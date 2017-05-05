@@ -4,3 +4,11 @@
 /vendor/
 /web/bundles/
 ###< symfony/framework-bundle ###
+
+# User-specific stuff:
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+
+## File-based project format:
+*.iws
