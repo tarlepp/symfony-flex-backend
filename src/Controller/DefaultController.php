@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DefaultController
- *service="app.controller.default",
  *
  * @Route(path="/")
  *
