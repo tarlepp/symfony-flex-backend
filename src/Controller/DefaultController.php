@@ -1,14 +1,13 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/App/Controller/DefaultController.php
+ * /src/Controller/DefaultController.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Controller;
 
 use Psr\Log\LoggerInterface as Logger;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,13 +28,20 @@ class DefaultController
     private $logger;
 
     /**
+     * @var \Twig_Environment
+     */
+    private $twig;
+
+    /**
      * Constructor of the class.
      *
-     * @param Logger $logger
+     * @param Logger            $logger
+     * @param \Twig_Environment $twig
      */
-    public function __construct(Logger $logger)
+    public function __construct(Logger $logger, \Twig_Environment $twig)
     {
         $this->logger = $logger;
+        $this->twig = $twig;
     }
 
     /**
@@ -43,16 +49,17 @@ class DefaultController
      *
      * @Route("")
      *
-     * @Method("GET");
+     * @return Response
      *
      * @throws \InvalidArgumentException
-     *
-     * @return Response
+     * @throws \Twig_Error_Syntax
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Loader
      */
-    public function indexAction(): Response
+    public function index(): Response
     {
         $this->logger->info('test');
 
-        return new Response('Hello world', Response::HTTP_OK);
+        return new Response($this->twig->render('index.twig'), Response::HTTP_OK);
     }
 }
