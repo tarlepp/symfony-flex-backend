@@ -5,13 +5,21 @@
     "require": {
         "php": "^7.1",
         "doctrine/annotations": "^1.4@dev",
+        "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "^4.0@dev",
+        "symfony/console": "^3.3@dev",
         "symfony/flex": "^1.0",
         "symfony/framework-bundle": "^3.3",
+        "symfony/monolog-bundle": "^3.0@dev",
+        "symfony/twig-bundle": "^3.3@dev",
+        "symfony/web-server-bundle": "^3.3@dev",
         "symfony/yaml": "^3.3"
     },
     "require-dev": {
-        "symfony/dotenv": "^3.3"
+        "sensiolabs/security-checker": "^4.0@dev",
+        "symfony/dotenv": "^3.3",
+        "symfony/requirements-checker": "^1.0@dev",
+        "symfony/web-profiler-bundle": "^3.3@dev"
     },
     "config": {
         "platform": {
@@ -35,7 +43,9 @@
     "scripts": {
         "auto-scripts": {
             "make cache-warmup": "script",
-            "assets:install --symlink --relative %WEB_DIR%": "symfony-cmd"
+            "assets:install --symlink --relative %WEB_DIR%": "symfony-cmd",
+            "vendor/bin/security-checker security:check": "php-script",
+            "%BIN_DIR%/check.php": "php-script"
         },
         "post-install-cmd": [
             "@auto-scripts"
