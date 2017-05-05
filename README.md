@@ -44,6 +44,11 @@ $ curl -sS https://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
+### 4. Other (optionally)
+#### Allow other IP's to access `dev` environment
+If you want to allow another IP addresses or _all_ to your `dev` environment see `/etc/packages/dev/allowed_addresses.php`
+file for detailed information
+
 # Links / resources
 [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
 [Symfony 4: A quick Demo](https://medium.com/@fabpot/symfony-4-a-quick-demo-da7d32be323)
