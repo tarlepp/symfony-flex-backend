@@ -4,6 +4,8 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^7.1",
+        "doctrine/annotations": "^1.4@dev",
+        "sensio/framework-extra-bundle": "^4.0@dev",
         "symfony/flex": "^1.0",
         "symfony/framework-bundle": "^3.3",
         "symfony/yaml": "^3.3"
