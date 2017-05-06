@@ -12,6 +12,7 @@
         "symfony/framework-bundle": "^3.3",
         "symfony/monolog-bundle": "^3.0@dev",
         "symfony/orm-pack": "^2.4@dev",
+        "symfony/security-bundle": "^3.3@dev",
         "symfony/twig-bundle": "^3.3@dev",
         "symfony/web-server-bundle": "^3.3@dev",
         "symfony/yaml": "^3.3"

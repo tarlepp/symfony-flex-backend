@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c224d8da1af0a388483766174c1f4404",
+    "content-hash": "47b76b85fedbf9cffd4a79c42110ed0c",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2275,6 +2275,63 @@
             "time": "2017-05-01T18:49:34+00:00"
         },
         {
+            "name": "symfony/inflector",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/inflector.git",
+                "reference": "aed5a0874a3bcfd8d0393a2d91b4cf828f29c7fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/inflector/zipball/aed5a0874a3bcfd8d0393a2d91b4cf828f29c7fb",
+                "reference": "aed5a0874a3bcfd8d0393a2d91b4cf828f29c7fb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Inflector\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bernhard Schussek",
+                    "email": "bschussek@gmail.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Inflector Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "inflection",
+                "pluralize",
+                "singularize",
+                "string",
+                "symfony",
+                "words"
+            ],
+            "time": "2017-04-12T14:14:56+00:00"
+        },
+        {
             "name": "symfony/monolog-bridge",
             "version": "dev-master",
             "source": {
@@ -2706,6 +2763,74 @@
             "time": "2017-04-29T15:36:12+00:00"
         },
         {
+            "name": "symfony/property-access",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/property-access.git",
+                "reference": "1bb34c37830cd44e2514d56c717c2422be3e43db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/1bb34c37830cd44e2514d56c717c2422be3e43db",
+                "reference": "1bb34c37830cd44e2514d56c717c2422be3e43db",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "symfony/inflector": "~3.1",
+                "symfony/polyfill-php70": "~1.0"
+            },
+            "require-dev": {
+                "symfony/cache": "~3.1"
+            },
+            "suggest": {
+                "psr/cache-implementation": "To cache access methods."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\PropertyAccess\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony PropertyAccess Component",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "access",
+                "array",
+                "extraction",
+                "index",
+                "injection",
+                "object",
+                "property",
+                "property path",
+                "reflection"
+            ],
+            "time": "2017-04-12T14:14:56+00:00"
+        },
+        {
             "name": "symfony/routing",
             "version": "dev-master",
             "source": {
@@ -2784,37 +2909,49 @@
             "time": "2017-04-13T13:45:25+00:00"
         },
         {
-            "name": "symfony/security-core",
+            "name": "symfony/security",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/security-core.git",
-                "reference": "66aa40a7eea3948e95bab0fc432e29951f35392a"
+                "url": "https://github.com/symfony/security.git",
+                "reference": "07396589f88468e3608d97fdbc5557cfaccde711"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-core/zipball/66aa40a7eea3948e95bab0fc432e29951f35392a",
-                "reference": "66aa40a7eea3948e95bab0fc432e29951f35392a",
+                "url": "https://api.github.com/repos/symfony/security/zipball/07396589f88468e3608d97fdbc5557cfaccde711",
+                "reference": "07396589f88468e3608d97fdbc5557cfaccde711",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
+                "symfony/event-dispatcher": "~2.8|~3.0",
+                "symfony/http-foundation": "~2.8|~3.0",
+                "symfony/http-kernel": "~3.3",
                 "symfony/polyfill-php56": "~1.0",
-                "symfony/polyfill-util": "~1.0"
+                "symfony/polyfill-php70": "~1.0",
+                "symfony/polyfill-util": "~1.0",
+                "symfony/property-access": "~2.8|~3.0"
+            },
+            "replace": {
+                "symfony/security-core": "self.version",
+                "symfony/security-csrf": "self.version",
+                "symfony/security-guard": "self.version",
+                "symfony/security-http": "self.version"
             },
             "require-dev": {
                 "psr/log": "~1.0",
-                "symfony/event-dispatcher": "~2.8|~3.0",
                 "symfony/expression-language": "~2.8|~3.0",
-                "symfony/http-foundation": "~2.8|~3.0",
+                "symfony/finder": "~2.8|~3.0",
                 "symfony/ldap": "~3.1",
+                "symfony/polyfill-intl-icu": "~1.0",
+                "symfony/routing": "~2.8|~3.0",
                 "symfony/validator": "^2.8.18|^3.2.5"
             },
             "suggest": {
-                "symfony/event-dispatcher": "",
                 "symfony/expression-language": "For using the expression voter",
-                "symfony/http-foundation": "",
-                "symfony/ldap": "For using LDAP integration",
+                "symfony/form": "",
+                "symfony/ldap": "For using the LDAP user and authentication providers",
+                "symfony/routing": "For using the HttpUtils class to create sub-requests, redirect the user, and match URLs",
                 "symfony/validator": "For using the user password constraint"
             },
             "type": "library",
@@ -2825,7 +2962,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Symfony\\Component\\Security\\Core\\": ""
+                    "Symfony\\Component\\Security\\": ""
                 },
                 "exclude-from-classmap": [
                     "/Tests/"
@@ -2845,37 +2982,59 @@
                     "homepage": "https://symfony.com/contributors"
                 }
             ],
-            "description": "Symfony Security Component - Core Library",
+            "description": "Symfony Security Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-19T20:25:39+00:00"
+            "time": "2017-05-01T15:01:29+00:00"
         },
         {
-            "name": "symfony/security-csrf",
+            "name": "symfony/security-bundle",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/security-csrf.git",
-                "reference": "307136ba6a0331996ddd31d7783ee82b3812b038"
+                "url": "https://github.com/symfony/security-bundle.git",
+                "reference": "1079b17fa18a3330d5bbf53d8468b4cb1e21904f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-csrf/zipball/307136ba6a0331996ddd31d7783ee82b3812b038",
-                "reference": "307136ba6a0331996ddd31d7783ee82b3812b038",
+                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/1079b17fa18a3330d5bbf53d8468b4cb1e21904f",
+                "reference": "1079b17fa18a3330d5bbf53d8468b4cb1e21904f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
-                "symfony/polyfill-php56": "~1.0",
+                "symfony/dependency-injection": "~3.3-beta2",
+                "symfony/http-kernel": "~3.3",
                 "symfony/polyfill-php70": "~1.0",
-                "symfony/security-core": "~2.8|~3.0"
+                "symfony/security": "~3.3"
+            },
+            "conflict": {
+                "symfony/var-dumper": "<3.3"
             },
             "require-dev": {
-                "symfony/http-foundation": "~2.8|~3.0"
+                "doctrine/doctrine-bundle": "~1.4",
+                "symfony/asset": "~2.8|~3.0",
+                "symfony/browser-kit": "~2.8|~3.0",
+                "symfony/console": "~3.2",
+                "symfony/css-selector": "~2.8|~3.0",
+                "symfony/dom-crawler": "~2.8|~3.0",
+                "symfony/expression-language": "~2.8|~3.0",
+                "symfony/form": "^2.8.18|^3.2.5",
+                "symfony/framework-bundle": "^3.2.8",
+                "symfony/http-foundation": "~2.8|~3.0",
+                "symfony/process": "~2.8|~3.0",
+                "symfony/security-acl": "~2.8|~3.0",
+                "symfony/translation": "~2.8|~3.0",
+                "symfony/twig-bridge": "~2.8|~3.0",
+                "symfony/twig-bundle": "~2.8|~3.0",
+                "symfony/validator": "^3.2.5",
+                "symfony/var-dumper": "~3.3",
+                "symfony/yaml": "~2.8|~3.0",
+                "twig/twig": "~1.28|~2.0"
             },
             "suggest": {
-                "symfony/http-foundation": "For using the class SessionTokenStorage."
+                "symfony/security-acl": "For using the ACL functionality of this bundle"
             },
-            "type": "library",
+            "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
                     "dev-master": "3.3-dev"
@@ -2883,7 +3042,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Symfony\\Component\\Security\\Csrf\\": ""
+                    "Symfony\\Bundle\\SecurityBundle\\": ""
                 },
                 "exclude-from-classmap": [
                     "/Tests/"
@@ -2903,9 +3062,9 @@
                     "homepage": "https://symfony.com/contributors"
                 }
             ],
-            "description": "Symfony Security Component - CSRF Library",
+            "description": "Symfony SecurityBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-04-19T20:25:39+00:00"
+            "time": "2017-05-03T17:24:51+00:00"
         },
         {
             "name": "symfony/stopwatch",
@@ -3632,6 +3791,7 @@
         "symfony/console": 20,
         "symfony/monolog-bundle": 20,
         "symfony/orm-pack": 20,
+        "symfony/security-bundle": 20,
         "symfony/twig-bundle": 20,
         "symfony/web-server-bundle": 20,
         "sensiolabs/security-checker": 20,
