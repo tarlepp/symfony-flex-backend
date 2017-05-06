@@ -80,7 +80,7 @@ class JSON
      *
      * @throws \LogicException
      */
-    public static function decode(string $json, ?bool $assoc, ?int $depth, ?int $options)
+    public static function decode(string $json, ?bool $assoc = null, ?int $depth = null, ?int $options = null)
     {
         $assoc = $assoc ?? false;
         $depth = $depth ?? 512;
