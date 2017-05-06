@@ -21,6 +21,7 @@
         "phpunit/phpunit": "^6.1@dev",
         "sensiolabs/security-checker": "^4.0@dev",
         "symfony/dotenv": "^3.3",
+        "symfony/phpunit-bridge": "^3.3@dev",
         "symfony/requirements-checker": "^1.0@dev",
         "symfony/web-profiler-bundle": "^3.3@dev"
     },
