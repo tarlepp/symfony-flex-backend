@@ -6,7 +6,7 @@ use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 // The check is to ensure we don't use .env in production
 if (!getenv('APP_ENV')) {
@@ -14,13 +14,8 @@ if (!getenv('APP_ENV')) {
 }
 
 if (getenv('APP_DEBUG')) {
-    // WARNING: You should setup permissions the proper way!
-    // REMOVE the following PHP line and read
-    // https://symfony.com/doc/current/book/installation.html#checking-symfony-application-configuration-and-setup
-    umask(0000);
-
     // Get allowed IP addresses
-    $allowedAddress = require __DIR__ . '/../etc/packages/dev/allowed_addresses.php';
+    $allowedAddress = require __DIR__ . '/../allowed_addresses.php';
 
     if (!\in_array('*', $allowedAddress, true)
         && (

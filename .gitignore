@@ -11,6 +11,10 @@
 .idea/dictionaries
 
 ## File-based project format:
-*.iws###> symfony/web-server-bundle ###
+*.iws
+
+allowed_addresses_local.php
+
+###> symfony/web-server-bundle ###
 .web-server-pid
 ###< symfony/web-server-bundle ###

@@ -44,14 +44,23 @@ $ curl -sS https://getcomposer.org/installer | php
 $ php composer.phar install
 ```
 
-### 4. Other (optionally)
+### 4. File permissions
+Next thing is to make sure that application `var` directory has correct permissions. Instructions for that you can 
+find [here](https://symfony.com/doc/current/setup/file_permissions.html).
+
+_I really recommend_ that you use `ACL` option in your development environment.
+
+### 5. Other (optionally)
 #### Allow other IP's to access `dev` environment
-If you want to allow another IP addresses or _all_ to your `dev` environment see `/etc/packages/dev/allowed_addresses.php`
-file for detailed information
+If you want to allow another IP addresses or _all_ to your `dev` environment see `/allowed_addresses.php` file for 
+detailed information how you can allow certain IP addresses to have access to your `dev` environment.
 
 # Links / resources
-[Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
-[Symfony 4: A quick Demo](https://medium.com/@fabpot/symfony-4-a-quick-demo-da7d32be323)
+* [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
+* [Symfony 4: A quick Demo](https://medium.com/@fabpot/symfony-4-a-quick-demo-da7d32be323)
+* [Symfony Development using PhpStorm](http://blog.jetbrains.com/phpstorm/2014/08/symfony-development-using-phpstorm/) 
+* [PHP Annotations plugin for PhpStorm](https://plugins.jetbrains.com/plugin/7320)
+* [Php Inspections (EA Extended) for IntelliJ IDEA](https://plugins.jetbrains.com/idea/plugin/7622-php-inspections-ea-extended-)
 
 # Authors
 [Tarmo Leppänen](https://github.com/tarlepp)
