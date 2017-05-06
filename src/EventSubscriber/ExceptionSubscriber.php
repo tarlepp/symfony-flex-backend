@@ -106,8 +106,6 @@ class ExceptionSubscriber
             $statusCode = $user ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
         } else if ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();
-        } else if (\method_exists($exception, 'getStatusCode')) {
-            $statusCode = $exception->getStatusCode();
         }
 
         return $statusCode;
