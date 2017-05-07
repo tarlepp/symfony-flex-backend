@@ -25,6 +25,7 @@ install:
   - composer install
 
 before_script:
+  - php --version
   - php bin/console --version
   - vendor/bin/phpunit --version
 
