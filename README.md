@@ -6,7 +6,23 @@
 Simple JSON API which is build on top of [Symfony](https://symfony.com/) framework.
 
 Note that this project is built with [Symfony Flex](https://github.com/symfony/flex), so we're using lot `@dev` packages 
-at this moment. Also note that we're going to update Symfony itself to `4.x.x` as soon as possible. 
+at this moment. Also note that we're going to update Symfony itself to `4.x.x` as soon as possible.
+ 
+Table of Contents
+=================
+ * [What is this?](#what-is-this)
+ * [Requirements](#requirements)
+ * [Installation](#installation)
+    * [1. Clone repository](#1-clone-repository)
+    * [2. Configuration](#2-configuration)
+    * [3. Dependencies installation](#3-dependencies-installation)
+    * [4. File permissions](#4-file-permissions)
+    * [5. Other (optionally)](#5-other-optionally)
+        * [Allow other IP's to access dev environment](#allow-other-ips-to-access-dev-environment)
+ * [Testing](#testing)
+ * [Links / resources](#links--resources)
+ * [Authors](#authors)
+ * [License](#license)
 
 # Requirements
 * PHP 7.1
@@ -55,6 +71,17 @@ _I really recommend_ that you use `ACL` option in your development environment.
 If you want to allow another IP addresses or _all_ to your `dev` environment see `/allowed_addresses.php` file for 
 detailed information how you can allow certain IP addresses to have access to your `dev` environment.
 
+# Testing
+Project contains bunch of tests (Functional, Integration, Unit) which you can run simply by following command:
+
+```bash
+$ ./vendor/bin/phpunit
+```
+
+* [PHPUnit](https://phpunit.de/)
+
+Or you could easily configure your IDE to run these for you.
+
 # Links / resources
 * [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
 * [Symfony 4: A quick Demo](https://medium.com/@fabpot/symfony-4-a-quick-demo-da7d32be323)
@@ -65,7 +92,7 @@ detailed information how you can allow certain IP addresses to have access to yo
 # Authors
 [Tarmo Leppänen](https://github.com/tarlepp)
 
-# LICENSE
+# License
 [The MIT License (MIT)](LICENSE)
 
 Copyright (c) 2017 Tarmo Leppänen
