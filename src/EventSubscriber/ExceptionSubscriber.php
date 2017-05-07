@@ -102,9 +102,9 @@ class ExceptionSubscriber
         // HttpExceptionInterface is a special type of exception that holds status code and header details
         if ($exception instanceof AuthenticationException) {
             $statusCode = Response::HTTP_UNAUTHORIZED;
-        } else if ($exception instanceof AccessDeniedException) {
+        } elseif ($exception instanceof AccessDeniedException) {
             $statusCode = $user ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
-        } else if ($exception instanceof HttpExceptionInterface) {
+        } elseif ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();
         }
 
@@ -162,7 +162,7 @@ class ExceptionSubscriber
                 $exception instanceof AccessDeniedException
             ) {
                 $message = 'Access denied.';
-            } else if ($exception instanceof DBALException ||
+            } elseif ($exception instanceof DBALException ||
                 $exception instanceof ORMException
             ) { // Database errors
                 $message = 'Database error.';
