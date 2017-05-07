@@ -50,4 +50,19 @@ class PHPUnitUtil
 
         return $method;
     }
+
+    /**
+     * Helper method to override any property value within given class.
+     *
+     * @param string    $property
+     * @param mixed     $value
+     * @param mixed     $object
+     */
+    public static function setProperty(string $property, $value, $object): void
+    {
+        $clazz = new \ReflectionClass(\get_class($object));
+        $property = $clazz->getProperty($property);
+        $property->setAccessible(true);
+        $property->setValue($object, $value);
+    }
 }
