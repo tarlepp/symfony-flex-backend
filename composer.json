@@ -49,7 +49,6 @@
         "auto-scripts": {
             "make cache-warmup": "script",
             "assets:install --symlink --relative %WEB_DIR%": "symfony-cmd",
-            "vendor/bin/security-checker security:check": "php-script",
             "%BIN_DIR%/check.php": "php-script"
         },
         "post-install-cmd": [
