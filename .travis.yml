@@ -20,6 +20,7 @@ matrix:
 
 before_install:
   - cp .env.travis .env
+  - cp .env.travis .env.test
 
 install:
   - composer install

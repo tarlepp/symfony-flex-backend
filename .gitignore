@@ -5,6 +5,9 @@
 /web/bundles/
 ###< symfony/framework-bundle ###
 
+## Test environment configuration
+.env.test
+
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
