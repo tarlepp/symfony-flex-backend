@@ -1,0 +1,36 @@
+language: php
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
+git:
+  depth: 1
+
+services:
+  - mysql
+
+php:
+  - 7.1
+
+matrix:
+  fast_finish: true
+
+before_install:
+  - cp .env.travis .env
+
+install:
+  - composer install
+
+before_script:
+  - php bin/console --version
+  - vendor/bin/phpunit --version
+
+script:
+  - mkdir -p build/logs
+  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - php vendor/bin/coveralls -v
