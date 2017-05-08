@@ -5,6 +5,7 @@
     "require": {
         "php": "^7.1",
         "doctrine/annotations": "^1.4@dev",
+        "ramsey/uuid": "^3.0@dev",
         "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "^4.0@dev",
         "symfony/console": "^3.3@dev",
@@ -13,7 +14,9 @@
         "symfony/monolog-bundle": "^3.0@dev",
         "symfony/orm-pack": "^2.4@dev",
         "symfony/security-bundle": "^3.3@dev",
+        "symfony/serializer": "^3.3@dev",
         "symfony/twig-bundle": "^3.3@dev",
+        "symfony/validator": "^3.3@dev",
         "symfony/web-server-bundle": "^3.3@dev",
         "symfony/yaml": "^3.3"
     },

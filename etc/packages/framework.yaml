@@ -10,6 +10,8 @@ framework:
     #    save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
     #esi: ~
     #fragments: ~
+    serializer:
+        enable_annotations: true
     php_errors:
         log: true
     router:
