@@ -10,7 +10,7 @@
     <php>
         <ini name="error_reporting" value="-1" />
         <ini name="date.timezone" value="UTC" />
-        <server name="KERNEL_DIR" value="src/" />
+        <server name="KERNEL_CLASS" value="App\Kernel" />
     </php>
 
     <testsuites>

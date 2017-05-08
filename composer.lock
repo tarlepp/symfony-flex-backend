@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b81fd6f074a8948a939211afee00eed",
+    "content-hash": "90a6af8bf09aedb10c451fbe681eb9c6",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2027,12 +2027,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/framework-bundle.git",
-                "reference": "0acbe67a48c4aedac48cb4e3479cd1e1672dcb5f"
+                "reference": "cd3ac2983d2761d2fef32525a34d30a3d9f6d8aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/0acbe67a48c4aedac48cb4e3479cd1e1672dcb5f",
-                "reference": "0acbe67a48c4aedac48cb4e3479cd1e1672dcb5f",
+                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/cd3ac2983d2761d2fef32525a34d30a3d9f6d8aa",
+                "reference": "cd3ac2983d2761d2fef32525a34d30a3d9f6d8aa",
                 "shasum": ""
             },
             "require": {
@@ -2134,7 +2134,7 @@
             ],
             "description": "Symfony FrameworkBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-05-06T22:45:28+00:00"
+            "time": "2017-05-08T08:36:21+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -3205,12 +3205,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bundle.git",
-                "reference": "0189e9a442900e889a81a295f6c307f8ca8aba84"
+                "reference": "e173678ffece3e669313f984d05a8fd6e738e0bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bundle/zipball/0189e9a442900e889a81a295f6c307f8ca8aba84",
-                "reference": "0189e9a442900e889a81a295f6c307f8ca8aba84",
+                "url": "https://api.github.com/repos/symfony/twig-bundle/zipball/e173678ffece3e669313f984d05a8fd6e738e0bf",
+                "reference": "e173678ffece3e669313f984d05a8fd6e738e0bf",
                 "shasum": ""
             },
             "require": {
@@ -3268,7 +3268,7 @@
             ],
             "description": "Symfony TwigBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-05-07T15:24:22+00:00"
+            "time": "2017-05-07T15:55:12+00:00"
         },
         {
             "name": "symfony/web-server-bundle",
@@ -4290,12 +4290,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "42cca1bf58f3eecd10c171f71b7b65fabc5cc7eb"
+                "reference": "eca636d78208ab8adb61287c106478b4d1c91be1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/42cca1bf58f3eecd10c171f71b7b65fabc5cc7eb",
-                "reference": "42cca1bf58f3eecd10c171f71b7b65fabc5cc7eb",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/eca636d78208ab8adb61287c106478b4d1c91be1",
+                "reference": "eca636d78208ab8adb61287c106478b4d1c91be1",
                 "shasum": ""
             },
             "require": {
@@ -4366,7 +4366,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-05-03T12:30:07+00:00"
+            "time": "2017-05-08T09:50:59+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -5495,12 +5495,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/web-profiler-bundle.git",
-                "reference": "bd4b127fc9a5dc21c8d7aefc632020f63391838f"
+                "reference": "eb85c977cca1a032f70ef082652a9039486c4bd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/bd4b127fc9a5dc21c8d7aefc632020f63391838f",
-                "reference": "bd4b127fc9a5dc21c8d7aefc632020f63391838f",
+                "url": "https://api.github.com/repos/symfony/web-profiler-bundle/zipball/eb85c977cca1a032f70ef082652a9039486c4bd7",
+                "reference": "eb85c977cca1a032f70ef082652a9039486c4bd7",
                 "shasum": ""
             },
             "require": {
@@ -5553,7 +5553,7 @@
             ],
             "description": "Symfony WebProfilerBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-05-07T15:01:53+00:00"
+            "time": "2017-05-07T17:02:29+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -5653,6 +5653,7 @@
         "roave/security-advisories": 20,
         "sensio/framework-extra-bundle": 20,
         "symfony/console": 20,
+        "symfony/framework-bundle": 20,
         "symfony/monolog-bundle": 20,
         "symfony/orm-pack": 20,
         "symfony/security-bundle": 20,

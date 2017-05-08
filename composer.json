@@ -9,7 +9,7 @@
         "sensio/framework-extra-bundle": "^4.0@dev",
         "symfony/console": "^3.3@dev",
         "symfony/flex": "^1.0",
-        "symfony/framework-bundle": "^3.3",
+        "symfony/framework-bundle": "^3.3@dev",
         "symfony/monolog-bundle": "^3.0@dev",
         "symfony/orm-pack": "^2.4@dev",
         "symfony/security-bundle": "^3.3@dev",
