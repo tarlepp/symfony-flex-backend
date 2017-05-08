@@ -8,6 +8,7 @@ declare(strict_types = 1);
  *
  * <code>
  *  <?php
+ *  declare(strict_types = 1);
  *
  *  return [
  *      'Your IP address here',
