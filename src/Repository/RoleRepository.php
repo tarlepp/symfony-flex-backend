@@ -7,18 +7,15 @@ declare(strict_types=1);
  */
 namespace App\Repository;
 
+use Doctrine\ORM\EntityRepository;
+
 /**
  * Class RoleRepository
  *
  * @package App\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RoleRepository extends Base
+class RoleRepository extends EntityRepository
 {
-    /**
-     * Names of search columns.
-     *
-     * @var string[]
-     */
-    protected static $searchColumns = ['role'];
+    // Implement custom repository methods here
 }

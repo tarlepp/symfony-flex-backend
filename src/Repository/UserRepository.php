@@ -7,13 +7,15 @@ declare(strict_types=1);
  */
 namespace App\Repository;
 
+use App\Rest\Repository;
+
 /**
  * Class UserRepository
  *
  * @package App\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserRepository extends Base
+class UserRepository extends Repository
 {
     /**
      * Names of search columns.
