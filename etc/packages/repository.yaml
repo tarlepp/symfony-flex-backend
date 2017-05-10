@@ -1,0 +1,13 @@
+services:
+    repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: [ '@doctrine.orm.entity_manager', getRepository ]
+        shared: false
+
+    App\Repository\UserGroupRepository:
+        parent: repository
+        arguments: [ App\Entity\UserGroup ]
+
+    App\Repository\UserRepository:
+        parent: repository
+        arguments: [ App\Entity\User ]
