@@ -56,6 +56,29 @@ class IntegrityTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatRepositoryHaveFunctionalTests
+     *
+     * @param string $repositoryTestClass
+     * @param string $repositoryClass
+     * @param array  $methods
+     */
+    public function testThatRepositoryHaveFunctionalTests(
+        string $repositoryTestClass,
+        string $repositoryClass,
+        array $methods
+    ): void
+    {
+        $message = \sprintf(
+            'Repository \'%s\' doesn\'t have required test class \'%s\', repository has following methods that needs to be tested: \'%s\'.',
+            $repositoryClass,
+            $repositoryTestClass,
+            \implode('\', \'', $methods)
+        );
+
+        static::assertTrue(\class_exists($repositoryTestClass), $message);
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatControllersHaveFunctionalTests(): array
@@ -69,8 +92,9 @@ class IntegrityTest extends KernelTestCase
         $namespaceTest = '\\App\\Tests\\Functional\\Controller\\';
 
         $iterator = function (string $file) use ($folder, $namespace, $namespaceTest) {
-            $class = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-            $classTest = $namespaceTest . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', 'Test', '\\'], $file);
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
 
             return [
                 $classTest,
@@ -79,5 +103,68 @@ class IntegrityTest extends KernelTestCase
         };
 
         return \array_map($iterator, self::recursiveFileSearch($folder, $pattern));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatRepositoryHaveFunctionalTests(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/Repository/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\Repository\\';
+        $namespaceTest = '\\App\\Tests\\Functional\\Repository\\';
+
+        $repositoryMethods = [];
+
+        $iterator = function (string $file) use ($folder, $namespace) {
+            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new \ReflectionClass($repositoryClass);
+        };
+
+        $filter = function (\ReflectionClass $reflectionClass) use (&$repositoryMethods) {
+            $filter = function (\ReflectionMethod $method) use ($reflectionClass) {
+                return $method->class === $reflectionClass->getName();
+            };
+
+            $methods = \array_filter($reflectionClass->getMethods(), $filter);
+
+            $formatter = function (\ReflectionMethod $method) {
+                return $method->getName();
+            };
+
+            $repositoryMethods[$reflectionClass->getName()] = \array_map($formatter, $methods);
+
+            return !($reflectionClass->isAbstract() || $reflectionClass->isInterface() || empty($methods));
+        };
+
+        $formatter = function (\ReflectionClass $reflectionClass) use (&$repositoryMethods, $folder, $namespace, $namespaceTest) {
+            $file = $reflectionClass->getFileName();
+
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+                $repositoryMethods[$reflectionClass->getName()],
+            ];
+        };
+
+        return \array_map(
+            $formatter,
+            \array_filter(
+                \array_map(
+                    $iterator,
+                    self::recursiveFileSearch($folder, $pattern)
+                ),
+                $filter
+            )
+        );
     }
 }
