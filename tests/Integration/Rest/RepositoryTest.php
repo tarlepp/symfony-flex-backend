@@ -5,7 +5,6 @@ declare(strict_types=1);
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-
 namespace App\Tests\Integration\Rest;
 
 use App\Entity\User as UserEntity;
@@ -57,6 +56,23 @@ class RepositoryTest extends KernelTestCase
         $this->container = static::$kernel->getContainer();
         $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
         $this->repository = $this->entityManager->getRepository($this->entityName);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatProcessOrderByWorksLikeExpected
+     *
+     * @param       $expected
+     * @param array $input
+     */
+    public function testThatProcessOrderByWorksLikeExpected($expected, array $input): void
+    {
+        $qb = $this->repository->createQueryBuilder('entity');
+
+        PHPUnitUtil::callMethod($this->repository, 'processOrderBy', [$qb, $input, []]);
+
+        $message = 'getExpression method did modify expression with no criteria - this should not happen';
+
+        static::assertSame($expected, $qb->getDQL(), $message);
     }
 
     public function testThatGetExpressionDoesNotModifyExpressionWithEmptyCriteria(): void
@@ -127,6 +143,48 @@ class RepositoryTest extends KernelTestCase
             static::assertSame($expectedParameters[$key]['name'], $parameter->getName());
             static::assertSame($expectedParameters[$key]['value'], $parameter->getValue());
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatProcessOrderByWorksLikeExpected(): array
+    {
+        return [
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
+                ['foo' => 'asc'],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo DESC',
+                ['foo' => 'DESC'],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
+                ['entity.foo' => 'asc'],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity ORDER BY .foo asdf',
+                ['.foo' => 'asdf'],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity ORDER BY foo.bar asc',
+                ['foo.bar' => 'asc'],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc, foo.bar desc',
+                [
+                    'foo' => 'asc',
+                    'foo.bar' => 'desc',
+                ],
+            ],
+        ];
     }
 
     /**
