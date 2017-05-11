@@ -289,12 +289,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "3632e03cb11fd5d6e382854514bf5fc0e0c5870e"
+                "reference": "87251a14b20107cf3015bd790e1f1f6c380bda42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/3632e03cb11fd5d6e382854514bf5fc0e0c5870e",
-                "reference": "3632e03cb11fd5d6e382854514bf5fc0e0c5870e",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/87251a14b20107cf3015bd790e1f1f6c380bda42",
+                "reference": "87251a14b20107cf3015bd790e1f1f6c380bda42",
                 "shasum": ""
             },
             "require": {
@@ -354,7 +354,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-05-03T13:21:04+00:00"
+            "time": "2017-05-10T14:59:08+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -706,12 +706,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "7bb02d0dbdc337f98fa94078985baa713c24bb65"
+                "reference": "c222c1d17abd774638059d26c2415ae9e573bdba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/7bb02d0dbdc337f98fa94078985baa713c24bb65",
-                "reference": "7bb02d0dbdc337f98fa94078985baa713c24bb65",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/c222c1d17abd774638059d26c2415ae9e573bdba",
+                "reference": "c222c1d17abd774638059d26c2415ae9e573bdba",
                 "shasum": ""
             },
             "require": {
@@ -778,7 +778,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-05-03T10:40:33+00:00"
+            "time": "2017-05-10T17:31:40+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1753,12 +1753,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "c8adee82e43fc161c9510e65bd7857431377c3d9"
+                "reference": "aa8e45df409b442d76fbf565247a0a12a893f127"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/c8adee82e43fc161c9510e65bd7857431377c3d9",
-                "reference": "c8adee82e43fc161c9510e65bd7857431377c3d9",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/aa8e45df409b442d76fbf565247a0a12a893f127",
+                "reference": "aa8e45df409b442d76fbf565247a0a12a893f127",
                 "shasum": ""
             },
             "require": {
@@ -1815,7 +1815,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-07T15:20:56+00:00"
+            "time": "2017-05-09T09:53:08+00:00"
         },
         {
             "name": "symfony/doctrine-bridge",
@@ -2063,12 +2063,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "e59e66c476a7f6cfb02580cd2380faa70e33a78c"
+                "reference": "979058ceade93847435825bcc7c06c13c4e60c9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/e59e66c476a7f6cfb02580cd2380faa70e33a78c",
-                "reference": "e59e66c476a7f6cfb02580cd2380faa70e33a78c",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/979058ceade93847435825bcc7c06c13c4e60c9b",
+                "reference": "979058ceade93847435825bcc7c06c13c4e60c9b",
                 "shasum": ""
             },
             "require": {
@@ -2101,7 +2101,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2017-05-03T14:47:35+00:00"
+            "time": "2017-05-10T19:28:35+00:00"
         },
         {
             "name": "symfony/framework-bundle",
@@ -2109,12 +2109,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/framework-bundle.git",
-                "reference": "cd3ac2983d2761d2fef32525a34d30a3d9f6d8aa"
+                "reference": "312a59d8f649db5284b396cc8d76594ec4dde452"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/cd3ac2983d2761d2fef32525a34d30a3d9f6d8aa",
-                "reference": "cd3ac2983d2761d2fef32525a34d30a3d9f6d8aa",
+                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/312a59d8f649db5284b396cc8d76594ec4dde452",
+                "reference": "312a59d8f649db5284b396cc8d76594ec4dde452",
                 "shasum": ""
             },
             "require": {
@@ -2216,7 +2216,7 @@
             ],
             "description": "Symfony FrameworkBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-05-08T08:36:21+00:00"
+            "time": "2017-05-09T14:36:16+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -3810,12 +3810,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "56bf6c1cc3e1b24691f10a09321516d4790cecbd"
+                "reference": "0031313a708d4ff027b30dfae605398abaa031cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/56bf6c1cc3e1b24691f10a09321516d4790cecbd",
-                "reference": "56bf6c1cc3e1b24691f10a09321516d4790cecbd",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/0031313a708d4ff027b30dfae605398abaa031cc",
+                "reference": "0031313a708d4ff027b30dfae605398abaa031cc",
                 "shasum": ""
             },
             "require": {
@@ -3867,7 +3867,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2017-05-04T23:22:10+00:00"
+            "time": "2017-05-09T06:57:15+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -3926,12 +3926,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "f5b8a8512e2b58b0071a7280e39f14f72e05d87c"
+                "reference": "8882b252f802cae96f0315c3608faef95af6a7f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/f5b8a8512e2b58b0071a7280e39f14f72e05d87c",
-                "reference": "f5b8a8512e2b58b0071a7280e39f14f72e05d87c",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/8882b252f802cae96f0315c3608faef95af6a7f2",
+                "reference": "8882b252f802cae96f0315c3608faef95af6a7f2",
                 "shasum": ""
             },
             "require": {
@@ -3983,7 +3983,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-03-20T17:10:46+00:00"
+            "time": "2017-05-09T09:16:44+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -5686,12 +5686,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/requirements-checker.git",
-                "reference": "8dd5e7e22df89fc104b80092842b067986503b2c"
+                "reference": "e6647f0c6087f665f04e465c469da4ceacd9367c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/requirements-checker/zipball/8dd5e7e22df89fc104b80092842b067986503b2c",
-                "reference": "8dd5e7e22df89fc104b80092842b067986503b2c",
+                "url": "https://api.github.com/repos/symfony/requirements-checker/zipball/e6647f0c6087f665f04e465c469da4ceacd9367c",
+                "reference": "e6647f0c6087f665f04e465c469da4ceacd9367c",
                 "shasum": ""
             },
             "require": {
@@ -5723,7 +5723,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2017-04-05T14:16:15+00:00"
+            "time": "2017-05-11T16:14:46+00:00"
         },
         {
             "name": "symfony/var-dumper",
