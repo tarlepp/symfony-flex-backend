@@ -5,7 +5,7 @@ declare(strict_types = 1);
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace AppBundle\unit\Utils;
+namespace App\Tests\Unit\Utils;
 
 use App\Utils\JSON;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
