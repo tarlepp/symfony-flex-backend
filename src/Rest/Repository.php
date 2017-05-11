@@ -9,7 +9,7 @@ namespace App\Rest;
 
 use App\Entity\Interfaces\EntityInterface;
 use Doctrine\Common\Proxy\Proxy;
-use Doctrine\DBAL\Query\Expression\CompositeExpression;
+use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -332,13 +332,7 @@ abstract class Repository extends EntityRepository implements Interfaces\Reposit
         \array_walk($criteria, $processCriteria);
 
         // And attach search term condition to main query
-        $queryBuilder->andWhere(
-            $this->getExpression(
-                $queryBuilder,
-                new CompositeExpression(CompositeExpression::TYPE_AND, $queryBuilder->expr()->andX()->getParts()),
-                $condition
-            )
-        );
+        $queryBuilder->andWhere($this->getExpression($queryBuilder, $queryBuilder->expr()->andX(), $condition));
     }
 
     /**
@@ -370,10 +364,7 @@ abstract class Repository extends EntityRepository implements Interfaces\Reposit
                 $queryBuilder->andWhere(
                     $this->getExpression(
                         $queryBuilder,
-                        new CompositeExpression(
-                            CompositeExpression::TYPE_AND,
-                            $queryBuilder->expr()->andX()->getParts()
-                        ),
+                        $queryBuilder->expr()->andX(),
                         $criteria
                     )
                 );
@@ -472,41 +463,25 @@ abstract class Repository extends EntityRepository implements Interfaces\Reposit
      *
      * @see https://gist.github.com/jgornick/8671644
      *
-     * @param QueryBuilder        $queryBuilder
-     * @param CompositeExpression $expression
-     * @param array               $criteria
+     * @param QueryBuilder $queryBuilder
+     * @param Composite    $expression
+     * @param array        $criteria
      *
-     * @return CompositeExpression
+     * @return Composite
+     *
+     * @throws \InvalidArgumentException
      */
     protected function getExpression(
         QueryBuilder $queryBuilder,
-        CompositeExpression $expression,
+        Composite $expression,
         array $criteria
-    ): CompositeExpression {
+    ): Composite {
         if (\count($criteria)) {
             foreach ($criteria as $key => $comparison) {
                 if ($key === 'or' || \array_key_exists('or', $comparison)) {
-                    $expression->add(
-                        $this->getExpression(
-                            $queryBuilder,
-                            new CompositeExpression(
-                                CompositeExpression::TYPE_OR,
-                                $queryBuilder->expr()->andX()->getParts()
-                            ),
-                            $comparison
-                        )
-                    );
+                    $expression->add($this->getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
                 } elseif ($key === 'and' || \array_key_exists('and', $comparison)) {
-                    $expression->add(
-                        $this->getExpression(
-                            $queryBuilder,
-                            new CompositeExpression(
-                                CompositeExpression::TYPE_AND,
-                                $queryBuilder->expr()->andX()->getParts()
-                            ),
-                            $comparison
-                        )
-                    );
+                    $expression->add($this->getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
                 } else {
                     $comparison = (object)\array_combine(['field', 'operator', 'value'], $comparison);
 
@@ -531,7 +506,7 @@ abstract class Repository extends EntityRepository implements Interfaces\Reposit
                             $queryBuilder->setParameter($this->parameterCount, $comparison->value[1]);
                         } else { // Otherwise this must be IN or NOT IN expression
                             $parameters[] = \array_map(function ($value) use ($queryBuilder) {
-                                return  $queryBuilder->expr()->literal($value);
+                                return $queryBuilder->expr()->literal($value);
                             }, $comparison->value);
                         }
                     } elseif (!($lowercaseOperator === 'isnull' || $lowercaseOperator === 'isnotnull')) {
@@ -541,9 +516,7 @@ abstract class Repository extends EntityRepository implements Interfaces\Reposit
                     }
 
                     // And finally add new expression to main one with specified parameters
-                    $expression->add(
-                        \call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters)
-                    );
+                    $expression->add(\call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters));
                 }
             }
         }
