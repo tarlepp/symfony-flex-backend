@@ -52,6 +52,25 @@ class PHPUnitUtil
     }
 
     /**
+     * Helper method to get any property value from given class.
+     *
+     * @param string $property
+     * @param mixed  $object
+     *
+     * @return mixed
+     */
+    public static function getProperty(string $property, $object)
+    {
+        $clazz = new \ReflectionClass(\get_class($object));
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $property = $clazz->getProperty($property);
+        $property->setAccessible(true);
+
+        return $property->getValue($object);
+    }
+
+    /**
      * Helper method to override any property value within given class.
      *
      * @param string    $property
@@ -61,6 +80,8 @@ class PHPUnitUtil
     public static function setProperty(string $property, $value, $object): void
     {
         $clazz = new \ReflectionClass(\get_class($object));
+
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $property = $clazz->getProperty($property);
         $property->setAccessible(true);
         $property->setValue($object, $value);
