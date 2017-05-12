@@ -59,18 +59,35 @@ class RepositoryTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatProcessSearchTermsWorksLikeExpected
+     *
+     * @param string $expected
+     * @param array  $input
+     */
+    public function testThatProcessSearchTermsWorksLikeExpected(string $expected, array $input):  void
+    {
+        $qb = $this->repository->createQueryBuilder('entity');
+
+        PHPUnitUtil::callMethod($this->repository, 'processSearchTerms', [$qb, $input]);
+
+        $message = 'processSearchTerms did not return expected DQL.';
+
+        static::assertSame($expected, $qb->getDQL(), $message);
+    }
+
+    /**
      * @dataProvider dataProviderTestThatProcessOrderByWorksLikeExpected
      *
-     * @param       $expected
-     * @param array $input
+     * @param string $expected
+     * @param array  $input
      */
-    public function testThatProcessOrderByWorksLikeExpected($expected, array $input): void
+    public function testThatProcessOrderByWorksLikeExpected(string $expected, array $input): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
         PHPUnitUtil::callMethod($this->repository, 'processOrderBy', [$qb, $input, []]);
 
-        $message = 'getExpression method did modify expression with no criteria - this should not happen';
+        $message = 'processOrderBy did not return expected DQL.';
 
         static::assertSame($expected, $qb->getDQL(), $message);
     }
@@ -143,6 +160,51 @@ class RepositoryTest extends KernelTestCase
             static::assertSame($expectedParameters[$key]['name'], $parameter->getName());
             static::assertSame($expectedParameters[$key]['value'], $parameter->getValue());
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): array
+    {
+        return [
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4',
+                [
+                    'and' => ['foo'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstname LIKE ?2 OR entity.surname LIKE ?3 OR entity.email LIKE ?4',
+                [
+                    'or' => ['foo'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4 AND entity.username LIKE ?5 AND entity.firstname LIKE ?6 AND entity.surname LIKE ?7 AND entity.email LIKE ?8',
+                [
+                    'and' => ['foo', 'bar'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstname LIKE ?2 OR entity.surname LIKE ?3 OR entity.email LIKE ?4 OR entity.username LIKE ?5 OR entity.firstname LIKE ?6 OR entity.surname LIKE ?7 OR entity.email LIKE ?8',
+                [
+                    'or' => ['foo', 'bar'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE (entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4) AND (entity.username LIKE ?5 OR entity.firstname LIKE ?6 OR entity.surname LIKE ?7 OR entity.email LIKE ?8)',
+                [
+                    'and' => ['foo'],
+                    'or'  => ['bar'],
+                ],
+            ],
+        ];
     }
 
     /**
