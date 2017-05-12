@@ -58,13 +58,32 @@ class RepositoryTest extends KernelTestCase
         $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 
+    public function testThatProcessSearchTermsWorksLikeExpectedWithoutSearchColumns(): void
+    {
+        $qb = $this->repository->createQueryBuilder('entity');
+
+        $originalValue = PHPUnitUtil::getProperty('searchColumns', $this->repository);
+
+        PHPUnitUtil::setProperty('searchColumns', [], $this->repository);
+        PHPUnitUtil::callMethod($this->repository, 'processSearchTerms', [$qb, ['and' => ['foo', 'bar']]]);
+
+        $message = 'processSearchTerms did not return expected DQL.';
+
+        $expected = 'SELECT entity FROM App\\Entity\\User entity';
+        $actual = $qb->getDQL();
+
+        PHPUnitUtil::setProperty('searchColumns', $originalValue, $this->repository);
+
+        static::assertSame($expected, $actual, $message);
+    }
+
     /**
      * @dataProvider dataProviderTestThatProcessSearchTermsWorksLikeExpected
      *
      * @param string $expected
      * @param array  $input
      */
-    public function testThatProcessSearchTermsWorksLikeExpected(string $expected, array $input):  void
+    public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $input):  void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
