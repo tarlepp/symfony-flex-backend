@@ -79,6 +79,26 @@ class IntegrityTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatRestRepositoryHaveIntegrationTests
+     *
+     * @param string $repositoryTestClass
+     * @param string $repositoryClass
+     */
+    public function testThatRestRepositoryHaveIntegrationTests(
+        string $repositoryTestClass,
+        string $repositoryClass
+    ): void
+    {
+        $message = \sprintf(
+            'Repository \'%s\' doesn\'t have required test class \'%s\'.',
+          $repositoryClass,
+          $repositoryTestClass
+        );
+
+        static::assertTrue(\class_exists($repositoryTestClass), $message);
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatControllersHaveFunctionalTests(): array
@@ -153,6 +173,54 @@ class IntegrityTest extends KernelTestCase
                 $classTest,
                 $class,
                 $repositoryMethods[$reflectionClass->getName()],
+            ];
+        };
+
+        return \array_map(
+            $formatter,
+            \array_filter(
+                \array_map(
+                    $iterator,
+                    self::recursiveFileSearch($folder, $pattern)
+                ),
+                $filter
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/Repository/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\Repository\\';
+        $namespaceTest = '\\App\\Tests\\Functional\\Repository\\';
+
+        $iterator = function (string $file) use ($folder, $namespace) {
+            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new \ReflectionClass($repositoryClass);
+        };
+
+        $filter = function (\ReflectionClass $reflectionClass) {
+            return $reflectionClass->implementsInterface(\App\Rest\Interfaces\Repository::class);
+        };
+
+        $formatter = function (\ReflectionClass $reflectionClass) use (&$repositoryMethods, $folder, $namespace, $namespaceTest) {
+            $file = $reflectionClass->getFileName();
+
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
             ];
         };
 
