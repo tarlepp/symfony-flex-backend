@@ -199,7 +199,7 @@ class IntegrityTest extends KernelTestCase
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Repository\\';
-        $namespaceTest = '\\App\\Tests\\Functional\\Repository\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
 
         $iterator = function (string $file) use ($folder, $namespace) {
             $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
@@ -211,7 +211,7 @@ class IntegrityTest extends KernelTestCase
             return $reflectionClass->implementsInterface(\App\Rest\Interfaces\Repository::class);
         };
 
-        $formatter = function (\ReflectionClass $reflectionClass) use (&$repositoryMethods, $folder, $namespace, $namespaceTest) {
+        $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
             $file = $reflectionClass->getFileName();
 
             $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
