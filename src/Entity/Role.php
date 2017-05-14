@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class Role extends BaseRole implements Interfaces\EntityInterface
+class Role extends BaseRole
 {
     /**
      * @var string
@@ -63,6 +63,16 @@ class Role extends BaseRole implements Interfaces\EntityInterface
      *  )
      */
     private $userGroups;
+
+    /**
+     * Constructor.
+     *
+     * @param string $role The role name
+     */
+    public function __construct($role = '')
+    {
+        parent::__construct($role);
+    }
 
     /**
      * @return string
