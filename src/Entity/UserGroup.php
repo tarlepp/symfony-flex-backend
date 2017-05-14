@@ -33,8 +33,10 @@ class UserGroup implements Interfaces\EntityInterface
      * @var string
      *
      * @Groups({
-     *      "User",
-     *      "User.id",
+     *      "UserGroup",
+     *      "UserGroup.id",
+     *      "User.userGroups",
+     *      "Role.userGroups",
      *  })
      *
      * @ORM\Column(

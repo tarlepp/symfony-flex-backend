@@ -42,6 +42,7 @@ class User implements UserInterface, EquatableInterface, \Serializable, Interfac
      * @Groups({
      *      "User",
      *      "User.id",
+     *      "UserGroup.users",
      *  })
      *
      * @ORM\Column(
@@ -383,7 +384,7 @@ class User implements UserInterface, EquatableInterface, \Serializable, Interfac
      *
      * This can return null if the password was not encoded using a salt.
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
         return null;
     }

@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\Role\Role as BaseRole;
@@ -36,6 +37,7 @@ class Role extends BaseRole
      * @Groups({
      *      "Role",
      *      "Role.role",
+     *      "UserGroup.role",
      *  })
      *
      * @ORM\Column(
@@ -53,7 +55,7 @@ class Role extends BaseRole
      * @var Collection<App\Entity\UserGroup>
      *
      * @Groups({
-     *      "Author.books",
+     *      "Role.userGroups",
      *  })
      *
      * @ORM\OneToMany(
@@ -72,6 +74,8 @@ class Role extends BaseRole
     public function __construct($role = '')
     {
         parent::__construct($role);
+
+        $this->userGroups = new ArrayCollection();
     }
 
     /**
