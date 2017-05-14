@@ -72,11 +72,14 @@ If you want to allow another IP addresses or _all_ to your `dev` environment see
 detailed information how you can allow certain IP addresses to have access to your `dev` environment.
 
 # Testing
-Project contains bunch of tests (Functional, Integration, Unit) which you can run simply by following command:
+Project contains bunch of tests _(Functional, Integration, Unit)_ which you can run simply by following command:
 
 ```bash
 $ ./vendor/bin/phpunit
 ```
+
+Note that you need to create `.env.test` file to define your testing environment. This file has the same content as the 
+main `.env` file, just change database and others to match your testing environment.
 
 * [PHPUnit](https://phpunit.de/)
 
