@@ -7,6 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Tests\Unit;
 
+use App\Entity\Interfaces\EntityInterface;
+use App\Rest\Interfaces\Repository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -96,6 +98,23 @@ class IntegrityTest extends KernelTestCase
         );
 
         static::assertTrue(\class_exists($repositoryTestClass), $message);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatEntityHaveIntegrationTests
+     *
+     * @param string $entityTestClass
+     * @param string $entityClass
+     */
+    public function testThatEntityHaveIntegrationTests(string $entityTestClass, string $entityClass): void
+    {
+        $message = \sprintf(
+            'Entity \'%s\' doesn\'t have required test class \'%s\'.',
+            $entityClass,
+            $entityTestClass
+        );
+
+        static::assertTrue(\class_exists($entityTestClass), $message);
     }
 
     /**
@@ -208,7 +227,53 @@ class IntegrityTest extends KernelTestCase
         };
 
         $filter = function (\ReflectionClass $reflectionClass) {
-            return $reflectionClass->implementsInterface(\App\Rest\Interfaces\Repository::class);
+            return $reflectionClass->implementsInterface(Repository::class);
+        };
+
+        $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
+            $file = $reflectionClass->getFileName();
+
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map(
+            $formatter,
+            \array_filter(
+                \array_map(
+                    $iterator,
+                    self::recursiveFileSearch($folder, $pattern)
+                ),
+                $filter
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatEntityHaveIntegrationTests(): array
+    {
+        $folder = static::$kernel->getRootDir() . '/Entity/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\Entity\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Entity\\';
+
+        $iterator = function (string $file) use ($folder, $namespace) {
+            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new \ReflectionClass($repositoryClass);
+        };
+
+        $filter = function (\ReflectionClass $reflectionClass) {
+            return !$reflectionClass->isInterface() && $reflectionClass->implementsInterface(EntityInterface::class);
         };
 
         $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
