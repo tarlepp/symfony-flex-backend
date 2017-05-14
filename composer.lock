@@ -706,12 +706,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "c222c1d17abd774638059d26c2415ae9e573bdba"
+                "reference": "e9b54de488accfb3c08cc8efe629722099f2c507"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/c222c1d17abd774638059d26c2415ae9e573bdba",
-                "reference": "c222c1d17abd774638059d26c2415ae9e573bdba",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/e9b54de488accfb3c08cc8efe629722099f2c507",
+                "reference": "e9b54de488accfb3c08cc8efe629722099f2c507",
                 "shasum": ""
             },
             "require": {
@@ -778,7 +778,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-05-10T17:31:40+00:00"
+            "time": "2017-05-14T08:21:42+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
