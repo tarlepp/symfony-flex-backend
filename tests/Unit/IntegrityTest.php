@@ -118,6 +118,53 @@ class IntegrityTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatEventSubscriberHaveIntegrationTest
+     *
+     * @param string $eventSubscriberTestClass
+     * @param string $eventSubscriberClass
+     */
+    public function testThatEventSubscriberHaveIntegrationTest(
+        string $eventSubscriberTestClass,
+        string $eventSubscriberClass
+    ): void
+    {
+        $message = \sprintf(
+            'EventSubscriber \'%s\' doesn\'t have required test class \'%s\'.',
+            $eventSubscriberClass,
+            $eventSubscriberTestClass
+        );
+
+        static::assertTrue(\class_exists($eventSubscriberTestClass), $message);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/EventSubscriber/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\EventSubscriber\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\EventSubscriber\\';
+
+        $iterator = function (string $file) use ($folder, $namespace, $namespaceTest) {
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map($iterator, self::recursiveFileSearch($folder, $pattern));
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatControllersHaveFunctionalTests(): array
