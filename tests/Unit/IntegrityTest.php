@@ -138,30 +138,20 @@ class IntegrityTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @dataProvider dataProviderTestThatResourceHaveIntegrationTest
+     *
+     * @param string $resourceTestClass
+     * @param string $resourceClass
      */
-    public function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
+    public function testThatResourceHaveIntegrationTest(string $resourceTestClass, string $resourceClass): void
     {
-        self::bootKernel();
+        $message = \sprintf(
+            'Resource \'%s\' doesn\'t have required test class \'%s\'.',
+            $resourceClass,
+            $resourceTestClass
+        );
 
-        $folder = static::$kernel->getRootDir() . '/EventSubscriber/';
-        $pattern = '/^.+\.php$/i';
-
-        $namespace = '\\App\\EventSubscriber\\';
-        $namespaceTest = '\\App\\Tests\\Integration\\EventSubscriber\\';
-
-        $iterator = function (string $file) use ($folder, $namespace, $namespaceTest) {
-            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
-            $class = $namespace . \str_replace('.php', '', $base);
-            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
-
-            return [
-                $classTest,
-                $class,
-            ];
-        };
-
-        return \array_map($iterator, self::recursiveFileSearch($folder, $pattern));
+        static::assertTrue(\class_exists($resourceTestClass), $message);
     }
 
     /**
@@ -346,5 +336,59 @@ class IntegrityTest extends KernelTestCase
                 $filter
             )
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/EventSubscriber/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\EventSubscriber\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\EventSubscriber\\';
+
+        $iterator = function (string $file) use ($folder, $namespace, $namespaceTest) {
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map($iterator, self::recursiveFileSearch($folder, $pattern));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatResourceHaveIntegrationTest(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/Resource/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\Resource\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Resource\\';
+
+        $iterator = function (string $file) use ($folder, $namespace, $namespaceTest) {
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map($iterator, self::recursiveFileSearch($folder, $pattern));
     }
 }
