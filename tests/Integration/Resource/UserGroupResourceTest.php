@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Resource/UserResourceTest.php
+ * /tests/Integration/Resource/UserGroupResourceTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -13,7 +13,7 @@ use App\Resource\UserGroupResource;
 use App\Tests\Helpers\ResourceTestCase;
 
 /**
- * Class UserResourceTest
+ * Class UserGroupResourceTest
  *
  * @package App\Tests\Integration\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
