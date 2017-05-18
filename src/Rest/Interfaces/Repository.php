@@ -99,20 +99,20 @@ interface Repository
     /**
      * Generic replacement for basic 'findBy' method if/when you want to use generic LIKE search.
      *
-     * @param array         $search
      * @param array         $criteria
      * @param null|array    $orderBy
      * @param null|integer  $limit
      * @param null|integer  $offset
+     * @param null|array    $search
      *
      * @return array
      */
     public function findByAdvanced(
-        array $search,
         array $criteria,
         array $orderBy = null,
         int $limit = null,
-        int $offset = null
+        int $offset = null,
+        array $search = null
     ): array;
 
     /**

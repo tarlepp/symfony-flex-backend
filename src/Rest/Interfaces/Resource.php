@@ -82,7 +82,7 @@ interface Resource
      * Generic find method to return an array of items from database. Return value is an array of specified repository
      * entities.
      *
-     * @param array        $criteria
+     * @param null|array   $criteria
      * @param null|array   $orderBy
      * @param null|integer $limit
      * @param null|integer $offset

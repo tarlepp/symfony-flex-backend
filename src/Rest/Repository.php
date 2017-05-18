@@ -160,26 +160,27 @@ abstract class Repository extends EntityRepository implements Interfaces\Reposit
     /**
      * Generic replacement for basic 'findBy' method if/when you want to use generic LIKE search.
      *
-     * @param array $search
-     * @param array $criteria
-     * @param null|array $orderBy
+     * @param array        $criteria
+     * @param null|array   $orderBy
      * @param null|integer $limit
      * @param null|integer $offset
+     * @param null|array   $search
      *
      * @return array
      *
      * @throws \InvalidArgumentException
      */
     public function findByAdvanced(
-        array $search,
         array $criteria,
         array $orderBy = null,
         int $limit = null,
-        int $offset = null
+        int $offset = null,
+        array $search = null
     ): array {
         $orderBy = $orderBy ?? [];
         $limit = $limit ?? 0;
         $offset = $offset ?? 0;
+        $search = $search ?? [];
 
         // Create new query builder
         $queryBuilder = $this->createQueryBuilder('entity');

@@ -73,7 +73,7 @@ abstract class Resource implements Interfaces\Resource
         if ($this->dtoClass === null) {
             $message = \sprintf(
                 'DTO class not specified for \'%s\' resource',
-                \get_called_class()
+                static::class
             );
 
             throw new \UnexpectedValueException($message);
@@ -135,7 +135,7 @@ abstract class Resource implements Interfaces\Resource
      * Generic find method to return an array of items from database. Return value is an array of specified repository
      * entities.
      *
-     * @param array        $criteria
+     * @param null|array   $criteria
      * @param null|array   $orderBy
      * @param null|integer $limit
      * @param null|integer $offset
@@ -161,7 +161,7 @@ abstract class Resource implements Interfaces\Resource
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
         // Fetch data
-        $entities = $this->repository->findByAdvanced($search, $criteria, $orderBy, $limit, $offset);
+        $entities = $this->repository->findByAdvanced($criteria, $orderBy, $limit, $offset, $search);
 
         // After callback method call
         $this->afterFind($criteria, $orderBy, $limit, $offset, $search, $entities);
