@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Integration\Resource;
 
 use App\Entity\Interfaces\EntityInterface;
-use App\Entity\User;
+use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
+use App\Rest\DTO\User as UserDto;
 use App\Rest\Interfaces\Resource as ResourceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -27,7 +28,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class GenericResourceTest extends KernelTestCase
 {
-    protected $entityClass = User::class;
+    protected $dtoClass = UserDto::class;
+    protected $entityClass = UserEntity::class;
     protected $resourceClass = UserResource::class;
     protected $repositoryClass = UserRepository::class;
 
@@ -139,8 +141,7 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findByAdvanced')
-            ->with(...$expectedArguments)
-        ;
+            ->with(...$expectedArguments);
 
         /** @var ResourceInterface $resource */
         $resource = new $this->resourceClass($repository, self::getValidator());
@@ -218,8 +219,7 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findOneBy')
-            ->with(...$expectedArguments)
-        ;
+            ->with(...$expectedArguments);
 
         /** @var ResourceInterface $resource */
         $resource = new $this->resourceClass($repository, self::getValidator());
@@ -282,12 +282,64 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('count')
-            ->with(...$expectedArguments)
-        ;
+            ->with(...$expectedArguments);
 
         /** @var ResourceInterface $resource */
         $resource = new $this->resourceClass($repository, self::getValidator());
         $resource->count(...$arguments);
+    }
+
+    public function testThatSaveMethodCallsExpectedRepositoryMethod(): void
+    {
+        $entity = $this->getEntityInterfaceMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $repository
+            ->expects(static::once())
+            ->method('save')
+            ->with($entity);
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+
+        static::assertSame($entity, $resource->save($entity));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
+     */
+    public function testThatCreateThrowsAnErrorWithInvalidDto(): void
+    {
+        $dto = new $this->dtoClass();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource->create($dto);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
+     */
+    public function testThatSaveMethodThrowsAnExceptionWithInvalidEntity(): void
+    {
+        $entity = new $this->entityClass();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $repository
+            ->expects(static::never())
+            ->method('save')
+            ->with($entity);
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource->save($entity);
     }
 
     /**
