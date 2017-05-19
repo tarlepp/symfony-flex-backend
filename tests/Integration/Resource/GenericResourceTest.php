@@ -11,6 +11,7 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
+use App\Rest\DTO\Interfaces\RestDtoInterface;
 use App\Rest\DTO\User as UserDto;
 use App\Rest\Interfaces\Resource as ResourceInterface;
 use Doctrine\ORM\EntityManagerInterface;
@@ -310,16 +311,67 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
      */
-    public function testThatCreateThrowsAnErrorWithInvalidDto(): void
+    public function testThatCreateMethodThrowsAnErrorWithInvalidDto(): void
     {
-        $dto = new $this->dtoClass();
-
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $dto = new $this->dtoClass();
 
         /** @var ResourceInterface $resource */
         $resource = new $this->resourceClass($repository, self::getValidator());
         $resource->create($dto);
+    }
+
+    public function testThatCreateMethodCallsExpectedMethods(): void
+    {
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $repository
+            ->expects(static::once())
+            ->method('getClassName')
+            ->willReturn($this->entityClass);
+
+        $repository
+            ->expects(static::once())
+            ->method('save');
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|ValidatorInterface $repository */
+        $validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
+        $dto = $this->getDtoMockBuilder()->getMock();
+
+        $dto
+            ->expects(static::once())
+            ->method('update');
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, $validator);
+        $resource->create($dto);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @expectedExceptionMessage Not found
+     */
+    public function testThatUpdateMethodThrowsAnExceptionIfEntityWasNotFound(): void
+    {
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $repository
+            ->expects(static::once())
+            ->method('find')
+            ->with('some id')
+            ->willReturn(null);
+
+        $dto = new $this->dtoClass();
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource->update('some id', $dto);
     }
 
     /**
@@ -435,5 +487,20 @@ class GenericResourceTest extends KernelTestCase
         return $this
             ->getMockBuilder(EntityInterface::class)
             ->getMock();
+    }
+
+    private function getEntityMock(): PHPUnit_Framework_MockObject_MockObject
+    {
+        return $this
+            ->getMockBuilder($this->entityClass)
+            ->getMock();
+    }
+
+    /**
+     * @return PHPUnit_Framework_MockObject_MockBuilder
+     */
+    private function getDtoMockBuilder(): PHPUnit_Framework_MockObject_MockBuilder
+    {
+        return $this->getMockBuilder($this->dtoClass);
     }
 }
