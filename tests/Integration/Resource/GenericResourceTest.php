@@ -374,6 +374,54 @@ class GenericResourceTest extends KernelTestCase
         $resource->update('some id', $dto);
     }
 
+    public function testThatDeleteMethodCallsExpectedRepositoryMethod(): void
+    {
+        $entity = $this->getEntityInterfaceMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $repository
+            ->expects(static::once())
+            ->method('find')
+            ->with('some id')
+            ->willReturn($entity);
+
+        $repository
+            ->expects(static::once())
+            ->method('remove')
+            ->with($entity);
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+
+        static::assertSame($entity, $resource->delete('some id'));
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
+     *
+     * @param array $expectedArguments
+     * @param array $arguments
+     */
+    public function testThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(
+        array $expectedArguments,
+        array $arguments
+    ): void
+    {
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $repository
+            ->expects(static::once())
+            ->method('findIds')
+            ->with(...$expectedArguments);
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource->getIds(...$arguments);
+    }
+
     /**
      * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
      */
@@ -470,6 +518,27 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
+     * @return array
+     */
+    public function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): array
+    {
+        return [
+            [
+                [[], []],
+                [null, null],
+            ],
+            [
+                [['foo'], []],
+                [['foo'], null],
+            ],
+            [
+                [['foo'], ['bar']],
+                [['foo'], ['bar']],
+            ],
+        ];
+    }
+
+    /**
      * @return PHPUnit_Framework_MockObject_MockBuilder
      */
     private function getRepositoryMockBuilder(): PHPUnit_Framework_MockObject_MockBuilder
@@ -489,6 +558,9 @@ class GenericResourceTest extends KernelTestCase
             ->getMock();
     }
 
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject|UserEntity
+     */
     private function getEntityMock(): PHPUnit_Framework_MockObject_MockObject
     {
         return $this
