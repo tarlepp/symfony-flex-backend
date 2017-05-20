@@ -374,6 +374,41 @@ class GenericResourceTest extends KernelTestCase
         $resource->update('some id', $dto);
     }
 
+    public function testThatUpdateCallsExpectedRepositoryMethod(): void
+    {
+        $dto = new $this->dtoClass();
+        $entity = new $this->entityClass();
+
+        $methods = [
+            'setUsername'   => 'username',
+            'setFirstname'  => 'firstname',
+            'setSurname'    => 'surname',
+            'setEmail'      => 'test@test.com',
+        ];
+
+        foreach ($methods as $method => $value) {
+            $dto->$method($value);
+            $entity->$method($value);
+        }
+
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $repository
+            ->expects(static::once())
+            ->method('find')
+            ->with('some id')
+            ->willReturn($entity);
+
+        $repository
+            ->expects(static::once())
+            ->method('save')
+            ->with($entity);
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource->update('some id', $dto);
+    }
+
     public function testThatDeleteMethodCallsExpectedRepositoryMethod(): void
     {
         $entity = $this->getEntityInterfaceMock();
