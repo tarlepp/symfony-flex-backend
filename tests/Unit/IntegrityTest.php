@@ -155,6 +155,23 @@ class IntegrityTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatRestDtoHaveIntegrationTest
+     *
+     * @param string $dtoTestClass
+     * @param string $dtoClass
+     */
+    public function testThatRestDtoHaveIntegrationTest(string $dtoTestClass, string $dtoClass): void
+    {
+        $message = \sprintf(
+            'REST DTO \'%s\' doesn\'t have required test class \'%s\'.',
+            $dtoClass,
+            $dtoTestClass
+        );
+
+        static::assertTrue(\class_exists($dtoTestClass), $message);
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatControllersHaveFunctionalTests(): array
@@ -390,5 +407,51 @@ class IntegrityTest extends KernelTestCase
         };
 
         return \array_map($iterator, self::recursiveFileSearch($folder, $pattern));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatRestDtoHaveIntegrationTest(): array
+    {
+        $folder = static::$kernel->getRootDir() . '/Rest/DTO/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\Rest\\DTO\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Rest\\DTO\\';
+
+        $iterator = function (string $file) use ($folder, $namespace) {
+            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new \ReflectionClass($repositoryClass);
+        };
+
+        $filter = function (\ReflectionClass $reflectionClass) {
+            return !$reflectionClass->isInterface() && !$reflectionClass->isAbstract();
+        };
+
+        $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
+            $file = $reflectionClass->getFileName();
+
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map(
+            $formatter,
+            \array_filter(
+                \array_map(
+                    $iterator,
+                    self::recursiveFileSearch($folder, $pattern)
+                ),
+                $filter
+            )
+        );
     }
 }
