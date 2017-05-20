@@ -44,7 +44,7 @@ abstract class Resource implements Interfaces\Resource
     /**
      * Getter method for entity repository.
      *
-     * @return Interfaces\Repository
+     * @return Interfaces\Repository|Repository
      */
     public function getRepository(): Interfaces\Repository
     {
@@ -87,7 +87,7 @@ abstract class Resource implements Interfaces\Resource
      *
      * @param string $dtoClass
      *
-     * @return Interfaces\Resource
+     * @return Interfaces\Resource|Resource
      */
     public function setDtoClass(string $dtoClass): Interfaces\Resource
     {
@@ -103,7 +103,7 @@ abstract class Resource implements Interfaces\Resource
      */
     public function getEntityName(): string
     {
-        return $this->repository->getEntityName();
+        return $this->getRepository()->getEntityName();
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class Resource implements Interfaces\Resource
      */
     public function getReference(string $id): ?Proxy
     {
-        return $this->repository->getReference($id);
+        return $this->getRepository()->getReference($id);
     }
 
     /**
@@ -128,7 +128,7 @@ abstract class Resource implements Interfaces\Resource
      */
     public function getAssociations(): array
     {
-        return \array_keys($this->repository->getAssociations());
+        return \array_keys($this->getRepository()->getAssociations());
     }
 
     /**
@@ -161,7 +161,7 @@ abstract class Resource implements Interfaces\Resource
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
 
         // Fetch data
-        $entities = $this->repository->findByAdvanced($criteria, $orderBy, $limit, $offset, $search);
+        $entities = $this->getRepository()->findByAdvanced($criteria, $orderBy, $limit, $offset, $search);
 
         // After callback method call
         $this->afterFind($criteria, $orderBy, $limit, $offset, $search, $entities);
@@ -188,7 +188,7 @@ abstract class Resource implements Interfaces\Resource
         $this->beforeFindOne($id);
 
         /** @var null|EntityInterface $entity */
-        $entity = $this->repository->find($id);
+        $entity = $this->getRepository()->find($id);
 
         // Entity not found
         if ($throwExceptionIfNotFound && $entity === null) {
@@ -226,7 +226,7 @@ abstract class Resource implements Interfaces\Resource
         $this->beforeFindOneBy($criteria, $orderBy);
 
         /** @var null|EntityInterface $entity */
-        $entity = $this->repository->findOneBy($criteria, $orderBy);
+        $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
 
         // Entity not found
         if ($throwExceptionIfNotFound && $entity === null) {
@@ -258,7 +258,7 @@ abstract class Resource implements Interfaces\Resource
         // Before callback method call
         $this->beforeCount($criteria, $search);
 
-        $count = $this->repository->count($criteria, $search);
+        $count = $this->getRepository()->count($criteria, $search);
 
         // After callback method call
         $this->afterCount($criteria, $search, $count);
@@ -285,7 +285,7 @@ abstract class Resource implements Interfaces\Resource
         $this->validateDto($dto);
 
         // Determine entity name
-        $entity = $this->repository->getClassName();
+        $entity = $this->getRepository()->getClassName();
 
         /**
          * Create new entity
@@ -374,7 +374,7 @@ abstract class Resource implements Interfaces\Resource
         $this->beforeDelete($id, $entity);
 
         // And remove entity from repo
-        $this->repository->remove($entity);
+        $this->getRepository()->remove($entity);
 
         // After callback method call
         $this->afterDelete($id, $entity);
@@ -400,7 +400,7 @@ abstract class Resource implements Interfaces\Resource
         $this->beforeIds($criteria, $search);
 
         // Fetch data
-        $ids = $this->repository->findIds($criteria, $search);
+        $ids = $this->getRepository()->findIds($criteria, $search);
 
         // After callback method call
         $this->afterIds($ids, $criteria, $search);
@@ -430,7 +430,7 @@ abstract class Resource implements Interfaces\Resource
 
         // Validate entity
         if (!$skipValidation) {
-            $errors = $this->validator->validate($entity);
+            $errors = $this->getValidator()->validate($entity);
 
             // Oh noes, we have some errors
             if (\count($errors) > 0) {
@@ -439,7 +439,7 @@ abstract class Resource implements Interfaces\Resource
         }
 
         // Persist on database
-        $this->repository->save($entity);
+        $this->getRepository()->save($entity);
 
         // After callback method call
         $this->afterSave($entity);
@@ -477,7 +477,7 @@ abstract class Resource implements Interfaces\Resource
     private function validateDto(RestDtoInterface $dto): void
     {
         // Check possible errors of DTO
-        $errors = $this->validator->validate($dto);
+        $errors = $this->getValidator()->validate($dto);
 
         // Oh noes, we have some errors
         if (\count($errors) > 0) {
@@ -495,7 +495,7 @@ abstract class Resource implements Interfaces\Resource
     private function getEntity(string $id): EntityInterface
     {
         /** @var EntityInterface $entity */
-        $entity = $this->repository->find($id);
+        $entity = $this->getRepository()->find($id);
 
         // Entity not found
         if ($entity === null) {
