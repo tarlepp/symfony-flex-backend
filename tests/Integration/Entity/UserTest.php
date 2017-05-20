@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\User;
-use App\Tests\Helpers\EntityTestCase;
 
 /**
  * Class UserTest

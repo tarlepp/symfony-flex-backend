@@ -9,7 +9,6 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Tests\Helpers\RepositoryTestCase;
 
 /**
  * Class UserRepositoryTest

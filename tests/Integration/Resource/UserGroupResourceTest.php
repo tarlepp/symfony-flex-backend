@@ -10,7 +10,6 @@ namespace App\Tests\Integration\Resource;
 use App\Entity\UserGroup;
 use App\Repository\UserGroupRepository;
 use App\Resource\UserGroupResource;
-use App\Tests\Helpers\ResourceTestCase;
 
 /**
  * Class UserGroupResourceTest

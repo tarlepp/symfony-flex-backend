@@ -10,7 +10,6 @@ namespace App\Tests\Integration\Resource;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
-use App\Tests\Helpers\ResourceTestCase;
 
 /**
  * Class UserResourceTest

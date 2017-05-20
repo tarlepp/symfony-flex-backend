@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Helpers/ResourceTestCase.php
+ * /tests/Integration/Resource/ResourceTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Helpers;
+namespace App\Tests\Integration\Resource;
 
 use App\Rest\Interfaces\Resource as ResourceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 /**
  * Class ResourceTestCase
  *
- * @package App\Tests\Helpers
+ * @package App\Tests\Integration\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class ResourceTestCase extends KernelTestCase

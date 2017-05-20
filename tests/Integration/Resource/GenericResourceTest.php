@@ -5,7 +5,7 @@ declare(strict_types=1);
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace Integration\Resource;
+namespace App\Tests\Integration\Resource;
 
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\User as UserEntity;
@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Class GenericResourceTest
  *
- * @package Integration\Resource
+ * @package App\Tests\Integration\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class GenericResourceTest extends KernelTestCase

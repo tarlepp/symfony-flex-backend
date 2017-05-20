@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Helpers/EntityTestCase.php
+ * /tests/Integration/Entity/EntityTestCase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Helpers;
+namespace App\Tests\Integration\Entity;
 
 use App\Entity\Interfaces\EntityInterface;
 use Doctrine\Common\Collections\ArrayCollection;

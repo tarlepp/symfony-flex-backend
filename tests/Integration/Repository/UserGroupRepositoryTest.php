@@ -7,10 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Repository;
 
-use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Repository\UserGroupRepository;
-use App\Tests\Helpers\RepositoryTestCase;
 
 /**
  * Class UserGroupRepositoryTest

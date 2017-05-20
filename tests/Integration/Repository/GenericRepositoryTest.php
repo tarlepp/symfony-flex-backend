@@ -1,103 +1,68 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/RepositoryTestCase.php
+ * /tests/Integration/Integration/GenericRepositoryTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Helpers;
+namespace App\Tests\Integration\Repository;
 
 use App\Entity\Interfaces\EntityInterface;
-use App\Rest\Interfaces\Repository;
+use App\Entity\User as UserEntity;
+use App\Repository\UserRepository;
+use App\Resource\UserResource;
+use App\Rest\Repository;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class RepositoryTestCase
+ * Class GenericRepositoryTest
  *
- * @package App\Tests
+ * @package App\Tests\Integration\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RepositoryTestCase extends KernelTestCase
+class GenericRepositoryTest extends KernelTestCase
 {
-    /**
-     * @var \App\Rest\Repository
-     */
-    protected $repository;
+    protected $entityClass = UserEntity::class;
+    protected $resourceClass = UserResource::class;
+    protected $repositoryClass = UserRepository::class;
 
     /**
-     * @var string
+     * @return EntityManagerInterface|Object
      */
-    protected $entityName;
-
-    /**
-     * @var string
-     */
-    protected $repositoryName;
-
-    /**
-     * @var array
-     */
-    protected $associations = [];
-
-    /**
-     * @var array
-     */
-    protected $searchColumns = [];
+    private static function getEntityManager(): EntityManagerInterface
+    {
+        return static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
+    }
 
     public function setUp(): void
     {
         parent::setUp();
 
-        self::bootKernel();
-
-        $this->repository = static::$kernel->getContainer()->get($this->repositoryName);
-    }
-
-    public function testThatGetEntityNameReturnsExpected(): void
-    {
-        static::assertSame($this->entityName, $this->repository->getEntityName());
+        static::bootKernel();
     }
 
     public function testThatGetReferenceReturnsExpected(): void
     {
         /** @var EntityInterface $entity */
-        $entity = new $this->entityName();
+        $entity = new $this->entityClass();
+
+        /** @var Repository $repository */
+        $repository = new $this->repositoryClass(static::getEntityManager(), new ClassMetadata($this->entityClass));
 
         static::assertInstanceOf(
             Proxy::class,
-            $this->repository->getReference($entity->getId())
-        );
-    }
-
-    public function testThatGetAssociationsReturnsExpected(): void
-    {
-        $message = 'Repository did not return expected associations for entity.';
-
-        static::assertSame(
-            $this->associations,
-            \array_keys($this->repository->getAssociations()),
-            $message
-        );
-    }
-
-    public function testThatGetSearchColumnsReturnsExpected(): void
-    {
-        $message = 'Repository did not return expected search columns.';
-
-        static::assertSame(
-            $this->searchColumns,
-            $this->repository->getSearchColumns(),
-            $message
+            $repository->getReference($entity->getId())
         );
     }
 
     public function testThatSaveMethodCallsExpectedServices(): void
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface $entityInterface */
-        $entityInterface = $this->createMock($this->entityName);
+        $entityInterface = $this->createMock($this->entityClass);
 
         // Create mock for entity manager
         $entityManager = $this
@@ -116,10 +81,8 @@ class RepositoryTestCase extends KernelTestCase
             ->expects(static::once())
             ->method('flush');
 
-        $repositoryClass = \get_class($this->repository);
-
         /** @var Repository $repository */
-        $repository = new $repositoryClass($entityManager, new ClassMetadata($this->entityName));
+        $repository = new $this->repositoryClass($entityManager, new ClassMetadata($this->entityClass));
 
         // Call save method
         $repository->save($entityInterface);
@@ -128,7 +91,7 @@ class RepositoryTestCase extends KernelTestCase
     public function testThatRemoveMethodCallsExpectedServices(): void
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface $entityInterface */
-        $entityInterface = $this->createMock($this->entityName);
+        $entityInterface = $this->createMock($this->entityClass);
 
         // Create mock for entity manager
         $entityManager = $this
@@ -147,10 +110,8 @@ class RepositoryTestCase extends KernelTestCase
             ->expects(static::once())
             ->method('flush');
 
-        $repositoryClass = \get_class($this->repository);
-
         /** @var Repository $repository */
-        $repository = new $repositoryClass($entityManager, new ClassMetadata($this->entityName));
+        $repository = new $this->repositoryClass($entityManager, new ClassMetadata($this->entityClass));
 
         // Call remove method
         $repository->remove($entityInterface);
