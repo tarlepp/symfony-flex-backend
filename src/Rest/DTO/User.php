@@ -71,6 +71,8 @@ class User extends Base
      */
     public function setUsername(string $username): User
     {
+        $this->setVisited('username');
+
         $this->username = $username;
 
         return $this;
@@ -91,6 +93,8 @@ class User extends Base
      */
     public function setFirstname(string $firstname): User
     {
+        $this->setVisited('firstname');
+
         $this->firstname = $firstname;
 
         return $this;
@@ -111,6 +115,8 @@ class User extends Base
      */
     public function setSurname(string $surname): User
     {
+        $this->setVisited('surname');
+
         $this->surname = $surname;
 
         return $this;
@@ -131,6 +137,8 @@ class User extends Base
      */
     public function setEmail(string $email): User
     {
+        $this->setVisited('email');
+
         $this->email = $email;
 
         return $this;
