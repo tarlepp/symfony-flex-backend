@@ -80,23 +80,27 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "0da649fce4838f7a6121c501c9a86d4b8921b648"
+                "reference": "24ae84fa281eec3d33386106e8febdfe879ac15a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/0da649fce4838f7a6121c501c9a86d4b8921b648",
-                "reference": "0da649fce4838f7a6121c501c9a86d4b8921b648",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/24ae84fa281eec3d33386106e8febdfe879ac15a",
+                "reference": "24ae84fa281eec3d33386106e8febdfe879ac15a",
                 "shasum": ""
             },
             "require": {
-                "php": "~5.6|~7.0"
+                "php": "~7.1"
             },
             "conflict": {
                 "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
+                "alcaeus/mongo-php-adapter": "^1.1",
                 "phpunit/phpunit": "^5.7",
                 "predis/predis": "~1.0"
+            },
+            "suggest": {
+                "alcaeus/mongo-php-adapter": "Required to use MongoDB driver"
             },
             "type": "library",
             "extra": {
@@ -141,7 +145,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2017-03-06T14:38:51+00:00"
+            "time": "2017-05-20T19:47:13+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -289,12 +293,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "87251a14b20107cf3015bd790e1f1f6c380bda42"
+                "reference": "51220fcc197ea7c61e04efd2d5d1f6a28ad70d8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/87251a14b20107cf3015bd790e1f1f6c380bda42",
-                "reference": "87251a14b20107cf3015bd790e1f1f6c380bda42",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/51220fcc197ea7c61e04efd2d5d1f6a28ad70d8b",
+                "reference": "51220fcc197ea7c61e04efd2d5d1f6a28ad70d8b",
                 "shasum": ""
             },
             "require": {
@@ -354,7 +358,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-05-10T14:59:08+00:00"
+            "time": "2017-05-20T13:31:40+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
