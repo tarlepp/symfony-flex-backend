@@ -1,18 +1,48 @@
 security:
+    # http://symfony.com/doc/current/cookbook/security/named_encoders.html
+    encoders:
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 12
+
+        App\Entity\User:
+            algorithm: bcrypt
+            cost: 12
+
     # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: null }
+        users:
+            entity:
+                class: App\Entity\User
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: null
 
-            # activate different ways to authenticate
+        login:
+            pattern: ^/auth/getToken$
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path: /auth/getToken
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-            # http_basic: null
-            # https://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+        root:
+            pattern: ^/$
+            stateless: true
+            anonymous: true
 
-            # form_login: null
-            # https://symfony.com/doc/current/cookbook/security/form_login_setup.html
+        api:
+            pattern: ^/
+            stateless: true
+            anonymous: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+
+    role_hierarchy:
+        ROLE_USER:  [ROLE_LOGGED]
+        ROLE_ADMIN: [ROLE_USER]
+        ROLE_ROOT:  [ROLE_ADMIN]

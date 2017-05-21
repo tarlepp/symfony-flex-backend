@@ -17,6 +17,7 @@
     "require": {
         "php": "^7.1",
         "doctrine/annotations": "^1.4@dev",
+        "lexik/jwt-authentication-bundle": "^2.0@dev",
         "ramsey/uuid": "^3.0@dev",
         "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "^4.0@dev",
