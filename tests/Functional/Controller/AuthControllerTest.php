@@ -27,7 +27,7 @@ class AuthControllerTest extends WebTestCase
     public function testThatLoginRouteDoesNotAllowOtherThanPost(string $method): void
     {
         $client = static::createClient();
-        $client->request($method, $this->baseUrl . '/login');
+        $client->request($method, $this->baseUrl . '/getToken');
 
         static::assertSame(405, $client->getResponse()->getStatusCode());
     }
