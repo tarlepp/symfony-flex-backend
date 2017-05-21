@@ -1,7 +1,19 @@
 {
+    "name": "tarlepp/symfony-flex-backend",
+    "description": "Simple JSON API which is build on top of Symfony framework",
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
     "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Tarmo Leppänen",
+            "homepage": "https://github.com/tarlepp",
+            "role": "developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/tarlepp/symfony-flex-backend/issues"
+    },
     "require": {
         "php": "^7.1",
         "doctrine/annotations": "^1.4@dev",
