@@ -46,3 +46,7 @@ security:
         ROLE_USER:  [ROLE_LOGGED]
         ROLE_ADMIN: [ROLE_USER]
         ROLE_ROOT:  [ROLE_ADMIN]
+
+services:
+    App\Security\Roles:
+        arguments: [ '%security.role_hierarchy.roles%' ]
