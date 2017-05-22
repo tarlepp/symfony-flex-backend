@@ -47,7 +47,7 @@ class Role extends BaseRole
      *  )
      * @ORM\Id()
      */
-    private $role = '';
+    private $role;
 
     /**
      * Author books.
@@ -71,10 +71,11 @@ class Role extends BaseRole
      *
      * @param string $role The role name
      */
-    public function __construct($role = '')
+    public function __construct(string $role = '')
     {
         parent::__construct($role);
 
+        $this->role = $role;
         $this->userGroups = new ArrayCollection();
     }
 
