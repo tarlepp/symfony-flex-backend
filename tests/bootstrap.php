@@ -9,6 +9,7 @@ declare(strict_types=1);
  *  3) Drop test environment database
  *  4) Create empty database to test environment
  *  5) Update database schema
+ *  6) Create user roles to database
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -77,12 +78,38 @@ $updateSchemaDoctrineCommand = function () use ($application) {
     $command->run($input, new ConsoleOutput());
 };
 
+// Add the user:create-roles command to the application and run it
+$createUserRolesCommand = function () use ($application) {
+    $container = $application->getKernel()->getContainer();
+
+    /** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
+    $entityManager = $container->get('doctrine.orm.entity_manager');
+
+    /** @var App\Repository\RoleRepository $roleRepository */
+    $roleRepository = $container->get(App\Repository\RoleRepository::class);
+
+    /** @var App\Security\RolesInterface $rolesInterface */
+    $rolesInterface = $container->get(App\Security\Roles::class);
+
+    $command = new \App\Command\User\CreateRolesCommand(null, $entityManager, $roleRepository, $rolesInterface);
+    $application->add($command);
+
+    $input = new ArrayInput([
+        'command' => 'user:create-roles',
+    ]);
+
+    $input->setInteractive(false);
+
+    $command->run($input, new ConsoleOutput());
+};
+
 // And finally call each of initialize functions to make test environment ready
-array_map(
+\array_map(
     '\call_user_func',
     [
         $dropDatabaseDoctrineCommand,
         $createDatabaseDoctrineCommand,
         $updateSchemaDoctrineCommand,
+        $createUserRolesCommand,
     ]
 );

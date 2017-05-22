@@ -30,6 +30,7 @@
             <directory>src</directory>
             <exclude>
                 <file>src/Kernel.php</file>
+                <directory>src/Command</directory>
             </exclude>
         </whitelist>
     </filter>
