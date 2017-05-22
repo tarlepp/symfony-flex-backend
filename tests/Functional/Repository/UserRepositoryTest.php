@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Repository;
 
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -17,4 +18,26 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class UserRepositoryTest extends KernelTestCase
 {
+    /**
+     * @var UserRepository;
+     */
+    private $repository;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$kernel->getContainer()->get(UserRepository::class);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @expectedExceptionMessageRegExp /User "\w+" not found/
+     */
+    public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidUsername(): void
+    {
+        $this->repository->loadUserByUsername('foobar');
+    }
 }
