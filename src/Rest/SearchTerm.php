@@ -13,7 +13,7 @@ namespace App\Rest;
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-final class SearchTerm implements Interfaces\SearchTerm
+final class SearchTerm implements SearchTermInterface
 {
     /**
      * Static method to get search term criteria for specified columns and search terms with specified operand and mode.

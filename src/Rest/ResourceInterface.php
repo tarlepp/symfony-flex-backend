@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/Interfaces/Resource.php
+ * /src/Rest/ResourceInterfaces.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Rest\Interfaces;
+namespace App\Rest;
 
 use App\Entity\Interfaces\EntityInterface;
 use App\Rest\DTO\Interfaces\RestDtoInterface;
@@ -13,12 +13,12 @@ use Doctrine\Common\Proxy\Proxy;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Interface Resource
+ * Interface ResourceInterface
  *
- * @package App\Rest\Interfaces
+ * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-interface Resource
+interface ResourceInterface
 {
     /**
      * Getter method for entity repository.

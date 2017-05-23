@@ -20,7 +20,7 @@ use Doctrine\ORM\QueryBuilder;
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class Repository extends EntityRepository implements Interfaces\Repository
+abstract class Repository extends EntityRepository implements RepositoryInterface
 {
     /**
      * Names of search columns.
@@ -94,13 +94,13 @@ abstract class Repository extends EntityRepository implements Interfaces\Reposit
      *
      * @param EntityInterface $entity
      *
-     * @return Interfaces\Repository
+     * @return Repository
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(EntityInterface $entity): Interfaces\Repository
+    public function save(EntityInterface $entity): Repository
     {
         // Persist on database
         $this->getEntityManager()->persist($entity);
@@ -114,13 +114,13 @@ abstract class Repository extends EntityRepository implements Interfaces\Reposit
      *
      * @param EntityInterface $entity
      *
-     * @return Interfaces\Repository
+     * @return Repository
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(EntityInterface $entity): Interfaces\Repository
+    public function remove(EntityInterface $entity): Repository
     {
         // Remove from database
         $this->getEntityManager()->remove($entity);

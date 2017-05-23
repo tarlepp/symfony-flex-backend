@@ -21,13 +21,13 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class Resource implements Interfaces\Resource
+abstract class Resource implements ResourceInterface
 {
     // Attach generic life cycle traits
     use Traits\Resource;
 
     /**
-     * @var Interfaces\Repository|EntityRepository
+     * @var Repository|EntityRepository
      */
     protected $repository;
 
@@ -44,9 +44,9 @@ abstract class Resource implements Interfaces\Resource
     /**
      * Getter method for entity repository.
      *
-     * @return Interfaces\Repository|Repository
+     * @return Repository
      */
-    public function getRepository(): Interfaces\Repository
+    public function getRepository(): Repository
     {
         return $this->repository;
     }
@@ -87,9 +87,9 @@ abstract class Resource implements Interfaces\Resource
      *
      * @param string $dtoClass
      *
-     * @return Interfaces\Resource|Resource
+     * @return Resource
      */
-    public function setDtoClass(string $dtoClass): Interfaces\Resource
+    public function setDtoClass(string $dtoClass): Resource
     {
         $this->dtoClass = $dtoClass;
 
@@ -142,6 +142,8 @@ abstract class Resource implements Interfaces\Resource
      * @param null|array   $search
      *
      * @return EntityInterface[]
+     *
+     * @throws \InvalidArgumentException
      */
     public function find(
         array $criteria = null,

@@ -1,23 +1,23 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/Interfaces/Repository.php
+ * /src/Rest/RepositoryInterface.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Rest\Interfaces;
+namespace App\Rest;
 
 use App\Entity\Interfaces\EntityInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Interface Repository
+ * Interface RepositoryInterface
  *
- * @package App\Rest\Interfaces
+ * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-interface Repository
+interface RepositoryInterface
 {
     /**
      * Getter method for entity name.

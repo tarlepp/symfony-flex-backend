@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit;
 
 use App\Entity\Interfaces\EntityInterface;
-use App\Rest\Interfaces\Repository;
+use App\Rest\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -281,7 +281,7 @@ class IntegrityTest extends KernelTestCase
         };
 
         $filter = function (\ReflectionClass $reflectionClass) {
-            return $reflectionClass->implementsInterface(Repository::class);
+            return $reflectionClass->implementsInterface(RepositoryInterface::class);
         };
 
         $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {

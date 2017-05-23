@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/Interfaces/SearchTerm.php
+ * /src/Rest/SearchTermInterface.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Rest\Interfaces;
+namespace App\Rest;
 
 /**
- * Interface SearchTerm
+ * Interface SearchTermInterface
  *
- * @package App\Rest\Interfaces
+ * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-interface SearchTerm
+interface SearchTermInterface
 {
     // Used OPERAND constants
     const OPERAND_OR = 'or';
