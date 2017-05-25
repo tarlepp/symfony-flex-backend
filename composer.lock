@@ -220,12 +220,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "54d5eb679f0d8372b8675c51244ddf2296391667"
+                "reference": "7181fafc832e90e866000b7cbe86aa0939cf2de0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/54d5eb679f0d8372b8675c51244ddf2296391667",
-                "reference": "54d5eb679f0d8372b8675c51244ddf2296391667",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/7181fafc832e90e866000b7cbe86aa0939cf2de0",
+                "reference": "7181fafc832e90e866000b7cbe86aa0939cf2de0",
                 "shasum": ""
             },
             "require": {
@@ -285,7 +285,7 @@
                 "persistence",
                 "spl"
             ],
-            "time": "2017-05-23T21:33:56+00:00"
+            "time": "2017-05-24T21:38:59+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -1661,12 +1661,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "a56a943e5c24bfb32868b3fed041ded710420792"
+                "reference": "bfa3962834ea7b72406ca81b6203733883a76f40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/a56a943e5c24bfb32868b3fed041ded710420792",
-                "reference": "a56a943e5c24bfb32868b3fed041ded710420792",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/bfa3962834ea7b72406ca81b6203733883a76f40",
+                "reference": "bfa3962834ea7b72406ca81b6203733883a76f40",
                 "shasum": ""
             },
             "require": {
@@ -1725,7 +1725,7 @@
                 "caching",
                 "psr6"
             ],
-            "time": "2017-05-17T16:21:40+00:00"
+            "time": "2017-05-25T05:53:40+00:00"
         },
         {
             "name": "symfony/class-loader",
@@ -1973,12 +1973,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "378720c4ed38f8c3040815c11a9c89e26ca5ba20"
+                "reference": "456d7c254e2d1ffcc1e72592d0808c25eb98f96f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/378720c4ed38f8c3040815c11a9c89e26ca5ba20",
-                "reference": "378720c4ed38f8c3040815c11a9c89e26ca5ba20",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/456d7c254e2d1ffcc1e72592d0808c25eb98f96f",
+                "reference": "456d7c254e2d1ffcc1e72592d0808c25eb98f96f",
                 "shasum": ""
             },
             "require": {
@@ -2035,7 +2035,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-24T14:44:14+00:00"
+            "time": "2017-05-25T05:53:40+00:00"
         },
         {
             "name": "symfony/doctrine-bridge",
