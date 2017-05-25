@@ -1,18 +1,18 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/DTO/Interfaces/RestDtoInterface.php
+ * /src/Rest/DTO/RestDtoInterface.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Rest\DTO\Interfaces;
+namespace App\Rest\DTO;
 
 use App\Entity\Interfaces\EntityInterface;
 
 /**
  * Interface RestDtoInterface
  *
- * @package App\Rest\DTO\\Interfaces
+ * @package App\Rest\DTO\
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface RestDtoInterface

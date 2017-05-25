@@ -9,7 +9,6 @@ namespace App\Rest\DTO;
 
 use App\Entity\User as UserEntity;
 use App\Entity\Interfaces\EntityInterface;
-use App\Rest\DTO\Interfaces\RestDtoInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -18,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\Rest\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class User extends Base
+class User extends RestDto
 {
     /**
      * @var string

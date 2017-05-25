@@ -7,15 +7,13 @@ declare(strict_types=1);
  */
 namespace App\Rest\DTO;
 
-use App\Rest\DTO\Interfaces\RestDtoInterface;
-
 /**
  * Class Base
  *
  * @package App\Rest\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class Base implements RestDtoInterface
+abstract class RestDto implements RestDtoInterface
 {
     /**
      * An array of 'visited' setter properties of current dto.
