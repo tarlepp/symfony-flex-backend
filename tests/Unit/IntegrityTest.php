@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Unit;
 
-use App\Entity\Interfaces\EntityInterface;
+use App\Entity\EntityInterface;
 use App\Rest\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

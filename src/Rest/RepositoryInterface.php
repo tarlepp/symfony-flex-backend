@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest;
 
-use App\Entity\Interfaces\EntityInterface;
+use App\Entity\EntityInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 

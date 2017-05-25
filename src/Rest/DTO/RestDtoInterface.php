@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Rest\DTO;
 
-use App\Entity\Interfaces\EntityInterface;
+use App\Entity\EntityInterface;
 
 /**
  * Interface RestDtoInterface

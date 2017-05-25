@@ -34,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class User implements UserInterface, EquatableInterface, \Serializable, Interfaces\EntityInterface
+class User implements UserInterface, EquatableInterface, \Serializable, EntityInterface
 {
     /**
      * @var string
@@ -52,7 +52,7 @@ class User implements UserInterface, EquatableInterface, \Serializable, Interfac
      *  )
      * @ORM\Id()
      */
-    private $id = '';
+    private $id;
 
     /**
      * @var string

@@ -7,14 +7,15 @@ declare(strict_types=1);
  */
 namespace App\Resource;
 
-use App\Entity\Interfaces\EntityInterface;
+use App\Entity\EntityInterface;
 use App\Entity\UserGroup as Entity;
 use App\Repository\UserGroupRepository as Repository;
-use App\Rest\DTO\Interfaces\RestDtoInterface;
+use App\Rest\DTO\RestDtoInterface;
 use App\Rest\Resource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
+/** @noinspection PhpMissingParentCallCommonInspection */
 
 /**
  * Class UserGroupResource

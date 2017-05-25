@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest;
 
-use App\Entity\Interfaces\EntityInterface;
+use App\Entity\EntityInterface;
 use App\Rest\DTO\RestDtoInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

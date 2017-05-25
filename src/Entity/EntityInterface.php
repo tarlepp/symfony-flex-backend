@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Entity/Interfaces/EntityInterface.php
+ * /src/Entity/EntityInterface.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Entity\Interfaces;
+namespace App\Entity;
 
 /**
  * Interface EntityInterface
  *
- * @package App\Entity\Interfaces
+ * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface EntityInterface

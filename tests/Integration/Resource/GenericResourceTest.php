@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Resource;
 
-use App\Entity\Interfaces\EntityInterface;
+use App\Entity\EntityInterface;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;

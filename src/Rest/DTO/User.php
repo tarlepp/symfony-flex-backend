@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Rest\DTO;
 
 use App\Entity\User as UserEntity;
-use App\Entity\Interfaces\EntityInterface;
+use App\Entity\EntityInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
