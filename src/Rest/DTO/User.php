@@ -148,7 +148,7 @@ class User extends RestDto
      *
      * @param EntityInterface|UserEntity $entity
      *
-     * @return RestDtoInterface
+     * @return RestDtoInterface|User
      */
     public function load(EntityInterface $entity): RestDtoInterface
     {

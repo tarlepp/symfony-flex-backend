@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest\DTO;
 
 use App\Rest\DTO\Interfaces\RestDtoInterface;
+use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -197,10 +198,19 @@ class DtoTestCase extends KernelTestCase
 
                 if ($info[0] === '@') {
                     // get the name of the param
-                    \preg_match('/@var (\w+)/', $info, $matches);
+                    \preg_match('/@var (.*)/', $info, $matches);
+
+                    if (!$matches) {
+                        $message = \sprintf(
+                            'Cannot determine parameter type for "%s"',
+                            $info
+                        );
+
+                        throw new InvalidArgumentException($message);
+                    }
 
                     if ($matches[1]) {
-                        $output = $matches[1];
+                        $output = \trim($matches[1]);
 
                         break;
                     }
