@@ -55,7 +55,7 @@ class CreateUserGroupCommand extends Command
         RoleRepository $roleRepository
     )
     {
-        parent::__construct('user:createGroup');
+        parent::__construct('user:create-group');
 
         $this->userGroupResource = $userGroupResource;
         $this->roleRepository = $roleRepository;
