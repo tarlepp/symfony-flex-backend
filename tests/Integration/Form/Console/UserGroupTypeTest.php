@@ -7,12 +7,15 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Form\Console;
 
+use App\Entity\Role;
 use App\Form\Console\UserGroupType;
 use App\Repository\RoleRepository;
 use App\Rest\DTO\UserGroup as UserGroupDto;
 use App\Security\Roles;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Form\FormFactory;
+use Doctrine\Common\Persistence\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject;
+use Symfony\Component\Form\PreloadedExtension;
+use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * Class UserGroupTypeTest
@@ -20,45 +23,55 @@ use Symfony\Component\Form\FormFactory;
  * @package App\Tests\Integration\Form\Console
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserGroupTypeTest extends KernelTestCase
+class UserGroupTypeTest extends TypeTestCase
 {
     /**
-     * @var FormFactory
+     * @var PHPUnit_Framework_MockObject_MockObject|Roles
      */
-    private $formFactory;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->formFactory = static::$kernel->getContainer()->get('form.factory');
-    }
+    private $mockRoles;
 
     /**
-     * @dataProvider dataProviderTestSubmitValidData
-     *
-     * @param string $roleName
+     * @var PHPUnit_Framework_MockObject_MockObject|RoleRepository
      */
-    public function testSubmitValidData(string $roleName): void
-    {
-        // Create form
-        $form = $this->formFactory->create(UserGroupType::class);
+    private $mockRoleRepository;
 
-        /** @var RoleRepository $roleRepository */
-        $roleRepository = static::$kernel->getContainer()->get(RoleRepository::class);
-        $roleEntity = $roleRepository->find($roleName);
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     */
+    private $mockObjectManager;
+
+    public function testSubmitValidData(): void
+    {
+        // Create new role entity for testing
+        $roleEntity = new Role('ROLE_ADMIN');
+
+        $this->mockRoleRepository
+            ->expects(static::once())
+            ->method('findAll')
+            ->willReturn([$roleEntity]);
+
+        $this->mockRoleRepository
+            ->expects(static::once())
+            ->method('find')
+            ->willReturn($roleEntity);
+
+        $this->mockObjectManager
+            ->expects(static::once())
+            ->method('getRepository')
+            ->willReturn($this->mockRoleRepository);
+
+        // Create form
+        $form = $this->factory->create(UserGroupType::class);
 
         // Create new DTO object
         $dto = new UserGroupDto();
-        $dto->setName($roleName);
+        $dto->setName('ROLE_ADMIN');
         $dto->setRole($roleEntity);
 
         // Specify used form data
         $formData = array(
-            'name'  => $roleName,
-            'role'  => $roleName,
+            'name'  => 'ROLE_ADMIN',
+            'role'  => 'ROLE_ADMIN',
         );
 
         // submit the data to the form directly
@@ -79,17 +92,28 @@ class UserGroupTypeTest extends KernelTestCase
         }
     }
 
+    protected function setUp(): void
+    {
+        $this->mockRoles = $this->createMock(Roles::class);
+        $this->mockRoleRepository = $this->createMock(RoleRepository::class);
+        $this->mockObjectManager = $this->createMock(ObjectManager::class);
+
+        parent::setUp();
+    }
+
     /**
      * @return array
      */
-    public function dataProviderTestSubmitValidData(): array
+    protected function getExtensions(): array
     {
-        static::bootKernel();
+        parent::getExtensions();
 
-        $formatter = function (string $role) {
-            return (array)$role;
-        };
+        // create a type instance with the mocked dependencies
+        $type = new UserGroupType($this->mockRoles, $this->mockRoleRepository, $this->mockObjectManager);
 
-        return \array_map($formatter, static::$kernel->getContainer()->get(Roles::class)->getRoles());
+        return [
+            // register the type instances with the PreloadedExtension
+            new PreloadedExtension([$type], []),
+        ];
     }
 }
