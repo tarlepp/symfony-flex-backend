@@ -7,13 +7,19 @@ declare(strict_types=1);
  */
 namespace App\Repository;
 
+use App\Entity\Role as Entity;
 use Doctrine\ORM\EntityRepository;
+
+/** @noinspection PhpHierarchyChecksInspection */
+/** @noinspection PhpMissingParentCallCommonInspection */
 
 /**
  * Class RoleRepository
  *
  * @package App\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method Entity|null find($id, $lockMode = null, $lockVersion = null)
  */
 class RoleRepository extends EntityRepository
 {
