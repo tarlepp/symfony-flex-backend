@@ -710,12 +710,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "2a239be45ec4e64c736e4277cde8bff376ef2402"
+                "reference": "205ee72e3360175f687d01c72024c4854dff8363"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2a239be45ec4e64c736e4277cde8bff376ef2402",
-                "reference": "2a239be45ec4e64c736e4277cde8bff376ef2402",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/205ee72e3360175f687d01c72024c4854dff8363",
+                "reference": "205ee72e3360175f687d01c72024c4854dff8363",
                 "shasum": ""
             },
             "require": {
@@ -782,7 +782,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-05-23T16:44:10+00:00"
+            "time": "2017-05-30T12:05:19+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -843,12 +843,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "496878c33a3a256215f1153770156b01899ca839"
+                "reference": "0409f26fcc7ff259e9eff8e408e78c844cb12c62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/496878c33a3a256215f1153770156b01899ca839",
-                "reference": "496878c33a3a256215f1153770156b01899ca839",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/0409f26fcc7ff259e9eff8e408e78c844cb12c62",
+                "reference": "0409f26fcc7ff259e9eff8e408e78c844cb12c62",
                 "shasum": ""
             },
             "require": {
@@ -932,7 +932,7 @@
                 "rest",
                 "symfony"
             ],
-            "time": "2017-05-10T20:16:55+00:00"
+            "time": "2017-05-29T12:33:13+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -1789,12 +1789,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "d08cc20d9cd5c931cb480a752ccd4fa8370a8976"
+                "reference": "cd28548446fc35020387f0b9b61125ee7178ef29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/d08cc20d9cd5c931cb480a752ccd4fa8370a8976",
-                "reference": "d08cc20d9cd5c931cb480a752ccd4fa8370a8976",
+                "url": "https://api.github.com/repos/symfony/config/zipball/cd28548446fc35020387f0b9b61125ee7178ef29",
+                "reference": "cd28548446fc35020387f0b9b61125ee7178ef29",
                 "shasum": ""
             },
             "require": {
@@ -1841,7 +1841,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-24T09:02:43+00:00"
+            "time": "2017-05-29T18:41:56+00:00"
         },
         {
             "name": "symfony/console",
@@ -3060,12 +3060,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4"
+                "reference": "adebc086600bc93b45d8d6721c8f21088a2be4dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/e79d363049d1c2128f133a2667e4f4190904f7f4",
-                "reference": "e79d363049d1c2128f133a2667e4f4190904f7f4",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/adebc086600bc93b45d8d6721c8f21088a2be4dc",
+                "reference": "adebc086600bc93b45d8d6721c8f21088a2be4dc",
                 "shasum": ""
             },
             "require": {
@@ -3111,7 +3111,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2016-11-14T01:06:16+00:00"
+            "time": "2017-05-29T15:51:17+00:00"
         },
         {
             "name": "symfony/polyfill-php56",
