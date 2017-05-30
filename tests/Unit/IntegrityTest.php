@@ -10,6 +10,7 @@ namespace App\Tests\Unit;
 use App\Entity\EntityInterface;
 use App\Rest\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
 
 /**
@@ -187,6 +188,26 @@ class IntegrityTest extends KernelTestCase
         );
 
         static::assertTrue(\class_exists($formTypeTestClass), $message);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatDataTransformerHaveIntegrationTest
+     *
+     * @param string $dataTransformerTestClass
+     * @param string $dataTransformerClass
+     */
+    public function testThatDataTransformerHaveIntegrationTest(
+        string $dataTransformerTestClass,
+        string $dataTransformerClass
+    ): void
+    {
+        $message = \sprintf(
+            'DataTransformer \'%s\' doesn\'t have required test class \'%s\'.',
+            $dataTransformerClass,
+            $dataTransformerTestClass
+        );
+
+        static::assertTrue(\class_exists($dataTransformerTestClass), $message);
     }
 
     /**
@@ -494,6 +515,54 @@ class IntegrityTest extends KernelTestCase
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return $reflectionClass->implementsInterface(FormTypeInterface::class);
+        };
+
+        $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
+            $file = $reflectionClass->getFileName();
+
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map(
+            $formatter,
+            \array_filter(
+                \array_map(
+                    $iterator,
+                    self::recursiveFileSearch($folder, $pattern)
+                ),
+                $filter
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/Form/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\Form\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
+
+        $iterator = function (string $file) use ($folder, $namespace) {
+            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new \ReflectionClass($repositoryClass);
+        };
+
+        $filter = function (\ReflectionClass $reflectionClass) {
+            return $reflectionClass->implementsInterface(DataTransformerInterface::class);
         };
 
         $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
