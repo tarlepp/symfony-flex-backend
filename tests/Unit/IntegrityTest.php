@@ -10,6 +10,7 @@ namespace App\Tests\Unit;
 use App\Entity\EntityInterface;
 use App\Rest\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * Class IntegrityTest
@@ -169,6 +170,23 @@ class IntegrityTest extends KernelTestCase
         );
 
         static::assertTrue(\class_exists($dtoTestClass), $message);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatFormTypeHaveIntegrationTest
+     *
+     * @param string $formTypeTestClass
+     * @param string $formTypeClass
+     */
+    public function testThatFormTypeHaveIntegrationTest(string $formTypeTestClass, string $formTypeClass): void
+    {
+        $message = \sprintf(
+            'Form type \'%s\' doesn\'t have required test class \'%s\'.',
+            $formTypeClass,
+            $formTypeTestClass
+        );
+
+        static::assertTrue(\class_exists($formTypeTestClass), $message);
     }
 
     /**
@@ -428,6 +446,54 @@ class IntegrityTest extends KernelTestCase
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return !$reflectionClass->isInterface() && !$reflectionClass->isAbstract();
+        };
+
+        $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
+            $file = $reflectionClass->getFileName();
+
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map(
+            $formatter,
+            \array_filter(
+                \array_map(
+                    $iterator,
+                    self::recursiveFileSearch($folder, $pattern)
+                ),
+                $filter
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatFormTypeHaveIntegrationTest(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/Form/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\Form\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
+
+        $iterator = function (string $file) use ($folder, $namespace) {
+            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new \ReflectionClass($repositoryClass);
+        };
+
+        $filter = function (\ReflectionClass $reflectionClass) {
+            return $reflectionClass->implementsInterface(FormTypeInterface::class);
         };
 
         $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
