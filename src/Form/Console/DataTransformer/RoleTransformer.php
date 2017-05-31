@@ -44,7 +44,7 @@ class RoleTransformer implements DataTransformerInterface
      */
     public function transform($role): string
     {
-        return (null === $role) ? '' : $role->getId();
+        return ($role instanceof Role) ? $role->getId() : '';
     }
 
     /**

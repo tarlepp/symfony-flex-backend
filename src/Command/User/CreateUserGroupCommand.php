@@ -13,7 +13,9 @@ use App\Resource\UserGroupResource;
 use App\Rest\DTO\UserGroup as UserGroupDto;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -41,6 +43,20 @@ class CreateUserGroupCommand extends Command
     private $io;
 
     /**
+     * @var array
+     */
+    private $commandParameters = [
+        [
+            'name'          => 'name',
+            'description'   => 'Name of the user group',
+        ],
+        [
+            'name'          => 'role',
+            'description'   => 'Role of the user group',
+        ],
+    ];
+
+    /**
      * CreateUserGroupCommand constructor.
      *
      * @param null              $name
@@ -63,6 +79,34 @@ class CreateUserGroupCommand extends Command
         $this->setDescription('Console command to create user groups');
     }
 
+    /**
+     * Configures the current command.
+     *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     */
+    protected function configure(): void
+    {
+        /**
+         * Lambda iterator function to parse specified inputs.
+         *
+         * @param array $input
+         *
+         * @return InputOption
+         */
+        $iterator = function (array $input) {
+            return new InputOption(
+                $input['name'],
+                $input['shortcut']    ?? null,
+                $input['mode']        ?? InputOption::VALUE_OPTIONAL,
+                $input['description'] ?? '',
+                $input['default']     ?? null
+            );
+        };
+
+        // Configure command
+        $this->setDefinition(new InputDefinition(\array_map($iterator, $this->commandParameters)));
+    }
+
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * Executes the current command.
@@ -82,7 +126,7 @@ class CreateUserGroupCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
 
         // Check that roles exists
-        $this->checkRoles($output);
+        $this->checkRoles($output, $input->isInteractive());
 
         /** @var UserGroupDto $dto */
         $dto = $this->getHelper('form')->interactUsingForm(
@@ -94,26 +138,34 @@ class CreateUserGroupCommand extends Command
         // Create new user group
         $this->userGroupResource->create($dto);
 
-        $this->io->success('User group created - have a nice day');
+        if ($input->isInteractive()) {
+            $this->io->success('User group created - have a nice day');
+        }
 
         return null;
     }
 
     /**
+     * Method to check if database contains role(s), if non exists method will run 'user:create-roles' command
+     * which creates all roles to database so that user groups can be created.
+     *
      * @param OutputInterface $output
+     * @param bool            $interactive
      *
      * @throws \Exception
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      */
-    private function checkRoles(OutputInterface $output): void
+    private function checkRoles(OutputInterface $output, bool $interactive): void
     {
         if ($this->roleRepository->count([]) !== 0) {
             return;
         }
 
-        $this->io->block([
-            'Roles are not yet created, creating those now...'
-        ]);
+        if ($interactive) {
+            $this->io->block([
+                'Roles are not yet created, creating those now...'
+            ]);
+        }
 
         $command = $this->getApplication()->find('user:create-roles');
 
