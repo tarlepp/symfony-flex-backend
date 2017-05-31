@@ -23,5 +23,21 @@ use Doctrine\ORM\EntityRepository;
  */
 class RoleRepository extends EntityRepository
 {
-    // Implement custom repository methods here
+    /**
+     * Helper method to 'reset' repository entity table - in other words delete all records - so be carefully with
+     * this...
+     *
+     * @return int
+     */
+    public function reset(): int
+    {
+        // Create query builder
+        $queryBuilder = $this->createQueryBuilder('entity');
+
+        // Define delete query
+        $queryBuilder->delete();
+
+        // Return deleted row count
+        return $queryBuilder->getQuery()->execute();
+    }
 }
