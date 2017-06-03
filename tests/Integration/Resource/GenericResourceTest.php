@@ -282,7 +282,7 @@ class GenericResourceTest extends KernelTestCase
 
         $repository
             ->expects(static::once())
-            ->method('count')
+            ->method('countAdvanced')
             ->with(...$expectedArguments);
 
         /** @var ResourceInterface $resource */

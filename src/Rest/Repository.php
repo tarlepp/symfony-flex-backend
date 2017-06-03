@@ -140,7 +140,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function count(array $criteria = null, array $search = null): int
+    public function countAdvanced(array $criteria = null, array $search = null): int
     {
         $criteria = $criteria ?? [];
         $search = $search ?? [];
@@ -153,6 +153,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         $this->processSearchTerms($queryBuilder, $search);
 
         $queryBuilder->select('COUNT(entity.id)');
+        $queryBuilder->distinct();
 
         return (int)$queryBuilder->getQuery()->getSingleScalarResult();
     }

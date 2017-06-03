@@ -48,9 +48,9 @@ interface ResourceInterface
      *
      * @param string $dtoClass
      *
-     * @return Resource
+     * @return ResourceInterface
      */
-    public function setDtoClass(string $dtoClass): Resource;
+    public function setDtoClass(string $dtoClass): ResourceInterface;
 
     /**
      * Getter method for current entity name.
@@ -196,6 +196,8 @@ interface ResourceInterface
      * @param null|array $search
      *
      * @return array
+     *
+     * @throws \InvalidArgumentException
      */
     public function getIds(array $criteria = null, array $search = null): array;
 

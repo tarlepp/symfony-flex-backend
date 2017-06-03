@@ -157,7 +157,7 @@ class CreateUserGroupCommand extends Command
      */
     private function checkRoles(OutputInterface $output, bool $interactive): void
     {
-        if ($this->roleRepository->count([]) !== 0) {
+        if ($this->roleRepository->countAdvanced([]) !== 0) {
             return;
         }
 

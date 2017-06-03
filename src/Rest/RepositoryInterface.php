@@ -94,7 +94,7 @@ interface RepositoryInterface
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function count(array $criteria = null, array $search = null): int;
+    public function countAdvanced(array $criteria = null, array $search = null): int;
 
     /**
      * Generic replacement for basic 'findBy' method if/when you want to use generic LIKE search.

@@ -87,9 +87,9 @@ abstract class Resource implements ResourceInterface
      *
      * @param string $dtoClass
      *
-     * @return Resource
+     * @return ResourceInterface
      */
-    public function setDtoClass(string $dtoClass): Resource
+    public function setDtoClass(string $dtoClass): ResourceInterface
     {
         $this->dtoClass = $dtoClass;
 
@@ -260,7 +260,7 @@ abstract class Resource implements ResourceInterface
         // Before callback method call
         $this->beforeCount($criteria, $search);
 
-        $count = $this->getRepository()->count($criteria, $search);
+        $count = $this->getRepository()->countAdvanced($criteria, $search);
 
         // After callback method call
         $this->afterCount($criteria, $search, $count);
@@ -392,6 +392,8 @@ abstract class Resource implements ResourceInterface
      * @param null|array $search
      *
      * @return array
+     *
+     * @throws \InvalidArgumentException
      */
     public function getIds(array $criteria = null, array $search = null): array
     {
