@@ -59,6 +59,7 @@ class UserEntitySubscriber
      *
      * @return void
      *
+     * @throws \LengthException
      * @throws \RuntimeException
      */
     public function prePersist(LifecycleEventArgs $event): void
@@ -79,6 +80,7 @@ class UserEntitySubscriber
      *
      * @return void
      *
+     * @throws \LengthException
      * @throws \RuntimeException
      */
     public function preUpdate(PreUpdateEventArgs $event): void
@@ -99,6 +101,7 @@ class UserEntitySubscriber
      *
      * @return void
      *
+     * @throws \LengthException
      * @throws \RuntimeException
      */
     protected function changePassword(User $user): void
@@ -108,6 +111,10 @@ class UserEntitySubscriber
 
         // Yeah, we have new plain password set, so we need to encode it
         if (!empty($plainPassword)) {
+            if (\strlen($plainPassword) < 8) {
+                throw new \LengthException('Too short password');
+            }
+
             $encoder = $this->getEncoder($user);
 
             // Password hash callback
