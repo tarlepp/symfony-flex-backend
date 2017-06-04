@@ -15,35 +15,35 @@
         "issues": "https://github.com/tarlepp/symfony-flex-backend/issues"
     },
     "require": {
-        "php": "^7.1",
+        "php": "^7.1.3",
         "doctrine/annotations": "^1.4@dev",
         "lexik/jwt-authentication-bundle": "^2.0@dev",
         "matthiasnoback/symfony-console-form": "dev-master",
         "ramsey/uuid": "^3.0@dev",
         "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "^4.0@dev",
-        "symfony/console": "^3.3@dev",
+        "symfony/console": "^3.4@dev",
         "symfony/flex": "^1.0",
-        "symfony/form": "3.4.x-dev",
-        "symfony/framework-bundle": "^3.3@dev",
-        "symfony/monolog-bundle": "^3.0@dev",
+        "symfony/form": "^3.4@dev",
+        "symfony/framework-bundle": "^3.4@dev",
+        "symfony/monolog-bundle": "^3.4@dev",
         "symfony/orm-pack": "^2.4@dev",
-        "symfony/security-bundle": "^3.3@dev",
-        "symfony/serializer": "^3.3@dev",
-        "symfony/twig-bundle": "^3.3@dev",
-        "symfony/validator": "^3.3@dev",
-        "symfony/web-server-bundle": "^3.3@dev",
-        "symfony/yaml": "^3.3"
+        "symfony/security-bundle": "^3.4@dev",
+        "symfony/serializer": "^3.4@dev",
+        "symfony/twig-bundle": "^3.4@dev",
+        "symfony/validator": "^3.4@dev",
+        "symfony/web-server-bundle": "^3.4@dev",
+        "symfony/yaml": "^3.4@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.1@dev",
         "satooshi/php-coveralls": "^2.0@dev",
         "sensiolabs/security-checker": "^4.0@dev",
-        "symfony/browser-kit": "^3.3@dev",
-        "symfony/dotenv": "^3.3",
-        "symfony/phpunit-bridge": "^3.3@dev",
+        "symfony/browser-kit": "^3.4@dev",
+        "symfony/dotenv": "^3.4@dev",
+        "symfony/phpunit-bridge": "^3.4@dev",
         "symfony/requirements-checker": "^1.0@dev",
-        "symfony/web-profiler-bundle": "^3.3@dev"
+        "symfony/web-profiler-bundle": "^3.4@dev"
     },
     "config": {
         "platform": {
