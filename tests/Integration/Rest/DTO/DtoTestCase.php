@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest\DTO;
 
-use App\Rest\DTO\Interfaces\RestDtoInterface;
+use App\Rest\DTO\RestDtoInterface;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -156,6 +156,9 @@ class DtoTestCase extends KernelTestCase
         }
 
         switch ($type) {
+            case 'array':
+                $output = [];
+                break;
             case 'string';
                 $output = 'foobar';
                 break;
