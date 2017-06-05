@@ -7,8 +7,11 @@ declare(strict_types=1);
  */
 namespace App\Command\User;
 
+use App\Form\Console\UserType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
+use App\Resource\UserResource;
+use App\Rest\DTO\User as UserDto;
 use App\Security\RolesInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -24,6 +27,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateUserCommand extends Command
 {
+    private $userResource;
+
     /**
      * @var UserGroupResource
      */
@@ -48,6 +53,7 @@ class CreateUserCommand extends Command
      * CreateRolesCommand constructor.
      *
      * @param null              $name
+     * @param UserResource      $userResource
      * @param UserGroupResource $userGroupResource
      * @param RolesInterface    $roles
      * @param RoleRepository    $roleRepository
@@ -56,6 +62,7 @@ class CreateUserCommand extends Command
      */
     public function __construct(
         $name = null,
+        UserResource $userResource,
         UserGroupResource $userGroupResource,
         RolesInterface $roles,
         RoleRepository $roleRepository
@@ -63,6 +70,7 @@ class CreateUserCommand extends Command
     {
         parent::__construct('user:create');
 
+        $this->userResource = $userResource;
         $this->userGroupResource = $userGroupResource;
         $this->roles = $roles;
         $this->roleRepository = $roleRepository;
@@ -79,10 +87,12 @@ class CreateUserCommand extends Command
      *
      * @return null|int null or 0 if everything went fine, or an error code
      *
-     * @throws \InvalidArgumentException
      * @throws \Exception
+     * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\Console\Exception\LogicException
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -90,6 +100,12 @@ class CreateUserCommand extends Command
 
         // Check that roles exists
         $this->checkUserGroups($output, $input->isInteractive());
+
+        /** @var UserDto $dto */
+        $dto = $this->getHelper('form')->interactUsingForm(UserType::class, $input, $output);
+
+        // Create new user group
+        $this->userResource->create($dto);
 
         if ($input->isInteractive()) {
             $this->io->success('User created - have a nice day');
