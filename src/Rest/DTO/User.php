@@ -26,7 +26,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    private $username;
+    private $username = '';
 
     /**
      * @var string
@@ -35,7 +35,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    private $firstname;
+    private $firstname = '';
 
     /**
      * @var string
@@ -44,7 +44,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    private $surname;
+    private $surname = '';
 
     /**
      * @var string
@@ -53,7 +53,17 @@ class User extends RestDto
      * @Assert\NotNull()
      * @Assert\Email()
      */
-    private $email;
+    private $email = '';
+
+    /**
+     * @var array
+     */
+    private $userGroups = [];
+
+    /**
+     * @var string
+     */
+    private $plainPassword = '';
 
     /**
      * @return string
@@ -144,6 +154,50 @@ class User extends RestDto
     }
 
     /**
+     * @return array
+     */
+    public function getUserGroups(): array
+    {
+        return $this->userGroups;
+    }
+
+    /**
+     * @param array $userGroups
+     *
+     * @return User
+     */
+    public function setUserGroups($userGroups): User
+    {
+        $this->setVisited('userGroups');
+
+        $this->userGroups = $userGroups;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPlainPassword(): string
+    {
+        return $this->plainPassword;
+    }
+
+    /**
+     * @param string $plainPassword
+     *
+     * @return User
+     */
+    public function setPlainPassword(string $plainPassword): User
+    {
+        $this->setVisited('plainPassword');
+
+        $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    /**
      * Method to load DTO data from specified entity.
      *
      * @param EntityInterface|UserEntity $entity
@@ -156,6 +210,7 @@ class User extends RestDto
         $this->firstname = $entity->getFirstname();
         $this->surname = $entity->getSurname();
         $this->email = $entity->getEmail();
+        $this->userGroups = $entity->getUserGroups();
 
         return $this;
     }
@@ -173,6 +228,15 @@ class User extends RestDto
         $entity->setFirstname($this->firstname);
         $entity->setSurname($this->surname);
         $entity->setEmail($this->email);
+        $entity->setPlainPassword($this->plainPassword);
+
+        // Clear user groups
+        $entity->clearUserGroups();
+
+        // And attach user groups to entity
+        foreach ($this->userGroups as $userGroup) {
+            $entity->addUserGroup($userGroup);
+        }
 
         return $entity;
     }
