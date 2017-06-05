@@ -13,6 +13,7 @@ use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * Class Repository
@@ -195,7 +196,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         $limit === 0 ?: $queryBuilder->setMaxResults($limit);
         $offset === 0 ?: $queryBuilder->setFirstResult($offset);
 
-        return $queryBuilder->getQuery()->getResult();
+        return (new Paginator($queryBuilder, true))->getIterator()->getArrayCopy();
     }
 
     /**
@@ -363,13 +364,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
             $criteria = SearchTerm::getCriteria($columns, $terms, $operand);
 
             if ($criteria !== null) {
-                $queryBuilder->andWhere(
-                    $this->getExpression(
-                        $queryBuilder,
-                        $queryBuilder->expr()->andX(),
-                        $criteria
-                    )
-                );
+                $queryBuilder->andWhere($this->getExpression($queryBuilder, $queryBuilder->expr()->andX(), $criteria));
             }
         }
     }
