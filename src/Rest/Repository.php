@@ -475,10 +475,10 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     ): Composite {
         if (\count($criteria)) {
             foreach ($criteria as $key => $comparison) {
-                if ($key === 'or' || \array_key_exists('or', $comparison)) {
-                    $expression->add($this->getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
-                } elseif ($key === 'and' || \array_key_exists('and', $comparison)) {
+                if ($key === 'and' || \array_key_exists('and', $comparison)) {
                     $expression->add($this->getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
+                } elseif ($key === 'or' || \array_key_exists('or', $comparison)) {
+                    $expression->add($this->getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
                 } else {
                     $comparison = (object)\array_combine(['field', 'operator', 'value'], $comparison);
 
