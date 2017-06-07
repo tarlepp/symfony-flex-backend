@@ -294,12 +294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "b331b1e327eb1f3af065675086de558b66c3a198"
+                "reference": "66fa7f84dff1a1d837be3643adf5a8242b28b0ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/b331b1e327eb1f3af065675086de558b66c3a198",
-                "reference": "b331b1e327eb1f3af065675086de558b66c3a198",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/66fa7f84dff1a1d837be3643adf5a8242b28b0ba",
+                "reference": "66fa7f84dff1a1d837be3643adf5a8242b28b0ba",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +359,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-06-06T13:10:33+00:00"
+            "time": "2017-06-06T16:00:09+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -367,12 +367,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "28438d40f16c7e6f0d1d41c2bfed3db36cba873f"
+                "reference": "1818d3d60bff83bdeea79cbb852eed104217998f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/28438d40f16c7e6f0d1d41c2bfed3db36cba873f",
-                "reference": "28438d40f16c7e6f0d1d41c2bfed3db36cba873f",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/1818d3d60bff83bdeea79cbb852eed104217998f",
+                "reference": "1818d3d60bff83bdeea79cbb852eed104217998f",
                 "shasum": ""
             },
             "require": {
@@ -440,7 +440,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2017-06-01T10:46:36+00:00"
+            "time": "2017-06-06T14:27:52+00:00"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -1458,12 +1458,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ccffea64be8575eaa7ad09cd16dfeedfa4711607"
+                "reference": "7cd88c8d4e4e6b483633bb13c35bcec95fd6cd4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ccffea64be8575eaa7ad09cd16dfeedfa4711607",
-                "reference": "ccffea64be8575eaa7ad09cd16dfeedfa4711607",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/7cd88c8d4e4e6b483633bb13c35bcec95fd6cd4c",
+                "reference": "7cd88c8d4e4e6b483633bb13c35bcec95fd6cd4c",
                 "shasum": ""
             },
             "conflict": {
@@ -1505,6 +1505,7 @@
                 "magento/magento2ce": ">=2,<2.2",
                 "monolog/monolog": ">=1.8,<1.12",
                 "namshi/jose": "<2.2",
+                "onelogin/php-saml": "<2.10.4",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
                 "phpmailer/phpmailer": ">=5,<5.2.22",
@@ -1585,7 +1586,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-05-13T14:02:28+00:00"
+            "time": "2017-06-07T12:12:03+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
