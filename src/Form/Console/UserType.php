@@ -60,48 +60,55 @@ class UserType extends AbstractType
                 'username',
                 Type\TextType::class,
                 [
-                    'label'     => 'Username',
-                    'required'  => true,
+                    'label'         => 'Username',
+                    'required'      => true,
+                    'empty_data'    => '',
                 ]
             )
             ->add(
                 'firstname',
                 Type\TextType::class,
                 [
-                    'label'     => 'Firstname',
-                    'required'  => true,
+                    'label'         => 'Firstname',
+                    'required'      => true,
+                    'empty_data'    => '',
                 ]
             )
             ->add(
                 'surname',
                 Type\TextType::class,
                 [
-                    'label'     => 'Surname',
-                    'required'  => true,
+                    'label'         => 'Surname',
+                    'required'      => true,
+                    'empty_data'    => '',
                 ]
             )
             ->add(
                 'email',
                 Type\EmailType::class,
                 [
-                    'label'     => 'Email address',
-                    'required'  => true,
+                    'label'         => 'Email address',
+                    'required'      => true,
+                    'empty_data'    => '',
                 ]
             )
             ->add(
                 'plainPassword',
                 Type\PasswordType::class,
                 [
-                    'label'     => 'Password',
+                    'label'         => 'Password',
+                    'required'      => true,
+                    'empty_data'    => '',
                 ]
             )
             ->add(
                 'userGroups',
                 Type\ChoiceType::class,
                 [
-                    'choices'   => $this->getUserGroupChoices(),
-                    'multiple'  => true,
-                    'required'  => true,
+                    'choices'       => $this->getUserGroupChoices(),
+                    'multiple'      => true,
+                    'required'      => true,
+                    'empty_data'    => '',
                 ]
             );
 

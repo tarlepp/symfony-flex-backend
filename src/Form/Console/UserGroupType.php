@@ -72,17 +72,19 @@ class UserGroupType extends AbstractType
                 'name',
                 Type\TextType::class,
                 [
-                    'label'     => 'Group name',
-                    'required'  => true
+                    'label'         => 'Group name',
+                    'required'      => true,
+                    'empty_data'    => '',
                 ]
             )
             ->add(
                 'role',
                 Type\ChoiceType::class,
                 [
-                    'label'     => 'Role',
-                    'choices'   => $this->getRoleChoices(),
-                    'required'  => true,
+                    'label'         => 'Role',
+                    'choices'       => $this->getRoleChoices(),
+                    'required'      => true,
+                    'empty_data'    => '',
                 ]
             );
 
