@@ -83,7 +83,10 @@ class UserTypeTest extends TypeTestCase
             'firstname'     => 'John',
             'surname'       => 'Doe',
             'email'         => 'john.doe@test.com',
-            'plainPassword' => 'password',
+            'plainPassword' => [
+                'password1' => 'password',
+                'password2' => 'password',
+            ],
             'userGroups'    => [$userGroupEntity->getId()],
         );
 

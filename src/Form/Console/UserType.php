@@ -99,9 +99,11 @@ class UserType extends AbstractType
                     'type'              => Type\PasswordType::class,
                     'required'          => true,
                     'invalid_message'   => 'The password fields must match.',
+                    'first_name'        => 'password1',
                     'first_options'     => [
                         'label' => 'Password',
                     ],
+                    'second_name'       => 'password2',
                     'second_options'    => [
                         'label' => 'Repeat password',
                     ],
