@@ -94,11 +94,17 @@ class UserType extends AbstractType
             )
             ->add(
                 'plainPassword',
-                Type\PasswordType::class,
+                Type\RepeatedType::class,
                 [
-                    'label'         => 'Password',
-                    'required'      => true,
-                    'empty_data'    => '',
+                    'type'              => Type\PasswordType::class,
+                    'required'          => true,
+                    'invalid_message'   => 'The password fields must match.',
+                    'first_options'     => [
+                        'label' => 'Password',
+                    ],
+                    'second_options'    => [
+                        'label' => 'Repeat password',
+                    ],
                 ]
             )
             ->add(

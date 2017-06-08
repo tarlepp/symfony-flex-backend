@@ -184,15 +184,15 @@ class User extends RestDto
     }
 
     /**
-     * @param string $plainPassword
+     * @param string|null $plainPassword
      *
      * @return User
      */
-    public function setPlainPassword(string $plainPassword): User
+    public function setPlainPassword(string $plainPassword = null): User
     {
         $this->setVisited('plainPassword');
 
-        $this->plainPassword = $plainPassword;
+        $this->plainPassword = $plainPassword ?? '';
 
         return $this;
     }
