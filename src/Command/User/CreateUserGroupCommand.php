@@ -28,6 +28,20 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class CreateUserGroupCommand extends Command
 {
     /**
+     * @var array
+     */
+    private static $commandParameters = [
+        [
+            'name'          => 'name',
+            'description'   => 'Name of the user group',
+        ],
+        [
+            'name'          => 'role',
+            'description'   => 'Role of the user group',
+        ],
+    ];
+
+    /**
      * @var UserGroupResource
      */
     private $userGroupResource;
@@ -41,20 +55,6 @@ class CreateUserGroupCommand extends Command
      * @var SymfonyStyle
      */
     private $io;
-
-    /**
-     * @var array
-     */
-    private $commandParameters = [
-        [
-            'name'          => 'name',
-            'description'   => 'Name of the user group',
-        ],
-        [
-            'name'          => 'role',
-            'description'   => 'Role of the user group',
-        ],
-    ];
 
     /**
      * CreateUserGroupCommand constructor.
@@ -104,7 +104,7 @@ class CreateUserGroupCommand extends Command
         };
 
         // Configure command
-        $this->setDefinition(new InputDefinition(\array_map($iterator, $this->commandParameters)));
+        $this->setDefinition(new InputDefinition(\array_map($iterator, self::$commandParameters)));
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
