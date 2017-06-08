@@ -294,12 +294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "66fa7f84dff1a1d837be3643adf5a8242b28b0ba"
+                "reference": "7bac69133b1b0a483a9ecf957e34536cdf758290"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/66fa7f84dff1a1d837be3643adf5a8242b28b0ba",
-                "reference": "66fa7f84dff1a1d837be3643adf5a8242b28b0ba",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/7bac69133b1b0a483a9ecf957e34536cdf758290",
+                "reference": "7bac69133b1b0a483a9ecf957e34536cdf758290",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +359,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-06-06T16:00:09+00:00"
+            "time": "2017-06-08T11:36:36+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -536,29 +536,29 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/inflector.git",
-                "reference": "803a2ed9fea02f9ca47cd45395089fe78769a392"
+                "reference": "75f2720fd91f98cb79cd3dd1d998608f0f06ad29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/803a2ed9fea02f9ca47cd45395089fe78769a392",
-                "reference": "803a2ed9fea02f9ca47cd45395089fe78769a392",
+                "url": "https://api.github.com/repos/doctrine/inflector/zipball/75f2720fd91f98cb79cd3dd1d998608f0f06ad29",
+                "reference": "75f2720fd91f98cb79cd3dd1d998608f0f06ad29",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.*"
+                "phpunit/phpunit": "^6.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.1.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Doctrine\\Common\\Inflector\\": "lib/"
+                "psr-4": {
+                    "Doctrine\\Common\\Inflector\\": "lib/Doctrine/Common/Inflector"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -595,7 +595,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2016-05-12T17:23:41+00:00"
+            "time": "2017-06-08T07:02:20+00:00"
         },
         {
             "name": "doctrine/instantiator",
@@ -1741,7 +1741,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3"
+                "php": ">=5.5.9"
             },
             "require-dev": {
                 "symfony/finder": "~2.8|~3.0|~4.0",
@@ -1917,12 +1917,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "68792b216cd94a804ba3d73b39dc2c5eab32c1b0"
+                "reference": "2b1c9fd1e392071fcecdbff2f11f0b9321d7dbab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/68792b216cd94a804ba3d73b39dc2c5eab32c1b0",
-                "reference": "68792b216cd94a804ba3d73b39dc2c5eab32c1b0",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/2b1c9fd1e392071fcecdbff2f11f0b9321d7dbab",
+                "reference": "2b1c9fd1e392071fcecdbff2f11f0b9321d7dbab",
                 "shasum": ""
             },
             "require": {
@@ -1965,7 +1965,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-01T22:17:54+00:00"
+            "time": "2017-06-07T14:10:47+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -2576,12 +2576,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "b601e1370a2fb478bfc7d31c706fdb30758c34e1"
+                "reference": "26c3a0a7caf7f3128435e61c240675422d0556e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/b601e1370a2fb478bfc7d31c706fdb30758c34e1",
-                "reference": "b601e1370a2fb478bfc7d31c706fdb30758c34e1",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/26c3a0a7caf7f3128435e61c240675422d0556e2",
+                "reference": "26c3a0a7caf7f3128435e61c240675422d0556e2",
                 "shasum": ""
             },
             "require": {
@@ -2653,7 +2653,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-02T14:38:27+00:00"
+            "time": "2017-06-07T14:09:28+00:00"
         },
         {
             "name": "symfony/inflector",
@@ -2793,12 +2793,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bridge.git",
-                "reference": "2823e5e3f2dac4ef668637f8c5efbe8374ebec6c"
+                "reference": "46e34d82896bff9a9c155b2e9f178857e5cc862a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bridge/zipball/2823e5e3f2dac4ef668637f8c5efbe8374ebec6c",
-                "reference": "2823e5e3f2dac4ef668637f8c5efbe8374ebec6c",
+                "url": "https://api.github.com/repos/symfony/monolog-bridge/zipball/46e34d82896bff9a9c155b2e9f178857e5cc862a",
+                "reference": "46e34d82896bff9a9c155b2e9f178857e5cc862a",
                 "shasum": ""
             },
             "require": {
@@ -2849,7 +2849,7 @@
             ],
             "description": "Symfony Monolog Bridge",
             "homepage": "https://symfony.com",
-            "time": "2017-05-21T13:20:45+00:00"
+            "time": "2017-06-07T14:10:47+00:00"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -4172,12 +4172,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "0c523c5c79376b88d0eb2701e96d63be3e035d2d"
+                "reference": "5aad21c1e7492ea9d87e51f64dd81cc6becccb8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/0c523c5c79376b88d0eb2701e96d63be3e035d2d",
-                "reference": "0c523c5c79376b88d0eb2701e96d63be3e035d2d",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/5aad21c1e7492ea9d87e51f64dd81cc6becccb8e",
+                "reference": "5aad21c1e7492ea9d87e51f64dd81cc6becccb8e",
                 "shasum": ""
             },
             "require": {
@@ -4230,7 +4230,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-06-06T03:58:49+00:00"
+            "time": "2017-06-07T18:48:31+00:00"
         }
     ],
     "packages-dev": [
@@ -6220,12 +6220,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "ab971a703842b0b305b3ec8d90913c102c283d42"
+                "reference": "2f3d36840264f3cebfe356cae64a71f78b163d67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/ab971a703842b0b305b3ec8d90913c102c283d42",
-                "reference": "ab971a703842b0b305b3ec8d90913c102c283d42",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2f3d36840264f3cebfe356cae64a71f78b163d67",
+                "reference": "2f3d36840264f3cebfe356cae64a71f78b163d67",
                 "shasum": ""
             },
             "require": {
@@ -6279,7 +6279,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2017-06-02T10:06:41+00:00"
+            "time": "2017-06-07T14:10:47+00:00"
         },
         {
             "name": "symfony/web-profiler-bundle",
