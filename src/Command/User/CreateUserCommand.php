@@ -15,7 +15,9 @@ use App\Rest\DTO\User as UserDto;
 use App\Security\RolesInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -27,6 +29,39 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateUserCommand extends Command
 {
+    /**
+     * @var array
+     */
+    private static $commandParameters = [
+        [
+            'name'          => 'username',
+            'description'   => 'Username',
+        ],
+        [
+            'name'          => 'firstname',
+            'description'   => 'Firstname of the user',
+        ],
+        [
+            'name'          => 'surname',
+            'description'   => 'Surname of the user',
+        ],
+        [
+            'name'          => 'email',
+            'description'   => 'Email of the user',
+        ],
+        [
+            'name'          => 'plainPassword',
+            'description'   => 'Plain password for user',
+        ],
+        [
+            'name'          => 'userGroups',
+            'description'   => 'User groups where to attach user',
+        ],
+    ];
+
+    /**
+     * @var UserResource
+     */
     private $userResource;
 
     /**
@@ -76,6 +111,34 @@ class CreateUserCommand extends Command
         $this->roleRepository = $roleRepository;
 
         $this->setDescription('Console command to create user to database');
+    }
+
+    /**
+     * Configures the current command.
+     *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     */
+    protected function configure(): void
+    {
+        /**
+         * Lambda iterator function to parse specified inputs.
+         *
+         * @param array $input
+         *
+         * @return InputOption
+         */
+        $iterator = function (array $input) {
+            return new InputOption(
+                $input['name'],
+                $input['shortcut']    ?? null,
+                $input['mode']        ?? InputOption::VALUE_OPTIONAL,
+                $input['description'] ?? '',
+                $input['default']     ?? null
+            );
+        };
+
+        // Configure command
+        $this->setDefinition(new InputDefinition(\array_map($iterator, self::$commandParameters)));
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
