@@ -59,4 +59,11 @@ interface RolesInterface
      * @return string
      */
     public function getShort(string $role): string;
+
+    /**
+     * @param array $roles
+     *
+     * @return array
+     */
+    public function getInheritedRoles(array $roles): array;
 }

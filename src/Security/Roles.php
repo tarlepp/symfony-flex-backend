@@ -7,6 +7,9 @@ declare(strict_types=1);
  */
 namespace App\Security;
 
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Component\Security\Core\Role\RoleHierarchy;
+
 /**
  * Class Roles
  *
@@ -99,5 +102,24 @@ class Roles implements RolesInterface
     public function getShort(string $role): string
     {
         return \mb_strtolower(\mb_substr($role, \mb_strpos($role, '_') + 1));
+    }
+
+    /**
+     * Helper method to get inherited roles for given roles.
+     *
+     * @param array $roles
+     *
+     * @return array
+     */
+    public function getInheritedRoles(array $roles): array
+    {
+        $hierarchy = new RoleHierarchy($this->rolesHierarchy);
+
+        return \array_unique(
+            \array_map(
+                function (Role $role) { return $role->getRole(); },
+                $hierarchy->getReachableRoles(\array_map(function (string $role) { return new Role($role); }, $roles))
+            )
+        );
     }
 }
