@@ -331,7 +331,7 @@ class User implements UserInterface, EquatableInterface, \Serializable, EntityIn
          * @return  string
          */
         $iterator = function (UserGroup $userGroup) {
-            return $userGroup->getRole();
+            return $userGroup->getRole()->getId();
         };
 
         return \array_map($iterator, $this->userGroups->toArray());
