@@ -19,13 +19,14 @@ Table of Contents
     * [4. File permissions](#4-file-permissions)
     * [5. Other (optionally)](#5-other-optionally)
         * [Allow other IP's to access dev environment](#allow-other-ips-to-access-dev-environment)
+ * [Commands](#commands)
  * [Testing](#testing)
  * [Links / resources](#links--resources)
  * [Authors](#authors)
  * [License](#license)
 
 # Requirements
-* PHP 7.1
+* PHP 7.1.3 or higher
 * [Composer](https://getcomposer.org/)
 * Database that is supported by [Doctrine](http://www.doctrine-project.org/) 
 
@@ -70,6 +71,17 @@ _I really recommend_ that you use `ACL` option in your development environment.
 #### Allow other IP's to access `dev` environment
 If you want to allow another IP addresses or _all_ to your `dev` environment see `/allowed_addresses.php` file for 
 detailed information how you can allow certain IP addresses to have access to your `dev` environment.
+
+# Commands
+Project contains following console commands to help eg. user management:
+
+```bash
+./bin/console user:create         # To create single user
+./bin/console user:create-group   # To create single user group
+./bin/console user:create-roles   # To initialize user group rolws
+./bin/console user:list           # To list current users
+./bin/console user:list-groups    # To list current user groups
+```
 
 # Testing
 Project contains bunch of tests _(Functional, Integration, Unit)_ which you can run simply by following command:
