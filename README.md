@@ -108,9 +108,9 @@ detailed information how you can allow certain IP addresses to have access to yo
 # Commands
 Project contains following console commands to help eg. user management:
 ```bash
-$ ./bin/console user:create         # To create single user
-$ ./bin/console user:create-group   # To create single user group
-$ ./bin/console user:create-roles   # To initialize user group rolws
+$ ./bin/console user:create         # To create user
+$ ./bin/console user:create-group   # To create user group
+$ ./bin/console user:create-roles   # To initialize user group roles
 $ ./bin/console user:list           # To list current users
 $ ./bin/console user:list-groups    # To list current user groups
 ```
