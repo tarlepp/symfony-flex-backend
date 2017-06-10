@@ -86,6 +86,17 @@ class RolesTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatGetInheritedRolesReturnsExpected
+     *
+     * @param array $expected
+     * @param array $roles
+     */
+    public function testThatGetInheritedRolesReturnsExpected(array $expected, array $roles): void
+    {
+        static::assertSame($expected, $this->service->getInheritedRoles($roles), 'Inherited roles was not expected');
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatGetRoleLabelReturnsExpected(): array
@@ -110,6 +121,19 @@ class RolesTest extends KernelTestCase
             [Roles::ROLE_ADMIN, 'admin'],
             [Roles::ROLE_ROOT, 'root'],
             ['SOME_CUSTOM_ROLE', 'custom_role']
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetInheritedRolesReturnsExpected(): array
+    {
+        return [
+            [[Roles::ROLE_LOGGED], [Roles::ROLE_LOGGED]],
+            [[Roles::ROLE_USER, Roles::ROLE_LOGGED], [Roles::ROLE_USER]],
+            [[Roles::ROLE_ADMIN, Roles::ROLE_USER, Roles::ROLE_LOGGED], [Roles::ROLE_ADMIN]],
+            [[Roles::ROLE_ROOT, Roles::ROLE_ADMIN, Roles::ROLE_USER, Roles::ROLE_LOGGED], [Roles::ROLE_ROOT]],
         ];
     }
 }
