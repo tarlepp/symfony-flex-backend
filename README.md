@@ -111,6 +111,7 @@ Project contains following console commands to help eg. user management:
 $ ./bin/console user:create         # To create user
 $ ./bin/console user:create-group   # To create user group
 $ ./bin/console user:create-roles   # To initialize user group roles
+$ ./bin/console user:edit           # To edit user
 $ ./bin/console user:edit-group     # To edit user group
 $ ./bin/console user:list           # To list current users
 $ ./bin/console user:list-groups    # To list current user groups
