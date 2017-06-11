@@ -9,7 +9,8 @@ namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 /**
  * Class AuthController
  *
@@ -23,12 +24,19 @@ use Symfony\Component\HttpFoundation\Request;
 class AuthController
 {
     /**
+     * Action to get user's Json Web Token (JWT) for authentication.
+     *
+     * Note that the security layer will intercept this request.
+     *
      * @Route("/getToken");
      * @Method("POST")
      *
-     * @param Request $request
+     * @return Response
+     *
+     * @throws \InvalidArgumentException
      */
-    public function login(Request $request): void
+    public function login(): Response
     {
+        return new Response('', 405);
     }
 }

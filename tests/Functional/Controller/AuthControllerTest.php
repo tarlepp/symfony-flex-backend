@@ -32,6 +32,24 @@ class AuthControllerTest extends WebTestCase
         static::assertSame(405, $client->getResponse()->getStatusCode());
     }
 
+    public function testThatLoginRouteReturn401WithInvalidCredentials(): void
+    {
+        $client = static::createClient();
+        $client->request(
+            'POST',
+            '/auth/getToken',
+            [],
+            [],
+            [
+                'CONTENT_TYPE'          => 'application/json',
+                'HTTP_X-Requested-With' => 'XMLHttpRequest'
+            ],
+            \json_encode(['username' => 'username', 'password' => 'password'])
+        );
+
+        static::assertSame(401, $client->getResponse()->getStatusCode());
+    }
+
     /**
      * @return array
      */
