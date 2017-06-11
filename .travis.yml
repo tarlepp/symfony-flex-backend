@@ -1,5 +1,4 @@
 language: php
-dist: trusty
 sudo: false
 
 cache:
@@ -14,13 +13,11 @@ services:
 
 php:
   - 7.1
-  - hhvm
   - nightly
 
 matrix:
   fast_finish: true
   allow_failures:
-    - php: hhvm
     - php: nightly
 
 before_install:
