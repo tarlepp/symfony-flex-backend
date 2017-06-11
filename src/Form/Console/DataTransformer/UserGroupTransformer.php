@@ -47,8 +47,13 @@ class UserGroupTransformer implements DataTransformerInterface
         $output = [];
 
         if (\is_array($userGroups)) {
-            $iterator = function (UserGroup $userGroup) {
-                return $userGroup->getId();
+            /**
+             * @param string|UserGroup $userGroup
+             *
+             * @return string
+             */
+            $iterator = function ($userGroup) {
+                return \is_string($userGroup) ? $userGroup : $userGroup->getId();
             };
 
             $output = \array_map($iterator, $userGroups);

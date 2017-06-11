@@ -9,6 +9,7 @@ namespace App\Rest\DTO;
 
 use App\Entity\User as UserEntity;
 use App\Entity\EntityInterface;
+use App\Entity\UserGroup as UserGroupEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -166,7 +167,7 @@ class User extends RestDto
      *
      * @return User
      */
-    public function setUserGroups($userGroups): User
+    public function setUserGroups(array $userGroups): User
     {
         $this->setVisited('userGroups');
 
@@ -206,11 +207,22 @@ class User extends RestDto
      */
     public function load(EntityInterface $entity): RestDtoInterface
     {
+        /**
+         * Lambda function to extract user group id
+         *
+         * @param UserGroupEntity $group
+         *
+         * @return string
+         */
+        $iterator = function (UserGroupEntity $group) {
+            return $group->getId();
+        };
+
         $this->username = $entity->getUsername();
         $this->firstname = $entity->getFirstname();
         $this->surname = $entity->getSurname();
         $this->email = $entity->getEmail();
-        $this->userGroups = $entity->getUserGroups();
+        $this->userGroups = \array_map($iterator, $entity->getUserGroups()->toArray());
 
         return $this;
     }
