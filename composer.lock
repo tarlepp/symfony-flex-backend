@@ -711,12 +711,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "049ad1e079052b5c457dc7c6defbc4058451e0e1"
+                "reference": "c0c08d92baf8d8b3152b6f08bb5d1c1db1690882"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/049ad1e079052b5c457dc7c6defbc4058451e0e1",
-                "reference": "049ad1e079052b5c457dc7c6defbc4058451e0e1",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/c0c08d92baf8d8b3152b6f08bb5d1c1db1690882",
+                "reference": "c0c08d92baf8d8b3152b6f08bb5d1c1db1690882",
                 "shasum": ""
             },
             "require": {
@@ -783,7 +783,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-06-08T17:06:25+00:00"
+            "time": "2017-06-11T09:14:30+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1848,12 +1848,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "a5f315ffce45698eb607619c4e4c5e8dbf1f6c2d"
+                "reference": "bd7bf81dc914c7c7c01daad32946681c85ea16ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/a5f315ffce45698eb607619c4e4c5e8dbf1f6c2d",
-                "reference": "a5f315ffce45698eb607619c4e4c5e8dbf1f6c2d",
+                "url": "https://api.github.com/repos/symfony/console/zipball/bd7bf81dc914c7c7c01daad32946681c85ea16ae",
+                "reference": "bd7bf81dc914c7c7c01daad32946681c85ea16ae",
                 "shasum": ""
             },
             "require": {
@@ -1910,7 +1910,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-09T13:37:35+00:00"
+            "time": "2017-06-10T12:08:03+00:00"
         },
         {
             "name": "symfony/debug",
@@ -4299,12 +4299,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "1739e8b94e058421d4da8b66887c52ee523f7d45"
+                "reference": "065287bc14f3e606fe6aec6ecfeac9616afbd3cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/1739e8b94e058421d4da8b66887c52ee523f7d45",
-                "reference": "1739e8b94e058421d4da8b66887c52ee523f7d45",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/065287bc14f3e606fe6aec6ecfeac9616afbd3cb",
+                "reference": "065287bc14f3e606fe6aec6ecfeac9616afbd3cb",
                 "shasum": ""
             },
             "require": {
@@ -4356,7 +4356,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2017-05-15T08:45:24+00:00"
+            "time": "2017-06-10T14:17:14+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -4415,12 +4415,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "8882b252f802cae96f0315c3608faef95af6a7f2"
+                "reference": "8dfe52c2d14a68ff3dce6af82058391c6c4eb9b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/8882b252f802cae96f0315c3608faef95af6a7f2",
-                "reference": "8882b252f802cae96f0315c3608faef95af6a7f2",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/8dfe52c2d14a68ff3dce6af82058391c6c4eb9b3",
+                "reference": "8dfe52c2d14a68ff3dce6af82058391c6c4eb9b3",
                 "shasum": ""
             },
             "require": {
@@ -4472,7 +4472,7 @@
                 "uri",
                 "url"
             ],
-            "time": "2017-05-09T09:16:44+00:00"
+            "time": "2017-06-10T19:55:42+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -5083,12 +5083,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "4e2b54d7f112de7de70ee59d8c334853ca249dce"
+                "reference": "75445d33d942331ba2cad3e64ec88fb219abe8c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4e2b54d7f112de7de70ee59d8c334853ca249dce",
-                "reference": "4e2b54d7f112de7de70ee59d8c334853ca249dce",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/75445d33d942331ba2cad3e64ec88fb219abe8c5",
+                "reference": "75445d33d942331ba2cad3e64ec88fb219abe8c5",
                 "shasum": ""
             },
             "require": {
@@ -5159,7 +5159,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-06-09T05:23:31+00:00"
+            "time": "2017-06-11T10:24:32+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -5448,12 +5448,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "9eda8de3fc6222c99884542ea08b19f918f2a481"
+                "reference": "c7a73305b177922a6cd6ddfab6bb1780fea29c02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/9eda8de3fc6222c99884542ea08b19f918f2a481",
-                "reference": "9eda8de3fc6222c99884542ea08b19f918f2a481",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/c7a73305b177922a6cd6ddfab6bb1780fea29c02",
+                "reference": "c7a73305b177922a6cd6ddfab6bb1780fea29c02",
                 "shasum": ""
             },
             "require": {
@@ -5492,7 +5492,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2017-06-09T05:24:55+00:00"
+            "time": "2017-06-10T10:11:03+00:00"
         },
         {
             "name": "sebastian/environment",
