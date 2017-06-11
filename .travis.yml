@@ -30,6 +30,7 @@ before_script:
   - php --version
   - php bin/console --version
   - vendor/bin/phpunit --version
+  - php bin/check.php
 
 script:
   - mkdir -p build/logs
