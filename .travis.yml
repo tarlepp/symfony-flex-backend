@@ -14,9 +14,13 @@ services:
 
 php:
   - 7.1
+  - hhvm
+  - nightly
 
 matrix:
   fast_finish: true
+  allow_failures:
+    - php: hhvm nightly
 
 before_install:
   - cp .env.travis .env
