@@ -1,5 +1,5 @@
 language: php
-
+dist: trusty
 sudo: false
 
 cache:
@@ -20,7 +20,8 @@ php:
 matrix:
   fast_finish: true
   allow_failures:
-    - php: hhvm nightly
+    - php: hhvm
+    - php: nightly
 
 before_install:
   - cp .env.travis .env
@@ -41,4 +42,4 @@ script:
   - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_success:
-  - php vendor/bin/coveralls -v
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then php vendor/bin/coveralls -v; fi
