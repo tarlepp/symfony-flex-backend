@@ -24,6 +24,7 @@ before_install:
 
 install:
   - composer install
+  - make generate-jwt-keys
 
 before_script:
   - php --version
