@@ -60,9 +60,9 @@ class UserGroup extends RestDto
     }
 
     /**
-     * @return RoleEntity|null
+     * @return RoleEntity|string|null
      */
-    public function getRole(): ?RoleEntity
+    public function getRole()
     {
         return $this->role;
     }
@@ -91,7 +91,7 @@ class UserGroup extends RestDto
     public function load(EntityInterface $entity): RestDtoInterface
     {
         $this->name = $entity->getName();
-        $this->role = $entity->getRole();
+        $this->role = $entity->getRole()->getId();
 
         return $this;
     }
