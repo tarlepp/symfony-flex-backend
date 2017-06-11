@@ -40,3 +40,6 @@ script:
 
 after_success:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then php vendor/bin/coveralls -v; fi
+
+after_failure:
+  - cat var/logs/*.log
