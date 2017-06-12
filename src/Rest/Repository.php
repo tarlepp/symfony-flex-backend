@@ -23,12 +23,33 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 abstract class Repository extends EntityRepository implements RepositoryInterface
 {
+    const INNER_JOIN = 'innerJoin';
+    const LEFT_JOIN = 'leftJoin';
+
     /**
      * Names of search columns.
      *
      * @var string[]
      */
     protected static $searchColumns = [];
+
+    /**
+     * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
+     *
+     * @var array
+     */
+    private static $joins = [
+        self::INNER_JOIN => [],
+        self::LEFT_JOIN  => [],
+    ];
+
+    /**
+     * @var array
+     */
+    private static $processedJoins = [
+        self::INNER_JOIN => [],
+        self::LEFT_JOIN  => [],
+    ];
 
     /**
      * Parameter count in current query, this is used to track parameters which are bind to current query.
@@ -149,6 +170,9 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         // Create new query builder
         $queryBuilder = $this->createQueryBuilder('entity');
 
+        // Process custom QueryBuilder actions
+        $this->processQueryBuilder($queryBuilder);
+
         // Process normal and search term criteria
         $this->processCriteria($queryBuilder, $criteria);
         $this->processSearchTerms($queryBuilder, $search);
@@ -187,6 +211,9 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         // Create new query builder
         $queryBuilder = $this->createQueryBuilder('entity');
 
+        // Process custom QueryBuilder actions
+        $this->processQueryBuilder($queryBuilder);
+
         // Process normal and search term criteria and order
         $this->processCriteria($queryBuilder, $criteria);
         $this->processSearchTerms($queryBuilder, $search);
@@ -217,13 +244,16 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         // Create new query builder
         $queryBuilder = $this->createQueryBuilder('entity');
 
+        // Process custom QueryBuilder actions
+        $this->processQueryBuilder($queryBuilder);
+
         // Process normal and search term criteria
         $this->processCriteria($queryBuilder, $criteria);
         $this->processSearchTerms($queryBuilder, $search);
 
         $queryBuilder
             ->select('entity.id')
-            ->distinct(true);
+            ->distinct();
 
         return \array_map('\current', $queryBuilder->getQuery()->getArrayResult());
     }
@@ -244,6 +274,114 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
 
         // Return deleted row count
         return $queryBuilder->getQuery()->execute();
+    }
+
+    /**
+     * With this method you can attach some custom functions for generic REST API find / count queries.
+     *
+     * @param QueryBuilder $queryBuilder
+     *
+     * @return void
+     */
+    public function processQueryBuilder(QueryBuilder $queryBuilder): void
+    {
+        // Reset processed joins
+        self::$processedJoins = [
+            self::INNER_JOIN => [],
+            self::LEFT_JOIN  => [],
+        ];
+
+        $this->processJoins($queryBuilder);
+    }
+    
+    /**
+     * Adds left join to current QueryBuilder query.
+     *
+     * @note Requires processJoins() to be run
+     *       
+     * @see QueryBuilder::leftJoin() for parameters
+     *
+     * @param array $parameters
+     * 
+     * @return RepositoryInterface
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addLeftJoin(array $parameters): RepositoryInterface
+    {
+        $this->addJoinToQuery('leftJoin', $parameters);
+        
+        return $this;
+    }
+
+    /**
+     * Adds inner join to current QueryBuilder query.
+     *
+     * @note Requires processJoins() to be run
+     *
+     * @see QueryBuilder::innerJoin() for parameters
+     *
+     * @param array $parameters
+     *
+     * @return RepositoryInterface
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addInnerJoin(array $parameters): RepositoryInterface
+    {
+        $this->addJoinToQuery('innerJoin', $parameters);
+        
+        return $this;
+    }
+
+    /**
+     * Process defined joins for current QueryBuilder instance.
+     *
+     * @param QueryBuilder $queryBuilder
+     */
+    public function processJoins(QueryBuilder $queryBuilder): void
+    {
+        /**
+         * @var string $joinType
+         * @var array  $joins
+         */
+        foreach (self::$joins as $joinType => $joins) {
+            foreach ($joins as $key => $joinParameters) {
+                $queryBuilder->$joinType(...$joinParameters);
+            }
+            
+            self::$joins[$joinType] = [];
+        }
+    }
+
+    /**
+     * Method to add defined join(s) to current QueryBuilder query. This will keep track of attached join(s) so any of
+     * those are not added multiple times to QueryBuilder.
+     *
+     * @note processJoins() method must be called for joins to actually be added to QueryBuilder. processQueryBuilder()
+     *       method calls this method automatically.
+     *
+     * @see QueryBuilder::leftJoin()
+     * @see QueryBuilder::innerJoin()
+     *       
+     * @param string $type       Join type; leftJoin, innerJoin or join
+     * @param array  $parameters Query builder join parameters. 
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function addJoinToQuery(string $type, array $parameters): void
+    {
+        if (!\array_key_exists($type, self::$joins)) {
+            throw new \InvalidArgumentException('Join type \'' . $type . '\' is not supported.');
+        }
+
+        $comparision = \implode('|', $parameters);
+
+        if (!\in_array($comparision, self::$processedJoins[$type], true)) {
+            self::$joins[$type][] = $parameters;
+
+            self::$processedJoins[$type][] = $comparision;
+        }
     }
 
     /**
