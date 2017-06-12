@@ -76,6 +76,123 @@ class RepositoryTest extends KernelTestCase
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Join type 'invalid type' is not supported.
+     */
+    public function testThatAddJoinToQueryThrowsAnExceptionWithInvalidType(): void
+    {
+        PHPUnitUtil::callMethod($this->repository, 'addJoinToQuery', ['invalid type', []]);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatAddLeftJoinWorksAsExpected
+     *
+     * @param string $expected
+     * @param string $method
+     * @param array  $joins
+     */
+    public function testThatAddJoinMethodsWorksLikeExpected(string $expected, string $method, array $joins): void
+    {
+        foreach ($joins as $parameters) {
+            $this->repository->$method($parameters);
+        }
+
+        $qb = $this->repository->createQueryBuilder('entity');
+
+        $this->repository->processQueryBuilder($qb);
+
+        $message = \sprintf(
+            'Method \'%s\' did not return expected DQL.',
+            $method
+        );
+
+        static::assertSame($expected, $qb->getDQL(), $message);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatAddLeftJoinWorksAsExpected(): array
+    {
+        return [
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug',
+                'addLeftJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug',
+                'addLeftJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['entity.userGroups', 'ug'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug LEFT JOIN ug.role r',
+                'addLeftJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['ug.role', 'r'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug LEFT JOIN ug.role r',
+                'addLeftJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['entity.userGroups', 'ug'],
+                    ['ug.role', 'r'],
+                    ['ug.role', 'r'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug',
+                'addInnerJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug',
+                'addInnerJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['entity.userGroups', 'ug'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug INNER JOIN ug.role r',
+                'addInnerJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['ug.role', 'r'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug INNER JOIN ug.role r',
+                'addInnerJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['entity.userGroups', 'ug'],
+                    ['ug.role', 'r'],
+                    ['ug.role', 'r'],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatProcessCriteriaWorksAsExpected(): array
