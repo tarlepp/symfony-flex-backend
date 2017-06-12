@@ -286,10 +286,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     public function processQueryBuilder(QueryBuilder $queryBuilder): void
     {
         // Reset processed joins
-        self::$processedJoins = [
-            self::INNER_JOIN => [],
-            self::LEFT_JOIN  => [],
-        ];
+        self::$processedJoins = [self::INNER_JOIN => [], self::LEFT_JOIN  => []];
 
         $this->processJoins($queryBuilder);
     }
