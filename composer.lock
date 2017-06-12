@@ -844,12 +844,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "5e9685bf80e465367a5d94e1758298e337bdd074"
+                "reference": "e30bde8a52c60e692b1d70dd0b4748d247a3ce7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/5e9685bf80e465367a5d94e1758298e337bdd074",
-                "reference": "5e9685bf80e465367a5d94e1758298e337bdd074",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/e30bde8a52c60e692b1d70dd0b4748d247a3ce7b",
+                "reference": "e30bde8a52c60e692b1d70dd0b4748d247a3ce7b",
                 "shasum": ""
             },
             "require": {
@@ -933,7 +933,7 @@
                 "rest",
                 "symfony"
             ],
-            "time": "2017-05-30T12:05:43+00:00"
+            "time": "2017-06-09T15:27:51+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -5083,12 +5083,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "75445d33d942331ba2cad3e64ec88fb219abe8c5"
+                "reference": "9d02b4dffc8a4f5baeb5540103569cc4e2631a29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/75445d33d942331ba2cad3e64ec88fb219abe8c5",
-                "reference": "75445d33d942331ba2cad3e64ec88fb219abe8c5",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9d02b4dffc8a4f5baeb5540103569cc4e2631a29",
+                "reference": "9d02b4dffc8a4f5baeb5540103569cc4e2631a29",
                 "shasum": ""
             },
             "require": {
@@ -5159,7 +5159,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-06-11T10:24:32+00:00"
+            "time": "2017-06-11T12:16:43+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
