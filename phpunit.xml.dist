@@ -31,6 +31,7 @@
             <exclude>
                 <file>src/Kernel.php</file>
                 <directory>src/Command</directory>
+                <directory>src/DataFixtures</directory>
             </exclude>
         </whitelist>
     </filter>
