@@ -1,14 +1,16 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/DataFixtures/ORM/LoadRoleData.php
+ * /src/DataFixtures/ORM/LoadUserGroupData.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
+use App\Entity\UserGroup;
 use App\Security\Roles;
+use App\Security\RolesInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -16,12 +18,12 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class LoadRoleData
+ * Class LoadUserGroupData
  *
  * @package App\DataFixtures\ORM
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadUserGroupData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -32,6 +34,11 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
      * @var ObjectManager
      */
     private $manager;
+
+    /**
+     * @var RolesInterface
+     */
+    private $roles;
 
     /**
      * @param ContainerInterface|null $container
@@ -52,8 +59,9 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
     public function load(ObjectManager $manager): void
     {
         $this->manager = $manager;
+        $this->roles = $this->container->get(Roles::class);
 
-        \array_map([$this, 'createRole'], $this->container->get(Roles::class)->getRoles());
+        \array_map([$this, 'createUserGroup'], $this->roles->getRoles());
     }
 
     /**
@@ -63,24 +71,27 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
      */
     public function getOrder(): int
     {
-        return 1;
+        return 2;
     }
 
     /**
-     * Method to create, persist and flush Role entity to database.
-     *
      * @param string $role
      */
-    private function createRole(string $role): void
+    private function createUserGroup(string $role): void
     {
-        // Create new Role entity
-        $entity = new Role($role);
+        /** @var Role $roleReference */
+        $roleReference = $this->getReference('Role-' . $role);
+
+        // Create new entity
+        $entity = new UserGroup();
+        $entity->setRole($roleReference);
+        $entity->setName($this->roles->getRoleLabel($role));
 
         // Persist and flush entity
         $this->manager->persist($entity);
         $this->manager->flush();
 
         // Create reference for later usage
-        $this->addReference('Role-' . $role, $entity);
+        $this->addReference('UserGroup-' . $role, $entity);
     }
 }
