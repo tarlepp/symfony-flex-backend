@@ -78,24 +78,15 @@ $updateSchemaDoctrineCommand = function () use ($application) {
     $command->run($input, new ConsoleOutput());
 };
 
-// Add the user:create-roles command to the application and run it
-$createUserRolesCommand = function () use ($application) {
-    $container = $application->getKernel()->getContainer();
-
-    /** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
-    $entityManager = $container->get('doctrine.orm.entity_manager');
-
-    /** @var App\Repository\RoleRepository $roleRepository */
-    $roleRepository = $container->get(App\Repository\RoleRepository::class);
-
-    /** @var App\Security\RolesInterface $rolesInterface */
-    $rolesInterface = $container->get(App\Security\Roles::class);
-
-    $command = new \App\Command\User\CreateRolesCommand(null, $entityManager, $roleRepository, $rolesInterface);
+// Add the doctrine:fixtures:load command to the application and run it
+$loadFixturesDoctrineCommand = function () use ($application) {
+    $command = new \Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand();
     $application->add($command);
 
     $input = new ArrayInput([
-        'command' => 'user:create-roles',
+        'command'           => 'doctrine:fixtures:load',
+        '--no-interaction'  => true,
+        '--fixtures'        => 'src/DataFixtures/',
     ]);
 
     $input->setInteractive(false);
@@ -110,6 +101,6 @@ $createUserRolesCommand = function () use ($application) {
         $dropDatabaseDoctrineCommand,
         $createDatabaseDoctrineCommand,
         $updateSchemaDoctrineCommand,
-        $createUserRolesCommand,
+        $loadFixturesDoctrineCommand,
     ]
 );
