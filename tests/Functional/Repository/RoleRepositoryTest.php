@@ -7,12 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Repository;
 
-use App\Command\User\CreateRolesCommand;
 use App\Repository\RoleRepository;
-use App\Security\Roles;
-use App\Security\RolesInterface;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -43,27 +41,20 @@ class RoleRepositoryTest extends KernelTestCase
         parent::tearDown();
 
         $application = new Application(static::$kernel);
-        $container = static::$kernel->getContainer();
 
-        /** @var \Doctrine\ORM\EntityManagerInterface $entityManager */
-        $entityManager = $container->get('doctrine.orm.entity_manager');
+        $command = new LoadDataFixturesDoctrineCommand();
 
-        /** @var RoleRepository $roleRepository */
-        $roleRepository = $container->get(RoleRepository::class);
-
-        /** @var RolesInterface $rolesInterface */
-        $rolesInterface = $container->get(Roles::class);
-
-        $command = new CreateRolesCommand(null, $entityManager, $roleRepository, $rolesInterface);
         $application->add($command);
 
         $input = new ArrayInput([
-            'command' => 'user:create-roles',
+            'command'           => 'doctrine:fixtures:load',
+            '--no-interaction'  => true,
+            '--fixtures'        => 'src/DataFixtures/',
         ]);
 
         $input->setInteractive(false);
 
-        $command->run($input, new ConsoleOutput());
+        $command->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
     }
 
     public function testThatResetMethodDeletesAllRecords(): void
