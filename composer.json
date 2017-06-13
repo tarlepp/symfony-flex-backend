@@ -36,6 +36,7 @@
         "symfony/yaml": "^3.4@dev"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^2.2@dev",
         "phpunit/phpunit": "^6.1@dev",
         "satooshi/php-coveralls": "^2.0@dev",
         "sensiolabs/security-checker": "^4.0@dev",

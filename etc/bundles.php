@@ -11,4 +11,5 @@ return [
     'Symfony\Bundle\SecurityBundle\SecurityBundle' => ['all' => true],
     'Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle' => ['all' => true],
     'Matthias\SymfonyConsoleForm\Bundle\SymfonyConsoleFormBundle' => ['all' => true],
+    'Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle' => ['dev' => true, 'test' => true],
 ];
