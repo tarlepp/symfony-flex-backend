@@ -294,12 +294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "7bac69133b1b0a483a9ecf957e34536cdf758290"
+                "reference": "899c62bb579027c146b73f6b580c871eb669d310"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/7bac69133b1b0a483a9ecf957e34536cdf758290",
-                "reference": "7bac69133b1b0a483a9ecf957e34536cdf758290",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/899c62bb579027c146b73f6b580c871eb669d310",
+                "reference": "899c62bb579027c146b73f6b580c871eb669d310",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +359,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-06-08T11:36:36+00:00"
+            "time": "2017-06-13T11:58:27+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -711,12 +711,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "3dc0f471feed226980c5dd6c32d53024730c9822"
+                "reference": "fc67b398a1efd3d61837778e2cda2d05a395778c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/3dc0f471feed226980c5dd6c32d53024730c9822",
-                "reference": "3dc0f471feed226980c5dd6c32d53024730c9822",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/fc67b398a1efd3d61837778e2cda2d05a395778c",
+                "reference": "fc67b398a1efd3d61837778e2cda2d05a395778c",
                 "shasum": ""
             },
             "require": {
@@ -783,7 +783,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-06-12T18:45:25+00:00"
+            "time": "2017-06-12T22:20:57+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -2409,12 +2409,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/framework-bundle.git",
-                "reference": "f737da36444df3506ae1468ea4f1ca8939d76ff7"
+                "reference": "9cb8efbbee26ae541497a605e7cf6e29cdd97670"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/f737da36444df3506ae1468ea4f1ca8939d76ff7",
-                "reference": "f737da36444df3506ae1468ea4f1ca8939d76ff7",
+                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/9cb8efbbee26ae541497a605e7cf6e29cdd97670",
+                "reference": "9cb8efbbee26ae541497a605e7cf6e29cdd97670",
                 "shasum": ""
             },
             "require": {
@@ -2515,7 +2515,7 @@
             ],
             "description": "Symfony FrameworkBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-06-12T18:05:06+00:00"
+            "time": "2017-06-13T08:29:19+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -4427,7 +4427,7 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.6.1",
+            "version": "1.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
@@ -5034,12 +5034,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9d02b4dffc8a4f5baeb5540103569cc4e2631a29"
+                "reference": "aced19c732ce653cd5802e7fda6deafd27c2c800"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9d02b4dffc8a4f5baeb5540103569cc4e2631a29",
-                "reference": "9d02b4dffc8a4f5baeb5540103569cc4e2631a29",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/aced19c732ce653cd5802e7fda6deafd27c2c800",
+                "reference": "aced19c732ce653cd5802e7fda6deafd27c2c800",
                 "shasum": ""
             },
             "require": {
@@ -5110,7 +5110,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-06-11T12:16:43+00:00"
+            "time": "2017-06-13T14:08:18+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -5451,12 +5451,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "0d1b04bee1356d8bb46bd6f3afcba94b0ceff073"
+                "reference": "b89a97be3b97a4a2849ce778743edb9add641262"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/0d1b04bee1356d8bb46bd6f3afcba94b0ceff073",
-                "reference": "0d1b04bee1356d8bb46bd6f3afcba94b0ceff073",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/b89a97be3b97a4a2849ce778743edb9add641262",
+                "reference": "b89a97be3b97a4a2849ce778743edb9add641262",
                 "shasum": ""
             },
             "require": {
@@ -5468,7 +5468,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0.x-dev"
+                    "dev-master": "3.1.x-dev"
                 }
             },
             "autoload": {
@@ -5493,7 +5493,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2017-06-09T05:17:49+00:00"
+            "time": "2017-06-13T13:48:49+00:00"
         },
         {
             "name": "sebastian/exporter",
