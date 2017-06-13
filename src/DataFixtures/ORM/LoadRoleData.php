@@ -9,6 +9,7 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
 use App\Security\Roles;
+use App\Security\RolesInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -34,6 +35,11 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
     private $manager;
 
     /**
+     * @var RolesInterface
+     */
+    private $roles;
+
+    /**
      * @param ContainerInterface|null $container
      */
     public function setContainer(ContainerInterface $container = null): void
@@ -52,8 +58,13 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
     public function load(ObjectManager $manager): void
     {
         $this->manager = $manager;
+        $this->roles = $this->container->get(Roles::class);
 
-        \array_map([$this, 'createRole'], $this->container->get(Roles::class)->getRoles());
+        // Create entities
+        \array_map([$this, 'createRole'], $this->roles->getRoles());
+
+        // Flush database changes
+        $this->manager->flush();
     }
 
     /**
@@ -76,11 +87,10 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
         // Create new Role entity
         $entity = new Role($role);
 
-        // Persist and flush entity
+        // Persist entity
         $this->manager->persist($entity);
-        $this->manager->flush();
 
         // Create reference for later usage
-        $this->addReference('Role-' . $role, $entity);
+        $this->addReference('Role-' . $this->roles->getShort($role), $entity);
     }
 }

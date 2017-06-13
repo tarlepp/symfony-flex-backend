@@ -61,7 +61,11 @@ class LoadUserGroupData extends AbstractFixture implements OrderedFixtureInterfa
         $this->manager = $manager;
         $this->roles = $this->container->get(Roles::class);
 
+        // Create entities
         \array_map([$this, 'createUserGroup'], $this->roles->getRoles());
+
+        // Flush database changes
+        $this->manager->flush();
     }
 
     /**
@@ -80,18 +84,17 @@ class LoadUserGroupData extends AbstractFixture implements OrderedFixtureInterfa
     private function createUserGroup(string $role): void
     {
         /** @var Role $roleReference */
-        $roleReference = $this->getReference('Role-' . $role);
+        $roleReference = $this->getReference('Role-' . $this->roles->getShort($role));
 
         // Create new entity
         $entity = new UserGroup();
         $entity->setRole($roleReference);
         $entity->setName($this->roles->getRoleLabel($role));
 
-        // Persist and flush entity
+        // Persist entity
         $this->manager->persist($entity);
-        $this->manager->flush();
 
         // Create reference for later usage
-        $this->addReference('UserGroup-' . $role, $entity);
+        $this->addReference('UserGroup-' . $this->roles->getShort($role), $entity);
     }
 }
