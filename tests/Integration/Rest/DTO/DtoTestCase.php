@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest\DTO;
 
 use App\Rest\DTO\RestDtoInterface;
+use App\Tests\Helpers\PHPUnitUtil;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -136,6 +137,55 @@ class DtoTestCase extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatSetterOnlyAcceptSpecifiedType
+     * 
+     * @param string $field
+     * @param string $type
+     */
+    public function testThatSetterOnlyAcceptSpecifiedType(string $field, string $type): void
+    {
+        // Get "valid" value for current property
+        $value = PHPUnitUtil::getInvalidValueForType($type);
+
+        $this->expectException(TypeError::class);
+
+        $setter = 'set' . \ucfirst($field);
+
+        $dto = new $this->dtoClass();
+        $dto->$setter($value);
+
+        $message = \sprintf(
+            "Setter '%s' didn't fail with invalid value type '%s', maybe missing variable type?",
+            $setter,
+            \is_object($value) ? \gettype($value) : '(' . \gettype($value) . ')' . $value
+        );
+
+        static::fail($message);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatSetterOnlyAcceptSpecifiedType(): array
+    {
+        $dtoClass = $this->dtoClass;
+        $dtoReflection = new \ReflectionClass($this->dtoClass);
+
+        $filter = function (\ReflectionProperty $reflectionProperty) use ($dtoClass) {
+            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName();
+        };
+
+        $iterator = function (\ReflectionProperty $reflectionProperty) {
+            return [
+                $reflectionProperty->getName(),
+                $this->parseType($reflectionProperty),
+            ];
+        };
+
+        return \array_map($iterator, \array_filter($dtoReflection->getProperties(), $filter));
+    }
+
+    /**
      * @param \ReflectionClass    $dtoReflection
      * @param \ReflectionProperty $reflectionProperty
      *
@@ -155,28 +205,7 @@ class DtoTestCase extends KernelTestCase
             throw new \DomainException($message);
         }
 
-        switch ($type) {
-            case 'array':
-                $output = [];
-                break;
-            case 'string';
-                $output = 'foobar';
-                break;
-            case 'int':
-            case 'integer':
-                $output = 123;
-                break;
-            case 'float':
-            case 'double':
-            case 'decimal':
-                $output = 0.123;
-                break;
-            default:
-                $output = new $type();
-                break;
-        }
-
-        return $output;
+        return PHPUnitUtil::getValidValueForType($type);
     }
 
     /**
