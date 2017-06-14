@@ -316,6 +316,7 @@ abstract class Resource implements ResourceInterface
      *
      * @return EntityInterface
      *
+     * @throws \LogicException
      * @throws \BadMethodCallException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Symfony\Component\Validator\Exception\ValidatorException

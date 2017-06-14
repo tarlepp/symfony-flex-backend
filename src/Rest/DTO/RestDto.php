@@ -53,6 +53,7 @@ abstract class RestDto implements RestDtoInterface
      *
      * @return RestDtoInterface
      *
+     * @throws \LogicException
      * @throws \BadMethodCallException
      */
     public function patch(RestDtoInterface $dto): RestDtoInterface
@@ -69,7 +70,18 @@ abstract class RestDto implements RestDtoInterface
             };
 
             // Determine getter method
-            $getter = \current(\array_filter($getters, $filter));
+            $filtered = \array_filter($getters, $filter);
+
+            if (\count($filtered) > 1) {
+                $message = \sprintf(
+                    'Property \'%s\' has multiple getter methods - this is insane!',
+                    $property
+                );
+
+                throw new \LogicException($message);
+            }
+
+            $getter = \current($filtered);
 
             // Oh noes - required getter method does not exist
             if ($getter === false) {

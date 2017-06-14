@@ -40,6 +40,7 @@ interface RestDtoInterface
      *
      * @return RestDtoInterface
      *
+     * @throws \LogicException
      * @throws \BadMethodCallException
      */
     public function patch(RestDtoInterface $dto): RestDtoInterface;
