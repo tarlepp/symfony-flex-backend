@@ -147,7 +147,7 @@ class DtoTestCase extends KernelTestCase
         // Get "valid" value for current property
         $value = PHPUnitUtil::getInvalidValueForType($type);
 
-        $this->expectException(TypeError::class);
+        $this->expectException(\TypeError::class);
 
         $setter = 'set' . \ucfirst($field);
 

@@ -156,6 +156,7 @@ class PHPUnitUtil
             case \stdClass::class:
                 $value = new \DateTime();
                 break;
+            case 'CustomClass':
             case 'integer':
             case \DateTime::class:
             case 'string':
