@@ -2284,12 +2284,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "40802c3f01f842be9f0313095efa4fdda7d3753c"
+                "reference": "761787e98d087c4d93a86fef82ec8dd5c0612565"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/40802c3f01f842be9f0313095efa4fdda7d3753c",
-                "reference": "40802c3f01f842be9f0313095efa4fdda7d3753c",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/761787e98d087c4d93a86fef82ec8dd5c0612565",
+                "reference": "761787e98d087c4d93a86fef82ec8dd5c0612565",
                 "shasum": ""
             },
             "require": {
@@ -2322,7 +2322,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2017-06-10T00:38:56+00:00"
+            "time": "2017-06-14T04:58:05+00:00"
         },
         {
             "name": "symfony/form",
@@ -2409,12 +2409,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/framework-bundle.git",
-                "reference": "9cb8efbbee26ae541497a605e7cf6e29cdd97670"
+                "reference": "5198e224f7c6a42524dd435818dee83e7b975c31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/9cb8efbbee26ae541497a605e7cf6e29cdd97670",
-                "reference": "9cb8efbbee26ae541497a605e7cf6e29cdd97670",
+                "url": "https://api.github.com/repos/symfony/framework-bundle/zipball/5198e224f7c6a42524dd435818dee83e7b975c31",
+                "reference": "5198e224f7c6a42524dd435818dee83e7b975c31",
                 "shasum": ""
             },
             "require": {
@@ -2515,7 +2515,7 @@
             ],
             "description": "Symfony FrameworkBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-06-13T08:29:19+00:00"
+            "time": "2017-06-14T05:09:10+00:00"
         },
         {
             "name": "symfony/http-foundation",
@@ -3176,12 +3176,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php70.git",
-                "reference": "032fd647d5c11a9ceab8ee8747e13b5448e93874"
+                "reference": "31e7c2b409137f4f7100317ceb0a9c930e89da51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/032fd647d5c11a9ceab8ee8747e13b5448e93874",
-                "reference": "032fd647d5c11a9ceab8ee8747e13b5448e93874",
+                "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/31e7c2b409137f4f7100317ceb0a9c930e89da51",
+                "reference": "31e7c2b409137f4f7100317ceb0a9c930e89da51",
                 "shasum": ""
             },
             "require": {
@@ -3227,7 +3227,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2017-06-09T14:24:12+00:00"
+            "time": "2017-06-13T21:35:25+00:00"
         },
         {
             "name": "symfony/polyfill-util",
@@ -3481,12 +3481,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security.git",
-                "reference": "9ebbe5ac35ceed0e560cba870dc44a5e28f3b471"
+                "reference": "6fb1da9a54b9c200baa20e7e9364b1c581cd9bc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security/zipball/9ebbe5ac35ceed0e560cba870dc44a5e28f3b471",
-                "reference": "9ebbe5ac35ceed0e560cba870dc44a5e28f3b471",
+                "url": "https://api.github.com/repos/symfony/security/zipball/6fb1da9a54b9c200baa20e7e9364b1c581cd9bc4",
+                "reference": "6fb1da9a54b9c200baa20e7e9364b1c581cd9bc4",
                 "shasum": ""
             },
             "require": {
@@ -3548,7 +3548,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-21T18:02:37+00:00"
+            "time": "2017-06-14T07:19:54+00:00"
         },
         {
             "name": "symfony/security-bundle",
@@ -3556,12 +3556,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security-bundle.git",
-                "reference": "f886cb734200a61b5abaa81ad019bf700ed9083a"
+                "reference": "32927a65c872847600130be47dd2b16939827e37"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/f886cb734200a61b5abaa81ad019bf700ed9083a",
-                "reference": "f886cb734200a61b5abaa81ad019bf700ed9083a",
+                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/32927a65c872847600130be47dd2b16939827e37",
+                "reference": "32927a65c872847600130be47dd2b16939827e37",
                 "shasum": ""
             },
             "require": {
@@ -3569,9 +3569,10 @@
                 "symfony/dependency-injection": "~3.3|~4.0",
                 "symfony/http-kernel": "~3.3|~4.0",
                 "symfony/polyfill-php70": "~1.0",
-                "symfony/security": "~3.3|~4.0"
+                "symfony/security": "~3.4|~4.0"
             },
             "conflict": {
+                "symfony/event-dispatcher": "<3.3",
                 "symfony/var-dumper": "<3.3"
             },
             "require-dev": {
@@ -3581,6 +3582,7 @@
                 "symfony/console": "~3.2|~4.0",
                 "symfony/css-selector": "~2.8|~3.0|~4.0",
                 "symfony/dom-crawler": "~2.8|~3.0|~4.0",
+                "symfony/event-dispatcher": "~3.3|~4.0",
                 "symfony/expression-language": "~2.8|~3.0|~4.0",
                 "symfony/form": "^2.8.18|^3.2.5|~4.0",
                 "symfony/framework-bundle": "^3.2.8|~4.0",
@@ -3628,7 +3630,7 @@
             ],
             "description": "Symfony SecurityBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-06-12T16:03:21+00:00"
+            "time": "2017-06-13T08:30:58+00:00"
         },
         {
             "name": "symfony/serializer",
@@ -3862,12 +3864,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bundle.git",
-                "reference": "aa1036b27f2c39c881c601e3856b5f2c86047de0"
+                "reference": "cf0c0fc0033d478735f350e467611b6fb30dfe85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bundle/zipball/aa1036b27f2c39c881c601e3856b5f2c86047de0",
-                "reference": "aa1036b27f2c39c881c601e3856b5f2c86047de0",
+                "url": "https://api.github.com/repos/symfony/twig-bundle/zipball/cf0c0fc0033d478735f350e467611b6fb30dfe85",
+                "reference": "cf0c0fc0033d478735f350e467611b6fb30dfe85",
                 "shasum": ""
             },
             "require": {
@@ -3883,6 +3885,7 @@
             },
             "require-dev": {
                 "doctrine/annotations": "~1.0",
+                "doctrine/cache": "~1.0",
                 "symfony/asset": "~2.8|~3.0|~4.0",
                 "symfony/dependency-injection": "~3.3|~4.0",
                 "symfony/expression-language": "~2.8|~3.0|~4.0",
@@ -3925,7 +3928,7 @@
             ],
             "description": "Symfony TwigBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-06-06T04:51:36+00:00"
+            "time": "2017-06-13T15:15:58+00:00"
         },
         {
             "name": "symfony/validator",
@@ -4068,12 +4071,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "02878ee742708dd663c129a1bd3ad1b628098b00"
+                "reference": "c58111d731049b9085e97deaa09797b7c13ec0d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/02878ee742708dd663c129a1bd3ad1b628098b00",
-                "reference": "02878ee742708dd663c129a1bd3ad1b628098b00",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/c58111d731049b9085e97deaa09797b7c13ec0d5",
+                "reference": "c58111d731049b9085e97deaa09797b7c13ec0d5",
                 "shasum": ""
             },
             "require": {
@@ -4115,7 +4118,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-12T16:03:21+00:00"
+            "time": "2017-06-14T07:34:46+00:00"
         },
         {
             "name": "twig/twig",
@@ -5567,12 +5570,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "b89a97be3b97a4a2849ce778743edb9add641262"
+                "reference": "99851040b23c18fd20691275d36a96befe8afb62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/b89a97be3b97a4a2849ce778743edb9add641262",
-                "reference": "b89a97be3b97a4a2849ce778743edb9add641262",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/99851040b23c18fd20691275d36a96befe8afb62",
+                "reference": "99851040b23c18fd20691275d36a96befe8afb62",
                 "shasum": ""
             },
             "require": {
@@ -5609,7 +5612,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2017-06-13T13:48:49+00:00"
+            "time": "2017-06-14T10:35:46+00:00"
         },
         {
             "name": "sebastian/exporter",
