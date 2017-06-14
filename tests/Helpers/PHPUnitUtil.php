@@ -86,4 +86,93 @@ class PHPUnitUtil
         $property->setAccessible(true);
         $property->setValue($object, $value);
     }
+
+    /**
+     * Helper method to get valid value for specified type.
+     *
+     * @param string     $type
+     * @param array|null $meta
+     *
+     * @return mixed
+     */
+    public static function getValidValueForType(string $type, array $meta = null)
+    {
+        $meta = $meta ?? [];
+
+        $class = \stdClass::class;
+
+        if (\substr_count($type, '\\') > 1) {
+            $class = \count($meta) ? $meta['targetEntity'] : $type;
+
+            $type = 'CustomClass';
+        }
+
+        switch ($type) {
+            case 'CustomClass':
+                $value = new $class();
+                break;
+            case 'integer':
+                $value = 666;
+                break;
+            case \DateTime::class:
+                $value = new \DateTime();
+                break;
+            case 'string':
+                $value = 'Some text here';
+                break;
+            case 'array':
+                $value = ['some', 'array', 'here'];
+                break;
+            case 'boolean':
+                $value = true;
+                break;
+            default:
+                $message = \sprintf(
+                    "Cannot create valid value for type '%s'.",
+                    $type
+                );
+
+                throw new \LogicException($message);
+                break;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Helper method to get invalid value for specified type.
+     *
+     * @param string $type
+     *
+     * @return mixed
+     */
+    public static function getInvalidValueForType(string $type)
+    {
+        if ($type !== \stdClass::class && \substr_count($type, '\\') > 1) {
+            $type = 'CustomClass';
+        }
+
+        switch ($type) {
+            case \stdClass::class:
+                $value = new \DateTime();
+                break;
+            case 'integer':
+            case \DateTime::class:
+            case 'string':
+            case 'array':
+            case 'boolean':
+                $value = new \stdClass();
+                break;
+            default:
+                $message = \sprintf(
+                    "Cannot create invalid value for type '%s'.",
+                    $type
+                );
+
+                throw new \LogicException($message);
+                break;
+        }
+
+        return $value;
+    }
 }
