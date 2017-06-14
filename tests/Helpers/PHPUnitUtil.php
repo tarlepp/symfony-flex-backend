@@ -71,6 +71,46 @@ class PHPUnitUtil
     }
 
     /**
+     * @param \Doctrine\DBAL\Types\Type|string|null $type
+     *
+     * @return string
+     */
+    public static function getType($type): string
+    {
+        switch ($type) {
+            case 'integer':
+            case 'bigint':
+                $output = 'integer';
+                break;
+            case 'time':
+            case 'date':
+            case 'datetime':
+                $output = \DateTime::class;
+                break;
+            case 'text':
+            case 'string':
+                $output = 'string';
+                break;
+            case 'array':
+                $output = 'array';
+                break;
+            case 'boolean':
+                $output = 'boolean';
+                break;
+            default:
+                $message = \sprintf(
+                    "Currently type '%s' is not supported within generic EntityTestCase",
+                    $type
+                );
+
+                throw new \LogicException($message);
+                break;
+        }
+
+        return $output;
+    }
+
+    /**
      * Helper method to override any property value within given class.
      *
      * @param string    $property

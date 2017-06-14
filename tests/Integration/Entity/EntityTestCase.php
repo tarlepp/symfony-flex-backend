@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\EntityInterface;
+use App\Tests\Helpers\PHPUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Container;
@@ -46,83 +48,6 @@ abstract class EntityTestCase extends KernelTestCase
      * @var \Doctrine\ORM\EntityRepository
      */
     protected $repository;
-
-    /**
-     * @param   string  $type
-     * @param   array   $meta
-     *
-     * @return  array|bool|\DateTime|int|string
-     */
-    private static function getValidValueForType(string $type, array $meta)
-    {
-        if (\substr_count($type, '\\') > 1) {
-            $type = 'CustomClass';
-        }
-
-        switch ($type) {
-            case 'CustomClass':
-                $value = new $meta['targetEntity']();
-                break;
-            case 'integer':
-                $value = 666;
-                break;
-            case \DateTime::class:
-                $value = new \DateTime();
-                break;
-            case 'string':
-                $value = 'Some text here';
-                break;
-            case 'array':
-                $value = ['some', 'array', 'here'];
-                break;
-            case 'boolean':
-                $value = true;
-                break;
-            default:
-                $message = \sprintf(
-                    "Cannot create valid value for type '%s'.",
-                    $type
-                );
-
-                throw new \LogicException($message);
-                break;
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param   string $type
-     *
-     * @return  mixed
-     */
-    private static function getNotValidValueForType(string $type)
-    {
-        if (\substr_count($type, '\\') > 1) {
-            $type = 'CustomClass';
-        }
-
-        switch ($type) {
-            case 'CustomClass':
-            case 'integer':
-            case \DateTime::class:
-            case 'string':
-            case 'array':
-            case 'boolean':
-                $value = new \stdClass();
-                break;
-            default:
-                $message = \sprintf(
-                    "Cannot create invalid value for type '%s'.",
-                    $type
-                );
-
-                throw new \LogicException($message);
-                break;
-        }
-
-        return $value;
-    }
 
     public function setUp(): void
     {
@@ -233,7 +158,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $this->expectException(\TypeError::class);
 
-        $value = self::getNotValidValueForType($type);
+        $value = PHPUnitUtil::getInvalidValueForType($type);
 
         $this->entity->{$setter}($value);
 
@@ -263,7 +188,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             \get_class($this->entity),
-            \call_user_func([$this->entity, $setter], self::getValidValueForType($type, $meta)),
+            \call_user_func([$this->entity, $setter], PHPUnitUtil::getValidValueForType($type, $meta)),
             \sprintf(
                 "Entity '%s' setter '%s()' method for '%s' property did not return expected value.",
                 $this->entityName,
@@ -290,7 +215,7 @@ abstract class EntityTestCase extends KernelTestCase
         }
 
         if (\array_key_exists('columnName', $meta) || \array_key_exists('joinColumns', $meta)) {
-            $value = self::getValidValueForType($type, $meta);
+            $value = PHPUnitUtil::getValidValueForType($type, $meta);
 
             $this->entity->{$setter}($value);
 
@@ -536,7 +461,7 @@ abstract class EntityTestCase extends KernelTestCase
     {
         self::bootKernel();
 
-        // Get entity manager
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
@@ -554,39 +479,7 @@ abstract class EntityTestCase extends KernelTestCase
          * @return array
          */
         $iterator = function (string $field) use ($meta): array {
-            $type = $meta->getTypeOfField($field);
-
-            switch ($type) {
-                case 'integer':
-                case 'bigint':
-                    $type = 'integer';
-                    break;
-                case 'time':
-                case 'date':
-                case 'datetime':
-                    $type = \DateTime::class;
-                    break;
-                case 'text':
-                case 'string':
-                    $type = 'string';
-                    break;
-                case 'array':
-                    $type = 'array';
-                    break;
-                case 'boolean':
-                    $type = 'boolean';
-                    break;
-                default:
-                    $message = \sprintf(
-                        "Currently type '%s' is not supported within generic EntityTestCase",
-                        $type
-                    );
-
-                    throw new \LogicException($message);
-                    break;
-            }
-
-            return [$field, $type, $meta->getFieldMapping($field)];
+            return [$field, PHPUnitUtil::getType($meta->getTypeOfField($field)), $meta->getFieldMapping($field)];
         };
 
         $fieldsToOmit = \array_merge(
@@ -634,7 +527,7 @@ abstract class EntityTestCase extends KernelTestCase
     {
         self::bootKernel();
 
-        // Get entity manager
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
@@ -671,12 +564,14 @@ abstract class EntityTestCase extends KernelTestCase
         $items = \array_filter($meta->getAssociationMappings(), $filter);
 
         if (empty($items)) {
-            return [
+            $output = [
                 [false, false, false, false, false, false, []]
             ];
+        } else {
+            $output = \array_merge(...\array_values(\array_map($iterator, $items)));
         }
 
-        return \array_merge(...\array_values(\array_map($iterator, $items)));
+        return $output;
     }
 
     /**
@@ -686,7 +581,7 @@ abstract class EntityTestCase extends KernelTestCase
     {
         self::bootKernel();
 
-        // Get entity manager
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
@@ -718,12 +613,14 @@ abstract class EntityTestCase extends KernelTestCase
         $items = \array_filter($meta->getAssociationMappings(), $filter);
 
         if (empty($items)) {
-            return [
+            $output = [
                 [false, false, false, false, []]
             ];
+        } else {
+            $output = \array_merge(...\array_values(\array_map($iterator, $items)));
         }
 
-        return \array_merge(...\array_values(\array_map($iterator, $items)));
+        return $output;
     }
 
     /**
@@ -733,7 +630,7 @@ abstract class EntityTestCase extends KernelTestCase
     {
         self::bootKernel();
 
-        // Get entity manager
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
@@ -802,12 +699,14 @@ abstract class EntityTestCase extends KernelTestCase
 
         // These isn't associations, so return special values that marks test skipped
         if (empty($meta->getAssociationMappings())) {
-            return [
+            $output = [
                 ['', '', null, null]
             ];
+        } else {
+            $output = \array_merge(...\array_values(\array_map($iterator, $meta->getAssociationMappings())));
         }
 
-        return \array_merge(...\array_values(\array_map($iterator, $meta->getAssociationMappings())));
+        return $output;
     }
 
     /**
@@ -817,7 +716,7 @@ abstract class EntityTestCase extends KernelTestCase
     {
         self::bootKernel();
 
-        // Get entity manager
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
 
         // Get entity class meta data
@@ -845,11 +744,13 @@ abstract class EntityTestCase extends KernelTestCase
         $items = \array_filter($meta->getAssociationMappings(), $filter);
 
         if (empty($items)) {
-            return [
+            $output = [
                 [false, false, []]
             ];
+        } else {
+            $output = \array_merge(...\array_values(\array_map($iterator, $items)));
         }
 
-        return \array_merge(...\array_values(\array_map($iterator, $items)));
+        return $output;
     }
 }
