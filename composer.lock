@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "955a16d1e88427bc78f680c01b567880",
+    "content-hash": "7d16e3e1f8b7d1d793cc91a25ef05078",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2179,6 +2179,56 @@
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
             "time": "2017-06-12T18:12:26+00:00"
+        },
+        {
+            "name": "symfony/expression-language",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/expression-language.git",
+                "reference": "8d00fbb680a04de9198d1f286ff58a240da2c726"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/expression-language/zipball/8d00fbb680a04de9198d1f286ff58a240da2c726",
+                "reference": "8d00fbb680a04de9198d1f286ff58a240da2c726",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "symfony/cache": "~3.4|~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\ExpressionLanguage\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony ExpressionLanguage Component",
+            "homepage": "https://symfony.com",
+            "time": "2017-05-20T14:03:23+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -6567,10 +6617,12 @@
         "roave/security-advisories": 20,
         "sensio/framework-extra-bundle": 20,
         "symfony/console": 20,
+        "symfony/expression-language": 20,
         "symfony/form": 20,
         "symfony/framework-bundle": 20,
         "symfony/monolog-bundle": 20,
         "symfony/orm-pack": 20,
+        "symfony/security": 20,
         "symfony/security-bundle": 20,
         "symfony/serializer": 20,
         "symfony/twig-bundle": 20,
