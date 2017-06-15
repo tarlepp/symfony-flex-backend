@@ -63,7 +63,7 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
         try {
             $user = $query->getSingleResult();
         } catch (NoResultException $exception) {
-            if (\getenv('APP_ENV') !== 'dev') {
+            if (!\in_array(\getenv('APP_ENV'), ['dev', 'test'], true)) {
                 \sleep(5);
             }
 
