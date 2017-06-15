@@ -47,7 +47,7 @@ class Role extends BaseRole
      *  )
      * @ORM\Id()
      */
-    private $role;
+    private $id;
 
     /**
      * Author books.
@@ -75,7 +75,7 @@ class Role extends BaseRole
     {
         parent::__construct($role);
 
-        $this->role = $role;
+        $this->id = $role;
         $this->userGroups = new ArrayCollection();
     }
 
@@ -84,7 +84,7 @@ class Role extends BaseRole
      */
     public function getId(): string
     {
-        return $this->role;
+        return $this->id;
     }
 
     /**
