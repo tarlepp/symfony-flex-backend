@@ -35,7 +35,7 @@ class AuthController
      *
      * @throws \InvalidArgumentException
      */
-    public function login(): Response
+    public function getTokenAction(): Response
     {
         return new Response('', 405);
     }
