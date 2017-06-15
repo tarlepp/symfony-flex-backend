@@ -7,7 +7,9 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Controller;
 
+use App\Utils\JSON;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class AuthControllerTest
@@ -20,19 +22,71 @@ class AuthControllerTest extends WebTestCase
     private $baseUrl = '/auth';
 
     /**
-     * @dataProvider dataProviderTestThatLoginRouteDoesNotAllowOtherThanPost
+     * @dataProvider dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost
      *
      * @param string $method
      */
-    public function testThatLoginRouteDoesNotAllowOtherThanPost(string $method): void
+    public function testThatGetTokenRouteDoesNotAllowOtherThanPost(string $method): void
     {
         $client = static::createClient();
         $client->request($method, $this->baseUrl . '/getToken');
 
-        static::assertSame(405, $client->getResponse()->getStatusCode());
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(405, $response->getStatusCode());
     }
 
-    public function testThatLoginRouteReturn401WithInvalidCredentials(): void
+    /**
+     * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
+     *
+     * @param string $username
+     * @param string $password
+     */
+    public function testThatGetTokenReturnsJwtWithValidCredentials(string $username, string $password): void
+    {
+        $client = static::createClient();
+        $client->request(
+            'POST',
+            '/auth/getToken',
+            [],
+            [],
+            [
+                'CONTENT_TYPE'          => 'application/json',
+                'HTTP_X-Requested-With' => 'XMLHttpRequest'
+            ],
+            \json_encode(['username' => $username, 'password' => $password])
+        );
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        // Check that HTTP status code is correct
+        static::assertSame(
+            200,
+            $response->getStatusCode(),
+            "User login was not successfully.\n" . $response
+        );
+
+        $responseContent = JSON::decode($response->getContent());
+
+        // Attributes that should be present...
+        $attributes = [
+            'token',
+        ];
+
+        // Iterate expected attributes and check that those are present
+        foreach ($attributes as $attribute) {
+            $messageNotPresent = 'getToken did not return all expected attributes, missing \'' . $attribute . '\'.';
+            $messageEmpty = 'Attribute \'' . $attribute . '\' is empty, this is fail...';
+
+            static::assertObjectHasAttribute($attribute, $responseContent, $messageNotPresent);
+            static::assertNotEmpty($responseContent->{$attribute}, $messageEmpty);
+        }
+    }
+
+    public function testThatGetTokenRouteReturn401WithInvalidCredentials(): void
     {
         $client = static::createClient();
         $client->request(
@@ -47,13 +101,24 @@ class AuthControllerTest extends WebTestCase
             \json_encode(['username' => 'username', 'password' => 'password'])
         );
 
-        static::assertSame(401, $client->getResponse()->getStatusCode());
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(401, $response->getStatusCode());
+
+        $responseContent = JSON::decode($response->getContent());
+
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
+        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
+        static::assertSame('Bad credentials', $responseContent->message, 'Response message was not expected');
     }
 
     /**
      * @return array
      */
-    public function dataProviderTestThatLoginRouteDoesNotAllowOtherThanPost(): array
+    public function dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost(): array
     {
         return [
             ['HEAD'],
@@ -63,6 +128,25 @@ class AuthControllerTest extends WebTestCase
             ['OPTIONS'],
             ['CONNECT'],
             ['PATCH'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): array
+    {
+        return [
+            ['john',                        'password'],
+            ['john.doe@test.com',           'password'],
+            ['john-logged',                 'password-logged'],
+            ['john.doe-logged@test.com',    'password-logged'],
+            ['john-user',                   'password-user'],
+            ['john.doe-user@test.com',      'password-user'],
+            ['john-admin',                  'password-admin'],
+            ['john.doe-admin@test.com',     'password-admin'],
+            ['john-root',                   'password-root'],
+            ['john.doe-root@test.com',      'password-root'],
         ];
     }
 }
