@@ -7,6 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
+use App\Security\Roles;
+use App\Security\RolesInterface;
 use App\Utils\JSON;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -36,6 +38,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface, EquatableInterface, \Serializable, EntityInterface
 {
+    private $rolesService;
+
     /**
      * @var string
      *
@@ -171,6 +175,18 @@ class User implements UserInterface, EquatableInterface, \Serializable, EntityIn
      *  )
      */
     private $userGroups;
+
+    /**
+     * @param RolesInterface $rolesService
+     *
+     * @return User
+     */
+    public function setRolesService(RolesInterface $rolesService): User
+    {
+        $this->rolesService = $rolesService;
+
+        return $this;
+    }
 
     /**
      * User constructor.
@@ -319,6 +335,10 @@ class User implements UserInterface, EquatableInterface, \Serializable, EntityIn
     /**
      * Getter for roles.
      *
+     * @Groups({
+     *      "User.roles",
+     *  })
+     *
      * @return string[]
      */
     public function getRoles(): array
@@ -334,7 +354,15 @@ class User implements UserInterface, EquatableInterface, \Serializable, EntityIn
             return $userGroup->getRole()->getId();
         };
 
-        return \array_map($iterator, $this->userGroups->toArray());
+        // Determine base roles
+        $output = \array_map($iterator, $this->userGroups->toArray());
+
+        // And if we have roles service present we can fetch all inherited roles
+        if ($this->rolesService instanceof Roles) {
+            $output = $this->rolesService->getInheritedRoles($output);
+        }
+
+        return \array_unique($output);
     }
 
     /**
