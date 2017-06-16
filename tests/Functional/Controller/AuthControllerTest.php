@@ -114,6 +114,28 @@ class AuthControllerTest extends WebTestCase
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('Bad credentials', $responseContent->message, 'Response message was not expected');
     }
+    
+    public function testThatGetProfileReturns401WithoutToken(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', '/auth/profile');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(401, $response->getStatusCode());
+
+        $responseContent = JSON::decode($response->getContent());
+
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
+        static::assertSame(403, $responseContent->code, 'Response code was not expected');
+
+        static::assertObjectHasAttribute('status', $responseContent, 'Response does not contain \'status\'');
+        static::assertSame(401, $responseContent->status, 'Response status was not expected');
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
+        static::assertSame('Access denied.', $responseContent->message, 'Response message was not expected');
+    }
 
     /**
      * @return array
