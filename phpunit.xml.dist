@@ -32,6 +32,7 @@
                 <file>src/Kernel.php</file>
                 <directory>src/Command</directory>
                 <directory>src/DataFixtures</directory>
+                <directory>src/Utils/Tests</directory>
             </exclude>
         </whitelist>
     </filter>
