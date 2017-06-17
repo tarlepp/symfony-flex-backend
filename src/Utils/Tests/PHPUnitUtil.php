@@ -99,7 +99,7 @@ class PHPUnitUtil
                 break;
             default:
                 $message = \sprintf(
-                    "Currently type '%s' is not supported within generic EntityTestCase",
+                    "Currently type '%s' is not supported within type normalizer",
                     $type
                 );
 
