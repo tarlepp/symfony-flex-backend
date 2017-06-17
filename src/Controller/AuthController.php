@@ -35,23 +35,21 @@ class AuthController
      * Note that the security layer will intercept this request.
      *
      * @Route("/getToken");
-     * @Method("POST")
      *
-     * @return Response
+     * @Method("POST")
      *
      * @throws \InvalidArgumentException
      */
-    public function getTokenAction(): Response
+    public function getTokenAction(): void
     {
-        return new Response('', 405);
     }
 
     /**
      * Action to get current user profile data.
      *
-     * @Method("GET")
-     *
      * @Route("/profile");
+     *
+     * @Method("GET")
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
