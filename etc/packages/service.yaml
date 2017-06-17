@@ -1,0 +1,5 @@
+services:
+    App\Utils\Tests\Auth:
+        autowire: true
+        autoconfigure: true
+        public: true
