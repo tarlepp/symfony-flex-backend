@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest\DTO;
 
 use App\Rest\DTO\RestDtoInterface;
-use App\Tests\Helpers\PHPUnitUtil;
+use App\Utils\Tests\PHPUnitUtil;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

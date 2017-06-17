@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\ExceptionSubscriber;
-use App\Tests\Helpers\PHPUnitUtil;
 use App\Utils\JSON;
+use App\Utils\Tests\PHPUnitUtil;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
 use Psr\Log\LoggerInterface;

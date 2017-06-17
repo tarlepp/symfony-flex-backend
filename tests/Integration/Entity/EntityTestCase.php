@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\EntityInterface;
-use App\Tests\Helpers\PHPUnitUtil;
+use App\Utils\Tests\PHPUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;

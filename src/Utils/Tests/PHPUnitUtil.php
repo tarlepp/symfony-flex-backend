@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Helpers/PHPUnitUtil.php
+ * /src/Utils/Tests/PHPUnitUtil.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Helpers;
+namespace App\Utils\Tests;
 
 /**
  * Class PHPUnitUtil
  *
- * @package App\Tests\Helpers
+ * @package App\Utils\Tests
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class PHPUnitUtil

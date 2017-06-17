@@ -9,7 +9,7 @@ namespace App\Tests\Integration\Rest;
 
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
-use App\Tests\Helpers\PHPUnitUtil;
+use App\Utils\Tests\PHPUnitUtil;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Container;
