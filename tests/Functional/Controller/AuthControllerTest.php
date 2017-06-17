@@ -7,8 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Controller;
 
+use App\Utils\Tests\WebTestCase;
 use App\Utils\JSON;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,7 +26,7 @@ class AuthControllerTest extends WebTestCase
      *
      * @param string $method
      */
-    public function testThatGetTokenRouteDoesNotAllowOtherThanPost(string $method): void
+    public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
         $client = static::createClient();
         $client->request($method, $this->baseUrl . '/getToken');
@@ -43,12 +43,12 @@ class AuthControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      */
-    public function testThatGetTokenReturnsJwtWithValidCredentials(string $username, string $password): void
+    public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $username, string $password): void
     {
         $client = static::createClient();
         $client->request(
             'POST',
-            '/auth/getToken',
+            $this->baseUrl . '/getToken',
             [],
             [],
             [
@@ -86,12 +86,12 @@ class AuthControllerTest extends WebTestCase
         }
     }
 
-    public function testThatGetTokenRouteReturn401WithInvalidCredentials(): void
+    public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
     {
         $client = static::createClient();
         $client->request(
             'POST',
-            '/auth/getToken',
+            $this->baseUrl . '/getToken',
             [],
             [],
             [
@@ -115,10 +115,10 @@ class AuthControllerTest extends WebTestCase
         static::assertSame('Bad credentials', $responseContent->message, 'Response message was not expected');
     }
     
-    public function testThatGetProfileReturns401WithoutToken(): void
+    public function testThatProfileActionReturns401WithoutToken(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/auth/profile');
+        $client->request('GET', $this->baseUrl . '/profile');
 
         $response = $client->getResponse();
 
@@ -135,6 +135,23 @@ class AuthControllerTest extends WebTestCase
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('Access denied.', $responseContent->message, 'Response message was not expected');
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
+     *
+     * @param string $username
+     * @param string $password
+     */
+    public function testThatGetProfileActionReturnExpectedWithValidToken(string $username, string $password): void
+    {
+        $client = $this->getClient($username, $password);
+        $client->request('GET', $this->baseUrl . '/profile');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(200, $response->getStatusCode());
     }
 
     /**
