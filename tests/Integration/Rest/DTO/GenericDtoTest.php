@@ -7,6 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest\DTO;
 
+use App\Entity\EntityInterface;
+use App\Rest\DTO\RestDto;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\DTO\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -34,5 +36,93 @@ class GenericDtoTest extends KernelTestCase
 
         $dto = new User();
         $dto->patch($dtoMock);
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage Property 'foo' has multiple getter methods - this is insane!
+     */
+    public function testThatPatchThrowsAnErrorIfMultipleGettersAreDefined(): void
+    {
+        $dtoMock = new Dto();
+        $dtoMock->setFoo('foo');
+
+        $dto = new User();
+        $dto->patch($dtoMock);
+    }
+}
+
+/**
+ * Class Dto
+ *
+ * @package App\Tests\Integration\Rest\DTO
+ */
+class Dto extends RestDto
+{
+    /**
+     * @var mixed
+     */
+    private $foo;
+
+    /**
+     * @param mixed $foo
+     *
+     * @return Dto
+     */
+    public function setFoo($foo): Dto
+    {
+        $this->setVisited('foo');
+
+        $this->foo = $foo;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFoo()
+    {
+        return $this->foo;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFoo(): bool
+    {
+        return (bool)$this->foo;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFoo(): bool
+    {
+        return (bool)$this->foo;
+    }
+
+    /**
+     * Method to load DTO data from specified entity.
+     *
+     * @param EntityInterface $entity
+     *
+     * @return RestDtoInterface
+     */
+    public function load(EntityInterface $entity): RestDtoInterface
+    {
+        return $this;
+    }
+
+    /**
+     * Method to update specified entity with DTO data.
+     *
+     * @param EntityInterface $entity
+     *
+     * @return EntityInterface
+     */
+    public function update(EntityInterface $entity): EntityInterface
+    {
+        return $entity;
     }
 }
