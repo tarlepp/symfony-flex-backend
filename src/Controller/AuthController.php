@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -39,9 +39,11 @@ class AuthController
      * @Method("POST")
      *
      * @throws \InvalidArgumentException
+     * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException
      */
     public function getTokenAction(): void
     {
+        throw new MethodNotAllowedException(['POST']);
     }
 
     /**
