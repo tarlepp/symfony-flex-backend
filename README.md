@@ -108,6 +108,11 @@ detailed information how you can allow certain IP addresses to have access to yo
 # Commands
 Project contains following console commands to help eg. user management:
 ```bash
+$ ./bin/console user:management     # All necessarry commands to manage your users and user groups
+```
+
+Basically that `user:management` command is just a wrapper for following commands:
+```bash
 $ ./bin/console user:create         # To create user
 $ ./bin/console user:create-group   # To create user group
 $ ./bin/console user:create-roles   # To initialize user group roles
