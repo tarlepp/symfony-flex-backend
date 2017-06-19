@@ -192,7 +192,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      * @param null|integer $offset
      * @param null|array   $search
      *
-     * @return array
+     * @return EntityInterface[]
      *
      * @throws \InvalidArgumentException
      */

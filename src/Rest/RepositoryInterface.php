@@ -105,7 +105,7 @@ interface RepositoryInterface
      * @param null|integer  $offset
      * @param null|array    $search
      *
-     * @return array
+     * @return EntityInterface[]
      */
     public function findByAdvanced(
         array $criteria,
