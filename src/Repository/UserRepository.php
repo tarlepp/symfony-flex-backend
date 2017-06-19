@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Repository;
 
-use App\Entity\User;
+use App\Entity\User as Entity;
 use App\Rest\Repository;
 use Doctrine\ORM\NoResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -16,11 +16,16 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/** @noinspection PhpHierarchyChecksInspection */
+/** @noinspection PhpMissingParentCallCommonInspection */
+
 /**
  * Class UserRepository
  *
  * @package App\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method Entity[] findByAdvanced(array $criteria, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
  */
 class UserRepository extends Repository implements UserProviderInterface, UserLoaderInterface
 {
@@ -85,7 +90,7 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
      *
      * @param UserInterface $user
      *
-     * @return UserInterface|User
+     * @return UserInterface|Entity
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
