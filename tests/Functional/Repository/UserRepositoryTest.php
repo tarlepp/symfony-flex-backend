@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Repository;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -39,5 +40,25 @@ class UserRepositoryTest extends KernelTestCase
     public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidUsername(): void
     {
         $this->repository->loadUserByUsername('foobar');
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @expectedExceptionMessage User "test" not found
+     */
+    public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
+    {
+        $user = new User();
+        $user->setUsername('test');
+
+        $this->repository->refreshUser($user);
+    }
+
+    public function testThatRefreshUserReturnsCorrectUser(): void
+    {
+        /** @var User $user */
+        $user = $this->repository->findOneBy(['username' => 'john']);
+
+        static::assertSame($user->getId(), $this->repository->refreshUser($user)->getId());
     }
 }
