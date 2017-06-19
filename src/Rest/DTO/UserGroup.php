@@ -27,7 +27,7 @@ class UserGroup extends RestDto
      * @Assert\NotNull()
      * @Assert\Length(min = 4, max = 255)
      */
-    public $name = '';
+    private $name = '';
 
     /**
      * @var \App\Entity\Role
@@ -35,7 +35,7 @@ class UserGroup extends RestDto
      * @Assert\NotBlank()
      * @Assert\NotNull()
      */
-    public $role;
+    private $role;
 
     /**
      * @return string
