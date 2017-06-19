@@ -63,9 +63,7 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
         try {
             $user = $query->getSingleResult();
         } catch (NoResultException $exception) {
-            if (!\in_array(\getenv('APP_ENV'), ['dev', 'test'], true)) {
-                \sleep(5);
-            }
+            \sleep(5);
 
             $message = \sprintf(
                 'User "%s" not found',
