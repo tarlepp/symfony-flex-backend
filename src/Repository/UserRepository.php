@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Rest\Repository;
 use Doctrine\ORM\NoResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -84,7 +85,7 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
      *
      * @param UserInterface $user
      *
-     * @return UserInterface
+     * @return UserInterface|User
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
