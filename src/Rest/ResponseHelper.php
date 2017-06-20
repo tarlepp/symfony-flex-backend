@@ -141,7 +141,7 @@ final class ResponseHelper implements ResponseHelperInterface
     ): Response
     {
         $httpStatus = $httpStatus ?? 200;
-        $format = $format ?? $request->getContentType() === self::FORMAT_XML ? self::FORMAT_XML : self::FORMAT_JSON;
+        $format = $format ?? ($request->getContentType() === self::FORMAT_XML ? self::FORMAT_XML : self::FORMAT_JSON);
         $context = $context ?? $this->getSerializeContext($request);
 
         try {
@@ -150,13 +150,9 @@ final class ResponseHelper implements ResponseHelperInterface
             $response->setContent($this->serializer->serialize($data, $format, $context));
             $response->setStatusCode($httpStatus);
         } catch (\Exception $error) {
-            throw new HttpException(
-                Response::HTTP_BAD_REQUEST,
-                $error->getMessage(),
-                $error,
-                [],
-                Response::HTTP_BAD_REQUEST
-            );
+            $status = Response::HTTP_BAD_REQUEST;
+
+            throw new HttpException($status, $error->getMessage(), $error, [], $status);
         }
 
         // Set content type
