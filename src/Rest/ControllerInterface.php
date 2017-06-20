@@ -16,14 +16,6 @@ namespace App\Rest;
 interface ControllerInterface
 {
     /**
-     * Controller constructor.
-     *
-     * @param ResourceInterface       $resource
-     * @param ResponseHelperInterface $responseHelper
-     */
-    public function __construct(ResourceInterface $resource, ResponseHelperInterface $responseHelper);
-
-    /**
      * @return ResourceInterface
      */
     public function getResource(): ResourceInterface;

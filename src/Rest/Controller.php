@@ -26,20 +26,6 @@ abstract class Controller implements ControllerInterface
     protected $responseHelper;
 
     /**
-     * Controller constructor.
-     *
-     * @param ResourceInterface       $resource
-     * @param ResponseHelperInterface $responseHelper
-     */
-    public function __construct(ResourceInterface $resource, ResponseHelperInterface $responseHelper)
-    {
-        $this->resource = $resource;
-        $this->responseHelper = $responseHelper;
-
-        $this->responseHelper->setResource($this->resource);
-    }
-
-    /**
      * @return ResourceInterface
      */
     public function getResource(): ResourceInterface
@@ -53,5 +39,19 @@ abstract class Controller implements ControllerInterface
     public function getResponseHelper(): ResponseHelperInterface
     {
         return $this->responseHelper;
+    }
+
+    /**
+     * Method to initialize REST controller.
+     *
+     * @param ResourceInterface       $resource
+     * @param ResponseHelperInterface $responseHelper
+     */
+    protected function init(ResourceInterface $resource, ResponseHelperInterface $responseHelper): void
+    {
+        $this->resource = $resource;
+        $this->responseHelper = $responseHelper;
+
+        $this->responseHelper->setResource($this->resource);
     }
 }
