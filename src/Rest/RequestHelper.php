@@ -192,6 +192,8 @@ final class RequestHelper
                 $output = [
                     'or' => \array_unique(\array_values(\array_filter(\explode(' ', $search))))
                 ];
+
+                $input = null;
             }
 
             if ($input !== null) {
