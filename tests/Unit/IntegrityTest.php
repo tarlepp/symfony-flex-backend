@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit;
 
 use App\Entity\EntityInterface;
+use App\Rest\ControllerInterface;
 use App\Rest\RepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -49,6 +50,23 @@ class IntegrityTest extends KernelTestCase
      * @param string $controllerClass
      */
     public function testThatControllerHaveFunctionalTests(string $controllerTestClass, string $controllerClass): void
+    {
+        $message = \sprintf(
+            'Controller \'%s\' doesn\'t have required test class \'%s\'.',
+            $controllerClass,
+            $controllerTestClass
+        );
+
+        static::assertTrue(\class_exists($controllerTestClass), $message);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatRestControllerHaveIntegrationTests
+     *
+     * @param string $controllerTestClass
+     * @param string $controllerClass
+     */
+    public function testThatRestControllerHaveIntegrationTests(string $controllerTestClass, string $controllerClass): void
     {
         $message = \sprintf(
             'Controller \'%s\' doesn\'t have required test class \'%s\'.',
@@ -563,6 +581,54 @@ class IntegrityTest extends KernelTestCase
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return $reflectionClass->implementsInterface(DataTransformerInterface::class);
+        };
+
+        $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
+            $file = $reflectionClass->getFileName();
+
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map(
+            $formatter,
+            \array_filter(
+                \array_map(
+                    $iterator,
+                    self::recursiveFileSearch($folder, $pattern)
+                ),
+                $filter
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatRestControllerHaveIntegrationTests(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/Controller/';
+        $pattern = '/^.+Controller\.php$/i';
+
+        $namespace = '\\App\\Controller\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Controller\\';
+
+        $iterator = function (string $file) use ($folder, $namespace) {
+            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new \ReflectionClass($repositoryClass);
+        };
+
+        $filter = function (\ReflectionClass $reflectionClass) {
+            return $reflectionClass->implementsInterface(ControllerInterface::class);
         };
 
         $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
