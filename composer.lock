@@ -711,28 +711,28 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "fc67b398a1efd3d61837778e2cda2d05a395778c"
+                "reference": "b925cce6c4ca23711cb9fb30fdb07d430b659a81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/fc67b398a1efd3d61837778e2cda2d05a395778c",
-                "reference": "fc67b398a1efd3d61837778e2cda2d05a395778c",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/b925cce6c4ca23711cb9fb30fdb07d430b659a81",
+                "reference": "b925cce6c4ca23711cb9fb30fdb07d430b659a81",
                 "shasum": ""
             },
             "require": {
-                "doctrine/annotations": "~1.2",
-                "doctrine/cache": "~1.5",
+                "doctrine/annotations": "~1.4",
+                "doctrine/cache": "~1.6",
                 "doctrine/collections": "^1.4",
                 "doctrine/common": "^2.7.1",
                 "doctrine/dbal": ">=2.5-dev,<2.7-dev",
                 "doctrine/instantiator": "~1.0.1",
                 "ext-pdo": "*",
-                "php": "^7.0",
-                "symfony/console": "~2.5|~3.0|~4.0"
+                "php": "^7.1",
+                "symfony/console": "~3.0|~4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.0",
-                "symfony/yaml": "~2.3|~3.0|~4.0"
+                "symfony/yaml": "~3.0|~4.0"
             },
             "suggest": {
                 "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
@@ -783,7 +783,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-06-12T22:20:57+00:00"
+            "time": "2017-06-21T06:29:31+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1974,12 +1974,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "b0a214c0983a82a3cf6b988eef366b784c42fd25"
+                "reference": "b7953b058ebbf64d0d469566915a22aa143cf0e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/b0a214c0983a82a3cf6b988eef366b784c42fd25",
-                "reference": "b0a214c0983a82a3cf6b988eef366b784c42fd25",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/b7953b058ebbf64d0d469566915a22aa143cf0e0",
+                "reference": "b7953b058ebbf64d0d469566915a22aa143cf0e0",
                 "shasum": ""
             },
             "require": {
@@ -2036,7 +2036,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-12T18:12:26+00:00"
+            "time": "2017-06-21T09:27:03+00:00"
         },
         {
             "name": "symfony/doctrine-bridge",
@@ -2334,12 +2334,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "63377e357ad918d5e08b0bbaa03e9c74c527320d"
+                "reference": "1c48a5e6c2543bfaaa0152e0713a21f8321a3339"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/63377e357ad918d5e08b0bbaa03e9c74c527320d",
-                "reference": "63377e357ad918d5e08b0bbaa03e9c74c527320d",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/1c48a5e6c2543bfaaa0152e0713a21f8321a3339",
+                "reference": "1c48a5e6c2543bfaaa0152e0713a21f8321a3339",
                 "shasum": ""
             },
             "require": {
@@ -2372,7 +2372,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2017-06-19T23:18:08+00:00"
+            "time": "2017-06-21T02:22:36+00:00"
         },
         {
             "name": "symfony/form",
@@ -2573,12 +2573,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "28209d9e670787ad473ef424ae00ffab442bd51d"
+                "reference": "46552dee236cf4c8de2864e6736503b4320b8e30"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/28209d9e670787ad473ef424ae00ffab442bd51d",
-                "reference": "28209d9e670787ad473ef424ae00ffab442bd51d",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/46552dee236cf4c8de2864e6736503b4320b8e30",
+                "reference": "46552dee236cf4c8de2864e6736503b4320b8e30",
                 "shasum": ""
             },
             "require": {
@@ -2618,7 +2618,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-16T21:35:59+00:00"
+            "time": "2017-06-17T07:49:15+00:00"
         },
         {
             "name": "symfony/http-kernel",
@@ -5205,12 +5205,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3263b15ba549ea5496249c83d51707a5dfb426ef"
+                "reference": "445c9b40b9b9db43b11b81095d6acbae5233e739"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3263b15ba549ea5496249c83d51707a5dfb426ef",
-                "reference": "3263b15ba549ea5496249c83d51707a5dfb426ef",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/445c9b40b9b9db43b11b81095d6acbae5233e739",
+                "reference": "445c9b40b9b9db43b11b81095d6acbae5233e739",
                 "shasum": ""
             },
             "require": {
@@ -5281,7 +5281,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-06-16T16:05:23+00:00"
+            "time": "2017-06-21T08:27:43+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -5622,12 +5622,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "99851040b23c18fd20691275d36a96befe8afb62"
+                "reference": "dce014c5ac410e20f39e069a2dbdc31cea112cef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/99851040b23c18fd20691275d36a96befe8afb62",
-                "reference": "99851040b23c18fd20691275d36a96befe8afb62",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/dce014c5ac410e20f39e069a2dbdc31cea112cef",
+                "reference": "dce014c5ac410e20f39e069a2dbdc31cea112cef",
                 "shasum": ""
             },
             "require": {
@@ -5664,7 +5664,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2017-06-14T10:35:46+00:00"
+            "time": "2017-06-20T16:26:07+00:00"
         },
         {
             "name": "sebastian/exporter",
