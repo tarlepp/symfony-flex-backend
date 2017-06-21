@@ -76,7 +76,9 @@ trait FindMethod
                 throw $error;
             }
 
-            throw new HttpException(Response::HTTP_BAD_REQUEST, $error->getMessage(), $error, [], Response::HTTP_BAD_REQUEST);
+            $code = Response::HTTP_BAD_REQUEST;
+
+            throw new HttpException($code, $error->getMessage(), $error, [], $code);
         }
     }
 
