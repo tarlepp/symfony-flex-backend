@@ -68,22 +68,15 @@ trait FindMethod
                 $this->processCriteria($criteria);
             }
 
-            return $this->getResponseHelper()->createResponse(
-                $request,
-                $this->getResource()->find($criteria, $orderBy, $limit, $offset, $search)
-            );
+            return $this
+                ->getResponseHelper()
+                ->createResponse($request, $this->getResource()->find($criteria, $orderBy, $limit, $offset, $search));
         } catch (\Exception $error) {
             if ($error instanceof HttpException) {
                 throw $error;
             }
 
-            throw new HttpException(
-                Response::HTTP_BAD_REQUEST,
-                $error->getMessage(),
-                $error,
-                [],
-                Response::HTTP_BAD_REQUEST
-            );
+            throw new HttpException(Response::HTTP_BAD_REQUEST, $error->getMessage(), $error, [], Response::HTTP_BAD_REQUEST);
         }
     }
 
