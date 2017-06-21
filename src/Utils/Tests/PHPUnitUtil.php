@@ -16,6 +16,8 @@ namespace App\Utils\Tests;
 class PHPUnitUtil
 {
     /**
+     * @codeCoverageIgnore
+     *
      * @param string $folder
      * @param string $pattern
      *

@@ -10,6 +10,7 @@ namespace App\Tests\Unit;
 use App\Entity\EntityInterface;
 use App\Rest\ControllerInterface;
 use App\Rest\RepositoryInterface;
+use App\Utils\Tests\PHPUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
@@ -22,27 +23,6 @@ use Symfony\Component\Form\FormTypeInterface;
  */
 class IntegrityTest extends KernelTestCase
 {
-    /**
-     * @param string $folder
-     * @param string $pattern
-     *
-     * @return array
-     */
-    public static function recursiveFileSearch(string $folder, string $pattern): array
-    {
-        $dir = new \RecursiveDirectoryIterator($folder);
-        $ite = new \RecursiveIteratorIterator($dir);
-
-        $files = new \RegexIterator($ite, $pattern, \RegexIterator::GET_MATCH);
-        $fileList = array();
-
-        foreach ($files as $file) {
-            $fileList[] = $file[0];
-        }
-
-        return $fileList;
-    }
-
     /**
      * @dataProvider dataProviderTestThatControllersHaveFunctionalTests
      *
@@ -252,7 +232,7 @@ class IntegrityTest extends KernelTestCase
             ];
         };
 
-        return \array_map($iterator, self::recursiveFileSearch($folder, $pattern));
+        return \array_map($iterator, PHPUnitUtil::recursiveFileSearch($folder, $pattern));
     }
 
     /**
@@ -311,7 +291,7 @@ class IntegrityTest extends KernelTestCase
             \array_filter(
                 \array_map(
                     $iterator,
-                    self::recursiveFileSearch($folder, $pattern)
+                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -359,7 +339,7 @@ class IntegrityTest extends KernelTestCase
             \array_filter(
                 \array_map(
                     $iterator,
-                    self::recursiveFileSearch($folder, $pattern)
+                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -405,7 +385,7 @@ class IntegrityTest extends KernelTestCase
             \array_filter(
                 \array_map(
                     $iterator,
-                    self::recursiveFileSearch($folder, $pattern)
+                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -436,7 +416,7 @@ class IntegrityTest extends KernelTestCase
             ];
         };
 
-        return \array_map($iterator, self::recursiveFileSearch($folder, $pattern));
+        return \array_map($iterator, PHPUnitUtil::recursiveFileSearch($folder, $pattern));
     }
 
     /**
@@ -463,7 +443,7 @@ class IntegrityTest extends KernelTestCase
             ];
         };
 
-        return \array_map($iterator, self::recursiveFileSearch($folder, $pattern));
+        return \array_map($iterator, PHPUnitUtil::recursiveFileSearch($folder, $pattern));
     }
 
     /**
@@ -505,7 +485,7 @@ class IntegrityTest extends KernelTestCase
             \array_filter(
                 \array_map(
                     $iterator,
-                    self::recursiveFileSearch($folder, $pattern)
+                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -553,7 +533,7 @@ class IntegrityTest extends KernelTestCase
             \array_filter(
                 \array_map(
                     $iterator,
-                    self::recursiveFileSearch($folder, $pattern)
+                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -601,7 +581,7 @@ class IntegrityTest extends KernelTestCase
             \array_filter(
                 \array_map(
                     $iterator,
-                    self::recursiveFileSearch($folder, $pattern)
+                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -649,7 +629,7 @@ class IntegrityTest extends KernelTestCase
             \array_filter(
                 \array_map(
                     $iterator,
-                    self::recursiveFileSearch($folder, $pattern)
+                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
