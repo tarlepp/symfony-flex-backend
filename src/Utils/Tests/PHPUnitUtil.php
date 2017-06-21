@@ -16,6 +16,27 @@ namespace App\Utils\Tests;
 class PHPUnitUtil
 {
     /**
+     * @param string $folder
+     * @param string $pattern
+     *
+     * @return array
+     */
+    public static function recursiveFileSearch(string $folder, string $pattern): array
+    {
+        $dir = new \RecursiveDirectoryIterator($folder);
+        $ite = new \RecursiveIteratorIterator($dir);
+
+        $files = new \RegexIterator($ite, $pattern, \RegexIterator::GET_MATCH);
+        $fileList = array();
+
+        foreach ($files as $file) {
+            $fileList[] = $file[0];
+        }
+
+        return $fileList;
+    }
+
+    /**
      * Method to call specified 'protected' or 'private' method on given class.
      *
      * @param mixed     $object The instantiated instance of your class
