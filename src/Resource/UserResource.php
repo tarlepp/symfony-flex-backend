@@ -11,6 +11,7 @@ use App\Entity\EntityInterface;
 use App\Entity\User as Entity;
 use App\Repository\UserRepository as Repository;
 use App\Rest\DTO\RestDtoInterface;
+use App\Rest\DTO\User;
 use App\Rest\Resource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -34,6 +35,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class UserResource extends Resource
 {
+    protected $dtoClass = User::class;
+
     /**
      * Class constructor.
      *
