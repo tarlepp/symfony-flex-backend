@@ -51,6 +51,16 @@ final class ResponseHelper implements ResponseHelperInterface
     }
 
     /**
+     * Getter for serializer
+     *
+     * @return SerializerInterface
+     */
+    public function getSerializer(): SerializerInterface
+    {
+        return $this->serializer;
+    }
+
+    /**
      * Getter for current resource service
      *
      * @return ResourceInterface

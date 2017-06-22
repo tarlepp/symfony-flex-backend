@@ -35,6 +35,13 @@ interface ResponseHelperInterface
     public function __construct(SerializerInterface $serializer);
 
     /**
+     * Getter for serializer
+     *
+     * @return SerializerInterface
+     */
+    public function getSerializer(): SerializerInterface;
+
+    /**
      * Getter for current resource service
      *
      * @return ResourceInterface
