@@ -9,7 +9,7 @@ namespace App\Command\User;
 
 use App\Entity\Role;
 use App\Repository\RoleRepository;
-use App\Security\RolesInterface;
+use App\Security\Roles;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,7 +34,7 @@ class CreateRolesCommand extends Command
     private $roleRepository;
 
     /**
-     * @var RolesInterface
+     * @var Roles
      */
     private $roles;
 
@@ -49,7 +49,7 @@ class CreateRolesCommand extends Command
      * @param null                   $name
      * @param EntityManagerInterface $entityManager
      * @param RoleRepository         $roleRepository
-     * @param RolesInterface         $roles
+     * @param Roles                  $roles
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
@@ -57,7 +57,7 @@ class CreateRolesCommand extends Command
         $name = null,
         EntityManagerInterface $entityManager,
         RoleRepository $roleRepository,
-        RolesInterface $roles
+        Roles $roles
     )
     {
         parent::__construct('user:create-roles');

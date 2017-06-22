@@ -10,7 +10,7 @@ namespace App\Command\User;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Resource\UserResource;
-use App\Security\RolesInterface;
+use App\Security\Roles;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,7 +30,7 @@ class ListUsersCommand extends Command
     private $userResource;
 
     /**
-     * @var RolesInterface
+     * @var Roles
      */
     private $roles;
 
@@ -44,11 +44,11 @@ class ListUsersCommand extends Command
      *
      * @param null|string    $name
      * @param UserResource   $userResource
-     * @param RolesInterface $roles
+     * @param Roles          $roles
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct($name = null, UserResource $userResource, RolesInterface $roles)
+    public function __construct($name = null, UserResource $userResource, Roles $roles)
     {
         parent::__construct('user:list');
 

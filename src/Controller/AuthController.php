@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Security\RolesInterface;
+use App\Security\Roles;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -56,7 +56,7 @@ class AuthController
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
      * @param UserInterface|User  $user
-     * @param RolesInterface      $roles
+     * @param Roles               $roles
      * @param SerializerInterface $serializer
      *
      * @return JsonResponse
@@ -65,7 +65,7 @@ class AuthController
      */
     public function profileAction(
         UserInterface $user,
-        RolesInterface $roles,
+        Roles $roles,
         SerializerInterface $serializer
     ): JsonResponse
     {
