@@ -711,12 +711,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "b925cce6c4ca23711cb9fb30fdb07d430b659a81"
+                "reference": "af1ea1ae1d4f0b945eb37c94732ed7e1e44099d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/b925cce6c4ca23711cb9fb30fdb07d430b659a81",
-                "reference": "b925cce6c4ca23711cb9fb30fdb07d430b659a81",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/af1ea1ae1d4f0b945eb37c94732ed7e1e44099d8",
+                "reference": "af1ea1ae1d4f0b945eb37c94732ed7e1e44099d8",
                 "shasum": ""
             },
             "require": {
@@ -783,7 +783,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-06-21T06:29:31+00:00"
+            "time": "2017-06-22T06:03:42+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -3606,12 +3606,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security-bundle.git",
-                "reference": "a4a7250944fbbc91e3b7922146d807bc214fe3ce"
+                "reference": "5c5bf16b4a10d917a400e1393e0c31dd56c665a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/a4a7250944fbbc91e3b7922146d807bc214fe3ce",
-                "reference": "a4a7250944fbbc91e3b7922146d807bc214fe3ce",
+                "url": "https://api.github.com/repos/symfony/security-bundle/zipball/5c5bf16b4a10d917a400e1393e0c31dd56c665a6",
+                "reference": "5c5bf16b4a10d917a400e1393e0c31dd56c665a6",
                 "shasum": ""
             },
             "require": {
@@ -3680,7 +3680,7 @@
             ],
             "description": "Symfony SecurityBundle",
             "homepage": "https://symfony.com",
-            "time": "2017-06-15T14:23:21+00:00"
+            "time": "2017-06-21T19:59:45+00:00"
         },
         {
             "name": "symfony/serializer",
@@ -5570,12 +5570,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/diff.git",
-                "reference": "c7a73305b177922a6cd6ddfab6bb1780fea29c02"
+                "reference": "5bf53e77396e822ea248d8f48679ab5bd76ac20c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/c7a73305b177922a6cd6ddfab6bb1780fea29c02",
-                "reference": "c7a73305b177922a6cd6ddfab6bb1780fea29c02",
+                "url": "https://api.github.com/repos/sebastianbergmann/diff/zipball/5bf53e77396e822ea248d8f48679ab5bd76ac20c",
+                "reference": "5bf53e77396e822ea248d8f48679ab5bd76ac20c",
                 "shasum": ""
             },
             "require": {
@@ -5614,7 +5614,7 @@
             "keywords": [
                 "diff"
             ],
-            "time": "2017-06-10T10:11:03+00:00"
+            "time": "2017-06-22T14:02:19+00:00"
         },
         {
             "name": "sebastian/environment",
