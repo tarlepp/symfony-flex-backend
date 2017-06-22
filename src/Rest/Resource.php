@@ -70,7 +70,7 @@ abstract class Resource implements ResourceInterface
      */
     public function getDtoClass(): string
     {
-        if ($this->dtoClass === null) {
+        if ((string)$this->dtoClass === '') {
             $message = \sprintf(
                 'DTO class not specified for \'%s\' resource',
                 static::class

@@ -68,6 +68,8 @@ class GenericResourceTest extends KernelTestCase
 
         /** @var ResourceInterface $resource */
         $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource->setDtoClass('');
+
         $resource->getDtoClass();
     }
 
