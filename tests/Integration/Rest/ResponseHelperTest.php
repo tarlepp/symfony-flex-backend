@@ -22,6 +22,15 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class ResponseHelperTest extends ContainerTestCase
 {
+    public function testThatGetSerializerReturnsExpected(): void
+    {
+        $serializer = $this->getContainer()->get('serializer');
+
+        $responseClass = new ResponseHelper($serializer);
+
+        static::assertSame($serializer,  $responseClass->getSerializer());
+    }
+
     /**
      * @dataProvider dataProviderTestThatCreateResponseReturnsExpected
      *
