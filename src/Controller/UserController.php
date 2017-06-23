@@ -34,6 +34,7 @@ class UserController extends Controller
     // Traits for REST actions
     use Actions\Root\CountAction;
     use Actions\Root\CreateAction;
+    use Actions\Root\DeleteAction;
     use Actions\Root\FindAction;
     use Actions\Root\FindOneAction;
     use Actions\Root\IdsAction;
