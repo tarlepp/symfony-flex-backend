@@ -37,6 +37,7 @@ class UserController extends Controller
     use Actions\Root\FindAction;
     use Actions\Root\FindOneAction;
     use Actions\Root\IdsAction;
+    use Actions\Root\UpdateAction;
 
     /**
      * UserController constructor.
