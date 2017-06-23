@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 trait CreateMethod
 {
     /**
-     * Generic 'createMethod' to create new record to specified resource.
+     * Generic 'createMethod' method for REST resources.
      *
      * @param Request    $request
      * @param array|null $allowedHttpMethods

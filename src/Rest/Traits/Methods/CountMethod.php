@@ -27,6 +27,8 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 trait CountMethod
 {
     /**
+     * Generic 'countMethod' method for REST resources.
+     *
      * @param Request    $request
      * @param array|null $allowedHttpMethods
      *

@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait FindOneAction
 {
+    // Traits
     use FindOneMethod;
 
     /**

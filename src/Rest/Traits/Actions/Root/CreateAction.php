@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait CreateAction
 {
+    // Traits
     use CreateMethod;
 
     /**

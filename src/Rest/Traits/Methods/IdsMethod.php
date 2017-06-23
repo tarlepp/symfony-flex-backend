@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 trait IdsMethod
 {
     /**
-     * Generic 'IdsMethod' to return specified resource id values as an array with given criteria and search words.
+     * Generic 'idsMethod' method for REST resources.
      *
      * @param Request    $request
      * @param array|null $allowedHttpMethods

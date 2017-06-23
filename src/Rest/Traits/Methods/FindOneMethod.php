@@ -24,7 +24,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 trait FindOneMethod
 {
     /**
-     * Generic 'findOne' method for REST resources.
+     * Generic 'findOneMethod' method for REST resources.
      *
      * @param Request    $request
      * @param string     $id

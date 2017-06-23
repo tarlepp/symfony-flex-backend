@@ -25,6 +25,8 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 trait UpdateMethod
 {
     /**
+     * Generic 'updateMethod' method for REST resources.
+     *
      * @param Request    $request
      * @param string     $id
      * @param array|null $allowedHttpMethods
