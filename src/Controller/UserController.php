@@ -32,12 +32,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class UserController extends Controller
 {
     // Traits for REST actions
-    use Actions\Root\CountAction;
+    use Actions\Admin\CountAction;
+    use Actions\Admin\FindAction;
+    use Actions\Admin\FindOneAction;
+    use Actions\Admin\IdsAction;
     use Actions\Root\CreateAction;
     use Actions\Root\DeleteAction;
-    use Actions\Root\FindAction;
-    use Actions\Root\FindOneAction;
-    use Actions\Root\IdsAction;
     use Actions\Root\UpdateAction;
 
     /**
