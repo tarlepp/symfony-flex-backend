@@ -9,7 +9,7 @@ namespace Integration\Rest\Traits\Methods;
 
 use App\Entity\EntityInterface;
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHelperInterface;
+use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\DeleteMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodTestClass;
 use Ramsey\Uuid\Uuid;
@@ -53,12 +53,12 @@ class DeleteMethodTest extends KernelTestCase
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var DeleteMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             DeleteMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         $uuid = Uuid::uuid4()->toString();
@@ -78,12 +78,12 @@ class DeleteMethodTest extends KernelTestCase
     public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var DeleteMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             DeleteMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         $uuid = Uuid::uuid4()->toString();
@@ -108,12 +108,12 @@ class DeleteMethodTest extends KernelTestCase
     public function testThatTraitCallsServiceMethods(): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var DeleteMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             DeleteMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         /** @var Request|\PHPUnit_Framework_MockObject_MockObject $request */
@@ -134,7 +134,7 @@ class DeleteMethodTest extends KernelTestCase
             ->with($uuid)
             ->willReturn($entityInterface);
 
-        $responseHelper
+        $responseHandler
             ->expects(static::once())
             ->method('createResponse')
             ->withAnyParameters()
@@ -147,8 +147,8 @@ class DeleteMethodTest extends KernelTestCase
 
         $testClass
             ->expects(static::once())
-            ->method('getResponseHelper')
-            ->willReturn($responseHelper);
+            ->method('getResponseHandler')
+            ->willReturn($responseHandler);
 
         $testClass->deleteMethod($request, $uuid);
     }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/ResponseHelper.php
+ * /src/Rest/ResponseHandler.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -13,12 +13,12 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Class ResponseHelper
+ * Class ResponseHandler
  *
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-final class ResponseHelper implements ResponseHelperInterface
+final class ResponseHandler implements ResponseHandlerInterface
 {
     /**
      * Content types for supported response output formats.
@@ -41,7 +41,7 @@ final class ResponseHelper implements ResponseHelperInterface
     private $resource;
 
     /**
-     * ResponseHelper constructor.
+     * ResponseHandler constructor.
      *
      * @param SerializerInterface $serializer
      */
@@ -75,9 +75,9 @@ final class ResponseHelper implements ResponseHelperInterface
      *
      * @param ResourceInterface $resource
      *
-     * @return ResponseHelperInterface
+     * @return ResponseHandlerInterface
      */
-    public function setResource(ResourceInterface $resource): ResponseHelperInterface
+    public function setResource(ResourceInterface $resource): ResponseHandlerInterface
     {
         $this->resource = $resource;
 

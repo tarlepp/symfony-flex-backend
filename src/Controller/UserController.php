@@ -9,7 +9,7 @@ namespace App\Controller;
 
 use App\Resource\UserResource;
 use App\Rest\Controller;
-use App\Rest\ResponseHelper;
+use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -44,10 +44,10 @@ class UserController extends Controller
      * UserController constructor.
      *
      * @param UserResource   $resource
-     * @param ResponseHelper $responseHelper
+     * @param ResponseHandler $responseHandler
      */
-    public function __construct(UserResource $resource, ResponseHelper $responseHelper)
+    public function __construct(UserResource $resource, ResponseHandler $responseHandler)
     {
-        $this->init($resource, $responseHelper);
+        $this->init($resource, $responseHandler);
     }
 }

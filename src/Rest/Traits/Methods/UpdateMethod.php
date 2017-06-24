@@ -10,7 +10,7 @@ namespace App\Rest\Traits\Methods;
 use App\Rest\ControllerInterface;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHelperInterface;
+use App\Rest\ResponseHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -61,9 +61,9 @@ trait UpdateMethod
             $dtoClass = $this->getResource()->getDtoClass();
 
             /** @var RestDtoInterface $dto */
-            $dto = $this->getResponseHelper()->getSerializer()->deserialize($request->getContent(), $dtoClass, 'json');
+            $dto = $this->getResponseHandler()->getSerializer()->deserialize($request->getContent(), $dtoClass, 'json');
 
-            return $this->getResponseHelper()->createResponse($request, $this->getResource()->update($id, $dto));
+            return $this->getResponseHandler()->createResponse($request, $this->getResource()->update($id, $dto));
         } catch (\Exception $error) {
             if ($error instanceof HttpException) {
                 throw $error;
@@ -83,7 +83,7 @@ trait UpdateMethod
     abstract public function getResource(): ResourceInterface;
 
     /**
-     * @return ResponseHelperInterface
+     * @return ResponseHandlerInterface
      */
-    abstract public function getResponseHelper(): ResponseHelperInterface;
+    abstract public function getResponseHandler(): ResponseHandlerInterface;
 }

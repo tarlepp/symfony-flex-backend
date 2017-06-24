@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/ResponseHelperInterface.php
+ * /src/Rest/ResponseHandlerInterface.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Interface ResponseHelperInterface
+ * Interface ResponseHandlerInterface
  *
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-interface ResponseHelperInterface
+interface ResponseHandlerInterface
 {
     /**
      * Constants for response output formats.
@@ -28,7 +28,7 @@ interface ResponseHelperInterface
     const FORMAT_XML = 'xml';
 
     /**
-     * ResponseHelper constructor.
+     * ResponseHandler constructor.
      *
      * @param SerializerInterface $serializer
      */
@@ -53,9 +53,9 @@ interface ResponseHelperInterface
      *
      * @param ResourceInterface $resource
      *
-     * @return ResponseHelperInterface
+     * @return ResponseHandlerInterface
      */
-    public function setResource(ResourceInterface $resource): ResponseHelperInterface;
+    public function setResource(ResourceInterface $resource): ResponseHandlerInterface;
 
     /**
      * Helper method to get serialization context for request.

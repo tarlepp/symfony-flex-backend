@@ -21,9 +21,9 @@ abstract class Controller implements ControllerInterface
     protected $resource;
 
     /**
-     * @var ResponseHelperInterface
+     * @var ResponseHandlerInterface
      */
-    protected $responseHelper;
+    protected $responseHandler;
 
     /**
      * @return ResourceInterface
@@ -34,24 +34,24 @@ abstract class Controller implements ControllerInterface
     }
 
     /**
-     * @return ResponseHelperInterface
+     * @return ResponseHandlerInterface
      */
-    public function getResponseHelper(): ResponseHelperInterface
+    public function getResponseHandler(): ResponseHandlerInterface
     {
-        return $this->responseHelper;
+        return $this->responseHandler;
     }
 
     /**
      * Method to initialize REST controller.
      *
      * @param ResourceInterface       $resource
-     * @param ResponseHelperInterface $responseHelper
+     * @param ResponseHandlerInterface $responseHandler
      */
-    protected function init(ResourceInterface $resource, ResponseHelperInterface $responseHelper): void
+    protected function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void
     {
         $this->resource = $resource;
-        $this->responseHelper = $responseHelper;
+        $this->responseHandler = $responseHandler;
 
-        $this->responseHelper->setResource($this->resource);
+        $this->responseHandler->setResource($this->resource);
     }
 }

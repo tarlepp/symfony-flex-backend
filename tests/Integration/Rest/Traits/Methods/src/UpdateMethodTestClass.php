@@ -9,7 +9,7 @@ namespace App\Tests\Integration\Rest\Traits\Methods\src;
 
 use App\Rest\ControllerInterface;
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHelperInterface;
+use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
 
 /**
@@ -26,9 +26,9 @@ abstract class UpdateMethodTestClass implements ControllerInterface
      * UpdateMethodTestClass constructor.
      *
      * @param ResourceInterface       $resource
-     * @param ResponseHelperInterface $responseHelper
+     * @param ResponseHandlerInterface $responseHandler
      */
-    public function __construct(ResourceInterface $resource, ResponseHelperInterface $responseHelper)
+    public function __construct(ResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
     }
 }

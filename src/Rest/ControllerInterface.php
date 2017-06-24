@@ -21,7 +21,7 @@ interface ControllerInterface
     public function getResource(): ResourceInterface;
 
     /**
-     * @return ResponseHelperInterface
+     * @return ResponseHandlerInterface
      */
-    public function getResponseHelper(): ResponseHelperInterface;
+    public function getResponseHandler(): ResponseHandlerInterface;
 }

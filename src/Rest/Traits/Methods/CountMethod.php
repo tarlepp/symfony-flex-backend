@@ -10,7 +10,7 @@ namespace App\Rest\Traits\Methods;
 use App\Rest\ControllerInterface;
 use App\Rest\RequestHelper;
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHelperInterface;
+use App\Rest\ResponseHandlerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,7 +68,7 @@ trait CountMethod
             }
 
             return $this
-                ->getResponseHelper()
+                ->getResponseHandler()
                 ->createResponse($request, ['count' => $this->getResource()->count($criteria, $search)]
             );
         } catch (\Exception $error) {
@@ -102,7 +102,7 @@ trait CountMethod
     abstract public function getResource(): ResourceInterface;
 
     /**
-     * @return ResponseHelperInterface
+     * @return ResponseHandlerInterface
      */
-    abstract public function getResponseHelper(): ResponseHelperInterface;
+    abstract public function getResponseHandler(): ResponseHandlerInterface;
 }

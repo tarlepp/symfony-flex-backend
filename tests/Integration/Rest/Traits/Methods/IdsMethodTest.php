@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHelperInterface;
+use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\IdsMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodTestClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -47,12 +47,12 @@ class IdsMethodTest extends KernelTestCase
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             IdsMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         // Create request and response
@@ -64,12 +64,12 @@ class IdsMethodTest extends KernelTestCase
     public function testThatTraitCallsProcessCriteriaIfItExists(): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             IdsMethodTestClass::class,
-            [$resource, $responseHelper],
+            [$resource, $responseHandler],
             '',
             true,
             true,
@@ -97,12 +97,12 @@ class IdsMethodTest extends KernelTestCase
     public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             IdsMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         $request = Request::create('/');
@@ -126,12 +126,12 @@ class IdsMethodTest extends KernelTestCase
     public function testThatTraitCallsServiceMethods(): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             IdsMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         // Create request and response
@@ -144,7 +144,7 @@ class IdsMethodTest extends KernelTestCase
             ->withAnyParameters()
             ->willReturn([]);
 
-        $responseHelper
+        $responseHandler
             ->expects(static::once())
             ->method('createResponse')
             ->withAnyParameters()
@@ -157,8 +157,8 @@ class IdsMethodTest extends KernelTestCase
 
         $testClass
             ->expects(static::once())
-            ->method('getResponseHelper')
-            ->willReturn($responseHelper);
+            ->method('getResponseHandler')
+            ->willReturn($responseHandler);
 
         $testClass->idsMethod($request);
     }

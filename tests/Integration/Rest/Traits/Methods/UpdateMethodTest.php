@@ -10,7 +10,7 @@ namespace Integration\Rest\Traits\Methods;
 use App\Entity\EntityInterface;
 use App\Rest\DTO\RestDto;
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHelperInterface;
+use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\UpdateMethodTestClass;
 use Ramsey\Uuid\Uuid;
@@ -55,12 +55,12 @@ class UpdateMethodTest extends KernelTestCase
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var UpdateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             UpdateMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         $uuid = Uuid::uuid4()->toString();
@@ -80,12 +80,12 @@ class UpdateMethodTest extends KernelTestCase
     public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var UpdateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             UpdateMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         $uuid = Uuid::uuid4()->toString();
@@ -110,12 +110,12 @@ class UpdateMethodTest extends KernelTestCase
     public function testThatTraitCallsServiceMethods(): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var UpdateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             UpdateMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         /** @var Request|\PHPUnit_Framework_MockObject_MockObject $request */
@@ -149,12 +149,12 @@ class UpdateMethodTest extends KernelTestCase
             ->withAnyParameters()
             ->willReturn($dtoInterface);
 
-        $responseHelper
+        $responseHandler
             ->expects(static::once())
             ->method('getSerializer')
             ->willReturn($serializer);
 
-        $responseHelper
+        $responseHandler
             ->expects(static::once())
             ->method('createResponse')
             ->withAnyParameters()
@@ -167,8 +167,8 @@ class UpdateMethodTest extends KernelTestCase
 
         $testClass
             ->expects(static::exactly(2))
-            ->method('getResponseHelper')
-            ->willReturn($responseHelper);
+            ->method('getResponseHandler')
+            ->willReturn($responseHandler);
 
         $testClass->updateMethod($request, $uuid);
     }

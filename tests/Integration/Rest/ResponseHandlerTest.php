@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/AppBundle/integration/Services/Rest/Helper/ResponseTest.php
+ * /tests/Integration/Rest/ResponseHandlerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace AppBundle\integration\Services\Rest\Helper;
 
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHelper;
+use App\Rest\ResponseHandler;
 use App\Utils\Tests\ContainerTestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,13 +20,13 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @package AppBundle\integration\Services\Rest\Helper
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ResponseHelperTest extends ContainerTestCase
+class ResponseHandlerTest extends ContainerTestCase
 {
     public function testThatGetSerializerReturnsExpected(): void
     {
         $serializer = $this->getContainer()->get('serializer');
 
-        $responseClass = new ResponseHelper($serializer);
+        $responseClass = new ResponseHandler($serializer);
 
         static::assertSame($serializer,  $responseClass->getSerializer());
     }
@@ -49,7 +49,7 @@ class ResponseHelperTest extends ContainerTestCase
         /** @var ResourceInterface|\PHPUnit_Framework_MockObject_MockObject $stubResourceService */
         $stubResourceService = $this->createMock(ResourceInterface::class);
 
-        $responseClass = new ResponseHelper($serializer);
+        $responseClass = new ResponseHandler($serializer);
         $responseClass->setResource($stubResourceService);
 
         $httpResponse = $responseClass->createResponse($request, $data, 200);
@@ -80,7 +80,7 @@ class ResponseHelperTest extends ContainerTestCase
             ->withAnyParameters()
             ->willThrowException($exception);
 
-        $responseClass = new ResponseHelper($stubSerializer);
+        $responseClass = new ResponseHandler($stubSerializer);
         $responseClass->setResource($stubResourceService);
         $responseClass->createResponse($request, []);
     }
@@ -102,7 +102,7 @@ class ResponseHelperTest extends ContainerTestCase
         /** @var ResourceInterface|\PHPUnit_Framework_MockObject_MockObject $stubResourceService */
         $stubResourceService = $this->createMock(ResourceInterface::class);
 
-        $responseClass = new ResponseHelper($serializer);
+        $responseClass = new ResponseHandler($serializer);
         $responseClass->setResource($stubResourceService);
 
         $responseClass->createResponse($request, ['foo' => 'bar'], 200, $format);
@@ -133,7 +133,7 @@ class ResponseHelperTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $testClass = new ResponseHelper($stubSerializer);
+        $testClass = new ResponseHandler($stubSerializer);
         $testClass->setResource($stubResourceService);
         $context = $testClass->getSerializeContext($stubRequest);
 
@@ -165,7 +165,7 @@ class ResponseHelperTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $testClass = new ResponseHelper($stubSerializer);
+        $testClass = new ResponseHandler($stubSerializer);
         $testClass->setResource($stubResourceService);
         $context = $testClass->getSerializeContext($stubRequest);
 
@@ -202,7 +202,7 @@ class ResponseHelperTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $testClass = new ResponseHelper($stubSerializer);
+        $testClass = new ResponseHandler($stubSerializer);
         $testClass->setResource($stubResourceService);
         $context = $testClass->getSerializeContext($stubRequest);
 
@@ -234,7 +234,7 @@ class ResponseHelperTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $testClass = new ResponseHelper($stubSerializer);
+        $testClass = new ResponseHandler($stubSerializer);
         $testClass->setResource($stubResourceService);
         $context = $testClass->getSerializeContext($stubRequest);
 
@@ -272,7 +272,7 @@ class ResponseHelperTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $testClass = new ResponseHelper($stubSerializer);
+        $testClass = new ResponseHandler($stubSerializer);
         $testClass->setResource($stubResourceService);
         $context = $testClass->getSerializeContext($stubRequest);
 

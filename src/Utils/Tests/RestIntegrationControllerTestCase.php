@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Utils\Tests;
 use App\Rest\ControllerInterface;
-use App\Rest\ResponseHelperInterface;
+use App\Rest\ResponseHandlerInterface;
 
 /**
  * Class RestIntegrationControllerTestCase
@@ -57,8 +57,8 @@ class RestIntegrationControllerTestCase extends ContainerTestCase
         static::assertInstanceOf($this->resourceClass, $this->controller->getResource());
     }
 
-    public function testThatGetResponseHelperReturnsExpected(): void
+    public function testThatGetResponseHandlerReturnsExpected(): void
     {
-        static::assertInstanceOf(ResponseHelperInterface::class, $this->controller->getResponseHelper());
+        static::assertInstanceOf(ResponseHandlerInterface::class, $this->controller->getResponseHandler());
     }
 }

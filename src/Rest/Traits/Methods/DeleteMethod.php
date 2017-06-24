@@ -9,7 +9,7 @@ namespace App\Rest\Traits\Methods;
 
 use App\Rest\ControllerInterface;
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHelperInterface;
+use App\Rest\ResponseHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -58,7 +58,7 @@ trait DeleteMethod
         try {
             // Fetch data from database
             return $this
-                ->getResponseHelper()
+                ->getResponseHandler()
                 ->createResponse($request, $this->getResource()->delete($id));
         } catch (\Exception $error) {
             if ($error instanceof HttpException) {
@@ -79,7 +79,7 @@ trait DeleteMethod
     abstract public function getResource(): ResourceInterface;
 
     /**
-     * @return ResponseHelperInterface
+     * @return ResponseHandlerInterface
      */
-    abstract public function getResponseHelper(): ResponseHelperInterface;
+    abstract public function getResponseHandler(): ResponseHandlerInterface;
 }

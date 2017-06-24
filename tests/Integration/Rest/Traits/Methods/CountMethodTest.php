@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHelperInterface;
+use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\CountMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\CountMethodTestClass;
 use Doctrine\ORM\NonUniqueResultException;
@@ -49,12 +49,12 @@ class CountMethodTest extends KernelTestCase
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var CountMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             CountMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         // Create request and response
@@ -66,12 +66,12 @@ class CountMethodTest extends KernelTestCase
     public function testThatTraitCallsProcessCriteriaIfItExists(): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var CountMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             CountMethodTestClass::class,
-            [$resource, $responseHelper],
+            [$resource, $responseHandler],
             '',
             true,
             true,
@@ -99,12 +99,12 @@ class CountMethodTest extends KernelTestCase
     public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var CountMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             CountMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         $request = Request::create('/');
@@ -128,12 +128,12 @@ class CountMethodTest extends KernelTestCase
     public function testThatTraitCallsServiceMethods(): void
     {
         $resource = $this->createMock(ResourceInterface::class);
-        $responseHelper = $this->createMock(ResponseHelperInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var CountMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             CountMethodTestClass::class,
-            [$resource, $responseHelper]
+            [$resource, $responseHandler]
         );
 
         // Create request and response
@@ -146,7 +146,7 @@ class CountMethodTest extends KernelTestCase
             ->withAnyParameters()
             ->willReturn(123);
 
-        $responseHelper
+        $responseHandler
             ->expects(static::once())
             ->method('createResponse')
             ->withAnyParameters()
@@ -159,8 +159,8 @@ class CountMethodTest extends KernelTestCase
 
         $testClass
             ->expects(static::once())
-            ->method('getResponseHelper')
-            ->willReturn($responseHelper);
+            ->method('getResponseHandler')
+            ->willReturn($responseHandler);
 
         $testClass->countMethod($request)->getContent();
     }
