@@ -104,9 +104,6 @@ final class ResponseHandler implements ResponseHandlerInterface
         $bits = \explode('\\', $entityName);
         $entityName = \end($bits);
 
-        // Determine used default group
-        $defaultGroup = $populateAll ? 'Default' : $entityName;
-
         // Set all associations to be populated
         if ($populateAll && \count($populate) === 0) {
             $associations = $this->getResource()->getAssociations();
@@ -119,9 +116,9 @@ final class ResponseHandler implements ResponseHandlerInterface
         }
 
         if ($populateOnly) {
-            $groups = \count($populate) === 0 ? [$defaultGroup] : $populate;
+            $groups = \count($populate) === 0 ? [$entityName] : $populate;
         } else {
-            $groups = \array_merge([$defaultGroup], $populate);
+            $groups = \array_merge([$entityName], $populate);
         }
 
         return [
