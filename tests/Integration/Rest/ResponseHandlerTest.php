@@ -5,7 +5,7 @@ declare(strict_types = 1);
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace AppBundle\integration\Services\Rest\Helper;
+namespace App\Tests\Integration\Rest;
 
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandler;
@@ -169,7 +169,7 @@ class ResponseHandlerTest extends ContainerTestCase
         $testClass->setResource($stubResourceService);
         $context = $testClass->getSerializeContext($stubRequest);
 
-        static::assertSame(['Default'], $context['groups']);
+        static::assertSame(['FakeEntity'], $context['groups']);
     }
 
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenEntityDoesHaveAssociations(): void
@@ -206,7 +206,7 @@ class ResponseHandlerTest extends ContainerTestCase
         $testClass->setResource($stubResourceService);
         $context = $testClass->getSerializeContext($stubRequest);
 
-        static::assertSame(['Default', 'FakeEntity.AnotherFakeEntity'], $context['groups']);
+        static::assertSame(['FakeEntity', 'FakeEntity.AnotherFakeEntity'], $context['groups']);
     }
 
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityDoesNotHaveAnyAssociations(): void
