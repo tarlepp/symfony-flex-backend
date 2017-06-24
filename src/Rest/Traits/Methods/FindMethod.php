@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Rest\Traits\Methods;
 
 use App\Rest\ControllerInterface;
-use App\Rest\RequestHelper;
+use App\Rest\RequestHandler;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,13 +56,13 @@ trait FindMethod
         }
 
         // Determine used parameters
-        $orderBy    = RequestHelper::getOrderBy($request);
-        $limit      = RequestHelper::getLimit($request);
-        $offset     = RequestHelper::getOffset($request);
-        $search     = RequestHelper::getSearchTerms($request);
+        $orderBy    = RequestHandler::getOrderBy($request);
+        $limit      = RequestHandler::getLimit($request);
+        $offset     = RequestHandler::getOffset($request);
+        $search     = RequestHandler::getSearchTerms($request);
 
         try {
-            $criteria = RequestHelper::getCriteria($request);
+            $criteria = RequestHandler::getCriteria($request);
 
             if (\method_exists($this, 'processCriteria')) {
                 $this->processCriteria($criteria);

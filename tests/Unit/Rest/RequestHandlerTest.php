@@ -1,13 +1,13 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Unit/Rest/RequestHelperTest.php
+ * /tests/Unit/Rest/RequestHandlerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Unit\Rest;
 
-use App\Rest\RequestHelper;
+use App\Rest\RequestHandler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @package App\Tests\Unit\Rest;
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RequestHelperTest extends KernelTestCase
+class RequestHandlerTest extends KernelTestCase
 {
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
@@ -27,7 +27,7 @@ class RequestHelperTest extends KernelTestCase
     {
         $fakeRequest = Request::create('/', 'GET', ['where' => '{foo bar']);
 
-        RequestHelper::getCriteria($fakeRequest);
+        RequestHandler::getCriteria($fakeRequest);
     }
 
     public function testThatGetCriteriaMethodsReturnsExpectedArray(): void
@@ -38,7 +38,7 @@ class RequestHelperTest extends KernelTestCase
 
         $fakeRequest = Request::create('/', 'GET', ['where' => \json_encode($data)]);
 
-        static::assertSame($data, RequestHelper::getCriteria($fakeRequest));
+        static::assertSame($data, RequestHandler::getCriteria($fakeRequest));
     }
 
     /**
@@ -53,7 +53,7 @@ class RequestHelperTest extends KernelTestCase
 
         static::assertSame(
             $expected,
-            RequestHelper::getOrderBy($fakeRequest),
+            RequestHandler::getOrderBy($fakeRequest),
             'getOrderBy method did not return expected value'
         );
     }
@@ -63,7 +63,7 @@ class RequestHelperTest extends KernelTestCase
         $fakeRequest = Request::create('/');
 
         static::assertNull(
-            RequestHelper::getLimit($fakeRequest),
+            RequestHandler::getLimit($fakeRequest),
             'getLimit method did not return NULL as it should without any parameters'
         );
     }
@@ -78,7 +78,7 @@ class RequestHelperTest extends KernelTestCase
     {
         $fakeRequest = Request::create('/', 'GET', $parameters);
 
-        $actual = RequestHelper::getLimit($fakeRequest);
+        $actual = RequestHandler::getLimit($fakeRequest);
 
         static::assertNotNull(
             $actual,
@@ -97,7 +97,7 @@ class RequestHelperTest extends KernelTestCase
         $fakeRequest = Request::create('/');
 
         static::assertNull(
-            RequestHelper::getOffset($fakeRequest),
+            RequestHandler::getOffset($fakeRequest),
             'getOffset method did not return NULL as it should without any parameters'
         );
     }
@@ -112,7 +112,7 @@ class RequestHelperTest extends KernelTestCase
     {
         $fakeRequest = Request::create('/', 'GET', $parameters);
 
-        $actual = RequestHelper::getOffset($fakeRequest);
+        $actual = RequestHandler::getOffset($fakeRequest);
 
         static::assertNotNull(
             $actual,
@@ -132,7 +132,7 @@ class RequestHelperTest extends KernelTestCase
 
         static::assertSame(
             [],
-            RequestHelper::getSearchTerms($fakeRequest),
+            RequestHandler::getSearchTerms($fakeRequest),
             'getSearchTerms method did not return empty array ([]) as it should without any parameters'
         );
     }
@@ -149,7 +149,7 @@ class RequestHelperTest extends KernelTestCase
 
         $fakeRequest = Request::create('/', 'GET', $parameters);
 
-        RequestHelper::getSearchTerms($fakeRequest);
+        RequestHandler::getSearchTerms($fakeRequest);
     }
 
     /**
@@ -168,7 +168,7 @@ class RequestHelperTest extends KernelTestCase
 
         static::assertSame(
             $expected,
-            RequestHelper::getSearchTerms($fakeRequest),
+            RequestHandler::getSearchTerms($fakeRequest),
             'getSearchTerms method did not return expected value'
         );
     }

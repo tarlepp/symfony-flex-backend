@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Rest\Traits\Methods;
 
 use App\Rest\ControllerInterface;
-use App\Rest\RequestHelper;
+use App\Rest\RequestHandler;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,10 +56,10 @@ trait IdsMethod
         }
 
         // Determine used parameters
-        $search = RequestHelper::getSearchTerms($request);
+        $search = RequestHandler::getSearchTerms($request);
 
         try {
-            $criteria = RequestHelper::getCriteria($request);
+            $criteria = RequestHandler::getCriteria($request);
 
             if (\method_exists($this, 'processCriteria')) {
                 $this->processCriteria($criteria);

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/RequestHelper.php
+ * /src/Rest/RequestHandler.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -13,12 +13,12 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
- * Class RequestHelper
+ * Class RequestHandler
  *
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-final class RequestHelper
+final class RequestHandler
 {
     /**
      * Method to get used criteria array for 'find' and 'count' methods. Some examples below.
