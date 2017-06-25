@@ -37,7 +37,7 @@ trait DeleteAction
      *      }
      *  )
      *
-     * @Method({"GET"})
+     * @Method({"DELETE"})
      *
      * @Security("has_role('ROLE_ROOT')")
      *

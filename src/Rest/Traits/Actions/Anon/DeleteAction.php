@@ -37,7 +37,7 @@ trait DeleteAction
      *      }
      *  )
      *
-     * @Method({"GET"})
+     * @Method({"DELETE"})
      *
      * @param Request $request
      * @param string  $id
