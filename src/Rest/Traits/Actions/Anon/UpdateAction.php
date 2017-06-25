@@ -37,7 +37,7 @@ trait UpdateAction
      *      }
      *  )
      *
-     * @Method({"GET"})
+     * @Method({"PUT"})
      *
      * @param Request $request
      * @param string  $id

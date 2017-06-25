@@ -37,7 +37,7 @@ trait UpdateAction
      *      }
      *  )
      *
-     * @Method({"GET"})
+     * @Method({"PUT"})
      *
      * @Security("has_role('ROLE_USER')")
      *
