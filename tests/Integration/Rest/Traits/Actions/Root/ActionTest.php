@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class ActionTest
  *
- * @package AppBundle\integration\Traits\Roles\Root
+ * @package App\Tests\Integration\Rest\Traits\Actions\Root
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ActionTest extends KernelTestCase

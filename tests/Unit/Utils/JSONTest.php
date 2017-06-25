@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 /**
  * Class JSONTest
  *
- * @package AppBundle\unit\Utils
+ * @package App\Tests\Unit\Utils
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class JSONTest extends KernelTestCase

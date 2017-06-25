@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * Class ResponseTest
  *
- * @package AppBundle\integration\Services\Rest\Helper
+ * @package App\Tests\Integration\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ResponseHandlerTest extends ContainerTestCase

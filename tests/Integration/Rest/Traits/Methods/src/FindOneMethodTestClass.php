@@ -13,9 +13,9 @@ use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\FindOneMethod;
 
 /**
- * Class Create - just a dummy class so that we can actually test that trait.
+ * Class FindOneMethodTestClass - just a dummy class so that we can actually test that trait.
  *
- * @package AppBundle\integration\Traits\Rest\Methods
+ * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class FindOneMethodTestClass implements ControllerInterface
