@@ -62,7 +62,7 @@ trait CreateMethod
             /** @var RestDtoInterface $dto */
             $dto = $this->getResponseHandler()->getSerializer()->deserialize($request->getContent(), $dtoClass, 'json');
 
-            return $this->getResponseHandler()->createResponse($request, $this->getResource()->create($dto));
+            return $this->getResponseHandler()->createResponse($request, $this->getResource()->create($dto), Response::HTTP_CREATED);
         } catch (\Exception $error) {
             if ($error instanceof HttpException) {
                 throw $error;
