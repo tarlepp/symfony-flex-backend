@@ -78,8 +78,23 @@ class WebTestCase extends BaseWebTestCase
         $server = $server ?? [];
 
         // Merge authorization headers
-        $server = \array_merge($this->getAuthService()->getAuthorizationHeadersForUser($username, $password), $server);
+        $server = \array_merge(
+            $this->getAuthService()->getAuthorizationHeadersForUser($username, $password),
+            $this->getJsonHeaders(),
+            $server
+        );
 
         return static::createClient($options, $server);
+    }
+
+    /**
+     * @return array
+     */
+    public function getJsonHeaders(): array
+    {
+        return [
+            'CONTENT_TYPE'          => 'application/json',
+            'HTTP_X-Requested-With' => 'XMLHttpRequest'
+        ];
     }
 }
