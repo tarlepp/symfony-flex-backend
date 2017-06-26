@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/Traits/Actions/RootActionsTest.php
+ * /tests/Functional/Rest/Traits/Actions/AdminActionsTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -10,7 +10,7 @@ namespace App\Tests\Functional\Rest\Traits\Actions;
 use App\Utils\Tests\RestTraitTestCase;
 
 /**
- * Class RootActionsTest
+ * Class AdminActionsTest
  *
  * @package App\Tests\Functional\Rest\Traits\Actions
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
