@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/Traits/Actions/src/LoggedActionsController.php
+ * /tests/Functional/Rest/Traits/Actions/src/AuthenticatedActionsController.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -12,7 +12,7 @@ use App\Rest\Traits\Actions\Authenticated as Actions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
- * Class LoggedActionsController
+ * Class AuthenticatedActionsController
  *
  * @Route(path="/test_authenticated_actions")
  *
