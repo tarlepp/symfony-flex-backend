@@ -1,0 +1,3 @@
+controllers_test:
+    resource: ../tests/Functional/Rest/Traits/Actions/src/
+    type: annotation
