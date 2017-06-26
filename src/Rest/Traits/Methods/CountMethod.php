@@ -88,7 +88,7 @@ trait CountMethod
                 throw new HttpException($code, $error->getMessage(), $error, [], $code);
             }
 
-            $code = Response::HTTP_BAD_REQUEST;
+            $code = $error->getCode() !== 0 ? $error->getCode() : Response::HTTP_BAD_REQUEST;
 
             throw new HttpException($code, $error->getMessage(), $error, [], $code);
         }
