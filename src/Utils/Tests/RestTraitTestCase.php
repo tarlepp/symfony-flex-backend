@@ -154,7 +154,7 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame(500, $response->getStatusCode());
+        static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
 
     /**
@@ -206,7 +206,7 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame(405, $response->getStatusCode());
+        static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
     /**
@@ -234,7 +234,7 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame(500, $response->getStatusCode());
+        static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
 
     /**
@@ -286,7 +286,7 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame(405, $response->getStatusCode());
+        static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
     /**
@@ -310,7 +310,7 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame(500, $response->getStatusCode());
+        static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
     
     /**
@@ -334,7 +334,7 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame($username === null ? 401 : 403, $response->getStatusCode());
+        static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
     }
 
     /**

@@ -1,0 +1,48 @@
+<?php
+declare(strict_types=1);
+/**
+ * /tests/Functional/Rest/Traits/Actions/LoggedActionsTest.php
+ *
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
+namespace App\Tests\Functional\Rest\Traits\Actions;
+
+use App\Utils\Tests\RestTraitTestCase;
+
+/**
+ * Class LoggedActionsTest
+ *
+ * @package App\Tests\Functional\Rest\Traits\Actions
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
+class LoggedActionsTest extends RestTraitTestCase
+{
+    /**
+     * @var string
+     */
+    protected static $route = '/test_logged_actions';
+
+    /**
+     * @return array
+     */
+    public function getValidUsers(): array
+    {
+        return [
+            ['john-root',   'password-root'],
+            ['john-admin',  'password-admin'],
+            ['john-user',   'password-user'],
+            ['john-logged', 'password-logged'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getInvalidUsers(): array
+    {
+        return [
+            [null,      null],
+            ['john',    'password'],
+        ];
+    }
+}
