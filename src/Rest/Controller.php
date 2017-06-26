@@ -35,9 +35,15 @@ abstract class Controller implements ControllerInterface
 
     /**
      * @return ResponseHandlerInterface
+     *
+     * @throws \UnexpectedValueException
      */
     public function getResponseHandler(): ResponseHandlerInterface
     {
+        if (!$this->responseHandler instanceof ResponseHandlerInterface) {
+            throw new \UnexpectedValueException('Response handler not set', 500);
+        }
+
         return $this->responseHandler;
     }
 
