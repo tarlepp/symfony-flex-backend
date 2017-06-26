@@ -15,12 +15,12 @@ use App\Utils\Tests\RestTraitTestCase;
  * @package App\Tests\Functional\Rest\Traits\Actions
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RootActionsTest extends RestTraitTestCase
+class AdminActionsTest extends RestTraitTestCase
 {
     /**
      * @var string
      */
-    protected static $route = '/test_root_actions';
+    protected static $route = '/test_admin_actions';
 
     /**
      * @return array
@@ -29,6 +29,7 @@ class RootActionsTest extends RestTraitTestCase
     {
         return [
             ['john-root',   'password-root'],
+            ['john-admin',  'password-admin'],
         ];
     }
 
@@ -42,7 +43,6 @@ class RootActionsTest extends RestTraitTestCase
             ['john',        'password'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
-            ['john-admin',  'password-admin'],
         ];
     }
 }
