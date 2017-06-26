@@ -65,21 +65,21 @@ class WebTestCase extends BaseWebTestCase
     /**
      * Helper method to get authorized client for specified username and password.
      *
-     * @param string $username
-     * @param string $password
-     * @param array  $options
-     * @param array  $server
+     * @param string|null $username
+     * @param string|null $password
+     * @param array       $options
+     * @param array       $server
      *
      * @return Client
      */
-    public function getClient(string $username, string $password, array $options = null, array $server = null): Client
+    public function getClient(string $username = null, string $password = null, array $options = null, array $server = null): Client
     {
         $options = $options ?? [];
         $server = $server ?? [];
 
         // Merge authorization headers
         $server = \array_merge(
-            $this->getAuthService()->getAuthorizationHeadersForUser($username, $password),
+            $username === null ? [] : $this->getAuthService()->getAuthorizationHeadersForUser($username, $password),
             $this->getJsonHeaders(),
             $server
         );
