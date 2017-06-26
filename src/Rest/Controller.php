@@ -32,7 +32,7 @@ abstract class Controller implements ControllerInterface
      */
     public function getResource(): ResourceInterface
     {
-        if (!$this->responseHandler instanceof ResourceInterface) {
+        if (!$this->resource instanceof ResourceInterface) {
             throw new \UnexpectedValueException('Resource service not set', 500);
         }
 
