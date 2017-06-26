@@ -27,9 +27,15 @@ abstract class Controller implements ControllerInterface
 
     /**
      * @return ResourceInterface
+     *
+     * @throws \UnexpectedValueException
      */
     public function getResource(): ResourceInterface
     {
+        if (!$this->responseHandler instanceof ResourceInterface) {
+            throw new \UnexpectedValueException('Resource service not set', 500);
+        }
+
         return $this->resource;
     }
 
