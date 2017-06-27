@@ -7,6 +7,9 @@ declare(strict_types=1);
  */
 namespace App\Rest;
 
+use App\Rest\DTO\RestDtoInterface;
+use Symfony\Component\Form\FormTypeInterface;
+
 /**
  * Class Controller
  *
@@ -15,6 +18,20 @@ namespace App\Rest;
  */
 abstract class Controller implements ControllerInterface
 {
+    /**
+     * Method + DTO class names (key + value)
+     *
+     * @var string[]
+     */
+    protected static $dtoClasses = [];
+
+    /**
+     * Method + Form type class names (key + value)
+     *
+     * @var string[]
+     */
+    protected static $formTypes = [];
+
     /**
      * @var ResourceInterface
      */
@@ -47,19 +64,75 @@ abstract class Controller implements ControllerInterface
     public function getResponseHandler(): ResponseHandlerInterface
     {
         if (!$this->responseHandler instanceof ResponseHandlerInterface) {
-            throw new \UnexpectedValueException('Response handler not set', 500);
+            throw new \UnexpectedValueException('ResponseHandler service not set', 500);
         }
 
         return $this->responseHandler;
     }
 
     /**
+     * Getter method for used DTO class for current controller.
+     *
+     * @param string|null $method
+     *
+     * @return string
+     *
+     * @throws \UnexpectedValueException
+     */
+    public function getDtoClass(string $method = null): string
+    {
+        $dtoClass = \array_key_exists($method, static::$dtoClasses)
+            ? static::$dtoClasses[$method]
+            : $this->getResource()->getDtoClass();
+
+        if (!\in_array(RestDtoInterface::class, \class_implements($dtoClass), true)) {
+            $message = \sprintf(
+                'Given DTO class \'%s\' is not implementing \'%s\' interface.',
+                $dtoClass,
+                RestDtoInterface::class
+            );
+
+            throw new \UnexpectedValueException($message);
+        }
+
+        return $dtoClass;
+    }
+
+    /**
+     * Getter method for used DTO class for current controller.
+     *
+     * @param string|null $method
+     *
+     * @return string
+     *
+     * @throws \UnexpectedValueException
+     */
+    public function getFormTypeClass(string $method = null): string
+    {
+        $formTypeClass = \array_key_exists($method, static::$formTypes)
+            ? static::$formTypes[$method]
+            : $this->getResource()->getFormTypeClass();
+
+        if (!\in_array(FormTypeInterface::class, \class_implements($formTypeClass), true)) {
+            $message = \sprintf(
+                'Given form type class \'%s\' is not implementing \'%s\' interface.',
+                $formTypeClass,
+                FormTypeInterface::class
+            );
+
+            throw new \UnexpectedValueException($message);
+        }
+
+        return $formTypeClass;
+    }
+
+    /**
      * Method to initialize REST controller.
      *
-     * @param ResourceInterface       $resource
+     * @param ResourceInterface        $resource
      * @param ResponseHandlerInterface $responseHandler
      */
-    protected function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void
+    public function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void
     {
         $this->resource = $resource;
         $this->responseHandler = $responseHandler;
