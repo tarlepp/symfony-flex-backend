@@ -53,6 +53,22 @@ interface ResourceInterface
     public function setDtoClass(string $dtoClass): ResourceInterface;
 
     /**
+     * Getter method for used default FormType class for this REST resource.
+     *
+     * @return string
+     */
+    public function getFormTypeClass(): string;
+
+    /**
+     * Setter method for used default FormType class for this REST resource.
+     *
+     * @param string $formTypeClass
+     *
+     * @return ResourceInterface
+     */
+    public function setFormTypeClass(string $formTypeClass): ResourceInterface;
+
+    /**
      * Getter method for current entity name.
      *
      * @return string
@@ -77,6 +93,18 @@ interface ResourceInterface
      * @return array
      */
     public function getAssociations(): array;
+
+    /**
+     * Getter method DTO class with loaded entity data.
+     *
+     * @param string $id
+     * @param string $dtoClass
+     *
+     * @return RestDtoInterface
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function getDtoForEntity(string $id, string $dtoClass): RestDtoInterface;
 
     /**
      * Generic find method to return an array of items from database. Return value is an array of specified repository

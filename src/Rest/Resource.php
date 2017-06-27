@@ -42,6 +42,11 @@ abstract class Resource implements ResourceInterface
     protected $dtoClass;
 
     /**
+     * @var string
+     */
+    protected $formTypeClass;
+
+    /**
      * Getter method for entity repository.
      *
      * @return Repository
@@ -97,6 +102,30 @@ abstract class Resource implements ResourceInterface
     }
 
     /**
+     * Getter method for used default FormType class for this REST resource.
+     *
+     * @return string
+     */
+    public function getFormTypeClass(): string
+    {
+        return $this->formTypeClass;
+    }
+
+    /**
+     * Setter method for used default FormType class for this REST resource.
+     *
+     * @param string $formTypeClass
+     *
+     * @return ResourceInterface
+     */
+    public function setFormTypeClass(string $formTypeClass): ResourceInterface
+    {
+        $this->formTypeClass = $formTypeClass;
+
+        return $this;
+    }
+
+    /**
      * Getter method for current entity name.
      *
      * @return string
@@ -129,6 +158,32 @@ abstract class Resource implements ResourceInterface
     public function getAssociations(): array
     {
         return \array_keys($this->getRepository()->getAssociations());
+    }
+
+    /**
+     * Getter method DTO class with loaded entity data.
+     *
+     * @param string $id
+     * @param string $dtoClass
+     *
+     * @return RestDtoInterface
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function getDtoForEntity(string $id, string $dtoClass): RestDtoInterface
+    {
+        // Fetch entity
+        $entity = $this->getEntity($id);
+
+        /**
+         * Create new instance of DTO and load entity to that.
+         *
+         * @var RestDtoInterface $restDto
+         */
+        $restDto = new $dtoClass();
+        $restDto->load($entity);
+
+        return $restDto;
     }
 
     /**
