@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Resource;
 
-use App\Rest\Interfaces\Resource as ResourceInterface;
+use App\Rest\ResourceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
