@@ -25,7 +25,7 @@ abstract class CountMethodTestClass implements ControllerInterface
     /**
      * CountMethodTestClass constructor.
      *
-     * @param ResourceInterface       $resource
+     * @param ResourceInterface        $resource
      * @param ResponseHandlerInterface $responseHandler
      */
     public function __construct(ResourceInterface $resource, ResponseHandlerInterface $responseHandler)
