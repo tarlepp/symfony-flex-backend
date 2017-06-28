@@ -105,9 +105,20 @@ abstract class Resource implements ResourceInterface
      * Getter method for used default FormType class for this REST resource.
      *
      * @return string
+     *
+     * @throws \UnexpectedValueException
      */
     public function getFormTypeClass(): string
     {
+        if ((string)$this->formTypeClass === '') {
+            $message = \sprintf(
+                'FormType class not specified for \'%s\' resource',
+                static::class
+            );
+
+            throw new \UnexpectedValueException($message);
+        }
+
         return $this->formTypeClass;
     }
 

@@ -59,7 +59,7 @@ class GenericResourceTest extends KernelTestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage DTO class not specified for
+     * @expectedExceptionMessageRegExp /DTO class not specified for '.*' resource/
      */
     public function testThatGetDtoClassThrowsAnExceptionWithoutDto(): void
     {
@@ -69,7 +69,6 @@ class GenericResourceTest extends KernelTestCase
         /** @var ResourceInterface $resource */
         $resource = new $this->resourceClass($repository, self::getValidator());
         $resource->setDtoClass('');
-
         $resource->getDtoClass();
     }
 
@@ -83,6 +82,33 @@ class GenericResourceTest extends KernelTestCase
         $resource->setDtoClass('foobar');
 
         static::assertSame('foobar', $resource->getDtoClass());
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessageRegExp /FormType class not specified for '.*' resource/
+     */
+    public function testGetFormTypeClassThrowsAnExceptionWithoutFormType(): void
+    {
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource->setFormTypeClass('');
+        $resource->getFormTypeClass();
+    }
+
+    public function testThatGetFormTypeClassReturnsExpectedDto(): void
+    {
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource->setFormTypeClass('foobar');
+
+        static::assertSame('foobar', $resource->getFormTypeClass());
     }
 
     public function testThatGetEntityNameCallsExpectedRepositoryMethod(): void
@@ -125,6 +151,51 @@ class GenericResourceTest extends KernelTestCase
         /** @var ResourceInterface $resource */
         $resource = new $this->resourceClass($repository, self::getValidator());
         $resource->getAssociations();
+    }
+
+    public function testThatGetDtoForEntityCallsExpectedRepositoryMethod(): void
+    {
+        $entity = $this->getEntityMock();
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $repository
+            ->expects(static::once())
+            ->method('find')
+            ->with('some id')
+            ->willReturn($entity);
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
+        $dto = $this->getDtoMockBuilder()->getMock();
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+
+        static::assertInstanceOf(RestDtoInterface::class, $resource->getDtoForEntity('some id', \get_class($dto)));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @expectedExceptionMessage Not found
+     */
+    public function testThatGetDtoForEntityThrowsAnExceptionIfEntityWasNotFound(): void
+    {
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->getMock();
+
+        $repository
+            ->expects(static::once())
+            ->method('find')
+            ->with('some id')
+            ->willReturn(null);
+
+        /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
+        $dto = $this->getDtoMockBuilder()->getMock();
+
+        /** @var ResourceInterface $resource */
+        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource->getDtoForEntity('some id', \get_class($dto));
     }
 
     /**
@@ -188,7 +259,7 @@ class GenericResourceTest extends KernelTestCase
 
     public function testThatFindOneWontThrowAnExceptionIfEntityWasFound(): void
     {
-        $entity = $this->getEntityInterfaceMock();
+        $entity = $this->getEntityMock();
 
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
@@ -251,7 +322,7 @@ class GenericResourceTest extends KernelTestCase
 
     public function testThatFindOneByWontThrowAnExceptionIfEntityWasFound(): void
     {
-        $entity = $this->getEntityInterfaceMock();
+        $entity = $this->getEntityMock();
 
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
@@ -413,7 +484,7 @@ class GenericResourceTest extends KernelTestCase
 
     public function testThatDeleteMethodCallsExpectedRepositoryMethod(): void
     {
-        $entity = $this->getEntityInterfaceMock();
+        $entity = $this->getEntityMock();
 
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
