@@ -12,17 +12,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "7c830a576f9471f71096d200d633b6400513ccfb"
+                "reference": "2016f4e48149d8c1ce65eb25d7f641fb3760b40c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/7c830a576f9471f71096d200d633b6400513ccfb",
-                "reference": "7c830a576f9471f71096d200d633b6400513ccfb",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/2016f4e48149d8c1ce65eb25d7f641fb3760b40c",
+                "reference": "2016f4e48149d8c1ce65eb25d7f641fb3760b40c",
                 "shasum": ""
             },
             "require": {
                 "doctrine/lexer": "1.*",
-                "php": "^5.6 || ^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
                 "doctrine/cache": "1.*",
@@ -31,7 +31,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4.x-dev"
+                    "dev-master": "1.5.x-dev"
                 }
             },
             "autoload": {
@@ -72,7 +72,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2017-05-25T15:48:57+00:00"
+            "time": "2017-06-28T04:31:58+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -294,18 +294,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "03e17189c48a92bff9c5fd7d9242d13a15780d15"
+                "reference": "8e3159b3c7c4230b448b43c02338a24d9ed83165"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/03e17189c48a92bff9c5fd7d9242d13a15780d15",
-                "reference": "03e17189c48a92bff9c5fd7d9242d13a15780d15",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/8e3159b3c7c4230b448b43c02338a24d9ed83165",
+                "reference": "8e3159b3c7c4230b448b43c02338a24d9ed83165",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": "^2.7.1",
                 "ext-pdo": "*",
-                "php": "^7.0"
+                "php": "^7.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^5.4.6",
@@ -359,7 +359,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-06-23T20:42:58+00:00"
+            "time": "2017-06-28T04:51:02+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -3339,12 +3339,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "8def77d81697a56c816cfa8bd2eb66b3594cda3d"
+                "reference": "8bdb5476df7d0f1f5243ff1a773173d81c23f23c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/8def77d81697a56c816cfa8bd2eb66b3594cda3d",
-                "reference": "8def77d81697a56c816cfa8bd2eb66b3594cda3d",
+                "url": "https://api.github.com/repos/symfony/process/zipball/8bdb5476df7d0f1f5243ff1a773173d81c23f23c",
+                "reference": "8bdb5476df7d0f1f5243ff1a773173d81c23f23c",
                 "shasum": ""
             },
             "require": {
@@ -3380,7 +3380,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-12T18:12:26+00:00"
+            "time": "2017-06-26T07:24:20+00:00"
         },
         {
             "name": "symfony/property-access",
