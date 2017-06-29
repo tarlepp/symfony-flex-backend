@@ -109,6 +109,8 @@ abstract class Controller implements ControllerInterface
      */
     public function getFormTypeClass(string $method = null): string
     {
+        $method = $method ?? '';
+
         if ($position = mb_strrpos($method, '::')) {
             $method = mb_substr($method, $position + 2);
         }

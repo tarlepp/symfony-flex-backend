@@ -168,29 +168,6 @@ class ControllerTest extends KernelTestCase
         $controller->getFormTypeClass();
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Given form type class 'stdClass' is not implementing 'Symfony\Component\Form\FormTypeInterface' interface.
-     */
-    public function testThatGetFormTypeClassThrowsAnExceptionIfResourceDoesNotReturnExpectedClass(): void
-    {
-        /** @var PHPUnit_Framework_MockObject_MockObject|ResourceInterface $resource */
-        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
-
-        $resource
-            ->expects(static::once())
-            ->method('getFormTypeClass')
-            ->willReturn(\stdClass::class);
-
-        /** @var ResponseHandlerInterface $responseHandler */
-        $responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)->getMock();
-
-        /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
-        $controller->init($resource, $responseHandler);
-        $controller->getFormTypeClass();
-    }
-
     public function testThatGetFormTypeClassWorksAsExpectedWithGivenFormTypes(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|FormTypeInterface $formTypeClass */
@@ -214,6 +191,6 @@ class ControllerTest extends KernelTestCase
         $reflection->setAccessible(true);
         $reflection->setValue(null, $formTypes);
 
-        static::assertSame(\get_class($formTypeClass),  $controller->getFormTypeClass('foo'));
+        static::assertSame(\get_class($formTypeClass),  $controller->getFormTypeClass('bar::foo'));
     }
 }
