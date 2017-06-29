@@ -15,6 +15,15 @@ namespace App\Rest;
  */
 interface ControllerInterface
 {
+    const METHOD_COUNT      = 'countMethod';
+    const METHOD_CREATE     = 'createMethod';
+    const METHOD_DELETE     = 'deleteMethod';
+    const METHOD_FIND       = 'findMethod';
+    const METHOD_FIND_ONE   = 'findOneMethod';
+    const METHOD_IDS        = 'idsMethod';
+    const METHOD_PATCH      = 'patchMethod';
+    const METHOD_UPDATE     = 'updateMethod';
+
     /**
      * @return ResourceInterface
      *

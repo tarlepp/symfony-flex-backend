@@ -109,19 +109,13 @@ abstract class Controller implements ControllerInterface
      */
     public function getFormTypeClass(string $method = null): string
     {
+        if ($position = mb_strrpos($method, '::')) {
+            $method = mb_substr($method, $position + 2);
+        }
+
         $formTypeClass = \array_key_exists($method, static::$formTypes)
             ? static::$formTypes[$method]
             : $this->getResource()->getFormTypeClass();
-
-        if (!\in_array(FormTypeInterface::class, \class_implements($formTypeClass), true)) {
-            $message = \sprintf(
-                'Given form type class \'%s\' is not implementing \'%s\' interface.',
-                $formTypeClass,
-                FormTypeInterface::class
-            );
-
-            throw new \UnexpectedValueException($message);
-        }
 
         return $formTypeClass;
     }
