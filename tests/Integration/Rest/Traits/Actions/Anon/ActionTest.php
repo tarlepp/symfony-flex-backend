@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Rest\Traits\Actions\Anon;
 use App\Utils\Tests\PHPUnitUtil;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -77,6 +78,10 @@ class ActionTest extends KernelTestCase
             ];
 
             switch ($base) {
+                case 'PatchAction':
+                    $parameters[] = $this->createMock(FormFactoryInterface::class);
+                    $parameters[] = Uuid::uuid4()->toString();
+                    break;
                 case 'DeleteAction':
                 case 'FindOneAction':
                 case 'UpdateAction':
