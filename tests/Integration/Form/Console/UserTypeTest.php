@@ -74,7 +74,7 @@ class UserTypeTest extends TypeTestCase
         $dto->setFirstname('John');
         $dto->setSurname('Doe');
         $dto->setEmail('john.doe@test.com');
-        $dto->setPlainPassword('password');
+        $dto->setPassword('password');
         $dto->setUserGroups([$userGroupEntity]);
 
         // Specify used form data

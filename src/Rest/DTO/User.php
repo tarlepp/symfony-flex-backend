@@ -64,7 +64,7 @@ class User extends RestDto
     /**
      * @var string
      */
-    private $plainPassword = '';
+    private $password = '';
 
     /**
      * @return string
@@ -179,21 +179,19 @@ class User extends RestDto
     /**
      * @return string
      */
-    public function getPlainPassword(): string
+    public function getPassword(): string
     {
-        return $this->plainPassword;
+        return $this->password;
     }
 
     /**
-     * @param string|null $plainPassword
+     * @param string|null $password
      *
      * @return User
      */
-    public function setPlainPassword(string $plainPassword = null): User
+    public function setPassword(string $password = null): User
     {
-        $this->setVisited('plainPassword');
-
-        $this->plainPassword = $plainPassword ?? '';
+        $this->password = $password ?? '';
 
         return $this;
     }
@@ -236,18 +234,20 @@ class User extends RestDto
      */
     public function update(EntityInterface $entity): EntityInterface
     {
-        $entity->setUsername($this->username);
-        $entity->setFirstname($this->firstname);
-        $entity->setSurname($this->surname);
-        $entity->setEmail($this->email);
-        $entity->setPlainPassword($this->plainPassword);
+        foreach ($this->getVisited() as $property) {
+            if ($property === 'password') {
+                $entity->setPlainPassword($this->$property);
+            } elseif ($property === 'userGroups') {
+                $entity->clearUserGroups();
 
-        // Clear user groups
-        $entity->clearUserGroups();
+                \array_map([$entity, 'addUserGroup'], $this->$property);
+            } else {
+                // Determine setter method
+                $setter = 'set' . \ucfirst($property);
 
-        // And attach user groups to entity
-        foreach ($this->userGroups as $userGroup) {
-            $entity->addUserGroup($userGroup);
+                // Update current dto property value
+                $entity->$setter($this->$property);
+            }
         }
 
         return $entity;
