@@ -83,7 +83,7 @@ class UserTypeTest extends TypeTestCase
             'firstname'     => 'John',
             'surname'       => 'Doe',
             'email'         => 'john.doe@test.com',
-            'plainPassword' => [
+            'password'      => [
                 'password1' => 'password',
                 'password2' => 'password',
             ],
