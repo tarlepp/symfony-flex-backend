@@ -294,12 +294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "8e3159b3c7c4230b448b43c02338a24d9ed83165"
+                "reference": "65d74db371f9611918997182f8e594b45619d270"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/8e3159b3c7c4230b448b43c02338a24d9ed83165",
-                "reference": "8e3159b3c7c4230b448b43c02338a24d9ed83165",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/65d74db371f9611918997182f8e594b45619d270",
+                "reference": "65d74db371f9611918997182f8e594b45619d270",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +359,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-06-28T04:51:02+00:00"
+            "time": "2017-06-29T19:50:53+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -844,12 +844,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "328f8e3e7750a6173f306ed4b6015f515ea8f0e2"
+                "reference": "5fa8dd460eec8a56189df83fa65fb9cffd2e8448"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/328f8e3e7750a6173f306ed4b6015f515ea8f0e2",
-                "reference": "328f8e3e7750a6173f306ed4b6015f515ea8f0e2",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/5fa8dd460eec8a56189df83fa65fb9cffd2e8448",
+                "reference": "5fa8dd460eec8a56189df83fa65fb9cffd2e8448",
                 "shasum": ""
             },
             "require": {
@@ -933,7 +933,7 @@
                 "rest",
                 "symfony"
             ],
-            "time": "2017-06-17T05:30:11+00:00"
+            "time": "2017-06-29T13:45:36+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -1232,12 +1232,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/container.git",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+                "reference": "2cc4a01788191489dc7459446ba832fa79a216a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
-                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/2cc4a01788191489dc7459446ba832fa79a216a7",
+                "reference": "2cc4a01788191489dc7459446ba832fa79a216a7",
                 "shasum": ""
             },
             "require": {
@@ -1273,7 +1273,7 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2017-02-14T16:28:37+00:00"
+            "time": "2017-06-28T15:35:32+00:00"
         },
         {
             "name": "psr/log",
@@ -3533,12 +3533,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security.git",
-                "reference": "b4f0d8966919627a0c418d2056c106eff52e242c"
+                "reference": "a732f3f44680161dc1fa20f8e2aad2c78e674281"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security/zipball/b4f0d8966919627a0c418d2056c106eff52e242c",
-                "reference": "b4f0d8966919627a0c418d2056c106eff52e242c",
+                "url": "https://api.github.com/repos/symfony/security/zipball/a732f3f44680161dc1fa20f8e2aad2c78e674281",
+                "reference": "a732f3f44680161dc1fa20f8e2aad2c78e674281",
                 "shasum": ""
             },
             "require": {
@@ -3600,7 +3600,7 @@
             ],
             "description": "Symfony Security Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-24T12:58:08+00:00"
+            "time": "2017-06-29T09:48:41+00:00"
         },
         {
             "name": "symfony/security-bundle",
@@ -3832,12 +3832,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/twig-bridge.git",
-                "reference": "0012c68803d18b557c4d9338e00a2ccf941cd498"
+                "reference": "1fa1cc68cf4c20a54ae23a197ceb99a093b9682d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/0012c68803d18b557c4d9338e00a2ccf941cd498",
-                "reference": "0012c68803d18b557c4d9338e00a2ccf941cd498",
+                "url": "https://api.github.com/repos/symfony/twig-bridge/zipball/1fa1cc68cf4c20a54ae23a197ceb99a093b9682d",
+                "reference": "1fa1cc68cf4c20a54ae23a197ceb99a093b9682d",
                 "shasum": ""
             },
             "require": {
@@ -3911,7 +3911,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "https://symfony.com",
-            "time": "2017-06-24T09:47:31+00:00"
+            "time": "2017-06-30T09:07:28+00:00"
         },
         {
             "name": "symfony/twig-bundle",
@@ -4128,12 +4128,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "1faeaf2aa8180967d80329213f77c1bcb75fe4fa"
+                "reference": "f46d917c00519312152720916760ab18550c0ce5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/1faeaf2aa8180967d80329213f77c1bcb75fe4fa",
-                "reference": "1faeaf2aa8180967d80329213f77c1bcb75fe4fa",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/f46d917c00519312152720916760ab18550c0ce5",
+                "reference": "f46d917c00519312152720916760ab18550c0ce5",
                 "shasum": ""
             },
             "require": {
@@ -4175,7 +4175,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-24T09:47:31+00:00"
+            "time": "2017-06-30T09:07:51+00:00"
         },
         {
             "name": "twig/twig",
@@ -5294,12 +5294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "5cbf2424850cc702617646fca5a2ae2c77bf6f6e"
+                "reference": "d8833b396dce9162bb2eb5d59aee5a3ab3cfa5b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5cbf2424850cc702617646fca5a2ae2c77bf6f6e",
-                "reference": "5cbf2424850cc702617646fca5a2ae2c77bf6f6e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/d8833b396dce9162bb2eb5d59aee5a3ab3cfa5b4",
+                "reference": "d8833b396dce9162bb2eb5d59aee5a3ab3cfa5b4",
                 "shasum": ""
             },
             "require": {
@@ -5345,7 +5345,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2017-04-01T10:07:28+00:00"
+            "time": "2017-06-30T08:15:21+00:00"
         },
         {
             "name": "psr/http-message",
