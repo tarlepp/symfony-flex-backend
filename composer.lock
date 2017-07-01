@@ -5210,12 +5210,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "0300973dafb29d2e6d8d543f24128027e497cb0c"
+                "reference": "7e3fa25e0cfd2696d8e7b08dc886b373652cfd05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0300973dafb29d2e6d8d543f24128027e497cb0c",
-                "reference": "0300973dafb29d2e6d8d543f24128027e497cb0c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7e3fa25e0cfd2696d8e7b08dc886b373652cfd05",
+                "reference": "7e3fa25e0cfd2696d8e7b08dc886b373652cfd05",
                 "shasum": ""
             },
             "require": {
@@ -5236,7 +5236,7 @@
                 "phpunit/phpunit-mock-objects": "^4.0",
                 "sebastian/comparator": "^2.0",
                 "sebastian/diff": "^1.4.3 || ^2.0",
-                "sebastian/environment": "^3.0.2",
+                "sebastian/environment": "^3.1",
                 "sebastian/exporter": "^3.1",
                 "sebastian/global-state": "^1.1 || ^2.0",
                 "sebastian/object-enumerator": "^3.0.2",
@@ -5286,7 +5286,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-06-26T06:23:47+00:00"
+            "time": "2017-07-01T11:21:09+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -5627,12 +5627,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/environment.git",
-                "reference": "dce014c5ac410e20f39e069a2dbdc31cea112cef"
+                "reference": "cd0871b3975fb7fc44d11314fd1ee20925fce4f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/dce014c5ac410e20f39e069a2dbdc31cea112cef",
-                "reference": "dce014c5ac410e20f39e069a2dbdc31cea112cef",
+                "url": "https://api.github.com/repos/sebastianbergmann/environment/zipball/cd0871b3975fb7fc44d11314fd1ee20925fce4f5",
+                "reference": "cd0871b3975fb7fc44d11314fd1ee20925fce4f5",
                 "shasum": ""
             },
             "require": {
@@ -5669,7 +5669,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2017-06-20T16:26:07+00:00"
+            "time": "2017-07-01T08:51:00+00:00"
         },
         {
             "name": "sebastian/exporter",
