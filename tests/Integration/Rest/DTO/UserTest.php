@@ -8,7 +8,10 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest\DTO;
 
 use App\Entity\EntityInterface;
-use App\Rest\DTO\User;
+use App\Entity\Role as RoleEntity;
+use App\Entity\User as UserEntity;
+use App\Entity\UserGroup as UserGroupEntity;
+use App\Rest\DTO\User  as UserDto;
 
 /**
  * Class UserTest
@@ -18,7 +21,36 @@ use App\Rest\DTO\User;
  */
 class UserTest extends DtoTestCase
 {
-    protected $dtoClass = User::class;
+    protected $dtoClass = UserDto::class;
+
+    public function testThatLoadMethodWorks(): void
+    {
+        // Create Role entity
+        $roleEntity = new RoleEntity('test role');
+
+        // Create UserGroup entity
+        $userGroupEntity = new UserGroupEntity();
+        $userGroupEntity->setName('test user group');
+        $userGroupEntity->setRole($roleEntity);
+
+        // Create User entity
+        $userEntity = new UserEntity();
+        $userEntity->setUsername('username');
+        $userEntity->setFirstname('firstname');
+        $userEntity->setSurname('surname');
+        $userEntity->setEmail('firstname.surname@test.com');
+        $userEntity->addUserGroup($userGroupEntity);
+
+        /** @var UserDto $dto */
+        $dto = new $this->dtoClass();
+        $dto->load($userEntity);
+
+        static::assertSame('username', $dto->getUsername());
+        static::assertSame('firstname', $dto->getFirstname());
+        static::assertSame('surname', $dto->getSurname());
+        static::assertSame('firstname.surname@test.com', $dto->getEmail());
+        static::assertSame([$userGroupEntity->getId()], $dto->getUserGroups());
+    }
 
     public function testThatUpdateMethodCallsExpectedEntityMethodIfPasswordIsVisited(): void
     {
@@ -32,7 +64,7 @@ class UserTest extends DtoTestCase
             ->method('setPlainPassword')
             ->with('password');
 
-        /** @var User $dto */
+        /** @var UserDto $dto */
         $dto = new $this->dtoClass();
         $dto->setPassword('password');
         $dto->update($entity);
@@ -59,7 +91,7 @@ class UserTest extends DtoTestCase
             ->method('addUserGroup')
             ->willReturn($entity);
 
-        /** @var User $dto */
+        /** @var UserDto $dto */
         $dto = new $this->dtoClass();
         $dto->setUserGroups($userGroups);
         $dto->update($entity);
