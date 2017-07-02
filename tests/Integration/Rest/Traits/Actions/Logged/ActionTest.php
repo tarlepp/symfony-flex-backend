@@ -82,12 +82,12 @@ class ActionTest extends KernelTestCase
                     $parameters[] = $this->createMock(FormFactoryInterface::class);
                     break;
                 case 'PatchAction':
+                case 'UpdateAction':
                     $parameters[] = $this->createMock(FormFactoryInterface::class);
                     $parameters[] = Uuid::uuid4()->toString();
                     break;
                 case 'DeleteAction':
                 case 'FindOneAction':
-                case 'UpdateAction':
                     $parameters[] = Uuid::uuid4()->toString();
                     break;
             }

@@ -9,12 +9,16 @@ namespace Integration\Rest\Traits\Methods;
 
 use App\Entity\EntityInterface;
 use App\Rest\DTO\RestDto;
+use App\Rest\DTO\RestDtoInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\UpdateMethodTestClass;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\FormConfigInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -38,11 +42,14 @@ class UpdateMethodTest extends KernelTestCase
         /** @var UpdateMethod $mock */
         $mock = $this->getMockForTrait(UpdateMethod::class);
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
+        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
+
         $uuid = Uuid::uuid4()->toString();
 
         $request = Request::create('/' . $uuid, 'PUT');
 
-        $mock->updateMethod($request, 'some-id');
+        $mock->updateMethod($request, $formFactoryMock, 'some-id');
     }
 
     /**
@@ -57,6 +64,9 @@ class UpdateMethodTest extends KernelTestCase
         $resource = $this->createMock(ResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
+        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
+
         /** @var UpdateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
         $testClass = $this->getMockForAbstractClass(
             UpdateMethodTestClass::class,
@@ -68,7 +78,7 @@ class UpdateMethodTest extends KernelTestCase
         // Create request and response
         $request = Request::create('/' . $uuid, $httpMethod);
 
-        $testClass->updateMethod($request, 'some-id')->getContent();
+        $testClass->updateMethod($request, $formFactoryMock, 'some-id')->getContent();
     }
 
     /**
@@ -82,7 +92,10 @@ class UpdateMethodTest extends KernelTestCase
         $resource = $this->createMock(ResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var UpdateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
+        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|UpdateMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             UpdateMethodTestClass::class,
             [$resource, $responseHandler]
@@ -91,20 +104,15 @@ class UpdateMethodTest extends KernelTestCase
         $uuid = Uuid::uuid4()->toString();
         $request = Request::create('/' . $uuid, 'PUT');
 
-        $resource
+        $formFactoryMock
             ->expects(static::once())
-            ->method('getDtoClass')
+            ->method('createNamed')
             ->willThrowException($exception);
-
-        $testClass
-            ->expects(static::once())
-            ->method('getResource')
-            ->willReturn($resource);
 
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $testClass->updateMethod($request, $uuid);
+        $testClass->updateMethod($request, $formFactoryMock, $uuid);
     }
 
     public function testThatTraitCallsServiceMethods(): void
@@ -112,65 +120,136 @@ class UpdateMethodTest extends KernelTestCase
         $resource = $this->createMock(ResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var UpdateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var \PHPUnit_Framework_MockObject_MockObject|UpdateMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             UpdateMethodTestClass::class,
             [$resource, $responseHandler]
         );
 
-        /** @var Request|\PHPUnit_Framework_MockObject_MockObject $request */
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface        $formInterfaceMock
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormConfigInterface  $formConfigInterface
+         * @var \PHPUnit_Framework_MockObject_MockObject|RestDtoInterface     $dtoInterface
+         * @var \PHPUnit_Framework_MockObject_MockObject|Request              $request
+         */
+        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
+        $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
+        $formConfigInterface = $this->getMockBuilder(FormConfigInterface::class)->getMock();
+        $dtoInterface = $this->createMock(RestDtoInterface::class);
         $request = $this->createMock(Request::class);
-        $response = $this->createMock(Response::class);
-        $entityInterface = $this->createMock(EntityInterface::class);
-        $dtoInterface = $this->createMock(RestDto::class);
-        $serializer = $this->createMock(SerializerInterface::class);
 
         $uuid = Uuid::uuid4()->toString();
 
         $request
-            ->expects(static::once())
-            ->method('getContent')
-            ->willReturn('{"foo":"bar"}');
-
-        $request
-            ->expects(static::once())
+            ->expects(static::exactly(2))
             ->method('getMethod')
             ->willReturn('PUT');
 
-        $resource
+        $formConfigInterface
             ->expects(static::once())
-            ->method('update')
-            ->with($uuid, $dtoInterface)
-            ->willReturn($entityInterface);
+            ->method('getDataClass')
+            ->willReturn('foobar');
 
-        $serializer
+        $formInterfaceMock
             ->expects(static::once())
-            ->method('deserialize')
-            ->withAnyParameters()
+            ->method('setData')
+            ->withAnyParameters();
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('handleRequest')
+            ->with($request);
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('getConfig')
+            ->willReturn($formConfigInterface);
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('isValid')
+            ->willReturn(true);
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('getData')
             ->willReturn($dtoInterface);
 
-        $responseHandler
+        $formFactoryMock
             ->expects(static::once())
-            ->method('getSerializer')
-            ->willReturn($serializer);
-
-        $responseHandler
-            ->expects(static::once())
-            ->method('createResponse')
+            ->method('createNamed')
             ->withAnyParameters()
-            ->willReturn($response);
+            ->willReturn($formInterfaceMock);
 
-        $testClass
+        $testClass->updateMethod($request, $formFactoryMock, $uuid);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function testThatTraitThrowsAnErrorIfFormIsInvalid(): void
+    {
+        $resource = $this->createMock(ResourceInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|UpdateMethodTestClass $testClass */
+        $testClass = $this->getMockForAbstractClass(
+            UpdateMethodTestClass::class,
+            [$resource, $responseHandler]
+        );
+
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface        $formInterfaceMock
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormConfigInterface  $formConfigInterface
+         * @var \PHPUnit_Framework_MockObject_MockObject|RestDtoInterface     $dtoInterface
+         * @var \PHPUnit_Framework_MockObject_MockObject|Request              $request
+         */
+        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
+        $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
+        $formConfigInterface = $this->getMockBuilder(FormConfigInterface::class)->getMock();
+        $request = $this->createMock(Request::class);
+
+        $uuid = Uuid::uuid4()->toString();
+
+        $request
             ->expects(static::exactly(2))
-            ->method('getResource')
-            ->willReturn($resource);
+            ->method('getMethod')
+            ->willReturn('PUT');
 
-        $testClass
-            ->expects(static::exactly(2))
-            ->method('getResponseHandler')
-            ->willReturn($responseHandler);
+        $formConfigInterface
+            ->expects(static::once())
+            ->method('getDataClass')
+            ->willReturn('foobar');
 
-        $testClass->updateMethod($request, $uuid);
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('setData')
+            ->withAnyParameters();
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('handleRequest')
+            ->with($request);
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('getConfig')
+            ->willReturn($formConfigInterface);
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('isValid')
+            ->willReturn(false);
+
+        $formFactoryMock
+            ->expects(static::once())
+            ->method('createNamed')
+            ->withAnyParameters()
+            ->willReturn($formInterfaceMock);
+
+        $testClass->updateMethod($request, $formFactoryMock, $uuid);
     }
 
     /**
@@ -182,6 +261,7 @@ class UpdateMethodTest extends KernelTestCase
             ['HEAD'],
             ['DELETE'],
             ['GET'],
+            ['PATCH'],
             ['POST'],
             ['OPTIONS'],
             ['CONNECT'],
