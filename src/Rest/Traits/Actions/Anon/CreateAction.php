@@ -11,6 +11,7 @@ use App\Rest\Traits\Methods\CreateMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,16 +35,19 @@ trait CreateAction
      *
      * @Method({"POST"})
      *
-     * @param Request $request
+     * @param Request              $request
+     * @param FormFactoryInterface $formFactory
      *
      * @return Response
      *
      * @throws \LogicException
+     * @throws \UnexpectedValueException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
-    public function createAction(Request $request): Response
+    public function createAction(Request $request, FormFactoryInterface $formFactory): Response
     {
-        return $this->createMethod($request);
+        return $this->createMethod($request, $formFactory);
     }
 }

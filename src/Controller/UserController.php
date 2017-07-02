@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Form\Rest\User\UserCreateType;
 use App\Form\Rest\User\UserPatchType;
 use App\Resource\UserResource;
 use App\Rest\Controller;
@@ -32,8 +33,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class UserController extends Controller
 {
+    /**
+     * Method + Form type class names (key + value)
+     *
+     * @var string[]
+     */
     protected static $formTypes = [
-        self::METHOD_PATCH => UserPatchType::class,
+        self::METHOD_PATCH  => UserPatchType::class,
+        self::METHOD_CREATE => UserCreateType::class,
     ];
 
     // Traits for REST actions
