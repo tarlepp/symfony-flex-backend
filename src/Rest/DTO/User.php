@@ -191,9 +191,11 @@ class User extends RestDto
      */
     public function setPassword(string $password = null): User
     {
-        $this->setVisited('password');
+        if ($password !== null) {
+            $this->setVisited('password');
 
-        $this->password = $password ?? '';
+            $this->password = $password;
+        }
 
         return $this;
     }

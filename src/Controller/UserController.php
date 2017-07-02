@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Form\Rest\User\UserPatchType;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\ResponseHandler;
@@ -31,6 +32,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class UserController extends Controller
 {
+    protected static $formTypes = [
+        self::METHOD_PATCH => UserPatchType::class,
+    ];
+
     // Traits for REST actions
     use Actions\Admin\CountAction;
     use Actions\Admin\FindAction;
@@ -38,6 +43,7 @@ class UserController extends Controller
     use Actions\Admin\IdsAction;
     use Actions\Root\CreateAction;
     use Actions\Root\DeleteAction;
+    use Actions\Root\PatchAction;
     use Actions\Root\UpdateAction;
 
     /**
