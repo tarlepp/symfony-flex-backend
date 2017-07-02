@@ -11,6 +11,7 @@ use App\Rest\Traits\Methods\UpdateMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,17 +42,23 @@ trait UpdateAction
      *
      * @Security("has_role('ROLE_ROOT')")
      *
-     * @param Request $request
-     * @param string  $id
+     * @param Request              $request
+     * @param FormFactoryInterface $formFactory
+     * @param string               $id
      *
      * @return Response
      *
      * @throws \LogicException
+     * @throws \UnexpectedValueException
+     * @throws \Symfony\Component\Form\Exception\LogicException
+     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
-    public function updateAction(Request $request, string $id): Response
+    public function updateAction(Request $request, FormFactoryInterface $formFactory, string $id): Response
     {
-        return $this->updateMethod($request, $id);
+        return $this->updateMethod($request, $formFactory, $id);
     }
 }

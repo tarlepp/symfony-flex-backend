@@ -9,6 +9,7 @@ namespace App\Controller;
 
 use App\Form\Rest\User\UserCreateType;
 use App\Form\Rest\User\UserPatchType;
+use App\Form\Rest\User\UserUpdateType;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\ResponseHandler;
@@ -41,6 +42,7 @@ class UserController extends Controller
     protected static $formTypes = [
         self::METHOD_PATCH  => UserPatchType::class,
         self::METHOD_CREATE => UserCreateType::class,
+        self::METHOD_UPDATE => UserUpdateType::class,
     ];
 
     // Traits for REST actions

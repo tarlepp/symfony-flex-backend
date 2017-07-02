@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace App\Rest\Traits\Methods;
 
 use App\Rest\ControllerInterface;
-use App\Rest\DTO\RestDtoInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -27,17 +28,28 @@ trait UpdateMethod
     /**
      * Generic 'updateMethod' method for REST resources.
      *
-     * @param Request    $request
-     * @param string     $id
-     * @param array|null $allowedHttpMethods
+     * @param Request              $request
+     * @param FormFactoryInterface $formFactory
+     * @param string               $id
+     * @param array|null           $allowedHttpMethods
      *
      * @return Response
      *
      * @throws \LogicException
+     * @throws \UnexpectedValueException
+     * @throws \Symfony\Component\Form\Exception\LogicException
+     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
-    public function updateMethod(Request $request, string $id, array $allowedHttpMethods = null): Response
+    public function updateMethod(
+        Request $request,
+        FormFactoryInterface $formFactory,
+        string $id,
+        array $allowedHttpMethods = null
+    ): Response
     {
         $allowedHttpMethods = $allowedHttpMethods ?? ['PUT'];
 
@@ -56,14 +68,41 @@ trait UpdateMethod
             throw new MethodNotAllowedHttpException($allowedHttpMethods);
         }
 
+        /**
+         * Lambda function to create form.
+         *
+         * @param Request              $request
+         * @param FormFactoryInterface $formFactory
+         * @param string               $id
+         * @param string               $method
+         *
+         * @return FormInterface
+         */
+        $createForm = function (Request $request, FormFactoryInterface $formFactory, string $id, string $method): FormInterface
+        {
+            $formType = $this->getFormTypeClass($method);
+
+            // Create form, load entity data for form and handle request
+            $form = $formFactory->createNamed('', $formType, null, ['method' => $request->getMethod()]);
+            $form->setData($this->getResource()->getDtoForEntity($id, $form->getConfig()->getDataClass()));
+
+            $form->handleRequest($request);
+
+            return $form;
+        };
+
         try {
-            // TODO: how to override this in controller ?
-            $dtoClass = $this->getResource()->getDtoClass();
+            $form = $createForm($request, $formFactory, $id, __METHOD__);
 
-            /** @var RestDtoInterface $dto */
-            $dto = $this->getResponseHandler()->getSerializer()->deserialize($request->getContent(), $dtoClass, 'json');
+            if (!$form->isValid()) {
+                // TODO handle form errors
 
-            return $this->getResponseHandler()->createResponse($request, $this->getResource()->update($id, $dto));
+                throw new HttpException(Response::HTTP_BAD_REQUEST, 'form has errors');
+            }
+
+            return $this
+                ->getResponseHandler()
+                ->createResponse($request, $this->getResource()->update($id, $form->getData()));
         } catch (\Exception $error) {
             if ($error instanceof HttpException) {
                 throw $error;
@@ -76,14 +115,38 @@ trait UpdateMethod
     }
 
     /**
-     * Getter method for resource service.
-     *
      * @return ResourceInterface
+     *
+     * @throws \UnexpectedValueException
      */
     abstract public function getResource(): ResourceInterface;
 
     /**
      * @return ResponseHandlerInterface
+     *
+     * @throws \UnexpectedValueException
      */
     abstract public function getResponseHandler(): ResponseHandlerInterface;
+
+    /**
+     * Getter method for used DTO class for current controller.
+     *
+     * @param string|null $method
+     *
+     * @return string
+     *
+     * @throws \UnexpectedValueException
+     */
+    abstract public function getDtoClass(string $method = null): string;
+
+    /**
+     * Getter method for used DTO class for current controller.
+     *
+     * @param string|null $method
+     *
+     * @return string
+     *
+     * @throws \UnexpectedValueException
+     */
+    abstract public function getFormTypeClass(string $method = null): string;
 }
