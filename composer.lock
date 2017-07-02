@@ -294,12 +294,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "65d74db371f9611918997182f8e594b45619d270"
+                "reference": "8906f736e95aaf035c2a766f103d021d854091d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/65d74db371f9611918997182f8e594b45619d270",
-                "reference": "65d74db371f9611918997182f8e594b45619d270",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/8906f736e95aaf035c2a766f103d021d854091d6",
+                "reference": "8906f736e95aaf035c2a766f103d021d854091d6",
                 "shasum": ""
             },
             "require": {
@@ -359,7 +359,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-06-29T19:50:53+00:00"
+            "time": "2017-07-02T10:10:52+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -5210,12 +5210,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "7e3fa25e0cfd2696d8e7b08dc886b373652cfd05"
+                "reference": "077a638b1b28f097a6c3bca248e0166d6f75d8c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/7e3fa25e0cfd2696d8e7b08dc886b373652cfd05",
-                "reference": "7e3fa25e0cfd2696d8e7b08dc886b373652cfd05",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/077a638b1b28f097a6c3bca248e0166d6f75d8c4",
+                "reference": "077a638b1b28f097a6c3bca248e0166d6f75d8c4",
                 "shasum": ""
             },
             "require": {
@@ -5286,7 +5286,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-07-01T11:21:09+00:00"
+            "time": "2017-07-01T11:24:04+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
