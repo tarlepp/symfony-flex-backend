@@ -78,6 +78,9 @@ class ActionTest extends KernelTestCase
             ];
 
             switch ($base) {
+                case 'CreateAction':
+                    $parameters[] = $this->createMock(FormFactoryInterface::class);
+                    break;
                 case 'PatchAction':
                     $parameters[] = $this->createMock(FormFactoryInterface::class);
                     $parameters[] = Uuid::uuid4()->toString();

@@ -151,6 +151,7 @@ class UserControllerTest extends WebTestCase
             'firstname' => 'test',
             'surname'   => 'user',
             'email'     => 'test-user@test.com',
+            'password'  => 'some password',
         ];
         
         $client = $this->getClient('john-root', 'password-root');
@@ -164,6 +165,8 @@ class UserControllerTest extends WebTestCase
         $responseData = $response->getContent();
 
         $data['id'] = JSON::decode($responseData)->id;
+
+        unset($data['password']);
 
         static::assertJsonStringEqualsJsonString(JSON::encode($data), $responseData);
 
