@@ -63,6 +63,10 @@ class User extends RestDto
 
     /**
      * @var string
+     *
+     * @Assert\NotBlank(groups={"Create"})
+     * @Assert\NotNull(groups={"Create"})
+     * @Assert\Length(groups={"Create"}, min = 2, max = 255)
      */
     private $password = '';
 
