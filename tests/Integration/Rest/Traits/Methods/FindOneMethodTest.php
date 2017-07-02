@@ -161,6 +161,7 @@ class FindOneMethodTest extends KernelTestCase
         return [
             ['HEAD'],
             ['DELETE'],
+            ['PATCH'],
             ['PUT'],
             ['POST'],
             ['OPTIONS'],

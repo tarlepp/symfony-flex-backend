@@ -170,6 +170,7 @@ class FindMethodTest extends KernelTestCase
     {
         return [
             ['HEAD'],
+            ['PATCH'],
             ['POST'],
             ['PUT'],
             ['DELETE'],

@@ -172,6 +172,7 @@ class CountMethodTest extends KernelTestCase
     {
         return [
             ['HEAD'],
+            ['PATCH'],
             ['POST'],
             ['PUT'],
             ['DELETE'],

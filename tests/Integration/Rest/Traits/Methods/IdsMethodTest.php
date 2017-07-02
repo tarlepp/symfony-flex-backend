@@ -170,6 +170,7 @@ class IdsMethodTest extends KernelTestCase
     {
         return [
             ['HEAD'],
+            ['PATCH'],
             ['POST'],
             ['PUT'],
             ['DELETE'],

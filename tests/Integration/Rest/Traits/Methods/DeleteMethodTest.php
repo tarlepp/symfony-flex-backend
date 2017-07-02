@@ -161,6 +161,7 @@ class DeleteMethodTest extends KernelTestCase
         return [
             ['HEAD'],
             ['GET'],
+            ['PATCH'],
             ['PUT'],
             ['POST'],
             ['OPTIONS'],

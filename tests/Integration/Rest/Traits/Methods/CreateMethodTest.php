@@ -216,6 +216,7 @@ class CreateMethodTest extends KernelTestCase
         return [
             ['HEAD'],
             ['GET'],
+            ['PATCH'],
             ['PUT'],
             ['DELETE'],
             ['OPTIONS'],
