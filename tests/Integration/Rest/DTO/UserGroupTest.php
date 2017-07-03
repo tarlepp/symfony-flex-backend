@@ -29,11 +29,6 @@ class UserGroupTest extends DtoTestCase
             ->setMethods(['getId'])
             ->getMock();
 
-        $roleEntity
-            ->expects(static::once())
-            ->method('getId')
-            ->willReturn('test role id');
-
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface|UserGroupEntity $userGroupEntity */
         $userGroupEntity = $this->getMockBuilder(EntityInterface::class)
             ->setMethods(['getId', 'getName', 'getRole'])
@@ -54,7 +49,7 @@ class UserGroupTest extends DtoTestCase
         $dto->load($userGroupEntity);
 
         static::assertSame('test name', $dto->getName());
-        static::assertSame('test role id', $dto->getRole());
+        static::assertSame($roleEntity, $dto->getRole());
     }
 
     public function testThatUpdateMethodCallsExpectedEntityMethods(): void
