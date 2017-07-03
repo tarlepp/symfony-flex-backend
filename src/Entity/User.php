@@ -177,6 +177,16 @@ class User implements UserInterface, EquatableInterface, \Serializable, EntityIn
     private $userGroups;
 
     /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4()->toString();
+
+        $this->userGroups = new ArrayCollection();
+    }
+
+    /**
      * @param RolesInterface $rolesService
      *
      * @return User
@@ -186,16 +196,6 @@ class User implements UserInterface, EquatableInterface, \Serializable, EntityIn
         $this->rolesService = $rolesService;
 
         return $this;
-    }
-
-    /**
-     * User constructor.
-     */
-    public function __construct()
-    {
-        $this->id = Uuid::uuid4()->toString();
-
-        $this->userGroups = new ArrayCollection();
     }
 
     /**
@@ -425,9 +425,11 @@ class User implements UserInterface, EquatableInterface, \Serializable, EntityIn
     public function getLoginData(): array
     {
         return [
+            'id'        => $this->getId(),
             'firstname' => $this->getFirstname(),
             'surname'   => $this->getSurname(),
-            'email'     => $this->getEmail()
+            'email'     => $this->getEmail(),
+            'roles'     => $this->getRoles(),
         ];
     }
 
