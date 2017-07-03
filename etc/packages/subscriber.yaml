@@ -1,16 +1,31 @@
 services:
-    App\EventSubscriber\BodySubscriber:
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
         autowire: true
+        # automatically registers your services as commands, form types, etc.
+        autoconfigure: true
+        # this means you cannot fetch services directly from the container via $container->get()
+        # if you need to do this, you can override this setting on individual services
+        public: false
+
+    App\EventSubscriber\BodySubscriber:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 10 }
 
     App\EventSubscriber\ExceptionSubscriber:
-        autowire: true
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
+    App\EventSubscriber\JWTCreatedSubscriber:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    App\EventSubscriber\JWTDecodedSubscriber:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecoded }
+
     App\EventSubscriber\UserEntitySubscriber:
-        autowire: true
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
