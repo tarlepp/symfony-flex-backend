@@ -70,7 +70,7 @@
     "scripts": {
         "auto-scripts": {
             "make cache-warmup": "script",
-            "assets:install --symlink --relative %WEB_DIR%": "symfony-cmd",
+            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
             "vendor/bin/security-checker security:check --end-point=http://security.sensiolabs.org/check_lock": "php-script",
             "%BIN_DIR%/check.php": "php-script"
         },
