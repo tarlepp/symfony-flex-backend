@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Entity\User;
-use App\Resource\UserResource;
 use App\Security\Roles;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -24,11 +23,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class JWTCreatedSubscriber
 {
     /**
-     * @var UserResource
-     */
-    protected $userResource;
-
-    /**
      * @var RoleHierarchyInterface
      */
     protected $roles;
@@ -41,13 +35,11 @@ class JWTCreatedSubscriber
     /**
      * JWTCreatedListener constructor.
      *
-     * @param   UserResource $userResource
      * @param   Roles        $roles
      * @param   RequestStack $requestStack
      */
-    public function __construct(UserResource $userResource, Roles $roles, RequestStack $requestStack)
+    public function __construct(Roles $roles, RequestStack $requestStack)
     {
-        $this->userResource = $userResource;
         $this->roles = $roles;
         $this->requestStack = $requestStack;
     }
