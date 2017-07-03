@@ -29,7 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class Role extends BaseRole
+class Role extends BaseRole implements EntityInterface
 {
     /**
      * @var string
