@@ -10,6 +10,9 @@ namespace App\Tests\Integration\Rest;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandler;
 use App\Utils\Tests\ContainerTestCase;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormErrorIterator;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -277,6 +280,43 @@ class ResponseHandlerTest extends ContainerTestCase
         $context = $testClass->getSerializeContext($stubRequest);
 
         static::assertSame(['AnotherFakeEntity'], $context['groups']);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function testThatHandleFormErrorThrowsExpectedException(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $serializer
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface       $formInterface
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormError           $formError
+         */
+        $serializer = $this->createMock(SerializerInterface::class);
+        $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
+        $formError = $this->createMock(FormError::class);
+
+        // Create FormErrorIterator
+        $formErrorIterator = new FormErrorIterator($formInterface, [$formError]);
+
+        $formInterface
+            ->expects(static::once())
+            ->method('getErrors')
+            ->withAnyParameters()
+            ->willReturn($formErrorIterator);
+
+        $formInterface
+            ->expects(static::once())
+            ->method('getName')
+            ->willReturn('foo');
+
+        $formError
+            ->expects(static::once())
+            ->method('getOrigin')
+            ->willReturn($formInterface);
+
+        $testClass = new ResponseHandler($serializer);
+        $testClass->handleFormError($formInterface);
     }
 
     /**
