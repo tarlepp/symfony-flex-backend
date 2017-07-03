@@ -245,6 +245,16 @@ class PatchMethodTest extends KernelTestCase
             ->withAnyParameters()
             ->willReturn($formInterfaceMock);
 
+        $responseHandler
+            ->expects(static::once())
+            ->method('handleFormError')
+            ->willThrowException(new HttpException(400));
+
+        $testClass
+            ->expects(static::once())
+            ->method('getResponseHandler')
+            ->willReturn($responseHandler);
+
         $testClass->patchMethod($request, $formFactoryMock, $uuid);
     }
 

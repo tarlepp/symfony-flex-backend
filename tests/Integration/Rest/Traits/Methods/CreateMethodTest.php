@@ -7,21 +7,16 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
-use App\Entity\EntityInterface;
-use App\Rest\DTO\RestDto;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\CreateMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\CreateMethodTestClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class CreateMethodTest
@@ -204,6 +199,16 @@ class CreateMethodTest extends KernelTestCase
             ->method('createNamed')
             ->withAnyParameters()
             ->willReturn($formInterfaceMock);
+
+        $responseHandler
+            ->expects(static::once())
+            ->method('handleFormError')
+            ->willThrowException(new HttpException(400));
+
+        $testClass
+            ->expects(static::once())
+            ->method('getResponseHandler')
+            ->willReturn($responseHandler);
 
         $testClass->createMethod($request, $formFactoryMock);
     }
