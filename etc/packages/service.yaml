@@ -12,5 +12,5 @@ services:
     App\Utils\Tests\Auth:
         public: true
 
-    App\Resources\UserResource:
+    App\Resource\UserResource:
         public: true
