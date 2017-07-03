@@ -22,7 +22,7 @@ class UserControllerTest extends WebTestCase
 {
     private $baseUrl = '/user';
 
-    public function testThatGetBaseRouteReturn403(): void
+    public function testThatGetBaseRouteReturn401(): void
     {
         $client = static::createClient();
         $client->request('GET', $this->baseUrl);
@@ -31,7 +31,7 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(401, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":403,"status":401}', $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"message":"JWT Token not found","code":401}', $response->getContent());
     }
 
     /**
@@ -67,7 +67,7 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":403,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
     }
 
     /**
@@ -103,7 +103,7 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":403,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
     }
 
     /**
@@ -139,7 +139,7 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":403,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
     }
 
     /**
@@ -154,7 +154,7 @@ class UserControllerTest extends WebTestCase
             'email'     => 'test-user@test.com',
             'password'  => 'some password',
         ];
-        
+
         $client = $this->getClient('john-root', 'password-root');
         $client->request('POST', $this->baseUrl, [], [], [], JSON::encode($data));
 
@@ -196,7 +196,7 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":403,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
     }
 
     /**
@@ -256,7 +256,7 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":403,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
 
         return $userId;
     }
@@ -278,7 +278,7 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":403,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
     }
 
     /**
