@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Form\Rest\UserGroup\UserGroupType;
 use App\Resource\UserGroupResource;
 use App\Rest\Controller;
 use App\Rest\ResponseHandler;
@@ -25,12 +26,25 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
  */
 class UserGroupController extends Controller
 {
+    /**
+     * Method + Form type class names (key + value)
+     *
+     * @var string[]
+     */
+    protected static $formTypes = [
+        self::METHOD_PATCH  => UserGroupType::class,
+        self::METHOD_CREATE => UserGroupType::class,
+        self::METHOD_UPDATE => UserGroupType::class,
+    ];
+
+    // Traits for REST actions
     use Actions\Admin\CountAction;
     use Actions\Admin\FindAction;
     use Actions\Admin\FindOneAction;
     use Actions\Admin\IdsAction;
     use Actions\Root\CreateAction;
     use Actions\Root\DeleteAction;
+    use Actions\Root\PatchAction;
     use Actions\Root\UpdateAction;
 
     /**
