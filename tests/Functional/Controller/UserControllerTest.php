@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Controller;
 
+use App\Resource\UserResource;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -294,6 +295,25 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
+    }
+
+    public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
+    {
+        self::bootKernel();
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        $user = $userResource->findOneBy(['username' => 'john-root'], null, true);
+
+        $client = $this->getClient('john-root', 'password-root');
+        $client->request('DELETE', $this->baseUrl . '/' . $user->getId());
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(400, $response->getStatusCode(), $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"message":"You cannot remove yourself...","code":0,"status":400}', $response->getContent());
     }
 
     /**
