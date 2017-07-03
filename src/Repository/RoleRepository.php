@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Role as Entity;
-use Doctrine\ORM\EntityRepository;
+use App\Rest\Repository;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -21,23 +21,12 @@ use Doctrine\ORM\EntityRepository;
  *
  * @method Entity|null find($id, $lockMode = null, $lockVersion = null)
  */
-class RoleRepository extends EntityRepository
+class RoleRepository extends Repository
 {
     /**
-     * Helper method to 'reset' repository entity table - in other words delete all records - so be carefully with
-     * this...
+     * Names of search columns.
      *
-     * @return int
+     * @var string[]
      */
-    public function reset(): int
-    {
-        // Create query builder
-        $queryBuilder = $this->createQueryBuilder('entity');
-
-        // Define delete query
-        $queryBuilder->delete();
-
-        // Return deleted row count
-        return $queryBuilder->getQuery()->execute();
-    }
+    protected static $searchColumns = ['id'];
 }
