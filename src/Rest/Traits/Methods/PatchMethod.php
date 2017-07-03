@@ -95,9 +95,7 @@ trait PatchMethod
             $form = $createForm($request, $formFactory, $id, __METHOD__);
 
             if (!$form->isValid()) {
-                // TODO handle form errors
-
-                throw new HttpException(Response::HTTP_BAD_REQUEST, 'form has errors');
+                $this->getResponseHandler()->handleFormError($form);
             }
 
             return $this
