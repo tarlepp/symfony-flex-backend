@@ -78,6 +78,17 @@ class Auth
     }
 
     /**
+     * @return array
+     */
+    public function getJwtHeaders(): array
+    {
+        return [
+            'REMOTE_ADDR'       => '123.123.123.123',
+            'HTTP_USER_AGENT'   => 'foobar',
+        ];
+    }
+
+    /**
      * Method to make actual login to application with specified username and password.
      *
      * @param string $username
@@ -98,10 +109,13 @@ class Auth
             '/auth/getToken',
             [],
             [],
-            [
-                'CONTENT_TYPE'          => 'application/json',
-                'HTTP_X-Requested-With' => 'XMLHttpRequest'
-            ],
+            \array_merge(
+                $this->getJwtHeaders(),
+                [
+                    'CONTENT_TYPE'          => 'application/json',
+                    'HTTP_X-Requested-With' => 'XMLHttpRequest'
+                ]
+            ),
             \json_encode(['username' => $username, 'password' => $password])
         );
 
