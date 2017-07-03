@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Controller;
 
+use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -50,11 +51,51 @@ class RoleControllerTest extends WebTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatGetInheritedRolesActionWorksAsExpected
+     *
+     * @param string $username
+     * @param string $password
+     */
+    public function testThatGetInheritedRolesActionWorksAsExpected(string $username, string $password): void
+    {
+        $roles = ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'];
+
+        $client = $this->getClient($username, $password);
+
+        foreach ($roles as $role) {
+            $offset = \array_search($role, $roles, true);
+            $foo = \array_slice($roles, $offset);
+
+            $client->request('GET', $this->baseUrl . '/' . $role . '/inherited');
+
+            $response = $client->getResponse();
+
+            static::assertInstanceOf(Response::class, $response);
+            static::assertSame(200, $response->getStatusCode(), $response->getContent());
+            static::assertJsonStringEqualsJsonString(JSON::encode($foo), $response->getContent());
+        }
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatFindOneActionWorksAsExpected(): array
     {
         return [
+            ['john-admin',  'password-admin'],
+            ['john-root',   'password-root'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): array
+    {
+        return [
+            ['john',        'password'],
+            ['john-logged', 'password-logged'],
+            ['john-user',   'password-user'],
             ['john-admin',  'password-admin'],
             ['john-root',   'password-root'],
         ];
