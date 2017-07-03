@@ -81,6 +81,7 @@ class WebTestCase extends BaseWebTestCase
         $server = \array_merge(
             $username === null ? [] : $this->getAuthService()->getAuthorizationHeadersForUser($username, $password),
             $this->getJsonHeaders(),
+            $this->getAuthService()->getJwtHeaders(),
             $server
         );
 
@@ -94,7 +95,7 @@ class WebTestCase extends BaseWebTestCase
     {
         return [
             'CONTENT_TYPE'          => 'application/json',
-            'HTTP_X-Requested-With' => 'XMLHttpRequest'
+            'HTTP_X-Requested-With' => 'XMLHttpRequest',
         ];
     }
 }
