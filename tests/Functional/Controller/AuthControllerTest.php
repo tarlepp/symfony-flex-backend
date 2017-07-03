@@ -128,13 +128,10 @@ class AuthControllerTest extends WebTestCase
         $responseContent = JSON::decode($response->getContent());
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
-        static::assertSame(403, $responseContent->code, 'Response code was not expected');
-
-        static::assertObjectHasAttribute('status', $responseContent, 'Response does not contain \'status\'');
-        static::assertSame(401, $responseContent->status, 'Response status was not expected');
+        static::assertSame(401, $responseContent->code, 'Response code was not expected');
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
-        static::assertSame('Access denied.', $responseContent->message, 'Response message was not expected');
+        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
     }
 
     /**
@@ -151,7 +148,7 @@ class AuthControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
     /**
