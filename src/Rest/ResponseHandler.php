@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest;
 
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -166,5 +167,27 @@ final class ResponseHandler implements ResponseHandlerInterface
         $response->headers->set('Content-Type', $this->contentTypes[$format]);
 
         return $response;
+    }
+
+    /**
+     * Method to handle form errors.
+     *
+     * @param FormInterface $form
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function handleFormError(FormInterface $form): void
+    {
+        $errors = [];
+
+        foreach ($form->getErrors(true) as $error) {
+            $errors[] = \sprintf(
+                'Field \'%s\': %s',
+                $error->getOrigin()->getName(),
+                $error->getMessage()
+            );
+        }
+
+        throw new HttpException(Response::HTTP_BAD_REQUEST, \implode("\n", $errors));
     }
 }

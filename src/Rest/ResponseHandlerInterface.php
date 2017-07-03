@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest;
 
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -86,4 +87,13 @@ interface ResponseHandlerInterface
         string $format = null,
         array $context = null
     ): Response;
+
+    /**
+     * Method to handle form errors.
+     *
+     * @param FormInterface $form
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function handleFormError(FormInterface $form): void;
 }
