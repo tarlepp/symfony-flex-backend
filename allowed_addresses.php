@@ -24,7 +24,7 @@ declare(strict_types = 1);
 $configFile = __DIR__ . '/allowed_addresses_local.php';
 
 // Get local IP addresses
-$local = file_exists($configFile) ? require_once $configFile : [];
+$local = \file_exists($configFile) ? require $configFile : [];
 
 // By default allow 'localhost'
 $base = [
@@ -33,4 +33,4 @@ $base = [
     '::1',
 ];
 
-return array_merge($base, $local);
+return \array_merge($base, $local);
