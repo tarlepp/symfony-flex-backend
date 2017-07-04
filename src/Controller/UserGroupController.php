@@ -7,13 +7,19 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Entity\UserGroup;
 use App\Form\Rest\UserGroup\UserGroupType;
 use App\Resource\UserGroupResource;
+use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class UserGroupController
@@ -56,5 +62,45 @@ class UserGroupController extends Controller
     public function __construct(UserGroupResource $userGroupResource, ResponseHandler $responseHandler)
     {
         $this->init($userGroupResource, $responseHandler);
+    }
+
+    /**
+     * Endpoint action to list specified user group users.
+     *
+     * @Route(
+     *      "/{id}/users",
+     *      requirements={
+     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+     *      }
+     *  )
+     *
+     * @ParamConverter(
+     *     "user",
+     *     class="App:UserGroup"
+     *  )
+     *
+     * @Method({"GET"})
+     *
+     * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @param Request      $request
+     * @param UserResource $userResource
+     * @param UserGroup    $userGroup
+     *
+     * @return Response
+     *
+     * @throws \UnexpectedValueException
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function getUserGroupUsersAction(
+        Request $request,
+        UserResource $userResource,
+        UserGroup $userGroup
+    ): Response
+    {
+        // Manually change used resource class, so that serializer groups are correct ones
+        $this->getResponseHandler()->setResource($userResource);
+
+        return $this->getResponseHandler()->createResponse($request, $userResource->getUsersForGroup($userGroup));
     }
 }
