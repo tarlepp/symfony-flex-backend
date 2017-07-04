@@ -12,5 +12,6 @@ services:
     App\Utils\Tests\Auth:
         public: true
 
-    App\Resource\UserResource:
+    App\Resource\:
+        resource: '../../src/Resource'
         public: true
