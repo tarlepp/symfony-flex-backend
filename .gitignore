@@ -1,8 +1,8 @@
 ###> symfony/framework-bundle ###
 .env
+/public/bundles/
 /var/
 /vendor/
-/web/bundles/
 ###< symfony/framework-bundle ###
 
 ## Test environment configuration

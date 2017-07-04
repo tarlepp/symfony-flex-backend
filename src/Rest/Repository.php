@@ -160,6 +160,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      * @return integer
      *
      * @throws \InvalidArgumentException
+     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countAdvanced(array $criteria = null, array $search = null): int

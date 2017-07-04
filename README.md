@@ -5,8 +5,8 @@
 
 Simple JSON API which is build on top of [Symfony](https://symfony.com/) framework.
 
-Note that this project is built with [Symfony Flex](https://github.com/symfony/flex), so we're using lot `@dev` packages 
-at this moment. Also note that we're going to update Symfony itself to `4.x.x` as soon as possible.
+Note that this project is built with [Symfony Flex](https://github.com/symfony/flex), although this project is using 
+latest stable packages, but note that we're going to update Symfony itself to `4.x.x` as soon as possible.
  
 Table of Contents
 =================

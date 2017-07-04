@@ -108,6 +108,6 @@ class UserRepositoryTest extends KernelTestCase
     {
         $this->repository->reset();
 
-        self::assertSame(0, $this->repository->count([]));
+        self::assertSame(0, $this->repository->countAdvanced());
     }
 }
