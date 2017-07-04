@@ -13,7 +13,9 @@ use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\DTO\User as UserDto;
+use App\Rest\RepositoryInterface;
 use App\Rest\ResourceInterface;
+use App\Security\Roles;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit_Framework_MockObject_MockBuilder;
@@ -67,7 +69,7 @@ class GenericResourceTest extends KernelTestCase
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->setDtoClass('');
         $resource->getDtoClass();
     }
@@ -78,7 +80,7 @@ class GenericResourceTest extends KernelTestCase
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->setDtoClass('foobar');
 
         static::assertSame('foobar', $resource->getDtoClass());
@@ -94,7 +96,7 @@ class GenericResourceTest extends KernelTestCase
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->setFormTypeClass('');
         $resource->getFormTypeClass();
     }
@@ -105,7 +107,7 @@ class GenericResourceTest extends KernelTestCase
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->setFormTypeClass('foobar');
 
         static::assertSame('foobar', $resource->getFormTypeClass());
@@ -121,7 +123,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('getEntityName');
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->getEntityName();
     }
 
@@ -135,7 +137,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('getReference');
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->getReference('some id');
     }
 
@@ -149,7 +151,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('getAssociations');
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->getAssociations();
     }
 
@@ -170,7 +172,7 @@ class GenericResourceTest extends KernelTestCase
         $dto = $this->getDtoMockBuilder()->getMock();
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
 
         static::assertInstanceOf(RestDtoInterface::class, $resource->getDtoForEntity('some id', \get_class($dto)));
     }
@@ -194,7 +196,7 @@ class GenericResourceTest extends KernelTestCase
         $dto = $this->getDtoMockBuilder()->getMock();
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->getDtoForEntity('some id', \get_class($dto));
     }
 
@@ -218,7 +220,7 @@ class GenericResourceTest extends KernelTestCase
             ->with(...$expectedArguments);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->find(...$arguments);
     }
 
@@ -233,7 +235,7 @@ class GenericResourceTest extends KernelTestCase
             ->withAnyParameters();
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->findOne('some id');
     }
 
@@ -253,7 +255,7 @@ class GenericResourceTest extends KernelTestCase
             ->willReturn(null);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->findOne('some id', true);
     }
 
@@ -271,7 +273,7 @@ class GenericResourceTest extends KernelTestCase
             ->willReturn($entity);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
 
         static::assertSame($entity, $resource->findOne('some id', true));
     }
@@ -296,7 +298,7 @@ class GenericResourceTest extends KernelTestCase
             ->with(...$expectedArguments);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->findOneBy(...$arguments);
     }
 
@@ -316,7 +318,7 @@ class GenericResourceTest extends KernelTestCase
             ->willReturn(null);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->findOneBy([], null, true);
     }
 
@@ -334,7 +336,7 @@ class GenericResourceTest extends KernelTestCase
             ->willReturn($entity);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
 
         static::assertSame($entity, $resource->findOneBy([], null, true));
     }
@@ -359,7 +361,7 @@ class GenericResourceTest extends KernelTestCase
             ->with(...$expectedArguments);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->count(...$arguments);
     }
 
@@ -376,7 +378,7 @@ class GenericResourceTest extends KernelTestCase
             ->with($entity);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
 
         static::assertSame($entity, $resource->save($entity));
     }
@@ -392,13 +394,13 @@ class GenericResourceTest extends KernelTestCase
         $dto = new $this->dtoClass();
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->create($dto);
     }
 
     public function testThatCreateMethodCallsExpectedMethods(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository|RepositoryInterface $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
         $repository
@@ -410,7 +412,7 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('save');
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|ValidatorInterface $repository */
+        /** @var PHPUnit_Framework_MockObject_MockObject|ValidatorInterface $validator */
         $validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
 
         /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
@@ -421,7 +423,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('update');
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, $validator);
+        $resource = $this->getResource($repository, $validator);
         $resource->create($dto);
     }
 
@@ -443,7 +445,7 @@ class GenericResourceTest extends KernelTestCase
         $dto = new $this->dtoClass();
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->update('some id', $dto);
     }
 
@@ -464,6 +466,7 @@ class GenericResourceTest extends KernelTestCase
             $entity->$method($value);
         }
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|UserRepository|RepositoryInterface $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
         $repository
@@ -478,7 +481,7 @@ class GenericResourceTest extends KernelTestCase
             ->with($entity);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->update('some id', $dto);
     }
 
@@ -501,7 +504,7 @@ class GenericResourceTest extends KernelTestCase
             ->with($entity);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
 
         static::assertSame($entity, $resource->delete('some id'));
     }
@@ -526,7 +529,7 @@ class GenericResourceTest extends KernelTestCase
             ->with(...$expectedArguments);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->getIds(...$arguments);
     }
 
@@ -546,7 +549,7 @@ class GenericResourceTest extends KernelTestCase
             ->with($entity);
 
         /** @var ResourceInterface $resource */
-        $resource = new $this->resourceClass($repository, self::getValidator());
+        $resource = $this->getResource($repository);
         $resource->save($entity);
     }
 
@@ -682,5 +685,20 @@ class GenericResourceTest extends KernelTestCase
     private function getDtoMockBuilder(): PHPUnit_Framework_MockObject_MockBuilder
     {
         return $this->getMockBuilder($this->dtoClass);
+    }
+
+    /**
+     * @param RepositoryInterface     $repository
+     * @param ValidatorInterface|null $validator
+     *
+     * @return mixed
+     */
+    private function getResource(RepositoryInterface $repository, ValidatorInterface $validator = null)
+    {
+        $roles = $this->getMockBuilder(Roles::class)->disableOriginalConstructor()->getMock();
+
+        $validator = $validator ?? self::getValidator();
+
+        return new $this->resourceClass($repository, $validator, $roles);
     }
 }

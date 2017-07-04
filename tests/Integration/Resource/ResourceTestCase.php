@@ -7,8 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Resource;
 
+use App\Rest\RepositoryInterface;
 use App\Rest\ResourceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Class ResourceTestCase
@@ -47,7 +49,7 @@ abstract class ResourceTestCase extends KernelTestCase
         $repository = static::$kernel->getContainer()->get($this->repositoryClass);
         $validator = static::$kernel->getContainer()->get('validator');
 
-        $this->resource = new $this->resourceClass($repository, $validator);
+        $this->resource = $this->getResource($repository, $validator);
     }
 
     public function testThatGetRepositoryReturnsExpected(): void
@@ -68,5 +70,16 @@ abstract class ResourceTestCase extends KernelTestCase
         );
 
         self::assertSame($this->entityClass, $this->resource->getEntityName(), $message);
+    }
+
+    /**
+     * @param RepositoryInterface $repository
+     * @param ValidatorInterface  $validator
+     *
+     * @return ResourceInterface
+     */
+    protected function getResource(RepositoryInterface $repository, ValidatorInterface $validator): ResourceInterface
+    {
+        return new $this->resourceClass($repository, $validator);
     }
 }
