@@ -7,6 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Controller;
 
+use App\Resource\UserGroupResource;
+use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -29,5 +31,41 @@ class UserGroupControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(401, $response->getStatusCode());
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGetUserGroupUsersActionReturnsExpected
+     *
+     * @param int    $userCount
+     * @param string $userGroupId
+     */
+    public function testThatGetUserGroupUsersActionReturnsExpected(int $userCount, string $userGroupId): void
+    {
+        $client = $this->getClient('john-root', 'password-root');
+        $client->request('GET', $this->baseUrl . '/' . $userGroupId . '/users');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertCount($userCount, JSON::decode($response->getContent()));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): array
+    {
+        self::bootKernel();
+
+        /** @var UserGroupResource $userGroupResource */
+        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+
+        return [
+            [1, $userGroupResource->findOneBy(['name' => 'Root users'])->getId()],
+            [2, $userGroupResource->findOneBy(['name' => 'Admin users'])->getId()],
+            [3, $userGroupResource->findOneBy(['name' => 'Normal users'])->getId()],
+            [4, $userGroupResource->findOneBy(['name' => 'Logged in users'])->getId()],
+        ];
     }
 }
