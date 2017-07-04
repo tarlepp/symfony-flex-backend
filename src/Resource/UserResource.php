@@ -9,10 +9,12 @@ namespace App\Resource;
 
 use App\Entity\EntityInterface;
 use App\Entity\User as Entity;
+use App\Entity\UserGroup;
 use App\Repository\UserRepository as Repository;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\DTO\User;
 use App\Rest\Resource;
+use App\Security\Roles;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
@@ -38,14 +40,47 @@ class UserResource extends Resource
     protected $dtoClass = User::class;
 
     /**
+     * @var Roles
+     */
+    private $roles;
+
+    /**
      * Class constructor.
      *
      * @param Repository         $repository
      * @param ValidatorInterface $validator
+     * @param Roles              $roles
      */
-    public function __construct(Repository $repository, ValidatorInterface $validator)
+    public function __construct(Repository $repository, ValidatorInterface $validator, Roles $roles)
     {
         $this->repository = $repository;
         $this->validator = $validator;
+        $this->roles = $roles;
+    }
+
+    /**
+     * Method to fetch users for specified user group, note that this method will also check user role inheritance so
+     * return value will contain all users that belong to specified user group via role inheritance.
+     *
+     * @param UserGroup $userGroup
+     *
+     * @return Entity[]
+     */
+    public function getUsersForGroup(UserGroup $userGroup): array
+    {
+        /**
+         * Filter method to see if specified user belongs to certain user group.
+         *
+         * @param Entity $user
+         *
+         * @return bool
+         */
+        $filter = function (Entity $user) use ($userGroup): bool {
+            $user->setRolesService($this->roles);
+
+            return \in_array($userGroup->getRole()->getId(), $user->getRoles(), true);
+        };
+
+        return \array_values(\array_filter($this->find(), $filter));
     }
 }
