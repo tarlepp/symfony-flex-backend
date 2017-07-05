@@ -50,3 +50,9 @@ run-tests:
 	mkdir -p build/logs
 	vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 ###< phpunit ###
+
+###> phpunit ###
+phpmetrics:
+	mkdir -p build/phpmetrics
+	vendor/bin/phpmetrics --report-html=build/phpmetrics .
+###< phpunit ###
