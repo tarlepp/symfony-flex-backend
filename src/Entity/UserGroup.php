@@ -106,6 +106,9 @@ class UserGroup implements EntityInterface
      *      mappedBy="userGroups",
      *      cascade={"all"},
      *  )
+     * @ORM\JoinTable(
+     *      name="user_has_user_group"
+     *  )
      */
     private $users;
 

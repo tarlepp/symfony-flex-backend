@@ -173,6 +173,9 @@ class User implements UserInterface, EquatableInterface, \Serializable, EntityIn
      *      inversedBy="users",
      *      cascade={"all"},
      *  )
+     * @ORM\JoinTable(
+     *      name="user_has_user_group"
+     *  )
      */
     private $userGroups;
 
