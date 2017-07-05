@@ -9,10 +9,12 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Security\Roles;
+use App\Utils\JSON;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -38,12 +40,17 @@ class AuthController
      *
      * @Method("POST")
      *
-     * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\Routing\Exception\MethodNotAllowedException
+     * @throws \LogicException
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function getTokenAction(): void
     {
-        throw new MethodNotAllowedException(['POST']);
+        $message = \sprintf(
+            'You need to send JSON body to obtain token eg. %s',
+            JSON::encode(['username' => 'username', 'password' => 'password'])
+        );
+
+        throw new HttpException(400, $message);
     }
 
     /**
