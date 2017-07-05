@@ -115,7 +115,7 @@ class CreateRolesCommand extends Command
     {
         $this->roleRepository->createQueryBuilder('role')
             ->delete()
-            ->where('role.role NOT IN(:roles)')
+            ->where('role.id NOT IN(:roles)')
             ->setParameter(':roles', $roles)
             ->getQuery()
             ->execute();

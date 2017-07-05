@@ -189,9 +189,11 @@ class CreateUserCommand extends Command
      * @param bool            $interactive
      *
      * @throws \Exception
+     *
      * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      */
     private function checkUserGroups(OutputInterface $output, bool $interactive): void
     {

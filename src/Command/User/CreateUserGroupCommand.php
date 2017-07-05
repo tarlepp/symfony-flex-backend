@@ -153,11 +153,15 @@ class CreateUserGroupCommand extends Command
      * @param bool            $interactive
      *
      * @throws \Exception
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      */
     private function checkRoles(OutputInterface $output, bool $interactive): void
     {
-        if ($this->roleRepository->count([]) !== 0) {
+        if ($this->roleRepository->countAdvanced() !== 0) {
             return;
         }
 
