@@ -35,8 +35,7 @@ before_script:
   - php bin/check.php
 
 script:
-  - mkdir -p build/logs
-  - vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - make run-tests
 
 after_success:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then php vendor/bin/coveralls -v; fi

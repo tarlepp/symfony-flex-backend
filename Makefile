@@ -44,3 +44,9 @@ endif
 	openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${JWT_PRIVATE_KEY_PATH} -out ${JWT_PUBLIC_KEY_PATH}
 	@echo "\033[32mRSA key pair successfully generated\033[39m"
 ###< lexik/jwt-authentication-bundle ###
+
+###> phpunit ###
+run-tests:
+	mkdir -p build/logs
+	vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+###< phpunit ###
