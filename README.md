@@ -125,6 +125,8 @@ $ ./bin/console user:list-groups    # To list current user groups
 # Testing
 Project contains bunch of tests _(Functional, Integration, Unit)_ which you can run simply by following command:
 ```bash
+$ make run-tests
+# or alternative
 $ ./vendor/bin/phpunit
 ```
 
@@ -134,6 +136,17 @@ main `.env` file, just change database and others to match your testing environm
 * [PHPUnit](https://phpunit.de/)
 
 Or you could easily configure your IDE to run these for you.
+
+# Metrics
+Project contains also [PhpMetrics](https://github.com/phpmetrics/phpmetrics) to make some analyze of your code. You can
+run this by following command:
+```bash
+$ make phpmetrics
+# or alternative
+$ ./vendor/bin/phpmetrics --report-html=build/phpmetrics .
+```
+
+And after that open `build/phpmetrics/index.html` with your favorite browser.
 
 # Links / resources
 * [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
