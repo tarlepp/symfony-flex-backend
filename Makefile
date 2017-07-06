@@ -47,12 +47,16 @@ endif
 
 ###> phpunit ###
 run-tests:
-	mkdir -p build/logs
-	vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+	@mkdir -p build/logs
+	@vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 ###< phpunit ###
 
 ###> phpunit ###
 phpmetrics:
-	mkdir -p build/phpmetrics
-	vendor/bin/phpmetrics --report-html=build/phpmetrics .
+	@mkdir -p build/phpmetrics
+	@if [ ! -f build/logs/junit.xml ] ; then \
+		printf "\033[32;49mjunit.xml not found running tests...\033[39m\n" ; \
+		make run-tests ; \
+	fi;
+	@vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
 ###< phpunit ###
