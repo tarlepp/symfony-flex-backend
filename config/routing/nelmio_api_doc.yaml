@@ -1,0 +1,8 @@
+NelmioApiDocBundleUi:
+    resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
+    prefix:   /api/doc
+
+NelmioApiDocBundle:
+    path: /api/doc.json
+    methods: GET
+    defaults: { _controller: nelmio_api_doc.controller.swagger }

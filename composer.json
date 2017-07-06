@@ -19,13 +19,15 @@
         "doctrine/doctrine-migrations-bundle": "1.2.1",
         "lexik/jwt-authentication-bundle": "2.4.1",
         "matthiasnoback/symfony-console-form": "dev-master",
+        "nelmio/api-doc-bundle": "dev-master",
         "ramsey/uuid": "3.6.1",
         "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "3.0.26",
+        "symfony/asset": "3.3.4",
         "symfony/console": "3.3.4",
         "symfony/expression-language": "3.3.4",
         "symfony/flex": "1.0.11",
-        "symfony/form": "^3.3.4",
+        "symfony/form": "3.3.4",
         "symfony/framework-bundle": "3.3.4",
         "symfony/monolog-bundle": "3.1.0",
         "symfony/orm-pack": "1.0.0",
@@ -34,7 +36,6 @@
         "symfony/serializer": "3.3.4",
         "symfony/twig-bundle": "3.3.4",
         "symfony/validator": "3.3.4",
-        "symfony/web-server-bundle": "3.3.4",
         "symfony/yaml": "3.3.4"
     },
     "require-dev": {
@@ -47,7 +48,8 @@
         "symfony/dotenv": "3.3.4",
         "symfony/phpunit-bridge": "3.3.4",
         "symfony/requirements-checker": "1.0.0",
-        "symfony/web-profiler-bundle": "3.3.4"
+        "symfony/web-profiler-bundle": "3.3.4",
+        "symfony/web-server-bundle": "3.3.4"
     },
     "config": {
         "preferred-install": {
@@ -87,7 +89,7 @@
     "extra": {
         "symfony": {
             "id": "01BFA135DXTPRA5CR250NTJJJP",
-            "allow-contrib": false
+            "allow-contrib": "true"
         }
     }
 }
