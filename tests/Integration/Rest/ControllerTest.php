@@ -10,10 +10,11 @@ namespace App\Tests\Integration\Rest;
 use App\Rest\Controller;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\ResourceInterface;
-use App\Rest\ResponseHandlerInterface;
+use App\Rest\ResponseHandler;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class ControllerTest
@@ -39,8 +40,7 @@ class ControllerTest extends KernelTestCase
         /** @var ResourceInterface $resource */
         $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
 
-        /** @var ResponseHandlerInterface $responseHandler */
-        $responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)->getMock();
+        $responseHandler = new ResponseHandler(new Serializer());
 
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
@@ -65,14 +65,13 @@ class ControllerTest extends KernelTestCase
         /** @var ResourceInterface $resource */
         $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
 
-        /** @var ResponseHandlerInterface $responseHandler */
-        $responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)->getMock();
+        $responseHandler = new ResponseHandler(new Serializer());
 
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
         $controller->init($resource, $responseHandler);
 
-        static::assertInstanceOf(ResponseHandlerInterface::class, $controller->getResponseHandler());
+        static::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
     }
 
     public function testThatGetDtoClassCallsExpectedServiceMethods(): void
@@ -88,8 +87,7 @@ class ControllerTest extends KernelTestCase
             ->method('getDtoClass')
             ->willReturn(\get_class($dtoClass));
 
-        /** @var ResponseHandlerInterface $responseHandler */
-        $responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)->getMock();
+        $responseHandler = new ResponseHandler(new Serializer());
 
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
@@ -111,8 +109,7 @@ class ControllerTest extends KernelTestCase
             ->method('getDtoClass')
             ->willReturn(\stdClass::class);
 
-        /** @var ResponseHandlerInterface $responseHandler */
-        $responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)->getMock();
+        $responseHandler = new ResponseHandler(new Serializer());
 
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
@@ -128,8 +125,7 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|ResourceInterface $resource */
         $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
 
-        /** @var ResponseHandlerInterface $responseHandler */
-        $responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)->getMock();
+        $responseHandler = new ResponseHandler(new Serializer());
 
         $dtoClasses = [
             'foo' => \get_class($dtoClass),
@@ -159,8 +155,7 @@ class ControllerTest extends KernelTestCase
             ->method('getFormTypeClass')
             ->willReturn(\get_class($formTypeClass));
 
-        /** @var ResponseHandlerInterface $responseHandler */
-        $responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)->getMock();
+        $responseHandler = new ResponseHandler(new Serializer());
 
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
@@ -176,8 +171,7 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|ResourceInterface $resource */
         $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
 
-        /** @var ResponseHandlerInterface $responseHandler */
-        $responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)->getMock();
+        $responseHandler = new ResponseHandler(new Serializer());
 
         $formTypes = [
             'foo' => \get_class($formTypeClass),
