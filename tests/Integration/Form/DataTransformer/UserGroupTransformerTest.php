@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Form/Console/DataTransformer/UserGroupTransformerTest.php
+ * /tests/Integration/Form/DataTransformer/UserGroupTransformerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Form\Console\DataTransformer;
+namespace App\Tests\Integration\Form\DataTransformer;
 
 use App\Entity\UserGroup;
-use App\Form\Console\DataTransformer\UserGroupTransformer;
+use App\Form\DataTransformer\UserGroupTransformer;
 use App\Repository\UserGroupRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject;

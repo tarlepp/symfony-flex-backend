@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Form\Console;
 
 use App\Entity\UserGroup;
-use App\Form\Console\DataTransformer\UserGroupTransformer;
+use App\Form\DataTransformer\UserGroupTransformer;
 use App\Resource\UserGroupResource;
 use App\Rest\DTO\User as UserDto;
 use Doctrine\Common\Persistence\ObjectManager;

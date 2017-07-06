@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Form\Console;
 
 use App\Entity\Role as RoleEntity;
-use App\Form\Console\DataTransformer\RoleTransformer;
+use App\Form\DataTransformer\RoleTransformer;
 use App\Repository\RoleRepository;
 use App\Rest\DTO\UserGroup as UserGroupDto;
 use App\Security\Roles;

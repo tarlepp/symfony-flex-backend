@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Form/Console/DataTransformer/RoleTransformerTest.php
+ * /tests/Integration/Form/DataTransformer/RoleTransformerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Form\Console\DataTransformer;
+namespace App\Tests\Integration\Form\DataTransformer;
 
 use App\Entity\Role;
-use App\Form\Console\DataTransformer\RoleTransformer;
+use App\Form\DataTransformer\RoleTransformer;
 use App\Repository\RoleRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject;
