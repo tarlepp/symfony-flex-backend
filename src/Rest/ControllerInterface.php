@@ -63,8 +63,8 @@ interface ControllerInterface
     /**
      * Method to initialize REST controller.
      *
-     * @param ResourceInterface        $resource
-     * @param ResponseHandlerInterface $responseHandler
+     * @param ResourceInterface $resource
+     * @param ResponseHandler   $responseHandler
      */
-    public function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void;
+    public function init(ResourceInterface $resource, ResponseHandler $responseHandler): void;
 }
