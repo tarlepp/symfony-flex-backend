@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits\Actions\Root;
 
+use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\UpdateMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -41,6 +42,8 @@ trait UpdateAction
      * @Method({"PUT"})
      *
      * @Security("has_role('ROLE_ROOT')")
+     *
+     * @RestApiDoc()
      *
      * @param Request              $request
      * @param FormFactoryInterface $formFactory

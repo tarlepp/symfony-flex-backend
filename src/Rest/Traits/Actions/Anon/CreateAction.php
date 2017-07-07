@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits\Actions\Anon;
 
+use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CreateMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -34,6 +35,8 @@ trait CreateAction
      * @Route("")
      *
      * @Method({"POST"})
+     *
+     * @RestApiDoc()
      *
      * @param Request              $request
      * @param FormFactoryInterface $formFactory

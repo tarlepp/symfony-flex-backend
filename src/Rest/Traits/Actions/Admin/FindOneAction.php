@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits\Actions\Admin;
 
+use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\FindOneMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -34,12 +35,14 @@ trait FindOneAction
      *      "/{id}",
      *      requirements={
      *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-     *      }
+     *      },
      *  )
      *
      * @Method({"GET"})
      *
      * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @RestApiDoc()
      *
      * @param Request $request
      * @param string  $id

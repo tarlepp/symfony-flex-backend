@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits\Actions\Anon;
 
+use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\IdsMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -33,6 +34,8 @@ trait IdsAction
      * @Route("/ids")
      *
      * @Method({"GET"})
+     *
+     * @RestApiDoc()
      *
      * @param Request $request
      *

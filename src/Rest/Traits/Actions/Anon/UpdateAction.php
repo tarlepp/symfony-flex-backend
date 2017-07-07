@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits\Actions\Anon;
 
+use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\UpdateMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -38,6 +39,8 @@ trait UpdateAction
      *  )
      *
      * @Method({"PUT"})
+     *
+     * @RestApiDoc()
      *
      * @param Request              $request
      * @param FormFactoryInterface $formFactory

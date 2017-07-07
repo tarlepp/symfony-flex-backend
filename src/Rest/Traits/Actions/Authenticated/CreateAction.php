@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits\Actions\Authenticated;
 
+use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CreateMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -36,6 +37,8 @@ trait CreateAction
      * @Method({"POST"})
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     *
+     * @RestApiDoc()
      *
      * @param Request              $request
      * @param FormFactoryInterface $formFactory
