@@ -10,12 +10,13 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Security\Roles;
 use App\Utils\JSON;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -32,13 +33,34 @@ use Symfony\Component\Serializer\SerializerInterface;
 class AuthController
 {
     /**
-     * Action to get user's Json Web Token (JWT) for authentication.
-     *
-     * Note that the security layer will intercept this request.
+     * Endpoint action to get user Json Web Token (JWT) for authentication.
      *
      * @Route("/getToken");
      *
      * @Method("POST")
+     *
+     * @SWG\Parameter(
+     *      name="body",
+     *      in="body",
+     *      description="Credentials object",
+     *      required=true,
+     *      @SWG\Schema(
+     *          example={"username": "username", "password": "password"}
+     *      )
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="JSON Web Token for user",
+     *  )
+     * @SWG\Response(
+     *      response=400,
+     *      description="Invalid body content",
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Bad credentials",
+     *  )
+     * @SWG\Tag(name="/auth")
      *
      * @throws \LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -54,13 +76,41 @@ class AuthController
     }
 
     /**
-     * Action to get current user profile data.
+     * Endpoint action to get current user profile data.
      *
      * @Route("/profile");
      *
      * @Method("GET")
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="User profile data",
+     *      @SWG\Schema(
+     *          @Model(
+     *              type=User::class,
+     *              groups={"User", "User.userGroups", "User.roles", "UserGroup", "UserGroup.role"},
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Tag(name="/auth")
      *
      * @param UserInterface|User  $user
      * @param Roles               $roles
