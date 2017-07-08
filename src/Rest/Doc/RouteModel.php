@@ -43,11 +43,6 @@ class RouteModel
     private $route;
 
     /**
-     * @var \ReflectionMethod
-     */
-    private $reflection;
-
-    /**
      * @var array
      */
     private $methodAnnotations;
@@ -153,26 +148,6 @@ class RouteModel
     public function setRoute(Route $route): RouteModel
     {
         $this->route = $route;
-
-        return $this;
-    }
-
-    /**
-     * @return \ReflectionMethod
-     */
-    public function getReflection(): \ReflectionMethod
-    {
-        return $this->reflection;
-    }
-
-    /**
-     * @param \ReflectionMethod $reflection
-     *
-     * @return RouteModel
-     */
-    public function setReflection(\ReflectionMethod $reflection): RouteModel
-    {
-        $this->reflection = $reflection;
 
         return $this;
     }

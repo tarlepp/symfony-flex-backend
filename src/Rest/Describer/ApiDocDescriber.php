@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Rest\Describer;
 
 use App\Annotation\RestApiDoc;
+use App\Rest\Controller;
 use App\Rest\Doc\RouteModel;
 use Doctrine\Common\Annotations\AnnotationReader;
 use EXSyst\Component\Swagger\Operation;
@@ -15,6 +16,7 @@ use EXSyst\Component\Swagger\Parameter;
 use EXSyst\Component\Swagger\Response;
 use EXSyst\Component\Swagger\Swagger;
 use Nelmio\ApiDocBundle\Describer\DescriberInterface;
+use Psr\Container\ContainerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
@@ -29,10 +31,24 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class ApiDocDescriber implements DescriberInterface
 {
+    const COUNT_ACTION      = 'countAction';
+    const CREATE_ACTION     = 'createAction';
+    const DELETE_ACTION     = 'deleteAction';
+    const FIND_ACTION       = 'findAction';
+    const FIND_ONE_ACTION   = 'findOneAction';
+    const IDS_ACTION        = 'idsAction';
+    const PATCH_ACTION      = 'patchAction';
+    const UPDATE_ACTION     = 'updateAction';
+
     /**
      * @var RouteCollection
      */
     private $routeCollection;
+
+    /**
+     * @var ContainerInterface
+     */
+    private $container;
 
     /**
      * @var AnnotationReader
@@ -40,11 +56,13 @@ class ApiDocDescriber implements DescriberInterface
     private $annotationReader;
 
     /**
-     * @param RouteCollection $routeCollection
+     * @param RouteCollection    $routeCollection
+     * @param ContainerInterface $container
      */
-    public function __construct(RouteCollection $routeCollection)
+    public function __construct(RouteCollection $routeCollection, ContainerInterface $container)
     {
         $this->routeCollection = $routeCollection;
+        $this->container = $container;
         $this->annotationReader = new AnnotationReader();
     }
 
@@ -52,6 +70,9 @@ class ApiDocDescriber implements DescriberInterface
      * @param Swagger $api
      *
      * @throws \ReflectionException
+     * @throws \UnexpectedValueException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function describe(Swagger $api): void
     {
@@ -112,7 +133,6 @@ class ApiDocDescriber implements DescriberInterface
             $routeModel->setHttpMethod(\mb_strtolower($httpMethodAnnotation->getMethods()[0]));
             $routeModel->setBaseRoute($routeAnnotation->getPath());
             $routeModel->setRoute($route);
-            $routeModel->setReflection($reflection);
             $routeModel->setMethodAnnotations($methodAnnotations);
             $routeModel->setControllerAnnotations($controllerAnnotations);
 
@@ -161,6 +181,10 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param Operation  $operation
      * @param RouteModel $routeModel
+     *
+     * @throws \UnexpectedValueException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     private function createDocs(Operation $operation, RouteModel $routeModel): void
     {
@@ -172,6 +196,7 @@ class ApiDocDescriber implements DescriberInterface
         // Process custom REST API documentation
         $this->processTags($routeModel, $data);
         $this->processSecurity($routeModel, $operation);
+        $this->processSummary($routeModel, $operation);
 
         // And finally merge all data to current operation
         $operation->merge($data);
@@ -203,7 +228,7 @@ class ApiDocDescriber implements DescriberInterface
     }
 
     /**
-     * Method to process method '@Security' annotation. If this annotation is present we need to following things:
+     * Method to process rest action '@Security' annotation. If this annotation is present we need to following things:
      *  1) Add 'Authorization' header parameter
      *  2) Add 401 response
      *
@@ -228,17 +253,94 @@ class ApiDocDescriber implements DescriberInterface
             
             $operation->getParameters()->add(new Parameter($parameter));
 
-            $responseData = [
-                'description'   => 'Invalid token',
-                'examples'      => [
-                    'Token not found'   => '{code: 401, message: JWT Token not found}',
-                    'Expired token'     => '{code: 401, message: Expired JWT Token}',
-                ],
-            ];
-
-            $response = new Response($responseData);
-
-            $operation->getResponses()->set(401, $response);
+            $this->add401Response($operation);
+            $this->add403Response($operation);
         }
+    }
+
+    /**
+     * Method to process operation 'summary' information.
+     *
+     * @param RouteModel $routeModel
+     * @param Operation  $operation
+     *
+     * @throws \UnexpectedValueException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    private function processSummary(RouteModel $routeModel, Operation $operation): void
+    {
+        $summary = '';
+
+        switch ($routeModel->getMethod()) {
+            case self::COUNT_ACTION:
+                $summary = 'Endpoint action to get count of entities (%s) on this resource.';
+                break;
+            case self::CREATE_ACTION:
+                $summary = 'Endpoint action to create new entity (%s) to this resource.';
+                break;
+            case self::DELETE_ACTION:
+                $summary = 'Endpoint action to delete specified entity (%s) from this resource.';
+                break;
+            case self::FIND_ACTION:
+                $summary = 'Endpoint action to fetch entities (%s) from this resource.';
+                break;
+            case self::FIND_ONE_ACTION:
+                $summary = 'Endpoint action to fetch specified entity (%s) from this resource.';
+                break;
+            case self::IDS_ACTION:
+                $summary = 'Endpoint action to fetch entities (%s) id values from this resource.';
+                break;
+            case self::PATCH_ACTION:
+                $summary = 'Endpoint action to create patch specified entity (%s) on this resource.';
+                break;
+            case self::UPDATE_ACTION:
+                $summary = 'Endpoint action to create update specified entity (%s) on this resource.';
+                break;
+        }
+
+        if (!empty($summary) && $this->container->has($routeModel->getController())) {
+            /** @var Controller $controller */
+            $controller = $this->container->get($routeModel->getController());
+
+            $operation->setSummary(\sprintf($summary, $controller->getResource()->getEntityName()));
+        }
+    }
+
+    /**
+     * @param Operation $operation
+     */
+    private function add401Response(Operation $operation): void
+    {
+        $data = [
+            'description' => 'Invalid token',
+            'examples' => [
+                'Token not found' => '{code: 401, message: JWT Token not found}',
+                'Expired token' => '{code: 401, message: Expired JWT Token}',
+            ],
+        ];
+
+        $response = new Response($data);
+
+        /** @noinspection PhpParamsInspection */
+        $operation->getResponses()->set(401, $response);
+    }
+
+    /**
+     * @param Operation $operation
+     */
+    private function add403Response(Operation $operation): void
+    {
+        $data = [
+            'description' => 'Access denied',
+            'examples' => [
+                'Access denied' => '{message: Access denied., code: 0, status: 403}',
+            ],
+        ];
+
+        $response = new Response($data);
+
+        /** @noinspection PhpParamsInspection */
+        $operation->getResponses()->set(403, $response);
     }
 }
