@@ -197,6 +197,7 @@ class ApiDocDescriber implements DescriberInterface
         $this->processTags($routeModel, $data);
         $this->processSecurity($routeModel, $operation);
         $this->processSummary($routeModel, $operation);
+        $this->processResponse($routeModel, $operation);
 
         // And finally merge all data to current operation
         $operation->merge($data);
@@ -308,6 +309,64 @@ class ApiDocDescriber implements DescriberInterface
     }
 
     /**
+     * @param RouteModel $routeModel
+     * @param Operation  $operation
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \UnexpectedValueException
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    private function processResponse(RouteModel $routeModel, Operation $operation): void
+    {
+        $description = '';
+        $statusCode = 200;
+        $responses = [];
+
+        switch ($routeModel->getMethod()) {
+            case self::COUNT_ACTION:
+                $description = 'Count of (%s) entities';
+                break;
+            case self::CREATE_ACTION:
+                $description = 'Created new entity (%s)';
+                $statusCode = 201;
+                break;
+            case self::DELETE_ACTION:
+                $description = 'Deleted entity (%s)';
+                $responses[] = 'add404Response';
+                break;
+            case self::FIND_ACTION:
+                $description = 'Array of fetched entities (%s)';
+                break;
+            case self::FIND_ONE_ACTION:
+                $description = 'Fetched entity (%s)';
+                $responses[] = 'add404Response';
+                break;
+            case self::IDS_ACTION:
+                $description = 'Fetched entities (%s) primary key values';
+                break;
+            case self::PATCH_ACTION:
+                $description = 'Deleted entity (%s)';
+                $responses[] = 'add404Response';
+                break;
+            case self::UPDATE_ACTION:
+                $description = 'Updated entity (%s)';
+                $responses[] = 'add404Response';
+                break;
+        }
+
+        if (!empty($description) && $this->container->has($routeModel->getController())) {
+            /** @var Controller $controller */
+            $controller = $this->container->get($routeModel->getController());
+
+            $this->addOkResponse($operation, $description, $statusCode, $controller->getResource()->getEntityName());
+
+            foreach ($responses as $method) {
+                $this->$method($operation, $routeModel);
+            }
+        }
+    }
+
+    /**
      * @param Operation $operation
      */
     private function add401Response(Operation $operation): void
@@ -342,5 +401,43 @@ class ApiDocDescriber implements DescriberInterface
 
         /** @noinspection PhpParamsInspection */
         $operation->getResponses()->set(403, $response);
+    }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     */
+    private function add404Response(Operation $operation, RouteModel $routeModel): void
+    {
+        $data = [
+            'description' => 'Not found',
+            'examples' => [
+                'Not found' => '{message: Not found, code: 0, status: 404}',
+            ],
+        ];
+
+        $response = new Response($data);
+
+        /** @noinspection PhpParamsInspection */
+        $operation->getResponses()->set(404, $response);
+    }
+
+    /**
+     * @param Operation $operation
+     * @param string    $description
+     * @param int       $statusCode
+     * @param string    $entityName
+     */
+    private function addOkResponse(Operation $operation, string $description, int $statusCode, string $entityName): void
+    {
+        $data = [
+            'description' => \sprintf($description, $entityName),
+        ];
+
+        $response = new Response($data);
+
+        /** @noinspection PhpParamsInspection */
+        $operation->getResponses()->set($statusCode, $response);
     }
 }
