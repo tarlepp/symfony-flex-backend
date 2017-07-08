@@ -15,3 +15,7 @@ services:
     App\Resource\:
         resource: '../../src/Resource'
         public: true
+
+    App\Rest\Describer\ApiDocDescriber:
+        tags:
+            - { name: nelmio_api_doc.describer, priority: -500 }
