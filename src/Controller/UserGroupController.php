@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Form\Rest\UserGroup\UserGroupType;
 use App\Resource\UserGroupResource;
@@ -14,10 +15,12 @@ use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -27,6 +30,8 @@ use Symfony\Component\HttpFoundation\Response;
  * @Route(path="/user_group")
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ *
+ * @SWG\Tag(name="UserGroup Management")
  *
  * @package App\Controller
  */
@@ -82,6 +87,38 @@ class UserGroupController extends Controller
      * @Method({"GET"})
      *
      * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="User group users",
+     *      @SWG\Schema(
+     *          @Model(
+     *              type=User::class,
+     *              groups={"User", "User.userGroups", "User.roles", "UserGroup", "UserGroup.role"},
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Response(
+     *      response=404,
+     *      description="User Group not found",
+     *  )
+     * @SWG\Tag(name="UserGroup Management")
      *
      * @param Request      $request
      * @param UserResource $userResource

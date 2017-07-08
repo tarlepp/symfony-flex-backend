@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Annotation\RestApiDoc;
 use App\Entity\User;
 use App\Form\Rest\User\UserCreateType;
 use App\Form\Rest\User\UserPatchType;
@@ -20,6 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -34,6 +36,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @Route(path="/user")
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ *
+ * @SWG\Tag(name="User Management")
  *
  * @package App\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -75,8 +79,7 @@ class UserController extends Controller
     }
 
     /**
-     * Endpoint action to delete user. Note that we cannot use generic 'deleteAction' REST trait within this controller
-     * because we need to make some extra checks before actual delete.
+     * Endpoint action to delete specified User entity.
      *
      * @Route(
      *      "/{id}",
@@ -93,6 +96,8 @@ class UserController extends Controller
      * @Method({"DELETE"})
      *
      * @Security("has_role('ROLE_ROOT')")
+     *
+     * @RestApiDoc()
      *
      * @param Request            $request
      * @param User               $user

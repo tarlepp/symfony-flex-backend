@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Annotation\RestApiDoc;
 use App\Entity\Role;
 use App\Resource\RoleResource;
 use App\Rest\Controller;
@@ -18,6 +19,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +33,8 @@ use Symfony\Component\HttpFoundation\Response;
  * @Route(path="/role")
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ *
+ * @SWG\Tag(name="Role Management")
  *
  * @package App\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -57,8 +61,7 @@ class RoleController extends Controller
     }
 
     /**
-     * Endpoint action to fetch single Role entity from database and show it as a JSON response. Note that we cannot
-     * use generic 'findOneAction' REST trait in this case because Role entity ID's are not V4 UUID strings.
+     * Endpoint action to fetch single Role entity from database and show it as a JSON response.
      *
      * @Route(
      *      "/{role}",
@@ -70,6 +73,8 @@ class RoleController extends Controller
      * @Method({"GET"})
      *
      * @Security("has_role('ROLE_ADMIN')")
+     *
+     * @RestApiDoc()
      *
      * @param Request $request
      * @param string  $role
@@ -103,6 +108,35 @@ class RoleController extends Controller
      * @Method({"GET"})
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="Inherited roles",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @SWG\Items(
+     *              type="string",
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     *
+     * @RestApiDoc()
      *
      * @param Roles $roles
      * @param Role  $role

@@ -60,7 +60,7 @@ class AuthController
      *      response=401,
      *      description="Bad credentials",
      *  )
-     * @SWG\Tag(name="/auth")
+     * @SWG\Tag(name="Authentication")
      *
      * @throws \LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -110,7 +110,7 @@ class AuthController
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
      *      },
      *  )
-     * @SWG\Tag(name="/auth")
+     * @SWG\Tag(name="Authentication")
      *
      * @param UserInterface|User  $user
      * @param Roles               $roles
