@@ -79,8 +79,6 @@ class UserController extends Controller
     }
 
     /**
-     * Endpoint action to delete specified User entity.
-     *
      * @Route(
      *      "/{id}",
      *      requirements={

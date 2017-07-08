@@ -61,8 +61,6 @@ class RoleController extends Controller
     }
 
     /**
-     * Endpoint action to fetch single Role entity from database and show it as a JSON response.
-     *
      * @Route(
      *      "/{role}",
      *      requirements={
