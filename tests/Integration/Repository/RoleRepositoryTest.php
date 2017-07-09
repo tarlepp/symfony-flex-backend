@@ -34,11 +34,4 @@ class RoleRepositoryTest extends RepositoryTestCase
     protected $associations = [
         'userGroups',
     ];
-
-    /**
-     * @var array
-     */
-    protected $searchColumns = [
-        'id',
-    ];
 }
