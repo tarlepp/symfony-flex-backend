@@ -158,7 +158,12 @@ final class RequestHandler
      * Getter method for used search terms within 'find' and 'count' methods. Note that these will affect to columns /
      * properties that you have specified to your resource service repository class.
      *
-     * TODO add usage examples.
+     * Usage examples:
+     *  ?search=term
+     *  ?search=term1+term2
+     *  ?search={"and": ["term1", "term2"]}
+     *  ?search={"or": ["term1", "term2"]}
+     *  ?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}
      *
      * @throws HttpException
      *
