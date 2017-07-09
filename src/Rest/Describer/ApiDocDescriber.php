@@ -51,6 +51,11 @@ class ApiDocDescriber implements DescriberInterface
     private $container;
 
     /**
+     * @var \Twig_Environment
+     */
+    private $templateEngine;
+
+    /**
      * @var AnnotationReader
      */
     private $annotationReader;
@@ -58,11 +63,17 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param RouteCollection    $routeCollection
      * @param ContainerInterface $container
+     * @param \Twig_Environment  $templateEngine
      */
-    public function __construct(RouteCollection $routeCollection, ContainerInterface $container)
+    public function __construct(
+        RouteCollection $routeCollection,
+        ContainerInterface $container,
+        \Twig_Environment $templateEngine
+    )
     {
         $this->routeCollection = $routeCollection;
         $this->container = $container;
+        $this->templateEngine = $templateEngine;
         $this->annotationReader = new AnnotationReader();
     }
 
@@ -198,6 +209,7 @@ class ApiDocDescriber implements DescriberInterface
         $this->processSecurity($routeModel, $operation);
         $this->processSummary($routeModel, $operation);
         $this->processResponse($routeModel, $operation);
+        $this->processParameters($routeModel, $operation);
 
         // And finally merge all data to current operation
         $operation->merge($data);
@@ -367,6 +379,44 @@ class ApiDocDescriber implements DescriberInterface
     }
 
     /**
+     * @param RouteModel $routeModel
+     * @param Operation  $operation
+     */
+    private function processParameters(RouteModel $routeModel, Operation $operation): void
+    {
+        $parameters = [];
+
+        switch ($routeModel->getMethod()) {
+            case self::COUNT_ACTION:
+            case self::IDS_ACTION:
+                $parameters[] = 'addParameterSearch';
+                $parameters[] = 'addParameterCriteria';
+                break;
+            case self::CREATE_ACTION:
+                break;
+            case self::DELETE_ACTION:
+            case self::FIND_ONE_ACTION:
+            case self::PATCH_ACTION:
+            case self::UPDATE_ACTION:
+                $parameters[] = 'changePathParameter';
+                break;
+            case self::FIND_ACTION:
+                $parameters[] = 'addParameterOrderBy';
+                $parameters[] = 'addParameterLimit';
+                $parameters[] = 'addParameterOffset';
+                $parameters[] = 'addParameterSearch';
+                $parameters[] = 'addParameterCriteria';
+                break;
+        }
+
+        if (\count($parameters) > 0 && $this->container->has($routeModel->getController())) {
+            foreach ($parameters as $method) {
+                $this->$method($operation, $routeModel);
+            }
+        }
+    }
+
+    /**
      * @param Operation $operation
      */
     private function add401Response(Operation $operation): void
@@ -439,5 +489,101 @@ class ApiDocDescriber implements DescriberInterface
 
         /** @noinspection PhpParamsInspection */
         $operation->getResponses()->set($statusCode, $response);
+    }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     *
+     * @throws \UnexpectedValueException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    private function addParameterSearch(Operation $operation, RouteModel $routeModel): void
+    {
+        /** @var Controller $controller */
+        $controller = $this->container->get($routeModel->getController());
+
+        // Fetch used search columns for current resource
+        $searchColumns = $controller->getResource()->getRepository()->getSearchColumns();
+
+        if (\count($searchColumns) === 0) {
+            return;
+        }
+
+        // Specify used  examples for this parameter
+        static $examples = [
+            '?search=term',
+            '?search=term1+term2',
+            '?search={"and": ["term1", "term2"]}',
+            '?search={"or": ["term1", "term2"]}',
+            '?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}',
+        ];
+
+        // Render a parameter description
+        $description = $this->templateEngine->render(
+            'Swagger/parameter_search.twig',
+            [
+                'properties' => $searchColumns,
+                'examples'   => $examples,
+            ]
+        );
+
+        $parameter = [
+            'type'          => 'string',
+            'name'          => 'search',
+            'in'            => 'query',
+            'required'      => false,
+            'description'   => $description,
+            'default'       => 'term',
+        ];
+
+        $operation->getParameters()->add(new Parameter($parameter));
+    }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     */
+    private function addParameterCriteria(Operation $operation, RouteModel $routeModel): void
+    {
+    }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     */
+    private function addParameterOrderBy(Operation $operation, RouteModel $routeModel): void
+    {
+    }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     */
+    private function addParameterLimit(Operation $operation, RouteModel $routeModel): void
+    {
+    }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     */
+    private function addParameterOffset(Operation $operation, RouteModel $routeModel): void
+    {
+    }
+
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     */
+    private function changePathParameter(Operation $operation, RouteModel $routeModel): void
+    {
     }
 }
