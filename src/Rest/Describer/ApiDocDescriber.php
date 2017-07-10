@@ -550,9 +550,39 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param Operation  $operation
      * @param RouteModel $routeModel
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     private function addParameterCriteria(Operation $operation, RouteModel $routeModel): void
     {
+        // Specify used  examples for this parameter
+        static $examples = [
+            '?where={"property": "value"}                => WHERE entity.property = \'value\'',
+            '?where={"id": [1,2,3]}                      => WHERE entity.id IN (1,2,3)',
+            '?where={"prop1": "val1", "prop2": "val2"}   => WHERE entity.prop1 = \'val1\' AND entity.prop2 = \'val2\'',
+            '?where={"property": "value", "id": [1,2,3]} => WHERE entity.property = \'value\' AND entity.id IN (1,2,3)',
+        ];
+
+        // Render a parameter description
+        $description = $this->templateEngine->render(
+            'Swagger/parameter_criteria.twig',
+            [
+                'examples' => $examples,
+            ]
+        );
+
+        $parameter = [
+            'type'          => 'string',
+            'name'          => 'where',
+            'in'            => 'query',
+            'required'      => false,
+            'description'   => $description,
+            'default'       => '{"property": "value"}',
+        ];
+
+        $operation->getParameters()->add(new Parameter($parameter));
     }
 
     /** @noinspection PhpUnusedPrivateMethodInspection */
