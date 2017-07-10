@@ -22,6 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class ApiDocDescriber
@@ -61,17 +62,17 @@ class ApiDocDescriber implements DescriberInterface
     private $annotationReader;
 
     /**
-     * @param RouteCollection    $routeCollection
+     * @param RouterInterface    $router
      * @param ContainerInterface $container
      * @param \Twig_Environment  $templateEngine
      */
     public function __construct(
-        RouteCollection $routeCollection,
+        RouterInterface $router,
         ContainerInterface $container,
         \Twig_Environment $templateEngine
     )
     {
-        $this->routeCollection = $routeCollection;
+        $this->routeCollection = $router->getRouteCollection();
         $this->container = $container;
         $this->templateEngine = $templateEngine;
         $this->annotationReader = new AnnotationReader();
@@ -497,6 +498,9 @@ class ApiDocDescriber implements DescriberInterface
      * @param RouteModel $routeModel
      *
      * @throws \UnexpectedValueException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
