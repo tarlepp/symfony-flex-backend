@@ -71,11 +71,11 @@ final class RequestHandler
      *  ?order[column1]=ASC                             => ORDER BY entity.column1 ASC
      *  ?order[column1]=DESC                            => ORDER BY entity.column1 DESC
      *  ?order[column1]=foobar                          => ORDER BY entity.column1 ASC
-     *  ?order[column1]=DESC&orderBy[column2]=DESC      => ORDER BY entity.column1 DESC, entity.column2 DESC
+     *  ?order[column1]=DESC&order[column2]=DESC        => ORDER BY entity.column1 DESC, entity.column2 DESC
      *  ?order[foo.column1]=ASC                         => ORDER BY foo.column1 ASC
      *  ?order[foo.column1]=DESC                        => ORDER BY foo.column1 DESC
      *  ?order[foo.column1]=foobar                      => ORDER BY foo.column1 ASC
-     *  ?order[foo.column1]=DESC&orderBy[column2]=DESC  => ORDER BY foo.column1 DESC, entity.column2 DESC
+     *  ?order[foo.column1]=DESC&order[column2]=DESC    => ORDER BY foo.column1 DESC, entity.column2 DESC
      *
      * @param HttpFoundationRequest $request
      *
