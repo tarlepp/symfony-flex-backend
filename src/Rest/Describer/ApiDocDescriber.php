@@ -598,9 +598,36 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param Operation  $operation
      * @param RouteModel $routeModel
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     private function addParameterLimit(Operation $operation, RouteModel $routeModel): void
     {
+        // Specify used  examples for this parameter
+        static $examples = [
+            '?limit=10',
+        ];
+
+        // Render a parameter description
+        $description = $this->templateEngine->render(
+            'Swagger/parameter_limit.twig',
+            [
+                'examples' => $examples,
+            ]
+        );
+
+        $parameter = [
+            'type'          => 'integer',
+            'name'          => 'limit',
+            'in'            => 'query',
+            'required'      => false,
+            'description'   => $description,
+            'default'       => '10',
+        ];
+
+        $operation->getParameters()->add(new Parameter($parameter));
     }
 
     /** @noinspection PhpUnusedPrivateMethodInspection */
