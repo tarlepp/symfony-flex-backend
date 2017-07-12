@@ -24,6 +24,8 @@ use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/** @noinspection PhpHierarchyChecksInspection */
+/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class UserGroupController
  *
@@ -34,6 +36,9 @@ use Symfony\Component\HttpFoundation\Response;
  * @SWG\Tag(name="UserGroup Management")
  *
  * @package App\Controller
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method UserGroupResource getResource()
  */
 class UserGroupController extends Controller
 {
