@@ -454,6 +454,7 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getResponses()->set(403, $response);
     }
 
+    /** @noinspection PhpUnusedParameterInspection */
     /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
      * @param Operation  $operation
@@ -546,6 +547,7 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getParameters()->add(new Parameter($parameter));
     }
 
+    /** @noinspection PhpUnusedParameterInspection */
     /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
      * @param Operation  $operation
@@ -594,6 +596,7 @@ class ApiDocDescriber implements DescriberInterface
     {
     }
 
+    /** @noinspection PhpUnusedParameterInspection */
     /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
      * @param Operation  $operation
@@ -630,6 +633,7 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getParameters()->add(new Parameter($parameter));
     }
 
+    /** @noinspection PhpUnusedParameterInspection */
     /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
      * @param Operation  $operation
@@ -666,6 +670,7 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getParameters()->add(new Parameter($parameter));
     }
 
+    /** @noinspection PhpUnusedParameterInspection */
     /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
      * @param Operation  $operation
@@ -673,5 +678,13 @@ class ApiDocDescriber implements DescriberInterface
      */
     private function changePathParameter(Operation $operation, RouteModel $routeModel): void
     {
+        /** @var Parameter $parameter */
+        foreach ($operation->getParameters() as $parameter) {
+            if ($parameter->getIn() !== 'path') {
+                continue;
+            }
+
+            $parameter->setDescription('Identifier');
+        }
     }
 }
