@@ -1,0 +1,11 @@
+Used populate parts in request.
+
+{% if associations %}
+<p>Associations that can be used:</p>
+<pre>{{ associations | join('<br />') | raw }}</pre>
+{% endif %}
+
+<p>Usage examples:</p>
+<pre><em>{{ examples | join('<br />') | raw }}</em></pre>
+
+<br />

@@ -396,9 +396,12 @@ class ApiDocDescriber implements DescriberInterface
             case self::CREATE_ACTION:
                 break;
             case self::DELETE_ACTION:
-            case self::FIND_ONE_ACTION:
             case self::PATCH_ACTION:
             case self::UPDATE_ACTION:
+                $parameters[] = 'changePathParameter';
+                break;
+            case self::FIND_ONE_ACTION:
+                $parameters[] = 'addParameterPopulate';
                 $parameters[] = 'changePathParameter';
                 break;
             case self::FIND_ACTION:
@@ -407,6 +410,7 @@ class ApiDocDescriber implements DescriberInterface
                 $parameters[] = 'addParameterOffset';
                 $parameters[] = 'addParameterSearch';
                 $parameters[] = 'addParameterCriteria';
+                $parameters[] = 'addParameterPopulate';
                 break;
         }
 
@@ -675,6 +679,65 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param Operation  $operation
      * @param RouteModel $routeModel
+     *
+     * @throws \UnexpectedValueException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Syntax
+     * @throws \Twig_Error_Runtime
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    private function addParameterPopulate(Operation $operation, RouteModel $routeModel): void
+    {
+        /** @var Controller $controller */
+        $controller = $this->container->get($routeModel->getController());
+
+        // Get resource associations
+        $associations = $controller->getResource()->getAssociations();
+
+        // Determine base name for resource serializer group
+        $bits = \explode('\\', $controller->getResource()->getEntityName());
+        $basename = \end($bits);
+
+        // Specify used  examples for this parameter
+        $examples = [];
+
+        foreach ($associations as $association) {
+            $examples[] = '?populate[]=' . $basename . '.' . $association;
+        }
+
+        $examples[] = '?populate[]=' . $basename . '.property';
+        $examples[] = '?populate[]=' . $basename . '.prop1&populate[]=' . $basename . '.prop2';
+
+        // Render a parameter description
+        $description = $this->templateEngine->render(
+            'Swagger/parameter_populate.twig',
+            [
+                'examples'      => $examples,
+                'associations'  => $associations,
+            ]
+        );
+
+        $parameter = [
+            'type'              => 'array',
+            'name'              => 'populate[]',
+            'collectionFormat'  => 'multi',
+            'in'                => 'query',
+            'required'          => false,
+            'description'       => $description,
+            'items'             => [
+                'type'          => 'string',
+            ],
+        ];
+
+        $operation->getParameters()->add(new Parameter($parameter));
+    }
+
+    /** @noinspection PhpUnusedParameterInspection */
+    /** @noinspection PhpUnusedPrivateMethodInspection */
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
      */
     private function changePathParameter(Operation $operation, RouteModel $routeModel): void
     {
@@ -685,6 +748,7 @@ class ApiDocDescriber implements DescriberInterface
             }
 
             $parameter->setDescription('Identifier');
+            $parameter->setDefault('Identifier');
         }
     }
 }
