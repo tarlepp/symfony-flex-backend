@@ -595,9 +595,46 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param Operation  $operation
      * @param RouteModel $routeModel
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     private function addParameterOrderBy(Operation $operation, RouteModel $routeModel): void
     {
+        // Specify used examples for this parameter
+        static $examples = [
+            '?order=column1     => ORDER BY entity.column1 ASC',
+            '?order=-column1    => ORDER BY entity.column2 DESC',
+        ];
+
+        // Specify used advanced examples for this parameter
+        static $advancedExamples = [
+            '?order[column1]=ASC                        => ORDER BY entity.column1 ASC',
+            '?order[column1]=DESC                       => ORDER BY entity.column1 DESC',
+            '?order[column1]=foobar                     => ORDER BY entity.column1 ASC',
+            '?order[column1]=DESC&order[column2]=DESC   => ORDER BY entity.column1 DESC, entity.column2 DESC',
+        ];
+
+        // Render a parameter description
+        $description = $this->templateEngine->render(
+            'Swagger/parameter_order.twig',
+            [
+                'examples'          => $examples,
+                'advancedExamples'  => $advancedExamples,
+            ]
+        );
+
+        $parameter = [
+            'type'          => 'string',
+            'name'          => 'order',
+            'in'            => 'query',
+            'required'      => false,
+            'description'   => $description,
+            'default'       => 'column',
+        ];
+
+        $operation->getParameters()->add(new Parameter($parameter));
     }
 
     /** @noinspection PhpUnusedParameterInspection */
