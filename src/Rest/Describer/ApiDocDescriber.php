@@ -605,7 +605,7 @@ class ApiDocDescriber implements DescriberInterface
         // Specify used examples for this parameter
         static $examples = [
             '?order=column1     => ORDER BY entity.column1 ASC',
-            '?order=-column1    => ORDER BY entity.column2 DESC',
+            '?order=-column1    => ORDER BY entity.column1 DESC',
         ];
 
         // Specify used advanced examples for this parameter
