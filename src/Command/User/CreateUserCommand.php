@@ -152,6 +152,7 @@ class CreateUserCommand extends Command
      *
      * @throws \Exception
      * @throws \InvalidArgumentException
+     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
