@@ -37,8 +37,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class UserResource extends Resource
 {
-    protected $dtoClass = User::class;
-
     /**
      * @var Roles
      */
@@ -56,6 +54,8 @@ class UserResource extends Resource
         $this->repository = $repository;
         $this->validator = $validator;
         $this->roles = $roles;
+
+        $this->setDtoClass(User::class);
     }
 
     /**
