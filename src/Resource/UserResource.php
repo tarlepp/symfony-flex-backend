@@ -51,8 +51,9 @@ class UserResource extends Resource
      */
     public function __construct(Repository $repository, ValidatorInterface $validator, Roles $roles)
     {
-        $this->repository = $repository;
-        $this->validator = $validator;
+        $this->setRepository($repository);
+        $this->setValidator($validator);
+
         $this->roles = $roles;
 
         $this->setDtoClass(User::class);

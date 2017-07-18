@@ -28,11 +28,29 @@ interface ResourceInterface
     public function getRepository(): Repository;
 
     /**
+     * Setter method for repository.
+     *
+     * @param Repository $repository
+     *
+     * @return ResourceInterface
+     */
+    public function setRepository(Repository $repository): ResourceInterface;
+
+    /**
      * Getter for used validator.
      *
      * @return ValidatorInterface
      */
     public function getValidator(): ValidatorInterface;
+
+    /**
+     * Setter for used validator.
+     *
+     * @param ValidatorInterface $validator
+     *
+     * @return ResourceInterface
+     */
+    public function setValidator(ValidatorInterface $validator): ResourceInterface;
 
     /**
      * Getter method for used DTO class for this REST service.

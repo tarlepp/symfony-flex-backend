@@ -29,22 +29,22 @@ abstract class Resource implements ResourceInterface
     /**
      * @var Repository|EntityRepository
      */
-    protected $repository;
+    private $repository;
 
     /**
      * @var ValidatorInterface
      */
-    protected $validator;
+    private $validator;
 
     /**
      * @var string
      */
-    protected $dtoClass;
+    private $dtoClass;
 
     /**
      * @var string
      */
-    protected $formTypeClass;
+    private $formTypeClass;
 
     /**
      * Getter method for entity repository.
@@ -57,6 +57,20 @@ abstract class Resource implements ResourceInterface
     }
 
     /**
+     * Setter method for repository.
+     *
+     * @param Repository $repository
+     *
+     * @return ResourceInterface
+     */
+    public function setRepository(Repository $repository): ResourceInterface
+    {
+        $this->repository = $repository;
+
+        return $this;
+    }
+
+    /**
      * Getter for used validator.
      *
      * @return ValidatorInterface
@@ -64,6 +78,20 @@ abstract class Resource implements ResourceInterface
     public function getValidator(): ValidatorInterface
     {
         return $this->validator;
+    }
+
+    /**
+     * Setter for used validator.
+     *
+     * @param ValidatorInterface $validator
+     *
+     * @return ResourceInterface
+     */
+    public function setValidator(ValidatorInterface $validator): ResourceInterface
+    {
+        $this->validator = $validator;
+
+        return $this;
     }
 
     /**

@@ -42,7 +42,7 @@ class RoleResource extends Resource
      */
     public function __construct(Repository $repository, ValidatorInterface $validator)
     {
-        $this->repository = $repository;
-        $this->validator = $validator;
+        $this->setRepository($repository);
+        $this->setValidator($validator);
     }
 }
