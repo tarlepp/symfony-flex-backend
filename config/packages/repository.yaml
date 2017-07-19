@@ -15,3 +15,5 @@ services:
     App\Repository\UserRepository:
         parent: repository
         arguments: [ App\Entity\User ]
+        calls:
+            - [ setLogger, [ '@logger'] ]

@@ -10,6 +10,8 @@ namespace App\Repository;
 use App\Entity\User as Entity;
 use App\Rest\Repository;
 use Doctrine\ORM\NoResultException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -31,7 +33,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * @method Entity|null findOneBy(array $criteria, array $orderBy = null)
  * @method Entity[]    findByAdvanced(array $criteria, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
  */
-class UserRepository extends Repository implements UserProviderInterface, UserLoaderInterface
+class UserRepository extends Repository implements UserProviderInterface, UserLoaderInterface, LoggerAwareInterface
 {
     /**
      * Names of search columns.
@@ -39,6 +41,23 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
      * @var string[]
      */
     protected static $searchColumns = ['username', 'firstname', 'surname', 'email'];
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * Sets a logger instance on the object.
+     *
+     * @param LoggerInterface $logger
+     *
+     * @return void
+     */
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
 
     /**
      * Loads the user for the given username.
@@ -74,6 +93,8 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
             $user = $query->getSingleResult();
         } catch (NoResultException $exception) {
             \sleep(5);
+
+            $this->logger ? $this->logger->error($exception) : null;
 
             $message = \sprintf(
                 'User "%s" not found',
