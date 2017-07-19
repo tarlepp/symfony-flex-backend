@@ -12,7 +12,7 @@
 use Symfony\Requirements\SymfonyRequirements;
 
 if (!isset($_SERVER['HTTP_HOST'])) {
-    exit('This script cannot be run from the CLI. Run it from a browser.');
+    exit("This script cannot be run from the CLI. Run it from a browser.\n");
 }
 
 if (!in_array(@$_SERVER['REMOTE_ADDR'], array(

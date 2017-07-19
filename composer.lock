@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "667fb039043556d758467b123ad637ea",
+    "content-hash": "56ed3ea4503dbcf3f87012ae915bbc30",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -6918,21 +6918,24 @@
         },
         {
             "name": "symfony/requirements-checker",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/requirements-checker.git",
-                "reference": "e6647f0c6087f665f04e465c469da4ceacd9367c"
+                "reference": "95a542d4b17b4b28942762bcefe90e9dec8cba59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/requirements-checker/zipball/e6647f0c6087f665f04e465c469da4ceacd9367c",
-                "reference": "e6647f0c6087f665f04e465c469da4ceacd9367c",
+                "url": "https://api.github.com/repos/symfony/requirements-checker/zipball/95a542d4b17b4b28942762bcefe90e9dec8cba59",
+                "reference": "95a542d4b17b4b28942762bcefe90e9dec8cba59",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.9"
             },
+            "bin": [
+                "bin/requirements-checker"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -6959,7 +6962,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2017-05-11T16:14:46+00:00"
+            "time": "2017-07-19T10:04:23+00:00"
         },
         {
             "name": "symfony/var-dumper",
