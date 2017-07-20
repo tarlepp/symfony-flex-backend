@@ -11,24 +11,29 @@ latest stable packages, but note that we're going to update Symfony itself to `4
 Table of Contents
 =================
  * [What is this?](#what-is-this)
+ * [Table of Contents](#table-of-contents)
  * [Requirements](#requirements)
  * [Installation](#installation)
-    * [1. Clone repository](#1-clone-repository)
-    * [2. Configuration](#2-configuration)
-    * [3. Dependencies installation](#3-dependencies-installation)
-    * [4. Create JWT auth keys](#4-create-jwt-auth-keys)
-    * [5. File permissions](#5-file-permissions)
-    * [6. Environment checks](#6-environment-checks)
-        * [CLI environment](#cli-environment)
-        * [Web-server environment](#web-server-environment)
-            * [Apache](#apache)
-    * [7. Other (optionally)](#7-other-optionally)
-        * [Allow other IP's to access dev environment](#allow-other-ips-to-access-dev-environment)
+   * [1. Clone repository](#1-clone-repository)
+   * [2. Configuration](#2-configuration)
+   * [3. Dependencies installation](#3-dependencies-installation)
+   * [4. Create JWT auth keys](#4-create-jwt-auth-keys)
+   * [5. File permissions](#5-file-permissions)
+   * [6. Environment checks](#6-environment-checks)
+     * [CLI environment](#cli-environment)
+     * [Web-server environment](#web-server-environment)
+       * [Apache](#apache)
+   * [7. Other (optionally)](#7-other-optionally)
+     * [Allow other IP's to access dev environment](#allow-other-ips-to-access-dev-environment)
  * [Commands](#commands)
+   * [Symfony console](#symfony-console)
+   * [Custom commands](#custom-commands)
  * [Testing](#testing)
+ * [Metrics](#metrics)
  * [Links / resources](#links--resources)
  * [Authors](#authors)
  * [License](#license)
+
 
 # Requirements
 * PHP 7.1.3 or higher
@@ -106,7 +111,14 @@ If you want to allow another IP addresses or _all_ to your `dev` environment see
 detailed information how you can allow certain IP addresses to have access to your `dev` environment.
 
 # Commands
-Project contains following console commands to help eg. user management:
+## Symfony console
+You can list all Symfony console commands via following command:
+```bash
+$ ./bin/console
+```
+
+## Custom commands
+Project contains following custom console commands to help eg. user management:
 ```bash
 $ ./bin/console user:management     # All necessarry commands to manage your users and user groups
 ```
