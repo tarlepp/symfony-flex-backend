@@ -51,7 +51,7 @@ run-tests:
 	@vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 ###< phpunit ###
 
-###> phpunit ###
+###> phpmetrics ###
 phpmetrics:
 	@mkdir -p build/phpmetrics
 	@if [ ! -f build/logs/junit.xml ] ; then \
@@ -59,4 +59,4 @@ phpmetrics:
 		make run-tests ; \
 	fi;
 	@vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
-###< phpunit ###
+###< phpmetrics ###
