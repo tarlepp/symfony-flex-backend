@@ -86,7 +86,7 @@ $loadFixturesDoctrineCommand = function () use ($application) {
     $input = new ArrayInput([
         'command'           => 'doctrine:fixtures:load',
         '--no-interaction'  => true,
-        '--fixtures'        => 'src/DataFixtures/',
+        '--fixtures'        => $application->getKernel()->getRootDir() . '/DataFixtures/',
     ]);
 
     $input->setInteractive(false);
