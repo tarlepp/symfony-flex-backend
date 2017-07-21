@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "56ed3ea4503dbcf3f87012ae915bbc30",
+    "content-hash": "19328339e6c8e83adec619ec3e27e9ea",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2749,16 +2749,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.11",
+            "version": "v1.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "d1c0b0245de0d7a29242e19cec3e2f65a2a2cc64"
+                "reference": "d68d28624e3ec972d6887cca06f7df5e07ba03a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/d1c0b0245de0d7a29242e19cec3e2f65a2a2cc64",
-                "reference": "d1c0b0245de0d7a29242e19cec3e2f65a2a2cc64",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/d68d28624e3ec972d6887cca06f7df5e07ba03a9",
+                "reference": "d68d28624e3ec972d6887cca06f7df5e07ba03a9",
                 "shasum": ""
             },
             "require": {
@@ -2791,7 +2791,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2017-07-03T12:27:59+00:00"
+            "time": "2017-07-21T08:31:17+00:00"
         },
         {
             "name": "symfony/form",
