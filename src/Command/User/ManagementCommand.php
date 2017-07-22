@@ -69,9 +69,7 @@ class ManagementCommand extends Command
     {
         $this->io = new SymfonyStyle($input, $output);
 
-        $command = $this->ask();
-
-        while ($command) {
+        while ($command = $this->ask()) {
             $arguments = [
                 'command'   => $command,
             ];
@@ -80,8 +78,6 @@ class ManagementCommand extends Command
 
             $cmd = $this->getApplication()->find($command);
             $cmd->run($input, $output);
-
-            $command = $this->ask();
         }
 
         if ($input->isInteractive()) {
@@ -102,6 +98,6 @@ class ManagementCommand extends Command
             true
         );
 
-        return \array_values(\array_flip(self::$choices))[$index];
+        return \array_values(\array_flip(self::$choices))[(int)$index];
     }
 }
