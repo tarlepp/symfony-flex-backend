@@ -67,6 +67,7 @@ class EditUserCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->io = new SymfonyStyle($input, $output);
+        $this->io->write(\sprintf("\033\143"));
 
         $userFound = false;
 

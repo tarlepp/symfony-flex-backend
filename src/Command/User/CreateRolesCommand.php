@@ -81,6 +81,7 @@ class CreateRolesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->io = new SymfonyStyle($input, $output);
+        $this->io->write(\sprintf("\033\143"));
 
         // Create defined roles to database
         \array_map([$this, 'createRole'], $this->roles->getRoles());
