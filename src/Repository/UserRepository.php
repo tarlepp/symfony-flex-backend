@@ -143,4 +143,32 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
     {
         return $this->getEntityName() === $class || \is_subclass_of($class, $this->getEntityName());
     }
+
+    /**
+     * Method to check if specified username is available or not.
+     *
+     * @param string      $username
+     * @param string|null $id
+     *
+     * @return bool
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function isUsernameAvailable(string $username, string $id = null): bool
+    {
+        // Build query
+        $query = $this
+            ->createQueryBuilder('u')
+            ->select('u')
+            ->where('u.username = :username')
+            ->setParameter('username', $username);
+
+        if ($id !== null) {
+            $query
+                ->andWhere('u.id <> :id')
+                ->setParameter('id', $id);
+        }
+
+        return $query->getQuery()->getOneOrNullResult() === null;
+    }
 }
