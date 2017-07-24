@@ -14,6 +14,7 @@ use App\Utils\Tests\PHPUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Validator\ConstraintValidatorInterface;
 
 /**
  * Class IntegrityTest
@@ -206,6 +207,26 @@ class IntegrityTest extends KernelTestCase
         );
 
         static::assertTrue(\class_exists($dataTransformerTestClass), $message);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatValidatorConstraintsHaveIntegrationTest
+     *
+     * @param string $validatorTestClass
+     * @param string $validatorClass
+     */
+    public function testThatValidatorConstraintsHaveIntegrationTest(
+        string $validatorTestClass,
+        string $validatorClass
+    ): void
+    {
+        $message = \sprintf(
+            'Validator \'%s\' doesn\'t have required test class \'%s\'.',
+            $validatorClass,
+            $validatorTestClass
+        );
+
+        static::assertTrue(\class_exists($validatorTestClass), $message);
     }
 
     /**
@@ -609,6 +630,54 @@ class IntegrityTest extends KernelTestCase
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return $reflectionClass->implementsInterface(ControllerInterface::class);
+        };
+
+        $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
+            $file = $reflectionClass->getFileName();
+
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map(
+            $formatter,
+            \array_filter(
+                \array_map(
+                    $iterator,
+                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                ),
+                $filter
+            )
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/Validator/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\Validator\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Validator\\';
+
+        $iterator = function (string $file) use ($folder, $namespace) {
+            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new \ReflectionClass($repositoryClass);
+        };
+
+        $filter = function (\ReflectionClass $reflectionClass) {
+            return $reflectionClass->implementsInterface(ConstraintValidatorInterface::class);
         };
 
         $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
