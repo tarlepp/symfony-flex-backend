@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Security\Core\User\User as CoreUser;
 
 /**
  * Class UserRepositoryTest
@@ -28,19 +29,8 @@ class UserRepositoryTest extends KernelTestCase
      */
     private $repository;
 
-    public function setUp(): void
+    public static function tearDownAfterClass(): void
     {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$kernel->getContainer()->get(UserRepository::class);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
         $application = new Application(static::$kernel);
 
         $command = new LoadDataFixturesDoctrineCommand();
@@ -56,6 +46,15 @@ class UserRepositoryTest extends KernelTestCase
         $input->setInteractive(false);
 
         $command->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
+    }
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$kernel->getContainer()->get(UserRepository::class);
     }
 
     /**
@@ -87,6 +86,17 @@ class UserRepositoryTest extends KernelTestCase
         static::assertSame($user->getId(), $this->repository->refreshUser($user)->getId());
     }
 
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
+     * @expectedExceptionMessage Instance of "Symfony\Component\Security\Core\User\User" is not supported.
+     */
+    public function testThatRefreshUserThrowsAnExceptionIfUserClassIsNotSupported(): void
+    {
+        $user = new CoreUser('test', 'password');
+
+        $this->repository->refreshUser($user);
+    }
+
     public function testThatCountAdvancedReturnsExpected(): void
     {
         static::assertSame(5, $this->repository->countAdvanced());
@@ -104,10 +114,38 @@ class UserRepositoryTest extends KernelTestCase
         static::assertCount(4, $this->repository->findIds([], ['or' => 'john-']));
     }
 
+    /**
+     * @depends testThatIsUsernameAvailableMethodReturnsExpected
+     */
     public function testThatResetMethodDeletesAllRecords(): void
     {
         $this->repository->reset();
 
         self::assertSame(0, $this->repository->countAdvanced());
+    }
+
+    public function testThatIsUsernameAvailableMethodReturnsExpected(): void
+    {
+        $iterator = function (User $user, bool $expected) {
+            return [
+                $expected,
+                $user->getUsername(),
+                $expected ? $user->getId() : null,
+            ];
+        };
+
+        $users = $this->repository->findAll();
+
+        $data = \array_merge(
+            \array_map($iterator, $users, \array_fill(0, \count($users), true)),
+            \array_map($iterator, $users, \array_fill(0, \count($users), false))
+        );
+
+        foreach ($data as $set) {
+            [$expected, $username, $id] = $set;
+
+            /** @noinspection DisconnectedForeachInstructionInspection */
+            self::assertSame($expected, $this->repository->isUsernameAvailable($username, $id));
+        }
     }
 }
