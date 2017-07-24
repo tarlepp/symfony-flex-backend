@@ -10,6 +10,7 @@ namespace App\Entity;
 use App\Security\Roles;
 use App\Security\RolesInterface;
 use App\Utils\JSON;
+use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class User
+ *
+ * @AppAssert\UniqueUsername()
  *
  * @ORM\Table(
  *      name="user",
