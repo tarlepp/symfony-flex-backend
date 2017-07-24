@@ -27,19 +27,8 @@ class RoleRepositoryTest extends KernelTestCase
      */
     private $repository;
 
-    public function setUp(): void
+    public static function tearDownAfterClass(): void
     {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$kernel->getContainer()->get(RoleRepository::class);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
         $application = new Application(static::$kernel);
 
         $command = new LoadDataFixturesDoctrineCommand();
@@ -55,6 +44,15 @@ class RoleRepositoryTest extends KernelTestCase
         $input->setInteractive(false);
 
         $command->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
+    }
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$kernel->getContainer()->get(RoleRepository::class);
     }
 
     public function testThatResetMethodDeletesAllRecords(): void
