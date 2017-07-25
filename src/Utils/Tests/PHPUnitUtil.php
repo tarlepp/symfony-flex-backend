@@ -170,6 +170,10 @@ class PHPUnitUtil
             $type = 'CustomClass';
         }
 
+        if (\strpos($type, '|') !== false) {
+            return self::getValidValueForType(\explode('|', $type)[0], $meta);
+        }
+
         switch ($type) {
             case 'CustomClass':
                 $value = new $class();
@@ -213,6 +217,10 @@ class PHPUnitUtil
     {
         if ($type !== \stdClass::class && \substr_count($type, '\\') > 1) {
             $type = 'CustomClass';
+        }
+
+        if (\strpos($type, '|') !== false) {
+            return self::getInvalidValueForType(\explode('|', $type)[0]);
         }
 
         switch ($type) {
