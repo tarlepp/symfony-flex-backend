@@ -284,8 +284,9 @@ class ResponseHandlerTest extends ContainerTestCase
 
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
+     * @expectedExceptionMessage Field 'foo': test error
      */
-    public function testThatHandleFormErrorThrowsExpectedException(): void
+    public function testThatHandleFormErrorThrowsExpectedExceptionWithProperty(): void
     {
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $serializer
@@ -314,6 +315,54 @@ class ResponseHandlerTest extends ContainerTestCase
             ->expects(static::once())
             ->method('getOrigin')
             ->willReturn($formInterface);
+
+        $formError
+            ->expects(static::once())
+            ->method('getMessage')
+            ->willReturn('test error');
+
+        $testClass = new ResponseHandler($serializer);
+        $testClass->handleFormError($formInterface);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
+     * @expectedExceptionMessage test error
+     */
+    public function testThatHandleFormErrorThrowsExpectedExceptionWithoutProperty(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $serializer
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface       $formInterface
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormError           $formError
+         */
+        $serializer = $this->createMock(SerializerInterface::class);
+        $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
+        $formError = $this->createMock(FormError::class);
+
+        // Create FormErrorIterator
+        $formErrorIterator = new FormErrorIterator($formInterface, [$formError]);
+
+        $formInterface
+            ->expects(static::once())
+            ->method('getErrors')
+            ->withAnyParameters()
+            ->willReturn($formErrorIterator);
+
+        $formInterface
+            ->expects(static::once())
+            ->method('getName')
+            ->willReturn('');
+
+        $formError
+            ->expects(static::once())
+            ->method('getOrigin')
+            ->willReturn($formInterface);
+
+        $formError
+            ->expects(static::once())
+            ->method('getMessage')
+            ->willReturn('test error');
 
         $testClass = new ResponseHandler($serializer);
         $testClass->handleFormError($formInterface);

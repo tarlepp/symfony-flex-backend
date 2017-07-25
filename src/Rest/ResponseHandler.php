@@ -181,11 +181,17 @@ final class ResponseHandler implements ResponseHandlerInterface
         $errors = [];
 
         foreach ($form->getErrors(true) as $error) {
-            $errors[] = \sprintf(
-                'Field \'%s\': %s',
-                $error->getOrigin()->getName(),
-                $error->getMessage()
-            );
+            $name = $error->getOrigin()->getName();
+
+            if (empty($name)) {
+                $errors[] = $error->getMessage();
+            } else {
+                $errors[] = \sprintf(
+                    'Field \'%s\': %s',
+                    $name,
+                    $error->getMessage()
+                );
+            }
         }
 
         throw new HttpException(Response::HTTP_BAD_REQUEST, \implode("\n", $errors));
