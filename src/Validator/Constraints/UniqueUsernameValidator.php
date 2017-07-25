@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Validator\Constraints;
 
-use App\Entity\User;
+use App\Entity\UserInterface;
 use App\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Validator\Constraint;
@@ -43,7 +43,7 @@ class UniqueUsernameValidator extends ConstraintValidator
      *
      * @throws  NonUniqueResultException
      *
-     * @param User                      $value      The value that should be validated
+     * @param UserInterface             $value      The value that should be validated
      * @param Constraint|UniqueUsername $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint): void
