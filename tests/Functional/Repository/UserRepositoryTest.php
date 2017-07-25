@@ -148,4 +148,29 @@ class UserRepositoryTest extends KernelTestCase
             self::assertSame($expected, $this->repository->isUsernameAvailable($username, $id));
         }
     }
+
+    public function testThatIsEmailAvailableMethodReturnsExpected(): void
+    {
+        $iterator = function (User $user, bool $expected) {
+            return [
+                $expected,
+                $user->getEmail(),
+                $expected ? $user->getId() : null,
+            ];
+        };
+
+        $users = $this->repository->findAll();
+
+        $data = \array_merge(
+            \array_map($iterator, $users, \array_fill(0, \count($users), true)),
+            \array_map($iterator, $users, \array_fill(0, \count($users), false))
+        );
+
+        foreach ($data as $set) {
+            [$expected, $email, $id] = $set;
+
+            /** @noinspection DisconnectedForeachInstructionInspection */
+            self::assertSame($expected, $this->repository->isEmailAvailable($email, $id));
+        }
+    }
 }
