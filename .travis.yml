@@ -23,6 +23,7 @@ matrix:
 before_install:
   - cp .env.travis .env
   - cp .env.travis .env.test
+  - mysql -e 'CREATE DATABASE travis;'
 
 install:
   - composer install
