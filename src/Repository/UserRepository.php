@@ -171,4 +171,32 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
 
         return $query->getQuery()->getOneOrNullResult() === null;
     }
+
+    /**
+     * Method to check if specified email is available or not.
+     *
+     * @param string      $email Email to check
+     * @param string|null $id    User id to ignore
+     *
+     * @return bool
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function isEmailAvailable(string $email, string $id = null): bool
+    {
+        // Build query
+        $query = $this
+            ->createQueryBuilder('u')
+            ->select('u')
+            ->where('u.email = :email')
+            ->setParameter('email', $email);
+
+        if ($id !== null) {
+            $query
+                ->andWhere('u.id <> :id')
+                ->setParameter('id', $id);
+        }
+
+        return $query->getQuery()->getOneOrNullResult() === null;
+    }
 }
