@@ -17,6 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class User
  *
+ * @AppAssert\UniqueEmail()
  * @AppAssert\UniqueUsername()
  *
  * @package App\Rest\DTO
