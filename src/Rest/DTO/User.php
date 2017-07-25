@@ -10,16 +10,25 @@ namespace App\Rest\DTO;
 use App\Entity\User as UserEntity;
 use App\Entity\EntityInterface;
 use App\Entity\UserGroup as UserGroupEntity;
+use App\Entity\UserInterface;
+use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class User
  *
+ * @AppAssert\UniqueUsername()
+ *
  * @package App\Rest\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class User extends RestDto
+class User extends RestDto implements UserInterface
 {
+    /**
+     * @var string|null
+     */
+    private $id;
+
     /**
      * @var string
      *
@@ -69,6 +78,28 @@ class User extends RestDto
      * @Assert\Length(groups={"Create"}, min = 2, max = 255)
      */
     private $password = '';
+
+    /**
+     * @return null|string
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param null|string $id
+     *
+     * @return User
+     */
+    public function setId(string $id = null): User
+    {
+        $this->setVisited('id');
+
+        $this->id = $id;
+
+        return $this;
+    }
 
     /**
      * @return string
@@ -224,6 +255,7 @@ class User extends RestDto
             return $group->getId();
         };
 
+        $this->id = $entity->getId();
         $this->username = $entity->getUsername();
         $this->firstname = $entity->getFirstname();
         $this->surname = $entity->getSurname();

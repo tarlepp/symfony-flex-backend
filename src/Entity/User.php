@@ -10,20 +10,21 @@ namespace App\Entity;
 use App\Security\Roles;
 use App\Security\RolesInterface;
 use App\Utils\JSON;
-use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Security\Core\User\EquatableInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class User
  *
- * @AppAssert\UniqueUsername()
+ * @AssertCollection\UniqueEntity("email")
+ * @AssertCollection\UniqueEntity("username")
  *
  * @ORM\Table(
  *      name="user",
@@ -39,7 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class User implements UserInterface, EquatableInterface, \Serializable, EntityInterface
+class User implements CoreUserInterface, EquatableInterface, \Serializable, EntityInterface, UserInterface
 {
     private $rolesService;
 
@@ -506,11 +507,11 @@ class User implements UserInterface, EquatableInterface, \Serializable, EntityIn
      * Also implementation should consider that $user instance may implement
      * the extended user interface `AdvancedUserInterface`.
      *
-     * @param UserInterface|User $user
+     * @param CoreUserInterface|User $user
      *
      * @return bool
      */
-    public function isEqualTo(UserInterface $user): bool
+    public function isEqualTo(CoreUserInterface $user): bool
     {
         return $user->getId() === $this->getId();
     }
