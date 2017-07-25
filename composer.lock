@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "130a891c3e53fa50a628fee8064e95fb",
+    "content-hash": "9949c421f4e5fafb8444cc0352a7fde6",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -916,16 +916,16 @@
         },
         {
             "name": "exsyst/swagger",
-            "version": "v0.2.4",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GuilhemN/swagger.git",
-                "reference": "5626b604c482042bdfc8b9e241641aa1f02df7eb"
+                "reference": "b3d6310990fc8d3c59b5ec9339070f0c33664f7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GuilhemN/swagger/zipball/5626b604c482042bdfc8b9e241641aa1f02df7eb",
-                "reference": "5626b604c482042bdfc8b9e241641aa1f02df7eb",
+                "url": "https://api.github.com/repos/GuilhemN/swagger/zipball/b3d6310990fc8d3c59b5ec9339070f0c33664f7c",
+                "reference": "b3d6310990fc8d3c59b5ec9339070f0c33664f7c",
                 "shasum": ""
             },
             "require": {
@@ -951,7 +951,7 @@
                 }
             ],
             "description": "A php library to manipulate Swagger specifications",
-            "time": "2017-06-25T07:32:59+00:00"
+            "time": "2017-07-25T08:15:44+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1303,16 +1303,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "7e46cc88998ea587b7ede481ec3dfdd362f47c6b"
+                "reference": "bb14c85179c1a490accf41de59eacd61a935069c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/7e46cc88998ea587b7ede481ec3dfdd362f47c6b",
-                "reference": "7e46cc88998ea587b7ede481ec3dfdd362f47c6b",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/bb14c85179c1a490accf41de59eacd61a935069c",
+                "reference": "bb14c85179c1a490accf41de59eacd61a935069c",
                 "shasum": ""
             },
             "require": {
-                "exsyst/swagger": "~0.2.3",
+                "exsyst/swagger": "~0.3",
                 "php": "~7.0|~7.1",
                 "symfony/framework-bundle": "^3.2.5|^4.0",
                 "symfony/property-info": "^3.1|^4.0",
@@ -1322,6 +1322,7 @@
                 "api-platform/core": "^2.0.3",
                 "doctrine/annotations": "^1.2",
                 "friendsofsymfony/rest-bundle": "^2.0",
+                "jms/serializer-bundle": "^1.0|^2.0",
                 "phpdocumentor/reflection-docblock": "^3.1",
                 "sensio/framework-extra-bundle": "^3.0",
                 "symfony/asset": "^2.8|^3.0|^4.0",
@@ -1374,7 +1375,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-07-11T17:41:54+00:00"
+            "time": "2017-07-25T09:26:14+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -6596,16 +6597,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.0.4",
+            "version": "v4.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc"
+                "reference": "6a3b0c3b42e41c777b1ad75032d8177863fdc5e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/9e69eddf3bc49d1ee5c7908564da3141796d4bbc",
-                "reference": "9e69eddf3bc49d1ee5c7908564da3141796d4bbc",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/6a3b0c3b42e41c777b1ad75032d8177863fdc5e1",
+                "reference": "6a3b0c3b42e41c777b1ad75032d8177863fdc5e1",
                 "shasum": ""
             },
             "require": {
@@ -6637,7 +6638,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2017-03-31T14:50:32+00:00"
+            "time": "2017-07-24T11:42:56+00:00"
         },
         {
             "name": "symfony/browser-kit",
