@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/tarlepp/symfony-flex-backend.png?branch=master)](https://travis-ci.org/tarlepp/symfony-flex-backend)
 [![Coverage Status](https://coveralls.io/repos/github/tarlepp/symfony-flex-backend/badge.svg?branch=master)](https://coveralls.io/github/tarlepp/symfony-flex-backend?branch=master)
 
-Simple JSON API which is build on top of [Symfony](https://symfony.com/) framework.
+JSON REST API which is build on top of [Symfony](https://symfony.com/) framework.
 
 Note that this project is built with [Symfony Flex](https://github.com/symfony/flex), although this project is using 
 latest stable packages, but note that we're going to update Symfony itself to `4.x.x` as soon as possible.
@@ -159,6 +159,9 @@ $ ./vendor/bin/phpmetrics --report-html=build/phpmetrics .
 ```
 
 And after that open `build/phpmetrics/index.html` with your favorite browser.
+
+# Structure
+todo
 
 # Links / resources
 * [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
