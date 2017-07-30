@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9949c421f4e5fafb8444cc0352a7fde6",
+    "content-hash": "5ca1b46bdc61aa482959236040802657",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -5164,16 +5164,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v3.0.6",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "0808939f81c1347a3c8a82a5925385a08074b0f1"
+                "reference": "4d4896e553f2094e657fe493506dc37c509d4e2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/0808939f81c1347a3c8a82a5925385a08074b0f1",
-                "reference": "0808939f81c1347a3c8a82a5925385a08074b0f1",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4d4896e553f2094e657fe493506dc37c509d4e2b",
+                "reference": "4d4896e553f2094e657fe493506dc37c509d4e2b",
                 "shasum": ""
             },
             "require": {
@@ -5211,7 +5211,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2017-06-28T20:53:48+00:00"
+            "time": "2017-07-28T14:45:09+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -6597,16 +6597,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.0.5",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "6a3b0c3b42e41c777b1ad75032d8177863fdc5e1"
+                "reference": "cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/6a3b0c3b42e41c777b1ad75032d8177863fdc5e1",
-                "reference": "6a3b0c3b42e41c777b1ad75032d8177863fdc5e1",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f",
+                "reference": "cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f",
                 "shasum": ""
             },
             "require": {
@@ -6619,7 +6619,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -6638,7 +6638,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2017-07-24T11:42:56+00:00"
+            "time": "2017-07-28T18:31:05+00:00"
         },
         {
             "name": "symfony/browser-kit",
