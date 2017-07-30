@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use App\Security\Roles;
 use App\Security\RolesInterface;
 use App\Utils\JSON;
@@ -42,6 +43,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements CoreUserInterface, EquatableInterface, \Serializable, EntityInterface, UserInterface
 {
+    // Traits
+    use Timestampable;
+
+    /**
+     * @var RolesInterface
+     */
     private $rolesService;
 
     /**
