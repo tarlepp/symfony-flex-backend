@@ -23,6 +23,7 @@
         "ramsey/uuid": "3.6.1",
         "roave/security-advisories": "dev-master",
         "sensio/framework-extra-bundle": "3.0.26",
+        "stof/doctrine-extensions-bundle": "1.2.2",
         "symfony/asset": "3.3.5",
         "symfony/console": "3.3.5",
         "symfony/expression-language": "3.3.5",
