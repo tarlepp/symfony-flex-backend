@@ -14,4 +14,5 @@ return [
     'Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle' => ['dev' => true, 'test' => true],
     'Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle' => ['all' => true],
     'Nelmio\ApiDocBundle\NelmioApiDocBundle' => ['all' => true],
+    'Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle' => ['all' => true],
 ];
