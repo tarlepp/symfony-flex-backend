@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Entity\Traits;
 
+use App\Entity\EntityInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -61,9 +62,10 @@ trait Timestampable
      * Sets createdAt.
      *
      * @param \DateTime $createdAt
-     * @return $this
+     *
+     * @return EntityInterface|$this
      */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setCreatedAt(\DateTime $createdAt): EntityInterface
     {
         $this->createdAt = $createdAt;
 
@@ -85,9 +87,9 @@ trait Timestampable
      *
      * @param \DateTime $updatedAt
      *
-     * @return $this
+     * @return EntityInterface|$this
      */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt): EntityInterface
     {
         $this->updatedAt = $updatedAt;
 
