@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
+use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Security\Roles;
 use App\Security\RolesInterface;
@@ -44,6 +45,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements CoreUserInterface, EquatableInterface, \Serializable, EntityInterface, UserInterface
 {
     // Traits
+    use Blameable;
     use Timestampable;
 
     /**

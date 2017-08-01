@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Entity;
 
+use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -33,6 +34,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Role extends BaseRole implements EntityInterface
 {
     // Traits
+    use Blameable;
     use Timestampable;
 
     /**
