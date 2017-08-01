@@ -33,5 +33,7 @@ class RoleRepositoryTest extends RepositoryTestCase
      */
     protected $associations = [
         'userGroups',
+        'createdBy',
+        'updatedBy',
     ];
 }
