@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "24d8d7e2fbeb981426be5e2bf084bc0a",
+    "content-hash": "8b37eebbe9e49a33703adf96ba8da158",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1856,16 +1856,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.6.1",
+            "version": "3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "4ae32dd9ab8860a4bbd750ad269cba7f06f7934e"
+                "reference": "0ef23d1b10cf1bc576e9d865a7e9c47982c5715e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/4ae32dd9ab8860a4bbd750ad269cba7f06f7934e",
-                "reference": "4ae32dd9ab8860a4bbd750ad269cba7f06f7934e",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/0ef23d1b10cf1bc576e9d865a7e9c47982c5715e",
+                "reference": "0ef23d1b10cf1bc576e9d865a7e9c47982c5715e",
                 "shasum": ""
             },
             "require": {
@@ -1934,7 +1934,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2017-03-26T20:37:53+00:00"
+            "time": "2017-08-04T13:39:04+00:00"
         },
         {
             "name": "roave/security-advisories",
