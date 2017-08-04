@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "518d7a1d125c989b1871d46cc6c4c073",
+    "content-hash": "f8ab772dfedfeda8253161fb4513407d",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1425,12 +1425,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "bb14c85179c1a490accf41de59eacd61a935069c"
+                "reference": "e4009b4f64a77d419b3560292c126a331ce6304c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/bb14c85179c1a490accf41de59eacd61a935069c",
-                "reference": "bb14c85179c1a490accf41de59eacd61a935069c",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/e4009b4f64a77d419b3560292c126a331ce6304c",
+                "reference": "e4009b4f64a77d419b3560292c126a331ce6304c",
                 "shasum": ""
             },
             "require": {
@@ -1497,7 +1497,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-07-25T09:26:14+00:00"
+            "time": "2017-08-04T08:36:46+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -5971,29 +5971,29 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.4.11",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "e03f8f67534427a787e21a385a67ec3ca6978ea7"
+                "reference": "ecb0b2cdaa0add708fe6f329ef65ae0c5225130b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/e03f8f67534427a787e21a385a67ec3ca6978ea7",
-                "reference": "e03f8f67534427a787e21a385a67ec3ca6978ea7",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/ecb0b2cdaa0add708fe6f329ef65ae0c5225130b",
+                "reference": "ecb0b2cdaa0add708fe6f329ef65ae0c5225130b",
                 "shasum": ""
             },
             "require": {
                 "ext-tokenizer": "*",
-                "php": ">=5.3.3"
+                "php": "^7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.2"
+                "phpunit/phpunit": "^6.2.4"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -6016,7 +6016,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-02-27T10:12:30+00:00"
+            "time": "2017-08-03T14:17:41+00:00"
         },
         {
             "name": "phpunit/phpunit",
@@ -6104,16 +6104,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "4.0.3",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "ecefcd79159785826d02ccb76c8ab23c8dee8616"
+                "reference": "2f789b59ab89669015ad984afa350c4ec577ade0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/ecefcd79159785826d02ccb76c8ab23c8dee8616",
-                "reference": "ecefcd79159785826d02ccb76c8ab23c8dee8616",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/2f789b59ab89669015ad984afa350c4ec577ade0",
+                "reference": "2f789b59ab89669015ad984afa350c4ec577ade0",
                 "shasum": ""
             },
             "require": {
@@ -6159,7 +6159,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2017-08-03T12:45:52+00:00"
+            "time": "2017-08-03T14:08:16+00:00"
         },
         {
             "name": "satooshi/php-coveralls",
@@ -6780,16 +6780,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.1.2",
+            "version": "v4.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "9c7bfbc7be32781d39f8e262744f7fb0c410df67"
+                "reference": "7d60f01b9a56dfd152796877d009b1a0578d6ef4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/9c7bfbc7be32781d39f8e262744f7fb0c410df67",
-                "reference": "9c7bfbc7be32781d39f8e262744f7fb0c410df67",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/7d60f01b9a56dfd152796877d009b1a0578d6ef4",
+                "reference": "7d60f01b9a56dfd152796877d009b1a0578d6ef4",
                 "shasum": ""
             },
             "require": {
@@ -6821,7 +6821,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2017-08-02T07:52:06+00:00"
+            "time": "2017-08-03T12:24:05+00:00"
         },
         {
             "name": "symfony/browser-kit",
