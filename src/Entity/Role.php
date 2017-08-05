@@ -67,7 +67,6 @@ class Role extends BaseRole implements EntityInterface
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\UserGroup",
      *      mappedBy="role",
-     *      cascade={"all"},
      *  )
      */
     private $userGroups;

@@ -184,7 +184,6 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      * @ORM\ManyToMany(
      *      targetEntity="UserGroup",
      *      inversedBy="users",
-     *      cascade={"all"},
      *  )
      * @ORM\JoinTable(
      *      name="user_has_user_group"

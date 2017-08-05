@@ -67,7 +67,6 @@ class UserGroup implements EntityInterface
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\Role",
      *      inversedBy="userGroups",
-     *      cascade={"all"},
      *  )
      * @ORM\JoinColumns({
      *      @ORM\JoinColumn(
@@ -110,7 +109,6 @@ class UserGroup implements EntityInterface
      * @ORM\ManyToMany(
      *      targetEntity="User",
      *      mappedBy="userGroups",
-     *      cascade={"all"},
      *  )
      * @ORM\JoinTable(
      *      name="user_has_user_group"
