@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace App\Rest;
 
 use App\Rest\DTO\RestDtoInterface;
-use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * Class Controller
