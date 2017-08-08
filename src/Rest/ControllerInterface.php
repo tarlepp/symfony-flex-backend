@@ -7,6 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Rest;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Interface ControllerInterface
  *
@@ -63,8 +65,19 @@ interface ControllerInterface
     /**
      * Method to initialize REST controller.
      *
-     * @param ResourceInterface $resource
-     * @param ResponseHandler   $responseHandler
+     * @param ResourceInterface        $resource
+     * @param ResponseHandlerInterface $responseHandler
      */
-    public function init(ResourceInterface $resource, ResponseHandler $responseHandler): void;
+    public function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void;
+
+    /**
+     * Method to validate REST trait method.
+     *
+     * @param Request $request
+     * @param array   $allowedHttpMethods
+     *
+     * @throws \LogicException
+     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     */
+    public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
 }

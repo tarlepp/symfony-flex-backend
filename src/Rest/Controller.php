@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Rest;
 
 use App\Rest\DTO\RestDtoInterface;
+use App\Rest\Traits\MethodValidator;
 
 /**
  * Class Controller
@@ -17,6 +18,9 @@ use App\Rest\DTO\RestDtoInterface;
  */
 abstract class Controller implements ControllerInterface
 {
+    // Traits
+    use MethodValidator;
+
     /**
      * Method + DTO class names (key + value)
      *
@@ -124,10 +128,10 @@ abstract class Controller implements ControllerInterface
     /**
      * Method to initialize REST controller.
      *
-     * @param ResourceInterface $resource
-     * @param ResponseHandler   $responseHandler
+     * @param ResourceInterface        $resource
+     * @param ResponseHandlerInterface $responseHandler
      */
-    public function init(ResourceInterface $resource, ResponseHandler $responseHandler): void
+    public function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void
     {
         $this->resource = $resource;
         $this->responseHandler = $responseHandler;
