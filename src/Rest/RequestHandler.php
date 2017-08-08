@@ -51,7 +51,8 @@ final class RequestHandler
         } catch (\LogicException $error) {
             throw new HttpException(
                 HttpFoundationResponse::HTTP_BAD_REQUEST,
-                'Current \'where\' parameter is not valid JSON.'
+                'Current \'where\' parameter is not valid JSON.',
+                $error
             );
         }
 
@@ -177,7 +178,7 @@ final class RequestHandler
         $output = [];
 
         if ($search !== null) {
-            $input =null;
+            $input = null;
 
             try {
                 $input = JSON::decode($search, true);
