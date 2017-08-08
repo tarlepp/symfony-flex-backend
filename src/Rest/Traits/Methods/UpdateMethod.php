@@ -20,6 +20,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method ResourceInterface getResource()
+ * @method ResponseHandlerInterface getResponseHandler()
  */
 trait UpdateMethod
 {
@@ -97,51 +100,4 @@ trait UpdateMethod
             throw new HttpException($code, $error->getMessage(), $error, [], $code);
         }
     }
-
-    /**
-     * @return ResourceInterface
-     *
-     * @throws \UnexpectedValueException
-     */
-    abstract public function getResource(): ResourceInterface;
-
-    /**
-     * @return ResponseHandlerInterface
-     *
-     * @throws \UnexpectedValueException
-     */
-    abstract public function getResponseHandler(): ResponseHandlerInterface;
-
-    /**
-     * Getter method for used DTO class for current controller.
-     *
-     * @param string|null $method
-     *
-     * @return string
-     *
-     * @throws \UnexpectedValueException
-     */
-    abstract public function getDtoClass(string $method = null): string;
-
-    /**
-     * Getter method for used DTO class for current controller.
-     *
-     * @param string|null $method
-     *
-     * @return string
-     *
-     * @throws \UnexpectedValueException
-     */
-    abstract public function getFormTypeClass(string $method = null): string;
-
-    /**
-     * Method to validate REST trait method.
-     *
-     * @param Request $request
-     * @param array   $allowedHttpMethods
-     *
-     * @throws \LogicException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     */
-    abstract public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
 }

@@ -21,6 +21,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method ResourceInterface getResource()
+ * @method ResponseHandlerInterface getResponseHandler()
  */
 trait CountMethod
 {
@@ -79,27 +82,4 @@ trait CountMethod
             throw new HttpException($code, $error->getMessage(), $error, [], $code);
         }
     }
-
-    /**
-     * Getter method for resource service.
-     *
-     * @return ResourceInterface
-     */
-    abstract public function getResource(): ResourceInterface;
-
-    /**
-     * @return ResponseHandlerInterface
-     */
-    abstract public function getResponseHandler(): ResponseHandlerInterface;
-
-    /**
-     * Method to validate REST trait method.
-     *
-     * @param Request $request
-     * @param array   $allowedHttpMethods
-     *
-     * @throws \LogicException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     */
-    abstract public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
 }
