@@ -11,6 +11,7 @@ use App\Rest\DTO\RestDtoInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\PatchMethod;
+use App\Tests\Integration\Rest\Traits\Methods\src\PatchMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\PatchMethodTestClass;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -35,17 +36,18 @@ class PatchMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var PatchMethod $mock */
-        $mock = $this->getMockForTrait(PatchMethod::class);
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock
+         * @var \PHPUnit_Framework_MockObject_MockObject|PatchMethodInvalidTestClass $testClass
+         */
+        $testClass = $this->getMockForAbstractClass(PatchMethodInvalidTestClass::class);
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
 
         $uuid = Uuid::uuid4()->toString();
 
         $request = Request::create('/' . $uuid, 'PATCH');
 
-        $mock->patchMethod($request, $formFactoryMock, 'some-id');
+        $testClass->patchMethod($request, $formFactoryMock, 'some-id');
     }
 
     /**

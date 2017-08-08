@@ -11,6 +11,7 @@ use App\Entity\EntityInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\FindOneMethod;
+use App\Tests\Integration\Rest\Traits\Methods\src\FindOneMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindOneMethodTestClass;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -33,14 +34,14 @@ class FindOneMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var FindOneMethod $mock */
-        $mock = $this->getMockForTrait(FindOneMethod::class);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|FindOneMethodInvalidTestClass $testClass */
+        $testClass = $this->getMockForAbstractClass(FindOneMethodInvalidTestClass::class);
 
         $uuid = Uuid::uuid4()->toString();
 
         $request = Request::create('/' . $uuid);
 
-        $mock->findOneMethod($request, 'some-id');
+        $testClass->findOneMethod($request, 'some-id');
     }
 
     /**

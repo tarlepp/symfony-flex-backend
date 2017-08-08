@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Rest\Traits\Methods;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\IdsMethod;
+use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodTestClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +31,12 @@ class IdsMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var IdsMethod $mock */
-        $mock = $this->getMockForTrait(IdsMethod::class);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|IdsMethodInvalidTestClass $testClass */
+        $testClass = $this->getMockForAbstractClass(IdsMethodInvalidTestClass::class);
+
         $request = Request::create('/');
 
-        $mock->idsMethod($request);
+        $testClass->idsMethod($request);
     }
 
     /**

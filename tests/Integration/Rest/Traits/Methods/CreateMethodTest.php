@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Rest\Traits\Methods;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use App\Rest\Traits\Methods\CreateMethod;
+use App\Tests\Integration\Rest\Traits\Methods\src\CreateMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\CreateMethodTestClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -32,15 +32,16 @@ class CreateMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var CreateMethod $mock */
-        $mock = $this->getMockForTrait(CreateMethod::class);
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock
+         * @var \PHPUnit_Framework_MockObject_MockObject|CreateMethodInvalidTestClass $testClass
+         */
+        $testClass = $this->getMockForAbstractClass(CreateMethodInvalidTestClass::class);
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
 
         $request = Request::create('/');
 
-        $mock->createMethod($request, $formFactoryMock);
+        $testClass->createMethod($request, $formFactoryMock);
     }
 
     /**

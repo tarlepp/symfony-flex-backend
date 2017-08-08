@@ -11,6 +11,7 @@ use App\Rest\ControllerInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\FindMethod;
+use App\Rest\Traits\MethodValidator;
 
 /**
  * Class FindMethodTestClass - just a dummy class so that we can actually test that trait.
@@ -21,6 +22,7 @@ use App\Rest\Traits\Methods\FindMethod;
 abstract class FindMethodTestClass implements ControllerInterface
 {
     use FindMethod;
+    use MethodValidator;
 
     /**
      * FindMethodTestClass constructor.

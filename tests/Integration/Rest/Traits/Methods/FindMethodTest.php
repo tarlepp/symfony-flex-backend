@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Rest\Traits\Methods;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\FindMethod;
+use App\Tests\Integration\Rest\Traits\Methods\src\FindMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindMethodTestClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,11 +31,12 @@ class FindMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var FindMethod $mock */
-        $mock = $this->getMockForTrait(FindMethod::class);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|FindMethodInvalidTestClass $testClass */
+        $testClass = $this->getMockForAbstractClass(FindMethodInvalidTestClass::class);
+
         $request = Request::create('/');
 
-        $mock->findMethod($request);
+        $testClass->findMethod($request);
     }
 
     /**

@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Rest\Traits\Methods\src;
 use App\Rest\ControllerInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
+use App\Rest\Traits\MethodValidator;
 use App\Rest\Traits\Methods\PatchMethod;
 
 /**
@@ -21,6 +22,7 @@ use App\Rest\Traits\Methods\PatchMethod;
 abstract class PatchMethodTestClass implements ControllerInterface
 {
     use PatchMethod;
+    use MethodValidator;
 
     /**
      * PatchMethodTestClass constructor.

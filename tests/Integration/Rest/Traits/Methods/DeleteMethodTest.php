@@ -10,7 +10,7 @@ namespace Integration\Rest\Traits\Methods;
 use App\Entity\EntityInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use App\Rest\Traits\Methods\DeleteMethod;
+use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodTestClass;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -33,14 +33,14 @@ class DeleteMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var DeleteMethod $mock */
-        $mock = $this->getMockForTrait(DeleteMethod::class);
+        /** @var \PHPUnit_Framework_MockObject_MockObject|DeleteMethodInvalidTestClass $testClass */
+        $testClass = $this->getMockForAbstractClass(DeleteMethodInvalidTestClass::class);
 
         $uuid = Uuid::uuid4()->toString();
 
         $request = Request::create('/' . $uuid, 'DELETE');
 
-        $mock->deleteMethod($request, 'some-id');
+        $testClass->deleteMethod($request, 'some-id');
     }
 
     /**

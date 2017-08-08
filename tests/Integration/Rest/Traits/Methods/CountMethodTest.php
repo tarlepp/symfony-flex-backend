@@ -9,7 +9,7 @@ namespace App\Tests\Integration\Rest\Traits\Methods;
 
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use App\Rest\Traits\Methods\CountMethod;
+use App\Tests\Integration\Rest\Traits\Methods\src\CountMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\CountMethodTestClass;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -32,11 +32,12 @@ class CountMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var CountMethod $mock */
-        $mock = $this->getMockForTrait(CountMethod::class);
+        /** @var CountMethodInvalidTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        $testClass = $this->getMockForAbstractClass(CountMethodInvalidTestClass::class);
+
         $request = Request::create('/');
 
-        $mock->countMethod($request);
+        $testClass->countMethod($request);
     }
 
     /**

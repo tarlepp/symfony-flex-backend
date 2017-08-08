@@ -13,6 +13,7 @@ use App\Rest\DTO\RestDtoInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
+use App\Tests\Integration\Rest\Traits\Methods\src\UpdateMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\UpdateMethodTestClass;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -39,17 +40,18 @@ class UpdateMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var UpdateMethod $mock */
-        $mock = $this->getMockForTrait(UpdateMethod::class);
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock
+         * @var \PHPUnit_Framework_MockObject_MockObject|UpdateMethodInvalidTestClass $testClass
+         */
+        $testClass = $this->getMockForAbstractClass(UpdateMethodInvalidTestClass::class);
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
 
         $uuid = Uuid::uuid4()->toString();
 
         $request = Request::create('/' . $uuid, 'PUT');
 
-        $mock->updateMethod($request, $formFactoryMock, 'some-id');
+        $testClass->updateMethod($request, $formFactoryMock, 'some-id');
     }
 
     /**
