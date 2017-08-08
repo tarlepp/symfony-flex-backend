@@ -65,6 +65,8 @@ class ApiDocDescriber implements DescriberInterface
      * @param RouterInterface    $router
      * @param ContainerInterface $container
      * @param \Twig_Environment  $templateEngine
+     *
+     * @throws \Doctrine\Common\Annotations\AnnotationException
      */
     public function __construct(
         RouterInterface $router,
