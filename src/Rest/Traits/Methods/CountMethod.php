@@ -7,7 +7,6 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits\Methods;
 
-use App\Rest\ControllerInterface;
 use App\Rest\RequestHandler;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
@@ -16,7 +15,6 @@ use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 /**
  * Trait CountMethod
@@ -43,19 +41,7 @@ trait CountMethod
         $allowedHttpMethods = $allowedHttpMethods ?? ['GET'];
 
         // Make sure that we have everything we need to make this work
-        if (!($this instanceof ControllerInterface)) {
-            $message = \sprintf(
-                'You cannot use \'%s\' within controller class that does not implement \'%s\'',
-                self::class,
-                ControllerInterface::class
-            );
-
-            throw new \LogicException($message);
-        }
-
-        if (!\in_array($request->getMethod(), $allowedHttpMethods, true)) {
-            throw new MethodNotAllowedHttpException($allowedHttpMethods);
-        }
+        $this->validateRestMethod($request, $allowedHttpMethods);
 
         // Determine used parameters
         $search = RequestHandler::getSearchTerms($request);
@@ -105,4 +91,15 @@ trait CountMethod
      * @return ResponseHandlerInterface
      */
     abstract public function getResponseHandler(): ResponseHandlerInterface;
+
+    /**
+     * Method to validate REST trait method.
+     *
+     * @param Request $request
+     * @param array   $allowedHttpMethods
+     *
+     * @throws \LogicException
+     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     */
+    abstract public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
 }
