@@ -1,9 +1,18 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="ArgumentEqualsDefaultValueInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ArrayCastingEquivalentInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="BadExceptionsProcessingInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ClassConstantCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ComparisonOperandsOrderInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="ConstantCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DefaultValueInElseBranchInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DegradedSwitchInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DisallowWritingIntoStaticPropertiesInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DisconnectedForeachInstructionInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="EfferentObjectCouplingInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ElvisOperatorCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="EmptyClassInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ForgottenDebugOutputInspection" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="configuration">
@@ -27,17 +36,41 @@
       </option>
       <option name="migratedIntoUserSpace" value="true" />
     </inspection_tool>
+    <inspection_tool class="GenericObjectTypeUsageInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="IfReturnReturnSimplificationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="InvertedIfElseConstructsInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="LowPerformanceArrayUniqueUsageInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MoreThanThreeArgumentsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="limit" value="6" />
     </inspection_tool>
     <inspection_tool class="MultipleReturnStatementsInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NullCoalescingOperatorCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="OffsetOperationsInspection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="OnlyWritesOnParameterInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PackedHashtableOptimizationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ParameterDefaultValueIsNotNullInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PdoApiUsageInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpAssignmentReplaceableWithOperatorAssignmentInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpAssignmentReplaceableWithPrefixExpressionInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingDocCommentInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingParentCallCommonInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingStrictTypesDeclarationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="StaticLocalVariablesUsageInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
-    <inspection_tool class="UnqualifiedReferenceInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PropertyInitializationFlawsInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ReturnTypeCanBeDeclaredInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SequentialUnSetCallsInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ShortListSyntaxCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="StaticLocalVariablesUsageInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="StrTrUsageAsStrReplaceInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="StringCaseManipulationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="StringNormalizationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SubStrUsedAsStrPosInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="TernaryOperatorSimplifyInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ThrowRawExceptionInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="TypeUnsafeArraySearchInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnqualifiedReferenceInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnusedConstructorDependenciesInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="UnusedGotoLabelInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="UselessUnsetInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="UsingInclusionReturnValueInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
   </profile>
 </component>
