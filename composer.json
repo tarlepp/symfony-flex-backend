@@ -28,7 +28,7 @@
         "symfony/config": "3.3.x-dev",
         "symfony/console": "3.3.6",
         "symfony/expression-language": "3.3.6",
-        "symfony/flex": "1.0.14",
+        "symfony/flex": "1.0.15",
         "symfony/form": "3.3.6",
         "symfony/framework-bundle": "3.3.6",
         "symfony/monolog-bundle": "3.1.0",
