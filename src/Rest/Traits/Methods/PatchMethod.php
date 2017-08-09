@@ -55,7 +55,7 @@ trait PatchMethod
         try {
             $data = $this
                 ->getResource()
-                ->update($id, $this->processForm($request, $formFactory, __METHOD__, $id)->getData());
+                ->update($id, $this->processForm($request, $formFactory, __METHOD__, $id)->getData(), true);
 
             return $this
                 ->getResponseHandler()

@@ -193,6 +193,7 @@ interface ResourceInterface
      * specified repository.
      *
      * @param RestDtoInterface $dto
+     * @param bool|null        $skipValidation
      *
      * @return EntityInterface
      *
@@ -201,13 +202,14 @@ interface ResourceInterface
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function create(RestDtoInterface $dto): EntityInterface;
+    public function create(RestDtoInterface $dto, bool $skipValidation = null): EntityInterface;
 
     /**
      * Generic method to update specified entity with new data.
      *
      * @param string           $id
      * @param RestDtoInterface $dto
+     * @param bool|null        $skipValidation
      *
      * @return EntityInterface
      *
@@ -219,7 +221,7 @@ interface ResourceInterface
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function update(string $id, RestDtoInterface $dto): EntityInterface;
+    public function update(string $id, RestDtoInterface $dto, bool $skipValidation = null): EntityInterface;
 
     /**
      * Generic method to delete specified entity from database.

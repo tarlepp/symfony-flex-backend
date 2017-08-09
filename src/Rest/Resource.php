@@ -368,6 +368,7 @@ abstract class Resource implements ResourceInterface
      * specified repository.
      *
      * @param RestDtoInterface $dto
+     * @param bool|null        $skipValidation
      *
      * @return EntityInterface
      *
@@ -376,10 +377,14 @@ abstract class Resource implements ResourceInterface
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function create(RestDtoInterface $dto): EntityInterface
+    public function create(RestDtoInterface $dto, bool $skipValidation = null): EntityInterface
     {
+        $skipValidation = $skipValidation ?? false;
+
         // Validate DTO
-        $this->validateDto($dto);
+        if (!$skipValidation) {
+            $this->validateDto($dto);
+        }
 
         // Determine entity name
         $entity = $this->getRepository()->getClassName();
@@ -408,6 +413,7 @@ abstract class Resource implements ResourceInterface
      *
      * @param string           $id
      * @param RestDtoInterface $dto
+     * @param bool|null        $skipValidation
      *
      * @return EntityInterface
      *
@@ -419,8 +425,10 @@ abstract class Resource implements ResourceInterface
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function update(string $id, RestDtoInterface $dto): EntityInterface
+    public function update(string $id, RestDtoInterface $dto, bool $skipValidation = null): EntityInterface
     {
+        $skipValidation = $skipValidation ?? false;
+
         // Fetch entity
         $entity = $this->getEntity($id);
 
@@ -437,7 +445,9 @@ abstract class Resource implements ResourceInterface
         $restDto->patch($dto);
 
         // Validate DTO
-        $this->validateDto($restDto);
+        if (!$skipValidation) {
+            $this->validateDto($restDto);
+        }
 
         // Before callback method call
         $this->beforeUpdate($id, $restDto, $entity);

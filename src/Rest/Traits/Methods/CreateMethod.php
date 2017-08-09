@@ -53,7 +53,7 @@ trait CreateMethod
         try {
             $data = $this
                 ->getResource()
-                ->create($this->processForm($request, $formFactory, __METHOD__)->getData());
+                ->create($this->processForm($request, $formFactory, __METHOD__)->getData(), true);
 
             return $this
                 ->getResponseHandler()
