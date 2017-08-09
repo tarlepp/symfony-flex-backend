@@ -13,7 +13,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Trait CreateMethod
@@ -82,14 +81,8 @@ trait CreateMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, $this->getResource()->create($form->getData()), Response::HTTP_CREATED);
-        } catch (\Exception $error) {
-            if ($error instanceof HttpException) {
-                throw $error;
-            }
-
-            $code = $error->getCode() !== 0 ? $error->getCode() : Response::HTTP_BAD_REQUEST;
-
-            throw new HttpException($code, $error->getMessage(), $error, [], $code);
+        } catch (\Exception $exception) {
+            throw $this->handleRestMethodException($exception);
         }
     }
 }

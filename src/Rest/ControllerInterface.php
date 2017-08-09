@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Rest;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Interface ControllerInterface
@@ -80,4 +81,15 @@ interface ControllerInterface
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
+
+    /**
+     * Method to handle possible REST method trait exception.
+     *
+     * @param \Exception $exception
+     *
+     * @return HttpException
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function handleRestMethodException(\Exception $exception): HttpException;
 }

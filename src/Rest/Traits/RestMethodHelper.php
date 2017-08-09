@@ -8,7 +8,11 @@ declare(strict_types=1);
 namespace App\Rest\Traits;
 
 use App\Rest\ControllerInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 /**
@@ -44,5 +48,35 @@ trait RestMethodHelper
         if (!\in_array($request->getMethod(), $allowedHttpMethods, true)) {
             throw new MethodNotAllowedHttpException($allowedHttpMethods);
         }
+    }
+
+    /**
+     * Method to handle possible REST method trait exception.
+     *
+     * @param \Exception $exception
+     *
+     * @return HttpException
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    public function handleRestMethodException(\Exception $exception): HttpException
+    {
+        if ($exception instanceof HttpException) {
+            $output = $exception;
+        } elseif ($exception instanceof NoResultException) {
+            $code = Response::HTTP_NOT_FOUND;
+
+            $output = new HttpException($code, 'Not found', $exception, [], $code);
+        } elseif ($exception instanceof NonUniqueResultException) {
+            $code = Response::HTTP_INTERNAL_SERVER_ERROR;
+
+            $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
+        } else {
+            $code = $exception->getCode() !== 0 ? $exception->getCode() : Response::HTTP_BAD_REQUEST;
+
+            $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
+        }
+
+        return $output;
     }
 }

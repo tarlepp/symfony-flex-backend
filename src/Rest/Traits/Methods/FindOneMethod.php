@@ -11,7 +11,6 @@ use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Trait FindOneMethod
@@ -49,14 +48,8 @@ trait FindOneMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, $this->getResource()->findOne($id, true));
-        } catch (\Exception $error) {
-            if ($error instanceof HttpException) {
-                throw $error;
-            }
-
-            $code = $error->getCode() !== 0 ? $error->getCode() : Response::HTTP_BAD_REQUEST;
-
-            throw new HttpException($code, $error->getMessage(), $error, [], $code);
+        } catch (\Exception $exception) {
+            throw $this->handleRestMethodException($exception);
         }
     }
 }

@@ -10,11 +10,8 @@ namespace App\Rest\Traits\Methods;
 use App\Rest\RequestHandler;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Trait CountMethod
@@ -60,26 +57,8 @@ trait CountMethod
                 ->getResponseHandler()
                 ->createResponse($request, ['count' => $this->getResource()->count($criteria, $search)]
             );
-        } catch (\Exception $error) {
-            if ($error instanceof HttpException) {
-                throw $error;
-            }
-
-            if ($error instanceof NoResultException) {
-                $code = Response::HTTP_NOT_FOUND;
-
-                throw new HttpException($code, 'Not found', $error, [], $code);
-            }
-
-            if ($error instanceof NonUniqueResultException) {
-                $code = Response::HTTP_INTERNAL_SERVER_ERROR;
-
-                throw new HttpException($code, $error->getMessage(), $error, [], $code);
-            }
-
-            $code = $error->getCode() !== 0 ? $error->getCode() : Response::HTTP_BAD_REQUEST;
-
-            throw new HttpException($code, $error->getMessage(), $error, [], $code);
+        } catch (\Exception $exception) {
+            throw $this->handleRestMethodException($exception);
         }
     }
 }

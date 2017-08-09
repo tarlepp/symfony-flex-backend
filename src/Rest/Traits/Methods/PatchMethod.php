@@ -13,7 +13,6 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Trait PatchMethod
@@ -37,13 +36,12 @@ trait PatchMethod
      * @return Response
      *
      * @throws \LogicException
-     * @throws \UnexpectedValueException
      * @throws \Symfony\Component\Form\Exception\LogicException
      * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
     public function patchMethod(
         Request $request,
@@ -90,14 +88,8 @@ trait PatchMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, $this->getResource()->update($id, $form->getData()));
-        } catch (\Exception $error) {
-            if ($error instanceof HttpException) {
-                throw $error;
-            }
-
-            $code = $error->getCode() !== 0 ? $error->getCode() : Response::HTTP_BAD_REQUEST;
-
-            throw new HttpException($code, $error->getMessage(), $error, [], $code);
+        } catch (\Exception $exception) {
+            throw $this->handleRestMethodException($exception);
         }
     }
 }
