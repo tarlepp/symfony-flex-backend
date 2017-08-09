@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest\Traits\Methods\src;
 
 use App\Rest\Traits\Methods\CreateMethod;
-use App\Rest\Traits\MethodValidator;
+use App\Rest\Traits\RestMethodHelper;
 
 /**
  * Class CreateMethodInvalidTestClass - just a dummy class so that we can actually test that trait.
@@ -19,5 +19,5 @@ use App\Rest\Traits\MethodValidator;
 abstract class CreateMethodInvalidTestClass
 {
     use CreateMethod;
-    use MethodValidator;
+    use RestMethodHelper;
 }

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Rest;
 
 use App\Rest\DTO\RestDtoInterface;
-use App\Rest\Traits\MethodValidator;
+use App\Rest\Traits\RestMethodHelper;
 
 /**
  * Class Controller
@@ -19,7 +19,7 @@ use App\Rest\Traits\MethodValidator;
 abstract class Controller implements ControllerInterface
 {
     // Traits
-    use MethodValidator;
+    use RestMethodHelper;
 
     /**
      * Method + DTO class names (key + value)

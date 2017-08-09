@@ -11,7 +11,7 @@ use App\Rest\ControllerInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\CountMethod;
-use App\Rest\Traits\MethodValidator;
+use App\Rest\Traits\RestMethodHelper;
 
 /**
  * Class CountMethodTestClass - just a dummy class so that we can actually test that trait.
@@ -22,7 +22,7 @@ use App\Rest\Traits\MethodValidator;
 abstract class CountMethodTestClass implements ControllerInterface
 {
     use CountMethod;
-    use MethodValidator;
+    use RestMethodHelper;
 
     /**
      * CountMethodTestClass constructor.

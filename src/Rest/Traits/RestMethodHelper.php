@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-trait MethodValidator
+trait RestMethodHelper
 {
     /**
      * Method to validate REST trait method.

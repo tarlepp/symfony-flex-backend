@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Rest\Traits\Methods\src;
 use App\Rest\ControllerInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use App\Rest\Traits\MethodValidator;
+use App\Rest\Traits\RestMethodHelper;
 use App\Rest\Traits\Methods\UpdateMethod;
 
 /**
@@ -22,7 +22,7 @@ use App\Rest\Traits\Methods\UpdateMethod;
 abstract class UpdateMethodTestClass implements ControllerInterface
 {
     use UpdateMethod;
-    use MethodValidator;
+    use RestMethodHelper;
 
     /**
      * UpdateMethodTestClass constructor.

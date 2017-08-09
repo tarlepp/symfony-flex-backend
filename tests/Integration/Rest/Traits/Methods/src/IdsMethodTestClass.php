@@ -11,7 +11,7 @@ use App\Rest\ControllerInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\IdsMethod;
-use App\Rest\Traits\MethodValidator;
+use App\Rest\Traits\RestMethodHelper;
 
 /**
  * Class IdsMethodTestClass - just a dummy class so that we can actually test that trait.
@@ -22,7 +22,7 @@ use App\Rest\Traits\MethodValidator;
 abstract class IdsMethodTestClass implements ControllerInterface
 {
     use IdsMethod;
-    use MethodValidator;
+    use RestMethodHelper;
 
     /**
      * FindMethodTestClass constructor.

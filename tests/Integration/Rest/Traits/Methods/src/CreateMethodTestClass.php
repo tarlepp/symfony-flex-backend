@@ -11,7 +11,7 @@ use App\Rest\ControllerInterface;
 use App\Rest\ResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\CreateMethod;
-use App\Rest\Traits\MethodValidator;
+use App\Rest\Traits\RestMethodHelper;
 
 /**
  * Class CreateMethodTestClass - just a dummy class so that we can actually test that trait.
@@ -22,7 +22,7 @@ use App\Rest\Traits\MethodValidator;
 abstract class CreateMethodTestClass implements ControllerInterface
 {
     use CreateMethod;
-    use MethodValidator;
+    use RestMethodHelper;
 
     /**
      * FindMethodTestClass constructor.

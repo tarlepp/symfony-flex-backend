@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest\Traits\Methods\src;
 
-use App\Rest\Traits\MethodValidator;
+use App\Rest\Traits\RestMethodHelper;
 use App\Rest\Traits\Methods\PatchMethod;
 
 /**
@@ -19,5 +19,5 @@ use App\Rest\Traits\Methods\PatchMethod;
 abstract class PatchMethodInvalidTestClass
 {
     use PatchMethod;
-    use MethodValidator;
+    use RestMethodHelper;
 }
