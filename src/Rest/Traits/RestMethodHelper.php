@@ -8,8 +8,12 @@ declare(strict_types=1);
 namespace App\Rest\Traits;
 
 use App\Rest\ControllerInterface;
+use App\Rest\ResourceInterface;
+use App\Rest\ResponseHandlerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -20,6 +24,9 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
  *
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method ResourceInterface getResource()
+ * @method ResponseHandlerInterface getResponseHandler()
  */
 trait RestMethodHelper
 {
@@ -78,5 +85,46 @@ trait RestMethodHelper
         }
 
         return $output;
+    }
+
+    /**
+     * Method to process POST, PUT and PATCH action form within REST traits.
+     *
+     * @param Request              $request
+     * @param FormFactoryInterface $formFactory
+     * @param string               $method
+     * @param string|null          $id
+     *
+     * @return FormInterface
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws \Symfony\Component\Form\Exception\LogicException
+     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
+     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function processForm(
+        Request $request,
+        FormFactoryInterface $formFactory,
+        string $method,
+        string $id = null
+    ): FormInterface
+    {
+        $formType = $this->getFormTypeClass($method);
+
+        // Create form, load possible entity data for form and handle request
+        $form = $formFactory->createNamed('', $formType, null, ['method' => $request->getMethod()]);
+
+        if ($id !== null) {
+            $form->setData($this->getResource()->getDtoForEntity($id, $form->getConfig()->getDataClass()));
+        }
+
+        $form->handleRequest($request);
+
+        if (!$form->isValid()) {
+            $this->getResponseHandler()->handleFormError($form);
+        }
+
+        return $form;
     }
 }

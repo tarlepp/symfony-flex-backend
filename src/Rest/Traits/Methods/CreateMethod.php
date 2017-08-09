@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @method ResourceInterface getResource()
  * @method ResponseHandlerInterface getResponseHandler()
+ * @method FormInterface processForm()
  */
 trait CreateMethod
 {
@@ -35,10 +36,8 @@ trait CreateMethod
      * @return Response
      *
      * @throws \LogicException
-     * @throws \UnexpectedValueException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
     public function createMethod(
         Request $request,
@@ -51,36 +50,14 @@ trait CreateMethod
         // Make sure that we have everything we need to make this work
         $this->validateRestMethod($request, $allowedHttpMethods);
 
-        /**
-         * Lambda function to create form.
-         *
-         * @param Request              $request
-         * @param FormFactoryInterface $formFactory
-         * @param string               $method
-         *
-         * @return FormInterface
-         */
-        $createForm = function (Request $request, FormFactoryInterface $formFactory, string $method): FormInterface
-        {
-            $formType = $this->getFormTypeClass($method);
-
-            // Create form and handle request
-            $form = $formFactory->createNamed('', $formType, null, ['method' => $request->getMethod()]);
-            $form->handleRequest($request);
-
-            return $form;
-        };
-
         try {
-            $form = $createForm($request, $formFactory, __METHOD__);
-
-            if (!$form->isValid()) {
-                $this->getResponseHandler()->handleFormError($form);
-            }
+            $data = $this
+                ->getResource()
+                ->create($this->processForm($request, $formFactory, __METHOD__)->getData());
 
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, $this->getResource()->create($form->getData()), Response::HTTP_CREATED);
+                ->createResponse($request, $data, Response::HTTP_CREATED);
         } catch (\Exception $exception) {
             throw $this->handleRestMethodException($exception);
         }

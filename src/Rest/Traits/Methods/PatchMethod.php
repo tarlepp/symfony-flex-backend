@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @method ResourceInterface getResource()
  * @method ResponseHandlerInterface getResponseHandler()
+ * @method FormInterface processForm()
  */
 trait PatchMethod
 {
@@ -36,12 +37,8 @@ trait PatchMethod
      * @return Response
      *
      * @throws \LogicException
-     * @throws \Symfony\Component\Form\Exception\LogicException
-     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
     public function patchMethod(
         Request $request,
@@ -55,39 +52,14 @@ trait PatchMethod
         // Make sure that we have everything we need to make this work
         $this->validateRestMethod($request, $allowedHttpMethods);
 
-        /**
-         * Lambda function to create form.
-         *
-         * @param Request              $request
-         * @param FormFactoryInterface $formFactory
-         * @param string               $id
-         * @param string               $method
-         *
-         * @return FormInterface
-         */
-        $createForm = function (Request $request, FormFactoryInterface $formFactory, string $id, string $method): FormInterface
-        {
-            $formType = $this->getFormTypeClass($method);
-
-            // Create form, load entity data for form and handle request
-            $form = $formFactory->createNamed('', $formType, null, ['method' => $request->getMethod()]);
-            $form->setData($this->getResource()->getDtoForEntity($id, $form->getConfig()->getDataClass()));
-
-            $form->handleRequest($request);
-
-            return $form;
-        };
-
         try {
-            $form = $createForm($request, $formFactory, $id, __METHOD__);
-
-            if (!$form->isValid()) {
-                $this->getResponseHandler()->handleFormError($form);
-            }
+            $data = $this
+                ->getResource()
+                ->update($id, $this->processForm($request, $formFactory, __METHOD__, $id)->getData());
 
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, $this->getResource()->update($id, $form->getData()));
+                ->createResponse($request, $data);
         } catch (\Exception $exception) {
             throw $this->handleRestMethodException($exception);
         }
