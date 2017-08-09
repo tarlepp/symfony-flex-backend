@@ -66,14 +66,6 @@ interface ControllerInterface
     public function getFormTypeClass(string $method = null): string;
 
     /**
-     * Method to initialize REST controller.
-     *
-     * @param ResourceInterface        $resource
-     * @param ResponseHandlerInterface $responseHandler
-     */
-    public function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void;
-
-    /**
      * Method to validate REST trait method.
      *
      * @param Request $request

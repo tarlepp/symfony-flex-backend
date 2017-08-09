@@ -131,7 +131,7 @@ abstract class Controller implements ControllerInterface
      * @param ResourceInterface        $resource
      * @param ResponseHandlerInterface $responseHandler
      */
-    public function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void
+    protected function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void
     {
         $this->resource = $resource;
         $this->responseHandler = $responseHandler;
