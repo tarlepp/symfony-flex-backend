@@ -29,7 +29,7 @@ class DeleteMethodTest extends KernelTestCase
 {
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp /You cannot use '.*' within controller class that does not implement 'App\\Rest\\ControllerInterface'/
+     * @expectedExceptionMessageRegExp /You cannot use '.*' controller class with REST traits if that does not implement 'App\\Rest\\ControllerInterface'/
      */
     public function testThatTraitThrowsAnException():void
     {

@@ -44,8 +44,8 @@ trait RestMethodHelper
         // Make sure that we have everything we need to make this work
         if (!($this instanceof ControllerInterface)) {
             $message = \sprintf(
-                'You cannot use \'%s\' within controller class that does not implement \'%s\'',
-                self::class,
+                'You cannot use \'%s\' controller class with REST traits if that does not implement \'%s\'',
+                \get_class($this),
                 ControllerInterface::class
             );
 
