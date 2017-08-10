@@ -12,4 +12,4 @@ global_exclude_dirs:
 # issue: install libraries, prepare the database, etc.
 pre_composer_script: |
     #!/bin/bash
-    cp env.dist env.yml
+    cp ./.env.dist ./.env.yml
