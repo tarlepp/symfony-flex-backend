@@ -36,8 +36,6 @@ final class RequestHandler
      *  Note that with advanced usage you can easily use everything that App\Repository\Base::getExpression method
      *  supports - and that is basically 99% that you need on advanced search criteria.
      *
-     * TODO create an example of advanced usage.
-     *
      * @param HttpFoundationRequest $request
      *
      * @return array
