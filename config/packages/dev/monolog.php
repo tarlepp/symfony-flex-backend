@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use EasyCorp\EasyLog\EasyLogHandler;
 use Symfony\Component\Config\Resource\ClassExistenceResource;
 use Symfony\Component\Console\Application;
 
@@ -11,6 +12,12 @@ $handlers = [
         'level'     => 'debug',
         'channels'  => ['!event'],
     ],
+    'buffered' => [
+        'type'      => 'buffer',
+        'handler'   => 'easylog',
+        'channels'  => ['!event'],
+        'level'     => 'debug',
+    ],
     'firephp' => [
         'type'  => 'firephp',
         'level' => 'info',
@@ -19,6 +26,11 @@ $handlers = [
         'type'  => 'chromephp',
         'level' => 'info',
     ],
+    'easylog' => [
+        'type'  => 'service',
+        'id'    => EasyLogHandler::class,
+    ],
+
 ];
 
 $container->addResource(new ClassExistenceResource(Application::class));
@@ -34,3 +46,4 @@ if (class_exists(Application::class)) {
 $container->loadFromExtension('monolog', [
     'handlers' => $handlers,
 ]);
+
