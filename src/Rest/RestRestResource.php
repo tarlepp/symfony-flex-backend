@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 abstract class RestRestResource implements RestResourceInterface
 {
     // Attach generic life cycle traits
-    use Traits\Resource;
+    use Traits\RestResource;
 
     /**
      * @var Repository|EntityRepository

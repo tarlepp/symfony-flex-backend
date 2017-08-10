@@ -16,7 +16,7 @@ use App\Rest\DTO\RestDtoInterface;
  * @package App\Rest\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-trait Resource
+trait RestResource
 {
     /**
      * Before lifecycle method for find method.
