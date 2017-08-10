@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/Resource.php
+ * /src/Rest/RestResource.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class Resource implements ResourceInterface
+abstract class RestRestResource implements RestResourceInterface
 {
     // Attach generic life cycle traits
     use Traits\Resource;
@@ -61,9 +61,9 @@ abstract class Resource implements ResourceInterface
      *
      * @param Repository $repository
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function setRepository(Repository $repository): ResourceInterface
+    public function setRepository(Repository $repository): RestResourceInterface
     {
         $this->repository = $repository;
 
@@ -85,9 +85,9 @@ abstract class Resource implements ResourceInterface
      *
      * @param ValidatorInterface $validator
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function setValidator(ValidatorInterface $validator): ResourceInterface
+    public function setValidator(ValidatorInterface $validator): RestResourceInterface
     {
         $this->validator = $validator;
 
@@ -120,9 +120,9 @@ abstract class Resource implements ResourceInterface
      *
      * @param string $dtoClass
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function setDtoClass(string $dtoClass): ResourceInterface
+    public function setDtoClass(string $dtoClass): RestResourceInterface
     {
         $this->dtoClass = $dtoClass;
 
@@ -155,9 +155,9 @@ abstract class Resource implements ResourceInterface
      *
      * @param string $formTypeClass
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function setFormTypeClass(string $formTypeClass): ResourceInterface
+    public function setFormTypeClass(string $formTypeClass): RestResourceInterface
     {
         $this->formTypeClass = $formTypeClass;
 

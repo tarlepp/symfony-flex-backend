@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\IdsMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodInvalidTestClass;
@@ -48,7 +48,7 @@ class IdsMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
@@ -65,7 +65,7 @@ class IdsMethodTest extends KernelTestCase
 
     public function testThatTraitCallsProcessCriteriaIfItExists(): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
@@ -98,7 +98,7 @@ class IdsMethodTest extends KernelTestCase
      */
     public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
@@ -127,7 +127,7 @@ class IdsMethodTest extends KernelTestCase
 
     public function testThatTraitCallsServiceMethods(): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */

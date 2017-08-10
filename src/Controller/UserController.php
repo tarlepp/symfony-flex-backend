@@ -70,7 +70,7 @@ class UserController extends Controller
     /**
      * UserController constructor.
      *
-     * @param UserResource   $resource
+     * @param UserResource    $resource
      * @param ResponseHandler $responseHandler
      */
     public function __construct(UserResource $resource, ResponseHandler $responseHandler)

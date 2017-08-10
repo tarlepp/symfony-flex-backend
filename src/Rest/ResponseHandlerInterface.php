@@ -45,18 +45,18 @@ interface ResponseHandlerInterface
     /**
      * Getter for current resource service
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function getResource(): ResourceInterface;
+    public function getResource(): RestResourceInterface;
 
     /**
      * Setter for resource service.
      *
-     * @param ResourceInterface $resource
+     * @param RestResourceInterface $resource
      *
      * @return ResponseHandlerInterface
      */
-    public function setResource(ResourceInterface $resource): ResponseHandlerInterface;
+    public function setResource(RestResourceInterface $resource): ResponseHandlerInterface;
 
     /**
      * Helper method to get serialization context for request.

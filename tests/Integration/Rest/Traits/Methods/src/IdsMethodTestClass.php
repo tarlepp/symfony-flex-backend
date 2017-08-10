@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest\Traits\Methods\src;
 
 use App\Rest\ControllerInterface;
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\IdsMethod;
 use App\Rest\Traits\RestMethodHelper;
@@ -27,10 +27,10 @@ abstract class IdsMethodTestClass implements ControllerInterface
     /**
      * FindMethodTestClass constructor.
      *
-     * @param ResourceInterface        $resource
+     * @param RestResourceInterface    $resource
      * @param ResponseHandlerInterface $responseHandler
      */
-    public function __construct(ResourceInterface $resource, ResponseHandlerInterface $responseHandler)
+    public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
     }
 }

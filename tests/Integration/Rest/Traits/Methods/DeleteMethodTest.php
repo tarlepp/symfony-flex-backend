@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Integration\Rest\Traits\Methods;
 
 use App\Entity\EntityInterface;
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodTestClass;
@@ -52,7 +52,7 @@ class DeleteMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var DeleteMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
@@ -77,7 +77,7 @@ class DeleteMethodTest extends KernelTestCase
      */
     public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var DeleteMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
@@ -107,7 +107,7 @@ class DeleteMethodTest extends KernelTestCase
 
     public function testThatTraitCallsServiceMethods(): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var DeleteMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */

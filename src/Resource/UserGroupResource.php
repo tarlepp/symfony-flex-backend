@@ -11,7 +11,7 @@ use App\Entity\EntityInterface;
 use App\Entity\UserGroup as Entity;
 use App\Repository\UserGroupRepository as Repository;
 use App\Rest\DTO\RestDtoInterface;
-use App\Rest\Resource;
+use App\Rest\RestRestResource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @method Entity      delete(string $id): EntityInterface
  * @method Entity      save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
  */
-class UserGroupResource extends Resource
+class UserGroupResource extends RestRestResource
 {
     /**
      * Class constructor.

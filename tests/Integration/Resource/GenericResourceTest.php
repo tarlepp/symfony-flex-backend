@@ -14,7 +14,7 @@ use App\Resource\UserResource;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\DTO\User as UserDto;
 use App\Rest\RepositoryInterface;
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Security\Roles;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -68,7 +68,7 @@ class GenericResourceTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->setDtoClass('');
         $resource->getDtoClass();
@@ -79,7 +79,7 @@ class GenericResourceTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->setDtoClass('foobar');
 
@@ -95,7 +95,7 @@ class GenericResourceTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->setFormTypeClass('');
         $resource->getFormTypeClass();
@@ -106,7 +106,7 @@ class GenericResourceTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->setFormTypeClass('foobar');
 
@@ -122,7 +122,7 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('getEntityName');
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->getEntityName();
     }
@@ -136,7 +136,7 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('getReference');
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->getReference('some id');
     }
@@ -150,7 +150,7 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('getAssociations');
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->getAssociations();
     }
@@ -171,7 +171,7 @@ class GenericResourceTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
         $dto = $this->getDtoMockBuilder()->getMock();
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
 
         static::assertInstanceOf(RestDtoInterface::class, $resource->getDtoForEntity('some id', \get_class($dto)));
@@ -195,7 +195,7 @@ class GenericResourceTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
         $dto = $this->getDtoMockBuilder()->getMock();
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->getDtoForEntity('some id', \get_class($dto));
     }
@@ -219,7 +219,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('findByAdvanced')
             ->with(...$expectedArguments);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->find(...$arguments);
     }
@@ -234,7 +234,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('find')
             ->withAnyParameters();
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->findOne('some id');
     }
@@ -254,7 +254,7 @@ class GenericResourceTest extends KernelTestCase
             ->withAnyParameters()
             ->willReturn(null);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->findOne('some id', true);
     }
@@ -272,7 +272,7 @@ class GenericResourceTest extends KernelTestCase
             ->withAnyParameters()
             ->willReturn($entity);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
 
         static::assertSame($entity, $resource->findOne('some id', true));
@@ -297,7 +297,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('findOneBy')
             ->with(...$expectedArguments);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->findOneBy(...$arguments);
     }
@@ -317,7 +317,7 @@ class GenericResourceTest extends KernelTestCase
             ->withAnyParameters()
             ->willReturn(null);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->findOneBy([], null, true);
     }
@@ -335,7 +335,7 @@ class GenericResourceTest extends KernelTestCase
             ->withAnyParameters()
             ->willReturn($entity);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
 
         static::assertSame($entity, $resource->findOneBy([], null, true));
@@ -360,7 +360,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('countAdvanced')
             ->with(...$expectedArguments);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->count(...$arguments);
     }
@@ -377,7 +377,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('save')
             ->with($entity);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
 
         static::assertSame($entity, $resource->save($entity));
@@ -393,7 +393,7 @@ class GenericResourceTest extends KernelTestCase
 
         $dto = new $this->dtoClass();
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->create($dto);
     }
@@ -422,7 +422,7 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('update');
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository, $validator);
         $resource->create($dto);
     }
@@ -444,7 +444,7 @@ class GenericResourceTest extends KernelTestCase
 
         $dto = new $this->dtoClass();
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->update('some id', $dto);
     }
@@ -480,7 +480,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('save')
             ->with($entity);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->update('some id', $dto);
     }
@@ -503,7 +503,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('remove')
             ->with($entity);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
 
         static::assertSame($entity, $resource->delete('some id'));
@@ -528,7 +528,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('findIds')
             ->with(...$expectedArguments);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->getIds(...$arguments);
     }
@@ -548,7 +548,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('save')
             ->with($entity);
 
-        /** @var ResourceInterface $resource */
+        /** @var RestResourceInterface $resource */
         $resource = $this->getResource($repository);
         $resource->save($entity);
     }

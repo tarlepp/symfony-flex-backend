@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Integration\Rest\Traits\Methods;
 
 use App\Entity\EntityInterface;
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\FindOneMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindOneMethodInvalidTestClass;
@@ -53,7 +53,7 @@ class FindOneMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var FindOneMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
@@ -78,7 +78,7 @@ class FindOneMethodTest extends KernelTestCase
      */
     public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var FindOneMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
@@ -108,7 +108,7 @@ class FindOneMethodTest extends KernelTestCase
 
     public function testThatTraitCallsServiceMethods()
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var FindOneMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */

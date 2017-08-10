@@ -30,11 +30,11 @@ interface ControllerInterface
     const METHOD_UPDATE     = 'updateMethod';
 
     /**
-     * @return ResourceInterface
+     * @return RestResourceInterface
      *
      * @throws \UnexpectedValueException
      */
-    public function getResource(): ResourceInterface;
+    public function getResource(): RestResourceInterface;
 
     /**
      * @return ResponseHandlerInterface

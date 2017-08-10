@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Rest\Traits;
 
 use App\Rest\ControllerInterface;
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method ResourceInterface getResource()
+ * @method RestResourceInterface getResource()
  * @method ResponseHandlerInterface getResponseHandler()
  */
 trait RestMethodHelper

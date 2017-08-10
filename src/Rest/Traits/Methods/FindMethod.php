@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Rest\Traits\Methods;
 
 use App\Rest\RequestHandler;
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method ResourceInterface getResource()
+ * @method RestResourceInterface getResource()
  * @method ResponseHandlerInterface getResponseHandler()
  */
 trait FindMethod

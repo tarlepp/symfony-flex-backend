@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/ResourceInterfaces.php
+ * /src/Rest/RestResourceInterfaces.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-interface ResourceInterface
+interface RestResourceInterface
 {
     /**
      * Getter method for entity repository.
@@ -32,9 +32,9 @@ interface ResourceInterface
      *
      * @param Repository $repository
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function setRepository(Repository $repository): ResourceInterface;
+    public function setRepository(Repository $repository): RestResourceInterface;
 
     /**
      * Getter for used validator.
@@ -48,9 +48,9 @@ interface ResourceInterface
      *
      * @param ValidatorInterface $validator
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function setValidator(ValidatorInterface $validator): ResourceInterface;
+    public function setValidator(ValidatorInterface $validator): RestResourceInterface;
 
     /**
      * Getter method for used DTO class for this REST service.
@@ -66,9 +66,9 @@ interface ResourceInterface
      *
      * @param string $dtoClass
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function setDtoClass(string $dtoClass): ResourceInterface;
+    public function setDtoClass(string $dtoClass): RestResourceInterface;
 
     /**
      * Getter method for used default FormType class for this REST resource.
@@ -82,9 +82,9 @@ interface ResourceInterface
      *
      * @param string $formTypeClass
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function setFormTypeClass(string $formTypeClass): ResourceInterface;
+    public function setFormTypeClass(string $formTypeClass): RestResourceInterface;
 
     /**
      * Getter method for current entity name.

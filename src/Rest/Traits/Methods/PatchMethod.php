@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits\Methods;
 
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method ResourceInterface getResource()
+ * @method RestResourceInterface getResource()
  * @method ResponseHandlerInterface getResponseHandler()
  * @method FormInterface processForm()
  */

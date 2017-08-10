@@ -9,7 +9,7 @@ namespace App\Tests\Integration\Rest;
 
 use App\Rest\Controller;
 use App\Rest\DTO\RestDtoInterface;
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use App\Utils\Tests\PHPUnitUtil;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -38,8 +38,8 @@ class ControllerTest extends KernelTestCase
 
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {
-        /** @var ResourceInterface $resource */
-        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
+        /** @var RestResourceInterface $resource */
+        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $responseHandler = new ResponseHandler(new Serializer());
 
@@ -48,7 +48,7 @@ class ControllerTest extends KernelTestCase
 
         PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
-        static::assertInstanceOf(ResourceInterface::class, $controller->getResource());
+        static::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
     }
 
     /**
@@ -64,8 +64,8 @@ class ControllerTest extends KernelTestCase
 
     public function testThatGetResponseHandlerDoesNotThrowsAnExceptionIfSet(): void
     {
-        /** @var ResourceInterface $resource */
-        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
+        /** @var RestResourceInterface $resource */
+        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $responseHandler = new ResponseHandler(new Serializer());
 
@@ -82,8 +82,8 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dtoClass */
         $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|ResourceInterface $resource */
-        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $resource
             ->expects(static::once())
@@ -106,8 +106,8 @@ class ControllerTest extends KernelTestCase
      */
     public function testThatGetDtoClassThrowsAnExceptionIfResourceDoesNotReturnExpectedClass(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|ResourceInterface $resource */
-        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $resource
             ->expects(static::once())
@@ -129,8 +129,8 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dtoClass */
         $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|ResourceInterface $resource */
-        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $responseHandler = new ResponseHandler(new Serializer());
 
@@ -155,8 +155,8 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|FormTypeInterface $formTypeClass */
         $formTypeClass = $this->getMockBuilder(FormTypeInterface::class)->getMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|ResourceInterface $resource */
-        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $resource
             ->expects(static::once())
@@ -178,8 +178,8 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|FormTypeInterface $formTypeClass */
         $formTypeClass = $this->getMockBuilder(FormTypeInterface::class)->getMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|ResourceInterface $resource */
-        $resource = $this->getMockBuilder(ResourceInterface::class)->getMock();
+        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $responseHandler = new ResponseHandler(new Serializer());
 

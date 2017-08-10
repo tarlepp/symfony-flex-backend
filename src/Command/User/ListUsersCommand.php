@@ -42,9 +42,9 @@ class ListUsersCommand extends Command
     /**
      * ListUserGroupsCommand constructor.
      *
-     * @param null|string    $name
-     * @param UserResource   $userResource
-     * @param Roles          $roles
+     * @param null|string  $name
+     * @param UserResource $userResource
+     * @param Roles        $roles
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */

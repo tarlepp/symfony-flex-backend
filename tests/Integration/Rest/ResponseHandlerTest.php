@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Tests\Integration\Rest;
 
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use App\Utils\Tests\ContainerTestCase;
 use Symfony\Component\Form\FormError;
@@ -49,8 +49,8 @@ class ResponseHandlerTest extends ContainerTestCase
     {
         $serializer = $this->getContainer()->get('serializer');
 
-        /** @var ResourceInterface|\PHPUnit_Framework_MockObject_MockObject $stubResourceService */
-        $stubResourceService = $this->createMock(ResourceInterface::class);
+        /** @var RestResourceInterface|\PHPUnit_Framework_MockObject_MockObject $stubResourceService */
+        $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $responseClass = new ResponseHandler($serializer);
         $responseClass->setResource($stubResourceService);
@@ -67,11 +67,11 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatCreateResponseThrowsAnExceptionIfSerializationFails(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|ResourceInterface   $stubResourceService
+         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
+         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
-        $stubResourceService = $this->createMock(ResourceInterface::class);
+        $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $request = Request::create('');
 
@@ -102,8 +102,8 @@ class ResponseHandlerTest extends ContainerTestCase
         $request = Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => $format]);
         $serializer = $this->getContainer()->get('serializer');
 
-        /** @var ResourceInterface|\PHPUnit_Framework_MockObject_MockObject $stubResourceService */
-        $stubResourceService = $this->createMock(ResourceInterface::class);
+        /** @var RestResourceInterface|\PHPUnit_Framework_MockObject_MockObject $stubResourceService */
+        $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $responseClass = new ResponseHandler($serializer);
         $responseClass->setResource($stubResourceService);
@@ -114,15 +114,15 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextMethodCallsExpectedServiceMethods():void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request             $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag        $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|ResourceInterface   $stubResourceService
+         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
+         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
+         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
+         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
         $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(ResourceInterface::class);
+        $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $stubParameterBag
             ->expects(static::exactly(2))
@@ -146,15 +146,15 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenEntityDoesNotHaveAnyAssociations(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface                 $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request                    $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag               $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|ResourceInterface   $stubResourceService
+         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
+         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
+         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
+         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
         $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(ResourceInterface::class);
+        $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $stubParameterBag
             ->expects(static::exactly(2))
@@ -178,15 +178,15 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenEntityDoesHaveAssociations(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface                 $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request                    $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag               $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|ResourceInterface   $stubResourceService
+         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
+         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
+         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
+         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
         $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(ResourceInterface::class);
+        $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $stubParameterBag
             ->expects(static::exactly(2))
@@ -215,15 +215,15 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityDoesNotHaveAnyAssociations(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface                 $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request                    $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag               $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|ResourceInterface   $stubResourceService
+         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
+         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
+         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
+         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
         $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(ResourceInterface::class);
+        $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $stubParameterBag
             ->expects(static::exactly(2))
@@ -247,15 +247,15 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityDoesHaveAssociations(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface                 $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request                    $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag               $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|ResourceInterface   $stubResourceService
+         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
+         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
+         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
+         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
         $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(ResourceInterface::class);
+        $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $stubParameterBag
             ->expects(static::exactly(2))

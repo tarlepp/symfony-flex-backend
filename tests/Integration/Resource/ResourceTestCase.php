@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Resource;
 
 use App\Rest\RepositoryInterface;
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -36,7 +36,7 @@ abstract class ResourceTestCase extends KernelTestCase
     protected $entityClass;
 
     /**
-     * @var ResourceInterface
+     * @var RestResourceInterface
      */
     protected $resource;
 
@@ -76,9 +76,9 @@ abstract class ResourceTestCase extends KernelTestCase
      * @param RepositoryInterface $repository
      * @param ValidatorInterface  $validator
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    protected function getResource(RepositoryInterface $repository, ValidatorInterface $validator): ResourceInterface
+    protected function getResource(RepositoryInterface $repository, ValidatorInterface $validator): RestResourceInterface
     {
         return new $this->resourceClass($repository, $validator);
     }

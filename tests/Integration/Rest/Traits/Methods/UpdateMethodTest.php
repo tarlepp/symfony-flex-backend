@@ -10,7 +10,7 @@ namespace Integration\Rest\Traits\Methods;
 use App\Entity\EntityInterface;
 use App\Rest\DTO\RestDto;
 use App\Rest\DTO\RestDtoInterface;
-use App\Rest\ResourceInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\UpdateMethodInvalidTestClass;
@@ -63,7 +63,7 @@ class UpdateMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
@@ -91,7 +91,7 @@ class UpdateMethodTest extends KernelTestCase
      */
     public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
@@ -119,7 +119,7 @@ class UpdateMethodTest extends KernelTestCase
 
     public function testThatTraitCallsServiceMethods(): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|UpdateMethodTestClass $testClass */
@@ -192,7 +192,7 @@ class UpdateMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnErrorIfFormIsInvalid(): void
     {
-        $resource = $this->createMock(ResourceInterface::class);
+        $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|UpdateMethodTestClass $testClass */

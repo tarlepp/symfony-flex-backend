@@ -37,7 +37,7 @@ final class ResponseHandler implements ResponseHandlerInterface
     private $serializer;
 
     /**
-     * @var ResourceInterface
+     * @var RestResourceInterface
      */
     private $resource;
 
@@ -64,9 +64,9 @@ final class ResponseHandler implements ResponseHandlerInterface
     /**
      * Getter for current resource service
      *
-     * @return ResourceInterface
+     * @return RestResourceInterface
      */
-    public function getResource(): ResourceInterface
+    public function getResource(): RestResourceInterface
     {
         return $this->resource;
     }
@@ -74,11 +74,11 @@ final class ResponseHandler implements ResponseHandlerInterface
     /**
      * Setter for resource service.
      *
-     * @param ResourceInterface $resource
+     * @param RestResourceInterface $resource
      *
      * @return ResponseHandlerInterface
      */
-    public function setResource(ResourceInterface $resource): ResponseHandlerInterface
+    public function setResource(RestResourceInterface $resource): ResponseHandlerInterface
     {
         $this->resource = $resource;
 

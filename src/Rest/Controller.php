@@ -36,7 +36,7 @@ abstract class Controller implements ControllerInterface
     protected static $formTypes = [];
 
     /**
-     * @var ResourceInterface
+     * @var RestResourceInterface
      */
     protected $resource;
 
@@ -46,13 +46,13 @@ abstract class Controller implements ControllerInterface
     protected $responseHandler;
 
     /**
-     * @return ResourceInterface
+     * @return RestResourceInterface
      *
      * @throws \UnexpectedValueException
      */
-    public function getResource(): ResourceInterface
+    public function getResource(): RestResourceInterface
     {
-        if (!$this->resource instanceof ResourceInterface) {
+        if (!$this->resource instanceof RestResourceInterface) {
             throw new \UnexpectedValueException('Resource service not set', 500);
         }
 
@@ -128,10 +128,10 @@ abstract class Controller implements ControllerInterface
     /**
      * Method to initialize REST controller.
      *
-     * @param ResourceInterface        $resource
+     * @param RestResourceInterface    $resource
      * @param ResponseHandlerInterface $responseHandler
      */
-    protected function init(ResourceInterface $resource, ResponseHandlerInterface $responseHandler): void
+    protected function init(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler): void
     {
         $this->resource = $resource;
         $this->responseHandler = $responseHandler;

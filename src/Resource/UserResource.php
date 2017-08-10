@@ -13,7 +13,7 @@ use App\Entity\UserGroup;
 use App\Repository\UserRepository as Repository;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\DTO\User;
-use App\Rest\Resource;
+use App\Rest\RestRestResource;
 use App\Security\Roles;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -35,7 +35,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @method Entity      delete(string $id): EntityInterface
  * @method Entity      save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
  */
-class UserResource extends Resource
+class UserResource extends RestRestResource
 {
     /**
      * @var Roles
