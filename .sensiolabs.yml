@@ -1,7 +1,3 @@
-# Configure in which directory your code is located.
-# This can be set to any subdirectory of your project.
-working_directory: src
-
 global_exclude_dirs:
     - bin
     - build
