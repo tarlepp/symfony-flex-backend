@@ -1,3 +1,7 @@
+# Configure in which directory your code is located.
+# This can be set to any subdirectory of your project.
+working_directory: src
+
 global_exclude_dirs:
     - bin
     - build
@@ -12,4 +16,4 @@ global_exclude_dirs:
 # issue: install libraries, prepare the database, etc.
 pre_composer_script: |
     #!/bin/bash
-    cp ./.env.dist ./.env.yml
+    cp ./../.env.dist ./../.env.yml
