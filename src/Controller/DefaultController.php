@@ -29,7 +29,7 @@ class DefaultController
      *
      * @throws \InvalidArgumentException
      */
-    public function index(): Response
+    public function indexAction(): Response
     {
         return new Response('', Response::HTTP_OK);
     }
