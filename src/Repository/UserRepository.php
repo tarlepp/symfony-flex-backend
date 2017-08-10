@@ -92,7 +92,7 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
         try {
             $user = $query->getSingleResult();
         } catch (NoResultException $exception) {
-            \sleep(5);
+            \usleep(5000);
 
             $this->logger ? $this->logger->error($exception) : null;
 
