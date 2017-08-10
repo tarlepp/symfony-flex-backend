@@ -257,7 +257,7 @@ class ApiDocDescriber implements DescriberInterface
             return $annotation instanceof Security;
         };
 
-        if (\count($annotations = \array_values(\array_filter($routeModel->getMethodAnnotations(), $filter))) === 1) {
+        if (\count(\array_values(\array_filter($routeModel->getMethodAnnotations(), $filter))) === 1) {
             $parameter = [
                 'type'          => 'string',
                 'name'          => 'Authorization',
