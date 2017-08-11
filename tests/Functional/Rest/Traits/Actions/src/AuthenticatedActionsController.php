@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Rest\Traits\Actions\src;
 
+use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\Authenticated as Actions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -15,6 +16,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
  * Class AuthenticatedActionsController
  *
  * @Route(path="/test_authenticated_actions")
+ *
+ * @RestApiDoc(disabled=true)
  *
  * @package App\Tests\Functional\Rest\Traits\Actions\src
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
