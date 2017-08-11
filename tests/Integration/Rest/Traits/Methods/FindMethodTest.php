@@ -114,11 +114,6 @@ class FindMethodTest extends KernelTestCase
             ->method('find')
             ->willThrowException($exception);
 
-        $testClass
-            ->expects(static::once())
-            ->method('getResource')
-            ->willReturn($resource);
-
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
@@ -151,16 +146,6 @@ class FindMethodTest extends KernelTestCase
             ->method('createResponse')
             ->withAnyParameters()
             ->willReturn($response);
-
-        $testClass
-            ->expects(static::once())
-            ->method('getResource')
-            ->willReturn($resource);
-
-        $testClass
-            ->expects(static::once())
-            ->method('getResponseHandler')
-            ->willReturn($responseHandler);
 
         $testClass->findMethod($request);
     }

@@ -115,11 +115,6 @@ class CountMethodTest extends KernelTestCase
             ->method('count')
             ->willThrowException($exception);
 
-        $testClass
-            ->expects(static::once())
-            ->method('getResource')
-            ->willReturn($resource);
-
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
@@ -152,16 +147,6 @@ class CountMethodTest extends KernelTestCase
             ->method('createResponse')
             ->withAnyParameters()
             ->willReturn($response);
-
-        $testClass
-            ->expects(static::once())
-            ->method('getResource')
-            ->willReturn($resource);
-
-        $testClass
-            ->expects(static::once())
-            ->method('getResponseHandler')
-            ->willReturn($responseHandler);
 
         $testClass->countMethod($request)->getContent();
     }

@@ -256,11 +256,6 @@ class UpdateMethodTest extends KernelTestCase
             ->method('handleFormError')
             ->willThrowException(new HttpException(400));
 
-        $testClass
-            ->expects(static::once())
-            ->method('getResponseHandler')
-            ->willReturn($responseHandler);
-
         $testClass->updateMethod($request, $formFactoryMock, $uuid);
     }
 

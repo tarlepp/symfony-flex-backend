@@ -32,5 +32,7 @@ abstract class DeleteMethodTestClass implements ControllerInterface
      */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
+        $this->resource = $resource;
+        $this->responseHandler = $responseHandler;
     }
 }
