@@ -9,7 +9,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
-use App\Form\Rest\UserGroup\UserGroupType;
+use App\Form\Type\Rest\UserGroup\UserGroupType;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Rest\Controller;

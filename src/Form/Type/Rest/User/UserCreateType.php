@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Form/Rest/User/UserUpdateType.php
+ * /src/Form/Type\Rest/User/UserCreateType.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Form\Rest\User;
+namespace App\Form\Type\Rest\User;
 
 use App\Rest\DTO\User as UserDto;
 use Symfony\Component\Form\AbstractType;
@@ -14,12 +14,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class UserUpdateType
+ * Class UserCreateType
  *
- * @package App\Form\Rest\User
+ * @package App\Form\Type\Rest\User
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserUpdateType extends AbstractType
+class UserCreateType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -82,7 +82,8 @@ class UserUpdateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => UserDto::class
+            'data_class'        => UserDto::class,
+            'validation_groups' => ['Create', 'Default'],
         ]);
     }
 }

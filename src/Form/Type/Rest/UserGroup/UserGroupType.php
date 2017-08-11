@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Form/Rest/UserGroup/UserGroupType.php
+ * /src/Form/Type/Rest/UserGroup/UserGroupType.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Form\Rest\UserGroup;
+namespace App\Form\Type\Rest\UserGroup;
 
 use App\Entity\Role as RoleEntity;
 use App\Form\DataTransformer\RoleTransformer;
@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class UserGroupType
  *
- * @package App\Form\Rest\UserGroup
+ * @package App\Form\Type\Rest\UserGroup
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroupType extends AbstractType

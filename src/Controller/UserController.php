@@ -9,9 +9,9 @@ namespace App\Controller;
 
 use App\Annotation\RestApiDoc;
 use App\Entity\User;
-use App\Form\Rest\User\UserCreateType;
-use App\Form\Rest\User\UserPatchType;
-use App\Form\Rest\User\UserUpdateType;
+use App\Form\Type\Rest\User\UserCreateType;
+use App\Form\Type\Rest\User\UserPatchType;
+use App\Form\Type\Rest\User\UserUpdateType;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\ResponseHandler;

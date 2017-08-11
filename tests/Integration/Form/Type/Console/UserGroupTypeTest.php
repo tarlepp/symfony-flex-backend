@@ -1,25 +1,26 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Form/Rest/UserGroup/UserGroupTypeTest.php
+ * /tests/Integration/Form/Type/Console/UserGroupTypeTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Form\Rest\UserGroup;
+namespace App\Tests\Integration\Form\Type\Console;
 
 use App\Entity\Role;
-use App\Form\Rest\UserGroup\UserGroupType;
+use App\Form\Type\Console\UserGroupType;
 use App\Repository\RoleRepository;
 use App\Rest\DTO\UserGroup as UserGroupDto;
 use App\Security\Roles;
 use Doctrine\Common\Persistence\ObjectManager;
+use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
  * Class UserGroupTypeTest
  *
- * @package App\Tests\Integration\Form\Rest\UserGroup
+ * @package App\Tests\Integration\Form\Type\Console
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroupTypeTest extends TypeTestCase

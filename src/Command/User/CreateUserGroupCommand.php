@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Command\User;
 
-use App\Form\Console\UserGroupType;
+use App\Form\Type\Console\UserGroupType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
 use App\Rest\DTO\UserGroup as UserGroupDto;

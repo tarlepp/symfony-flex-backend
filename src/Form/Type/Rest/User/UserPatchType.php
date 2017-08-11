@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Form/Rest/User/UserPatchType.php
+ * /src/Form/Type/Rest/User/UserPatchType.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Form\Rest\User;
+namespace App\Form\Type\Rest\User;
 
 use App\Rest\DTO\User as UserDto;
 use Symfony\Component\Form\AbstractType;
@@ -16,7 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class UserPatchType
  *
- * @package App\Form\Rest\User
+ * @package App\Form\Type\Rest\User
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserPatchType extends AbstractType

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Form/Console/UserType.php
+ * /src/Form/Type/Console/UserType.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Form\Console;
+namespace App\Form\Type\Console;
 
 use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
@@ -20,7 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class UserType
  *
- * @package App\Form\Console
+ * @package App\Form\Type\Console
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserType extends AbstractType

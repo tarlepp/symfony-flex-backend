@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Command\User;
 
-use App\Form\Console\UserType;
+use App\Form\Type\Console\UserType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;

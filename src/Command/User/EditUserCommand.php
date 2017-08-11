@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Command\User;
 
 use App\Entity\User as UserEntity;
-use App\Form\Console\UserType;
+use App\Form\Type\Console\UserType;
 use App\Resource\UserResource;
 use App\Rest\DTO\User as UserDto;
 use Symfony\Component\Console\Command\Command;

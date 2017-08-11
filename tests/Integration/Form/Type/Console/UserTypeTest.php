@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Form/Console/UserTypeTest.php
+ * /tests/Integration/Form/Type/Console/UserTypeTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Form\Console;
+namespace App\Tests\Integration\Form\Type\Console;
 
 use App\Entity\Role;
 use App\Entity\UserGroup;
-use App\Form\Console\UserType;
+use App\Form\Type\Console\UserType;
 use App\Repository\UserGroupRepository;
 use App\Resource\UserGroupResource;
 use App\Rest\DTO\User as UserDto;
@@ -21,7 +21,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 /**
  * Class UserTypeTest
  *
- * @package App\Tests\Integration\Form\Console
+ * @package App\Tests\Integration\Form\Type\Console
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserTypeTest extends TypeTestCase

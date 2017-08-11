@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Form/Console/UserGroupType.php
+ * /src/Form/Type/Console/UserGroupType.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Form\Console;
+namespace App\Form\Type\Console;
 
 use App\Entity\Role as RoleEntity;
 use App\Form\DataTransformer\RoleTransformer;
@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class UserGroupType
  *
- * @package App\Form\Console
+ * @package App\Form\Type\Console
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroupType extends AbstractType

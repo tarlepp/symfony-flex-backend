@@ -1,28 +1,28 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Form/Rest/User/UserUpdateTypeTest.php
+ * /tests/Integration/Form/Type/Rest/User/UserCreateTypeTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Form\Rest\User;
+namespace App\Tests\Integration\Form\Type\Rest\User;
 
-use App\Form\Rest\User\UserUpdateType;
+use App\Form\Type\Rest\User\UserCreateType;
 use App\Rest\DTO\User as UserDto;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
- * Class UserUpdateTypeTest
+ * Class UserCreateTypeTest
  *
- * @package App\Tests\Integration\Form\Rest\User
+ * @package App\Tests\Integration\Form\Type\Rest\User
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserUpdateTypeTest extends TypeTestCase
+class UserCreateTypeTest extends TypeTestCase
 {
     public function testSubmitValidData(): void
     {
         // Create form
-        $form = $this->factory->create(UserUpdateType::class);
+        $form = $this->factory->create(UserCreateType::class);
 
         // Create new DTO object
         $dto = new UserDto();

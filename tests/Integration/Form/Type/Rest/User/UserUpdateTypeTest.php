@@ -1,28 +1,28 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Form/Rest/User/UserPatchTypeTest.php
+ * /tests/Integration/Form/Type/Rest/User/UserUpdateTypeTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Form\Rest\User;
+namespace App\Tests\Integration\Form\Type\Rest\User;
 
-use App\Form\Rest\User\UserPatchType;
+use App\Form\Type\Rest\User\UserUpdateType;
 use App\Rest\DTO\User as UserDto;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**
- * Class UserPatchTypeTest
+ * Class UserUpdateTypeTest
  *
- * @package App\Tests\Integration\Form\Rest\User
+ * @package App\Tests\Integration\Form\Type\Rest\User
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserPatchTypeTest extends TypeTestCase
+class UserUpdateTypeTest extends TypeTestCase
 {
     public function testSubmitValidData(): void
     {
         // Create form
-        $form = $this->factory->create(UserPatchType::class);
+        $form = $this->factory->create(UserUpdateType::class);
 
         // Create new DTO object
         $dto = new UserDto();
@@ -30,6 +30,7 @@ class UserPatchTypeTest extends TypeTestCase
         $dto->setFirstname('John');
         $dto->setSurname('Doe');
         $dto->setEmail('john.doe@test.com');
+        $dto->setPassword('some password');
 
         // Specify used form data
         $formData = array(
@@ -37,6 +38,7 @@ class UserPatchTypeTest extends TypeTestCase
             'firstname'     => 'John',
             'surname'       => 'Doe',
             'email'         => 'john.doe@test.com',
+            'password'      => 'some password',
         );
 
         // submit the data to the form directly
