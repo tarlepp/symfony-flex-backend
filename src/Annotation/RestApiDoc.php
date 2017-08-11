@@ -9,16 +9,16 @@ namespace App\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 
-/** @noinspection EmptyClassInspection */
 /**
  * Class RestApiDoc
  *
  * @Annotation
- * @Annotation\Target("METHOD")
+ * @Annotation\Target({"CLASS", "METHOD"})
  *
  * @package App\Annotation
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RestApiDoc
 {
+    public $disabled = false;
 }
