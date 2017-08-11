@@ -1,11 +1,3 @@
-working_directory: src
-
-rules:
-    composer.unfixed_dependency_version:
-        enabled: false
-    web.missing_favicon:
-        enabled: false
-
 exclude_patterns:
     - public/index.php
     - config/bundles.php
@@ -18,7 +10,3 @@ global_exclude_dirs:
     - tests
     - var
     - vendor
-
-pre_composer_script: |
-    #!/bin/bash
-    cp ./../.env.dist ./../.env.yml
