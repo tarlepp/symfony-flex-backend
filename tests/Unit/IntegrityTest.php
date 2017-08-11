@@ -533,7 +533,7 @@ class IntegrityTest extends KernelTestCase
         };
 
         $filter = function (\ReflectionClass $reflectionClass) {
-            return $reflectionClass->implementsInterface(FormTypeInterface::class);
+            return !$reflectionClass->isAbstract() && $reflectionClass->implementsInterface(FormTypeInterface::class);
         };
 
         $formatter = function (\ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
