@@ -1,3 +1,5 @@
+working_directory: src
+
 rules:
     composer.unfixed_dependency_version:
         enabled: false
@@ -7,7 +9,6 @@ rules:
 exclude_patterns:
     - public/index.php
     - config/bundles.php
-    - 'var/*'
 
 global_exclude_dirs:
     - bin
@@ -20,3 +21,4 @@ global_exclude_dirs:
 
 pre_composer_script: |
     #!/bin/bash
+    cp ./../.env.dist ./../.env.yml
