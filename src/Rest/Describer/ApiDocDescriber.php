@@ -87,6 +87,9 @@ class ApiDocDescriber implements DescriberInterface
      * @throws \UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     public function describe(Swagger $api): void
     {
@@ -199,6 +202,9 @@ class ApiDocDescriber implements DescriberInterface
      * @throws \UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
      */
     private function createDocs(Operation $operation, RouteModel $routeModel): void
     {
@@ -384,42 +390,41 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param RouteModel $routeModel
      * @param Operation  $operation
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \UnexpectedValueException
      */
     private function processParameters(RouteModel $routeModel, Operation $operation): void
     {
-        $parameters = [];
-
         switch ($routeModel->getMethod()) {
             case self::COUNT_ACTION:
             case self::IDS_ACTION:
-                $parameters[] = 'addParameterSearch';
-                $parameters[] = 'addParameterCriteria';
+                $this->add404Response($operation);
+                $this->addParameterCriteria($operation);
                 break;
             case self::CREATE_ACTION:
                 break;
             case self::DELETE_ACTION:
             case self::PATCH_ACTION:
             case self::UPDATE_ACTION:
-                $parameters[] = 'changePathParameter';
+                $this->changePathParameter($operation);
                 break;
             case self::FIND_ONE_ACTION:
-                $parameters[] = 'addParameterPopulate';
-                $parameters[] = 'changePathParameter';
+                $this->addParameterPopulate($operation, $routeModel);
+                $this->changePathParameter($operation);
                 break;
             case self::FIND_ACTION:
-                $parameters[] = 'addParameterOrderBy';
-                $parameters[] = 'addParameterLimit';
-                $parameters[] = 'addParameterOffset';
-                $parameters[] = 'addParameterSearch';
-                $parameters[] = 'addParameterCriteria';
-                $parameters[] = 'addParameterPopulate';
+                $this->addParameterOrderBy($operation);
+                $this->addParameterLimit($operation);
+                $this->addParameterOffset($operation);
+                $this->addParameterSearch($operation, $routeModel);
+                $this->addParameterCriteria($operation);
+                $this->addParameterPopulate($operation, $routeModel);
                 break;
-        }
-
-        if (\count($parameters) > 0 && $this->container->has($routeModel->getController())) {
-            foreach ($parameters as $method) {
-                $this->$method($operation, $routeModel);
-            }
         }
     }
 
@@ -460,13 +465,10 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getResponses()->set(403, $response);
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
-     * @param Operation  $operation
-     * @param RouteModel $routeModel
+     * @param Operation $operation
      */
-    private function add404Response(Operation $operation, RouteModel $routeModel): void
+    private function add404Response(Operation $operation): void
     {
         $data = [
             'description' => 'Not found',
@@ -499,7 +501,6 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getResponses()->set($statusCode, $response);
     }
 
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
      * @param Operation  $operation
      * @param RouteModel $routeModel
@@ -553,17 +554,14 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getParameters()->add(new Parameter($parameter));
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
-     * @param Operation  $operation
-     * @param RouteModel $routeModel
+     * @param Operation $operation
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    private function addParameterCriteria(Operation $operation, RouteModel $routeModel): void
+    private function addParameterCriteria(Operation $operation): void
     {
         // Specify used  examples for this parameter
         static $examples = [
@@ -593,16 +591,14 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getParameters()->add(new Parameter($parameter));
     }
 
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
-     * @param Operation  $operation
-     * @param RouteModel $routeModel
+     * @param Operation $operation
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    private function addParameterOrderBy(Operation $operation, RouteModel $routeModel): void
+    private function addParameterOrderBy(Operation $operation): void
     {
         // Specify used examples for this parameter
         static $examples = [
@@ -639,17 +635,14 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getParameters()->add(new Parameter($parameter));
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
      * @param Operation  $operation
-     * @param RouteModel $routeModel
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    private function addParameterLimit(Operation $operation, RouteModel $routeModel): void
+    private function addParameterLimit(Operation $operation): void
     {
         // Specify used  examples for this parameter
         static $examples = [
@@ -676,17 +669,14 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getParameters()->add(new Parameter($parameter));
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
-     * @param Operation  $operation
-     * @param RouteModel $routeModel
+     * @param Operation $operation
      *
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    private function addParameterOffset(Operation $operation, RouteModel $routeModel): void
+    private function addParameterOffset(Operation $operation): void
     {
         // Specify used  examples for this parameter
         static $examples = [
@@ -713,8 +703,6 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getParameters()->add(new Parameter($parameter));
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
      * @param Operation  $operation
      * @param RouteModel $routeModel
@@ -772,13 +760,10 @@ class ApiDocDescriber implements DescriberInterface
         $operation->getParameters()->add(new Parameter($parameter));
     }
 
-    /** @noinspection PhpUnusedParameterInspection */
-    /** @noinspection PhpUnusedPrivateMethodInspection */
     /**
-     * @param Operation  $operation
-     * @param RouteModel $routeModel
+     * @param Operation $operation
      */
-    private function changePathParameter(Operation $operation, RouteModel $routeModel): void
+    private function changePathParameter(Operation $operation): void
     {
         /** @var Parameter $parameter */
         foreach ($operation->getParameters() as $parameter) {
