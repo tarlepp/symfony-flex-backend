@@ -62,6 +62,11 @@ class ApiDocDescriber implements DescriberInterface
     private $annotationReader;
 
     /**
+     * @var Swagger $api
+     */
+    private $api;
+
+    /**
      * @param RouterInterface    $router
      * @param ContainerInterface $container
      * @param \Twig_Environment  $templateEngine
@@ -93,6 +98,8 @@ class ApiDocDescriber implements DescriberInterface
      */
     public function describe(Swagger $api): void
     {
+        $this->api = $api;
+
         foreach ($this->getRouteModels() as $routeModel) {
             $path = $api->getPaths()->get($routeModel->getRoute()->getPath());
 
@@ -175,6 +182,22 @@ class ApiDocDescriber implements DescriberInterface
         }
 
         if ($output) {
+            [$controller] = \explode('::', $route->getDefault('_controller'));
+
+            $reflection = new \ReflectionClass($controller);
+
+            $annotations = $this->annotationReader->getClassAnnotations($reflection);
+
+            foreach ($annotations as $annotation) {
+                if ($annotation instanceof RestApiDoc && $annotation->disabled) {
+                    $output = false;
+
+                    $this->api->getPaths()->remove($route->getPath());
+                }
+            }
+        }
+
+        if ($output) {
             [$controller, $method] = \explode('::', $route->getDefault('_controller'));
 
             $reflection = new \ReflectionMethod($controller, $method);
@@ -242,11 +265,9 @@ class ApiDocDescriber implements DescriberInterface
             $annotation = $annotations[0];
 
             $tagName = $annotation->name;
-        } else { // Otherwise just fallback to controller base route
-            $tagName = $routeModel->getBaseRoute();
-        }
 
-        $data['tags'][] = $tagName;
+            $data['tags'][] = $tagName;
+        }
     }
 
     /**
@@ -296,28 +317,28 @@ class ApiDocDescriber implements DescriberInterface
 
         switch ($routeModel->getMethod()) {
             case self::COUNT_ACTION:
-                $summary = 'Endpoint action to get count of entities (%s) on this resource.';
+                $summary = 'Endpoint action to get count of entities (%s) on this resource. Base route: "%s"';
                 break;
             case self::CREATE_ACTION:
-                $summary = 'Endpoint action to create new entity (%s) to this resource.';
+                $summary = 'Endpoint action to create new entity (%s) to this resource. Base route: "%s"';
                 break;
             case self::DELETE_ACTION:
-                $summary = 'Endpoint action to delete specified entity (%s) from this resource.';
+                $summary = 'Endpoint action to delete specified entity (%s) from this resource. Base route: "%s"';
                 break;
             case self::FIND_ACTION:
-                $summary = 'Endpoint action to fetch entities (%s) from this resource.';
+                $summary = 'Endpoint action to fetch entities (%s) from this resource. Base route: "%s"';
                 break;
             case self::FIND_ONE_ACTION:
-                $summary = 'Endpoint action to fetch specified entity (%s) from this resource.';
+                $summary = 'Endpoint action to fetch specified entity (%s) from this resource. Base route: "%s"';
                 break;
             case self::IDS_ACTION:
-                $summary = 'Endpoint action to fetch entities (%s) id values from this resource.';
+                $summary = 'Endpoint action to fetch entities (%s) id values from this resource. Base route: "%s"';
                 break;
             case self::PATCH_ACTION:
-                $summary = 'Endpoint action to create patch specified entity (%s) on this resource.';
+                $summary = 'Endpoint action to create patch specified entity (%s) on this resource. Base route: "%s"';
                 break;
             case self::UPDATE_ACTION:
-                $summary = 'Endpoint action to create update specified entity (%s) on this resource.';
+                $summary = 'Endpoint action to create update specified entity (%s) on this resource. Base route: "%s"';
                 break;
         }
 
@@ -325,7 +346,11 @@ class ApiDocDescriber implements DescriberInterface
             /** @var Controller $controller */
             $controller = $this->container->get($routeModel->getController());
 
-            $operation->setSummary(\sprintf($summary, $controller->getResource()->getEntityName()));
+            $operation->setSummary(\sprintf(
+                $summary,
+                $controller->getResource()->getEntityName(),
+                $routeModel->getBaseRoute()
+            ));
         }
     }
 
