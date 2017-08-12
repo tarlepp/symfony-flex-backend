@@ -4,6 +4,10 @@ services:
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         shared: false
 
+    App\Repository\HealthzRepository:
+        parent: repository
+        arguments: [ App\Entity\Healthz ]
+
     App\Repository\RoleRepository:
         parent: repository
         arguments: [ App\Entity\Role ]
