@@ -61,7 +61,7 @@ class HealthzRepositoryTest extends KernelTestCase
 
     public function testThatReadValueMethodReturnsExpectedWithEmptyDatabase(): void
     {
-        static::assertNull($this->repository->readValue());
+        static::assertNull($this->repository->read());
     }
 
     /**
@@ -69,7 +69,7 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public function testThatCreateValueReturnsExpected(): void
     {
-        static::assertInstanceOf(Healthz::class, $this->repository->createValue());
+        static::assertInstanceOf(Healthz::class, $this->repository->create());
     }
 
     /**
@@ -77,7 +77,7 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public function testThatReadValueReturnExpectedAfterCreate(): void
     {
-        static::assertNotNull($this->repository->readValue());
+        static::assertNotNull($this->repository->read());
     }
 
     /**
