@@ -22,7 +22,9 @@ class DefaultControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/');
 
-        static::assertSame(200, $client->getResponse()->getStatusCode());
+        $response = $client->getResponse();
+
+        static::assertSame(200, $response->getStatusCode());
     }
 
     public function testThatHealthzRouteReturns200(): void
@@ -30,6 +32,8 @@ class DefaultControllerTest extends WebTestCase
         $client = static::createClient();
         $client->request('GET', '/healthz');
 
-        static::assertSame(200, $client->getResponse()->getStatusCode());
+        $response = $client->getResponse();
+
+        static::assertSame(200, $response->getStatusCode());
     }
 }

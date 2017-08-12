@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Utils\HealthzService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,12 +46,15 @@ class DefaultController
      *
      * @Method("GET")
      *
+     * @param HealthzService $healthzService
+     *
      * @return Response
      *
+     * @throws \Exception
      * @throws \InvalidArgumentException
      */
-    public function healthzAction(): Response
+    public function healthzAction(HealthzService $healthzService): Response
     {
-        return new Response('', Response::HTTP_OK);
+        return new Response($healthzService->check(), Response::HTTP_OK);
     }
 }
