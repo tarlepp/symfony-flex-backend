@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +31,25 @@ class DefaultController
      * @throws \InvalidArgumentException
      */
     public function indexAction(): Response
+    {
+        return new Response('', Response::HTTP_OK);
+    }
+
+    /**
+     * Route for application health check. This action will make some simple tasks to ensure that application is up
+     * and running like expected.
+     *
+     * @link https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+     *
+     * @Route("/healthz")
+     *
+     * @Method("GET")
+     *
+     * @return Response
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function healthzAction(): Response
     {
         return new Response('', Response::HTTP_OK);
     }
