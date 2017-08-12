@@ -26,7 +26,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
-
 /**
  * Class RoleController
  *

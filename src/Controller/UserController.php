@@ -29,7 +29,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
-
 /**
  * Class UserController
  *
