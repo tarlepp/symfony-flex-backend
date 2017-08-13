@@ -7,9 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\EventSubscriber;
 
-use App\EventSubscriber\BodySubscriber;
 use App\EventSubscriber\RequestSubscriber;
-use App\Services\RequestLogger;
+use App\Utils\RequestLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

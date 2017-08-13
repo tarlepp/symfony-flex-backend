@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Services/RequestLoggerInterface.php
+ * /src/Utils/RequestLoggerInterface.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Services;
+namespace App\Utils;
 
 use App\Resource\RequestLogResource;
 use Psr\Log\LoggerInterface;

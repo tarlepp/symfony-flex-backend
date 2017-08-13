@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\EventSubscriber;
 
-use App\Services\RequestLogger;
+use App\Utils\RequestLogger;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;

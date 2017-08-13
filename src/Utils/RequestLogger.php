@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Services/RequestLogger.php
+ * /src/Utils/RequestLogger.php
  *
  * @Book  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Services;
+namespace App\Utils;
 
 use App\Entity\RequestLog as RequestLogEntity;
 use App\Resource\RequestLogResource;
