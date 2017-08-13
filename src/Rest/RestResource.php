@@ -103,7 +103,7 @@ abstract class RestResource implements RestResourceInterface
      */
     public function getDtoClass(): string
     {
-        if ((string)$this->dtoClass === '') {
+        if ($this->dtoClass === '') {
             $message = \sprintf(
                 'DTO class not specified for \'%s\' resource',
                 static::class
@@ -138,7 +138,7 @@ abstract class RestResource implements RestResourceInterface
      */
     public function getFormTypeClass(): string
     {
-        if ((string)$this->formTypeClass === '') {
+        if ($this->formTypeClass === '') {
             $message = \sprintf(
                 'FormType class not specified for \'%s\' resource',
                 static::class
