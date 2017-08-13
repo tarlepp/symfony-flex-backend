@@ -16,12 +16,12 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Class Resource
+ * Class RestResource
  *
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class RestRestResource implements RestResourceInterface
+abstract class RestResource implements RestResourceInterface
 {
     // Attach generic life cycle traits
     use Traits\RestResource;

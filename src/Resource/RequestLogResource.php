@@ -11,7 +11,7 @@ use App\Entity\EntityInterface;
 use App\Entity\RequestLog as Entity;
 use App\Repository\RequestLogRepository as Repository;
 use App\Rest\DTO\RestDtoInterface;
-use App\Rest\RestRestResource;
+use App\Rest\RestResource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @method Entity      delete(string $id): EntityInterface
  * @method Entity      save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
  */
-class RequestLogResource extends RestRestResource
+class RequestLogResource extends RestResource
 {
     /**
      * RequestLogResource constructor.
