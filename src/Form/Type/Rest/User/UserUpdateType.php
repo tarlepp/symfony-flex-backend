@@ -8,9 +8,6 @@ declare(strict_types=1);
 namespace App\Form\Type\Rest\User;
 
 use App\Rest\DTO\User as UserDto;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**

@@ -9,6 +9,7 @@ namespace App\Form\Type\Console;
 
 use App\Form\Type\Rest\UserGroup\UserGroupType as UserGroupBaseType;
 
+/** @noinspection EmptyClassInspection */
 /**
  * Class UserGroupType
  *
