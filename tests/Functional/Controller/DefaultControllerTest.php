@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Controller;
 
+use App\Resource\RequestLogResource;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -35,5 +36,20 @@ class DefaultControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertSame(200, $response->getStatusCode());
+    }
+
+    public function testThatHealthzRouteDoesNotMakeRequestLog(): void
+    {
+        static::bootKernel();
+
+        /** @var RequestLogResource $resource */
+        $resource = static::$kernel->getContainer()->get(RequestLogResource::class);
+
+        $expectedLogCount = $resource->count();
+
+        $client = static::createClient();
+        $client->request('GET', '/healthz');
+
+        static::assertSame($expectedLogCount, $resource->count());
     }
 }
