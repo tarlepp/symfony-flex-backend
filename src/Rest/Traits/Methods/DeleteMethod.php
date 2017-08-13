@@ -11,7 +11,6 @@ use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Trait DeleteMethod

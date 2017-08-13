@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait PatchAction
 {
+    // Traits
     use PatchMethod;
 
     /**
