@@ -40,6 +40,7 @@ class UserRepositoryTest extends RepositoryTestCase
      */
     protected $associations = [
         'userGroups',
+        'requestLogs',
         'createdBy',
         'updatedBy',
     ];
