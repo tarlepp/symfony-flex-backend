@@ -171,39 +171,39 @@ class PHPUnitUtil
         }
 
         if (\strpos($type, '|') !== false) {
-            return self::getValidValueForType(\explode('|', $type)[0], $meta);
+            $output = self::getValidValueForType(\explode('|', $type)[0], $meta);
+        } else {
+            switch ($type) {
+                case 'CustomClass':
+                    $output = new $class();
+                    break;
+                case 'integer':
+                    $output = 666;
+                    break;
+                case \DateTime::class:
+                    $output = new \DateTime();
+                    break;
+                case 'string':
+                    $output = 'Some text here';
+                    break;
+                case 'array':
+                    $output = ['some', 'array', 'here'];
+                    break;
+                case 'boolean':
+                    $output = true;
+                    break;
+                default:
+                    $message = \sprintf(
+                        "Cannot create valid value for type '%s'.",
+                        $type
+                    );
+
+                    throw new \LogicException($message);
+                    break;
+            }
         }
 
-        switch ($type) {
-            case 'CustomClass':
-                $value = new $class();
-                break;
-            case 'integer':
-                $value = 666;
-                break;
-            case \DateTime::class:
-                $value = new \DateTime();
-                break;
-            case 'string':
-                $value = 'Some text here';
-                break;
-            case 'array':
-                $value = ['some', 'array', 'here'];
-                break;
-            case 'boolean':
-                $value = true;
-                break;
-            default:
-                $message = \sprintf(
-                    "Cannot create valid value for type '%s'.",
-                    $type
-                );
-
-                throw new \LogicException($message);
-                break;
-        }
-
-        return $value;
+        return $output;
     }
 
     /**
@@ -220,31 +220,31 @@ class PHPUnitUtil
         }
 
         if (\strpos($type, '|') !== false) {
-            return self::getInvalidValueForType(\explode('|', $type)[0]);
+            $output = self::getInvalidValueForType(\explode('|', $type)[0]);
+        } else {
+            switch ($type) {
+                case \stdClass::class:
+                    $output = new \DateTime();
+                    break;
+                case 'CustomClass':
+                case 'integer':
+                case \DateTime::class:
+                case 'string':
+                case 'array':
+                case 'boolean':
+                    $output = new \stdClass();
+                    break;
+                default:
+                    $message = \sprintf(
+                        "Cannot create invalid value for type '%s'.",
+                        $type
+                    );
+
+                    throw new \LogicException($message);
+                    break;
+            }
         }
 
-        switch ($type) {
-            case \stdClass::class:
-                $value = new \DateTime();
-                break;
-            case 'CustomClass':
-            case 'integer':
-            case \DateTime::class:
-            case 'string':
-            case 'array':
-            case 'boolean':
-                $value = new \stdClass();
-                break;
-            default:
-                $message = \sprintf(
-                    "Cannot create invalid value for type '%s'.",
-                    $type
-                );
-
-                throw new \LogicException($message);
-                break;
-        }
-
-        return $value;
+        return $output;
     }
 }
