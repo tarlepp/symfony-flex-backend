@@ -428,7 +428,7 @@ class RequestLog implements EntityInterface
         $this->id = Uuid::uuid4()->toString();
 
         if ($request !== null) {
-            $this->setClientIp($request->getClientIp());
+            $this->setClientIp((string)$request->getClientIp());
             $this->setMethod($request->getRealMethod());
             $this->setScheme($request->getScheme());
             $this->setHttpHost($request->getHttpHost());
