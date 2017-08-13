@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @package App\Services
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-final class RequestLogger implements RequestLoggerInterface
+class RequestLogger implements RequestLoggerInterface
 {
     /**
      * @var Response
