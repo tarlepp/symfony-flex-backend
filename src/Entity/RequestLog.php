@@ -437,7 +437,7 @@ class RequestLog implements EntityInterface
             $this->setPath($request->getPathInfo());
             $this->setQueryString($request->getRequestUri());
             $this->setUri($request->getUri());
-            $this->setController($this->determineController($request));
+            $this->setController($request->get('_controller', ''));
             $this->setAction($this->determineAction($request));
             $this->setHeaders($request->headers->all());
             $this->setContentType($request->getMimeType($request->getContentType()));
@@ -936,27 +936,6 @@ class RequestLog implements EntityInterface
         if (\is_array($value)) {
             \array_walk($value, [$this, 'cleanParameters']);
         }
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return string
-     */
-    private function determineController(Request $request): string
-    {
-        $controller = $request->get('_controller', '');
-
-        if (\strpos($controller, '::')) {
-            $controller = \explode('::', $controller);
-            $controller = \explode('\\', $controller[0]);
-
-            return $controller[4] ?? '';
-        }
-
-        $controller = \explode(':', $controller);
-
-        return $controller[0];
     }
 
     /**
