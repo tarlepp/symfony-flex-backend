@@ -1,0 +1,115 @@
+<?php
+declare(strict_types=1);
+/**
+ * /tests/Integration/Utils/RequestLoggerTest.php
+ *
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
+namespace App\Tests\Integration\Utils;
+
+use App\Resource\RequestLogResource;
+use App\Utils\RequestLogger;
+use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * Class RequestLoggerTest
+ *
+ * @package App\Tests\Integration\Utils
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
+class RequestLoggerTest extends KernelTestCase
+{
+    public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogResource $resource
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $resource = $this->getMockBuilder(RequestLogResource::class)->disableOriginalConstructor()->getMock();
+
+        $resource
+            ->expects(static::never())
+            ->method('save');
+
+        (new RequestLogger($logger, $resource))
+            ->setResponse(new Response())
+            ->handle();
+    }
+
+    public function testThatLogIsNotCreatedIfResponseObjectIsNotSet(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogResource $resource
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $resource = $this->getMockBuilder(RequestLogResource::class)->disableOriginalConstructor()->getMock();
+
+        $resource
+            ->expects(static::never())
+            ->method('save');
+
+        (new RequestLogger($logger, $resource))
+            ->setRequest(new Request())
+            ->handle();
+    }
+
+    public function testThatResourceSaveMethodIsCalled(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogResource $resource
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $resource = $this->getMockBuilder(RequestLogResource::class)->disableOriginalConstructor()->getMock();
+
+        $request = new Request();
+        $response = new Response();
+
+        $resource
+            ->expects(static::once())
+            ->method('save');
+
+        (new RequestLogger($logger, $resource))
+            ->setRequest($request)
+            ->setResponse($response)
+            ->setMasterRequest(true)
+            ->setUser()
+            ->handle();
+    }
+
+    public function testThatLoggerIsCalledIfExceptionIsThrown(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogResource $resource
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $resource = $this->getMockBuilder(RequestLogResource::class)->disableOriginalConstructor()->getMock();
+
+        $request = new Request();
+        $response = new Response();
+        $exception = new \Exception('test exception');
+
+        $resource
+            ->expects(static::once())
+            ->method('save')
+            ->willThrowException($exception);
+
+        $logger
+            ->expects(static::once())
+            ->method('error')
+            ->with('test exception');
+
+        (new RequestLogger($logger, $resource))
+            ->setRequest($request)
+            ->setResponse($response)
+            ->setMasterRequest(true)
+            ->setUser()
+            ->handle();
+    }
+}
