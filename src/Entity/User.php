@@ -201,10 +201,23 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\RequestLog",
      *      mappedBy="user",
-     *      cascade={"all"},
      *  )
      */
     private $requestLogs;
+
+    /**
+     * @var Collection<LoginLog>
+     *
+     * @Groups({
+     *      "User.loginLogs",
+     *  })
+     *
+     * @ORM\OneToMany(
+     *      targetEntity="App\Entity\LoginLog",
+     *      mappedBy="user",
+     *  )
+     */
+    private $loginLogs;
 
     /**
      * User constructor.
@@ -409,11 +422,21 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
     /**
      * Getter for user request log collection.
      *
-     * @return Collection
+     * @return Collection<RequestLog>|ArrayCollection<RequestLog>
      */
     public function getRequestLogs(): Collection
     {
         return $this->requestLogs;
+    }
+
+    /**
+     * Getter for user login log collection.
+     *
+     * @return Collection<LoginLog>|ArrayCollection<LoginLog>
+     */
+    public function getLoginLogs(): Collection
+    {
+        return $this->loginLogs;
     }
 
     /**

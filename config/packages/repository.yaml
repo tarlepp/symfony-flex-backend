@@ -8,6 +8,10 @@ services:
         parent: repository
         arguments: [ App\Entity\Healthz ]
 
+    App\Repository\LoginLogRepository:
+        parent: repository
+        arguments: [ App\Entity\LoginLog ]
+
     App\Repository\RequestLogRepository:
         parent: repository
         arguments: [ App\Entity\RequestLog ]
