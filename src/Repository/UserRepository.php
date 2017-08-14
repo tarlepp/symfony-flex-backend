@@ -11,7 +11,7 @@ use App\Entity\User as Entity;
 use App\Rest\Repository;
 use Doctrine\ORM\NoResultException;
 use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareTrait;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -20,7 +20,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
-
 /**
  * Class UserRepository
  *
@@ -35,29 +34,15 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  */
 class UserRepository extends Repository implements UserProviderInterface, UserLoaderInterface, LoggerAwareInterface
 {
+    // Traits
+    use LoggerAwareTrait;
+
     /**
      * Names of search columns.
      *
      * @var string[]
      */
     protected static $searchColumns = ['username', 'firstname', 'surname', 'email'];
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * Sets a logger instance on the object.
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return void
-     */
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
-    }
 
     /**
      * Loads the user for the given username.
