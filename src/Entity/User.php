@@ -228,6 +228,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
 
         $this->userGroups = new ArrayCollection();
         $this->requestLogs = new ArrayCollection();
+        $this->loginLogs = new ArrayCollection();
     }
 
     /**
