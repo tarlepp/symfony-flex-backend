@@ -46,4 +46,3 @@ if (class_exists(Application::class)) {
 $container->loadFromExtension('monolog', [
     'handlers' => $handlers,
 ]);
-
