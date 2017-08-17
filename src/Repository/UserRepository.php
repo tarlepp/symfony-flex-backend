@@ -9,10 +9,8 @@ namespace App\Repository;
 
 use App\Entity\User as Entity;
 use App\Rest\Repository;
-use Doctrine\ORM\NoResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -50,12 +48,12 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
      *
      * @param string $username The username
      *
-     * @return UserInterface
+     * @return null|UserInterface|Entity
      *
+     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
-    public function loadUserByUsername($username): UserInterface
+    public function loadUserByUsername($username): ?UserInterface
     {
         // Build query
         $query = $this
@@ -68,22 +66,7 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
             ->setParameter('email', $username)
             ->getQuery();
 
-        try {
-            $user = $query->getSingleResult();
-        } catch (NoResultException $exception) {
-            \usleep(5000);
-
-            $this->logger ? $this->logger->error($exception) : null;
-
-            $message = \sprintf(
-                'User "%s" not found',
-                $username
-            );
-
-            throw new UsernameNotFoundException($message);
-        }
-
-        return $user;
+        return $query->getSingleResult();
     }
 
     /**
@@ -96,6 +79,7 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
      *
      * @return UserInterface|Entity
      *
+     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      * @throws \Symfony\Component\Security\Core\Exception\UnsupportedUserException
