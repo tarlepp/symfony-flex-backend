@@ -11,8 +11,6 @@ use App\Entity\Role as Entity;
 use App\Rest\Repository;
 
 /** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
-
 /**
  * Class RoleRepository
  *

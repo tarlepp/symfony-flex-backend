@@ -10,8 +10,6 @@ namespace App\Repository;
 use App\Entity\User as Entity;
 use App\Rest\Repository;
 use Doctrine\ORM\NoResultException;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -19,7 +17,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class UserRepository
  *
@@ -32,11 +29,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * @method Entity|null findOneBy(array $criteria, array $orderBy = null)
  * @method Entity[]    findByAdvanced(array $criteria, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
  */
-class UserRepository extends Repository implements UserProviderInterface, UserLoaderInterface, LoggerAwareInterface
+class UserRepository extends Repository implements UserProviderInterface, UserLoaderInterface
 {
-    // Traits
-    use LoggerAwareTrait;
-
     /**
      * Names of search columns.
      *

@@ -7,17 +7,24 @@ declare(strict_types=1);
  */
 namespace App\Repository;
 
-use App\Entity\Healthz;
+use App\Entity\Healthz as Entity;
+use App\Rest\Repository;
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\EntityRepository;
 
+/** @noinspection PhpHierarchyChecksInspection */
 /**
  * Class HealthzRepository
  *
  * @package App\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method Entity|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Entity[]    findAll()
+ * @method Entity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Entity|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Entity[]    findByAdvanced(array $criteria, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
  */
-class HealthzRepository extends EntityRepository
+class HealthzRepository extends Repository
 {
     /**
      * Method to read value from database
@@ -42,23 +49,20 @@ class HealthzRepository extends EntityRepository
     /**
      * Method to write new value to database.
      *
-     * @return Healthz
+     * @return Entity
      *
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Doctrine\ORM\ORMException
      */
-    public function create(): Healthz
+    public function create(): Entity
     {
         // Create new entity
-        $entity = new Healthz();
+        $entity = new Entity();
         $entity->setTimestamp(new \DateTime('NOW', new \DateTimeZone('UTC')));
 
-        // Get entity manager
-        $em = $this->getEntityManager();
-
         // Store entity to database
-        $em->persist($entity);
-        $em->flush();
+        $this->save($entity);
 
         return $entity;
     }
@@ -73,7 +77,7 @@ class HealthzRepository extends EntityRepository
     public function cleanup(): int
     {
         // Determine date
-        $date = new \DateTime('now', new \DateTimeZone('UTC'));
+        $date = new \DateTime('NOW', new \DateTimeZone('UTC'));
         $date->sub(new \DateInterval('P7D'));
 
         // Create query builder

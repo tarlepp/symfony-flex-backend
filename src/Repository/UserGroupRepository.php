@@ -11,8 +11,6 @@ use App\Entity\UserGroup as Entity;
 use App\Rest\Repository;
 
 /** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
-
 /**
  * Class UserGroupRepository
  *
