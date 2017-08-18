@@ -58,8 +58,7 @@ class UserRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     * @expectedExceptionMessageRegExp /User "\w+" not found/
+     * @expectedException \Doctrine\ORM\NoResultException
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidUsername(): void
     {
@@ -67,8 +66,7 @@ class UserRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     * @expectedExceptionMessage User "test" not found
+     * @expectedException \Doctrine\ORM\NoResultException
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
     {
