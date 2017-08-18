@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Integration/UserRepositoryTest.php
+ * /tests/Integration/Integration/HealthzRepositoryTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
