@@ -89,8 +89,9 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @return LoginLoggerInterface
      *
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function setUser(UserInterface $user): LoginLoggerInterface
     {
@@ -149,7 +150,7 @@ class LoginLogger implements LoginLoggerInterface
         $userLogin->setDeviceName($this->deviceDetector->getDeviceName());
         $userLogin->setBrandName($this->deviceDetector->getBrandName());
         $userLogin->setModel($this->deviceDetector->getModel());
-        $userLogin->setLoginTime(new \DateTime('now', new \DateTimeZone('UTC')));
+        $userLogin->setTimestamp(new \DateTime('NOW', new \DateTimeZone('UTC')));
 
         // And store entry to database
         return $this->loginLogResource->save($userLogin, true);
