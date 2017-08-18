@@ -328,16 +328,16 @@ class LoginLog implements EntityInterface
      *
      * @Groups({
      *      "LoginLog",
-     *      "LoginLog.loginTime",
+     *      "LoginLog.timestamp",
      *  })
      *
      * @ORM\Column(
-     *      name="login_time",
+     *      name="timestamp",
      *      type="datetime",
      *      nullable=false,
      *  )
      */
-    private $loginTime;
+    private $timestamp;
 
     /**
      * LoginLog constructor.
@@ -678,19 +678,19 @@ class LoginLog implements EntityInterface
     /**
      * @return \DateTime
      */
-    public function getLoginTime(): \DateTime
+    public function getTimestamp(): \DateTime
     {
-        return $this->loginTime;
+        return $this->timestamp;
     }
 
     /**
-     * @param \DateTime $loginTime
+     * @param \DateTime $timestamp
      *
      * @return LoginLog
      */
-    public function setLoginTime(\DateTime $loginTime): LoginLog
+    public function setTimestamp(\DateTime $timestamp): LoginLog
     {
-        $this->loginTime = $loginTime;
+        $this->timestamp = $timestamp;
 
         return $this;
     }
