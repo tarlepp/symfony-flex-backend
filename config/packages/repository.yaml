@@ -16,9 +16,9 @@ services:
         parent: repository
         arguments: [ App\Entity\LogLoginSuccess ]
 
-    App\Repository\RequestLogRepository:
+    App\Repository\LogRequestRepository:
         parent: repository
-        arguments: [ App\Entity\RequestLog ]
+        arguments: [ App\Entity\LogRequest ]
 
     App\Repository\RoleRepository:
         parent: repository

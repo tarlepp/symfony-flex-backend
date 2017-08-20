@@ -7,8 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Utils;
 
-use App\Entity\RequestLog as RequestLogEntity;
-use App\Resource\RequestLogResource;
+use App\Entity\LogRequest as RequestLogEntity;
+use App\Resource\LogRequestResource;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +39,7 @@ class RequestLogger implements RequestLoggerInterface
     private $logger;
 
     /**
-     * @var RequestLogResource
+     * @var LogRequestResource
      */
     private $resource;
 
@@ -57,9 +57,9 @@ class RequestLogger implements RequestLoggerInterface
      * ResponseLogger constructor.
      *
      * @param LoggerInterface    $logger
-     * @param RequestLogResource $resource
+     * @param LogRequestResource $resource
      */
-    public function __construct(LoggerInterface $logger, RequestLogResource $resource)
+    public function __construct(LoggerInterface $logger, LogRequestResource $resource)
     {
         // Store user services
         $this->logger = $logger;

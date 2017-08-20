@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Utils;
 
-use App\Resource\RequestLogResource;
+use App\Resource\LogRequestResource;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,9 +25,9 @@ interface RequestLoggerInterface
      * ResponseLogger constructor.
      *
      * @param LoggerInterface    $logger
-     * @param RequestLogResource $resource
+     * @param LogRequestResource $resource
      */
-    public function __construct(LoggerInterface $logger, RequestLogResource $resource);
+    public function __construct(LoggerInterface $logger, LogRequestResource $resource);
 
     /**
      * Setter for response object.

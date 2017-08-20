@@ -192,18 +192,18 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
     private $userGroups;
 
     /**
-     * @var Collection<RequestLog>
+     * @var Collection<LogRequest>
      *
      * @Groups({
-     *      "User.requestLogs",
+     *      "User.logsRequest",
      *  })
      *
      * @ORM\OneToMany(
-     *      targetEntity="App\Entity\RequestLog",
+     *      targetEntity="App\Entity\LogRequest",
      *      mappedBy="user",
      *  )
      */
-    private $requestLogs;
+    private $logsRequest;
 
     /**
      * @var Collection<LogLoginSuccess>
@@ -241,7 +241,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
         $this->id = Uuid::uuid4()->toString();
 
         $this->userGroups = new ArrayCollection();
-        $this->requestLogs = new ArrayCollection();
+        $this->logsRequest = new ArrayCollection();
         $this->logsLoginSuccess = new ArrayCollection();
         $this->logsLoginFailure = new ArrayCollection();
     }
@@ -438,11 +438,11 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
     /**
      * Getter for user request log collection.
      *
-     * @return Collection<RequestLog>|ArrayCollection<RequestLog>
+     * @return Collection<LogRequest>|ArrayCollection<LogRequest>
      */
-    public function getRequestLogs(): Collection
+    public function getLogsRequest(): Collection
     {
-        return $this->requestLogs;
+        return $this->logsRequest;
     }
 
     /**

@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Resource/RequestLogResource.php
+ * /src/Resource/LogRequestResource.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Resource;
 
 use App\Entity\EntityInterface;
-use App\Entity\RequestLog as Entity;
-use App\Repository\RequestLogRepository as Repository;
+use App\Entity\LogRequest as Entity;
+use App\Repository\LogRequestRepository as Repository;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\RestResource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
 /**
- * Class RequestLogResource
+ * Class LogRequestResource
  *
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -31,10 +31,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @method Entity      delete(string $id): EntityInterface
  * @method Entity      save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
  */
-class RequestLogResource extends RestResource
+class LogRequestResource extends RestResource
 {
     /**
-     * RequestLogResource constructor.
+     * LogRequestResource constructor.
      *
      * @param Repository         $repository
      * @param ValidatorInterface $validator

@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Repository/RequestLogRepository.php
+ * /src/Repository/LogRequestRepository.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Repository;
 
-use App\Entity\RequestLog as Entity;
+use App\Entity\LogRequest as Entity;
 use App\Rest\Repository;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /**
- * Class RequestLogRepository
+ * Class LogRequestRepository
  *
  * @package App\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -23,7 +23,7 @@ use App\Rest\Repository;
  * @method Entity|null findOneBy(array $criteria, array $orderBy = null)
  * @method Entity[]    findByAdvanced(array $criteria, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
  */
-class RequestLogRepository extends Repository
+class LogRequestRepository extends Repository
 {
     /**
      * Helper method to clean history data from request_log table.

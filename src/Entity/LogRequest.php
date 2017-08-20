@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Entity/RequestLog.php
+ * /src/Entity/LogRequest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -15,30 +15,30 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Class RequestLog
+ * Class LogRequest
  *
  * @ORM\Table(
- *      name="request_log",
+ *      name="log_request",
  *      indexes={
  *          @ORM\Index(name="user_id", columns={"user_id"}),
  *      }
  *  )
  * @ORM\Entity(
- *      repositoryClass="App\Repository\RequestLogRepository"
+ *      repositoryClass="App\Repository\LogRequestRepository"
  *  )
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RequestLog implements EntityInterface
+class LogRequest implements EntityInterface
 {
     /**
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.id",
-     *      "User.requestLog",
+     *      "LogRequest",
+     *      "LogRequest.id",
+     *      "User.logRequest",
      *  })
      *
      * @ORM\Column(
@@ -54,12 +54,12 @@ class RequestLog implements EntityInterface
      * @var \App\Entity\User
      *
      * @Groups({
-     *      "RequestLog.user",
+     *      "LogRequest.user",
      *  })
      *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\User",
-     *      inversedBy="requestLogs",
+     *      inversedBy="logsRequest",
      *  )
      * @ORM\JoinColumns({
      *      @ORM\JoinColumn(
@@ -74,8 +74,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.clientIp",
+     *      "LogRequest",
+     *      "LogRequest.clientIp",
      *  })
      *
      * @ORM\Column(
@@ -91,8 +91,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.method",
+     *      "LogRequest",
+     *      "LogRequest.method",
      *  })
      *
      * @ORM\Column(
@@ -108,8 +108,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.scheme",
+     *      "LogRequest",
+     *      "LogRequest.scheme",
      *  })
      *
      * @ORM\Column(
@@ -125,8 +125,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.httpHost",
+     *      "LogRequest",
+     *      "LogRequest.httpHost",
      *  })
      *
      * @ORM\Column(
@@ -142,8 +142,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.basePath",
+     *      "LogRequest",
+     *      "LogRequest.basePath",
      *  })
      *
      * @ORM\Column(
@@ -159,8 +159,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.script",
+     *      "LogRequest",
+     *      "LogRequest.script",
      *  })
      *
      * @ORM\Column(
@@ -176,8 +176,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.path",
+     *      "LogRequest",
+     *      "LogRequest.path",
      *  })
      *
      * @ORM\Column(
@@ -193,8 +193,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.queryString",
+     *      "LogRequest",
+     *      "LogRequest.queryString",
      *  })
      *
      * @ORM\Column(
@@ -209,8 +209,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.uri",
+     *      "LogRequest",
+     *      "LogRequest.uri",
      *  })
      *
      * @ORM\Column(
@@ -225,8 +225,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.controller",
+     *      "LogRequest",
+     *      "LogRequest.controller",
      *  })
      *
      * @ORM\Column(
@@ -242,8 +242,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.action",
+     *      "LogRequest",
+     *      "LogRequest.action",
      *  })
      *
      * @ORM\Column(
@@ -259,8 +259,8 @@ class RequestLog implements EntityInterface
      * @var array
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.headers",
+     *      "LogRequest",
+     *      "LogRequest.headers",
      *  })
      *
      * @ORM\Column(
@@ -274,8 +274,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.contentType",
+     *      "LogRequest",
+     *      "LogRequest.contentType",
      *  })
      *
      * @ORM\Column(
@@ -291,8 +291,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.contentTypeShort",
+     *      "LogRequest",
+     *      "LogRequest.contentTypeShort",
      *  })
      *
      * @ORM\Column(
@@ -308,8 +308,8 @@ class RequestLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.content",
+     *      "LogRequest",
+     *      "LogRequest.content",
      *  })
      *
      * @ORM\Column(
@@ -324,8 +324,8 @@ class RequestLog implements EntityInterface
      * @var array
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.parameters",
+     *      "LogRequest",
+     *      "LogRequest.parameters",
      *  })
      *
      * @ORM\Column(
@@ -339,8 +339,8 @@ class RequestLog implements EntityInterface
      * @var integer
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.statusCode",
+     *      "LogRequest",
+     *      "LogRequest.statusCode",
      *  })
      *
      * @ORM\Column(
@@ -355,8 +355,8 @@ class RequestLog implements EntityInterface
      * @var integer
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.responseContentLength",
+     *      "LogRequest",
+     *      "LogRequest.responseContentLength",
      *  })
      *
      * @ORM\Column(
@@ -371,8 +371,8 @@ class RequestLog implements EntityInterface
      * @var bool
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.isMasterRequest",
+     *      "LogRequest",
+     *      "LogRequest.isMasterRequest",
      *  })
      *
      * @ORM\Column(
@@ -387,8 +387,8 @@ class RequestLog implements EntityInterface
      * @var bool
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.isXmlHttpRequest",
+     *      "LogRequest",
+     *      "LogRequest.isXmlHttpRequest",
      *  })
      *
      * @ORM\Column(
@@ -403,8 +403,8 @@ class RequestLog implements EntityInterface
      * @var \DateTime
      *
      * @Groups({
-     *      "RequestLog",
-     *      "RequestLog.time",
+     *      "LogRequest",
+     *      "LogRequest.time",
      *  })
      *
      * @ORM\Column(
@@ -416,7 +416,7 @@ class RequestLog implements EntityInterface
     private $time;
 
     /**
-     * RequestLog constructor.
+     * LogRequest constructor.
      *
      * @param Request|null  $request
      * @param Response|null $response
@@ -473,9 +473,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $clientIp
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setClientIp(string $clientIp): RequestLog
+    public function setClientIp(string $clientIp): LogRequest
     {
         $this->clientIp = $clientIp;
 
@@ -493,9 +493,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $uri
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setUri(string $uri): RequestLog
+    public function setUri(string $uri): LogRequest
     {
         $this->uri = $uri;
 
@@ -513,9 +513,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $method
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setMethod(string $method): RequestLog
+    public function setMethod(string $method): LogRequest
     {
         $this->method = $method;
 
@@ -533,9 +533,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $scheme
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setScheme(string $scheme): RequestLog
+    public function setScheme(string $scheme): LogRequest
     {
         $this->scheme = $scheme;
 
@@ -553,9 +553,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $httpHost
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setHttpHost(string $httpHost): RequestLog
+    public function setHttpHost(string $httpHost): LogRequest
     {
         $this->httpHost = $httpHost;
 
@@ -573,9 +573,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $basePath
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setBasePath(string $basePath): RequestLog
+    public function setBasePath(string $basePath): LogRequest
     {
         $this->basePath = $basePath;
 
@@ -593,9 +593,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string|null $queryString
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setQueryString(string $queryString = null): RequestLog
+    public function setQueryString(string $queryString = null): LogRequest
     {
         $this->queryString = $queryString;
 
@@ -613,9 +613,9 @@ class RequestLog implements EntityInterface
     /**
      * @param array $headers
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setHeaders(array $headers): RequestLog
+    public function setHeaders(array $headers): LogRequest
     {
         // Clean possible sensitive data from parameters
         \array_walk($headers, [$this, 'cleanParameters']);
@@ -636,9 +636,9 @@ class RequestLog implements EntityInterface
     /**
      * @param array $parameters
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setParameters(array $parameters): RequestLog
+    public function setParameters(array $parameters): LogRequest
     {
         // Clean possible sensitive data from parameters
         \array_walk($parameters, [$this, 'cleanParameters']);
@@ -659,9 +659,9 @@ class RequestLog implements EntityInterface
     /**
      * @param int $statusCode
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setStatusCode(int $statusCode): RequestLog
+    public function setStatusCode(int $statusCode): LogRequest
     {
         $this->statusCode = $statusCode;
 
@@ -679,9 +679,9 @@ class RequestLog implements EntityInterface
     /**
      * @param int $responseContentLength
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setResponseContentLength(int $responseContentLength): RequestLog
+    public function setResponseContentLength(int $responseContentLength): LogRequest
     {
         $this->responseContentLength = $responseContentLength;
 
@@ -699,9 +699,9 @@ class RequestLog implements EntityInterface
     /**
      * @param \DateTime $time
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setTime(\DateTime $time): RequestLog
+    public function setTime(\DateTime $time): LogRequest
     {
         $this->time = $time;
 
@@ -719,9 +719,9 @@ class RequestLog implements EntityInterface
     /**
      * @param User|null $user
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setUser(User $user = null): RequestLog
+    public function setUser(User $user = null): LogRequest
     {
         $this->user = $user;
 
@@ -739,9 +739,9 @@ class RequestLog implements EntityInterface
     /**
      * @param boolean $xmlHttpRequest
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setXmlHttpRequest(bool $xmlHttpRequest): RequestLog
+    public function setXmlHttpRequest(bool $xmlHttpRequest): LogRequest
     {
         $this->xmlHttpRequest = $xmlHttpRequest;
 
@@ -759,9 +759,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string|null $controller
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setController(string $controller = null): RequestLog
+    public function setController(string $controller = null): LogRequest
     {
         $this->controller = $controller;
 
@@ -779,9 +779,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string|null $action
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setAction(string $action = null): RequestLog
+    public function setAction(string $action = null): LogRequest
     {
         $this->action = $action;
 
@@ -799,9 +799,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string|null $path
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setPath(string $path = null): RequestLog
+    public function setPath(string $path = null): LogRequest
     {
         $this->path = $path;
 
@@ -819,9 +819,9 @@ class RequestLog implements EntityInterface
     /**
      * @param boolean $masterRequest
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setMasterRequest(bool $masterRequest): RequestLog
+    public function setMasterRequest(bool $masterRequest): LogRequest
     {
         $this->masterRequest = $masterRequest;
 
@@ -839,9 +839,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $script
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setScript(string $script): RequestLog
+    public function setScript(string $script): LogRequest
     {
         $this->script = $script;
 
@@ -859,9 +859,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $content
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setContent(string $content): RequestLog
+    public function setContent(string $content): LogRequest
     {
         $this->content = $this->cleanContent($content);
 
@@ -879,9 +879,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $contentType
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setContentType(string $contentType = null): RequestLog
+    public function setContentType(string $contentType = null): LogRequest
     {
         $this->contentType = $contentType;
 
@@ -899,9 +899,9 @@ class RequestLog implements EntityInterface
     /**
      * @param string $contentTypeShort
      *
-     * @return RequestLog
+     * @return LogRequest
      */
-    public function setContentTypeShort(string $contentTypeShort = null): RequestLog
+    public function setContentTypeShort(string $contentTypeShort = null): LogRequest
     {
         $this->contentTypeShort = $contentTypeShort;
 
