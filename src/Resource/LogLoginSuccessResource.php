@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Resource/LoginFailureLogResource.php
+ * /src/Resource/LogLoginSuccessResource.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Resource;
 
 use App\Entity\EntityInterface;
-use App\Entity\LoginFailureLog as Entity;
-use App\Repository\LoginFailureLogRepository as Repository;
+use App\Entity\LogLoginSuccess as Entity;
+use App\Repository\LogLoginSuccessRepository as Repository;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\RestResource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
 /**
- * Class LoginFailureLogResource
+ * Class LogLoginSuccessResource
  *
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -31,10 +31,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @method Entity      delete(string $id): EntityInterface
  * @method Entity      save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
  */
-class LoginFailureLogResource extends RestResource
+class LogLoginSuccessResource extends RestResource
 {
     /**
-     * LoginFailureLogResource constructor.
+     * LogLoginSuccessResource constructor.
      *
      * @param Repository         $repository
      * @param ValidatorInterface $validator

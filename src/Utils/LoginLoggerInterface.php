@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use App\Repository\UserRepository;
-use App\Resource\LoginLogResource;
+use App\Resource\LogLoginSuccessResource;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -24,14 +24,14 @@ interface LoginLoggerInterface
     /**
      * LoginLogger constructor.
      *
-     * @param LoggerInterface  $logger
-     * @param LoginLogResource $loginLogResource
-     * @param UserRepository   $userRepository
-     * @param RequestStack     $requestStack
+     * @param LoggerInterface         $logger
+     * @param LogLoginSuccessResource $loginLogResource
+     * @param UserRepository          $userRepository
+     * @param RequestStack            $requestStack
      */
     public function __construct(
         LoggerInterface $logger,
-        LoginLogResource $loginLogResource,
+        LogLoginSuccessResource $loginLogResource,
         UserRepository $userRepository,
         RequestStack $requestStack
     );

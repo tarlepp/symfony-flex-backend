@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Entity/LoginLog.php
+ * /src/Entity/LogLoginFailure.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -12,30 +12,30 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * Class LoginLog
+ * Class LogLoginFailure
  *
  * @ORM\Table(
- *      name="login_log",
+ *      name="log_login_failure",
  *      indexes={
  *          @ORM\Index(name="user_id", columns={"user_id"}),
  *      }
  *  )
  * @ORM\Entity(
- *      repositoryClass="App\Repository\LoginLogRepository"
+ *      repositoryClass="App\Repository\LogLoginFailureRepository"
  *  )
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LoginLog implements EntityInterface
+class LogLoginFailure implements EntityInterface
 {
     /**
      * @var string
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.id",
-     *      "User.logins",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.id",
+     *      "User.loginFailures",
      *  })
      *
      * @ORM\Column(
@@ -51,13 +51,13 @@ class LoginLog implements EntityInterface
      * @var \App\Entity\User
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.user",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.user",
      *  })
      *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\User",
-     *      inversedBy="loginLogs",
+     *      inversedBy="logsLoginFailure",
      *  )
      * @ORM\JoinColumns({
      *      @ORM\JoinColumn(
@@ -73,8 +73,8 @@ class LoginLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.ip",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.ip",
      *  })
      *
      * @ORM\Column(
@@ -90,8 +90,8 @@ class LoginLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.host",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.host",
      *  })
      *
      * @ORM\Column(
@@ -107,8 +107,8 @@ class LoginLog implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.agent",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.agent",
      *  })
      *
      * @ORM\Column(
@@ -123,8 +123,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.clientType",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.clientType",
      *  })
      *
      * @ORM\Column(
@@ -140,8 +140,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.clientName",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.clientName",
      *  })
      *
      * @ORM\Column(
@@ -157,8 +157,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.clientShortName",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.clientShortName",
      *  })
      *
      * @ORM\Column(
@@ -174,8 +174,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.clientVersion",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.clientVersion",
      *  })
      *
      * @ORM\Column(
@@ -191,8 +191,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.clientEngine",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.clientEngine",
      *  })
      *
      * @ORM\Column(
@@ -208,8 +208,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.osName",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.osName",
      *  })
      *
      * @ORM\Column(
@@ -225,8 +225,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.osShortName",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.osShortName",
      *  })
      *
      * @ORM\Column(
@@ -242,8 +242,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.osVersion",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.osVersion",
      *  })
      *
      * @ORM\Column(
@@ -259,8 +259,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.osPlatform",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.osPlatform",
      *  })
      *
      * @ORM\Column(
@@ -276,8 +276,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.deviceName",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.deviceName",
      *  })
      *
      * @ORM\Column(
@@ -293,8 +293,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.brandName",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.brandName",
      *  })
      *
      * @ORM\Column(
@@ -310,8 +310,8 @@ class LoginLog implements EntityInterface
      * @var string|null
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.model",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.model",
      *  })
      *
      * @ORM\Column(
@@ -327,8 +327,8 @@ class LoginLog implements EntityInterface
      * @var \DateTime
      *
      * @Groups({
-     *      "LoginLog",
-     *      "LoginLog.timestamp",
+     *      "LoginFailureLog",
+     *      "LoginFailureLog.timestamp",
      *  })
      *
      * @ORM\Column(
@@ -340,7 +340,7 @@ class LoginLog implements EntityInterface
     private $timestamp;
 
     /**
-     * LoginLog constructor.
+     * LogLoginFailure constructor.
      */
     public function __construct()
     {
@@ -366,9 +366,9 @@ class LoginLog implements EntityInterface
     /**
      * @param User $user
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setUser(User $user): LoginLog
+    public function setUser(User $user): LogLoginFailure
     {
         $this->user = $user;
 
@@ -386,9 +386,9 @@ class LoginLog implements EntityInterface
     /**
      * @param string $ip
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setIp(string $ip): LoginLog
+    public function setIp(string $ip): LogLoginFailure
     {
         $this->ip = $ip;
 
@@ -406,9 +406,9 @@ class LoginLog implements EntityInterface
     /**
      * @param string $host
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setHost(string $host): LoginLog
+    public function setHost(string $host): LogLoginFailure
     {
         $this->host = $host;
 
@@ -426,9 +426,9 @@ class LoginLog implements EntityInterface
     /**
      * @param string $agent
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setAgent(string $agent): LoginLog
+    public function setAgent(string $agent): LogLoginFailure
     {
         $this->agent = $agent;
 
@@ -446,9 +446,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $clientType
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setClientType(string $clientType = null): LoginLog
+    public function setClientType(string $clientType = null): LogLoginFailure
     {
         $this->clientType = $clientType;
 
@@ -466,9 +466,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $clientName
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setClientName(string $clientName = null): LoginLog
+    public function setClientName(string $clientName = null): LogLoginFailure
     {
         $this->clientName = $clientName;
 
@@ -486,9 +486,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $clientShortName
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setClientShortName(string $clientShortName = null): LoginLog
+    public function setClientShortName(string $clientShortName = null): LogLoginFailure
     {
         $this->clientShortName = $clientShortName;
 
@@ -506,9 +506,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $clientVersion
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setClientVersion(string $clientVersion = null): LoginLog
+    public function setClientVersion(string $clientVersion = null): LogLoginFailure
     {
         $this->clientVersion = $clientVersion;
 
@@ -526,9 +526,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $clientEngine
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setClientEngine(string $clientEngine = null): LoginLog
+    public function setClientEngine(string $clientEngine = null): LogLoginFailure
     {
         $this->clientEngine = $clientEngine;
 
@@ -546,9 +546,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $osName
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setOsName(string $osName = null): LoginLog
+    public function setOsName(string $osName = null): LogLoginFailure
     {
         $this->osName = $osName;
 
@@ -566,9 +566,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $osShortName
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setOsShortName(string $osShortName = null): LoginLog
+    public function setOsShortName(string $osShortName = null): LogLoginFailure
     {
         $this->osShortName = $osShortName;
 
@@ -586,9 +586,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $osVersion
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setOsVersion(string $osVersion = null): LoginLog
+    public function setOsVersion(string $osVersion = null): LogLoginFailure
     {
         $this->osVersion = $osVersion;
 
@@ -606,9 +606,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $osPlatform
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setOsPlatform(string $osPlatform = null): LoginLog
+    public function setOsPlatform(string $osPlatform = null): LogLoginFailure
     {
         $this->osPlatform = $osPlatform;
 
@@ -626,9 +626,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $deviceName
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setDeviceName(string $deviceName = null): LoginLog
+    public function setDeviceName(string $deviceName = null): LogLoginFailure
     {
         $this->deviceName = $deviceName;
 
@@ -646,9 +646,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $brandName
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setBrandName(string $brandName = null): LoginLog
+    public function setBrandName(string $brandName = null): LogLoginFailure
     {
         $this->brandName = $brandName;
 
@@ -666,9 +666,9 @@ class LoginLog implements EntityInterface
     /**
      * @param null|string $model
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setModel(string $model = null): LoginLog
+    public function setModel(string $model = null): LogLoginFailure
     {
         $this->model = $model;
 
@@ -686,9 +686,9 @@ class LoginLog implements EntityInterface
     /**
      * @param \DateTime $timestamp
      *
-     * @return LoginLog
+     * @return LogLoginFailure
      */
-    public function setTimestamp(\DateTime $timestamp): LoginLog
+    public function setTimestamp(\DateTime $timestamp): LogLoginFailure
     {
         $this->timestamp = $timestamp;
 

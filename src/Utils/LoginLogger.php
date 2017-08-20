@@ -7,10 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Utils;
 
-use App\Entity\LoginLog;
+use App\Entity\LogLoginSuccess;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Resource\LoginLogResource;
+use App\Resource\LogLoginSuccessResource;
 use DeviceDetector\DeviceDetector;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Monolog\Logger;
@@ -32,7 +32,7 @@ class LoginLogger implements LoginLoggerInterface
     private $logger;
 
     /**
-     * @var LoginLogResource
+     * @var LogLoginSuccessResource
      */
     private $loginLogResource;
 
@@ -64,14 +64,14 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * LoginLogger constructor.
      *
-     * @param LoggerInterface  $logger
-     * @param LoginLogResource $loginLogResource
-     * @param UserRepository   $userRepository
-     * @param RequestStack     $requestStack
+     * @param LoggerInterface         $logger
+     * @param LogLoginSuccessResource $loginLogResource
+     * @param UserRepository          $userRepository
+     * @param RequestStack            $requestStack
      */
     public function __construct(
         LoggerInterface $logger,
-        LoginLogResource $loginLogResource,
+        LogLoginSuccessResource $loginLogResource,
         UserRepository $userRepository,
         RequestStack $requestStack
     ) {
@@ -126,14 +126,14 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * Method to create new login entry and store it to database.
      *
-     * @return LoginLog
+     * @return LogLoginSuccess
      *
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
-    private function createEntry(): LoginLog
+    private function createEntry(): LogLoginSuccess
     {
         // Create new login entry
-        $userLogin = new LoginLog();
+        $userLogin = new LogLoginSuccess();
         $userLogin->setUser($this->user);
         $userLogin->setIp((string)$this->request->getClientIp());
         $userLogin->setHost($this->request->getHost());

@@ -206,18 +206,32 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
     private $requestLogs;
 
     /**
-     * @var Collection<LoginLog>
+     * @var Collection<LogLoginSuccess>
      *
      * @Groups({
-     *      "User.loginLogs",
+     *      "User.logsLoginSuccess",
      *  })
      *
      * @ORM\OneToMany(
-     *      targetEntity="App\Entity\LoginLog",
+     *      targetEntity="App\Entity\LogLoginSuccess",
      *      mappedBy="user",
      *  )
      */
-    private $loginLogs;
+    private $logsLoginSuccess;
+
+    /**
+     * @var Collection<LogLoginFailure>
+     *
+     * @Groups({
+     *      "User.logsLoginFailure",
+     *  })
+     *
+     * @ORM\OneToMany(
+     *      targetEntity="App\Entity\LogLoginFailure",
+     *      mappedBy="user",
+     *  )
+     */
+    private $logsLoginFailure;
 
     /**
      * User constructor.
@@ -228,7 +242,8 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
 
         $this->userGroups = new ArrayCollection();
         $this->requestLogs = new ArrayCollection();
-        $this->loginLogs = new ArrayCollection();
+        $this->logsLoginSuccess = new ArrayCollection();
+        $this->logsLoginFailure = new ArrayCollection();
     }
 
     /**
@@ -431,13 +446,23 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
     }
 
     /**
-     * Getter for user login log collection.
+     * Getter for user success login log collection.
      *
-     * @return Collection<LoginLog>|ArrayCollection<LoginLog>
+     * @return Collection<LogLoginSuccess>|ArrayCollection<LogLoginSuccess>
      */
-    public function getLoginLogs(): Collection
+    public function getLogsLoginSuccess(): Collection
     {
-        return $this->loginLogs;
+        return $this->logsLoginSuccess;
+    }
+
+    /**
+     * Getter for user failure login log collection.
+     *
+     * @return Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>
+     */
+    public function getLogsLoginFailure(): Collection
+    {
+        return $this->logsLoginFailure;
     }
 
     /**

@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Repository/LoginLogRepository.php
+ * /src/Repository/LogLoginSuccessRepository.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Repository;
 
-use App\Entity\LoginLog as Entity;
+use App\Entity\LogLoginSuccess as Entity;
 use App\Rest\Repository;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /**
- * Class LoginLogRepository
+ * Class LogLoginSuccessRepository
  *
  * @package App\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -23,6 +23,6 @@ use App\Rest\Repository;
  * @method Entity|null findOneBy(array $criteria, array $orderBy = null)
  * @method Entity[]    findByAdvanced(array $criteria, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
  */
-class LoginLogRepository extends Repository
+class LogLoginSuccessRepository extends Repository
 {
 }
