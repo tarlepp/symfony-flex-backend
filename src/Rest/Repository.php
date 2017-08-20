@@ -14,6 +14,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
 /**
  * Class Repository
@@ -21,10 +23,13 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  * @package App\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class Repository extends EntityRepository implements RepositoryInterface
+abstract class Repository extends EntityRepository implements RepositoryInterface, LoggerAwareInterface
 {
     const INNER_JOIN = 'innerJoin';
     const LEFT_JOIN = 'leftJoin';
+
+    // Traits
+    use LoggerAwareTrait;
 
     /**
      * Names of search columns.

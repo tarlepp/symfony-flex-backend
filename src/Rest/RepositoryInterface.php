@@ -10,6 +10,7 @@ namespace App\Rest;
 use App\Entity\EntityInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Interface RepositoryInterface
@@ -132,4 +133,50 @@ interface RepositoryInterface
      * @return integer
      */
     public function reset(): int;
+
+    /**
+     * With this method you can attach some custom functions for generic REST API find / count queries.
+     *
+     * @param QueryBuilder $queryBuilder
+     *
+     * @return void
+     */
+    public function processQueryBuilder(QueryBuilder $queryBuilder): void;
+
+    /**
+     * Adds left join to current QueryBuilder query.
+     *
+     * @note Requires processJoins() to be run
+     *
+     * @see QueryBuilder::leftJoin() for parameters
+     *
+     * @param array $parameters
+     *
+     * @return RepositoryInterface
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addLeftJoin(array $parameters): RepositoryInterface;
+
+    /**
+     * Adds inner join to current QueryBuilder query.
+     *
+     * @note Requires processJoins() to be run
+     *
+     * @see QueryBuilder::innerJoin() for parameters
+     *
+     * @param array $parameters
+     *
+     * @return RepositoryInterface
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function addInnerJoin(array $parameters): RepositoryInterface;
+
+    /**
+     * Process defined joins for current QueryBuilder instance.
+     *
+     * @param QueryBuilder $queryBuilder
+     */
+    public function processJoins(QueryBuilder $queryBuilder): void;
 }
