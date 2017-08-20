@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Integration/RequestLogRepositoryTest.php
+ * /tests/Integration/Integration/LogRequestRepositoryTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Repository;
 
-use App\Entity\RequestLog;
-use App\Repository\RequestLogRepository;
+use App\Entity\LogRequest;
+use App\Repository\LogRequestRepository;
 
 /**
  * Class UserRepositoryTest
@@ -16,22 +16,22 @@ use App\Repository\RequestLogRepository;
  * @package App\Tests\Integration\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RequestLogRepositoryTest extends RepositoryTestCase
+class LogRequestRepositoryTest extends RepositoryTestCase
 {
     /**
-     * @var RequestLogRepository
+     * @var LogRequestRepository
      */
     protected $repository;
 
     /**
      * @var string
      */
-    protected $entityName = RequestLog::class;
+    protected $entityName = LogRequest::class;
 
     /**
      * @var string
      */
-    protected $repositoryName = RequestLogRepository::class;
+    protected $repositoryName = LogRequestRepository::class;
 
     /**
      * @var array

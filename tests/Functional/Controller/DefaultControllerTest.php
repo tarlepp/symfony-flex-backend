@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Controller;
 
-use App\Resource\RequestLogResource;
+use App\Resource\LogRequestResource;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 /**
@@ -42,8 +42,8 @@ class DefaultControllerTest extends WebTestCase
     {
         static::bootKernel();
 
-        /** @var RequestLogResource $resource */
-        $resource = static::$kernel->getContainer()->get(RequestLogResource::class);
+        /** @var LogRequestResource $resource */
+        $resource = static::$kernel->getContainer()->get(LogRequestResource::class);
 
         $expectedLogCount = $resource->count();
 

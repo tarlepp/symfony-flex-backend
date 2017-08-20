@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Utils;
 
-use App\Resource\RequestLogResource;
+use App\Resource\LogRequestResource;
 use App\Utils\RequestLogger;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -25,11 +25,11 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogResource $resource
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface    $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
          */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $resource = $this->getMockBuilder(RequestLogResource::class)->disableOriginalConstructor()->getMock();
+        $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
         $resource
             ->expects(static::never())
@@ -43,11 +43,11 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLogIsNotCreatedIfResponseObjectIsNotSet(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogResource $resource
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface    $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
          */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $resource = $this->getMockBuilder(RequestLogResource::class)->disableOriginalConstructor()->getMock();
+        $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
         $resource
             ->expects(static::never())
@@ -61,11 +61,11 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatResourceSaveMethodIsCalled(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogResource $resource
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface    $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
          */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $resource = $this->getMockBuilder(RequestLogResource::class)->disableOriginalConstructor()->getMock();
+        $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
         $request = new Request();
         $response = new Response();
@@ -85,11 +85,11 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLoggerIsCalledIfExceptionIsThrown(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogResource $resource
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface    $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
          */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $resource = $this->getMockBuilder(RequestLogResource::class)->disableOriginalConstructor()->getMock();
+        $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
         $request = new Request();
         $response = new Response();

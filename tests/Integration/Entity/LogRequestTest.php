@@ -1,29 +1,29 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Entity/RequestLogTest.php
+ * /tests/Integration/Entity/LogRequestTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Entity;
 
-use App\Entity\RequestLog;
+use App\Entity\LogRequest;
 use App\Utils\Tests\PHPUnitUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class RequestLogTest
+ * Class LogRequestTest
  *
  * @package App\Tests\Integration\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RequestLogTest extends EntityTestCase
+class LogRequestTest extends EntityTestCase
 {
     /**
      * @var string
      */
-    protected $entityName = RequestLog::class;
+    protected $entityName = LogRequest::class;
 
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
@@ -33,11 +33,11 @@ class RequestLogTest extends EntityTestCase
      */
     public function testThatSensitiveDataIsCleanedFromHeaders(array $headers, array $expected)
     {
-        $requestLog = new RequestLog(Request::create(''), Response::create());
+        $logRequest = new LogRequest(Request::create(''), Response::create());
 
-        $requestLog->setHeaders($headers);
+        $logRequest->setHeaders($headers);
 
-        static::assertSame($expected, $requestLog->getHeaders());
+        static::assertSame($expected, $logRequest->getHeaders());
     }
 
     /**
@@ -48,11 +48,11 @@ class RequestLogTest extends EntityTestCase
      */
     public function testThatSensitiveDataIsCleanedFromParameters(array $parameters, array $expected)
     {
-        $requestLog = new RequestLog(Request::create(''), Response::create());
+        $logRequest = new LogRequest(Request::create(''), Response::create());
 
-        $requestLog->setParameters($parameters);
+        $logRequest->setParameters($parameters);
 
-        static::assertSame($expected, $requestLog->getParameters());
+        static::assertSame($expected, $logRequest->getParameters());
     }
 
     /**
@@ -63,11 +63,11 @@ class RequestLogTest extends EntityTestCase
      */
     public function testThatDetermineParametersWorksLikeExpected(string $content, array $expected)
     {
-        $requestLog = new RequestLog(Request::create(''), Response::create());
+        $logRequest = new LogRequest(Request::create(''), Response::create());
 
         $request = Request::create('', 'GET', [], [], [], [], $content);
 
-        static::assertSame($expected, PHPUnitUtil::callMethod($requestLog, 'determineParameters', [$request]));
+        static::assertSame($expected, PHPUnitUtil::callMethod($logRequest, 'determineParameters', [$request]));
     }
 
     /**
