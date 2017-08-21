@@ -7,14 +7,15 @@ declare(strict_types=1);
  */
 namespace App\Utils;
 
+use App\Entity\EntityInterface;
+use App\Entity\LogLoginFailure;
 use App\Entity\LogLoginSuccess;
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Resource\LogLoginFailureResource;
 use App\Resource\LogLoginSuccessResource;
+use App\Rest\RestResourceInterface;
 use DeviceDetector\DeviceDetector;
-use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Monolog\Logger;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -26,15 +27,18 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class LoginLogger implements LoginLoggerInterface
 {
-    /**
-     * @var Logger
-     */
-    private $logger;
+    const TYPE_SUCCESS = 'success';
+    const TYPE_FAILURE = 'failure';
 
     /**
      * @var LogLoginSuccessResource
      */
-    private $loginLogResource;
+    private $logLoginSuccessResource;
+
+    /**
+     * @var LogLoginFailureResource
+     */
+    private $logLoginFailureResource;
 
     /**
      * @var UserRepository
@@ -42,9 +46,9 @@ class LoginLogger implements LoginLoggerInterface
     private $userRepository;
 
     /**
-     * @var Request
+     * @var RequestStack
      */
-    private $request;
+    private $requestStack;
 
     /**
      * @var User
@@ -64,22 +68,22 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * LoginLogger constructor.
      *
-     * @param LoggerInterface         $logger
-     * @param LogLoginSuccessResource $loginLogResource
+     * @param LogLoginSuccessResource $logLoginSuccessResource
+     * @param LogLoginFailureResource $logLoginFailureResource
      * @param UserRepository          $userRepository
      * @param RequestStack            $requestStack
      */
     public function __construct(
-        LoggerInterface $logger,
-        LogLoginSuccessResource $loginLogResource,
+        LogLoginSuccessResource $logLoginSuccessResource,
+        LogLoginFailureResource $logLoginFailureResource,
         UserRepository $userRepository,
         RequestStack $requestStack
     ) {
         // Store used services
-        $this->logger = $logger;
-        $this->loginLogResource = $loginLogResource;
+        $this->logLoginSuccessResource = $logLoginSuccessResource;
+        $this->logLoginFailureResource = $logLoginFailureResource;
         $this->userRepository = $userRepository;
-        $this->request = $requestStack->getCurrentRequest();
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -106,53 +110,76 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * Method to handle login event.
      *
+     * @param string $type
+     *
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
-    public function handle(): void
+    public function process(string $type): void
     {
         // Specify user agent
-        $this->agent = $this->request->headers->get('User-Agent');
+        $this->agent = $this->requestStack->getCurrentRequest()->headers->get('User-Agent');
 
         // Parse user agent data with device detector
         $this->deviceDetector = new DeviceDetector($this->agent);
         $this->deviceDetector->parse();
 
         // Create entry
-        $this->createEntry();
-
-        $this->logger->debug('Created new login entry to database.');
+        $this->createEntry($type);
     }
 
     /**
      * Method to create new login entry and store it to database.
      *
-     * @return LogLoginSuccess
+     * @param string $type
      *
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
-    private function createEntry(): LogLoginSuccess
+    private function createEntry(string $type): void
     {
-        // Create new login entry
-        $userLogin = new LogLoginSuccess();
-        $userLogin->setUser($this->user);
-        $userLogin->setIp((string)$this->request->getClientIp());
-        $userLogin->setHost($this->request->getHost());
-        $userLogin->setAgent($this->agent);
-        $userLogin->setClientType($this->deviceDetector->getClient('type'));
-        $userLogin->setClientName($this->deviceDetector->getClient('name'));
-        $userLogin->setClientShortName($this->deviceDetector->getClient('short_name'));
-        $userLogin->setClientVersion($this->deviceDetector->getClient('version'));
-        $userLogin->setClientEngine($this->deviceDetector->getClient('engine'));
-        $userLogin->setOsName($this->deviceDetector->getOs('name'));
-        $userLogin->setOsShortName($this->deviceDetector->getOs('short_name'));
-        $userLogin->setOsVersion($this->deviceDetector->getOs('version'));
-        $userLogin->setOsPlatform($this->deviceDetector->getOs('platform'));
-        $userLogin->setDeviceName($this->deviceDetector->getDeviceName());
-        $userLogin->setBrandName($this->deviceDetector->getBrandName());
-        $userLogin->setModel($this->deviceDetector->getModel());
-        $userLogin->setTimestamp(new \DateTime('NOW', new \DateTimeZone('UTC')));
+        // Get current request
+        $request= $this->requestStack->getCurrentRequest();
+
+        /** @var LogLoginSuccess|LogLoginFailure $entry */
+        $entry = $this->getEntity($type);
+        $entry->setUser($this->user);
+        $entry->setIp((string)$request->getClientIp());
+        $entry->setHost($request->getHost());
+        $entry->setAgent($this->agent);
+        $entry->setClientType($this->deviceDetector->getClient('type'));
+        $entry->setClientName($this->deviceDetector->getClient('name'));
+        $entry->setClientShortName($this->deviceDetector->getClient('short_name'));
+        $entry->setClientVersion($this->deviceDetector->getClient('version'));
+        $entry->setClientEngine($this->deviceDetector->getClient('engine'));
+        $entry->setOsName($this->deviceDetector->getOs('name'));
+        $entry->setOsShortName($this->deviceDetector->getOs('short_name'));
+        $entry->setOsVersion($this->deviceDetector->getOs('version'));
+        $entry->setOsPlatform($this->deviceDetector->getOs('platform'));
+        $entry->setDeviceName($this->deviceDetector->getDeviceName());
+        $entry->setBrandName($this->deviceDetector->getBrandName());
+        $entry->setModel($this->deviceDetector->getModel());
+        $entry->setTimestamp(new \DateTime('NOW', new \DateTimeZone('UTC')));
 
         // And store entry to database
-        return $this->loginLogResource->save($userLogin, true);
+        $this->getResource($type)->save($entry, true);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return LogLoginFailure|LogLoginSuccess|EntityInterface
+     */
+    private function getEntity(string $type): EntityInterface
+    {
+        return $type === self::TYPE_SUCCESS ? new LogLoginSuccess() : new LogLoginFailure();
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return LogLoginFailureResource|LogLoginSuccessResource|RestResourceInterface
+     */
+    private function getResource(string $type): RestResourceInterface
+    {
+        return $type ===  self::TYPE_SUCCESS ? $this->logLoginSuccessResource : $this->logLoginFailureResource;
     }
 }

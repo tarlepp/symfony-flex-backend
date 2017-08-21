@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use App\Repository\UserRepository;
+use App\Resource\LogLoginFailureResource;
 use App\Resource\LogLoginSuccessResource;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -24,14 +25,14 @@ interface LoginLoggerInterface
     /**
      * LoginLogger constructor.
      *
-     * @param LoggerInterface         $logger
-     * @param LogLoginSuccessResource $loginLogResource
+     * @param LogLoginSuccessResource $logLoginSuccessResource
+     * @param LogLoginFailureResource $logLoginFailureResource
      * @param UserRepository          $userRepository
      * @param RequestStack            $requestStack
      */
     public function __construct(
-        LoggerInterface $logger,
-        LogLoginSuccessResource $loginLogResource,
+        LogLoginSuccessResource $logLoginSuccessResource,
+        LogLoginFailureResource $logLoginFailureResource,
         UserRepository $userRepository,
         RequestStack $requestStack
     );
@@ -51,7 +52,9 @@ interface LoginLoggerInterface
     /**
      * Method to handle login event.
      *
+     * @param string $type
+     *
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
-    public function handle(): void;
+    public function process(string $type): void;
 }
