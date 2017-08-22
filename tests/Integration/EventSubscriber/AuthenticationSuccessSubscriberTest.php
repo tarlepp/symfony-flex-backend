@@ -38,7 +38,7 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
 
         $loginLogger
             ->expects(static::once())
-            ->method('handle');
+            ->method('process');
 
         $subscriber = new AuthenticationSuccessSubscriber($loginLogger);
         $subscriber->onAuthenticationSuccess($event);
