@@ -40,12 +40,8 @@ class AuthenticationSuccessSubscriber
      *
      * @param AuthenticationSuccessEvent $event
      *
-     * @return void
-     *
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
