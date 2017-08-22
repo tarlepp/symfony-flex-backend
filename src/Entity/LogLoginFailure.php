@@ -48,7 +48,7 @@ class LogLoginFailure implements EntityInterface
     private $id;
 
     /**
-     * @var \App\Entity\User
+     * @var \App\Entity\User|null
      *
      * @Groups({
      *      "LoginFailureLog",
@@ -64,6 +64,7 @@ class LogLoginFailure implements EntityInterface
      *          name="user_id",
      *          referencedColumnName="id",
      *          onDelete="SET NULL",
+     *          nullable=true,
      *      ),
      *  })
      */
@@ -356,19 +357,19 @@ class LogLoginFailure implements EntityInterface
     }
 
     /**
-     * @return User
+     * @return User|null
      */
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
     /**
-     * @param User $user
+     * @param User|null $user
      *
      * @return LogLoginFailure
      */
-    public function setUser(User $user): LogLoginFailure
+    public function setUser(User $user = null): LogLoginFailure
     {
         $this->user = $user;
 
