@@ -9,9 +9,13 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
+    App\EventSubscriber\AuthenticationFailureSubscriber:
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailure }
+
     App\EventSubscriber\AuthenticationSuccessSubscriber:
         tags:
-           - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccess }
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccess }
 
     App\EventSubscriber\BodySubscriber:
         tags:
