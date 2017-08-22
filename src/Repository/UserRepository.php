@@ -50,7 +50,6 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
      *
      * @return null|UserInterface|Entity
      *
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function loadUserByUsername($username): ?UserInterface
@@ -66,7 +65,7 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
             ->setParameter('email', $username)
             ->getQuery();
 
-        return $query->getSingleResult();
+        return $query->getOneOrNullResult();
     }
 
     /**
