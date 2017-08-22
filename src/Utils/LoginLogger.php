@@ -89,20 +89,20 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * Setter for User object
      *
-     * @param UserInterface $user
+     * @param UserInterface|null $user
      *
      * @return LoginLoggerInterface
      *
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
-    public function setUser(UserInterface $user): LoginLoggerInterface
+    public function setUser(UserInterface $user = null): LoginLoggerInterface
     {
-        // We need to make sure that User object is right one
-        $user = $user instanceof User ? $user : $this->userRepository->loadUserByUsername($user->getUsername());
+        if ($user !== null) {
+            // We need to make sure that User object is right one
+            $user = $user instanceof User ? $user : $this->userRepository->loadUserByUsername($user->getUsername());
 
-        $this->user = $user;
+            $this->user = $user;
+        }
 
         return $this;
     }

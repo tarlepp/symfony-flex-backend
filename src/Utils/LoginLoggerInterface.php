@@ -10,7 +10,6 @@ namespace App\Utils;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
 use App\Resource\LogLoginSuccessResource;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -40,14 +39,13 @@ interface LoginLoggerInterface
     /**
      * Setter for User object
      *
-     * @param UserInterface $user
+     * @param UserInterface|null $user
      *
      * @return LoginLoggerInterface
      *
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function setUser(UserInterface $user): LoginLoggerInterface;
+    public function setUser(UserInterface $user = null): LoginLoggerInterface;
 
     /**
      * Method to handle login event.
