@@ -26,33 +26,4 @@ use App\Rest\Repository;
  */
 class LogLoginFailureRepository extends Repository
 {
-    /**
-     * @return array
-     */
-    public function getFailedAttempts(): array
-    {
-        // Create query
-        $qb = $this->createQueryBuilder('log')
-            ->select('log, COUNT(log.id) AS _count')
-            ->groupBy('log.user')
-            ->orderBy('log.timestamp', 'DESC');
-
-        return $qb->getQuery()->getArrayResult();
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return int
-     */
-    public function clearFailuresForUser(User $user): int
-    {
-        // Create DELETE query
-        $qb = $this->createQueryBuilder('log')
-            ->delete()
-            ->where('log.user = :user')
-            ->setParameter('user', $user->getId());
-
-        return (int)$qb->getQuery()->execute();
-    }
 }
