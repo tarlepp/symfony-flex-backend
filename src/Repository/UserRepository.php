@@ -9,6 +9,7 @@ namespace App\Repository;
 
 use App\Entity\User as Entity;
 use App\Rest\Repository;
+use Doctrine\ORM\NoResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -80,7 +81,6 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      * @throws \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      */
     public function refreshUser(UserInterface $user): UserInterface
@@ -91,7 +91,13 @@ class UserRepository extends Repository implements UserProviderInterface, UserLo
             throw new UnsupportedUserException(\sprintf('Instance of "%s" is not supported.', $class));
         }
 
-        return $this->loadUserByUsername($user->getUsername());
+        $output = $this->loadUserByUsername($user->getUsername());
+
+        if ($output === null) {
+            throw new NoResultException();
+        }
+
+        return $output;
     }
 
     /**
