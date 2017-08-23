@@ -57,12 +57,9 @@ class UserRepositoryTest extends KernelTestCase
         $this->repository = static::$kernel->getContainer()->get(UserRepository::class);
     }
 
-    /**
-     * @expectedException \Doctrine\ORM\NoResultException
-     */
-    public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidUsername(): void
+    public function testThatLoadUserByUsernameReturnsNullWithInvalidUsername(): void
     {
-        $this->repository->loadUserByUsername('foobar');
+        static::assertNull($this->repository->loadUserByUsername('foobar'));
     }
 
     /**
