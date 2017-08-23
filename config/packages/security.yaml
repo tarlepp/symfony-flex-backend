@@ -49,4 +49,5 @@ security:
 
 services:
     App\Security\Roles:
+        public: true
         arguments: [ '%security.role_hierarchy.roles%' ]
