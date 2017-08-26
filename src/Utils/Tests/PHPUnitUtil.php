@@ -7,6 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Utils\Tests;
 
+use App\Doctrine\DBAL\Types\EnumLogLoginType;
+
 /**
  * Class PHPUnitUtil
  *
@@ -112,6 +114,7 @@ class PHPUnitUtil
                 break;
             case 'text':
             case 'string':
+            case 'enumLogLogin':
                 $output = 'string';
                 break;
             case 'array':
@@ -192,6 +195,14 @@ class PHPUnitUtil
                 case 'boolean':
                     $output = true;
                     break;
+                case 'enumLogLogin':
+                    $valid = [
+                        EnumLogLoginType::TYPE_FAILURE,
+                        EnumLogLoginType::TYPE_SUCCESS,
+                    ];
+
+                    $output = $valid[\array_rand($valid)];
+                    break;
                 default:
                     $message = \sprintf(
                         "Cannot create valid value for type '%s'.",
@@ -232,6 +243,7 @@ class PHPUnitUtil
                 case 'string':
                 case 'array':
                 case 'boolean':
+                case 'enumLogLogin':
                     $output = new \stdClass();
                     break;
                 default:
