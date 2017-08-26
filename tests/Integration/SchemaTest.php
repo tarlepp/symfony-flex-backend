@@ -7,6 +7,8 @@ declare(strict_types = 1);
  */
 namespace App\Tests\Integration;
 
+use App\Doctrine\DBAL\Types\EnumLogLoginType;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaValidator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -30,6 +32,10 @@ class SchemaTest extends KernelTestCase
     protected function setUp()
     {
         self::bootKernel();
+
+        if (!Type::hasType('EnumLogLogin')) {
+            Type::addType('EnumLogLogin', EnumLogLoginType::class);
+        }
 
         /** @var EntityManagerInterface $em */
         $em = static::$kernel->getContainer()
