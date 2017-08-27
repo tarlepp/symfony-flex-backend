@@ -40,8 +40,7 @@
         "symfony/serializer": "3.3.6",
         "symfony/twig-bundle": "3.3.6",
         "symfony/validator": "3.3.6",
-        "symfony/yaml": "3.3.6",
-        "zircote/swagger-php": "2.0.9"
+        "symfony/yaml": "3.3.6"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "2.3.0",

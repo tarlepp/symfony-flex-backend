@@ -120,16 +120,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.7.0",
+            "version": "v1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "53d9518ffeb019c51d542ff60cb578f076d3ff16"
+                "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/53d9518ffeb019c51d542ff60cb578f076d3ff16",
-                "reference": "53d9518ffeb019c51d542ff60cb578f076d3ff16",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/b3217d58609e9c8e661cd41357a54d926c4a2a1a",
+                "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a",
                 "shasum": ""
             },
             "require": {
@@ -190,7 +190,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2017-07-22T13:00:15+00:00"
+            "time": "2017-08-25T07:02:50+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -1527,12 +1527,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "e4009b4f64a77d419b3560292c126a331ce6304c"
+                "reference": "2b95b1bd0f67552e7cbef0b205a1f1a89146f531"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/e4009b4f64a77d419b3560292c126a331ce6304c",
-                "reference": "e4009b4f64a77d419b3560292c126a331ce6304c",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/2b95b1bd0f67552e7cbef0b205a1f1a89146f531",
+                "reference": "2b95b1bd0f67552e7cbef0b205a1f1a89146f531",
                 "shasum": ""
             },
             "require": {
@@ -1599,7 +1599,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-08-04T08:36:46+00:00"
+            "time": "2017-08-23T21:21:46+00:00"
         },
         {
             "name": "ocramius/package-versions",
