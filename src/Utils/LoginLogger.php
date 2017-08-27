@@ -7,14 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Utils;
 
-use App\Entity\EntityInterface;
-use App\Entity\LogLoginFailure;
-use App\Entity\LogLoginSuccess;
+use App\Entity\LogLogin;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Resource\LogLoginFailureResource;
-use App\Resource\LogLoginSuccessResource;
-use App\Rest\RestResourceInterface;
+use App\Resource\LogLoginResource;
 use DeviceDetector\DeviceDetector;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -27,18 +23,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class LoginLogger implements LoginLoggerInterface
 {
-    const TYPE_SUCCESS = 'success';
-    const TYPE_FAILURE = 'failure';
-
     /**
-     * @var LogLoginSuccessResource
+     * @var LogLoginResource
      */
-    private $logLoginSuccessResource;
-
-    /**
-     * @var LogLoginFailureResource
-     */
-    private $logLoginFailureResource;
+    private $logLoginResource;
 
     /**
      * @var UserRepository
@@ -68,20 +56,17 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * LoginLogger constructor.
      *
-     * @param LogLoginSuccessResource $logLoginSuccessResource
-     * @param LogLoginFailureResource $logLoginFailureResource
+     * @param LogLoginResource        $logLoginFailureResource
      * @param UserRepository          $userRepository
      * @param RequestStack            $requestStack
      */
     public function __construct(
-        LogLoginSuccessResource $logLoginSuccessResource,
-        LogLoginFailureResource $logLoginFailureResource,
+        LogLoginResource $logLoginFailureResource,
         UserRepository $userRepository,
         RequestStack $requestStack
     ) {
         // Store used services
-        $this->logLoginSuccessResource = $logLoginSuccessResource;
-        $this->logLoginFailureResource = $logLoginFailureResource;
+        $this->logLoginResource = $logLoginFailureResource;
         $this->userRepository = $userRepository;
         $this->requestStack = $requestStack;
     }
@@ -139,8 +124,9 @@ class LoginLogger implements LoginLoggerInterface
         // Get current request
         $request= $this->requestStack->getCurrentRequest();
 
-        /** @var LogLoginSuccess|LogLoginFailure $entry */
-        $entry = $this->getEntity($type);
+        /** @var LogLogin $entry */
+        $entry = new LogLogin();
+        $entry->setType($type);
         $entry->setUser($this->user);
         $entry->setIp((string)$request->getClientIp());
         $entry->setHost($request->getHost());
@@ -160,26 +146,6 @@ class LoginLogger implements LoginLoggerInterface
         $entry->setTimestamp(new \DateTime('NOW', new \DateTimeZone('UTC')));
 
         // And store entry to database
-        $this->getResource($type)->save($entry, true);
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return LogLoginFailure|LogLoginSuccess|EntityInterface
-     */
-    private function getEntity(string $type): EntityInterface
-    {
-        return $type === self::TYPE_SUCCESS ? new LogLoginSuccess() : new LogLoginFailure();
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return LogLoginFailureResource|LogLoginSuccessResource|RestResourceInterface
-     */
-    private function getResource(string $type): RestResourceInterface
-    {
-        return $type ===  self::TYPE_SUCCESS ? $this->logLoginSuccessResource : $this->logLoginFailureResource;
+        $this->logLoginResource->save($entry, true);
     }
 }
