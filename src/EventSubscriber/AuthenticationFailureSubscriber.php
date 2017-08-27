@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\EventSubscriber;
 
+use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
@@ -57,6 +58,6 @@ class AuthenticationFailureSubscriber
         $user = $this->userRepository->loadUserByUsername($event->getException()->getToken()->getUser());
 
         $this->loginLogger->setUser($user);
-        $this->loginLogger->process(LoginLogger::TYPE_FAILURE);
+        $this->loginLogger->process(EnumLogLoginType::TYPE_FAILURE);
     }
 }

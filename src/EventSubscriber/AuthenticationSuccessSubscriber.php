@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\EventSubscriber;
 
+use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 
@@ -46,6 +47,6 @@ class AuthenticationSuccessSubscriber
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
         $this->loginLogger->setUser($event->getUser());
-        $this->loginLogger->process(LoginLogger::TYPE_SUCCESS);
+        $this->loginLogger->process(EnumLogLoginType::TYPE_SUCCESS);
     }
 }
