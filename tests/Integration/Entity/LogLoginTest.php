@@ -1,24 +1,24 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Entity/LogLoginFailureTest.php
+ * /tests/Integration/Entity/LogLoginTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Entity;
 
-use App\Entity\LogLoginFailure;
+use App\Entity\LogLogin;
 
 /**
- * Class LogLoginFailureTest
+ * Class LogLoginTest
  *
  * @package App\Tests\Integration\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LogLoginFailureTest extends EntityTestCase
+class LogLoginTest extends EntityTestCase
 {
     /**
      * @var string
      */
-    protected $entityName = LogLoginFailure::class;
+    protected $entityName = LogLogin::class;
 }

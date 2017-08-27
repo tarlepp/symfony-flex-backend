@@ -1,32 +1,32 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Integration/LogLoginFailureRepositoryTest.php
+ * /tests/Integration/Integration/LogLoginRepositoryTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Repository;
 
-use App\Entity\LogLoginFailure;
-use App\Repository\LogLoginFailureRepository;
+use App\Entity\LogLogin;
+use App\Repository\LogLoginRepository;
 
 /**
- * Class LogLoginFailureRepositoryTest
+ * Class LogLoginRepositoryTest
  *
  * @package App\Tests\Integration\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LogLoginFailureRepositoryTest extends RepositoryTestCase
+class LogLoginRepositoryTest extends RepositoryTestCase
 {
     /**
      * @var string
      */
-    protected $entityName = LogLoginFailure::class;
+    protected $entityName = LogLogin::class;
 
     /**
      * @var string
      */
-    protected $repositoryName = LogLoginFailureRepository::class;
+    protected $repositoryName = LogLoginRepository::class;
 
     /**
      * @var array
