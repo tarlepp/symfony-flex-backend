@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Resource/LogLoginFailureResource.php
+ * /src/Resource/LogLoginResource.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Resource;
 
 use App\Entity\EntityInterface;
-use App\Entity\LogLoginFailure as Entity;
-use App\Repository\LogLoginFailureRepository as Repository;
+use App\Entity\LogLogin as Entity;
+use App\Repository\LogLoginRepository as Repository;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\RestResource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
 /**
- * Class LogLoginFailureResource
+ * Class LogLoginResource
  *
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @method Entity      delete(string $id): EntityInterface
  * @method Entity      save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
  */
-class LogLoginFailureResource extends RestResource
+class LogLoginResource extends RestResource
 {
     /**
      * LogLoginFailureResource constructor.
