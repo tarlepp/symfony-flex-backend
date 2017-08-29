@@ -146,4 +146,49 @@ class AuthController
             true
         );
     }
+
+    /**
+     * Endpoint action to get current user roles as an array.
+     *
+     * @Route("/roles");
+     *
+     * @Method("GET")
+     *
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="User roles",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @SWG\Items(type="string"),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Tag(name="Authentication")
+     *
+     * @param UserInterface $user
+     * @param Roles         $roles
+     *
+     * @return JsonResponse
+     */
+    public function rolesAction(UserInterface $user, Roles $roles): JsonResponse
+    {
+        return new JsonResponse($roles->getInheritedRoles($user->getRoles()));
+    }
 }
