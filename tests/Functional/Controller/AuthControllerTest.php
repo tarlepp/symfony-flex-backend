@@ -151,6 +151,44 @@ class AuthControllerTest extends WebTestCase
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
+    public function testThatGetRolesActionReturns401WithoutToken(): void
+    {
+        $client = static::createClient();
+        $client->request('GET', $this->baseUrl . '/roles');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(401, $response->getStatusCode());
+
+        $responseContent = JSON::decode($response->getContent());
+
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
+        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
+        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGetRolesActionReturnsExpected
+     *
+     * @param string $username
+     * @param string $password
+     * @param array  $expected
+     */
+    public function testThatGetRolesActionReturnsExpected(string $username, string $password, array $expected): void
+    {
+        $client = $this->getClient($username, $password);
+        $client->request('GET', $this->baseUrl . '/roles');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame($expected, JSON::decode($response->getContent(), true), $response->getContent());
+    }
+
     /**
      * @return array
      */
@@ -173,16 +211,35 @@ class AuthControllerTest extends WebTestCase
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): array
     {
         return [
-            ['john',                        'password'],
-            ['john.doe@test.com',           'password'],
-            ['john-logged',                 'password-logged'],
-            ['john.doe-logged@test.com',    'password-logged'],
-            ['john-user',                   'password-user'],
-            ['john.doe-user@test.com',      'password-user'],
-            ['john-admin',                  'password-admin'],
-            ['john.doe-admin@test.com',     'password-admin'],
-            ['john-root',                   'password-root'],
-            ['john.doe-root@test.com',      'password-root'],
+            ['john',                     'password'],
+            ['john.doe@test.com',        'password'],
+            ['john-logged',              'password-logged'],
+            ['john.doe-logged@test.com', 'password-logged'],
+            ['john-user',                'password-user'],
+            ['john.doe-user@test.com',   'password-user'],
+            ['john-admin',               'password-admin'],
+            ['john.doe-admin@test.com',  'password-admin'],
+            ['john-root',                'password-root'],
+            ['john.doe-root@test.com',   'password-root'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetRolesActionReturnsExpected(): array
+    {
+        return [
+            ['john',                     'password',        []],
+            ['john.doe@test.com',        'password',        []],
+            ['john-logged',              'password-logged', ['ROLE_LOGGED']],
+            ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']],
+            ['john-user',                'password-user',   ['ROLE_USER', 'ROLE_LOGGED']],
+            ['john.doe-user@test.com',   'password-user',   ['ROLE_USER', 'ROLE_LOGGED']],
+            ['john-admin',               'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
+            ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
+            ['john-root',                'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
+            ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
         ];
     }
 }
