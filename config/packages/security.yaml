@@ -47,6 +47,9 @@ security:
         ROLE_ADMIN: [ROLE_USER]
         ROLE_ROOT:  [ROLE_ADMIN]
 
+    access_decision_manager:
+        strategy: unanimous
+
 services:
     App\Security\Roles:
         public: true
