@@ -41,7 +41,7 @@ class RestIntegrationControllerTestCase extends ContainerTestCase
 
     public function testThatGivenControllerIsCorrect(): void
     {
-        $expected = mb_substr((new \ReflectionClass($this))->getShortName(), 0, -4);
+        $expected = \mb_substr((new \ReflectionClass($this))->getShortName(), 0, -4);
 
         $message = \sprintf(
             'Your REST controller integration test \'%s\' uses likely wrong controller class \'%s\'',
