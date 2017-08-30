@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Symfony2PluginSettings">
+    <option name="directoryToWeb" value="public" />
     <option name="directoryToApp" value="src" />
     <option name="pluginEnabled" value="true" />
     <option name="phpHighlightServices" value="true" />
