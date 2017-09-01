@@ -171,7 +171,7 @@ class UserController extends Controller
      *
      * @return JsonResponse
      */
-    public function getUserRoles(User $requestUser, Roles $roles): JsonResponse
+    public function getUserRolesAction(User $requestUser, Roles $roles): JsonResponse
     {
         return new JsonResponse($roles->getInheritedRoles($requestUser->getRoles()));
     }
