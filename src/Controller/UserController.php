@@ -17,11 +17,13 @@ use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
+use App\Security\Roles;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -113,5 +115,64 @@ class UserController extends Controller
         }
 
         return $this->deleteMethod($request, $user->getId());
+    }
+
+    /**
+     * Endpoint action to fetch specified user roles.
+     *
+     * @Route(
+     *      "/{id}/roles",
+     *      requirements={
+     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+     *      }
+     *  )
+     *
+     * @ParamConverter(
+     *     "requestUser",
+     *     class="App:User"
+     *  )
+     *
+     * @Method({"GET"})
+     *
+     * @Security("is_granted('IS_USER_HIMSELF', requestUser) or has_role('ROLE_ROOT')")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="Specified user roles",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @SWG\Items(type="string"),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Response(
+     *      response=403,
+     *      description="Access denied",
+     *  )
+     * @SWG\Tag(name="User Management")
+     *
+     * @param User  $requestUser
+     * @param Roles $roles
+     *
+     * @return JsonResponse
+     */
+    public function getUserRoles(User $requestUser, Roles $roles): JsonResponse
+    {
+        return new JsonResponse($roles->getInheritedRoles($requestUser->getRoles()));
     }
 }
