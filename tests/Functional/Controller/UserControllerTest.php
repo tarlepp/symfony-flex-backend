@@ -7,7 +7,9 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Controller;
 
+use App\Entity\User;
 use App\Resource\UserResource;
+use App\Security\Roles;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -317,6 +319,70 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatGetRolesActionsReturns403ForInvalidUser
+     *
+     * @param string $username
+     * @param string $password
+     * @param array  $userIds
+     */
+    public function testThatGetRolesActionsReturns403ForInvalidUser(string $username, string $password, array $userIds): void
+    {
+        $client = $this->getClient($username, $password);
+
+        foreach ($userIds as $userId) {
+            $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
+
+            $response = $client->getResponse();
+
+            static::assertInstanceOf(Response::class, $response);
+            static::assertSame(403, $response->getStatusCode(), $response->getContent());
+        }
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGetRolesActionsReturns200ForUserHimself
+     *
+     * @param string $username
+     * @param string $password
+     * @param string $userId
+     * @param string $expectedResponse
+     */
+    public function testThatGetRolesActionsReturns200ForUserHimself(
+        string $username,
+        string $password,
+        string $userId,
+        string $expectedResponse
+    ): void
+    {
+        $client = $this->getClient($username, $password);
+        $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGetRolesActionReturns200ForRootRoleUser
+     *
+     * @param string $userId
+     * @param string $expectedResponse
+     */
+    public function testThatGetRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
+    {
+        $client = $this->getClient('john-root','password-root');
+        $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
+    }
+
+    /**
      * @return array
      */
     public function dataProviderValidUsers(): array
@@ -350,5 +416,105 @@ class UserControllerTest extends WebTestCase
             ['john-user',   'password-user'],
             ['john-admin',  'password-admin'],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetRolesActionsReturns403ForInvalidUser(): array
+    {
+        self::bootKernel();
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        $users = $userResource->find();
+
+        $iterator = function(array $userData) use ($users): array {
+            $ids = [];
+
+            foreach ($users as $user) {
+                if ($user->getUsername() === $userData[0]) {
+                    continue;
+                }
+
+                $ids[] = $user->getId();
+            }
+
+            $userData[] = $ids;
+
+            return $userData;
+        };
+
+        return \array_map($iterator, $this->dataProviderInvalidUsersCreate());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetRolesActionsReturns200ForUserHimself(): array
+    {
+        self::bootKernel();
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        /** @var Roles $rolesService */
+        $rolesService = static::$kernel->getContainer()->get(Roles::class);
+
+        $users = $userResource->find();
+
+        $iterator = function(array $userData) use ($users, $rolesService): array {
+            /** @var User $user */
+            $user = \array_values(
+                \array_filter(
+                    $users,
+                    function(User $user) use ($userData) {
+                        return $userData[0] === $user->getUsername();
+                    }
+                )
+            )[0];
+
+            $user->setRolesService($rolesService);
+
+            $userData[] = $user->getId();
+            $userData[] = JSON::encode($user->getRoles());
+
+            return $userData;
+        };
+
+        $credentials = [
+            ['john',        'password'],
+            ['john-logged', 'password-logged'],
+            ['john-user',   'password-user'],
+            ['john-admin',  'password-admin'],
+            ['john-root',   'password-root'],
+        ];
+
+        return \array_map($iterator, $credentials);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetRolesActionReturns200ForRootRoleUser(): array
+    {
+        self::bootKernel();
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        /** @var Roles $rolesService */
+        $rolesService = static::$kernel->getContainer()->get(Roles::class);
+
+        $output = [];
+
+        foreach ($userResource->find() as $user) {
+            $user->setRolesService($rolesService);
+
+            $output[] = [$user->getId(), JSON::encode($user->getRoles())];
+        }
+
+        return $output;
     }
 }
