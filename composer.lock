@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d647bf426c4ae1b248c18f8f009b5503",
+    "content-hash": "463c4242fa58ab5bda7d552ca801e817",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3089,16 +3089,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.16",
+            "version": "v1.0.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "17e56322f33990daa08cf5761c80188b3a2b41b1"
+                "reference": "6cfb2e6f690d905843cc52ea3236eb54ba50a42e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/17e56322f33990daa08cf5761c80188b3a2b41b1",
-                "reference": "17e56322f33990daa08cf5761c80188b3a2b41b1",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/6cfb2e6f690d905843cc52ea3236eb54ba50a42e",
+                "reference": "6cfb2e6f690d905843cc52ea3236eb54ba50a42e",
                 "shasum": ""
             },
             "require": {
@@ -3131,7 +3131,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2017-08-23T16:58:35+00:00"
+            "time": "2017-09-01T23:43:15+00:00"
         },
         {
             "name": "symfony/form",
