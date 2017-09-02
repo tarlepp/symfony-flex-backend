@@ -76,6 +76,11 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('persist')
             ->with($entityInterface);
 
+        $entityManager
+            ->expects(static::exactly(2))
+            ->method('isOpen')
+            ->willReturn(true);
+
         // Check that 'flush' method is called
         $entityManager
             ->expects(static::once())
@@ -104,6 +109,11 @@ class GenericRepositoryTest extends KernelTestCase
             ->expects(static::once())
             ->method('remove')
             ->with($entityInterface);
+
+        $entityManager
+            ->expects(static::exactly(2))
+            ->method('isOpen')
+            ->willReturn(true);
 
         // Check that 'flush' method is called
         $entityManager
