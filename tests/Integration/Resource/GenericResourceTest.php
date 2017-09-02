@@ -15,7 +15,7 @@ use App\Rest\DTO\RestDtoInterface;
 use App\Rest\DTO\User as UserDto;
 use App\Rest\RepositoryInterface;
 use App\Rest\RestResourceInterface;
-use App\Security\Roles;
+use App\Security\RolesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit_Framework_MockObject_MockBuilder;
@@ -695,7 +695,7 @@ class GenericResourceTest extends KernelTestCase
      */
     private function getResource(RepositoryInterface $repository, ValidatorInterface $validator = null)
     {
-        $roles = $this->getMockBuilder(Roles::class)->disableOriginalConstructor()->getMock();
+        $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
         $validator = $validator ?? self::getValidator();
 

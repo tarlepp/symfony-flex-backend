@@ -11,7 +11,7 @@ use App\Entity\Role as RoleEntity;
 use App\Form\DataTransformer\RoleTransformer;
 use App\Repository\RoleRepository;
 use App\Rest\DTO\UserGroup as UserGroupDto;
-use App\Security\Roles;
+use App\Security\RolesService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
@@ -27,7 +27,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class UserGroupType extends AbstractType
 {
     /**
-     * @var Roles
+     * @var RolesService
      */
     private $roles;
 
@@ -44,12 +44,12 @@ class UserGroupType extends AbstractType
     /**
      * UserGroupType constructor.
      *
-     * @param Roles          $roles
+     * @param RolesService   $roles
      * @param RoleRepository $roleRepository
      * @param ObjectManager  $objectManager
      */
     public function __construct(
-        Roles $roles,
+        RolesService $roles,
         RoleRepository $roleRepository,
         ObjectManager $objectManager
     )

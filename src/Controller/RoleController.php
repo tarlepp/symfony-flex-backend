@@ -14,7 +14,7 @@ use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
-use App\Security\Roles;
+use App\Security\RolesService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -135,12 +135,12 @@ class RoleController extends Controller
      *
      * @RestApiDoc()
      *
-     * @param Roles $roles
-     * @param Role  $role
+     * @param RolesService $roles
+     * @param Role         $role
      *
      * @return JsonResponse
      */
-    public function getInheritedRolesAction(Roles $roles, Role $role): JsonResponse
+    public function getInheritedRolesAction(RolesService $roles, Role $role): JsonResponse
     {
         return new JsonResponse($roles->getInheritedRoles([$role->getId()]));
     }

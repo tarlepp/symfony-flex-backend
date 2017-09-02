@@ -13,7 +13,7 @@ namespace App\Security;
  * @package Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-interface RolesInterface
+interface RolesServiceInterface
 {
     // Used role constants
     const ROLE_LOGGED   = 'ROLE_LOGGED';

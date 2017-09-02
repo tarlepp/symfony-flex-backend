@@ -11,7 +11,7 @@ use App\Entity\Role;
 use App\Form\Type\Rest\UserGroup\UserGroupType;
 use App\Repository\RoleRepository;
 use App\Rest\DTO\UserGroup as UserGroupDto;
-use App\Security\Roles;
+use App\Security\RolesService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -25,7 +25,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class UserGroupTypeTest extends TypeTestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Roles
+     * @var PHPUnit_Framework_MockObject_MockObject|RolesService
      */
     private $mockRoles;
 
@@ -93,7 +93,7 @@ class UserGroupTypeTest extends TypeTestCase
 
     protected function setUp(): void
     {
-        $this->mockRoles = $this->createMock(Roles::class);
+        $this->mockRoles = $this->createMock(RolesService::class);
         $this->mockRoleRepository = $this->createMock(RoleRepository::class);
         $this->mockObjectManager = $this->createMock(ObjectManager::class);
 

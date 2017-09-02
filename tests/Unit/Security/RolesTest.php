@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Tests\Unit\Security;
 
-use App\Security\Roles;
+use App\Security\RolesService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class RolesTest extends KernelTestCase
 {
     /**
-     * @var Roles
+     * @var RolesService
      */
     protected $service;
 
@@ -29,7 +29,7 @@ class RolesTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->service = static::$kernel->getContainer()->get(Roles::class);
+        $this->service = static::$kernel->getContainer()->get(RolesService::class);
     }
 
     public function testThatGetHierarchyReturnsExpected(): void
@@ -102,10 +102,10 @@ class RolesTest extends KernelTestCase
     public function dataProviderTestThatGetRoleLabelReturnsExpected(): array
     {
         return [
-            [Roles::ROLE_LOGGED, 'Logged in users'],
-            [Roles::ROLE_USER, 'Normal users'],
-            [Roles::ROLE_ADMIN, 'Admin users'],
-            [Roles::ROLE_ROOT, 'Root users'],
+            [RolesService::ROLE_LOGGED, 'Logged in users'],
+            [RolesService::ROLE_USER, 'Normal users'],
+            [RolesService::ROLE_ADMIN, 'Admin users'],
+            [RolesService::ROLE_ROOT, 'Root users'],
             ['Not supported role', 'Unknown - Not supported role'],
         ];
     }
@@ -116,10 +116,10 @@ class RolesTest extends KernelTestCase
     public function dataProviderTestThatGetShortReturnsExpected(): array
     {
         return [
-            [Roles::ROLE_LOGGED, 'logged'],
-            [Roles::ROLE_USER, 'user'],
-            [Roles::ROLE_ADMIN, 'admin'],
-            [Roles::ROLE_ROOT, 'root'],
+            [RolesService::ROLE_LOGGED, 'logged'],
+            [RolesService::ROLE_USER, 'user'],
+            [RolesService::ROLE_ADMIN, 'admin'],
+            [RolesService::ROLE_ROOT, 'root'],
             ['SOME_CUSTOM_ROLE', 'custom_role']
         ];
     }
@@ -130,10 +130,10 @@ class RolesTest extends KernelTestCase
     public function dataProviderTestThatGetInheritedRolesReturnsExpected(): array
     {
         return [
-            [[Roles::ROLE_LOGGED], [Roles::ROLE_LOGGED]],
-            [[Roles::ROLE_USER, Roles::ROLE_LOGGED], [Roles::ROLE_USER]],
-            [[Roles::ROLE_ADMIN, Roles::ROLE_USER, Roles::ROLE_LOGGED], [Roles::ROLE_ADMIN]],
-            [[Roles::ROLE_ROOT, Roles::ROLE_ADMIN, Roles::ROLE_USER, Roles::ROLE_LOGGED], [Roles::ROLE_ROOT]],
+            [[RolesService::ROLE_LOGGED], [RolesService::ROLE_LOGGED]],
+            [[RolesService::ROLE_USER, RolesService::ROLE_LOGGED], [RolesService::ROLE_USER]],
+            [[RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED], [RolesService::ROLE_ADMIN]],
+            [[RolesService::ROLE_ROOT, RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED], [RolesService::ROLE_ROOT]],
         ];
     }
 }

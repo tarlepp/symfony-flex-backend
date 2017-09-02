@@ -9,8 +9,8 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
 use App\Entity\UserGroup;
-use App\Security\Roles;
-use App\Security\RolesInterface;
+use App\Security\RolesService;
+use App\Security\RolesServiceInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -36,7 +36,7 @@ class LoadUserGroupData extends AbstractFixture implements OrderedFixtureInterfa
     private $manager;
 
     /**
-     * @var RolesInterface
+     * @var RolesServiceInterface
      */
     private $roles;
 
@@ -59,7 +59,7 @@ class LoadUserGroupData extends AbstractFixture implements OrderedFixtureInterfa
     public function load(ObjectManager $manager): void
     {
         $this->manager = $manager;
-        $this->roles = $this->container->get(Roles::class);
+        $this->roles = $this->container->get(RolesService::class);
 
         // Create entities
         \array_map([$this, 'createUserGroup'], $this->roles->getRoles());

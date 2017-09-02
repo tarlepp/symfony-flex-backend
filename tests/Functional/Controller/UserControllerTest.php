@@ -9,7 +9,7 @@ namespace App\Tests\Functional\Controller;
 
 use App\Entity\User;
 use App\Resource\UserResource;
-use App\Security\Roles;
+use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -459,8 +459,8 @@ class UserControllerTest extends WebTestCase
         /** @var UserResource $userResource */
         $userResource = static::$kernel->getContainer()->get(UserResource::class);
 
-        /** @var Roles $rolesService */
-        $rolesService = static::$kernel->getContainer()->get(Roles::class);
+        /** @var RolesService $rolesService */
+        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
 
         $users = $userResource->find();
 
@@ -504,8 +504,8 @@ class UserControllerTest extends WebTestCase
         /** @var UserResource $userResource */
         $userResource = static::$kernel->getContainer()->get(UserResource::class);
 
-        /** @var Roles $rolesService */
-        $rolesService = static::$kernel->getContainer()->get(Roles::class);
+        /** @var RolesService $rolesService */
+        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
 
         $output = [];
 

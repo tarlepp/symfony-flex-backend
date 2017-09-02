@@ -12,7 +12,7 @@ use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Rest\DTO\User as UserDto;
-use App\Security\Roles;
+use App\Security\RolesService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -70,7 +70,7 @@ class CreateUserCommand extends Command
     private $userGroupResource;
 
     /**
-     * @var Roles
+     * @var RolesService
      */
     private $roles;
 
@@ -90,7 +90,7 @@ class CreateUserCommand extends Command
      * @param null              $name
      * @param UserResource      $userResource
      * @param UserGroupResource $userGroupResource
-     * @param Roles             $roles
+     * @param RolesService      $roles
      * @param RoleRepository    $roleRepository
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
@@ -99,7 +99,7 @@ class CreateUserCommand extends Command
         $name = null,
         UserResource $userResource,
         UserGroupResource $userGroupResource,
-        Roles $roles,
+        RolesService $roles,
         RoleRepository $roleRepository
     )
     {

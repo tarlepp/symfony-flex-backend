@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Security\Roles;
+use App\Security\RolesService;
 use App\Utils\JSON;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -113,7 +113,7 @@ class AuthController
      * @SWG\Tag(name="Authentication")
      *
      * @param UserInterface|User  $user
-     * @param Roles               $roles
+     * @param RolesService        $roles
      * @param SerializerInterface $serializer
      *
      * @return JsonResponse
@@ -122,7 +122,7 @@ class AuthController
      */
     public function profileAction(
         UserInterface $user,
-        Roles $roles,
+        RolesService $roles,
         SerializerInterface $serializer
     ): JsonResponse
     {
@@ -183,11 +183,11 @@ class AuthController
      * @SWG\Tag(name="Authentication")
      *
      * @param UserInterface $user
-     * @param Roles         $roles
+     * @param RolesService  $roles
      *
      * @return JsonResponse
      */
-    public function rolesAction(UserInterface $user, Roles $roles): JsonResponse
+    public function rolesAction(UserInterface $user, RolesService $roles): JsonResponse
     {
         return new JsonResponse($roles->getInheritedRoles($user->getRoles()));
     }

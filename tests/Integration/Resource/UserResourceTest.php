@@ -12,7 +12,7 @@ use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\RepositoryInterface;
 use App\Rest\RestResourceInterface;
-use App\Security\Roles;
+use App\Security\RolesService;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -36,7 +36,7 @@ class UserResourceTest extends ResourceTestCase
      */
     protected function getResource(RepositoryInterface $repository, ValidatorInterface $validator): RestResourceInterface
     {
-        $roles = $this->getMockBuilder(Roles::class)->disableOriginalConstructor()->getMock();
+        $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
         return new $this->resourceClass($repository, $validator, $roles);
     }

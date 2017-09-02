@@ -17,7 +17,7 @@ use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
-use App\Security\Roles;
+use App\Security\RolesService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -166,12 +166,12 @@ class UserController extends Controller
      *  )
      * @SWG\Tag(name="User Management")
      *
-     * @param User  $requestUser
-     * @param Roles $roles
+     * @param User         $requestUser
+     * @param RolesService $roles
      *
      * @return JsonResponse
      */
-    public function getUserRolesAction(User $requestUser, Roles $roles): JsonResponse
+    public function getUserRolesAction(User $requestUser, RolesService $roles): JsonResponse
     {
         return new JsonResponse($roles->getInheritedRoles($requestUser->getRoles()));
     }

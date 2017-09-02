@@ -14,7 +14,7 @@ use App\Repository\UserRepository as Repository;
 use App\Rest\DTO\RestDtoInterface;
 use App\Rest\DTO\User;
 use App\Rest\RestResource;
-use App\Security\Roles;
+use App\Security\RolesService;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserResource extends RestResource
 {
     /**
-     * @var Roles
+     * @var RolesService
      */
     private $roles;
 
@@ -46,9 +46,9 @@ class UserResource extends RestResource
      *
      * @param Repository         $repository
      * @param ValidatorInterface $validator
-     * @param Roles              $roles
+     * @param RolesService       $roles
      */
-    public function __construct(Repository $repository, ValidatorInterface $validator, Roles $roles)
+    public function __construct(Repository $repository, ValidatorInterface $validator, RolesService $roles)
     {
         $this->setRepository($repository);
         $this->setValidator($validator);

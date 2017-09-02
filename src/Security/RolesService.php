@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Role\RoleHierarchy;
  * @package App\Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class Roles implements RolesInterface
+class RolesService implements RolesServiceInterface
 {
     /**
      * Roles hierarchy.

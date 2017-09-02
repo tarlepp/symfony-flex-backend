@@ -9,8 +9,8 @@ namespace App\Entity;
 
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
-use App\Security\Roles;
-use App\Security\RolesInterface;
+use App\Security\RolesService;
+use App\Security\RolesServiceInterface;
 use App\Utils\JSON;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -49,7 +49,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
     use Timestampable;
 
     /**
-     * @var RolesInterface
+     * @var RolesServiceInterface
      */
     private $rolesService;
 
@@ -232,11 +232,11 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
     }
 
     /**
-     * @param RolesInterface $rolesService
+     * @param RolesServiceInterface $rolesService
      *
      * @return User
      */
-    public function setRolesService(RolesInterface $rolesService): User
+    public function setRolesService(RolesServiceInterface $rolesService): User
     {
         $this->rolesService = $rolesService;
 
@@ -403,7 +403,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
         $output = \array_map($iterator, $this->userGroups->toArray());
 
         // And if we have roles service present we can fetch all inherited roles
-        if ($this->rolesService instanceof Roles) {
+        if ($this->rolesService instanceof RolesService) {
             $output = $this->rolesService->getInheritedRoles($output);
         }
 

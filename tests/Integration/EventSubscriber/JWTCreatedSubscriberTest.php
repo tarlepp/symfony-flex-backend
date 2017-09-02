@@ -9,7 +9,7 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\Entity\User;
 use App\EventSubscriber\JWTCreatedSubscriber;
-use App\Security\Roles;
+use App\Security\RolesService;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,8 +41,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $requestStack = new RequestStack();
         $requestStack->push($request);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Roles $roles */
-        $roles = $this->getMockBuilder(Roles::class)->disableOriginalConstructor()->getMock();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|RolesService $roles */
+        $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent($payload, $user);
