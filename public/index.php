@@ -1,5 +1,10 @@
 <?php
 declare(strict_types=1);
+/**
+ * /public/index.php
+ *
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
 
 use App\Kernel;
 use Symfony\Component\Dotenv\Dotenv;
@@ -10,11 +15,12 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // The check is to ensure we don't use .env in production
 if (!getenv('APP_ENV')) {
-    (new Dotenv())->load(__DIR__.'/../.env');
+    (new Dotenv())->load(__DIR__ . '/../.env');
 }
 
 if (getenv('APP_DEBUG')) {
     // Get allowed IP addresses
+    /** @noinspection UsingInclusionReturnValueInspection */
     $allowedAddress = require __DIR__ . '/../allowed_addresses.php';
 
     if (!\in_array('*', $allowedAddress, true)
@@ -35,8 +41,15 @@ if (getenv('APP_DEBUG')) {
 
 // Request::setTrustedProxies(['0.0.0.0/0'], Request::HEADER_FORWARDED);
 
+// Create new application kernel
 $kernel = new Kernel(getenv('APP_ENV'), getenv('APP_DEBUG'));
+
+// Create request
 $request = Request::createFromGlobals();
+
+// Handle request and send response to client
 $response = $kernel->handle($request);
 $response->send();
+
+// Terminate application
 $kernel->terminate($request, $response);

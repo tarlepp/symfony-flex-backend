@@ -1,12 +1,9 @@
 <?php
-
-/*
- * This file is part of the Symfony package.
+declare(strict_types=1);
+/**
+ * /public/check.php
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 use Symfony\Requirements\SymfonyRequirements;
@@ -15,23 +12,33 @@ if (!isset($_SERVER['HTTP_HOST'])) {
     exit("This script cannot be run from the CLI. Run it from a browser.\n");
 }
 
-if (!in_array(@$_SERVER['REMOTE_ADDR'], array(
-    '127.0.0.1',
-    '::1',
-))) {
+// Get allowed IP addresses
+/** @noinspection UsingInclusionReturnValueInspection */
+$allowedAddress = require __DIR__ . '/../allowed_addresses.php';
+
+if (!\in_array('*', $allowedAddress, true)
+    && (
+        isset($_SERVER['HTTP_CLIENT_IP'])
+        || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
+        || !(\in_array($_SERVER['REMOTE_ADDR'], $allowedAddress, true)
+        || PHP_SAPI === 'cli-server')
+    )
+) {
     header('HTTP/1.0 403 Forbidden');
     exit('This script is only accessible from localhost.');
 }
 
 if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
+    /** @noinspection PhpIncludeInspection */
     require_once $autoloader;
 } elseif (file_exists($autoloader = __DIR__.'/../vendor/autoload.php')) {
+    /** @noinspection PhpIncludeInspection */
     require_once $autoloader;
 } else {
     throw new \RuntimeException('Unable to find the Composer autoloader.');
 }
 
-$symfonyRequirements = new SymfonyRequirements(dirname(dirname(realpath($autoloader))));
+$symfonyRequirements = new SymfonyRequirements(dirname(realpath($autoloader), 2));
 
 $majorProblems = $symfonyRequirements->getFailedRequirements();
 $minorProblems = $symfonyRequirements->getFailedRecommendations();
@@ -417,7 +424,7 @@ $hasMinorProblems = (bool) count($minorProblems);
 
                         <ul class="symfony-install-continue">
                             <?php if ($hasMajorProblems || $hasMinorProblems): ?>
-                                <li><a href="config.php">Re-check configuration</a></li>
+                                <li><a href="check.php">Re-check configuration</a></li>
                             <?php endif; ?>
                         </ul>
                     </div>
