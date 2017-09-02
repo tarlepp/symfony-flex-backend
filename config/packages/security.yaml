@@ -51,6 +51,6 @@ security:
         strategy: unanimous
 
 services:
-    App\Security\Roles:
+    App\Security\RolesService:
         public: true
         arguments: [ '%security.role_hierarchy.roles%' ]
