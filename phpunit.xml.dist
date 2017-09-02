@@ -9,6 +9,7 @@
     <php>
         <ini name="error_reporting" value="-1" />
         <ini name="date.timezone" value="UTC" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="1" />
         <server name="KERNEL_CLASS" value="App\Kernel" />
     </php>
 
