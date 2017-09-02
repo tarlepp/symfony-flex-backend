@@ -39,6 +39,11 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     protected static $searchColumns = [];
 
     /**
+     * @var EntityManager
+     */
+    protected static $entityManager;
+
+    /**
      * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
      *
      * @var array
@@ -113,7 +118,18 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      */
     public function getEntityManager(): EntityManager
     {
-        return parent::getEntityManager();
+        self::$entityManager = parent::getEntityManager();
+
+        if (!self::$entityManager->isOpen()) {
+            /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
+            /** @noinspection StaticInvocationViaThisInspection */
+            self::$entityManager = static::$entityManager->create(
+                self::$entityManager->getConnection(),
+                self::$entityManager->getConfiguration()
+            );
+        }
+
+        return self::$entityManager;
     }
 
     /**

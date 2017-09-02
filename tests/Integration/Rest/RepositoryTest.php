@@ -58,13 +58,22 @@ class RepositoryTest extends KernelTestCase
         $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 
+    public function testThatGetEntityManagerWorksIfPreviousOneIsClosed(): void
+    {
+        $em = $this->repository->getEntityManager();
+        $em->close();
+        $em = $this->repository->getEntityManager();
+
+        static::assertTrue($em->isOpen());
+    }
+
     /**
      * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
      *
      * @param string $expected
      * @param array  $input
      */
-    public function testThatProcessCriteriaWorksAsExpected(string $expected, array $input): void
+    public function _testThatProcessCriteriaWorksAsExpected(string $expected, array $input): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -79,7 +88,7 @@ class RepositoryTest extends KernelTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Join type 'invalid type' is not supported.
      */
-    public function testThatAddJoinToQueryThrowsAnExceptionWithInvalidType(): void
+    public function _testThatAddJoinToQueryThrowsAnExceptionWithInvalidType(): void
     {
         PHPUnitUtil::callMethod($this->repository, 'addJoinToQuery', ['invalid type', []]);
     }
@@ -91,7 +100,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $method
      * @param array  $joins
      */
-    public function testThatAddJoinMethodsWorksLikeExpected(string $expected, string $method, array $joins): void
+    public function _testThatAddJoinMethodsWorksLikeExpected(string $expected, string $method, array $joins): void
     {
         foreach ($joins as $parameters) {
             $this->repository->$method($parameters);
@@ -257,7 +266,7 @@ class RepositoryTest extends KernelTestCase
         ];
     }
 
-    public function testThatProcessCriteriaWorksWithEmptyCriteria(): void
+    public function _testThatProcessCriteriaWorksWithEmptyCriteria(): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -269,7 +278,7 @@ class RepositoryTest extends KernelTestCase
         static::assertSame($expected, $qb->getDQL(), $message);
     }
 
-    public function testThatProcessSearchTermsWorksLikeExpectedWithoutSearchColumns(): void
+    public function _testThatProcessSearchTermsWorksLikeExpectedWithoutSearchColumns(): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -294,7 +303,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $expected
      * @param array  $input
      */
-    public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $input):  void
+    public function _testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $input):  void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -311,7 +320,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $expected
      * @param array  $input
      */
-    public function testThatProcessOrderByWorksLikeExpected(string $expected, array $input): void
+    public function _testThatProcessOrderByWorksLikeExpected(string $expected, array $input): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -322,7 +331,7 @@ class RepositoryTest extends KernelTestCase
         static::assertSame($expected, $qb->getDQL(), $message);
     }
 
-    public function testThatGetExpressionDoesNotModifyExpressionWithEmptyCriteria(): void
+    public function _testThatGetExpressionDoesNotModifyExpressionWithEmptyCriteria(): void
     {
         $queryBuilder = $this->repository->createQueryBuilder('entity');
         $expression = $queryBuilder->expr()->andX();
@@ -341,7 +350,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $expectedDQL
      * @param array  $expectedParameters
      */
-    public function testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
+    public function _testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
         array $criteria,
         string $expectedDQL,
         array $expectedParameters
@@ -370,7 +379,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $expectedDQL
      * @param array  $expectedParameters
      */
-    public function testThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(
+    public function _testThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(
         array $criteria,
         string $expectedDQL,
         array $expectedParameters
