@@ -73,7 +73,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $expected
      * @param array  $input
      */
-    public function _testThatProcessCriteriaWorksAsExpected(string $expected, array $input): void
+    public function testThatProcessCriteriaWorksAsExpected(string $expected, array $input): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -88,7 +88,7 @@ class RepositoryTest extends KernelTestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Join type 'invalid type' is not supported.
      */
-    public function _testThatAddJoinToQueryThrowsAnExceptionWithInvalidType(): void
+    public function testThatAddJoinToQueryThrowsAnExceptionWithInvalidType(): void
     {
         PHPUnitUtil::callMethod($this->repository, 'addJoinToQuery', ['invalid type', []]);
     }
@@ -100,7 +100,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $method
      * @param array  $joins
      */
-    public function _testThatAddJoinMethodsWorksLikeExpected(string $expected, string $method, array $joins): void
+    public function testThatAddJoinMethodsWorksLikeExpected(string $expected, string $method, array $joins): void
     {
         foreach ($joins as $parameters) {
             $this->repository->$method($parameters);
@@ -266,7 +266,7 @@ class RepositoryTest extends KernelTestCase
         ];
     }
 
-    public function _testThatProcessCriteriaWorksWithEmptyCriteria(): void
+    public function testThatProcessCriteriaWorksWithEmptyCriteria(): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -278,7 +278,7 @@ class RepositoryTest extends KernelTestCase
         static::assertSame($expected, $qb->getDQL(), $message);
     }
 
-    public function _testThatProcessSearchTermsWorksLikeExpectedWithoutSearchColumns(): void
+    public function testThatProcessSearchTermsWorksLikeExpectedWithoutSearchColumns(): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -303,7 +303,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $expected
      * @param array  $input
      */
-    public function _testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $input):  void
+    public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $input):  void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -320,7 +320,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $expected
      * @param array  $input
      */
-    public function _testThatProcessOrderByWorksLikeExpected(string $expected, array $input): void
+    public function testThatProcessOrderByWorksLikeExpected(string $expected, array $input): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -331,7 +331,7 @@ class RepositoryTest extends KernelTestCase
         static::assertSame($expected, $qb->getDQL(), $message);
     }
 
-    public function _testThatGetExpressionDoesNotModifyExpressionWithEmptyCriteria(): void
+    public function testThatGetExpressionDoesNotModifyExpressionWithEmptyCriteria(): void
     {
         $queryBuilder = $this->repository->createQueryBuilder('entity');
         $expression = $queryBuilder->expr()->andX();
@@ -350,7 +350,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $expectedDQL
      * @param array  $expectedParameters
      */
-    public function _testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
+    public function testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
         array $criteria,
         string $expectedDQL,
         array $expectedParameters
@@ -379,7 +379,7 @@ class RepositoryTest extends KernelTestCase
      * @param string $expectedDQL
      * @param array  $expectedParameters
      */
-    public function _testThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(
+    public function testThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(
         array $criteria,
         string $expectedDQL,
         array $expectedParameters
