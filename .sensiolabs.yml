@@ -1,0 +1,14 @@
+working_directory: src
+
+global_exclude_dirs:
+    - bin
+    - build
+    - config
+    - migrations
+    - tests
+    - var
+    - vendor
+
+pre_composer_script: |
+    #!/bin/bash
+    cp ./../.env.dist ./../.env
