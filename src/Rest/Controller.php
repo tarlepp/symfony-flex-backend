@@ -20,8 +20,6 @@ abstract class Controller implements ControllerInterface
     // Traits
     use RestMethodHelper;
 
-
-
     /**
      * Method to initialize REST controller.
      *
