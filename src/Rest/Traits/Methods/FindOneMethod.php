@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method RestResourceInterface getResource()
+ * @method RestResourceInterface    getResource()
  * @method ResponseHandlerInterface getResponseHandler()
  */
 trait FindOneMethod
