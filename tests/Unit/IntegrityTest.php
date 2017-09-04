@@ -157,12 +157,12 @@ class IntegrityTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatRestDtoHaveIntegrationTest
+     * @dataProvider dataProviderTestThatDtoHaveIntegrationTest
      *
      * @param string $dtoTestClass
      * @param string $dtoClass
      */
-    public function testThatRestDtoHaveIntegrationTest(string $dtoTestClass, string $dtoClass): void
+    public function testThatDtoHaveIntegrationTest(string $dtoTestClass, string $dtoClass): void
     {
         $message = \sprintf(
             'REST DTO \'%s\' doesn\'t have required test class \'%s\'.',
@@ -491,13 +491,13 @@ class IntegrityTest extends KernelTestCase
     /**
      * @return array
      */
-    public function dataProviderTestThatRestDtoHaveIntegrationTest(): array
+    public function dataProviderTestThatDtoHaveIntegrationTest(): array
     {
-        $folder = static::$kernel->getRootDir() . '/Rest/DTO/';
+        $folder = static::$kernel->getRootDir() . '/DTO/';
         $pattern = '/^.+\.php$/i';
 
-        $namespace = '\\App\\Rest\\DTO\\';
-        $namespaceTest = '\\App\\Tests\\Integration\\Rest\\DTO\\';
+        $namespace = '\\App\\DTO\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\DTO\\';
 
         $iterator = function (string $file) use ($folder, $namespace) {
             $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
