@@ -7,8 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest;
 
+use App\DTO\RestDtoInterface;
 use App\Rest\Controller;
-use App\Rest\DTO\RestDtoInterface;
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use App\Utils\Tests\PHPUnitUtil;
@@ -102,7 +102,7 @@ class ControllerTest extends KernelTestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Given DTO class 'stdClass' is not implementing 'App\Rest\DTO\RestDtoInterface' interface.
+     * @expectedExceptionMessage Given DTO class 'stdClass' is not implementing 'App\DTO\RestDtoInterface' interface.
      */
     public function testThatGetDtoClassThrowsAnExceptionIfResourceDoesNotReturnExpectedClass(): void
     {
