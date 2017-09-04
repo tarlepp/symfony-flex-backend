@@ -7,12 +7,12 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Resource;
 
+use App\DTO\RestDtoInterface;
+use App\DTO\User as UserDto;
 use App\Entity\EntityInterface;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
-use App\Rest\DTO\RestDtoInterface;
-use App\Rest\DTO\User as UserDto;
 use App\Rest\RepositoryInterface;
 use App\Rest\RestResourceInterface;
 use App\Security\RolesService;
