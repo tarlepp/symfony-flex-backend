@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Rest/DTO/DtoTestCase.php
+ * /tests/Integration/DTO/DtoTestCase.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Rest\DTO;
+namespace App\Tests\Integration\DTO;
 
-use App\Rest\DTO\RestDtoInterface;
+use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PHPUnitUtil;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 /**
  * Class DtoTestCase
  *
- * @package App\Tests\Integration\Rest\DTO
+ * @package App\Tests\Integration\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class DtoTestCase extends KernelTestCase

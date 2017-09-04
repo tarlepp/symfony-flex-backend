@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Rest/DTO/UserTest.php
+ * /tests/Integration/DTO/UserTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Rest\DTO;
+namespace App\Tests\Integration\DTO;
 
+use App\DTO\User  as UserDto;
 use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\User as UserEntity;
 use App\Entity\UserGroup as UserGroupEntity;
-use App\Rest\DTO\User  as UserDto;
 
 /**
  * Class UserTest
  *
- * @package App\Tests\Integration\Rest\DTO
+ * @package App\Tests\Integration\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserTest extends DtoTestCase

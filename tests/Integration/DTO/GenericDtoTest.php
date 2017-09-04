@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/Rest/DTO/DtoTestCase.php
+ * /tests/Integration/DTO/DtoTestCase.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Rest\DTO;
+namespace App\Tests\Integration\DTO;
 
+use App\DTO\RestDto;
+use App\DTO\RestDtoInterface;
+use App\DTO\User;
 use App\Entity\EntityInterface;
-use App\Rest\DTO\RestDto;
-use App\Rest\DTO\RestDtoInterface;
-use App\Rest\DTO\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Class GenericDtoTest
  *
- * @package App\Tests\Integration\Rest\DTO
+ * @package App\Tests\Integration\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class GenericDtoTest extends KernelTestCase
@@ -55,7 +55,7 @@ class GenericDtoTest extends KernelTestCase
 /**
  * Class Dto
  *
- * @package App\Tests\Integration\Rest\DTO
+ * @package App\Tests\Integration\DTO
  */
 class Dto extends RestDto
 {
