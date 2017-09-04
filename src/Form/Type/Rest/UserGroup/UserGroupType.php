@@ -7,10 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Form\Type\Rest\UserGroup;
 
+use App\DTO\UserGroup as UserGroupDto;
 use App\Entity\Role as RoleEntity;
 use App\Form\DataTransformer\RoleTransformer;
 use App\Repository\RoleRepository;
-use App\Rest\DTO\UserGroup as UserGroupDto;
 use App\Security\RolesService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;

@@ -7,10 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Form\Type\Console;
 
+use App\DTO\User as UserDto;
 use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Resource\UserGroupResource;
-use App\Rest\DTO\User as UserDto;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
