@@ -5,7 +5,7 @@ declare(strict_types=1);
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Rest\DTO;
+namespace App\DTO;
 
 use App\Entity\User as UserEntity;
 use App\Entity\EntityInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @AppAssert\UniqueEmail()
  * @AppAssert\UniqueUsername()
  *
- * @package App\Rest\DTO
+ * @package App\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class User extends RestDto implements UserInterface

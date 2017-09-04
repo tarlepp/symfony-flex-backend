@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/DTO/Base.php
+ * /src/DTO/RestDto.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Rest\DTO;
+namespace App\DTO;
 
 /**
- * Class Base
+ * Class RestDto
  *
- * @package App\Rest\DTO
+ * @package App\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class RestDto implements RestDtoInterface

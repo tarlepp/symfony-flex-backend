@@ -5,7 +5,7 @@ declare(strict_types=1);
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Rest\DTO;
+namespace App\DTO;
 
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class UserGroup
  *
- * @package App\Rest\DTO
+ * @package App\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroup extends RestDto
