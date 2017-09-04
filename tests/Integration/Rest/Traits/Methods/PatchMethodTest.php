@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
-use App\Rest\DTO\RestDtoInterface;
+use App\DTO\RestDtoInterface;
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\PatchMethod;

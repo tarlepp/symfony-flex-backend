@@ -7,9 +7,8 @@ declare(strict_types=1);
  */
 namespace Integration\Rest\Traits\Methods;
 
-use App\Entity\EntityInterface;
-use App\Rest\DTO\RestDto;
-use App\Rest\DTO\RestDtoInterface;
+use App\DTO\RestDto;
+use App\DTO\RestDtoInterface;
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
