@@ -7,10 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Command\User;
 
+use App\DTO\User as UserDto;
 use App\Entity\User as UserEntity;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserResource;
-use App\Rest\DTO\User as UserDto;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

@@ -7,10 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Command\User;
 
+use App\DTO\UserGroup as UserGroupDto;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\UserGroupResource;
 use App\Entity\UserGroup as UserGroupEntity;
-use App\Rest\DTO\UserGroup as UserGroupDto;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

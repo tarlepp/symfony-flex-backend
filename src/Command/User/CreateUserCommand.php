@@ -7,11 +7,11 @@ declare(strict_types=1);
  */
 namespace App\Command\User;
 
+use App\DTO\User as UserDto;
 use App\Form\Type\Console\UserType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
-use App\Rest\DTO\User as UserDto;
 use App\Security\RolesService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
