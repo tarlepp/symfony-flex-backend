@@ -7,12 +7,12 @@ declare(strict_types=1);
  */
 namespace App\Resource;
 
+use App\DTO\RestDtoInterface;
+use App\DTO\User;
 use App\Entity\EntityInterface;
 use App\Entity\User as Entity;
 use App\Entity\UserGroup;
 use App\Repository\UserRepository as Repository;
-use App\Rest\DTO\RestDtoInterface;
-use App\Rest\DTO\User;
 use App\Rest\RestResource;
 use App\Security\RolesService;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

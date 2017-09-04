@@ -7,10 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Resource;
 
+use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Entity\LogLogin as Entity;
 use App\Repository\LogLoginRepository as Repository;
-use App\Rest\DTO\RestDtoInterface;
 use App\Rest\RestResource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
