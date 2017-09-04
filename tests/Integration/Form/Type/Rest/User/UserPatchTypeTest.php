@@ -7,8 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Form\Type\Rest\User;
 
+use App\DTO\User as UserDto;
 use App\Form\Type\Rest\User\UserPatchType;
-use App\Rest\DTO\User as UserDto;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 /**

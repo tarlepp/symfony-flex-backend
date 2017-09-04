@@ -7,12 +7,12 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Form\Type\Console;
 
+use App\DTO\User as UserDto;
 use App\Entity\Role;
 use App\Entity\UserGroup;
 use App\Form\Type\Console\UserType;
 use App\Repository\UserGroupRepository;
 use App\Resource\UserGroupResource;
-use App\Rest\DTO\User as UserDto;
 use Doctrine\Common\Persistence\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Form\PreloadedExtension;

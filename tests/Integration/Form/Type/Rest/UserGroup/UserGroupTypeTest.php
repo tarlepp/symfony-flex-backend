@@ -7,10 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Form\Type\Rest\UserGroup;
 
+use App\DTO\UserGroup as UserGroupDto;
 use App\Entity\Role;
 use App\Form\Type\Rest\UserGroup\UserGroupType;
 use App\Repository\RoleRepository;
-use App\Rest\DTO\UserGroup as UserGroupDto;
 use App\Security\RolesService;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\PreloadedExtension;
@@ -25,17 +25,17 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class UserGroupTypeTest extends TypeTestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|RolesService
+     * @var \PHPUnit_Framework_MockObject_MockObject|RolesService
      */
     private $mockRoles;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|RoleRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject|RoleRepository
      */
     private $mockRoleRepository;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager
      */
     private $mockObjectManager;
 

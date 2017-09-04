@@ -7,10 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Form\Type\Console;
 
+use App\DTO\UserGroup as UserGroupDto;
 use App\Entity\Role;
 use App\Form\Type\Console\UserGroupType;
 use App\Repository\RoleRepository;
-use App\Rest\DTO\UserGroup as UserGroupDto;
 use App\Security\RolesService;
 use Doctrine\Common\Persistence\ObjectManager;
 use PHPUnit_Framework_MockObject_MockObject;
