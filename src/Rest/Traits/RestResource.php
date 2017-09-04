@@ -7,8 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits;
 
+use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
-use App\Rest\DTO\RestDtoInterface;
 
 /**
  * Trait Resource

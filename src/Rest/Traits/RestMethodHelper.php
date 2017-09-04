@@ -7,8 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Rest\Traits;
 
+use App\DTO\RestDtoInterface;
 use App\Rest\ControllerInterface;
-use App\Rest\DTO\RestDtoInterface;
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use Doctrine\ORM\NonUniqueResultException;
