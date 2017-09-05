@@ -36,12 +36,11 @@ class ListUserGroupsCommand extends Command
     /**
      * ListUserGroupsCommand constructor.
      *
-     * @param null|string       $name
      * @param UserGroupResource $userGroupResource
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct($name = null, UserGroupResource $userGroupResource)
+    public function __construct(UserGroupResource $userGroupResource)
     {
         parent::__construct('user:list-groups');
 

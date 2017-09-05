@@ -40,13 +40,11 @@ class ManagementCommand extends Command
     ];
 
     /**
-     * ListUserGroupsCommand constructor.
-     *
-     * @param null|string    $name
+     * ManagementCommand constructor.
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct($name = null)
+    public function __construct()
     {
         parent::__construct('user:management');
 

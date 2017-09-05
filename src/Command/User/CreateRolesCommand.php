@@ -47,7 +47,6 @@ class CreateRolesCommand extends Command
     /**
      * CreateRolesCommand constructor.
      *
-     * @param null                   $name
      * @param EntityManagerInterface $entityManager
      * @param RoleRepository         $roleRepository
      * @param RolesService           $roles
@@ -55,12 +54,10 @@ class CreateRolesCommand extends Command
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
     public function __construct(
-        $name = null,
         EntityManagerInterface $entityManager,
         RoleRepository $roleRepository,
         RolesService $roles
-    )
-    {
+    ) {
         parent::__construct('user:create-roles');
 
         $this->entityManager = $entityManager;

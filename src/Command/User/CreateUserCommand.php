@@ -85,9 +85,8 @@ class CreateUserCommand extends Command
     private $io;
 
     /**
-     * CreateRolesCommand constructor.
+     * CreateUserCommand constructor.
      *
-     * @param null              $name
      * @param UserResource      $userResource
      * @param UserGroupResource $userGroupResource
      * @param RolesService      $roles
@@ -96,13 +95,11 @@ class CreateUserCommand extends Command
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
     public function __construct(
-        $name = null,
         UserResource $userResource,
         UserGroupResource $userGroupResource,
         RolesService $roles,
         RoleRepository $roleRepository
-    )
-    {
+    ) {
         parent::__construct('user:create');
 
         $this->userResource = $userResource;

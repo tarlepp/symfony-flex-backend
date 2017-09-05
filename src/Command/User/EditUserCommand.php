@@ -35,17 +35,13 @@ class EditUserCommand extends Command
     private $io;
 
     /**
-     * EditUserGroupCommand constructor.
+     * EditUserCommand constructor.
      *
-     * @param null         $name
      * @param UserResource $userResource
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct(
-        $name = null,
-        UserResource $userResource
-    )
+    public function __construct(UserResource $userResource)
     {
         parent::__construct('user:edit');
 

@@ -40,15 +40,14 @@ class ListUsersCommand extends Command
     private $io;
 
     /**
-     * ListUserGroupsCommand constructor.
+     * ListUsersCommand constructor.
      *
-     * @param null|string  $name
      * @param UserResource $userResource
      * @param RolesService $roles
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct($name = null, UserResource $userResource, RolesService $roles)
+    public function __construct(UserResource $userResource, RolesService $roles)
     {
         parent::__construct('user:list');
 

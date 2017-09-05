@@ -37,15 +37,11 @@ class EditUserGroupCommand extends Command
     /**
      * EditUserGroupCommand constructor.
      *
-     * @param null              $name
      * @param UserGroupResource $userGroupResource
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct(
-        $name = null,
-        UserGroupResource $userGroupResource
-    )
+    public function __construct(UserGroupResource $userGroupResource)
     {
         parent::__construct('user:edit-group');
 

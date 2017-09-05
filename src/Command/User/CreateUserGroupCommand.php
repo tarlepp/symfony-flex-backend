@@ -59,18 +59,15 @@ class CreateUserGroupCommand extends Command
     /**
      * CreateUserGroupCommand constructor.
      *
-     * @param null              $name
      * @param UserGroupResource $userGroupResource
      * @param RoleRepository    $roleRepository
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
     public function __construct(
-        $name = null,
         UserGroupResource $userGroupResource,
         RoleRepository $roleRepository
-    )
-    {
+    ) {
         parent::__construct('user:create-group');
 
         $this->userGroupResource = $userGroupResource;
