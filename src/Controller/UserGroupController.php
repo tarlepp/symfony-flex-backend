@@ -138,8 +138,7 @@ class UserGroupController extends Controller
         Request $request,
         UserResource $userResource,
         UserGroup $userGroup
-    ): Response
-    {
+    ): Response {
         // Manually change used resource class, so that serializer groups are correct ones
         $this->getResponseHandler()->setResource($userResource);
 

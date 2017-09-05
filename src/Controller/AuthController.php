@@ -124,8 +124,7 @@ class AuthController
         UserInterface $user,
         RolesService $roles,
         SerializerInterface $serializer
-    ): JsonResponse
-    {
+    ): JsonResponse {
         // Specify used serialization groups
         static $groups = [
             'User',
