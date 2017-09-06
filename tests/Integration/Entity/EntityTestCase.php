@@ -243,7 +243,7 @@ abstract class EntityTestCase extends KernelTestCase
             if (static::isType($type)) {
                 static::assertInternalType($type, \call_user_func([$this->entity, $getter]));
             }
-        } catch (\Exception $error) {
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
             static::assertInstanceOf($type, \call_user_func([$this->entity, $getter]));
         }
     }
@@ -261,8 +261,7 @@ abstract class EntityTestCase extends KernelTestCase
         string $field,
         $input,
         $expectedOutput
-    ): void
-    {
+    ): void {
         if ($method === '') {
             self::markTestSkipped("Entity doesn't have associations, so cannot test those...");
         }
@@ -301,8 +300,7 @@ abstract class EntityTestCase extends KernelTestCase
         string $field,
         $targetEntity,
         array $mappings
-    ): void
-    {
+    ): void {
         if ($methodGetter === false) {
             static::markTestSkipped('Entity does not contain many-to-many relationships.');
 
@@ -398,8 +396,7 @@ abstract class EntityTestCase extends KernelTestCase
         string $methodGetter,
         $targetEntity,
         string $field
-    ): void
-    {
+    ): void {
         if ($methodSetter === false) {
             static::markTestSkipped('Entity does not contain many-to-one relationships.');
         }

@@ -30,12 +30,15 @@ class UserTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatPasswordHashingIsWorkingAsExpected
      *
-     * @param   callable    $callable
-     * @param   string      $password
-     * @param   string      $expected
+     * @param callable $callable
+     * @param string   $password
+     * @param string   $expected
      */
-    public function testThatPasswordHashingIsWorkingAsExpected(callable $callable, string $password, string $expected): void
-    {
+    public function testThatPasswordHashingIsWorkingAsExpected(
+        callable $callable,
+        string $password,
+        string $expected
+    ): void {
         $this->entity->setPassword($callable, $password);
 
         static::assertSame($expected, $this->entity->getPassword());
