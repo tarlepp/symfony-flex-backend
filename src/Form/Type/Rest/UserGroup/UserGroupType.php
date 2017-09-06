@@ -52,8 +52,7 @@ class UserGroupType extends AbstractType
         RolesService $roles,
         RoleRepository $roleRepository,
         ObjectManager $objectManager
-    )
-    {
+    ) {
         $this->roles = $roles;
         $this->roleRepository = $roleRepository;
         $this->objectManager = $objectManager;
