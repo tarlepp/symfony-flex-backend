@@ -61,6 +61,7 @@ class UserGroupControllerTest extends WebTestCase
         /** @var UserGroupResource $userGroupResource */
         $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
 
+        /** @noinspection NullPointerExceptionInspection */
         return [
             [1, $userGroupResource->findOneBy(['name' => 'Root users'])->getId()],
             [2, $userGroupResource->findOneBy(['name' => 'Admin users'])->getId()],

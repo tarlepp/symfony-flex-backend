@@ -33,7 +33,10 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(401, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"JWT Token not found","code":401}', $response->getContent());
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"JWT Token not found","code":401}',
+            $response->getContent()
+        );
     }
 
     /**
@@ -69,7 +72,10 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"Access denied.","code":0,"status":403}',
+            $response->getContent()
+        );
     }
 
     /**
@@ -105,7 +111,10 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"Access denied.","code":0,"status":403}',
+            $response->getContent()
+        );
     }
 
     /**
@@ -141,7 +150,10 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"Access denied.","code":0,"status":403}',
+            $response->getContent()
+        );
     }
 
     /**
@@ -198,7 +210,10 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"Access denied.","code":0,"status":403}',
+            $response->getContent()
+        );
     }
 
     /**
@@ -242,8 +257,11 @@ class UserControllerTest extends WebTestCase
      *
      * @return string
      */
-    public function testThatUpdateActionReturns403ForInvalidUser(string $username, string $password, string $userId): string
-    {
+    public function testThatUpdateActionReturns403ForInvalidUser(
+        string $username,
+        string $password,
+        string $userId
+    ): string {
         $data = [
             'username'  => 'test-user',
             'firstname' => 'test-1',
@@ -258,7 +276,10 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"Access denied.","code":0,"status":403}',
+            $response->getContent()
+        );
 
         return $userId;
     }
@@ -271,8 +292,11 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param string $userId
      */
-    public function testThatDeleteActionReturns403ForInvalidUser(string $username, string $password, string $userId): void
-    {
+    public function testThatDeleteActionReturns403ForInvalidUser(
+        string $username,
+        string $password,
+        string $userId
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request('DELETE', $this->baseUrl . '/' . $userId);
 
@@ -280,7 +304,10 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(403, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"message":"Access denied.","code":0,"status":403}', $response->getContent());
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"Access denied.","code":0,"status":403}',
+            $response->getContent()
+        );
     }
 
     /**
@@ -315,7 +342,10 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(400, $response->getStatusCode(), $response->getContent());
-        static::assertJsonStringEqualsJsonString('{"message":"You cannot remove yourself...","code":0,"status":400}', $response->getContent());
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"You cannot remove yourself...","code":0,"status":400}',
+            $response->getContent()
+        );
     }
 
     /**
@@ -325,8 +355,11 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param array  $userIds
      */
-    public function testThatGetRolesActionsReturns403ForInvalidUser(string $username, string $password, array $userIds): void
-    {
+    public function testThatGetRolesActionsReturns403ForInvalidUser(
+        string $username,
+        string $password,
+        array $userIds
+    ): void {
         $client = $this->getClient($username, $password);
 
         foreach ($userIds as $userId) {
@@ -352,8 +385,7 @@ class UserControllerTest extends WebTestCase
         string $password,
         string $userId,
         string $expectedResponse
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
@@ -372,7 +404,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatGetRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
     {
-        $client = $this->getClient('john-root','password-root');
+        $client = $this->getClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
         $response = $client->getResponse();
@@ -430,7 +462,7 @@ class UserControllerTest extends WebTestCase
 
         $users = $userResource->find();
 
-        $iterator = function(array $userData) use ($users): array {
+        $iterator = function (array $userData) use ($users): array {
             $ids = [];
 
             foreach ($users as $user) {
@@ -464,12 +496,12 @@ class UserControllerTest extends WebTestCase
 
         $users = $userResource->find();
 
-        $iterator = function(array $userData) use ($users, $rolesService): array {
+        $iterator = function (array $userData) use ($users, $rolesService): array {
             /** @var User $user */
             $user = \array_values(
                 \array_filter(
                     $users,
-                    function(User $user) use ($userData) {
+                    function (User $user) use ($userData) {
                         return $userData[0] === $user->getUsername();
                     }
                 )
