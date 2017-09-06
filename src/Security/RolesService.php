@@ -117,8 +117,15 @@ class RolesService implements RolesServiceInterface
 
         return \array_unique(
             \array_map(
-                function (Role $role) { return $role->getRole(); },
-                $hierarchy->getReachableRoles(\array_map(function (string $role) { return new Role($role); }, $roles))
+                function (Role $role) {
+                    return $role->getRole();
+                },
+                $hierarchy->getReachableRoles(\array_map(
+                    function (string $role) {
+                        return new Role($role);
+                    },
+                    $roles
+                ))
             )
         );
     }
