@@ -77,8 +77,7 @@ class ApiDocDescriber implements DescriberInterface
         RouterInterface $router,
         ContainerInterface $container,
         \Twig_Environment $templateEngine
-    )
-    {
+    ) {
         $this->routeCollection = $router->getRouteCollection();
         $this->container = $container;
         $this->templateEngine = $templateEngine;
@@ -259,8 +258,10 @@ class ApiDocDescriber implements DescriberInterface
             return $annotation instanceof SWG\Tag;
         };
 
+        $annotations = \array_values(\array_filter($routeModel->getControllerAnnotations(), $filter));
+
         // If controller has 'SWG\Tag' annotation we will use that as a tag
-        if (\count($annotations = \array_values(\array_filter($routeModel->getControllerAnnotations(), $filter))) === 1) {
+        if (\count($annotations) === 1) {
             /** @var SWG\Tag $annotation */
             $annotation = $annotations[0];
 

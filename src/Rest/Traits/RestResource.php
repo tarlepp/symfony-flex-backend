@@ -48,8 +48,7 @@ trait RestResource
         int &$offset,
         array &$search,
         array &$entities
-    ): void
-    {
+    ): void {
     }
 
     /**

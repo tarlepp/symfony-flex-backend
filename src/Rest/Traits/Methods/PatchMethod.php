@@ -45,8 +45,7 @@ trait PatchMethod
         FormFactoryInterface $formFactory,
         string $id,
         array $allowedHttpMethods = null
-    ): Response
-    {
+    ): Response {
         $allowedHttpMethods = $allowedHttpMethods ?? ['PATCH'];
 
         // Make sure that we have everything we need to make this work

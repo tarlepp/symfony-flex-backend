@@ -43,8 +43,7 @@ trait CreateMethod
         Request $request,
         FormFactoryInterface $formFactory,
         array $allowedHttpMethods = null
-    ): Response
-    {
+    ): Response {
         $allowedHttpMethods = $allowedHttpMethods ?? ['POST'];
 
         // Make sure that we have everything we need to make this work

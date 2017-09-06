@@ -191,7 +191,8 @@ final class RequestHandler
                         'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.'
                     );
                 }
-            } catch (\LogicException $error) { // Parameter was not JSON so just use parameter values as search strings
+            } /** @noinspection BadExceptionsProcessingInspection */
+            catch (\LogicException $error) { // Parameter was not JSON so just use parameter values as search strings
                 // By default we want to use 'OR' operand with given search words.
                 $output = [
                     'or' => \array_unique(\array_values(\array_filter(\explode(' ', $search))))

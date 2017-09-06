@@ -245,8 +245,7 @@ abstract class RestResource implements RestResourceInterface
         int $limit = null,
         int $offset = null,
         array $search = null
-    ): array
-    {
+    ): array {
         $criteria = $criteria ?? [];
         $orderBy = $orderBy ?? [];
         $limit = $limit ?? 0;
@@ -313,8 +312,7 @@ abstract class RestResource implements RestResourceInterface
         array $criteria,
         array $orderBy = null,
         bool $throwExceptionIfNotFound = null
-    ): ?EntityInterface
-    {
+    ): ?EntityInterface {
         $orderBy = $orderBy ?? [];
         $throwExceptionIfNotFound = $throwExceptionIfNotFound ?? false;
 

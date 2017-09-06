@@ -55,8 +55,7 @@ trait CountMethod
 
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, ['count' => $this->getResource()->count($criteria, $search)]
-            );
+                ->createResponse($request, ['count' => $this->getResource()->count($criteria, $search)]);
         } catch (\Exception $exception) {
             throw $this->handleRestMethodException($exception);
         }

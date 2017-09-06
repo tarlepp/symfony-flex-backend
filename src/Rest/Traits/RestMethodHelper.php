@@ -211,8 +211,7 @@ trait RestMethodHelper
         FormFactoryInterface $formFactory,
         string $method,
         string $id = null
-    ): FormInterface
-    {
+    ): FormInterface {
         $formType = $this->getFormTypeClass($method);
 
         // Create form, load possible entity data for form and handle request

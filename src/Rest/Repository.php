@@ -317,11 +317,11 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      * Adds left join to current QueryBuilder query.
      *
      * @note Requires processJoins() to be run
-     *       
+     *
      * @see QueryBuilder::leftJoin() for parameters
      *
      * @param array $parameters
-     * 
+     *
      * @return RepositoryInterface
      *
      * @throws \InvalidArgumentException
@@ -382,9 +382,9 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      *
      * @see QueryBuilder::leftJoin()
      * @see QueryBuilder::innerJoin()
-     *       
+     *
      * @param string $type       Join type; leftJoin, innerJoin or join
-     * @param array  $parameters Query builder join parameters. 
+     * @param array  $parameters Query builder join parameters.
      *
      * @throws \InvalidArgumentException
      */
@@ -670,7 +670,9 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
                     }
 
                     // And finally add new expression to main one with specified parameters
-                    $expression->add(\call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters));
+                    $expression->add(
+                        \call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters)
+                    );
                 }
             }
         }
