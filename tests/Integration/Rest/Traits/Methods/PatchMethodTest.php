@@ -31,8 +31,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PatchMethodTest extends KernelTestCase
 {
     /**
+     * @codingStandardsIgnoreStart
+     *
      * @expectedException \LogicException
      * @expectedExceptionMessageRegExp /You cannot use '.*' controller class with REST traits if that does not implement 'App\\Rest\\ControllerInterface'/
+     *
+     * @codingStandardsIgnoreEnd
      */
     public function testThatTraitThrowsAnException():void
     {
