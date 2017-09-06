@@ -965,9 +965,11 @@ class LogRequest implements EntityInterface
         // Content given so parse it
         if ($request->getContent()) {
             // First try to convert content to array from JSON
+
             try {
                 $output = JSON::decode($request->getContent(), true);
-            } catch (\LogicException $error) { // Oh noes content isn't JSON so just parse it
+            } /** @noinspection BadExceptionsProcessingInspection */
+            catch (\LogicException $error) { // Oh noes content isn't JSON so just parse it
                 $output = [];
 
                 \parse_str($request->getContent(), $output);
