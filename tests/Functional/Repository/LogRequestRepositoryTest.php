@@ -34,6 +34,6 @@ class LogRequestRepositoryTest extends KernelTestCase
 
     public function testThatCleanHistoryReturnsExpected(): void
     {
-        static::assertSame(0,  $this->repository->cleanHistory());
+        static::assertSame(0, $this->repository->cleanHistory());
     }
 }
