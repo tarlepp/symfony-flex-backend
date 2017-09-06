@@ -7,10 +7,9 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\DTO;
 
-use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
 use App\DTO\User;
-use App\Entity\EntityInterface;
+use App\Tests\Integration\Dto\src\DummyDto;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -44,85 +43,12 @@ class GenericDtoTest extends KernelTestCase
      */
     public function testThatPatchThrowsAnErrorIfMultipleGettersAreDefined(): void
     {
-        $dtoMock = new Dto();
+        require_once __DIR__ . '/src/DummyDto.php';
+
+        $dtoMock = new DummyDto();
         $dtoMock->setFoo('foo');
 
         $dto = new User();
         $dto->patch($dtoMock);
-    }
-}
-
-/**
- * Class Dto
- *
- * @package App\Tests\Integration\DTO
- */
-class Dto extends RestDto
-{
-    /**
-     * @var mixed
-     */
-    private $foo;
-
-    /**
-     * @param mixed $foo
-     *
-     * @return Dto
-     */
-    public function setFoo($foo): Dto
-    {
-        $this->setVisited('foo');
-
-        $this->foo = $foo;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getFoo()
-    {
-        return $this->foo;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isFoo(): bool
-    {
-        return (bool)$this->foo;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasFoo(): bool
-    {
-        return (bool)$this->foo;
-    }
-
-    /**
-     * Method to load DTO data from specified entity.
-     *
-     * @param EntityInterface $entity
-     *
-     * @return RestDtoInterface
-     */
-    public function load(EntityInterface $entity): RestDtoInterface
-    {
-        return $this;
-    }
-
-    /**
-     * Method to update specified entity with DTO data.
-     *
-     * @param EntityInterface $entity
-     *
-     * @return EntityInterface
-     */
-    public function update(EntityInterface $entity): EntityInterface
-    {
-        return $entity;
     }
 }

@@ -138,7 +138,7 @@ class DtoTestCase extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatSetterOnlyAcceptSpecifiedType
-     * 
+     *
      * @param string $field
      * @param string $type
      */
