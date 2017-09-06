@@ -38,7 +38,7 @@ abstract class EnumType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
-        $iterator = function(string $value): string {
+        $iterator = function (string $value): string {
             return "'" . $value . "'";
         };
 
