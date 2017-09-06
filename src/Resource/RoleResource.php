@@ -22,6 +22,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
+ * @codingStandardsIgnoreStart
+ *
  * @method Repository  getRepository(): Repository
  * @method Entity[]    find(array $criteria = null, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
  * @method Entity|null findOne(string $id, bool $throwExceptionIfNotFound = null): ?EntityInterface
@@ -30,6 +32,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @method Entity      update(string $id, RestDtoInterface $dto, bool $skipValidation = null): EntityInterface
  * @method Entity      delete(string $id): EntityInterface
  * @method Entity      save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
+ *
+ * @codingStandardsIgnoreEnd
  */
 class RoleResource extends RestResource
 {
