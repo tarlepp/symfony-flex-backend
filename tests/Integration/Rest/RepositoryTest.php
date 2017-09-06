@@ -354,8 +354,7 @@ class RepositoryTest extends KernelTestCase
         array $criteria,
         string $expectedDQL,
         array $expectedParameters
-    ): void
-    {
+    ): void {
         $queryBuilder = $this->repository->createQueryBuilder('u');
         $expression = $queryBuilder->expr()->andX();
 
@@ -383,8 +382,7 @@ class RepositoryTest extends KernelTestCase
         array $criteria,
         string $expectedDQL,
         array $expectedParameters
-    ): void
-    {
+    ): void {
         $queryBuilder = $this->repository->createQueryBuilder('u');
         $expression = $queryBuilder->expr()->andX();
 
@@ -406,6 +404,7 @@ class RepositoryTest extends KernelTestCase
      */
     public function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): array
     {
+        // @codingStandardsIgnoreStart
         return [
             [
                 /** @lang text */
@@ -444,6 +443,7 @@ class RepositoryTest extends KernelTestCase
                 ],
             ],
         ];
+        // @codingStandardsIgnoreEnd
     }
 
     /**
@@ -643,6 +643,8 @@ class RepositoryTest extends KernelTestCase
      */
     public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(): array
     {
+        // @codingStandardsIgnoreStart
+
         return [
             [
                 [
@@ -721,5 +723,7 @@ DQL
                 ],
             ]
         ];
+
+        // @codingStandardsIgnoreEnd
     }
 }

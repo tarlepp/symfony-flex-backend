@@ -31,7 +31,7 @@ class ResponseHandlerTest extends ContainerTestCase
 
         $responseClass = new ResponseHandler($serializer);
 
-        static::assertSame($serializer,  $responseClass->getSerializer());
+        static::assertSame($serializer, $responseClass->getSerializer());
     }
 
     /**
@@ -45,8 +45,7 @@ class ResponseHandlerTest extends ContainerTestCase
         Request $request,
         $data,
         string $expectedContent
-    ): void
-    {
+    ): void {
         $serializer = $this->getContainer()->get('serializer');
 
         /** @var RestResourceInterface|\PHPUnit_Framework_MockObject_MockObject $stubResourceService */
@@ -143,7 +142,7 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['FakeEntity'], $context['groups']);
     }
 
-    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenEntityDoesNotHaveAnyAssociations(): void
+    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenNonAnyAssociations(): void
     {
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
@@ -175,7 +174,7 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['FakeEntity'], $context['groups']);
     }
 
-    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenEntityDoesHaveAssociations(): void
+    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenAssociations(): void
     {
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
@@ -212,7 +211,7 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['FakeEntity', 'FakeEntity.AnotherFakeEntity'], $context['groups']);
     }
 
-    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityDoesNotHaveAnyAssociations(): void
+    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenNonAssociations(): void
     {
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
@@ -244,7 +243,7 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['FakeEntity'], $context['groups']);
     }
 
-    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityDoesHaveAssociations(): void
+    public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityAssociations(): void
     {
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer

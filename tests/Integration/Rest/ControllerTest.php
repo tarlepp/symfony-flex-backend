@@ -147,7 +147,7 @@ class ControllerTest extends KernelTestCase
         $reflection->setAccessible(true);
         $reflection->setValue(null, $dtoClasses);
 
-        static::assertSame(\get_class($dtoClass),  $controller->getDtoClass('foo'));
+        static::assertSame(\get_class($dtoClass), $controller->getDtoClass('foo'));
     }
 
     public function testThatGetFormTypeClassCallsExpectedServiceMethods(): void
@@ -196,6 +196,6 @@ class ControllerTest extends KernelTestCase
         $reflection->setAccessible(true);
         $reflection->setValue(null, $formTypes);
 
-        static::assertSame(\get_class($formTypeClass),  $controller->getFormTypeClass('bar::foo'));
+        static::assertSame(\get_class($formTypeClass), $controller->getFormTypeClass('bar::foo'));
     }
 }
