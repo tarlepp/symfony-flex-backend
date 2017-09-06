@@ -48,8 +48,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route . '/count');
 
@@ -72,8 +71,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route . '/count');
 
@@ -96,8 +94,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route . '/count');
 
@@ -121,8 +118,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route);
 
@@ -146,8 +142,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route);
 
@@ -170,8 +165,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route);
 
@@ -196,8 +190,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $uuid = Uuid::uuid4()->toString();
 
         $client = $this->getClient($username, $password);
@@ -224,8 +217,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $uuid = Uuid::uuid4()->toString();
 
         $client = $this->getClient($username, $password);
@@ -252,8 +244,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $uuid = Uuid::uuid4()->toString();
 
         $client = $this->getClient($username, $password);
@@ -278,8 +269,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route . '/ids');
 
@@ -302,8 +292,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route . '/ids');
 
@@ -326,8 +315,7 @@ abstract class RestTraitTestCase extends WebTestCase
         string $username = null,
         string $password = null,
         string $method
-    ): void
-    {
+    ): void {
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route . '/ids');
 

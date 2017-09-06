@@ -72,8 +72,12 @@ class WebTestCase extends BaseWebTestCase
      *
      * @return Client
      */
-    public function getClient(string $username = null, string $password = null, array $options = null, array $server = null): Client
-    {
+    public function getClient(
+        string $username = null,
+        string $password = null,
+        array $options = null,
+        array $server = null
+    ): Client {
         $options = $options ?? [];
         $server = $server ?? [];
 

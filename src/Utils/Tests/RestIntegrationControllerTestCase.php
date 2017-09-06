@@ -6,6 +6,7 @@ declare(strict_types=1);
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Utils\Tests;
+
 use App\Rest\ControllerInterface;
 use App\Rest\ResponseHandlerInterface;
 
