@@ -89,8 +89,8 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestResponseHasExpectedStatusCode
      *
-     * @param int           $expectedStatus
-     * @param \Exception    $exception
+     * @param int        $expectedStatus
+     * @param \Exception $exception
      */
     public function testResponseHasExpectedStatusCode(int $expectedStatus, \Exception $exception): void
     {
@@ -122,8 +122,8 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatResponseHasExpectedKeys
      *
-     * @param array     $expectedKeys
-     * @param string    $environment
+     * @param array  $expectedKeys
+     * @param string $environment
      */
     public function testThatResponseHasExpectedKeys(array $expectedKeys, string $environment): void
     {
@@ -161,13 +161,13 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetStatusCodeReturnsExpected
      *
-     * @param int           $expectedStatusCode
-     * @param \Exception    $exception
-     * @param bool          $user
+     * @param int        $expectedStatusCode
+     * @param \Exception $exception
+     * @param bool       $user
      */
     public function testThatGetStatusCodeReturnsExpected(
-        int $expectedStatusCode, 
-        \Exception $exception, 
+        int $expectedStatusCode,
+        \Exception $exception,
         bool $user
     ): void {
         /**
@@ -194,14 +194,14 @@ class ExceptionSubscriberTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetExceptionMessageReturnsExpected
-     * 
-     * @param string        $expectedMessage
-     * @param \Exception    $exception
-     * @param string        $environment
+     *
+     * @param string     $expectedMessage
+     * @param \Exception $exception
+     * @param string     $environment
      */
     public function testThatGetExceptionMessageReturnsExpected(
-        string $expectedMessage, 
-        \Exception $exception, 
+        string $expectedMessage,
+        \Exception $exception,
         string $environment
     ): void {
         /**
@@ -220,7 +220,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             $expectedMessage,
             PHPUnitUtil::callMethod($subscriber, 'getExceptionMessage', [$exception])
         );
-    } 
+    }
 
     /**
      * @return array

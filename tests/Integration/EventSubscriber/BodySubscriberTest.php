@@ -71,8 +71,7 @@ class BodySubscriberTest extends KernelTestCase
         array $expectedRequestParameters,
         string $contentType,
         string $content
-    ): void
-    {
+    ): void {
         static::bootKernel();
 
         $request = new Request([], ['foobar' => 'foobar'], [], [], [], [], $content);
