@@ -22,11 +22,15 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * @package App\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
+ * @codingStandardsIgnoreStart
+ *
  * @method Entity|null find($id, $lockMode = null, $lockVersion = null)
  * @method Entity[]    findAll()
  * @method Entity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method Entity|null findOneBy(array $criteria, array $orderBy = null)
  * @method Entity[]    findByAdvanced(array $criteria, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
+ *
+ * @codingStandardsIgnoreEnd
  */
 class UserRepository extends Repository implements UserProviderInterface, UserLoaderInterface
 {
