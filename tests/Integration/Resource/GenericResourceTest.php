@@ -33,8 +33,8 @@ class GenericResourceTest extends KernelTestCase
 {
     protected $dtoClass = UserDto::class;
     protected $entityClass = UserEntity::class;
-    protected $resourceClass = UserResource::class;
     protected $repositoryClass = UserRepository::class;
+    private $resourceClass = UserResource::class;
 
     /**
      * @return ValidatorInterface
@@ -209,8 +209,7 @@ class GenericResourceTest extends KernelTestCase
     public function testThatFindCallsExpectedRepositoryMethodWithCorrectParameters(
         array $expectedArguments,
         array $arguments
-    ): void
-    {
+    ): void {
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
@@ -287,8 +286,7 @@ class GenericResourceTest extends KernelTestCase
     public function testThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(
         array $expectedArguments,
         array $arguments
-    ): void
-    {
+    ): void {
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
@@ -350,8 +348,7 @@ class GenericResourceTest extends KernelTestCase
     public function testThatCountCallsExpectedRepositoryMethodWithCorrectParameters(
         array $expectedArguments,
         array $arguments
-    ): void
-    {
+    ): void {
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 
@@ -518,8 +515,7 @@ class GenericResourceTest extends KernelTestCase
     public function testThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(
         array $expectedArguments,
         array $arguments
-    ): void
-    {
+    ): void {
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->getMock();
 

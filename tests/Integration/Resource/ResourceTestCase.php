@@ -46,6 +46,10 @@ abstract class ResourceTestCase extends KernelTestCase
 
         self::bootKernel();
 
+        /**
+         * @var RepositoryInterface $repository
+         * @var ValidatorInterface  $validator
+         */
         $repository = static::$kernel->getContainer()->get($this->repositoryClass);
         $validator = static::$kernel->getContainer()->get('validator');
 
@@ -78,8 +82,10 @@ abstract class ResourceTestCase extends KernelTestCase
      *
      * @return RestResourceInterface
      */
-    protected function getResource(RepositoryInterface $repository, ValidatorInterface $validator): RestResourceInterface
-    {
+    protected function getResource(
+        RepositoryInterface $repository,
+        ValidatorInterface $validator
+    ): RestResourceInterface {
         return new $this->resourceClass($repository, $validator);
     }
 }

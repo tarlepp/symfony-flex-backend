@@ -34,8 +34,10 @@ class UserResourceTest extends ResourceTestCase
      *
      * @return RestResourceInterface
      */
-    protected function getResource(RepositoryInterface $repository, ValidatorInterface $validator): RestResourceInterface
-    {
+    protected function getResource(
+        RepositoryInterface $repository,
+        ValidatorInterface $validator
+    ): RestResourceInterface {
         $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
         return new $this->resourceClass($repository, $validator, $roles);
