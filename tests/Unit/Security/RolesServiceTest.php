@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Unit/Security/RolesTest.php
+ * /tests/Unit/Security/RolesServiceTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -11,12 +11,12 @@ use App\Security\RolesService;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
- * Class RolesTest
+ * Class RolesServiceTest
  *
  * @package App\Tests\Unit\Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RolesTest extends KernelTestCase
+class RolesServiceTest extends KernelTestCase
 {
     /**
      * @var RolesService
@@ -130,10 +130,22 @@ class RolesTest extends KernelTestCase
     public function dataProviderTestThatGetInheritedRolesReturnsExpected(): array
     {
         return [
-            [[RolesService::ROLE_LOGGED], [RolesService::ROLE_LOGGED]],
-            [[RolesService::ROLE_USER, RolesService::ROLE_LOGGED], [RolesService::ROLE_USER]],
-            [[RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED], [RolesService::ROLE_ADMIN]],
-            [[RolesService::ROLE_ROOT, RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED], [RolesService::ROLE_ROOT]],
+            [
+                [RolesService::ROLE_LOGGED],
+                [RolesService::ROLE_LOGGED]
+            ],
+            [
+                [RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
+                [RolesService::ROLE_USER]
+            ],
+            [
+                [RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
+                [RolesService::ROLE_ADMIN]
+            ],
+            [
+                [RolesService::ROLE_ROOT, RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
+                [RolesService::ROLE_ROOT]
+            ],
         ];
     }
 }

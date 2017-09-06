@@ -48,8 +48,10 @@ class IntegrityTest extends KernelTestCase
      * @param string $controllerTestClass
      * @param string $controllerClass
      */
-    public function testThatRestControllerHaveIntegrationTests(string $controllerTestClass, string $controllerClass): void
-    {
+    public function testThatRestControllerHaveIntegrationTests(
+        string $controllerTestClass,
+        string $controllerClass
+    ): void {
         $message = \sprintf(
             'Controller \'%s\' doesn\'t have required test class \'%s\'.',
             $controllerClass,
@@ -70,10 +72,13 @@ class IntegrityTest extends KernelTestCase
         string $repositoryTestClass,
         string $repositoryClass,
         array $methods
-    ): void
-    {
+    ): void {
+        $format = <<<FORMAT
+Repository '%s' doesn't have required test class '%s', repository has following methods that needs to be tested: '%s'.
+FORMAT;
+
         $message = \sprintf(
-            'Repository \'%s\' doesn\'t have required test class \'%s\', repository has following methods that needs to be tested: \'%s\'.',
+            $format,
             $repositoryClass,
             $repositoryTestClass,
             \implode('\', \'', $methods)
@@ -91,12 +96,11 @@ class IntegrityTest extends KernelTestCase
     public function testThatRestRepositoryHaveIntegrationTests(
         string $repositoryTestClass,
         string $repositoryClass
-    ): void
-    {
+    ): void {
         $message = \sprintf(
             'Repository \'%s\' doesn\'t have required test class \'%s\'.',
-          $repositoryClass,
-          $repositoryTestClass
+            $repositoryClass,
+            $repositoryTestClass
         );
 
         static::assertTrue(\class_exists($repositoryTestClass), $message);
@@ -128,8 +132,7 @@ class IntegrityTest extends KernelTestCase
     public function testThatEventSubscriberHaveIntegrationTest(
         string $eventSubscriberTestClass,
         string $eventSubscriberClass
-    ): void
-    {
+    ): void {
         $message = \sprintf(
             'EventSubscriber \'%s\' doesn\'t have required test class \'%s\'.',
             $eventSubscriberClass,
@@ -199,8 +202,7 @@ class IntegrityTest extends KernelTestCase
     public function testThatDataTransformerHaveIntegrationTest(
         string $dataTransformerTestClass,
         string $dataTransformerClass
-    ): void
-    {
+    ): void {
         $message = \sprintf(
             'DataTransformer \'%s\' doesn\'t have required test class \'%s\'.',
             $dataTransformerClass,
@@ -219,8 +221,7 @@ class IntegrityTest extends KernelTestCase
     public function testThatValidatorConstraintsHaveIntegrationTest(
         string $validatorTestClass,
         string $validatorClass
-    ): void
-    {
+    ): void {
         $message = \sprintf(
             'Validator \'%s\' doesn\'t have required test class \'%s\'.',
             $validatorClass,
@@ -239,8 +240,7 @@ class IntegrityTest extends KernelTestCase
     public function testThatCustomDBALTypeHaveIntegrationTest(
         string $dbalTypeTestClass,
         string $dbalTypeClass
-    ): void
-    {
+    ): void {
         $message = \sprintf(
             'DBAL type \'%s\' doesn\'t have required test class \'%s\'.',
             $dbalTypeClass,
@@ -292,11 +292,7 @@ class IntegrityTest extends KernelTestCase
 
         $repositoryMethods = [];
 
-        $iterator = function (string $file) use ($folder, $namespace) {
-            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new \ReflectionClass($repositoryClass);
-        };
+        $iterator = $this->getReflectionClass($folder, $namespace);
 
         $filter = function (\ReflectionClass $reflectionClass) use (&$repositoryMethods) {
             $filter = function (\ReflectionMethod $method) use ($reflectionClass) {
@@ -314,7 +310,12 @@ class IntegrityTest extends KernelTestCase
             return !($reflectionClass->isAbstract() || $reflectionClass->isInterface() || empty($methods));
         };
 
-        $formatter = function (\ReflectionClass $reflectionClass) use (&$repositoryMethods, $folder, $namespace, $namespaceTest) {
+        $formatter = function (\ReflectionClass $reflectionClass) use (
+            &$repositoryMethods,
+            $folder,
+            $namespace,
+            $namespaceTest
+        ) {
             $file = $reflectionClass->getFileName();
 
             $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
@@ -353,11 +354,7 @@ class IntegrityTest extends KernelTestCase
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
 
-        $iterator = function (string $file) use ($folder, $namespace) {
-            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new \ReflectionClass($repositoryClass);
-        };
+        $iterator = $this->getReflectionClass($folder, $namespace);
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return $reflectionClass->implementsInterface(RepositoryInterface::class);
@@ -399,11 +396,7 @@ class IntegrityTest extends KernelTestCase
         $namespace = '\\App\\Entity\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Entity\\';
 
-        $iterator = function (string $file) use ($folder, $namespace) {
-            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new \ReflectionClass($repositoryClass);
-        };
+        $iterator = $this->getReflectionClass($folder, $namespace);
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return !$reflectionClass->isInterface() && $reflectionClass->implementsInterface(EntityInterface::class);
@@ -499,11 +492,7 @@ class IntegrityTest extends KernelTestCase
         $namespace = '\\App\\DTO\\';
         $namespaceTest = '\\App\\Tests\\Integration\\DTO\\';
 
-        $iterator = function (string $file) use ($folder, $namespace) {
-            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new \ReflectionClass($repositoryClass);
-        };
+        $iterator = $this->getReflectionClass($folder, $namespace);
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return !$reflectionClass->isInterface() && !$reflectionClass->isAbstract();
@@ -547,11 +536,7 @@ class IntegrityTest extends KernelTestCase
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
 
-        $iterator = function (string $file) use ($folder, $namespace) {
-            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new \ReflectionClass($repositoryClass);
-        };
+        $iterator = $this->getReflectionClass($folder, $namespace);
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return !$reflectionClass->isAbstract() && $reflectionClass->implementsInterface(FormTypeInterface::class);
@@ -595,11 +580,7 @@ class IntegrityTest extends KernelTestCase
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
 
-        $iterator = function (string $file) use ($folder, $namespace) {
-            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new \ReflectionClass($repositoryClass);
-        };
+        $iterator = $this->getReflectionClass($folder, $namespace);
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return $reflectionClass->implementsInterface(DataTransformerInterface::class);
@@ -643,11 +624,7 @@ class IntegrityTest extends KernelTestCase
         $namespace = '\\App\\Controller\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Controller\\';
 
-        $iterator = function (string $file) use ($folder, $namespace) {
-            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new \ReflectionClass($repositoryClass);
-        };
+        $iterator = $this->getReflectionClass($folder, $namespace);
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return $reflectionClass->implementsInterface(ControllerInterface::class);
@@ -691,11 +668,7 @@ class IntegrityTest extends KernelTestCase
         $namespace = '\\App\\Validator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Validator\\';
 
-        $iterator = function (string $file) use ($folder, $namespace) {
-            $repositoryClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new \ReflectionClass($repositoryClass);
-        };
+        $iterator = $this->getReflectionClass($folder, $namespace);
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return $reflectionClass->implementsInterface(ConstraintValidatorInterface::class);
@@ -739,11 +712,7 @@ class IntegrityTest extends KernelTestCase
         $namespace = '\\App\\Doctrine\\DBAL\\Types\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Doctrine\\DBAL\\Types\\';
 
-        $iterator = function (string $file) use ($folder, $namespace) {
-            $typeClass = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new \ReflectionClass($typeClass);
-        };
+        $iterator = $this->getReflectionClass($folder, $namespace);
 
         $filter = function (\ReflectionClass $reflectionClass) {
             return !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
@@ -772,5 +741,22 @@ class IntegrityTest extends KernelTestCase
                 $filter
             )
         );
+    }
+
+    /**
+     * @param string $folder
+     * @param string $namespace
+     *
+     * @return \Closure
+     */
+    private function getReflectionClass(string $folder, string $namespace): \Closure
+    {
+        $iterator = function (string $file) use ($folder, $namespace) {
+            $class = $namespace . \str_replace([$folder, '.php', \DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new \ReflectionClass($class);
+        };
+
+        return $iterator;
     }
 }
