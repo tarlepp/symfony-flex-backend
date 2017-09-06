@@ -35,8 +35,7 @@ class ActionTest extends KernelTestCase
         string $method,
         string $traitMethod,
         array $parameters
-    ): void
-    {
+    ): void {
         $stub = $this->getMockForTrait(
             $className,
             [],
@@ -95,7 +94,7 @@ class ActionTest extends KernelTestCase
             return [
                 $class,
                 \lcfirst($base),
-                \str_replace('Action',  'Method', \lcfirst($base)),
+                \str_replace('Action', 'Method', \lcfirst($base)),
                 $parameters,
             ];
         };
