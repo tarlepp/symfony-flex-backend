@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package App\DataFixtures\ORM
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LoadUserData  extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
