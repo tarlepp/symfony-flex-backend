@@ -19,8 +19,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class AuthControllerTest extends KernelTestCase
 {
     /**
+     * @codingStandardsIgnoreStart
+     *
      * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
      * @expectedExceptionMessage You need to send JSON body to obtain token eg. {"username":"username","password":"password"}
+     *
+     * @codingStandardsIgnoreEnd
      */
     public function testThatGetTokenThrowsAnException(): void
     {
