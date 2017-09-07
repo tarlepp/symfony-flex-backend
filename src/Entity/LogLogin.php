@@ -56,7 +56,7 @@ class LogLogin implements EntityInterface
      *
      * @ORM\Column(
      *      name="type",
-     *      type="enumLogLogin",
+     *      type="EnumLogLogin",
      *      nullable=false,
      *  )
      */

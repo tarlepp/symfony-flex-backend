@@ -6,7 +6,7 @@ doctrine:
         types:
             datetime: App\Doctrine\DBAL\Types\UTCDateTimeType
             datetimetz: App\Doctrine\DBAL\Types\UTCDateTimeType
-            enumLogLogin: App\Doctrine\DBAL\Types\EnumLogLoginType
+            EnumLogLogin: App\Doctrine\DBAL\Types\EnumLogLoginType
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
