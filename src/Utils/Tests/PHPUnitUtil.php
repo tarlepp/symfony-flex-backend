@@ -112,7 +112,7 @@ class PHPUnitUtil
                 break;
             case 'text':
             case 'string':
-            case 'enumLogLogin':
+            case 'EnumLogLogin':
                 $output = 'string';
                 break;
             case 'array':
