@@ -35,7 +35,7 @@ class EnumLogLoginTypeTest extends KernelTestCase
         parent::setUp();
 
         $this->platform = new MySqlPlatform();
-        $this->type = Type::getType('enumLogLogin');
+        $this->type = Type::getType('EnumLogLogin');
     }
 
     public function testThatGetSQLDeclarationReturnsExpected(): void
