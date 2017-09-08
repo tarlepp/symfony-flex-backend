@@ -21,11 +21,11 @@
         <testsuite name="Functional tests">
             <directory>tests/Functional/</directory>
         </testsuite>
-        <testsuite name="Unit tests">
-            <directory>tests/Unit/</directory>
-        </testsuite>
         <testsuite name="Integration tests">
             <directory>tests/Integration/</directory>
+        </testsuite>
+        <testsuite name="Unit tests">
+            <directory>tests/Unit/</directory>
         </testsuite>
     </testsuites>
 
