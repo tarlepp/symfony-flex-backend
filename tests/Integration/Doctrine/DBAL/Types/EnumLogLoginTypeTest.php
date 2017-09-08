@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
+use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -35,6 +36,13 @@ class EnumLogLoginTypeTest extends KernelTestCase
         parent::setUp();
 
         $this->platform = new MySqlPlatform();
+
+        if (Type::hasType('EnumLogLogin')) {
+            Type::overrideType('EnumLogLogin', EnumLogLoginType::class);
+        } else {
+            Type::addType('EnumLogLogin', EnumLogLoginType::class);
+        }
+
         $this->type = Type::getType('EnumLogLogin');
     }
 

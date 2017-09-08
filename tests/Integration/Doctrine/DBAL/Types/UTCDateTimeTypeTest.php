@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
+use App\Doctrine\DBAL\Types\UTCDateTimeType;
 use App\Utils\Tests\PHPUnitUtil;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
@@ -36,6 +37,13 @@ class UTCDateTimeTypeTest extends KernelTestCase
         parent::setUp();
 
         $this->platform = new MySqlPlatform();
+
+        if (Type::hasType('datetime')) {
+            Type::overrideType('datetime', UTCDateTimeType::class);
+        } else {
+            Type::addType('datetime', UTCDateTimeType::class);
+        }
+
         $this->type = Type::getType('datetime');
     }
 
