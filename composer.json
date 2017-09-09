@@ -43,6 +43,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "2.3.0",
+        "liuggio/fastest": "dev-master",
         "phpmetrics/phpmetrics": "2.2.0",
         "phpunit/phpunit": "6.3.0",
         "satooshi/php-coveralls": "1.0.1",
