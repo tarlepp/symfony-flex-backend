@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4734e4420fd01323f5209500b7946ce",
+    "content-hash": "c5e587014b2d3954e16be6b4b19575da",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3107,7 +3107,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.3.8",
+            "version": "v3.3.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -3892,21 +3892,21 @@
         },
         {
             "name": "symfony/orm-pack",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/orm-pack.git",
-                "reference": "afd5539f04ea5e516532bf43e2dffc4088d2690d"
+                "reference": "5f09e33401b374607149ed17bbb1117cd4f9f5d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/orm-pack/zipball/afd5539f04ea5e516532bf43e2dffc4088d2690d",
-                "reference": "afd5539f04ea5e516532bf43e2dffc4088d2690d",
+                "url": "https://api.github.com/repos/symfony/orm-pack/zipball/5f09e33401b374607149ed17bbb1117cd4f9f5d5",
+                "reference": "5f09e33401b374607149ed17bbb1117cd4f9f5d5",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^1.6",
-                "doctrine/orm": "^2.4.5",
+                "doctrine/orm": "^2.5.7",
                 "php": "^7.0"
             },
             "type": "metapackage",
@@ -3915,7 +3915,7 @@
                 "MIT"
             ],
             "description": "A pack for the Doctrine ORM",
-            "time": "2017-05-30T14:58:02+00:00"
+            "time": "2017-09-11T23:09:08+00:00"
         },
         {
             "name": "symfony/polyfill-apcu",
@@ -5763,16 +5763,16 @@
         },
         {
             "name": "phpdocumentor/reflection-common",
-            "version": "1.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionCommon.git",
-                "reference": "144c307535e82c8fdcaacbcfc1d6d8eeb896687c"
+                "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/144c307535e82c8fdcaacbcfc1d6d8eeb896687c",
-                "reference": "144c307535e82c8fdcaacbcfc1d6d8eeb896687c",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionCommon/zipball/21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6",
+                "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6",
                 "shasum": ""
             },
             "require": {
@@ -5813,7 +5813,7 @@
                 "reflection",
                 "static analysis"
             ],
-            "time": "2015-12-27T11:43:31+00:00"
+            "time": "2017-09-11T18:02:19+00:00"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
