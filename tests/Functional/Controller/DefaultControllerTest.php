@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
 use App\Resource\LogRequestResource;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Utils\Tests\WebTestCase;
 
 /**
  * Class DefaultControllerTest
@@ -20,7 +20,7 @@ class DefaultControllerTest extends WebTestCase
 {
     public function testThatDefaultRouteReturns200(): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request('GET', '/');
 
         $response = $client->getResponse();
@@ -30,7 +30,7 @@ class DefaultControllerTest extends WebTestCase
 
     public function testThatHealthzRouteReturns200(): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request('GET', '/healthz');
 
         $response = $client->getResponse();
@@ -47,7 +47,7 @@ class DefaultControllerTest extends WebTestCase
 
         $expectedLogCount = $resource->count();
 
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request('GET', '/healthz');
 
         static::assertSame($expectedLogCount, $resource->count());

@@ -23,7 +23,7 @@ class RoleControllerTest extends WebTestCase
 
     public function testThatGetBaseRouteReturn403(): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();

@@ -84,7 +84,7 @@ class WebTestCase extends BaseWebTestCase
         // Merge authorization headers
         $server = \array_merge(
             $username === null ? [] : $this->getAuthService()->getAuthorizationHeadersForUser($username, $password),
-            $this->getJsonHeaders(),
+            \array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
             $this->getAuthService()->getJwtHeaders(),
             $server
         );
@@ -101,5 +101,23 @@ class WebTestCase extends BaseWebTestCase
             'CONTENT_TYPE'          => 'application/json',
             'HTTP_X-Requested-With' => 'XMLHttpRequest',
         ];
+    }
+
+    /**
+     * @codeCoverageIgnore
+     *
+     * @return array
+     */
+    public function getFastestHeaders(): array
+    {
+        $output = [];
+
+        if (\getenv('ENV_TEST_CHANNEL_READABLE')) {
+            $output = [
+                'X-FASTEST-ENV-TEST-CHANNEL-READABLE' => \getenv('ENV_TEST_CHANNEL_READABLE'),
+            ];
+        }
+
+        return $output;
     }
 }

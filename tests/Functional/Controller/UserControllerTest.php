@@ -26,7 +26,7 @@ class UserControllerTest extends WebTestCase
 
     public function testThatGetBaseRouteReturn401(): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();

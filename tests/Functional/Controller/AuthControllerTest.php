@@ -28,7 +28,7 @@ class AuthControllerTest extends WebTestCase
      */
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request($method, $this->baseUrl . '/getToken');
 
         $response = $client->getResponse();
@@ -45,7 +45,7 @@ class AuthControllerTest extends WebTestCase
      */
     public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $username, string $password): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request(
             'POST',
             $this->baseUrl . '/getToken',
@@ -88,7 +88,7 @@ class AuthControllerTest extends WebTestCase
 
     public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request(
             'POST',
             $this->baseUrl . '/getToken',
@@ -117,7 +117,7 @@ class AuthControllerTest extends WebTestCase
     
     public function testThatProfileActionReturns401WithoutToken(): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request('GET', $this->baseUrl . '/profile');
 
         $response = $client->getResponse();
@@ -153,7 +153,7 @@ class AuthControllerTest extends WebTestCase
 
     public function testThatGetRolesActionReturns401WithoutToken(): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request('GET', $this->baseUrl . '/roles');
 
         $response = $client->getResponse();

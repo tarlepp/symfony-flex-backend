@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Utils\Tests\WebTestCase;
 
 /**
  * Class DocumentationTest
@@ -19,7 +19,7 @@ class DocumentationTest extends WebTestCase
 {
     public function testThatDocumentationUiWorks(): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request('GET', '/api/doc/');
 
         static::assertSame(200, $client->getResponse()->getStatusCode());
@@ -27,7 +27,7 @@ class DocumentationTest extends WebTestCase
 
     public function testThatDocumentationJsonWorks(): void
     {
-        $client = static::createClient();
+        $client = $this->getClient();
         $client->request('GET', '/api/doc.json');
 
         static::assertSame(200, $client->getResponse()->getStatusCode());
