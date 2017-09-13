@@ -143,6 +143,13 @@ $ make run-tests
 $ ./vendor/bin/phpunit
 ```
 
+And if you want to run tests with [fastest](https://github.com/liuggio/fastest) library use following command:
+```bash
+$ make run-tests-fastest
+# or alternative
+$ ./vendor/bin/fastest -x phpunit.xml.dist
+```
+
 Note that you need to create `.env.test` file to define your testing environment. This file has the same content as the 
 main `.env` file, just change database and others to match your testing environment.
 
