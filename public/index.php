@@ -3,19 +3,25 @@ declare(strict_types=1);
 /**
  * /public/index.php
  *
+ * @package App
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-
 use App\Kernel;
-use Symfony\Component\Dotenv\Dotenv;
+use Liuggio\Fastest\Environment\FastestEnvironment;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
 
 require __DIR__ . '/../vendor/autoload.php';
 
+// Set fastest environment
+FastestEnvironment::setFromRequest();
+
 // The check is to ensure we don't use .env in production
 if (!getenv('APP_ENV')) {
-    (new Dotenv())->load(__DIR__ . '/../.env');
+    // Specify used environment file
+    putenv('ENVIRONMENT_FILE=.env');
+
+    require __DIR__ . '/../bootstrap.php';
 }
 
 if (getenv('APP_DEBUG')) {
@@ -32,7 +38,7 @@ if (getenv('APP_DEBUG')) {
         )
     ) {
         header('HTTP/1.0 403 Forbidden');
-        exit('You are not allowed to access this file. Check '.basename(__FILE__).' for more information.');
+        exit('You are not allowed to access this file. Check ' . basename(__FILE__) . ' for more information.');
     }
 
     /** @noinspection ForgottenDebugOutputInspection */

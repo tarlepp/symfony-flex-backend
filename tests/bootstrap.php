@@ -11,6 +11,7 @@ declare(strict_types=1);
  *  5) Update database schema
  *  6) Create user roles to database
  *
+ * @package App\Tests
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 use App\Kernel;
@@ -20,12 +21,12 @@ use Doctrine\Bundle\DoctrineBundle\Command\Proxy\UpdateSchemaDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Dotenv\Dotenv;
+
+// Specify used environment file
+putenv('ENVIRONMENT_FILE=.env.test');
 
 require __DIR__ . '/../vendor/autoload.php';
-
-// Load test environment variables
-(new Dotenv())->load(__DIR__.'/../.env.test');
+require __DIR__ . '/../bootstrap.php';
 
 // Create and boot 'test' kernel
 $kernel = new Kernel(getenv('APP_ENV'), getenv('APP_DEBUG'));

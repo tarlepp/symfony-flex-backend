@@ -1,6 +1,8 @@
 doctrine:
     dbal:
         url: '%env(DATABASE_URL)%'
+        # This is needed for 'fastest' see https://github.com/liuggio/fastest/issues/101
+        dbname: '%env(DATABASE_NAME)'
         mapping_types:
             enum: string
         types:
