@@ -43,7 +43,7 @@
         "symfony/yaml": "3.3.9"
     },
     "require-dev": {
-        "liuggio/fastest": "dev-master",
+        "liuggio/fastest": "1.4.3",
         "phpmetrics/phpmetrics": "2.2.0",
         "phpunit/phpunit": "6.3.0",
         "satooshi/php-coveralls": "1.0.1",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c5e587014b2d3954e16be6b4b19575da",
+    "content-hash": "b8dd92bffe7a224ea4d8d432d0550898",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5510,7 +5510,7 @@
         },
         {
             "name": "liuggio/fastest",
-            "version": "dev-master",
+            "version": "v1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liuggio/fastest.git",
@@ -7750,8 +7750,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "nelmio/api-doc-bundle": 20,
-        "roave/security-advisories": 20,
-        "liuggio/fastest": 20
+        "roave/security-advisories": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
