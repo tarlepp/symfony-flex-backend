@@ -49,6 +49,9 @@ endif
 run-tests:
 	@mkdir -p build/logs
 	@vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
+
+run-tests-fastest:
+	@vendor/bin/fastest -x phpunit.xml.dist
 ###< phpunit ###
 
 ###> phpmetrics ###
