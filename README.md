@@ -11,30 +11,35 @@ latest stable packages, but note that we're going to update Symfony itself to `4
  
 Table of Contents
 =================
- * [What is this?](#what-is-this)
- * [Table of Contents](#table-of-contents)
- * [Requirements](#requirements)
- * [Installation](#installation)
-   * [1. Clone repository](#1-clone-repository)
-   * [2. Configuration](#2-configuration)
-   * [3. Dependencies installation](#3-dependencies-installation)
-   * [4. Create JWT auth keys](#4-create-jwt-auth-keys)
-   * [5. File permissions](#5-file-permissions)
-   * [6. Environment checks](#6-environment-checks)
-     * [CLI environment](#cli-environment)
-     * [Web-server environment](#web-server-environment)
-       * [Apache](#apache)
-   * [7. Other (optionally)](#7-other-optionally)
-     * [Allow other IP's to access dev environment](#allow-other-ips-to-access-dev-environment)
- * [Commands](#commands)
-   * [Symfony console](#symfony-console)
-   * [Custom commands](#custom-commands)
- * [Testing](#testing)
- * [Metrics](#metrics)
- * [Links / resources](#links--resources)
- * [Authors](#authors)
- * [License](#license)
-
+* [What is this?](#what-is-this)
+* [Table of Contents](#table-of-contents)
+* [Requirements](#requirements)
+* [Installation](#installation)
+    * [1. Clone repository](#1-clone-repository)
+    * [2. Configuration](#2-configuration)
+    * [3. Dependencies installation](#3-dependencies-installation)
+    * [4. Create JWT auth keys](#4-create-jwt-auth-keys)
+    * [5. File permissions](#5-file-permissions)
+    * [6. Environment checks](#6-environment-checks)
+        * [CLI environment](#cli-environment)
+        * [Web-server environment](#web-server-environment)
+            * [Apache](#apache)
+    * [7. Other (optionally)](#7-other-optionally)
+        * [Allow other IP's to access dev environment](#allow-other-ips-to-access-dev-environment)
+* [Commands](#commands)
+    * [Makefile](#makefile)
+    * [Symfony console](#symfony-console)
+    * [Custom commands](#custom-commands)
+* [Structure](#structure)
+* [Development](#development)
+    * [IDE](#ide)
+    * [PHP Code Sniffer](#php-code-sniffer)
+    * [Database changes](#database-changes)
+* [Testing](#testing)
+* [Metrics](#metrics)
+* [Links / resources](#links--resources)
+* [Authors](#authors)
+* [License](#license)
 
 # Requirements
 * PHP 7.1.3 or higher
@@ -89,7 +94,7 @@ one for CLI environment and another for your web-server environment.
 #### CLI environment
 You need to run following command to make all necessary checks.
 ```bash
-$ php ./bin/check.php
+$ ./vendor/bin/requirements-checker
 ```
 
 #### Web-server environment
@@ -112,6 +117,22 @@ If you want to allow another IP addresses or _all_ to your `dev` environment see
 detailed information how you can allow certain IP addresses to have access to your `dev` environment.
 
 # Commands
+## Makefile
+Symfony Flex comes with `Makefile` configuration so that you can easily run some generic commands via `make` command. 
+Below is a list of currently supported make commands:
+```bash
+cache-clear
+cache-warmup
+generate-jwt-keys
+phpmetrics
+run-tests
+run-tests-fastest
+serve
+serve_as_php
+serve_as_sf
+sf_console
+```
+
 ## Symfony console
 You can list all Symfony console commands via following command:
 ```bash
@@ -134,6 +155,58 @@ $ ./bin/console user:edit-group     # To edit user group
 $ ./bin/console user:list           # To list current users
 $ ./bin/console user:list-groups    # To list current user groups
 ```
+
+# Structure
+todo
+
+# Development
+* [Coding Standards](http://symfony.com/doc/current/contributing/code/standards.html)
+
+## IDE
+I highly recommend that you use "proper" [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment) to 
+development your application. Below is short list of some popular IDEs that you could use.
+* [PhpStorm](https://www.jetbrains.com/phpstorm/)
+* [NetBeans](https://netbeans.org/)
+* [Sublime Text](https://www.sublimetext.com/)
+
+Personally I recommend PhpStorm, but just choose one which is the best for you.
+
+## PHP Code Sniffer
+It's highly recommended that you use this tool while doing actual development to application. PHP Code Sniffer is 
+added to project ```dev``` dependencies, so all you need to do is just configure it to your favorite IDE. So the 
+```phpcs``` command is available via following example command.
+
+```bash
+$ ./vendor/bin/phpcs -i
+```
+
+If you're using [PhpStorm](https://www.jetbrains.com/phpstorm/) following links will help you to get things rolling.
+* [Using PHP Code Sniffer Tool](https://www.jetbrains.com/help/phpstorm/10.0/using-php-code-sniffer-tool.html)
+* [PHP Code Sniffer in PhpStorm](https://confluence.jetbrains.com/display/PhpStorm/PHP+Code+Sniffer+in+PhpStorm)
+
+## Database changes
+When you start a new project where you use this project as a "seed" first thing to do is to run following command:
+```bash
+$ ./bin/console doctrine:migrations:diff
+```
+
+This will create a migration file which contains all necessary database changes to get application running with default
+database structure. You can migrate these changes to your database with following command:
+```bash
+$ ./bin/console doctrine:migrations:migrate
+```
+
+After that you can start to modify or delete existing entities or create your own ones. Easiest way to make this all
+work is to follow below workflow:
+
+1. Make your changes (create, delete, modify) to entities in `/src/Entity/` folder
+2. Run `diff` command to create new migration file; ```$ ./bin/console doctrine:migrations:diff```
+3. Run `migrate` command to make actual changes to your database; ```$ ./bin/console doctrine:migrations:diff```
+4. Run `validate` command to validate your mappings and actual database structure;```$ ./bin/console doctrine:schema:validate```
+
+With this workflow you get easy approach to generic database changes on your application. And you don't need to make
+any migrations files by hand (just let Doctrine handle those). Although remember to really take a closer look of those 
+generated migration files to make sure that those doesn't contain anything that you really don't want.
 
 # Testing
 Project contains bunch of tests _(Functional, Integration, Unit)_ which you can run simply by following command:
@@ -167,9 +240,6 @@ $ ./vendor/bin/phpmetrics --report-html=build/phpmetrics .
 ```
 
 And after that open `build/phpmetrics/index.html` with your favorite browser.
-
-# Structure
-todo
 
 # Links / resources
 * [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
