@@ -30,7 +30,7 @@
         "symfony/asset": "3.3.9",
         "symfony/console": "3.3.9",
         "symfony/expression-language": "3.3.9",
-        "symfony/flex": "1.0.19",
+        "symfony/flex": "1.0.20",
         "symfony/form": "3.3.9",
         "symfony/framework-bundle": "3.3.9",
         "symfony/monolog-bundle": "3.1.0",
