@@ -62,6 +62,16 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     ];
 
     /**
+     * @var array
+     */
+    private static $callbacks = [];
+
+    /**
+     * @var array
+     */
+    private static $processedCallbacks = [];
+
+    /**
      * Parameter count in current query, this is used to track parameters which are bind to current query.
      *
      * @var integer
@@ -137,13 +147,13 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      *
      * @param EntityInterface $entity
      *
-     * @return Repository
+     * @return RepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(EntityInterface $entity): Repository
+    public function save(EntityInterface $entity): RepositoryInterface
     {
         // Persist on database
         $this->getEntityManager()->persist($entity);
@@ -157,13 +167,13 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      *
      * @param EntityInterface $entity
      *
-     * @return Repository
+     * @return RepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(EntityInterface $entity): Repository
+    public function remove(EntityInterface $entity): RepositoryInterface
     {
         // Remove from database
         $this->getEntityManager()->remove($entity);
@@ -192,15 +202,15 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         // Create new query builder
         $queryBuilder = $this->createQueryBuilder('entity');
 
-        // Process custom QueryBuilder actions
-        $this->processQueryBuilder($queryBuilder);
-
         // Process normal and search term criteria
         $this->processCriteria($queryBuilder, $criteria);
         $this->processSearchTerms($queryBuilder, $search);
 
         $queryBuilder->select('COUNT(entity.id)');
         $queryBuilder->distinct();
+
+        // Process custom QueryBuilder actions
+        $this->processQueryBuilder($queryBuilder);
 
         return (int)$queryBuilder->getQuery()->getSingleScalarResult();
     }
@@ -233,9 +243,6 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         // Create new query builder
         $queryBuilder = $this->createQueryBuilder('entity');
 
-        // Process custom QueryBuilder actions
-        $this->processQueryBuilder($queryBuilder);
-
         // Process normal and search term criteria and order
         $this->processCriteria($queryBuilder, $criteria);
         $this->processSearchTerms($queryBuilder, $search);
@@ -244,6 +251,9 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         // Process limit and offset
         $limit === 0 ?: $queryBuilder->setMaxResults($limit);
         $offset === 0 ?: $queryBuilder->setFirstResult($offset);
+
+        // Process custom QueryBuilder actions
+        $this->processQueryBuilder($queryBuilder);
 
         return (new Paginator($queryBuilder, true))->getIterator()->getArrayCopy();
     }
@@ -266,9 +276,6 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         // Create new query builder
         $queryBuilder = $this->createQueryBuilder('entity');
 
-        // Process custom QueryBuilder actions
-        $this->processQueryBuilder($queryBuilder);
-
         // Process normal and search term criteria
         $this->processCriteria($queryBuilder, $criteria);
         $this->processSearchTerms($queryBuilder, $search);
@@ -276,6 +283,9 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         $queryBuilder
             ->select('entity.id')
             ->distinct();
+
+        // Process custom QueryBuilder actions
+        $this->processQueryBuilder($queryBuilder);
 
         return \array_map('\current', $queryBuilder->getQuery()->getArrayResult());
     }
@@ -298,6 +308,8 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         return $queryBuilder->getQuery()->execute();
     }
 
+
+
     /**
      * With this method you can attach some custom functions for generic REST API find / count queries.
      *
@@ -307,10 +319,12 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      */
     public function processQueryBuilder(QueryBuilder $queryBuilder): void
     {
-        // Reset processed joins
+        // Reset processed joins and callbacks
         self::$processedJoins = [self::INNER_JOIN => [], self::LEFT_JOIN  => []];
+        self::$processedCallbacks = [];
 
         $this->processJoins($queryBuilder);
+        $this->processCallbacks($queryBuilder);
     }
     
     /**
@@ -354,6 +368,33 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     }
 
     /**
+     * Method to add callback to current query builder instance which is calling 'processQueryBuilder' method. By
+     * default this method is called from following core methods:
+     *  - countAdvanced
+     *  - findByAdvanced
+     *  - findIds
+     *
+     * Note that every callback will get 'QueryBuilder' as in first parameter.
+     *
+     * @param callable   $callable
+     * @param array|null $args
+     *
+     * @return RepositoryInterface
+     */
+    public function addCallback(callable $callable, array $args = null): RepositoryInterface
+    {
+        $args = $args ?? [];
+        $hash = \sha1(\serialize(\array_merge([\spl_object_hash((object)$callable)], $args)));
+
+        if (!\in_array($hash, self::$processedCallbacks, true)) {
+            self::$callbacks[$hash] = [$callable, $args];
+            self::$processedCallbacks[] = $hash;
+        }
+
+        return $this;
+    }
+
+    /**
      * Process defined joins for current QueryBuilder instance.
      *
      * @param QueryBuilder $queryBuilder
@@ -371,6 +412,26 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
             
             self::$joins[$joinType] = [];
         }
+    }
+
+    /**
+     * Process defined callbacks for current QueryBuilder instance.
+     *
+     * @param QueryBuilder $queryBuilder
+     */
+    public function processCallbacks(QueryBuilder $queryBuilder): void
+    {
+        /**
+         * @var callable $callback
+         * @var array    $args
+         */
+        foreach (self::$callbacks as [$callback, $args]) {
+            \array_unshift($args, $queryBuilder);
+
+            $callback(...$args);
+        }
+
+        self::$callbacks = [];
     }
 
     /**

@@ -63,26 +63,26 @@ interface RepositoryInterface
      *
      * @param EntityInterface $entity
      *
-     * @return Repository
+     * @return RepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(EntityInterface $entity): Repository;
+    public function save(EntityInterface $entity): RepositoryInterface;
 
     /**
      * Helper method to remove specified entity from database.
      *
      * @param EntityInterface $entity
      *
-     * @return Repository
+     * @return RepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(EntityInterface $entity): Repository;
+    public function remove(EntityInterface $entity): RepositoryInterface;
 
     /**
      * Generic count method to determine count of entities for specified criteria and search term(s).
@@ -174,9 +174,32 @@ interface RepositoryInterface
     public function addInnerJoin(array $parameters): RepositoryInterface;
 
     /**
+     * Method to add callback to current query builder instance which is calling 'processQueryBuilder' method. By
+     * default this method is called from following core methods:
+     *  - countAdvanced
+     *  - findByAdvanced
+     *  - findIds
+     *
+     * Note that every callback will get 'QueryBuilder' as in first parameter.
+     *
+     * @param callable   $callable
+     * @param array|null $args
+     *
+     * @return RepositoryInterface
+     */
+    public function addCallback(callable $callable, array $args = null): RepositoryInterface;
+
+    /**
      * Process defined joins for current QueryBuilder instance.
      *
      * @param QueryBuilder $queryBuilder
      */
     public function processJoins(QueryBuilder $queryBuilder): void;
+
+    /**
+     * Process defined callbacks for current QueryBuilder instance.
+     *
+     * @param QueryBuilder $queryBuilder
+     */
+    public function processCallbacks(QueryBuilder $queryBuilder): void;
 }
