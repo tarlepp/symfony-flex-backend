@@ -11,6 +11,7 @@ use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Utils\Tests\PHPUnitUtil;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -116,6 +117,50 @@ class RepositoryTest extends KernelTestCase
         );
 
         static::assertSame($expected, $qb->getDQL(), $message);
+    }
+
+    public function testThatAddCallbackWorksLikeExpectedWithoutArgs(): void
+    {
+        $callback = function ($queryBuilder) {
+            static::assertInstanceOf(QueryBuilder::class, $queryBuilder);
+        };
+
+        $qb = $this->repository->createQueryBuilder('entity');
+
+        $this->repository->addCallback($callback);
+        $this->repository->processQueryBuilder($qb);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatAddCallbackWorksLikeExpectedWithArgs
+     *
+     * @param int   $expectedArgsCount
+     * @param array $expectedArgs
+     */
+    public function testThatAddCallbackWorksLikeExpectedWithArgs(int $expectedArgsCount, array $expectedArgs): void
+    {
+        $callback = function (...$args) use ($expectedArgsCount, $expectedArgs) {
+            static::assertCount($expectedArgsCount, $args);
+            static::assertInstanceOf(QueryBuilder::class, \array_shift($args));
+            static::assertSame($expectedArgs, $args);
+        };
+
+        $qb = $this->repository->createQueryBuilder('entity');
+
+        $this->repository->addCallback($callback, $expectedArgs);
+        $this->repository->processQueryBuilder($qb);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatAddCallbackWorksLikeExpectedWithArgs(): array
+    {
+        return [
+            [1, []],
+            [2, ['foo']],
+            [3, ['foo', new \stdClass()]],
+        ];
     }
 
     /**
