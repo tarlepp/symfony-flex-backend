@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -21,16 +22,23 @@ class JWTDecodedSubscriber
     /**
      * @var RequestStack
      */
-    protected $requestStack;
+    private $requestStack;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * JWTDecodedSubscriber constructor.
      *
-     * @param RequestStack $requestStack
+     * @param RequestStack    $requestStack
+     * @param LoggerInterface $logger
      */
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, LoggerInterface $logger)
     {
         $this->requestStack = $requestStack;
+        $this->logger = $logger;
     }
 
     /**
@@ -42,21 +50,32 @@ class JWTDecodedSubscriber
      */
     public function onJWTDecoded(JWTDecodedEvent $event): void
     {
+        // No need to continue event is invalid
+        if (!$event->isValid()) {
+            return;
+        }
+
         // Get current payload and request object
         $payload = $event->getPayload();
         $request = $this->requestStack->getCurrentRequest();
 
-        // Get bits for checksum calculation
-        $bits = [
-            $request->getClientIp(),
-            $request->headers->get('User-Agent'),
-        ];
+        if ($request !== null) {
+            // Get bits for checksum calculation
+            $bits = [
+                $request->getClientIp(),
+                $request->headers->get('User-Agent'),
+            ];
 
-        // Calculate checksum
-        $checksum = \hash('sha512', \implode('|', $bits));
+            // Calculate checksum
+            $checksum = \hash('sha512', \implode('|', $bits));
 
-        // Custom checks to validate user's JWT
-        if (!\array_key_exists('checksum', $payload) || $payload['checksum'] !== $checksum) {
+            // Custom checks to validate user's JWT
+            if (!\array_key_exists('checksum', $payload) || $payload['checksum'] !== $checksum) {
+                $event->markAsInvalid();
+            }
+        } else {
+            $this->logger->error('Request not available');
+
             $event->markAsInvalid();
         }
     }
