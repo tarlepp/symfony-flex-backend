@@ -10,6 +10,7 @@ namespace App\EventSubscriber;
 use App\Entity\User;
 use App\Security\RolesService;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -25,23 +26,30 @@ class JWTCreatedSubscriber
     /**
      * @var RoleHierarchyInterface
      */
-    protected $roles;
+    private $roles;
 
     /**
      * @var RequestStack
      */
-    protected $requestStack;
+    private $requestStack;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * JWTCreatedListener constructor.
      *
-     * @param   RolesService $roles
-     * @param   RequestStack $requestStack
+     * @param RolesService    $roles
+     * @param RequestStack    $requestStack
+     * @param LoggerInterface $logger
      */
-    public function __construct(RolesService $roles, RequestStack $requestStack)
+    public function __construct(RolesService $roles, RequestStack $requestStack, LoggerInterface $logger)
     {
         $this->roles = $roles;
         $this->requestStack = $requestStack;
+        $this->logger = $logger;
     }
 
     /**
@@ -91,6 +99,12 @@ class JWTCreatedSubscriber
     {
         // Get current request
         $request = $this->requestStack->getCurrentRequest();
+
+        if ($request === null) {
+            $this->logger->alert('Request not available');
+
+            return;
+        }
 
         // Get bits for checksum calculation
         $bits = [
