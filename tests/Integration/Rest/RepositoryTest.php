@@ -151,173 +151,13 @@ class RepositoryTest extends KernelTestCase
         $this->repository->processQueryBuilder($qb);
     }
 
-    /**
-     * @return array
-     */
-    public function dataProviderTestThatAddCallbackWorksLikeExpectedWithArgs(): array
-    {
-        return [
-            [1, []],
-            [2, ['foo']],
-            [3, ['foo', new \stdClass()]],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderTestThatAddLeftJoinWorksAsExpected(): array
-    {
-        return [
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug',
-                'addLeftJoin',
-                [
-                    ['entity.userGroups', 'ug'],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug',
-                'addLeftJoin',
-                [
-                    ['entity.userGroups', 'ug'],
-                    ['entity.userGroups', 'ug'],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug LEFT JOIN ug.role r',
-                'addLeftJoin',
-                [
-                    ['entity.userGroups', 'ug'],
-                    ['ug.role', 'r'],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug LEFT JOIN ug.role r',
-                'addLeftJoin',
-                [
-                    ['entity.userGroups', 'ug'],
-                    ['entity.userGroups', 'ug'],
-                    ['ug.role', 'r'],
-                    ['ug.role', 'r'],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug',
-                'addInnerJoin',
-                [
-                    ['entity.userGroups', 'ug'],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug',
-                'addInnerJoin',
-                [
-                    ['entity.userGroups', 'ug'],
-                    ['entity.userGroups', 'ug'],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug INNER JOIN ug.role r',
-                'addInnerJoin',
-                [
-                    ['entity.userGroups', 'ug'],
-                    ['ug.role', 'r'],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug INNER JOIN ug.role r',
-                'addInnerJoin',
-                [
-                    ['entity.userGroups', 'ug'],
-                    ['entity.userGroups', 'ug'],
-                    ['ug.role', 'r'],
-                    ['ug.role', 'r'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderTestThatProcessCriteriaWorksAsExpected(): array
-    {
-        return [
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1',
-                ['foo' => 'bar'],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE foo.bar = ?1',
-                ['foo.bar' => 'foobar'],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1 AND entity.bar = ?2',
-                [
-                    'foo' => 'bar',
-                    'bar' => 'foo',
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
-                [
-                    'and' => [
-                        ['bar', 'eq', 'foo'],
-                    ],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
-                [
-                    'or' => [
-                        ['bar', 'eq', 'foo'],
-                    ],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 AND foo = ?2',
-                [
-                    'and' => [
-                        ['bar', 'eq', 'foo'],
-                        ['foo', 'eq', 'bar'],
-                    ],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 OR foo = ?2',
-                [
-                    'or' => [
-                        ['bar', 'eq', 'foo'],
-                        ['foo', 'eq', 'bar'],
-                    ],
-                ],
-            ],
-        ];
-    }
-
     public function testThatProcessCriteriaWorksWithEmptyCriteria(): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
         PHPUnitUtil::callMethod($this->repository, 'processCriteria', [$qb, []]);
 
-        $expected = 'SELECT entity FROM App\\Entity\\User entity';
+        $expected = /** @lang text */ 'SELECT entity FROM App\\Entity\\User entity';
         $message = 'processCriteria method changed DQL when it should not - weird';
 
         static::assertSame($expected, $qb->getDQL(), $message);
@@ -334,7 +174,7 @@ class RepositoryTest extends KernelTestCase
 
         $message = 'processSearchTerms did not return expected DQL.';
 
-        $expected = 'SELECT entity FROM App\\Entity\\User entity';
+        $expected = /** @lang text */ 'SELECT entity FROM App\\Entity\\User entity';
         $actual = $qb->getDQL();
 
         PHPUnitUtil::setProperty('searchColumns', $originalValue, $this->repository);
@@ -770,5 +610,165 @@ DQL
         ];
 
         // @codingStandardsIgnoreEnd
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatAddLeftJoinWorksAsExpected(): array
+    {
+        return [
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug',
+                'addLeftJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug',
+                'addLeftJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['entity.userGroups', 'ug'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug LEFT JOIN ug.role r',
+                'addLeftJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['ug.role', 'r'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity LEFT JOIN entity.userGroups ug LEFT JOIN ug.role r',
+                'addLeftJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['entity.userGroups', 'ug'],
+                    ['ug.role', 'r'],
+                    ['ug.role', 'r'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug',
+                'addInnerJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug',
+                'addInnerJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['entity.userGroups', 'ug'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug INNER JOIN ug.role r',
+                'addInnerJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['ug.role', 'r'],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity INNER JOIN entity.userGroups ug INNER JOIN ug.role r',
+                'addInnerJoin',
+                [
+                    ['entity.userGroups', 'ug'],
+                    ['entity.userGroups', 'ug'],
+                    ['ug.role', 'r'],
+                    ['ug.role', 'r'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatProcessCriteriaWorksAsExpected(): array
+    {
+        return [
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1',
+                ['foo' => 'bar'],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE foo.bar = ?1',
+                ['foo.bar' => 'foobar'],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1 AND entity.bar = ?2',
+                [
+                    'foo' => 'bar',
+                    'bar' => 'foo',
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
+                [
+                    'and' => [
+                        ['bar', 'eq', 'foo'],
+                    ],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
+                [
+                    'or' => [
+                        ['bar', 'eq', 'foo'],
+                    ],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 AND foo = ?2',
+                [
+                    'and' => [
+                        ['bar', 'eq', 'foo'],
+                        ['foo', 'eq', 'bar'],
+                    ],
+                ],
+            ],
+            [
+                /** @lang text */
+                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 OR foo = ?2',
+                [
+                    'or' => [
+                        ['bar', 'eq', 'foo'],
+                        ['foo', 'eq', 'bar'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatAddCallbackWorksLikeExpectedWithArgs(): array
+    {
+        return [
+            [1, []],
+            [2, ['foo']],
+            [3, ['foo', new \stdClass()]],
+        ];
     }
 }
