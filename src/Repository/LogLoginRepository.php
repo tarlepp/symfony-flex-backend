@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\LogLogin as Entity;
-use App\Entity\User;
 use App\Rest\Repository;
 
 /** @noinspection PhpHierarchyChecksInspection */
