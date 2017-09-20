@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b10d7b475ea496b1c39593225623a3c",
+    "content-hash": "397ec0769c5c83e58eba16e8dfeb3f2e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -820,32 +820,32 @@
         },
         {
             "name": "doctrine/instantiator",
-            "version": "1.0.5",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d"
+                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/8e884e78f9f0eb1329e445619e04456e64d8051d",
-                "reference": "8e884e78f9f0eb1329e445619e04456e64d8051d",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
+                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3,<8.0-DEV"
+                "php": "^7.1"
             },
             "require-dev": {
                 "athletic/athletic": "~0.1.8",
                 "ext-pdo": "*",
                 "ext-phar": "*",
-                "phpunit/phpunit": "~4.0",
-                "squizlabs/php_codesniffer": "~2.0"
+                "phpunit/phpunit": "^6.2.3",
+                "squizlabs/php_codesniffer": "^3.0.2"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.0.x-dev"
+                    "dev-master": "1.2.x-dev"
                 }
             },
             "autoload": {
@@ -870,7 +870,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2015-06-14T21:17:01+00:00"
+            "time": "2017-07-22T11:58:36+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1002,16 +1002,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.5.10",
+            "version": "v2.5.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "c78afd51721804f4f76ff30d9b6f6159eb046161"
+                "reference": "249b737094f1e7cba4f0a8d19acf5be6cf3ed504"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/c78afd51721804f4f76ff30d9b6f6159eb046161",
-                "reference": "c78afd51721804f4f76ff30d9b6f6159eb046161",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/249b737094f1e7cba4f0a8d19acf5be6cf3ed504",
+                "reference": "249b737094f1e7cba4f0a8d19acf5be6cf3ed504",
                 "shasum": ""
             },
             "require": {
@@ -1019,7 +1019,7 @@
                 "doctrine/collections": "~1.2",
                 "doctrine/common": ">=2.5-dev,<2.9-dev",
                 "doctrine/dbal": ">=2.5-dev,<2.7-dev",
-                "doctrine/instantiator": "~1.0.1",
+                "doctrine/instantiator": "^1.0.1",
                 "ext-pdo": "*",
                 "php": ">=5.4",
                 "symfony/console": "~2.5|~3.0"
@@ -1074,7 +1074,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-08-18T19:17:35+00:00"
+            "time": "2017-09-18T06:50:20+00:00"
         },
         {
             "name": "easycorp/easy-log-handler",
@@ -1643,12 +1643,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "3adf8c3d97663ad27768f021f093cef16701a5df"
+                "reference": "0baa67751588fe25c775f239b6a2b2f41ded7faf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/3adf8c3d97663ad27768f021f093cef16701a5df",
-                "reference": "3adf8c3d97663ad27768f021f093cef16701a5df",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/0baa67751588fe25c775f239b6a2b2f41ded7faf",
+                "reference": "0baa67751588fe25c775f239b6a2b2f41ded7faf",
                 "shasum": ""
             },
             "require": {
@@ -1715,7 +1715,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-09-09T18:40:21+00:00"
+            "time": "2017-09-20T05:18:58+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -7088,16 +7088,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.0.2",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "c7594a88ae75401e8f8d0bd4deb8431b39045c51"
+                "reference": "3c2d0a0fe39684ba0c1eb842a6a775d0b938d699"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/c7594a88ae75401e8f8d0bd4deb8431b39045c51",
-                "reference": "c7594a88ae75401e8f8d0bd4deb8431b39045c51",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/3c2d0a0fe39684ba0c1eb842a6a775d0b938d699",
+                "reference": "3c2d0a0fe39684ba0c1eb842a6a775d0b938d699",
                 "shasum": ""
             },
             "require": {
@@ -7107,7 +7107,7 @@
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0"
             },
             "bin": [
                 "bin/phpcs",
@@ -7135,7 +7135,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-07-18T01:12:32+00:00"
+            "time": "2017-09-19T22:47:14+00:00"
         },
         {
             "name": "symfony/browser-kit",
