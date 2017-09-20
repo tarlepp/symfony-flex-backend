@@ -49,6 +49,7 @@ interface LoginLoggerInterface
      *
      * @param string $type
      *
+     * @throws \UnexpectedValueException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
     public function process(string $type): void;

@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
 use DeviceDetector\DeviceDetector;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -42,11 +43,6 @@ class LoginLogger implements LoginLoggerInterface
      * @var User
      */
     private $user;
-
-    /**
-     * @var string
-     */
-    private $agent;
 
     /**
      * @var DeviceDetector
@@ -97,40 +93,47 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @param string $type
      *
+     * @throws \UnexpectedValueException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
     public function process(string $type): void
     {
+        // Get current request
+        $request = $this->requestStack->getCurrentRequest();
+
+        if ($request === null) {
+            throw new \UnexpectedValueException('Could not get request from current request stack');
+        }
+
         // Specify user agent
-        $this->agent = $this->requestStack->getCurrentRequest()->headers->get('User-Agent');
+        $agent = $request->headers->get('User-Agent');
 
         // Parse user agent data with device detector
-        $this->deviceDetector = new DeviceDetector($this->agent);
+        $this->deviceDetector = new DeviceDetector($agent);
         $this->deviceDetector->parse();
 
         // Create entry
-        $this->createEntry($type);
+        $this->createEntry($type, $request, $agent);
     }
 
     /**
      * Method to create new login entry and store it to database.
      *
-     * @param string $type
+     * @param string  $type
+     * @param Request $request
+     * @param string  $agent
      *
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
-    private function createEntry(string $type): void
+    private function createEntry(string $type, Request $request, string $agent): void
     {
-        // Get current request
-        $request= $this->requestStack->getCurrentRequest();
-
         /** @var LogLogin $entry */
         $entry = new LogLogin();
         $entry->setType($type);
         $entry->setUser($this->user);
         $entry->setIp((string)$request->getClientIp());
         $entry->setHost($request->getHost());
-        $entry->setAgent($this->agent);
+        $entry->setAgent($agent);
         $entry->setClientType($this->deviceDetector->getClient('type'));
         $entry->setClientName($this->deviceDetector->getClient('name'));
         $entry->setClientShortName($this->deviceDetector->getClient('short_name'));
