@@ -91,12 +91,14 @@ class Auth
     /**
      * Method to make actual login to application with specified username and password.
      *
+     * @codeCoverageIgnore
+     *
      * @param string $username
      * @param string $password
      *
      * @return string
      *
-     * @throws \DomainException
+     * @throws \UnexpectedValueException
      */
     private function getToken(string $username, string $password): string
     {
@@ -120,6 +122,10 @@ class Auth
         );
 
         $response = $client->getResponse();
+
+        if ($response === null) {
+            throw new \UnexpectedValueException('Test client did not return response at all');
+        }
 
         return JSON::decode($response->getContent())->token;
     }
