@@ -7,3 +7,24 @@ nelmio_api_doc:
             title: Symfony Flex Backend
             description: REST API with Symfony Flex
             version: 1.0.0
+#    exclude_sections:     []
+#    default_sections_opened:  true
+#    motd:
+#        template:             'NelmioApiDocBundle::Components/motd.html.twig'
+#    request_listener:
+#        enabled:              true
+#        parameter:            _doc
+#    swagger:
+#        api_base_path:        /api
+#        swagger_version:      '1.2'
+#        api_version:          '0.1'
+#        info:
+#            title:                Symfony2
+#            description:          'My awesome Symfony2 app!'
+#            TermsOfServiceUrl:    null
+#            contact:              null
+#            license:              null
+#            licenseUrl:           null
+#    cache:
+#        enabled:              false
+#        file:                 '%kernel.cache_dir%/api-doc.cache'

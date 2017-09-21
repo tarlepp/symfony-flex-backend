@@ -50,7 +50,3 @@ security:
     access_decision_manager:
         strategy: unanimous
 
-services:
-    App\Security\RolesService:
-        public: true
-        arguments: [ '%security.role_hierarchy.roles%' ]
