@@ -15,6 +15,7 @@ use Nelmio\ApiDocBundle\Describer\DescriberInterface;
  * Class ApiDocDescriberInformation
  *
  * @package App\Rest\Describer
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiDocDescriberInformation implements DescriberInterface
 {
