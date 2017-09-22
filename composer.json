@@ -1,6 +1,7 @@
 {
 	"name": "tarlepp/symfony-flex-backend",
 	"description": "Simple JSON API which is build on top of Symfony framework",
+	"version": "0.2.0",
 	"type": "project",
 	"license": "MIT",
 	"authors": [
@@ -96,6 +97,5 @@
 			"id": "01BFA135DXTPRA5CR250NTJJJP",
 			"allow-contrib": "true"
 		}
-	},
-	"version": "0.1.0"
+	}
 }
