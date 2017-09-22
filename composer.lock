@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "397ec0769c5c83e58eba16e8dfeb3f2e",
+    "content-hash": "c75356e157adfa8708577708dc5d22ee",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5909,16 +5909,16 @@
         },
         {
             "name": "phpmetrics/phpmetrics",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmetrics/PhpMetrics.git",
-                "reference": "cc553d9ede844cd638e0d208b4f6eb6a201d2bbd"
+                "reference": "c6fc9a5ef08571ffa3b09d2f05017b4705715b95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmetrics/PhpMetrics/zipball/cc553d9ede844cd638e0d208b4f6eb6a201d2bbd",
-                "reference": "cc553d9ede844cd638e0d208b4f6eb6a201d2bbd",
+                "url": "https://api.github.com/repos/phpmetrics/PhpMetrics/zipball/c6fc9a5ef08571ffa3b09d2f05017b4705715b95",
+                "reference": "c6fc9a5ef08571ffa3b09d2f05017b4705715b95",
                 "shasum": ""
             },
             "require": {
@@ -5966,7 +5966,7 @@
                 "quality",
                 "testing"
             ],
-            "time": "2017-04-13T05:18:28+00:00"
+            "time": "2017-09-22T09:33:03+00:00"
         },
         {
             "name": "phpspec/prophecy",
