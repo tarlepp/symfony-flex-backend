@@ -248,6 +248,7 @@ And after that open `build/phpmetrics/index.html` with your favorite browser.
 * [Symfony Plugin plugin for PhpStorm](https://plugins.jetbrains.com/plugin/7219-symfony-plugin)
 * [PHP Annotations plugin for PhpStorm](https://plugins.jetbrains.com/plugin/7320)
 * [Php Inspections (EA Extended) plugin for PhpStorm](https://plugins.jetbrains.com/idea/plugin/7622-php-inspections-ea-extended-)
+* [composer-version](https://github.com/vutran/composer-version)
 
 # Authors
 [Tarmo Leppänen](https://github.com/tarlepp)
