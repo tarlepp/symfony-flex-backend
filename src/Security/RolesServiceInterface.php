@@ -20,6 +20,7 @@ interface RolesServiceInterface
     const ROLE_USER     = 'ROLE_USER';
     const ROLE_ADMIN    = 'ROLE_ADMIN';
     const ROLE_ROOT     = 'ROLE_ROOT';
+    const ROLE_API      = 'ROLE_API';
 
     /**
      * RolesHelper constructor.
