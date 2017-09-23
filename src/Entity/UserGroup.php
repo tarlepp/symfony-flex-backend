@@ -100,7 +100,7 @@ class UserGroup implements EntityInterface
     private $name = '';
 
     /**
-     * @var Collection<App\Entity\User>
+     * @var Collection<App\Entity\User>|ArrayCollection<App\Entity\User>
      *
      * @Groups({
      *      "UserGroup.users",
@@ -117,6 +117,23 @@ class UserGroup implements EntityInterface
     private $users;
 
     /**
+     * @var Collection<App\Entity\ApiKey>|ArrayCollection<App\Entity\ApiKey>
+     *
+     * @Groups({
+     *      "UserGroup.apiKeys",
+     *  })
+     *
+     * @ORM\ManyToMany(
+     *      targetEntity="ApiKey",
+     *      mappedBy="userGroups",
+     *  )
+     * @ORM\JoinTable(
+     *      name="api_key_has_user_group"
+     *  )
+     */
+    private $apiKeys;
+
+    /**
      * UserGroup constructor.
      */
     public function __construct()
@@ -124,6 +141,7 @@ class UserGroup implements EntityInterface
         $this->id = Uuid::uuid4()->toString();
 
         $this->users = new ArrayCollection();
+        $this->apiKeys = new ArrayCollection();
     }
 
     /**
@@ -183,6 +201,14 @@ class UserGroup implements EntityInterface
     }
 
     /**
+     * @return Collection<ApiKey>|ArrayCollection<ApiKey>
+     */
+    public function getApiKeys(): Collection
+    {
+        return $this->apiKeys;
+    }
+
+    /**
      * Method to attach new user group to user.
      *
      * @param   User    $user
@@ -224,6 +250,52 @@ class UserGroup implements EntityInterface
     public function clearUsers(): UserGroup
     {
         $this->users->clear();
+
+        return $this;
+    }
+
+    /**
+     * Method to attach new user group to user.
+     *
+     * @param ApiKey $apiKey
+     *
+     * @return UserGroup
+     */
+    public function addApiKey(ApiKey $apiKey): UserGroup
+    {
+        if (!$this->apiKeys->contains($apiKey)) {
+            $this->apiKeys->add($apiKey);
+            $apiKey->addUserGroup($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Method to remove specified user from user group.
+     *
+     * @param ApiKey $apiKey
+     *
+     * @return UserGroup
+     */
+    public function removeApiKey(ApiKey $apiKey): UserGroup
+    {
+        if ($this->apiKeys->contains($apiKey)) {
+            $this->apiKeys->removeElement($apiKey);
+            $apiKey->removeUserGroup($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Method to remove all many-to-many api key relations from current user group.
+     *
+     * @return  UserGroup
+     */
+    public function clearApiKeys(): UserGroup
+    {
+        $this->apiKeys->clear();
 
         return $this;
     }
