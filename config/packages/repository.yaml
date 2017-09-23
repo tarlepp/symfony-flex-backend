@@ -4,6 +4,10 @@ services:
         factory: [ '@doctrine.orm.entity_manager', getRepository ]
         shared: false
 
+    App\Repository\ApiKeyRepository:
+        parent: repository
+        arguments: [ App\Entity\ApiKey ]
+
     App\Repository\DateDimensionRepository:
         parent: repository
         arguments: [ App\Entity\DateDimension ]
