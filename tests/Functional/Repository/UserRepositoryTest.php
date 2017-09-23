@@ -78,6 +78,10 @@ class UserRepositoryTest extends KernelTestCase
         /** @var User $user */
         $user = $this->repository->findOneBy(['username' => 'john']);
 
+        static::assertNotNull($user);
+        static::assertInstanceOf(User::class, $user);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($user->getId(), $this->repository->refreshUser($user)->getId());
     }
 
@@ -108,17 +112,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         static::assertCount(4, $this->repository->findIds([], ['or' => 'john-']));
     }
-
-    /**
-     * @depends testThatIsUsernameAvailableMethodReturnsExpected
-     */
-    public function testThatResetMethodDeletesAllRecords(): void
-    {
-        $this->repository->reset();
-
-        self::assertSame(0, $this->repository->countAdvanced());
-    }
-
+    
     public function testThatIsUsernameAvailableMethodReturnsExpected(): void
     {
         $iterator = function (User $user, bool $expected) {
@@ -140,9 +134,20 @@ class UserRepositoryTest extends KernelTestCase
             [$expected, $username, $id] = $set;
 
             /** @noinspection DisconnectedForeachInstructionInspection */
-            self::assertSame($expected, $this->repository->isUsernameAvailable($username, $id));
+            static::assertSame($expected, $this->repository->isUsernameAvailable($username, $id));
         }
     }
+
+    /**
+     * @depends testThatIsUsernameAvailableMethodReturnsExpected
+     */
+    public function testThatResetMethodDeletesAllRecords(): void
+    {
+        $this->repository->reset();
+
+        static::assertSame(0, $this->repository->countAdvanced());
+    }
+
 
     public function testThatIsEmailAvailableMethodReturnsExpected(): void
     {
@@ -165,7 +170,7 @@ class UserRepositoryTest extends KernelTestCase
             [$expected, $email, $id] = $set;
 
             /** @noinspection DisconnectedForeachInstructionInspection */
-            self::assertSame($expected, $this->repository->isEmailAvailable($email, $id));
+            static::assertSame($expected, $this->repository->isEmailAvailable($email, $id));
         }
     }
 }
