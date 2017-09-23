@@ -11,7 +11,14 @@ security:
 
     # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        users:
+        chain_provider:
+            chain:
+                providers: [user_provider, api_key_user_provider]
+
+        api_key_user_provider:
+            id: App\Security\ApiKeyUserProvider
+
+        user_provider:
             entity:
                 class: App\Entity\User
 
@@ -38,11 +45,14 @@ security:
             pattern: ^/
             stateless: true
             anonymous: true
+            simple_preauth:
+                authenticator: App\Security\ApiKeyAuthenticator
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
     role_hierarchy:
+        ROLE_API:   [ROLE_LOGGED]
         ROLE_USER:  [ROLE_LOGGED]
         ROLE_ADMIN: [ROLE_USER]
         ROLE_ROOT:  [ROLE_ADMIN]
