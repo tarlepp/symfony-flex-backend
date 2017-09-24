@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "f25509761b6c9e901f8be5f2d991f6f7",
+    "content-hash": "3e7e9fe132d61bc001bee6fe0b621863",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1744,12 +1744,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "0baa67751588fe25c775f239b6a2b2f41ded7faf"
+                "reference": "d6913dc78f0093d03143ce34491c25695adfb40e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/0baa67751588fe25c775f239b6a2b2f41ded7faf",
-                "reference": "0baa67751588fe25c775f239b6a2b2f41ded7faf",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/d6913dc78f0093d03143ce34491c25695adfb40e",
+                "reference": "d6913dc78f0093d03143ce34491c25695adfb40e",
                 "shasum": ""
             },
             "require": {
@@ -1816,7 +1816,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-09-20T05:18:58+00:00"
+            "time": "2017-09-23T22:57:06+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -6384,16 +6384,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.3.0",
+            "version": "6.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "9501bab711403a1ab5b8378a8adb4ec3db3debdb"
+                "reference": "c0ff817b36a827e64bf5f57bc72278150cf30a77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/9501bab711403a1ab5b8378a8adb4ec3db3debdb",
-                "reference": "9501bab711403a1ab5b8378a8adb4ec3db3debdb",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/c0ff817b36a827e64bf5f57bc72278150cf30a77",
+                "reference": "c0ff817b36a827e64bf5f57bc72278150cf30a77",
                 "shasum": ""
             },
             "require": {
@@ -6464,7 +6464,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-08-04T05:20:39+00:00"
+            "time": "2017-09-24T07:25:54+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
