@@ -28,6 +28,8 @@ class ApiKeyControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
     }
 
@@ -41,12 +43,13 @@ class ApiKeyControllerTest extends WebTestCase
     public function testThatFindActionWorksAsExpected(string $username, string $password, int $expectedStatus): void
     {
         $client = $this->getClient($username, $password);
-
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expectedStatus, $response->getStatusCode(), $response->getContent());
     }
 
@@ -57,6 +60,7 @@ class ApiKeyControllerTest extends WebTestCase
     {
         return [
             ['john',        'password',         403],
+            ['john-api',    'password-api',     403],
             ['john-logged', 'password-logged',  403],
             ['john-user',   'password-user',    403],
             ['john-admin',  'password-admin',   403],
