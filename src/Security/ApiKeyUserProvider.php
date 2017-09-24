@@ -47,13 +47,13 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
     /**
      * Method to fetch ApiKey entity for specified token.
      *
-     * @param string $identifier
+     * @param string $token
      *
      * @return ApiKey|null
      */
-    public function getApiKeyForToken(string $identifier): ?ApiKey
+    public function getApiKeyForToken(string $token): ?ApiKey
     {
-        return $this->apiKeyRepository->findOneBy(['token' => $identifier]);
+        return $this->apiKeyRepository->findOneBy(['token' => $token]);
     }
 
     /**

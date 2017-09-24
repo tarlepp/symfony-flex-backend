@@ -29,9 +29,9 @@ interface ApiKeyUserProviderInterface
     /**
      * Method to fetch ApiKey entity for specified token.
      *
-     * @param string $identifier
+     * @param string $token
      *
      * @return ApiKey|null
      */
-    public function getApiKeyForToken(string $identifier): ?ApiKey;
+    public function getApiKeyForToken(string $token): ?ApiKey;
 }
