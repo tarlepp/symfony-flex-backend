@@ -35,6 +35,9 @@ class RolesServiceTest extends KernelTestCase
     public function testThatGetHierarchyReturnsExpected(): void
     {
         $expected = [
+            'ROLE_API' => [
+                'ROLE_LOGGED',
+            ],
             'ROLE_USER' => [
                 'ROLE_LOGGED',
             ],
@@ -57,6 +60,7 @@ class RolesServiceTest extends KernelTestCase
                 'ROLE_USER',
                 'ROLE_ADMIN',
                 'ROLE_ROOT',
+                'ROLE_API',
             ],
             $this->service->getRoles(),
             'Returned roles are not expected.'
@@ -106,6 +110,7 @@ class RolesServiceTest extends KernelTestCase
             [RolesService::ROLE_USER, 'Normal users'],
             [RolesService::ROLE_ADMIN, 'Admin users'],
             [RolesService::ROLE_ROOT, 'Root users'],
+            [RolesService::ROLE_API, 'API users'],
             ['Not supported role', 'Unknown - Not supported role'],
         ];
     }
@@ -120,6 +125,7 @@ class RolesServiceTest extends KernelTestCase
             [RolesService::ROLE_USER, 'user'],
             [RolesService::ROLE_ADMIN, 'admin'],
             [RolesService::ROLE_ROOT, 'root'],
+            [RolesService::ROLE_API, 'api'],
             ['SOME_CUSTOM_ROLE', 'custom_role']
         ];
     }
@@ -137,6 +143,10 @@ class RolesServiceTest extends KernelTestCase
             [
                 [RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
                 [RolesService::ROLE_USER]
+            ],
+            [
+                [RolesService::ROLE_API, RolesService::ROLE_LOGGED],
+                [RolesService::ROLE_API]
             ],
             [
                 [RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
