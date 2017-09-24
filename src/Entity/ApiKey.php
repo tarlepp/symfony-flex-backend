@@ -114,12 +114,27 @@ class ApiKey implements EntityInterface
     private $userGroups;
 
     /**
+     * @var Collection<LogRequest>
+     *
+     * @Groups({
+     *      "ApiKey.logsRequest",
+     *  })
+     *
+     * @ORM\OneToMany(
+     *      targetEntity="App\Entity\LogRequest",
+     *      mappedBy="apiKey",
+     *  )
+     */
+    private $logsRequest;
+
+    /**
      * ApiKey constructor.
      */
     public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
         $this->userGroups = new ArrayCollection();
+        $this->logsRequest = new ArrayCollection();
 
         $this->generateToken();
     }
@@ -189,6 +204,16 @@ class ApiKey implements EntityInterface
     public function getUserGroups(): Collection
     {
         return $this->userGroups;
+    }
+
+    /**
+     * Getter for user request log collection.
+     *
+     * @return Collection<App\Entity\LogRequest>|ArrayCollection<App\Entity\LogRequest>
+     */
+    public function getLogsRequest(): Collection
+    {
+        return $this->logsRequest;
     }
 
     /**
