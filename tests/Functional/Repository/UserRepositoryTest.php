@@ -98,7 +98,7 @@ class UserRepositoryTest extends KernelTestCase
 
     public function testThatCountAdvancedReturnsExpected(): void
     {
-        static::assertSame(5, $this->repository->countAdvanced());
+        static::assertSame(6, $this->repository->countAdvanced());
     }
 
     public function testThatFindByAdvancedReturnsExpected(): void
@@ -110,7 +110,7 @@ class UserRepositoryTest extends KernelTestCase
 
     public function testThatFindIdsReturnsExpected(): void
     {
-        static::assertCount(4, $this->repository->findIds([], ['or' => 'john-']));
+        static::assertCount(5, $this->repository->findIds([], ['or' => 'john-']));
     }
     
     public function testThatIsUsernameAvailableMethodReturnsExpected(): void
