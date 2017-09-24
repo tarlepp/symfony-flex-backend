@@ -12,6 +12,7 @@ use App\Rest\Controller;
 use App\Rest\Traits\Actions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Swagger\Annotations as SWG;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
