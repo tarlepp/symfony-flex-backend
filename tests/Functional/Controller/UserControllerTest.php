@@ -32,7 +32,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"JWT Token not found","code":401}',
             $response->getContent()
@@ -53,8 +57,12 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode());
-        static::assertJsonStringEqualsJsonString('{"count":5}', $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent());
     }
 
     /**
@@ -71,7 +79,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(403, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
@@ -92,8 +104,12 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode());
-        static::assertCount(5, JSON::decode($response->getContent()));
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertCount(6, JSON::decode($response->getContent()));
     }
 
     /**
@@ -110,7 +126,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(403, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
@@ -131,8 +151,12 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode());
-        static::assertCount(5, JSON::decode($response->getContent()));
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertCount(6, JSON::decode($response->getContent()));
     }
 
     /**
@@ -149,7 +173,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(403, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
@@ -175,8 +203,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(201, $response->getStatusCode());
 
+        /** @noinspection NullPointerExceptionInspection */
         $responseData = $response->getContent();
 
         $data['id'] = JSON::decode($responseData)->id;
@@ -209,7 +240,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(403, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
@@ -238,10 +273,13 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
 
         $data['id'] = $userId;
 
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(JSON::encode($data), $response->getContent());
 
         return $userId;
@@ -275,7 +313,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(403, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
@@ -303,7 +345,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(403, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
@@ -323,6 +369,8 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
@@ -336,12 +384,18 @@ class UserControllerTest extends WebTestCase
         $user = $userResource->findOneBy(['username' => 'john-root'], null, true);
 
         $client = $this->getClient('john-root', 'password-root');
+
+        /** @noinspection NullPointerExceptionInspection */
         $client->request('DELETE', $this->baseUrl . '/' . $user->getId());
 
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(400, $response->getStatusCode(), $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"You cannot remove yourself...","code":0,"status":400}',
             $response->getContent()
@@ -368,6 +422,8 @@ class UserControllerTest extends WebTestCase
             $response = $client->getResponse();
 
             static::assertInstanceOf(Response::class, $response);
+
+            /** @noinspection NullPointerExceptionInspection */
             static::assertSame(403, $response->getStatusCode(), $response->getContent());
         }
     }
@@ -392,7 +448,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
     }
 
@@ -410,7 +470,11 @@ class UserControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
     }
 
@@ -432,6 +496,7 @@ class UserControllerTest extends WebTestCase
     {
         return [
             ['john',        'password'],
+            ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
         ];
@@ -444,6 +509,7 @@ class UserControllerTest extends WebTestCase
     {
         return [
             ['john',        'password'],
+            ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
             ['john-admin',  'password-admin'],
@@ -517,6 +583,7 @@ class UserControllerTest extends WebTestCase
 
         $credentials = [
             ['john',        'password'],
+            ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
             ['john-admin',  'password-admin'],

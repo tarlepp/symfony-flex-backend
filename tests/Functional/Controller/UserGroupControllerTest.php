@@ -30,6 +30,8 @@ class UserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
     }
 
@@ -47,7 +49,11 @@ class UserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertCount($userCount, JSON::decode($response->getContent()));
     }
 
@@ -66,7 +72,8 @@ class UserGroupControllerTest extends WebTestCase
             [1, $userGroupResource->findOneBy(['name' => 'Root users'])->getId()],
             [2, $userGroupResource->findOneBy(['name' => 'Admin users'])->getId()],
             [3, $userGroupResource->findOneBy(['name' => 'Normal users'])->getId()],
-            [4, $userGroupResource->findOneBy(['name' => 'Logged in users'])->getId()],
+            [1, $userGroupResource->findOneBy(['name' => 'Api users'])->getId()],
+            [5, $userGroupResource->findOneBy(['name' => 'Logged in users'])->getId()],
         ];
     }
 }
