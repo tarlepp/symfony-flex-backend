@@ -112,7 +112,7 @@ class UserRepositoryTest extends KernelTestCase
     {
         static::assertCount(5, $this->repository->findIds([], ['or' => 'john-']));
     }
-    
+
     public function testThatIsUsernameAvailableMethodReturnsExpected(): void
     {
         $iterator = function (User $user, bool $expected) {
@@ -138,17 +138,6 @@ class UserRepositoryTest extends KernelTestCase
         }
     }
 
-    /**
-     * @depends testThatIsUsernameAvailableMethodReturnsExpected
-     */
-    public function testThatResetMethodDeletesAllRecords(): void
-    {
-        $this->repository->reset();
-
-        static::assertSame(0, $this->repository->countAdvanced());
-    }
-
-
     public function testThatIsEmailAvailableMethodReturnsExpected(): void
     {
         $iterator = function (User $user, bool $expected) {
@@ -172,5 +161,16 @@ class UserRepositoryTest extends KernelTestCase
             /** @noinspection DisconnectedForeachInstructionInspection */
             static::assertSame($expected, $this->repository->isEmailAvailable($email, $id));
         }
+    }
+
+    /**
+     * @depends testThatIsUsernameAvailableMethodReturnsExpected
+     * @depends testThatIsEmailAvailableMethodReturnsExpected
+     */
+    public function testThatResetMethodDeletesAllRecords(): void
+    {
+        $this->repository->reset();
+
+        static::assertSame(0, $this->repository->countAdvanced());
     }
 }
