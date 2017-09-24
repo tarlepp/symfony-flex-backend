@@ -9,8 +9,8 @@ namespace App\Resource;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
-use App\Entity\User as Entity;
-use App\Repository\UserRepository as Repository;
+use App\Entity\ApiKey as Entity;
+use App\Repository\ApiKeyRepository as Repository;
 use App\Rest\RestResource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
