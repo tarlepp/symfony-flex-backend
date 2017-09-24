@@ -7,7 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\EventSubscriber;
 
+use App\Entity\ApiKey;
+use App\Entity\User;
 use App\EventSubscriber\RequestSubscriber;
+use App\Security\ApiKeyUser;
 use App\Utils\RequestLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * Class RequestSubscriberTest
@@ -54,12 +58,6 @@ class RequestSubscriberTest extends KernelTestCase
 
         $logger
             ->expects(static::once())
-            ->method('setUser')
-            ->with(null)
-            ->willReturn($logger);
-
-        $logger
-            ->expects(static::once())
             ->method('setMasterRequest')
             ->with($event->isMasterRequest())
             ->willReturn($logger);
@@ -67,6 +65,89 @@ class RequestSubscriberTest extends KernelTestCase
         $logger
             ->expects(static::once())
             ->method('handle');
+
+        $subscriber = new RequestSubscriber($logger, $tokenStorage);
+        $subscriber->onKernelResponse($event);
+    }
+
+    public function testThatSetUserIsCalled(): void
+    {
+        static::bootKernel();
+
+        $request = new Request();
+        $response = new Response();
+
+        $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogger $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|TokenStorageInterface $tokenStorage
+         */
+        $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
+        $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
+        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
+        $user = new User();
+
+        $token
+            ->expects(static::once())
+            ->method('getUser')
+            ->willReturn($user);
+
+        $tokenStorage
+            ->expects(static::once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $logger
+            ->expects(static::once())
+            ->method('setUser')
+            ->with($user)
+            ->willReturn($logger);
+
+        $subscriber = new RequestSubscriber($logger, $tokenStorage);
+        $subscriber->onKernelResponse($event);
+    }
+
+    public function testThatSetApiKeyIsCalled(): void
+    {
+        static::bootKernel();
+
+        $request = new Request();
+        $response = new Response();
+
+        $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogger $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|TokenStorageInterface $tokenStorage
+         */
+        $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
+        $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
+        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
+        $user = $this->getMockBuilder(ApiKeyUser::class)->disableOriginalConstructor()->getMock();
+
+        $apiKey = new ApiKey();
+
+        $user
+            ->expects(static::once())
+            ->method('getApiKey')
+            ->willReturn($apiKey);
+
+        $token
+            ->expects(static::once())
+            ->method('getUser')
+            ->willReturn($user);
+
+        $tokenStorage
+            ->expects(static::once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $logger
+            ->expects(static::once())
+            ->method('setApiKey')
+            ->with($apiKey)
+            ->willReturn($logger);
 
         $subscriber = new RequestSubscriber($logger, $tokenStorage);
         $subscriber->onKernelResponse($event);
