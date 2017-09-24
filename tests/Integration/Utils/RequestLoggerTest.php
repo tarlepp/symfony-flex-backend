@@ -79,6 +79,7 @@ class RequestLoggerTest extends KernelTestCase
             ->setResponse($response)
             ->setMasterRequest(true)
             ->setUser()
+            ->setApiKey()
             ->handle();
     }
 
@@ -110,6 +111,7 @@ class RequestLoggerTest extends KernelTestCase
             ->setResponse($response)
             ->setMasterRequest(true)
             ->setUser()
+            ->setApiKey()
             ->handle();
     }
 }
