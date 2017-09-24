@@ -64,11 +64,11 @@ class ApiKeyUserProvider implements UserProviderInterface
      *
      * @param string $guid
      *
-     * @return ApiKeyUser
+     * @return ApiKeyUserInterface
      *
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
-    public function loadUserByUsername($guid): ApiKeyUser
+    public function loadUserByUsername($guid): ApiKeyUserInterface
     {
         $apiKey = $this->apiKeyRepository->find($guid);
 

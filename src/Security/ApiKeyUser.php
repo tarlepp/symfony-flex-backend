@@ -9,7 +9,6 @@ namespace App\Security;
 
 use App\Entity\ApiKey;
 use App\Entity\UserGroup;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class ApiKeyUser
@@ -17,8 +16,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @package App\Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ApiKeyUser implements UserInterface
+class ApiKeyUser implements ApiKeyUserInterface
 {
+    /**
+     * @var ApiKey
+     */
+    private $apiKey;
+
     /**
      * @var string
      */
@@ -37,17 +41,27 @@ class ApiKeyUser implements UserInterface
      */
     public function __construct(ApiKey $apiKey, RolesService $rolesService)
     {
-        $this->username = $apiKey->getId();
+        $this->apiKey = $apiKey;
+
+        $this->username = $this->apiKey->getId();
 
         // Attach base 'ROLE_API' for API user
         $roles = [RolesService::ROLE_API];
 
         // Iterate API key user groups and attach those roles for API user
-        $apiKey->getUserGroups()->map(function (UserGroup $userGroup) use (&$roles) {
+        $this->apiKey->getUserGroups()->map(function (UserGroup $userGroup) use (&$roles) {
             $roles[] = $userGroup->getRole()->getId();
         });
 
         $this->roles = \array_unique($rolesService->getInheritedRoles($roles));
+    }
+
+    /**
+     * @return ApiKey
+     */
+    public function getApiKey(): ApiKey
+    {
+        return $this->apiKey;
     }
 
     /**
