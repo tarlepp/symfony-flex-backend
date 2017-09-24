@@ -19,7 +19,7 @@ services:
         resource: '../src/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../src/{Entity,Migrations,Repository,EventSubscriber}'
+        exclude: '../src/{Entity,Migrations,Repository,EventSubscriber,Security/ApiKeyUser.php}'
 
     # controllers are imported separately to make sure they
     # have the tag that allows actions to type-hint services
@@ -37,7 +37,7 @@ services:
 
     App\Rest\Describer\ApiDocDescriberInformation:
         arguments:
-                $rootDir: '%kernel.root_dir%'
+            $rootDir: '%kernel.root_dir%'
         tags:
             - { name: nelmio_api_doc.describer, priority: -500 }
 
