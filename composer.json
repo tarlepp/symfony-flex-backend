@@ -33,7 +33,7 @@
 		"matthiasnoback/symfony-console-form": "2.3.0",
 		"nelmio/api-doc-bundle": "dev-master",
 		"piwik/device-detector": "3.8.1",
-		"ramsey/uuid": "3.7.0",
+		"ramsey/uuid": "3.7.1",
 		"roave/security-advisories": "dev-master",
 		"sensio/framework-extra-bundle": "3.0.27",
 		"stof/doctrine-extensions-bundle": "1.2.2",
