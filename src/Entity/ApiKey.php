@@ -173,7 +173,7 @@ class ApiKey implements EntityInterface
     public function generateToken(): ApiKey
     {
         $factory = new RandomLib\Factory;
-        $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::HIGH));
+        $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
 
         return $this->setToken($generator->generateString(40, RandomLib\Generator::CHAR_ALNUM));
     }
