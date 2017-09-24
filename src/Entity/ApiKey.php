@@ -13,8 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
-use RandomLib;
-use SecurityLib;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -172,10 +170,15 @@ class ApiKey implements EntityInterface
      */
     public function generateToken(): ApiKey
     {
-        $factory = new RandomLib\Factory;
-        $generator = $factory->getGenerator(new SecurityLib\Strength(SecurityLib\Strength::MEDIUM));
+        $token = '';
+        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $max = \mb_strlen($chars, '8bit') - 1;
 
-        return $this->setToken($generator->generateString(40, RandomLib\Generator::CHAR_ALNUM));
+        for ($i = 0; $i < 40; $i++) {
+            $token .= $chars[\random_int(0, $max)];
+        }
+
+        return $this->setToken($token);
     }
 
     /**
