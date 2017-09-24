@@ -38,5 +38,6 @@ class LogRequestRepositoryTest extends RepositoryTestCase
      */
     protected $associations = [
         'user',
+        'apiKey',
     ];
 }
