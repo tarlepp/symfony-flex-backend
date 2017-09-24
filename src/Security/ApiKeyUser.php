@@ -9,6 +9,7 @@ namespace App\Security;
 
 use App\Entity\ApiKey;
 use App\Entity\UserGroup;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class ApiKeyUser
@@ -16,7 +17,7 @@ use App\Entity\UserGroup;
  * @package App\Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ApiKeyUser implements ApiKeyUserInterface
+class ApiKeyUser implements ApiKeyUserInterface, UserInterface
 {
     /**
      * @var ApiKey
@@ -57,6 +58,8 @@ class ApiKeyUser implements ApiKeyUserInterface
     }
 
     /**
+     * Getter method for ApiKey entity
+     *
      * @return ApiKey
      */
     public function getApiKey(): ApiKey
