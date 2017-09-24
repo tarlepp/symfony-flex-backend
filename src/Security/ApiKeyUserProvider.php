@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
  * @package App\Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ApiKeyUserProvider implements UserProviderInterface
+class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInterface
 {
     /**
      * @var ApiKeyRepository
