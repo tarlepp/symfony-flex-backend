@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Utils;
 
+use App\Entity\ApiKey;
 use App\Resource\LogRequestResource;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,6 +56,15 @@ interface RequestLoggerInterface
      * @return RequestLoggerInterface
      */
     public function setUser(UserInterface $user = null): RequestLoggerInterface;
+
+    /**
+     * Setter method for current api key
+     *
+     * @param ApiKey|null $apiKey
+     *
+     * @return RequestLoggerInterface
+     */
+    public function setApiKey(ApiKey $apiKey = null): RequestLoggerInterface;
 
     /**
      * Setter method for 'master request' info.
