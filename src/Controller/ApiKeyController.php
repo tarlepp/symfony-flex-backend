@@ -9,6 +9,7 @@ namespace App\Controller;
 
 use App\Resource\ApiKeyResource;
 use App\Rest\Controller;
+use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -41,4 +42,15 @@ class ApiKeyController extends Controller
     use Actions\Root\DeleteAction;
     use Actions\Root\PatchAction;
     use Actions\Root\UpdateAction;
+
+    /**
+     * ApiKeyController constructor.
+     *
+     * @param ApiKeyResource  $resource
+     * @param ResponseHandler $responseHandler
+     */
+    public function __construct(ApiKeyResource $resource, ResponseHandler $responseHandler)
+    {
+        $this->init($resource, $responseHandler);
+    }
 }
