@@ -7,6 +7,8 @@ declare(strict_types = 1);
  */
 namespace App\EventSubscriber;
 
+use App\Entity\UserInterface as ApplicationUser;
+use App\Security\ApiKeyUser;
 use App\Utils\RequestLogger;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -66,7 +68,13 @@ class RequestSubscriber
         // Set needed data to logger and handle actual log
         $this->logger->setRequest($request);
         $this->logger->setResponse($event->getResponse());
-        $this->logger->setUser($this->user);
+
+        if ($this->user instanceof ApplicationUser) {
+            $this->logger->setUser($this->user);
+        } elseif ($this->user instanceof ApiKeyUser) {
+            $this->logger->setApiKey($this->user->getApiKey());
+        }
+
         $this->logger->setMasterRequest($event->isMasterRequest());
         $this->logger->handle();
     }

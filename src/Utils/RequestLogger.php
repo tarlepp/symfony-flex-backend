@@ -7,8 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Utils;
 
-use App\Entity\LogRequest as RequestLogEntity;
+use App\Entity\ApiKey;
+use App\Entity\LogRequest;
 use App\Resource\LogRequestResource;
+use App\Security\ApiKeyUserInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,9 +46,14 @@ class RequestLogger implements RequestLoggerInterface
     private $resource;
 
     /**
-     * @var UserInterface
+     * @var UserInterface|null
      */
     private $user;
+
+    /**
+     * @var ApiKey|null
+     */
+    private $apiKey;
 
     /**
      * @var bool
@@ -109,6 +116,20 @@ class RequestLogger implements RequestLoggerInterface
     }
 
     /**
+     * Setter method for current api key
+     *
+     * @param ApiKey|null $apiKey
+     *
+     * @return RequestLoggerInterface
+     */
+    public function setApiKey(ApiKey $apiKey = null): RequestLoggerInterface
+    {
+        $this->apiKey = $apiKey;
+
+        return $this;
+    }
+
+    /**
      * Setter method for 'master request' info.
      *
      * @param bool $masterRequest
@@ -149,8 +170,9 @@ class RequestLogger implements RequestLoggerInterface
     private function createRequestLogEntry()
     {
         // Create new request log entity
-        $entity = new RequestLogEntity($this->request, $this->response);
+        $entity = new LogRequest($this->request, $this->response);
         $entity->setUser($this->user);
+        $entity->setApiKey($this->apiKey);
         $entity->setMasterRequest($this->masterRequest);
 
         $this->resource->save($entity, true);

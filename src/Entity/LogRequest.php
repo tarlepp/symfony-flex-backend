@@ -51,7 +51,7 @@ class LogRequest implements EntityInterface
     private $id;
 
     /**
-     * @var \App\Entity\User
+     * @var \App\Entity\User|null
      *
      * @Groups({
      *      "LogRequest.user",
@@ -65,10 +65,32 @@ class LogRequest implements EntityInterface
      *      @ORM\JoinColumn(
      *          name="user_id",
      *          referencedColumnName="id",
+     *          nullable=true
      *      ),
      *  })
      */
     private $user;
+
+    /**
+     * @var \App\Entity\ApiKey|null
+     *
+     * @Groups({
+     *      "LogRequest.apiKey",
+     *  })
+     *
+     * @ORM\ManyToOne(
+     *      targetEntity="App\Entity\ApiKey",
+     *      inversedBy="logsRequest",
+     *  )
+     * @ORM\JoinColumns({
+     *      @ORM\JoinColumn(
+     *          name="api_key_id",
+     *          referencedColumnName="id",
+     *          nullable=true
+     *      ),
+     *  })
+     */
+    private $apiKey;
 
     /**
      * @var string
@@ -724,6 +746,26 @@ class LogRequest implements EntityInterface
     public function setUser(User $user = null): LogRequest
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return ApiKey|null
+     */
+    public function getApiKey(): ?ApiKey
+    {
+        return $this->apiKey;
+    }
+
+    /**
+     * @param ApiKey|null $apiKey
+     *
+     * @return LogRequest
+     */
+    public function setApiKey(ApiKey $apiKey = null): LogRequest
+    {
+        $this->apiKey = $apiKey;
 
         return $this;
     }
