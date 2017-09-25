@@ -93,6 +93,8 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
      *
      * This should be the encoded password. On authentication, a plain-text
      * password will be salted, encoded, and then compared to this value.
+     *
+     * @codeCoverageIgnore
      */
     public function getPassword(): void
     {
@@ -102,6 +104,8 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
      * Returns the salt that was originally used to encode the password.
      *
      * This can return null if the password was not encoded using a salt.
+     *
+     * @codeCoverageIgnore
      */
     public function getSalt(): void
     {
@@ -111,6 +115,8 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
      * Returns the username used to authenticate the user.
      *
      * @return string The username
+     *
+     * @codeCoverageIgnore
      */
     public function getUsername(): string
     {
@@ -122,6 +128,8 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
      *
      * This is important if, at any given point, sensitive information like
      * the plain-text password is stored on this object.
+     *
+     * @codeCoverageIgnore
      */
     public function eraseCredentials(): void
     {
