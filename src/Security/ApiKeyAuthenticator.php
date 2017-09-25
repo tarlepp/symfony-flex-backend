@@ -77,13 +77,25 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
      *
      * @return PreAuthenticatedToken
      *
+     * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @throws \Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException
+     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function authenticateToken(
         TokenInterface $token,
         UserProviderInterface $userProvider,
         $providerKey
     ): PreAuthenticatedToken {
+        if (!($userProvider instanceof ChainUserProvider)) {
+            $message = \sprintf(
+                'User provider must be instance of \'%s\' class',
+                ChainUserProvider::class
+            );
+
+            throw new \InvalidArgumentException($message);
+        }
+
         /**
          * Lambda function to filter user providers
          *
@@ -113,7 +125,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
          *          here)
          */
         if ($apiKey === null) {
-            throw new CustomUserMessageAuthenticationException(\sprintf('API Key "%s" does not exist.', $identifier));
+            throw new CustomUserMessageAuthenticationException('Invalid API key');
         }
 
         $user = $userProvider->loadUserByUsername($apiKey->getId());
