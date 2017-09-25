@@ -68,20 +68,9 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     }
 
     /**
-     * Returns the roles granted to the user.
+     * Returns the roles granted to the api user.
      *
-     * <code>
-     * public function getRoles()
-     * {
-     *     return array('ROLE_USER');
-     * }
-     * </code>
-     *
-     * Alternatively, the roles might be stored on a ``roles`` property,
-     * and populated in any number of different ways when the user object
-     * is created.
-     *
-     * @return array (Role|string)[] The user roles
+     * @return string[] The user roles
      */
     public function getRoles(): array
     {
