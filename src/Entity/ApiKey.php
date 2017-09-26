@@ -90,6 +90,7 @@ class ApiKey implements EntityInterface
      * @ORM\Column(
      *      name="description",
      *      type="text",
+     *      nullable=false,
      *  )
      */
     private $description = '';
