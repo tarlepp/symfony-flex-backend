@@ -9,6 +9,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
+use App\Security\RolesService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -90,7 +91,6 @@ class ApiKey implements EntityInterface
      * @ORM\Column(
      *      name="description",
      *      type="text",
-     *      nullable=false,
      *  )
      */
     private $description = '';
@@ -218,6 +218,36 @@ class ApiKey implements EntityInterface
     public function getLogsRequest(): Collection
     {
         return $this->logsRequest;
+    }
+
+    /**
+     * Getter for roles.
+     *
+     * @Groups({
+     *      "ApiKey.roles",
+     *  })
+     *
+     * @return string[]
+     */
+    public function getRoles(): array
+    {
+        /**
+         * Lambda iterator to get user group role information.
+         *
+         * @param UserGroup $userGroup
+         *
+         * @return string
+         */
+        $iterator = function (UserGroup $userGroup) {
+            return $userGroup->getRole()->getId();
+        };
+
+        return \array_unique(
+            \array_merge(
+                [RolesService::ROLE_API],
+                \array_map($iterator, $this->userGroups->toArray())
+            )
+        );
     }
 
     /**
