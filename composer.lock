@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0946560b9c25db6472d83dba1c558cb7",
+    "content-hash": "83cf023b341c8092f6f89eb3ea94281d",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1643,17 +1643,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "d6913dc78f0093d03143ce34491c25695adfb40e"
+                "reference": "87f40feefcb3ac95d64d9620011b5b3f4292a957"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/d6913dc78f0093d03143ce34491c25695adfb40e",
-                "reference": "d6913dc78f0093d03143ce34491c25695adfb40e",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/87f40feefcb3ac95d64d9620011b5b3f4292a957",
+                "reference": "87f40feefcb3ac95d64d9620011b5b3f4292a957",
                 "shasum": ""
             },
             "require": {
                 "exsyst/swagger": "~0.3",
-                "php": "7.0.*|7.1.*",
+                "php": "^7.0",
                 "symfony/framework-bundle": "^3.2.5|^4.0",
                 "symfony/property-info": "^3.1|^4.0",
                 "zircote/swagger-php": "^2.0.9"
@@ -1715,7 +1715,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-09-23T22:57:06+00:00"
+            "time": "2017-09-27T18:29:54+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -1837,16 +1837,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.10",
+            "version": "v2.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d"
+                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/634bae8e911eefa89c1abfbf1b66da679ac8f54d",
-                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/5da4d3c796c275c55f057af5a643ae297d96b4d8",
+                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8",
                 "shasum": ""
             },
             "require": {
@@ -1881,7 +1881,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-03-13T16:27:32+00:00"
+            "time": "2017-09-27T21:40:39+00:00"
         },
         {
             "name": "piwik/device-detector",
@@ -3778,30 +3778,30 @@
         },
         {
             "name": "symfony/monolog-bundle",
-            "version": "v3.1.0",
+            "version": "v3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "6f96c7dbb6b2ef70b307a1a6f897153cbca3da47"
+                "reference": "80c82d7d41c4eed0bf27e215f27531c05b217c17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/6f96c7dbb6b2ef70b307a1a6f897153cbca3da47",
-                "reference": "6f96c7dbb6b2ef70b307a1a6f897153cbca3da47",
+                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/80c82d7d41c4eed0bf27e215f27531c05b217c17",
+                "reference": "80c82d7d41c4eed0bf27e215f27531c05b217c17",
                 "shasum": ""
             },
             "require": {
                 "monolog/monolog": "~1.22",
                 "php": ">=5.3.2",
-                "symfony/config": "~2.7|~3.0",
-                "symfony/dependency-injection": "~2.7|~3.0",
-                "symfony/http-kernel": "~2.7|~3.0",
-                "symfony/monolog-bridge": "~2.7|~3.0"
+                "symfony/config": "~2.7|~3.0|~4.0",
+                "symfony/dependency-injection": "~2.7|~3.0|~4.0",
+                "symfony/http-kernel": "~2.7|~3.0|~4.0",
+                "symfony/monolog-bridge": "~2.7|~3.0|~4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.8",
-                "symfony/console": "~2.3|~3.0",
-                "symfony/yaml": "~2.3|~3.0"
+                "symfony/console": "~2.3|~3.0|~4.0",
+                "symfony/yaml": "~2.3|~3.0|~4.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -3834,7 +3834,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2017-03-26T11:55:59+00:00"
+            "time": "2017-09-26T03:17:02+00:00"
         },
         {
             "name": "symfony/options-resolver",
@@ -3892,21 +3892,21 @@
         },
         {
             "name": "symfony/orm-pack",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/orm-pack.git",
-                "reference": "5f09e33401b374607149ed17bbb1117cd4f9f5d5"
+                "reference": "b3a0213e52f98bce1f1d1d82a092f226127184ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/orm-pack/zipball/5f09e33401b374607149ed17bbb1117cd4f9f5d5",
-                "reference": "5f09e33401b374607149ed17bbb1117cd4f9f5d5",
+                "url": "https://api.github.com/repos/symfony/orm-pack/zipball/b3a0213e52f98bce1f1d1d82a092f226127184ec",
+                "reference": "b3a0213e52f98bce1f1d1d82a092f226127184ec",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^1.6",
-                "doctrine/orm": "^2.5.7",
+                "doctrine/orm": "^2.5.11",
                 "php": "^7.0"
             },
             "type": "metapackage",
@@ -3915,7 +3915,7 @@
                 "MIT"
             ],
             "description": "A pack for the Doctrine ORM",
-            "time": "2017-09-11T23:09:08+00:00"
+            "time": "2017-09-27T22:26:39+00:00"
         },
         {
             "name": "symfony/polyfill-apcu",
@@ -5121,16 +5121,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.4.3",
+            "version": "v2.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "eab7c3288ae6603d7d6f92b531626af2b162d1f2"
+                "reference": "eddb97148ad779f27e670e1e3f19fb323aedafeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/eab7c3288ae6603d7d6f92b531626af2b162d1f2",
-                "reference": "eab7c3288ae6603d7d6f92b531626af2b162d1f2",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/eddb97148ad779f27e670e1e3f19fb323aedafeb",
+                "reference": "eddb97148ad779f27e670e1e3f19fb323aedafeb",
                 "shasum": ""
             },
             "require": {
@@ -5183,7 +5183,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-06-07T18:47:58+00:00"
+            "time": "2017-09-27T18:10:31+00:00"
         },
         {
             "name": "zendframework/zend-code",
