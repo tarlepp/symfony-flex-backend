@@ -90,13 +90,13 @@ class CreateUserGroupCommand extends Command
          *
          * @return InputOption
          */
-        $iterator = function (array $input) {
+        $iterator = function (array $input): InputOption {
             return new InputOption(
                 $input['name'],
-                $input['shortcut']    ?? null,
-                $input['mode']        ?? InputOption::VALUE_OPTIONAL,
+                $input['shortcut'] ?? null,
+                $input['mode'] ?? InputOption::VALUE_OPTIONAL,
                 $input['description'] ?? '',
-                $input['default']     ?? null
+                $input['default'] ?? null
             );
         };
 
@@ -124,17 +124,13 @@ class CreateUserGroupCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->io = new SymfonyStyle($input, $output);
-        $this->io->write(\sprintf("\033\143"));
+        $this->io->write("\033\143");
 
         // Check that roles exists
         $this->checkRoles($output, $input->isInteractive());
 
         /** @var UserGroupDto $dto */
-        $dto = $this->getHelper('form')->interactUsingForm(
-            UserGroupType::class,
-            $input,
-            $output
-        );
+        $dto = $this->getHelper('form')->interactUsingForm(UserGroupType::class, $input, $output);
 
         // Create new user group
         $this->userGroupResource->create($dto);
@@ -167,9 +163,7 @@ class CreateUserGroupCommand extends Command
         }
 
         if ($interactive) {
-            $this->io->block([
-                'Roles are not yet created, creating those now...'
-            ]);
+            $this->io->block('Roles are not yet created, creating those now...');
         }
 
         $command = $this->getApplication()->find('user:create-roles');

@@ -61,7 +61,7 @@ class ListUserGroupsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->io = new SymfonyStyle($input, $output);
-        $this->io->write(\sprintf("\033\143"));
+        $this->io->write("\033\143");
 
         static $headers = [
             'Id',
@@ -81,7 +81,12 @@ class ListUserGroupsCommand extends Command
      */
     private function getRows(): array
     {
-        $formatterUser = function (User $user) {
+        /**
+         * @param User $user
+         *
+         * @return string
+         */
+        $formatterUser = function (User $user): string {
             return \sprintf(
                 '%s %s <%s>',
                 $user->getFirstname(),
@@ -90,12 +95,17 @@ class ListUserGroupsCommand extends Command
             );
         };
 
-        $formatterGroup = function (UserGroup $userGroup) use ($formatterUser) {
+        /**
+         * @param UserGroup $userGroup
+         *
+         * @return array
+         */
+        $formatterGroup = function (UserGroup $userGroup) use ($formatterUser): array {
             return [
                 $userGroup->getId(),
                 $userGroup->getName(),
                 $userGroup->getRole()->getId(),
-                \implode(",\n", \array_map($formatterUser, $userGroup->getUsers()->toArray()))
+                \implode(",\n", $userGroup->getUsers()->map($formatterUser)->toArray()),
             ];
         };
 

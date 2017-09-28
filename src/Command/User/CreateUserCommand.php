@@ -124,13 +124,13 @@ class CreateUserCommand extends Command
          *
          * @return InputOption
          */
-        $iterator = function (array $input) {
+        $iterator = function (array $input): InputOption {
             return new InputOption(
                 $input['name'],
-                $input['shortcut']    ?? null,
-                $input['mode']        ?? InputOption::VALUE_OPTIONAL,
+                $input['shortcut'] ?? null,
+                $input['mode'] ?? InputOption::VALUE_OPTIONAL,
                 $input['description'] ?? '',
-                $input['default']     ?? null
+                $input['default'] ?? null
             );
         };
 
@@ -158,7 +158,7 @@ class CreateUserCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->io = new SymfonyStyle($input, $output);
-        $this->io->write(\sprintf("\033\143"));
+        $this->io->write("\033\143");
 
         // Check that roles exists
         $this->checkUserGroups($output, $input->isInteractive());
@@ -201,9 +201,7 @@ class CreateUserCommand extends Command
         }
 
         if ($interactive) {
-            $this->io->block([
-                'User groups are not yet created, creating those now...'
-            ]);
+            $this->io->block('User groups are not yet created, creating those now...');
         }
 
         // Reset roles

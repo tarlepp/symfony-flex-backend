@@ -46,6 +46,8 @@ class EditUserGroupCommand extends Command
         parent::__construct('user:edit-group');
 
         $this->userGroupResource = $userGroupResource;
+
+        $this->setDescription('Command to edit existing user group');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -63,7 +65,7 @@ class EditUserGroupCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->io = new SymfonyStyle($input, $output);
-        $this->io->write(\sprintf("\033\143"));
+        $this->io->write("\033\143");
 
         $groupFound = false;
 
@@ -116,7 +118,7 @@ class EditUserGroupCommand extends Command
          *
          * @param UserGroupEntity $userGroup
          */
-        $iterator = function (UserGroupEntity $userGroup) use (&$choices) {
+        $iterator = function (UserGroupEntity $userGroup) use (&$choices): void {
             $choices[$userGroup->getId()] = \sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
         };
 

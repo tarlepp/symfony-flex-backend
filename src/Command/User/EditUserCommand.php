@@ -46,6 +46,8 @@ class EditUserCommand extends Command
         parent::__construct('user:edit');
 
         $this->userResource = $userResource;
+
+        $this->setDescription('Command to edit existing user');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -63,7 +65,7 @@ class EditUserCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->io = new SymfonyStyle($input, $output);
-        $this->io->write(\sprintf("\033\143"));
+        $this->io->write("\033\143");
 
         $userFound = false;
 
@@ -71,7 +73,7 @@ class EditUserCommand extends Command
             $user = $this->getUser();
 
             $message = \sprintf(
-                'Is this the group [%s - %s (%s %s)] which information you want to change?',
+                'Is this the user [%s - %s (%s %s)] which information you want to change?',
                 $user->getId(),
                 $user->getUsername(),
                 $user->getFirstname(),
@@ -117,7 +119,7 @@ class EditUserCommand extends Command
          *
          * @param UserEntity $user
          */
-        $iterator = function (UserEntity $user) use (&$choices) {
+        $iterator = function (UserEntity $user) use (&$choices): void {
             $message = \sprintf(
                 '%s (%s %s <%s>)',
                 $user->getUsername(),
@@ -131,10 +133,7 @@ class EditUserCommand extends Command
 
         \array_map($iterator, $this->userResource->find([], ['username' => 'asc']));
 
-        $userId = $this->io->choice(
-            'Which user you want to edit?',
-            $choices
-        );
+        $userId = $this->io->choice('Which user you want to edit?', $choices);
 
         return $this->userResource->findOne($userId);
     }
