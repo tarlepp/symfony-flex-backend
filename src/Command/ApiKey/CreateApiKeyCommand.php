@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Command\ApiKey;
 
+use App\Command\HelperConfigure;
 use App\DTO\ApiKey;
 use App\Form\Type\Console\ApiKeyType;
 use App\Repository\RoleRepository;
@@ -15,9 +16,7 @@ use App\Resource\UserGroupResource;
 use App\Security\RolesService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -97,25 +96,7 @@ class CreateApiKeyCommand extends Command
      */
     protected function configure(): void
     {
-        /**
-         * Lambda iterator function to parse specified inputs.
-         *
-         * @param array $input
-         *
-         * @return InputOption
-         */
-        $iterator = function (array $input): InputOption {
-            return new InputOption(
-                $input['name'],
-                $input['shortcut'] ?? null,
-                $input['mode'] ?? InputOption::VALUE_OPTIONAL,
-                $input['description'] ?? '',
-                $input['default'] ?? null
-            );
-        };
-
-        // Configure command
-        $this->setDefinition(new InputDefinition(\array_map($iterator, self::$commandParameters)));
+        HelperConfigure::configure($this, self::$commandParameters);
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
