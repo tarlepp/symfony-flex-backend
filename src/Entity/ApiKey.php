@@ -242,12 +242,7 @@ class ApiKey implements EntityInterface
             return $userGroup->getRole()->getId();
         };
 
-        return \array_unique(
-            \array_merge(
-                [RolesService::ROLE_API],
-                \array_map($iterator, $this->userGroups->toArray())
-            )
-        );
+        return \array_unique(\array_merge([RolesService::ROLE_API], $this->userGroups->map($iterator)->toArray()));
     }
 
     /**

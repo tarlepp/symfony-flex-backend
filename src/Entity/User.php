@@ -400,7 +400,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
         };
 
         // Determine base roles
-        $output = \array_map($iterator, $this->userGroups->toArray());
+        $output = $this->userGroups->map($iterator)->toArray();
 
         // And if we have roles service present we can fetch all inherited roles
         if ($this->rolesService instanceof RolesService) {

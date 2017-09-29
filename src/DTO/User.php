@@ -261,7 +261,7 @@ class User extends RestDto implements UserInterface
         $this->firstname = $entity->getFirstname();
         $this->surname = $entity->getSurname();
         $this->email = $entity->getEmail();
-        $this->userGroups = \array_map($iterator, $entity->getUserGroups()->toArray());
+        $this->userGroups = $entity->getUserGroups()->map($iterator)->toArray();
 
         return $this;
     }
