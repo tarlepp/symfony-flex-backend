@@ -55,7 +55,7 @@ class ApiKeyTest extends DtoTestCase
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface $entity */
         $entity = $this->getMockBuilder(EntityInterface::class)
-            ->setMethods(['getId', 'clearUserGroups', 'addUserGroup'])
+            ->setMethods(['getId', 'setDescription', 'clearUserGroups', 'addUserGroup'])
             ->getMock();
 
         $entity
