@@ -30,22 +30,24 @@ class EditApiKeyCommand extends Command
     private $apiKeyResource;
 
     /**
-     * @var SymfonyStyle
+     * @var ApiKeyHelper
      */
-    private $io;
+    private $apiKeyHelper;
 
     /**
      * EditUserCommand constructor.
      *
      * @param ApiKeyResource $apiKeyResource
+     * @param ApiKeyHelper   $apiKeyHelper
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct(ApiKeyResource $apiKeyResource)
+    public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
         parent::__construct('api-key:edit');
 
         $this->apiKeyResource = $apiKeyResource;
+        $this->apiKeyHelper = $apiKeyHelper;
 
         $this->setDescription('Command to edit existing API key');
     }
@@ -64,13 +66,13 @@ class EditApiKeyCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         $apiKeyFound = false;
 
         while (!$apiKeyFound) {
-            $apiKey = $this->getApiKey();
+            $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to edit?');
 
             $message = \sprintf(
                 'Is this the API key \'[%s] [%s] %s\' which information you want to change?',
@@ -79,7 +81,7 @@ class EditApiKeyCommand extends Command
                 $apiKey->getDescription()
             );
 
-            $apiKeyFound = $this->io->confirm($message, false);
+            $apiKeyFound = $io->confirm($message, false);
         }
 
         /** @var ApiKeyEntity $apiKey */
@@ -100,39 +102,12 @@ class EditApiKeyCommand extends Command
         $this->apiKeyResource->update($apiKey->getId(), $dtoEdit);
 
         if ($input->isInteractive()) {
-            $this->io->success([
+            $io->success([
                 'API key updated - have a nice day',
                 ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
             ]);
         }
 
         return null;
-    }
-
-    /**
-     * @return ApiKeyEntity
-     */
-    private function getApiKey(): ApiKeyEntity
-    {
-        $choices = [];
-
-        /**
-         * Lambda function create API key choices
-         *
-         * @param ApiKeyEntity $apiKey
-         */
-        $iterator = function (ApiKeyEntity $apiKey) use (&$choices): void {
-            $message = \sprintf(
-                '[%s] %s',
-                $apiKey->getToken(),
-                $apiKey->getDescription()
-            );
-
-            $choices[$apiKey->getId()] = $message;
-        };
-
-        \array_map($iterator, $this->apiKeyResource->find([], ['token' => 'ASC']));
-
-        return $this->apiKeyResource->findOne($this->io->choice('Which API key you want to edit?', $choices));
     }
 }

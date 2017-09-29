@@ -28,22 +28,24 @@ class ChangeTokenCommand extends Command
     private $apiKeyResource;
 
     /**
-     * @var SymfonyStyle
+     * @var ApiKeyHelper
      */
-    private $io;
+    private $apiKeyHelper;
 
     /**
      * ChangeTokenCommand constructor.
      *
      * @param ApiKeyResource $apiKeyResource
+     * @param ApiKeyHelper   $apiKeyHelper
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct(ApiKeyResource $apiKeyResource)
+    public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
         parent::__construct('api-key:change-token');
 
         $this->apiKeyResource = $apiKeyResource;
+        $this->apiKeyHelper = $apiKeyHelper;
 
         $this->setDescription('Command to change token for existing API key');
     }
@@ -62,13 +64,13 @@ class ChangeTokenCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         $apiKeyFound = false;
 
         while (!$apiKeyFound) {
-            $apiKey = $this->getApiKey();
+            $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key token you want to change?');
 
             $message = \sprintf(
                 'Is this the API key \'[%s] [%s] %s\' which token you want to change?',
@@ -77,7 +79,7 @@ class ChangeTokenCommand extends Command
                 $apiKey->getDescription()
             );
 
-            $apiKeyFound = $this->io->confirm($message, false);
+            $apiKeyFound = $io->confirm($message, false);
         }
 
         /** @var ApiKey $apiKey */
@@ -87,39 +89,12 @@ class ChangeTokenCommand extends Command
         $this->apiKeyResource->save($apiKey);
 
         if ($input->isInteractive()) {
-            $this->io->success([
+            $io->success([
                 'API key token updated - have a nice day',
                 ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
             ]);
         }
 
         return null;
-    }
-
-    /**
-     * @return ApiKey
-     */
-    private function getApiKey(): ApiKey
-    {
-        $choices = [];
-
-        /**
-         * Lambda function create API key choices
-         *
-         * @param ApiKey $apiKey
-         */
-        $iterator = function (ApiKey $apiKey) use (&$choices): void {
-            $message = \sprintf(
-                '[%s] %s',
-                $apiKey->getToken(),
-                $apiKey->getDescription()
-            );
-
-            $choices[$apiKey->getId()] = $message;
-        };
-
-        \array_map($iterator, $this->apiKeyResource->find([], ['token' => 'ASC']));
-
-        return $this->apiKeyResource->findOne($this->io->choice('Which API key token you want to change?', $choices));
     }
 }

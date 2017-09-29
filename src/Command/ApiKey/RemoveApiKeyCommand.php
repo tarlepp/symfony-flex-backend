@@ -28,22 +28,24 @@ class RemoveApiKeyCommand extends Command
     private $apiKeyResource;
 
     /**
-     * @var SymfonyStyle
+     * @var ApiKeyHelper
      */
-    private $io;
+    private $apiKeyHelper;
 
     /**
      * RemoveApiKeyCommand constructor.
      *
      * @param ApiKeyResource $apiKeyResource
+     * @param ApiKeyHelper   $apiKeyHelper
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct(ApiKeyResource $apiKeyResource)
+    public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
         parent::__construct('api-key:remove');
 
         $this->apiKeyResource = $apiKeyResource;
+        $this->apiKeyHelper = $apiKeyHelper;
 
         $this->setDescription('Console command to remove existing API key');
     }
@@ -59,13 +61,13 @@ class RemoveApiKeyCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         $apiKeyFound = false;
 
         while (!$apiKeyFound) {
-            $apiKey = $this->getApiKey();
+            $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to remove?');
 
             $message = \sprintf(
                 'Is this the API key \'[%s] [%s] %s\' which you want to remove?',
@@ -74,7 +76,7 @@ class RemoveApiKeyCommand extends Command
                 $apiKey->getDescription()
             );
 
-            $apiKeyFound = $this->io->confirm($message, false);
+            $apiKeyFound = $io->confirm($message, false);
         }
 
         /** @var ApiKey $apiKey */
@@ -83,38 +85,11 @@ class RemoveApiKeyCommand extends Command
         $this->apiKeyResource->delete($apiKey->getId());
 
         if ($input->isInteractive()) {
-            $this->io->success([
+            $io->success([
                 'API key deleted - have a nice day',
             ]);
         }
 
         return null;
-    }
-
-    /**
-     * @return ApiKey
-     */
-    private function getApiKey(): ApiKey
-    {
-        $choices = [];
-
-        /**
-         * Lambda function create api key choices
-         *
-         * @param ApiKey $apiKey
-         */
-        $iterator = function (ApiKey $apiKey) use (&$choices) {
-            $message = \sprintf(
-                '[%s] %s',
-                $apiKey->getToken(),
-                $apiKey->getDescription()
-            );
-
-            $choices[$apiKey->getId()] = $message;
-        };
-
-        \array_map($iterator, $this->apiKeyResource->find([], ['token' => 'ASC']));
-
-        return $this->apiKeyResource->findOne($this->io->choice('Which API key you want to remove?', $choices));
     }
 }
