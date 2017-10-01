@@ -88,7 +88,7 @@ class UserController extends Controller
      *  )
      *
      * @ParamConverter(
-     *     "user",
+     *     "requestUser",
      *     class="App:User"
      *  )
      *
@@ -99,7 +99,7 @@ class UserController extends Controller
      * @RestApiDoc()
      *
      * @param Request            $request
-     * @param User               $user
+     * @param User               $requestUser
      * @param User|UserInterface $currentUser
      *
      * @return Response
@@ -108,13 +108,13 @@ class UserController extends Controller
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
-    public function deleteAction(Request $request, User $user, UserInterface $currentUser): Response
+    public function deleteAction(Request $request, User $requestUser, UserInterface $currentUser): Response
     {
-        if ($currentUser === $user) {
+        if ($currentUser === $requestUser) {
             throw new HttpException(400, 'You cannot remove yourself...');
         }
 
-        return $this->deleteMethod($request, $user->getId());
+        return $this->deleteMethod($request, $requestUser->getId());
     }
 
     /**

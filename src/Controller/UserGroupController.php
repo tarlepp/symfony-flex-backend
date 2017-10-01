@@ -85,7 +85,7 @@ class UserGroupController extends Controller
      *  )
      *
      * @ParamConverter(
-     *     "user",
+     *     "userGroup",
      *     class="App:UserGroup"
      *  )
      *
