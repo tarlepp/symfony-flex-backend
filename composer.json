@@ -31,7 +31,7 @@
 		"lexik/jwt-authentication-bundle": "2.4.1",
 		"matthiasnoback/symfony-console-form": "2.3.0",
 		"nelmio/api-doc-bundle": "dev-master",
-		"piwik/device-detector": "3.8.1",
+		"piwik/device-detector": "3.8.2",
 		"ramsey/uuid": "3.7.1",
 		"roave/security-advisories": "dev-master",
 		"sensio/framework-extra-bundle": "4.0.0",
@@ -61,7 +61,7 @@
 		"symfony/browser-kit": "3.3.9",
 		"symfony/dotenv": "3.3.9",
 		"symfony/phpunit-bridge": "3.3.9",
-		"symfony/requirements-checker": "1.0.1",
+		"symfony/requirements-checker": "1.0.2",
 		"symfony/web-profiler-bundle": "3.3.9",
 		"symfony/web-server-bundle": "3.3.9"
 	},
