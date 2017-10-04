@@ -30,6 +30,8 @@ Table of Contents
     * [Makefile](#makefile)
     * [Symfony console](#symfony-console)
     * [Custom commands](#custom-commands)
+        * [user:management](#usermanagement)
+        * [api-key:management](#api-keymanagement)
 * [Structure](#structure)
 * [Development](#development)
     * [IDE](#ide)
@@ -143,9 +145,11 @@ $ ./bin/console
 Project contains following custom console commands to help eg. user management:
 ```bash
 $ ./bin/console user:management     # All necessarry commands to manage your users and user groups
+$ ./bin/console api-key:management  # All necessarry commands to manage your API keys
 ```
 
-Basically that `user:management` command is just a wrapper for following commands:
+### user:management
+This command is just a wrapper for following commands:
 ```bash
 $ ./bin/console user:create         # To create user
 $ ./bin/console user:create-group   # To create user group
@@ -156,6 +160,15 @@ $ ./bin/console user:list           # To list current users
 $ ./bin/console user:list-groups    # To list current user groups
 ```
 
+### api-key:management
+This command is just a wrapper for following commands:
+```bash
+$ ./bin/console api-key:create          # To create API key
+$ ./bin/console api-key:edit            # To edit API key
+$ ./bin/console api-key:change-token    # To change API key token
+$ ./bin/console api-key:remove          # To remove API key
+$ ./bin/console api-key:list            # To list API keys
+```
 # Structure
 todo
 
