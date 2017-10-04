@@ -308,8 +308,6 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         return $queryBuilder->getQuery()->execute();
     }
 
-
-
     /**
      * With this method you can attach some custom functions for generic REST API find / count queries.
      *
