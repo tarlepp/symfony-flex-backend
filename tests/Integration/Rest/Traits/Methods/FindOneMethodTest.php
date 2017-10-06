@@ -10,7 +10,6 @@ namespace Integration\Rest\Traits\Methods;
 use App\Entity\EntityInterface;
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use App\Rest\Traits\Methods\FindOneMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindOneMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindOneMethodTestClass;
 use Ramsey\Uuid\Uuid;

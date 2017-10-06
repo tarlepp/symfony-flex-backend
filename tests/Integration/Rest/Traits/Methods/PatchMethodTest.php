@@ -10,7 +10,6 @@ namespace App\Tests\Integration\Rest\Traits\Methods;
 use App\DTO\RestDtoInterface;
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use App\Rest\Traits\Methods\PatchMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\PatchMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\PatchMethodTestClass;
 use Ramsey\Uuid\Uuid;

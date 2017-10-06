@@ -9,7 +9,6 @@ namespace App\Tests\Integration\Rest\Traits\Methods;
 
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use App\Rest\Traits\Methods\FindMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindMethodTestClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -136,7 +135,7 @@ class FindMethodTest extends KernelTestCase
         );
 
         // Create request and response
-        $request = Request::create('/', 'GET');
+        $request = Request::create('/');
         $response = Response::create('[]');
 
         $resource

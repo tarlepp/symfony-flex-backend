@@ -9,7 +9,6 @@ namespace App\Tests\Integration\Rest\Traits\Methods;
 
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use App\Rest\Traits\Methods\IdsMethod;
 use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodTestClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

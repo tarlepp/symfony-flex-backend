@@ -7,11 +7,9 @@ declare(strict_types=1);
  */
 namespace Integration\Rest\Traits\Methods;
 
-use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
-use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use App\Rest\Traits\Methods\UpdateMethod;
+use App\Rest\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\UpdateMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\UpdateMethodTestClass;
 use Ramsey\Uuid\Uuid;
@@ -20,10 +18,8 @@ use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
  * Class UpdateMethodTest
