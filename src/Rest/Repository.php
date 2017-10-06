@@ -204,6 +204,8 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
 
+        RepositoryHelper::resetParameterCount();
+
         return (int)$queryBuilder->getQuery()->getSingleScalarResult();
     }
 
@@ -247,6 +249,8 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
 
+        RepositoryHelper::resetParameterCount();
+
         return (new Paginator($queryBuilder, true))->getIterator()->getArrayCopy();
     }
 
@@ -278,6 +282,8 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
 
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
+
+        RepositoryHelper::resetParameterCount();
 
         return \array_map('\current', $queryBuilder->getQuery()->getArrayResult());
     }

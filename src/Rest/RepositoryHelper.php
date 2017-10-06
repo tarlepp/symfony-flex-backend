@@ -23,7 +23,15 @@ class RepositoryHelper
      *
      * @var integer
      */
-    private static $parameterCount = 0;
+    public static $parameterCount = 0;
+
+    /**
+     * Method to reset current parameter count value
+     */
+    public static function resetParameterCount(): void
+    {
+        self::$parameterCount = 0;
+    }
 
     /**
      * Process given criteria which is given by ?where parameter. This is given as JSON string, which is converted
