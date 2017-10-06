@@ -7,11 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Command\ApiKey;
 
+use App\Command\Traits\ExecuteMultipleCommandTrait;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class ApiKeyManagementCommand
@@ -21,15 +18,12 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class ApiKeyManagementCommand extends Command
 {
-    /**
-     * @var SymfonyStyle
-     */
-    private $io;
+    use ExecuteMultipleCommandTrait;
 
     /**
      * @var array
      */
-    private static $choices = [
+    protected static $choices = [
         'api-key:create'        => 'Create API key',
         'api-key:edit'          => 'Edit API key',
         'api-key:change-token'  => 'Change API key token',
@@ -48,54 +42,5 @@ class ApiKeyManagementCommand extends Command
         parent::__construct('api-key:management');
 
         $this->setDescription('Console command to manage API keys');
-    }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int|null
-     *
-     * @throws \Exception
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
-     */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
-    {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
-
-        while ($command = $this->ask()) {
-            $arguments = [
-                'command'   => $command,
-            ];
-
-            $input = new ArrayInput($arguments);
-
-            $cmd = $this->getApplication()->find($command);
-            $cmd->run($input, $output);
-        }
-
-        if ($input->isInteractive()) {
-            $this->io->success('Have a nice day');
-        }
-
-        return null;
-    }
-
-    /**
-     * @return string|boolean
-     */
-    private function ask()
-    {
-        $index = \array_search(
-            $this->io->choice('What you want to do', \array_values(self::$choices)),
-            \array_values(self::$choices),
-            true
-        );
-
-        return \array_values(\array_flip(self::$choices))[(int)$index];
     }
 }
