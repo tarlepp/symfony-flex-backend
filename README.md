@@ -233,6 +233,8 @@ And if you want to run tests with [fastest](https://github.com/liuggio/fastest) 
 $ make run-tests-fastest
 # or alternative
 $ ./vendor/bin/fastest -x phpunit.xml.dist
+# or another alternative
+$ find tests/ -name "*Test.php" | ./vendor/bin/fastest -v
 ```
 
 Note that you need to create `.env.test` file to define your testing environment. This file has the same content as the 
