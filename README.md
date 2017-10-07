@@ -121,18 +121,16 @@ detailed information how you can allow certain IP addresses to have access to yo
 # Commands
 ## Makefile
 Symfony Flex comes with `Makefile` configuration so that you can easily run some generic commands via `make` command. 
-Below is a list of currently supported make commands:
+Below is a list of currently supported (main commands) make commands, note that you can get this same list with just 
+running `make` command:
 ```bash
-cache-clear
-cache-warmup
-generate-jwt-keys
-phpmetrics
-run-tests
-run-tests-fastest
-serve
-serve_as_php
-serve_as_sf
-sf_console
+cache-clear       Clears the cache
+cache-warmup      Warms up an empty cache
+generate-jwt-keys Generates JWT auth keys
+phpmetrics        Generates PhpMetrics static analysis
+run-tests-fastest Runs all test via fastest
+run-tests         Runs all tests via phpunit
+serve             Runs a local web server
 ```
 
 ## Symfony console
