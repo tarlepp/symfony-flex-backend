@@ -28,10 +28,10 @@ if (!\in_array('*', $allowedAddress, true)
     exit('This script is only accessible from localhost.');
 }
 
-if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
+if (file_exists($autoloader = __DIR__ . '/../../../autoload.php')) {
     /** @noinspection PhpIncludeInspection */
     require_once $autoloader;
-} elseif (file_exists($autoloader = __DIR__.'/../vendor/autoload.php')) {
+} elseif (file_exists($autoloader = __DIR__ . '/../vendor/autoload.php')) {
     /** @noinspection PhpIncludeInspection */
     require_once $autoloader;
 } else {
