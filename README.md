@@ -179,6 +179,7 @@ development your application. Below is short list of some popular IDEs that you 
 * [PhpStorm](https://www.jetbrains.com/phpstorm/)
 * [NetBeans](https://netbeans.org/)
 * [Sublime Text](https://www.sublimetext.com/)
+* [Visual Studio Code](https://code.visualstudio.com/)
 
 Personally I recommend PhpStorm, but just choose one which is the best for you.
 
