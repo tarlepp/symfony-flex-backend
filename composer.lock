@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8b1008edd7cae488e6ae62dee3ff4c7",
+    "content-hash": "2acc4d1635d6e7ba9753e3d57285eb95",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3204,16 +3204,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.27",
+            "version": "v1.0.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "bc2f175435d0e2f407836857ed1a99ee6877730d"
+                "reference": "c7fdacdc84f673f48ca52cb56602c027a3213fb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/bc2f175435d0e2f407836857ed1a99ee6877730d",
-                "reference": "bc2f175435d0e2f407836857ed1a99ee6877730d",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/c7fdacdc84f673f48ca52cb56602c027a3213fb3",
+                "reference": "c7fdacdc84f673f48ca52cb56602c027a3213fb3",
                 "shasum": ""
             },
             "require": {
@@ -3246,7 +3246,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2017-10-06T18:48:20+00:00"
+            "time": "2017-10-07T15:35:19+00:00"
         },
         {
             "name": "symfony/form",
@@ -6282,16 +6282,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.4.0",
+            "version": "6.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a1bcaca096998de32c29535fdd2dea0c475e8f61"
+                "reference": "b770d8ba7e60295ee91d69d5a5e01ae833cac220"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a1bcaca096998de32c29535fdd2dea0c475e8f61",
-                "reference": "a1bcaca096998de32c29535fdd2dea0c475e8f61",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b770d8ba7e60295ee91d69d5a5e01ae833cac220",
+                "reference": "b770d8ba7e60295ee91d69d5a5e01ae833cac220",
                 "shasum": ""
             },
             "require": {
@@ -6362,7 +6362,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-10-06T03:14:57+00:00"
+            "time": "2017-10-07T17:53:53+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
