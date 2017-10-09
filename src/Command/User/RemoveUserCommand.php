@@ -33,11 +33,6 @@ class RemoveUserCommand extends Command
     private $userHelper;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $io;
-
-    /**
      * RemoveApiKeyCommand constructor.
      *
      * @param UserResource $userResource
@@ -87,7 +82,7 @@ class RemoveUserCommand extends Command
 
         /** @var User $user */
 
-        // Delete API key
+        // Delete user
         $this->userResource->delete($user->getId());
 
         if ($input->isInteractive()) {
