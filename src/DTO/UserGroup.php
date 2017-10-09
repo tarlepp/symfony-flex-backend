@@ -91,7 +91,7 @@ class UserGroup extends RestDto
     public function load(EntityInterface $entity): RestDtoInterface
     {
         $this->name = $entity->getName();
-        $this->role = $entity->getRole();
+        $this->role = $entity->getRole()->getId();
 
         return $this;
     }
