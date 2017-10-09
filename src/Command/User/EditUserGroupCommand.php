@@ -30,6 +30,11 @@ class EditUserGroupCommand extends Command
     private $userGroupResource;
 
     /**
+     * @var UserHelper
+     */
+    private $userHelper;
+
+    /**
      * @var SymfonyStyle
      */
     private $io;
@@ -38,14 +43,16 @@ class EditUserGroupCommand extends Command
      * EditUserGroupCommand constructor.
      *
      * @param UserGroupResource $userGroupResource
+     * @param UserHelper        $userHelper
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct(UserGroupResource $userGroupResource)
+    public function __construct(UserGroupResource $userGroupResource, UserHelper $userHelper)
     {
         parent::__construct('user:edit-group');
 
         $this->userGroupResource = $userGroupResource;
+        $this->userHelper = $userHelper;
 
         $this->setDescription('Command to edit existing user group');
     }
@@ -70,7 +77,7 @@ class EditUserGroupCommand extends Command
         $groupFound = false;
 
         while (!$groupFound) {
-            $userGroup = $this->getUserGroup();
+            $userGroup = $this->userHelper->getUserGroup($this->io, 'Which user group you want to edit?');
 
             $message = \sprintf(
                 'Is this the group [%s - %s (%s)] which information you want to change?',
@@ -104,31 +111,5 @@ class EditUserGroupCommand extends Command
         }
 
         return null;
-    }
-
-    /**
-     * @return UserGroupEntity
-     */
-    private function getUserGroup(): UserGroupEntity
-    {
-        $choices = [];
-
-        /**
-         * Lambda function create user group choices
-         *
-         * @param UserGroupEntity $userGroup
-         */
-        $iterator = function (UserGroupEntity $userGroup) use (&$choices): void {
-            $choices[$userGroup->getId()] = \sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
-        };
-
-        \array_map($iterator, $this->userGroupResource->find([], ['name' => 'asc']));
-
-        $userGroupId = $this->io->choice(
-            'Which user group you want to edit?',
-            $choices
-        );
-
-        return $this->userGroupResource->findOne($userGroupId);
     }
 }

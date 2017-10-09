@@ -30,6 +30,11 @@ class EditUserCommand extends Command
     private $userResource;
 
     /**
+     * @var UserHelper
+     */
+    private $userHelper;
+
+    /**
      * @var SymfonyStyle
      */
     private $io;
@@ -38,14 +43,16 @@ class EditUserCommand extends Command
      * EditUserCommand constructor.
      *
      * @param UserResource $userResource
+     * @param UserHelper   $userHelper
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct(UserResource $userResource)
+    public function __construct(UserResource $userResource, UserHelper $userHelper)
     {
         parent::__construct('user:edit');
 
         $this->userResource = $userResource;
+        $this->userHelper = $userHelper;
 
         $this->setDescription('Command to edit existing user');
     }
@@ -70,7 +77,7 @@ class EditUserCommand extends Command
         $userFound = false;
 
         while (!$userFound) {
-            $user = $this->getUser();
+            $user = $this->userHelper->getUser($this->io, 'Which user you want to edit?');
 
             $message = \sprintf(
                 'Is this the user [%s - %s (%s %s)] which information you want to change?',
@@ -105,36 +112,5 @@ class EditUserCommand extends Command
         }
 
         return null;
-    }
-
-    /**
-     * @return UserEntity
-     */
-    private function getUser(): UserEntity
-    {
-        $choices = [];
-
-        /**
-         * Lambda function create user choices
-         *
-         * @param UserEntity $user
-         */
-        $iterator = function (UserEntity $user) use (&$choices): void {
-            $message = \sprintf(
-                '%s (%s %s <%s>)',
-                $user->getUsername(),
-                $user->getFirstname(),
-                $user->getSurname(),
-                $user->getEmail()
-            );
-
-            $choices[$user->getId()] = $message;
-        };
-
-        \array_map($iterator, $this->userResource->find([], ['username' => 'asc']));
-
-        $userId = $this->io->choice('Which user you want to edit?', $choices);
-
-        return $this->userResource->findOne($userId);
     }
 }
