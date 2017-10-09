@@ -68,7 +68,7 @@ run-tests: ## Runs all tests via phpunit
 	@vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 
 run-tests-fastest: ## Runs all test via fastest
-	@vendor/bin/fastest -x phpunit.xml.dist
+	find tests/ -name "*Test.php" | ./vendor/bin/fastest -v -p 2
 ###< phpunit ###
 
 ###> phpmetrics ###
