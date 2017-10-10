@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2acc4d1635d6e7ba9753e3d57285eb95",
+    "content-hash": "3403860ef219c5361a88da4f30351a1a",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3204,7 +3204,7 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.28",
+            "version": "v1.0.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
