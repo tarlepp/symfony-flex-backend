@@ -24,32 +24,20 @@ class UserGroupTest extends DtoTestCase
 
     public function testThatLoadCallsExpectedEntityMethods(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface|RoleEntity $userGroupEntity */
-        $roleEntity = $this->getMockBuilder(EntityInterface::class)
-            ->setMethods(['getId'])
-            ->getMock();
+        // Create Role entity
+        $roleEntity = new RoleEntity('test role');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface|UserGroupEntity $userGroupEntity */
-        $userGroupEntity = $this->getMockBuilder(EntityInterface::class)
-            ->setMethods(['getId', 'getName', 'getRole'])
-            ->getMock();
-
-        $userGroupEntity
-            ->expects(static::once())
-            ->method('getName')
-            ->willReturn('test name');
-
-        $userGroupEntity
-            ->expects(static::once())
-            ->method('getRole')
-            ->willReturn($roleEntity);
+        // Create UserGroup entity
+        $userGroupEntity = new UserGroupEntity();
+        $userGroupEntity->setName('test user group');
+        $userGroupEntity->setRole($roleEntity);
 
         /** @var UserGroup $dto */
         $dto = new $this->dtoClass();
         $dto->load($userGroupEntity);
 
-        static::assertSame('test name', $dto->getName());
-        static::assertSame($roleEntity, $dto->getRole());
+        static::assertSame('test user group', $dto->getName());
+        static::assertSame($roleEntity->getId(), $dto->getRole());
     }
 
     public function testThatUpdateMethodCallsExpectedEntityMethods(): void
