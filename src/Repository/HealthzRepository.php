@@ -9,7 +9,6 @@ namespace App\Repository;
 
 use App\Entity\Healthz as Entity;
 use App\Rest\Repository;
-use Doctrine\ORM\AbstractQuery;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /**
@@ -33,21 +32,21 @@ class HealthzRepository extends Repository
     /**
      * Method to read value from database
      *
-     * @return string|null
+     * @return Entity|null
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\NoResultException
      */
-    public function read(): ?string
+    public function read(): ?Entity
     {
         $query = $this
             ->createQueryBuilder('h')
-            ->select('h.timestamp')
+            ->select('h')
             ->orderBy('h.timestamp', 'DESC')
             ->setMaxResults(1)
             ->getQuery();
 
-        return $query->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
+        return $query->getOneOrNullResult();
     }
 
     /**
@@ -63,7 +62,6 @@ class HealthzRepository extends Repository
     {
         // Create new entity
         $entity = new Entity();
-        $entity->setTimestamp(new \DateTime('NOW', new \DateTimeZone('UTC')));
 
         // Store entity to database
         $this->save($entity);

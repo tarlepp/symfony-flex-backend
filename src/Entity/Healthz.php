@@ -9,6 +9,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class Healthz
@@ -28,6 +29,11 @@ class Healthz implements EntityInterface
     /**
      * @var string
      *
+     * @Groups({
+     *      "Healthz",
+     *      "Healthz.id",
+     *  })
+     *
      * @ORM\Column(
      *      name="id",
      *      type="guid",
@@ -39,6 +45,11 @@ class Healthz implements EntityInterface
 
     /**
      * @var \DateTime
+     *
+     * @Groups({
+     *      "Healthz",
+     *      "Healthz.timestamp",
+     *  })
      *
      * @ORM\Column(
      *      name="timestamp",
@@ -54,6 +65,8 @@ class Healthz implements EntityInterface
     public function __construct()
     {
         $this->id = Uuid::uuid4()->toString();
+
+        $this->setTimestamp(new \DateTime('NOW', new \DateTimeZone('UTC')));
     }
 
     /**

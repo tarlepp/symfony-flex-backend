@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Utils;
 
+use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
 
 /**
@@ -33,11 +34,11 @@ final class HealthzService
     }
 
     /**
-     * @return string
+     * @return Healthz
      *
      * @throws \Exception
      */
-    public function check(): string
+    public function check(): ?Healthz
     {
         $this->repository->cleanup();
         $this->repository->create();

@@ -7,9 +7,11 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Rest\ResponseHandler;
 use App\Utils\HealthzService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -46,15 +48,30 @@ class DefaultController
      *
      * @Method("GET")
      *
-     * @param HealthzService $healthzService
+     * @param Request         $request
+     * @param ResponseHandler $responseHandler
+     * @param HealthzService  $healthzService
      *
      * @return Response
      *
      * @throws \Exception
-     * @throws \InvalidArgumentException
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function healthzAction(HealthzService $healthzService): Response
-    {
-        return new Response($healthzService->check(), Response::HTTP_OK);
+    public function healthzAction(
+        Request $request,
+        ResponseHandler $responseHandler,
+        HealthzService $healthzService
+    ): Response {
+        return $responseHandler->createResponse(
+            $request,
+            $healthzService->check(),
+            null,
+            null,
+            [
+                'groups' => [
+                    'Healthz.timestamp'
+                ]
+            ]
+        );
     }
 }
