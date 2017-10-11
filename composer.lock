@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3403860ef219c5361a88da4f30351a1a",
+    "content-hash": "d143adf921a2d400f9d0b6c0b441bcb4",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5509,16 +5509,16 @@
         },
         {
             "name": "liuggio/fastest",
-            "version": "v1.4.3",
+            "version": "v1.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liuggio/fastest.git",
-                "reference": "276691aef0008a426564d4bf07124e840388d636"
+                "reference": "6168cbaff7b6bbcd54f21d99170d6992b82d0d4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liuggio/fastest/zipball/276691aef0008a426564d4bf07124e840388d636",
-                "reference": "276691aef0008a426564d4bf07124e840388d636",
+                "url": "https://api.github.com/repos/liuggio/fastest/zipball/6168cbaff7b6bbcd54f21d99170d6992b82d0d4e",
+                "reference": "6168cbaff7b6bbcd54f21d99170d6992b82d0d4e",
                 "shasum": ""
             },
             "require": {
@@ -5563,7 +5563,7 @@
                 }
             ],
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
-            "time": "2017-09-05T20:48:43+00:00"
+            "time": "2017-10-11T11:51:29+00:00"
         },
         {
             "name": "myclabs/deep-copy",
