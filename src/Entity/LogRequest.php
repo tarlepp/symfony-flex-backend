@@ -23,9 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          @ORM\Index(name="user_id", columns={"user_id"}),
  *      }
  *  )
- * @ORM\Entity(
- *      repositoryClass="App\Repository\LogRequestRepository"
- *  )
+ * @ORM\Entity()
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

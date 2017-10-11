@@ -24,9 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          @ORM\UniqueConstraint(name="uq_role", columns={"role"}),
  *      },
  *  )
- * @ORM\Entity(
- *      repositoryClass="App\Repository\RoleRepository"
- *  )
+ * @ORM\Entity()
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

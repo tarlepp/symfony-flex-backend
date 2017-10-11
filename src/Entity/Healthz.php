@@ -17,9 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Table(
  *      name="healthz",
  *  )
- * @ORM\Entity(
- *      repositoryClass="App\Repository\HealthzRepository"
- *  )
+ * @ORM\Entity()
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

@@ -22,9 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *      name="user_group",
  *  )
- * @ORM\Entity(
- *      repositoryClass="App\Repository\UserGroupRepository",
- *  )
+ * @ORM\Entity()
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

@@ -29,9 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          @ORM\UniqueConstraint(name="uq_token", columns={"token"}),
  *      },
  *  )
- * @ORM\Entity(
- *      repositoryClass="App\Repository\ApiKeyRepository"
- *  )
+ * @ORM\Entity()
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

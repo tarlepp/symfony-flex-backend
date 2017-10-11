@@ -36,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *      },
  *  )
  * @ORM\Entity(
- *      repositoryClass="App\Repository\UserRepository"
+ *      repositoryClass="App\Security\UserRepository"
  *  )
  *
  * @package App\Entity
