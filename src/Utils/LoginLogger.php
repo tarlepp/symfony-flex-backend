@@ -9,8 +9,8 @@ namespace App\Utils;
 
 use App\Entity\LogLogin;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
+use App\Security\UserProvider;
 use DeviceDetector\DeviceDetector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -30,9 +30,9 @@ class LoginLogger implements LoginLoggerInterface
     private $logLoginResource;
 
     /**
-     * @var UserRepository
+     * @var UserProvider
      */
-    private $userRepository;
+    private $userProvider;
 
     /**
      * @var RequestStack
@@ -52,18 +52,18 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * LoginLogger constructor.
      *
-     * @param LogLoginResource        $logLoginFailureResource
-     * @param UserRepository          $userRepository
-     * @param RequestStack            $requestStack
+     * @param LogLoginResource $logLoginFailureResource
+     * @param UserProvider     $userProvider
+     * @param RequestStack     $requestStack
      */
     public function __construct(
         LogLoginResource $logLoginFailureResource,
-        UserRepository $userRepository,
+        UserProvider $userProvider,
         RequestStack $requestStack
     ) {
         // Store used services
         $this->logLoginResource = $logLoginFailureResource;
-        $this->userRepository = $userRepository;
+        $this->userProvider = $userProvider;
         $this->requestStack = $requestStack;
     }
 
@@ -80,7 +80,7 @@ class LoginLogger implements LoginLoggerInterface
     {
         if ($user !== null) {
             // We need to make sure that User object is right one
-            $user = $user instanceof User ? $user : $this->userRepository->loadUserByUsername($user->getUsername());
+            $user = $user instanceof User ? $user : $this->userProvider->loadUserByUsername($user->getUsername());
 
             $this->user = $user;
         }
