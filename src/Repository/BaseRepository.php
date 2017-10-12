@@ -1,34 +1,31 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Rest/Repository.php
+ * /src/Repository/BaseRepository.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Rest;
+namespace App\Repository;
 
 use App\Entity\EntityInterface;
+use App\Rest\RepositoryHelper;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
 
 /**
- * Class Repository
+ * Class BaseRepository
  *
- * @package App\Rest
+ * @package App\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class Repository extends EntityRepository implements RepositoryInterface, LoggerAwareInterface
+abstract class BaseRepository implements BaseRepositoryInterface
 {
     const INNER_JOIN = 'innerJoin';
     const LEFT_JOIN = 'leftJoin';
-
-    // Traits
-    use LoggerAwareTrait;
 
     /**
      * Names of search columns.
@@ -36,6 +33,11 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      * @var string[]
      */
     protected static $searchColumns = [];
+
+    /**
+     * @var string
+     */
+    protected static $entityName;
 
     /**
      * @var EntityManager
@@ -71,13 +73,28 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     private static $processedCallbacks = [];
 
     /**
+     * @var ManagerRegistry
+     */
+    private $managerRegistry;
+
+    /**
+     * BaseRepository constructor.
+     *
+     * @param ManagerRegistry $managerRegistry
+     */
+    public function __construct(ManagerRegistry $managerRegistry)
+    {
+        $this->managerRegistry = $managerRegistry;
+    }
+
+    /**
      * Getter method for entity name.
      *
      * @return string
      */
     public function getEntityName(): string
     {
-        return parent::getEntityName();
+        return static::$entityName;
     }
 
     /**
@@ -92,7 +109,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      */
     public function getReference(string $id): ?Proxy
     {
-        return $this->getEntityManager()->getReference($this->getClassName(), $id);
+        return $this->getEntityManager()->getReference($this->getEntityName(), $id);
     }
 
     /**
@@ -102,7 +119,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      */
     public function getAssociations(): array
     {
-        return $this->getEntityManager()->getClassMetadata($this->getClassName())->getAssociationMappings();
+        return $this->getEntityManager()->getClassMetadata($this->getEntityName())->getAssociationMappings();
     }
 
     /**
@@ -116,22 +133,35 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     }
 
     /**
-     * @return EntityManager
+     * Getter method for EntityManager for current entity.
+     *
+     * @return EntityManager|ObjectManager
      */
     public function getEntityManager(): EntityManager
     {
-        self::$entityManager = parent::getEntityManager();
+        return $this->managerRegistry->getManagerForClass(static::$entityName);
+    }
 
-        if (!self::$entityManager->isOpen()) {
-            /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
-            /** @noinspection StaticInvocationViaThisInspection */
-            self::$entityManager = static::$entityManager->create(
-                self::$entityManager->getConnection(),
-                self::$entityManager->getConfiguration()
-            );
-        }
+    /**
+     * Method to create new query builder for current entity.
+     *
+     * @param string $alias
+     * @param string $indexBy
+     *
+     * @return QueryBuilder
+     */
+    public function createQueryBuilder(string $alias = null, string $indexBy = null): QueryBuilder
+    {
+        $alias = $alias ?? 'entity';
 
-        return self::$entityManager;
+        // Create new query builder
+        $queryBuilder = $this
+            ->getEntityManager()
+            ->createQueryBuilder()
+            ->select($alias)
+            ->from($this->getEntityName(), $alias, $indexBy);
+
+        return $queryBuilder;
     }
 
     /**
@@ -139,13 +169,13 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      *
      * @param EntityInterface $entity
      *
-     * @return RepositoryInterface
+     * @return BaseRepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(EntityInterface $entity): RepositoryInterface
+    public function save(EntityInterface $entity): BaseRepositoryInterface
     {
         // Persist on database
         $this->getEntityManager()->persist($entity);
@@ -159,13 +189,13 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      *
      * @param EntityInterface $entity
      *
-     * @return RepositoryInterface
+     * @return BaseRepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(EntityInterface $entity): RepositoryInterface
+    public function remove(EntityInterface $entity): BaseRepositoryInterface
     {
         // Remove from database
         $this->getEntityManager()->remove($entity);
@@ -192,7 +222,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         $search = $search ?? [];
 
         // Create new query builder
-        $queryBuilder = $this->createQueryBuilder('entity');
+        $queryBuilder = $this->createQueryBuilder();
 
         // Process normal and search term criteria
         RepositoryHelper::processCriteria($queryBuilder, $criteria);
@@ -207,6 +237,53 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         RepositoryHelper::resetParameterCount();
 
         return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Wrapper for default Doctrine repository find method.
+     *
+     * @param string      $id
+     * @param string|null $lockMode
+     * @param string|null $lockVersion
+     *
+     * @return EntityInterface|null
+     */
+    public function find(string $id, string $lockMode = null, string $lockVersion = null): ?EntityInterface
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
+    }
+
+    /**
+     * Wrapper for default Doctrine repository findOneBy method.
+     *
+     * @param array      $criteria
+     * @param array|null $orderBy
+     *
+     * @return EntityInterface|null
+     */
+    public function findOneBy(array $criteria, array $orderBy = null): ?EntityInterface
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->getEntityManager()->getRepository($this->getEntityName())->findOneBy($criteria, $orderBy);
+    }
+
+    /**
+     * Wrapper for default Doctrine repository findBy method.
+     *
+     * @param array      $criteria
+     * @param array|null $orderBy
+     * @param int|null   $limit
+     * @param int|null   $offset
+     *
+     * @return array
+     */
+    public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): array
+    {
+        return $this
+            ->getEntityManager()
+            ->getRepository($this->getEntityName())
+            ->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     /**
@@ -235,7 +312,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         $search = $search ?? [];
 
         // Create new query builder
-        $queryBuilder = $this->createQueryBuilder('entity');
+        $queryBuilder = $this->createQueryBuilder();
 
         // Process normal and search term criteria and order
         RepositoryHelper::processCriteria($queryBuilder, $criteria);
@@ -255,6 +332,16 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     }
 
     /**
+     * Wrapper for default Doctrine repository findBy method.
+     *
+     * @return array
+     */
+    public function findAll(): array
+    {
+        return $this->getEntityManager()->getRepository($this->getEntityName())->findAll();
+    }
+
+    /**
      * Repository method to fetch current entity id values from database and return those as an array.
      *
      * @param null|array $criteria
@@ -268,9 +355,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     {
         $criteria = $criteria ?? [];
         $search = $search ?? [];
-
-        // Create new query builder
-        $queryBuilder = $this->createQueryBuilder('entity');
+        $queryBuilder = $this->createQueryBuilder();
 
         // Process normal and search term criteria
         RepositoryHelper::processCriteria($queryBuilder, $criteria);
@@ -297,7 +382,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
     public function reset(): int
     {
         // Create query builder
-        $queryBuilder = $this->createQueryBuilder('entity');
+        $queryBuilder = $this->createQueryBuilder();
 
         // Define delete query
         $queryBuilder->delete();
@@ -322,7 +407,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
         $this->processJoins($queryBuilder);
         $this->processCallbacks($queryBuilder);
     }
-    
+
     /**
      * Adds left join to current QueryBuilder query.
      *
@@ -332,14 +417,14 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      *
      * @param array $parameters
      *
-     * @return RepositoryInterface
+     * @return BaseRepositoryInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function addLeftJoin(array $parameters): RepositoryInterface
+    public function addLeftJoin(array $parameters): BaseRepositoryInterface
     {
         $this->addJoinToQuery('leftJoin', $parameters);
-        
+
         return $this;
     }
 
@@ -352,14 +437,14 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      *
      * @param array $parameters
      *
-     * @return RepositoryInterface
+     * @return BaseRepositoryInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function addInnerJoin(array $parameters): RepositoryInterface
+    public function addInnerJoin(array $parameters): BaseRepositoryInterface
     {
         $this->addJoinToQuery('innerJoin', $parameters);
-        
+
         return $this;
     }
 
@@ -375,9 +460,9 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
      * @param callable   $callable
      * @param array|null $args
      *
-     * @return RepositoryInterface
+     * @return BaseRepositoryInterface
      */
-    public function addCallback(callable $callable, array $args = null): RepositoryInterface
+    public function addCallback(callable $callable, array $args = null): BaseRepositoryInterface
     {
         $args = $args ?? [];
         $hash = \sha1(\serialize(\array_merge([\spl_object_hash((object)$callable)], $args)));
@@ -405,7 +490,7 @@ abstract class Repository extends EntityRepository implements RepositoryInterfac
             foreach ($joins as $key => $joinParameters) {
                 $queryBuilder->$joinType(...$joinParameters);
             }
-            
+
             self::$joins[$joinType] = [];
         }
     }

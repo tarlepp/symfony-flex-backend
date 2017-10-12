@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\LogLogin as Entity;
-use App\Rest\Repository;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /**
@@ -19,14 +18,18 @@ use App\Rest\Repository;
  *
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null find($id, $lockMode = null, $lockVersion = null)
- * @method Entity[]    findAll()
- * @method Entity[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Entity|null find(string $id, string $lockMode = null, string $lockVersion = null)
  * @method Entity|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Entity[]    findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null)
  * @method Entity[]    findByAdvanced(array $criteria, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
+ * @method Entity[]    findAll()
  *
  * @codingStandardsIgnoreEnd
  */
-class LogLoginRepository extends Repository
+class LogLoginRepository extends BaseRepository
 {
+    /**
+     * @var string
+     */
+    protected static $entityName = Entity::class;
 }
