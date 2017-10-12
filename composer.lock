@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d143adf921a2d400f9d0b6c0b441bcb4",
+    "content-hash": "ea6dd21e1bc7e7eea941a4ca70662425",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1128,16 +1128,16 @@
         },
         {
             "name": "exsyst/swagger",
-            "version": "v0.3.0",
+            "version": "v0.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/GuilhemN/swagger.git",
-                "reference": "b3d6310990fc8d3c59b5ec9339070f0c33664f7c"
+                "reference": "fdf1a4a3b6516486b27111b016a68cb532d322f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/GuilhemN/swagger/zipball/b3d6310990fc8d3c59b5ec9339070f0c33664f7c",
-                "reference": "b3d6310990fc8d3c59b5ec9339070f0c33664f7c",
+                "url": "https://api.github.com/repos/GuilhemN/swagger/zipball/fdf1a4a3b6516486b27111b016a68cb532d322f8",
+                "reference": "fdf1a4a3b6516486b27111b016a68cb532d322f8",
                 "shasum": ""
             },
             "require": {
@@ -1163,20 +1163,20 @@
                 }
             ],
             "description": "A php library to manipulate Swagger specifications",
-            "time": "2017-07-25T08:15:44+00:00"
+            "time": "2017-10-11T05:23:09+00:00"
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.30",
+            "version": "v2.4.31",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "5e2cc07beb0cd24345cbe02eb7afc3b23f9cd488"
+                "reference": "79cd1d49898a21ede9a5dfad41c021abd9a14339"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/5e2cc07beb0cd24345cbe02eb7afc3b23f9cd488",
-                "reference": "5e2cc07beb0cd24345cbe02eb7afc3b23f9cd488",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/79cd1d49898a21ede9a5dfad41c021abd9a14339",
+                "reference": "79cd1d49898a21ede9a5dfad41c021abd9a14339",
                 "shasum": ""
             },
             "require": {
@@ -1241,7 +1241,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2017-07-02T09:46:37+00:00"
+            "time": "2017-10-12T06:26:21+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1643,12 +1643,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "87f40feefcb3ac95d64d9620011b5b3f4292a957"
+                "reference": "3e98b9fe9765c0c0f493bcde3300c8860b8e226e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/87f40feefcb3ac95d64d9620011b5b3f4292a957",
-                "reference": "87f40feefcb3ac95d64d9620011b5b3f4292a957",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/3e98b9fe9765c0c0f493bcde3300c8860b8e226e",
+                "reference": "3e98b9fe9765c0c0f493bcde3300c8860b8e226e",
                 "shasum": ""
             },
             "require": {
@@ -1715,7 +1715,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-09-27T18:29:54+00:00"
+            "time": "2017-10-12T05:15:04+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -5509,16 +5509,16 @@
         },
         {
             "name": "liuggio/fastest",
-            "version": "v1.4.4",
+            "version": "v1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liuggio/fastest.git",
-                "reference": "6168cbaff7b6bbcd54f21d99170d6992b82d0d4e"
+                "reference": "d29bde82e1669f3c31294dd8e2f9868ac793a052"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liuggio/fastest/zipball/6168cbaff7b6bbcd54f21d99170d6992b82d0d4e",
-                "reference": "6168cbaff7b6bbcd54f21d99170d6992b82d0d4e",
+                "url": "https://api.github.com/repos/liuggio/fastest/zipball/d29bde82e1669f3c31294dd8e2f9868ac793a052",
+                "reference": "d29bde82e1669f3c31294dd8e2f9868ac793a052",
                 "shasum": ""
             },
             "require": {
@@ -5563,7 +5563,7 @@
                 }
             ],
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
-            "time": "2017-10-11T11:51:29+00:00"
+            "time": "2017-10-12T12:40:51+00:00"
         },
         {
             "name": "myclabs/deep-copy",
