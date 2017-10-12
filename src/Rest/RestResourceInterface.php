@@ -9,6 +9,7 @@ namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
+use App\Repository\BaseRepositoryInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -23,18 +24,18 @@ interface RestResourceInterface
     /**
      * Getter method for entity repository.
      *
-     * @return Repository
+     * @return BaseRepositoryInterface
      */
-    public function getRepository(): Repository;
+    public function getRepository(): BaseRepositoryInterface;
 
     /**
      * Setter method for repository.
      *
-     * @param Repository $repository
+     * @param BaseRepositoryInterface $repository
      *
      * @return RestResourceInterface
      */
-    public function setRepository(Repository $repository): RestResourceInterface;
+    public function setRepository(BaseRepositoryInterface $repository): RestResourceInterface;
 
     /**
      * Getter for used validator.

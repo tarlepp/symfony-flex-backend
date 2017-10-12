@@ -9,8 +9,8 @@ namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
+use App\Repository\BaseRepositoryInterface;
 use Doctrine\Common\Proxy\Proxy;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -27,7 +27,7 @@ abstract class RestResource implements RestResourceInterface
     use Traits\RestResource;
 
     /**
-     * @var Repository|EntityRepository
+     * @var BaseRepositoryInterface
      */
     private $repository;
 
@@ -49,9 +49,9 @@ abstract class RestResource implements RestResourceInterface
     /**
      * Getter method for entity repository.
      *
-     * @return Repository
+     * @return BaseRepositoryInterface
      */
-    public function getRepository(): Repository
+    public function getRepository(): BaseRepositoryInterface
     {
         return $this->repository;
     }
@@ -59,11 +59,11 @@ abstract class RestResource implements RestResourceInterface
     /**
      * Setter method for repository.
      *
-     * @param Repository $repository
+     * @param BaseRepositoryInterface $repository
      *
      * @return RestResourceInterface
      */
-    public function setRepository(Repository $repository): RestResourceInterface
+    public function setRepository(BaseRepositoryInterface $repository): RestResourceInterface
     {
         $this->repository = $repository;
 
@@ -385,7 +385,7 @@ abstract class RestResource implements RestResourceInterface
         }
 
         // Determine entity name
-        $entity = $this->getRepository()->getClassName();
+        $entity = $this->getRepository()->getEntityName();
 
         /**
          * Create new entity
