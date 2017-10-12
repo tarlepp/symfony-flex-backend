@@ -9,6 +9,7 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\UserGroup;
 use App\Repository\UserGroupRepository;
+use App\Resource\UserGroupResource;
 
 /**
  * Class UserGroupRepositoryTest
@@ -27,6 +28,11 @@ class UserGroupRepositoryTest extends RepositoryTestCase
      * @var string
      */
     protected $repositoryName = UserGroupRepository::class;
+
+    /**
+     * @var string
+     */
+    protected $resourceName = UserGroupResource::class;
 
     /**
      * @var array

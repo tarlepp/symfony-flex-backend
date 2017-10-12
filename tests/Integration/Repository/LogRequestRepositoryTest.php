@@ -9,6 +9,7 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\LogRequest;
 use App\Repository\LogRequestRepository;
+use App\Resource\LogRequestResource;
 
 /**
  * Class UserRepositoryTest
@@ -32,6 +33,11 @@ class LogRequestRepositoryTest extends RepositoryTestCase
      * @var string
      */
     protected $repositoryName = LogRequestRepository::class;
+
+    /**
+     * @var string
+     */
+    protected $resourceName = LogRequestResource::class;
 
     /**
      * @var array

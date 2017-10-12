@@ -7,12 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest;
 
-use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
+use App\Resource\UserResource;
 use App\Rest\RepositoryHelper;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\Container;
 
 /**
  * Class RepositoryHelperTest
@@ -22,26 +20,6 @@ use Symfony\Component\DependencyInjection\Container;
  */
 class RepositoryHelperTest extends KernelTestCase
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * @var UserEntity
-     */
-    protected $entity;
-
-    /**
-     * @var string
-     */
-    protected $entityName = UserEntity::class;
-
     /**
      * @var UserRepository
      */
@@ -53,9 +31,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         self::bootKernel();
 
-        $this->container = static::$kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
-        $this->repository = $this->entityManager->getRepository($this->entityName);
+        $this->repository = static::$kernel->getContainer()->get(UserResource::class)->getRepository();
 
         RepositoryHelper::resetParameterCount();
     }

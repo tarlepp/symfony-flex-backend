@@ -22,7 +22,9 @@ class HealthzServiceTest extends KernelTestCase
     public function testThatCheckMethodCallsExpectedRepositoryMethods(): void
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|HealthzRepository $mockRepository */
-        $mockRepository = $this->createMock(HealthzRepository::class);
+        $mockRepository = $this->getMockBuilder(HealthzRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockRepository
             ->expects(static::once())
@@ -34,8 +36,7 @@ class HealthzServiceTest extends KernelTestCase
 
         $mockRepository
             ->expects(static::once())
-            ->method('read')
-            ->willReturn('');
+            ->method('read');
 
         $healthzService = new HealthzService($mockRepository);
         $healthzService->check();

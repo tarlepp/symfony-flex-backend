@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Repository;
 
 use App\Repository\RoleRepository;
+use App\Resource\RoleResource;
+use App\Rest\Traits\RestResourceCreate;
 use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -52,7 +54,7 @@ class RoleRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->repository = static::$kernel->getContainer()->get(RoleRepository::class);
+        $this->repository = static::$kernel->getContainer()->get(RoleResource::class)->getRepository();
     }
 
     public function testThatResetMethodDeletesAllRecords(): void

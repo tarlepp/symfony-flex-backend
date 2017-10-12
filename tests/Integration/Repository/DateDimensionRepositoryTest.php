@@ -9,6 +9,7 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\DateDimension;
 use App\Repository\DateDimensionRepository;
+use App\Resource\DateDimensionResource;
 
 /**
  * Class DateDimensionRepositoryTest
@@ -27,4 +28,9 @@ class DateDimensionRepositoryTest extends RepositoryTestCase
      * @var string
      */
     protected $repositoryName = DateDimensionRepository::class;
+
+    /**
+     * @var string
+     */
+    protected $resourceName = DateDimensionResource::class;
 }

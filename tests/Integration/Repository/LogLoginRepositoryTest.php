@@ -9,6 +9,7 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\LogLogin;
 use App\Repository\LogLoginRepository;
+use App\Resource\LogLoginResource;
 
 /**
  * Class LogLoginRepositoryTest
@@ -27,6 +28,11 @@ class LogLoginRepositoryTest extends RepositoryTestCase
      * @var string
      */
     protected $repositoryName = LogLoginRepository::class;
+
+    /**
+     * @var string
+     */
+    protected $resourceName = LogLoginResource::class;
 
     /**
      * @var array

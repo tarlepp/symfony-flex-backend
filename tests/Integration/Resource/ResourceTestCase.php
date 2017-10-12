@@ -46,14 +46,7 @@ abstract class ResourceTestCase extends KernelTestCase
 
         self::bootKernel();
 
-        /**
-         * @var RepositoryInterface $repository
-         * @var ValidatorInterface  $validator
-         */
-        $repository = static::$kernel->getContainer()->get($this->repositoryClass);
-        $validator = static::$kernel->getContainer()->get('validator');
-
-        $this->resource = $this->getResource($repository, $validator);
+        $this->resource = static::$kernel->getContainer()->get($this->resourceClass);
     }
 
     public function testThatGetRepositoryReturnsExpected(): void
@@ -74,18 +67,5 @@ abstract class ResourceTestCase extends KernelTestCase
         );
 
         self::assertSame($this->entityClass, $this->resource->getEntityName(), $message);
-    }
-
-    /**
-     * @param RepositoryInterface $repository
-     * @param ValidatorInterface  $validator
-     *
-     * @return RestResourceInterface
-     */
-    protected function getResource(
-        RepositoryInterface $repository,
-        ValidatorInterface $validator
-    ): RestResourceInterface {
-        return new $this->resourceClass($repository, $validator);
     }
 }

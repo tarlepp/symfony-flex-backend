@@ -9,6 +9,7 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\Role;
 use App\Repository\RoleRepository;
+use App\Resource\RoleResource;
 
 /**
  * Class RoleRepositoryTest
@@ -27,6 +28,11 @@ class RoleRepositoryTest extends RepositoryTestCase
      * @var string
      */
     protected $repositoryName = RoleRepository::class;
+
+    /**
+     * @var string
+     */
+    protected $resourceName = RoleResource::class;
 
     /**
      * @var array

@@ -9,12 +9,12 @@ namespace App\Tests\Functional\Repository;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Resource\UserResource;
 use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Security\Core\User\User as CoreUser;
 
 /**
  * Class UserRepositoryTest
@@ -27,7 +27,7 @@ class UserRepositoryTest extends KernelTestCase
     /**
      * @var UserRepository;
      */
-    private $repository;
+    private $userRepository;
 
     public static function tearDownAfterClass(): void
     {
@@ -54,63 +54,24 @@ class UserRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->repository = static::$kernel->getContainer()->get(UserRepository::class);
-    }
-
-    public function testThatLoadUserByUsernameReturnsNullWithInvalidUsername(): void
-    {
-        static::assertNull($this->repository->loadUserByUsername('foobar'));
-    }
-
-    /**
-     * @expectedException \Doctrine\ORM\NoResultException
-     */
-    public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
-    {
-        $user = new User();
-        $user->setUsername('test');
-
-        $this->repository->refreshUser($user);
-    }
-
-    public function testThatRefreshUserReturnsCorrectUser(): void
-    {
-        /** @var User $user */
-        $user = $this->repository->findOneBy(['username' => 'john']);
-
-        static::assertNotNull($user);
-        static::assertInstanceOf(User::class, $user);
-
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame($user->getId(), $this->repository->refreshUser($user)->getId());
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
-     * @expectedExceptionMessage Instance of "Symfony\Component\Security\Core\User\User" is not supported.
-     */
-    public function testThatRefreshUserThrowsAnExceptionIfUserClassIsNotSupported(): void
-    {
-        $user = new CoreUser('test', 'password');
-
-        $this->repository->refreshUser($user);
+        $this->userRepository = static::$kernel->getContainer()->get(UserResource::class)->getRepository();
     }
 
     public function testThatCountAdvancedReturnsExpected(): void
     {
-        static::assertSame(6, $this->repository->countAdvanced());
+        static::assertSame(6, $this->userRepository->countAdvanced());
     }
 
     public function testThatFindByAdvancedReturnsExpected(): void
     {
-        $users = $this->repository->findByAdvanced(['username' => 'john']);
+        $users = $this->userRepository->findByAdvanced(['username' => 'john']);
 
         static::assertCount(1, $users);
     }
 
     public function testThatFindIdsReturnsExpected(): void
     {
-        static::assertCount(5, $this->repository->findIds([], ['or' => 'john-']));
+        static::assertCount(5, $this->userRepository->findIds([], ['or' => 'john-']));
     }
 
     public function testThatIsUsernameAvailableMethodReturnsExpected(): void
@@ -123,7 +84,7 @@ class UserRepositoryTest extends KernelTestCase
             ];
         };
 
-        $users = $this->repository->findAll();
+        $users = $this->userRepository->findAll();
 
         $data = \array_merge(
             \array_map($iterator, $users, \array_fill(0, \count($users), true)),
@@ -134,7 +95,7 @@ class UserRepositoryTest extends KernelTestCase
             [$expected, $username, $id] = $set;
 
             /** @noinspection DisconnectedForeachInstructionInspection */
-            static::assertSame($expected, $this->repository->isUsernameAvailable($username, $id));
+            static::assertSame($expected, $this->userRepository->isUsernameAvailable($username, $id));
         }
     }
 
@@ -148,7 +109,7 @@ class UserRepositoryTest extends KernelTestCase
             ];
         };
 
-        $users = $this->repository->findAll();
+        $users = $this->userRepository->findAll();
 
         $data = \array_merge(
             \array_map($iterator, $users, \array_fill(0, \count($users), true)),
@@ -159,7 +120,7 @@ class UserRepositoryTest extends KernelTestCase
             [$expected, $email, $id] = $set;
 
             /** @noinspection DisconnectedForeachInstructionInspection */
-            static::assertSame($expected, $this->repository->isEmailAvailable($email, $id));
+            static::assertSame($expected, $this->userRepository->isEmailAvailable($email, $id));
         }
     }
 
@@ -169,8 +130,8 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
-        $this->repository->reset();
+        $this->userRepository->reset();
 
-        static::assertSame(0, $this->repository->countAdvanced());
+        static::assertSame(0, $this->userRepository->countAdvanced());
     }
 }

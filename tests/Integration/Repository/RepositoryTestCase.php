@@ -18,7 +18,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class RepositoryTestCase extends KernelTestCase
 {
     /**
-     * @var \App\Rest\Repository
+     * @var \App\Rest\RestResource
+     */
+    protected $resource;
+
+    /**
+     * @var \App\Repository\BaseRepository
      */
     protected $repository;
 
@@ -31,6 +36,11 @@ class RepositoryTestCase extends KernelTestCase
      * @var string
      */
     protected $repositoryName;
+
+    /**
+     * @var string
+     */
+    protected $resourceName;
 
     /**
      * @var array
@@ -48,7 +58,8 @@ class RepositoryTestCase extends KernelTestCase
 
         self::bootKernel();
 
-        $this->repository = static::$kernel->getContainer()->get($this->repositoryName);
+        $this->resource = static::$kernel->getContainer()->get($this->resourceName);
+        $this->repository = $this->resource->getRepository();
     }
 
     public function testThatGetEntityNameReturnsExpected(): void

@@ -9,6 +9,7 @@ namespace App\Tests\Functional\Repository;
 
 use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
+use App\Resource\HealthzResource;
 use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -56,7 +57,7 @@ class HealthzRepositoryTest extends KernelTestCase
             self::$initialized = true;
         }
 
-        $this->repository = static::$kernel->getContainer()->get(HealthzRepository::class);
+        $this->repository = static::$kernel->getContainer()->get(HealthzResource::class)->getRepository();
     }
 
     public function testThatReadValueMethodReturnsExpectedWithEmptyDatabase(): void

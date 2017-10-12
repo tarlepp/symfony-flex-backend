@@ -8,9 +8,8 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Repository;
 
 use App\Entity\User;
-use App\Entity\UserGroup;
 use App\Repository\UserRepository;
-use Symfony\Component\Security\Core\User\User as CoreUser;
+use App\Resource\UserResource;
 
 /**
  * Class UserRepositoryTest
@@ -36,6 +35,11 @@ class UserRepositoryTest extends RepositoryTestCase
     protected $repositoryName = UserRepository::class;
 
     /**
+     * @var string
+     */
+    protected $resourceName = UserResource::class;
+
+    /**
      * @var array
      */
     protected $associations = [
@@ -55,42 +59,4 @@ class UserRepositoryTest extends RepositoryTestCase
         'surname',
         'email',
     ];
-
-    /**
-     * @dataProvider dataProviderTestThatSupportsClassMethodReturnsExpected
-     *
-     * @param bool   $expected
-     * @param string $class
-     */
-    public function testThatSupportsClassMethodReturnsExpected(bool $expected, string $class): void
-    {
-        if ($expected) {
-            self::assertTrue($this->repository->supportsClass($class));
-        } else {
-            self::assertFalse($this->repository->supportsClass($class));
-        }
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
-     * @expectedExceptionMessage Instance of "Symfony\Component\Security\Core\User\User" is not supported.
-     */
-    public function testThatRefreshUserThrowsAnExceptionWhenNotSupportedUserInterfaceIsUsed(): void
-    {
-        $user = new CoreUser('username', 'password');
-
-        $this->repository->refreshUser($user);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderTestThatSupportsClassMethodReturnsExpected(): array
-    {
-        return [
-            [true, User::class],
-            [false, UserGroup::class],
-            [false, CoreUser::class],
-        ];
-    }
 }

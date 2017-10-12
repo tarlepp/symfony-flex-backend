@@ -9,6 +9,7 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\ApiKey;
 use App\Repository\ApiKeyRepository;
+use App\Resource\ApiKeyResource;
 
 /**
  * Class ApiKeyRepositoryTest
@@ -27,6 +28,11 @@ class ApiKeyRepositoryTest extends RepositoryTestCase
      * @var string
      */
     protected $repositoryName = ApiKeyRepository::class;
+
+    /**
+     * @var string
+     */
+    protected $resourceName = ApiKeyResource::class;
 
     /**
      * @var array
