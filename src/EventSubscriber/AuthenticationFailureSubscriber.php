@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\EventSubscriber;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
-use App\Repository\UserRepository;
+use App\Security\UserProvider;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 
@@ -26,20 +26,20 @@ class AuthenticationFailureSubscriber
     protected $loginLogger;
 
     /**
-     * @var UserRepository
+     * @var UserProvider
      */
-    protected $userRepository;
+    protected $userProvider;
 
     /**
      * AuthenticationFailureSubscriber constructor.
      *
-     * @param LoginLogger    $loginLogger
-     * @param UserRepository $userRepository
+     * @param LoginLogger  $loginLogger
+     * @param UserProvider $userProvider
      */
-    public function __construct(LoginLogger $loginLogger, UserRepository $userRepository)
+    public function __construct(LoginLogger $loginLogger, UserProvider $userProvider)
     {
         $this->loginLogger = $loginLogger;
-        $this->userRepository = $userRepository;
+        $this->userProvider = $userProvider;
     }
 
     /**
@@ -49,13 +49,14 @@ class AuthenticationFailureSubscriber
      *
      * @param AuthenticationFailureEvent $event
      *
+     * @throws \UnexpectedValueException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
         // Fetch user entity
-        $user = $this->userRepository->loadUserByUsername($event->getException()->getToken()->getUser());
+        $user = $this->userProvider->loadUserByUsername($event->getException()->getToken()->getUser());
 
         $this->loginLogger->setUser($user);
         $this->loginLogger->process(EnumLogLoginType::TYPE_FAILURE);

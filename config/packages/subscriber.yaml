@@ -9,7 +9,18 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
+    # This is needed for Authentication failure subscriber
+    userProvider:
+        autowire: false
+        autoconfigure: false
+        shared: false
+        class: Doctrine\ORM\EntityRepository
+        factory: [ '@doctrine.orm.entity_manager', getRepository ]
+        arguments: [ App\Entity\User ]
+
     App\EventSubscriber\AuthenticationFailureSubscriber:
+        arguments:
+            $userProvider: '@userProvider'
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailure }
 
