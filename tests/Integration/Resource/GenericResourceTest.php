@@ -14,8 +14,6 @@ use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\RepositoryInterface;
-use App\Rest\RestResourceInterface;
-use App\Security\RolesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit_Framework_MockObject_MockBuilder;
@@ -39,14 +37,6 @@ class GenericResourceTest extends KernelTestCase
      * @var UserResource
      */
     private $resource;
-
-    /**
-     * @return ValidatorInterface
-     */
-    private static function getValidator(): ValidatorInterface
-    {
-        return static::$kernel->getContainer()->get('validator');
-    }
 
     /**
      * @return EntityManagerInterface|Object
