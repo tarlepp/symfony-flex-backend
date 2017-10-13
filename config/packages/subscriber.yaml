@@ -19,8 +19,6 @@ services:
         arguments: [ App\Entity\User ]
 
     App\EventSubscriber\AuthenticationFailureSubscriber:
-        arguments:
-            $userProvider: '@userProvider'
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailure }
 
