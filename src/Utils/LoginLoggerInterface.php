@@ -7,8 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Utils;
 
+use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
-use App\Security\UserProvider;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -24,12 +24,12 @@ interface LoginLoggerInterface
      * LoginLogger constructor.
      *
      * @param LogLoginResource $logLoginFailureResource
-     * @param UserProvider     $userProvider
+     * @param UserRepository   $userRepository
      * @param RequestStack     $requestStack
      */
     public function __construct(
         LogLoginResource $logLoginFailureResource,
-        UserProvider $userProvider,
+        UserRepository $userRepository,
         RequestStack $requestStack
     );
 

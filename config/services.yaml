@@ -45,9 +45,5 @@ services:
         public: true
         arguments: [ '%security.role_hierarchy.roles%' ]
 
-    App\Utils\LoginLogger:
-        arguments:
-            $userProvider: '@userProvider'
-
     App\Utils\Tests\Auth:
         public: true
