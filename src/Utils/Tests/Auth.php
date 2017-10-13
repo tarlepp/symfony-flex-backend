@@ -9,6 +9,7 @@ namespace App\Utils\Tests;
 
 use App\Utils\JSON;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Auth
@@ -103,6 +104,7 @@ class Auth
     private function getToken(string $username, string $password): string
     {
         // Get client
+        /** @noinspection MissingService */
         $client = $this->container->get('test.client');
 
         // Create request to make login using given credentials
@@ -121,10 +123,15 @@ class Auth
             \json_encode(['username' => $username, 'password' => $password])
         );
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         if ($response === null) {
             throw new \UnexpectedValueException('Test client did not return response at all');
+        }
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \UnexpectedValueException('Invalid status code: '. $response->getStatusCode());
         }
 
         return JSON::decode($response->getContent())->token;
