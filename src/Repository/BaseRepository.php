@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\EntityInterface;
+use App\Repository\Traits\BaseRepositoryTrait;
 use App\Rest\RepositoryHelper;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
@@ -24,6 +24,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 abstract class BaseRepository implements BaseRepositoryInterface
 {
+    // Traits
+    use BaseRepositoryTrait;
+
     const INNER_JOIN = 'innerJoin';
     const LEFT_JOIN = 'leftJoin';
 
@@ -98,31 +101,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
-     * Gets a reference to the entity identified by the given type and identifier without actually loading it,
-     * if the entity is not yet loaded.
-     *
-     * @param string $id
-     *
-     * @return Proxy|null
-     *
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function getReference(string $id): ?Proxy
-    {
-        return $this->getEntityManager()->getReference($this->getEntityName(), $id);
-    }
-
-    /**
-     * Gets all association mappings of the class.
-     *
-     * @return array
-     */
-    public function getAssociations(): array
-    {
-        return $this->getEntityManager()->getClassMetadata($this->getEntityName())->getAssociationMappings();
-    }
-
-    /**
      * Getter method for search columns of current entity.
      *
      * @return string[]
@@ -140,68 +118,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
     public function getEntityManager(): EntityManager
     {
         return $this->managerRegistry->getManagerForClass(static::$entityName);
-    }
-
-    /**
-     * Method to create new query builder for current entity.
-     *
-     * @param string $alias
-     * @param string $indexBy
-     *
-     * @return QueryBuilder
-     */
-    public function createQueryBuilder(string $alias = null, string $indexBy = null): QueryBuilder
-    {
-        $alias = $alias ?? 'entity';
-
-        // Create new query builder
-        $queryBuilder = $this
-            ->getEntityManager()
-            ->createQueryBuilder()
-            ->select($alias)
-            ->from($this->getEntityName(), $alias, $indexBy);
-
-        return $queryBuilder;
-    }
-
-    /**
-     * Helper method to persist specified entity to database.
-     *
-     * @param EntityInterface $entity
-     *
-     * @return BaseRepositoryInterface
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function save(EntityInterface $entity): BaseRepositoryInterface
-    {
-        // Persist on database
-        $this->getEntityManager()->persist($entity);
-        $this->getEntityManager()->flush();
-
-        return $this;
-    }
-
-    /**
-     * Helper method to remove specified entity from database.
-     *
-     * @param EntityInterface $entity
-     *
-     * @return BaseRepositoryInterface
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function remove(EntityInterface $entity): BaseRepositoryInterface
-    {
-        // Remove from database
-        $this->getEntityManager()->remove($entity);
-        $this->getEntityManager()->flush();
-
-        return $this;
     }
 
     /**
