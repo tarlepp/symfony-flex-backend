@@ -44,7 +44,7 @@ trait LoadUserByUserNameTrait
             ->createQueryBuilder('u')
             ->select('u, g, r')
             ->leftJoin('u.userGroups', 'g')
-            ->innerJoin('g.role', 'r')
+            ->leftJoin('g.role', 'r')
             ->where('u.username = :username OR u.email = :email')
             ->setParameter('username', $username)
             ->setParameter('email', $username)
