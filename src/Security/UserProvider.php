@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Security;
 
 use App\Entity\User as Entity;
+use App\Repository\Traits\LoadUserByUserNameTrait;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -23,37 +24,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  */
 class UserProvider extends EntityRepository implements UserProviderInterface, UserLoaderInterface
 {
-    /**
-     * Loads the user for the given username.
-     *
-     * This method must throw UsernameNotFoundException if the user is not found.
-     *
-     * Method is override for performance reasons see link below.
-     *
-     * @link http://symfony2-document.readthedocs.org/en/latest/cookbook/security/entity_provider.html
-     *       #managing-roles-in-the-database
-     *
-     * @param string $username The username
-     *
-     * @return null|UserInterface|Entity
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function loadUserByUsername($username): ?UserInterface
-    {
-        // Build query
-        $query = $this
-            ->createQueryBuilder('u')
-            ->select('u, g, r')
-            ->leftJoin('u.userGroups', 'g')
-            ->leftJoin('g.role', 'r')
-            ->where('u.username = :username OR u.email = :email')
-            ->setParameter('username', $username)
-            ->setParameter('email', $username)
-            ->getQuery();
-
-        return $query->getOneOrNullResult();
-    }
+    // Traits
+    use LoadUserByUserNameTrait;
 
     /**
      * Refreshes the user for the account interface.

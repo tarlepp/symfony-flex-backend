@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\User as Entity;
+use App\Repository\Traits\LoadUserByUserNameTrait;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /**
@@ -28,6 +29,8 @@ use App\Entity\User as Entity;
  */
 class UserRepository extends BaseRepository
 {
+    use LoadUserByUserNameTrait;
+
     /**
      * @var string
      */
