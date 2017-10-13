@@ -41,6 +41,7 @@ class AuthenticationSuccessSubscriber
      *
      * @param AuthenticationSuccessEvent $event
      *
+     * @throws \UnexpectedValueException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
