@@ -9,7 +9,7 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\Entity\User;
 use App\EventSubscriber\AuthenticationFailureSubscriber;
-use App\Security\UserProvider;
+use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -40,11 +40,11 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $event = new AuthenticationFailureEvent($authenticationException, $response);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoginLogger  $loginLogger
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserProvider $userRepository
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoginLogger    $loginLogger
+         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository $userRepository
          */
         $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();
-        $userRepository = $this->getMockBuilder(UserProvider::class)->disableOriginalConstructor()->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
         $userRepository
             ->expects(static::once())
@@ -81,11 +81,11 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $event = new AuthenticationFailureEvent($authenticationException, $response);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoginLogger  $loginLogger
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserProvider $userRepository
+         * @var \PHPUnit_Framework_MockObject_MockObject|LoginLogger    $loginLogger
+         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository $userRepository
          */
         $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();
-        $userRepository = $this->getMockBuilder(UserProvider::class)->disableOriginalConstructor()->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
         $userRepository
             ->expects(static::once())

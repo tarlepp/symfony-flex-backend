@@ -307,7 +307,12 @@ FORMAT;
 
             $repositoryMethods[$reflectionClass->getName()] = \array_map($formatter, $methods);
 
-            return !($reflectionClass->isAbstract() || $reflectionClass->isInterface() || empty($methods));
+            return !(
+                $reflectionClass->isAbstract() ||
+                $reflectionClass->isInterface() ||
+                $reflectionClass->isTrait() ||
+                empty($methods)
+            );
         };
 
         $formatter = function (\ReflectionClass $reflectionClass) use (

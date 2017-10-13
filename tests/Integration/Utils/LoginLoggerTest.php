@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Utils;
 
-use App\Security\UserProvider;
+use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
 use App\Utils\LoginLogger;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -26,10 +26,10 @@ class LoginLoggerTest extends KernelTestCase
     {
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject|LogLoginResource $logLoginResource
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserProvider   $userRepository
+         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository   $userRepository
          */
         $logLoginResource = $this->getMockBuilder(LogLoginResource::class)->disableOriginalConstructor()->getMock();
-        $userRepository = $this->getMockBuilder(UserProvider::class)->disableOriginalConstructor()->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $requestStack = new RequestStack();
 
         $userRepository
@@ -52,10 +52,10 @@ class LoginLoggerTest extends KernelTestCase
     {
         /**
          * @var \PHPUnit_Framework_MockObject_MockObject|LogLoginResource $logLoginResource
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserProvider   $userRepository
+         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository   $userRepository
          */
         $logLoginResource = $this->getMockBuilder(LogLoginResource::class)->disableOriginalConstructor()->getMock();
-        $userRepository = $this->getMockBuilder(UserProvider::class)->disableOriginalConstructor()->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $requestStack = new RequestStack();
 
         $loginLogger = new LoginLogger($logLoginResource, $userRepository, $requestStack);

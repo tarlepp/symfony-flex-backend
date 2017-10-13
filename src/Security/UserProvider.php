@@ -9,6 +9,7 @@ namespace App\Security;
 
 use App\Entity\User as Entity;
 use App\Repository\Traits\LoadUserByUserNameTrait;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -26,6 +27,14 @@ class UserProvider extends EntityRepository implements UserProviderInterface, Us
 {
     // Traits
     use LoadUserByUserNameTrait;
+
+    /**
+     * @return EntityManager
+     */
+    public function getEntityManager(): EntityManager
+    {
+        return parent::getEntityManager();
+    }
 
     /**
      * Refreshes the user for the account interface.
