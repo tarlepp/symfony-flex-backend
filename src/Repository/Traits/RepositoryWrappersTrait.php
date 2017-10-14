@@ -1,29 +1,33 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Repository/Traits/BaseRepository.php
+ * /src/Repository/Traits/RepositoryWrappersTrait.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Repository\Traits;
 
-use App\Entity\EntityInterface;
-use App\Repository\BaseRepositoryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 
 /**
- * Trait BaseRepository
+ * Class RepositoryWrappersTrait
  *
  * @package App\Repository\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method EntityManager getEntityManager()
- * @method string        getEntityName()
+ * @method string        getEntityName(): string
  */
-trait BaseRepositoryTrait
+trait RepositoryWrappersTrait
 {
+    /**
+     * @var ManagerRegistry
+     */
+    protected $managerRegistry;
+
     /**
      * Gets a reference to the entity identified by the given type and identifier without actually loading it,
      * if the entity is not yet loaded.
@@ -50,6 +54,16 @@ trait BaseRepositoryTrait
     }
 
     /**
+     * Getter method for EntityManager for current entity.
+     *
+     * @return EntityManager|ObjectManager
+     */
+    public function getEntityManager(): EntityManager
+    {
+        return $this->managerRegistry->getManagerForClass(static::$entityName);
+    }
+
+    /**
      * Method to create new query builder for current entity.
      *
      * @param string $alias
@@ -69,47 +83,5 @@ trait BaseRepositoryTrait
             ->from($this->getEntityName(), $alias, $indexBy);
 
         return $queryBuilder;
-    }
-
-    /**
-     * Helper method to persist specified entity to database.
-     *
-     * @param EntityInterface $entity
-     *
-     * @return BaseRepositoryInterface
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function save(EntityInterface $entity): BaseRepositoryInterface
-    {
-        // Persist on database
-        $this->getEntityManager()->persist($entity);
-        $this->getEntityManager()->flush();
-
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this;
-    }
-
-    /**
-     * Helper method to remove specified entity from database.
-     *
-     * @param EntityInterface $entity
-     *
-     * @return BaseRepositoryInterface
-     *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
-     */
-    public function remove(EntityInterface $entity): BaseRepositoryInterface
-    {
-        // Remove from database
-        $this->getEntityManager()->remove($entity);
-        $this->getEntityManager()->flush();
-
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this;
     }
 }

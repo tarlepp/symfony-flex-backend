@@ -241,18 +241,4 @@ interface BaseRepositoryInterface
      * @return BaseRepositoryInterface
      */
     public function addCallback(callable $callable, array $args = null): BaseRepositoryInterface;
-
-    /**
-     * Process defined joins for current QueryBuilder instance.
-     *
-     * @param QueryBuilder $queryBuilder
-     */
-    public function processJoins(QueryBuilder $queryBuilder): void;
-
-    /**
-     * Process defined callbacks for current QueryBuilder instance.
-     *
-     * @param QueryBuilder $queryBuilder
-     */
-    public function processCallbacks(QueryBuilder $queryBuilder): void;
 }
