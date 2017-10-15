@@ -74,6 +74,10 @@ class EditUserCommand extends Command
         while (!$userFound) {
             $user = $this->userHelper->getUser($io, 'Which user you want to edit?');
 
+            if ($user === null) {
+                break;
+            }
+
             $message = \sprintf(
                 'Is this the user [%s - %s (%s %s)] which information you want to change?',
                 $user->getId(),
@@ -86,24 +90,29 @@ class EditUserCommand extends Command
         }
 
         /** @var UserEntity $user */
+        if ($user instanceof UserEntity) {
+            // Load entity to DTO
+            $dtoLoaded = new UserDto();
+            $dtoLoaded->load($user);
 
-        // Load entity to DTO
-        $dtoLoaded = new UserDto();
-        $dtoLoaded->load($user);
+            /** @var UserDto $dtoEdit */
+            $dtoEdit = $this->getHelper('form')->interactUsingForm(
+                UserType::class,
+                $input,
+                $output,
+                ['data' => $dtoLoaded]
+            );
 
-        /** @var UserDto $dtoEdit */
-        $dtoEdit = $this->getHelper('form')->interactUsingForm(
-            UserType::class,
-            $input,
-            $output,
-            ['data' => $dtoLoaded]
-        );
+            // Update user
+            $this->userResource->update($user->getId(), $dtoEdit);
 
-        // Update user
-        $this->userResource->update($user->getId(), $dtoEdit);
+            $message = 'User updated - have a nice day';
+        } else {
+            $message = 'Nothing changed - have a nice day';
+        }
 
         if ($input->isInteractive()) {
-            $io->success('User updated - have a nice day');
+            $io->success($message);
         }
 
         return null;

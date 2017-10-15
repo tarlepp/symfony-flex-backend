@@ -49,7 +49,7 @@ class UserHelper
      *
      * @return UserEntity
      */
-    public function getUser(SymfonyStyle $io, string $question): UserEntity
+    public function getUser(SymfonyStyle $io, string $question): ?UserEntity
     {
         $choices = [];
 
@@ -71,6 +71,8 @@ class UserHelper
         };
 
         \array_map($iterator, $this->userResource->find([], ['username' => 'asc']));
+
+        $choices['Exit'] = 'Exit command';
 
         return $this->userResource->findOne($io->choice($question, $choices));
     }
