@@ -40,11 +40,6 @@ class CreateRolesCommand extends Command
     private $roles;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $io;
-
-    /**
      * CreateRolesCommand constructor.
      *
      * @param EntityManagerInterface $entityManager
@@ -78,8 +73,8 @@ class CreateRolesCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         // Create defined roles to database
         \array_map([$this, 'createRole'], $this->roles->getRoles());

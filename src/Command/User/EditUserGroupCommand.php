@@ -35,11 +35,6 @@ class EditUserGroupCommand extends Command
     private $userHelper;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $io;
-
-    /**
      * EditUserGroupCommand constructor.
      *
      * @param UserGroupResource $userGroupResource
@@ -71,13 +66,13 @@ class EditUserGroupCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         $groupFound = false;
 
         while (!$groupFound) {
-            $userGroup = $this->userHelper->getUserGroup($this->io, 'Which user group you want to edit?');
+            $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to edit?');
 
             $message = \sprintf(
                 'Is this the group [%s - %s (%s)] which information you want to change?',
@@ -86,7 +81,7 @@ class EditUserGroupCommand extends Command
                 $userGroup->getRole()->getId()
             );
 
-            $groupFound = $this->io->confirm($message, false);
+            $groupFound = $io->confirm($message, false);
         }
 
         /** @var UserGroupEntity $userGroup */
@@ -107,7 +102,7 @@ class EditUserGroupCommand extends Command
         $this->userGroupResource->update($userGroup->getId(), $dtoEdit);
 
         if ($input->isInteractive()) {
-            $this->io->success('User group updated - have a nice day');
+            $io->success('User group updated - have a nice day');
         }
 
         return null;

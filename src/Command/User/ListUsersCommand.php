@@ -35,11 +35,6 @@ class ListUsersCommand extends Command
     private $roles;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $io;
-
-    /**
      * ListUsersCommand constructor.
      *
      * @param UserResource $userResource
@@ -68,8 +63,8 @@ class ListUsersCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         static $headers = [
             'Id',
@@ -80,8 +75,8 @@ class ListUsersCommand extends Command
             'Groups',
         ];
 
-        $this->io->title('Current users');
-        $this->io->table($headers, $this->getRows());
+        $io->title('Current users');
+        $io->table($headers, $this->getRows());
 
         return null;
     }

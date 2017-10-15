@@ -29,11 +29,6 @@ class ListUserGroupsCommand extends Command
     private $userGroupResource;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $io;
-
-    /**
      * ListUserGroupsCommand constructor.
      *
      * @param UserGroupResource $userGroupResource
@@ -60,8 +55,8 @@ class ListUserGroupsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         static $headers = [
             'Id',
@@ -70,8 +65,8 @@ class ListUserGroupsCommand extends Command
             'Users',
         ];
 
-        $this->io->title('Current user groups');
-        $this->io->table($headers, $this->getRows());
+        $io->title('Current user groups');
+        $io->table($headers, $this->getRows());
 
         return null;
     }

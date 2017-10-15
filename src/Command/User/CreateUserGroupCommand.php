@@ -52,11 +52,6 @@ class CreateUserGroupCommand extends Command
     private $roleRepository;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $io;
-
-    /**
      * CreateUserGroupCommand constructor.
      *
      * @param UserGroupResource $userGroupResource
@@ -123,11 +118,11 @@ class CreateUserGroupCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         // Check that roles exists
-        $this->checkRoles($output, $input->isInteractive());
+        $this->checkRoles($output, $input->isInteractive(), $io);
 
         /** @var UserGroupDto $dto */
         $dto = $this->getHelper('form')->interactUsingForm(UserGroupType::class, $input, $output);
@@ -136,7 +131,7 @@ class CreateUserGroupCommand extends Command
         $this->userGroupResource->create($dto);
 
         if ($input->isInteractive()) {
-            $this->io->success('User group created - have a nice day');
+            $io->success('User group created - have a nice day');
         }
 
         return null;
@@ -148,6 +143,7 @@ class CreateUserGroupCommand extends Command
      *
      * @param OutputInterface $output
      * @param bool            $interactive
+     * @param SymfonyStyle    $io
      *
      * @throws \Exception
      *
@@ -156,14 +152,14 @@ class CreateUserGroupCommand extends Command
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      */
-    private function checkRoles(OutputInterface $output, bool $interactive): void
+    private function checkRoles(OutputInterface $output, bool $interactive, SymfonyStyle $io): void
     {
         if ($this->roleRepository->countAdvanced() !== 0) {
             return;
         }
 
         if ($interactive) {
-            $this->io->block('Roles are not yet created, creating those now...');
+            $io->block('Roles are not yet created, creating those now...');
         }
 
         $command = $this->getApplication()->find('user:create-roles');

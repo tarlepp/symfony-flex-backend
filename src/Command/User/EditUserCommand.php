@@ -35,11 +35,6 @@ class EditUserCommand extends Command
     private $userHelper;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $io;
-
-    /**
      * EditUserCommand constructor.
      *
      * @param UserResource $userResource
@@ -71,13 +66,13 @@ class EditUserCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         $userFound = false;
 
         while (!$userFound) {
-            $user = $this->userHelper->getUser($this->io, 'Which user you want to edit?');
+            $user = $this->userHelper->getUser($io, 'Which user you want to edit?');
 
             $message = \sprintf(
                 'Is this the user [%s - %s (%s %s)] which information you want to change?',
@@ -87,7 +82,7 @@ class EditUserCommand extends Command
                 $user->getSurname()
             );
 
-            $userFound = $this->io->confirm($message, false);
+            $userFound = $io->confirm($message, false);
         }
 
         /** @var UserEntity $user */
@@ -108,7 +103,7 @@ class EditUserCommand extends Command
         $this->userResource->update($user->getId(), $dtoEdit);
 
         if ($input->isInteractive()) {
-            $this->io->success('User updated - have a nice day');
+            $io->success('User updated - have a nice day');
         }
 
         return null;

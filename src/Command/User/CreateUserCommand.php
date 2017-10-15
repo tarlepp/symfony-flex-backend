@@ -79,11 +79,6 @@ class CreateUserCommand extends Command
     private $roleRepository;
 
     /**
-     * @var SymfonyStyle
-     */
-    private $io;
-
-    /**
      * CreateUserCommand constructor.
      *
      * @param UserResource      $userResource
@@ -138,11 +133,11 @@ class CreateUserCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         // Check that roles exists
-        $this->checkUserGroups($output, $input->isInteractive());
+        $this->checkUserGroups($output, $input->isInteractive(), $io);
 
         /** @var UserDto $dto */
         $dto = $this->getHelper('form')->interactUsingForm(UserType::class, $input, $output);
@@ -151,7 +146,7 @@ class CreateUserCommand extends Command
         $this->userResource->create($dto);
 
         if ($input->isInteractive()) {
-            $this->io->success('User created - have a nice day');
+            $io->success('User created - have a nice day');
         }
 
         return null;
@@ -167,6 +162,7 @@ class CreateUserCommand extends Command
      *
      * @param OutputInterface $output
      * @param bool            $interactive
+     * @param SymfonyStyle    $io
      *
      * @throws \Exception
      *
@@ -175,14 +171,14 @@ class CreateUserCommand extends Command
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      */
-    private function checkUserGroups(OutputInterface $output, bool $interactive): void
+    private function checkUserGroups(OutputInterface $output, bool $interactive, SymfonyStyle $io): void
     {
         if ($this->userGroupResource->count() !== 0) {
             return;
         }
 
         if ($interactive) {
-            $this->io->block('User groups are not yet created, creating those now...');
+            $io->block('User groups are not yet created, creating those now...');
         }
 
         // Reset roles
