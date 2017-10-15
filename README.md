@@ -154,6 +154,8 @@ $ ./bin/console user:create-group   # To create user group
 $ ./bin/console user:create-roles   # To initialize user group roles
 $ ./bin/console user:edit           # To edit user
 $ ./bin/console user:edit-group     # To edit user group
+$ ./bin/console user:remove         # To remove user
+$ ./bin/console user:remove-group   # To remove user group
 $ ./bin/console user:list           # To list current users
 $ ./bin/console user:list-groups    # To list current user groups
 ```
@@ -167,6 +169,7 @@ $ ./bin/console api-key:change-token    # To change API key token
 $ ./bin/console api-key:remove          # To remove API key
 $ ./bin/console api-key:list            # To list API keys
 ```
+
 # Structure
 todo
 
