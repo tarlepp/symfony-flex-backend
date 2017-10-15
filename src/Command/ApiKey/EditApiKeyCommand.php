@@ -74,6 +74,10 @@ class EditApiKeyCommand extends Command
         while (!$apiKeyFound) {
             $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to edit?');
 
+            if ($apiKey === null) {
+                break;
+            }
+
             $message = \sprintf(
                 'Is this the API key \'[%s] [%s] %s\' which information you want to change?',
                 $apiKey->getId(),
@@ -84,28 +88,33 @@ class EditApiKeyCommand extends Command
             $apiKeyFound = $io->confirm($message, false);
         }
 
-        /** @var ApiKeyEntity $apiKey */
+        /** @var ApiKeyEntity|null $apiKey */
+        if ($apiKey instanceof ApiKeyEntity) {
+            // Load entity to DTO
+            $dtoLoaded = new ApiKeyDto();
+            $dtoLoaded->load($apiKey);
 
-        // Load entity to DTO
-        $dtoLoaded = new ApiKeyDto();
-        $dtoLoaded->load($apiKey);
+            /** @var ApiKeyDto $dtoEdit */
+            $dtoEdit = $this->getHelper('form')->interactUsingForm(
+                ApiKeyType::class,
+                $input,
+                $output,
+                ['data' => $dtoLoaded]
+            );
 
-        /** @var ApiKeyDto $dtoEdit */
-        $dtoEdit = $this->getHelper('form')->interactUsingForm(
-            ApiKeyType::class,
-            $input,
-            $output,
-            ['data' => $dtoLoaded]
-        );
+            // Update user
+            $this->apiKeyResource->update($apiKey->getId(), $dtoEdit);
 
-        // Update user
-        $this->apiKeyResource->update($apiKey->getId(), $dtoEdit);
-
-        if ($input->isInteractive()) {
-            $io->success([
+            $message = [
                 'API key updated - have a nice day',
                 ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
-            ]);
+            ];
+        } else {
+            $message = 'Nothing changed - have a nice day';
+        }
+
+        if ($input->isInteractive()) {
+            $io->success($message);
         }
 
         return null;

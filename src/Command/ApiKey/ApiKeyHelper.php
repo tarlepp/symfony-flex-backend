@@ -40,7 +40,7 @@ class ApiKeyHelper
      *
      * @return ApiKey
      */
-    public function getApiKey(SymfonyStyle $io, string $question): ApiKey
+    public function getApiKey(SymfonyStyle $io, string $question): ?ApiKey
     {
         $choices = [];
 
@@ -60,6 +60,8 @@ class ApiKeyHelper
         };
 
         \array_map($iterator, $this->apiKeyResource->find([], ['token' => 'ASC']));
+
+        $choices['Exit'] = 'Exit command';
 
         return $this->apiKeyResource->findOne($io->choice($question, $choices));
     }

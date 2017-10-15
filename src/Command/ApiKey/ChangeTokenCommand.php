@@ -72,6 +72,10 @@ class ChangeTokenCommand extends Command
         while (!$apiKeyFound) {
             $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key token you want to change?');
 
+            if ($apiKey === null) {
+                break;
+            }
+
             $message = \sprintf(
                 'Is this the API key \'[%s] [%s] %s\' which token you want to change?',
                 $apiKey->getId(),
@@ -82,17 +86,23 @@ class ChangeTokenCommand extends Command
             $apiKeyFound = $io->confirm($message, false);
         }
 
-        /** @var ApiKey $apiKey */
-        $apiKey->generateToken();
+        /** @var ApiKey|null $apiKey */
+        if ($apiKey instanceof ApiKey) {
+            $apiKey->generateToken();
 
-        // Update API key
-        $this->apiKeyResource->save($apiKey);
+            // Update API key
+            $this->apiKeyResource->save($apiKey);
 
-        if ($input->isInteractive()) {
-            $io->success([
+            $message = [
                 'API key token updated - have a nice day',
                 ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
-            ]);
+            ];
+        } else {
+            $message = 'Nothing changed - have a nice day';
+        }
+
+        if ($input->isInteractive()) {
+            $io->success($message);
         }
 
         return null;

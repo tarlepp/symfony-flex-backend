@@ -69,6 +69,10 @@ class RemoveApiKeyCommand extends Command
         while (!$apiKeyFound) {
             $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to remove?');
 
+            if ($apiKey === null) {
+                break;
+            }
+
             $message = \sprintf(
                 'Is this the API key \'[%s] [%s] %s\' which you want to remove?',
                 $apiKey->getId(),
@@ -79,15 +83,18 @@ class RemoveApiKeyCommand extends Command
             $apiKeyFound = $io->confirm($message, false);
         }
 
-        /** @var ApiKey $apiKey */
+        /** @var ApiKey|null $apiKey */
+        if ($apiKey instanceof ApiKey) {
+            // Delete API key
+            $this->apiKeyResource->delete($apiKey->getId());
 
-        // Delete API key
-        $this->apiKeyResource->delete($apiKey->getId());
+            $message = 'API key deleted - have a nice day';
+        } else {
+            $message = 'Nothing changed - have a nice day';
+        }
 
         if ($input->isInteractive()) {
-            $io->success([
-                'API key deleted - have a nice day',
-            ]);
+            $io->success($message);
         }
 
         return null;
