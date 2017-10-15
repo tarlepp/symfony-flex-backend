@@ -32,7 +32,7 @@ class UserHelper
     private $userGroupResource;
 
     /**
-     * ApiKeyHelper constructor.
+     * UserHelper constructor.
      *
      * @param UserResource      $userResource
      * @param UserGroupResource $userGroupResource

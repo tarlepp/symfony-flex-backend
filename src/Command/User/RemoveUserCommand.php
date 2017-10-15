@@ -33,7 +33,7 @@ class RemoveUserCommand extends Command
     private $userHelper;
 
     /**
-     * RemoveApiKeyCommand constructor.
+     * RemoveUserCommand constructor.
      *
      * @param UserResource $userResource
      * @param UserHelper   $userHelper
