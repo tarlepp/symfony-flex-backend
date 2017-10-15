@@ -74,6 +74,10 @@ class EditUserGroupCommand extends Command
         while (!$groupFound) {
             $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to edit?');
 
+            if ($userGroup === null) {
+                break;
+            }
+
             $message = \sprintf(
                 'Is this the group [%s - %s (%s)] which information you want to change?',
                 $userGroup->getId(),
@@ -85,24 +89,29 @@ class EditUserGroupCommand extends Command
         }
 
         /** @var UserGroupEntity $userGroup */
+        if ($userGroup instanceof UserGroupEntity) {
+            // Load entity to DTO
+            $dtoLoaded = new UserGroupDto();
+            $dtoLoaded->load($userGroup);
 
-        // Load entity to DTO
-        $dtoLoaded = new UserGroupDto();
-        $dtoLoaded->load($userGroup);
+            /** @var UserGroupDto $dtoLoaded */
+            $dtoEdit = $this->getHelper('form')->interactUsingForm(
+                UserGroupType::class,
+                $input,
+                $output,
+                ['data' => $dtoLoaded]
+            );
 
-        /** @var UserGroupDto $dtoLoaded */
-        $dtoEdit = $this->getHelper('form')->interactUsingForm(
-            UserGroupType::class,
-            $input,
-            $output,
-            ['data' => $dtoLoaded]
-        );
+            // Update user group
+            $this->userGroupResource->update($userGroup->getId(), $dtoEdit);
 
-        // Create new user group
-        $this->userGroupResource->update($userGroup->getId(), $dtoEdit);
+            $message = 'User group updated - have a nice day';
+        } else {
+            $message = 'Nothing changed - have a nice day';
+        }
 
         if ($input->isInteractive()) {
-            $io->success('User group updated - have a nice day');
+            $io->success($message);
         }
 
         return null;

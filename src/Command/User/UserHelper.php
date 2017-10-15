@@ -47,7 +47,7 @@ class UserHelper
      * @param SymfonyStyle $io
      * @param string       $question
      *
-     * @return UserEntity
+     * @return UserEntity|null
      */
     public function getUser(SymfonyStyle $io, string $question): ?UserEntity
     {
@@ -81,9 +81,9 @@ class UserHelper
      * @param SymfonyStyle $io
      * @param string       $question
      *
-     * @return UserGroupEntity
+     * @return UserGroupEntity|null
      */
-    public function getUserGroup(SymfonyStyle $io, string $question): UserGroupEntity
+    public function getUserGroup(SymfonyStyle $io, string $question): ?UserGroupEntity
     {
         $choices = [];
 
@@ -97,6 +97,8 @@ class UserHelper
         };
 
         \array_map($iterator, $this->userGroupResource->find([], ['name' => 'asc']));
+
+        $choices['Exit'] = 'Exit command';
 
         return $this->userGroupResource->findOne($io->choice($question, $choices));
     }

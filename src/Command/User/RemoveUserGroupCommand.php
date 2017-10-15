@@ -69,6 +69,10 @@ class RemoveUserGroupCommand extends Command
         while (!$groupFound) {
             $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to remove?');
 
+            if ($userGroup === null) {
+                break;
+            }
+
             $message = \sprintf(
                 'Is this the group [%s - %s (%s)] which you want to remove?',
                 $userGroup->getId(),
@@ -80,14 +84,17 @@ class RemoveUserGroupCommand extends Command
         }
 
         /** @var UserGroup $userGroup */
+        if ($userGroup instanceof UserGroup) {
+            // Delete user group
+            $this->userGroupResource->delete($userGroup->getId());
 
-        // Delete user group
-        $this->userGroupResource->delete($userGroup->getId());
+            $message = 'User group removed - have a nice day';
+        } else {
+            $message = 'Nothing changed - have a nice day';
+        }
 
         if ($input->isInteractive()) {
-            $io->success([
-                'User group removed - have a nice day',
-            ]);
+            $io->success($message);
         }
 
         return null;
