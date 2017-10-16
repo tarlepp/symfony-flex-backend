@@ -36,7 +36,7 @@ install:
   - make generate-jwt-keys
 
 before_script:
-  - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} != "7.1" && ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini; fi
   - php --version
   - php bin/console --version
   - vendor/bin/phpunit --version
