@@ -13,6 +13,7 @@ use App\Repository\BaseRepositoryInterface;
 use App\Resource\UserResource;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\Query\Expr;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -130,6 +131,50 @@ class GenericRepositoryTest extends KernelTestCase
         $message = 'addLeftJoin method did not return expected';
 
         static::assertSame($expected, $queryBuilder->getDQL(), $message);
+    }
+
+    public function testThatAddCallbackWorks(): void
+    {
+        /** @var BaseRepositoryInterface $repository */
+        $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
+
+        $queryBuilder = $repository->createQueryBuilder('entity');
+
+        $callable = function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder) {
+            static::assertSame($queryBuilder, $qb);
+            static::assertSame(1, $foo);
+            static::assertSame('string', $bar);
+        };
+
+        $repository->addCallback($callable, [1, 'string']);
+        $repository->processQueryBuilder($queryBuilder);
+    }
+
+    public function testThatAddCallbackCallsCallbackJustOnce(): void
+    {
+        /** @var BaseRepositoryInterface $repository */
+        $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
+
+        $count = 0;
+
+        $queryBuilder = $repository->createQueryBuilder('entity');
+
+        $callable = function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder, &$count) {
+            static::assertSame($queryBuilder, $qb);
+            static::assertSame(1, $foo);
+            static::assertSame('string', $bar);
+
+            $count++;
+        };
+
+        // Attach same callback twice
+        $repository->addCallback($callable, [1, 'string']);
+        $repository->addCallback($callable, [1, 'string']);
+
+        // Process query builder
+        $repository->processQueryBuilder($queryBuilder);
+
+        static::assertSame(1, $count);
     }
 
     /**
