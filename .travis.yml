@@ -16,6 +16,11 @@ php:
   - 7.2
   - nightly
 
+env:
+  matrix:
+    - USE_XDEBUG=true
+    - USE_XDEBUG=false
+
 matrix:
   fast_finish: true
   allow_failures:
@@ -31,6 +36,7 @@ install:
   - make generate-jwt-keys
 
 before_script:
+  - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini; fi
   - php --version
   - php bin/console --version
   - vendor/bin/phpunit --version
