@@ -86,6 +86,14 @@ class UserProviderTest extends KernelTestCase
     }
 
     /**
+     * @expectedException \Doctrine\ORM\NoResultException
+     */
+    public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
+    {
+        $this->repository->refreshUser(new User());
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatSupportsClassMethodReturnsExpected(): array
