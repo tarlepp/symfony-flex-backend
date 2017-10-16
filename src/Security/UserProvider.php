@@ -29,14 +29,6 @@ class UserProvider extends EntityRepository implements UserProviderInterface, Us
     use LoadUserByUserNameTrait;
 
     /**
-     * @return EntityManager
-     */
-    public function getEntityManager(): EntityManager
-    {
-        return parent::getEntityManager();
-    }
-
-    /**
      * Refreshes the user for the account interface.
      *
      * It is up to the implementation to decide if the user data should be totally reloaded (e.g. from the database),
