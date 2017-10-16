@@ -135,7 +135,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     public function addLeftJoin(array $parameters): BaseRepositoryInterface
     {
-        $this->addJoinToQuery('leftJoin', $parameters);
+        if (!empty($parameters)) {
+            $this->addJoinToQuery(self::LEFT_JOIN, $parameters);
+        }
 
         return $this;
     }
@@ -155,7 +157,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     public function addInnerJoin(array $parameters): BaseRepositoryInterface
     {
-        $this->addJoinToQuery('innerJoin', $parameters);
+        if (!empty($parameters)) {
+            $this->addJoinToQuery(self::INNER_JOIN, $parameters);
+        }
 
         return $this;
     }
@@ -238,16 +242,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @see QueryBuilder::innerJoin()
      *
      * @param string $type       Join type; leftJoin, innerJoin or join
-     * @param array  $parameters Query builder join parameters.
-     *
-     * @throws \InvalidArgumentException
+     * @param array  $parameters Query builder join parameters
      */
     private function addJoinToQuery(string $type, array $parameters): void
     {
-        if (!\array_key_exists($type, self::$joins)) {
-            throw new \InvalidArgumentException('Join type \'' . $type . '\' is not supported.');
-        }
-
         $comparision = \implode('|', $parameters);
 
         if (!\in_array($comparision, self::$processedJoins[$type], true)) {
