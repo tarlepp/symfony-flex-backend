@@ -10,8 +10,12 @@ namespace App\Tests\Integration\Repository;
 use App\Entity\EntityInterface;
 use App\Entity\User as UserEntity;
 use App\Repository\BaseRepositoryInterface;
+use App\Repository\UserRepository;
 use App\Resource\UserResource;
+use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\Common\Proxy\Proxy;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -25,6 +29,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class GenericRepositoryTest extends KernelTestCase
 {
     private $entityClass = UserEntity::class;
+    private $repositoryClass = UserRepository::class;
     private $resourceClass = UserResource::class;
 
     public function setUp(): void
@@ -175,6 +180,191 @@ class GenericRepositoryTest extends KernelTestCase
         $repository->processQueryBuilder($queryBuilder);
 
         static::assertSame(1, $count);
+    }
+
+    public function testThatFindMethodCallsExpectedEntityManagerMethod(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|AbstractManagerRegistry $managerObject
+         * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager           $entityManager
+         */
+        $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->getMock();
+
+        $entityManager = $this->getMockBuilder(EntityManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $arguments = [
+            'id',
+            'lockMode',
+            'lockVersion',
+        ];
+
+        $entityManager
+            ->expects(static::once())
+            ->method('find')
+            ->with(
+                $this->entityClass,
+                'id',
+                'lockMode',
+                'lockVersion'
+            );
+
+        $managerObject
+            ->expects(static::once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManager);
+
+        /**
+         * @var BaseRepositoryInterface $repository
+         */
+        $repository = new $this->repositoryClass($managerObject);
+        $repository->find(...$arguments);
+    }
+
+    public function testThatFindOneByMethodCallsExpectedEntityManagerMethod(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|AbstractManagerRegistry $managerObject
+         * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager           $entityManager
+         * @var \PHPUnit_Framework_MockObject_MockObject|EntityRepository        $repositoryMock
+         */
+        $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->getMock();
+
+        $entityManager = $this->getMockBuilder(EntityManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $repositoryMock = $this->getMockBuilder(EntityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $arguments = [
+            ['some criteria'],
+            ['some order by']
+        ];
+
+        $repositoryMock
+            ->expects(static::once())
+            ->method('findOneBy')
+            ->with(...$arguments);
+
+        $entityManager
+            ->expects(static::once())
+            ->method('getRepository')
+            ->with($this->entityClass)
+            ->willReturn($repositoryMock);
+
+        $managerObject
+            ->expects(static::once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManager);
+
+        /**
+         * @var BaseRepositoryInterface $repository
+         */
+        $repository = new $this->repositoryClass($managerObject);
+        $repository->findOneBy(...$arguments);
+    }
+
+    public function testThatFindByMethodCallsExpectedEntityManagerMethod(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|AbstractManagerRegistry $managerObject
+         * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager           $entityManager
+         * @var \PHPUnit_Framework_MockObject_MockObject|EntityRepository        $repositoryMock
+         */
+        $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->getMock();
+
+        $entityManager = $this->getMockBuilder(EntityManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $repositoryMock = $this->getMockBuilder(EntityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $arguments = [
+            ['some criteria'],
+            ['some order by'],
+            10,
+            20,
+        ];
+
+        $repositoryMock
+            ->expects(static::once())
+            ->method('findBy')
+            ->with(...$arguments)
+            ->willReturn([]);
+
+        $entityManager
+            ->expects(static::once())
+            ->method('getRepository')
+            ->with($this->entityClass)
+            ->willReturn($repositoryMock);
+
+        $managerObject
+            ->expects(static::once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManager);
+
+        /**
+         * @var BaseRepositoryInterface $repository
+         */
+        $repository = new $this->repositoryClass($managerObject);
+        $repository->findBy(...$arguments);
+    }
+
+    public function testThatFindAllMethodCallsExpectedEntityManagerMethod(): void
+    {
+        /**
+         * @var \PHPUnit_Framework_MockObject_MockObject|AbstractManagerRegistry $managerObject
+         * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager           $entityManager
+         * @var \PHPUnit_Framework_MockObject_MockObject|EntityRepository        $repositoryMock
+         */
+        $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->getMock();
+
+        $entityManager = $this->getMockBuilder(EntityManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $repositoryMock = $this->getMockBuilder(EntityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $repositoryMock
+            ->expects(static::once())
+            ->method('findAll')
+            ->willReturn([]);
+
+        $entityManager
+            ->expects(static::once())
+            ->method('getRepository')
+            ->with($this->entityClass)
+            ->willReturn($repositoryMock);
+
+        $managerObject
+            ->expects(static::once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManager);
+
+        /**
+         * @var BaseRepositoryInterface $repository
+         */
+        $repository = new $this->repositoryClass($managerObject);
+        $repository->findAll();
     }
 
     /**
