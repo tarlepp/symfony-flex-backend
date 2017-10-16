@@ -46,7 +46,7 @@ script:
   - make run-tests
 
 after_success:
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" ]]; then php vendor/bin/coveralls -v; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php vendor/bin/coveralls -v; fi
 
 after_failure:
   - cat var/logs/*.log
