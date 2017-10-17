@@ -11,7 +11,6 @@ use App\DTO\User as UserDto;
 use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Resource\UserGroupResource;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,24 +25,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class UserType extends AbstractType
 {
     /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
      * @var UserGroupResource
      */
     private $userGroupResource;
 
     /**
+     * @var UserGroupTransformer
+     */
+    private $userGroupTransformer;
+
+    /**
      * UserType constructor.
      *
-     * @param ObjectManager     $objectManager
-     * @param UserGroupResource $userGroupResource
+     * @param UserGroupResource    $userGroupResource
+     * @param UserGroupTransformer $userGroupTransformer
      */
-    public function __construct(ObjectManager $objectManager, UserGroupResource $userGroupResource)
+    public function __construct(UserGroupResource $userGroupResource, UserGroupTransformer $userGroupTransformer)
     {
-        $this->objectManager = $objectManager;
+        $this->userGroupTransformer = $userGroupTransformer;
         $this->userGroupResource = $userGroupResource;
     }
 
@@ -119,7 +118,7 @@ class UserType extends AbstractType
                 ]
             );
 
-        $builder->get('userGroups')->addModelTransformer(new UserGroupTransformer($this->objectManager));
+        $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
     }
 
     /**

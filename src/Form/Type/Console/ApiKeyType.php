@@ -11,7 +11,6 @@ use App\DTO\ApiKey;
 use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Resource\UserGroupResource;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -26,9 +25,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ApiKeyType extends AbstractType
 {
     /**
-     * @var ObjectManager
+     * @var UserGroupTransformer
      */
-    private $objectManager;
+    private $userGroupTransformer;
 
     /**
      * @var UserGroupResource
@@ -38,13 +37,13 @@ class ApiKeyType extends AbstractType
     /**
      * ApiKeyType constructor.
      *
-     * @param ObjectManager     $objectManager
-     * @param UserGroupResource $userGroupResource
+     * @param UserGroupResource    $userGroupResource
+     * @param UserGroupTransformer $userGroupTransformer
      */
-    public function __construct(ObjectManager $objectManager, UserGroupResource $userGroupResource)
+    public function __construct(UserGroupResource $userGroupResource, UserGroupTransformer $userGroupTransformer)
     {
-        $this->objectManager = $objectManager;
         $this->userGroupResource = $userGroupResource;
+        $this->userGroupTransformer = $userGroupTransformer;
     }
 
     /**
@@ -76,7 +75,7 @@ class ApiKeyType extends AbstractType
                 ]
             );
 
-        $builder->get('userGroups')->addModelTransformer(new UserGroupTransformer($this->objectManager));
+        $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
     }
 
     /**

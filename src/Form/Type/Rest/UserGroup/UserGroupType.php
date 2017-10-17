@@ -10,9 +10,8 @@ namespace App\Form\Type\Rest\UserGroup;
 use App\DTO\UserGroup as UserGroupDto;
 use App\Entity\Role as RoleEntity;
 use App\Form\DataTransformer\RoleTransformer;
-use App\Repository\RoleRepository;
+use App\Resource\RoleResource;
 use App\Security\RolesService;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,33 +28,33 @@ class UserGroupType extends AbstractType
     /**
      * @var RolesService
      */
-    private $roles;
+    private $rolesService;
 
     /**
-     * @var RoleRepository
+     * @var RoleResource
      */
-    private $roleRepository;
+    private $roleResource;
 
     /**
-     * @var ObjectManager
+     * @var RoleTransformer
      */
-    private $objectManager;
+    private $roleTransformer;
 
     /**
      * UserGroupType constructor.
      *
-     * @param RolesService   $roles
-     * @param RoleRepository $roleRepository
-     * @param ObjectManager  $objectManager
+     * @param RolesService    $rolesService
+     * @param RoleResource    $roleResource
+     * @param RoleTransformer $roleTransformer
      */
     public function __construct(
-        RolesService $roles,
-        RoleRepository $roleRepository,
-        ObjectManager $objectManager
+        RolesService $rolesService,
+        RoleResource $roleResource,
+        RoleTransformer $roleTransformer
     ) {
-        $this->roles = $roles;
-        $this->roleRepository = $roleRepository;
-        $this->objectManager = $objectManager;
+        $this->rolesService = $rolesService;
+        $this->roleResource = $roleResource;
+        $this->roleTransformer = $roleTransformer;
     }
 
     /**
@@ -86,7 +85,7 @@ class UserGroupType extends AbstractType
                 ]
             );
 
-        $builder->get('role')->addModelTransformer(new RoleTransformer($this->objectManager));
+        $builder->get('role')->addModelTransformer($this->roleTransformer);
     }
 
     /**
@@ -113,15 +112,13 @@ class UserGroupType extends AbstractType
         // Initialize output
         $choices = [];
 
-        $helper = $this->roles;
-
-        $iterator = function (RoleEntity $role) use (&$choices, $helper) {
-            $name = $helper->getRoleLabel($role->getId());
+        $iterator = function (RoleEntity $role) use (&$choices) {
+            $name = $this->rolesService->getRoleLabel($role->getId());
 
             $choices[$name] = $role->getId();
         };
 
-        \array_map($iterator, $this->roleRepository->findAll());
+        \array_map($iterator, $this->roleResource->find());
 
         return $choices;
     }
