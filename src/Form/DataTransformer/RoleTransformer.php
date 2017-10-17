@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Form\DataTransformer;
 
 use App\Entity\Role;
+use App\Resource\RoleResource;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -23,16 +24,16 @@ class RoleTransformer implements DataTransformerInterface
     /**
      * @var ObjectManager
      */
-    private $manager;
+    private $resource;
 
     /**
      * RoleTransformer constructor.
      *
-     * @param ObjectManager $manager
+     * @param RoleResource $resource
      */
-    public function __construct(ObjectManager $manager)
+    public function __construct(RoleResource $resource)
     {
-        $this->manager = $manager;
+        $this->resource = $resource;
     }
 
     /**
@@ -59,9 +60,7 @@ class RoleTransformer implements DataTransformerInterface
     public function reverseTransform($roleName): ?Role
     {
         if ($roleName !== null) {
-            $role = $this->manager
-                ->getRepository(Role::class)
-                ->find($roleName);
+            $role = $this->resource->findOne($roleName);
 
             if ($role === null) {
                 throw new TransformationFailedException(\sprintf(

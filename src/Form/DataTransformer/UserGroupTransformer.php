@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Form\DataTransformer;
 
 use App\Entity\UserGroup;
-use Doctrine\Common\Persistence\ObjectManager;
+use App\Resource\UserGroupResource;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
@@ -21,18 +21,18 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class UserGroupTransformer implements DataTransformerInterface
 {
     /**
-     * @var ObjectManager
+     * @var UserGroupResource
      */
-    private $manager;
+    private $resource;
 
     /**
      * UserGroupTransformer constructor.
      *
-     * @param ObjectManager $manager
+     * @param UserGroupResource $resource
      */
-    public function __construct(ObjectManager $manager)
+    public function __construct(UserGroupResource $resource)
     {
-        $this->manager = $manager;
+        $this->resource = $resource;
     }
 
     /**
@@ -76,10 +76,8 @@ class UserGroupTransformer implements DataTransformerInterface
         $output = null;
 
         if (\is_array($userGroups)) {
-            $repository = $this->manager->getRepository(UserGroup::class);
-
-            $iterator = function (string $groupId) use ($repository) {
-                $group = $repository->find($groupId);
+            $iterator = function (string $groupId) {
+                $group = $this->resource->findOne($groupId);
 
                 if ($group === null) {
                     throw new TransformationFailedException(\sprintf(
