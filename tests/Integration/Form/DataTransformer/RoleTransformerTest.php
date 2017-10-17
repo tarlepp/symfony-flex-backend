@@ -9,9 +9,7 @@ namespace App\Tests\Integration\Form\DataTransformer;
 
 use App\Entity\Role;
 use App\Form\DataTransformer\RoleTransformer;
-use App\Repository\RoleRepository;
-use Doctrine\Common\Persistence\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject;
+use App\Resource\RoleResource;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -23,6 +21,21 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class RoleTransformerTest extends KernelTestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|RoleResource
+     */
+    private $roleResource;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->roleResource = $this
+            ->getMockBuilder(RoleResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
      * @param mixed $expected
@@ -30,37 +43,22 @@ class RoleTransformerTest extends KernelTestCase
      */
     public function testThatTransformReturnsExpected($expected, $input): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|ObjectManager $manager */
-        $manager = $this->getMockBuilder(ObjectManager::class)->disableOriginalConstructor()->getMock();
-
-        $transformer = new RoleTransformer($manager);
+        $transformer = new RoleTransformer($this->roleResource);
 
         static::assertSame($expected, $transformer->transform($input));
     }
 
     public function testThatReverseTransformCallsExpectedObjectManagerMethods(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|ObjectManager $manager */
-        $manager = $this->getMockBuilder(ObjectManager::class)->disableOriginalConstructor()->getMock();
-
-        /** @var PHPUnit_Framework_MockObject_MockObject|RoleRepository $repository */
-        $repository = $this->getMockBuilder(RoleRepository::class)->disableOriginalConstructor()->getMock();
-
         $entity = new Role();
 
-        $repository
+        $this->roleResource
             ->expects(static::once())
-            ->method('find')
+            ->method('findOne')
             ->with('rolename')
             ->willReturn($entity);
 
-        $manager
-            ->expects(static::once())
-            ->method('getRepository')
-            ->with(Role::class)
-            ->willReturn($repository);
-
-        $transformer = new RoleTransformer($manager);
+        $transformer = new RoleTransformer($this->roleResource);
         $transformer->reverseTransform('rolename');
     }
 
@@ -70,51 +68,27 @@ class RoleTransformerTest extends KernelTestCase
      */
     public function testThatReverseTransformThrowsAnException(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|ObjectManager $manager */
-        $manager = $this->getMockBuilder(ObjectManager::class)->disableOriginalConstructor()->getMock();
-
-        /** @var PHPUnit_Framework_MockObject_MockObject|RoleRepository $repository */
-        $repository = $this->getMockBuilder(RoleRepository::class)->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->roleResource
             ->expects(static::once())
-            ->method('find')
+            ->method('findOne')
             ->with('rolename')
             ->willReturn(null);
 
-        $manager
-            ->expects(static::once())
-            ->method('getRepository')
-            ->with(Role::class)
-            ->willReturn($repository);
-
-        $transformer = new RoleTransformer($manager);
+        $transformer = new RoleTransformer($this->roleResource);
         $transformer->reverseTransform('rolename');
     }
 
     public function testThatReverseTransformReturnsExpected(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|ObjectManager $manager */
-        $manager = $this->getMockBuilder(ObjectManager::class)->disableOriginalConstructor()->getMock();
-
-        /** @var PHPUnit_Framework_MockObject_MockObject|RoleRepository $repository */
-        $repository = $this->getMockBuilder(RoleRepository::class)->disableOriginalConstructor()->getMock();
-
         $entity = new Role();
 
-        $repository
+        $this->roleResource
             ->expects(static::once())
-            ->method('find')
+            ->method('findOne')
             ->with('rolename')
             ->willReturn($entity);
 
-        $manager
-            ->expects(static::once())
-            ->method('getRepository')
-            ->with(Role::class)
-            ->willReturn($repository);
-
-        $transformer = new RoleTransformer($manager);
+        $transformer = new RoleTransformer($this->roleResource);
 
         static::assertSame($entity, $transformer->reverseTransform('rolename'));
     }
