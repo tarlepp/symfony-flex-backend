@@ -9,10 +9,10 @@ namespace App\Tests\Integration\Form\Type\Rest\UserGroup;
 
 use App\DTO\UserGroup as UserGroupDto;
 use App\Entity\Role;
+use App\Form\DataTransformer\RoleTransformer;
 use App\Form\Type\Rest\UserGroup\UserGroupType;
-use App\Repository\RoleRepository;
+use App\Resource\RoleResource;
 use App\Security\RolesService;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
@@ -27,37 +27,33 @@ class UserGroupTypeTest extends TypeTestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|RolesService
      */
-    private $mockRoles;
+    private $mockRoleService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RoleRepository
+     * @var \PHPUnit_Framework_MockObject_MockObject|RoleResource
      */
-    private $mockRoleRepository;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager
-     */
-    private $mockObjectManager;
+    private $mockRoleResource;
 
     public function testSubmitValidData(): void
     {
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
 
-        $this->mockRoleRepository
-            ->expects(static::once())
-            ->method('findAll')
-            ->willReturn([$roleEntity]);
-
-        $this->mockRoleRepository
+        $this->mockRoleResource
             ->expects(static::once())
             ->method('find')
+            ->willReturn([$roleEntity]);
+
+        $this->mockRoleResource
+            ->expects(static::once())
+            ->method('findOne')
+            ->with($roleEntity->getId())
             ->willReturn($roleEntity);
 
-        $this->mockObjectManager
+        $this->mockRoleService
             ->expects(static::once())
-            ->method('getRepository')
-            ->willReturn($this->mockRoleRepository);
+            ->method('getRoleLabel')
+            ->willReturn('role name');
 
         // Create form
         $form = $this->factory->create(UserGroupType::class);
@@ -93,9 +89,8 @@ class UserGroupTypeTest extends TypeTestCase
 
     protected function setUp(): void
     {
-        $this->mockRoles = $this->createMock(RolesService::class);
-        $this->mockRoleRepository = $this->createMock(RoleRepository::class);
-        $this->mockObjectManager = $this->createMock(ObjectManager::class);
+        $this->mockRoleService = $this->createMock(RolesService::class);
+        $this->mockRoleResource = $this->createMock(RoleResource::class);
 
         parent::setUp();
     }
@@ -108,7 +103,11 @@ class UserGroupTypeTest extends TypeTestCase
         parent::getExtensions();
 
         // create a type instance with the mocked dependencies
-        $type = new UserGroupType($this->mockRoles, $this->mockRoleRepository, $this->mockObjectManager);
+        $type = new UserGroupType(
+            $this->mockRoleService,
+            $this->mockRoleResource,
+            new RoleTransformer($this->mockRoleResource)
+        );
 
         return [
             // register the type instances with the PreloadedExtension

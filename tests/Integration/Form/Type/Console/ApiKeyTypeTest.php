@@ -10,11 +10,9 @@ namespace App\Tests\Integration\Form\Type\Console;
 use App\DTO\ApiKey as ApiKeyDto;
 use App\Entity\Role;
 use App\Entity\UserGroup;
+use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\ApiKeyType;
-use App\Repository\UserGroupRepository;
 use App\Resource\UserGroupResource;
-use Doctrine\Common\Persistence\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
@@ -27,19 +25,9 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class ApiKeyTypeTest extends TypeTestCase
 {
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject|ObjectManager
-     */
-    private $mockObjectManager;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|UserGroupResource
+     * @var \PHPUnit_Framework_MockObject_MockObject|UserGroupResource
      */
     private $mockUserGroupResource;
-
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|UserGroupRepository
-     */
-    private $mockUserGroupRepository;
 
     public function testSubmitValidData(): void
     {
@@ -50,20 +38,16 @@ class ApiKeyTypeTest extends TypeTestCase
         $userGroupEntity = new UserGroup();
         $userGroupEntity->setRole($roleEntity);
 
-        $this->mockObjectManager
-            ->expects(static::once())
-            ->method('getRepository')
-            ->willReturn($this->mockUserGroupRepository);
-
-        $this->mockUserGroupRepository
-            ->expects(static::once())
-            ->method('find')
-            ->willReturn($userGroupEntity);
-
         $this->mockUserGroupResource
             ->expects(static::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
+
+        $this->mockUserGroupResource
+            ->expects(static::once())
+            ->method('findOne')
+            ->with($userGroupEntity->getId())
+            ->willReturn($userGroupEntity);
 
         // Create form
         $form = $this->factory->create(ApiKeyType::class);
@@ -99,9 +83,7 @@ class ApiKeyTypeTest extends TypeTestCase
 
     protected function setUp(): void
     {
-        $this->mockObjectManager = $this->createMock(ObjectManager::class);
         $this->mockUserGroupResource = $this->createMock(UserGroupResource::class);
-        $this->mockUserGroupRepository = $this->createMock(UserGroupRepository::class);
 
         parent::setUp();
     }
@@ -114,7 +96,7 @@ class ApiKeyTypeTest extends TypeTestCase
         parent::getExtensions();
 
         // create a type instance with the mocked dependencies
-        $type = new ApiKeyType($this->mockObjectManager, $this->mockUserGroupResource);
+        $type = new ApiKeyType($this->mockUserGroupResource, new UserGroupTransformer($this->mockUserGroupResource));
 
         return [
             // register the type instances with the PreloadedExtension
