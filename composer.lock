@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ddc95430935a8eeb1efc1ff71eafa26b",
+    "content-hash": "b8f5d9f694abd64a8bf23001c0e2d7fa",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2346,16 +2346,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v4.0.0",
+            "version": "v5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "74f1f17e1e5c32ca43de92611e9097a8d0e0acf2"
+                "reference": "9e3fa14aa959f703961bc9e4ab00110d617bcfdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/74f1f17e1e5c32ca43de92611e9097a8d0e0acf2",
-                "reference": "74f1f17e1e5c32ca43de92611e9097a8d0e0acf2",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/9e3fa14aa959f703961bc9e4ab00110d617bcfdd",
+                "reference": "9e3fa14aa959f703961bc9e4ab00110d617bcfdd",
                 "shasum": ""
             },
             "require": {
@@ -2411,7 +2411,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2017-09-29T16:05:12+00:00"
+            "time": "2017-10-12T17:37:44+00:00"
         },
         {
             "name": "stof/doctrine-extensions-bundle",
