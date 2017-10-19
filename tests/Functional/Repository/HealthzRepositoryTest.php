@@ -60,12 +60,17 @@ class HealthzRepositoryTest extends KernelTestCase
         $this->repository = static::$kernel->getContainer()->get(HealthzResource::class)->getRepository();
     }
 
+    /**
+     * @covers \App\Repository\HealthzRepository::read()
+     */
     public function testThatReadValueMethodReturnsExpectedWithEmptyDatabase(): void
     {
         static::assertNull($this->repository->read());
     }
 
     /**
+     * @covers \App\Repository\HealthzRepository::create()
+     *
      * @depends testThatReadValueMethodReturnsExpectedWithEmptyDatabase
      */
     public function testThatCreateValueReturnsExpected(): void
@@ -74,6 +79,8 @@ class HealthzRepositoryTest extends KernelTestCase
     }
 
     /**
+     * @covers \App\Repository\HealthzRepository::read()
+     *
      * @depends testThatCreateValueReturnsExpected
      */
     public function testThatReadValueReturnExpectedAfterCreate(): void
@@ -82,6 +89,8 @@ class HealthzRepositoryTest extends KernelTestCase
     }
 
     /**
+     * @covers \App\Repository\HealthzRepository::cleanup()
+     *
      * @depends testThatReadValueReturnExpectedAfterCreate
      */
     public function testThatCleanupMethodClearsDatabaseReturnsExpected(): void
