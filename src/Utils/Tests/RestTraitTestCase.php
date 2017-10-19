@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * /src/Utils/Tests/WebTestCase.php
+ * /src/Utils/Tests/RestTraitTestCase.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -39,7 +39,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods
      *
-     * @covers \App\Rest\Traits\Actions\Root\CountAction::countAction()
      *
      * @param string|null $username
      * @param string|null $password
@@ -65,8 +64,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatCountRouteWorksWithAllowedHttpMethods
      *
-     * @covers \App\Rest\Traits\Actions\Root\CountAction::countAction()
-     *
      * @param string|null $username
      * @param string|null $password
      * @param string      $method
@@ -90,8 +87,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatCountRouteDoesNotAllowInvalidUser
-     *
-     * @covers \App\Rest\Traits\Actions\Root\CountAction::countAction()
      *
      * @param string|null $username
      * @param string|null $password
@@ -117,9 +112,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods
      *
-     * @covers \App\Rest\Traits\Actions\Root\CreateAction::createAction()
-     * @covers \App\Rest\Traits\Actions\Root\FindAction::findAction()
-     *
      * @param string|null $username
      * @param string|null $password
      * @param string      $method
@@ -143,9 +135,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWorksWithAllowedHttpMethods
-     *
-     * @covers \App\Rest\Traits\Actions\Root\CreateAction::createAction()
-     * @covers \App\Rest\Traits\Actions\Root\FindAction::findAction()
      *
      * @param string|null $username
      * @param string|null $password
@@ -171,8 +160,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatRootRouteDoesNotAllowInvalidUser
      *
-     * @covers \App\Rest\Traits\Actions\Root\CountAction::countAction()
-     *
      * @param string|null $username
      * @param string|null $password
      * @param string      $method
@@ -196,10 +183,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods
-     *
-     * @covers \App\Rest\Traits\Actions\Root\DeleteAction::deleteAction()
-     * @covers \App\Rest\Traits\Actions\Root\FindOneAction::findOneAction()
-     * @covers \App\Rest\Traits\Actions\Root\UpdateAction::updateAction()
      *
      * @param string|null $username
      * @param string|null $password
@@ -227,10 +210,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods
      *
-     * @covers \App\Rest\Traits\Actions\Root\DeleteAction::deleteAction()
-     * @covers \App\Rest\Traits\Actions\Root\FindOneAction::findOneAction()
-     * @covers \App\Rest\Traits\Actions\Root\UpdateAction::updateAction()
-     *
      * @param string|null $username
      * @param string|null $password
      * @param string      $method
@@ -256,10 +235,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser
-     *
-     * @covers \App\Rest\Traits\Actions\Root\DeleteAction::deleteAction()
-     * @covers \App\Rest\Traits\Actions\Root\FindOneAction::findOneAction()
-     * @covers \App\Rest\Traits\Actions\Root\UpdateAction::updateAction()
      *
      * @param string|null $username
      * @param string|null $password
@@ -287,8 +262,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods
      *
-     * @covers \App\Rest\Traits\Actions\Root\IdsAction::idsAction()
-     *
      * @param string|null $username
      * @param string|null $password
      * @param string      $method
@@ -313,8 +286,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods
      *
-     * @covers \App\Rest\Traits\Actions\Root\IdsAction::idsAction()
-     *
      * @param string|null $username
      * @param string|null $password
      * @param string      $method
@@ -338,8 +309,6 @@ abstract class RestTraitTestCase extends WebTestCase
     /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatIdsRouteDoesNotAllowInvalidUser
-     *
-     * @covers \App\Rest\Traits\Actions\Root\IdsAction::idsAction()
      *
      * @param string|null $username
      * @param string|null $password

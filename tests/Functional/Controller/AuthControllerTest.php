@@ -22,8 +22,6 @@ class AuthControllerTest extends WebTestCase
     private $baseUrl = '/auth';
 
     /**
-     * @covers \App\Controller\AuthController::getTokenAction()
-     *
      * @dataProvider dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost
      *
      * @param string $method
@@ -42,8 +40,6 @@ class AuthControllerTest extends WebTestCase
     }
 
     /**
-     * @covers \App\Controller\AuthController::getTokenAction()
-     *
      * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
      *
      * @param string $username
@@ -94,9 +90,6 @@ class AuthControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * @covers \App\Controller\AuthController::getTokenAction()
-     */
     public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
     {
         $client = $this->getClient();
@@ -129,9 +122,6 @@ class AuthControllerTest extends WebTestCase
         static::assertSame('Bad credentials', $responseContent->message, 'Response message was not expected');
     }
 
-    /**
-     * @covers \App\Controller\AuthController::profileAction()
-     */
     public function testThatProfileActionReturns401WithoutToken(): void
     {
         $client = $this->getClient();
@@ -155,8 +145,6 @@ class AuthControllerTest extends WebTestCase
     }
 
     /**
-     * @covers \App\Controller\AuthController::profileAction()
-     *
      * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
      *
      * @param string $username
@@ -175,9 +163,6 @@ class AuthControllerTest extends WebTestCase
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
-    /**
-     * @covers \App\Controller\AuthController::rolesAction()
-     */
     public function testThatGetRolesActionReturns401WithoutToken(): void
     {
         $client = $this->getClient();

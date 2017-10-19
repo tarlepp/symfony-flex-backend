@@ -57,17 +57,11 @@ class UserRepositoryTest extends KernelTestCase
         $this->userRepository = static::$kernel->getContainer()->get(UserResource::class)->getRepository();
     }
 
-    /**
-     * @covers \App\Repository\UserRepository::countAdvanced()
-     */
     public function testThatCountAdvancedReturnsExpected(): void
     {
         static::assertSame(6, $this->userRepository->countAdvanced());
     }
 
-    /**
-     * @covers \App\Repository\UserRepository::findByAdvanced()
-     */
     public function testThatFindByAdvancedReturnsExpected(): void
     {
         $users = $this->userRepository->findByAdvanced(['username' => 'john']);
@@ -75,17 +69,11 @@ class UserRepositoryTest extends KernelTestCase
         static::assertCount(1, $users);
     }
 
-    /**
-     * @covers \App\Repository\UserRepository::findIds()
-     */
     public function testThatFindIdsReturnsExpected(): void
     {
         static::assertCount(5, $this->userRepository->findIds([], ['or' => 'john-']));
     }
 
-    /**
-     * @covers \App\Repository\UserRepository::isUsernameAvailable()
-     */
     public function testThatIsUsernameAvailableMethodReturnsExpected(): void
     {
         $iterator = function (User $user, bool $expected) {
@@ -111,9 +99,6 @@ class UserRepositoryTest extends KernelTestCase
         }
     }
 
-    /**
-     * @covers \App\Repository\UserRepository::isEmailAvailable()
-     */
     public function testThatIsEmailAvailableMethodReturnsExpected(): void
     {
         $iterator = function (User $user, bool $expected) {
@@ -140,9 +125,6 @@ class UserRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @covers \App\Repository\UserRepository::countAdvanced()
-     * @covers \App\Repository\UserRepository::reset()
-     *
      * @depends testThatIsUsernameAvailableMethodReturnsExpected
      * @depends testThatIsEmailAvailableMethodReturnsExpected
      */

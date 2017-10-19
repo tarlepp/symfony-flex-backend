@@ -33,9 +33,6 @@ class LogRequestRepositoryTest extends KernelTestCase
         $this->repository = static::$kernel->getContainer()->get(LogRequestResource::class)->getRepository();
     }
 
-    /**
-     * @covers \App\Repository\LogRequestRepository::cleanHistory()
-     */
     public function testThatCleanHistoryReturnsExpected(): void
     {
         static::assertSame(0, $this->repository->cleanHistory());

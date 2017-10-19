@@ -21,9 +21,6 @@ class RoleControllerTest extends WebTestCase
 {
     private $baseUrl = '/role';
 
-    /**
-     * @covers \App\Controller\RoleController::findAction()
-     */
     public function testThatGetBaseRouteReturn403(): void
     {
         $client = $this->getClient();
@@ -38,8 +35,6 @@ class RoleControllerTest extends WebTestCase
     }
 
     /**
-     * @covers \App\Controller\RoleController::findOneAction()
-     *
      * @dataProvider dataProviderTestThatFindOneActionWorksAsExpected
      *
      * @param string $username
@@ -60,8 +55,6 @@ class RoleControllerTest extends WebTestCase
     }
 
     /**
-     * @covers \App\Controller\RoleController::getInheritedRolesAction()
-     *
      * @dataProvider dataProviderTestThatGetInheritedRolesActionWorksAsExpected
      *
      * @param string $username

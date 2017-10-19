@@ -20,9 +20,6 @@ class ApiKeyControllerTest extends WebTestCase
 {
     private $baseUrl = '/api_key';
 
-    /**
-     * @covers \App\Controller\ApiKeyController::findAction()
-     */
     public function testThatGetBaseRouteReturn401(): void
     {
         $client = $this->getClient();
@@ -37,8 +34,6 @@ class ApiKeyControllerTest extends WebTestCase
     }
 
     /**
-     * @covers \App\Controller\ApiKeyController::findAction()
-     *
      * @dataProvider dataProviderTestThatFindActionWorksAsExpected
      *
      * @param string $username
