@@ -22,6 +22,9 @@ class UserGroupControllerTest extends WebTestCase
 {
     private $baseUrl = '/user_group';
 
+    /**
+     * @covers \App\Controller\UserGroupController::findAction()
+     */
     public function testThatGetBaseRouteReturn403(): void
     {
         $client = $this->getClient();
@@ -36,6 +39,8 @@ class UserGroupControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserGroupController::getUserGroupUsersAction()
+     *
      * @dataProvider dataProviderTestThatGetUserGroupUsersActionReturnsExpected
      *
      * @param int    $userCount

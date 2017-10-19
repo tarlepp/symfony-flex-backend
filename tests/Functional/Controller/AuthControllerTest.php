@@ -22,6 +22,8 @@ class AuthControllerTest extends WebTestCase
     private $baseUrl = '/auth';
 
     /**
+     * @covers \App\Controller\AuthController::getTokenAction()
+     *
      * @dataProvider dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost
      *
      * @param string $method
@@ -34,10 +36,14 @@ class AuthControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(405, $response->getStatusCode());
     }
 
     /**
+     * @covers \App\Controller\AuthController::getTokenAction()
+     *
      * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
      *
      * @param string $username
@@ -63,12 +69,14 @@ class AuthControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         // Check that HTTP status code is correct
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(
             200,
             $response->getStatusCode(),
             "User login was not successfully.\n" . $response
         );
 
+        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         // Attributes that should be present...
@@ -86,6 +94,9 @@ class AuthControllerTest extends WebTestCase
         }
     }
 
+    /**
+     * @covers \App\Controller\AuthController::getTokenAction()
+     */
     public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
     {
         $client = $this->getClient();
@@ -104,8 +115,11 @@ class AuthControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
 
+        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
@@ -114,7 +128,10 @@ class AuthControllerTest extends WebTestCase
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('Bad credentials', $responseContent->message, 'Response message was not expected');
     }
-    
+
+    /**
+     * @covers \App\Controller\AuthController::profileAction()
+     */
     public function testThatProfileActionReturns401WithoutToken(): void
     {
         $client = $this->getClient();
@@ -123,8 +140,11 @@ class AuthControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
 
+        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
@@ -135,6 +155,8 @@ class AuthControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\AuthController::profileAction()
+     *
      * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
      *
      * @param string $username
@@ -148,9 +170,14 @@ class AuthControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
+    /**
+     * @covers \App\Controller\AuthController::rolesAction()
+     */
     public function testThatGetRolesActionReturns401WithoutToken(): void
     {
         $client = $this->getClient();
@@ -159,8 +186,11 @@ class AuthControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
 
+        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
@@ -185,7 +215,11 @@ class AuthControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expected, JSON::decode($response->getContent(), true), $response->getContent());
     }
 

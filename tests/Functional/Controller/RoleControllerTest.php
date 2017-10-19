@@ -21,6 +21,9 @@ class RoleControllerTest extends WebTestCase
 {
     private $baseUrl = '/role';
 
+    /**
+     * @covers \App\Controller\RoleController::findAction()
+     */
     public function testThatGetBaseRouteReturn403(): void
     {
         $client = $this->getClient();
@@ -29,10 +32,14 @@ class RoleControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
     }
 
     /**
+     * @covers \App\Controller\RoleController::findOneAction()
+     *
      * @dataProvider dataProviderTestThatFindOneActionWorksAsExpected
      *
      * @param string $username
@@ -47,10 +54,14 @@ class RoleControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
     /**
+     * @covers \App\Controller\RoleController::getInheritedRolesAction()
+     *
      * @dataProvider dataProviderTestThatGetInheritedRolesActionWorksAsExpected
      *
      * @param string $username
@@ -71,7 +82,11 @@ class RoleControllerTest extends WebTestCase
             $response = $client->getResponse();
 
             static::assertInstanceOf(Response::class, $response);
+
+            /** @noinspection NullPointerExceptionInspection */
             static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+            /** @noinspection NullPointerExceptionInspection */
             static::assertJsonStringEqualsJsonString(JSON::encode($foo), $response->getContent());
         }
     }

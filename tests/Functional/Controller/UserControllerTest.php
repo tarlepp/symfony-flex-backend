@@ -24,6 +24,9 @@ class UserControllerTest extends WebTestCase
 {
     private $baseUrl = '/user';
 
+    /**
+     * @covers \App\Controller\UserController::findAction()
+     */
     public function testThatGetBaseRouteReturn401(): void
     {
         $client = $this->getClient();
@@ -44,6 +47,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::countAction()
+     *
      * @dataProvider dataProviderValidUsers
      *
      * @param string $username
@@ -66,6 +71,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::countAction()
+     *
      * @dataProvider dataProviderInvalidUsers
      *
      * @param string $username
@@ -91,6 +98,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::findAction()
+     *
      * @dataProvider dataProviderValidUsers
      *
      * @param string $username
@@ -113,6 +122,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::findAction()
+     *
      * @dataProvider dataProviderInvalidUsers
      *
      * @param string $username
@@ -138,6 +149,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::idsAction()
+     *
      * @dataProvider dataProviderValidUsers
      *
      * @param string $username
@@ -160,6 +173,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::idsAction()
+     *
      * @dataProvider dataProviderInvalidUsers
      *
      * @param string $username
@@ -185,6 +200,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::createAction()
+     *
      * @return string
      */
     public function testThatCreateActionWorksLikeExpected(): string
@@ -220,6 +237,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::createAction()
+     *
      * @dataProvider dataProviderInvalidUsersCreate
      *
      * @param string $username
@@ -252,6 +271,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::updateAction()
+     *
      * @depends testThatCreateActionWorksLikeExpected
      *
      * @param string $userId
@@ -286,6 +307,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::updateAction()
+     *
      * @depends      testThatUpdateActionWorksLikeExpected
      * @dataProvider dataProviderInvalidUsersCreate
      *
@@ -327,6 +350,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::deleteAction()
+     *
      * @depends      testThatUpdateActionWorksLikeExpected
      * @dataProvider dataProviderInvalidUsersCreate
      *
@@ -357,6 +382,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::deleteAction()
+     *
      * @depends testThatUpdateActionWorksLikeExpected
      *
      * @param string $userId
@@ -374,6 +401,9 @@ class UserControllerTest extends WebTestCase
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
+    /**
+     * @covers \App\Controller\UserController::deleteAction()
+     */
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
         self::bootKernel();
@@ -403,13 +433,15 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::getUserRolesAction()
+     *
      * @dataProvider dataProviderTestThatGetRolesActionsReturns403ForInvalidUser
      *
      * @param string $username
      * @param string $password
      * @param array  $userIds
      */
-    public function testThatGetRolesActionsReturns403ForInvalidUser(
+    public function testThatGetUserRolesActionsReturns403ForInvalidUser(
         string $username,
         string $password,
         array $userIds
@@ -429,6 +461,8 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::getUserRolesAction()
+     *
      * @dataProvider dataProviderTestThatGetRolesActionsReturns200ForUserHimself
      *
      * @param string $username
@@ -436,7 +470,7 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      * @param string $expectedResponse
      */
-    public function testThatGetRolesActionsReturns200ForUserHimself(
+    public function testThatGetUserRolesActionsReturns200ForUserHimself(
         string $username,
         string $password,
         string $userId,
@@ -457,12 +491,14 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @covers \App\Controller\UserController::getUserRolesAction()
+     *
      * @dataProvider dataProviderTestThatGetRolesActionReturns200ForRootRoleUser
      *
      * @param string $userId
      * @param string $expectedResponse
      */
-    public function testThatGetRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
+    public function testThatGetUserRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
     {
         $client = $this->getClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');

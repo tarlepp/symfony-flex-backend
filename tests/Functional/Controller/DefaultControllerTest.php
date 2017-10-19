@@ -18,6 +18,9 @@ use App\Utils\Tests\WebTestCase;
  */
 class DefaultControllerTest extends WebTestCase
 {
+    /**
+     * @covers \App\Controller\DefaultController::indexAction()
+     */
     public function testThatDefaultRouteReturns200(): void
     {
         $client = $this->getClient();
@@ -25,9 +28,13 @@ class DefaultControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode());
     }
 
+    /**
+     * @covers \App\Controller\DefaultController::healthzAction()
+     */
     public function testThatHealthzRouteReturns200(): void
     {
         $client = $this->getClient();
@@ -35,9 +42,13 @@ class DefaultControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode());
     }
 
+    /**
+     * @covers \App\Controller\DefaultController::healthzAction()
+     */
     public function testThatHealthzRouteDoesNotMakeRequestLog(): void
     {
         static::bootKernel();
