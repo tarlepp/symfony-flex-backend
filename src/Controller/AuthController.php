@@ -17,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -112,19 +112,23 @@ class AuthController
      *  )
      * @SWG\Tag(name="Authentication")
      *
-     * @param UserInterface|User  $user
+     * @param TokenStorage        $tokenStorage
      * @param RolesService        $roles
      * @param SerializerInterface $serializer
      *
      * @return JsonResponse
      *
      * @throws \InvalidArgumentException
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
     public function profileAction(
-        UserInterface $user,
+        TokenStorage $tokenStorage,
         RolesService $roles,
         SerializerInterface $serializer
     ): JsonResponse {
+        /** @noinspection NullPointerExceptionInspection */
+        $user = $tokenStorage->getToken()->getUser();
+
         // Specify used serialization groups
         static $groups = [
             'User',
@@ -181,13 +185,18 @@ class AuthController
      *  )
      * @SWG\Tag(name="Authentication")
      *
-     * @param UserInterface $user
-     * @param RolesService  $roles
+     * @param TokenStorage $tokenStorage
+     * @param RolesService $rolesService
      *
      * @return JsonResponse
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function rolesAction(UserInterface $user, RolesService $roles): JsonResponse
+    public function rolesAction(TokenStorage $tokenStorage, RolesService $rolesService): JsonResponse
     {
-        return new JsonResponse($roles->getInheritedRoles($user->getRoles()));
+        /** @noinspection NullPointerExceptionInspection */
+        $user = $tokenStorage->getToken()->getUser();
+
+        return new JsonResponse($rolesService->getInheritedRoles($user->getRoles()));
     }
 }

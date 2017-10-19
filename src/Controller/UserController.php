@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -98,9 +98,9 @@ class UserController extends Controller
      *
      * @RestApiDoc()
      *
-     * @param Request            $request
-     * @param User               $requestUser
-     * @param User|UserInterface $currentUser
+     * @param Request      $request
+     * @param User         $requestUser
+     * @param TokenStorage $tokenStorage
      *
      * @return Response
      *
@@ -108,8 +108,11 @@ class UserController extends Controller
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
-    public function deleteAction(Request $request, User $requestUser, UserInterface $currentUser): Response
+    public function deleteAction(Request $request, User $requestUser, TokenStorage $tokenStorage): Response
     {
+        /** @noinspection NullPointerExceptionInspection */
+        $currentUser = $tokenStorage->getToken()->getUser();
+
         if ($currentUser === $requestUser) {
             throw new HttpException(400, 'You cannot remove yourself...');
         }
