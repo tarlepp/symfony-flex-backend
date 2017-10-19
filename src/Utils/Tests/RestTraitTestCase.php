@@ -35,6 +35,7 @@ abstract class RestTraitTestCase extends WebTestCase
      */
     protected static $route;
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods
      *
@@ -55,9 +56,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatCountRouteWorksWithAllowedHttpMethods
      *
@@ -78,9 +82,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatCountRouteDoesNotAllowInvalidUser
      *
@@ -101,9 +108,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods
      *
@@ -125,9 +135,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWorksWithAllowedHttpMethods
      *
@@ -149,9 +162,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteDoesNotAllowInvalidUser
      *
@@ -172,9 +188,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods
      *
@@ -199,9 +218,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods
      *
@@ -226,9 +248,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser
      *
@@ -253,9 +278,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods
      *
@@ -276,9 +304,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods
      *
@@ -299,9 +330,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
-    
+
+    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatIdsRouteDoesNotAllowInvalidUser
      *
@@ -322,6 +356,8 @@ abstract class RestTraitTestCase extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
     }
 
