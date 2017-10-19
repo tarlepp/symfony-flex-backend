@@ -2,12 +2,14 @@
 
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.3/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.4/phpunit.xsd"
          colors="true"
          bootstrap="tests/bootstrap.php"
 >
     <php>
-        <ini name="error_reporting" value="-1" />
+        <ini name="error_reporting" value="E_ALL" />
+        <ini name="display_errors" value="On" />
+        <ini name="display_startup_errors" value="On" />
         <ini name="date.timezone" value="UTC" />
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="1" />
         <server name="KERNEL_CLASS" value="App\Kernel" />
