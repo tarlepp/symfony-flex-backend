@@ -24,6 +24,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 trait ExecuteMultipleCommandTrait
 {
     /**
+     * @var array
+     */
+    protected static $choices = [];
+
+    /**
      * @var SymfonyStyle
      */
     private $io;
@@ -52,7 +57,7 @@ trait ExecuteMultipleCommandTrait
 
             $input = new ArrayInput($arguments);
 
-            $cmd = $this->getApplication()->find($command);
+            $cmd = $this->getApplication()->find((string)$command);
             $cmd->run($input, $output);
         }
 
