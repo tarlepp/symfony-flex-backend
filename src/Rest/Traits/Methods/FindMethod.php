@@ -10,6 +10,7 @@ namespace App\Rest\Traits\Methods;
 use App\Rest\RequestHandler;
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
+use Guzzle\Http\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,6 +25,28 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait FindMethod
 {
+    /**
+     * Method to validate REST trait method.
+     *
+     * @param Request $request
+     * @param array   $allowedHttpMethods
+     *
+     * @throws \LogicException
+     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     */
+    abstract public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
+
+    /**
+     * Method to handle possible REST method trait exception.
+     *
+     * @param \Exception $exception
+     *
+     * @return HttpException
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    abstract public function handleRestMethodException(\Exception $exception): HttpException;
+
     /**
      * Generic 'findMethod' method for REST resources.
      *

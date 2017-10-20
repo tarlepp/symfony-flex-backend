@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Trait CreateMethod
@@ -26,6 +27,28 @@ use Symfony\Component\HttpFoundation\Response;
  */
 trait CreateMethod
 {
+    /**
+     * Method to validate REST trait method.
+     *
+     * @param Request $request
+     * @param array   $allowedHttpMethods
+     *
+     * @throws \LogicException
+     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     */
+    abstract public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
+
+    /**
+     * Method to handle possible REST method trait exception.
+     *
+     * @param \Exception $exception
+     *
+     * @return HttpException
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    abstract public function handleRestMethodException(\Exception $exception): HttpException;
+
     /**
      * Generic 'createMethod' method for REST resources.
      *
