@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Rest;
 
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -179,6 +180,7 @@ final class ResponseHandler implements ResponseHandlerInterface
     {
         $errors = [];
 
+        /** @var FormError $error */
         foreach ($form->getErrors(true) as $error) {
             $name = $error->getOrigin()->getName();
 
