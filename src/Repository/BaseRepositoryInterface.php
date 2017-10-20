@@ -76,26 +76,26 @@ interface BaseRepositoryInterface
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface
+     * @return BaseRepositoryInterface|$this
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(EntityInterface $entity): BaseRepositoryInterface;
+    public function save(EntityInterface $entity);
 
     /**
      * Helper method to remove specified entity from database.
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface
+     * @return BaseRepositoryInterface|$this
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(EntityInterface $entity): BaseRepositoryInterface;
+    public function remove(EntityInterface $entity);
 
     /**
      * Generic count method to determine count of entities for specified criteria and search term(s).
@@ -113,13 +113,13 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository find method.
      *
-     * @param string      $id
-     * @param string|null $lockMode
-     * @param string|null $lockVersion
+     * @param string   $id
+     * @param int|null $lockMode
+     * @param int|null $lockVersion
      *
      * @return EntityInterface|null
      */
-    public function find(string $id, string $lockMode = null, string $lockVersion = null): ?EntityInterface;
+    public function find(string $id, int $lockMode = null, int $lockVersion = null): ?EntityInterface;
 
     /**
      * Wrapper for default Doctrine repository findOneBy method.
