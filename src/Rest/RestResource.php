@@ -174,17 +174,18 @@ abstract class RestResource implements RestResourceInterface
         return $this->getRepository()->getEntityName();
     }
 
+    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Gets a reference to the entity identified by the given type and identifier without actually loading it,
      * if the entity is not yet loaded.
      *
      * @param string $id The entity identifier.
      *
-     * @return Proxy|null
+     * @return Proxy|object|null
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function getReference(string $id): ?Proxy
+    public function getReference(string $id)
     {
         return $this->getRepository()->getReference($id);
     }
