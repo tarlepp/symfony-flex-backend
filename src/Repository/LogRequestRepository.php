@@ -54,6 +54,6 @@ class LogRequestRepository extends BaseRepository
             ->setParameter('time', $date);
 
         // Return deleted row count
-        return $queryBuilder->getQuery()->execute();
+        return (int)$queryBuilder->getQuery()->execute();
     }
 }
