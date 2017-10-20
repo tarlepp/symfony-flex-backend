@@ -22,7 +22,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class RoleTransformer implements DataTransformerInterface
 {
     /**
-     * @var ObjectManager
+     * @var RoleResource
      */
     private $resource;
 
