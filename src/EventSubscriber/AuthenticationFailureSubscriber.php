@@ -59,6 +59,7 @@ class AuthenticationFailureSubscriber
     {
         // Fetch user entity
         if ($event->getException()->getToken() !== null) {
+            /** @var User $user */
             $user = $this->userRepository->loadUserByUsername($event->getException()->getToken()->getUser());
 
             $this->loginLogger->setUser($user);
