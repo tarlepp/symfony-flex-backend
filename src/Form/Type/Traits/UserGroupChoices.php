@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Form\Type\Traits;
 
 use App\Entity\UserGroup;
+use App\Resource\UserGroupResource;
 
 /**
  * Trait UserGroupChoices
@@ -17,6 +18,11 @@ use App\Entity\UserGroup;
  */
 trait UserGroupChoices
 {
+    /**
+     * @var UserGroupResource
+     */
+    protected $userGroupResource;
+
     /**
      * Method to create choices array for user groups.
      *
