@@ -67,9 +67,10 @@ class ChangeTokenCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
+        $apiKey = null;
         $apiKeyFound = false;
 
-        while (!$apiKeyFound) {
+        while ($apiKeyFound === false) {
             $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key token you want to change?');
 
             if ($apiKey === null) {

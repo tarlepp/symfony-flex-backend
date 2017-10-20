@@ -69,9 +69,10 @@ class EditApiKeyCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
+        $apiKey = null;
         $apiKeyFound = false;
 
-        while (!$apiKeyFound) {
+        while ($apiKeyFound === false) {
             $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to edit?');
 
             if ($apiKey === null) {
