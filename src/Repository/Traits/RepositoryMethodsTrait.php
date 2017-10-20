@@ -28,33 +28,35 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 trait RepositoryMethodsTrait
 {
+    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Wrapper for default Doctrine repository find method.
      *
-     * @param string      $id
-     * @param string|null $lockMode
-     * @param string|null $lockVersion
+     * @param string   $id
+     * @param int|null $lockMode
+     * @param int|null $lockVersion
      *
-     * @return EntityInterface|null
+     * @return EntityInterface|object|null
      *
      * @throws \Doctrine\ORM\TransactionRequiredException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function find(string $id, string $lockMode = null, string $lockVersion = null): ?EntityInterface
+    public function find(string $id, int $lockMode = null, int $lockVersion = null): ?EntityInterface
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
     }
 
+    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Wrapper for default Doctrine repository findOneBy method.
      *
      * @param array      $criteria
      * @param array|null $orderBy
      *
-     * @return EntityInterface|null
+     * @return EntityInterface|object|null
      */
     public function findOneBy(array $criteria, array $orderBy = null): ?EntityInterface
     {
@@ -217,7 +219,7 @@ trait RepositoryMethodsTrait
         $queryBuilder->delete();
 
         // Return deleted row count
-        return $queryBuilder->getQuery()->execute();
+        return (int)$queryBuilder->getQuery()->execute();
     }
 
     /**
@@ -225,13 +227,13 @@ trait RepositoryMethodsTrait
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface
+     * @return BaseRepositoryInterface|$this
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(EntityInterface $entity): BaseRepositoryInterface
+    public function save(EntityInterface $entity)
     {
         // Persist on database
         $this->getEntityManager()->persist($entity);
@@ -246,13 +248,13 @@ trait RepositoryMethodsTrait
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface
+     * @return BaseRepositoryInterface|$this
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(EntityInterface $entity): BaseRepositoryInterface
+    public function remove(EntityInterface $entity)
     {
         // Remove from database
         $this->getEntityManager()->remove($entity);
