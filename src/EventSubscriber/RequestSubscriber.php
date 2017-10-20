@@ -69,10 +69,14 @@ class RequestSubscriber
         $this->logger->setRequest($request);
         $this->logger->setResponse($event->getResponse());
 
+        $user = $this->user;
+
         if ($this->user instanceof ApplicationUser) {
-            $this->logger->setUser($this->user);
+            /** @var ApplicationUser $user */
+            $this->logger->setUser($user);
         } elseif ($this->user instanceof ApiKeyUser) {
-            $this->logger->setApiKey($this->user->getApiKey());
+            /** @var ApiKeyUser $user */
+            $this->logger->setApiKey($user->getApiKey());
         }
 
         $this->logger->setMasterRequest($event->isMasterRequest());
