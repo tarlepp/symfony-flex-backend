@@ -269,8 +269,7 @@ class ApiKey implements EntityInterface
      */
     public function removeUserGroup(UserGroup $userGroup): ApiKey
     {
-        if ($this->userGroups->contains($userGroup)) {
-            $this->userGroups->removeElement($userGroup);
+        if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeApiKey($this);
         }
 

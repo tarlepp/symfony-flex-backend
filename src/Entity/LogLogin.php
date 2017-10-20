@@ -510,9 +510,9 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getClientShortName(): string
+    public function getClientShortName(): ?string
     {
         return $this->clientShortName;
     }

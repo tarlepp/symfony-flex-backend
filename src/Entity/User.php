@@ -535,8 +535,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      */
     public function removeUserGroup(UserGroup $userGroup): User
     {
-        if ($this->userGroups->contains($userGroup)) {
-            $this->userGroups->removeElement($userGroup);
+        if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeUser($this);
         }
 
@@ -571,6 +570,6 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      */
     public function isEqualTo(CoreUserInterface $user): bool
     {
-        return $user->getId() === $this->getId();
+        return ($user instanceof self) ? $user->getId() === $this->getId() : false;
     }
 }

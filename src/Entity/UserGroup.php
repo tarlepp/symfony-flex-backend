@@ -232,8 +232,7 @@ class UserGroup implements EntityInterface
      */
     public function removeUser(User $user): UserGroup
     {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
+        if ($this->users->removeElement($user)) {
             $user->removeUserGroup($this);
         }
 
@@ -278,8 +277,7 @@ class UserGroup implements EntityInterface
      */
     public function removeApiKey(ApiKey $apiKey): UserGroup
     {
-        if ($this->apiKeys->contains($apiKey)) {
-            $this->apiKeys->removeElement($apiKey);
+        if ($this->apiKeys->removeElement($apiKey)) {
             $apiKey->removeUserGroup($this);
         }
 

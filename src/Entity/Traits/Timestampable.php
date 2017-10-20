@@ -65,7 +65,7 @@ trait Timestampable
      *
      * @return EntityInterface|$this
      */
-    public function setCreatedAt(\DateTime $createdAt): EntityInterface
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -89,7 +89,7 @@ trait Timestampable
      *
      * @return EntityInterface|$this
      */
-    public function setUpdatedAt(\DateTime $updatedAt): EntityInterface
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 
