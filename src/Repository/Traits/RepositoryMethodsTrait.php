@@ -43,7 +43,7 @@ trait RepositoryMethodsTrait
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function find(string $id, int $lockMode = null, int $lockVersion = null): ?EntityInterface
+    public function find(string $id, int $lockMode = null, int $lockVersion = null)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
@@ -58,7 +58,7 @@ trait RepositoryMethodsTrait
      *
      * @return EntityInterface|object|null
      */
-    public function findOneBy(array $criteria, array $orderBy = null): ?EntityInterface
+    public function findOneBy(array $criteria, array $orderBy = null)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getEntityManager()->getRepository($this->getEntityName())->findOneBy($criteria, $orderBy);

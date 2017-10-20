@@ -28,17 +28,18 @@ interface BaseRepositoryInterface
      */
     public function getEntityName(): string;
 
+    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Gets a reference to the entity identified by the given type and identifier without actually loading it,
      * if the entity is not yet loaded.
      *
      * @param string $id
      *
-     * @return Proxy|null
+     * @return Proxy|object|null
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function getReference(string $id): ?Proxy;
+    public function getReference(string $id);
 
     /**
      * Gets all association mappings of the class.
@@ -57,9 +58,9 @@ interface BaseRepositoryInterface
     /**
      * Getter method for EntityManager for current entity.
      *
-     * @return EntityManager|ObjectManager
+     * @return EntityManager|ObjectManager|null
      */
-    public function getEntityManager(): EntityManager;
+    public function getEntityManager();
 
     /**
      * Method to create new query builder for current entity.
@@ -110,6 +111,7 @@ interface BaseRepositoryInterface
      */
     public function countAdvanced(array $criteria = null, array $search = null): int;
 
+    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Wrapper for default Doctrine repository find method.
      *
@@ -117,19 +119,20 @@ interface BaseRepositoryInterface
      * @param int|null $lockMode
      * @param int|null $lockVersion
      *
-     * @return EntityInterface|null
+     * @return EntityInterface|object|null
      */
-    public function find(string $id, int $lockMode = null, int $lockVersion = null): ?EntityInterface;
+    public function find(string $id, int $lockMode = null, int $lockVersion = null);
 
+    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Wrapper for default Doctrine repository findOneBy method.
      *
      * @param array      $criteria
      * @param array|null $orderBy
      *
-     * @return EntityInterface|null
+     * @return EntityInterface|object|null
      */
-    public function findOneBy(array $criteria, array $orderBy = null): ?EntityInterface;
+    public function findOneBy(array $criteria, array $orderBy = null);
 
     /**
      * Wrapper for default Doctrine repository findBy method.

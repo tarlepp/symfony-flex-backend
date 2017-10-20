@@ -28,17 +28,18 @@ trait RepositoryWrappersTrait
      */
     protected $managerRegistry;
 
+    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Gets a reference to the entity identified by the given type and identifier without actually loading it,
      * if the entity is not yet loaded.
      *
      * @param string $id
      *
-     * @return Proxy|null
+     * @return Proxy|object|null
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    public function getReference(string $id): ?Proxy
+    public function getReference(string $id)
     {
         return $this->getEntityManager()->getReference($this->getEntityName(), $id);
     }
@@ -56,9 +57,9 @@ trait RepositoryWrappersTrait
     /**
      * Getter method for EntityManager for current entity.
      *
-     * @return EntityManager|ObjectManager
+     * @return EntityManager|ObjectManager|null
      */
-    public function getEntityManager(): EntityManager
+    public function getEntityManager()
     {
         return $this->managerRegistry->getManagerForClass(static::$entityName);
     }
