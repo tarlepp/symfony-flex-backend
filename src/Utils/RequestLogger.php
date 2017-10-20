@@ -9,6 +9,7 @@ namespace App\Utils;
 
 use App\Entity\ApiKey;
 use App\Entity\LogRequest;
+use App\Entity\User;
 use App\Resource\LogRequestResource;
 use App\Security\ApiKeyUserInterface;
 use Psr\Log\LoggerInterface;
@@ -104,7 +105,7 @@ class RequestLogger implements RequestLoggerInterface
     /**
      * Setter method for current user.
      *
-     * @param UserInterface|null $user
+     * @param UserInterface|User|null $user
      *
      * @return RequestLoggerInterface
      */

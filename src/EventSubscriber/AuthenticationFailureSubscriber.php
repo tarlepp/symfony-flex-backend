@@ -8,6 +8,8 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
+use App\Entity\User;
+use App\Entity\UserInterface;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
@@ -56,9 +58,13 @@ class AuthenticationFailureSubscriber
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
         // Fetch user entity
-        $user = $this->userRepository->loadUserByUsername($event->getException()->getToken()->getUser());
+        if ($event->getException()->getToken() !== null) {
+            /** @var UserInterface $user */
+            $user = $this->userRepository->loadUserByUsername($event->getException()->getToken()->getUser());
 
-        $this->loginLogger->setUser($user);
+            $this->loginLogger->setUser($user);
+        }
+
         $this->loginLogger->process(EnumLogLoginType::TYPE_FAILURE);
     }
 }

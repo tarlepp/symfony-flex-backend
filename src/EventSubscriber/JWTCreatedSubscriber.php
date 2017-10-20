@@ -24,9 +24,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class JWTCreatedSubscriber
 {
     /**
-     * @var RoleHierarchyInterface
+     * @var RolesService
      */
-    private $roles;
+    private $rolesService;
 
     /**
      * @var RequestStack
@@ -41,13 +41,13 @@ class JWTCreatedSubscriber
     /**
      * JWTCreatedListener constructor.
      *
-     * @param RolesService    $roles
+     * @param RolesService    $rolesService
      * @param RequestStack    $requestStack
      * @param LoggerInterface $logger
      */
-    public function __construct(RolesService $roles, RequestStack $requestStack, LoggerInterface $logger)
+    public function __construct(RolesService $rolesService, RequestStack $requestStack, LoggerInterface $logger)
     {
-        $this->roles = $roles;
+        $this->rolesService = $rolesService;
         $this->requestStack = $requestStack;
         $this->logger = $logger;
     }
@@ -125,7 +125,7 @@ class JWTCreatedSubscriber
     private function setUserData(array &$payload, User $user): void
     {
         // Set Roles service for User Entity
-        $user->setRolesService($this->roles);
+        $user->setRolesService($this->rolesService);
 
         // Merge login data to current payload
         $payload = \array_merge($payload, $user->getLoginData());

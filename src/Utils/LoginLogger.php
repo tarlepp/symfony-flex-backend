@@ -70,7 +70,7 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * Setter for User object
      *
-     * @param UserInterface|null $user
+     * @param UserInterface|User|null $user
      *
      * @return LoginLoggerInterface
      *
