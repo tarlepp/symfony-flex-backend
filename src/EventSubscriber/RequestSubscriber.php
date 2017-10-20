@@ -72,10 +72,10 @@ class RequestSubscriber
         $user = $this->user;
 
         if ($this->user instanceof ApplicationUser) {
-            /** @var ApplicationUser $user */
+            /** @var ApplicationUser|UserInterface $user */
             $this->logger->setUser($user);
         } elseif ($this->user instanceof ApiKeyUser) {
-            /** @var ApiKeyUser $user */
+            /** @var ApiKeyUser|UserInterface $user */
             $this->logger->setApiKey($user->getApiKey());
         }
 

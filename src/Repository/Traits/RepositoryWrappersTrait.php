@@ -51,13 +51,21 @@ trait RepositoryWrappersTrait
      */
     public function getAssociations(): array
     {
-        return $this->getEntityManager()->getClassMetadata($this->getEntityName())->getAssociationMappings();
+        return $this->getClassMetaData()->getAssociationMappings();
+    }
+
+    /**
+     * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata|\Doctrine\ORM\Mapping\ClassMetadata
+     */
+    public function getClassMetaData()
+    {
+        return $this->getEntityManager()->getClassMetadata($this->getEntityName());
     }
 
     /**
      * Getter method for EntityManager for current entity.
      *
-     * @return EntityManager|ObjectManager|null
+     * @return EntityManager|ObjectManager
      */
     public function getEntityManager()
     {
