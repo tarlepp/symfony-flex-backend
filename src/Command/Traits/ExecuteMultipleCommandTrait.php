@@ -24,11 +24,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 trait ExecuteMultipleCommandTrait
 {
     /**
-     * @var array
-     */
-    protected static $choices = [];
-
-    /**
      * @var SymfonyStyle
      */
     private $io;
