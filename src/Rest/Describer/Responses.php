@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace App\Rest\Describer;
 
 use EXSyst\Component\Swagger\Operation;
-use EXSyst\Component\Swagger\Response;
+use EXSyst\Component\Swagger\Response as SwaggerResponse;
 
 /**
  * Class Responses
@@ -31,7 +31,7 @@ class Responses
             ],
         ];
 
-        $response = new Response($data);
+        $response = new SwaggerResponse($data);
 
         /** @noinspection PhpParamsInspection */
         $operation->getResponses()->set(401, $response);
@@ -49,7 +49,7 @@ class Responses
             ],
         ];
 
-        $response = new Response($data);
+        $response = new SwaggerResponse($data);
 
         /** @noinspection PhpParamsInspection */
         $operation->getResponses()->set(403, $response);
@@ -67,7 +67,7 @@ class Responses
             ],
         ];
 
-        $response = new Response($data);
+        $response = new SwaggerResponse($data);
 
         /** @noinspection PhpParamsInspection */
         $operation->getResponses()->set(404, $response);
@@ -85,7 +85,7 @@ class Responses
             'description' => \sprintf($description, $entityName),
         ];
 
-        $response = new Response($data);
+        $response = new SwaggerResponse($data);
 
         /** @noinspection PhpParamsInspection */
         $operation->getResponses()->set($statusCode, $response);
