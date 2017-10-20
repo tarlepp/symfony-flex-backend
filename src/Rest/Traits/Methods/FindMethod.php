@@ -10,9 +10,9 @@ namespace App\Rest\Traits\Methods;
 use App\Rest\RequestHandler;
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
-use Guzzle\Http\Exception\HttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Trait FindMethod
