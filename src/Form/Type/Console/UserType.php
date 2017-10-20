@@ -8,8 +8,8 @@ declare(strict_types = 1);
 namespace App\Form\Type\Console;
 
 use App\DTO\User as UserDto;
-use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
+use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
@@ -24,10 +24,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UserType extends AbstractType
 {
+    // Traits
+    use UserGroupChoices;
+
     /**
      * @var UserGroupResource
      */
-    private $userGroupResource;
+    protected $userGroupResource;
 
     /**
      * @var UserGroupTransformer
@@ -133,33 +136,5 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => UserDto::class
         ]);
-    }
-
-    /**
-     * Method to create choices array for user groups.
-     *
-     * @return  array
-     */
-    private function getUserGroupChoices(): array
-    {
-        // Initialize output
-        $choices = [];
-
-        /**
-         * Lambda function to iterate all user groups and to create necessary choices array.
-         *
-         * @param UserGroup $userGroup
-         *
-         * @return void
-         */
-        $iterator = function (UserGroup $userGroup) use (&$choices) {
-            $name = $userGroup->getName() . ' [' . $userGroup->getRole()->getId() . ']';
-
-            $choices[$name] = $userGroup->getId();
-        };
-
-        \array_map($iterator, $this->userGroupResource->find());
-
-        return $choices;
     }
 }
