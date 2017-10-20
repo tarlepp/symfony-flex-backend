@@ -199,8 +199,8 @@ class GenericRepositoryTest extends KernelTestCase
 
         $arguments = [
             'id',
-            'lockMode',
-            'lockVersion',
+            null,
+            null,
         ];
 
         $entityManager
@@ -209,8 +209,8 @@ class GenericRepositoryTest extends KernelTestCase
             ->with(
                 $this->entityClass,
                 'id',
-                'lockMode',
-                'lockVersion'
+                null,
+                null
             );
 
         $managerObject
