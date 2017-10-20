@@ -69,9 +69,10 @@ class EditUserGroupCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $groupFound = false;
+        $userGroup = null;
+        $userGroupFound = false;
 
-        while (!$groupFound) {
+        while ($userGroupFound === false) {
             $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to edit?');
 
             if ($userGroup === null) {
@@ -85,7 +86,7 @@ class EditUserGroupCommand extends Command
                 $userGroup->getRole()->getId()
             );
 
-            $groupFound = $io->confirm($message, false);
+            $userGroupFound = $io->confirm($message, false);
         }
 
         /** @var UserGroupEntity $userGroup */

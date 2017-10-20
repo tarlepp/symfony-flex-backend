@@ -64,9 +64,10 @@ class RemoveUserGroupCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $groupFound = false;
+        $userGroup = null;
+        $userGroupFound = false;
 
-        while (!$groupFound) {
+        while ($userGroupFound === false) {
             $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to remove?');
 
             if ($userGroup === null) {
@@ -80,7 +81,7 @@ class RemoveUserGroupCommand extends Command
                 $userGroup->getRole()->getId()
             );
 
-            $groupFound = $io->confirm($message, false);
+            $userGroupFound = $io->confirm($message, false);
         }
 
         /** @var UserGroup $userGroup */

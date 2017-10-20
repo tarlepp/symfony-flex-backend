@@ -69,9 +69,10 @@ class EditUserCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
+        $user = null;
         $userFound = false;
 
-        while (!$userFound) {
+        while ($userFound === false) {
             $user = $this->userHelper->getUser($io, 'Which user you want to edit?');
 
             if ($user === null) {
