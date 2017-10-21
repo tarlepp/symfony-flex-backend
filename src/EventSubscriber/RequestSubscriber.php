@@ -29,7 +29,7 @@ class RequestSubscriber
     private $logger;
 
     /**
-     * @var UserInterface|null
+     * @var UserInterface|ApplicationUser|ApiKeyUser|null
      */
     private $user;
 
@@ -72,7 +72,7 @@ class RequestSubscriber
         $user = $this->user;
 
         if ($this->user instanceof ApplicationUser) {
-            /** @var ApplicationUser|UserInterface $user */
+            /** @var UserInterface $user */
             $this->logger->setUser($user);
         } elseif ($this->user instanceof ApiKeyUser) {
             /** @var ApiKeyUser|UserInterface $user */
