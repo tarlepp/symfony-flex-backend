@@ -33,11 +33,11 @@ trait LoadUserByUserNameTrait
      *
      * @param string $username The username
      *
-     * @return null|UserInterface|Entity
+     * @return null|Entity
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function loadUserByUsername($username): ?UserInterface
+    public function loadUserByUsername($username): ?Entity
     {
         // Build query
         $query = $this
