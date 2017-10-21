@@ -30,10 +30,10 @@ matrix:
 before_install:
   - cp .env.travis .env
   - cp .env.travis .env.test
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_1;'
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_2;'
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_3;'
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_4;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_1;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_2;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_3;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_4;'
 
 install:
   - composer install
