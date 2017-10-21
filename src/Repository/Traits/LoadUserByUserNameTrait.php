@@ -8,7 +8,6 @@ declare(strict_types = 1);
 namespace App\Repository\Traits;
 
 use App\Entity\User as Entity;
-use App\Entity\UserInterface;
 use Doctrine\ORM\QueryBuilder;
 
 /**

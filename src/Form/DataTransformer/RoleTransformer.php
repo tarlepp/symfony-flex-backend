@@ -9,7 +9,6 @@ namespace App\Form\DataTransformer;
 
 use App\Entity\Role;
 use App\Resource\RoleResource;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 
