@@ -35,13 +35,13 @@ class UserProvider extends EntityRepository implements UserProviderInterface, Us
      *
      * @param UserInterface $user
      *
-     * @return UserInterface|Entity
+     * @return Entity
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      */
-    public function refreshUser(UserInterface $user)
+    public function refreshUser(UserInterface $user): Entity
     {
         $class = \get_class($user);
 
