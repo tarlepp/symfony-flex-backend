@@ -65,7 +65,7 @@ trait RepositoryWrappersTrait
     /**
      * Getter method for EntityManager for current entity.
      *
-     * @return EntityManager|ObjectManager
+     * @return ObjectManager|EntityManager
      */
     public function getEntityManager()
     {

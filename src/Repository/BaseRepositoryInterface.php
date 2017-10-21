@@ -58,7 +58,7 @@ interface BaseRepositoryInterface
     /**
      * Getter method for EntityManager for current entity.
      *
-     * @return EntityManager|ObjectManager|null
+     * @return ObjectManager|EntityManager
      */
     public function getEntityManager();
 
