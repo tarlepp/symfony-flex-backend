@@ -9,7 +9,6 @@ namespace App\EventSubscriber;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Entity\User;
-use App\Entity\UserInterface;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
