@@ -176,8 +176,6 @@ final class RequestHandler
         $output = [];
 
         if ($search !== null) {
-            $input = null;
-
             try {
                 $input = JSON::decode($search, true);
 
