@@ -126,6 +126,7 @@ class AuthController
         RolesService $roles,
         SerializerInterface $serializer
     ): JsonResponse {
+        /** @var User $user */
         /** @noinspection NullPointerExceptionInspection */
         $user = $tokenStorage->getToken()->getUser();
 
