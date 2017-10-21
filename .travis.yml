@@ -44,7 +44,7 @@ before_script:
   - mkdir -p build/fastest
 
 script:
-  - find tests/ -name "*Test.php" | ./vendor/bin/fastest -v -p 2 "./vendor/bin/phpunit {} --coverage-php build/fastest/{n}.cov;"
+  - find tests/ -name "*Test.php" | ./vendor/bin/fastest -v -p 2 -o -b "php ./tests/bootstrap_fastest.php" "./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
 
 after_success:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi

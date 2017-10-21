@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.4/phpunit.xsd"
+         colors="true"
+         bootstrap="tests/bootstrap_fastest.php"
+>
+    <php>
+        <ini name="error_reporting" value="E_ALL" />
+        <ini name="display_errors" value="On" />
+        <ini name="display_startup_errors" value="On" />
+        <ini name="date.timezone" value="UTC" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="1" />
+        <server name="KERNEL_CLASS" value="App\Kernel" />
+    </php>
+
+    <listeners>
+        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
+    </listeners>
+
+    <testsuites>
+        <testsuite name="Functional tests">
+            <directory>tests/Functional/</directory>
+        </testsuite>
+        <testsuite name="Integration tests">
+            <directory>tests/Integration/</directory>
+        </testsuite>
+        <testsuite name="Unit tests">
+            <directory>tests/Unit/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+            <exclude>
+                <file>src/Kernel.php</file>
+            </exclude>
+            <exclude>
+                <directory>src/DataFixtures</directory>
+            </exclude>
+            <exclude>
+                <directory>src/Command</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
