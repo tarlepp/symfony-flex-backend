@@ -31,6 +31,7 @@
 		"lexik/jwt-authentication-bundle": "2.4.1",
 		"matthiasnoback/symfony-console-form": "2.3.0",
 		"nelmio/api-doc-bundle": "dev-master",
+		"phpunit/phpcov": "dev-master",
 		"piwik/device-detector": "3.8.2",
 		"ramsey/uuid": "3.7.1",
 		"roave/security-advisories": "dev-master",
