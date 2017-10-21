@@ -18,12 +18,23 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @method RestResourceInterface    getResource()
- * @method ResponseHandlerInterface getResponseHandler()
  */
 trait FindOneMethod
 {
+    /**
+     * @return RestResourceInterface
+     *
+     * @throws \UnexpectedValueException
+     */
+    abstract public function getResource(): RestResourceInterface;
+
+    /**
+     * @return ResponseHandlerInterface
+     *
+     * @throws \UnexpectedValueException
+     */
+    abstract public function getResponseHandler(): ResponseHandlerInterface;
+
     /**
      * Method to validate REST trait method.
      *

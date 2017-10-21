@@ -20,13 +20,23 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package App\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @method RestResourceInterface    getResource()
- * @method ResponseHandlerInterface getResponseHandler()
- * @method FormInterface            processForm()
  */
 trait UpdateMethod
 {
+    /**
+     * @return RestResourceInterface
+     *
+     * @throws \UnexpectedValueException
+     */
+    abstract public function getResource(): RestResourceInterface;
+
+    /**
+     * @return ResponseHandlerInterface
+     *
+     * @throws \UnexpectedValueException
+     */
+    abstract public function getResponseHandler(): ResponseHandlerInterface;
+
     /**
      * Method to validate REST trait method.
      *
@@ -48,6 +58,30 @@ trait UpdateMethod
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     abstract public function handleRestMethodException(\Exception $exception): HttpException;
+
+    /**
+     * Method to process POST, PUT and PATCH action form within REST traits.
+     *
+     * @param Request              $request
+     * @param FormFactoryInterface $formFactory
+     * @param string               $method
+     * @param string|null          $id
+     *
+     * @return FormInterface
+     *
+     * @throws \UnexpectedValueException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws \Symfony\Component\Form\Exception\LogicException
+     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
+     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    abstract public function processForm(
+        Request $request,
+        FormFactoryInterface $formFactory,
+        string $method,
+        string $id = null
+    ): FormInterface;
 
     /**
      * Generic 'updateMethod' method for REST resources.
