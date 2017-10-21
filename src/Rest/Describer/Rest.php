@@ -61,8 +61,13 @@ class Rest
      * @param Response   $response
      * @param Parameters $parameters
      */
-    public function __construct(Tags $tags, Security $security, Summary $summary, Response $response, Parameters $parameters)
-    {
+    public function __construct(
+        Tags $tags,
+        Security $security,
+        Summary $summary,
+        Response $response,
+        Parameters $parameters
+    ) {
         $this->tags = $tags;
         $this->security = $security;
         $this->summary = $summary;

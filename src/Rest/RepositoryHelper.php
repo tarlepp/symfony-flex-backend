@@ -278,19 +278,22 @@ class RepositoryHelper
 
                     // Array values needs some extra work
                     if (\is_array($comparison->value)) {
+                        /** @var array $value */
+                        $value = $comparison->value;
+
                         // Operator is between, so we need to add third parameter for Expr method
                         if ($lowercaseOperator === 'between') {
                             $parameters[] = '?' . self::$parameterCount;
-                            $queryBuilder->setParameter(self::$parameterCount, $comparison->value[0]);
+                            $queryBuilder->setParameter(self::$parameterCount, $value[0]);
 
                             self::$parameterCount++;
 
                             $parameters[] = '?' . self::$parameterCount;
-                            $queryBuilder->setParameter(self::$parameterCount, $comparison->value[1]);
+                            $queryBuilder->setParameter(self::$parameterCount, $value[1]);
                         } else { // Otherwise this must be IN or NOT IN expression
                             $parameters[] = \array_map(function ($value) use ($queryBuilder) {
                                 return $queryBuilder->expr()->literal($value);
-                            }, $comparison->value);
+                            }, $value);
                         }
                     } elseif (!($lowercaseOperator === 'isnull' || $lowercaseOperator === 'isnotnull')) {
                         $parameters[] = '?' . self::$parameterCount;
