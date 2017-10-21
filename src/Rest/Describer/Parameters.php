@@ -207,10 +207,7 @@ class Parameters
         // Render a parameter description
         $description = $this->templateEngine->render(
             'Swagger/parameter_order.twig',
-            [
-                'examples'          => $examples,
-                'advancedExamples'  => $advancedExamples,
-            ]
+            \compact('examples', 'advancedExamples')
         );
 
         $parameter = [
@@ -329,10 +326,7 @@ class Parameters
         // Render a parameter description
         $description = $this->templateEngine->render(
             'Swagger/parameter_populate.twig',
-            [
-                'examples'      => $examples,
-                'associations'  => $associations,
-            ]
+            \compact('examples', 'associations')
         );
 
         $parameter = [
