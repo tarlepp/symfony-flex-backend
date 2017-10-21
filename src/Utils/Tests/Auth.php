@@ -120,7 +120,7 @@ class Auth
                     'HTTP_X-Requested-With' => 'XMLHttpRequest'
                 ]
             ),
-            \json_encode(['username' => $username, 'password' => $password])
+            \json_encode(\compact('username', 'password'))
         );
 
         /** @var Response $response */
