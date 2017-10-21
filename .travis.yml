@@ -30,6 +30,10 @@ matrix:
 before_install:
   - cp .env.travis .env
   - cp .env.travis .env.test
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_1;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_2;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_3;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_4;'
 
 install:
   - composer install
@@ -42,10 +46,6 @@ before_script:
   - php ./vendor/bin/phpunit --version
   - php ./vendor/bin/requirements-checker
   - mkdir -p build/fastest
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_1;'
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_2;'
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_3;'
-  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_4;'
 
 script:
   - find tests/ -name "*Test.php" | ./vendor/bin/fastest -v -p 4 -o -b "php ./tests/bootstrap_fastest.php" "./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
