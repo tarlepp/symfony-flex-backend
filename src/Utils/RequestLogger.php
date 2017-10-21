@@ -12,7 +12,6 @@ use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Resource\LogRequestResource;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -36,7 +35,7 @@ class RequestLogger implements RequestLoggerInterface
     private $request;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     private $logger;
 
