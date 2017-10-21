@@ -19,10 +19,11 @@ use Doctrine\ORM\QueryBuilder;
  * @package App\Repository\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method string        getEntityName(): string
+ * @method string getEntityName(): string
  */
 trait RepositoryWrappersTrait
 {
+
     /**
      * @var ManagerRegistry
      */
@@ -69,7 +70,7 @@ trait RepositoryWrappersTrait
      */
     public function getEntityManager()
     {
-        return $this->managerRegistry->getManagerForClass(static::$entityName);
+        return $this->managerRegistry->getManagerForClass($this->getEntityName());
     }
 
     /**
