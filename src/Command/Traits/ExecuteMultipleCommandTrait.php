@@ -24,9 +24,22 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 trait ExecuteMultipleCommandTrait
 {
     /**
+     * @var array
+     */
+    private $choices = [];
+
+    /**
      * @var SymfonyStyle
      */
     private $io;
+
+    /**
+     * @param array $choices
+     */
+    protected function setChoices(array $choices): void
+    {
+        $this->choices = $choices;
+    }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
@@ -69,11 +82,11 @@ trait ExecuteMultipleCommandTrait
     private function ask()
     {
         $index = \array_search(
-            $this->io->choice('What you want to do', \array_values(static::$choices)),
-            \array_values(static::$choices),
+            $this->io->choice('What you want to do', \array_values($this->choices)),
+            \array_values($this->choices),
             true
         );
 
-        return \array_values(\array_flip(static::$choices))[(int)$index];
+        return \array_values(\array_flip($this->choices))[(int)$index];
     }
 }

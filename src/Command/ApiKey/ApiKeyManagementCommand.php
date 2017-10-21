@@ -21,18 +21,6 @@ class ApiKeyManagementCommand extends Command
     use ExecuteMultipleCommandTrait;
 
     /**
-     * @var array
-     */
-    protected static $choices = [
-        'api-key:create'        => 'Create API key',
-        'api-key:edit'          => 'Edit API key',
-        'api-key:change-token'  => 'Change API key token',
-        'api-key:remove'        => 'Remove API key',
-        'api-key:list'          => 'List API keys',
-        false                   => 'Exit',
-    ];
-
-    /**
      * ManagementCommand constructor.
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
@@ -42,5 +30,14 @@ class ApiKeyManagementCommand extends Command
         parent::__construct('api-key:management');
 
         $this->setDescription('Console command to manage API keys');
+
+        $this->setChoices([
+            'api-key:create'        => 'Create API key',
+            'api-key:edit'          => 'Edit API key',
+            'api-key:change-token'  => 'Change API key token',
+            'api-key:remove'        => 'Remove API key',
+            'api-key:list'          => 'List API keys',
+            false                   => 'Exit',
+        ]);
     }
 }
