@@ -28,11 +28,6 @@ class ApiKeyType extends AbstractType
     use UserGroupChoices;
 
     /**
-     * @var UserGroupResource
-     */
-    protected $userGroupResource;
-
-    /**
      * @var UserGroupTransformer
      */
     private $userGroupTransformer;
