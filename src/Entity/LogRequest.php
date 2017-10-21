@@ -85,7 +85,8 @@ class LogRequest implements EntityInterface
      *      @ORM\JoinColumn(
      *          name="api_key_id",
      *          referencedColumnName="id",
-     *          nullable=true
+     *          nullable=true,
+     *          onDelete="SET NULL",
      *      ),
      *  })
      */
