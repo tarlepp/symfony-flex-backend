@@ -42,7 +42,7 @@ abstract class EnumType extends Type
             return "'" . $value . "'";
         };
 
-        return 'ENUM(' . \implode(', ', \array_map($iterator, static::$values)). ')';
+        return 'ENUM(' . \implode(', ', \array_map($iterator, static::$values)) . ')';
     }
 
     /**
