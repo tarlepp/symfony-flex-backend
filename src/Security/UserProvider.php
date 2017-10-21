@@ -9,7 +9,6 @@ namespace App\Security;
 
 use App\Entity\User as Entity;
 use App\Repository\Traits\LoadUserByUserNameTrait;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -42,7 +41,7 @@ class UserProvider extends EntityRepository implements UserProviderInterface, Us
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      */
-    public function refreshUser(UserInterface $user): UserInterface
+    public function refreshUser(UserInterface $user)
     {
         $class = \get_class($user);
 
