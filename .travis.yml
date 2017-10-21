@@ -48,10 +48,10 @@ before_script:
   - mkdir -p build/fastest
 
 script:
-  - find tests/ -name "*Test.php" | ./vendor/bin/fastest -v -p 4 "./vendor/bin/phpunit {} --coverage-php build/fastest/{n}.cov;"
+  - find tests/ -name "*Test.php" | ./vendor/bin/fastest -v -p 8 "./vendor/bin/phpunit {} --coverage-php build/fastest/{n}.cov;"
 
 after_success:
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=build/logs/clover.xml fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/coveralls -v; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml; fi
 
