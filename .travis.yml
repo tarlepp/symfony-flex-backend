@@ -33,6 +33,11 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_1;'
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_2;'
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_3;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_4;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_5;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_6;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_7;'
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_8;'
 
 install:
   - composer install
@@ -47,7 +52,7 @@ before_script:
   - mkdir -p build/fastest
 
 script:
-  - find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 3 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
+  - find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
 
 after_success:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi
