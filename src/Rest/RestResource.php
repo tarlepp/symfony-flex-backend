@@ -203,14 +203,17 @@ abstract class RestResource implements RestResourceInterface
     /**
      * Getter method DTO class with loaded entity data.
      *
-     * @param string $id
-     * @param string $dtoClass
+     * @param string                $id
+     * @param string                $dtoClass
+     * @param null|RestDtoInterface $dto
      *
      * @return RestDtoInterface
      *
+     * @throws \LogicException
+     * @throws \BadMethodCallException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function getDtoForEntity(string $id, string $dtoClass): RestDtoInterface
+    public function getDtoForEntity(string $id, string $dtoClass, RestDtoInterface $dto = null): RestDtoInterface
     {
         // Fetch entity
         $entity = $this->getEntity($id);
@@ -222,6 +225,10 @@ abstract class RestResource implements RestResourceInterface
          */
         $restDto = new $dtoClass();
         $restDto->load($entity);
+
+        if ($dto !== null) {
+            $restDto->patch($dto);
+        }
 
         return $restDto;
     }
@@ -434,14 +441,8 @@ abstract class RestResource implements RestResourceInterface
         /**
          * Determine used dto class and create new instance of that and load entity to that. And after that patch
          * that dto with given partial OR whole dto class.
-         *
-         * @var RestDtoInterface $restDto
          */
-        $dtoClass = \get_class($dto);
-
-        $restDto = new $dtoClass();
-        $restDto->load($entity);
-        $restDto->patch($dto);
+        $restDto = $this->getDtoForEntity($id, \get_class($dto), $dto);
 
         // Validate DTO
         if (!$skipValidation) {
@@ -537,15 +538,8 @@ abstract class RestResource implements RestResourceInterface
         // Before callback method call
         $this->beforeSave($entity);
 
-        // Validate entity
-        if (!$skipValidation) {
-            $errors = $this->getValidator()->validate($entity);
-
-            // Oh noes, we have some errors
-            if (\count($errors) > 0) {
-                throw new ValidatorException((string)$errors);
-            }
-        }
+        // Validate current entity
+        $this->validateEntity($entity, $skipValidation);
 
         // Persist on database
         $this->getRepository()->save($entity);
@@ -612,5 +606,23 @@ abstract class RestResource implements RestResourceInterface
         }
 
         return $entity;
+    }
+
+    /**
+     * Method to validate specified entity.
+     *
+     * @param EntityInterface $entity
+     * @param bool            $skipValidation
+     *
+     * @throws \Symfony\Component\Validator\Exception\ValidatorException
+     */
+    private function validateEntity(EntityInterface $entity, bool $skipValidation): void
+    {
+        $errors = !$skipValidation ? $this->getValidator()->validate($entity) : [];
+
+        // Oh noes, we have some errors
+        if (\count($errors) > 0) {
+            throw new ValidatorException((string)$errors);
+        }
     }
 }
