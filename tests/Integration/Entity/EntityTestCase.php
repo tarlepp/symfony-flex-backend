@@ -108,8 +108,9 @@ abstract class EntityTestCase extends KernelTestCase
      * @param string $field
      * @param string $type
      * @param array  $meta
+     * @param bool   $readOnly
      */
-    public function testThatGetterAndSetterExists(string $field, string $type, array $meta): void
+    public function testThatGetterAndSetterExists(string $field, string $type, array $meta, bool $readOnly): void
     {
         $getter = 'get' . \ucfirst($field);
         $setter = 'set' . \ucfirst($field);
@@ -129,14 +130,14 @@ abstract class EntityTestCase extends KernelTestCase
         );
 
         if (\array_key_exists('columnName', $meta)) {
-            static::assertTrue(
+            $message = $readOnly
+                ? "Entity '%s' has not expected setter '%s()' method for '%s' property."
+                : "Entity '%s' does not have expected setter '%s()' method for '%s' property.";
+
+            static::assertSame(
+                !$readOnly,
                 \method_exists($this->entity, $setter),
-                \sprintf(
-                    "Entity '%s' does not have expected setter '%s()' method for '%s' property.",
-                    $this->entityName,
-                    $setter,
-                    $field
-                )
+                \sprintf($message, $this->entityName, $setter, $field)
             );
         }
     }
@@ -148,8 +149,11 @@ abstract class EntityTestCase extends KernelTestCase
      * @param string $type
      * @param array  $meta
      */
-    public function testThatSetterOnlyAcceptSpecifiedType(string $field, string $type, array $meta): void
-    {
+    public function testThatSetterOnlyAcceptSpecifiedType(
+        string $field,
+        string $type,
+        array $meta
+    ): void {
         $setter = 'set' . \ucfirst($field);
 
         if (!\array_key_exists('columnName', $meta) && !\array_key_exists('joinColumns', $meta)) {
@@ -178,8 +182,11 @@ abstract class EntityTestCase extends KernelTestCase
      * @param string $type
      * @param array  $meta
      */
-    public function testThatSetterReturnsInstanceOfEntity(string $field, string $type, array $meta): void
-    {
+    public function testThatSetterReturnsInstanceOfEntity(
+        string $field,
+        string $type,
+        array $meta
+    ): void {
         $setter = 'set' . \ucfirst($field);
 
         if (!\array_key_exists('columnName', $meta)) {
@@ -476,7 +483,12 @@ abstract class EntityTestCase extends KernelTestCase
          * @return array
          */
         $iterator = function (string $field) use ($meta): array {
-            return [$field, PHPUnitUtil::getType($meta->getTypeOfField($field)), $meta->getFieldMapping($field)];
+            return [
+                $field,
+                PHPUnitUtil::getType($meta->getTypeOfField($field)),
+                $meta->getFieldMapping($field),
+                $meta->isReadOnly
+            ];
         };
 
         $fieldsToOmit = \array_merge(
@@ -501,14 +513,18 @@ abstract class EntityTestCase extends KernelTestCase
         $assocFields = [];
 
         foreach ($meta->getAssociationMappings() as $mapping) {
+            /** @noinspection OffsetOperationsInspection */
             if (\in_array($mapping['fieldName'], ['createdBy', 'updatedBy', 'deletedBy'], true)) {
                 continue;
             }
 
+            /** @noinspection OffsetOperationsInspection */
             $field = $mapping['fieldName'];
+
+            /** @noinspection OffsetOperationsInspection */
             $type = $mapping['targetEntity'];
 
-            $assocFields[] = [$field, $type, $mapping];
+            $assocFields[] = [$field, $type, $mapping, $meta->isReadOnly];
         }
 
         return \array_merge(
@@ -584,12 +600,12 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata($this->entityName);
 
-        $iterator = function (array $mapping): array {
+        $iterator = function (array $mapping) use ($meta): array {
             $targetEntity = new $mapping['targetEntity']();
 
             return [
                 [
-                    'set' . \ucfirst($mapping['fieldName']),
+                    $meta->isReadOnly ? false : 'set' . \ucfirst($mapping['fieldName']),
                     'get' . \ucfirst($mapping['fieldName']),
                     $targetEntity,
                     $mapping['fieldName'],
@@ -633,7 +649,7 @@ abstract class EntityTestCase extends KernelTestCase
         // Get entity class meta data
         $meta = $entityManager->getClassMetadata($this->entityName);
 
-        $iterator = function (array $mapping): array {
+        $iterator = function (array $mapping) use ($meta): array {
             $input = new $mapping['targetEntity']();
 
             $methods = [
@@ -644,12 +660,14 @@ abstract class EntityTestCase extends KernelTestCase
                 case ClassMetadataInfo::ONE_TO_ONE:
                     break;
                 case ClassMetadataInfo::MANY_TO_ONE:
-                    $methods[] = [
-                        'set' . \ucfirst($mapping['fieldName']),
-                        $mapping['fieldName'],
-                        $input,
-                        $this->entityName
-                    ];
+                    if ($meta->isReadOnly === false) {
+                        $methods[] = [
+                            'set' . \ucfirst($mapping['fieldName']),
+                            $mapping['fieldName'],
+                            $input,
+                            $this->entityName
+                        ];
+                    }
                     break;
                 case ClassMetadataInfo::ONE_TO_MANY:
                     break;
@@ -664,25 +682,32 @@ abstract class EntityTestCase extends KernelTestCase
                             $input,
                             ArrayCollection::class
                         ],
-                        [
-                            'add' . \ucfirst($singular),
-                            $mapping['fieldName'],
-                            $input,
-                            $this->entityName
-                        ],
-                        [
-                            'remove' . \ucfirst($singular),
-                            $mapping['fieldName'],
-                            $input,
-                            $this->entityName
-                        ],
-                        [
-                            'clear' . \ucfirst($mapping['fieldName']),
-                            $mapping['fieldName'],
-                            $input,
-                            $this->entityName
-                        ]
                     ];
+
+                    if ($meta->isReadOnly === false) {
+                        $setters = [
+                            [
+                                'add' . \ucfirst($singular),
+                                $mapping['fieldName'],
+                                $input,
+                                $this->entityName
+                            ],
+                            [
+                                'remove' . \ucfirst($singular),
+                                $mapping['fieldName'],
+                                $input,
+                                $this->entityName
+                            ],
+                            [
+                                'clear' . \ucfirst($mapping['fieldName']),
+                                $mapping['fieldName'],
+                                $input,
+                                $this->entityName
+                            ]
+                        ];
+
+                        $methods = \array_merge($methods, $setters);
+                    }
                     break;
             }
 

@@ -7,8 +7,11 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Entity;
 
+use App\Entity\ApiKey;
 use App\Entity\LogRequest;
+use App\Entity\User;
 use App\Utils\Tests\PHPUnitUtil;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,6 +28,72 @@ class LogRequestTest extends EntityTestCase
      */
     protected $entityName = LogRequest::class;
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @param string $field
+     * @param string $type
+     * @param array  $meta
+    */
+    public function testThatSetterOnlyAcceptSpecifiedType(
+        string $field = null,
+        string $type = null,
+        array $meta = null
+    ): void {
+        static::markTestSkipped('There is not setter in read only entity...');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @param string $field
+     * @param string $type
+     * @param array  $meta
+     */
+    public function testThatSetterReturnsInstanceOfEntity(
+        string $field = null,
+        string $type = null,
+        array $meta = null
+    ): void {
+        static::markTestSkipped('There is not setter in read only entity...');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @dataProvider dataProviderTestThatSetterAndGettersWorks
+     *
+     * @param string $field
+     * @param string $type
+     * @param array  $meta
+     */
+    public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
+    {
+        $getter = 'get' . \ucfirst($field);
+
+        if ($type === 'boolean') {
+            $getter = 'is' . \ucfirst($field);
+        }
+
+        $logRequest = new LogRequest(
+            Request::create(''),
+            Response::create('abcdefgh'),
+            new User(),
+            new ApiKey()
+        );
+
+        if (!(\array_key_exists('columnName', $meta) || \array_key_exists('joinColumns', $meta))) {
+            $type = ArrayCollection::class;
+
+            static::assertInstanceOf($type, $logRequest->$getter());
+        }
+
+        try {
+            if (static::isType($type)) {
+                static::assertInternalType($type, $logRequest->$getter());
+            }
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
+            static::assertInstanceOf($type, $logRequest->$getter());
+        }
+    }
+
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
      *
@@ -33,9 +102,10 @@ class LogRequestTest extends EntityTestCase
      */
     public function testThatSensitiveDataIsCleanedFromHeaders(array $headers, array $expected)
     {
-        $logRequest = new LogRequest(Request::create(''), Response::create());
+        $request = Request::create('');
+        $request->headers->replace($headers);
 
-        $logRequest->setHeaders($headers);
+        $logRequest = new LogRequest($request, Response::create());
 
         static::assertSame($expected, $logRequest->getHeaders());
     }
@@ -48,9 +118,10 @@ class LogRequestTest extends EntityTestCase
      */
     public function testThatSensitiveDataIsCleanedFromParameters(array $parameters, array $expected)
     {
-        $logRequest = new LogRequest(Request::create(''), Response::create());
+        $request = Request::create('', 'POST');
+        $request->request->replace($parameters);
 
-        $logRequest->setParameters($parameters);
+        $logRequest = new LogRequest($request, Response::create());
 
         static::assertSame($expected, $logRequest->getParameters());
     }
@@ -77,31 +148,21 @@ class LogRequestTest extends EntityTestCase
     {
         return [
             [
-                ['passWord' => 'password'],
-                ['passWord' => '*** REPLACED ***'],
+                ['password' => 'password'],
+                ['password' => '*** REPLACED ***'],
             ],
             [
                 ['token' => 'secret token'],
                 ['token' => '*** REPLACED ***'],
             ],
             [
-                ['Authorization' => 'authorization bearer'],
-                ['Authorization' => '*** REPLACED ***'],
+                ['authorization' => 'authorization bearer'],
+                ['authorization' => '*** REPLACED ***'],
             ],
             [
-                ['cookie' => ['cookie']],
+                ['cookie' => 'cookie'],
                 ['cookie' => '*** REPLACED ***'],
             ],
-            [
-                ['someHeader' => [
-                    'foo'       => 'bar',
-                    'password'  => 'some password',
-                ]],
-                ['someHeader' => [
-                    'foo'       => 'bar',
-                    'password'  => '*** REPLACED ***',
-                ]],
-            ]
         ];
     }
 
