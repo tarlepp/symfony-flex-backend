@@ -23,7 +23,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          @ORM\Index(name="user_id", columns={"user_id"}),
  *      }
  *  )
- * @ORM\Entity()
+ * @ORM\Entity(
+ *      readOnly=true
+ *  )
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -442,37 +444,31 @@ class LogRequest implements EntityInterface
      *
      * @param Request|null  $request
      * @param Response|null $response
+     * @param User|null     $user
+     * @param ApiKey|null   $apiKey
+     * @param bool          $masterRequest
      *
      * @throws \LogicException
      */
-    public function __construct(Request $request = null, Response $response = null)
-    {
+    public function __construct(
+        Request $request = null,
+        Response $response = null,
+        User $user = null,
+        ApiKey $apiKey = null,
+        bool $masterRequest = null
+    ) {
         $this->id = Uuid::uuid4()->toString();
+        $this->user = $user;
+        $this->apiKey = $apiKey;
+        $this->masterRequest = $masterRequest ?? true;
 
         if ($request !== null) {
-            $this->setClientIp((string)$request->getClientIp());
-            $this->setMethod($request->getRealMethod());
-            $this->setScheme($request->getScheme());
-            $this->setHttpHost($request->getHttpHost());
-            $this->setBasePath($request->getBasePath());
-            $this->setScript('/' . \basename($request->getScriptName()));
-            $this->setPath($request->getPathInfo());
-            $this->setQueryString($request->getRequestUri());
-            $this->setUri($request->getUri());
-            $this->setController($request->get('_controller', ''));
-            $this->setAction($this->determineAction($request));
-            $this->setHeaders($request->headers->all());
-            $this->setContentType($request->getMimeType($request->getContentType()));
-            $this->setContentTypeShort($request->getContentType());
-            $this->setContent($request->getContent());
-            $this->setParameters($this->determineParameters($request));
-            $this->setXmlHttpRequest($request->isXmlHttpRequest());
-            $this->setTime(new \DateTime('now', new \DateTimeZone('UTC')));
+            $this->processRequest($request);
         }
 
         if ($response !== null) {
-            $this->setStatusCode($response->getStatusCode());
-            $this->setResponseContentLength(mb_strlen($response->getContent()));
+            $this->statusCode = $response->getStatusCode();
+            $this->responseContentLength = \mb_strlen($response->getContent());
         }
     }
 
@@ -493,35 +489,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param string $clientIp
-     *
-     * @return LogRequest
-     */
-    public function setClientIp(string $clientIp): LogRequest
-    {
-        $this->clientIp = $clientIp;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getUri(): string
     {
         return $this->uri;
-    }
-
-    /**
-     * @param string $uri
-     *
-     * @return LogRequest
-     */
-    public function setUri(string $uri): LogRequest
-    {
-        $this->uri = $uri;
-
-        return $this;
     }
 
     /**
@@ -533,35 +505,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param string $method
-     *
-     * @return LogRequest
-     */
-    public function setMethod(string $method): LogRequest
-    {
-        $this->method = $method;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getScheme(): string
     {
         return $this->scheme;
-    }
-
-    /**
-     * @param string $scheme
-     *
-     * @return LogRequest
-     */
-    public function setScheme(string $scheme): LogRequest
-    {
-        $this->scheme = $scheme;
-
-        return $this;
     }
 
     /**
@@ -573,35 +521,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param string $httpHost
-     *
-     * @return LogRequest
-     */
-    public function setHttpHost(string $httpHost): LogRequest
-    {
-        $this->httpHost = $httpHost;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getBasePath(): string
     {
         return $this->basePath;
-    }
-
-    /**
-     * @param string $basePath
-     *
-     * @return LogRequest
-     */
-    public function setBasePath(string $basePath): LogRequest
-    {
-        $this->basePath = $basePath;
-
-        return $this;
     }
 
     /**
@@ -613,38 +537,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param string|null $queryString
-     *
-     * @return LogRequest
-     */
-    public function setQueryString(string $queryString = null): LogRequest
-    {
-        $this->queryString = $queryString;
-
-        return $this;
-    }
-
-    /**
      * @return array
      */
     public function getHeaders(): array
     {
         return $this->headers;
-    }
-
-    /**
-     * @param array $headers
-     *
-     * @return LogRequest
-     */
-    public function setHeaders(array $headers): LogRequest
-    {
-        // Clean possible sensitive data from parameters
-        \array_walk($headers, [$this, 'cleanParameters']);
-
-        $this->headers = $headers;
-
-        return $this;
     }
 
     /**
@@ -656,38 +553,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param array $parameters
-     *
-     * @return LogRequest
-     */
-    public function setParameters(array $parameters): LogRequest
-    {
-        // Clean possible sensitive data from parameters
-        \array_walk($parameters, [$this, 'cleanParameters']);
-
-        $this->parameters = $parameters;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getStatusCode(): int
     {
         return $this->statusCode;
-    }
-
-    /**
-     * @param int $statusCode
-     *
-     * @return LogRequest
-     */
-    public function setStatusCode(int $statusCode): LogRequest
-    {
-        $this->statusCode = $statusCode;
-
-        return $this;
     }
 
     /**
@@ -699,35 +569,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param int $responseContentLength
-     *
-     * @return LogRequest
-     */
-    public function setResponseContentLength(int $responseContentLength): LogRequest
-    {
-        $this->responseContentLength = $responseContentLength;
-
-        return $this;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getTime(): \DateTime
     {
         return $this->time;
-    }
-
-    /**
-     * @param \DateTime $time
-     *
-     * @return LogRequest
-     */
-    public function setTime(\DateTime $time): LogRequest
-    {
-        $this->time = $time;
-
-        return $this;
     }
 
     /**
@@ -739,35 +585,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param User|null $user
-     *
-     * @return LogRequest
-     */
-    public function setUser(User $user = null): LogRequest
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
      * @return ApiKey|null
      */
     public function getApiKey(): ?ApiKey
     {
         return $this->apiKey;
-    }
-
-    /**
-     * @param ApiKey|null $apiKey
-     *
-     * @return LogRequest
-     */
-    public function setApiKey(ApiKey $apiKey = null): LogRequest
-    {
-        $this->apiKey = $apiKey;
-
-        return $this;
     }
 
     /**
@@ -779,35 +601,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param boolean $xmlHttpRequest
-     *
-     * @return LogRequest
-     */
-    public function setXmlHttpRequest(bool $xmlHttpRequest): LogRequest
-    {
-        $this->xmlHttpRequest = $xmlHttpRequest;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getController(): ?string
     {
         return $this->controller;
-    }
-
-    /**
-     * @param string|null $controller
-     *
-     * @return LogRequest
-     */
-    public function setController(string $controller = null): LogRequest
-    {
-        $this->controller = $controller;
-
-        return $this;
     }
 
     /**
@@ -819,35 +617,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param string|null $action
-     *
-     * @return LogRequest
-     */
-    public function setAction(string $action = null): LogRequest
-    {
-        $this->action = $action;
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getPath(): ?string
     {
         return $this->path;
-    }
-
-    /**
-     * @param string|null $path
-     *
-     * @return LogRequest
-     */
-    public function setPath(string $path = null): LogRequest
-    {
-        $this->path = $path;
-
-        return $this;
     }
 
     /**
@@ -859,35 +633,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param boolean $masterRequest
-     *
-     * @return LogRequest
-     */
-    public function setMasterRequest(bool $masterRequest): LogRequest
-    {
-        $this->masterRequest = $masterRequest;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getScript(): string
     {
         return $this->script;
-    }
-
-    /**
-     * @param string $script
-     *
-     * @return LogRequest
-     */
-    public function setScript(string $script): LogRequest
-    {
-        $this->script = $script;
-
-        return $this;
     }
 
     /**
@@ -899,35 +649,11 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param string $content
-     *
-     * @return LogRequest
-     */
-    public function setContent(string $content): LogRequest
-    {
-        $this->content = $this->cleanContent($content);
-
-        return $this;
-    }
-
-    /**
      * @return string|null
      */
     public function getContentType(): ?string
     {
         return $this->contentType;
-    }
-
-    /**
-     * @param string $contentType
-     *
-     * @return LogRequest
-     */
-    public function setContentType(string $contentType = null): LogRequest
-    {
-        $this->contentType = $contentType;
-
-        return $this;
     }
 
     /**
@@ -939,15 +665,42 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @param string $contentTypeShort
+     * @param Request $request
      *
-     * @return LogRequest
+     * @throws \LogicException
      */
-    public function setContentTypeShort(string $contentTypeShort = null): LogRequest
+    private function processRequest(Request $request): void
     {
-        $this->contentTypeShort = $contentTypeShort;
+        $this->clientIp = (string)$request->getClientIp();
+        $this->method = $request->getRealMethod();
+        $this->scheme = $request->getScheme();
+        $this->httpHost = $request->getHttpHost();
+        $this->basePath = $request->getBasePath();
+        $this->script = '/' . \basename($request->getScriptName());
+        $this->path = $request->getPathInfo();
+        $this->queryString = $request->getRequestUri();
+        $this->uri = $request->getUri();
+        $this->controller = $request->get('_controller', '');
+        $this->action = $this->determineAction($request);
+        $this->contentType = (string)$request->getMimeType($request->getContentType());
+        $this->contentTypeShort = (string)$request->getContentType();
+        $this->content = $this->cleanContent($request->getContent());
+        $this->xmlHttpRequest = $request->isXmlHttpRequest();
+        $this->time = new \DateTime('now', new \DateTimeZone('UTC'));
 
-        return $this;
+        $headers = $request->headers->all();
+
+        // Clean possible sensitive data from parameters
+        \array_walk($headers, [$this, 'cleanParameters']);
+
+        $this->headers = $headers;
+
+        $parameters = $this->determineParameters($request);
+
+        // Clean possible sensitive data from parameters
+        \array_walk($parameters, [$this, 'cleanParameters']);
+
+        $this->parameters = $parameters;
     }
 
     /**
@@ -956,7 +709,7 @@ class LogRequest implements EntityInterface
      * @param mixed  $value
      * @param string $key
      */
-    protected function cleanParameters(&$value, string $key): void
+    private function cleanParameters(&$value, string $key): void
     {
         // What keys we should replace so that any sensitive data is not logged
         static $replacements = [
@@ -971,7 +724,7 @@ class LogRequest implements EntityInterface
 
         // Replace current value
         if (\array_key_exists($key, $replacements)) {
-            $value = $replacements[$key];
+            $value = $this->cleanContent($replacements[$key]);
         }
 
         // Recursive call
@@ -1007,7 +760,6 @@ class LogRequest implements EntityInterface
         // Content given so parse it
         if ($request->getContent()) {
             // First try to convert content to array from JSON
-
             try {
                 $output = JSON::decode($request->getContent(), true);
             } /** @noinspection BadExceptionsProcessingInspection */
