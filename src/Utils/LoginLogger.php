@@ -113,7 +113,7 @@ class LoginLogger implements LoginLoggerInterface
         $this->deviceDetector->parse();
 
         // Create entry
-        $this->createEntry($type, $request, $agent);
+        $this->createEntry($type, $request);
     }
 
     /**
@@ -121,32 +121,13 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @param string  $type
      * @param Request $request
-     * @param string  $agent
      *
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
-    private function createEntry(string $type, Request $request, string $agent): void
+    private function createEntry(string $type, Request $request): void
     {
         /** @var LogLogin $entry */
-        $entry = new LogLogin();
-        $entry->setType($type);
-        $entry->setUser($this->user);
-        $entry->setIp((string)$request->getClientIp());
-        $entry->setHost($request->getHost());
-        $entry->setAgent($agent);
-        $entry->setClientType((string)$this->deviceDetector->getClient('type'));
-        $entry->setClientName((string)$this->deviceDetector->getClient('name'));
-        $entry->setClientShortName((string)$this->deviceDetector->getClient('short_name'));
-        $entry->setClientVersion((string)$this->deviceDetector->getClient('version'));
-        $entry->setClientEngine((string)$this->deviceDetector->getClient('engine'));
-        $entry->setOsName((string)$this->deviceDetector->getOs('name'));
-        $entry->setOsShortName((string)$this->deviceDetector->getOs('short_name'));
-        $entry->setOsVersion((string)$this->deviceDetector->getOs('version'));
-        $entry->setOsPlatform((string)$this->deviceDetector->getOs('platform'));
-        $entry->setDeviceName($this->deviceDetector->getDeviceName());
-        $entry->setBrandName($this->deviceDetector->getBrandName());
-        $entry->setModel($this->deviceDetector->getModel());
-        $entry->setTimestamp(new \DateTime('NOW', new \DateTimeZone('UTC')));
+        $entry = new LogLogin($type, $request, $this->deviceDetector, $this->user);
 
         // And store entry to database
         $this->logLoginResource->save($entry, true);

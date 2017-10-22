@@ -7,8 +7,10 @@ declare(strict_types = 1);
  */
 namespace App\Entity;
 
+use DeviceDetector\DeviceDetector;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -20,7 +22,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          @ORM\Index(name="user_id", columns={"user_id"}),
  *      }
  *  )
- * @ORM\Entity()
+ * @ORM\Entity(
+ *      readOnly=true
+ *  )
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -355,10 +359,26 @@ class LogLogin implements EntityInterface
 
     /**
      * LogLogin constructor.
+     *
+     * @param string         $type
+     * @param Request        $request
+     * @param DeviceDetector $deviceDetector
+     * @param User|null      $user
+     *
+     * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
-    public function __construct()
+    public function __construct(string $type, Request $request, DeviceDetector $deviceDetector, User $user = null)
     {
         $this->id = Uuid::uuid4()->toString();
+
+        $this->type = $type;
+        $this->user = $user;
+        $this->ip = (string)$request->getClientIp();
+        $this->host = $request->getHost();
+        $this->agent = (string)$request->headers->get('User-Agent');
+        $this->timestamp = new \DateTime('NOW', new \DateTimeZone('UTC'));
+
+        $this->processClientData($deviceDetector);
     }
 
     /**
@@ -378,35 +398,11 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param string $type
-     *
-     * @return LogLogin
-     */
-    public function setType(string $type): LogLogin
-    {
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
      * @return User|null
      */
     public function getUser(): ?User
     {
         return $this->user;
-    }
-
-    /**
-     * @param User|null $user
-     *
-     * @return LogLogin
-     */
-    public function setUser(User $user = null): LogLogin
-    {
-        $this->user = $user;
-
-        return $this;
     }
 
     /**
@@ -418,35 +414,11 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param string $ip
-     *
-     * @return LogLogin
-     */
-    public function setIp(string $ip): LogLogin
-    {
-        $this->ip = $ip;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getHost(): string
     {
         return $this->host;
-    }
-
-    /**
-     * @param string $host
-     *
-     * @return LogLogin
-     */
-    public function setHost(string $host): LogLogin
-    {
-        $this->host = $host;
-
-        return $this;
     }
 
     /**
@@ -458,35 +430,11 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param string $agent
-     *
-     * @return LogLogin
-     */
-    public function setAgent(string $agent): LogLogin
-    {
-        $this->agent = $agent;
-
-        return $this;
-    }
-
-    /**
      * @return null|string
      */
     public function getClientType(): ?string
     {
         return $this->clientType;
-    }
-
-    /**
-     * @param null|string $clientType
-     *
-     * @return LogLogin
-     */
-    public function setClientType(string $clientType = null): LogLogin
-    {
-        $this->clientType = $clientType;
-
-        return $this;
     }
 
     /**
@@ -498,35 +446,11 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param null|string $clientName
-     *
-     * @return LogLogin
-     */
-    public function setClientName(string $clientName = null): LogLogin
-    {
-        $this->clientName = $clientName;
-
-        return $this;
-    }
-
-    /**
      * @return null|string
      */
     public function getClientShortName(): ?string
     {
         return $this->clientShortName;
-    }
-
-    /**
-     * @param null|string $clientShortName
-     *
-     * @return LogLogin
-     */
-    public function setClientShortName(string $clientShortName = null): LogLogin
-    {
-        $this->clientShortName = $clientShortName;
-
-        return $this;
     }
 
     /**
@@ -538,35 +462,11 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param null|string $clientVersion
-     *
-     * @return LogLogin
-     */
-    public function setClientVersion(string $clientVersion = null): LogLogin
-    {
-        $this->clientVersion = $clientVersion;
-
-        return $this;
-    }
-
-    /**
      * @return null|string
      */
     public function getClientEngine(): ?string
     {
         return $this->clientEngine;
-    }
-
-    /**
-     * @param null|string $clientEngine
-     *
-     * @return LogLogin
-     */
-    public function setClientEngine(string $clientEngine = null): LogLogin
-    {
-        $this->clientEngine = $clientEngine;
-
-        return $this;
     }
 
     /**
@@ -578,35 +478,11 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param null|string $osName
-     *
-     * @return LogLogin
-     */
-    public function setOsName(string $osName = null): LogLogin
-    {
-        $this->osName = $osName;
-
-        return $this;
-    }
-
-    /**
      * @return null|string
      */
     public function getOsShortName(): ?string
     {
         return $this->osShortName;
-    }
-
-    /**
-     * @param null|string $osShortName
-     *
-     * @return LogLogin
-     */
-    public function setOsShortName(string $osShortName = null): LogLogin
-    {
-        $this->osShortName = $osShortName;
-
-        return $this;
     }
 
     /**
@@ -618,35 +494,11 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param null|string $osVersion
-     *
-     * @return LogLogin
-     */
-    public function setOsVersion(string $osVersion = null): LogLogin
-    {
-        $this->osVersion = $osVersion;
-
-        return $this;
-    }
-
-    /**
      * @return null|string
      */
     public function getOsPlatform(): ?string
     {
         return $this->osPlatform;
-    }
-
-    /**
-     * @param null|string $osPlatform
-     *
-     * @return LogLogin
-     */
-    public function setOsPlatform(string $osPlatform = null): LogLogin
-    {
-        $this->osPlatform = $osPlatform;
-
-        return $this;
     }
 
     /**
@@ -658,35 +510,11 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param null|string $deviceName
-     *
-     * @return LogLogin
-     */
-    public function setDeviceName(string $deviceName = null): LogLogin
-    {
-        $this->deviceName = $deviceName;
-
-        return $this;
-    }
-
-    /**
      * @return null|string
      */
     public function getBrandName(): ?string
     {
         return $this->brandName;
-    }
-
-    /**
-     * @param null|string $brandName
-     *
-     * @return LogLogin
-     */
-    public function setBrandName(string $brandName = null): LogLogin
-    {
-        $this->brandName = $brandName;
-
-        return $this;
     }
 
     /**
@@ -698,18 +526,6 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param null|string $model
-     *
-     * @return LogLogin
-     */
-    public function setModel(string $model = null): LogLogin
-    {
-        $this->model = $model;
-
-        return $this;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getTimestamp(): \DateTime
@@ -718,14 +534,21 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @param \DateTime $timestamp
-     *
-     * @return LogLogin
+     * @param DeviceDetector $deviceDetector
      */
-    public function setTimestamp(\DateTime $timestamp): LogLogin
+    private function processClientData(DeviceDetector $deviceDetector): void
     {
-        $this->timestamp = $timestamp;
-
-        return $this;
+        $this->clientType = (string)$deviceDetector->getClient('type');
+        $this->clientName = (string)$deviceDetector->getClient('name');
+        $this->clientShortName = (string)$deviceDetector->getClient('short_name');
+        $this->clientVersion = (string)$deviceDetector->getClient('version');
+        $this->clientEngine = (string)$deviceDetector->getClient('engine');
+        $this->osName = (string)$deviceDetector->getOs('name');
+        $this->osShortName = (string)$deviceDetector->getOs('short_name');
+        $this->osVersion = (string)$deviceDetector->getOs('version');
+        $this->osPlatform = (string)$deviceDetector->getOs('platform');
+        $this->deviceName = $deviceDetector->getDeviceName();
+        $this->brandName = $deviceDetector->getBrandName();
+        $this->model = $deviceDetector->getModel();
     }
 }
