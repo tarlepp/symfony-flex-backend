@@ -169,10 +169,7 @@ class RequestLogger implements RequestLoggerInterface
     private function createRequestLogEntry()
     {
         // Create new request log entity
-        $entity = new LogRequest($this->request, $this->response);
-        $entity->setUser($this->user);
-        $entity->setApiKey($this->apiKey);
-        $entity->setMasterRequest($this->masterRequest);
+        $entity = new LogRequest($this->request, $this->response, $this->user, $this->apiKey, $this->masterRequest);
 
         $this->resource->save($entity, true);
     }
