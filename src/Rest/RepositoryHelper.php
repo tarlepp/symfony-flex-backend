@@ -81,40 +81,17 @@ class RepositoryHelper
         $condition = [];
 
         /**
-         * Lambda function to create condition array for 'getExpression' method.
-         *
-         * @param string      $column
-         * @param mixed       $value
-         * @param null|string $operator
-         *
-         * @return array
-         */
-        $createCriteria = function (string $column, $value, $operator = null) {
-            if (\strpos($column, '.') === false) {
-                $column = 'entity.' . $column;
-            }
-
-            // Determine used operator
-            if ($operator === null) {
-                $operator = \is_array($value) ? 'in' : 'eq';
-            }
-
-            return [$column, $operator, $value];
-        };
-
-        /**
          * Lambda function to process criteria and add it to main condition array.
          *
          * @param mixed  $value
          * @param string $column
          */
-        $processCriteria = function ($value, $column) use (&$condition, $createCriteria) {
+        $processCriteria = function ($value, $column) use (&$condition) {
             // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
             if (\strcmp($column, 'and') === 0 || \strcmp($column, 'or') === 0) {
                 $condition[$column] = $value;
-            } else {
-                // Add condition
-                $condition[] = $createCriteria($column, $value);
+            } else { // Add condition
+                $condition[] = self::createCriteria($column, $value);
             }
         };
 
@@ -310,5 +287,24 @@ class RepositoryHelper
         }
 
         return $expression;
+    }
+
+    /**
+     * Lambda function to create condition array for 'getExpression' method.
+     *
+     * @param string $column
+     * @param mixed  $value
+     *
+     * @return array
+     */
+    private static function createCriteria(string $column, $value): array
+    {
+        if (\strpos($column, '.') === false) {
+            $column = 'entity.' . $column;
+        }
+
+        $operator = \is_array($value) ? 'in' : 'eq';
+
+        return [$column, $operator, $value];
     }
 }
