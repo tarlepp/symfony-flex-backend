@@ -28,7 +28,7 @@
 		"doctrine/doctrine-fixtures-bundle": "2.4.0",
 		"doctrine/doctrine-migrations-bundle": "1.2.1",
 		"easycorp/easy-log-handler": "1.0.3",
-		"lexik/jwt-authentication-bundle": "2.4.1",
+		"lexik/jwt-authentication-bundle": "2.4.2",
 		"matthiasnoback/symfony-console-form": "2.3.0",
 		"nelmio/api-doc-bundle": "dev-master",
 		"phpunit/phpcov": "dev-master",
