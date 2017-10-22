@@ -7,12 +7,14 @@
          bootstrap="tests/bootstrap.php"
 >
     <php>
-        <ini name="error_reporting" value="E_ALL" />
+        <ini name="error_reporting" value="-1" />
         <ini name="display_errors" value="On" />
         <ini name="display_startup_errors" value="On" />
         <ini name="date.timezone" value="UTC" />
+        <env name="KERNEL_CLASS" value="App\Kernel" />
+        <env name="APP_DEBUG" value="1" />
+        <env name="APP_SECRET" value="s$cretf0rt3st" />
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="1" />
-        <server name="KERNEL_CLASS" value="App\Kernel" />
     </php>
 
     <listeners>
