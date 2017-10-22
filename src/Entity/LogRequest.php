@@ -461,9 +461,14 @@ class LogRequest implements EntityInterface
         $this->user = $user;
         $this->apiKey = $apiKey;
         $this->masterRequest = $masterRequest ?? true;
+        $this->time = new \DateTime('now', new \DateTimeZone('UTC'));
 
         if ($request !== null) {
             $this->processRequest($request);
+            $this->processHeadersAndParameters($request);
+
+            $this->action = $this->determineAction($request);
+            $this->content = $this->cleanContent($request->getContent());
         }
 
         if ($response !== null) {
@@ -681,26 +686,9 @@ class LogRequest implements EntityInterface
         $this->queryString = $request->getRequestUri();
         $this->uri = $request->getUri();
         $this->controller = $request->get('_controller', '');
-        $this->action = $this->determineAction($request);
         $this->contentType = (string)$request->getMimeType($request->getContentType());
         $this->contentTypeShort = (string)$request->getContentType();
-        $this->content = $this->cleanContent($request->getContent());
         $this->xmlHttpRequest = $request->isXmlHttpRequest();
-        $this->time = new \DateTime('now', new \DateTimeZone('UTC'));
-
-        $headers = $request->headers->all();
-
-        // Clean possible sensitive data from parameters
-        \array_walk($headers, [$this, 'cleanParameters']);
-
-        $this->headers = $headers;
-
-        $parameters = $this->determineParameters($request);
-
-        // Clean possible sensitive data from parameters
-        \array_walk($parameters, [$this, 'cleanParameters']);
-
-        $this->parameters = $parameters;
     }
 
     /**
@@ -798,5 +786,27 @@ class LogRequest implements EntityInterface
         \array_map($iterator, $replacements);
 
         return $content;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @throws \LogicException
+     */
+    private function processHeadersAndParameters(Request $request): void
+    {
+        $headers = $request->headers->all();
+
+        // Clean possible sensitive data from parameters
+        \array_walk($headers, [$this, 'cleanParameters']);
+
+        $this->headers = $headers;
+
+        $parameters = $this->determineParameters($request);
+
+        // Clean possible sensitive data from parameters
+        \array_walk($parameters, [$this, 'cleanParameters']);
+
+        $this->parameters = $parameters;
     }
 }
