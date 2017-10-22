@@ -430,7 +430,7 @@ class GenericResourceTest extends KernelTestCase
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
-            ->expects(static::once())
+            ->expects(static::exactly(2))
             ->method('find')
             ->with('some id')
             ->willReturn($entity);
@@ -452,7 +452,7 @@ class GenericResourceTest extends KernelTestCase
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
-            ->expects(static::exactly(2))
+            ->expects(static::once())
             ->method('find')
             ->with('some id')
             ->willReturn($entity);
