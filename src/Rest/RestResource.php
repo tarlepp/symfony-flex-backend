@@ -388,9 +388,7 @@ abstract class RestResource implements RestResourceInterface
         $skipValidation = $skipValidation ?? false;
 
         // Validate DTO
-        if (!$skipValidation) {
-            $this->validateDto($dto);
-        }
+        $this->validateDto($dto, $skipValidation);
 
         // Determine entity name
         $entity = $this->getRepository()->getEntityName();
@@ -445,9 +443,7 @@ abstract class RestResource implements RestResourceInterface
         $restDto = $this->getDtoForEntity($id, \get_class($dto), $dto);
 
         // Validate DTO
-        if (!$skipValidation) {
-            $this->validateDto($restDto);
-        }
+        $this->validateDto($restDto, $skipValidation);
 
         // Before callback method call
         $this->beforeUpdate($id, $restDto, $entity);
@@ -571,24 +567,6 @@ abstract class RestResource implements RestResourceInterface
     }
 
     /**
-     * Helper method to validate given DTO class.
-     *
-     * @param RestDtoInterface $dto
-     *
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
-     */
-    private function validateDto(RestDtoInterface $dto): void
-    {
-        // Check possible errors of DTO
-        $errors = $this->getValidator()->validate($dto);
-
-        // Oh noes, we have some errors
-        if (\count($errors) > 0) {
-            throw new ValidatorException((string)$errors);
-        }
-    }
-
-    /**
      * @param string $id
      *
      * @return EntityInterface
@@ -606,6 +584,25 @@ abstract class RestResource implements RestResourceInterface
         }
 
         return $entity;
+    }
+
+    /**
+     * Helper method to validate given DTO class.
+     *
+     * @param RestDtoInterface $dto
+     * @param bool             $skipValidation
+     *
+     * @throws \Symfony\Component\Validator\Exception\ValidatorException
+     */
+    private function validateDto(RestDtoInterface $dto, bool $skipValidation): void
+    {
+        // Check possible errors of DTO
+        $errors = !$skipValidation ? $this->getValidator()->validate($dto) : [];
+
+        // Oh noes, we have some errors
+        if (\count($errors) > 0) {
+            throw new ValidatorException((string)$errors);
+        }
     }
 
     /**
