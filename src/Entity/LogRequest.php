@@ -465,15 +465,10 @@ class LogRequest implements EntityInterface
 
         if ($request !== null) {
             $this->processRequest($request);
-            $this->processHeadersAndParameters($request);
-
-            $this->action = $this->determineAction($request);
-            $this->content = $this->cleanContent($request->getContent());
         }
 
         if ($response !== null) {
-            $this->statusCode = $response->getStatusCode();
-            $this->responseContentLength = \mb_strlen($response->getContent());
+            $this->processResponse($response);
         }
     }
 
@@ -676,19 +671,11 @@ class LogRequest implements EntityInterface
      */
     private function processRequest(Request $request): void
     {
-        $this->clientIp = (string)$request->getClientIp();
-        $this->method = $request->getRealMethod();
-        $this->scheme = $request->getScheme();
-        $this->httpHost = $request->getHttpHost();
-        $this->basePath = $request->getBasePath();
-        $this->script = '/' . \basename($request->getScriptName());
-        $this->path = $request->getPathInfo();
-        $this->queryString = $request->getRequestUri();
-        $this->uri = $request->getUri();
-        $this->controller = $request->get('_controller', '');
-        $this->contentType = (string)$request->getMimeType($request->getContentType());
-        $this->contentTypeShort = (string)$request->getContentType();
-        $this->xmlHttpRequest = $request->isXmlHttpRequest();
+        $this->processRequestBaseInfo($request);
+        $this->processHeadersAndParameters($request);
+
+        $this->action = $this->determineAction($request);
+        $this->content = $this->cleanContent($request->getContent());
     }
 
     /**
@@ -808,5 +795,34 @@ class LogRequest implements EntityInterface
         \array_walk($parameters, [$this, 'cleanParameters']);
 
         $this->parameters = $parameters;
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function processRequestBaseInfo(Request $request): void
+    {
+        $this->clientIp = (string)$request->getClientIp();
+        $this->method = $request->getRealMethod();
+        $this->scheme = $request->getScheme();
+        $this->httpHost = $request->getHttpHost();
+        $this->basePath = $request->getBasePath();
+        $this->script = '/' . \basename($request->getScriptName());
+        $this->path = $request->getPathInfo();
+        $this->queryString = $request->getRequestUri();
+        $this->uri = $request->getUri();
+        $this->controller = $request->get('_controller', '');
+        $this->contentType = (string)$request->getMimeType($request->getContentType());
+        $this->contentTypeShort = (string)$request->getContentType();
+        $this->xmlHttpRequest = $request->isXmlHttpRequest();
+    }
+
+    /**
+     * @param Response $response
+     */
+    private function processResponse(Response $response): void
+    {
+        $this->statusCode = $response->getStatusCode();
+        $this->responseContentLength = \mb_strlen($response->getContent());
     }
 }
