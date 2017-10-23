@@ -106,16 +106,7 @@ final class ResponseHandler implements ResponseHandlerInterface
         $bits = \explode('\\', $entityName);
         $entityName = \end($bits);
 
-        // Set all associations to be populated
-        if ($populateAll && \count($populate) === 0) {
-            $associations = $this->getResource()->getAssociations();
-
-            $iterator = function (string $assocName) use ($entityName): string {
-                return $entityName . '.' . $assocName;
-            };
-
-            $populate = \array_map($iterator, $associations);
-        }
+        $populate = $this->checkPopulateAll($populateAll, $populate, $entityName);
 
         if ($populateOnly) {
             $groups = \count($populate) === 0 ? [$entityName] : $populate;
@@ -196,5 +187,28 @@ final class ResponseHandler implements ResponseHandlerInterface
         }
 
         throw new HttpException(Response::HTTP_BAD_REQUEST, \implode("\n", $errors));
+    }
+
+    /**
+     * @param $populateAll
+     * @param $populate
+     * @param $entityName
+     *
+     * @return array
+     */
+    private function checkPopulateAll($populateAll, $populate, $entityName): array
+    {
+        // Set all associations to be populated
+        if ($populateAll && \count($populate) === 0) {
+            $associations = $this->getResource()->getAssociations();
+
+            $iterator = function (string $assocName) use ($entityName): string {
+                return $entityName . '.' . $assocName;
+            };
+
+            $populate = \array_map($iterator, $associations);
+        }
+
+        return $populate;
     }
 }
