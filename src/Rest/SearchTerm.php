@@ -114,9 +114,7 @@ final class SearchTerm implements SearchTermInterface
          * @return array
          */
         $iteratorTerm = function (string $term) use ($columns, $mode): ?array {
-            $iteratorColumn = self::getColumnIterator($term, $mode);
-
-            return \count($columns) ? \array_map($iteratorColumn, $columns) : null;
+            return \count($columns) ? \array_map(self::getColumnIterator($term, $mode), $columns) : null;
         };
 
         return $iteratorTerm;
@@ -132,27 +130,47 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getColumnIterator(string $term, int $mode): \Closure
     {
-        $iteratorColumn = function ($column) use ($term, $mode): array {
+        /**
+         * Lambda function to create actual criteria for specified column + term + mode combo.
+         *
+         * @param string $column
+         *
+         * @return array
+         */
+        $iteratorColumn = function (string $column) use ($term, $mode): array {
             if (\strpos($column, '.') === false) {
                 $column = 'entity.' . $column;
             }
 
-            switch ($mode) {
-                case self::MODE_STARTS_WITH:
-                    $term .= '%';
-                    break;
-                case self::MODE_ENDS_WITH:
-                    $term = '%' . $term;
-                    break;
-                case self::MODE_FULL:
-                default:
-                    $term = '%' . $term . '%';
-                    break;
-            }
-
-            return [$column, 'like', $term];
+            return [$column, 'like', self::getTerm($mode, $term)];
         };
 
         return $iteratorColumn;
+    }
+
+    /**
+     * Method to get search term clause for 'LIKE' query for specified mode.
+     *
+     * @param int    $mode
+     * @param string $term
+     *
+     * @return string
+     */
+    private static function getTerm(int $mode, string $term): string
+    {
+        switch ($mode) {
+            case self::MODE_STARTS_WITH:
+                $term .= '%';
+                break;
+            case self::MODE_ENDS_WITH:
+                $term = '%' . $term;
+                break;
+            case self::MODE_FULL:
+            default:
+                $term = '%' . $term . '%';
+                break;
+        }
+
+        return $term;
     }
 }
