@@ -75,37 +75,7 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function createCriteria(array $columns, array $searchTerms, string $operand, int $mode): ?array
     {
-        /**
-         * Lambda function to process each search term to specified search columns.
-         *
-         * @param   string $term
-         *
-         * @return  array
-         */
-        $iteratorTerm = function ($term) use ($columns, $mode) {
-            $iteratorColumn = function ($column) use ($term, $mode) {
-                if (\strpos($column, '.') === false) {
-                    $column = 'entity.' . $column;
-                }
-
-                switch ($mode) {
-                    case self::MODE_STARTS_WITH:
-                        $term .= '%';
-                        break;
-                    case self::MODE_ENDS_WITH:
-                        $term = '%' . $term;
-                        break;
-                    case self::MODE_FULL:
-                    default:
-                        $term = '%' . $term . '%';
-                        break;
-                }
-
-                return [$column, 'like', $term];
-            };
-
-            return \count($columns) ? \array_map($iteratorColumn, $columns) : null;
-        };
+        $iteratorTerm = self::getTermIterator($columns, $mode);
 
         // Get criteria
         $criteria = \array_filter(\array_map($iteratorTerm, $searchTerms));
@@ -124,5 +94,65 @@ final class SearchTerm implements SearchTermInterface
         }
 
         return $output;
+    }
+
+    /**
+     * Method to get term iterator closure.
+     *
+     * @param array $columns
+     * @param int   $mode
+     *
+     * @return \Closure
+     */
+    private static function getTermIterator(array $columns, int $mode): \Closure
+    {
+        /**
+         * Lambda function to process each search term to specified search columns.
+         *
+         * @param string $term
+         *
+         * @return array
+         */
+        $iteratorTerm = function (string $term) use ($columns, $mode): ?array {
+            $iteratorColumn = self::getColumnIterator($term, $mode);
+
+            return \count($columns) ? \array_map($iteratorColumn, $columns) : null;
+        };
+
+        return $iteratorTerm;
+    }
+
+    /**
+     * Method to get column iterator closure.
+     *
+     * @param string $term
+     * @param int    $mode
+     *
+     * @return \Closure
+     */
+    private static function getColumnIterator(string $term, int $mode): \Closure
+    {
+        $iteratorColumn = function ($column) use ($term, $mode): array {
+            if (\strpos($column, '.') === false) {
+                $column = 'entity.' . $column;
+            }
+
+            switch ($mode) {
+                case self::MODE_STARTS_WITH:
+                    $term .= '%';
+                    break;
+                case self::MODE_ENDS_WITH:
+                    $term = '%' . $term;
+                    break;
+                case self::MODE_FULL:
+                default:
+                    $term = '%' . $term . '%';
+                    break;
+            }
+
+            return [$column, 'like', $term];
+        };
+
+        return $iteratorColumn;
     }
 }
