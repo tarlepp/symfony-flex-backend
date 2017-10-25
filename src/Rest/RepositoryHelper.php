@@ -305,23 +305,9 @@ class RepositoryHelper
 
         // Array values needs some extra work
         if (\is_array($comparison->value)) {
-            /** @var array $value */
             $value = $comparison->value;
 
-            // Operator is between, so we need to add third parameter for Expr method
-            if ($lowercaseOperator === 'between') {
-                $parameters[] = '?' . self::$parameterCount;
-                $queryBuilder->setParameter(self::$parameterCount, $value[0]);
-
-                self::$parameterCount++;
-
-                $parameters[] = '?' . self::$parameterCount;
-                $queryBuilder->setParameter(self::$parameterCount, $value[1]);
-            } else { // Otherwise this must be IN or NOT IN expression
-                $parameters[] = \array_map(function ($value) use ($queryBuilder) {
-                    return $queryBuilder->expr()->literal($value);
-                }, $value);
-            }
+            $parameters = self::getParameters($queryBuilder, $lowercaseOperator, $parameters, $value);
         } elseif (!($lowercaseOperator === 'isnull' || $lowercaseOperator === 'isnotnull')) {
             $parameters[] = '?' . self::$parameterCount;
 
@@ -329,5 +315,37 @@ class RepositoryHelper
         }
 
         return array($comparison, $parameters);
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string       $lowercaseOperator
+     * @param array        $parameters
+     * @param array        $value
+     *
+     * @return array
+     */
+    private static function getParameters(
+        QueryBuilder $queryBuilder,
+        string $lowercaseOperator,
+        array $parameters,
+        array $value
+    ): array {
+        // Operator is between, so we need to add third parameter for Expr method
+        if ($lowercaseOperator === 'between') {
+            $parameters[] = '?' . self::$parameterCount;
+            $queryBuilder->setParameter(self::$parameterCount, $value[0]);
+
+            self::$parameterCount++;
+
+            $parameters[] = '?' . self::$parameterCount;
+            $queryBuilder->setParameter(self::$parameterCount, $value[1]);
+        } else { // Otherwise this must be IN or NOT IN expression
+            $parameters[] = \array_map(function ($value) use ($queryBuilder) {
+                return $queryBuilder->expr()->literal($value);
+            }, $value);
+        }
+
+        return $parameters;
     }
 }
