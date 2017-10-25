@@ -164,58 +164,86 @@ final class RequestHandler
      *  ?search={"or": ["term1", "term2"]}
      *  ?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}
      *
-     * @throws HttpException
-     *
      * @param HttpFoundationRequest $request
      *
      * @return array
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public static function getSearchTerms(HttpFoundationRequest $request): array
     {
         $search = $request->get('search');
-        $output = [];
 
-        if ($search !== null) {
-            try {
-                $input = JSON::decode($search, true);
+        return $search !== null ? self::getSearchTermCriteria($search) : [];
+    }
 
-                if (!\is_array($input)) {
-                    throw new \LogicException('Search term is not an array, fallback to string handling');
-                }
+    /**
+     * Method to return search term criteria as an array that repositories can easily use.
+     *
+     * @param string $search
+     *
+     * @return array
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    private static function getSearchTermCriteria(string $search): array
+    {
+        $searchTerms = self::determineSearchTerms($search);
 
-                if (!\array_key_exists('and', $input) && !\array_key_exists('or', $input)) {
-                    throw new HttpException(
-                        HttpFoundationResponse::HTTP_BAD_REQUEST,
-                        'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.'
-                    );
-                }
-            } /** @noinspection BadExceptionsProcessingInspection */
-            catch (\LogicException $error) { // Parameter was not JSON so just use parameter values as search strings
-                // By default we want to use 'OR' operand with given search words.
-                $output = [
-                    'or' => \array_unique(\array_values(\array_filter(\explode(' ', $search))))
-                ];
+        if ($searchTerms !== null) {
+            /**
+             * Lambda function to normalize JSON search terms.
+             *
+             * @param   string|array $terms
+             */
+            $iterator = function (&$terms) {
+                $terms = \array_unique(\array_values(\array_filter($terms)));
+            };
 
-                $input = null;
-            }
+            // Normalize user input, note that this support array and string formats on value
+            \array_walk($searchTerms, $iterator);
 
-            if ($input !== null) {
-                /**
-                 * Lambda function to normalize JSON search terms.
-                 *
-                 * @param   string|array $terms
-                 */
-                $iterator = function (&$terms) {
-                    $terms = \array_unique(\array_values(\array_filter($terms)));
-                };
-
-                // Normalize user input, note that this support array and string formats on value
-                \array_walk($input, $iterator);
-
-                $output = $input;
-            }
+            $output = $searchTerms;
+        } else {
+            // By default we want to use 'OR' operand with given search words.
+            $output = [
+                'or' => \array_unique(\array_values(\array_filter(\explode(' ', $search))))
+            ];
         }
 
         return $output;
+    }
+
+    /**
+     * Method to determine used search terms. Note that this will first try to JSON decode given search term. This is
+     * for cases that 'search' request parameter contains 'and' or 'or' terms.
+     *
+     * @param string $search
+     *
+     * @return array|null
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    private static function determineSearchTerms(string $search): ?array
+    {
+        try {
+            $searchTerms = JSON::decode($search, true);
+
+            if (!\is_array($searchTerms)) {
+                throw new \LogicException('Search term is not an array, fallback to string handling');
+            }
+
+            if (!\array_key_exists('and', $searchTerms) && !\array_key_exists('or', $searchTerms)) {
+                throw new HttpException(
+                    HttpFoundationResponse::HTTP_BAD_REQUEST,
+                    'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.'
+                );
+            }
+        } /** @noinspection BadExceptionsProcessingInspection */
+        catch (\LogicException $error) { // Parameter was not JSON so just use parameter values as search strings
+            $searchTerms = null;
+        }
+
+        return $searchTerms;
     }
 }
