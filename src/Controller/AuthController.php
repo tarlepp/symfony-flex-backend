@@ -17,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -112,9 +112,9 @@ class AuthController
      *  )
      * @SWG\Tag(name="Authentication")
      *
-     * @param TokenStorage        $tokenStorage
-     * @param RolesService        $roles
-     * @param SerializerInterface $serializer
+     * @param TokenStorageInterface $tokenStorage
+     * @param SerializerInterface   $serializer
+     * @param RolesService          $rolesService
      *
      * @return JsonResponse
      *
@@ -122,9 +122,9 @@ class AuthController
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
     public function profileAction(
-        TokenStorage $tokenStorage,
-        RolesService $roles,
-        SerializerInterface $serializer
+        TokenStorageInterface $tokenStorage,
+        SerializerInterface $serializer,
+        RolesService $rolesService
     ): JsonResponse {
         /** @var User $user */
         /** @noinspection NullPointerExceptionInspection */
@@ -140,7 +140,7 @@ class AuthController
         ];
 
         // Set roles service to user entity, so we can get inherited roles
-        $user->setRolesService($roles);
+        $user->setRolesService($rolesService);
 
         // Create response
         return new JsonResponse(
@@ -186,14 +186,14 @@ class AuthController
      *  )
      * @SWG\Tag(name="Authentication")
      *
-     * @param TokenStorage $tokenStorage
-     * @param RolesService $rolesService
+     * @param TokenStorageInterface $tokenStorage
+     * @param RolesService          $rolesService
      *
      * @return JsonResponse
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function rolesAction(TokenStorage $tokenStorage, RolesService $rolesService): JsonResponse
+    public function rolesAction(TokenStorageInterface $tokenStorage, RolesService $rolesService): JsonResponse
     {
         /** @noinspection NullPointerExceptionInspection */
         $user = $tokenStorage->getToken()->getUser();

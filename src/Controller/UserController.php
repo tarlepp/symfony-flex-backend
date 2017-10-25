@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -98,9 +98,9 @@ class UserController extends Controller
      *
      * @RestApiDoc()
      *
-     * @param Request      $request
-     * @param User         $requestUser
-     * @param TokenStorage $tokenStorage
+     * @param Request               $request
+     * @param User                  $requestUser
+     * @param TokenStorageInterface $tokenStorage
      *
      * @return Response
      *
@@ -108,7 +108,7 @@ class UserController extends Controller
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
-    public function deleteAction(Request $request, User $requestUser, TokenStorage $tokenStorage): Response
+    public function deleteAction(Request $request, User $requestUser, TokenStorageInterface $tokenStorage): Response
     {
         /** @noinspection NullPointerExceptionInspection */
         $currentUser = $tokenStorage->getToken()->getUser();
