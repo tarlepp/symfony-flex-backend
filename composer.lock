@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4255d5eca4d93049b2144662a6d9deef",
+    "content-hash": "fa62cead4b0c25b4eedc58fc7bb8de11",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -7040,16 +7040,16 @@
         },
         {
             "name": "liuggio/fastest",
-            "version": "v1.5.0",
+            "version": "v1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liuggio/fastest.git",
-                "reference": "d29bde82e1669f3c31294dd8e2f9868ac793a052"
+                "reference": "11f65cf2c3d3f4d26812735f1097bea13d278881"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liuggio/fastest/zipball/d29bde82e1669f3c31294dd8e2f9868ac793a052",
-                "reference": "d29bde82e1669f3c31294dd8e2f9868ac793a052",
+                "url": "https://api.github.com/repos/liuggio/fastest/zipball/11f65cf2c3d3f4d26812735f1097bea13d278881",
+                "reference": "11f65cf2c3d3f4d26812735f1097bea13d278881",
                 "shasum": ""
             },
             "require": {
@@ -7094,7 +7094,7 @@
                 }
             ],
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
-            "time": "2017-10-12T12:40:51+00:00"
+            "time": "2017-10-25T15:17:20+00:00"
         },
         {
             "name": "nikic/php-parser",
