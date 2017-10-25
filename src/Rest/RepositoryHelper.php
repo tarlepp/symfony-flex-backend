@@ -236,57 +236,34 @@ class RepositoryHelper
         Composite $expression,
         array $criteria
     ): Composite {
-        if (\count($criteria)) {
-            foreach ($criteria as $key => $comparison) {
-                if ($key === 'and' || \array_key_exists('and', $comparison)) {
-                    $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
-                } elseif ($key === 'or' || \array_key_exists('or', $comparison)) {
-                    $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
-                } else {
-                    $comparison = (object)\array_combine(['field', 'operator', 'value'], $comparison);
-
-                    // Increase parameter count
-                    self::$parameterCount++;
-
-                    // Initialize used callback parameters
-                    $parameters = [$comparison->field];
-
-                    $lowercaseOperator = \strtolower($comparison->operator);
-
-                    // Array values needs some extra work
-                    if (\is_array($comparison->value)) {
-                        /** @var array $value */
-                        $value = $comparison->value;
-
-                        // Operator is between, so we need to add third parameter for Expr method
-                        if ($lowercaseOperator === 'between') {
-                            $parameters[] = '?' . self::$parameterCount;
-                            $queryBuilder->setParameter(self::$parameterCount, $value[0]);
-
-                            self::$parameterCount++;
-
-                            $parameters[] = '?' . self::$parameterCount;
-                            $queryBuilder->setParameter(self::$parameterCount, $value[1]);
-                        } else { // Otherwise this must be IN or NOT IN expression
-                            $parameters[] = \array_map(function ($value) use ($queryBuilder) {
-                                return $queryBuilder->expr()->literal($value);
-                            }, $value);
-                        }
-                    } elseif (!($lowercaseOperator === 'isnull' || $lowercaseOperator === 'isnotnull')) {
-                        $parameters[] = '?' . self::$parameterCount;
-
-                        $queryBuilder->setParameter(self::$parameterCount, $comparison->value);
-                    }
-
-                    // And finally add new expression to main one with specified parameters
-                    $expression->add(
-                        \call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters)
-                    );
-                }
-            }
-        }
+        self::processExpression($queryBuilder, $expression, $criteria);
 
         return $expression;
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param Composite    $expression
+     * @param array        $criteria
+     *
+     * @throws \InvalidArgumentException
+     */
+    private static function processExpression(QueryBuilder $queryBuilder, Composite $expression, array $criteria): void
+    {
+        foreach ($criteria as $key => $comparison) {
+            if ($key === 'and' || \array_key_exists('and', $comparison)) {
+                $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
+            } elseif ($key === 'or' || \array_key_exists('or', $comparison)) {
+                $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
+            } else {
+                [$comparison, $parameters] = self::determineComparisonAndParameters($queryBuilder, $comparison);
+
+                // And finally add new expression to main one with specified parameters
+                $expression->add(
+                    \call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters)
+                );
+            }
+        }
     }
 
     /**
@@ -306,5 +283,51 @@ class RepositoryHelper
         $operator = \is_array($value) ? 'in' : 'eq';
 
         return [$column, $operator, $value];
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param              $comparison
+     *
+     * @return array
+     */
+    private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, $comparison): array
+    {
+        $comparison = (object)\array_combine(['field', 'operator', 'value'], $comparison);
+
+        // Increase parameter count
+        self::$parameterCount++;
+
+        // Initialize used callback parameters
+        $parameters = [$comparison->field];
+
+        $lowercaseOperator = \strtolower($comparison->operator);
+
+        // Array values needs some extra work
+        if (\is_array($comparison->value)) {
+            /** @var array $value */
+            $value = $comparison->value;
+
+            // Operator is between, so we need to add third parameter for Expr method
+            if ($lowercaseOperator === 'between') {
+                $parameters[] = '?' . self::$parameterCount;
+                $queryBuilder->setParameter(self::$parameterCount, $value[0]);
+
+                self::$parameterCount++;
+
+                $parameters[] = '?' . self::$parameterCount;
+                $queryBuilder->setParameter(self::$parameterCount, $value[1]);
+            } else { // Otherwise this must be IN or NOT IN expression
+                $parameters[] = \array_map(function ($value) use ($queryBuilder) {
+                    return $queryBuilder->expr()->literal($value);
+                }, $value);
+            }
+        } elseif (!($lowercaseOperator === 'isnull' || $lowercaseOperator === 'isnotnull')) {
+            $parameters[] = '?' . self::$parameterCount;
+
+            $queryBuilder->setParameter(self::$parameterCount, $comparison->value);
+        }
+
+        return array($comparison, $parameters);
     }
 }
