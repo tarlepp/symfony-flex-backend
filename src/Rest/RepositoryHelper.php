@@ -254,21 +254,38 @@ class RepositoryHelper
             $expressionAnd = ($key === 'and' || \array_key_exists('and', $comparison));
             $expressionOr = ($key === 'or' || \array_key_exists('or', $comparison));
 
-            if ($expressionAnd) {
-                $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
-            } elseif ($expressionOr) {
-                $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
-            } else {
-                [$comparison, $parameters] = self::determineComparisonAndParameters($queryBuilder, $comparison);
-
-                // And finally add new expression to main one with specified parameters
-                $expression->add(
-                    \call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters)
-                );
-            }
+            self::buildExpression($queryBuilder, $expression, $expressionAnd, $expressionOr, $comparison);
         };
 
         \array_walk($criteria, $iterator);
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param Composite    $expression
+     * @param bool         $expressionAnd
+     * @param bool         $expressionOr
+     * @param mixed        $comparison
+     *
+     * @throws \InvalidArgumentException
+     */
+    private static function buildExpression(
+        QueryBuilder $queryBuilder,
+        Composite $expression,
+        bool $expressionAnd,
+        bool $expressionOr,
+        $comparison
+    ): void {
+        if ($expressionAnd) {
+            $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
+        } elseif ($expressionOr) {
+            $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
+        } else {
+            [$comparison, $parameters] = self::determineComparisonAndParameters($queryBuilder, $comparison);
+
+            // And finally add new expression to main one with specified parameters
+            $expression->add(\call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters));
+        }
     }
 
     /**
