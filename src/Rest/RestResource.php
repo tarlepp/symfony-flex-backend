@@ -8,10 +8,8 @@ declare(strict_types = 1);
 namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
 use Doctrine\Common\Proxy\Proxy;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -229,45 +227,5 @@ abstract class RestResource implements RestResourceInterface
         }
 
         return $restDto;
-    }
-
-    /**
-     * Helper method to set data to specified entity and store it to database.
-     *
-     * @param EntityInterface  $entity
-     * @param RestDtoInterface $dto
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
-     */
-    protected function persistEntity(EntityInterface $entity, RestDtoInterface $dto): void
-    {
-        // Update entity according to DTO current state
-        $dto->update($entity);
-
-        // And save current entity
-        $this->save($entity);
-    }
-
-    /**
-     * @param string $id
-     *
-     * @return EntityInterface
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    private function getEntity(string $id): EntityInterface
-    {
-        /** @var EntityInterface $entity */
-        $entity = $this->getRepository()->find($id);
-
-        // Entity not found
-        if ($entity === null) {
-            throw new NotFoundHttpException('Not found');
-        }
-
-        return $entity;
     }
 }

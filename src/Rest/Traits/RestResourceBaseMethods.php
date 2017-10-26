@@ -39,6 +39,25 @@ trait RestResourceBaseMethods
     abstract public function getValidator(): ValidatorInterface;
 
     /**
+     * Getter method DTO class with loaded entity data.
+     *
+     * @param string                $id
+     * @param string                $dtoClass
+     * @param null|RestDtoInterface $dto
+     *
+     * @return RestDtoInterface
+     *
+     * @throws \LogicException
+     * @throws \BadMethodCallException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    abstract public function getDtoForEntity(
+        string $id,
+        string $dtoClass,
+        RestDtoInterface $dto = null
+    ): RestDtoInterface;
+
+    /**
      * Generic find method to return an array of items from database. Return value is an array of specified repository
      * entities.
      *
@@ -347,6 +366,46 @@ trait RestResourceBaseMethods
 
         // After callback method call
         $this->afterSave($entity);
+
+        return $entity;
+    }
+
+    /**
+     * Helper method to set data to specified entity and store it to database.
+     *
+     * @param EntityInterface  $entity
+     * @param RestDtoInterface $dto
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Symfony\Component\Validator\Exception\ValidatorException
+     */
+    protected function persistEntity(EntityInterface $entity, RestDtoInterface $dto): void
+    {
+        // Update entity according to DTO current state
+        $dto->update($entity);
+
+        // And save current entity
+        $this->save($entity);
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return EntityInterface
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    protected function getEntity(string $id): EntityInterface
+    {
+        /** @var EntityInterface $entity */
+        $entity = $this->getRepository()->find($id);
+
+        // Entity not found
+        if ($entity === null) {
+            throw new NotFoundHttpException('Not found');
+        }
 
         return $entity;
     }
