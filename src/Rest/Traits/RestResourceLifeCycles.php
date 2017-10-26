@@ -13,7 +13,7 @@ namespace App\Rest\Traits;
  * @package App\Rest\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-trait RestResource
+trait RestResourceLifeCycles
 {
     use RestResourceFind;
     use RestResourceFindOne;
