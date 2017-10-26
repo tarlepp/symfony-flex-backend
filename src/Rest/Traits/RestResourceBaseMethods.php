@@ -11,6 +11,8 @@ use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\Exception\ValidatorException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Trait RestResourceBaseMethods
@@ -28,6 +30,13 @@ trait RestResourceBaseMethods
      * @return BaseRepositoryInterface
      */
     abstract public function getRepository(): BaseRepositoryInterface;
+
+    /**
+     * Getter for used validator.
+     *
+     * @return ValidatorInterface
+     */
+    abstract public function getValidator(): ValidatorInterface;
 
     /**
      * Generic find method to return an array of items from database. Return value is an array of specified repository
@@ -340,5 +349,42 @@ trait RestResourceBaseMethods
         $this->afterSave($entity);
 
         return $entity;
+    }
+
+    /**
+     * Helper method to validate given DTO class.
+     *
+     * @param RestDtoInterface $dto
+     * @param bool             $skipValidation
+     *
+     * @throws \Symfony\Component\Validator\Exception\ValidatorException
+     */
+    private function validateDto(RestDtoInterface $dto, bool $skipValidation): void
+    {
+        // Check possible errors of DTO
+        $errors = !$skipValidation ? $this->getValidator()->validate($dto) : [];
+
+        // Oh noes, we have some errors
+        if (\count($errors) > 0) {
+            throw new ValidatorException((string)$errors);
+        }
+    }
+
+    /**
+     * Method to validate specified entity.
+     *
+     * @param EntityInterface $entity
+     * @param bool            $skipValidation
+     *
+     * @throws \Symfony\Component\Validator\Exception\ValidatorException
+     */
+    private function validateEntity(EntityInterface $entity, bool $skipValidation): void
+    {
+        $errors = !$skipValidation ? $this->getValidator()->validate($entity) : [];
+
+        // Oh noes, we have some errors
+        if (\count($errors) > 0) {
+            throw new ValidatorException((string)$errors);
+        }
     }
 }
