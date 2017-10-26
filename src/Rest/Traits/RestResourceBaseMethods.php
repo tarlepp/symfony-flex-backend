@@ -214,15 +214,12 @@ trait RestResourceBaseMethods
         // Validate DTO
         $this->validateDto($dto, $skipValidation);
 
-        // Determine entity name
-        $entity = $this->getRepository()->getEntityName();
-
         /**
          * Create new entity
          *
          * @var EntityInterface $entity
          */
-        $entity = new $entity();
+        $entity = new $this->getRepository()->getEntityName()();
 
         // Before callback method call
         $this->beforeCreate($dto, $entity);
