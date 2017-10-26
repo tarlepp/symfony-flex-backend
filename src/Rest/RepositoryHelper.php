@@ -250,10 +250,13 @@ class RepositoryHelper
      */
     private static function processExpression(QueryBuilder $queryBuilder, Composite $expression, array $criteria): void
     {
-        foreach ($criteria as $key => $comparison) {
-            if ($key === 'and' || \array_key_exists('and', $comparison)) {
+        $iterator = function ($comparison, $key) use ($queryBuilder, $expression): void {
+            $expressionAnd = ($key === 'and' || \array_key_exists('and', $comparison));
+            $expressionOr = ($key === 'or' || \array_key_exists('or', $comparison));
+
+            if ($expressionAnd) {
                 $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
-            } elseif ($key === 'or' || \array_key_exists('or', $comparison)) {
+            } elseif ($expressionOr) {
                 $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->orX(), $comparison));
             } else {
                 [$comparison, $parameters] = self::determineComparisonAndParameters($queryBuilder, $comparison);
@@ -263,7 +266,9 @@ class RepositoryHelper
                     \call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters)
                 );
             }
-        }
+        };
+
+        \array_walk($criteria, $iterator);
     }
 
     /**
