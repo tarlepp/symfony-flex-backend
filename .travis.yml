@@ -17,8 +17,6 @@ php:
   - nightly
 
 env:
-  global:
-    - CC_TEST_REPORTER_ID=255597df7369612e9800ed8d047952ba2ae1ad29eb8eb3951c99942271fa7e44
   matrix:
     - USE_XDEBUG=true
     - USE_XDEBUG=false
@@ -59,7 +57,7 @@ script:
 after_success:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/coveralls -v; fi
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/test-reporter -v; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then CC_TEST_REPORTER_ID="255597df7369612e9800ed8d047952ba2ae1ad29eb8eb3951c99942271fa7e44" php ./vendor/bin/test-reporter -v; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml; fi
 
 after_failure:
