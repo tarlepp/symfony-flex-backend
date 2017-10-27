@@ -1,0 +1,41 @@
+---
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        php:
+          mass_threshold: 45
+  fixme:
+    enabled: true
+  #phpmd:
+  #  enabled: true
+  git-legal:
+    enabled: true
+  markdownlint:
+    enabled: true
+  #phan:
+  #  enabled: true
+  #  config:
+  #    minimum-severity: 5
+  phpcodesniffer:
+    enabled: true
+    config:
+      standard: "PSR1,PSR2"
+ratings:
+  paths:
+  - "**.php"
+  - "**.md"
+  - composer.*
+exclude_paths:
+- ".idea/"
+- bin/
+- build/
+- config/
+- public/
+- src/Utils/Tests/
+- templates/
+- tests/
+- translations/
+- var/
+- vendor/
