@@ -9,6 +9,7 @@ namespace App\Form\Type\Console;
 
 use App\DTO\User as UserDto;
 use App\Form\DataTransformer\UserGroupTransformer;
+use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
 use Symfony\Component\Form\AbstractType;
@@ -25,8 +26,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class UserType extends AbstractType
 {
     // Traits
+    use AddBasicFieldToForm;
     use UserGroupChoices;
 
+    /**
+     * Base form fields
+     *
+     * @var array
+     */
     static private $formFields = [
         [
             'username',
@@ -81,6 +88,7 @@ class UserType extends AbstractType
             ],
         ],
     ];
+
     /**
      * @var UserGroupTransformer
      */
@@ -106,9 +114,7 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        foreach (self::$formFields as $params) {
-            $builder->add(...$params);
-        }
+        $this->addBasicFieldToForm($builder, self::$formFields);
 
         $builder
             ->add(

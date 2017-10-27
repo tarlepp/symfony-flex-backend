@@ -9,6 +9,7 @@ namespace App\Form\Type\Console;
 
 use App\DTO\ApiKey;
 use App\Form\DataTransformer\UserGroupTransformer;
+use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
 use Symfony\Component\Form\AbstractType;
@@ -25,7 +26,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ApiKeyType extends AbstractType
 {
     // Traits
+    use AddBasicFieldToForm;
     use UserGroupChoices;
+
+    /**
+     * Base form fields
+     *
+     * @var array
+     */
+    static private $formFields = [
+        [
+            'description',
+            Type\TextType::class,
+            [
+                'label'         => 'Description',
+                'required'      => true,
+                'empty_data'    => '',
+            ],
+        ],
+    ];
 
     /**
      * @var UserGroupTransformer
@@ -52,16 +71,9 @@ class ApiKeyType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $this->addBasicFieldToForm($builder, self::$formFields);
+
         $builder
-            ->add(
-                'description',
-                Type\TextType::class,
-                [
-                    'label'         => 'Description',
-                    'required'      => true,
-                    'empty_data'    => '',
-                ]
-            )
             ->add(
                 'userGroups',
                 Type\ChoiceType::class,

@@ -10,6 +10,7 @@ namespace App\Form\Type\Rest\UserGroup;
 use App\DTO\UserGroup as UserGroupDto;
 use App\Entity\Role as RoleEntity;
 use App\Form\DataTransformer\RoleTransformer;
+use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
 use Symfony\Component\Form\AbstractType;
@@ -25,6 +26,26 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UserGroupType extends AbstractType
 {
+    // Traits
+    use AddBasicFieldToForm;
+
+    /**
+     * Base form fields
+     *
+     * @var array
+     */
+    static private $formFields = [
+        [
+            'name',
+            Type\TextType::class,
+            [
+                'label'         => 'Group name',
+                'required'      => true,
+                'empty_data'    => '',
+            ],
+        ],
+    ];
+
     /**
      * @var RolesService
      */
@@ -65,16 +86,9 @@ class UserGroupType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $this->addBasicFieldToForm($builder, self::$formFields);
+
         $builder
-            ->add(
-                'name',
-                Type\TextType::class,
-                [
-                    'label'         => 'Group name',
-                    'required'      => true,
-                    'empty_data'    => '',
-                ]
-            )
             ->add(
                 'role',
                 Type\ChoiceType::class,

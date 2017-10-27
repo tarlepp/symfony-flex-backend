@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Form\Type\Rest\User;
 
 use App\DTO\User as UserDto;
+use App\Form\Type\Traits\AddBasicFieldToForm;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,6 +22,52 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UserPatchType extends AbstractType
 {
+    // Traits
+    use AddBasicFieldToForm;
+
+    /**
+     * Base form fields
+     *
+     * @var array
+     */
+    static private $formFields = [
+        [
+            'username',
+            Type\TextType::class,
+            [
+                'label' => 'Username',
+            ],
+        ],
+        [
+            'firstname',
+            Type\TextType::class,
+            [
+                'label' => 'Firstname',
+            ],
+        ],
+        [
+            'surname',
+            Type\TextType::class,
+            [
+                'label' => 'Surname',
+            ],
+        ],
+        [
+            'email',
+            Type\EmailType::class,
+            [
+                'label' => 'Email address',
+            ],
+        ],
+        [
+            'password',
+            Type\TextType::class,
+            [
+                'label' => 'Password',
+            ],
+        ],
+    ];
+
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
@@ -29,42 +76,7 @@ class UserPatchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
-            ->add(
-                'username',
-                Type\TextType::class,
-                [
-                    'label' => 'Username',
-                ]
-            )
-            ->add(
-                'firstname',
-                Type\TextType::class,
-                [
-                    'label' => 'Firstname',
-                ]
-            )
-            ->add(
-                'surname',
-                Type\TextType::class,
-                [
-                    'label' => 'Surname',
-                ]
-            )
-            ->add(
-                'email',
-                Type\EmailType::class,
-                [
-                    'label' => 'Email address',
-                ]
-            )
-            ->add(
-                'password',
-                Type\TextType::class,
-                [
-                    'label' => 'Password',
-                ]
-            );
+        $this->addBasicFieldToForm($builder, self::$formFields);
     }
 
     /**
