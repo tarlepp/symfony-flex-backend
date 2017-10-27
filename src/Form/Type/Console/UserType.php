@@ -27,6 +27,60 @@ class UserType extends AbstractType
     // Traits
     use UserGroupChoices;
 
+    static private $formFields = [
+        [
+            'username',
+            Type\TextType::class,
+            [
+                'label'         => 'Username',
+                'required'      => true,
+                'empty_data'    => '',
+            ],
+        ],
+        [
+            'firstname',
+            Type\TextType::class,
+            [
+                'label'         => 'Firstname',
+                'required'      => true,
+                'empty_data'    => '',
+            ],
+        ],
+        [
+            'surname',
+            Type\TextType::class,
+            [
+                'label'         => 'Surname',
+                'required'      => true,
+                'empty_data'    => '',
+            ],
+        ],
+        [
+            'email',
+            Type\EmailType::class,
+            [
+                'label'         => 'Email address',
+                'required'      => true,
+                'empty_data'    => '',
+            ],
+        ],
+        [
+            'password',
+            Type\RepeatedType::class,
+            [
+                'type'              => Type\PasswordType::class,
+                'required'          => true,
+                'first_name'        => 'password1',
+                'first_options'     => [
+                    'label' => 'Password',
+                ],
+                'second_name'       => 'password2',
+                'second_options'    => [
+                    'label' => 'Repeat password',
+                ],
+            ],
+        ],
+    ];
     /**
      * @var UserGroupTransformer
      */
@@ -52,59 +106,11 @@ class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        foreach (self::$formFields as $params) {
+            $builder->add(...$params);
+        }
+
         $builder
-            ->add(
-                'username',
-                Type\TextType::class,
-                [
-                    'label'         => 'Username',
-                    'required'      => true,
-                    'empty_data'    => '',
-                ]
-            )
-            ->add(
-                'firstname',
-                Type\TextType::class,
-                [
-                    'label'         => 'Firstname',
-                    'required'      => true,
-                    'empty_data'    => '',
-                ]
-            )
-            ->add(
-                'surname',
-                Type\TextType::class,
-                [
-                    'label'         => 'Surname',
-                    'required'      => true,
-                    'empty_data'    => '',
-                ]
-            )
-            ->add(
-                'email',
-                Type\EmailType::class,
-                [
-                    'label'         => 'Email address',
-                    'required'      => true,
-                    'empty_data'    => '',
-                ]
-            )
-            ->add(
-                'password',
-                Type\RepeatedType::class,
-                [
-                    'type'              => Type\PasswordType::class,
-                    'required'          => true,
-                    'first_name'        => 'password1',
-                    'first_options'     => [
-                        'label' => 'Password',
-                    ],
-                    'second_name'       => 'password2',
-                    'second_options'    => [
-                        'label' => 'Repeat password',
-                    ],
-                ]
-            )
             ->add(
                 'userGroups',
                 Type\ChoiceType::class,
