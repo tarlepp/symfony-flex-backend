@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Command\ApiKey;
 
-use App\Entity\ApiKey;
+use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -64,7 +64,30 @@ class RemoveApiKeyCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $apiKey = null;
+        // Fetch API key entity
+        $apiKey = $this->getApiKeyEntity($io);
+
+        if ($apiKey instanceof ApiKeyEntity) {
+            // Delete API key
+            $this->apiKeyResource->delete($apiKey->getId());
+
+            $message = 'API key deleted - have a nice day';
+        }
+
+        if ($input->isInteractive()) {
+            $io->success($message ?? 'Nothing changed - have a nice day');
+        }
+
+        return null;
+    }
+
+    /**
+     * @param SymfonyStyle $io
+     *
+     * @return ApiKeyEntity|null
+     */
+    private function getApiKeyEntity(SymfonyStyle $io): ?ApiKeyEntity
+    {
         $apiKeyFound = false;
 
         while ($apiKeyFound === false) {
@@ -84,20 +107,6 @@ class RemoveApiKeyCommand extends Command
             $apiKeyFound = $io->confirm($message, false);
         }
 
-        /** @var ApiKey|null $apiKey */
-        if ($apiKey instanceof ApiKey) {
-            // Delete API key
-            $this->apiKeyResource->delete($apiKey->getId());
-
-            $message = 'API key deleted - have a nice day';
-        } else {
-            $message = 'Nothing changed - have a nice day';
-        }
-
-        if ($input->isInteractive()) {
-            $io->success($message);
-        }
-
-        return null;
+        return $apiKey ?? null;
     }
 }
