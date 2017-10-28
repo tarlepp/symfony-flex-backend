@@ -69,10 +69,9 @@ class EditApiKeyCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        // Get ApiKey
-        $apiKey = $this->getApiKey($io);
+        // Get API key entity
+        $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to edit?');
 
-        /** @var ApiKeyEntity|null $apiKey */
         if ($apiKey instanceof ApiKeyEntity) {
             $message = $this->updateApiKey($input, $output, $apiKey);
         }
@@ -82,37 +81,6 @@ class EditApiKeyCommand extends Command
         }
 
         return null;
-    }
-
-    /**
-     * Method to fetch API key entity for editing.
-     *
-     * @param SymfonyStyle $io
-     *
-     * @return ApiKeyEntity|null
-     */
-    private function getApiKey($io): ?ApiKeyEntity
-    {
-        $apiKeyFound = false;
-
-        while ($apiKeyFound === false) {
-            $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to edit?');
-
-            if ($apiKey === null) {
-                break;
-            }
-
-            $message = \sprintf(
-                'Is this the API key \'[%s] [%s] %s\' which information you want to change?',
-                $apiKey->getId(),
-                $apiKey->getToken(),
-                $apiKey->getDescription()
-            );
-
-            $apiKeyFound = $io->confirm($message, false);
-        }
-
-        return $apiKey ?? null;
     }
 
     /**

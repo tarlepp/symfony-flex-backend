@@ -67,10 +67,9 @@ class ChangeTokenCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        // Get ApiKey entity
-        $apiKey = $this->getApiKeyEntity($io);
+        // Get API key entity
+        $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key token you want to change?');
 
-        /** @var ApiKeyEntity|null $apiKey */
         if ($apiKey instanceof ApiKeyEntity) {
             $message = $this->changeApiKeyToken($apiKey);
         }
@@ -80,37 +79,6 @@ class ChangeTokenCommand extends Command
         }
 
         return null;
-    }
-
-    /**
-     * Method to get API key for token change.
-     *
-     * @param SymfonyStyle $io
-     *
-     * @return ApiKeyEntity|null
-     */
-    private function getApiKeyEntity(SymfonyStyle $io): ?ApiKeyEntity
-    {
-        $apiKeyFound = false;
-
-        while ($apiKeyFound === false) {
-            $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key token you want to change?');
-
-            if ($apiKey === null) {
-                break;
-            }
-
-            $message = \sprintf(
-                'Is this the API key \'[%s] [%s] %s\' which token you want to change?',
-                $apiKey->getId(),
-                $apiKey->getToken(),
-                $apiKey->getDescription()
-            );
-
-            $apiKeyFound = $io->confirm($message, false);
-        }
-
-        return $apiKey ?? null;
     }
 
     /**

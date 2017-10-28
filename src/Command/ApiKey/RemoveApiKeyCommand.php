@@ -64,8 +64,8 @@ class RemoveApiKeyCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        // Fetch API key entity
-        $apiKey = $this->getApiKeyEntity($io);
+        // Get API key entity
+        $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to remove?');
 
         if ($apiKey instanceof ApiKeyEntity) {
             // Delete API key
@@ -79,34 +79,5 @@ class RemoveApiKeyCommand extends Command
         }
 
         return null;
-    }
-
-    /**
-     * @param SymfonyStyle $io
-     *
-     * @return ApiKeyEntity|null
-     */
-    private function getApiKeyEntity(SymfonyStyle $io): ?ApiKeyEntity
-    {
-        $apiKeyFound = false;
-
-        while ($apiKeyFound === false) {
-            $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to remove?');
-
-            if ($apiKey === null) {
-                break;
-            }
-
-            $message = \sprintf(
-                'Is this the API key \'[%s] [%s] %s\' which you want to remove?',
-                $apiKey->getId(),
-                $apiKey->getToken(),
-                $apiKey->getDescription()
-            );
-
-            $apiKeyFound = $io->confirm($message, false);
-        }
-
-        return $apiKey ?? null;
     }
 }

@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Command\ApiKey;
 
-use App\Entity\ApiKey;
+use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -35,21 +35,54 @@ class ApiKeyHelper
     }
 
     /**
+     * Method to get API key entity. Also note that this may return a null in cases that user do not want to make any
+     * changes to API keys.
+     *
      * @param SymfonyStyle $io
      * @param string       $question
      *
-     * @return ApiKey
+     * @return ApiKeyEntity|null
      */
-    public function getApiKey(SymfonyStyle $io, string $question): ?ApiKey
+    public function getApiKey(SymfonyStyle $io, string $question): ?ApiKeyEntity
+    {
+        $apiKeyFound = false;
+
+        while ($apiKeyFound === false) {
+            $apiKeyEntity = $this->getApiKeyEntity($io, $question);
+
+            if ($apiKeyEntity === null) {
+                break;
+            }
+
+            $message = \sprintf(
+                'Is this the correct API key \'[%s] [%s] %s\'?',
+                $apiKeyEntity->getId(),
+                $apiKeyEntity->getToken(),
+                $apiKeyEntity->getDescription()
+            );
+
+            $apiKeyFound = $io->confirm($message, false);
+        }
+
+        return $apiKeyEntity ?? null;
+    }
+
+    /**
+     * @param SymfonyStyle $io
+     * @param string       $question
+     *
+     * @return ApiKeyEntity|null
+     */
+    private function getApiKeyEntity(SymfonyStyle $io, string $question): ?ApiKeyEntity
     {
         $choices = [];
 
         /**
          * Lambda function create api key choices
          *
-         * @param ApiKey $apiKey
+         * @param ApiKeyEntity $apiKey
          */
-        $iterator = function (ApiKey $apiKey) use (&$choices): void {
+        $iterator = function (ApiKeyEntity $apiKey) use (&$choices): void {
             $message = \sprintf(
                 '[%s] %s',
                 $apiKey->getToken(),
