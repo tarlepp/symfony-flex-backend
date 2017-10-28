@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Command\ApiKey;
 
-use App\Entity\ApiKey;
+use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -67,7 +67,32 @@ class ChangeTokenCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $apiKey = null;
+        // Get ApiKey entity
+        $apiKey = $this->getApiKeyEntity($io);
+
+        $message = 'Nothing changed - have a nice day';
+
+        /** @var ApiKeyEntity|null $apiKey */
+        if ($apiKey instanceof ApiKeyEntity) {
+            $message = $this->changeApiKeyToken($apiKey);
+        }
+
+        if ($input->isInteractive()) {
+            $io->success($message);
+        }
+
+        return null;
+    }
+
+    /**
+     * Method to get API key for token change.
+     *
+     * @param SymfonyStyle $io
+     *
+     * @return ApiKeyEntity|null
+     */
+    private function getApiKeyEntity(SymfonyStyle $io): ?ApiKeyEntity
+    {
         $apiKeyFound = false;
 
         while ($apiKeyFound === false) {
@@ -87,25 +112,29 @@ class ChangeTokenCommand extends Command
             $apiKeyFound = $io->confirm($message, false);
         }
 
-        /** @var ApiKey|null $apiKey */
-        if ($apiKey instanceof ApiKey) {
-            $apiKey->generateToken();
+        return $apiKey ?? null;
+    }
 
-            // Update API key
-            $this->apiKeyResource->save($apiKey);
+    /**
+     * Method to change API key token.
+     *
+     * @param ApiKeyEntity $apiKey
+     *
+     * @return array
+     */
+    private function changeApiKeyToken($apiKey): array
+    {
+        // Generate new token for API key
+        $apiKey->generateToken();
 
-            $message = [
-                'API key token updated - have a nice day',
-                ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
-            ];
-        } else {
-            $message = 'Nothing changed - have a nice day';
-        }
+        // Update API key
+        $this->apiKeyResource->save($apiKey);
 
-        if ($input->isInteractive()) {
-            $io->success($message);
-        }
+        $message = [
+            'API key token updated - have a nice day',
+            ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
+        ];
 
-        return null;
+        return $message;
     }
 }
