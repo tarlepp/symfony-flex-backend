@@ -8,9 +8,9 @@ declare(strict_types = 1);
 namespace App\Command\User;
 
 use App\DTO\UserGroup as UserGroupDto;
+use App\Entity\UserGroup as UserGroupEntity;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\UserGroupResource;
-use App\Entity\UserGroup as UserGroupEntity;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -69,52 +69,51 @@ class EditUserGroupCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $userGroup = null;
-        $userGroupFound = false;
+        $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to edit?');
 
-        while ($userGroupFound === false) {
-            $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to edit?');
-
-            if ($userGroup === null) {
-                break;
-            }
-
-            $message = \sprintf(
-                'Is this the group [%s - %s (%s)] which information you want to change?',
-                $userGroup->getId(),
-                $userGroup->getName(),
-                $userGroup->getRole()->getId()
-            );
-
-            $userGroupFound = $io->confirm($message, false);
-        }
-
-        /** @var UserGroupEntity $userGroup */
         if ($userGroup instanceof UserGroupEntity) {
-            // Load entity to DTO
-            $dtoLoaded = new UserGroupDto();
-            $dtoLoaded->load($userGroup);
-
-            /** @var UserGroupDto $dtoLoaded */
-            $dtoEdit = $this->getHelper('form')->interactUsingForm(
-                UserGroupType::class,
-                $input,
-                $output,
-                ['data' => $dtoLoaded]
-            );
-
-            // Update user group
-            $this->userGroupResource->update($userGroup->getId(), $dtoEdit);
-
-            $message = 'User group updated - have a nice day';
-        } else {
-            $message = 'Nothing changed - have a nice day';
+            $message = $this->updateUserGroup($input, $output, $userGroup);
         }
 
         if ($input->isInteractive()) {
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return null;
+    }
+
+    /**
+     * Method to update specified user group entity via specified form.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param UserGroupEntity $userGroup
+     *
+     * @return string
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     */
+    protected function updateUserGroup(
+        InputInterface $input,
+        OutputInterface $output,
+        UserGroupEntity $userGroup
+    ): string {
+        // Load entity to DTO
+        $dtoLoaded = new UserGroupDto();
+        $dtoLoaded->load($userGroup);
+
+        /** @var UserGroupDto $dtoLoaded */
+        $dtoEdit = $this->getHelper('form')->interactUsingForm(
+            UserGroupType::class,
+            $input,
+            $output,
+            ['data' => $dtoLoaded]
+        );
+
+        // Update user group
+        $this->userGroupResource->update($userGroup->getId(), $dtoEdit);
+
+        return 'User group updated - have a nice day';
     }
 }

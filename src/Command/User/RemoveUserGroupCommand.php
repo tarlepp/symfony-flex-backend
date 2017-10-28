@@ -64,25 +64,7 @@ class RemoveUserGroupCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $userGroup = null;
-        $userGroupFound = false;
-
-        while ($userGroupFound === false) {
-            $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to remove?');
-
-            if ($userGroup === null) {
-                break;
-            }
-
-            $message = \sprintf(
-                'Is this the group [%s - %s (%s)] which you want to remove?',
-                $userGroup->getId(),
-                $userGroup->getName(),
-                $userGroup->getRole()->getId()
-            );
-
-            $userGroupFound = $io->confirm($message, false);
-        }
+        $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to remove?');
 
         /** @var UserGroup $userGroup */
         if ($userGroup instanceof UserGroup) {
@@ -90,12 +72,10 @@ class RemoveUserGroupCommand extends Command
             $this->userGroupResource->delete($userGroup->getId());
 
             $message = 'User group removed - have a nice day';
-        } else {
-            $message = 'Nothing changed - have a nice day';
         }
 
         if ($input->isInteractive()) {
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return null;

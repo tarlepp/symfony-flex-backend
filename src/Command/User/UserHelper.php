@@ -79,6 +79,9 @@ class UserHelper
     }
 
     /**
+     * Method to get user group entity. Also note that this may return a null in cases that user do not want to make any
+     * changes to user groups.
+     *
      * @param SymfonyStyle $io
      * @param string       $question
      *
@@ -86,22 +89,26 @@ class UserHelper
      */
     public function getUserGroup(SymfonyStyle $io, string $question): ?UserGroupEntity
     {
-        $choices = [];
+        $userGroupFound = false;
 
-        /**
-         * Lambda function create user group choices
-         *
-         * @param UserGroupEntity $userGroup
-         */
-        $iterator = function (UserGroupEntity $userGroup) use (&$choices): void {
-            $choices[$userGroup->getId()] = \sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
-        };
+        while ($userGroupFound === false) {
+            $userGroupEntity = $this->getUserGroupEntity($io, $question);
 
-        \array_map($iterator, $this->userGroupResource->find([], ['name' => 'asc']));
+            if ($userGroupEntity === null) {
+                break;
+            }
 
-        $choices['Exit'] = 'Exit command';
+            $message = \sprintf(
+                'Is this the correct user group [%s - %s (%s)]?',
+                $userGroupEntity->getId(),
+                $userGroupEntity->getName(),
+                $userGroupEntity->getRole()->getId()
+            );
 
-        return $this->userGroupResource->findOne($io->choice($question, $choices));
+            $userGroupFound = $io->confirm($message, false);
+        }
+
+        return $userGroupEntity ?? null;
     }
 
     /**
@@ -138,5 +145,31 @@ class UserHelper
         $choices['Exit'] = 'Exit command';
 
         return $this->userResource->findOne($io->choice($question, $choices));
+    }
+
+    /**
+     * @param SymfonyStyle $io
+     * @param string       $question
+     *
+     * @return UserGroupEntity|null
+     */
+    private function getUserGroupEntity(SymfonyStyle $io, string $question): ?UserGroupEntity
+    {
+        $choices = [];
+
+        /**
+         * Lambda function create user group choices
+         *
+         * @param UserGroupEntity $userGroup
+         */
+        $iterator = function (UserGroupEntity $userGroup) use (&$choices): void {
+            $choices[$userGroup->getId()] = \sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
+        };
+
+        \array_map($iterator, $this->userGroupResource->find([], ['name' => 'asc']));
+
+        $choices['Exit'] = 'Exit command';
+
+        return $this->userGroupResource->findOne($io->choice($question, $choices));
     }
 }
