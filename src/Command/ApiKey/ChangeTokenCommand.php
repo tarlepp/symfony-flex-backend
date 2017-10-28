@@ -70,15 +70,13 @@ class ChangeTokenCommand extends Command
         // Get ApiKey entity
         $apiKey = $this->getApiKeyEntity($io);
 
-        $message = 'Nothing changed - have a nice day';
-
         /** @var ApiKeyEntity|null $apiKey */
         if ($apiKey instanceof ApiKeyEntity) {
             $message = $this->changeApiKeyToken($apiKey);
         }
 
         if ($input->isInteractive()) {
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return null;

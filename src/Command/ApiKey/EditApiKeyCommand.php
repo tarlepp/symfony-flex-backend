@@ -72,15 +72,13 @@ class EditApiKeyCommand extends Command
         // Get ApiKey
         $apiKey = $this->getApiKey($io);
 
-        $message = 'Nothing changed - have a nice day';
-
         /** @var ApiKeyEntity|null $apiKey */
         if ($apiKey instanceof ApiKeyEntity) {
             $message = $this->updateApiKey($input, $output, $apiKey);
         }
 
         if ($input->isInteractive()) {
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return null;
