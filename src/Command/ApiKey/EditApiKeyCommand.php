@@ -69,7 +69,30 @@ class EditApiKeyCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $apiKey = null;
+        // Get ApiKey
+        $apiKey = $this->getApiKey($io);
+
+        $message = 'Nothing changed - have a nice day';
+
+        /** @var ApiKeyEntity|null $apiKey */
+        if ($apiKey instanceof ApiKeyEntity) {
+            $message = $this->updateApiKey($input, $output, $apiKey);
+        }
+
+        if ($input->isInteractive()) {
+            $io->success($message);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param SymfonyStyle $io
+     *
+     * @return ApiKeyEntity|null
+     */
+    private function getApiKey($io): ?ApiKeyEntity
+    {
         $apiKeyFound = false;
 
         while ($apiKeyFound === false) {
@@ -89,35 +112,41 @@ class EditApiKeyCommand extends Command
             $apiKeyFound = $io->confirm($message, false);
         }
 
-        /** @var ApiKeyEntity|null $apiKey */
-        if ($apiKey instanceof ApiKeyEntity) {
-            // Load entity to DTO
-            $dtoLoaded = new ApiKeyDto();
-            $dtoLoaded->load($apiKey);
+        return $apiKey ?? null;
+    }
 
-            /** @var ApiKeyDto $dtoEdit */
-            $dtoEdit = $this->getHelper('form')->interactUsingForm(
-                ApiKeyType::class,
-                $input,
-                $output,
-                ['data' => $dtoLoaded]
-            );
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param ApiKeyEntity    $apiKey
+     *
+     * @return array
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     */
+    private function updateApiKey(InputInterface $input, OutputInterface $output, ApiKeyEntity $apiKey): array
+    {
+        // Load entity to DTO
+        $dtoLoaded = new ApiKeyDto();
+        $dtoLoaded->load($apiKey);
 
-            // Update user
-            $this->apiKeyResource->update($apiKey->getId(), $dtoEdit);
+        /** @var ApiKeyDto $dtoEdit */
+        $dtoEdit = $this->getHelper('form')->interactUsingForm(
+            ApiKeyType::class,
+            $input,
+            $output,
+            ['data' => $dtoLoaded]
+        );
 
-            $message = [
-                'API key updated - have a nice day',
-                ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
-            ];
-        } else {
-            $message = 'Nothing changed - have a nice day';
-        }
+        // Update API key
+        $this->apiKeyResource->update($apiKey->getId(), $dtoEdit);
 
-        if ($input->isInteractive()) {
-            $io->success($message);
-        }
+        $message = [
+            'API key updated - have a nice day',
+            ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
+        ];
 
-        return null;
+        return $message;
     }
 }
