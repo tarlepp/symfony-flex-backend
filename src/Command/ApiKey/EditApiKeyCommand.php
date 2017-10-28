@@ -87,6 +87,8 @@ class EditApiKeyCommand extends Command
     }
 
     /**
+     * Method to fetch API key entity for editing.
+     *
      * @param SymfonyStyle $io
      *
      * @return ApiKeyEntity|null
@@ -116,6 +118,8 @@ class EditApiKeyCommand extends Command
     }
 
     /**
+     * Method to update specified API key via specified form.
+     *
      * @param InputInterface  $input
      * @param OutputInterface $output
      * @param ApiKeyEntity    $apiKey
