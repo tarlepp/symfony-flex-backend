@@ -44,6 +44,9 @@ class UserHelper
     }
 
     /**
+     * Method to get user entity. Also note that this may return a null in cases that user do not want to make any
+     * changes to users.
+     *
      * @param SymfonyStyle $io
      * @param string       $question
      *
@@ -51,30 +54,28 @@ class UserHelper
      */
     public function getUser(SymfonyStyle $io, string $question): ?UserEntity
     {
-        $choices = [];
+        $userFound = false;
 
-        /**
-         * Lambda function create user choices
-         *
-         * @param UserEntity $user
-         */
-        $iterator = function (UserEntity $user) use (&$choices): void {
+        while ($userFound === false) {
+            $userEntity = $this->getUserEntity($io, $question);
+
+            if ($userEntity === null) {
+                break;
+            }
+
             $message = \sprintf(
-                '%s (%s %s <%s>)',
-                $user->getUsername(),
-                $user->getFirstname(),
-                $user->getSurname(),
-                $user->getEmail()
+                'Is this the correct  user [%s - %s (%s %s <%s>)]?',
+                $userEntity->getId(),
+                $userEntity->getUsername(),
+                $userEntity->getFirstname(),
+                $userEntity->getSurname(),
+                $userEntity->getEmail()
             );
 
-            $choices[$user->getId()] = $message;
-        };
+            $userFound = $io->confirm($message, false);
+        }
 
-        \array_map($iterator, $this->userResource->find([], ['username' => 'asc']));
-
-        $choices['Exit'] = 'Exit command';
-
-        return $this->userResource->findOne($io->choice($question, $choices));
+        return $userEntity ?? null;
     }
 
     /**
@@ -101,5 +102,41 @@ class UserHelper
         $choices['Exit'] = 'Exit command';
 
         return $this->userGroupResource->findOne($io->choice($question, $choices));
+    }
+
+    /**
+     * Method to get user entity
+     *
+     * @param SymfonyStyle $io
+     * @param string       $question
+     *
+     * @return UserEntity|null
+     */
+    private function getUserEntity(SymfonyStyle $io, string $question): ?UserEntity
+    {
+        $choices = [];
+
+        /**
+         * Lambda function create user choices
+         *
+         * @param UserEntity $user
+         */
+        $iterator = function (UserEntity $user) use (&$choices): void {
+            $message = \sprintf(
+                '%s (%s %s <%s>)',
+                $user->getUsername(),
+                $user->getFirstname(),
+                $user->getSurname(),
+                $user->getEmail()
+            );
+
+            $choices[$user->getId()] = $message;
+        };
+
+        \array_map($iterator, $this->userResource->find([], ['username' => 'asc']));
+
+        $choices['Exit'] = 'Exit command';
+
+        return $this->userResource->findOne($io->choice($question, $choices));
     }
 }

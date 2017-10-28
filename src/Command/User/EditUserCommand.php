@@ -69,53 +69,49 @@ class EditUserCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $user = null;
-        $userFound = false;
+        // Get user entity
+        $user = $this->userHelper->getUser($io, 'Which user you want to edit?');
 
-        while ($userFound === false) {
-            $user = $this->userHelper->getUser($io, 'Which user you want to edit?');
-
-            if ($user === null) {
-                break;
-            }
-
-            $message = \sprintf(
-                'Is this the user [%s - %s (%s %s)] which information you want to change?',
-                $user->getId(),
-                $user->getUsername(),
-                $user->getFirstname(),
-                $user->getSurname()
-            );
-
-            $userFound = $io->confirm($message, false);
-        }
-
-        /** @var UserEntity $user */
         if ($user instanceof UserEntity) {
-            // Load entity to DTO
-            $dtoLoaded = new UserDto();
-            $dtoLoaded->load($user);
-
-            /** @var UserDto $dtoEdit */
-            $dtoEdit = $this->getHelper('form')->interactUsingForm(
-                UserType::class,
-                $input,
-                $output,
-                ['data' => $dtoLoaded]
-            );
-
-            // Update user
-            $this->userResource->update($user->getId(), $dtoEdit);
-
-            $message = 'User updated - have a nice day';
-        } else {
-            $message = 'Nothing changed - have a nice day';
+            $message = $this->updateUser($input, $output, $user);
         }
 
         if ($input->isInteractive()) {
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return null;
+    }
+
+    /**
+     * Method to update specified user entity via specified form.
+     *
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param UserEntity      $user
+     *
+     * @return string
+     *
+     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     */
+    private function updateUser(InputInterface $input, OutputInterface $output, $user): string
+    {
+        // Load entity to DTO
+        $dtoLoaded = new UserDto();
+        $dtoLoaded->load($user);
+
+        /** @var UserDto $dtoEdit */
+        $dtoEdit = $this->getHelper('form')->interactUsingForm(
+            UserType::class,
+            $input,
+            $output,
+            ['data' => $dtoLoaded]
+        );
+
+        // Update user
+        $this->userResource->update($user->getId(), $dtoEdit);
+
+        return 'User updated - have a nice day';
     }
 }

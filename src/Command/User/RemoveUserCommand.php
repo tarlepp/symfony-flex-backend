@@ -64,39 +64,18 @@ class RemoveUserCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $user = null;
-        $userFound = false;
+        // Get user entity
+        $user = $this->userHelper->getUser($io, 'Which user you want to remove?');
 
-        while ($userFound === false) {
-            $user = $this->userHelper->getUser($io, 'Which user you want to remove?');
-
-            if ($user === null) {
-                break;
-            }
-
-            $message = \sprintf(
-                'Is this the user [%s - %s (%s %s)] which you want to remove?',
-                $user->getId(),
-                $user->getUsername(),
-                $user->getFirstname(),
-                $user->getSurname()
-            );
-
-            $userFound = $io->confirm($message, false);
-        }
-
-        /** @var User $user */
         if ($user instanceof User) {
             // Delete user
             $this->userResource->delete($user->getId());
 
             $message = 'User removed - have a nice day';
-        } else {
-            $message = 'Nothing changed - have a nice day';
         }
 
         if ($input->isInteractive()) {
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return null;
