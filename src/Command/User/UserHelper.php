@@ -122,23 +122,7 @@ class UserHelper
     private function getUserEntity(SymfonyStyle $io, string $question): ?UserEntity
     {
         $choices = [];
-
-        /**
-         * Lambda function create user choices
-         *
-         * @param UserEntity $user
-         */
-        $iterator = function (UserEntity $user) use (&$choices): void {
-            $message = \sprintf(
-                '%s (%s %s <%s>)',
-                $user->getUsername(),
-                $user->getFirstname(),
-                $user->getSurname(),
-                $user->getEmail()
-            );
-
-            $choices[$user->getId()] = $message;
-        };
+        $iterator = $this->getUserIterator($choices);
 
         \array_map($iterator, $this->userResource->find([], ['username' => 'asc']));
 
@@ -171,5 +155,32 @@ class UserHelper
         $choices['Exit'] = 'Exit command';
 
         return $this->userGroupResource->findOne($io->choice($question, $choices));
+    }
+
+    /**
+     * @param array $choices
+     *
+     * @return \Closure
+     */
+    private function getUserIterator(&$choices): \Closure
+    {
+        /**
+         * Lambda function create user choices
+         *
+         * @param UserEntity $user
+         */
+        $iterator = function (UserEntity $user) use (&$choices): void {
+            $message = \sprintf(
+                '%s (%s %s <%s>)',
+                $user->getUsername(),
+                $user->getFirstname(),
+                $user->getSurname(),
+                $user->getEmail()
+            );
+
+            $choices[$user->getId()] = $message;
+        };
+
+        return $iterator;
     }
 }
