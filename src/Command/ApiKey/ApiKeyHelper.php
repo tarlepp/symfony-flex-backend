@@ -76,7 +76,22 @@ class ApiKeyHelper
     private function getApiKeyEntity(SymfonyStyle $io, string $question): ?ApiKeyEntity
     {
         $choices = [];
+        $iterator = $this->getApiKeyIterator($choices);
 
+        \array_map($iterator, $this->apiKeyResource->find([], ['token' => 'ASC']));
+
+        $choices['Exit'] = 'Exit command';
+
+        return $this->apiKeyResource->findOne($io->choice($question, $choices));
+    }
+
+    /**
+     * @param array $choices
+     *
+     * @return \Closure
+     */
+    private function getApiKeyIterator(&$choices): \Closure
+    {
         /**
          * Lambda function create api key choices
          *
@@ -92,10 +107,6 @@ class ApiKeyHelper
             $choices[$apiKey->getId()] = $message;
         };
 
-        \array_map($iterator, $this->apiKeyResource->find([], ['token' => 'ASC']));
-
-        $choices['Exit'] = 'Exit command';
-
-        return $this->apiKeyResource->findOne($io->choice($question, $choices));
+        return $iterator;
     }
 }
