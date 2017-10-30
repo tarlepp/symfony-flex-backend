@@ -51,7 +51,7 @@ class LogRequestRepository extends BaseRepository
             ->createQueryBuilder('requestLog')
             ->delete()
             ->where('requestLog.time < :time')
-            ->setParameter('time', $date);
+            ->setParameter('date', $date->format('Y-m-d'));
 
         // Return deleted row count
         return (int)$queryBuilder->getQuery()->execute();
