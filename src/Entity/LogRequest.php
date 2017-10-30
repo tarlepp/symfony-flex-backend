@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Entity;
 
+use App\Entity\Traits\LogEntityTrait;
 use App\Utils\JSON;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -28,12 +29,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(
  *      readOnly=true
  *  )
+ * @ORM\HasLifecycleCallbacks()
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LogRequest implements EntityInterface
 {
+    // Traits
+    use LogEntityTrait;
+
     /**
      * @var string
      *
@@ -426,38 +431,6 @@ class LogRequest implements EntityInterface
     private $xmlHttpRequest;
 
     /**
-     * @var \DateTime
-     *
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.time",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="time",
-     *      type="datetime",
-     *      nullable=false,
-     *  )
-     */
-    private $time;
-
-    /**
-     * @var \DateTime
-     *
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.date",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="`date`",
-     *      type="date",
-     *      nullable=false,
-     *  )
-     */
-    private $date;
-
-    /**
      * LogRequest constructor.
      *
      * @param Request|null  $request
@@ -479,11 +452,6 @@ class LogRequest implements EntityInterface
         $this->user = $user;
         $this->apiKey = $apiKey;
         $this->masterRequest = $masterRequest ?? true;
-
-        $dateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-
-        $this->time = $dateTime;
-        $this->date = $dateTime;
 
         if ($request !== null) {
             $this->processRequest($request);
@@ -588,22 +556,6 @@ class LogRequest implements EntityInterface
     public function getResponseContentLength(): int
     {
         return $this->responseContentLength;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getTime(): \DateTime
-    {
-        return $this->time;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getDate(): \DateTime
-    {
-        return $this->date;
     }
 
     /**
