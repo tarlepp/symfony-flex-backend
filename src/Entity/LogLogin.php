@@ -20,6 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      name="log_login",
  *      indexes={
  *          @ORM\Index(name="user_id", columns={"user_id"}),
+ *          @ORM\Index(name="date", columns={"date"}),
  *      }
  *  )
  * @ORM\Entity(
@@ -346,16 +347,32 @@ class LogLogin implements EntityInterface
      *
      * @Groups({
      *      "LogLogin",
-     *      "LogLogin.timestamp",
+     *      "LogLogin.time",
      *  })
      *
      * @ORM\Column(
-     *      name="timestamp",
+     *      name="time",
      *      type="datetime",
      *      nullable=false,
      *  )
      */
-    private $timestamp;
+    private $time;
+
+    /**
+     * @var \DateTime
+     *
+     * @Groups({
+     *      "LogLogin",
+     *      "LogLogin.date",
+     *  })
+     *
+     * @ORM\Column(
+     *      name="`date`",
+     *      type="date",
+     *      nullable=false,
+     *  )
+     */
+    private $date;
 
     /**
      * LogLogin constructor.
@@ -376,7 +393,11 @@ class LogLogin implements EntityInterface
         $this->ip = (string)$request->getClientIp();
         $this->host = $request->getHost();
         $this->agent = (string)$request->headers->get('User-Agent');
-        $this->timestamp = new \DateTime('NOW', new \DateTimeZone('UTC'));
+
+        $date = new \DateTime('NOW', new \DateTimeZone('UTC'));
+
+        $this->time = $date;
+        $this->date = $date;
 
         $this->processClientData($deviceDetector);
     }
@@ -528,9 +549,17 @@ class LogLogin implements EntityInterface
     /**
      * @return \DateTime
      */
-    public function getTimestamp(): \DateTime
+    public function getTime(): \DateTime
     {
-        return $this->timestamp;
+        return $this->time;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate(): \DateTime
+    {
+        return $this->date;
     }
 
     /**
