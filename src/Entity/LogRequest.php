@@ -451,7 +451,7 @@ class LogRequest implements EntityInterface
      *
      * @ORM\Column(
      *      name="`date`",
-     *      type="datetime",
+     *      type="date",
      *      nullable=false,
      *  )
      */
