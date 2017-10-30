@@ -21,6 +21,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      name="log_request",
  *      indexes={
  *          @ORM\Index(name="user_id", columns={"user_id"}),
+ *          @ORM\Index(name="api_key_id", columns={"api_key_id"}),
+ *          @ORM\Index(name="request_date", columns={"date"}),
  *      }
  *  )
  * @ORM\Entity(
@@ -440,6 +442,22 @@ class LogRequest implements EntityInterface
     private $time;
 
     /**
+     * @var \DateTime
+     *
+     * @Groups({
+     *      "LogRequest",
+     *      "LogRequest.date",
+     *  })
+     *
+     * @ORM\Column(
+     *      name="`date`",
+     *      type="datetime",
+     *      nullable=false,
+     *  )
+     */
+    private $date;
+
+    /**
      * LogRequest constructor.
      *
      * @param Request|null  $request
@@ -461,7 +479,11 @@ class LogRequest implements EntityInterface
         $this->user = $user;
         $this->apiKey = $apiKey;
         $this->masterRequest = $masterRequest ?? true;
-        $this->time = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $dateTime = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $this->time = $dateTime;
+        $this->date = $dateTime;
 
         if ($request !== null) {
             $this->processRequest($request);
@@ -574,6 +596,14 @@ class LogRequest implements EntityInterface
     public function getTime(): \DateTime
     {
         return $this->time;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate(): \DateTime
+    {
+        return $this->date;
     }
 
     /**
