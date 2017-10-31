@@ -89,7 +89,7 @@
 			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
 			"requirements-checker": "script",
 			"cache:clear": "symfony-cmd",
-			"security-checker security:check": "script"
+			"security-checker security:check -vvv": "script"
 		},
 		"post-install-cmd": [
 			"@auto-scripts"
