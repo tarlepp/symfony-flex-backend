@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 trait AbstractFormMethods
 {
+    // @codingStandardsIgnoreStart
     /**
      * Method to process POST, PUT and PATCH action form within REST traits.
      *
@@ -36,10 +37,6 @@ trait AbstractFormMethods
      * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
      * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
-    abstract public function processForm(
-        Request $request,
-        FormFactoryInterface $formFactory,
-        string $method,
-        string $id = null
-    ): FormInterface;
+    abstract public function processForm(Request $request, FormFactoryInterface $formFactory, string $method, string $id = null): FormInterface;
+    // @codingStandardsIgnoreEnd
 }
