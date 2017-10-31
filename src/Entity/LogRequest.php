@@ -40,24 +40,6 @@ class LogRequest implements EntityInterface
     use LogEntityTrait;
 
     /**
-     * @var string
-     *
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.id",
-     *      "User.logRequest",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="id",
-     *      type="guid",
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     */
-    private $id;
-
-    /**
      * @var \App\Entity\User|null
      *
      * @Groups({
@@ -77,7 +59,25 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
-    private $user;
+    protected $user;
+
+    /**
+     * @var string
+     *
+     * @Groups({
+     *      "LogRequest",
+     *      "LogRequest.id",
+     *      "User.logRequest",
+     *  })
+     *
+     * @ORM\Column(
+     *      name="id",
+     *      type="guid",
+     *      nullable=false,
+     *  )
+     * @ORM\Id()
+     */
+    private $id;
 
     /**
      * @var \App\Entity\ApiKey|null
@@ -100,23 +100,6 @@ class LogRequest implements EntityInterface
      *  })
      */
     private $apiKey;
-
-    /**
-     * @var string
-     *
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.clientIp",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="client_ip",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
-    private $clientIp;
 
     /**
      * @var string
@@ -151,23 +134,6 @@ class LogRequest implements EntityInterface
      *  )
      */
     private $scheme;
-
-    /**
-     * @var string
-     *
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.httpHost",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="http_host",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
-    private $httpHost;
 
     /**
      * @var string
@@ -475,14 +441,6 @@ class LogRequest implements EntityInterface
     /**
      * @return string
      */
-    public function getClientIp(): string
-    {
-        return $this->clientIp;
-    }
-
-    /**
-     * @return string
-     */
     public function getUri(): string
     {
         return $this->uri;
@@ -502,14 +460,6 @@ class LogRequest implements EntityInterface
     public function getScheme(): string
     {
         return $this->scheme;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHttpHost(): string
-    {
-        return $this->httpHost;
     }
 
     /**
@@ -558,14 +508,6 @@ class LogRequest implements EntityInterface
     public function getResponseContentLength(): int
     {
         return $this->responseContentLength;
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getUser(): ?User
-    {
-        return $this->user;
     }
 
     /**
@@ -655,6 +597,7 @@ class LogRequest implements EntityInterface
      */
     private function processRequest(Request $request): void
     {
+        $this->processRequestData($request);
         $this->processRequestBaseInfo($request);
         $this->processHeadersAndParameters($request);
 
@@ -786,10 +729,8 @@ class LogRequest implements EntityInterface
      */
     private function processRequestBaseInfo(Request $request): void
     {
-        $this->clientIp = (string)$request->getClientIp();
         $this->method = $request->getRealMethod();
         $this->scheme = $request->getScheme();
-        $this->httpHost = $request->getHttpHost();
         $this->basePath = $request->getBasePath();
         $this->script = '/' . \basename($request->getScriptName());
         $this->path = $request->getPathInfo();

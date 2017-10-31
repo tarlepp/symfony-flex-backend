@@ -38,6 +38,29 @@ class LogLogin implements EntityInterface
     use LogEntityTrait;
 
     /**
+     * @var \App\Entity\User|null
+     *
+     * @Groups({
+     *      "LogLogin",
+     *      "LogLogin.user",
+     *  })
+     *
+     * @ORM\ManyToOne(
+     *      targetEntity="App\Entity\User",
+     *      inversedBy="logsLogin",
+     *  )
+     * @ORM\JoinColumns({
+     *      @ORM\JoinColumn(
+     *          name="user_id",
+     *          referencedColumnName="id",
+     *          onDelete="SET NULL",
+     *          nullable=true,
+     *      ),
+     *  })
+     */
+    protected $user;
+
+    /**
      * @var string
      *
      * @Groups({
@@ -69,79 +92,6 @@ class LogLogin implements EntityInterface
      *  )
      */
     private $type;
-
-    /**
-     * @var \App\Entity\User|null
-     *
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.user",
-     *  })
-     *
-     * @ORM\ManyToOne(
-     *      targetEntity="App\Entity\User",
-     *      inversedBy="logsLogin",
-     *  )
-     * @ORM\JoinColumns({
-     *      @ORM\JoinColumn(
-     *          name="user_id",
-     *          referencedColumnName="id",
-     *          onDelete="SET NULL",
-     *          nullable=true,
-     *      ),
-     *  })
-     */
-    private $user;
-
-    /**
-     * @var string
-     *
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.ip",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="ip",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
-    private $ip;
-
-    /**
-     * @var string
-     *
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.host",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="host",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
-    private $host;
-
-    /**
-     * @var string
-     *
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.agent",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="agent",
-     *      type="text",
-     *      nullable=false,
-     *  )
-     */
-    private $agent;
 
     /**
      * @var string|null
@@ -363,11 +313,9 @@ class LogLogin implements EntityInterface
 
         $this->type = $type;
         $this->user = $user;
-        $this->ip = (string)$request->getClientIp();
-        $this->host = $request->getHost();
-        $this->agent = (string)$request->headers->get('User-Agent');
 
         $this->processTimeAndDate();
+        $this->processRequestData($request);
         $this->processClientData($deviceDetector);
     }
 
@@ -385,38 +333,6 @@ class LogLogin implements EntityInterface
     public function getType(): string
     {
         return $this->type;
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIp(): string
-    {
-        return $this->ip;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-    /**
-     * @return string
-     */
-    public function getAgent(): string
-    {
-        return $this->agent;
     }
 
     /**
