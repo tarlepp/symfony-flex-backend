@@ -25,14 +25,14 @@
 	"require": {
 		"php": "^7.1.3",
 		"doctrine/annotations": "1.5.0",
-		"doctrine/doctrine-fixtures-bundle": "2.4.0",
-		"doctrine/doctrine-migrations-bundle": "1.2.1",
+		"doctrine/doctrine-fixtures-bundle": "2.4.1",
+		"doctrine/doctrine-migrations-bundle": "1.3.0",
 		"easycorp/easy-log-handler": "1.0.3",
 		"lexik/jwt-authentication-bundle": "2.4.2",
 		"matthiasnoback/symfony-console-form": "2.3.0",
 		"nelmio/api-doc-bundle": "dev-master",
 		"phpunit/phpcov": "dev-master",
-		"piwik/device-detector": "3.8.2",
+		"piwik/device-detector": "3.9.0",
 		"ramsey/uuid": "3.7.1",
 		"roave/security-advisories": "dev-master",
 		"sensio/framework-extra-bundle": "5.0.1",
@@ -44,7 +44,7 @@
 		"symfony/form": "3.3.10",
 		"symfony/framework-bundle": "3.3.10",
 		"symfony/monolog-bundle": "3.1.1",
-		"symfony/orm-pack": "1.0.3",
+		"symfony/orm-pack": "1.0.4",
 		"symfony/security": "3.3.10",
 		"symfony/security-bundle": "3.3.10",
 		"symfony/serializer": "3.3.10",
@@ -87,8 +87,9 @@
 		"auto-scripts": {
 			"make cache-warmup": "script",
 			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
-			"vendor/bin/security-checker security:check --end-point=https://security.sensiolabs.org/check_lock": "php-script",
-			"requirements-checker": "script"
+			"requirements-checker": "script",
+			"cache:clear": "symfony-cmd",
+			"security-checker security:check": "script"
 		},
 		"post-install-cmd": [
 			"@auto-scripts"
