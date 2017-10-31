@@ -85,11 +85,11 @@
 	},
 	"scripts": {
 		"auto-scripts": {
-			"make cache-warmup": "script",
+			"cache:clear": "symfony-cmd",
+			"cache:warmup": "symfony-cmd",
 			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
 			"requirements-checker": "script",
-			"cache:clear": "symfony-cmd",
-			"security-checker security:check -vvv": "script"
+			"security-checker security:check": "script"
 		},
 		"post-install-cmd": [
 			"@auto-scripts"
