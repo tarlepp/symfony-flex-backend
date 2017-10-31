@@ -453,6 +453,8 @@ class LogRequest implements EntityInterface
         $this->apiKey = $apiKey;
         $this->masterRequest = $masterRequest ?? true;
 
+        $this->processTimeAndDate();
+
         if ($request !== null) {
             $this->processRequest($request);
         }

@@ -367,6 +367,7 @@ class LogLogin implements EntityInterface
         $this->host = $request->getHost();
         $this->agent = (string)$request->headers->get('User-Agent');
 
+        $this->processTimeAndDate();
         $this->processClientData($deviceDetector);
     }
 

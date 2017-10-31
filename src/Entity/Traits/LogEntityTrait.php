@@ -76,7 +76,7 @@ trait LogEntityTrait
     {
         $date = new \DateTime('NOW', new \DateTimeZone('UTC'));
 
-        $this->time = $date;
-        $this->date = $date;
+        $this->time = $this->time ?? $date;
+        $this->date = $this->time ?? $date;
     }
 }
