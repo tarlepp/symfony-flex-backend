@@ -16,6 +16,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Trait LogEntityTrait
  *
  * @package App\Entity\Traits
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property \App\Entity\User|null $user
  */
 trait LogEntityTrait
 {
