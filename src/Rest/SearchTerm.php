@@ -31,29 +31,8 @@ final class SearchTerm implements SearchTermInterface
         $operand = $operand ?? self::OPERAND_OR;
         $mode = $mode ?? self::MODE_FULL;
 
-        /**
-         * Lambda function to filter out all "empty" values.
-         *
-         * @param mixed $value
-         *
-         * @return bool
-         */
-        $iterator = function ($value) {
-            return mb_strlen(\trim((string)$value)) > 0;
-        };
-
-        // Normalize column and search parameters
-        $columns = \array_filter(
-            \array_map('\trim', (\is_array($column) ? $column : (array)$column)),
-            $iterator
-        );
-
-        $searchTerms = \array_unique(
-            \array_filter(
-                \array_map('\trim', (\is_array($search) ? $search : \explode(' ', (string)$search))),
-                $iterator
-            )
-        );
+        $columns = self::getColumns($column);
+        $searchTerms = self::getSearchTerms($search);
 
         // Fallback to OR operand if not supported one given
         if ($operand !== self::OPERAND_AND && $operand !== self::OPERAND_OR) {
@@ -172,5 +151,49 @@ final class SearchTerm implements SearchTermInterface
         }
 
         return $term;
+    }
+
+    /**
+     * @param $column
+     *
+     * @return array
+     */
+    private static function getColumns($column): array
+    {
+        // Normalize column and search parameters
+        $columns = \array_filter(
+            \array_map('\trim', (\is_array($column) ? $column : (array)$column)),
+            [__CLASS__, 'isValid']
+        );
+
+        return $columns;
+    }
+
+    /**
+     * Method to get search terms.
+     *
+     * @param array|string $search
+     *
+     * @return array
+     */
+    private static function getSearchTerms($search): array
+    {
+        $searchTerms = \array_unique(
+            \array_filter(
+                \array_map('\trim', (\is_array($search) ? $search : \explode(' ', (string)$search))),
+                [__CLASS__, 'isValid']
+            )
+        );
+        return $searchTerms;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return bool
+     */
+    private static function isValid(string $value): bool
+    {
+        return mb_strlen(\trim($value)) > 0;
     }
 }
