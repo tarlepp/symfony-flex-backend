@@ -29,9 +29,9 @@ class RequestSubscriber
     private $logger;
 
     /**
-     * @var UserInterface|ApplicationUser|ApiKeyUser|null
+     * @var TokenStorageInterface
      */
-    private $user;
+    private $tokenStorage;
 
     /**
      * RequestSubscriber constructor.
@@ -43,10 +43,7 @@ class RequestSubscriber
     {
         // Store logger service
         $this->logger = $requestLogger;
-
-        $token = $tokenStorage->getToken();
-
-        $this->user = ($token === null || $token instanceof AnonymousToken) ? null : $token->getUser();
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -65,21 +62,47 @@ class RequestSubscriber
             return;
         }
 
+        $this->process($event);
+    }
+
+    /**
+     * Method to process current request event.
+     *
+     * @param FilterResponseEvent $event
+     *
+     * @throws \Exception
+     */
+    private function process(FilterResponseEvent $event): void
+    {
+        $request = $event->getRequest();
+
         // Set needed data to logger and handle actual log
         $this->logger->setRequest($request);
         $this->logger->setResponse($event->getResponse());
 
-        $user = $this->user;
+        $user = $this->getUser();
 
-        if ($this->user instanceof ApplicationUser) {
+        if ($user instanceof ApplicationUser) {
             /** @var UserInterface $user */
             $this->logger->setUser($user);
-        } elseif ($this->user instanceof ApiKeyUser) {
-            /** @var ApiKeyUser|UserInterface $user */
+        } elseif ($user instanceof ApiKeyUser) {
+            /** @var ApiKeyUser $user */
             $this->logger->setApiKey($user->getApiKey());
         }
 
         $this->logger->setMasterRequest($event->isMasterRequest());
         $this->logger->handle();
+    }
+
+    /**
+     * Method to get current user from token storage.
+     *
+     * @return null|UserInterface|ApplicationUser|ApiKeyUser
+     */
+    private function getUser()
+    {
+        $token = $this->tokenStorage->getToken();
+
+        return ($token === null || $token instanceof AnonymousToken) ? null : $token->getUser();
     }
 }
