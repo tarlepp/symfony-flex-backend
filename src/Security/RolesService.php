@@ -26,6 +26,17 @@ class RolesService implements RolesServiceInterface
     private $rolesHierarchy;
 
     /**
+     * @var array
+     */
+    private static $roleNames = [
+        self::ROLE_LOGGED   => 'Logged in users',
+        self::ROLE_USER     => 'Normal users',
+        self::ROLE_ADMIN    => 'Admin users',
+        self::ROLE_ROOT     => 'Root users',
+        self::ROLE_API      => 'API users',
+    ];
+
+    /**
      * RolesHelper constructor.
      *
      * @param array $rolesHierarchy This is a 'security.role_hierarchy.roles' parameter value
@@ -72,25 +83,10 @@ class RolesService implements RolesServiceInterface
      */
     public function getRoleLabel(string $role): string
     {
-        switch ($role) {
-            case self::ROLE_LOGGED:
-                $output = 'Logged in users';
-                break;
-            case self::ROLE_USER:
-                $output = 'Normal users';
-                break;
-            case self::ROLE_ADMIN:
-                $output = 'Admin users';
-                break;
-            case self::ROLE_ROOT:
-                $output = 'Root users';
-                break;
-            case self::ROLE_API:
-                $output = 'API users';
-                break;
-            default:
-                $output = 'Unknown - ' . $role;
-                break;
+        $output = 'Unknown - ' . $role;
+
+        if (\array_key_exists($role, self::$roleNames)) {
+            $output = self::$roleNames[$role];
         }
 
         return $output;
