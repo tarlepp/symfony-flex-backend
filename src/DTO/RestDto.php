@@ -59,29 +59,8 @@ abstract class RestDto implements RestDtoInterface
     public function patch(RestDtoInterface $dto): RestDtoInterface
     {
         foreach ($dto->getVisited() as $property) {
-            $getters = [
-                'get' . \ucfirst($property),
-                'is' . \ucfirst($property),
-                'has' . \ucfirst($property),
-            ];
-
-            $filter = function (string $method) use ($dto): bool {
-                return \method_exists($dto, $method);
-            };
-
             // Determine getter method
-            $filtered = \array_filter($getters, $filter);
-
-            if (\count($filtered) > 1) {
-                $message = \sprintf(
-                    'Property \'%s\' has multiple getter methods - this is insane!',
-                    $property
-                );
-
-                throw new \LogicException($message);
-            }
-
-            $getter = \current($filtered);
+            $getter = $this->getGetter($dto, $property);
 
             // Oh noes - required getter method does not exist
             if ($getter === false) {
@@ -102,5 +81,40 @@ abstract class RestDto implements RestDtoInterface
         }
 
         return $this;
+    }
+
+    /**
+     * @param RestDtoInterface $dto
+     * @param string           $property
+     *
+     * @return mixed
+     *
+     * @throws \LogicException
+     */
+    private function getGetter(RestDtoInterface $dto, $property): mixed
+    {
+        $getters = [
+            'get' . \ucfirst($property),
+            'is' . \ucfirst($property),
+            'has' . \ucfirst($property),
+        ];
+
+        $filter = function (string $method) use ($dto): bool {
+            return \method_exists($dto, $method);
+        };
+
+        // Determine getter method
+        $filtered = \array_filter($getters, $filter);
+
+        if (\count($filtered) > 1) {
+            $message = \sprintf(
+                'Property \'%s\' has multiple getter methods - this is insane!',
+                $property
+            );
+
+            throw new \LogicException($message);
+        }
+
+        return \current($filtered);
     }
 }
