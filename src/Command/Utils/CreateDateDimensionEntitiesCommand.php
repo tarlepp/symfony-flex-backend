@@ -189,16 +189,12 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         $em = $this->repository->getEntityManager();
 
         // You spin me round (like a record... er like a date)
-        while (true) {
-            if ((int)$dateStart->format('Y') > $yearEnd) {
-                break;
-            }
-
+        while ((int)$dateStart->format('Y') < $yearEnd + 1) {
             $em->persist(new DateDimension(clone $dateStart));
 
             $dateStart->add(new \DateInterval('P1D'));
 
-            // Flush whole year of entities at one time
+            // Flush in 1000 batches to database
             if ($progress->getProgress() % 1000 === 0) {
                 $em->flush();
                 $em->clear();
