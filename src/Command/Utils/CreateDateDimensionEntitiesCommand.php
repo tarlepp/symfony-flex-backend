@@ -9,6 +9,7 @@ namespace App\Command\Utils;
 
 use App\Entity\DateDimension;
 use App\Repository\DateDimensionRepository;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -79,7 +80,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         $yearEnd = $this->getYearEnd($yearStart);
 
         // Create actual entities
-        $this->createEntities($yearStart, $yearEnd);
+        $this->process($yearStart, $yearEnd);
 
         $this->io->success('All done - have a nice day!');
 
@@ -172,7 +173,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Exception
      */
-    private function createEntities(int $yearStart, int $yearEnd)
+    private function process(int $yearStart, int $yearEnd)
     {
         $dateStart = new \DateTime($yearStart . '-01-01 00:00:00', new \DateTimeZone('UTC'));
         $dateEnd = new \DateTime($yearEnd . '-12-31 00:00:00', new \DateTimeZone('UTC'));
@@ -188,20 +189,8 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         // Get entity manager for _fast_ database handling.
         $em = $this->repository->getEntityManager();
 
-        // You spin me round (like a record... er like a date)
-        while ((int)$dateStart->format('Y') < $yearEnd + 1) {
-            $em->persist(new DateDimension(clone $dateStart));
-
-            $dateStart->add(new \DateInterval('P1D'));
-
-            // Flush in 1000 batches to database
-            if ($progress->getProgress() % 1000 === 0) {
-                $em->flush();
-                $em->clear();
-            }
-
-            $progress->advance();
-        }
+        // Create entities to database
+        $this->createEntities($yearEnd, $dateStart, $em, $progress);
 
         // Finally flush remaining entities
         $em->flush();
@@ -232,5 +221,33 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         $progress->setMessage($message);
 
         return $progress;
+    }
+
+    /**
+     * @param int           $yearEnd
+     * @param \DateTime     $dateStart
+     * @param EntityManager $em
+     * @param ProgressBar   $progress
+     *
+     * @throws \Exception
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    private function createEntities(int $yearEnd, \DateTime $dateStart, EntityManager $em, ProgressBar $progress): void
+    {
+        // You spin me round (like a record... er like a date)
+        while ((int)$dateStart->format('Y') < $yearEnd + 1) {
+            $em->persist(new DateDimension(clone $dateStart));
+
+            $dateStart->add(new \DateInterval('P1D'));
+
+            // Flush in 1000 batches to database
+            if ($progress->getProgress() % 1000 === 0) {
+                $em->flush();
+                $em->clear();
+            }
+
+            $progress->advance();
+        }
     }
 }
