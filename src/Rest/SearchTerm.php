@@ -181,7 +181,7 @@ final class SearchTerm implements SearchTermInterface
         $searchTerms = \array_unique(
             \array_filter(
                 \array_map('\trim', (\is_array($search) ? $search : \explode(' ', (string)$search))),
-                [__CLASS__, 'isValid']
+                'self::isValid'
             )
         );
         return $searchTerms;
