@@ -84,14 +84,16 @@ abstract class RestDto implements RestDtoInterface
     }
 
     /**
+     * Method to determine used getter method for DTO property.
+     *
      * @param RestDtoInterface $dto
      * @param string           $property
      *
-     * @return mixed
+     * @return string|bool
      *
      * @throws \LogicException
      */
-    private function getGetter(RestDtoInterface $dto, $property): mixed
+    private function getGetter(RestDtoInterface $dto, string $property)
     {
         $getters = [
             'get' . \ucfirst($property),
