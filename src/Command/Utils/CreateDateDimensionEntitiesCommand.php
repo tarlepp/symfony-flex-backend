@@ -9,7 +9,6 @@ namespace App\Command\Utils;
 
 use App\Entity\DateDimension;
 use App\Repository\DateDimensionRepository;
-use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -186,15 +185,8 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         // Remove existing entities
         $this->repository->reset();
 
-        // Get entity manager for _fast_ database handling.
-        $em = $this->repository->getEntityManager();
-
         // Create entities to database
-        $this->createEntities($yearEnd, $dateStart, $em, $progress);
-
-        // Finally flush remaining entities
-        $em->flush();
-        $em->clear();
+        $this->createEntities($yearEnd, $dateStart, $progress);
     }
 
     /**
@@ -226,15 +218,17 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
     /**
      * @param int           $yearEnd
      * @param \DateTime     $dateStart
-     * @param EntityManager $em
      * @param ProgressBar   $progress
      *
      * @throws \Exception
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function createEntities(int $yearEnd, \DateTime $dateStart, EntityManager $em, ProgressBar $progress): void
+    private function createEntities(int $yearEnd, \DateTime $dateStart, ProgressBar $progress): void
     {
+        // Get entity manager for _fast_ database handling.
+        $em = $this->repository->getEntityManager();
+
         // You spin me round (like a record... er like a date)
         while ((int)$dateStart->format('Y') < $yearEnd + 1) {
             $em->persist(new DateDimension(clone $dateStart));
@@ -249,5 +243,9 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
 
             $progress->advance();
         }
+
+        // Finally flush remaining entities
+        $em->flush();
+        $em->clear();
     }
 }
