@@ -160,10 +160,14 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getColumns($column): array
     {
+        $filter = function (string $value): bool {
+            return \mb_strlen(\trim($value)) > 0;
+        };
+
         // Normalize column and search parameters
         $columns = \array_filter(
             \array_map('\trim', (\is_array($column) ? $column : (array)$column)),
-            [__CLASS__, 'isValid']
+            $filter
         );
 
         return $columns;
@@ -178,22 +182,16 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getSearchTerms($search): array
     {
+        $filter = function (string $value): bool {
+            return \mb_strlen(\trim($value)) > 0;
+        };
+
         $searchTerms = \array_unique(
             \array_filter(
                 \array_map('\trim', (\is_array($search) ? $search : \explode(' ', (string)$search))),
-                'self::isValid'
+                $filter
             )
         );
         return $searchTerms;
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return bool
-     */
-    private static function isValid(string $value): bool
-    {
-        return mb_strlen(\trim($value)) > 0;
     }
 }
