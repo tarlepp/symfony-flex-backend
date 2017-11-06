@@ -86,6 +86,40 @@ class ListUsersCommand extends Command
      */
     private function getRows(): array
     {
+        return \array_map($this->getFormatter(), $this->userResource->find(null, ['username' => 'ASC']));
+    }
+
+    /**
+     * Getter method for user formatter.
+     *
+     * @return \Closure
+     */
+    private function getFormatter(): \Closure
+    {
+        /**
+         * @param User $user
+         *
+         * @return array
+         */
+        $formatterUser = function (User $user): array {
+            return [
+                $user->getId(),
+                $user->getUsername(),
+                $user->getEmail(),
+                $user->getFirstname() . ' ' . $user->getSurname(),
+                \implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
+                \implode(",\n", $user->getUserGroups()->map($this->formatterGroup())->toArray()),
+            ];
+        };
+
+        return $formatterUser;
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function formatterGroup(): \Closure
+    {
         /**
          * @param UserGroup $userGroup
          *
@@ -99,22 +133,6 @@ class ListUsersCommand extends Command
             );
         };
 
-        /**
-         * @param User $user
-         *
-         * @return array
-         */
-        $formatterUser = function (User $user) use ($formatterGroup): array {
-            return [
-                $user->getId(),
-                $user->getUsername(),
-                $user->getEmail(),
-                $user->getFirstname() . ' ' . $user->getSurname(),
-                \implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
-                \implode(",\n", $user->getUserGroups()->map($formatterGroup)->toArray()),
-            ];
-        };
-
-        return \array_map($formatterUser, $this->userResource->find(null, ['username' => 'ASC']));
+        return $formatterGroup;
     }
 }
