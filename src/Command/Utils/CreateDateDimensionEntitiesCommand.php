@@ -132,34 +132,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function getYearEnd(int $yearStart): int
     {
-        /**
-         * Lambda validator function for end year io question.
-         *
-         * @param mixed $year
-         *
-         * @return int
-         */
-        $validator = function ($year) use ($yearStart) {
-            $year = (int)$year;
-
-            if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
-                $message = \sprintf(
-                    'End year must be between %d and %d',
-                    self::YEAR_MIN,
-                    self::YEAR_MAX
-                );
-
-                throw new \InvalidArgumentException($message);
-            }
-
-            if ($year < $yearStart) {
-                throw new \InvalidArgumentException('End year cannot be before given start year');
-            }
-
-            return $year;
-        };
-
-        return (int)$this->io->ask('Give a year where to end', self::YEAR_MAX, $validator);
+        return (int)$this->io->ask('Give a year where to end', self::YEAR_MAX, $this->validatorYearEnd($yearStart));
     }
 
     /**
@@ -247,5 +220,46 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         // Finally flush remaining entities
         $em->flush();
         $em->clear();
+    }
+
+    /**
+     * Getter method for year end validator closure.
+     *
+     * @param int $yearStart
+     *
+     * @return \Closure
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function validatorYearEnd(int $yearStart): \Closure
+    {
+        /**
+         * Lambda validator function for end year io question.
+         *
+         * @param mixed $year
+         *
+         * @return int
+         */
+        $validator = function ($year) use ($yearStart) {
+            $year = (int)$year;
+
+            if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
+                $message = \sprintf(
+                    'End year must be between %d and %d',
+                    self::YEAR_MIN,
+                    self::YEAR_MAX
+                );
+
+                throw new \InvalidArgumentException($message);
+            }
+
+            if ($year < $yearStart) {
+                throw new \InvalidArgumentException('End year cannot be before given start year');
+            }
+
+            return $year;
+        };
+
+        return $validator;
     }
 }
