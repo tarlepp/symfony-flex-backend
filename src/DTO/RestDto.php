@@ -60,7 +60,7 @@ abstract class RestDto implements RestDtoInterface
     {
         foreach ($dto->getVisited() as $property) {
             // Determine getter method
-            $getter = $this->getGetter($dto, $property);
+            $getter = $this->determineGetterMethod($dto, $property);
 
             // Oh noes - required getter method does not exist
             if ($getter === false) {
@@ -93,7 +93,7 @@ abstract class RestDto implements RestDtoInterface
      *
      * @throws \LogicException
      */
-    private function getGetter(RestDtoInterface $dto, string $property)
+    private function determineGetterMethod(RestDtoInterface $dto, string $property)
     {
         $getters = [
             'get' . \ucfirst($property),
