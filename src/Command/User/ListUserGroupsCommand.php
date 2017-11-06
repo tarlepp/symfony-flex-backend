@@ -76,6 +76,36 @@ class ListUserGroupsCommand extends Command
      */
     private function getRows(): array
     {
+        return \array_map($this->getFormatter(), $this->userGroupResource->find(null, ['name' => 'ASC']));
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function getFormatter(): \Closure
+    {
+        /**
+         * @param UserGroup $userGroup
+         *
+         * @return array
+         */
+        $formatterGroup = function (UserGroup $userGroup): array {
+            return [
+                $userGroup->getId(),
+                $userGroup->getName(),
+                $userGroup->getRole()->getId(),
+                \implode(",\n", $userGroup->getUsers()->map($this->formatterUser())->toArray()),
+            ];
+        };
+
+        return $formatterGroup;
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function formatterUser(): \Closure
+    {
         /**
          * @param User $user
          *
@@ -90,20 +120,6 @@ class ListUserGroupsCommand extends Command
             );
         };
 
-        /**
-         * @param UserGroup $userGroup
-         *
-         * @return array
-         */
-        $formatterGroup = function (UserGroup $userGroup) use ($formatterUser): array {
-            return [
-                $userGroup->getId(),
-                $userGroup->getName(),
-                $userGroup->getRole()->getId(),
-                \implode(",\n", $userGroup->getUsers()->map($formatterUser)->toArray()),
-            ];
-        };
-
-        return \array_map($formatterGroup, $this->userGroupResource->find(null, ['name' => 'ASC']));
+        return $formatterUser;
     }
 }
