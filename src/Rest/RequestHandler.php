@@ -88,30 +88,7 @@ final class RequestHandler
         // Initialize output
         $output = [];
 
-        /**
-         * Lambda function to process user input for 'order' parameter and convert it to proper array that
-         * Doctrine repository find method can use.
-         *
-         * @param   string          $value
-         * @param   integer|string  $key
-         */
-        $iterator = function (string &$value, $key) use (&$output) {
-            $order = 'ASC';
-
-            if (\is_string($key)) {
-                $column = $key;
-                $order = \in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : $order;
-            } else {
-                $column = $value;
-            }
-
-            if ($column[0] === '-') {
-                $column = mb_substr($column, 1);
-                $order = 'DESC';
-            }
-
-            $output[$column] = $order;
-        };
+        [$output, $iterator] = self::getIterator($output);
 
         // Process user input
         \array_walk($input, $iterator);
@@ -269,5 +246,40 @@ final class RequestHandler
         \array_walk($searchTerms, $iterator);
 
         return $searchTerms;
+    }
+
+    /**
+     * @param array $output
+     *
+     * @return array
+     */
+    private static function getIterator(&$output): array
+    {
+        /**
+         * Lambda function to process user input for 'order' parameter and convert it to proper array that
+         * Doctrine repository find method can use.
+         *
+         * @param   string         $value
+         * @param   integer|string $key
+         */
+        $iterator = function (string &$value, $key) use (&$output) {
+            $order = 'ASC';
+
+            if (\is_string($key)) {
+                $column = $key;
+                $order = \in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : $order;
+            } else {
+                $column = $value;
+            }
+
+            if ($column[0] === '-') {
+                $column = mb_substr($column, 1);
+                $order = 'DESC';
+            }
+
+            $output[$column] = $order;
+        };
+
+        return array($output, $iterator);
     }
 }
