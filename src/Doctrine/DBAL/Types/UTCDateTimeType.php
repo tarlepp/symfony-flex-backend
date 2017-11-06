@@ -97,12 +97,14 @@ class UTCDateTimeType extends DateTimeType
      */
     private function checkConvertedValue($value, AbstractPlatform $platform, $converted): void
     {
-        if (!$converted) {
-            throw ConversionException::conversionFailedFormat(
-                $value,
-                $this->getName(),
-                $platform->getDateTimeFormatString()
-            );
+        if ($converted instanceof \DateTime) {
+            return;
         }
+
+        throw ConversionException::conversionFailedFormat(
+            $value,
+            $this->getName(),
+            $platform->getDateTimeFormatString()
+        );
     }
 }
