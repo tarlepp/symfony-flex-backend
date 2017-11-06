@@ -184,15 +184,29 @@ class CreateUserCommand extends Command
         // Reset roles
         $this->roleRepository->reset();
 
+        // Create user groups for each role
+        $this->createUserGroups($output);
+    }
+
+    /**
+     * Method to create user groups via existing 'user:create-group' command.
+     *
+     * @param OutputInterface $output
+     *
+     * @throws \Exception
+     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
+     */
+    private function createUserGroups(OutputInterface $output): void
+    {
         $command = $this->getApplication()->find('user:create-group');
 
         // Iterate roles and create user group for each one
         foreach ($this->roles->getRoles() as $role) {
             $arguments = [
-                'command'   => 'user:create-group',
-                '--name'    => $this->roles->getRoleLabel($role),
-                '--role'    => $role,
-                '-n'        => true,
+                'command' => 'user:create-group',
+                '--name'  => $this->roles->getRoleLabel($role),
+                '--role'  => $role,
+                '-n'      => true,
             ];
 
             $input = new ArrayInput($arguments);
