@@ -39,9 +39,7 @@ class UTCDateTimeType extends DateTimeType
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (self::$utc === null) {
-            self::$utc = new \DateTimeZone('UTC');
-        }
+        $this->initializeUtcDateTimeZone();
 
         if ($value instanceof \DateTime) {
             $value->setTimezone(self::$utc);
@@ -63,26 +61,48 @@ class UTCDateTimeType extends DateTimeType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        if (self::$utc === null) {
-            self::$utc = new \DateTimeZone('UTC');
-        }
+        $this->initializeUtcDateTimeZone();
 
         if ($value instanceof \DateTime) {
             $value->setTimezone(self::$utc);
         } elseif ($value !== null) {
             $converted = \DateTime::createFromFormat($platform->getDateTimeFormatString(), $value, self::$utc);
 
-            if (!$converted) {
-                throw ConversionException::conversionFailedFormat(
-                    $value,
-                    $this->getName(),
-                    $platform->getDateTimeFormatString()
-                );
-            }
+            $this->checkConvertedValue($value, $platform, $converted);
 
             $value = $converted;
         }
 
         return parent::convertToPHPValue($value, $platform);
+    }
+
+    /**
+     * Method to initialize DateTimeZone as in UTC.
+     */
+    private function initializeUtcDateTimeZone(): void
+    {
+        if (self::$utc === null) {
+            self::$utc = new \DateTimeZone('UTC');
+        }
+    }
+
+    /**
+     * Method to check if conversion was successfully or not.
+     *
+     * @param mixed             $value
+     * @param AbstractPlatform  $platform
+     * @param \DateTime|boolean $converted
+     *
+     * @throws ConversionException
+     */
+    private function checkConvertedValue($value, AbstractPlatform $platform, $converted): void
+    {
+        if (!$converted) {
+            throw ConversionException::conversionFailedFormat(
+                $value,
+                $this->getName(),
+                $platform->getDateTimeFormatString()
+            );
+        }
     }
 }
