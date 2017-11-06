@@ -62,17 +62,6 @@ abstract class RestDto implements RestDtoInterface
             // Determine getter method
             $getter = $this->determineGetterMethod($dto, $property);
 
-            // Oh noes - required getter method does not exist
-            if ($getter === false) {
-                $message = \sprintf(
-                    'DTO class \'%s\' does not have getter method property \'%s\' - cannot patch dto',
-                    \get_class($dto),
-                    $property
-                );
-
-                throw new \BadMethodCallException($message);
-            }
-
             // Determine setter method
             $setter = 'set' . \ucfirst($property);
 
@@ -117,6 +106,19 @@ abstract class RestDto implements RestDtoInterface
             throw new \LogicException($message);
         }
 
-        return \current($filtered);
+        $getter = \current($filtered);
+
+        // Oh noes - required getter method does not exist
+        if ($getter === false) {
+            $message = \sprintf(
+                'DTO class \'%s\' does not have getter method property \'%s\' - cannot patch dto',
+                \get_class($dto),
+                $property
+            );
+
+            throw new \BadMethodCallException($message);
+        }
+
+        return $getter;
     }
 }
