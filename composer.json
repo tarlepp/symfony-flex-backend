@@ -43,7 +43,7 @@
 		"symfony/flex": "1.0.39",
 		"symfony/form": "3.3.10",
 		"symfony/framework-bundle": "3.3.10",
-		"symfony/monolog-bundle": "3.1.1",
+		"symfony/monolog-bundle": "3.1.2",
 		"symfony/orm-pack": "1.0.4",
 		"symfony/security": "3.3.10",
 		"symfony/security-bundle": "3.3.10",
