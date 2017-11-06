@@ -95,30 +95,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function getYearStart(): int
     {
-        /**
-         * Lambda validator function for start year io question.
-         *
-         * @param mixed $year
-         *
-         * @return int
-         */
-        $validator = function ($year) {
-            $year = (int)$year;
-
-            if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
-                $message = \sprintf(
-                    'Start year must be between %d and %d',
-                    self::YEAR_MIN,
-                    self::YEAR_MAX
-                );
-
-                throw new \InvalidArgumentException($message);
-            }
-
-            return $year;
-        };
-
-        return (int)$this->io->ask('Give a year where to start', self::YEAR_MIN, $validator);
+        return (int)$this->io->ask('Give a year where to start', self::YEAR_MIN, $this->validatorYearStart());
     }
 
     /**
@@ -220,6 +197,41 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         // Finally flush remaining entities
         $em->flush();
         $em->clear();
+    }
+
+    /**
+     * Getter method for year start validator closure.
+     *
+     * @return \Closure
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function validatorYearStart(): \Closure
+    {
+        /**
+         * Lambda validator function for start year io question.
+         *
+         * @param mixed $year
+         *
+         * @return int
+         */
+        $validator = function ($year) {
+            $year = (int)$year;
+
+            if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
+                $message = \sprintf(
+                    'Start year must be between %d and %d',
+                    self::YEAR_MIN,
+                    self::YEAR_MAX
+                );
+
+                throw new \InvalidArgumentException($message);
+            }
+
+            return $year;
+        };
+
+        return $validator;
     }
 
     /**
