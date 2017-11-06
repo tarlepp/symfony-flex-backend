@@ -90,6 +90,37 @@ class ListApiKeysCommand extends Command
      */
     private function getRows(): array
     {
+        return \array_map($this->getFormatter(), $this->apiKeyResource->find(null, ['token' => 'ASC']));
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function getFormatter(): \Closure
+    {
+        /**
+         * @param ApiKey $apiToken
+         *
+         * @return array
+         */
+        $formatterApiKey = function (ApiKey $apiToken): array {
+            return [
+                $apiToken->getId(),
+                $apiToken->getToken(),
+                $apiToken->getDescription(),
+                \implode(",\n", $apiToken->getUserGroups()->map($this->formatterGroup())->toArray()),
+                \implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
+            ];
+        };
+
+        return $formatterApiKey;
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function formatterGroup(): \Closure
+    {
         /**
          * @param UserGroup $userGroup
          *
@@ -103,21 +134,6 @@ class ListApiKeysCommand extends Command
             );
         };
 
-        /**
-         * @param ApiKey $apiToken
-         *
-         * @return array
-         */
-        $formatterUser = function (ApiKey $apiToken) use ($formatterGroup): array {
-            return [
-                $apiToken->getId(),
-                $apiToken->getToken(),
-                $apiToken->getDescription(),
-                \implode(",\n", $apiToken->getUserGroups()->map($formatterGroup)->toArray()),
-                \implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
-            ];
-        };
-
-        return \array_map($formatterUser, $this->apiKeyResource->find(null, ['token' => 'ASC']));
+        return $formatterGroup;
     }
 }
