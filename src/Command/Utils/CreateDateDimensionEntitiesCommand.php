@@ -208,14 +208,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function validatorYearStart(): \Closure
     {
-        /**
-         * Lambda validator function for start year io question.
-         *
-         * @param mixed $year
-         *
-         * @return int
-         */
-        $validator = function ($year) {
+        return function ($year) {
             $year = (int)$year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
@@ -230,8 +223,6 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
 
             return $year;
         };
-
-        return $validator;
     }
 
     /**
