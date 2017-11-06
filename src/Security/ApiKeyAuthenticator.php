@@ -96,6 +96,36 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
             throw new \InvalidArgumentException($message);
         }
 
+        $apiKeyProvider = $this->getProvider($userProvider);
+        $token = $tokenInterface->getCredentials();
+        $apiKey = $apiKeyProvider->getApiKeyForToken($token);
+
+        /**
+         * Token not found, so cannot continue
+         *
+         * CAUTION: this message will be returned to the client (so don't put any un-trusted messages / error strings
+         *          here)
+         */
+        if ($apiKey === null) {
+            throw new CustomUserMessageAuthenticationException('Invalid API key');
+        }
+
+        $user = $apiKeyProvider->loadUserByUsername($apiKey->getId());
+
+        return new PreAuthenticatedToken($user, $token, $providerKey, $user->getRoles());
+    }
+
+    /**
+     * Getter method for API Key provider.
+     *
+     * @param ChainUserProvider $userProvider
+     *
+     * @return ApiKeyUserProvider
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
+    private function getProvider(ChainUserProvider $userProvider): ApiKeyUserProvider
+    {
         /**
          * Lambda function to filter user providers
          *
@@ -115,21 +145,6 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
         /** @var ApiKeyUserProvider $userProvider */
         $userProvider = \current($providers);
 
-        $token = $tokenInterface->getCredentials();
-        $apiKey = $userProvider->getApiKeyForToken($token);
-
-        /**
-         * Token not found, so cannot continue
-         *
-         * CAUTION: this message will be returned to the client (so don't put any un-trusted messages / error strings
-         *          here)
-         */
-        if ($apiKey === null) {
-            throw new CustomUserMessageAuthenticationException('Invalid API key');
-        }
-
-        $user = $userProvider->loadUserByUsername($apiKey->getId());
-
-        return new PreAuthenticatedToken($user, $token, $providerKey, $user->getRoles());
+        return $userProvider;
     }
 }
