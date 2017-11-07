@@ -58,21 +58,7 @@ class UserHelper
 
         while ($userFound === false) {
             $userEntity = $this->getUserEntity($io, $question);
-
-            if ($userEntity === null) {
-                break;
-            }
-
-            $message = \sprintf(
-                'Is this the correct  user [%s - %s (%s %s <%s>)]?',
-                $userEntity->getId(),
-                $userEntity->getUsername(),
-                $userEntity->getFirstname(),
-                $userEntity->getSurname(),
-                $userEntity->getEmail()
-            );
-
-            $userFound = $io->confirm($message, false);
+            $userFound = $userEntity === null ? true : $this->isCorrectUser($io, $userEntity);
         }
 
         return $userEntity ?? null;
@@ -93,19 +79,7 @@ class UserHelper
 
         while ($userGroupFound === false) {
             $userGroupEntity = $this->getUserGroupEntity($io, $question);
-
-            if ($userGroupEntity === null) {
-                break;
-            }
-
-            $message = \sprintf(
-                'Is this the correct user group [%s - %s (%s)]?',
-                $userGroupEntity->getId(),
-                $userGroupEntity->getName(),
-                $userGroupEntity->getRole()->getId()
-            );
-
-            $userGroupFound = $io->confirm($message, false);
+            $userGroupFound = $userGroupEntity === null ? true : $this->isCorrectUserGroup($io, $userGroupEntity);
         }
 
         return $userGroupEntity ?? null;
@@ -182,5 +156,43 @@ class UserHelper
         };
 
         return $iterator;
+    }
+
+    /**
+     * @param SymfonyStyle $io
+     * @param UserEntity   $userEntity
+     *
+     * @return bool
+     */
+    private function isCorrectUser(SymfonyStyle $io, UserEntity $userEntity): bool
+    {
+        $message = \sprintf(
+            'Is this the correct  user [%s - %s (%s %s <%s>)]?',
+            $userEntity->getId(),
+            $userEntity->getUsername(),
+            $userEntity->getFirstname(),
+            $userEntity->getSurname(),
+            $userEntity->getEmail()
+        );
+
+        return $io->confirm($message, false);
+    }
+
+    /**
+     * @param SymfonyStyle    $io
+     * @param UserGroupEntity $userGroupEntity
+     *
+     * @return bool
+     */
+    private function isCorrectUserGroup(SymfonyStyle $io, UserGroupEntity $userGroupEntity): bool
+    {
+        $message = \sprintf(
+            'Is this the correct user group [%s - %s (%s)]?',
+            $userGroupEntity->getId(),
+            $userGroupEntity->getName(),
+            $userGroupEntity->getRole()->getId()
+        );
+
+        return $io->confirm($message, false);
     }
 }
