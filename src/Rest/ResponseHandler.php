@@ -142,11 +142,12 @@ final class ResponseHandler implements ResponseHandlerInterface
     ): Response {
         $httpStatus = $httpStatus ?? 200;
         $context = $context ?? $this->getSerializeContext($request);
+        $format = $this->getFormat($request, $format);
 
         try {
             // Create new response
             $response = new Response();
-            $response->setContent($this->serializer->serialize($data, $this->getFormat($request, $format), $context));
+            $response->setContent($this->serializer->serialize($data, $format, $context));
             $response->setStatusCode($httpStatus);
         } catch (\Exception $error) {
             $status = Response::HTTP_BAD_REQUEST;
