@@ -208,7 +208,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function validatorYearStart(): \Closure
     {
-        return function ($year) {
+        return function ($year): int {
             $year = (int)$year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
@@ -236,33 +236,21 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function validatorYearEnd(int $yearStart): \Closure
     {
-        /**
-         * Lambda validator function for end year io question.
-         *
-         * @param mixed $year
-         *
-         * @return int
-         */
-        $validator = function ($year) use ($yearStart) {
+        return function ($year) use ($yearStart): int {
             $year = (int)$year;
 
-            if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
+            if ($year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart) {
                 $message = \sprintf(
-                    'End year must be between %d and %d',
+                    'End year must be between %d and %d and after given start year %d',
                     self::YEAR_MIN,
-                    self::YEAR_MAX
+                    self::YEAR_MAX,
+                    $yearStart
                 );
 
                 throw new \InvalidArgumentException($message);
             }
 
-            if ($year < $yearStart) {
-                throw new \InvalidArgumentException('End year cannot be before given start year');
-            }
-
             return $year;
         };
-
-        return $validator;
     }
 }
