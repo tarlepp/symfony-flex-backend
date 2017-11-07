@@ -51,7 +51,7 @@ before_script:
   - mkdir -p build/fastest
 
 script:
-  - find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
+  - travis_wait 20 find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
 
 after_success:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi
