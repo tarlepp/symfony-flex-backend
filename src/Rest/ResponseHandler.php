@@ -130,6 +130,7 @@ final class ResponseHandler implements ResponseHandlerInterface
      *
      * @return Response
      *
+     * @throws \InvalidArgumentException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function createResponse(
@@ -140,13 +141,12 @@ final class ResponseHandler implements ResponseHandlerInterface
         array $context = null
     ): Response {
         $httpStatus = $httpStatus ?? 200;
-        $format = $format ?? ($request->getContentType() === self::FORMAT_XML ? self::FORMAT_XML : self::FORMAT_JSON);
         $context = $context ?? $this->getSerializeContext($request);
 
         try {
             // Create new response
             $response = new Response();
-            $response->setContent($this->serializer->serialize($data, $format, $context));
+            $response->setContent($this->serializer->serialize($data, $this->getFormat($request, $format), $context));
             $response->setStatusCode($httpStatus);
         } catch (\Exception $error) {
             $status = Response::HTTP_BAD_REQUEST;
@@ -210,5 +210,16 @@ final class ResponseHandler implements ResponseHandlerInterface
         }
 
         return $populate;
+    }
+
+    /**
+     * @param Request     $request
+     * @param string|null $format
+     *
+     * @return string
+     */
+    private function getFormat(Request $request, string $format = null): string
+    {
+        return $format ?? ($request->getContentType() === self::FORMAT_XML ? self::FORMAT_XML : self::FORMAT_JSON);
     }
 }
