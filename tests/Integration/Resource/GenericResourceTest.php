@@ -376,6 +376,11 @@ class GenericResourceTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|ValidatorInterface $validator */
         $validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
 
+        $validator
+            ->expects(static::exactly(2))
+            ->method('validate')
+            ->willReturn([]);
+
         /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
         $dto = $this->getDtoMockBuilder()->getMock();
 
