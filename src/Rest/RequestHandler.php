@@ -263,14 +263,8 @@ final class RequestHandler
          * @param   integer|string $key
          */
         $iterator = function (string &$value, $key) use (&$output) {
-            $order = 'ASC';
-
-            if (\is_string($key)) {
-                $column = $key;
-                $order = \in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : $order;
-            } else {
-                $column = $value;
-            }
+            $order = \in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
+            $column = \is_string($key) ? $key : $value;
 
             if ($column[0] === '-') {
                 $column = mb_substr($column, 1);
