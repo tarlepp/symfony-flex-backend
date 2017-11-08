@@ -108,16 +108,7 @@ trait RepositoryMethodsTrait
         $search = $search ?? [];
 
         // Create new query builder
-        $queryBuilder = $this->createQueryBuilder();
-
-        // Process normal and search term criteria and order
-        RepositoryHelper::processCriteria($queryBuilder, $criteria);
-        RepositoryHelper::processSearchTerms($queryBuilder, $search, $this->getSearchColumns());
-        RepositoryHelper::processOrderBy($queryBuilder, $orderBy);
-
-        // Process limit and offset
-        $limit === 0 ?: $queryBuilder->setMaxResults($limit);
-        $offset === 0 ?: $queryBuilder->setFirstResult($offset);
+        $queryBuilder = $this->getQueryBuilder($criteria, $orderBy, $limit, $offset, $search);
 
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
@@ -262,5 +253,37 @@ trait RepositoryMethodsTrait
 
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this;
+    }
+
+    /**
+     * @param array $criteria
+     * @param array $orderBy
+     * @param int   $limit
+     * @param int   $offset
+     * @param array $search
+     *
+     * @return QueryBuilder
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function getQueryBuilder(
+        array $criteria,
+        array $orderBy,
+        int $limit,
+        int $offset,
+        array $search
+    ): QueryBuilder {
+        $queryBuilder = $this->createQueryBuilder();
+
+        // Process normal and search term criteria and order
+        RepositoryHelper::processCriteria($queryBuilder, $criteria);
+        RepositoryHelper::processSearchTerms($queryBuilder, $search, $this->getSearchColumns());
+        RepositoryHelper::processOrderBy($queryBuilder, $orderBy);
+
+        // Process limit and offset
+        $limit === 0 ?: $queryBuilder->setMaxResults($limit);
+        $offset === 0 ?: $queryBuilder->setFirstResult($offset);
+
+        return $queryBuilder;
     }
 }
