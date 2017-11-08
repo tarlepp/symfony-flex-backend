@@ -88,10 +88,8 @@ final class RequestHandler
         // Initialize output
         $output = [];
 
-        [$output, $iterator] = self::getIterator($output);
-
         // Process user input
-        \array_walk($input, $iterator);
+        \array_walk($input, self::getIterator($output));
 
         return $output;
     }
@@ -251,18 +249,11 @@ final class RequestHandler
     /**
      * @param array $output
      *
-     * @return array
+     * @return callable
      */
-    private static function getIterator(&$output): array
+    private static function getIterator(array &$output): callable
     {
-        /**
-         * Lambda function to process user input for 'order' parameter and convert it to proper array that
-         * Doctrine repository find method can use.
-         *
-         * @param   string         $value
-         * @param   integer|string $key
-         */
-        $iterator = function (string &$value, $key) use (&$output) {
+        return function (string &$value, $key) use (&$output) {
             $order = \in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
             $column = \is_string($key) ? $key : $value;
 
@@ -273,7 +264,5 @@ final class RequestHandler
 
             $output[$column] = $order;
         };
-
-        return array($output, $iterator);
     }
 }
