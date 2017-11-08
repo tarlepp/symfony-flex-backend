@@ -80,23 +80,8 @@ class RepositoryHelper
         // Initialize condition array
         $condition = [];
 
-        /**
-         * Lambda function to process criteria and add it to main condition array.
-         *
-         * @param mixed  $value
-         * @param string $column
-         */
-        $processCriteria = function ($value, $column) use (&$condition) {
-            // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
-            if (\strcmp($column, 'and') === 0 || \strcmp($column, 'or') === 0) {
-                $condition[$column] = $value;
-            } else { // Add condition
-                $condition[] = self::createCriteria($column, $value);
-            }
-        };
-
         // Create used condition array
-        \array_walk($criteria, $processCriteria);
+        \array_walk($criteria, self::getIterator($condition));
 
         // And attach search term condition to main query
         $queryBuilder->andWhere(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $condition));
@@ -369,5 +354,22 @@ class RepositoryHelper
         }
 
         return $parameters;
+    }
+
+    /**
+     * @param array $condition
+     *
+     * @return \Closure
+     */
+    private static function getIterator(array &$condition): \Closure
+    {
+        return function ($value, $column) use (&$condition) {
+            // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
+            if (\strcmp($column, 'and') === 0 || \strcmp($column, 'or') === 0) {
+                $condition[$column] = $value;
+            } else { // Add condition
+                $condition[] = self::createCriteria($column, $value);
+            }
+        };
     }
 }
