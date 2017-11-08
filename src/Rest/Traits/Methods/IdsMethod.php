@@ -47,9 +47,7 @@ trait IdsMethod
         try {
             $criteria = RequestHandler::getCriteria($request);
 
-            if (\method_exists($this, 'processCriteria')) {
-                $this->processCriteria($criteria);
-            }
+            $this->processCriteria($criteria);
 
             return $this
                 ->getResponseHandler()

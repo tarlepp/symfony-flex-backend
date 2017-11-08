@@ -190,6 +190,15 @@ trait RestMethodHelper
     }
 
     /**
+     * Method to process current criteria array.
+     *
+     * @param array $criteria
+     */
+    public function processCriteria(array &$criteria): void
+    {
+    }
+
+    /**
      * Method to process POST, PUT and PATCH action form within REST traits.
      *
      * @param Request              $request

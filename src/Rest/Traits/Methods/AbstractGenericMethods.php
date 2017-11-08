@@ -46,6 +46,13 @@ trait AbstractGenericMethods
     abstract public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
 
     /**
+     * Method to process current criteria array.
+     *
+     * @param array $criteria
+     */
+    abstract public function processCriteria(array &$criteria): void;
+
+    /**
      * Method to handle possible REST method trait exception.
      *
      * @param \Exception $exception
