@@ -196,6 +196,8 @@ trait RestMethodHelper
      */
     public function processCriteria(array &$criteria): void
     {
+        /** @noinspection PhpSillyAssignmentInspection */
+        $criteria = $criteria;
     }
 
     /**
