@@ -170,6 +170,10 @@ trait RestMethodHelper
      */
     public function handleRestMethodException(\Exception $exception): HttpException
     {
+        $code = $exception->getCode() !== 0 ? $exception->getCode() : Response::HTTP_BAD_REQUEST;
+
+        $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
+
         if ($exception instanceof HttpException) {
             $output = $exception;
         } elseif ($exception instanceof NoResultException) {
@@ -178,10 +182,6 @@ trait RestMethodHelper
             $output = new HttpException($code, 'Not found', $exception, [], $code);
         } elseif ($exception instanceof NonUniqueResultException) {
             $code = Response::HTTP_INTERNAL_SERVER_ERROR;
-
-            $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
-        } else {
-            $code = $exception->getCode() !== 0 ? $exception->getCode() : Response::HTTP_BAD_REQUEST;
 
             $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
         }
