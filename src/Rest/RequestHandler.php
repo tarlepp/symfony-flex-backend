@@ -249,9 +249,9 @@ final class RequestHandler
     /**
      * @param array $output
      *
-     * @return callable
+     * @return \Closure
      */
-    private static function getIterator(array &$output): callable
+    private static function getIterator(array &$output): \Closure
     {
         return function (string &$value, $key) use (&$output) {
             $order = \in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
