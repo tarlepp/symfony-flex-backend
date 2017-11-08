@@ -214,14 +214,8 @@ trait RestResourceBaseMethods
         // Validate DTO
         $this->validateDto($dto, $skipValidation);
 
-        $entityClass = $this->getRepository()->getEntityName();
-
-        /**
-         * Create new entity
-         *
-         * @var EntityInterface $entity
-         */
-        $entity = new $entityClass();
+        // Create new entity
+        $entity = $this->createEntity();
 
         // Before callback method call
         $this->beforeCreate($dto, $entity);
@@ -444,5 +438,15 @@ trait RestResourceBaseMethods
         if (\count($errors) > 0) {
             throw new ValidatorException((string)$errors);
         }
+    }
+
+    /**
+     * @return EntityInterface
+     */
+    private function createEntity(): EntityInterface
+    {
+        $entityClass = $this->getRepository()->getEntityName();
+
+        return new $entityClass();
     }
 }
