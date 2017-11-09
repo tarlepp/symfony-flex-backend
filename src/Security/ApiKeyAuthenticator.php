@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Security;
 
+use App\Entity\ApiKey;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -100,19 +101,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
         $token = $tokenInterface->getCredentials();
         $apiKey = $apiKeyProvider->getApiKeyForToken($token);
 
-        /**
-         * Token not found, so cannot continue
-         *
-         * CAUTION: this message will be returned to the client (so don't put any un-trusted messages / error strings
-         *          here)
-         */
-        if ($apiKey === null) {
-            throw new CustomUserMessageAuthenticationException('Invalid API key');
-        }
-
-        $user = $apiKeyProvider->loadUserByUsername($apiKey->getId());
-
-        return new PreAuthenticatedToken($user, $token, $providerKey, $user->getRoles());
+        return $this->getPreAuthenticatedToken($apiKeyProvider, $providerKey, $token, $apiKey);
     }
 
     /**
@@ -146,5 +135,37 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
         $userProvider = \current($providers);
 
         return $userProvider;
+    }
+
+    /**
+     * @param ApiKeyUserProvider $apiKeyProvider
+     * @param string             $providerKey
+     * @param string             $token
+     * @param ApiKey|null        $apiKey
+     *
+     * @return PreAuthenticatedToken
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @throws \Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException
+     */
+    private function getPreAuthenticatedToken(
+        ApiKeyUserProvider $apiKeyProvider,
+        string $providerKey,
+        string $token,
+        ApiKey $apiKey = null
+    ): PreAuthenticatedToken {
+        /**
+         * Token not found, so cannot continue
+         *
+         * CAUTION: this message will be returned to the client (so don't put any un-trusted messages / error strings
+         *          here)
+         */
+        if ($apiKey === null) {
+            throw new CustomUserMessageAuthenticationException('Invalid API key');
+        }
+
+        $user = $apiKeyProvider->loadUserByUsername($apiKey->getId());
+
+        return new PreAuthenticatedToken($user, $token, $providerKey, $user->getRoles());
     }
 }
