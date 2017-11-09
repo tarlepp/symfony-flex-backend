@@ -294,34 +294,32 @@ class RepositoryHelper
 
     /**
      * @param QueryBuilder $queryBuilder
-     * @param              $comparison
+     * @param array        $comparison
      *
      * @return array
      */
-    private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, $comparison): array
+    private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, array $comparison): array
     {
-        $comparison = (object)\array_combine(['field', 'operator', 'value'], $comparison);
+        $comparisonObject = (object)\array_combine(['field', 'operator', 'value'], $comparison);
 
         // Increase parameter count
         self::$parameterCount++;
 
         // Initialize used callback parameters
-        $parameters = [$comparison->field];
+        $parameters = [$comparisonObject->field];
 
-        $lowercaseOperator = \strtolower($comparison->operator);
+        $lowercaseOperator = \strtolower($comparisonObject->operator);
 
-        // Array values needs some extra work
-        if (\is_array($comparison->value)) {
-            $value = $comparison->value;
-
-            $parameters = self::getParameters($queryBuilder, $lowercaseOperator, $parameters, $value);
-        } elseif (!($lowercaseOperator === 'isnull' || $lowercaseOperator === 'isnotnull')) {
-            $parameters[] = '?' . self::$parameterCount;
-
-            $queryBuilder->setParameter(self::$parameterCount, $comparison->value);
+        if (!($lowercaseOperator === 'isnull' || $lowercaseOperator === 'isnotnull')) {
+            $parameters = self::getComparisonParameters(
+                $queryBuilder,
+                $comparisonObject,
+                $lowercaseOperator,
+                $parameters
+            );
         }
 
-        return array($comparison, $parameters);
+        return [$comparisonObject, $parameters];
     }
 
     /**
@@ -371,5 +369,32 @@ class RepositoryHelper
                 $condition[] = self::createCriteria($column, $value);
             }
         };
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param \stdClass    $comparison
+     * @param string       $lowercaseOperator
+     * @param array        $parameters
+     *
+     * @return array
+     */
+    private static function getComparisonParameters(
+        QueryBuilder $queryBuilder,
+        \stdClass $comparison,
+        string $lowercaseOperator,
+        array $parameters
+    ): array {
+        if (\is_array($comparison->value)) {
+            $value = $comparison->value;
+
+            $parameters = self::getParameters($queryBuilder, $lowercaseOperator, $parameters, $value);
+        } else {
+            $parameters[] = '?' . self::$parameterCount;
+
+            $queryBuilder->setParameter(self::$parameterCount, $comparison->value);
+        }
+
+        return $parameters;
     }
 }
