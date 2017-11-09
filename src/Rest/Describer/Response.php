@@ -52,40 +52,29 @@ class Response
      */
     public function process(Operation $operation, RouteModel $routeModel): void
     {
-        $description = '';
-        $statusCode = 200;
-        $responses = [];
+        [$action, $description, $statusCode, $responses] = $this->getDefaults($routeModel);
 
-        switch ($routeModel->getMethod()) {
-            case Rest::COUNT_ACTION:
-                $description = 'Count of (%s) entities';
-                break;
-            case Rest::CREATE_ACTION:
-                $description = 'Created new entity (%s)';
-                $statusCode = 201;
-                break;
-            case Rest::DELETE_ACTION:
-                $description = 'Deleted entity (%s)';
-                $responses[] = 'add404';
-                break;
-            case Rest::FIND_ACTION:
-                $description = 'Array of fetched entities (%s)';
-                break;
-            case Rest::FIND_ONE_ACTION:
-                $description = 'Fetched entity (%s)';
-                $responses[] = 'add404';
-                break;
-            case Rest::IDS_ACTION:
-                $description = 'Fetched entities (%s) primary key values';
-                break;
-            case Rest::PATCH_ACTION:
-                $description = 'Deleted entity (%s)';
-                $responses[] = 'add404';
-                break;
-            case Rest::UPDATE_ACTION:
-                $description = 'Updated entity (%s)';
-                $responses[] = 'add404';
-                break;
+        if ($action === Rest::COUNT_ACTION) {
+            $description = 'Count of (%s) entities';
+        } elseif ($action ===  Rest::CREATE_ACTION) {
+            $description = 'Created new entity (%s)';
+            $statusCode = 201;
+        } elseif ($action === Rest::DELETE_ACTION) {
+            $description = 'Deleted entity (%s)';
+            $responses[] = 'add404';
+        } elseif ($action === Rest::FIND_ACTION) {
+            $description = 'Array of fetched entities (%s)';
+        } elseif ($action === Rest::FIND_ONE_ACTION) {
+            $description = 'Fetched entity (%s)';
+            $responses[] = 'add404';
+        } elseif ($action === Rest::IDS_ACTION) {
+            $description = 'Fetched entities (%s) primary key values';
+        } elseif ($action === Rest::PATCH_ACTION) {
+            $description = 'Patched entity (%s)';
+            $responses[] = 'add404';
+        } elseif ($action === Rest::UPDATE_ACTION) {
+            $description = 'Updated entity (%s)';
+            $responses[] = 'add404';
         }
 
         $this->processResponse($operation, $routeModel, $description, $statusCode, $responses);
@@ -119,5 +108,20 @@ class Response
                 $this->responses->$method($operation, $routeModel);
             }
         }
+    }
+
+    /**
+     * @param RouteModel $routeModel
+     *
+     * @return array
+     */
+    private function getDefaults(RouteModel $routeModel): array
+    {
+        $action = $routeModel->getMethod();
+        $description = '';
+        $statusCode = 200;
+        $responses = [];
+
+        return [$action, $description, $statusCode, $responses];
     }
 }
