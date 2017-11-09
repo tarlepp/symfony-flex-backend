@@ -194,10 +194,8 @@ trait RestMethodHelper
      *
      * @param array $criteria
      */
-    public function processCriteria(array &$criteria): void
+    public function processCriteria(/** @scrutinizer ignore-unused */ array &$criteria): void
     {
-        /** @noinspection PhpSillyAssignmentInspection */
-        $criteria = $criteria;
     }
 
     /**
