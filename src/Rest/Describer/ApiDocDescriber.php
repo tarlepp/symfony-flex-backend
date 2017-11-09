@@ -161,15 +161,38 @@ class ApiDocDescriber implements DescriberInterface
 
             $annotations = $this->annotationReader->getClassAnnotations($reflection);
 
-            foreach ($annotations as $annotation) {
-                if ($annotation instanceof RestApiDoc && $annotation->disabled) {
-                    $output = false;
-
-                    $this->api->getPaths()->remove($route->getPath());
-                }
-            }
+            $this->isRestApiDocDisabled($route, $annotations, $output);
         }
 
+        return $this->routeFilterMethod($route, $output);
+    }
+
+    /**
+     * @param Route $route
+     * @param array $annotations
+     * @param bool  $disabled
+     */
+    private function isRestApiDocDisabled(Route $route, array $annotations, bool &$disabled)
+    {
+        foreach ($annotations as $annotation) {
+            if ($annotation instanceof RestApiDoc && $annotation->disabled) {
+                $disabled = false;
+
+                $this->api->getPaths()->remove($route->getPath());
+            }
+        }
+    }
+
+    /**
+     * @param Route $route
+     * @param bool  $output
+     *
+     * @return bool
+     *
+     * @throws \ReflectionException
+     */
+    private function routeFilterMethod(Route $route, bool $output): bool
+    {
         if ($output) {
             [$controller, $method] = \explode('::', $route->getDefault('_controller'));
 
@@ -179,15 +202,25 @@ class ApiDocDescriber implements DescriberInterface
 
             $supported = [];
 
-            foreach ($annotations as $annotation) {
-                if ($annotation instanceof RestApiDoc || $annotation instanceof Method) {
-                    $supported[] = true;
-                }
-            }
+            \array_map($this->isRouteSupported($supported), $annotations);
 
             $output = \count($supported) === 2;
         }
 
         return $output;
+    }
+
+    /**
+     * @param array $supported
+     *
+     * @return \Closure
+     */
+    private function isRouteSupported(array &$supported): \Closure
+    {
+        return function ($annotation) use (&$supported) {
+            if ($annotation instanceof RestApiDoc || $annotation instanceof Method) {
+                $supported[] = true;
+            }
+        };
     }
 }
