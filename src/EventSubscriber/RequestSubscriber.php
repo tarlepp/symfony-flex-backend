@@ -83,7 +83,7 @@ class RequestSubscriber
         $user = $this->getUser();
 
         if ($user instanceof ApplicationUser) {
-            $this->logger->setUser($user);
+            $this->logger->setUser(/** @scrutinizer ignore-type */$user);
         } elseif ($user instanceof ApiKeyUser) {
             $this->logger->setApiKey($user->getApiKey());
         }
