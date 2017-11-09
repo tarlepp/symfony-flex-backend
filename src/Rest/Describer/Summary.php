@@ -76,6 +76,20 @@ class Summary
                 break;
         }
 
+        $this->processSummary($operation, $routeModel, $summary);
+    }
+
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     * @param string     $summary
+     *
+     * @throws \UnexpectedValueException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    private function processSummary(Operation $operation, RouteModel $routeModel, string $summary): void
+    {
         if (!empty($summary) && $this->container->has($routeModel->getController())) {
             /** @var Controller $controller */
             $controller = $this->container->get($routeModel->getController());
