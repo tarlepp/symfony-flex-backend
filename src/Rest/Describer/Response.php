@@ -88,6 +88,27 @@ class Response
                 break;
         }
 
+        $this->processResponse($operation, $routeModel, $description, $statusCode, $responses);
+    }
+
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     * @param string     $description
+     * @param int        $statusCode
+     * @param array      $responses
+     *
+     * @throws \UnexpectedValueException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    private function processResponse(
+        Operation $operation,
+        RouteModel $routeModel,
+        string $description,
+        int $statusCode,
+        array $responses
+    ): void {
         if (!empty($description) && $this->container->has($routeModel->getController())) {
             /** @var Controller $controller */
             $controller = $this->container->get($routeModel->getController());
