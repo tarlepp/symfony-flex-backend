@@ -54,14 +54,35 @@ class Response
     {
         [$action, $description, $statusCode, $responses] = $this->getDefaults($routeModel);
 
+        if (\in_array(
+            $action,
+            [Rest::COUNT_ACTION, Rest::FIND_ACTION, Rest::FIND_ONE_ACTION, Rest::IDS_ACTION],
+            true
+        )) {
+            $this->processResponseForRead($action, $description, $responses);
+        } elseif (\in_array(
+            $action,
+            [Rest::CREATE_ACTION, Rest::DELETE_ACTION, Rest::PATCH_ACTION, Rest::UPDATE_ACTION],
+            true
+        )) {
+            $this->processResponseForWrite($action, $description, $statusCode, $responses);
+        }
+
+        $this->processResponse($operation, $routeModel, $description, $statusCode, $responses);
+    }
+
+    /**
+     * @param string $action
+     * @param string $description
+     * @param array  $responses
+     */
+    private function processResponseForRead(
+        string $action,
+        string &$description,
+        array &$responses
+    ): void {
         if ($action === Rest::COUNT_ACTION) {
             $description = 'Count of (%s) entities';
-        } elseif ($action ===  Rest::CREATE_ACTION) {
-            $description = 'Created new entity (%s)';
-            $statusCode = 201;
-        } elseif ($action === Rest::DELETE_ACTION) {
-            $description = 'Deleted entity (%s)';
-            $responses[] = 'add404';
         } elseif ($action === Rest::FIND_ACTION) {
             $description = 'Array of fetched entities (%s)';
         } elseif ($action === Rest::FIND_ONE_ACTION) {
@@ -69,6 +90,27 @@ class Response
             $responses[] = 'add404';
         } elseif ($action === Rest::IDS_ACTION) {
             $description = 'Fetched entities (%s) primary key values';
+        }
+    }
+
+    /**
+     * @param string $action
+     * @param string $description
+     * @param int    $statusCode
+     * @param array  $responses
+     */
+    private function processResponseForWrite(
+        string $action,
+        string &$description,
+        int &$statusCode,
+        array &$responses
+    ): void {
+        if ($action === Rest::CREATE_ACTION) {
+            $description = 'Created new entity (%s)';
+            $statusCode = 201;
+        } elseif ($action === Rest::DELETE_ACTION) {
+            $description = 'Deleted entity (%s)';
+            $responses[] = 'add404';
         } elseif ($action === Rest::PATCH_ACTION) {
             $description = 'Patched entity (%s)';
             $responses[] = 'add404';
@@ -76,8 +118,6 @@ class Response
             $description = 'Updated entity (%s)';
             $responses[] = 'add404';
         }
-
-        $this->processResponse($operation, $routeModel, $description, $statusCode, $responses);
     }
 
     /**
