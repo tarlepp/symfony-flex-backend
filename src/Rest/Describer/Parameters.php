@@ -63,31 +63,23 @@ class Parameters
      */
     public function process(Operation $operation, RouteModel $routeModel): void
     {
-        switch ($routeModel->getMethod()) {
-            case Rest::COUNT_ACTION:
-            case Rest::IDS_ACTION:
-                $this->responses->add404($operation);
-                $this->addParameterCriteria($operation);
-                break;
-            case Rest::CREATE_ACTION:
-                break;
-            case Rest::DELETE_ACTION:
-            case Rest::PATCH_ACTION:
-            case Rest::UPDATE_ACTION:
-                $this->changePathParameter($operation);
-                break;
-            case Rest::FIND_ONE_ACTION:
-                $this->addParameterPopulate($operation, $routeModel);
-                $this->changePathParameter($operation);
-                break;
-            case Rest::FIND_ACTION:
-                $this->addParameterOrderBy($operation);
-                $this->addParameterLimit($operation);
-                $this->addParameterOffset($operation);
-                $this->addParameterSearch($operation, $routeModel);
-                $this->addParameterCriteria($operation);
-                $this->addParameterPopulate($operation, $routeModel);
-                break;
+        $action = $routeModel->getMethod();
+
+        if (\in_array($action, [Rest::COUNT_ACTION, Rest::IDS_ACTION], true)) {
+            $this->responses->add404($operation);
+            $this->addParameterCriteria($operation);
+        } elseif (\in_array($action, [Rest::DELETE_ACTION, Rest::PATCH_ACTION, Rest::UPDATE_ACTION], true)) {
+            $this->changePathParameter($operation);
+        } elseif ($action === Rest::FIND_ONE_ACTION) {
+            $this->addParameterPopulate($operation, $routeModel);
+            $this->changePathParameter($operation);
+        } elseif ($action === Rest::FIND_ACTION) {
+            $this->addParameterOrderBy($operation);
+            $this->addParameterLimit($operation);
+            $this->addParameterOffset($operation);
+            $this->addParameterSearch($operation, $routeModel);
+            $this->addParameterCriteria($operation);
+            $this->addParameterPopulate($operation, $routeModel);
         }
     }
 
