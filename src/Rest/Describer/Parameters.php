@@ -21,6 +21,20 @@ use Psr\Container\ContainerInterface;
  */
 class Parameters
 {
+    // Specify used examples for this parameter
+    static private $orderByExamples = [
+        '?order=column1     => ORDER BY entity.column1 ASC',
+        '?order=-column1    => ORDER BY entity.column1 DESC',
+    ];
+
+    // Specify used advanced examples for this parameter
+    static private $orderByAdvancedExamples = [
+        '?order[column1]=ASC                        => ORDER BY entity.column1 ASC',
+        '?order[column1]=DESC                       => ORDER BY entity.column1 DESC',
+        '?order[column1]=foobar                     => ORDER BY entity.column1 ASC',
+        '?order[column1]=DESC&order[column2]=DESC   => ORDER BY entity.column1 DESC, entity.column2 DESC',
+    ];
+
     /**
      * @var ContainerInterface
      */
@@ -182,24 +196,13 @@ class Parameters
      */
     private function addParameterOrderBy(Operation $operation): void
     {
-        // Specify used examples for this parameter
-        static $examples = [
-            '?order=column1     => ORDER BY entity.column1 ASC',
-            '?order=-column1    => ORDER BY entity.column1 DESC',
-        ];
-
-        // Specify used advanced examples for this parameter
-        static $advancedExamples = [
-            '?order[column1]=ASC                        => ORDER BY entity.column1 ASC',
-            '?order[column1]=DESC                       => ORDER BY entity.column1 DESC',
-            '?order[column1]=foobar                     => ORDER BY entity.column1 ASC',
-            '?order[column1]=DESC&order[column2]=DESC   => ORDER BY entity.column1 DESC, entity.column2 DESC',
-        ];
-
         // Render a parameter description
         $description = $this->templateEngine->render(
             'Swagger/parameter_order.twig',
-            \compact('examples', 'advancedExamples')
+            [
+                'examples'          => self::$orderByExamples,
+                'advancedExamples'  => self::$orderByAdvancedExamples,
+            ]
         );
 
         $parameter = [
