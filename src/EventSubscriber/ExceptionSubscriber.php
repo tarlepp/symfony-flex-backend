@@ -154,21 +154,29 @@ class ExceptionSubscriber
      */
     private function getExceptionMessage(\Exception $exception): string
     {
-        if ($this->environment === 'dev') {
-            $message = $exception->getMessage();
+        return $this->environment === 'dev'
+            ? $exception->getMessage()
+            : $this->getMessageForProductionEnvironment($exception);
+    }
+
+    /**
+     * @param \Exception $exception
+     *
+     * @return string
+     */
+    private function getMessageForProductionEnvironment(\Exception $exception): string
+    {
+        // Within AccessDeniedHttpException we need to hide actual real message from users
+        if ($exception instanceof AccessDeniedHttpException ||
+            $exception instanceof AccessDeniedException
+        ) {
+            $message = 'Access denied.';
+        } elseif ($exception instanceof DBALException ||
+            $exception instanceof ORMException
+        ) { // Database errors
+            $message = 'Database error.';
         } else {
-            // Within AccessDeniedHttpException we need to hide actual real message from users
-            if ($exception instanceof AccessDeniedHttpException ||
-                $exception instanceof AccessDeniedException
-            ) {
-                $message = 'Access denied.';
-            } elseif ($exception instanceof DBALException ||
-                $exception instanceof ORMException
-            ) { // Database errors
-                $message = 'Database error.';
-            } else {
-                $message = $exception->getMessage();
-            }
+            $message = $exception->getMessage();
         }
 
         return $message;
