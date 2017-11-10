@@ -231,15 +231,9 @@ class Parameters
             '?limit=10',
         ];
 
-        // Render a parameter description
-        $description = $this->templateEngine->render(
-            'Swagger/parameter_limit.twig',
-            [
-                'examples' => $examples,
-            ]
+        $operation->getParameters()->add(
+            $this->getLimitOffsetParameter('limit', 'parameter_limit.twig', $examples)
         );
-
-        $operation->getParameters()->add($this->getLimitOffsetParameter('limit', $description));
     }
 
     /**
@@ -256,25 +250,32 @@ class Parameters
             '?offset=10',
         ];
 
+        $operation->getParameters()->add(
+            $this->getLimitOffsetParameter('offset', 'parameter_offset.twig', $examples)
+        );
+    }
+
+    /**
+     * @param string $name
+     * @param string $template
+     * @param array  $examples
+     *
+     * @return Parameter
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    private function getLimitOffsetParameter(string $name, string $template, array $examples): Parameter
+    {
         // Render a parameter description
         $description = $this->templateEngine->render(
-            'Swagger/parameter_offset.twig',
+            'Swagger/' . $template,
             [
                 'examples' => $examples,
             ]
         );
 
-        $operation->getParameters()->add($this->getLimitOffsetParameter('offset', $description));
-    }
-
-    /**
-     * @param string $name
-     * @param string $description
-     *
-     * @return Parameter
-     */
-    private function getLimitOffsetParameter(string $name, string $description): Parameter
-    {
         $parameter = [
             'type'          => 'integer',
             'name'          => $name,
