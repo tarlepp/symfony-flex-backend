@@ -239,16 +239,7 @@ class Parameters
             ]
         );
 
-        $parameter = [
-            'type'          => 'integer',
-            'name'          => 'limit',
-            'in'            => 'query',
-            'required'      => false,
-            'description'   => $description,
-            'default'       => 10,
-        ];
-
-        $operation->getParameters()->add(new Parameter($parameter));
+        $operation->getParameters()->add($this->getLimitOffsetParameter('limit', $description));
     }
 
     /**
@@ -273,16 +264,27 @@ class Parameters
             ]
         );
 
+        $operation->getParameters()->add($this->getLimitOffsetParameter('offset', $description));
+    }
+
+    /**
+     * @param string $name
+     * @param string $description
+     *
+     * @return Parameter
+     */
+    private function getLimitOffsetParameter(string $name, string $description): Parameter
+    {
         $parameter = [
             'type'          => 'integer',
-            'name'          => 'offset',
+            'name'          => $name,
             'in'            => 'query',
             'required'      => false,
             'description'   => $description,
             'default'       => 10,
         ];
 
-        $operation->getParameters()->add(new Parameter($parameter));
+        return new Parameter($parameter);
     }
 
     /**
