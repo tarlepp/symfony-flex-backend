@@ -1,6 +1,6 @@
 {
 	"name": "tarlepp/symfony-flex-backend",
-	"description": "Simple JSON API which is build on top of Symfony framework",
+	"description": "JSON REST API which is build on top of Symfony framework.",
 	"version": "0.2.1",
 	"type": "project",
 	"keywords": [
@@ -15,7 +15,7 @@
 			"name": "Tarmo Leppänen",
 			"email": "tarmo.leppanen@protacon.com",
 			"homepage": "https://github.com/tarlepp",
-			"role": "developer"
+			"role": "Developer"
 		}
 	],
 	"support": {
