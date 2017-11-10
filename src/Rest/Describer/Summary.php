@@ -114,7 +114,6 @@ class Summary
             $summary = 'Endpoint action to fetch entities (%s) from this resource. Base route: "%s"';
         } elseif ($action === Rest::FIND_ONE_ACTION) {
             $summary = 'Endpoint action to fetch specified entity (%s) from this resource. Base route: "%s"';
-            $responses[] = 'add404';
         } elseif ($action === Rest::IDS_ACTION) {
             $summary = 'Endpoint action to fetch entities (%s) id values from this resource. Base route: "%s"';
         }
