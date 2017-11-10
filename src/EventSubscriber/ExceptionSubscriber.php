@@ -167,7 +167,9 @@ class ExceptionSubscriber
     private function getMessageForProductionEnvironment(\Exception $exception): string
     {
         // Within AccessDeniedHttpException we need to hide actual real message from users
-        if ($exception->getCode() === 403) {
+        if ($exception instanceof AccessDeniedHttpException ||
+            $exception instanceof AccessDeniedException
+        ) {
             $message = 'Access denied.';
         } elseif ($exception instanceof DBALException ||
             $exception instanceof ORMException
