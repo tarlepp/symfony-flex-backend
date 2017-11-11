@@ -84,18 +84,7 @@ abstract class RestDto implements RestDtoInterface
      */
     private function determineGetterMethod(RestDtoInterface $dto, string $property)
     {
-        $getterMethods = $this->getGetterMethods($dto, $property);
-
-        if (\count($getterMethods) > 1) {
-            $message = \sprintf(
-                'Property \'%s\' has multiple getter methods - this is insane!',
-                $property
-            );
-
-            throw new \LogicException($message);
-        }
-
-        $getter = \current($getterMethods);
+        $getter = $this->getGetterMethod($dto, $property);
 
         // Oh noes - required getter method does not exist
         if ($getter === false) {
@@ -115,9 +104,11 @@ abstract class RestDto implements RestDtoInterface
      * @param RestDtoInterface $dto
      * @param string           $property
      *
-     * @return array
+     * @return string|false
+     *
+     * @throws \LogicException
      */
-    private function getGetterMethods(RestDtoInterface $dto, string $property): array
+    private function getGetterMethod(RestDtoInterface $dto, string $property)
     {
         $getters = [
             'get' . \ucfirst($property),
@@ -129,6 +120,17 @@ abstract class RestDto implements RestDtoInterface
             return \method_exists($dto, $method);
         };
 
-        return \array_filter($getters, $filter);
+        $getterMethods = \array_filter($getters, $filter);
+
+        if (\count($getterMethods) > 1) {
+            $message = \sprintf(
+                'Property \'%s\' has multiple getter methods - this is insane!',
+                $property
+            );
+
+            throw new \LogicException($message);
+        }
+
+        return \current($getterMethods);
     }
 }
