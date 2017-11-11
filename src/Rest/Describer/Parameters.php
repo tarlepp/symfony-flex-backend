@@ -35,6 +35,14 @@ class Parameters
         '?order[column1]=DESC&order[column2]=DESC   => ORDER BY entity.column1 DESC, entity.column2 DESC',
     ];
 
+    // Specify used  examples for this parameter
+    static private $criteriaExamples = [
+        '?where={"property": "value"}                => WHERE entity.property = \'value\'',
+        '?where={"id": [1,2,3]}                      => WHERE entity.id IN (1,2,3)',
+        '?where={"prop1": "val1", "prop2": "val2"}   => WHERE entity.prop1 = \'val1\' AND entity.prop2 = \'val2\'',
+        '?where={"property": "value", "id": [1,2,3]} => WHERE entity.property = \'value\' AND entity.id IN (1,2,3)',
+    ];
+
     /**
      * @var ContainerInterface
      */
@@ -159,19 +167,11 @@ class Parameters
      */
     private function addParameterCriteria(Operation $operation): void
     {
-        // Specify used  examples for this parameter
-        static $examples = [
-            '?where={"property": "value"}                => WHERE entity.property = \'value\'',
-            '?where={"id": [1,2,3]}                      => WHERE entity.id IN (1,2,3)',
-            '?where={"prop1": "val1", "prop2": "val2"}   => WHERE entity.prop1 = \'val1\' AND entity.prop2 = \'val2\'',
-            '?where={"property": "value", "id": [1,2,3]} => WHERE entity.property = \'value\' AND entity.id IN (1,2,3)',
-        ];
-
         // Render a parameter description
         $description = $this->templateEngine->render(
             'Swagger/parameter_criteria.twig',
             [
-                'examples' => $examples,
+                'examples' => self::$criteriaExamples,
             ]
         );
 
