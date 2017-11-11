@@ -170,7 +170,7 @@ trait RestMethodHelper
      */
     public function handleRestMethodException(\Exception $exception): HttpException
     {
-        $code = $exception->getCode() !== 0 ? $exception->getCode() : Response::HTTP_BAD_REQUEST;
+        $code = $this->getExceptionCode($exception);
 
         $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
 
@@ -237,5 +237,15 @@ trait RestMethodHelper
         }
 
         return $form;
+    }
+
+    /**
+     * @param \Exception $exception
+     *
+     * @return int
+     */
+    private function getExceptionCode(\Exception $exception): int
+    {
+        return (int)$exception->getCode() !== 0 ? (int)$exception->getCode() : Response::HTTP_BAD_REQUEST;
     }
 }
