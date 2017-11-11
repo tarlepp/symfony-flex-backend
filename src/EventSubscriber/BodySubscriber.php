@@ -66,7 +66,7 @@ class BodySubscriber
      */
     private function transformJsonBody(Request $request): void
     {
-        $data = JSON::decode($request->getContent(), true);
+        $data = JSON::decode((string)$request->getContent(), true);
 
         $request->request->replace($data);
     }
