@@ -157,21 +157,18 @@ class Parameters
             return;
         }
 
-        // Render a parameter description
-        $description = $this->templateEngine->render(
-            'Swagger/parameter_search.twig',
-            [
-                'properties' => $searchColumns,
-                'examples'   => self::$searchExamples,
-            ]
-        );
-
         $parameter = [
             'type'          => 'string',
             'name'          => 'search',
             'in'            => 'query',
             'required'      => false,
-            'description'   => $description,
+            'description'   => $this->getDescription(
+                'parameter_search.twig',
+                [
+                    'properties' => $searchColumns,
+                    'examples'   => self::$searchExamples,
+                ]
+            ),
             'default'       => 'term',
         ];
 
@@ -187,20 +184,17 @@ class Parameters
      */
     private function addParameterCriteria(Operation $operation): void
     {
-        // Render a parameter description
-        $description = $this->templateEngine->render(
-            'Swagger/parameter_criteria.twig',
-            [
-                'examples' => self::$criteriaExamples,
-            ]
-        );
-
         $parameter = [
             'type'          => 'string',
             'name'          => 'where',
             'in'            => 'query',
             'required'      => false,
-            'description'   => $description,
+            'description'   => $this->getDescription(
+                'parameter_criteria.twig',
+                [
+                    'examples' => self::$criteriaExamples,
+                ]
+            ),
             'default'       => '{"property": "value"}',
         ];
 
@@ -216,21 +210,18 @@ class Parameters
      */
     private function addParameterOrderBy(Operation $operation): void
     {
-        // Render a parameter description
-        $description = $this->templateEngine->render(
-            'Swagger/parameter_order.twig',
-            [
-                'examples'          => self::$orderByExamples,
-                'advancedExamples'  => self::$orderByAdvancedExamples,
-            ]
-        );
-
         $parameter = [
             'type'          => 'string',
             'name'          => 'order',
             'in'            => 'query',
             'required'      => false,
-            'description'   => $description,
+            'description'   => $this->getDescription(
+                'parameter_order.twig',
+                [
+                    'examples'          => self::$orderByExamples,
+                    'advancedExamples'  => self::$orderByAdvancedExamples,
+                ]
+            ),
             'default'       => 'column',
         ];
 
@@ -288,20 +279,17 @@ class Parameters
      */
     private function getLimitOffsetParameter(string $name, string $template, array $examples): Parameter
     {
-        // Render a parameter description
-        $description = $this->templateEngine->render(
-            'Swagger/' . $template,
-            [
-                'examples' => $examples,
-            ]
-        );
-
         $parameter = [
             'type'          => 'integer',
             'name'          => $name,
             'in'            => 'query',
             'required'      => false,
-            'description'   => $description,
+            'description'   => $this->getDescription(
+                $template,
+                [
+                    'examples' => $examples,
+                ]
+            ),
             'default'       => 10,
         ];
 
@@ -324,22 +312,19 @@ class Parameters
         /** @var Controller $controller */
         $controller = $this->container->get($routeModel->getController());
 
-        // Render a parameter description
-        $description = $this->templateEngine->render(
-            'Swagger/parameter_populate.twig',
-            [
-                'examples'     => $this->getPopulateExamples($controller),
-                'associations' => $controller->getResource()->getAssociations(),
-            ]
-        );
-
         $parameter = [
             'type'              => 'array',
             'name'              => 'populate[]',
             'collectionFormat'  => 'multi',
             'in'                => 'query',
             'required'          => false,
-            'description'       => $description,
+            'description'       => $this->getDescription(
+                'parameter_populate.twig',
+                [
+                    'examples'     => $this->getPopulateExamples($controller),
+                    'associations' => $controller->getResource()->getAssociations(),
+                ]
+            ),
             'items'             => [
                 'type'          => 'string',
             ],
@@ -388,5 +373,20 @@ class Parameters
         $examples[] = '?populate[]=' . $basename . '.prop1&populate[]=' . $basename . '.prop2';
 
         return $examples;
+    }
+
+    /**
+     * @param string $template
+     * @param array  $data
+     *
+     * @return string
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+    private function getDescription(string $template, array $data): string
+    {
+        return $this->templateEngine->render('Swagger/' . $template, $data);
     }
 }
