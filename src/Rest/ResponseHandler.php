@@ -144,16 +144,8 @@ final class ResponseHandler implements ResponseHandlerInterface
         $context = $context ?? $this->getSerializeContext($request);
         $format = $this->getFormat($request, $format);
 
-        try {
-            // Create new response
-            $response = new Response();
-            $response->setContent($this->serializer->serialize($data, $format, $context));
-            $response->setStatusCode($httpStatus);
-        } catch (\Exception $error) {
-            $status = Response::HTTP_BAD_REQUEST;
-
-            throw new HttpException($status, $error->getMessage(), $error, [], $status);
-        }
+        // Get response
+        $response = $this->getResponse($data, $httpStatus, $format, $context);
 
         // Set content type
         $response->headers->set('Content-Type', $this->contentTypes[$format]);
@@ -222,5 +214,31 @@ final class ResponseHandler implements ResponseHandlerInterface
     private function getFormat(Request $request, string $format = null): string
     {
         return $format ?? ($request->getContentType() === self::FORMAT_XML ? self::FORMAT_XML : self::FORMAT_JSON);
+    }
+
+    /**
+     * @param mixed  $data
+     * @param int    $httpStatus
+     * @param string $format
+     * @param array  $context
+     *
+     * @return Response
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     */
+    private function getResponse($data, int $httpStatus, string $format, array $context): Response
+    {
+        try {
+            // Create new response
+            $response = new Response();
+            $response->setContent($this->serializer->serialize($data, $format, $context));
+            $response->setStatusCode($httpStatus);
+        } catch (\Exception $error) {
+            $status = Response::HTTP_BAD_REQUEST;
+
+            throw new HttpException($status, $error->getMessage(), $error, [], $status);
+        }
+
+        return $response;
     }
 }
