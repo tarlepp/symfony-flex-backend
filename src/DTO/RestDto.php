@@ -84,20 +84,9 @@ abstract class RestDto implements RestDtoInterface
      */
     private function determineGetterMethod(RestDtoInterface $dto, string $property)
     {
-        $getters = [
-            'get' . \ucfirst($property),
-            'is' . \ucfirst($property),
-            'has' . \ucfirst($property),
-        ];
+        $getterMethods = $this->getGetterMethods($dto, $property);
 
-        $filter = function (string $method) use ($dto): bool {
-            return \method_exists($dto, $method);
-        };
-
-        // Determine getter method
-        $filtered = \array_filter($getters, $filter);
-
-        if (\count($filtered) > 1) {
+        if (\count($getterMethods) > 1) {
             $message = \sprintf(
                 'Property \'%s\' has multiple getter methods - this is insane!',
                 $property
@@ -106,7 +95,7 @@ abstract class RestDto implements RestDtoInterface
             throw new \LogicException($message);
         }
 
-        $getter = \current($filtered);
+        $getter = \current($getterMethods);
 
         // Oh noes - required getter method does not exist
         if ($getter === false) {
@@ -120,5 +109,26 @@ abstract class RestDto implements RestDtoInterface
         }
 
         return $getter;
+    }
+
+    /**
+     * @param RestDtoInterface $dto
+     * @param string           $property
+     *
+     * @return array
+     */
+    private function getGetterMethods(RestDtoInterface $dto, string $property): array
+    {
+        $getters = [
+            'get' . \ucfirst($property),
+            'is' . \ucfirst($property),
+            'has' . \ucfirst($property),
+        ];
+
+        $filter = function (string $method) use ($dto): bool {
+            return \method_exists($dto, $method);
+        };
+
+        return \array_filter($getters, $filter);
     }
 }
