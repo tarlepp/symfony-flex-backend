@@ -43,6 +43,15 @@ class Parameters
         '?where={"property": "value", "id": [1,2,3]} => WHERE entity.property = \'value\' AND entity.id IN (1,2,3)',
     ];
 
+    // Specify used  examples for this parameter
+    static private $searchExamples = [
+        '?search=term',
+        '?search=term1+term2',
+        '?search={"and": ["term1", "term2"]}',
+        '?search={"or": ["term1", "term2"]}',
+        '?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}',
+    ];
+
     /**
      * @var ContainerInterface
      */
@@ -128,21 +137,12 @@ class Parameters
             return;
         }
 
-        // Specify used  examples for this parameter
-        static $examples = [
-            '?search=term',
-            '?search=term1+term2',
-            '?search={"and": ["term1", "term2"]}',
-            '?search={"or": ["term1", "term2"]}',
-            '?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}',
-        ];
-
         // Render a parameter description
         $description = $this->templateEngine->render(
             'Swagger/parameter_search.twig',
             [
                 'properties' => $searchColumns,
-                'examples'   => $examples,
+                'examples'   => self::$searchExamples,
             ]
         );
 
