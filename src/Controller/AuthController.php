@@ -130,21 +130,24 @@ class AuthController
         /** @noinspection NullPointerExceptionInspection */
         $user = $tokenStorage->getToken()->getUser();
 
-        // Specify used serialization groups
-        static $groups = [
-            'User',
-            'User.userGroups',
-            'User.roles',
-            'UserGroup',
-            'UserGroup.role',
-        ];
-
         // Set roles service to user entity, so we can get inherited roles
         $user->setRolesService($rolesService);
 
         // Create response
         return new JsonResponse(
-            $serializer->serialize($user, 'json', ['groups' => $groups]),
+            $serializer->serialize(
+                $user,
+                'json',
+                [
+                    'groups' => [
+                        'User',
+                        'User.userGroups',
+                        'User.roles',
+                        'UserGroup',
+                        'UserGroup.role',
+                    ]
+                ]
+            ),
             200,
             [],
             true
