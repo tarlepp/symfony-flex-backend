@@ -101,7 +101,27 @@ class Parameters
             $this->addParameterCriteria($operation);
         } elseif (\in_array($action, [Rest::DELETE_ACTION, Rest::PATCH_ACTION, Rest::UPDATE_ACTION], true)) {
             $this->changePathParameter($operation);
-        } elseif ($action === Rest::FIND_ONE_ACTION) {
+        } elseif (\in_array($action, [Rest::FIND_ONE_ACTION, Rest::FIND_ACTION], true)) {
+            $this->processFind($operation, $routeModel);
+        }
+    }
+
+    /**
+     * @param Operation  $operation
+     * @param RouteModel $routeModel
+     *
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \UnexpectedValueException
+     */
+    private function processFind(Operation $operation, RouteModel $routeModel): void
+    {
+        $action = $routeModel->getMethod();
+
+        if ($action === Rest::FIND_ONE_ACTION) {
             $this->addParameterPopulate($operation, $routeModel);
             $this->changePathParameter($operation);
         } elseif ($action === Rest::FIND_ACTION) {
