@@ -36,20 +36,20 @@
 		"roave/security-advisories": "dev-master",
 		"sensio/framework-extra-bundle": "5.0.1",
 		"stof/doctrine-extensions-bundle": "1.2.2",
-		"symfony/asset": "3.3.10",
-		"symfony/console": "3.3.10",
-		"symfony/expression-language": "3.3.10",
-		"symfony/flex": "1.0.40",
-		"symfony/form": "3.3.10",
-		"symfony/framework-bundle": "3.3.10",
+		"symfony/asset": "3.3.11",
+		"symfony/console": "3.3.11",
+		"symfony/expression-language": "3.3.11",
+		"symfony/flex": "1.0.41",
+		"symfony/form": "3.3.11",
+		"symfony/framework-bundle": "3.3.11",
 		"symfony/monolog-bundle": "3.1.2",
 		"symfony/orm-pack": "1.0.4",
-		"symfony/security": "3.3.10",
-		"symfony/security-bundle": "3.3.10",
-		"symfony/serializer": "3.3.10",
-		"symfony/twig-bundle": "3.3.10",
-		"symfony/validator": "3.3.10",
-		"symfony/yaml": "3.3.10"
+		"symfony/security": "3.3.11",
+		"symfony/security-bundle": "3.3.11",
+		"symfony/serializer": "3.3.11",
+		"symfony/twig-bundle": "3.3.11",
+		"symfony/validator": "3.3.11",
+		"symfony/yaml": "3.3.11"
 	},
 	"require-dev": {
 		"codeclimate/php-test-reporter": "0.4.4",
@@ -57,15 +57,15 @@
 		"phpmetrics/phpmetrics": "2.3.2",
 		"phpunit/phpcov": "4.0.2",
 		"phpunit/phpunit": "6.4.4",
-		"satooshi/php-coveralls": "1.0.1",
+		"satooshi/php-coveralls": "1.0.2",
 		"sensiolabs/security-checker": "4.1.6",
 		"squizlabs/php_codesniffer": "3.1.1",
-		"symfony/browser-kit": "3.3.10",
-		"symfony/dotenv": "3.3.10",
-		"symfony/phpunit-bridge": "3.3.10",
-		"symfony/requirements-checker": "1.0.2",
-		"symfony/web-profiler-bundle": "3.3.10",
-		"symfony/web-server-bundle": "3.3.10"
+		"symfony/browser-kit": "3.3.11",
+		"symfony/dotenv": "3.3.11",
+		"symfony/phpunit-bridge": "3.3.11",
+		"symfony/requirements-checker": "1.0.3",
+		"symfony/web-profiler-bundle": "3.3.11",
+		"symfony/web-server-bundle": "3.3.11"
 	},
 	"config": {
 		"preferred-install": {
@@ -88,7 +88,8 @@
 			"cache:clear --no-warmup": "symfony-cmd",
 			"cache:warmup": "symfony-cmd",
 			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
-			"requirements-checker": "script"
+			"requirements-checker": "script",
+			"security-checker security:check": "script"
 		},
 		"post-install-cmd": [
 			"@auto-scripts"
