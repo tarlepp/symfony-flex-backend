@@ -304,27 +304,13 @@ class Parameters
         /** @var Controller $controller */
         $controller = $this->container->get($routeModel->getController());
 
-        // Get resource associations
-        $associations = $controller->getResource()->getAssociations();
-
-        // Determine base name for resource serializer group
-        $bits = \explode('\\', $controller->getResource()->getEntityName());
-        $basename = \end($bits);
-
-        // Specify used  examples for this parameter
-        $examples = [];
-
-        foreach ($associations as $association) {
-            $examples[] = '?populate[]=' . $basename . '.' . $association;
-        }
-
-        $examples[] = '?populate[]=' . $basename . '.property';
-        $examples[] = '?populate[]=' . $basename . '.prop1&populate[]=' . $basename . '.prop2';
-
         // Render a parameter description
         $description = $this->templateEngine->render(
             'Swagger/parameter_populate.twig',
-            \compact('examples', 'associations')
+            [
+                'examples'     => $this->getPopulateExamples($controller),
+                'associations' => $controller->getResource()->getAssociations(),
+            ]
         );
 
         $parameter = [
@@ -356,5 +342,31 @@ class Parameters
             $parameter->setDescription('Identifier');
             $parameter->setDefault('Identifier');
         }
+    }
+
+    /**
+     * @param Controller $controller
+     *
+     * @return array
+     *
+     * @throws \UnexpectedValueException
+     */
+    private function getPopulateExamples(Controller $controller): array
+    {
+        // Determine base name for resource serializer group
+        $bits = \explode('\\', $controller->getResource()->getEntityName());
+        $basename = \end($bits);
+
+        // Specify used  examples for this parameter
+        $examples = [];
+
+        foreach ($controller->getResource()->getAssociations() as $association) {
+            $examples[] = '?populate[]=' . $basename . '.' . $association;
+        }
+
+        $examples[] = '?populate[]=' . $basename . '.property';
+        $examples[] = '?populate[]=' . $basename . '.prop1&populate[]=' . $basename . '.prop2';
+
+        return $examples;
     }
 }
