@@ -78,16 +78,16 @@ abstract class RestDto implements RestDtoInterface
      * @param RestDtoInterface $dto
      * @param string           $property
      *
-     * @return string|bool
+     * @return string
      *
      * @throws \LogicException
      */
-    private function determineGetterMethod(RestDtoInterface $dto, string $property)
+    private function determineGetterMethod(RestDtoInterface $dto, string $property): string
     {
         $getter = $this->getGetterMethod($dto, $property);
 
         // Oh noes - required getter method does not exist
-        if ($getter === false) {
+        if ($getter === null) {
             $message = \sprintf(
                 'DTO class \'%s\' does not have getter method property \'%s\' - cannot patch dto',
                 \get_class($dto),
@@ -104,11 +104,11 @@ abstract class RestDto implements RestDtoInterface
      * @param RestDtoInterface $dto
      * @param string           $property
      *
-     * @return string|false
+     * @return string|null
      *
      * @throws \LogicException
      */
-    private function getGetterMethod(RestDtoInterface $dto, string $property)
+    private function getGetterMethod(RestDtoInterface $dto, string $property): ?string
     {
         $getters = [
             'get' . \ucfirst($property),
@@ -122,6 +122,19 @@ abstract class RestDto implements RestDtoInterface
 
         $getterMethods = \array_filter($getters, $filter);
 
+        return $this->validateGetterMethod($property, $getterMethods);
+    }
+
+    /**
+     * @param string $property
+     * @param array  $getterMethods
+     *
+     * @return string|null
+     *
+     * @throws \LogicException
+     */
+    private function validateGetterMethod(string $property, array $getterMethods): ?string
+    {
         if (\count($getterMethods) > 1) {
             $message = \sprintf(
                 'Property \'%s\' has multiple getter methods - this is insane!',
@@ -131,6 +144,8 @@ abstract class RestDto implements RestDtoInterface
             throw new \LogicException($message);
         }
 
-        return \current($getterMethods);
+        $method = \current($getterMethods);
+
+        return $method === false ? null : $method;
     }
 }
