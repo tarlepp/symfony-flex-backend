@@ -261,17 +261,17 @@ class DateDimension implements EntityInterface
         $this->id = Uuid::uuid4()->toString();
 
         if ($dateTime !== null) {
-            $this->setDate($dateTime);
-            $this->setYear((int)$dateTime->format('Y'));
-            $this->setMonth((int)$dateTime->format('n'));
-            $this->setDay((int)$dateTime->format('j'));
-            $this->setQuarter((int)\floor(((int)$dateTime->format('n') - 1) / 3) + 1);
-            $this->setWeekNumber((int)$dateTime->format('W'));
-            $this->setDayNumberOfWeek((int)$dateTime->format('N'));
-            $this->setDayNumberOfYear((int)$dateTime->format('z'));
-            $this->setLeapYear((bool)$dateTime->format('L'));
-            $this->setWeekNumberingYear((int)$dateTime->format('o'));
-            $this->setUnixTime((int)$dateTime->format('U'));
+            $this->date = $dateTime;
+            $this->year = (int)$dateTime->format('Y');
+            $this->month = (int)$dateTime->format('n');
+            $this->day = (int)$dateTime->format('j');
+            $this->quarter = (int)\floor(((int)$dateTime->format('n') - 1) / 3) + 1;
+            $this->weekNumber = (int)$dateTime->format('W');
+            $this->dayNumberOfWeek = (int)$dateTime->format('N');
+            $this->dayNumberOfYear = (int)$dateTime->format('z');
+            $this->leapYear = (bool)$dateTime->format('L');
+            $this->weekNumberingYear  = (int)$dateTime->format('o');
+            $this->unixTime = (int)$dateTime->format('U');
         }
     }
 
@@ -292,35 +292,11 @@ class DateDimension implements EntityInterface
     }
 
     /**
-     * @param \DateTime $date
-     *
-     * @return DateDimension
-     */
-    public function setDate(\DateTime $date): DateDimension
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getYear(): int
     {
         return $this->year;
-    }
-
-    /**
-     * @param int $year
-     *
-     * @return DateDimension
-     */
-    public function setYear(int $year): DateDimension
-    {
-        $this->year = $year;
-
-        return $this;
     }
 
     /**
@@ -332,35 +308,11 @@ class DateDimension implements EntityInterface
     }
 
     /**
-     * @param int $month
-     *
-     * @return DateDimension
-     */
-    public function setMonth(int $month): DateDimension
-    {
-        $this->month = $month;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getDay(): int
     {
         return $this->day;
-    }
-
-    /**
-     * @param int $day
-     *
-     * @return DateDimension
-     */
-    public function setDay(int $day): DateDimension
-    {
-        $this->day = $day;
-
-        return $this;
     }
 
     /**
@@ -372,35 +324,11 @@ class DateDimension implements EntityInterface
     }
 
     /**
-     * @param int $quarter
-     *
-     * @return DateDimension
-     */
-    public function setQuarter(int $quarter): DateDimension
-    {
-        $this->quarter = $quarter;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getWeekNumber(): int
     {
         return $this->weekNumber;
-    }
-
-    /**
-     * @param int $weekNumber
-     *
-     * @return DateDimension
-     */
-    public function setWeekNumber(int $weekNumber): DateDimension
-    {
-        $this->weekNumber = $weekNumber;
-
-        return $this;
     }
 
     /**
@@ -412,35 +340,11 @@ class DateDimension implements EntityInterface
     }
 
     /**
-     * @param int $dayNumberOfWeek
-     *
-     * @return DateDimension
-     */
-    public function setDayNumberOfWeek(int $dayNumberOfWeek): DateDimension
-    {
-        $this->dayNumberOfWeek = $dayNumberOfWeek;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getDayNumberOfYear(): int
     {
         return $this->dayNumberOfYear;
-    }
-
-    /**
-     * @param int $dayNumberOfYear
-     *
-     * @return DateDimension
-     */
-    public function setDayNumberOfYear(int $dayNumberOfYear): DateDimension
-    {
-        $this->dayNumberOfYear = $dayNumberOfYear;
-
-        return $this;
     }
 
     /**
@@ -452,18 +356,6 @@ class DateDimension implements EntityInterface
     }
 
     /**
-     * @param boolean $leapYear
-     *
-     * @return DateDimension
-     */
-    public function setLeapYear(bool $leapYear): DateDimension
-    {
-        $this->leapYear = $leapYear;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getWeekNumberingYear(): int
@@ -472,34 +364,10 @@ class DateDimension implements EntityInterface
     }
 
     /**
-     * @param int $weekNumberingYear
-     *
-     * @return DateDimension
-     */
-    public function setWeekNumberingYear(int $weekNumberingYear): DateDimension
-    {
-        $this->weekNumberingYear = $weekNumberingYear;
-
-        return $this;
-    }
-
-    /**
      * @return int
      */
     public function getUnixTime(): int
     {
         return $this->unixTime;
-    }
-
-    /**
-     * @param int $unixTime
-     *
-     * @return DateDimension
-     */
-    public function setUnixTime(int $unixTime): DateDimension
-    {
-        $this->unixTime = $unixTime;
-
-        return $this;
     }
 }
