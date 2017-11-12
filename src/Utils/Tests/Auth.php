@@ -64,6 +64,21 @@ class Auth
     }
 
     /**
+     * Method to get authorization headers for specified API Key role.
+     *
+     * @param string $role
+     *
+     * @return array
+     */
+    public function getAuthorizationHeadersForApiKey(string $role): array
+    {
+        return [
+            'CONTENT_TYPE'          => 'application/json',
+            'HTTP_AUTHORIZATION'    => 'ApiKey ' . \str_pad($role, 40, '_'),
+        ];
+    }
+
+    /**
      * Method to get authorization headers for specified token.
      *
      * @param string $token

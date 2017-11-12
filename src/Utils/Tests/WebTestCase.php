@@ -67,8 +67,8 @@ class WebTestCase extends BaseWebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param array       $options
-     * @param array       $server
+     * @param array|null  $options
+     * @param array|null  $server
      *
      * @return Client
      */
@@ -84,6 +84,31 @@ class WebTestCase extends BaseWebTestCase
         // Merge authorization headers
         $server = \array_merge(
             $username === null ? [] : $this->getAuthService()->getAuthorizationHeadersForUser($username, $password),
+            \array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
+            $this->getAuthService()->getJwtHeaders(),
+            $server
+        );
+
+        return static::createClient($options, $server);
+    }
+
+    /**
+     * Helper method to get authorized API Key client for specified role.
+     *
+     * @param string|null $role
+     * @param array|null  $options
+     * @param array|null  $server
+     *
+     * @return Client
+     */
+    public function getApiKeyClient(string $role = null, array $options = null, array $server = null): Client
+    {
+        $options = $options ?? [];
+        $server = $server ?? [];
+
+        // Merge authorization headers
+        $server = \array_merge(
+            $role === null ? [] : $this->getAuthService()->getAuthorizationHeadersForApiKey($role),
             \array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
             $this->getAuthService()->getJwtHeaders(),
             $server

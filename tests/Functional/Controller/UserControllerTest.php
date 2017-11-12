@@ -66,6 +66,27 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @dataProvider dataProviderValidApiKeyUsers
+     *
+     * @param string $role
+     */
+    public function testThatCountActionReturnsExpectedForApiKeyUser(string $role): void
+    {
+        $client = $this->getApiKeyClient($role);
+        $client->request('GET', $this->baseUrl . '/count');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent());
+    }
+
+    /**
      * @dataProvider dataProviderInvalidUsers
      *
      * @param string $username
@@ -74,6 +95,30 @@ class UserControllerTest extends WebTestCase
     public function testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $client = $this->getClient($username, $password);
+        $client->request('GET', $this->baseUrl . '/count');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(403, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"Access denied.","code":0,"status":403}',
+            $response->getContent()
+        );
+    }
+
+    /**
+     * @dataProvider dataProviderInvalidApiKeyUsers
+     *
+     * @param string $role
+     */
+    public function testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
+    {
+        $client = $this->getApiKeyClient($role);
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
@@ -492,6 +537,17 @@ class UserControllerTest extends WebTestCase
     /**
      * @return array
      */
+    public function dataProviderValidApiKeyUsers(): array
+    {
+        return [
+            ['admin'],
+            ['root'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
     public function dataProviderInvalidUsers(): array
     {
         return [
@@ -499,6 +555,18 @@ class UserControllerTest extends WebTestCase
             ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderInvalidApiKeyUsers(): array
+    {
+        return [
+            ['api'],
+            ['logged'],
+            ['user'],
         ];
     }
 
