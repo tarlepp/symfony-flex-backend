@@ -43,11 +43,11 @@ class UserRepositoryTest extends RepositoryTestCase
      * @var array
      */
     protected $associations = [
+        'createdBy',
+        'updatedBy',
         'userGroups',
         'logsRequest',
         'logsLogin',
-        'createdBy',
-        'updatedBy',
     ];
 
     /**
