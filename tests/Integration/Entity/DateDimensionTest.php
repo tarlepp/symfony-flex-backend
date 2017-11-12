@@ -22,6 +22,61 @@ class DateDimensionTest extends EntityTestCase
      */
     protected $entityName = DateDimension::class;
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @param string $field
+     * @param string $type
+     * @param array  $meta
+     */
+    public function testThatSetterOnlyAcceptSpecifiedType(
+        string $field = null,
+        string $type = null,
+        array $meta = null
+    ): void {
+        static::markTestSkipped('There is not setter in read only entity...');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @param string $field
+     * @param string $type
+     * @param array  $meta
+     */
+    public function testThatSetterReturnsInstanceOfEntity(
+        string $field = null,
+        string $type = null,
+        array $meta = null
+    ): void {
+        static::markTestSkipped('There is not setter in read only entity...');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @dataProvider dataProviderTestThatSetterAndGettersWorks
+     *
+     * @param string $field
+     * @param string $type
+     * @param array  $meta
+     */
+    public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
+    {
+        $getter = 'get' . \ucfirst($field);
+
+        if ($type === 'boolean') {
+            $getter = 'is' . \ucfirst($field);
+        }
+
+        $dateDimension = new DateDimension(new \DateTime());
+
+        try {
+            if (static::isType($type)) {
+                static::assertInternalType($type, $dateDimension->$getter());
+            }
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
+            static::assertInstanceOf($type, $dateDimension->$getter());
+        }
+    }
+
     public function testThatConstructorCallsExpectedMethods(): void
     {
         $dateTime = new \DateTime();

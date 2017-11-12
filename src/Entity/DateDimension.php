@@ -20,7 +20,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          @ORM\Index(name="date", columns={"date"}),
  *      }
  *  )
- * @ORM\Entity()
+ * @ORM\Entity(
+ *      readOnly=true
+ *  )
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
