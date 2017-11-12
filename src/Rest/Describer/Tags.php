@@ -32,6 +32,18 @@ class Tags
             'tags' => [],
         ];
 
+        $this->processTags($routeModel, $data);
+
+        // Merge data to operation
+        $operation->merge($data);
+    }
+
+    /**
+     * @param RouteModel $routeModel
+     * @param array      $data
+     */
+    private function processTags(RouteModel $routeModel, array &$data): void
+    {
         $filter = function ($annotation): bool {
             return $annotation instanceof SWG\Tag;
         };
@@ -47,8 +59,5 @@ class Tags
 
             $data['tags'][] = $tagName;
         }
-
-        // Merge data to operation
-        $operation->merge($data);
     }
 }
