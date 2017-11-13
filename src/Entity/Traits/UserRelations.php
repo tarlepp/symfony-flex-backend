@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 /**
  * /src/Entity/Traits/UserRelations.php
  *
@@ -19,6 +19,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @package App\Entity\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property $this User
  */
 trait UserRelations
 {
