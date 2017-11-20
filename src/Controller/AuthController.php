@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Security\ApiKeyUser;
 use App\Security\RolesService;
 use App\Utils\JSON;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -16,8 +17,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -126,32 +129,15 @@ class AuthController
         SerializerInterface $serializer,
         RolesService $rolesService
     ): JsonResponse {
-        /** @var User $user */
+        /** @var User|ApiKeyUser $user */
         /** @noinspection NullPointerExceptionInspection */
         $user = $tokenStorage->getToken()->getUser();
 
-        // Set roles service to user entity, so we can get inherited roles
-        $user->setRolesService($rolesService);
+        // Get serializer groups for current user instance
+        $groups = $this->getSerializationGroupsForProfile($rolesService, $user);
 
         // Create response
-        return new JsonResponse(
-            $serializer->serialize(
-                $user,
-                'json',
-                [
-                    'groups' => [
-                        'User',
-                        'User.userGroups',
-                        'User.roles',
-                        'UserGroup',
-                        'UserGroup.role',
-                    ]
-                ]
-            ),
-            200,
-            [],
-            true
-        );
+        return new JsonResponse($serializer->serialize($user, 'json', ['groups' => $groups]), 200, [], true);
     }
 
     /**
@@ -202,5 +188,43 @@ class AuthController
         $user = $tokenStorage->getToken()->getUser();
 
         return new JsonResponse($rolesService->getInheritedRoles($user->getRoles()));
+    }
+
+    /**
+     * @param RolesService  $rolesService
+     * @param UserInterface $user
+     *
+     * @return array
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     */
+    private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): array
+    {
+        if ($user instanceof User) {
+            $groups = [
+                'User',
+                'User.userGroups',
+                'User.roles',
+                'UserGroup',
+                'UserGroup.role',
+            ];
+
+            // Set roles service to user entity, so we can get inherited roles
+            $user->setRolesService($rolesService);
+        } elseif ($user instanceof ApiKeyUser) {
+            $groups = [
+                'ApiKeyUser',
+                'ApiKeyUser.apiKey',
+                'ApiKey.token',
+                'ApiKey.description',
+                'ApiKey.userGroups',
+                'UserGroup',
+                'UserGroup.role',
+            ];
+        } else {
+            throw new AccessDeniedHttpException('Not supported user');
+        }
+
+        return $groups;
     }
 }
