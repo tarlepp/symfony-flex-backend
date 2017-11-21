@@ -215,7 +215,6 @@ class AuthController
             $groups = [
                 'ApiKeyUser',
                 'ApiKeyUser.apiKey',
-                'ApiKey.token',
                 'ApiKey.description',
                 'ApiKey.userGroups',
                 'UserGroup',
