@@ -79,7 +79,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $apiKeyRepository
             ->expects(static::once())
-            ->method('find')
+            ->method('findOneBy')
+            ->with(['token' => 'guid'])
             ->willReturn(null);
 
         $provider = new ApiKeyUserProvider($apiKeyRepository, $rolesService);
@@ -99,8 +100,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $apiKeyRepository
             ->expects(static::once())
-            ->method('find')
-            ->with('guid')
+            ->method('findOneBy')
+            ->with(['token' => 'guid'])
             ->willReturn($apiKey);
 
         $provider = new ApiKeyUserProvider($apiKeyRepository, $rolesService);

@@ -12,7 +12,11 @@ use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
 use App\Security\ApiKeyUserProvider;
 use App\Security\RolesService;
+use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Security\Core\User\User;
 
 /**
@@ -27,6 +31,25 @@ class ApiKeyUserProviderTest extends KernelTestCase
      * @var ApiKeyUserProvider
      */
     private $apiKeyUserProvider;
+
+    public static function loadFixtures(): void
+    {
+        $application = new Application(static::$kernel);
+
+        $command = new LoadDataFixturesDoctrineCommand();
+
+        $application->add($command);
+
+        $input = new ArrayInput([
+            'command'           => 'doctrine:fixtures:load',
+            '--no-interaction'  => true,
+            '--fixtures'        => 'src/DataFixtures/',
+        ]);
+
+        $input->setInteractive(false);
+
+        $command->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
+    }
 
     public function setUp(): void
     {
@@ -86,16 +109,15 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatLoadUserByUsernameWorksAsExpected
      *
-     * @param string $guid
-     * @param ApiKey $apiKey
+     * @param string $token
+     * @param array  $roles
      */
-    public function testThatLoadUserByUsernameWorksAsExpected(string $guid, ApiKey $apiKey): void
+    public function testThatLoadUserByUsernameWorksAsExpected(string $token, array $roles): void
     {
-        $apiKeyUser = $this->apiKeyUserProvider->loadUserByUsername($guid);
+        $apiKeyUser = $this->apiKeyUserProvider->loadUserByUsername($token);
 
         static::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
-        static::assertSame($apiKey->getId(), $apiKeyUser->getApiKey()->getId());
-        static::assertSame($apiKey->getRoles(), $apiKeyUser->getApiKey()->getRoles());
+        static::assertSame($roles, $apiKeyUser->getApiKey()->getRoles());
     }
 
     /**
@@ -156,8 +178,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $iterator = function (ApiKey $apiKey): array {
             return [
-                $apiKey->getId(),
-                $apiKey,
+                $apiKey->getToken(),
+                $apiKey->getRoles(),
             ];
         };
 
