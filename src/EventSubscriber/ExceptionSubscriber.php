@@ -94,21 +94,9 @@ class ExceptionSubscriber
     {
         // Get current token, and determine if request is made from logged in user or not
         $token = $this->tokenStorage->getToken();
-        $user = !($token === null || $token instanceof AnonymousToken);
+        $isUser = !($token === null || $token instanceof AnonymousToken);
 
-        // Default status code is always 500
-        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
-
-        // HttpExceptionInterface is a special type of exception that holds status code and header details
-        if ($exception instanceof AuthenticationException) {
-            $statusCode = Response::HTTP_UNAUTHORIZED;
-        } elseif ($exception instanceof AccessDeniedException) {
-            $statusCode = $user ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
-        } elseif ($exception instanceof HttpExceptionInterface) {
-            $statusCode = $exception->getStatusCode();
-        }
-
-        return $statusCode;
+        return $this->determineStatusCode($exception, $isUser);
     }
 
     /**
@@ -166,19 +154,38 @@ class ExceptionSubscriber
      */
     private function getMessageForProductionEnvironment(\Exception $exception): string
     {
+        $message = $exception->getMessage();
+
         // Within AccessDeniedHttpException we need to hide actual real message from users
-        if ($exception instanceof AccessDeniedHttpException ||
-            $exception instanceof AccessDeniedException
-        ) {
+        if ($exception instanceof AccessDeniedHttpException || $exception instanceof AccessDeniedException) {
             $message = 'Access denied.';
-        } elseif ($exception instanceof DBALException ||
-            $exception instanceof ORMException
-        ) { // Database errors
+        } elseif ($exception instanceof DBALException || $exception instanceof ORMException) { // Database errors
             $message = 'Database error.';
-        } else {
-            $message = $exception->getMessage();
         }
 
         return $message;
+    }
+
+    /**
+     * @param \Exception $exception
+     * @param bool       $isUser
+     *
+     * @return int
+     */
+    private function determineStatusCode(\Exception $exception, bool $isUser): int
+    {
+        // Default status code is always 500
+        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+
+        // HttpExceptionInterface is a special type of exception that holds status code and header details
+        if ($exception instanceof AuthenticationException) {
+            $statusCode = Response::HTTP_UNAUTHORIZED;
+        } elseif ($exception instanceof AccessDeniedException) {
+            $statusCode = $isUser ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
+        } elseif ($exception instanceof HttpExceptionInterface) {
+            $statusCode = $exception->getStatusCode();
+        }
+
+        return $statusCode;
     }
 }
