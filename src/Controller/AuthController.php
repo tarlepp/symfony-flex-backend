@@ -17,9 +17,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -122,7 +122,7 @@ class AuthController
      * @return JsonResponse
      *
      * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     public function profileAction(
         TokenStorageInterface $tokenStorage,
@@ -196,7 +196,7 @@ class AuthController
      *
      * @return array
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): array
     {
@@ -221,7 +221,7 @@ class AuthController
                 'UserGroup.role',
             ];
         } else {
-            throw new AccessDeniedHttpException('Not supported user');
+            throw new AccessDeniedException('Not supported user');
         }
 
         return $groups;
