@@ -164,7 +164,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
             throw new CustomUserMessageAuthenticationException('Invalid API key');
         }
 
-        $user = $apiKeyProvider->loadUserByUsername($apiKey->getId());
+        $user = $apiKeyProvider->loadUserByUsername($apiKey->getToken());
 
         return new PreAuthenticatedToken($user, $token, $providerKey, $user->getRoles());
     }

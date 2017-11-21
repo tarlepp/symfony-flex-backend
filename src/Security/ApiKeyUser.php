@@ -10,6 +10,7 @@ namespace App\Security;
 use App\Entity\ApiKey;
 use App\Entity\UserGroup;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Class ApiKeyUser
@@ -20,17 +21,31 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ApiKeyUser implements ApiKeyUserInterface, UserInterface
 {
     /**
-     * @var ApiKey
-     */
-    private $apiKey;
-
-    /**
      * @var string
+     *
+     * @Groups({
+     *      "ApiKeyUser",
+     *      "ApiKeyUser.apiKey",
+     *  })
      */
     private $username;
 
     /**
+     * @var ApiKey
+     *
+     * @Groups({
+     *      "ApiKeyUser.apiKey",
+     *  })
+     */
+    private $apiKey;
+
+    /**
      * @var array
+     *
+     * @Groups({
+     *      "ApiKeyUser",
+     *      "ApiKeyUser.roles",
+     *  })
      */
     private $roles;
 
@@ -44,7 +59,7 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     {
         $this->apiKey = $apiKey;
 
-        $this->username = $this->apiKey->getId();
+        $this->username = $this->apiKey->getToken();
 
         // Attach base 'ROLE_API' for API user
         $roles = [RolesService::ROLE_API];

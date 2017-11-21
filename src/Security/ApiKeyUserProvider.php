@@ -62,15 +62,15 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
      * This method must throw UsernameNotFoundException if the user is not found. If user (API key) is found method
      * will create ApiKeyUser object for specified ApiKey entity.
      *
-     * @param string $guid
+     * @param string $token
      *
      * @return ApiKeyUserInterface
      *
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
-    public function loadUserByUsername($guid): ApiKeyUserInterface
+    public function loadUserByUsername($token): ApiKeyUserInterface
     {
-        $apiKey = $this->apiKeyRepository->find($guid);
+        $apiKey = $this->apiKeyRepository->findOneBy(['token' => $token]);
 
         if ($apiKey === null) {
             throw new UsernameNotFoundException('API key is not valid');
