@@ -7,6 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Controller;
 
+use App\Security\RolesService;
 use App\Utils\Tests\WebTestCase;
 use App\Utils\JSON;
 use Symfony\Component\HttpFoundation\Response;
@@ -150,7 +151,7 @@ class AuthControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      */
-    public function testThatGetProfileActionReturnExpectedWithValidToken(string $username, string $password): void
+    public function testThatProfileActionReturnExpectedWithValidToken(string $username, string $password): void
     {
         $client = $this->getClient($username, $password);
         $client->request('GET', $this->baseUrl . '/profile');
@@ -163,7 +164,55 @@ class AuthControllerTest extends WebTestCase
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
-    public function testThatGetRolesActionReturns401WithoutToken(): void
+    public function testThatProfileActionReturns401WithInvalidApiKey(): void
+    {
+        $client = $this->getApiKeyClient();
+        $client->request('GET', $this->baseUrl . '/profile');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(401, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $responseContent = JSON::decode($response->getContent());
+
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
+        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
+        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatProfileActionReturnsExpected
+     *
+     * @param string $token
+     */
+    public function testThatProfileActionReturnsExpected(string $token): void
+    {
+        $client = $this->getApiKeyClient($token);
+        $client->request('GET', $this->baseUrl . '/profile');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $responseContent = JSON::decode($response->getContent());
+
+        static::assertObjectHasAttribute('username', $responseContent);
+        static::assertObjectHasAttribute('apiKey', $responseContent);
+        static::assertObjectHasAttribute('roles', $responseContent);
+        static::assertSame($token, $responseContent->username);
+    }
+
+    public function testThatRolesActionReturns401WithoutToken(): void
     {
         $client = $this->getClient();
         $client->request('GET', $this->baseUrl . '/roles');
@@ -185,14 +234,36 @@ class AuthControllerTest extends WebTestCase
         static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
     }
 
+    public function testThatRolesActionReturns401WithInvalidApiKey(): void
+    {
+        $client = $this->getApiKeyClient();
+        $client->request('GET', $this->baseUrl . '/roles');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(401, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $responseContent = JSON::decode($response->getContent());
+
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
+        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
+        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+    }
+
     /**
-     * @dataProvider dataProviderTestThatGetRolesActionReturnsExpected
+     * @dataProvider dataProviderTestThatRolesActionReturnsExpected
      *
      * @param string $username
      * @param string $password
      * @param array  $expected
      */
-    public function testThatGetRolesActionReturnsExpected(string $username, string $password, array $expected): void
+    public function testThatRolesActionReturnsExpected(string $username, string $password, array $expected): void
     {
         $client = $this->getClient($username, $password);
         $client->request('GET', $this->baseUrl . '/roles');
@@ -206,6 +277,34 @@ class AuthControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expected, JSON::decode($response->getContent(), true), $response->getContent());
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey
+     *
+     * @param string $token
+     * @param array  $expected
+     */
+    public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token, array $expected): void
+    {
+        $client = $this->getApiKeyClient($token);
+        $client->request('GET', $this->baseUrl . '/roles');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $actual = JSON::decode($response->getContent(), true);
+
+        \sort($expected);
+        \sort($actual);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame($expected, $actual, $response->getContent());
     }
 
     /**
@@ -246,7 +345,23 @@ class AuthControllerTest extends WebTestCase
     /**
      * @return array
      */
-    public function dataProviderTestThatGetRolesActionReturnsExpected(): array
+    public function dataProviderTestThatProfileActionReturnsExpected(): array
+    {
+        self::bootKernel();
+
+        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+
+        $iterator = function (string $role) use ($rolesService): array {
+            return [\str_pad($rolesService->getShort($role), 40, '_')];
+        };
+
+        return \array_map($iterator, $rolesService->getRoles());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatRolesActionReturnsExpected(): array
     {
         return [
             ['john',                     'password',        []],
@@ -260,5 +375,24 @@ class AuthControllerTest extends WebTestCase
             ['john-root',                'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
             ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): array
+    {
+        self::bootKernel();
+
+        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+
+        $iterator = function (string $role) use ($rolesService): array {
+            return [
+                \str_pad($rolesService->getShort($role), 40, '_'),
+                \array_unique(\array_merge([RolesService::ROLE_API], $rolesService->getInheritedRoles([$role]))),
+            ];
+        };
+
+        return \array_map($iterator, $rolesService->getRoles());
     }
 }
