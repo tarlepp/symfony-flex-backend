@@ -77,37 +77,59 @@ class CreateRolesCommand extends Command
         $io->write("\033\143");
 
         // Create defined roles to database
-        \array_map([$this, 'createRole'], $this->roles->getRoles());
+        $created = \array_sum(\array_map([$this, 'createRole'], $this->roles->getRoles()));
 
         // Flush changes to database after creation
         $this->entityManager->flush();
 
         // Clear non-valid roles from database
-        $this->clearRoles($this->roles->getRoles());
+        $removed = $this->clearRoles($this->roles->getRoles());
+
+        if ($input->isInteractive()) {
+            $message = sprintf(
+                'Created total of %d role(s) and removed %d role(s) - have a nice day',
+                $created,
+                $removed
+            );
+
+            $io->success($message);
+        }
 
         return null;
     }
 
     /**
+     * Method to check if specified role exists on database and if not create and persist it to database.
+     *
      * @param string $role
+     *
+     * @return int
      */
-    private function createRole(string $role): void
+    private function createRole(string $role): int
     {
+        $output = 0;
+
         if ($this->roleRepository->find($role) === null) {
             $entity = new Role($role);
 
             $this->entityManager->persist($entity);
+
+            $output = 1;
         }
+
+        return $output;
     }
 
     /**
      * Method to clean existing roles from database that does not really exists.
      *
      * @param array $roles
+     *
+     * @return int
      */
-    private function clearRoles(array $roles): void
+    private function clearRoles(array $roles): int
     {
-        $this->roleRepository->createQueryBuilder('role')
+        return $this->roleRepository->createQueryBuilder('role')
             ->delete()
             ->where('role.id NOT IN(:roles)')
             ->setParameter(':roles', $roles)
