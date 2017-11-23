@@ -18,6 +18,7 @@ use Symfony\Component\Console\Command\Command;
  */
 class ApiKeyManagementCommand extends Command
 {
+    // Traits
     use ExecuteMultipleCommandTrait;
 
     /**
@@ -32,11 +33,11 @@ class ApiKeyManagementCommand extends Command
         $this->setDescription('Console command to manage API keys');
 
         $this->setChoices([
+            'api-key:list'          => 'List API keys',
             'api-key:create'        => 'Create API key',
             'api-key:edit'          => 'Edit API key',
             'api-key:change-token'  => 'Change API key token',
             'api-key:remove'        => 'Remove API key',
-            'api-key:list'          => 'List API keys',
             false                   => 'Exit',
         ]);
     }
