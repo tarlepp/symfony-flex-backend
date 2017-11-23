@@ -34,6 +34,8 @@ trait ExecuteMultipleCommandTrait
     private $io;
 
     /**
+     * Setter method for choices to use.
+     *
      * @param array $choices
      */
     protected function setChoices(array $choices): void
@@ -77,6 +79,8 @@ trait ExecuteMultipleCommandTrait
     }
 
     /**
+     * Method to ask user to make choose one of defined choices.
+     *
      * @return string|boolean
      */
     private function ask()
