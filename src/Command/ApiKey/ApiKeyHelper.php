@@ -76,6 +76,30 @@ class ApiKeyHelper
     }
 
     /**
+     * Helper method to get "normalized" message for API key. This is used on following cases:
+     *  - User changes API key token
+     *  - User creates new API key
+     *  - User modifies API key
+     *  - User removes API key
+     *
+     * @param string       $message
+     * @param ApiKeyEntity $apiKey
+     *
+     * @return array
+     */
+    public function getApiKeyMessage(string $message, ApiKeyEntity $apiKey): array
+    {
+        return [
+            $message,
+            sprintf(
+                "GUID:  %s\nToken: %s",
+                $apiKey->getId(),
+                $apiKey->getToken()
+            )
+        ];
+    }
+
+    /**
      * Method to list ApiKeys where user can select desired one.
      *
      * @param SymfonyStyle $io

@@ -96,11 +96,6 @@ class ChangeTokenCommand extends Command
         // Update API key
         $this->apiKeyResource->save($apiKey);
 
-        $message = [
-            'API key token updated - have a nice day',
-            ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
-        ];
-
-        return $message;
+        return $this->apiKeyHelper->getApiKeyMessage('API key token updated - have a nice day', $apiKey);
     }
 }

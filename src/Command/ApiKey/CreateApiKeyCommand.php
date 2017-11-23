@@ -39,6 +39,11 @@ class CreateApiKeyCommand extends Command
     ];
 
     /**
+     * @var ApiKeyHelper
+     */
+    private $apiKeyHelper;
+
+    /**
      * @var ApiKeyResource
      */
     private $apiKeyResource;
@@ -66,6 +71,7 @@ class CreateApiKeyCommand extends Command
     /**
      * CreateApiKeyCommand constructor.
      *
+     * @param ApiKeyHelper      $apiKeyHelper
      * @param ApiKeyResource    $apiKeyResource
      * @param UserGroupResource $userGroupResource
      * @param RolesService      $rolesService
@@ -74,6 +80,7 @@ class CreateApiKeyCommand extends Command
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
     public function __construct(
+        ApiKeyHelper $apiKeyHelper,
         ApiKeyResource $apiKeyResource,
         UserGroupResource $userGroupResource,
         RolesService $rolesService,
@@ -81,6 +88,7 @@ class CreateApiKeyCommand extends Command
     ) {
         parent::__construct('api-key:create');
 
+        $this->apiKeyHelper = $apiKeyHelper;
         $this->apiKeyResource = $apiKeyResource;
         $this->userGroupResource = $userGroupResource;
         $this->rolesService = $rolesService;
@@ -131,10 +139,7 @@ class CreateApiKeyCommand extends Command
         $apiKey = $this->apiKeyResource->create($dto);
 
         if ($input->isInteractive()) {
-            $this->io->success([
-                'API key created - have a nice day',
-                ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
-            ]);
+            $this->io->success($this->apiKeyHelper->getApiKeyMessage('API key created - have a nice day', $apiKey));
         }
 
         return null;

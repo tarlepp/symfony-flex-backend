@@ -71,7 +71,7 @@ class RemoveApiKeyCommand extends Command
             // Delete API key
             $this->apiKeyResource->delete($apiKey->getId());
 
-            $message = 'API key deleted - have a nice day';
+            $message = $this->apiKeyHelper->getApiKeyMessage('API key deleted - have a nice day', $apiKey);
         }
 
         if ($input->isInteractive()) {

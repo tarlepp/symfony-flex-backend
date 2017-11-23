@@ -112,11 +112,6 @@ class EditApiKeyCommand extends Command
         // Update API key
         $this->apiKeyResource->update($apiKey->getId(), $dtoEdit);
 
-        $message = [
-            'API key updated - have a nice day',
-            ' guid: ' . $apiKey->getId() . "\n" . 'token: ' . $apiKey->getToken(),
-        ];
-
-        return $message;
+        return $this->apiKeyHelper->getApiKeyMessage('API key updated - have a nice day', $apiKey);
     }
 }
