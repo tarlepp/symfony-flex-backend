@@ -9,6 +9,7 @@ namespace App\Command\ApiKey;
 
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
+use App\Security\RolesService;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
@@ -25,13 +26,20 @@ class ApiKeyHelper
     private $apiKeyResource;
 
     /**
+     * @var RolesService
+     */
+    private $rolesService;
+
+    /**
      * ApiKeyHelper constructor.
      *
      * @param ApiKeyResource $apiKeyResource
+     * @param RolesService   $rolesService
      */
-    public function __construct(ApiKeyResource $apiKeyResource)
+    public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
     {
         $this->apiKeyResource = $apiKeyResource;
+        $this->rolesService = $rolesService;
     }
 
     /**
@@ -68,6 +76,8 @@ class ApiKeyHelper
     }
 
     /**
+     * Method to list ApiKeys where user can select desired one.
+     *
      * @param SymfonyStyle $io
      * @param string       $question
      *
@@ -86,6 +96,8 @@ class ApiKeyHelper
     }
 
     /**
+     * Method to return ApiKeyIterator closure. This will format ApiKey entities for choice list.
+     *
      * @param array $choices
      *
      * @return \Closure
@@ -98,13 +110,14 @@ class ApiKeyHelper
          * @param ApiKeyEntity $apiKey
          */
         $iterator = function (ApiKeyEntity $apiKey) use (&$choices): void {
-            $message = \sprintf(
-                '[%s] %s',
+            $value = \sprintf(
+                '[%s] %s - Roles: %s',
                 $apiKey->getToken(),
-                $apiKey->getDescription()
+                $apiKey->getDescription(),
+                \implode(', ', $this->rolesService->getInheritedRoles($apiKey->getRoles()))
             );
 
-            $choices[$apiKey->getId()] = $message;
+            $choices[$apiKey->getId()] = $value;
         };
 
         return $iterator;
