@@ -142,7 +142,7 @@ class CreateUserCommand extends Command
         /** @var UserDto $dto */
         $dto = $this->getHelper('form')->interactUsingForm(UserType::class, $input, $output);
 
-        // Create new user group
+        // Create new user
         $this->userResource->create($dto);
 
         if ($input->isInteractive()) {
@@ -165,7 +165,6 @@ class CreateUserCommand extends Command
      * @param SymfonyStyle    $io
      *
      * @throws \Exception
-     *
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Doctrine\ORM\NoResultException
