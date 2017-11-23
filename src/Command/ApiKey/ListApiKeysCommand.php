@@ -86,54 +86,48 @@ class ListApiKeysCommand extends Command
     }
 
     /**
+     * Getter method for formatted API key rows for console table.
+     *
      * @return array
      */
     private function getRows(): array
     {
-        return \array_map($this->getFormatter(), $this->apiKeyResource->find(null, ['token' => 'ASC']));
+        return \array_map($this->getFormatterApiKey(), $this->apiKeyResource->find(null, ['token' => 'ASC']));
     }
 
     /**
+     * Getter method for API key formatter closure. This closure will format single ApiKey entity for console
+     * table.
+     *
      * @return \Closure
      */
-    private function getFormatter(): \Closure
+    private function getFormatterApiKey(): \Closure
     {
-        /**
-         * @param ApiKey $apiToken
-         *
-         * @return array
-         */
-        $formatterApiKey = function (ApiKey $apiToken): array {
+        return function (ApiKey $apiToken): array {
             return [
                 $apiToken->getId(),
                 $apiToken->getToken(),
                 $apiToken->getDescription(),
-                \implode(",\n", $apiToken->getUserGroups()->map($this->formatterGroup())->toArray()),
+                \implode(",\n", $apiToken->getUserGroups()->map($this->getFormatterUserGroup())->toArray()),
                 \implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
             ];
         };
-
-        return $formatterApiKey;
     }
 
     /**
+     * Getter method for user group formatter closure. This closure will format single UserGroup entity for console
+     * table.
+     *
      * @return \Closure
      */
-    private function formatterGroup(): \Closure
+    private function getFormatterUserGroup(): \Closure
     {
-        /**
-         * @param UserGroup $userGroup
-         *
-         * @return string
-         */
-        $formatterGroup = function (UserGroup $userGroup): string {
+        return function (UserGroup $userGroup): string {
             return \sprintf(
                 '%s (%s)',
                 $userGroup->getName(),
                 $userGroup->getRole()->getId()
             );
         };
-
-        return $formatterGroup;
     }
 }
