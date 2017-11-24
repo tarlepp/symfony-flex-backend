@@ -72,46 +72,41 @@ class ListUserGroupsCommand extends Command
     }
 
     /**
+     * Getter method for formatted user group rows for console table.
+     *
      * @return array
      */
     private function getRows(): array
     {
-        return \array_map($this->getFormatter(), $this->userGroupResource->find(null, ['name' => 'ASC']));
+        return \array_map($this->getFormatterUserGroup(), $this->userGroupResource->find(null, ['name' => 'ASC']));
     }
 
     /**
+     * Getter method for user group formatter closure. This closure will format single UserGroup entity for console
+     * table.
+     *
      * @return \Closure
      */
-    private function getFormatter(): \Closure
+    private function getFormatterUserGroup(): \Closure
     {
-        /**
-         * @param UserGroup $userGroup
-         *
-         * @return array
-         */
-        $formatterGroup = function (UserGroup $userGroup): array {
+        return function (UserGroup $userGroup): array {
             return [
                 $userGroup->getId(),
                 $userGroup->getName(),
                 $userGroup->getRole()->getId(),
-                \implode(",\n", $userGroup->getUsers()->map($this->formatterUser())->toArray()),
+                \implode(",\n", $userGroup->getUsers()->map($this->getFormatterUser())->toArray()),
             ];
         };
-
-        return $formatterGroup;
     }
 
     /**
+     * Getter method for user formatter closure. This closure will format single User entity for console table.
+     *
      * @return \Closure
      */
-    private function formatterUser(): \Closure
+    private function getFormatterUser(): \Closure
     {
-        /**
-         * @param User $user
-         *
-         * @return string
-         */
-        $formatterUser = function (User $user): string {
+        return function (User $user): string {
             return \sprintf(
                 '%s %s <%s>',
                 $user->getFirstname(),
@@ -119,7 +114,5 @@ class ListUserGroupsCommand extends Command
                 $user->getEmail()
             );
         };
-
-        return $formatterUser;
     }
 }
