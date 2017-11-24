@@ -23,8 +23,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
 {
-    const YEAR_MIN = 1970;
-    const YEAR_MAX = 2047; // This should be the year when I'm officially retired
+    private const YEAR_MIN = 1970;
+    private const YEAR_MAX = 2047; // This should be the year when I'm officially retired
 
     /**
      * @var SymfonyStyle
