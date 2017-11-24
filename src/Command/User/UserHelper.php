@@ -86,7 +86,7 @@ class UserHelper
     }
 
     /**
-     * Method to get user entity
+     * Method to get User entity. Within this user will be asked which User entity he/she wants to process with.
      *
      * @param SymfonyStyle $io
      * @param string       $question
@@ -106,6 +106,9 @@ class UserHelper
     }
 
     /**
+     * Method to get UserGroup entity. Within this user will be asked which UserGroup entity he/she wants to process
+     * with.
+     *
      * @param SymfonyStyle $io
      * @param string       $question
      *
@@ -114,15 +117,7 @@ class UserHelper
     private function getUserGroupEntity(SymfonyStyle $io, string $question): ?UserGroupEntity
     {
         $choices = [];
-
-        /**
-         * Lambda function create user group choices
-         *
-         * @param UserGroupEntity $userGroup
-         */
-        $iterator = function (UserGroupEntity $userGroup) use (&$choices): void {
-            $choices[$userGroup->getId()] = \sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
-        };
+        $iterator = $this->getUserGroupIterator($choices);
 
         \array_map($iterator, $this->userGroupResource->find([], ['name' => 'asc']));
 
@@ -132,18 +127,15 @@ class UserHelper
     }
 
     /**
+     * Getter method for user formatter closure. This closure will format single User entity for choice list.
+     *
      * @param array $choices
      *
      * @return \Closure
      */
-    private function getUserIterator(&$choices): \Closure
+    private function getUserIterator(array &$choices): \Closure
     {
-        /**
-         * Lambda function create user choices
-         *
-         * @param UserEntity $user
-         */
-        $iterator = function (UserEntity $user) use (&$choices): void {
+        return function (UserEntity $user) use (&$choices): void {
             $message = \sprintf(
                 '%s (%s %s <%s>)',
                 $user->getUsername(),
@@ -154,11 +146,25 @@ class UserHelper
 
             $choices[$user->getId()] = $message;
         };
-
-        return $iterator;
     }
 
     /**
+     * Getter method for user group formatter closure. This closure will format single UserGroup entity for choice list.
+     *
+     * @param array $choices
+     *
+     * @return \Closure
+     */
+    private function getUserGroupIterator(array &$choices): \Closure
+    {
+        return function (UserGroupEntity $userGroup) use (&$choices): void {
+            $choices[$userGroup->getId()] = \sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
+        };
+    }
+
+    /**
+     * Helper method to confirm user that he/she has chosen correct User entity to process with.
+     *
      * @param SymfonyStyle $io
      * @param UserEntity   $userEntity
      *
@@ -179,6 +185,8 @@ class UserHelper
     }
 
     /**
+     * Helper method to confirm user that he/she has chosen correct UserGroup entity to process with.
+     *
      * @param SymfonyStyle    $io
      * @param UserGroupEntity $userGroupEntity
      *
