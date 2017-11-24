@@ -76,13 +76,10 @@ class CreateRolesCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        // Create defined roles to database
         $created = \array_sum(\array_map([$this, 'createRole'], $this->roles->getRoles()));
 
-        // Flush changes to database after creation
         $this->entityManager->flush();
 
-        // Clear non-valid roles from database
         $removed = $this->clearRoles($this->roles->getRoles());
 
         if ($input->isInteractive()) {
