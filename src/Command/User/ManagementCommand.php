@@ -18,6 +18,7 @@ use Symfony\Component\Console\Command\Command;
  */
 class ManagementCommand extends Command
 {
+    // Traits
     use ExecuteMultipleCommandTrait;
 
     /**
@@ -32,14 +33,14 @@ class ManagementCommand extends Command
         $this->setDescription('Console command to manage users and user groups');
 
         $this->setChoices([
+            'user:list'         => 'List users',
+            'user:list-groups'  => 'List user groups',
             'user:create'       => 'Create user',
             'user:create-group' => 'Create user group',
             'user:edit'         => 'Edit user',
             'user:edit-group'   => 'Edit user group',
             'user:remove'       => 'Remove user',
             'user:remove-group' => 'Remove user group',
-            'user:list'         => 'List users',
-            'user:list-groups'  => 'List user groups',
             false               => 'Exit',
         ]);
     }
