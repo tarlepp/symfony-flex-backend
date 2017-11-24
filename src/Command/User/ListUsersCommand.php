@@ -82,57 +82,48 @@ class ListUsersCommand extends Command
     }
 
     /**
+     * Getter method for formatted user rows for console table.
+     *
      * @return array
      */
     private function getRows(): array
     {
-        return \array_map($this->getFormatter(), $this->userResource->find(null, ['username' => 'ASC']));
+        return \array_map($this->getFormatterUser(), $this->userResource->find(null, ['username' => 'ASC']));
     }
 
     /**
-     * Getter method for user formatter.
+     * Getter method for user formatter closure. This closure will format single User entity for console table.
      *
      * @return \Closure
      */
-    private function getFormatter(): \Closure
+    private function getFormatterUser(): \Closure
     {
-        /**
-         * @param User $user
-         *
-         * @return array
-         */
-        $formatterUser = function (User $user): array {
+        return function (User $user): array {
             return [
                 $user->getId(),
                 $user->getUsername(),
                 $user->getEmail(),
                 $user->getFirstname() . ' ' . $user->getSurname(),
                 \implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
-                \implode(",\n", $user->getUserGroups()->map($this->formatterGroup())->toArray()),
+                \implode(",\n", $user->getUserGroups()->map($this->formatterUserGroup())->toArray()),
             ];
         };
-
-        return $formatterUser;
     }
 
     /**
+     * Getter method for user group formatter closure. This closure will format single UserGroup entity for console
+     * table.
+     *
      * @return \Closure
      */
-    private function formatterGroup(): \Closure
+    private function formatterUserGroup(): \Closure
     {
-        /**
-         * @param UserGroup $userGroup
-         *
-         * @return string
-         */
-        $formatterGroup = function (UserGroup $userGroup): string {
+        return function (UserGroup $userGroup): string {
             return \sprintf(
                 '%s (%s)',
                 $userGroup->getName(),
                 $userGroup->getRole()->getId()
             );
         };
-
-        return $formatterGroup;
     }
 }
