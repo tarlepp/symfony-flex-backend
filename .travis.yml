@@ -25,6 +25,11 @@ matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
+  include:
+    - php: 7.1
+      env:
+        - COVERAGE=true
+        - USE_XDEBUG=true
 
 before_install:
   - cp .env.travis .env
@@ -54,10 +59,10 @@ script:
   - find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
 
 after_success:
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/coveralls -v; fi
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then php ./vendor/bin/test-reporter -v; fi
-  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "7.1" && ${USE_XDEBUG} == true ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml; fi
+  - if [[ $COVERAGE = true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi
+  - if [[ $COVERAGE = true ]]; then php ./vendor/bin/coveralls -v; fi
+  - if [[ $COVERAGE = true ]]; then php ./vendor/bin/test-reporter -v; fi
+  - if [[ $COVERAGE = true ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml; fi
 
 after_failure:
   - cat var/logs/*.log
