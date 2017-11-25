@@ -135,13 +135,13 @@ class RoleController extends Controller
      *
      * @RestApiDoc()
      *
-     * @param RolesService $roles
      * @param Role         $role
+     * @param RolesService $rolesService
      *
      * @return JsonResponse
      */
-    public function getInheritedRolesAction(RolesService $roles, Role $role): JsonResponse
+    public function getInheritedRolesAction(Role $role, RolesService $rolesService): JsonResponse
     {
-        return new JsonResponse($roles->getInheritedRoles([$role->getId()]));
+        return new JsonResponse($rolesService->getInheritedRoles([$role->getId()]));
     }
 }
