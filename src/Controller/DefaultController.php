@@ -55,6 +55,7 @@ class DefaultController
      * @return Response
      *
      * @throws \Exception
+     * @throws \InvalidArgumentException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function healthzAction(
@@ -65,8 +66,8 @@ class DefaultController
         return $responseHandler->createResponse(
             $request,
             $healthzService->check(),
-            null,
-            null,
+            200,
+            ResponseHandler::FORMAT_JSON,
             [
                 'groups' => [
                     'Healthz.timestamp'
