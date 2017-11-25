@@ -218,7 +218,7 @@ class ProfileController
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
-    private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): array
+    private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): ?array
     {
         if ($user instanceof User) {
             $groups = [
