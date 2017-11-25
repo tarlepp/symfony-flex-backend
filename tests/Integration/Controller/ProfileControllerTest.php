@@ -43,6 +43,10 @@ class ProfileControllerTest extends KernelTestCase
         $controller->profileAction($tokenStorage, $serializer, $rolesService);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     * @expectedExceptionMessage Not supported user
+     */
     public function testThatGroupsActionThrowsAnExceptionIfTokenStorageContainsWrongUserInstance(): void
     {
         self::bootKernel();
