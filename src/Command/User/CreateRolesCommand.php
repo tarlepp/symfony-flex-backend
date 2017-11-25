@@ -126,7 +126,7 @@ class CreateRolesCommand extends Command
      */
     private function clearRoles(array $roles): int
     {
-        return $this->roleRepository->createQueryBuilder('role')
+        return (int)$this->roleRepository->createQueryBuilder('role')
             ->delete()
             ->where('role.id NOT IN(:roles)')
             ->setParameter(':roles', $roles)
