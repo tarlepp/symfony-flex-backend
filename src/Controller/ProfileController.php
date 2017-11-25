@@ -186,7 +186,7 @@ class ProfileController
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
-    public function groupsAction(TokenStorageInterface $tokenStorage, SerializerInterface $serializer): JsonResponse
+    public function groupsAction(TokenStorageInterface $tokenStorage, SerializerInterface $serializer): ?JsonResponse
     {
         /** @var User|ApiKeyUser $user */
         /** @noinspection NullPointerExceptionInspection */
