@@ -206,6 +206,115 @@ class ProfileControllerTest extends WebTestCase
         static::assertSame($expected, $actual, $response->getContent());
     }
 
+    public function testThatGroupsActionReturns401WithoutToken(): void
+    {
+        $client = $this->getClient();
+        $client->request('GET', $this->baseUrl . '/groups');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(401, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $responseContent = JSON::decode($response->getContent());
+
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
+        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
+        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+    }
+
+    public function testThatGroupsActionReturns401WithInvalidApiKey(): void
+    {
+        $client = $this->getApiKeyClient();
+        $client->request('GET', $this->baseUrl . '/groups');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(401, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $responseContent = JSON::decode($response->getContent());
+
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
+        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
+        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGroupsActionReturnExpected
+     *
+     * @param array  $expected
+     * @param string $username
+     * @param string $password
+     */
+    public function testThatGroupsActionReturnExpected(string $username, string $password, array $expected): void
+    {
+        $client = $this->getClient($username, $password);
+        $client->request('GET', $this->baseUrl . '/groups');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $responseContent = JSON::decode($response->getContent());
+
+        if (empty($expected)) {
+            static::assertEmpty($responseContent);
+        } else {
+            $iterator = function (\stdClass $userGroup): string {
+                return $userGroup->role->id;
+            };
+
+            static::assertSame($expected, \array_map($iterator, $responseContent));
+        }
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey
+     *
+     * @param string $token
+     * @param array  $expected
+     */
+    public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token, array $expected): void
+    {
+        $client = $this->getApiKeyClient($token);
+        $client->request('GET', $this->baseUrl . '/groups');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $responseContent = JSON::decode($response->getContent());
+
+        if (empty($expected)) {
+            static::assertEmpty($responseContent);
+        } else {
+            $iterator = function (\stdClass $userGroup): string {
+                return $userGroup->role->id;
+            };
+
+            static::assertSame($expected, \array_map($iterator, $responseContent));
+        }
+    }
+
     /**
      * @return array
      */
@@ -273,6 +382,44 @@ class ProfileControllerTest extends WebTestCase
             return [
                 \str_pad($rolesService->getShort($role), 40, '_'),
                 \array_unique(\array_merge([RolesService::ROLE_API], $rolesService->getInheritedRoles([$role]))),
+            ];
+        };
+
+        return \array_map($iterator, $rolesService->getRoles());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGroupsActionReturnExpected(): array
+    {
+        return [
+            ['john',                     'password',        []],
+            ['john.doe@test.com',        'password',        []],
+            ['john-logged',              'password-logged', ['ROLE_LOGGED']],
+            ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']],
+            ['john-user',                'password-user',   ['ROLE_USER']],
+            ['john.doe-user@test.com',   'password-user',   ['ROLE_USER']],
+            ['john-admin',               'password-admin',  ['ROLE_ADMIN']],
+            ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN']],
+            ['john-root',                'password-root',   ['ROLE_ROOT']],
+            ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT']],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): array
+    {
+        self::bootKernel();
+
+        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+
+        $iterator = function (string $role) use ($rolesService): array {
+            return [
+                \str_pad($rolesService->getShort($role), 40, '_'),
+                [$role],
             ];
         };
 
