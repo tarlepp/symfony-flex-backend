@@ -28,6 +28,8 @@ use Symfony\Component\Serializer\SerializerInterface;
  *      path="/profile",
  *  )
  *
+ * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ *
  * @package App\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -39,8 +41,6 @@ class ProfileController
      * @Route("");
      *
      * @Method("GET")
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
      * @SWG\Parameter(
      *      type="string",
@@ -102,8 +102,6 @@ class ProfileController
      *
      * @Method("GET")
      *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-     *
      * @SWG\Parameter(
      *      type="string",
      *      name="Authorization",
@@ -143,6 +141,73 @@ class ProfileController
         $user = $tokenStorage->getToken()->getUser();
 
         return new JsonResponse($rolesService->getInheritedRoles($user->getRoles()));
+    }
+
+    /**
+     * Endpoint action to get current user user groups.
+     *
+     * @Route("/groups");
+     *
+     * @Method("GET")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="User groups",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @Model(
+     *              type=App\Entity\UserGroup::class,
+     *              groups={"UserGroup", "UserGroup.role"},
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Tag(name="Profile")
+     *
+     * @param TokenStorageInterface $tokenStorage
+     * @param SerializerInterface   $serializer
+     *
+     * @return JsonResponse
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     */
+    public function groupsAction(TokenStorageInterface $tokenStorage, SerializerInterface $serializer): JsonResponse
+    {
+        /** @var User|ApiKeyUser $user */
+        /** @noinspection NullPointerExceptionInspection */
+        $user = $tokenStorage->getToken()->getUser();
+
+        if ($user instanceof User) {
+            $data = $user->getUserGroups();
+        } elseif ($user instanceof ApiKeyUser) {
+            $data = $user->getApiKey()->getUserGroups();
+        } else {
+            throw new AccessDeniedException('Not supported user');
+        }
+
+        static $groups = [
+            'groups' => [
+                'UserGroup',
+                'UserGroup.role',
+            ],
+        ];
+
+        return new JsonResponse($serializer->serialize($data, 'json', $groups), 200, [], true);
     }
 
     /**
