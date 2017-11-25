@@ -47,7 +47,7 @@ install:
   - make generate-jwt-keys
 
 before_script:
-  - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini >> /dev/null; fi
+  - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini > /dev/null; fi
   - php --version
   - php ./bin/console --version
   - php ./vendor/bin/phpunit --version
