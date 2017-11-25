@@ -18,7 +18,6 @@ php:
 
 env:
   matrix:
-    - USE_XDEBUG=true
     - USE_XDEBUG=false
 
 matrix:
@@ -48,7 +47,7 @@ install:
   - make generate-jwt-keys
 
 before_script:
-  - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini; fi
+  - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini >> /dev/null; fi
   - php --version
   - php ./bin/console --version
   - php ./vendor/bin/phpunit --version
@@ -59,10 +58,10 @@ script:
   - find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
 
 after_success:
-  - if [[ $COVERAGE = true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi
-  - if [[ $COVERAGE = true ]]; then php ./vendor/bin/coveralls -v; fi
-  - if [[ $COVERAGE = true ]]; then php ./vendor/bin/test-reporter -v; fi
-  - if [[ $COVERAGE = true ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml; fi
+  - if [[ $COVERAGE == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi
+  - if [[ $COVERAGE == true ]]; then php ./vendor/bin/coveralls -v; fi
+  - if [[ $COVERAGE == true ]]; then php ./vendor/bin/test-reporter -v; fi
+  - if [[ $COVERAGE == true ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml; fi
 
 after_failure:
   - cat var/logs/*.log
