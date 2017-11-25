@@ -18,13 +18,18 @@ php:
 
 env:
   matrix:
-    - USE_XDEBUG=false
 
 matrix:
   fast_finish: true
   allow_failures:
     - php: nightly
   include:
+    - php: 7.1
+      env:
+        - USE_XDEBUG=false
+    - php: 7.2
+      env:
+        - USE_XDEBUG=false
     - php: 7.1
       env:
         - COVERAGE=true
