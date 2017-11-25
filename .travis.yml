@@ -16,9 +16,6 @@ php:
   - 7.2
   - nightly
 
-env:
-  matrix:
-
 matrix:
   fast_finish: true
   allow_failures:
@@ -33,7 +30,6 @@ matrix:
     - php: 7.1
       env:
         - COVERAGE=true
-        - USE_XDEBUG=true
 
 before_install:
   - cp .env.travis .env
@@ -52,7 +48,7 @@ install:
   - make generate-jwt-keys
 
 before_script:
-  - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini > /dev/null; fi
+  - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini; fi
   - php --version
   - php ./bin/console --version
   - php ./vendor/bin/phpunit --version
