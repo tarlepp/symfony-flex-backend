@@ -81,6 +81,8 @@ class LoadApiKeyData extends AbstractFixture implements OrderedFixtureInterface,
     }
 
     /**
+     * Helper method to create new ApiKey entity with specified role.
+     *
      * @param string $role
      */
     private function createApiKey(string $role = null): void
