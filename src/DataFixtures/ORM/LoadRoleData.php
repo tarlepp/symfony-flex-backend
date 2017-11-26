@@ -40,6 +40,8 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
     private $roles;
 
     /**
+     * Setter for container.
+     *
      * @param ContainerInterface|null $container
      */
     public function setContainer(ContainerInterface $container = null): void

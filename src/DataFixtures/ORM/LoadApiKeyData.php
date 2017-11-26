@@ -41,6 +41,8 @@ class LoadApiKeyData extends AbstractFixture implements OrderedFixtureInterface,
     private $roles;
 
     /**
+     * Setter for container.
+     *
      * @param ContainerInterface|null $container
      */
     public function setContainer(ContainerInterface $container = null): void

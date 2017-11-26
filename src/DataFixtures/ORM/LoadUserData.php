@@ -41,6 +41,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
     private $roles;
 
     /**
+     * Setter for container.
+     *
      * @param ContainerInterface|null $container
      */
     public function setContainer(ContainerInterface $container = null): void
@@ -81,6 +83,8 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
     }
 
     /**
+     * Method to create User entity with specified role.
+     *
      * @param string $role
      */
     private function createUser(string $role = null): void

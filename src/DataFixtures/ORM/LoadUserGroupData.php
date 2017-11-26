@@ -41,6 +41,8 @@ class LoadUserGroupData extends AbstractFixture implements OrderedFixtureInterfa
     private $roles;
 
     /**
+     * Setter for container.
+     *
      * @param ContainerInterface|null $container
      */
     public function setContainer(ContainerInterface $container = null): void
@@ -79,6 +81,8 @@ class LoadUserGroupData extends AbstractFixture implements OrderedFixtureInterfa
     }
 
     /**
+     * Method to create UserGroup entity for specified role.
+     *
      * @param string $role
      */
     private function createUserGroup(string $role): void
