@@ -9,6 +9,7 @@ namespace App\Controller;
 
 use App\Annotation\RestApiDoc;
 use App\Entity\User;
+use App\Entity\UserGroup;
 use App\Form\Type\Rest\User\UserCreateType;
 use App\Form\Type\Rest\User\UserPatchType;
 use App\Form\Type\Rest\User\UserUpdateType;
@@ -18,6 +19,7 @@ use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
 use App\Security\RolesService;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -28,6 +30,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -177,5 +180,109 @@ class UserController extends Controller
     public function getUserRolesAction(User $requestUser, RolesService $roles): JsonResponse
     {
         return new JsonResponse($roles->getInheritedRoles($requestUser->getRoles()));
+    }
+
+    /**
+     * Endpoint action to attach specified user group to specified user.
+     *
+     * @Route(
+     *      "/{userId}/group/{userGroupId}",
+     *      requirements={
+     *          "userId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "userGroupId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *      }
+     *  )
+     *
+     * @ParamConverter(
+     *      "user",
+     *      class="App:User",
+     *      options={
+     *          "id" = "userId",
+     *      },
+     *  )
+     * @ParamConverter(
+     *      "userGroup",
+     *      class="App:UserGroup",
+     *      options={
+     *          "id" = "userGroupId",
+     *      },
+     *  )
+     *
+     * @Method({"POST"})
+     *
+     * @Security("has_role('ROLE_ROOT')")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="userId",
+     *      in="path",
+     *      required=true,
+     *      description="User GUID",
+     *      default="User GUID",
+     *  )
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="userGroupId",
+     *      in="path",
+     *      required=true,
+     *      description="User Group GUID",
+     *      default="User Group GUID",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="User groups",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @Model(
+     *              type=App\Entity\UserGroup::class,
+     *              groups={"UserGroup", "UserGroup.role"},
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Response(
+     *      response=403,
+     *      description="Access denied",
+     *  )
+     * @SWG\Tag(name="User Management")
+     *
+     * @param User                $user
+     * @param UserGroup           $userGroup
+     * @param SerializerInterface $serializer
+     *
+     * @return JsonResponse
+     */
+    public function attachUserToGroupAction(
+        User $user,
+        UserGroup $userGroup,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $user->addUserGroup($userGroup);
+
+        $this->getResource()->save($user);
+
+        static $groups = [
+            'groups' => [
+                'UserGroup',
+                'UserGroup.role',
+            ],
+        ];
+
+        return new JsonResponse($serializer->serialize($user->getUserGroups(), 'json', $groups), 200, [], true);
     }
 }
