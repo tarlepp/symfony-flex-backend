@@ -183,6 +183,68 @@ class UserController extends Controller
     }
 
     /**
+     * Endpoint action to fetch specified user user groups.
+     *
+     * @Route(
+     *      "/{id}/groups",
+     *      requirements={
+     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+     *      }
+     *  )
+     *
+     * @ParamConverter(
+     *     "requestUser",
+     *     class="App:User"
+     *  )
+     *
+     * @Method({"GET"})
+     *
+     * @Security("is_granted('IS_USER_HIMSELF', requestUser) or has_role('ROLE_ROOT')")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="User groups",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @Model(
+     *              type=App\Entity\UserGroup::class,
+     *              groups={"UserGroup", "UserGroup.role"},
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Response(
+     *      response=403,
+     *      description="Access denied",
+     *  )
+     * @SWG\Tag(name="User Management")
+     *
+     * @param User                $requestUser
+     * @param SerializerInterface $serializer
+     *
+     * @return JsonResponse
+     */
+    public function getUserGroupsAction(User $requestUser, SerializerInterface $serializer): JsonResponse
+    {
+        return $this->getUserGroupResponse($requestUser, $serializer);
+    }
+
+    /**
      * Endpoint action to attach specified user group to specified user.
      *
      * @Route(
