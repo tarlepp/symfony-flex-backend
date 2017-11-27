@@ -267,15 +267,121 @@ class UserController extends Controller
      *
      * @return JsonResponse
      */
-    public function attachUserToGroupAction(
+    public function attachUserGroupAction(
         User $user,
         UserGroup $userGroup,
         SerializerInterface $serializer
     ): JsonResponse {
-        $user->addUserGroup($userGroup);
+        $this->getResource()->save($user->addUserGroup($userGroup));
 
-        $this->getResource()->save($user);
+        return $this->getUserGroupResponse($user, $serializer);
+    }
 
+    /**
+     * Endpoint action to detach specified user group from specified user.
+     *
+     * @Route(
+     *      "/{userId}/group/{userGroupId}",
+     *      requirements={
+     *          "userId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "userGroupId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *      }
+     *  )
+     *
+     * @ParamConverter(
+     *      "user",
+     *      class="App:User",
+     *      options={
+     *          "id" = "userId",
+     *      },
+     *  )
+     * @ParamConverter(
+     *      "userGroup",
+     *      class="App:UserGroup",
+     *      options={
+     *          "id" = "userGroupId",
+     *      },
+     *  )
+     *
+     * @Method({"DELETE"})
+     *
+     * @Security("has_role('ROLE_ROOT')")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="userId",
+     *      in="path",
+     *      required=true,
+     *      description="User GUID",
+     *      default="User GUID",
+     *  )
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="userGroupId",
+     *      in="path",
+     *      required=true,
+     *      description="User Group GUID",
+     *      default="User Group GUID",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="User groups",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @Model(
+     *              type=App\Entity\UserGroup::class,
+     *              groups={"UserGroup", "UserGroup.role"},
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Response(
+     *      response=403,
+     *      description="Access denied",
+     *  )
+     * @SWG\Tag(name="User Management")
+     *
+     * @param User                $user
+     * @param UserGroup           $userGroup
+     * @param SerializerInterface $serializer
+     *
+     * @return JsonResponse
+     */
+    public function detachUserGroupAction(
+        User $user,
+        UserGroup $userGroup,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $this->getResource()->save($user->removeUserGroup($userGroup));
+
+        return $this->getUserGroupResponse($user, $serializer);
+    }
+
+    /**
+     * Helper method to create UserGroup response.
+     *
+     * @param User                $user
+     * @param SerializerInterface $serializer
+     *
+     * @return JsonResponse
+     */
+    private function getUserGroupResponse(User $user, SerializerInterface $serializer): JsonResponse
+    {
         static $groups = [
             'groups' => [
                 'UserGroup',
@@ -283,6 +389,11 @@ class UserController extends Controller
             ],
         ];
 
-        return new JsonResponse($serializer->serialize($user->getUserGroups(), 'json', $groups), 200, [], true);
+        return new JsonResponse(
+            $serializer->serialize($user->getUserGroups()->getValues(), 'json', $groups),
+            200,
+            [],
+            true
+        );
     }
 }
