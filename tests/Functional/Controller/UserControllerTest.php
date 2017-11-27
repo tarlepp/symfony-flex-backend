@@ -524,6 +524,94 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatGetUserGroupsActionsReturns403ForInvalidUser
+     *
+     * @param string $username
+     * @param string $password
+     * @param array  $userIds
+     */
+    public function testThatGetUserGroupsActionsReturns403ForInvalidUser(
+        string $username,
+        string $password,
+        array $userIds
+    ): void {
+        $client = $this->getClient($username, $password);
+
+        foreach ($userIds as $userId) {
+            $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
+
+            $response = $client->getResponse();
+
+            static::assertInstanceOf(Response::class, $response);
+
+            /** @noinspection NullPointerExceptionInspection */
+            static::assertSame(403, $response->getStatusCode(), $response->getContent());
+        }
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself
+     *
+     * @param string $username
+     * @param string $password
+     * @param string $expectedResponse
+     * @param string $userId
+     */
+    public function testThatGetUserGroupsActionsReturns200ForUserHimself(
+        string $username,
+        string $password,
+        string $expectedResponse = null,
+        string $userId
+    ): void {
+        $client = $this->getClient($username, $password);
+        $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $data = JSON::decode($response->getContent());
+
+        if ($expectedResponse === null) {
+            static::assertEmpty($data);
+        } else {
+            static::assertSame($expectedResponse, $data[0]->role->id);
+        }
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGetUserGroupsActionReturns200ForRootRoleUser
+     *
+     * @param string $userId
+     * @param string $expectedResponse
+     */
+    public function testThatGetUserGroupsActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
+    {
+        $client = $this->getClient('john-root', 'password-root');
+        $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        /** @noinspection NullPointerExceptionInspection */
+        $data = JSON::decode($response->getContent());
+
+        if ($expectedResponse === null) {
+            static::assertEmpty($data);
+        } else {
+            static::assertSame($expectedResponse, $data[0]->role->id);
+        }
+    }
+
+    /**
      * @return array
      */
     public function dataProviderValidUsers(): array
@@ -680,6 +768,73 @@ class UserControllerTest extends WebTestCase
             $user->setRolesService($rolesService);
 
             $output[] = [$user->getId(), JSON::encode($user->getRoles())];
+        }
+
+        return $output;
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetUserGroupsActionsReturns403ForInvalidUser(): array
+    {
+        return $this->dataProviderTestThatGetRolesActionsReturns403ForInvalidUser();
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): array
+    {
+        self::bootKernel();
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        $users = $userResource->find();
+
+        $iterator = function (array $userData) use ($users): array {
+            /** @var User $user */
+            $user = \array_values(
+                \array_filter(
+                    $users,
+                    function (User $user) use ($userData) {
+                        return $userData[0] === $user->getUsername();
+                    }
+                )
+            )[0];
+
+            $userData[] = $user->getId();
+
+            return $userData;
+        };
+
+        $credentials = [
+            ['john',        'password',         null],
+            ['john-api',    'password-api',     'ROLE_API'],
+            ['john-logged', 'password-logged',  'ROLE_LOGGED'],
+            ['john-user',   'password-user',    'ROLE_USER'],
+            ['john-admin',  'password-admin',   'ROLE_ADMIN'],
+            ['john-root',   'password-root',    'ROLE_ROOT'],
+        ];
+
+        return \array_map($iterator, $credentials);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetUserGroupsActionReturns200ForRootRoleUser(): array
+    {
+        self::bootKernel();
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        $output = [];
+
+        foreach ($userResource->find() as $user) {
+            $output[] = [$user->getId(), \count($user->getRoles()) ? $user->getRoles()[0] : null];
         }
 
         return $output;
