@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
 use App\Entity\User;
+use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Security\RolesService;
 use App\Utils\JSON;
@@ -24,7 +25,7 @@ class UserControllerTest extends WebTestCase
 {
     private $baseUrl = '/user';
 
-    public function testThatGetBaseRouteReturn401(): void
+    public function _testThatGetBaseRouteReturn401(): void
     {
         $client = $this->getClient();
         $client->request('GET', $this->baseUrl);
@@ -49,7 +50,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      */
-    public function testThatCountActionReturnsExpected(string $username, string $password): void
+    public function _testThatCountActionReturnsExpected(string $username, string $password): void
     {
         $client = $this->getClient($username, $password);
         $client->request('GET', $this->baseUrl . '/count');
@@ -70,7 +71,7 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $role
      */
-    public function testThatCountActionReturnsExpectedForApiKeyUser(string $role): void
+    public function _testThatCountActionReturnsExpectedForApiKeyUser(string $role): void
     {
         $client = $this->getApiKeyClient($role);
         $client->request('GET', $this->baseUrl . '/count');
@@ -92,7 +93,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      */
-    public function testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
+    public function _testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $client = $this->getClient($username, $password);
         $client->request('GET', $this->baseUrl . '/count');
@@ -116,7 +117,7 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $role
      */
-    public function testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
+    public function _testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
     {
         $client = $this->getApiKeyClient($role);
         $client->request('GET', $this->baseUrl . '/count');
@@ -141,7 +142,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      */
-    public function testThatFindActionReturnsExpected(string $username, string $password): void
+    public function _testThatFindActionReturnsExpected(string $username, string $password): void
     {
         $client = $this->getClient($username, $password);
         $client->request('GET', $this->baseUrl);
@@ -163,7 +164,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      */
-    public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
+    public function _testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $client = $this->getClient($username, $password);
         $client->request('GET', $this->baseUrl);
@@ -188,7 +189,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      */
-    public function testThatIdsActionReturnExpected(string $username, string $password): void
+    public function _testThatIdsActionReturnExpected(string $username, string $password): void
     {
         $client = $this->getClient($username, $password);
         $client->request('GET', $this->baseUrl . '/ids');
@@ -210,7 +211,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      */
-    public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
+    public function _testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $client = $this->getClient($username, $password);
         $client->request('GET', $this->baseUrl . '/ids');
@@ -232,7 +233,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @return string
      */
-    public function testThatCreateActionWorksLikeExpected(): string
+    public function _testThatCreateActionWorksLikeExpected(): string
     {
         $data = [
             'username'  => 'test-user',
@@ -270,7 +271,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      */
-    public function testThatCreateActionReturns403ForInvalidUser(string $username, string $password): void
+    public function _testThatCreateActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $data = [
             'username'  => 'test-user',
@@ -303,7 +304,7 @@ class UserControllerTest extends WebTestCase
      *
      * @return string
      */
-    public function testThatUpdateActionWorksLikeExpected(string $userId): string
+    public function _testThatUpdateActionWorksLikeExpected(string $userId): string
     {
         $data = [
             'username'  => 'test-user',
@@ -340,7 +341,7 @@ class UserControllerTest extends WebTestCase
      *
      * @return string
      */
-    public function testThatUpdateActionReturns403ForInvalidUser(
+    public function _testThatUpdateActionReturns403ForInvalidUser(
         string $username,
         string $password,
         string $userId
@@ -379,7 +380,7 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param string $userId
      */
-    public function testThatDeleteActionReturns403ForInvalidUser(
+    public function _testThatDeleteActionReturns403ForInvalidUser(
         string $username,
         string $password,
         string $userId
@@ -406,7 +407,7 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $userId
      */
-    public function testThatDeleteActionWorksLikeExpected(string $userId): void
+    public function _testThatDeleteActionWorksLikeExpected(string $userId): void
     {
         $client = $this->getClient('john-root', 'password-root');
         $client->request('DELETE', $this->baseUrl . '/' . $userId);
@@ -419,7 +420,7 @@ class UserControllerTest extends WebTestCase
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
-    public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
+    public function _testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
         self::bootKernel();
 
@@ -454,7 +455,7 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param array  $userIds
      */
-    public function testThatGetUserRolesActionsReturns403ForInvalidUser(
+    public function _testThatGetUserRolesActionsReturns403ForInvalidUser(
         string $username,
         string $password,
         array $userIds
@@ -481,7 +482,7 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      * @param string $expectedResponse
      */
-    public function testThatGetUserRolesActionsReturns200ForUserHimself(
+    public function _testThatGetUserRolesActionsReturns200ForUserHimself(
         string $username,
         string $password,
         string $userId,
@@ -507,7 +508,7 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      * @param string $expectedResponse
      */
-    public function testThatGetUserRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
+    public function _testThatGetUserRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
     {
         $client = $this->getClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
@@ -530,7 +531,7 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param array  $userIds
      */
-    public function testThatGetUserGroupsActionsReturns403ForInvalidUser(
+    public function _testThatGetUserGroupsActionsReturns403ForInvalidUser(
         string $username,
         string $password,
         array $userIds
@@ -557,7 +558,7 @@ class UserControllerTest extends WebTestCase
      * @param string $expectedResponse
      * @param string $userId
      */
-    public function testThatGetUserGroupsActionsReturns200ForUserHimself(
+    public function _testThatGetUserGroupsActionsReturns200ForUserHimself(
         string $username,
         string $password,
         string $expectedResponse = null,
@@ -589,7 +590,7 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      * @param string $expectedResponse
      */
-    public function testThatGetUserGroupsActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
+    public function _testThatGetUserGroupsActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
     {
         $client = $this->getClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
@@ -609,6 +610,84 @@ class UserControllerTest extends WebTestCase
         } else {
             static::assertSame($expectedResponse, $data[0]->role->id);
         }
+    }
+
+    /**
+     * @dataProvider dataProviderInvalidUsersCreate
+     *
+     * @param string $username
+     * @param string $password
+     */
+    public function testThatAttachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
+    {
+        self::bootKernel();
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        /** @var UserGroupResource $userGroupResource */
+        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+
+        $user = $userResource->findOneBy(['username' => $username]);
+        $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
+
+        /** @noinspection NullPointerExceptionInspection */
+        $url = \sprintf(
+            '%s/%s/group/%s',
+            $this->baseUrl,
+            $user->getId(),
+            $userGroup->getId()
+        );
+
+        $client = $this->getClient($username, $password);
+        $client->request('POST', $url);
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(403, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"Access denied.","code":0,"status":403}',
+            $response->getContent()
+        );
+    }
+
+    public function testThatAttachUserGroupActionWorksAsExpected(): void
+    {
+        self::bootKernel();
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        /** @var UserGroupResource $userGroupResource */
+        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+
+        $user = $userResource->findOneBy(['username' => 'john']);
+        $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
+
+        /** @noinspection NullPointerExceptionInspection */
+        $url = \sprintf(
+            '%s/%s/group/%s',
+            $this->baseUrl,
+            $user->getId(),
+            $userGroup->getId()
+        );
+
+        $client = $this->getClient('john-root', 'password-root');
+        $client->request('POST', $url);
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode());
+
+        static::assertCount(1, JSON::decode($response->getContent()));
     }
 
     /**
