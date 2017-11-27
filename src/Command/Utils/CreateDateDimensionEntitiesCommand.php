@@ -208,7 +208,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function validatorYearStart(): \Closure
     {
-        return function ($year): int {
+        return function ($year): ?int {
             $year = (int)$year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
@@ -236,7 +236,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function validatorYearEnd(int $yearStart): \Closure
     {
-        return function ($year) use ($yearStart): int {
+        return function ($year) use ($yearStart): ?int {
             $year = (int)$year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart) {
