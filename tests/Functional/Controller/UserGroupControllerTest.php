@@ -143,6 +143,90 @@ class UserGroupControllerTest extends WebTestCase
     }
 
     /**
+     * @depends testThatAttachUserActionWorksAsExpected
+     */
+    public function testThatDetachUserActionWorksAsExpected(): void
+    {
+        self::bootKernel();
+
+        /** @var UserGroupResource $userGroupResource */
+        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        $user = $userResource->findOneBy(['username' => 'john']);
+        $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
+
+        /** @noinspection NullPointerExceptionInspection */
+        $url = \sprintf(
+            '%s/%s/user/%s',
+            $this->baseUrl,
+            $userGroup->getId(),
+            $user->getId()
+        );
+
+        $client = $this->getClient('john-root', 'password-root');
+        $client->request('DELETE', $url);
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertCount(1, JSON::decode($response->getContent()));
+    }
+
+    /**
+     * @depends testThatDetachUserActionWorksAsExpected
+     *
+     * @dataProvider dataProviderTestThatDetachUserActionReturns403ForInvalidUser
+     *
+     * @param string $username
+     * @param string $password
+     */
+    public function testThatDetachUserActionReturns403ForInvalidUser(string $username, string $password): void
+    {
+        self::bootKernel();
+
+        /** @var UserGroupResource $userGroupResource */
+        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+
+        /** @var UserResource $userResource */
+        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+
+        $user = $userResource->findOneBy(['username' => $username]);
+        $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
+
+        /** @noinspection NullPointerExceptionInspection */
+        $url = \sprintf(
+            '%s/%s/user/%s',
+            $this->baseUrl,
+            $userGroup->getId(),
+            $user->getId()
+        );
+
+        $client = $this->getClient($username, $password);
+        $client->request('DELETE', $url);
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(403, $response->getStatusCode());
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertJsonStringEqualsJsonString(
+            '{"message":"Access denied.","code":0,"status":403}',
+            $response->getContent()
+        );
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): array
@@ -185,5 +269,13 @@ class UserGroupControllerTest extends WebTestCase
             [201],
             [200],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatDetachUserActionReturns403ForInvalidUser(): array
+    {
+        return $this->dataProviderTestThatAttachUserActionReturns403ForInvalidUser();
     }
 }
