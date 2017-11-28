@@ -334,9 +334,11 @@ class UserController extends Controller
         UserGroup $userGroup,
         SerializerInterface $serializer
     ): JsonResponse {
+        $status = $user->getUserGroups()->contains($userGroup) ? 200 : 201;
+
         $this->getResource()->save($user->addUserGroup($userGroup));
 
-        return $this->getUserGroupResponse($user, $serializer);
+        return $this->getUserGroupResponse($user, $serializer, $status);
     }
 
     /**
@@ -439,11 +441,14 @@ class UserController extends Controller
      *
      * @param User                $user
      * @param SerializerInterface $serializer
+     * @param int|null            $status
      *
      * @return JsonResponse
      */
-    private function getUserGroupResponse(User $user, SerializerInterface $serializer): JsonResponse
+    private function getUserGroupResponse(User $user, SerializerInterface $serializer, int $status = null): JsonResponse
     {
+        $status = $status ?? 200;
+
         static $groups = [
             'groups' => [
                 'UserGroup',
@@ -453,7 +458,7 @@ class UserController extends Controller
 
         return new JsonResponse(
             $serializer->serialize($user->getUserGroups()->getValues(), 'json', $groups),
-            200,
+            $status,
             [],
             true
         );
