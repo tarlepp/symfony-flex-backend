@@ -203,7 +203,18 @@ class UserGroupController extends Controller
      *  )
      * @SWG\Response(
      *      response=200,
-     *      description="Users",
+     *      description="List of user group users - specified user already exists on this group",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @Model(
+     *              type=App\Entity\User::class,
+     *              groups={"User"},
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=201,
+     *      description="List of user group users - specified user has been attached to this group",
      *      @SWG\Schema(
      *          type="array",
      *          @Model(
@@ -237,7 +248,104 @@ class UserGroupController extends Controller
         User $user,
         SerializerInterface $serializer
     ): JsonResponse {
+        $status = $userGroup->getUsers()->contains($user) ? 200 : 201;
+
         $this->getResource()->save($userGroup->addUser($user));
+
+        return $this->getUserResponse($userGroup, $serializer, $status);
+    }
+
+    /**
+     * Endpoint action to detach specified user from specified user group.
+     *
+     * @Route(
+     *      "/{userGroupId}/user/{userId}",
+     *      requirements={
+     *          "userGroupId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "userId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *      }
+     *  )
+     *
+     * @ParamConverter(
+     *      "userGroup",
+     *      class="App:UserGroup",
+     *      options={
+     *          "id" = "userGroupId",
+     *      },
+     *  )
+     * @ParamConverter(
+     *      "user",
+     *      class="App:User",
+     *      options={
+     *          "id" = "userId",
+     *      },
+     *  )
+     *
+     * @Method({"DELETE"})
+     *
+     * @Security("has_role('ROLE_ROOT')")
+     *
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="Authorization",
+     *      in="header",
+     *      required=true,
+     *      description="Authorization header",
+     *      default="Bearer _your_jwt_here_",
+     *  )
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="userGroupId",
+     *      in="path",
+     *      required=true,
+     *      description="User Group GUID",
+     *      default="User Group GUID",
+     *  )
+     * @SWG\Parameter(
+     *      type="string",
+     *      name="userId",
+     *      in="path",
+     *      required=true,
+     *      description="User GUID",
+     *      default="User GUID",
+     *  )
+     * @SWG\Response(
+     *      response=200,
+     *      description="Users",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @Model(
+     *              type=App\Entity\User::class,
+     *              groups={"User"},
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=401,
+     *      description="Invalid token",
+     *      examples={
+     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Response(
+     *      response=403,
+     *      description="Access denied",
+     *  )
+     * @SWG\Tag(name="UserGroup Management")
+     *
+     * @param UserGroup           $userGroup
+     * @param User                $user
+     * @param SerializerInterface $serializer
+     *
+     * @return JsonResponse
+     */
+    public function detachUserAction(
+        UserGroup $userGroup,
+        User $user,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $this->getResource()->save($userGroup->removeUser($user));
 
         return $this->getUserResponse($userGroup, $serializer);
     }
@@ -247,11 +355,17 @@ class UserGroupController extends Controller
      *
      * @param UserGroup           $userGroup
      * @param SerializerInterface $serializer
+     * @param int|null            $status
      *
      * @return JsonResponse
      */
-    private function getUserResponse(UserGroup $userGroup, SerializerInterface $serializer): JsonResponse
-    {
+    private function getUserResponse(
+        UserGroup $userGroup,
+        SerializerInterface $serializer,
+        int $status = null
+    ): JsonResponse {
+        $status = $status ?? 200;
+
         static $groups = [
             'groups' => [
                 'User',
@@ -260,7 +374,7 @@ class UserGroupController extends Controller
 
         return new JsonResponse(
             $serializer->serialize($userGroup->getUsers()->getValues(), 'json', $groups),
-            200,
+            $status,
             [],
             true
         );
