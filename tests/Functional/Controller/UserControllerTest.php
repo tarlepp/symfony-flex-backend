@@ -628,7 +628,12 @@ class UserControllerTest extends WebTestCase
         );
     }
 
-    public function testThatAttachUserGroupActionWorksAsExpected(): void
+    /**
+     * @dataProvider dataProviderTestThatAttachUserGroupActionWorksAsExpected
+     *
+     * @param int $expectedStatus
+     */
+    public function testThatAttachUserGroupActionWorksAsExpected(int $expectedStatus): void
     {
         self::bootKernel();
 
@@ -657,7 +662,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame($expectedStatus, $response->getStatusCode());
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount(1, JSON::decode($response->getContent()));
@@ -824,6 +829,17 @@ class UserControllerTest extends WebTestCase
             ['api'],
             ['logged'],
             ['user'],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatAttachUserGroupActionWorksAsExpected(): array
+    {
+        return [
+            [201],
+            [200],
         ];
     }
 
