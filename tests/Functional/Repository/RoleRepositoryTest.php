@@ -9,11 +9,8 @@ namespace App\Tests\Functional\Repository;
 
 use App\Repository\RoleRepository;
 use App\Resource\RoleResource;
-use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use App\Utils\Tests\PHPUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Class RoleRepositoryTest
@@ -28,23 +25,12 @@ class RoleRepositoryTest extends KernelTestCase
      */
     private $repository;
 
+    /**
+     * @throws \Exception
+     */
     public static function tearDownAfterClass(): void
     {
-        $application = new Application(static::$kernel);
-
-        $command = new LoadDataFixturesDoctrineCommand();
-
-        $application->add($command);
-
-        $input = new ArrayInput([
-            'command'           => 'doctrine:fixtures:load',
-            '--no-interaction'  => true,
-            '--fixtures'        => 'src/DataFixtures/',
-        ]);
-
-        $input->setInteractive(false);
-
-        $command->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
+        PHPUnitUtil::loadFixtures(static::$kernel);
     }
 
     public function setUp(): void
@@ -56,6 +42,10 @@ class RoleRepositoryTest extends KernelTestCase
         $this->repository = static::$kernel->getContainer()->get(RoleResource::class)->getRepository();
     }
 
+    /**
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatResetMethodDeletesAllRecords(): void
     {
         self::assertSame(5, $this->repository->countAdvanced());

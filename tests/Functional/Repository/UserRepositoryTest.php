@@ -10,11 +10,8 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
-use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use App\Utils\Tests\PHPUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Class UserRepositoryTest
@@ -29,23 +26,12 @@ class UserRepositoryTest extends KernelTestCase
      */
     private $userRepository;
 
+    /**
+     * @throws \Exception
+     */
     public static function tearDownAfterClass(): void
     {
-        $application = new Application(static::$kernel);
-
-        $command = new LoadDataFixturesDoctrineCommand();
-
-        $application->add($command);
-
-        $input = new ArrayInput([
-            'command'           => 'doctrine:fixtures:load',
-            '--no-interaction'  => true,
-            '--fixtures'        => 'src/DataFixtures/',
-        ]);
-
-        $input->setInteractive(false);
-
-        $command->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
+        PHPUnitUtil::loadFixtures(static::$kernel);
     }
 
     public function setUp(): void
@@ -57,6 +43,10 @@ class UserRepositoryTest extends KernelTestCase
         $this->userRepository = static::$kernel->getContainer()->get(UserResource::class)->getRepository();
     }
 
+    /**
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatCountAdvancedReturnsExpected(): void
     {
         static::assertSame(6, $this->userRepository->countAdvanced());
@@ -74,6 +64,9 @@ class UserRepositoryTest extends KernelTestCase
         static::assertCount(5, $this->userRepository->findIds([], ['or' => 'john-']));
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatIsUsernameAvailableMethodReturnsExpected(): void
     {
         $iterator = function (User $user, bool $expected) {
@@ -99,6 +92,9 @@ class UserRepositoryTest extends KernelTestCase
         }
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatIsEmailAvailableMethodReturnsExpected(): void
     {
         $iterator = function (User $user, bool $expected) {
@@ -127,6 +123,9 @@ class UserRepositoryTest extends KernelTestCase
     /**
      * @depends testThatIsUsernameAvailableMethodReturnsExpected
      * @depends testThatIsEmailAvailableMethodReturnsExpected
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {

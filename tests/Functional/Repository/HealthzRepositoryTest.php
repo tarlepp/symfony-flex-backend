@@ -10,11 +10,8 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
 use App\Resource\HealthzResource;
-use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
+use App\Utils\Tests\PHPUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Class UserRepositoryTest
@@ -31,6 +28,9 @@ class HealthzRepositoryTest extends KernelTestCase
 
     private static $initialized = false;
 
+    /**
+     * @throws \Exception
+     */
     public function setUp(): void
     {
         parent::setUp();
@@ -38,21 +38,7 @@ class HealthzRepositoryTest extends KernelTestCase
         static::bootKernel();
 
         if (!self::$initialized) {
-            $application = new Application(static::$kernel);
-
-            $command = new LoadDataFixturesDoctrineCommand();
-
-            $application->add($command);
-
-            $input = new ArrayInput([
-                'command'           => 'doctrine:fixtures:load',
-                '--no-interaction'  => true,
-                '--fixtures'        => 'src/DataFixtures/',
-            ]);
-
-            $input->setInteractive(false);
-
-            $command->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
+            PHPUnitUtil::loadFixtures(static::$kernel);
 
             self::$initialized = true;
         }
@@ -60,6 +46,10 @@ class HealthzRepositoryTest extends KernelTestCase
         $this->repository = static::$kernel->getContainer()->get(HealthzResource::class)->getRepository();
     }
 
+    /**
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatReadValueMethodReturnsExpectedWithEmptyDatabase(): void
     {
         static::assertNull($this->repository->read());
@@ -67,6 +57,9 @@ class HealthzRepositoryTest extends KernelTestCase
 
     /**
      * @depends testThatReadValueMethodReturnsExpectedWithEmptyDatabase
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function testThatCreateValueReturnsExpected(): void
     {
@@ -75,6 +68,9 @@ class HealthzRepositoryTest extends KernelTestCase
 
     /**
      * @depends testThatCreateValueReturnsExpected
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testThatReadValueReturnExpectedAfterCreate(): void
     {
@@ -83,6 +79,8 @@ class HealthzRepositoryTest extends KernelTestCase
 
     /**
      * @depends testThatReadValueReturnExpectedAfterCreate
+     *
+     * @throws \Exception
      */
     public function testThatCleanupMethodClearsDatabaseReturnsExpected(): void
     {

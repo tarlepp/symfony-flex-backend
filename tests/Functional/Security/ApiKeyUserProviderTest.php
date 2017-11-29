@@ -12,11 +12,7 @@ use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
 use App\Security\ApiKeyUserProvider;
 use App\Security\RolesService;
-use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Security\Core\User\User;
 
 /**
@@ -31,25 +27,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
      * @var ApiKeyUserProvider
      */
     private $apiKeyUserProvider;
-
-    public static function loadFixtures(): void
-    {
-        $application = new Application(static::$kernel);
-
-        $command = new LoadDataFixturesDoctrineCommand();
-
-        $application->add($command);
-
-        $input = new ArrayInput([
-            'command'           => 'doctrine:fixtures:load',
-            '--no-interaction'  => true,
-            '--fixtures'        => 'src/DataFixtures/',
-        ]);
-
-        $input->setInteractive(false);
-
-        $command->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
-    }
 
     public function setUp(): void
     {

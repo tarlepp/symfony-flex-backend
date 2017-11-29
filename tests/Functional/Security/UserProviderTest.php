@@ -9,12 +9,8 @@ namespace App\Tests\Functional\Security;
 
 use App\Entity\User;
 use App\Security\UserProvider;
-use Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Security\Core\User\User as CoreUser;
 
 /**
@@ -44,6 +40,9 @@ class UserProviderTest extends KernelTestCase
         $this->userProvider = new $repository($entityManager, new ClassMetadata(User::class));
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatLoadUserByUsernameReturnsNullWithInvalidUsername(): void
     {
         static::assertNull($this->userProvider->loadUserByUsername('foobar'));
@@ -51,6 +50,9 @@ class UserProviderTest extends KernelTestCase
 
     /**
      * @expectedException \Doctrine\ORM\NoResultException
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
     {
@@ -60,6 +62,10 @@ class UserProviderTest extends KernelTestCase
         $this->userProvider->refreshUser($user);
     }
 
+    /**
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatRefreshUserReturnsCorrectUser(): void
     {
         /** @var User $user */
@@ -75,6 +81,9 @@ class UserProviderTest extends KernelTestCase
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      * @expectedExceptionMessage Instance of "Symfony\Component\Security\Core\User\User" is not supported.
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserClassIsNotSupported(): void
     {
