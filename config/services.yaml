@@ -26,7 +26,11 @@ services:
     # have the tag that allows actions to type-hint services
     App\Controller\:
         resource: '../src/Controller/*'
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
+
+    App\DataFixtures\:
+        resource: '../src/DataFixtures/*'
+        tags: [ 'doctrine.fixture.orm' ]
 
     App\Resource\:
         resource: '../src/Resource'
