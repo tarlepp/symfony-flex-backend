@@ -7,6 +7,11 @@ declare(strict_types = 1);
  */
 namespace App\Utils\Tests;
 
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\HttpKernel\KernelInterface;
+
 /**
  * Class PHPUnitUtil
  *
@@ -15,6 +20,28 @@ namespace App\Utils\Tests;
  */
 class PHPUnitUtil
 {
+    /**
+     * @codeCoverageIgnore
+     *
+     * @param KernelInterface $kernel
+     *
+     * @throws \Exception
+     */
+    public static function loadFixtures(KernelInterface $kernel): void
+    {
+        $application = new Application($kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput([
+            'command'           => 'doctrine:fixtures:load',
+            '--no-interaction'  => true,
+        ]);
+
+        $input->setInteractive(false);
+
+        $application->run($input, new ConsoleOutput(ConsoleOutput::VERBOSITY_QUIET));
+    }
+
     /**
      * @codeCoverageIgnore
      *
