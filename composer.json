@@ -25,7 +25,7 @@
 	"require": {
 		"php": "^7.1.3",
 		"doctrine/annotations": "1.5.0",
-		"doctrine/doctrine-fixtures-bundle": "2.4.1",
+		"doctrine/doctrine-fixtures-bundle": "3.0.0",
 		"doctrine/doctrine-migrations-bundle": "1.3.1",
 		"easycorp/easy-log-handler": "1.0.3",
 		"lexik/jwt-authentication-bundle": "2.4.2",
@@ -39,7 +39,7 @@
 		"symfony/asset": "3.3.13",
 		"symfony/console": "3.3.13",
 		"symfony/expression-language": "3.3.13",
-		"symfony/flex": "1.0.41",
+		"symfony/flex": "1.0.42",
 		"symfony/form": "3.3.13",
 		"symfony/framework-bundle": "3.3.13",
 		"symfony/lts": "v3",
