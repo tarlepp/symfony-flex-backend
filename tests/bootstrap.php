@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 /**
  * /tests/bootstrap.php
  *
@@ -15,9 +15,6 @@ declare(strict_types=1);
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 use App\Kernel;
-use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
-use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
-use Doctrine\Bundle\DoctrineBundle\Command\Proxy\UpdateSchemaDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -29,46 +26,39 @@ require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../bootstrap.php';
 
 // Create and boot 'test' kernel
-$kernel = new Kernel(getenv('APP_ENV'), getenv('APP_DEBUG'));
+$kernel = new Kernel(\getenv('APP_ENV'), \getenv('APP_DEBUG'));
 $kernel->boot();
 
 // Create new application
 $application = new Application($kernel);
+$application->setAutoExit(false);
 
 // Add the doctrine:database:drop command to the application and run it
 $dropDatabaseDoctrineCommand = function () use ($application) {
-    $command = new DropDatabaseDoctrineCommand();
-    $application->add($command);
-
     $input = new ArrayInput([
-        'command' => 'doctrine:database:drop',
-        '--force' => true,
+        'command'       => 'doctrine:database:drop',
+        '--force'       => true,
+        '--if-exists'   => true,
     ]);
 
     $input->setInteractive(false);
 
-    $command->run($input, new ConsoleOutput());
+    $application->run($input, new ConsoleOutput());
 };
 
 // Add the doctrine:database:create command to the application and run it
 $createDatabaseDoctrineCommand = function () use ($application) {
-    $command = new CreateDatabaseDoctrineCommand();
-    $application->add($command);
-
     $input = new ArrayInput([
         'command' => 'doctrine:database:create',
     ]);
 
     $input->setInteractive(false);
 
-    $command->run($input, new ConsoleOutput());
+    $application->run($input, new ConsoleOutput());
 };
 
 // Add the doctrine:schema:update command to the application and run it
 $updateSchemaDoctrineCommand = function () use ($application) {
-    $command = new UpdateSchemaDoctrineCommand();
-    $application->add($command);
-
     $input = new ArrayInput([
         'command' => 'doctrine:schema:update',
         '--force' => true,
@@ -76,23 +66,19 @@ $updateSchemaDoctrineCommand = function () use ($application) {
 
     $input->setInteractive(false);
 
-    $command->run($input, new ConsoleOutput());
+    $application->run($input, new ConsoleOutput());
 };
 
 // Add the doctrine:fixtures:load command to the application and run it
 $loadFixturesDoctrineCommand = function () use ($application) {
-    $command = new \Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand();
-    $application->add($command);
-
     $input = new ArrayInput([
         'command'           => 'doctrine:fixtures:load',
         '--no-interaction'  => true,
-        '--fixtures'        => $application->getKernel()->getRootDir() . '/DataFixtures/',
     ]);
 
     $input->setInteractive(false);
 
-    $command->run($input, new ConsoleOutput());
+    $application->run($input, new ConsoleOutput());
 };
 
 // And finally call each of initialize functions to make test environment ready
