@@ -10,7 +10,7 @@ namespace App\DataFixtures\ORM;
 use App\Entity\Role;
 use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
-use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package App\DataFixtures\ORM
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadRoleData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -83,6 +83,9 @@ class LoadRoleData extends AbstractFixture implements OrderedFixtureInterface, C
      * Method to create, persist and flush Role entity to database.
      *
      * @param string $role
+     *
+     * @throws \BadMethodCallException
+     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     private function createRole(string $role): void
     {

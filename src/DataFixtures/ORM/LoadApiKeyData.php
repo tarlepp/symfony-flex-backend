@@ -11,7 +11,7 @@ use App\Entity\ApiKey;
 use App\Entity\UserGroup;
 use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
-use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package App\DataFixtures\ORM
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LoadApiKeyData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -55,6 +55,8 @@ class LoadApiKeyData extends AbstractFixture implements OrderedFixtureInterface,
      *
      * @param ObjectManager $manager
      *
+     * @throws \BadMethodCallException
+     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
@@ -86,6 +88,9 @@ class LoadApiKeyData extends AbstractFixture implements OrderedFixtureInterface,
      * Helper method to create new ApiKey entity with specified role.
      *
      * @param string $role
+     *
+     * @throws \BadMethodCallException
+     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
     private function createApiKey(string $role = null): void
     {
