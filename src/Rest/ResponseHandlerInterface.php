@@ -25,8 +25,8 @@ interface ResponseHandlerInterface
      *
      * @var string
      */
-    const FORMAT_JSON = 'json';
-    const FORMAT_XML = 'xml';
+    public const FORMAT_JSON = 'json';
+    public const FORMAT_XML = 'xml';
 
     /**
      * ResponseHandler constructor.
