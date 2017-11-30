@@ -25,7 +25,7 @@
 	"require": {
 		"php": "^7.1.3",
 		"doctrine/annotations": "1.5.0",
-		"doctrine/doctrine-fixtures-bundle": "3.0.0",
+		"doctrine/doctrine-fixtures-bundle": "3.0.1",
 		"doctrine/doctrine-migrations-bundle": "1.3.1",
 		"easycorp/easy-log-handler": "1.0.3",
 		"lexik/jwt-authentication-bundle": "2.4.2",
@@ -34,7 +34,7 @@
 		"piwik/device-detector": "3.9.0",
 		"ramsey/uuid": "3.7.1",
 		"roave/security-advisories": "dev-master",
-		"sensio/framework-extra-bundle": "5.0.1",
+		"sensio/framework-extra-bundle": "5.1.1",
 		"stof/doctrine-extensions-bundle": "1.2.2",
 		"symfony/asset": "3.3.13",
 		"symfony/console": "3.3.13",

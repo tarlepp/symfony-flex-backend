@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "70e171684229bcf13c344fd688a6672b",
+    "content-hash": "a9efe1b58918df538ef96aae49c9246f",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -637,16 +637,16 @@
         },
         {
             "name": "doctrine/doctrine-fixtures-bundle",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineFixturesBundle.git",
-                "reference": "117162c48536c7f45ec00e0075a0523246cfa946"
+                "reference": "493961a60036fcd275228ff754c6b0778afda80f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/117162c48536c7f45ec00e0075a0523246cfa946",
-                "reference": "117162c48536c7f45ec00e0075a0523246cfa946",
+                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/493961a60036fcd275228ff754c6b0778afda80f",
+                "reference": "493961a60036fcd275228ff754c6b0778afda80f",
                 "shasum": ""
             },
             "require": {
@@ -694,7 +694,7 @@
                 "Fixture",
                 "persistence"
             ],
-            "time": "2017-11-28T19:27:20+00:00"
+            "time": "2017-11-30T12:13:19+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
@@ -2359,16 +2359,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v5.0.1",
+            "version": "v5.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "9e3fa14aa959f703961bc9e4ab00110d617bcfdd"
+                "reference": "4fc5d5ba02eee8bb02cc00548dfc5a98f6151fe8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/9e3fa14aa959f703961bc9e4ab00110d617bcfdd",
-                "reference": "9e3fa14aa959f703961bc9e4ab00110d617bcfdd",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/4fc5d5ba02eee8bb02cc00548dfc5a98f6151fe8",
+                "reference": "4fc5d5ba02eee8bb02cc00548dfc5a98f6151fe8",
                 "shasum": ""
             },
             "require": {
@@ -2401,7 +2401,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0.x-dev"
+                    "dev-master": "5.1.x-dev"
                 }
             },
             "autoload": {
@@ -2424,7 +2424,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2017-10-12T17:37:44+00:00"
+            "time": "2017-11-30T14:53:48+00:00"
         },
         {
             "name": "stof/doctrine-extensions-bundle",
