@@ -16,7 +16,7 @@ use App\Resource\UserResource;
 use App\Rest\RepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use PHPUnit_Framework_MockObject_MockBuilder;
+use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -102,6 +102,9 @@ class GenericResourceTest extends KernelTestCase
         $this->resource->getEntityName();
     }
 
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     */
     public function testThatGetReferenceCallsExpectedRepositoryMethod(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
@@ -311,6 +314,9 @@ class GenericResourceTest extends KernelTestCase
      *
      * @param array $expectedArguments
      * @param array $arguments
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testThatCountCallsExpectedRepositoryMethodWithCorrectParameters(
         array $expectedArguments,
@@ -610,9 +616,9 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockBuilder
+     * @return MockBuilder
      */
-    private function getRepositoryMockBuilder(): PHPUnit_Framework_MockObject_MockBuilder
+    private function getRepositoryMockBuilder(): MockBuilder
     {
         return $this
             ->getMockBuilder(UserRepository::class)
@@ -640,9 +646,9 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockBuilder
+     * @return MockBuilder
      */
-    private function getDtoMockBuilder(): PHPUnit_Framework_MockObject_MockBuilder
+    private function getDtoMockBuilder(): MockBuilder
     {
         return $this->getMockBuilder($this->dtoClass);
     }
