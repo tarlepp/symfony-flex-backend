@@ -39,7 +39,7 @@
 		"symfony/asset": "3.3.13",
 		"symfony/console": "3.3.13",
 		"symfony/expression-language": "3.3.13",
-		"symfony/flex": "1.0.43",
+		"symfony/flex": "1.0.44",
 		"symfony/form": "3.3.13",
 		"symfony/framework-bundle": "3.3.13",
 		"symfony/lts": "v3",
