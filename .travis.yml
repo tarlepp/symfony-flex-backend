@@ -42,6 +42,7 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_6;'
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_7;'
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_8;'
+  - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
 
 install:
   - composer install
