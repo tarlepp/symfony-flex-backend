@@ -25,6 +25,9 @@ class UserControllerTest extends WebTestCase
 {
     private $baseUrl = '/user';
 
+    /**
+     * @throws \Exception
+     */
     public function testThatGetBaseRouteReturn401(): void
     {
         $client = $this->getClient();
@@ -49,6 +52,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatCountActionReturnsExpected(string $username, string $password): void
     {
@@ -92,6 +97,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -141,6 +148,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatFindActionReturnsExpected(string $username, string $password): void
     {
@@ -163,6 +172,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -188,6 +199,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatIdsActionReturnExpected(string $username, string $password): void
     {
@@ -210,6 +223,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -232,6 +247,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @return string
+     *
+     * @throws \Exception
      */
     public function testThatCreateActionWorksLikeExpected(): string
     {
@@ -270,6 +287,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatCreateActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -303,6 +322,8 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      *
      * @return string
+     *
+     * @throws \Exception
      */
     public function testThatUpdateActionWorksLikeExpected(string $userId): string
     {
@@ -340,6 +361,8 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      *
      * @return string
+     *
+     * @throws \Exception
      */
     public function testThatUpdateActionReturns403ForInvalidUser(
         string $username,
@@ -379,6 +402,8 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      * @param string $userId
+     *
+     * @throws \Exception
      */
     public function testThatDeleteActionReturns403ForInvalidUser(
         string $username,
@@ -406,6 +431,8 @@ class UserControllerTest extends WebTestCase
      * @depends testThatUpdateActionWorksLikeExpected
      *
      * @param string $userId
+     *
+     * @throws \Exception
      */
     public function testThatDeleteActionWorksLikeExpected(string $userId): void
     {
@@ -420,6 +447,9 @@ class UserControllerTest extends WebTestCase
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
         self::bootKernel();
@@ -454,6 +484,8 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      * @param array  $userIds
+     *
+     * @throws \Exception
      */
     public function testThatGetUserRolesActionsReturns403ForInvalidUser(
         string $username,
@@ -481,6 +513,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param string $userId
      * @param string $expectedResponse
+     *
+     * @throws \Exception
      */
     public function testThatGetUserRolesActionsReturns200ForUserHimself(
         string $username,
@@ -507,6 +541,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $userId
      * @param string $expectedResponse
+     *
+     * @throws \Exception
      */
     public function testThatGetUserRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
     {
@@ -530,6 +566,8 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      * @param array  $userIds
+     *
+     * @throws \Exception
      */
     public function testThatGetUserGroupsActionsReturns403ForInvalidUser(
         string $username,
@@ -557,6 +595,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param string $expectedResponse
      * @param string $userId
+     *
+     * @throws \Exception
      */
     public function testThatGetUserGroupsActionsReturns200ForUserHimself(
         string $username,
@@ -589,6 +629,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatAttachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -632,6 +674,8 @@ class UserControllerTest extends WebTestCase
      * @dataProvider dataProviderTestThatAttachUserGroupActionWorksAsExpected
      *
      * @param int $expectedStatus
+     *
+     * @throws \Exception
      */
     public function testThatAttachUserGroupActionWorksAsExpected(int $expectedStatus): void
     {
@@ -670,6 +714,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @depends testThatAttachUserGroupActionWorksAsExpected
+     *
+     * @throws \Exception
      */
     public function testThatDetachUserGroupActionWorksAsExpected(): void
     {
@@ -707,12 +753,14 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @depends testThatDetachUserGroupActionWorksAsExpected
+     * @depends      testThatDetachUserGroupActionWorksAsExpected
      *
      * @dataProvider dataProviderInvalidUsersCreate
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatDetachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -759,6 +807,8 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $userId
      * @param string $expectedResponse
+     *
+     * @throws \Exception
      */
     public function testThatGetUserGroupsActionReturns200ForRootRoleUser(
         string $userId,
@@ -899,7 +949,7 @@ class UserControllerTest extends WebTestCase
         $userResource = static::$kernel->getContainer()->get(UserResource::class);
 
         /** @var RolesService $rolesService */
-        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+        $rolesService = static::$kernel->getContainer()->get('test.service_locator')->get(RolesService::class);
 
         $users = $userResource->find();
 
@@ -945,7 +995,7 @@ class UserControllerTest extends WebTestCase
         $userResource = static::$kernel->getContainer()->get(UserResource::class);
 
         /** @var RolesService $rolesService */
-        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+        $rolesService = static::$kernel->getContainer()->get('test.service_locator')->get(RolesService::class);
 
         $output = [];
 

@@ -341,7 +341,7 @@ class ProfileControllerTest extends WebTestCase
     {
         self::bootKernel();
 
-        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+        $rolesService = static::$kernel->getContainer()->get('test.service_locator')->get(RolesService::class);
 
         $iterator = function (string $role) use ($rolesService): array {
             return [\str_pad($rolesService->getShort($role), 40, '_')];
@@ -376,7 +376,7 @@ class ProfileControllerTest extends WebTestCase
     {
         self::bootKernel();
 
-        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+        $rolesService = static::$kernel->getContainer()->get('test.service_locator')->get(RolesService::class);
 
         $iterator = function (string $role) use ($rolesService): array {
             return [
@@ -414,7 +414,7 @@ class ProfileControllerTest extends WebTestCase
     {
         self::bootKernel();
 
-        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+        $rolesService = static::$kernel->getContainer()->get('test.service_locator')->get(RolesService::class);
 
         $iterator = function (string $role) use ($rolesService): array {
             return [
