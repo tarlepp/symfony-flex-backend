@@ -60,7 +60,7 @@ class UserEntitySubscriberTest extends KernelTestCase
         $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
 
         // Create listener
-        $this->subscriber = new UserEntitySubscriber($this->container->get('security.encoder_factory'));
+        $this->subscriber = new UserEntitySubscriber($this->container->get('test.service_locator')->get('security.encoder_factory'));
 
         // Create new user but not store it at this time
         $this->entity = new User();
@@ -70,7 +70,7 @@ class UserEntitySubscriberTest extends KernelTestCase
         $this->entity->setSurname('Doe');
 
         // Get used encoder
-        $this->encoder = $this->container->get('security.encoder_factory')->getEncoder($this->entity);
+        $this->encoder = $this->container->get('test.service_locator')->get('security.encoder_factory')->getEncoder($this->entity);
     }
 
     public function tearDown(): void

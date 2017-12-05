@@ -31,7 +31,7 @@ class ProfileControllerTest extends KernelTestCase
         self::bootKernel();
 
         $serializer = static::$kernel->getContainer()->get('serializer');
-        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+        $rolesService = static::$kernel->getContainer()->get('test.service_locator')->get(RolesService::class);
 
         $user = new User('test_user', 'test_password');
         $token = new PreAuthenticatedToken($user, 'credentials', 'providerKey', [RolesService::ROLE_LOGGED]);
