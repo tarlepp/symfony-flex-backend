@@ -17,9 +17,9 @@ require __DIR__ . '/../vendor/autoload.php';
 FastestEnvironment::setFromRequest();
 
 // The check is to ensure we don't use .env in production
-if (!getenv('APP_ENV')) {
+if (!\getenv('APP_ENV')) {
     // Specify used environment file
-    putenv('ENVIRONMENT_FILE=.env');
+    \putenv('ENVIRONMENT_FILE=.env');
 
     require __DIR__ . '/../bootstrap.php';
 }
@@ -37,8 +37,8 @@ if (getenv('APP_DEBUG')) {
             || PHP_SAPI === 'cli-server')
         )
     ) {
-        header('HTTP/1.0 403 Forbidden');
-        exit('You are not allowed to access this file. Check ' . basename(__FILE__) . ' for more information.');
+        \header('HTTP/1.0 403 Forbidden');
+        exit('You are not allowed to access this file. Check ' . \basename(__FILE__) . ' for more information.');
     }
 
     /** @noinspection ForgottenDebugOutputInspection */
@@ -48,7 +48,7 @@ if (getenv('APP_DEBUG')) {
 // Request::setTrustedProxies(['0.0.0.0/0'], Request::HEADER_FORWARDED);
 
 // Create new application kernel
-$kernel = new Kernel(getenv('APP_ENV'), getenv('APP_DEBUG'));
+$kernel = new Kernel(\getenv('APP_ENV'), (bool)\getenv('APP_DEBUG'));
 
 // Create request
 $request = Request::createFromGlobals();
