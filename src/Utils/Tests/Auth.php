@@ -53,14 +53,8 @@ class Auth
      */
     public function getAuthorizationHeadersForUser(string $username, string $password): array
     {
-        $key = \hash('sha512', $username . $password);
-
-        if (!\array_key_exists($key, $this->cache)) {
-            $this->cache[$key] = $this->getToken($username, $password);
-        }
-
         // Return valid authorization headers for user
-        return $this->getAuthorizationHeaders($this->cache[$key]);
+        return $this->getAuthorizationHeaders($this->getToken($username, $password));
     }
 
     /**
