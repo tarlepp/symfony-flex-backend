@@ -20,13 +20,13 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 // Specify used environment file
-putenv('ENVIRONMENT_FILE=.env.test');
+\putenv('ENVIRONMENT_FILE=.env.test');
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../bootstrap.php';
 
 // Create and boot 'test' kernel
-$kernel = new Kernel(\getenv('APP_ENV'), \getenv('APP_DEBUG'));
+$kernel = new Kernel(\getenv('APP_ENV'), (bool)\getenv('APP_DEBUG'));
 $kernel->boot();
 
 // Create new application
