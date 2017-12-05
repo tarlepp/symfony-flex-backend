@@ -31,7 +31,7 @@ class ApiKeyUserTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $rolesService = static::$kernel->getContainer()->get(RolesService::class);
+        $rolesService = static::$kernel->getContainer()->get('test.service_locator')->get(RolesService::class);
 
         $foo = new ApiKeyUser($apiKey, $rolesService);
 
