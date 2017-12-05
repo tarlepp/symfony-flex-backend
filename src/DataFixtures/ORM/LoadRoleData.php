@@ -60,7 +60,7 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
     public function load(ObjectManager $manager): void
     {
         $this->manager = $manager;
-        $this->roles = $this->container->get(RolesService::class);
+        $this->roles = $this->container->get('test.service_locator')->get(RolesService::class);
 
         // Create entities
         \array_map([$this, 'createRole'], $this->roles->getRoles());

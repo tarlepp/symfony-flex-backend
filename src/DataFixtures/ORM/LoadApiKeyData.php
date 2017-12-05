@@ -56,6 +56,8 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
      * @param ObjectManager $manager
      *
      * @throws \BadMethodCallException
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
@@ -63,7 +65,7 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
     public function load(ObjectManager $manager): void
     {
         $this->manager = $manager;
-        $this->roles = $this->container->get(RolesService::class);
+        $this->roles = $this->container->get('test.service_locator')->get(RolesService::class);
 
         // Create entities
         \array_map([$this, 'createApiKey'], $this->roles->getRoles());
