@@ -56,7 +56,7 @@ class WebTestCase extends BaseWebTestCase
             // We need to boot kernel up to get auth service
             self::bootKernel();
 
-            $this->authService = $this->getContainer()->get(Auth::class);
+            $this->authService = $this->getContainer()->get('test.service_locator')->get(Auth::class);
         }
 
         return $this->authService;
@@ -71,6 +71,8 @@ class WebTestCase extends BaseWebTestCase
      * @param array|null  $server
      *
      * @return Client
+     *
+     * @throws \Exception
      */
     public function getClient(
         string $username = null,
