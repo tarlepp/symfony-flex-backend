@@ -32,6 +32,7 @@ security:
             stateless: true
             anonymous: true
             json_login:
+                provider: user_provider
                 check_path: /auth/getToken
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
@@ -46,8 +47,10 @@ security:
             stateless: true
             anonymous: true
             simple_preauth:
+                provider: chain_provider
                 authenticator: App\Security\ApiKeyAuthenticator
             guard:
+                provider: user_provider
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
@@ -59,4 +62,3 @@ security:
 
     access_decision_manager:
         strategy: unanimous
-
