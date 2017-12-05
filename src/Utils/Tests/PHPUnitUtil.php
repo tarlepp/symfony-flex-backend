@@ -35,6 +35,7 @@ class PHPUnitUtil
         $input = new ArrayInput([
             'command'           => 'doctrine:fixtures:load',
             '--no-interaction'  => true,
+            '--quiet'           => true,
         ]);
 
         $input->setInteractive(false);
