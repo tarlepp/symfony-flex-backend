@@ -33,8 +33,8 @@ services:
         tags: [ 'doctrine.fixture.orm' ]
 
     App\Resource\:
-        resource: '../src/Resource'
-        public: true
+        resource: '../src/Resource/*'
+        tags: [ 'public_on_test' ]
 
     App\Rest\Describer\ApiDocDescriber:
         tags:
@@ -47,8 +47,4 @@ services:
             - { name: nelmio_api_doc.describer, priority: -500 }
 
     App\Security\RolesService:
-        public: true
         arguments: [ '%security.role_hierarchy.roles%' ]
-
-    App\Utils\Tests\Auth:
-        public: true
