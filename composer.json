@@ -30,6 +30,10 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/tarlepp/StofDoctrineExtensionsBundle"
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/tarlepp/fastest"
 		}
 	],
 	"require": {
