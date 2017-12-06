@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "16b0c8db6fc150332609c472c0e8c31b",
+    "content-hash": "1c02eb59d726cdf1ee98fc00fdcf055b",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1399,12 +1399,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tarlepp/symfony-console-form.git",
-                "reference": "af3e1bbd298a46b1968d9f7dcbb69cac33a4302a"
+                "reference": "efa10fb29a05ff8a5fbe88cb1f38eae149ee8198"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarlepp/symfony-console-form/zipball/af3e1bbd298a46b1968d9f7dcbb69cac33a4302a",
-                "reference": "af3e1bbd298a46b1968d9f7dcbb69cac33a4302a",
+                "url": "https://api.github.com/repos/tarlepp/symfony-console-form/zipball/efa10fb29a05ff8a5fbe88cb1f38eae149ee8198",
+                "reference": "efa10fb29a05ff8a5fbe88cb1f38eae149ee8198",
                 "shasum": ""
             },
             "require": {
@@ -1415,8 +1415,8 @@
             "require-dev": {
                 "beberlei/assert": "~2.1",
                 "behat/behat": "~3.0",
-                "friendsofphp/php-cs-fixer": "^1.10",
-                "phpunit/phpunit": "^4.8",
+                "friendsofphp/php-cs-fixer": "^1.10|^2.2",
+                "phpunit/phpunit": "^4.8|^6.0",
                 "symfony/finder": "~2.8|~3.0|~4.0",
                 "symfony/framework-bundle": "~2.8|~3.0|~4.0",
                 "symfony/security": "~2.8|~3.0|~4.0",
@@ -1454,7 +1454,7 @@
             "support": {
                 "source": "https://github.com/tarlepp/symfony-console-form/tree/master"
             },
-            "time": "2017-11-30T18:08:53+00:00"
+            "time": "2017-12-06T12:05:14+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -2226,12 +2226,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "f793fe6ff54acabd9bc9f76f4a9ad3c89a68c789"
+                "reference": "497fce9103b12b99e8d166bc466d015f5b07c0d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f793fe6ff54acabd9bc9f76f4a9ad3c89a68c789",
-                "reference": "f793fe6ff54acabd9bc9f76f4a9ad3c89a68c789",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/497fce9103b12b99e8d166bc466d015f5b07c0d8",
+                "reference": "497fce9103b12b99e8d166bc466d015f5b07c0d8",
                 "shasum": ""
             },
             "conflict": {
@@ -2313,7 +2313,7 @@
                 "symfony/web-profiler-bundle": ">=2,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
+                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
                 "twig/twig": "<1.20",
                 "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.22|>=8,<8.7.5",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
@@ -2362,7 +2362,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-11-24T16:44:41+00:00"
+            "time": "2017-12-05T17:52:25+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -5483,22 +5483,22 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/liuggio/fastest.git",
-                "reference": "b1cadad7273db4b534df6a805f269d8bd02996f3"
+                "url": "https://github.com/tarlepp/fastest.git",
+                "reference": "8b5a6f3516513cdd41cee2c9acb6928c53a501b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liuggio/fastest/zipball/b1cadad7273db4b534df6a805f269d8bd02996f3",
-                "reference": "b1cadad7273db4b534df6a805f269d8bd02996f3",
+                "url": "https://api.github.com/repos/tarlepp/fastest/zipball/8b5a6f3516513cdd41cee2c9acb6928c53a501b4",
+                "reference": "8b5a6f3516513cdd41cee2c9acb6928c53a501b4",
                 "shasum": ""
             },
             "require": {
                 "doctrine/collections": "~1.2",
                 "php": ">=5.6",
                 "phpunit/phpunit": "^5.7|^6.1",
-                "symfony/console": ">=2.7 <5.0",
-                "symfony/process": ">=2.7 <5.0",
-                "symfony/stopwatch": ">=2.7 <5.0"
+                "symfony/console": "~2.7|~3.0|~4.0",
+                "symfony/process": "~2.7|~3.0|~4.0",
+                "symfony/stopwatch": "~2.7|~3.0|~4.0"
             },
             "require-dev": {
                 "behat/behat": "~2.5"
@@ -5523,7 +5523,11 @@
                     ]
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Liuggio\\Fastest\\": "tests"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -5534,7 +5538,10 @@
                 }
             ],
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
-            "time": "2017-12-01T09:22:29+00:00"
+            "support": {
+                "source": "https://github.com/tarlepp/fastest/tree/master"
+            },
+            "time": "2017-12-06T12:46:05+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -6121,16 +6128,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "5.2.4",
+            "version": "5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "033ec97498cf530cc1be4199264cad568b19be26"
+                "reference": "661f34d0bd3f1a7225ef491a70a020ad23a057a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/033ec97498cf530cc1be4199264cad568b19be26",
-                "reference": "033ec97498cf530cc1be4199264cad568b19be26",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/661f34d0bd3f1a7225ef491a70a020ad23a057a1",
+                "reference": "661f34d0bd3f1a7225ef491a70a020ad23a057a1",
                 "shasum": ""
             },
             "require": {
@@ -6146,7 +6153,6 @@
                 "theseer/tokenizer": "^1.1"
             },
             "require-dev": {
-                "ext-xdebug": "^2.5",
                 "phpunit/phpunit": "^6.0"
             },
             "suggest": {
@@ -6155,7 +6161,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.2.x-dev"
+                    "dev-master": "5.3.x-dev"
                 }
             },
             "autoload": {
@@ -6170,7 +6176,7 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sb@sebastian-bergmann.de",
+                    "email": "sebastian@phpunit.de",
                     "role": "lead"
                 }
             ],
@@ -6181,7 +6187,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-11-27T09:00:30+00:00"
+            "time": "2017-12-06T09:29:45+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
