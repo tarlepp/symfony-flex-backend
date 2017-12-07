@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6b6c15dfaee5c01bf9abab0e2994c22",
+    "content-hash": "2f92de156f2a525c69dfee677eb32d94",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5483,22 +5483,22 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/liuggio/fastest.git",
-                "reference": "b1cadad7273db4b534df6a805f269d8bd02996f3"
+                "url": "https://github.com/tarlepp/fastest.git",
+                "reference": "8416cdf001326c84abec88641a2552ac101e0f3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liuggio/fastest/zipball/b1cadad7273db4b534df6a805f269d8bd02996f3",
-                "reference": "b1cadad7273db4b534df6a805f269d8bd02996f3",
+                "url": "https://api.github.com/repos/tarlepp/fastest/zipball/8416cdf001326c84abec88641a2552ac101e0f3c",
+                "reference": "8416cdf001326c84abec88641a2552ac101e0f3c",
                 "shasum": ""
             },
             "require": {
                 "doctrine/collections": "~1.2",
                 "php": ">=5.6",
                 "phpunit/phpunit": "^5.7|^6.1",
-                "symfony/console": ">=2.7 <5.0",
-                "symfony/process": ">=2.7 <5.0",
-                "symfony/stopwatch": ">=2.7 <5.0"
+                "symfony/console": "~2.7|~3.0|~4.0",
+                "symfony/process": "~2.7|~3.0|~4.0",
+                "symfony/stopwatch": "~2.7|~3.0|~4.0"
             },
             "require-dev": {
                 "behat/behat": "~2.5"
@@ -5523,7 +5523,11 @@
                     ]
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Liuggio\\Fastest\\": "tests"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -5534,7 +5538,10 @@
                 }
             ],
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
-            "time": "2017-12-01T09:22:29+00:00"
+            "support": {
+                "source": "https://github.com/tarlepp/fastest/tree/master"
+            },
+            "time": "2017-12-07T15:34:52+00:00"
         },
         {
             "name": "myclabs/deep-copy",
