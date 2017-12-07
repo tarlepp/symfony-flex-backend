@@ -45,6 +45,7 @@ before_install:
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
 
 install:
+  - composer clear-cache
   - composer install
   - make generate-jwt-keys
 
