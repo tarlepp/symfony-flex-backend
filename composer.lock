@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1c02eb59d726cdf1ee98fc00fdcf055b",
+    "content-hash": "b6b6c15dfaee5c01bf9abab0e2994c22",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1299,16 +1299,16 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "v2.4.2",
+            "version": "v2.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "dc18aa89554e0596ed4cdd537dbbfea0b25f34a1"
+                "reference": "01dbe7ffdf91df2e263f2bb2307f7cacfcb29b82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/dc18aa89554e0596ed4cdd537dbbfea0b25f34a1",
-                "reference": "dc18aa89554e0596ed4cdd537dbbfea0b25f34a1",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/01dbe7ffdf91df2e263f2bb2307f7cacfcb29b82",
+                "reference": "01dbe7ffdf91df2e263f2bb2307f7cacfcb29b82",
                 "shasum": ""
             },
             "require": {
@@ -1323,7 +1323,7 @@
                 "lcobucci/jwt": "~3.2",
                 "symfony/browser-kit": "^2.8|^3.0|^4.0",
                 "symfony/dom-crawler": "^2.8|^3.0|^4.0",
-                "symfony/phpunit-bridge": "~3.2",
+                "symfony/phpunit-bridge": "~3.3",
                 "symfony/yaml": "^2.8|^3.0|^4.0"
             },
             "suggest": {
@@ -1391,7 +1391,7 @@
                 "rest",
                 "symfony"
             ],
-            "time": "2017-10-19T08:52:34+00:00"
+            "time": "2017-11-10T12:18:03+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -3168,16 +3168,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.45",
+            "version": "v1.0.46",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "8917eb9e7d490088b85ea2a4cd7f2ad52bb0d9ee"
+                "reference": "d511e9d81301ecb1fe533cbba2c40809c58c6b62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/8917eb9e7d490088b85ea2a4cd7f2ad52bb0d9ee",
-                "reference": "8917eb9e7d490088b85ea2a4cd7f2ad52bb0d9ee",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/d511e9d81301ecb1fe533cbba2c40809c58c6b62",
+                "reference": "d511e9d81301ecb1fe533cbba2c40809c58c6b62",
                 "shasum": ""
             },
             "require": {
@@ -3210,7 +3210,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2017-12-04T22:00:42+00:00"
+            "time": "2017-12-06T21:01:41+00:00"
         },
         {
             "name": "symfony/form",
@@ -5483,22 +5483,22 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tarlepp/fastest.git",
-                "reference": "8b5a6f3516513cdd41cee2c9acb6928c53a501b4"
+                "url": "https://github.com/liuggio/fastest.git",
+                "reference": "b1cadad7273db4b534df6a805f269d8bd02996f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarlepp/fastest/zipball/8b5a6f3516513cdd41cee2c9acb6928c53a501b4",
-                "reference": "8b5a6f3516513cdd41cee2c9acb6928c53a501b4",
+                "url": "https://api.github.com/repos/liuggio/fastest/zipball/b1cadad7273db4b534df6a805f269d8bd02996f3",
+                "reference": "b1cadad7273db4b534df6a805f269d8bd02996f3",
                 "shasum": ""
             },
             "require": {
                 "doctrine/collections": "~1.2",
                 "php": ">=5.6",
                 "phpunit/phpunit": "^5.7|^6.1",
-                "symfony/console": "~2.7|~3.0|~4.0",
-                "symfony/process": "~2.7|~3.0|~4.0",
-                "symfony/stopwatch": "~2.7|~3.0|~4.0"
+                "symfony/console": ">=2.7 <5.0",
+                "symfony/process": ">=2.7 <5.0",
+                "symfony/stopwatch": ">=2.7 <5.0"
             },
             "require-dev": {
                 "behat/behat": "~2.5"
@@ -5523,11 +5523,7 @@
                     ]
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Liuggio\\Fastest\\": "tests"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5538,10 +5534,7 @@
                 }
             ],
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
-            "support": {
-                "source": "https://github.com/tarlepp/fastest/tree/master"
-            },
-            "time": "2017-12-06T12:46:05+00:00"
+            "time": "2017-12-01T09:22:29+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -6429,16 +6422,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.5.2",
+            "version": "6.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "24b708f2fd725bcef1c8153b366043381aa324f2"
+                "reference": "882e886cc928a0abd3c61282b2a64026237d14a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/24b708f2fd725bcef1c8153b366043381aa324f2",
-                "reference": "24b708f2fd725bcef1c8153b366043381aa324f2",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/882e886cc928a0abd3c61282b2a64026237d14a4",
+                "reference": "882e886cc928a0abd3c61282b2a64026237d14a4",
                 "shasum": ""
             },
             "require": {
@@ -6452,7 +6445,7 @@
                 "phar-io/version": "^1.0",
                 "php": "^7.0",
                 "phpspec/prophecy": "^1.7",
-                "phpunit/php-code-coverage": "^5.2.3",
+                "phpunit/php-code-coverage": "^5.3",
                 "phpunit/php-file-iterator": "^1.4.3",
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-timer": "^1.0.9",
@@ -6509,7 +6502,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-12-02T05:36:24+00:00"
+            "time": "2017-12-06T09:42:03+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
