@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2f92de156f2a525c69dfee677eb32d94",
+    "content-hash": "ea0ff29f611f845781fb172101c04ff2",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1395,33 +1395,32 @@
         },
         {
             "name": "matthiasnoback/symfony-console-form",
-            "version": "dev-master",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tarlepp/symfony-console-form.git",
-                "reference": "efa10fb29a05ff8a5fbe88cb1f38eae149ee8198"
+                "url": "https://github.com/matthiasnoback/symfony-console-form.git",
+                "reference": "18b9e6fddd37f8887e9ee05a98fae10d579b4ffb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarlepp/symfony-console-form/zipball/efa10fb29a05ff8a5fbe88cb1f38eae149ee8198",
-                "reference": "efa10fb29a05ff8a5fbe88cb1f38eae149ee8198",
+                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/18b9e6fddd37f8887e9ee05a98fae10d579b4ffb",
+                "reference": "18b9e6fddd37f8887e9ee05a98fae10d579b4ffb",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
-                "symfony/console": "~2.8|~3.0|~4.0",
-                "symfony/form": "~2.8|~3.0|~4.0"
+                "php": ">=7.0",
+                "symfony/console": "~3.0|~4.0",
+                "symfony/form": "~3.0|~4.0"
             },
             "require-dev": {
                 "beberlei/assert": "~2.1",
                 "behat/behat": "~3.0",
                 "friendsofphp/php-cs-fixer": "^1.10|^2.2",
-                "phpunit/phpunit": "^4.8|^6.0",
-                "symfony/finder": "~2.8|~3.0|~4.0",
-                "symfony/framework-bundle": "~2.8|~3.0|~4.0",
-                "symfony/security": "~2.8|~3.0|~4.0",
-                "symfony/validator": "~2.8|~3.0|~4.0",
-                "symfony/yaml": "~2.8|~3.0|~4.0"
+                "symfony/finder": "~3.0|~4.0",
+                "symfony/framework-bundle": "~3.0|~4.0",
+                "symfony/security": "~3.0|~4.0",
+                "symfony/validator": "~3.0|~4.0",
+                "symfony/yaml": "~3.0|~4.0"
             },
             "type": "library",
             "autoload": {
@@ -1429,11 +1428,7 @@
                     "Matthias\\SymfonyConsoleForm\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Matthias\\SymfonyConsoleForm\\Tests\\": "test/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1447,14 +1442,11 @@
             "description": "Use Symfony forms for Console command input",
             "homepage": "http://github.com/matthiasnoback/symfony-console-form",
             "keywords": [
-                "Symfony",
                 "console",
-                "form"
+                "form",
+                "symfony"
             ],
-            "support": {
-                "source": "https://github.com/tarlepp/symfony-console-form/tree/master"
-            },
-            "time": "2017-12-06T12:05:14+00:00"
+            "time": "2017-12-07T14:49:06+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -8081,7 +8073,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "matthiasnoback/symfony-console-form": 20,
         "nelmio/api-doc-bundle": 20,
         "roave/security-advisories": 20,
         "stof/doctrine-extensions-bundle": 20,
