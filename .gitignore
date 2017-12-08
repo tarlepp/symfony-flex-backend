@@ -19,11 +19,10 @@
 allowed_addresses_local.php
 
 /build/
+###> symfony/phpunit-bridge ###
+/phpunit.xml
+###< symfony/phpunit-bridge ###
 
 ###> symfony/web-server-bundle ###
 .web-server-pid
 ###< symfony/web-server-bundle ###
-
-###> symfony/phpunit-bridge ###
-/phpunit.xml
-###< symfony/phpunit-bridge ###

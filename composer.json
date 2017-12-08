@@ -55,7 +55,6 @@
 		"symfony/lts": "^4@dev",
 		"symfony/monolog-bundle": "3.1.2",
 		"symfony/orm-pack": "1.0.4",
-		"symfony/security": "4.0.1",
 		"symfony/security-bundle": "4.0.1",
 		"symfony/serializer": "4.0.1",
 		"symfony/twig-bundle": "4.0.1",
@@ -72,10 +71,9 @@
 		"sensiolabs/security-checker": "4.1.6",
 		"squizlabs/php_codesniffer": "3.1.1",
 		"symfony/browser-kit": "4.0.1",
+		"symfony/debug-pack": "^1.0",
 		"symfony/dotenv": "4.0.1",
-		"symfony/phpunit-bridge": "4.0.1",
 		"symfony/requirements-checker": "1.0.3",
-		"symfony/web-profiler-bundle": "4.0.1",
 		"symfony/web-server-bundle": "4.0.1"
 	},
 	"config": {
