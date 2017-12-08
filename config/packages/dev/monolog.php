@@ -6,29 +6,33 @@ use Symfony\Component\Config\Resource\ClassExistenceResource;
 use Symfony\Component\Console\Application;
 
 $handlers = [
-    'main' => [
+    'main'          => [
         'type'      => 'stream',
         'path'      => '%kernel.logs_dir%/%kernel.environment%.log',
         'level'     => 'debug',
-        'channels'  => ['!event'],
+        'channels'  => [
+            '!event',
+        ],
     ],
-    'buffered' => [
+    'buffered'      => [
         'type'      => 'buffer',
         'handler'   => 'easylog',
-        'channels'  => ['!event'],
+        'channels'  => [
+            '!event',
+        ],
         'level'     => 'debug',
     ],
-    'firephp' => [
-        'type'  => 'firephp',
-        'level' => 'info',
+    'firephp'       => [
+        'type'      => 'firephp',
+        'level'     => 'info',
     ],
-    'chromephp' => [
-        'type'  => 'chromephp',
-        'level' => 'info',
+    'chromephp'     => [
+        'type'      => 'chromephp',
+        'level'     => 'info',
     ],
-    'easylog' => [
-        'type'  => 'service',
-        'id'    => EasyLogHandler::class,
+    'easylog'       => [
+        'type'      => 'service',
+        'id'        => EasyLogHandler::class,
     ],
 
 ];
@@ -39,7 +43,11 @@ if (class_exists(Application::class)) {
     $handlers['console'] = [
         'type'                      => 'console',
         'process_psr_3_messages'    => false,
-        'channels'                  => ['!event', '!doctrine', '!console'],
+        'channels'                  => [
+            '!event',
+            '!doctrine',
+            '!console',
+        ],
     ];
 }
 
