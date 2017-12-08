@@ -49,7 +49,7 @@
 		"symfony/asset": "4.0.1",
 		"symfony/console": "4.0.1",
 		"symfony/expression-language": "4.0.1",
-		"symfony/flex": "1.0.46",
+		"symfony/flex": "1.0.48",
 		"symfony/form": "4.0.1",
 		"symfony/framework-bundle": "4.0.1",
 		"symfony/lts": "^4@dev",
