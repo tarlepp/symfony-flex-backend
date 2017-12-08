@@ -2,31 +2,26 @@ security:
     # http://symfony.com/doc/current/cookbook/security/named_encoders.html
     encoders:
         Symfony\Component\Security\Core\User\User:
-            algorithm: bcrypt
-            cost: 12
-
+            algorithm: argon2i
         App\Entity\User:
-            algorithm: bcrypt
-            cost: 12
+            algorithm: argon2i
 
     # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         chain_provider:
             chain:
                 providers: [user_provider, api_key_user_provider]
-
         api_key_user_provider:
             id: App\Security\ApiKeyUserProvider
-
         user_provider:
             entity:
                 class: App\Entity\User
 
+    # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
         login:
             pattern: ^/auth/getToken$
             stateless: true
@@ -36,12 +31,10 @@ security:
                 check_path: /auth/getToken
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
         root:
             pattern: ^/$
             stateless: true
             anonymous: true
-
         api:
             pattern: ^/
             stateless: true
