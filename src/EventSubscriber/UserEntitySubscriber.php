@@ -10,8 +10,7 @@ namespace App\EventSubscriber;
 use App\Entity\User;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class UserEntitySubscriber
@@ -22,34 +21,20 @@ use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 class UserEntitySubscriber
 {
     /**
-     * Used encoder factory.
+     * Used password encoder
      *
-     * @var EncoderFactoryInterface
+     * @var UserPasswordEncoderInterface
      */
-    private $encoderFactory;
+    private $userPasswordEncoder;
 
     /**
      * Constructor
      *
-     * @param EncoderFactoryInterface $encoderFactory
+     * @param UserPasswordEncoderInterface $userPasswordEncoder
      */
-    public function __construct(EncoderFactoryInterface $encoderFactory)
+    public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
     {
-        $this->encoderFactory = $encoderFactory;
-    }
-
-    /**
-     * Getter for user password encoder factory.
-     *
-     * @param User $user
-     *
-     * @return PasswordEncoderInterface
-     *
-     * @throws \RuntimeException
-     */
-    public function getEncoder(User $user): PasswordEncoderInterface
-    {
-        return $this->encoderFactory->getEncoder($user);
+        $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     /**
@@ -115,11 +100,9 @@ class UserEntitySubscriber
                 throw new \LengthException('Too short password');
             }
 
-            $encoder = $this->getEncoder($user);
-
             // Password hash callback
-            $callback = function ($plainPassword) use ($encoder, $user) {
-                return $encoder->encodePassword($plainPassword, $user->getSalt());
+            $callback = function ($plainPassword) use ($user) {
+                return $this->userPasswordEncoder->encodePassword($user, $plainPassword);
             };
 
             // Set new password and encode it with user encoder

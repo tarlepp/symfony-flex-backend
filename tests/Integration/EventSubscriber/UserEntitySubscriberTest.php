@@ -14,7 +14,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class UserEntitySubscriberTest
@@ -40,7 +40,7 @@ class UserEntitySubscriberTest extends KernelTestCase
     protected $entity;
 
     /**
-     * @var PasswordEncoderInterface
+     * @var UserPasswordEncoderInterface
      */
     protected $encoder;
 
@@ -59,8 +59,10 @@ class UserEntitySubscriberTest extends KernelTestCase
         $this->container = static::$kernel->getContainer();
         $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
 
+        $this->encoder = $this->container->get('security.password_encoder');
+
         // Create listener
-        $this->subscriber = new UserEntitySubscriber($this->container->get('test.service_locator')->get('security.encoder_factory'));
+        $this->subscriber = new UserEntitySubscriber($this->encoder);
 
         // Create new user but not store it at this time
         $this->entity = new User();
@@ -68,11 +70,11 @@ class UserEntitySubscriberTest extends KernelTestCase
         $this->entity->setEmail('john.doe_the_tester@test.com');
         $this->entity->setFirstname('John');
         $this->entity->setSurname('Doe');
-
-        // Get used encoder
-        $this->encoder = $this->container->get('test.service_locator')->get('security.encoder_factory')->getEncoder($this->entity);
     }
 
+    /**
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
     public function tearDown(): void
     {
         if ($this->entityManager->contains($this->entity)) {
@@ -142,7 +144,7 @@ class UserEntitySubscriberTest extends KernelTestCase
         static::assertNotSame($oldPassword, $this->entity->getPassword(), 'Password was not changed by the listener.');
 
         static::assertTrue(
-            $this->encoder->isPasswordValid($this->entity->getPassword(), 'test_test', ''),
+            $this->encoder->isPasswordValid($this->entity, 'test_test'),
             'Changed password is not valid.'
         );
     }
@@ -152,14 +154,14 @@ class UserEntitySubscriberTest extends KernelTestCase
         $encoder = $this->encoder;
 
         $callable = function ($password) use ($encoder) {
-            return $encoder->encodePassword($password, '');
+            return $encoder->encodePassword($this->entity, $password);
         };
 
         // Create encrypted password manually for user
         $this->entity->setPassword($callable, 'test_test');
 
         // Set plain password so that listener can make a real one
-        $this->entity->setPlainPassword('test_test');
+        $this->entity->setPlainPassword('test_test_test');
 
         // Get store old password
         $oldPassword = $this->entity->getPassword();
@@ -178,7 +180,7 @@ class UserEntitySubscriberTest extends KernelTestCase
         static::assertNotSame($oldPassword, $this->entity->getPassword(), 'Password was not changed by the listener.');
 
         static::assertTrue(
-            $this->encoder->isPasswordValid($this->entity->getPassword(), 'test_test', ''),
+            $this->encoder->isPasswordValid($this->entity, 'test_test_test'),
             'Changed password is not valid.'
         );
     }
