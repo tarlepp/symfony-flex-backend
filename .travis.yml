@@ -43,8 +43,7 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_7;'
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_8;'
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - sudo apt-get install libsodium
-  - pecl install -f libsodium
+  - sudo pecl install -f libsodium
 
 install:
   - composer clear-cache
