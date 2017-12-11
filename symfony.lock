@@ -137,6 +137,9 @@
             "ref": "d13bb99357ebcd2ffb6fe808a64961f5bc1c7546"
         }
     },
+    "nelmio/cors-bundle": {
+        "version": "1.5.x-dev"
+    },
     "nikic/php-parser": {
         "version": "v3.1.1"
     },
