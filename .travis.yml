@@ -43,6 +43,12 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_7;'
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_8;'
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
+  - wget https://download.libsodium.org/libsodium/releases/libsodium-1.0.15.tar.gz
+  - tar xvzf libsodium-1.0.15.tar.gz
+  - cd libsodium-1.0.15
+  - ./configure
+  - make && make check
+  - sudo make install
   - pecl install -f libsodium
 
 install:
