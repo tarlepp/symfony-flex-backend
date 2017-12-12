@@ -278,17 +278,23 @@ class User extends RestDto implements UserInterface
         foreach ($this->getVisited() as $property) {
             if ($property === 'password') {
                 $entity->setPlainPassword($this->$property);
-            } elseif ($property === 'userGroups') {
+
+                continue;
+            }
+
+            if ($property === 'userGroups') {
                 $entity->clearUserGroups();
 
                 \array_map([$entity, 'addUserGroup'], $this->$property);
-            } else {
-                // Determine setter method
-                $setter = 'set' . \ucfirst($property);
 
-                // Update current dto property value
-                $entity->$setter($this->$property);
+                continue;
             }
+
+            // Determine setter method
+            $setter = 'set' . \ucfirst($property);
+
+            // Update current dto property value
+            $entity->$setter($this->$property);
         }
 
         return $entity;
