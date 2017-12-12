@@ -1,5 +1,5 @@
 ---
-engines:
+plugins:
   duplication:
     enabled: true
     config:
@@ -53,12 +53,7 @@ checks:
   identical-code:
     config:
       threshold: # language-specific defaults. an override will affect all languages.
-ratings:
-  paths:
-  - "**.php"
-  - "**.md"
-  - composer.*
-exclude_paths:
+exclude_patterns:
 - ".idea/"
 - bin/
 - build/
