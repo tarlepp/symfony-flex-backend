@@ -58,12 +58,12 @@ class JWTDecodedSubscriber
 
         $request = $this->requestStack->getCurrentRequest();
 
+        $this->checkPayload($event, $request);
+
         if ($request === null) {
             $this->logger->error('Request not available');
 
             $event->markAsInvalid();
-        } else {
-            $this->checkPayload($event, $request);
         }
     }
 
@@ -71,10 +71,14 @@ class JWTDecodedSubscriber
      * Method to check payload data.
      *
      * @param JWTDecodedEvent $event
-     * @param Request         $request
+     * @param Request|null    $request
      */
-    private function checkPayload(JWTDecodedEvent $event, Request $request): void
+    private function checkPayload(JWTDecodedEvent $event, Request $request = null): void
     {
+        if ($request === null) {
+            return;
+        }
+
         $payload = $event->getPayload();
 
         // Get bits for checksum calculation
