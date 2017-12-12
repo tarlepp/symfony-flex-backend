@@ -60,9 +60,9 @@ before_script:
   - php ./vendor/bin/phpunit --version
   - php ./vendor/bin/requirements-checker
   - mkdir -p build/fastest
-  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-  - chmod +x ./cc-test-reporter
-  - ./cc-test-reporter before-build
+  - if [[ $COVERAGE == true ]]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
+  - if [[ $COVERAGE == true ]]; then chmod +x ./cc-test-reporter; fi
+  - if [[ $COVERAGE == true ]]; then ./cc-test-reporter before-build; fi
 
 script:
   - find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
