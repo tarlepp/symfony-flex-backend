@@ -10,6 +10,8 @@ namespace App\Rest\Traits;
 /**
  * Trait RestResourceCount
  *
+ * @SuppressWarnings("unused")
+ *
  * @package App\Rest\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */

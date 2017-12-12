@@ -85,6 +85,8 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
      * It is up to the implementation to decide if the user data should be totally reloaded (e.g. from the database),
      * or if the UserInterface object can just be merged into some internal array of users / identity map.
      *
+     * @SuppressWarnings("unused")
+     *
      * @param UserInterface $user
      *
      * @throws \Symfony\Component\Security\Core\Exception\UnsupportedUserException

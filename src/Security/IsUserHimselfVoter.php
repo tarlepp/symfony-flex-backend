@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class IsUserHimselfVoter extends Voter
 {
-    const ATTRIBUTE = 'IS_USER_HIMSELF';
+    private const ATTRIBUTE = 'IS_USER_HIMSELF';
 
     /**
      * Determines if the attribute and subject are supported by this voter.
@@ -37,6 +37,8 @@ class IsUserHimselfVoter extends Voter
     /**
      * Perform a single access check operation on a given attribute, subject and token.
      * It is safe to assume that $attribute and $subject already passed the "supports()" method check.
+     *
+     * @SuppressWarnings("unused")
      *
      * @param string         $attribute
      * @param User           $subject

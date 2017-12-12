@@ -12,6 +12,8 @@ use App\Entity\EntityInterface;
 /**
  * Trait RestResourceFindOneBy
  *
+ * @SuppressWarnings("unused")
+ *
  * @package App\Rest\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
