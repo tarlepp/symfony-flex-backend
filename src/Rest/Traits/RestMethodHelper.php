@@ -192,6 +192,8 @@ trait RestMethodHelper
     /**
      * Method to process current criteria array.
      *
+     * @SuppressWarnings("unused")
+     *
      * @param array $criteria
      */
     public function processCriteria(/** @scrutinizer ignore-unused */ array &$criteria): void

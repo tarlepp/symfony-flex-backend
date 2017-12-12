@@ -69,6 +69,8 @@ class UserPatchType extends AbstractType
     ];
 
     /**
+     * @SuppressWarnings("unused")
+     *
      * @param FormBuilderInterface $builder
      * @param array                $options
      *

@@ -64,6 +64,8 @@ class ApiKeyType extends AbstractType
     }
 
     /**
+     * @SuppressWarnings("unused")
+     *
      * @param FormBuilderInterface $builder
      * @param array                $options
      *
