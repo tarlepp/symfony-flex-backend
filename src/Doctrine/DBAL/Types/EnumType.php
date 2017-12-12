@@ -31,6 +31,8 @@ abstract class EnumType extends Type
     /**
      * Gets the SQL declaration snippet for a field of this type.
      *
+     * @SuppressWarnings("unused")
+     *
      * @param array            $fieldDeclaration
      * @param AbstractPlatform $platform
      *
