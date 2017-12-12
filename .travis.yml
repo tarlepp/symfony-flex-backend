@@ -60,6 +60,9 @@ before_script:
   - php ./vendor/bin/phpunit --version
   - php ./vendor/bin/requirements-checker
   - mkdir -p build/fastest
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 script:
   - find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
@@ -68,7 +71,7 @@ script:
 after_success:
   - if [[ $COVERAGE == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi
   - if [[ $COVERAGE == true ]]; then php ./vendor/bin/coveralls -v; fi
-  - if [[ $COVERAGE == true ]]; then php ./vendor/bin/test-reporter -v; fi
+  - if [[ $COVERAGE == true ]]; then php ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT fi
   - if [[ $COVERAGE == true ]]; then wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml; fi
 
 after_failure:
