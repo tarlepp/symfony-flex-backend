@@ -466,6 +466,9 @@ trait LogRequestProcessRequestTrait
     {
         $content = (string)$request->getContent();
 
+        // By default just get whole parameter bag
+        $output = $request->request->all();
+
         // Content given so parse it
         if ($content) {
             // First try to convert content to array from JSON
@@ -477,8 +480,6 @@ trait LogRequestProcessRequestTrait
 
                 \parse_str($content, $output);
             }
-        } else { // Otherwise trust parameter bag
-            $output = $request->request->all();
         }
 
         return (array)$output;
