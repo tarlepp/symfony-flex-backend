@@ -108,10 +108,10 @@ final class ResponseHandler implements ResponseHandlerInterface
 
         $populate = $this->checkPopulateAll($populateAll, $populate, $entityName);
 
+        $groups = \array_merge([$entityName], $populate);
+
         if ($populateOnly) {
             $groups = \count($populate) === 0 ? [$entityName] : $populate;
-        } else {
-            $groups = \array_merge([$entityName], $populate);
         }
 
         return [
@@ -168,14 +168,16 @@ final class ResponseHandler implements ResponseHandlerInterface
         foreach ($form->getErrors(true) as $error) {
             $name = $error->getOrigin()->getName();
 
+            $errors[] = \sprintf(
+                'Field \'%s\': %s',
+                $name,
+                $error->getMessage()
+            );
+
             if (empty($name)) {
+                \array_pop($errors);
+
                 $errors[] = $error->getMessage();
-            } else {
-                $errors[] = \sprintf(
-                    'Field \'%s\': %s',
-                    $name,
-                    $error->getMessage()
-                );
             }
         }
 
