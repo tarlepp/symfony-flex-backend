@@ -45,7 +45,16 @@ if (getenv('APP_DEBUG')) {
     Debug::enable();
 }
 
-// Request::setTrustedProxies(['0.0.0.0/0'], Request::HEADER_FORWARDED);
+if ($trustedProxies = \getenv('TRUSTED_PROXIES') ?? false) {
+    Request::setTrustedProxies(
+        \explode(',', $trustedProxies),
+        Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST
+    );
+}
+
+if ($trustedHosts = \getenv('TRUSTED_HOSTS') ?? false) {
+    Request::setTrustedHosts(\explode(',', $trustedHosts));
+}
 
 // Create new application kernel
 $kernel = new Kernel(\getenv('APP_ENV'), (bool)\getenv('APP_DEBUG'));
