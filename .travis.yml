@@ -4,6 +4,7 @@ sudo: true
 cache:
   directories:
     - $HOME/.composer/cache/files
+    - $HOME/.sonar/cache
 
 git:
   depth: 1
@@ -31,6 +32,15 @@ matrix:
       env:
         - COVERAGE=true
 
+addons:
+  sonarcloud:
+    organization: "tarlepp-github"
+    token:
+      secure: "E3s0zb9To6w9quiANztreSuvrXJYmtJksBizxiHZqAUfmsMINfDDpegjbyvto64+wzUKlgI1ySOPpbSAQOdLUzjfuIGK7WGex8SBcH35E+W/NFRuQNgqo2UqROdNt0iCtwQf8R0K6EYEBoYYBQMoizZpGAbAxPbSgVULa8UhxLz/kyWwSLFauoC6kjO2ctyVsFBlg95uu6tUtI3XYugLegai+9gOdEbT4ZMeJfbsUcsHayHw5vDq2F/7lZubDjFMc50wXBvW27x53J3m4fRZhgC3e3AaEBhjoJygWK9Uw8ZdHa/Br1agDz4xC8v7YXlf7FFdRC2zpjl51WSs50qkRDB8ubkJMgxuqLjIXTosFGgWdmwjI99HT9Mv1C0wls74uDdfRQh2dDysQe+dN3yE1kGORxTHxDqnBbp7Fx7k1UCNIzCnmEGhLxstBQgl99S4n5i2N6fZwjcqb3Vqaib9TaEJ2PLZkZB09bsN9Dmax2ONAA0MNl5oCaZC0nq1Vn7n0GC9XGnHfJ/XoWgQt6+mkbhe2cfLTJ7YekecZOZHm/zkDiS6qfTz3hcLqyWWkW7XTL2c8bD+lHNSUE+KGEjSYiR6kpMDHb2IMNbLJV5pANLok/XJhB2n6IaLYwb5FND9Ao/MZ/WxZxeA0br8vXL1JIoXNRLmH+7yAbjtzlfTyiY="
+
+jdk:
+  - oraclejdk8
+
 before_install:
   - cp .env.travis .env
   - cp .env.travis .env.test
@@ -49,7 +59,6 @@ before_install:
   - pecl install libsodium
 
 install:
-  - composer clear-cache
   - composer install
   - make generate-jwt-keys
 
@@ -66,6 +75,7 @@ before_script:
 
 script:
   - find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov;"
+  - if [[ $COVERAGE == true ]]; sonar-scanner; fi
 #  - ./vendor/bin/phpunit
 
 after_success:
