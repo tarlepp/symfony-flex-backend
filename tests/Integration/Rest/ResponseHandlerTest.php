@@ -316,7 +316,7 @@ class ResponseHandlerTest extends ContainerTestCase
             ->willReturn($formInterface);
 
         $formError
-            ->expects(static::once())
+            ->expects(static::atLeast(1))
             ->method('getMessage')
             ->willReturn('test error');
 
