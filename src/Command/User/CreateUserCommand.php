@@ -31,33 +31,36 @@ class CreateUserCommand extends Command
     // Traits
     use ApiKeyUserManagementHelperTrait;
 
+    private const PARAMETER_NAME = 'name';
+    private const PARAMETER_DESCRIPTION = 'description';
+
     /**
      * @var array
      */
     private static $commandParameters = [
         [
-            'name'          => 'username',
-            'description'   => 'Username',
+            self::PARAMETER_NAME        => 'username',
+            self::PARAMETER_DESCRIPTION => 'Username',
         ],
         [
-            'name'          => 'firstname',
-            'description'   => 'Firstname of the user',
+            self::PARAMETER_NAME        => 'firstname',
+            self::PARAMETER_DESCRIPTION => 'Firstname of the user',
         ],
         [
-            'name'          => 'surname',
-            'description'   => 'Surname of the user',
+            self::PARAMETER_NAME        => 'surname',
+            self::PARAMETER_DESCRIPTION => 'Surname of the user',
         ],
         [
-            'name'          => 'email',
-            'description'   => 'Email of the user',
+            self::PARAMETER_NAME        => 'email',
+            self::PARAMETER_DESCRIPTION => 'Email of the user',
         ],
         [
-            'name'          => 'plainPassword',
-            'description'   => 'Plain password for user',
+            self::PARAMETER_NAME        => 'plainPassword',
+            self::PARAMETER_DESCRIPTION => 'Plain password for user',
         ],
         [
-            'name'          => 'userGroups',
-            'description'   => 'User groups where to attach user',
+            self::PARAMETER_NAME        => 'userGroups',
+            self::PARAMETER_DESCRIPTION => 'User groups where to attach user',
         ],
     ];
 
