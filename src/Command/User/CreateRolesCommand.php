@@ -76,7 +76,11 @@ class CreateRolesCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $created = \array_sum(\array_map([$this, 'createRole'], $this->rolesService->getRoles()));
+        $iterator = function (string $role): int {
+            return $this->createRole($role);
+        };
+
+        $created = \array_sum(\array_map($iterator, $this->rolesService->getRoles()));
 
         $this->entityManager->flush();
 
