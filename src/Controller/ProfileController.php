@@ -196,7 +196,9 @@ class ProfileController
             $data = $user->getUserGroups();
         } elseif ($user instanceof ApiKeyUser) {
             $data = $user->getApiKey()->getUserGroups();
-        } else {
+        }
+
+        if (!isset($data)) {
             throw new AccessDeniedException('Not supported user');
         }
 
@@ -240,7 +242,9 @@ class ProfileController
                 'UserGroup',
                 'UserGroup.role',
             ];
-        } else {
+        }
+
+        if (!isset($groups)) {
             throw new AccessDeniedException('Not supported user');
         }
 
