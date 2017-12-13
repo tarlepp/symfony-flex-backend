@@ -133,7 +133,7 @@ class ApiKeyHelper
          *
          * @param ApiKeyEntity $apiKey
          */
-        $iterator = function (ApiKeyEntity $apiKey) use (&$choices): void {
+        return function (ApiKeyEntity $apiKey) use (&$choices): void {
             $value = \sprintf(
                 '[%s] %s - Roles: %s',
                 $apiKey->getToken(),
@@ -143,7 +143,5 @@ class ApiKeyHelper
 
             $choices[$apiKey->getId()] = $value;
         };
-
-        return $iterator;
     }
 }
