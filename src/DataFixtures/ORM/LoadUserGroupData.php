@@ -55,6 +55,9 @@ class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, Cont
      *
      * @param ObjectManager $manager
      *
+     * @throws \BadMethodCallException
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
@@ -63,8 +66,12 @@ class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, Cont
         $this->manager = $manager;
         $this->roles = $this->container->get('test.service_locator')->get(RolesService::class);
 
+        $iterator = function (string $role): void {
+            $this->createUserGroup($role);
+        };
+
         // Create entities
-        \array_map([$this, 'createUserGroup'], $this->roles->getRoles());
+        \array_map($iterator, $this->roles->getRoles());
 
         // Flush database changes
         $this->manager->flush();
