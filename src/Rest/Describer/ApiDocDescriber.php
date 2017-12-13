@@ -136,7 +136,11 @@ class ApiDocDescriber implements DescriberInterface
             return $routeModel;
         };
 
-        return \array_map($iterator, \array_filter($this->routeCollection->all(), [$this, 'routeFilter']));
+        $filter = function (Route $route): bool {
+            return $this->routeFilter($route);
+        };
+
+        return \array_map($iterator, \array_filter($this->routeCollection->all(), $filter));
     }
 
     /**
