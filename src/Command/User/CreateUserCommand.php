@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Command\User;
 
 use App\Command\HelperConfigure;
+use App\Command\Traits\ApiKeyUserManagementHelperTrait;
 use App\DTO\User as UserDto;
 use App\Form\Type\Console\UserType;
 use App\Repository\RoleRepository;
@@ -15,7 +16,6 @@ use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Security\RolesService;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -28,6 +28,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateUserCommand extends Command
 {
+    // Traits
+    use ApiKeyUserManagementHelperTrait;
+
     /**
      * @var array
      */
@@ -71,7 +74,7 @@ class CreateUserCommand extends Command
     /**
      * @var RolesService
      */
-    private $roles;
+    private $rolesService;
 
     /**
      * @var RoleRepository
@@ -83,7 +86,7 @@ class CreateUserCommand extends Command
      *
      * @param UserResource      $userResource
      * @param UserGroupResource $userGroupResource
-     * @param RolesService      $roles
+     * @param RolesService      $rolesService
      * @param RoleRepository    $roleRepository
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
@@ -91,17 +94,27 @@ class CreateUserCommand extends Command
     public function __construct(
         UserResource $userResource,
         UserGroupResource $userGroupResource,
-        RolesService $roles,
+        RolesService $rolesService,
         RoleRepository $roleRepository
     ) {
         parent::__construct('user:create');
 
         $this->userResource = $userResource;
         $this->userGroupResource = $userGroupResource;
-        $this->roles = $roles;
+        $this->rolesService = $rolesService;
         $this->roleRepository = $roleRepository;
 
         $this->setDescription('Console command to create user to database');
+    }
+
+    /**
+     * Getter for RolesService
+     *
+     * @return RolesService
+     */
+    public function getRolesService(): RolesService
+    {
+        return $this->rolesService;
     }
 
     /**
@@ -185,33 +198,5 @@ class CreateUserCommand extends Command
 
         // Create user groups for each role
         $this->createUserGroups($output);
-    }
-
-    /**
-     * Method to create user groups via existing 'user:create-group' command.
-     *
-     * @param OutputInterface $output
-     *
-     * @throws \Exception
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
-     */
-    private function createUserGroups(OutputInterface $output): void
-    {
-        $command = $this->getApplication()->find('user:create-group');
-
-        // Iterate roles and create user group for each one
-        foreach ($this->roles->getRoles() as $role) {
-            $arguments = [
-                'command' => 'user:create-group',
-                '--name'  => $this->roles->getRoleLabel($role),
-                '--role'  => $role,
-                '-n'      => true,
-            ];
-
-            $input = new ArrayInput($arguments);
-            $input->setInteractive(false);
-
-            $command->run($input, $output);
-        }
     }
 }

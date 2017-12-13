@@ -37,27 +37,27 @@ class CreateRolesCommand extends Command
     /**
      * @var RolesService
      */
-    private $roles;
+    private $rolesService;
 
     /**
      * CreateRolesCommand constructor.
      *
      * @param EntityManagerInterface $entityManager
      * @param RoleRepository         $roleRepository
-     * @param RolesService           $roles
+     * @param RolesService           $rolesService
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         RoleRepository $roleRepository,
-        RolesService $roles
+        RolesService $rolesService
     ) {
         parent::__construct('user:create-roles');
 
         $this->entityManager = $entityManager;
         $this->roleRepository = $roleRepository;
-        $this->roles = $roles;
+        $this->rolesService = $rolesService;
 
         $this->setDescription('Console command to create roles to database');
     }
@@ -76,11 +76,11 @@ class CreateRolesCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->write("\033\143");
 
-        $created = \array_sum(\array_map([$this, 'createRole'], $this->roles->getRoles()));
+        $created = \array_sum(\array_map([$this, 'createRole'], $this->rolesService->getRoles()));
 
         $this->entityManager->flush();
 
-        $removed = $this->clearRoles($this->roles->getRoles());
+        $removed = $this->clearRoles($this->rolesService->getRoles());
 
         if ($input->isInteractive()) {
             $message = sprintf(

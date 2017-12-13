@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Command\ApiKey;
 
 use App\Command\HelperConfigure;
+use App\Command\Traits\ApiKeyUserManagementHelperTrait;
 use App\DTO\ApiKey;
 use App\Form\Type\Console\ApiKeyType;
 use App\Repository\RoleRepository;
@@ -28,6 +29,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateApiKeyCommand extends Command
 {
+    // Traits
+    use ApiKeyUserManagementHelperTrait;
+
     /**
      * @var array
      */
@@ -95,6 +99,16 @@ class CreateApiKeyCommand extends Command
         $this->roleRepository = $roleRepository;
 
         $this->setDescription('Command to create new API key');
+    }
+
+    /**
+     * Getter for RolesService
+     *
+     * @return RolesService
+     */
+    public function getRolesService(): RolesService
+    {
+        return $this->rolesService;
     }
 
     /**
@@ -177,33 +191,5 @@ class CreateApiKeyCommand extends Command
 
         // Create user groups for each roles
         $this->createUserGroups($output);
-    }
-
-    /**
-     * Method to create user groups via existing 'user:create-group' command.
-     *
-     * @param OutputInterface $output
-     *
-     * @throws \Exception
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
-     */
-    private function createUserGroups(OutputInterface $output): void
-    {
-        $command = $this->getApplication()->find('user:create-group');
-
-        // Iterate roles and create user group for each one
-        foreach ($this->rolesService->getRoles() as $role) {
-            $arguments = [
-                'command' => 'user:create-group',
-                '--name'  => $this->rolesService->getRoleLabel($role),
-                '--role'  => $role,
-                '-n'      => true,
-            ];
-
-            $input = new ArrayInput($arguments);
-            $input->setInteractive(false);
-
-            $command->run($input, $output);
-        }
     }
 }
