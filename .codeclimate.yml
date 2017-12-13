@@ -9,8 +9,11 @@ plugins:
           mass_threshold: 45
   fixme:
     enabled: true
-  #phpmd:
-  #  enabled: true
+  phpmd:
+    enabled: true
+    config:
+      file_extensions: "php"
+      rulesets: "codesize,controversial,unusedcode,phpmd_ruleset.xml"
   git-legal:
     enabled: true
   markdownlint:
@@ -50,7 +53,7 @@ checks:
       threshold: 4
   similar-code:
     config:
-      threshold: # language-specific defaults. an override will affect all languages.
+      threshold: 40 # language-specific defaults. an override will affect all languages.
   identical-code:
     config:
       threshold: # language-specific defaults. an override will affect all languages.
