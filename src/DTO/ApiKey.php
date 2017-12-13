@@ -180,7 +180,6 @@ class ApiKey extends RestDto
 
             // Update current dto property value
             $entity->$setter($this->$property);
-
         }
 
         return $entity;
