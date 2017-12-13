@@ -156,7 +156,6 @@ class PHPUnitUtil
                 );
 
                 throw new \LogicException($message);
-                break;
         }
 
         return $output;
@@ -228,7 +227,6 @@ class PHPUnitUtil
                     );
 
                     throw new \LogicException($message);
-                    break;
             }
         }
 
@@ -271,7 +269,6 @@ class PHPUnitUtil
                     );
 
                     throw new \LogicException($message);
-                    break;
             }
         }
 
