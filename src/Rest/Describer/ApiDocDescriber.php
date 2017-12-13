@@ -89,27 +89,8 @@ class ApiDocDescriber implements DescriberInterface
      */
     private function getRouteModels(): array
     {
-        /**
-         * Simple filter lambda function to filter out all but Method class
-         *
-         * @param $annotation
-         *
-         * @return bool
-         */
-        $annotationFilterMethod = function ($annotation): bool {
-            return $annotation instanceof Method;
-        };
-
-        /**
-         * Simple filter lambda function to filter out all but Method class
-         *
-         * @param $annotation
-         *
-         * @return bool
-         */
-        $annotationFilterRoute = function ($annotation): bool {
-            return $annotation instanceof \Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-        };
+        $annotationFilterMethod = $this->getClosureAnnotationFilterMethod();
+        $annotationFilterRoute = $this->getClosureAnnotationFilterRoute();
 
         $iterator = function (Route $route) use ($annotationFilterMethod, $annotationFilterRoute): RouteModel {
             [$controller, $method] = \explode('::', $route->getDefault('_controller'));
@@ -226,5 +207,43 @@ class ApiDocDescriber implements DescriberInterface
                 $supported[] = true;
             }
         };
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function getClosureAnnotationFilterMethod(): \Closure
+    {
+        /**
+         * Simple filter lambda function to filter out all but Method class
+         *
+         * @param $annotation
+         *
+         * @return bool
+         */
+        $annotationFilterMethod = function ($annotation): bool {
+            return $annotation instanceof Method;
+        };
+
+        return $annotationFilterMethod;
+    }
+
+    /**
+     * @return \Closure
+     */
+    private function getClosureAnnotationFilterRoute(): \Closure
+    {
+        /**
+         * Simple filter lambda function to filter out all but Method class
+         *
+         * @param $annotation
+         *
+         * @return bool
+         */
+        $annotationFilterRoute = function ($annotation): bool {
+            return $annotation instanceof \Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+        };
+
+        return $annotationFilterRoute;
     }
 }
