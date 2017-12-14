@@ -7,15 +7,15 @@ services:
         autoconfigure: true
         # this means you cannot fetch services directly from the container via $container->get()
         # if you need to do this, you can override this setting on individual services
-        public: false
+        public: true
+
     App\Tests\Functional\Rest\Traits\Actions\src\:
         resource: '../../../tests/Functional/Rest/Traits/Actions/src/*'
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
 
     test.service_locator:
         class: Symfony\Component\DependencyInjection\ServiceLocator
-        tags: ['container.service_locator']
-        public: true
+        tags: [ 'container.service_locator' ]
         arguments:
             -
               App\Security\RolesService: '@App\Security\RolesService'
