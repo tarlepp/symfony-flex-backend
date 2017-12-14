@@ -20,8 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 trait PatchMethod
 {
     // Traits
-    use AbstractFormMethods;
-    use AbstractGenericMethods;
+    use PatchUpdateMethod;
 
     /**
      * Generic 'patchMethod' method for REST resources.
@@ -43,19 +42,6 @@ trait PatchMethod
         string $id,
         array $allowedHttpMethods = null
     ): Response {
-        $allowedHttpMethods = $allowedHttpMethods ?? ['PATCH'];
-
-        // Make sure that we have everything we need to make this work
-        $this->validateRestMethod($request, $allowedHttpMethods);
-
-        try {
-            $data = $this
-                ->getResource()
-                ->update($id, $this->processForm($request, $formFactory, __METHOD__, $id)->getData(), true);
-
-            return $this->getResponseHandler()->createResponse($request, $data);
-        } catch (\Exception $exception) {
-            throw $this->handleRestMethodException($exception);
-        }
+        return $this->patchUpdateMethod($request, $formFactory, $id, $allowedHttpMethods ?? ['PATCH']);
     }
 }
