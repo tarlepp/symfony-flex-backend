@@ -157,11 +157,11 @@ class Response
      */
     private function getDefaults(RouteModel $routeModel): array
     {
-        $action = $routeModel->getMethod();
-        $description = '';
-        $statusCode = 200;
-        $responses = [];
-
-        return [$action, $description, $statusCode, $responses];
+        return [
+            $routeModel->getMethod(),
+            '',
+            200,
+            [],
+        ];
     }
 }
