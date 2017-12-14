@@ -169,15 +169,15 @@ class ApiKey implements EntityInterface
      */
     public function generateToken(): ApiKey
     {
-        $token = '';
+        $random = '';
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $max = \mb_strlen($chars, '8bit') - 1;
 
         for ($i = 0; $i < 40; $i++) {
-            $token .= $chars[\random_int(0, $max)];
+            $random .= $chars[\random_int(0, $max)];
         }
 
-        return $this->setToken($token);
+        return $this->setToken($random);
     }
 
     /**
