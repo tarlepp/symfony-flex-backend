@@ -202,11 +202,8 @@ class ProfileController
             throw new AccessDeniedException('Not supported user');
         }
 
-        static $groups = [
-            'groups' => [
-                'UserGroup',
-                'UserGroup.role',
-            ],
+        $groups = [
+            'groups' => $this->getUserGroupGroups(),
         ];
 
         return new JsonResponse($serializer->serialize($data, 'json', $groups), 200, [], true);
@@ -223,25 +220,27 @@ class ProfileController
     private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): ?array
     {
         if ($user instanceof User) {
-            $groups = [
-                'User',
-                'User.userGroups',
-                'User.roles',
-                'UserGroup',
-                'UserGroup.role',
-            ];
+            $groups = \array_merge(
+                [
+                    'User',
+                    'User.userGroups',
+                    'User.roles',
+                ],
+                $this->getUserGroupGroups()
+            );
 
             // Set roles service to user entity, so we can get inherited roles
             $user->setRolesService($rolesService);
         } elseif ($user instanceof ApiKeyUser) {
-            $groups = [
-                'ApiKeyUser',
-                'ApiKeyUser.apiKey',
-                'ApiKey.description',
-                'ApiKey.userGroups',
-                'UserGroup',
-                'UserGroup.role',
-            ];
+            $groups = array_merge(
+                [
+                    'ApiKeyUser',
+                    'ApiKeyUser.apiKey',
+                    'ApiKey.description',
+                    'ApiKey.userGroups',
+                ],
+                $this->getUserGroupGroups()
+            );
         }
 
         if (!isset($groups)) {
@@ -249,5 +248,16 @@ class ProfileController
         }
 
         return $groups;
+    }
+
+    /**
+     * @return array
+     */
+    private function getUserGroupGroups(): array
+    {
+        return [
+            'UserGroup',
+            'UserGroup.role',
+        ];
     }
 }
