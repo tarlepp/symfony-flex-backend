@@ -12,10 +12,7 @@
 
 JSON REST API which is build on top of [Symfony](https://symfony.com/) framework.
 
-Note that this project is built with
-[Symfony Flex](https://github.com/symfony/flex),
-although this project is using latest stable packages, but note that we're going
-to update Symfony itself to `4.x.x` as soon as possible.
+Note that this project is build with [Symfony 4](https://symfony.com/4) and [Symfony Flex](https://github.com/symfony/flex).
 
 ## Table of Contents
 
@@ -48,6 +45,8 @@ to update Symfony itself to `4.x.x` as soon as possible.
   * [Testing](#testing)
   * [Metrics](#metrics)
   * [Links / resources](#links--resources)
+  * [Notes](#notes)
+    * [User password hashing](#user-password-hashing)
   * [Authors](#authors)
   * [License](#license)
 
@@ -56,6 +55,9 @@ to update Symfony itself to `4.x.x` as soon as possible.
 * PHP 7.1.3 or higher
 * [Composer](https://getcomposer.org/)
 * Database that is supported by [Doctrine](http://www.doctrine-project.org/)
+* [Sodium crypto library (libsodium)](https://download.libsodium.org/doc/) 
+  * for PHP < 7.2 use [this](https://pecl.php.net/package/libsodium) pecl package
+  * If you don't want to use [Argon2](https://password-hashing.net/) see [Notes](#notes)
 
 ## Installation
 
@@ -241,6 +243,8 @@ you could use.
 * [Visual Studio Code](https://code.visualstudio.com/)
 
 Personally I recommend PhpStorm, but just choose one which is the best for you.
+Also note that project contains `.idea` folder that holds default settings for
+PHPStorm.
 
 ### PHP Code Sniffer
 
@@ -345,6 +349,20 @@ And after that open `build/phpmetrics/index.html` with your favorite browser.
 * [PHP Annotations plugin for PhpStorm](https://plugins.jetbrains.com/plugin/7320)
 * [Php Inspections (EA Extended) plugin for PhpStorm](https://plugins.jetbrains.com/idea/plugin/7622-php-inspections-ea-extended-)
 * [composer-version](https://github.com/vutran/composer-version)
+* [Symfony Recipes Server](https://symfony.sh/)
+
+## Notes
+
+### User password hashing
+
+By default this application uses [Argon2](https://en.wikipedia.org/wiki/Argon2) 
+to hash all user passwords, and that is why application requires that your PHP 
+has support for [Sodium crypto library (libsodium)](https://download.libsodium.org/doc/)
+library.
+
+If you cannot or don't want to use this as password hashing method you need to
+change [security.yaml](config/packages/security.yaml#L3-L7) before [installation](#installation)
+step.
 
 ## Authors
 
