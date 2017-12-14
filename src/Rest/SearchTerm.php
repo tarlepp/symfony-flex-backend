@@ -92,11 +92,9 @@ final class SearchTerm implements SearchTermInterface
          *
          * @return array
          */
-        $iteratorTerm = function (string $term) use ($columns, $mode): ?array {
+        return function (string $term) use ($columns, $mode): ?array {
             return \count($columns) ? \array_map(self::getColumnIterator($term, $mode), $columns) : null;
         };
-
-        return $iteratorTerm;
     }
 
     /**
@@ -116,15 +114,13 @@ final class SearchTerm implements SearchTermInterface
          *
          * @return array
          */
-        $iteratorColumn = function (string $column) use ($term, $mode): array {
+        return function (string $column) use ($term, $mode): array {
             if (\strpos($column, '.') === false) {
                 $column = 'entity.' . $column;
             }
 
             return [$column, 'like', self::getTerm($mode, $term)];
         };
-
-        return $iteratorColumn;
     }
 
     /**
@@ -165,12 +161,10 @@ final class SearchTerm implements SearchTermInterface
         };
 
         // Normalize column and search parameters
-        $columns = \array_filter(
+        return \array_filter(
             \array_map('\trim', (\is_array($column) ? $column : (array)$column)),
             $filter
         );
-
-        return $columns;
     }
 
     /**
@@ -186,12 +180,11 @@ final class SearchTerm implements SearchTermInterface
             return \mb_strlen(\trim($value)) > 0;
         };
 
-        $searchTerms = \array_unique(
+        return \array_unique(
             \array_filter(
                 \array_map('\trim', (\is_array($search) ? $search : \explode(' ', (string)$search))),
                 $filter
             )
         );
-        return $searchTerms;
     }
 }
