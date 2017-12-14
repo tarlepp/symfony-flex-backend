@@ -221,11 +221,9 @@ class ApiDocDescriber implements DescriberInterface
          *
          * @return bool
          */
-        $annotationFilterMethod = function ($annotation): bool {
+        return function ($annotation): bool {
             return $annotation instanceof Method;
         };
-
-        return $annotationFilterMethod;
     }
 
     /**
@@ -240,10 +238,8 @@ class ApiDocDescriber implements DescriberInterface
          *
          * @return bool
          */
-        $annotationFilterRoute = function ($annotation): bool {
+        return function ($annotation): bool {
             return $annotation instanceof \Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
         };
-
-        return $annotationFilterRoute;
     }
 }
