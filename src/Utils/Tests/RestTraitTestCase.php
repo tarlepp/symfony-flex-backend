@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class RestTraitTestCase extends WebTestCase
 {
+    private const END_POINT_COUNT = '/count';
+
     /**
      * @return array
      */
@@ -39,18 +41,21 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods
      *
-     *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatCountRouteDoesNotAllowNotSupportedHttpMethods(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $client = $this->getClient($username, $password);
-        $client->request($method, static::$route . '/count');
+        $client->request($method, static::$route . self::END_POINT_COUNT);
 
         $response = $client->getResponse();
 
@@ -66,15 +71,19 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatCountRouteWorksWithAllowedHttpMethods(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $client = $this->getClient($username, $password);
-        $client->request($method, static::$route . '/count');
+        $client->request($method, static::$route . self::END_POINT_COUNT);
 
         $response = $client->getResponse();
 
@@ -90,15 +99,19 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatCountRouteDoesNotAllowInvalidUser(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $client = $this->getClient($username, $password);
-        $client->request($method, static::$route . '/count');
+        $client->request($method, static::$route . self::END_POINT_COUNT);
 
         $response = $client->getResponse();
 
@@ -114,13 +127,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatRootRouteDoesNotAllowNotSupportedHttpMethods(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route);
 
@@ -138,13 +155,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatRootRouteWorksWithAllowedHttpMethods(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route);
 
@@ -162,13 +183,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatRootRouteDoesNotAllowInvalidUser(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route);
 
@@ -186,13 +211,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $uuid = Uuid::uuid4()->toString();
 
         $client = $this->getClient($username, $password);
@@ -212,13 +241,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $uuid = Uuid::uuid4()->toString();
 
         $client = $this->getClient($username, $password);
@@ -238,13 +271,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatRootRouteWithIdDoesNotAllowInvalidUser(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $uuid = Uuid::uuid4()->toString();
 
         $client = $this->getClient($username, $password);
@@ -264,13 +301,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatIdsRouteDoesNotAllowNotSupportedHttpMethods(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route . '/ids');
 
@@ -288,13 +329,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatIdsRouteWorksWithAllowedHttpMethods(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route . '/ids');
 
@@ -312,13 +357,17 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @param string|null $username
      * @param string|null $password
-     * @param string      $method
+     * @param string|null $method
+     *
+     * @throws \Exception
      */
     public function testThatIdsRouteDoesNotAllowInvalidUser(
         string $username = null,
         string $password = null,
-        string $method
+        string $method = null
     ): void {
+        $method = $method ?? 'GET';
+
         $client = $this->getClient($username, $password);
         $client->request($method, static::$route . '/ids');
 

@@ -20,6 +20,12 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class PHPUnitUtil
 {
+    private const TYPE_INTEGER = 'integer';
+    private const TYPE_STRING = 'string';
+    private const TYPE_ARRAY = 'array';
+    private const TYPE_BOOLEAN = 'boolean';
+    private const TYPE_CUSTOM_CLASS = 'CustomClass';
+
     /**
      * @codeCoverageIgnore
      *
@@ -129,9 +135,9 @@ class PHPUnitUtil
     public static function getType($type): string
     {
         switch ($type) {
-            case 'integer':
+            case self::TYPE_INTEGER:
             case 'bigint':
-                $output = 'integer';
+                $output = self::TYPE_INTEGER;
                 break;
             case 'time':
             case 'date':
@@ -139,15 +145,15 @@ class PHPUnitUtil
                 $output = \DateTime::class;
                 break;
             case 'text':
-            case 'string':
+            case self::TYPE_STRING:
             case 'EnumLogLogin':
-                $output = 'string';
+                $output = self::TYPE_STRING;
                 break;
-            case 'array':
-                $output = 'array';
+            case self::TYPE_ARRAY:
+                $output = self::TYPE_ARRAY;
                 break;
-            case 'boolean':
-                $output = 'boolean';
+            case self::TYPE_BOOLEAN:
+                $output = self::TYPE_BOOLEAN;
                 break;
             default:
                 $message = \sprintf(
@@ -195,29 +201,29 @@ class PHPUnitUtil
         if (\substr_count($type, '\\') > 1) {
             $class = \count($meta) ? $meta['targetEntity'] : $type;
 
-            $type = 'CustomClass';
+            $type = self::TYPE_CUSTOM_CLASS;
         }
 
         if (\strpos($type, '|') !== false) {
             $output = self::getValidValueForType(\explode('|', $type)[0], $meta);
         } else {
             switch ($type) {
-                case 'CustomClass':
+                case self::TYPE_CUSTOM_CLASS:
                     $output = new $class();
                     break;
-                case 'integer':
+                case self::TYPE_INTEGER:
                     $output = 666;
                     break;
                 case \DateTime::class:
                     $output = new \DateTime();
                     break;
-                case 'string':
+                case self::TYPE_STRING:
                     $output = 'Some text here';
                     break;
-                case 'array':
-                    $output = ['some', 'array', 'here'];
+                case self::TYPE_ARRAY:
+                    $output = ['some', self::TYPE_ARRAY, 'here'];
                     break;
-                case 'boolean':
+                case self::TYPE_BOOLEAN:
                     $output = true;
                     break;
                 default:
@@ -243,7 +249,7 @@ class PHPUnitUtil
     public static function getInvalidValueForType(string $type)
     {
         if ($type !== \stdClass::class && \substr_count($type, '\\') > 1) {
-            $type = 'CustomClass';
+            $type = self::TYPE_CUSTOM_CLASS;
         }
 
         if (\strpos($type, '|') !== false) {
@@ -253,12 +259,12 @@ class PHPUnitUtil
                 case \stdClass::class:
                     $output = new \DateTime();
                     break;
-                case 'CustomClass':
-                case 'integer':
+                case self::TYPE_CUSTOM_CLASS:
+                case self::TYPE_INTEGER:
                 case \DateTime::class:
-                case 'string':
-                case 'array':
-                case 'boolean':
+                case self::TYPE_STRING:
+                case self::TYPE_ARRAY:
+                case self::TYPE_BOOLEAN:
                 case 'enumLogLogin':
                     $output = new \stdClass();
                     break;
