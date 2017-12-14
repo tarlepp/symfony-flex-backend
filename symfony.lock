@@ -180,10 +180,10 @@
         "version": "v1.7.2"
     },
     "phpunit/php-code-coverage": {
-        "version": "5.2.2"
+        "version": "5.3.0"
     },
     "phpunit/php-file-iterator": {
-        "version": "1.4.2"
+        "version": "1.4.5"
     },
     "phpunit/php-text-template": {
         "version": "1.2.1"
@@ -192,10 +192,10 @@
         "version": "1.0.9"
     },
     "phpunit/php-token-stream": {
-        "version": "2.0.1"
+        "version": "2.0.2"
     },
     "phpunit/phpcov": {
-        "version": "4.0.x-dev"
+        "version": "4.0.3"
     },
     "phpunit/phpunit": {
         "version": "4.7",
@@ -203,11 +203,11 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "4.7",
-            "ref": "a5708058bd6f16863618096090e825c549a231e1"
+            "ref": "fc35828893288f0bb786291377433ee8d7e14738"
         }
     },
     "phpunit/phpunit-mock-objects": {
-        "version": "4.0.4"
+        "version": "5.0.5"
     },
     "piwik/device-detector": {
         "version": "3.9.0"
@@ -422,7 +422,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "3.3",
-            "ref": "0a66a0097def4db1cd03bcb3d4a268440ae4cb47"
+            "ref": "179470cb6492db92dffee208cfdb436f175c93b4"
         }
     },
     "symfony/polyfill-intl-icu": {
