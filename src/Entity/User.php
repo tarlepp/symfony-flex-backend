@@ -368,6 +368,6 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      */
     public function isEqualTo(CoreUserInterface $user): bool
     {
-        return ($user instanceof self) ? $user->getId() === $this->getId() : false;
+        return $user instanceof self && $user->getId() === $this->getId();
     }
 }
