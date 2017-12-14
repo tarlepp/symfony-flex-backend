@@ -66,10 +66,12 @@ class Auth
      */
     public function getAuthorizationHeadersForApiKey(string $role): array
     {
-        return [
-            'CONTENT_TYPE'          => 'application/json',
-            'HTTP_AUTHORIZATION'    => 'ApiKey ' . \str_pad($role, 40, '_'),
-        ];
+        return \array_merge(
+            $this->getContentTypeHeader(),
+            [
+                'HTTP_AUTHORIZATION' => 'ApiKey ' . \str_pad($role, 40, '_'),
+            ]
+        );
     }
 
     /**
@@ -81,10 +83,12 @@ class Auth
      */
     public function getAuthorizationHeaders(string $token): array
     {
-        return [
-            'CONTENT_TYPE'          => 'application/json',
-            'HTTP_AUTHORIZATION'    => 'Bearer ' . $token
-        ];
+        return \array_merge(
+            $this->getContentTypeHeader(),
+            [
+                'HTTP_AUTHORIZATION'    => 'Bearer ' . $token
+            ]
+        );
     }
 
     /**
@@ -112,37 +116,51 @@ class Auth
      */
     private function getToken(string $username, string $password): string
     {
-        // Get client
-        /** @noinspection MissingService */
-        $client = $this->container->get('test.client');
+        if (!\array_key_exists($username . $password, $this->cache)) {
+            // Get client
+            /** @noinspection MissingService */
+            $client = $this->container->get('test.client');
 
-        // Create request to make login using given credentials
-        $client->request(
-            'POST',
-            '/auth/getToken',
-            [],
-            [],
-            \array_merge(
-                $this->getJwtHeaders(),
-                [
-                    'CONTENT_TYPE'          => 'application/json',
-                    'HTTP_X-Requested-With' => 'XMLHttpRequest'
-                ]
-            ),
-            \json_encode(\compact('username', 'password'))
-        );
+            // Create request to make login using given credentials
+            $client->request(
+                'POST',
+                '/auth/getToken',
+                [],
+                [],
+                \array_merge(
+                    $this->getJwtHeaders(),
+                    $this->getContentTypeHeader(),
+                    [
+                        'HTTP_X-Requested-With' => 'XMLHttpRequest'
+                    ]
+                ),
+                \json_encode(\compact('username', 'password'))
+            );
 
-        /** @var Response $response */
-        $response = $client->getResponse();
+            /** @var Response $response */
+            $response = $client->getResponse();
 
-        if ($response === null) {
-            throw new \UnexpectedValueException('Test client did not return response at all');
+            if ($response === null) {
+                throw new \UnexpectedValueException('Test client did not return response at all');
+            }
+
+            if ($response->getStatusCode() !== 200) {
+                throw new \UnexpectedValueException('Invalid status code: ' . $response->getStatusCode());
+            }
+
+            $this->cache[$username . $password] =  JSON::decode($response->getContent())->token;
         }
 
-        if ($response->getStatusCode() !== 200) {
-            throw new \UnexpectedValueException('Invalid status code: '. $response->getStatusCode());
-        }
+        return $this->cache[$username . $password];
+    }
 
-        return JSON::decode($response->getContent())->token;
+    /**
+     * @return array
+     */
+    private function getContentTypeHeader(): array
+    {
+        return [
+            'CONTENT_TYPE' => 'application/json',
+        ];
     }
 }
