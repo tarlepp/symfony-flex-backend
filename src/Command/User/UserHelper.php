@@ -58,7 +58,12 @@ class UserHelper
 
         while ($userFound === false) {
             $userEntity = $this->getUserEntity($io, $question);
-            $userFound = $userEntity === null ? true : $this->isCorrectUser($io, $userEntity);
+
+            if ($userEntity === null) {
+                break;
+            }
+
+            $userFound = $this->isCorrectUser($io, $userEntity);
         }
 
         return $userEntity ?? null;
@@ -79,7 +84,12 @@ class UserHelper
 
         while ($userGroupFound === false) {
             $userGroupEntity = $this->getUserGroupEntity($io, $question);
-            $userGroupFound = $userGroupEntity === null ? true : $this->isCorrectUserGroup($io, $userGroupEntity);
+
+            if ($userGroupEntity === null) {
+                break;
+            }
+
+            $userGroupFound = $this->isCorrectUserGroup($io, $userGroupEntity);
         }
 
         return $userGroupEntity ?? null;
