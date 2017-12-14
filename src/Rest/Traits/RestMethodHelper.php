@@ -125,11 +125,9 @@ trait RestMethodHelper
             $method = mb_substr($method, $position + 2);
         }
 
-        $formTypeClass = \array_key_exists($method, static::$formTypes)
+        return \array_key_exists($method, static::$formTypes)
             ? static::$formTypes[$method]
             : $this->getResource()->getFormTypeClass();
-
-        return $formTypeClass;
     }
 
     /**
