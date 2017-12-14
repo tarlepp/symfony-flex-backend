@@ -23,7 +23,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 trait RepositoryWrappersTrait
 {
-
     /**
      * @var ManagerRegistry
      */
@@ -86,12 +85,10 @@ trait RepositoryWrappersTrait
         $alias = $alias ?? 'entity';
 
         // Create new query builder
-        $queryBuilder = $this
+        return $this
             ->getEntityManager()
             ->createQueryBuilder()
             ->select($alias)
             ->from($this->getEntityName(), $alias, $indexBy);
-
-        return $queryBuilder;
     }
 }
