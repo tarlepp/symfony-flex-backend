@@ -49,13 +49,7 @@ class UserEntitySubscriber
      */
     public function prePersist(LifecycleEventArgs $event): void
     {
-        // Get user entity object
-        $user = $event->getEntity();
-
-        // Valid user so lets change password
-        if ($user instanceof User) {
-            $this->changePassword($user);
-        }
+        $this->process($event);
     }
 
     /**
@@ -69,6 +63,17 @@ class UserEntitySubscriber
      * @throws \RuntimeException
      */
     public function preUpdate(PreUpdateEventArgs $event): void
+    {
+        $this->process($event);
+    }
+
+    /**
+     * @param LifecycleEventArgs $event
+     *
+     * @throws \RuntimeException
+     * @throws \LengthException
+     */
+    private function process(LifecycleEventArgs $event): void
     {
         // Get user entity object
         $user = $event->getEntity();
@@ -89,7 +94,7 @@ class UserEntitySubscriber
      * @throws \LengthException
      * @throws \RuntimeException
      */
-    protected function changePassword(User $user): void
+    private function changePassword(User $user): void
     {
         // Get plain password from user entity
         $plainPassword = $user->getPlainPassword();
