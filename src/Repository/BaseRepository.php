@@ -25,8 +25,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
     use RepositoryMethodsTrait;
     use RepositoryWrappersTrait;
 
-    const INNER_JOIN = 'innerJoin';
-    const LEFT_JOIN = 'leftJoin';
+    private const INNER_JOIN = 'innerJoin';
+    private const LEFT_JOIN = 'leftJoin';
 
     /**
      * Names of search columns.
@@ -203,7 +203,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
          * @var array  $joins
          */
         foreach (self::$joins as $joinType => $joins) {
-            foreach ($joins as $key => $joinParameters) {
+            foreach ($joins as $joinParameters) {
                 $queryBuilder->$joinType(...$joinParameters);
             }
 
