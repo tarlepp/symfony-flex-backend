@@ -19,6 +19,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 trait LogRequestProcessRequestTrait
 {
+    private $replaceValue = '*** REPLACED ***';
+
     /**
      * @var array
      *
@@ -407,19 +409,19 @@ trait LogRequestProcessRequestTrait
      */
     private function processHeadersAndParameters(Request $request): void
     {
-        $headers = $request->headers->all();
+        $rawHeaders = $request->headers->all();
 
         // Clean possible sensitive data from parameters
-        \array_walk($headers, [$this, 'cleanParameters']);
+        \array_walk($rawHeaders, [$this, 'cleanParameters']);
 
-        $this->headers = $headers;
+        $this->headers = $rawHeaders;
 
-        $parameters = $this->determineParameters($request);
+        $rawParameters = $this->determineParameters($request);
 
         // Clean possible sensitive data from parameters
-        \array_walk($parameters, [$this, 'cleanParameters']);
+        \array_walk($rawParameters, [$this, 'cleanParameters']);
 
-        $this->parameters = $parameters;
+        $this->parameters = $rawParameters;
     }
 
     /**
@@ -447,10 +449,10 @@ trait LogRequestProcessRequestTrait
      */
     private function determineAction(Request $request): string
     {
-        $action = $request->get('_controller', '');
-        $action = \strpos($action, '::') ? \explode('::', $action) : \explode(':', $action);
+        $rawAction = $request->get('_controller', '');
+        $rawAction = explode(\strpos($rawAction, '::') ? '::' : ':', $rawAction);
 
-        return $action[1] ?? '';
+        return $rawAction[1] ?? '';
     }
 
     /**
@@ -464,21 +466,21 @@ trait LogRequestProcessRequestTrait
      */
     private function determineParameters(Request $request): array
     {
-        $content = (string)$request->getContent();
+        $rawContent = (string)$request->getContent();
 
         // By default just get whole parameter bag
         $output = $request->request->all();
 
         // Content given so parse it
-        if ($content) {
+        if ($rawContent) {
             // First try to convert content to array from JSON
             try {
-                $output = JSON::decode($content, true);
+                $output = JSON::decode($rawContent, true);
             } /** @noinspection BadExceptionsProcessingInspection */
             catch (\LogicException $error) { // Oh noes content isn't JSON so just parse it
                 $output = [];
 
-                \parse_str($content, $output);
+                \parse_str($rawContent, $output);
             }
         }
 
@@ -494,11 +496,11 @@ trait LogRequestProcessRequestTrait
     private function cleanParameters(&$value, string $key): void
     {
         // What keys we should replace so that any sensitive data is not logged
-        static $replacements = [
-            'password'          => '*** REPLACED ***',
-            'token'             => '*** REPLACED ***',
-            'authorization'     => '*** REPLACED ***',
-            'cookie'            => '*** REPLACED ***',
+        $replacements = [
+            'password'      => $this->replaceValue,
+            'token'         => $this->replaceValue,
+            'authorization' => $this->replaceValue,
+            'cookie'        => $this->replaceValue,
         ];
 
         // Normalize current key
@@ -518,14 +520,14 @@ trait LogRequestProcessRequestTrait
     /**
      * Method to clean raw request content of any sensitive data.
      *
-     * @param string $content
+     * @param string $inputContent
      *
      * @return string
      */
-    private function cleanContent(string $content): string
+    private function cleanContent(string $inputContent): string
     {
-        $iterator = function ($search) use (&$content) {
-            $content = \preg_replace('/(' . $search . '":)\s*"(.*)"/', '$1"*** REPLACED ***"', $content);
+        $iterator = function ($search) use (&$inputContent) {
+            $inputContent = \preg_replace('/(' . $search . '":)\s*"(.*)"/', '$1"*** REPLACED ***"', $inputContent);
         };
 
         static $replacements = [
@@ -537,6 +539,6 @@ trait LogRequestProcessRequestTrait
 
         \array_map($iterator, $replacements);
 
-        return $content;
+        return $inputContent;
     }
 }
