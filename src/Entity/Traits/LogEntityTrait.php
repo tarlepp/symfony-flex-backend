@@ -167,10 +167,10 @@ trait LogEntityTrait
      */
     protected function processTimeAndDate(): void
     {
-        $date = new \DateTime('NOW', new \DateTimeZone('UTC'));
+        $now = new \DateTime('NOW', new \DateTimeZone('UTC'));
 
-        $this->time = $this->time ?? $date;
-        $this->date = $this->time ?? $date;
+        $this->time = $this->time ?? $now;
+        $this->date = $this->time ?? $now;
     }
 
     /**
