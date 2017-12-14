@@ -412,14 +412,18 @@ trait LogRequestProcessRequestTrait
         $rawHeaders = $request->headers->all();
 
         // Clean possible sensitive data from parameters
-        \array_walk($rawHeaders, [$this, 'cleanParameters']);
+        \array_walk($rawHeaders, function (&$value, string $key) {
+            $this->cleanParameters($value, $key);
+        });
 
         $this->headers = $rawHeaders;
 
         $rawParameters = $this->determineParameters($request);
 
         // Clean possible sensitive data from parameters
-        \array_walk($rawParameters, [$this, 'cleanParameters']);
+        \array_walk($rawParameters, function (&$value, string $key) {
+            $this->cleanParameters($value, $key);
+        });
 
         $this->parameters = $rawParameters;
     }
@@ -513,7 +517,9 @@ trait LogRequestProcessRequestTrait
 
         // Recursive call
         if (\is_array($value)) {
-            \array_walk($value, [$this, 'cleanParameters']);
+            \array_walk($value, function (&$value, string $key) {
+                $this->cleanParameters($value, $key);
+            });
         }
     }
 
