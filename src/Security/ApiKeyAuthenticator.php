@@ -131,10 +131,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
             throw new AuthenticationException('The user provider must be an instance of ApiKeyUserProvider');
         }
 
-        /** @var ApiKeyUserProvider $userProvider */
-        $userProvider = \current($providers);
-
-        return $userProvider;
+        return \current($providers);
     }
 
     /**
