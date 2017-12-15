@@ -20,10 +20,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ApiKey extends RestDto
 {
+    static protected $mappings = [
+        'userGroups' => 'updateUserGroups',
+    ];
+
     /**
      * @var string|null
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -31,17 +35,17 @@ class ApiKey extends RestDto
      * @Assert\NotBlank()
      * @Assert\NotNull()
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      */
-    private $token;
+    protected $token;
 
     /**
      * @var array
      */
-    private $userGroups = [];
+    protected $userGroups = [];
 
     /**
      * @return null|string
@@ -158,30 +162,19 @@ class ApiKey extends RestDto
     }
 
     /**
-     * Method to update specified entity with DTO data.
+     * Method to update ApiKey entity user groups.
      *
-     * @param EntityInterface|ApiKeyEntity $entity
+     * @param ApiKeyEntity $entity
+     * @param array        $value
      *
-     * @return EntityInterface|ApiKeyEntity
+     * @return ApiKey
      */
-    public function update(EntityInterface $entity): EntityInterface
+    protected function updateUserGroups(ApiKeyEntity $entity, array $value): ApiKey
     {
-        foreach ($this->getVisited() as $property) {
-            if ($property === 'userGroups') {
-                $entity->clearUserGroups();
+        $entity->clearUserGroups();
 
-                \array_map([$entity, 'addUserGroup'], $this->$property);
+        \array_map([$entity, 'addUserGroup'], $value);
 
-                continue;
-            }
-
-            // Determine setter method
-            $setter = 'set' . \ucfirst($property);
-
-            // Update current dto property value
-            $entity->$setter($this->$property);
-        }
-
-        return $entity;
+        return $this;
     }
 }

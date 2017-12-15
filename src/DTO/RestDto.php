@@ -6,6 +6,7 @@ declare(strict_types = 1);
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\DTO;
+use App\Entity\EntityInterface;
 
 /**
  * Class RestDto
@@ -15,6 +16,23 @@ namespace App\DTO;
  */
 abstract class RestDto implements RestDtoInterface
 {
+    /**
+     * DTO property mappings to setter method.
+     *
+     * Example:
+     *  static protected $mappings = [
+     *      'someProperty' => 'methodInYourDtoClass',
+     *  ]
+     *
+     * This will call below method in your DTO class:
+     *  protected function methodInYourDtoClass($entity, $value)
+     *
+     * And in that method make all necessary that you need to set that specified value.
+     *
+     * @var array
+     */
+    static protected $mappings = [];
+
     /**
      * An array of 'visited' setter properties of current dto.
      *
@@ -44,6 +62,32 @@ abstract class RestDto implements RestDtoInterface
         $this->visited[] = $property;
 
         return $this;
+    }
+
+    /**
+     * Method to update specified entity with DTO data.
+     *
+     * @param EntityInterface $entity
+     *
+     * @return EntityInterface
+     */
+    public function update(EntityInterface $entity): EntityInterface
+    {
+        foreach ($this->getVisited() as $property) {
+            if (\array_key_exists($property, static::$mappings)) {
+                $this->{static::$mappings[$property]}($entity, $this->$property);
+
+                continue;
+            }
+
+            // Determine setter method
+            $setter = 'set' . \ucfirst($property);
+
+            // Update current dto property value
+            $entity->$setter($this->$property);
+        }
+
+        return $entity;
     }
 
     /**

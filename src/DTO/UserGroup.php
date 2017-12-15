@@ -27,7 +27,7 @@ class UserGroup extends RestDto
      * @Assert\NotNull()
      * @Assert\Length(min = 4, max = 255)
      */
-    private $name = '';
+    protected $name = '';
 
     /**
      * @var \App\Entity\Role
@@ -35,7 +35,7 @@ class UserGroup extends RestDto
      * @Assert\NotBlank()
      * @Assert\NotNull()
      */
-    private $role;
+    protected $role;
 
     /**
      * @return string
@@ -94,20 +94,5 @@ class UserGroup extends RestDto
         $this->role = $entity->getRole()->getId();
 
         return $this;
-    }
-
-    /**
-     * Method to update specified entity with DTO data.
-     *
-     * @param EntityInterface|UserGroupEntity $entity
-     *
-     * @return EntityInterface|UserGroupEntity
-     */
-    public function update(EntityInterface $entity): EntityInterface
-    {
-        $entity->setName($this->name);
-        $entity->setRole($this->role);
-
-        return $entity;
     }
 }

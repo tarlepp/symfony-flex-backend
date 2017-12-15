@@ -25,10 +25,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User extends RestDto implements UserInterface
 {
+    static protected $mappings = [
+        'password'      => 'updatePassword',
+        'userGroups'    => 'updateUserGroups',
+    ];
+
     /**
      * @var string|null
      */
-    private $id;
+    protected $id;
 
     /**
      * @var string
@@ -37,7 +42,7 @@ class User extends RestDto implements UserInterface
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    private $username = '';
+    protected $username = '';
 
     /**
      * @var string
@@ -46,7 +51,7 @@ class User extends RestDto implements UserInterface
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    private $firstname = '';
+    protected $firstname = '';
 
     /**
      * @var string
@@ -55,7 +60,7 @@ class User extends RestDto implements UserInterface
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    private $surname = '';
+    protected $surname = '';
 
     /**
      * @var string
@@ -64,12 +69,12 @@ class User extends RestDto implements UserInterface
      * @Assert\NotNull()
      * @Assert\Email()
      */
-    private $email = '';
+    protected $email = '';
 
     /**
      * @var array
      */
-    private $userGroups = [];
+    protected $userGroups = [];
 
     /**
      * @var string
@@ -78,7 +83,7 @@ class User extends RestDto implements UserInterface
      * @Assert\NotNull(groups={"Create"})
      * @Assert\Length(groups={"Create"}, min = 2, max = 255)
      */
-    private $password = '';
+    protected $password = '';
 
     /**
      * @return null|string
@@ -267,36 +272,34 @@ class User extends RestDto implements UserInterface
     }
 
     /**
-     * Method to update specified entity with DTO data.
+     * Method to update User entity password.
      *
-     * @param EntityInterface|UserEntity $entity
+     * @param UserEntity $entity
+     * @param string     $value
      *
-     * @return EntityInterface|UserEntity
+     * @return User
      */
-    public function update(EntityInterface $entity): EntityInterface
+    protected function updatePassword(UserEntity $entity, string $value): User
     {
-        foreach ($this->getVisited() as $property) {
-            if ($property === 'password') {
-                $entity->setPlainPassword($this->$property);
+        $entity->setPlainPassword($value);
 
-                continue;
-            }
+        return $this;
+    }
 
-            if ($property === 'userGroups') {
-                $entity->clearUserGroups();
+    /**
+     * Method to update User entity user groups.
+     *
+     * @param UserEntity $entity
+     * @param array      $value
+     *
+     * @return User
+     */
+    protected function updateUserGroups(UserEntity $entity, array $value): User
+    {
+        $entity->clearUserGroups();
 
-                \array_map([$entity, 'addUserGroup'], $this->$property);
+        \array_map([$entity, 'addUserGroup'], $value);
 
-                continue;
-            }
-
-            // Determine setter method
-            $setter = 'set' . \ucfirst($property);
-
-            // Update current dto property value
-            $entity->$setter($this->$property);
-        }
-
-        return $entity;
+        return $this;
     }
 }
