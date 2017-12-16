@@ -55,7 +55,7 @@ class UserTest extends DtoTestCase
     public function testThatUpdateMethodCallsExpectedEntityMethodIfPasswordIsVisited(): void
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface $entity */
-        $entity = $this->getMockBuilder(EntityInterface::class)
+        $entity = $this->getMockBuilder(UserEntity::class)
             ->setMethods(['getId', 'setPlainPassword'])
             ->getMock();
 
@@ -73,12 +73,12 @@ class UserTest extends DtoTestCase
     public function testThatUpdateMethodCallsExpectedEntityMethodsIfUserGroupsIsVisited(): void
     {
         $userGroups = [
-            'foo',
-            'bar',
+            $this->getMockBuilder(UserGroupEntity::class)->getMock(),
+            $this->getMockBuilder(UserGroupEntity::class)->getMock(),
         ];
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface $entity */
-        $entity = $this->getMockBuilder(EntityInterface::class)
+        $entity = $this->getMockBuilder(UserEntity::class)
             ->setMethods(['getId', 'clearUserGroups', 'addUserGroup'])
             ->getMock();
 

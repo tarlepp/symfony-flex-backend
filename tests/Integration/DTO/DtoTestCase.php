@@ -30,7 +30,9 @@ class DtoTestCase extends KernelTestCase
         $dtoReflection = new \ReflectionClass($this->dtoClass);
 
         foreach ($dtoReflection->getProperties() as $reflectionProperty) {
-            if ($this->dtoClass !== $reflectionProperty->getDeclaringClass()->getName()) {
+            if ($reflectionProperty->isStatic()
+                || $this->dtoClass !== $reflectionProperty->getDeclaringClass()->getName()
+            ) {
                 continue;
             }
 
@@ -52,7 +54,9 @@ class DtoTestCase extends KernelTestCase
         $dtoReflection = new \ReflectionClass($this->dtoClass);
 
         foreach ($dtoReflection->getProperties() as $reflectionProperty) {
-            if ($this->dtoClass !== $reflectionProperty->getDeclaringClass()->getName()) {
+            if ($reflectionProperty->isStatic()
+                || $this->dtoClass !== $reflectionProperty->getDeclaringClass()->getName()
+            ) {
                 continue;
             }
 
@@ -75,7 +79,7 @@ class DtoTestCase extends KernelTestCase
         $dtoReflection = new \ReflectionClass($this->dtoClass);
 
         $filter = function (\ReflectionProperty $reflectionProperty) use ($dtoClass) {
-            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName();
+            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName() && !$reflectionProperty->isStatic();
         };
 
         $properties = \array_filter($dtoReflection->getProperties(), $filter);
@@ -113,7 +117,7 @@ class DtoTestCase extends KernelTestCase
         $dtoReflection = new \ReflectionClass($this->dtoClass);
 
         $filter = function (\ReflectionProperty $reflectionProperty) use ($dtoClass) {
-            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName();
+            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName() && !$reflectionProperty->isStatic();
         };
 
         $properties = \array_filter($dtoReflection->getProperties(), $filter);
@@ -172,7 +176,7 @@ class DtoTestCase extends KernelTestCase
         $dtoReflection = new \ReflectionClass($this->dtoClass);
 
         $filter = function (\ReflectionProperty $reflectionProperty) use ($dtoClass) {
-            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName();
+            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName() && !$reflectionProperty->isStatic();
         };
 
         $iterator = function (\ReflectionProperty $reflectionProperty) {

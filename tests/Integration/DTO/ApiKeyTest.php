@@ -49,12 +49,12 @@ class ApiKeyTest extends DtoTestCase
     public function testThatUpdateMethodCallsExpectedEntityMethodsIfUserGroupsIsVisited(): void
     {
         $userGroups = [
-            'foo',
-            'bar',
+            $this->getMockBuilder(UserGroupEntity::class)->getMock(),
+            $this->getMockBuilder(UserGroupEntity::class)->getMock(),
         ];
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface $entity */
-        $entity = $this->getMockBuilder(EntityInterface::class)
+        $entity = $this->getMockBuilder(ApiKeyEntity::class)
             ->setMethods(['getId', 'setDescription', 'clearUserGroups', 'addUserGroup'])
             ->getMock();
 
