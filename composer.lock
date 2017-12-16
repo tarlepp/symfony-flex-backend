@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "99229884dac0fa22f70d0f18be725a00",
+    "content-hash": "364108229a27d96fb3985a207a13df53",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1645,12 +1645,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "29ec20bda12c4f0f65dd806ab00f25a9d5b20b9c"
+                "reference": "bff1b3ba0a55c6f18cd8dddb6681debbb8997d55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/29ec20bda12c4f0f65dd806ab00f25a9d5b20b9c",
-                "reference": "29ec20bda12c4f0f65dd806ab00f25a9d5b20b9c",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/bff1b3ba0a55c6f18cd8dddb6681debbb8997d55",
+                "reference": "bff1b3ba0a55c6f18cd8dddb6681debbb8997d55",
                 "shasum": ""
             },
             "require": {
@@ -1719,7 +1719,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-12-09T13:31:56+00:00"
+            "time": "2017-12-15T15:58:40+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -5719,25 +5719,24 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tarlepp/fastest.git",
-                "reference": "8416cdf001326c84abec88641a2552ac101e0f3c"
+                "url": "https://github.com/liuggio/fastest.git",
+                "reference": "f382430967478d3e52199fc12f28d32c955afdcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tarlepp/fastest/zipball/8416cdf001326c84abec88641a2552ac101e0f3c",
-                "reference": "8416cdf001326c84abec88641a2552ac101e0f3c",
+                "url": "https://api.github.com/repos/liuggio/fastest/zipball/f382430967478d3e52199fc12f28d32c955afdcd",
+                "reference": "f382430967478d3e52199fc12f28d32c955afdcd",
                 "shasum": ""
             },
             "require": {
                 "doctrine/collections": "~1.2",
                 "php": ">=5.6",
-                "phpunit/phpunit": "^5.7|^6.1",
-                "symfony/console": "~2.7|~3.0|~4.0",
-                "symfony/process": "~2.7|~3.0|~4.0",
-                "symfony/stopwatch": "~2.7|~3.0|~4.0"
+                "symfony/console": ">=2.7 <5.0",
+                "symfony/process": ">=2.7 <5.0",
+                "symfony/stopwatch": ">=2.7 <5.0"
             },
             "require-dev": {
-                "behat/behat": "~2.5"
+                "behat/behat": "~3.3"
             },
             "suggest": {
                 "behat/behat": "Install it if you want to run tests with the provided Behat extension"
@@ -5748,7 +5747,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.6-dev"
                 }
             },
             "autoload": {
@@ -5759,11 +5758,7 @@
                     ]
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Liuggio\\Fastest\\": "tests"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -5774,10 +5769,7 @@
                 }
             ],
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
-            "support": {
-                "source": "https://github.com/tarlepp/fastest/tree/master"
-            },
-            "time": "2017-12-07T15:34:52+00:00"
+            "time": "2017-12-14T12:35:32+00:00"
         },
         {
             "name": "myclabs/deep-copy",

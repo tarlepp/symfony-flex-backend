@@ -22,12 +22,6 @@
 		"issues": "https://github.com/tarlepp/symfony-flex-backend/issues"
 	},
 	"prefer-stable": true,
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "https://github.com/tarlepp/fastest"
-		}
-	],
 	"require": {
 		"php": "^7.1.3",
 		"doctrine/annotations": "1.6.0",
