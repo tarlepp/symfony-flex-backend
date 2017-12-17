@@ -35,8 +35,8 @@ trait RestResourceFind
     /**
      * After lifecycle method for find method.
      *
-     * Notes:   If you make changes to entity in this lifecycle method by default it will be saved on end of current
-     *          request. To prevent this you need to detach current entity from entity manager.
+     * Notes:   If you make changes to entities in this lifecycle method by default it will be saved on end of current
+     *          request. To prevent this you need to clone each entity and use those.
      *
      * @param array             $criteria
      * @param array             $orderBy
