@@ -47,7 +47,7 @@ trait FindOneMethod
                 ->getResponseHandler()
                 ->createResponse($request, $this->getResource()->findOne($id, true));
         } catch (\Exception $exception) {
-            throw $this->handleRestMethodException($exception);
+            throw $this->handleRestMethodException($exception, $id);
         }
     }
 }

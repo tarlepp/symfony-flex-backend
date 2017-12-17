@@ -55,11 +55,12 @@ trait AbstractGenericMethods
     /**
      * Method to handle possible REST method trait exception.
      *
-     * @param \Exception $exception
+     * @param \Exception  $exception
+     * @param string|null $id
      *
      * @return HttpException
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    abstract public function handleRestMethodException(\Exception $exception): HttpException;
+    abstract public function handleRestMethodException(\Exception $exception, string $id = null): HttpException;
 }

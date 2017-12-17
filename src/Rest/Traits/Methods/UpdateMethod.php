@@ -55,7 +55,7 @@ trait UpdateMethod
 
             return $this->getResponseHandler()->createResponse($request, $data);
         } catch (\Exception $exception) {
-            throw $this->handleRestMethodException($exception);
+            throw $this->handleRestMethodException($exception, $id);
         }
     }
 }

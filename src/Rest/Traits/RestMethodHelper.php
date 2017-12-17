@@ -13,6 +13,7 @@ use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\UnitOfWork;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -160,14 +161,17 @@ trait RestMethodHelper
     /**
      * Method to handle possible REST method trait exception.
      *
-     * @param \Exception $exception
+     * @param \Exception  $exception
+     * @param string|null $id
      *
      * @return HttpException
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function handleRestMethodException(\Exception $exception): HttpException
+    public function handleRestMethodException(\Exception $exception, string $id = null): HttpException
     {
+        $this->detachEntity($id);
+
         $code = $this->getExceptionCode($exception);
 
         $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
@@ -247,5 +251,30 @@ trait RestMethodHelper
     private function getExceptionCode(\Exception $exception): int
     {
         return (int)$exception->getCode() !== 0 ? (int)$exception->getCode() : Response::HTTP_BAD_REQUEST;
+    }
+
+    /**
+     * Method to detach entity from entity manager so possible changes to it won't be saved.
+     *
+     * @param string|null $id
+     *
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    private function detachEntity(string $id = null): void
+    {
+        if ($id === null) {
+            return;
+        }
+
+        $resource = $this->getResource();
+        $entityManager = $resource->getRepository()->getEntityManager();
+
+        // Fetch entity
+        $entity = $resource->findOne($id, false);
+
+        // Detach entity from manager if it's been managed by it
+        if ($entity !== null && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED) {
+            $entityManager->detach($entity);
+        }
     }
 }
