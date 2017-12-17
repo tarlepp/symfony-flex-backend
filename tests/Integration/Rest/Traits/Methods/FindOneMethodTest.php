@@ -94,7 +94,7 @@ class FindOneMethodTest extends KernelTestCase
         $request = Request::create('/' . $uuid);
 
         $resource
-            ->expects(static::once())
+            ->expects(static::exactly(2))
             ->method('findOne')
             ->willThrowException($exception);
 

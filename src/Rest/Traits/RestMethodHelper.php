@@ -170,7 +170,7 @@ trait RestMethodHelper
      */
     public function handleRestMethodException(\Exception $exception, string $id = null): HttpException
     {
-        $this->detachEntity($id);
+        $this->detachEntityFromManager($id);
 
         $code = $this->getExceptionCode($exception);
 
@@ -260,7 +260,7 @@ trait RestMethodHelper
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    private function detachEntity(string $id = null): void
+    private function detachEntityFromManager(string $id = null): void
     {
         if ($id === null) {
             return;
@@ -269,12 +269,16 @@ trait RestMethodHelper
         $resource = $this->getResource();
         $entityManager = $resource->getRepository()->getEntityManager();
 
-        // Fetch entity
-        $entity = $resource->findOne($id, false);
+        try {
+            // Fetch entity
+            $entity = $resource->findOne($id, false);
 
-        // Detach entity from manager if it's been managed by it
-        if ($entity !== null && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED) {
-            $entityManager->detach($entity);
+            // Detach entity from manager if it's been managed by it
+            if ($entity !== null && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED) {
+                $entityManager->detach($entity);
+            }
+        } catch (\Exception $exception) {
+            // Silently ignore this one
         }
     }
 }
