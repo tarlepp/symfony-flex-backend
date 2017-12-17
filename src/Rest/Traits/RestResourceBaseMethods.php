@@ -174,7 +174,6 @@ trait RestResourceBaseMethods
      * @return integer
      *
      * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function count(array $criteria = null, array $search = null): int
