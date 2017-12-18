@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "364108229a27d96fb3985a207a13df53",
+    "content-hash": "0c39e6442a2a625f87891755ac372b89",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1645,12 +1645,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "a6ff145195ab391feb7ba206ac3900889f1b80b0"
+                "reference": "ac7b924129e57636ed533e2ef2075175b4e33dfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/a6ff145195ab391feb7ba206ac3900889f1b80b0",
-                "reference": "a6ff145195ab391feb7ba206ac3900889f1b80b0",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/ac7b924129e57636ed533e2ef2075175b4e33dfd",
+                "reference": "ac7b924129e57636ed533e2ef2075175b4e33dfd",
                 "shasum": ""
             },
             "require": {
@@ -1718,7 +1718,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-12-17T09:52:11+00:00"
+            "time": "2017-12-17T15:58:41+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -7636,16 +7636,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.2.0",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "ba816f2e1bacc16278792c78b67c730dfff064a6"
+                "reference": "4064632daf602552d40dcff30a1658ab76fc1621"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/ba816f2e1bacc16278792c78b67c730dfff064a6",
-                "reference": "ba816f2e1bacc16278792c78b67c730dfff064a6",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/4064632daf602552d40dcff30a1658ab76fc1621",
+                "reference": "4064632daf602552d40dcff30a1658ab76fc1621",
                 "shasum": ""
             },
             "require": {
@@ -7683,7 +7683,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-12-12T21:36:10+00:00"
+            "time": "2017-12-18T00:24:01+00:00"
         },
         {
             "name": "symfony/browser-kit",
