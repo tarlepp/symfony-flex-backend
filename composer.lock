@@ -1645,12 +1645,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "ac7b924129e57636ed533e2ef2075175b4e33dfd"
+                "reference": "f03e33f551eb5d23e477753dc9dc82cd84b9730c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/ac7b924129e57636ed533e2ef2075175b4e33dfd",
-                "reference": "ac7b924129e57636ed533e2ef2075175b4e33dfd",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/f03e33f551eb5d23e477753dc9dc82cd84b9730c",
+                "reference": "f03e33f551eb5d23e477753dc9dc82cd84b9730c",
                 "shasum": ""
             },
             "require": {
@@ -1718,7 +1718,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2017-12-17T15:58:41+00:00"
+            "time": "2017-12-18T20:07:44+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
