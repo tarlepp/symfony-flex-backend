@@ -275,7 +275,9 @@ trait RestMethodHelper
 
             // Detach entity from manager if it's been managed by it
             if ($entity !== null
-                && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED
+                && $entityManager
+                    ->/** @scrutinizer ignore-call */getUnitOfWork()
+                    ->getEntityState($entity) === UnitOfWork::STATE_MANAGED
             ) {
                 $entityManager->detach($entity);
             }
