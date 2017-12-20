@@ -46,7 +46,8 @@ trait RepositoryMethodsTrait
     public function find(string $id, int $lockMode = null, int $lockVersion = null)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
+        return $this->getEntityManager()
+            ->find($this->getEntityName(), $id, $lockMode, $lockVersion);
     }
 
     /** @noinspection GenericObjectTypeUsageInspection */
@@ -61,7 +62,9 @@ trait RepositoryMethodsTrait
     public function findOneBy(array $criteria, array $orderBy = null)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->getEntityManager()->getRepository($this->getEntityName())->findOneBy($criteria, $orderBy);
+        return $this->getEntityManager()
+            ->getRepository($this->getEntityName())
+            ->/** @scrutinizer ignore-call */findOneBy($criteria, $orderBy);
     }
 
     /**
@@ -120,7 +123,9 @@ trait RepositoryMethodsTrait
      */
     public function findAll(): array
     {
-        return $this->getEntityManager()->getRepository($this->getEntityName())->findAll();
+        return $this->getEntityManager()
+            ->getRepository($this->getEntityName())
+            ->findAll();
     }
 
     /**
