@@ -102,13 +102,8 @@ trait RepositoryMethodsTrait
         int $offset = null,
         array $search = null
     ): array {
-        $orderBy = $orderBy ?? [];
-        $limit = $limit ?? 0;
-        $offset = $offset ?? 0;
-        $search = $search ?? [];
-
-        // Create new query builder
-        $queryBuilder = $this->getQueryBuilder($criteria, $orderBy, $limit, $offset, $search);
+        // Get query builder
+        $queryBuilder = $this->getQueryBuilder($criteria, $search, $orderBy, $limit, $offset);
 
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
@@ -140,14 +135,10 @@ trait RepositoryMethodsTrait
      */
     public function findIds(array $criteria = null, array $search = null): array
     {
-        $criteria = $criteria ?? [];
-        $search = $search ?? [];
-        $queryBuilder = $this->createQueryBuilder();
+        // Get query builder
+        $queryBuilder = $this->getQueryBuilder($criteria, $search);
 
-        // Process normal and search term criteria
-        RepositoryHelper::processCriteria($queryBuilder, $criteria);
-        RepositoryHelper::processSearchTerms($queryBuilder, $search, $this->getSearchColumns());
-
+        // Build query
         $queryBuilder
             ->select('entity.id')
             ->distinct();
@@ -169,23 +160,17 @@ trait RepositoryMethodsTrait
      * @return integer
      *
      * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countAdvanced(array $criteria = null, array $search = null): int
     {
-        $criteria = $criteria ?? [];
-        $search = $search ?? [];
+        // Get query builder
+        $queryBuilder = $this->getQueryBuilder($criteria, $search);
 
-        // Create new query builder
-        $queryBuilder = $this->createQueryBuilder();
-
-        // Process normal and search term criteria
-        RepositoryHelper::processCriteria($queryBuilder, $criteria);
-        RepositoryHelper::processSearchTerms($queryBuilder, $search, $this->getSearchColumns());
-
-        $queryBuilder->select('COUNT(entity.id)');
-        $queryBuilder->distinct();
+        // Build query
+        $queryBuilder
+            ->select('COUNT(entity.id)')
+            ->distinct();
 
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
@@ -256,29 +241,41 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * @param array $criteria
-     * @param array $orderBy
-     * @param int   $limit
-     * @param int   $offset
-     * @param array $search
+     * Helper method to get QueryBuilder for current instance within specified default parameters.
+     *
+     * @param null|array $criteria
+     * @param null|array $search
+     * @param null|array $orderBy
+     * @param null|int   $limit
+     * @param null|int   $offset
      *
      * @return QueryBuilder
      *
      * @throws \InvalidArgumentException
      */
     private function getQueryBuilder(
-        array $criteria,
-        array $orderBy,
-        int $limit,
-        int $offset,
-        array $search
+        array $criteria = null,
+        array $search = null,
+        array $orderBy = null,
+        int $limit = null,
+        int $offset = null
     ): QueryBuilder {
+        // Normalize inputs
+        $criteria = $criteria ?? [];
+        $search = $search ?? [];
+        $orderBy = $orderBy ?? [];
+        $limit = $limit ?? 0;
+        $offset = $offset ?? 0;
+
+        // Create new QueryBuilder for this instance
         $queryBuilder = $this->createQueryBuilder();
 
-        // Process normal and search term criteria and order
+        // Process normal and search term criteria
         RepositoryHelper::processCriteria($queryBuilder, $criteria);
         RepositoryHelper::processSearchTerms($queryBuilder, $search, $this->getSearchColumns());
-        RepositoryHelper::processOrderBy($queryBuilder, $orderBy);
+
+        // Process order if defined
+        $orderBy === [] ?: RepositoryHelper::processOrderBy($queryBuilder, $orderBy);
 
         // Process limit and offset
         $limit === 0 ?: $queryBuilder->setMaxResults($limit);
