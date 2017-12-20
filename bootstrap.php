@@ -11,12 +11,13 @@ declare(strict_types = 1);
  */
 use Symfony\Component\Dotenv\Dotenv;
 
-$environmentFile = getenv('ENVIRONMENT_FILE');
+$environmentFile = (string)\getenv('ENVIRONMENT_FILE');
+$readableChannel = (string)\getenv('ENV_TEST_CHANNEL_READABLE');
 
 // Application is started against 'fastest' library, so we need to override database name manually
-if ($readableChannel = getenv('ENV_TEST_CHANNEL_READABLE')) {
+if (\strlen($readableChannel) > 0) {
     // Parse current '.env.test' file
-    $variables = (new Dotenv())->parse(file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $environmentFile));
+    $variables = (new Dotenv())->parse(\file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $environmentFile));
 
     // Specify new database name for current test env
     $databaseName = $variables['DATABASE_NAME'] . '_' . $readableChannel;
