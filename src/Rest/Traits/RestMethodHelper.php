@@ -266,12 +266,12 @@ trait RestMethodHelper
             return;
         }
 
-        $resource = $this->getResource();
-        $entityManager = $resource->getRepository()->getEntityManager();
+        $currentResource = $this->getResource();
+        $entityManager = $currentResource->getRepository()->getEntityManager();
 
         try {
             // Fetch entity
-            $entity = $resource->findOne($id, false);
+            $entity = $currentResource->findOne($id, false);
 
             // Detach entity from manager if it's been managed by it
             if ($entity !== null
