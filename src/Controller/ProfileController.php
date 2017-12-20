@@ -192,13 +192,15 @@ class ProfileController
         /** @noinspection NullPointerExceptionInspection */
         $user = $tokenStorage->getToken()->getUser();
 
+        $data = null;
+
         if ($user instanceof User) {
             $data = $user->getUserGroups();
         } elseif ($user instanceof ApiKeyUser) {
             $data = $user->getApiKey()->getUserGroups();
         }
 
-        if (!isset($data)) {
+        if ($data === null) {
             throw new AccessDeniedException('Not supported user');
         }
 
