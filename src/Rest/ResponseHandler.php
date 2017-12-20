@@ -171,7 +171,7 @@ final class ResponseHandler implements ResponseHandlerInterface
             $errors[] = \sprintf(
                 'Field \'%s\': %s',
                 $name,
-                $error->getMessage()
+                $error->/** @scrutinizer ignore-call */getMessage()
             );
 
             if (empty($name)) {
