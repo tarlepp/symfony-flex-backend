@@ -12,7 +12,8 @@
 
 JSON REST API which is build on top of [Symfony](https://symfony.com/) framework.
 
-Note that this project is build with [Symfony 4](https://symfony.com/4) and [Symfony Flex](https://github.com/symfony/flex).
+Note that this project is build with [Symfony 4](https://symfony.com/4) and 
+[Symfony Flex](https://github.com/symfony/flex).
 
 ## Table of Contents
 
@@ -55,7 +56,7 @@ Note that this project is build with [Symfony 4](https://symfony.com/4) and [Sym
 * PHP 7.1.3 or higher
 * [Composer](https://getcomposer.org/)
 * Database that is supported by [Doctrine](http://www.doctrine-project.org/)
-* [Sodium crypto library (libsodium)](https://download.libsodium.org/doc/) 
+* [Sodium crypto library (libsodium)](https://download.libsodium.org/doc/)
   * for PHP < 7.2 use [this](https://pecl.php.net/package/libsodium) pecl package
   * If you don't want to use [Argon2](https://password-hashing.net/) see [Notes](#notes)
 
@@ -355,8 +356,8 @@ And after that open `build/phpmetrics/index.html` with your favorite browser.
 
 ### User password hashing
 
-By default this application uses [Argon2](https://en.wikipedia.org/wiki/Argon2) 
-to hash all user passwords, and that is why application requires that your PHP 
+By default this application uses [Argon2](https://en.wikipedia.org/wiki/Argon2)
+to hash all user passwords, and that is why application requires that your PHP
 has support for [Sodium crypto library (libsodium)](https://download.libsodium.org/doc/)
 library.
 
