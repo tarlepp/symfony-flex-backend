@@ -30,7 +30,7 @@
 		"easycorp/easy-log-handler": "1.0.3",
 		"lexik/jwt-authentication-bundle": "2.4.3",
 		"matthiasnoback/symfony-console-form": "2.4.0",
-		"nelmio/api-doc-bundle": "dev-master",
+		"nelmio/api-doc-bundle": "3.0.0",
 		"nelmio/cors-bundle": "1.5.4",
 		"piwik/device-detector": "3.9.1",
 		"ramsey/uuid": "3.7.1",
@@ -53,8 +53,7 @@
 		"symfony/yaml": "4.0.2"
 	},
 	"require-dev": {
-		"codeclimate/php-test-reporter": "dev-master",
-		"liuggio/fastest": "dev-master",
+		"liuggio/fastest": "1.6.0",
 		"php-coveralls/php-coveralls": "2.0.0",
 		"phpmetrics/phpmetrics": "2.3.2",
 		"phpunit/phpcov": "4.0.3",
