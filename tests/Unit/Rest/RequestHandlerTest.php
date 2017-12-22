@@ -30,15 +30,17 @@ class RequestHandlerTest extends KernelTestCase
         RequestHandler::getCriteria($fakeRequest);
     }
 
-    public function testThatGetCriteriaMethodsReturnsExpectedArray(): void
+    /**
+     * @dataProvider dataProviderTestThatGetCriteriaMethodsReturnsExpectedArray
+     *
+     * @param array $expected
+     * @param array $where
+     */
+    public function testThatGetCriteriaMethodsReturnsExpectedArray(array $expected, array $where): void
     {
-        $data = [
-            'foo' => 'bar',
-        ];
+        $fakeRequest = Request::create('/', 'GET', ['where' => \json_encode($where)]);
 
-        $fakeRequest = Request::create('/', 'GET', ['where' => \json_encode($data)]);
-
-        static::assertSame($data, RequestHandler::getCriteria($fakeRequest));
+        static::assertSame($expected, RequestHandler::getCriteria($fakeRequest));
     }
 
     /**
@@ -171,6 +173,93 @@ class RequestHandlerTest extends KernelTestCase
             RequestHandler::getSearchTerms($fakeRequest),
             'getSearchTerms method did not return expected value'
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGetCriteriaMethodsReturnsExpectedArray(): array
+    {
+        return [
+            [
+                [
+                    'foo' => 'bar',
+                ],
+                [
+                    'foo' => 'bar',
+                ],
+            ],
+            [
+                [
+                    'foo' => '',
+                ],
+                [
+                    'foo' => '',
+                ],
+            ],
+            [
+                [
+                    'foo' => '0',
+                ],
+                [
+                    'foo' => '0',
+                ],
+            ],
+            [
+                [
+                    'foo' => 0,
+                ],
+                [
+                    'foo' => 0,
+                ],
+            ],
+            [
+                [
+                    'foo' => true,
+                ],
+                [
+                    'foo' => true,
+                ],
+            ],
+            [
+                [
+                    'foo' => false,
+                ],
+                [
+                    'foo' => false,
+                ],
+            ],
+            [
+                [],
+                [
+                    'foo' => null,
+                ],
+            ],
+            [
+                [
+                    'foo1' => 'bar',
+                    'foo2' => '',
+                    'foo3' => '0',
+                    'foo4' => 0,
+                    'foo5' => true,
+                    'foo6' => false,
+                ],
+                [
+                    'foo1' => 'bar',
+                    'foo11' => null,
+                    'foo2' => '',
+                    'foo21' => null,
+                    'foo3' => '0',
+                    'foo31' => null,
+                    'foo4' => 0,
+                    'foo41' => null,
+                    'foo5' => true,
+                    'foo51' => null,
+                    'foo6' => false,
+                    'foo61' => null,
+                ],
+            ],
+        ];
     }
 
     /**

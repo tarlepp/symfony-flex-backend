@@ -45,7 +45,12 @@ final class RequestHandler
     public static function getCriteria(HttpFoundationRequest $request): array
     {
         try {
-            $where = \array_filter(JSON::decode($request->get('where', '{}'), true));
+            $where = \array_filter(
+                JSON::decode($request->get('where', '{}'), true),
+                function ($value) {
+                    return $value !== null;
+                }
+            );
         } catch (\LogicException $error) {
             throw new HttpException(
                 HttpFoundationResponse::HTTP_BAD_REQUEST,
