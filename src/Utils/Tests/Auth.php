@@ -27,7 +27,7 @@ class Auth
     /**
      * JWT cache
      *
-     * @var \string[]
+     * @var string[]
      */
     private $cache = [];
 

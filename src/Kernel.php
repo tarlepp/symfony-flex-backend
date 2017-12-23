@@ -52,7 +52,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
     /**
      * Returns an array of bundles to register.
      *
-     * @return iterable<BundleInterface> An array of bundle instances
+     * @return iterable An array of bundle instances
      */
     public function registerBundles(): iterable
     {
