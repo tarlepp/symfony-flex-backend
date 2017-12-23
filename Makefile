@@ -65,18 +65,20 @@ endif
 ###> phpunit ###
 run-tests: ## Runs all tests via phpunit
 	@mkdir -p build/logs
-	@vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
+	vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 
 run-tests-fastest: ## Runs all test via fastest
-	find tests/ -name "*Test.php" | ./vendor/bin/fastest -v -p 2
+	@mkdir -p build/fastest
+	find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
+	vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml
 ###< phpunit ###
 
 ###> phpmetrics ###
 phpmetrics: ## Generates PhpMetrics static analysis
 	@mkdir -p build/phpmetrics
 	@if [ ! -f build/logs/junit.xml ] ; then \
-		printf "\033[32;49mjunit.xml not found running tests...\033[39m\n" ; \
-		make run-tests ; \
+		printf "\033[32;49mclover.xml not found running tests...\033[39m\n" ; \
+		make run-tests or make run-tests-fastests ; \
 	fi;
-	@vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
+	vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
 ###< phpmetrics ###
