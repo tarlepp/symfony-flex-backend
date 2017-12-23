@@ -95,10 +95,7 @@
 		],
 		"post-update-cmd": [
 			"@auto-scripts"
-		],
-		"metrics": "./vendor/bin/phpmetrics --report-html=build/phpmetrics .",
-		"test": "./vendor/bin/phpunit",
-		"test-parallel": "./vendor/bin/fastest -x phpunit.xml.dist"
+		]
 	},
 	"conflict": {
 		"symfony/symfony": "*",
