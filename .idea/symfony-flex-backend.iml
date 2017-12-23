@@ -7,6 +7,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/behat/transliterator" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/codedungeon/phpunit-result-printer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/cache" />
@@ -29,6 +30,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/promises" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/hassankhan/config" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/jean85/pretty-package-versions" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/lexik/jwt-authentication-bundle" />
@@ -157,6 +159,7 @@
       <library name="PHP" type="php">
         <CLASSES>
           <root url="file://$MODULE_DIR$/vendor/behat/transliterator" />
+          <root url="file://$MODULE_DIR$/vendor/codedungeon/phpunit-result-printer" />
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/cache" />
@@ -179,6 +182,7 @@
           <root url="file://$MODULE_DIR$/vendor/guzzlehttp/guzzle" />
           <root url="file://$MODULE_DIR$/vendor/guzzlehttp/promises" />
           <root url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
+          <root url="file://$MODULE_DIR$/vendor/hassankhan/config" />
           <root url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
           <root url="file://$MODULE_DIR$/vendor/jean85/pretty-package-versions" />
           <root url="file://$MODULE_DIR$/vendor/lexik/jwt-authentication-bundle" />
@@ -303,6 +307,7 @@
         </CLASSES>
         <SOURCES>
           <root url="file://$MODULE_DIR$/vendor/behat/transliterator" />
+          <root url="file://$MODULE_DIR$/vendor/codedungeon/phpunit-result-printer" />
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/annotations" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/cache" />
@@ -325,6 +330,7 @@
           <root url="file://$MODULE_DIR$/vendor/guzzlehttp/guzzle" />
           <root url="file://$MODULE_DIR$/vendor/guzzlehttp/promises" />
           <root url="file://$MODULE_DIR$/vendor/guzzlehttp/psr7" />
+          <root url="file://$MODULE_DIR$/vendor/hassankhan/config" />
           <root url="file://$MODULE_DIR$/vendor/jdorn/sql-formatter" />
           <root url="file://$MODULE_DIR$/vendor/jean85/pretty-package-versions" />
           <root url="file://$MODULE_DIR$/vendor/lexik/jwt-authentication-bundle" />

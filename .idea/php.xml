@@ -146,6 +146,8 @@
       <path value="$PROJECT_DIR$/vendor/nette/utils" />
       <path value="$PROJECT_DIR$/vendor/nette/di" />
       <path value="$PROJECT_DIR$/vendor/nette/php-generator" />
+      <path value="$PROJECT_DIR$/vendor/hassankhan/config" />
+      <path value="$PROJECT_DIR$/vendor/codedungeon/phpunit-result-printer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
