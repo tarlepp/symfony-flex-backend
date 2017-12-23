@@ -53,6 +53,7 @@
 		"symfony/yaml": "4.0.2"
 	},
 	"require-dev": {
+		"codedungeon/phpunit-result-printer": "0.4.4",
 		"liuggio/fastest": "1.6.0",
 		"php-coveralls/php-coveralls": "2.0.0",
 		"phpmetrics/phpmetrics": "2.3.2",

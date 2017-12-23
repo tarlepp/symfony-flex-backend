@@ -2,6 +2,9 @@
     "behat/transliterator": {
         "version": "v1.2.0"
     },
+    "codedungeon/phpunit-result-printer": {
+        "version": "0.4.4"
+    },
     "composer/ca-bundle": {
         "version": "1.1.0"
     },
@@ -91,6 +94,9 @@
     },
     "guzzlehttp/psr7": {
         "version": "1.4.2"
+    },
+    "hassankhan/config": {
+        "version": "0.10.0"
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"

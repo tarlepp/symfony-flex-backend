@@ -6,6 +6,7 @@
          backupGlobals="false"
          colors="true"
          bootstrap="tests/bootstrap.php"
+         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer"
 >
     <php>
         <ini name="error_reporting" value="-1" />
