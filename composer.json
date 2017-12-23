@@ -56,6 +56,7 @@
 		"liuggio/fastest": "1.6.0",
 		"php-coveralls/php-coveralls": "2.0.0",
 		"phpmetrics/phpmetrics": "2.3.2",
+		"phpstan/phpstan": "0.9.1",
 		"phpunit/phpcov": "4.0.3",
 		"sensiolabs/security-checker": "4.1.6",
 		"squizlabs/php_codesniffer": "3.2.2",
