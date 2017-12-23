@@ -15,11 +15,13 @@ services:
 php:
   - 7.1
   - 7.2
+  - master
   - nightly
 
 matrix:
   fast_finish: true
   allow_failures:
+    - php: master
     - php: nightly
   include:
     - php: 7.1
