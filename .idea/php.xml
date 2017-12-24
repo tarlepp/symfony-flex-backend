@@ -148,6 +148,7 @@
       <path value="$PROJECT_DIR$/vendor/nette/php-generator" />
       <path value="$PROJECT_DIR$/vendor/hassankhan/config" />
       <path value="$PROJECT_DIR$/vendor/codedungeon/phpunit-result-printer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/maker-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
