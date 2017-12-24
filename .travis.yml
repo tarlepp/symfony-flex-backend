@@ -76,9 +76,9 @@ before_script:
   - if [[ $COVERAGE == true ]]; then ./cc-test-reporter before-build; fi
 
 script:
-  - php ./vendor/bin/phpcs --standard=PSR2 --colors src
-  - find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml;"
-#  - ./vendor/bin/phpunit
+  - make phpcs
+  - make run-tests-fastest
+#  - make run-tests
 
 after_success:
   - if [[ $COVERAGE == true ]]; then php ./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml; fi

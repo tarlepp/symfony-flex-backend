@@ -82,3 +82,8 @@ phpmetrics: ## Generates PhpMetrics static analysis
 	fi;
 	vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
 ###< phpmetrics ###
+
+###> phpcs ###
+phpcs: ## Runs PHP CodeSniffer
+	php ./vendor/bin/phpcs --standard=PSR2 --colors src
+###< phpcs ###
