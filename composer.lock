@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a18408cc8f988bc2603e1062759ea8b",
+    "content-hash": "6485b1deeb1fc0ea894a9fafc32f458a",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -8344,6 +8344,63 @@
                 "environment"
             ],
             "time": "2017-12-08T15:46:13+00:00"
+        },
+        {
+            "name": "symfony/maker-bundle",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/maker-bundle.git",
+                "reference": "bf97703ddb68c6b37bd6bab5f5ebd5c7542ca1ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/bf97703ddb68c6b37bd6bab5f5ebd5c7542ca1ef",
+                "reference": "bf97703ddb68c6b37bd6bab5f5ebd5c7542ca1ef",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0.8",
+                "symfony/config": "^3.4|^4.0",
+                "symfony/console": "^3.4|^4.0",
+                "symfony/dependency-injection": "^3.4|^4.0",
+                "symfony/filesystem": "^3.4|^4.0",
+                "symfony/framework-bundle": "^3.4|^4.0",
+                "symfony/http-kernel": "^3.4|^4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.8",
+                "symfony/phpunit-bridge": "^3.4|^4.0",
+                "symfony/process": "^3.4|^4.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Bundle\\MakerBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "keywords": [
+                "code generator",
+                "generator",
+                "scaffold",
+                "scaffolding"
+            ],
+            "time": "2017-12-04T17:50:28+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",

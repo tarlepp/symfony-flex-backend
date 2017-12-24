@@ -419,6 +419,15 @@
     "symfony/lts": {
         "version": "v3"
     },
+    "symfony/maker-bundle": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
+        }
+    },
     "symfony/monolog-bridge": {
         "version": "v3.3.10"
     },
