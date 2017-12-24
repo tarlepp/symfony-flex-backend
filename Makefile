@@ -70,6 +70,8 @@ run-tests: ## Runs all tests via phpunit
 run-tests-fastest: ## Runs all test via fastest
 	@mkdir -p build/fastest
 	find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
+
+merge-clover: ## Creates clover from fastest run
 	vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml
 ###< phpunit ###
 
