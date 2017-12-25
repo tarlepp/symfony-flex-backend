@@ -25,6 +25,13 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 class RestApiMaker implements MakerInterface
 {
+    private const PARAM_RESOURCE_NAME = 'resourceName';
+    private const PARAM_AUTHOR = 'author';
+    private const PARAM_SWAGGER_TAG = 'swaggerTag';
+    private const PARAM_CONTROLLER_NAME = 'controllerName';
+    private const PARAM_ENTITY_NAME = 'entityName';
+    private const PARAM_REPOSITORY_NAME = 'repositoryName';
+
     /**
      * Return the command name for your maker (e.g. make:report).
      *
@@ -54,17 +61,17 @@ class RestApiMaker implements MakerInterface
         $command
             ->setDescription($message)
             ->addArgument(
-                'resourceName',
+                self::PARAM_RESOURCE_NAME,
                 InputArgument::OPTIONAL,
                 'Name of the resource (e.g. <fg=yellow>Book</>)'
             )
             ->addArgument(
-                'author',
+                self::PARAM_AUTHOR,
                 InputArgument::OPTIONAL,
                 'Author name (e.g. <fg=yellow>TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com</>)'
             )
             ->addArgument(
-                'swaggerTag',
+                self::PARAM_SWAGGER_TAG,
                 InputArgument::OPTIONAL,
                 'Swagger documentation tag (e.g. <fg=yellow>Library</>)'
             )
@@ -103,9 +110,9 @@ class RestApiMaker implements MakerInterface
      */
     public function getParameters(InputInterface $input): array
     {
-        $resourceName = Str::asClassName($input->getArgument('resourceName'));
-        $author = $input->getArgument('author');
-        $swaggerTag = $input->getArgument('swaggerTag');
+        $resourceName = Str::asClassName($input->getArgument(self::PARAM_RESOURCE_NAME));
+        $author = $input->getArgument(self::PARAM_AUTHOR);
+        $swaggerTag = $input->getArgument(self::PARAM_SWAGGER_TAG);
 
         Validator::validateClassName($resourceName);
 
@@ -144,10 +151,10 @@ class RestApiMaker implements MakerInterface
 
         return \array_merge(
             [
-                $baseDir . 'Controller.tpl.php' => 'src/Controller/' . $params['controllerName'] . '.php',
-                $baseDir . 'Entity.tpl.php'     => 'src/Entity/' . $params['entityName'] . '.php',
-                $baseDir . 'Repository.tpl.php' => 'src/Repository/' . $params['repositoryName'] . '.php',
-                $baseDir . 'Resource.tpl.php'   => 'src/Resource/' . $params['resourceName'] . '.php',
+                $baseDir . 'Controller.tpl.php' => 'src/Controller/' . $params[self::PARAM_CONTROLLER_NAME] . '.php',
+                $baseDir . 'Entity.tpl.php'     => 'src/Entity/' . $params[self::PARAM_ENTITY_NAME] . '.php',
+                $baseDir . 'Repository.tpl.php' => 'src/Repository/' . $params[self::PARAM_REPOSITORY_NAME] . '.php',
+                $baseDir . 'Resource.tpl.php'   => 'src/Resource/' . $params[self::PARAM_RESOURCE_NAME] . '.php',
             ],
             $this->getTestFiles($params, $baseDir)
         );
@@ -194,29 +201,31 @@ class RestApiMaker implements MakerInterface
      */
     private function getTestFiles(array $params, string $baseDir): array
     {
+        $suffix = 'Test.php';
+
         $tests = [
             'Functional' => [
                 'ControllerTestFunctional.tpl.php' => [
                     'tests/Functional/Controller/',
-                    $params['controllerName'] . 'Test.php',
+                    $params[self::PARAM_CONTROLLER_NAME] . $suffix,
                 ]
             ],
             'Integration' => [
                 'ControllerTestIntegration.tpl.php' => [
                     'tests/Integration/Controller/',
-                    $params['controllerName'] . 'Test.php',
+                    $params[self::PARAM_CONTROLLER_NAME] . $suffix,
                 ],
                 'EntityTestIntegration.tpl.php' => [
                     'tests/Integration/Entity/',
-                    $params['entityName'] . 'Test.php',
+                    $params[self::PARAM_ENTITY_NAME] . $suffix,
                 ],
                 'RepositoryTestIntegration.tpl.php' => [
                     'tests/Integration/Repository/',
-                    $params['repositoryName'] . 'Test.php',
+                    $params[self::PARAM_REPOSITORY_NAME] . $suffix,
                 ],
                 'ResourceTestIntegration.tpl.php' => [
                     'tests/Integration/Resource/',
-                    $params['resourceName'] . 'Test.php',
+                    $params[self::PARAM_RESOURCE_NAME] . $suffix,
                 ],
             ],
         ];
@@ -224,10 +233,9 @@ class RestApiMaker implements MakerInterface
         $output = [];
 
         /**
-         * @var string $section
-         * @var array  $items
+         * @var array $items
          */
-        foreach ($tests as $section => $items) {
+        foreach ($tests as $items) {
             foreach ($items as $key => $parts) {
                 $output[$baseDir . $key] = \implode('', $parts);
             }
