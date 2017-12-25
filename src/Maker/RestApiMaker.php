@@ -11,7 +11,10 @@ use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\MakerInterface;
+use Symfony\Bundle\MakerBundle\Str;
+use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
@@ -22,21 +25,6 @@ use Symfony\Component\Console\Input\InputInterface;
  */
 class RestApiMaker implements MakerInterface
 {
-    /**
-     * @var string
-     */
-    private $resourceName;
-
-    /**
-     * @var string
-     */
-    private $author;
-
-    /**
-     * @var string
-     */
-    private $swaggerTag;
-
     /**
      * Return the command name for your maker (e.g. make:report).
      *
@@ -64,7 +52,23 @@ class RestApiMaker implements MakerInterface
         );
 
         $command
-            ->setDescription($message);
+            ->setDescription($message)
+            ->addArgument(
+                'resourceName',
+                InputArgument::OPTIONAL,
+                'Name of the resource (e.g. <fg=yellow>Book</>)'
+            )
+            ->addArgument(
+                'author',
+                InputArgument::OPTIONAL,
+                'Author name (e.g. <fg=yellow>TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com</>)'
+            )
+            ->addArgument(
+                'swaggerTag',
+                InputArgument::OPTIONAL,
+                'Swagger documentation tag (e.g. <fg=yellow>Library</>)'
+            )
+            ->setHelp($message . "\n\n" . self::getCommandName() . ' [<resourceName>] [<author>] [<swaggerTag>]');
     }
 
     /**
@@ -74,7 +78,6 @@ class RestApiMaker implements MakerInterface
      */
     public function configureDependencies(DependencyBuilder $dependencies): void
     {
-        // TODO: Implement configureDependencies() method.
     }
 
     /**
@@ -86,9 +89,6 @@ class RestApiMaker implements MakerInterface
      */
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
     {
-        $this->resourceName = \ucfirst($io->ask('Name of the resource'));
-        $this->author = $io->ask('Author name');
-        $this->swaggerTag = $io->ask('Swagger documentation tag');
     }
 
     /**
@@ -98,19 +98,27 @@ class RestApiMaker implements MakerInterface
      * @param InputInterface $input
      *
      * @return array
+     *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function getParameters(InputInterface $input): array
     {
+        $resourceName = Str::asClassName($input->getArgument('resourceName'));
+        $author = $input->getArgument('author');
+        $swaggerTag = $input->getArgument('swaggerTag');
+
+        Validator::validateClassName($resourceName);
+
         return [
-            'resource'          => $this->resourceName,
-            'controllerName'    => $this->resourceName . 'Controller',
-            'entityName'        => $this->resourceName,
-            'repositoryName'    => $this->resourceName . 'Repository',
-            'resourceName'      => $this->resourceName . 'Resource',
-            'author'            => $this->author,
-            'swaggerTag'        => $this->swaggerTag,
-            'routePath'         => '/' . $this->convertToSnakeCase($this->resourceName),
-            'tableName'         => $this->convertToSnakeCase($this->resourceName),
+            'resource'          => $resourceName,
+            'controllerName'    => $resourceName . 'Controller',
+            'entityName'        => $resourceName,
+            'repositoryName'    => $resourceName . 'Repository',
+            'resourceName'      => $resourceName . 'Resource',
+            'author'            => $author,
+            'swaggerTag'        => $swaggerTag,
+            'routePath'         => '/' . $this->convertToSnakeCase($resourceName),
+            'tableName'         => $this->convertToSnakeCase($resourceName),
         ];
     }
 
@@ -186,7 +194,7 @@ class RestApiMaker implements MakerInterface
      */
     private function getTestFiles(array $params, string $baseDir): array
     {
-        $foo = [
+        $tests = [
             'Functional' => [
                 'ControllerTestFunctional.tpl.php' => [
                     'tests/Functional/Controller/',
@@ -219,7 +227,7 @@ class RestApiMaker implements MakerInterface
          * @var string $section
          * @var array  $items
          */
-        foreach ($foo as $section => $items) {
+        foreach ($tests as $section => $items) {
             foreach ($items as $key => $parts) {
                 $output[$baseDir . $key] = \implode('', $parts);
             }
