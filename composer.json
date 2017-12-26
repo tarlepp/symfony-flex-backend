@@ -59,6 +59,7 @@
 		"phpmetrics/phpmetrics": "2.3.2",
 		"phpstan/phpstan": "0.9.1",
 		"phpunit/phpcov": "4.0.3",
+		"sebastian/finder-facade": "1.2.2",
 		"sensiolabs/security-checker": "4.1.6",
 		"squizlabs/php_codesniffer": "3.2.2",
 		"symfony/browser-kit": "4.0.2",
