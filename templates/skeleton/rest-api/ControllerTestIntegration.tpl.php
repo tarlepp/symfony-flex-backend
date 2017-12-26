@@ -1,5 +1,5 @@
 <?= "<?php\n" ?>
-declare(strict_types=1);
+declare(strict_types = 1);
 /**
  * /tests/Integration/Controller/<?= $controllerName ?>Test.php
  *
