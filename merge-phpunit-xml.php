@@ -41,11 +41,11 @@ try {
         }
     }
 
-    $outTestSuite->setAttribute('tests',      $tests);
+    $outTestSuite->setAttribute('tests', $tests);
     $outTestSuite->setAttribute('assertions', $assertions);
-    $outTestSuite->setAttribute('failures',   $failures);
-    $outTestSuite->setAttribute('errors',     $errors);
-    $outTestSuite->setAttribute('time',       $time);
+    $outTestSuite->setAttribute('failures', $failures);
+    $outTestSuite->setAttribute('errors', $errors);
+    $outTestSuite->setAttribute('time', $time);
 
     $outXml->save($output);
 } catch (\Exception $exception) {
