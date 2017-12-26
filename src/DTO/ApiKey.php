@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/DTO/ApiKey.php
+ * /src/DTO/ApiKey.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
