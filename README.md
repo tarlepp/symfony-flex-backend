@@ -12,7 +12,7 @@
 
 JSON REST API which is build on top of [Symfony](https://symfony.com/) framework.
 
-Note that this project is build with [Symfony 4](https://symfony.com/4) and 
+Note that this project is build with [Symfony 4](https://symfony.com/4) and
 [Symfony Flex](https://github.com/symfony/flex).
 
 ## Table of Contents
