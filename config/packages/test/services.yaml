@@ -13,6 +13,9 @@ services:
         resource: '../../../tests/Functional/Rest/Traits/Actions/src/*'
         tags: [ 'controller.service_arguments' ]
 
+    App\Tests\Integration\Helpers\src\:
+        resource: '../../../tests/Integration/Helpers/src/*'
+
     test.service_locator:
         class: Symfony\Component\DependencyInjection\ServiceLocator
         tags: [ 'container.service_locator' ]
