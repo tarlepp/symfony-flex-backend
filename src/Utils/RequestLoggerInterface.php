@@ -25,10 +25,9 @@ interface RequestLoggerInterface
     /**
      * ResponseLogger constructor.
      *
-     * @param LoggerInterface    $logger
      * @param LogRequestResource $resource
      */
-    public function __construct(LoggerInterface $logger, LogRequestResource $resource);
+    public function __construct(LogRequestResource $resource);
 
     /**
      * Setter for response object.

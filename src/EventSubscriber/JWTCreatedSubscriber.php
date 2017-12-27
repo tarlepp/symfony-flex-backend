@@ -8,9 +8,9 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Entity\User;
+use App\Helpers\LoggerAwareTrait;
 use App\Security\RolesService;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -22,6 +22,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class JWTCreatedSubscriber
 {
+    // Traits
+    use LoggerAwareTrait;
+
     /**
      * @var RolesService
      */
@@ -33,22 +36,15 @@ class JWTCreatedSubscriber
     private $requestStack;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * JWTCreatedListener constructor.
      *
-     * @param RolesService    $rolesService
-     * @param RequestStack    $requestStack
-     * @param LoggerInterface $logger
+     * @param RolesService $rolesService
+     * @param RequestStack $requestStack
      */
-    public function __construct(RolesService $rolesService, RequestStack $requestStack, LoggerInterface $logger)
+    public function __construct(RolesService $rolesService, RequestStack $requestStack)
     {
         $this->rolesService = $rolesService;
         $this->requestStack = $requestStack;
-        $this->logger = $logger;
     }
 
     /**

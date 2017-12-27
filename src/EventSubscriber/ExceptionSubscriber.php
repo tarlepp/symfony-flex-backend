@@ -7,10 +7,10 @@ declare(strict_types = 1);
  */
 namespace App\EventSubscriber;
 
+use App\Helpers\LoggerAwareTrait;
 use App\Utils\JSON;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -28,10 +28,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class ExceptionSubscriber
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    // Traits
+    use LoggerAwareTrait;
 
     /**
      * @var TokenStorageInterface
@@ -46,12 +44,10 @@ class ExceptionSubscriber
     /**
      * ExceptionSubscriber constructor.
      *
-     * @param LoggerInterface       $logger
      * @param TokenStorageInterface $tokenStorage
      */
-    public function __construct(LoggerInterface $logger, TokenStorageInterface $tokenStorage)
+    public function __construct(TokenStorageInterface $tokenStorage)
     {
-        $this->logger = $logger;
         $this->tokenStorage = $tokenStorage;
         $this->environment = \getenv('APP_ENV');
     }

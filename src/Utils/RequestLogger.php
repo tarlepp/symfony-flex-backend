@@ -10,8 +10,8 @@ namespace App\Utils;
 use App\Entity\ApiKey;
 use App\Entity\LogRequest;
 use App\Entity\User;
+use App\Helpers\LoggerAwareTrait;
 use App\Resource\LogRequestResource;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -24,6 +24,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class RequestLogger implements RequestLoggerInterface
 {
+    // Traits
+    use LoggerAwareTrait;
+
     /**
      * @var Response
      */
@@ -33,11 +36,6 @@ class RequestLogger implements RequestLoggerInterface
      * @var Request
      */
     private $request;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
 
     /**
      * @var LogRequestResource
@@ -62,13 +60,10 @@ class RequestLogger implements RequestLoggerInterface
     /**
      * ResponseLogger constructor.
      *
-     * @param LoggerInterface    $logger
      * @param LogRequestResource $resource
      */
-    public function __construct(LoggerInterface $logger, LogRequestResource $resource)
+    public function __construct(LogRequestResource $resource)
     {
-        // Store user services
-        $this->logger = $logger;
         $this->resource = $resource;
     }
 
