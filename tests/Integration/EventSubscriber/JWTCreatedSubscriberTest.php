@@ -43,16 +43,14 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $requestStack->push($request);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService    $roles
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
+         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService $roles
          */
         $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent($payload, $user);
 
-        $subscriber = new JWTCreatedSubscriber($roles, $requestStack, $logger);
+        $subscriber = new JWTCreatedSubscriber($roles, $requestStack);
         $subscriber->onJWTCreated($event);
 
         $keys = ['exp', 'checksum', 'id', 'firstname', 'surname', 'email', 'roles'];
@@ -86,7 +84,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent($payload, $user);
 
-        $subscriber = new JWTCreatedSubscriber($roles, $requestStack, $logger);
+        $subscriber = new JWTCreatedSubscriber($roles, $requestStack);
+        $subscriber->setLogger($logger);
         $subscriber->onJWTCreated($event);
 
         $keys = ['exp', 'id', 'firstname', 'surname', 'email', 'roles'];
@@ -127,7 +126,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent($payload, $user);
 
-        $subscriber = new JWTCreatedSubscriber($roles, $requestStack, $logger);
+        $subscriber = new JWTCreatedSubscriber($roles, $requestStack);
+        $subscriber->setLogger($logger);
         $subscriber->onJWTCreated($event);
     }
 }

@@ -56,7 +56,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->method('error')
             ->with((string)$exception);
 
-        $subscriber = new ExceptionSubscriber($stubLogger, $stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber->setLogger($stubLogger);
         $subscriber->onKernelException($stubEvent);
     }
 
@@ -82,7 +83,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->expects(static::once())
             ->method('setResponse');
 
-        $subscriber = new ExceptionSubscriber($stubLogger, $stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber->setLogger($stubLogger);
         $subscriber->onKernelException($stubEvent);
     }
 
@@ -113,7 +115,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             $exception
         );
 
-        $subscriber = new ExceptionSubscriber($stubLogger, $stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber->setLogger($stubLogger);
         $subscriber->onKernelException($event);
 
         static::assertSame($expectedStatus, $event->getResponse()->getStatusCode());
@@ -147,7 +150,8 @@ class ExceptionSubscriberTest extends KernelTestCase
         );
 
         // Process event
-        $subscriber = new ExceptionSubscriber($stubLogger, $stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber->setLogger($stubLogger);
 
         PHPUnitUtil::setProperty('environment', $environment, $subscriber);
 
@@ -184,7 +188,8 @@ class ExceptionSubscriberTest extends KernelTestCase
                 ->willReturn(true);
         }
 
-        $subscriber = new ExceptionSubscriber($stubLogger, $stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber->setLogger($stubLogger);
 
         static::assertSame(
             $expectedStatusCode,
@@ -212,7 +217,8 @@ class ExceptionSubscriberTest extends KernelTestCase
         $stubLogger = $this->createMock(LoggerInterface::class);
 
         // Create subscriber
-        $subscriber = new ExceptionSubscriber($stubLogger, $stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber->setLogger($stubLogger);
 
         PHPUnitUtil::setProperty('environment', $environment, $subscriber);
 

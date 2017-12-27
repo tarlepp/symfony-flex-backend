@@ -39,11 +39,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         // Create event for subscriber
         $event = new JWTDecodedEvent($payload);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-
         // Create subscriber and call actual process method
-        $subscriber = new JWTDecodedSubscriber($requestStack, $logger);
+        $subscriber = new JWTDecodedSubscriber($requestStack);
         $subscriber->onJWTDecoded($event);
 
         static::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
@@ -72,38 +69,11 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         // Create event for subscriber
         $event = new JWTDecodedEvent($payload);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-
         // Create subscriber and call actual process method
-        $subscriber = new JWTDecodedSubscriber($requestStack, $logger);
+        $subscriber = new JWTDecodedSubscriber($requestStack);
         $subscriber->onJWTDecoded($event);
 
         static::assertTrue($event->isValid(), 'JWTDecodedEvent did mark event as invalid.');
-    }
-
-    public function testThatLoggerErrorIsCalledIfRequestDoesNotExist(): void
-    {
-        // Create empty JWT payload
-        $payload = [];
-
-        // Create RequestStack and push pure Request to it
-        $requestStack = new RequestStack();
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-
-        $logger
-            ->expects(static::once())
-            ->method('error')
-            ->with('Request not available');
-
-        // Create event for subscriber
-        $event = new JWTDecodedEvent($payload);
-
-        // Create subscriber and call actual process method
-        $subscriber = new JWTDecodedSubscriber($requestStack, $logger);
-        $subscriber->onJWTDecoded($event);
     }
 
     public function testThatEventIsMarkedInvalidIfRequestDoesNotExist(): void
@@ -121,7 +91,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create subscriber and call actual process method
-        $subscriber = new JWTDecodedSubscriber($requestStack, $logger);
+        $subscriber = new JWTDecodedSubscriber($requestStack);
+        $subscriber->setLogger($logger);
         $subscriber->onJWTDecoded($event);
 
         static::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
@@ -141,11 +112,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
         $expectedEvent = clone $event;
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-
         // Create subscriber and call actual process method
-        $subscriber = new JWTDecodedSubscriber($requestStack, $logger);
+        $subscriber = new JWTDecodedSubscriber($requestStack);
         $subscriber->onJWTDecoded($event);
 
         static::assertSame($expectedEvent->getPayload(), $event->getPayload());

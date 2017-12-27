@@ -25,17 +25,15 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface    $logger
          * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
          */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
         $resource
             ->expects(static::never())
             ->method('save');
 
-        (new RequestLogger($logger, $resource))
+        (new RequestLogger($resource))
             ->setResponse(new Response())
             ->handle();
     }
@@ -43,17 +41,15 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLogIsNotCreatedIfResponseObjectIsNotSet(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface    $logger
          * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
          */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
         $resource
             ->expects(static::never())
             ->method('save');
 
-        (new RequestLogger($logger, $resource))
+        (new RequestLogger($resource))
             ->setRequest(new Request())
             ->handle();
     }
@@ -61,10 +57,8 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatResourceSaveMethodIsCalled(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface    $logger
          * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
          */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
         $request = new Request();
@@ -74,7 +68,7 @@ class RequestLoggerTest extends KernelTestCase
             ->expects(static::once())
             ->method('save');
 
-        (new RequestLogger($logger, $resource))
+        (new RequestLogger($resource))
             ->setRequest($request)
             ->setResponse($response)
             ->setMasterRequest(true)
@@ -106,7 +100,8 @@ class RequestLoggerTest extends KernelTestCase
             ->method('error')
             ->with('test exception');
 
-        (new RequestLogger($logger, $resource))
+        (new RequestLogger($resource))
+            ->setLogger($logger)
             ->setRequest($request)
             ->setResponse($response)
             ->setMasterRequest(true)
