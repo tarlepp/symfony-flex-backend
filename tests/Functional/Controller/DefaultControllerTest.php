@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Controller;
 
 use App\Resource\LogRequestResource;
+use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 
 /**
@@ -96,5 +97,22 @@ class DefaultControllerTest extends WebTestCase
         $client->request('GET', '/version');
 
         static::assertSame($expectedLogCount, $resource->count());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testThatApiVersionIsAddedToResponseHeaders(): void
+    {
+        $client = $this->getClient();
+        $client->request('GET', '/version');
+
+        $response = $client->getResponse();
+
+        /** @noinspection NullPointerExceptionInspection */
+        $version = $response->headers->get('X-API-VERSION');
+
+        static::assertNotNull($version);
+        static::assertSame(JSON::decode(\file_get_contents(__DIR__ . '/../../../composer.json'))->version, $version);
     }
 }
