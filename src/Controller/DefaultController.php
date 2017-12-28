@@ -9,8 +9,10 @@ namespace App\Controller;
 
 use App\Rest\ResponseHandler;
 use App\Utils\HealthzService;
+use App\Utils\JSON;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -74,5 +76,27 @@ class DefaultController
                 ]
             ]
         );
+    }
+
+    /**
+     * Route for get API version.
+     *
+     * @Route("/version")
+     *
+     * @Method("GET")
+     *
+     * @return JsonResponse
+     *
+     * @throws \LogicException
+     */
+    public function versionAction(): JsonResponse
+    {
+        $composerData = JSON::decode(\file_get_contents(__DIR__ . '/../../composer.json'));
+
+        $data = [
+            'version' => $composerData->version,
+        ];
+
+        return new JsonResponse($data);
     }
 }
