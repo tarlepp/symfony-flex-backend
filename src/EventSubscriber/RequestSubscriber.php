@@ -56,9 +56,13 @@ class RequestSubscriber
     public function onKernelResponse(FilterResponseEvent $event): void
     {
         $request = $event->getRequest();
+        $path = $request->getPathInfo();
 
-        // We don't want to log OPTIONS and /healthz requests
-        if ($request->getRealMethod() === 'OPTIONS' || $request->getPathInfo() === '/healthz') {
+        // We don't want to log /healthz , /version and OPTIONS requests
+        if ($path === '/healthz'
+            || $path === '/version'
+            || $request->getRealMethod() === 'OPTIONS'
+        ) {
             return;
         }
 
