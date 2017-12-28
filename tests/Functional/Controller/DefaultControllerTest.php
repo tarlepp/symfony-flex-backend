@@ -18,6 +18,9 @@ use App\Utils\Tests\WebTestCase;
  */
 class DefaultControllerTest extends WebTestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function testThatDefaultRouteReturns200(): void
     {
         $client = $this->getClient();
@@ -29,6 +32,9 @@ class DefaultControllerTest extends WebTestCase
         static::assertSame(200, $response->getStatusCode());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatHealthzRouteReturns200(): void
     {
         $client = $this->getClient();
@@ -40,6 +46,10 @@ class DefaultControllerTest extends WebTestCase
         static::assertSame(200, $response->getStatusCode());
     }
 
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Exception
+     */
     public function testThatHealthzRouteDoesNotMakeRequestLog(): void
     {
         static::bootKernel();
@@ -51,6 +61,39 @@ class DefaultControllerTest extends WebTestCase
 
         $client = $this->getClient();
         $client->request('GET', '/healthz');
+
+        static::assertSame($expectedLogCount, $resource->count());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testThatVersionRouteReturns200(): void
+    {
+        $client = $this->getClient();
+        $client->request('GET', '/version');
+
+        $response = $client->getResponse();
+
+        /** @noinspection NullPointerExceptionInspection */
+        static::assertSame(200, $response->getStatusCode());
+    }
+
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Exception
+     */
+    public function testThatVersionRouteDoesNotMakeRequestLog(): void
+    {
+        static::bootKernel();
+
+        /** @var LogRequestResource $resource */
+        $resource = static::$kernel->getContainer()->get(LogRequestResource::class);
+
+        $expectedLogCount = $resource->count();
+
+        $client = $this->getClient();
+        $client->request('GET', '/version');
 
         static::assertSame($expectedLogCount, $resource->count());
     }
