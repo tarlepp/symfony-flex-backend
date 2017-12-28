@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @package App\Tests
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class WebTestCase extends BaseWebTestCase
+abstract class WebTestCase extends BaseWebTestCase
 {
     /**
      * @var ContainerInterface

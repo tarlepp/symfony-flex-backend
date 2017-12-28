@@ -16,7 +16,7 @@ use App\Rest\ResponseHandlerInterface;
  * @package App\Utils\Tests
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RestIntegrationControllerTestCase extends ContainerTestCase
+abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 {
     /**
      * @var ControllerInterface
