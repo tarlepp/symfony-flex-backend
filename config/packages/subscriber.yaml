@@ -35,7 +35,11 @@ services:
 
     App\EventSubscriber\RequestSubscriber:
         tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 15 }
+
+    App\EventSubscriber\ResponseSubscriber:
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 10 }
 
     App\EventSubscriber\UserEntitySubscriber:
         tags:
