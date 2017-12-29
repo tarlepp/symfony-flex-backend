@@ -107,7 +107,7 @@ class RepositoryHelper
     {
         $terms = $terms ?? [];
 
-        if (empty($columns) || empty($terms)) {
+        if (empty($columns)) {
             return;
         }
 
