@@ -266,9 +266,6 @@ trait RepositoryMethodsTrait
         int $offset = null
     ): QueryBuilder {
         // Normalize inputs
-        $criteria = $criteria ?? [];
-        $search = $search ?? [];
-        $orderBy = $orderBy ?? [];
         $limit = $limit ?? 0;
         $offset = $offset ?? 0;
 
@@ -277,10 +274,8 @@ trait RepositoryMethodsTrait
 
         // Process normal and search term criteria
         RepositoryHelper::processCriteria($queryBuilder, $criteria);
-        RepositoryHelper::processSearchTerms($queryBuilder, $search, $this->getSearchColumns());
-
-        // Process order if defined
-        $orderBy === [] ?: RepositoryHelper::processOrderBy($queryBuilder, $orderBy);
+        RepositoryHelper::processSearchTerms($queryBuilder, $this->getSearchColumns(), $search);
+        RepositoryHelper::processOrderBy($queryBuilder, $orderBy);
 
         // Process limit and offset
         $limit === 0 ?: $queryBuilder->setMaxResults($limit);

@@ -65,14 +65,16 @@ class RepositoryHelper
      * @see \App\Controller\Rest::processCriteria
      *
      * @param QueryBuilder $queryBuilder
-     * @param array        $criteria
+     * @param array|null   $criteria
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function processCriteria(QueryBuilder $queryBuilder, array $criteria): void
+    public static function processCriteria(QueryBuilder $queryBuilder, array $criteria = null): void
     {
+        $criteria = $criteria ?? [];
+
         if (empty($criteria)) {
             return;
         }
@@ -94,16 +96,18 @@ class RepositoryHelper
      * @see \App\Controller\Rest::getSearchTerms
      *
      * @param QueryBuilder $queryBuilder
-     * @param array        $terms
      * @param array        $columns
+     * @param array|null   $terms
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function processSearchTerms(QueryBuilder $queryBuilder, array $terms, array $columns): void
+    public static function processSearchTerms(QueryBuilder $queryBuilder, array $columns, array $terms = null): void
     {
-        if (empty($columns)) {
+        $terms = $terms ?? [];
+
+        if (empty($columns) || empty($terms)) {
             return;
         }
 
@@ -121,12 +125,14 @@ class RepositoryHelper
      * Simple process method for order by part of for current query builder.
      *
      * @param QueryBuilder $queryBuilder
-     * @param array        $orderBy
+     * @param array|null   $orderBy
      *
      * @return void
      */
-    public static function processOrderBy(QueryBuilder $queryBuilder, array $orderBy): void
+    public static function processOrderBy(QueryBuilder $queryBuilder, array $orderBy = null): void
     {
+        $orderBy = $orderBy ?? [];
+
         foreach ($orderBy as $column => $order) {
             if (\strpos($column, '.') === false) {
                 $column = 'entity.' . $column;
