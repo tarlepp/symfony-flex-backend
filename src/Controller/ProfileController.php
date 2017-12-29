@@ -222,27 +222,12 @@ class ProfileController
     private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): ?array
     {
         if ($user instanceof User) {
-            $groups = \array_merge(
-                [
-                    'User',
-                    'User.userGroups',
-                    'User.roles',
-                ],
-                $this->getUserGroupGroups()
-            );
+            $groups = $this->getSerializationGroupsForUser();
 
             // Set roles service to user entity, so we can get inherited roles
             $user->setRolesService($rolesService);
         } elseif ($user instanceof ApiKeyUser) {
-            $groups = array_merge(
-                [
-                    'ApiKeyUser',
-                    'ApiKeyUser.apiKey',
-                    'ApiKey.description',
-                    'ApiKey.userGroups',
-                ],
-                $this->getUserGroupGroups()
-            );
+            $groups = $this->getSerializationGroupsForApiKey();
         }
 
         if (!isset($groups)) {
@@ -250,6 +235,37 @@ class ProfileController
         }
 
         return $groups;
+    }
+
+    /**
+     * @return array
+     */
+    private function getSerializationGroupsForUser(): array
+    {
+        return \array_merge(
+            [
+                'User',
+                'User.userGroups',
+                'User.roles',
+            ],
+            $this->getUserGroupGroups()
+        );
+    }
+
+    /**
+     * @return array
+     */
+    private function getSerializationGroupsForApiKey(): array
+    {
+        return array_merge(
+            [
+                'ApiKeyUser',
+                'ApiKeyUser.apiKey',
+                'ApiKey.description',
+                'ApiKey.userGroups',
+            ],
+            $this->getUserGroupGroups()
+        );
     }
 
     /**
