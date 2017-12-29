@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cdffbc4302b786bfb13a1860f7f9646e",
+    "content-hash": "c16669bdd15ab90c9df5e7708d4c8cfc",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1177,16 +1177,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.31",
+            "version": "v2.4.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "79cd1d49898a21ede9a5dfad41c021abd9a14339"
+                "reference": "a268224b312353be62d72e6390a286f4166a7542"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/79cd1d49898a21ede9a5dfad41c021abd9a14339",
-                "reference": "79cd1d49898a21ede9a5dfad41c021abd9a14339",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/a268224b312353be62d72e6390a286f4166a7542",
+                "reference": "a268224b312353be62d72e6390a286f4166a7542",
                 "shasum": ""
             },
             "require": {
@@ -1199,7 +1199,7 @@
                 "doctrine/mongodb-odm": ">=1.0.2",
                 "doctrine/orm": ">=2.5.0",
                 "phpunit/phpunit": "*",
-                "symfony/yaml": "~2.6|~3.0"
+                "symfony/yaml": "~2.6|~3.0|~4.0"
             },
             "suggest": {
                 "doctrine/mongodb-odm": "to use the extensions with the MongoDB ODM",
@@ -1251,7 +1251,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2017-10-12T06:26:21+00:00"
+            "time": "2017-12-28T14:36:10+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -3228,16 +3228,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.52",
+            "version": "v1.0.53",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "861a98056cad02a3a18b778404dee1427bd4a30d"
+                "reference": "cc4b1bac464597ce220d4f8208c38c75195e80c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/861a98056cad02a3a18b778404dee1427bd4a30d",
-                "reference": "861a98056cad02a3a18b778404dee1427bd4a30d",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/cc4b1bac464597ce220d4f8208c38c75195e80c2",
+                "reference": "cc4b1bac464597ce220d4f8208c38c75195e80c2",
                 "shasum": ""
             },
             "require": {
@@ -3270,7 +3270,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2017-12-20T19:26:56+00:00"
+            "time": "2017-12-27T16:06:01+00:00"
         },
         {
             "name": "symfony/form",
