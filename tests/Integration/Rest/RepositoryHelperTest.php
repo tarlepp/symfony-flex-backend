@@ -69,7 +69,7 @@ class RepositoryHelperTest extends KernelTestCase
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
-        RepositoryHelper::processSearchTerms($qb, ['and' => ['foo', 'bar']], []);
+        RepositoryHelper::processSearchTerms($qb, [], ['and' => ['foo', 'bar']]);
 
         $message = 'processSearchTerms did not return expected DQL.';
 
@@ -83,13 +83,13 @@ class RepositoryHelperTest extends KernelTestCase
      * @dataProvider dataProviderTestThatProcessSearchTermsWorksLikeExpected
      *
      * @param string $expected
-     * @param array  $input
+     * @param array  $terms
      */
-    public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $input):  void
+    public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $terms):  void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
-        RepositoryHelper::processSearchTerms($qb, $input, $this->repository->getSearchColumns());
+        RepositoryHelper::processSearchTerms($qb, $this->repository->getSearchColumns(), $terms);
 
         $message = 'processSearchTerms did not return expected DQL.';
 
