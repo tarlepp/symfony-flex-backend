@@ -167,7 +167,6 @@ class FindOneMethodTest extends KernelTestCase
         return [
             [new HttpException(400), 0],
             [new NotFoundHttpException(), 0],
-            [new \Exception(), 400],
         ];
     }
 }
