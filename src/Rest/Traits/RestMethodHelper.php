@@ -269,19 +269,15 @@ trait RestMethodHelper
         $currentResource = $this->getResource();
         $entityManager = $currentResource->getRepository()->getEntityManager();
 
-        try {
-            // Fetch entity
-            $entity = $currentResource->findOne($id, false);
+        // Fetch entity
+        $entity = $currentResource->findOne($id, false);
 
-            // Detach entity from manager if it's been managed by it
-            if ($entity !== null
-                /** @scrutinizer ignore-call */
-                && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED
-            ) {
-                $entityManager->detach($entity);
-            }
-        } catch (\Exception $exception) {
-            // Silently ignore this one
+        // Detach entity from manager if it's been managed by it
+        if ($entity !== null
+            /** @scrutinizer ignore-call */
+            && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED
+        ) {
+            $entityManager->detach($entity);
         }
     }
 }
