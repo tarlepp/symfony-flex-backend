@@ -6,7 +6,7 @@ plugins:
     config:
       languages:
         php:
-          mass_threshold: 45
+          mass_threshold: 55
   fixme:
     enabled: true
   phpmd:
@@ -44,7 +44,7 @@ checks:
       threshold: 20
   method-lines:
     config:
-      threshold: 25
+      threshold: 40
   nested-control-flow:
     config:
       threshold: 4
@@ -53,7 +53,7 @@ checks:
       threshold: 4
   similar-code:
     config:
-      threshold: 40 # language-specific defaults. an override will affect all languages.
+      threshold: 45 # language-specific defaults. an override will affect all languages.
   identical-code:
     config:
       threshold: # language-specific defaults. an override will affect all languages.
