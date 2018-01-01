@@ -12,6 +12,7 @@ use App\Utils\HealthzService;
 use App\Utils\JSON;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +51,16 @@ class DefaultController
      *
      * @Method("GET")
      *
+     * @SWG\Response(
+     *      response=200,
+     *      description="success",
+     *      @SWG\Schema(
+     *          type="object",
+     *          example={"timestamp": "2018-01-01T13:08:05+00:00"},
+     *          @SWG\Property(property="timestamp", type="string"),
+     *      ),
+     *  )
+     *
      * @param Request         $request
      * @param ResponseHandler $responseHandler
      * @param HealthzService  $healthzService
@@ -84,6 +95,16 @@ class DefaultController
      * @Route("/version")
      *
      * @Method("GET")
+     *
+     * @SWG\Response(
+     *      response=200,
+     *      description="success",
+     *      @SWG\Schema(
+     *          type="object",
+     *          example={"version": "1.2.3"},
+     *          @SWG\Property(property="version", type="string", description="Version number"),
+     *      ),
+     *  )
      *
      * @return JsonResponse
      *
