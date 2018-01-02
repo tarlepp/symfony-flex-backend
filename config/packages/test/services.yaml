@@ -9,6 +9,13 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: true
 
+    App\Tests\Functional\Rest\src\:
+        resource: '../../../tests/Functional/Rest/src/*'
+
+    App\Tests\Functional\Rest\src\Controller\:
+        resource: '../../../tests/Functional/Rest/src/Controller/*'
+        tags: [ 'controller.service_arguments' ]
+
     App\Tests\Functional\Rest\Traits\Actions\src\:
         resource: '../../../tests/Functional/Rest/Traits/Actions/src/*'
         tags: [ 'controller.service_arguments' ]

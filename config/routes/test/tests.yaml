@@ -1,3 +1,7 @@
-controllers_test:
+test_controllers:
     resource: ../tests/Functional/Rest/Traits/Actions/src/
+    type: annotation
+
+test_life_cycle_controllers:
+    resource: ../tests/Functional/Rest/src/Controller
     type: annotation

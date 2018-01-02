@@ -170,25 +170,11 @@ trait RestMethodHelper
      */
     public function handleRestMethodException(\Exception $exception, string $id = null): HttpException
     {
-        $this->detachEntityFromManager($id);
-
-        $code = $this->getExceptionCode($exception);
-
-        $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
-
-        if ($exception instanceof HttpException) {
-            $output = $exception;
-        } elseif ($exception instanceof NoResultException) {
-            $code = Response::HTTP_NOT_FOUND;
-
-            $output = new HttpException($code, 'Not found', $exception, [], $code);
-        } elseif ($exception instanceof NonUniqueResultException) {
-            $code = Response::HTTP_INTERNAL_SERVER_ERROR;
-
-            $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
+        if ($id !== null) {
+            $this->detachEntityFromManager($id);
         }
 
-        return $output;
+        return $this->determineOutputAndStatusCodeForRestMethodException($exception);
     }
 
     /**
@@ -256,21 +242,17 @@ trait RestMethodHelper
     /**
      * Method to detach entity from entity manager so possible changes to it won't be saved.
      *
-     * @param string|null $id
+     * @param string $id
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    private function detachEntityFromManager(string $id = null): void
+    private function detachEntityFromManager(string $id): void
     {
-        if ($id === null) {
-            return;
-        }
-
         $currentResource = $this->getResource();
         $entityManager = $currentResource->getRepository()->getEntityManager();
 
         // Fetch entity
-        $entity = $currentResource->findOne($id, false);
+        $entity = $currentResource->getRepository()->find($id);
 
         // Detach entity from manager if it's been managed by it
         if ($entity !== null
@@ -279,5 +261,31 @@ trait RestMethodHelper
         ) {
             $entityManager->detach($entity);
         }
+    }
+
+    /**
+     * @param \Exception $exception
+     *
+     * @return \Exception|HttpException
+     */
+    private function determineOutputAndStatusCodeForRestMethodException(\Exception $exception)
+    {
+        $code = $this->getExceptionCode($exception);
+
+        $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
+
+        if ($exception instanceof HttpException) {
+            $output = $exception;
+        } elseif ($exception instanceof NoResultException) {
+            $code = Response::HTTP_NOT_FOUND;
+
+            $output = new HttpException($code, 'Not found', $exception, [], $code);
+        } elseif ($exception instanceof NonUniqueResultException) {
+            $code = Response::HTTP_INTERNAL_SERVER_ERROR;
+
+            $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
+        }
+
+        return $output;
     }
 }
