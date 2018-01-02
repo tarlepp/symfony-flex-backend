@@ -54,6 +54,22 @@ class Role extends BaseRole implements EntityInterface
     private $id;
 
     /**
+     * @var string
+     *
+     * @Groups({
+     *      "Role",
+     *      "Role.description",
+     *  })
+     *
+     * @ORM\Column(
+     *      name="description",
+     *      type="text",
+     *      nullable=false
+     *  )
+     */
+    private $description = '';
+
+    /**
      * Author books.
      *
      * @var Collection<App\Entity\UserGroup>
@@ -88,6 +104,26 @@ class Role extends BaseRole implements EntityInterface
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return Role
+     */
+    public function setDescription(string $description): Role
+    {
+        $this->description = $description;
+
+        return $this;
     }
 
     /**
