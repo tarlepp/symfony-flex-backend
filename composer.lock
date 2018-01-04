@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "14b004e257ce61d1b3db6a993c031f8b",
+    "content-hash": "4ad457d9bfb0dc0ed3441ad5209c50be",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5333,21 +5333,21 @@
     "packages-dev": [
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.4.4",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "1f41a61732ad267af9fe9ab6b5eefae029c616d0"
+                "reference": "b070c70edc3e19fd5e85391fb3a31e775e938798"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/1f41a61732ad267af9fe9ab6b5eefae029c616d0",
-                "reference": "1f41a61732ad267af9fe9ab6b5eefae029c616d0",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/b070c70edc3e19fd5e85391fb3a31e775e938798",
+                "reference": "b070c70edc3e19fd5e85391fb3a31e775e938798",
                 "shasum": ""
             },
             "require": {
                 "hassankhan/config": "^0.10.0",
-                "symfony/yaml": "^3.3|^4.0"
+                "symfony/yaml": "^2.7|^3.0|^4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": ">=5.2",
@@ -5377,7 +5377,7 @@
                 "printer",
                 "result-printer"
             ],
-            "time": "2017-12-22T18:50:24+00:00"
+            "time": "2018-01-03T15:58:27+00:00"
         },
         {
             "name": "composer/ca-bundle",
