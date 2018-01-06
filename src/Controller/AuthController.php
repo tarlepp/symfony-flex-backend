@@ -44,14 +44,31 @@ class AuthController
      * @SWG\Response(
      *      response=200,
      *      description="JSON Web Token for user",
+     *      @SWG\Schema(
+     *          type="object",
+     *          example={"token": "_json_web_token_"},
+     *          @SWG\Property(property="token", type="string", description="Json Web Token"),
+     *      ),
      *  )
      * @SWG\Response(
      *      response=400,
-     *      description="Invalid body content",
+     *      description="Bad Request",
+     *      @SWG\Schema(
+     *          type="object",
+     *          example={"code": 400, "message": "Bad Request"},
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Response(
      *      response=401,
      *      description="Bad credentials",
+     *      @SWG\Schema(
+     *          type="object",
+     *          example={"code": 401, "message": "Bad credentials"},
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Tag(name="Authentication")
      *
