@@ -63,6 +63,11 @@ class ProfileController
      * @SWG\Response(
      *      response=401,
      *      description="Invalid token",
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
@@ -121,6 +126,11 @@ class ProfileController
      * @SWG\Response(
      *      response=401,
      *      description="Invalid token",
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
@@ -172,9 +182,26 @@ class ProfileController
      * @SWG\Response(
      *      response=401,
      *      description="Invalid token",
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *      },
+     *  )
+     * @SWG\Response(
+     *      response=403,
+     *      description="Access denied",
+     *      @SWG\Schema(
+     *          type="403",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
+     *      examples={
+     *          "Access denied": "{code: 403, message: 'Access denied'}",
      *      },
      *  )
      * @SWG\Tag(name="Profile")
