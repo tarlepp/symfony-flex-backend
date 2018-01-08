@@ -160,15 +160,28 @@ class UserController extends Controller
      *  )
      * @SWG\Response(
      *      response=401,
-     *      description="Invalid token",
+     *      description="Unauthorized",
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
      *      },
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Response(
      *      response=403,
      *      description="Access denied",
+     *      examples={
+     *          "Access denied": "{code: 403, message: 'Access denied'}",
+     *      },
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Tag(name="User Management")
      *
@@ -222,15 +235,28 @@ class UserController extends Controller
      *  )
      * @SWG\Response(
      *      response=401,
-     *      description="Invalid token",
+     *      description="Unauthorized",
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
      *      },
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Response(
      *      response=403,
      *      description="Access denied",
+     *      examples={
+     *          "Access denied": "{code: 403, message: 'Access denied'}",
+     *      },
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Tag(name="User Management")
      *
@@ -311,15 +337,28 @@ class UserController extends Controller
      *  )
      * @SWG\Response(
      *      response=401,
-     *      description="Invalid token",
+     *      description="Unauthorized",
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
      *      },
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Response(
      *      response=403,
      *      description="Access denied",
+     *      examples={
+     *          "Access denied": "{code: 403, message: 'Access denied'}",
+     *      },
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Tag(name="User Management")
      *
@@ -408,15 +447,28 @@ class UserController extends Controller
      *  )
      * @SWG\Response(
      *      response=401,
-     *      description="Invalid token",
+     *      description="Unauthorized",
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
      *      },
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Response(
      *      response=403,
-     *      description="Access denied",
+     *      description="Forbidden",
+     *      examples={
+     *          "Access denied": "{code: 403, message: 'Access denied'}",
+     *      },
+     *      @SWG\Schema(
+     *          type="object",
+     *          @SWG\Property(property="code", type="integer", description="Error code"),
+     *          @SWG\Property(property="message", type="string", description="Error description"),
+     *      ),
      *  )
      * @SWG\Tag(name="User Management")
      *
