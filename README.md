@@ -374,4 +374,4 @@ step.
 
 [The MIT License (MIT)](LICENSE)
 
-Copyright (c) 2017 Tarmo Leppänen
+Copyright (c) 2018 Tarmo Leppänen
