@@ -98,6 +98,7 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
     {
         // Create new Role entity
         $entity = new Role($role);
+        $entity->setDescription('Description - ' . $role);
 
         // Persist entity
         $this->manager->persist($entity);
