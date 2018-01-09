@@ -62,7 +62,7 @@ class AuthController
      *  )
      * @SWG\Response(
      *      response=401,
-     *      description="Bad credentials",
+     *      description="Unauthorized",
      *      @SWG\Schema(
      *          type="object",
      *          example={"code": 401, "message": "Bad credentials"},
