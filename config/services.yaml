@@ -32,9 +32,10 @@ services:
         resource: '../src/DataFixtures/*'
         tags: [ 'doctrine.fixture.orm' ]
 
+    # Note that Resource objects needs to be public
     App\Resource\:
         resource: '../src/Resource/*'
-        tags: [ 'public_on_test' ]
+        public: true
 
     App\Rest\Describer\ApiDocDescriber:
         tags:
