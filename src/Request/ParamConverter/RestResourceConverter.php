@@ -72,7 +72,7 @@ class RestResourceConverter implements ParamConverterInterface, ContainerAwareIn
 
         $name = $configuration->getName();
 
-        $request->attributes->set($name, $resource->findOne($request->attributes->get($name), true));
+        $request->attributes->set($name, $resource->findOne($request->attributes->get($name, ''), true));
 
         return true;
     }
