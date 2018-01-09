@@ -55,7 +55,7 @@ class ResourceLifeCycleTest extends WebTestCase
         $entity = $this->repository->findOneBy(['id' => $role]);
 
         if ($entity instanceof Role) {
-            static::assertSame('', $entity->getDescription());
+            static::assertSame('Description - ' . $role, $entity->getDescription());
         }
     }
 
