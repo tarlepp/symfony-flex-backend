@@ -80,15 +80,15 @@ class UserGroupController extends Controller
      * Endpoint action to list specified user group users.
      *
      * @Route(
-     *      "/{id}/users",
+     *      "/{userGroup}/users",
      *      requirements={
-     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
      *      }
      *  )
      *
      * @ParamConverter(
-     *     "userGroup",
-     *     class="App:UserGroup"
+     *      "userGroup",
+     *      class="App\Resource\UserGroupResource",
      *  )
      *
      * @Method({"GET"})
@@ -151,26 +151,20 @@ class UserGroupController extends Controller
      * Endpoint action to attach specified user to specified user group.
      *
      * @Route(
-     *      "/{userGroupId}/user/{userId}",
+     *      "/{userGroup}/user/{user}",
      *      requirements={
-     *          "userGroupId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *          "userId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "user" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
      *      }
      *  )
      *
      * @ParamConverter(
      *      "userGroup",
-     *      class="App:UserGroup",
-     *      options={
-     *          "id" = "userGroupId",
-     *      },
+     *      class="App\Resource\UserGroupResource",
      *  )
      * @ParamConverter(
      *      "user",
-     *      class="App:User",
-     *      options={
-     *          "id" = "userId",
-     *      },
+     *      class="App\Resource\UserResource",
      *  )
      *
      * @Method({"POST"})
@@ -259,7 +253,7 @@ class UserGroupController extends Controller
      * Endpoint action to detach specified user from specified user group.
      *
      * @Route(
-     *      "/{userGroupId}/user/{userId}",
+     *      "/{userGroup}/user/{user}",
      *      requirements={
      *          "userGroupId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
      *          "userId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
@@ -268,17 +262,11 @@ class UserGroupController extends Controller
      *
      * @ParamConverter(
      *      "userGroup",
-     *      class="App:UserGroup",
-     *      options={
-     *          "id" = "userGroupId",
-     *      },
+     *      class="App\Resource\UserGroupResource",
      *  )
      * @ParamConverter(
      *      "user",
-     *      class="App:User",
-     *      options={
-     *          "id" = "userId",
-     *      },
+     *      class="App\Resource\UserResource",
      *  )
      *
      * @Method({"DELETE"})

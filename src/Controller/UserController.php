@@ -84,15 +84,15 @@ class UserController extends Controller
 
     /**
      * @Route(
-     *      "/{id}",
+     *      "/{requestUser}",
      *      requirements={
-     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
      *      }
      *  )
      *
      * @ParamConverter(
      *     "requestUser",
-     *     class="App:User"
+     *     class="App\Resource\UserResource"
      *  )
      *
      * @Method({"DELETE"})
@@ -127,15 +127,15 @@ class UserController extends Controller
      * Endpoint action to fetch specified user roles.
      *
      * @Route(
-     *      "/{id}/roles",
+     *      "/{requestUser}/roles",
      *      requirements={
-     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
      *      }
      *  )
      *
      * @ParamConverter(
      *     "requestUser",
-     *     class="App:User"
+     *     class="App\Resource\UserResource"
      *  )
      *
      * @Method({"GET"})
@@ -199,15 +199,15 @@ class UserController extends Controller
      * Endpoint action to fetch specified user user groups.
      *
      * @Route(
-     *      "/{id}/groups",
+     *      "/{requestUser}/groups",
      *      requirements={
-     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
      *      }
      *  )
      *
      * @ParamConverter(
      *     "requestUser",
-     *     class="App:User"
+     *     class="App\Resource\UserResource"
      *  )
      *
      * @Method({"GET"})
@@ -274,26 +274,20 @@ class UserController extends Controller
      * Endpoint action to attach specified user group to specified user.
      *
      * @Route(
-     *      "/{userId}/group/{userGroupId}",
+     *      "/{user}/group/{userGroup}",
      *      requirements={
-     *          "userId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *          "userGroupId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "user" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
      *      }
      *  )
      *
      * @ParamConverter(
      *      "user",
-     *      class="App:User",
-     *      options={
-     *          "id" = "userId",
-     *      },
+     *      class="App\Resource\UserResource",
      *  )
      * @ParamConverter(
      *      "userGroup",
-     *      class="App:UserGroup",
-     *      options={
-     *          "id" = "userGroupId",
-     *      },
+     *      class="App\Resource\UserGroupResource",
      *  )
      *
      * @Method({"POST"})
@@ -384,26 +378,20 @@ class UserController extends Controller
      * Endpoint action to detach specified user group from specified user.
      *
      * @Route(
-     *      "/{userId}/group/{userGroupId}",
+     *      "/{user}/group/{userGroup}",
      *      requirements={
-     *          "userId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *          "userGroupId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "user" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
      *      }
      *  )
      *
      * @ParamConverter(
      *      "user",
-     *      class="App:User",
-     *      options={
-     *          "id" = "userId",
-     *      },
+     *      class="App\Resource\UserResource",
      *  )
      * @ParamConverter(
      *      "userGroup",
-     *      class="App:UserGroup",
-     *      options={
-     *          "id" = "userGroupId",
-     *      },
+     *      class="App\Resource\UserGroupResource",
      *  )
      *
      * @Method({"DELETE"})

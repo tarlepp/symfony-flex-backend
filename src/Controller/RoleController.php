@@ -99,7 +99,7 @@ class RoleController extends Controller
      *
      * @ParamConverter(
      *     "role",
-     *     class="App:Role"
+     *     class="App\Resource\RoleResource"
      * )
      *
      * @Method({"GET"})
