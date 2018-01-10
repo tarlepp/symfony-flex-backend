@@ -21,6 +21,13 @@ use Symfony\Component\HttpFoundation\Request;
  * This is meant to be used within controller actions that uses @ParamConverter annotation. Example:
  *
  *  /**
+ *   * @Route(
+ *   *    "/{userEntity}",
+ *   *    requirements={
+ *   *        "userEntity" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+ *   *    }
+ *   * )
+ *   *
  *   * @ParamConverter(
  *   *      "userEntity",
  *   *      class="App\Resource\UserResource",
@@ -69,10 +76,12 @@ class RestResourceConverter implements ParamConverterInterface, ContainerAwareIn
     {
         /** @var RestResource $resource */
         $resource = $this->container->get($configuration->getClass());
-
         $name = $configuration->getName();
+        $identifier = $request->attributes->get($name, false);
 
-        $request->attributes->set($name, $resource->findOne($request->attributes->get($name, ''), true));
+        if ($identifier !== false) {
+            $request->attributes->set($name, $resource->findOne($identifier, true));
+        }
 
         return true;
     }
