@@ -7,14 +7,13 @@ declare(strict_types = 1);
  */
 namespace App\Request\ParamConverter;
 
-use App\Rest\RestResource;
+use App\Resource\Collection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/** @noinspection AnnotationMissingUseInspection */
+/** @noinspection PhpUndefinedClassInspection */
 /**
  * Class RestResourceConverter
  *
@@ -45,19 +44,21 @@ use Symfony\Component\HttpFoundation\Request;
  * @package App\Request\ParamConverter
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RestResourceConverter implements ParamConverterInterface, ContainerAwareInterface
+class RestResourceConverter implements ParamConverterInterface
 {
-    // Traits
-    use ContainerAwareTrait;
+    /**
+     * @var Collection
+     */
+    private $collection;
 
     /**
      * RestResourceConverter constructor.
      *
-     * @param ContainerInterface $container
+     * @param Collection $collection
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(Collection $collection)
     {
-        $this->setContainer($container);
+        $this->collection = $collection;
     }
 
     /**
@@ -68,16 +69,14 @@ class RestResourceConverter implements ParamConverterInterface, ContainerAwareIn
      *
      * @return bool True if the object has been successfully set, else false
      *
+     * @throws \InvalidArgumentException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      */
     public function apply(Request $request, ParamConverter $configuration): bool
     {
-        /** @var RestResource $resource */
-        $resource = $this->container->get($configuration->getClass());
         $name = $configuration->getName();
         $identifier = $request->attributes->get($name, false);
+        $resource = $this->collection->get($configuration->getClass());
 
         if ($identifier !== false) {
             $request->attributes->set($name, $resource->findOne($identifier, true));
@@ -92,14 +91,9 @@ class RestResourceConverter implements ParamConverterInterface, ContainerAwareIn
      * @param ParamConverter $configuration
      *
      * @return bool
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      */
     public function supports(ParamConverter $configuration): bool
     {
-        $resourceName = $configuration->getClass();
-
-        return $this->container->has($resourceName) && $this->container->get($resourceName) instanceof RestResource;
+        return $this->collection->has($configuration->getClass());
     }
 }
