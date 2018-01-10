@@ -7,10 +7,12 @@ declare(strict_types = 1);
  */
 namespace App;
 
+use App\Resource\Collection;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
@@ -134,7 +136,10 @@ class Kernel extends BaseKernel implements CompilerPassInterface
      *
      * @param ContainerBuilder $container
      *
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @throws \Exception
      */
     public function process(ContainerBuilder $container)
     {
@@ -143,6 +148,12 @@ class Kernel extends BaseKernel implements CompilerPassInterface
             foreach ($container->findTaggedServiceIds('public_on_test') as $id => $tags) {
                 $container->getDefinition($id)->setPublic(true);
             }
+        }
+
+        $collection = $container->getDefinition(Collection::class);
+
+        foreach ($container->findTaggedServiceIds('app.rest.resource') as $id => $tags) {
+            $collection->addMethodCall('set', [new Reference($id)]);
         }
     }
 }

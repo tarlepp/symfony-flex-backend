@@ -35,7 +35,8 @@ services:
     # Note that Resource objects needs to be public
     App\Resource\:
         resource: '../src/Resource/*'
-        public: true
+        exclude: '../src/Resource/Collection.php'
+        tags: [ 'app.rest.resource', 'public_on_test' ]
 
     App\Rest\Describer\ApiDocDescriber:
         tags:
