@@ -60,12 +60,14 @@ class Collection
     }
 
     /**
-     * @param string $resourceName
+     * Method to check if specified resource exists or not in this Collection.
+     *
+     * @param string|null $resourceName
      *
      * @return bool
      */
-    public function has(string $resourceName): bool
+    public function has(string $resourceName = null): bool
     {
-        return \array_key_exists($resourceName, $this->resources);
+        return $resourceName === null ? false : \array_key_exists($resourceName, $this->resources);
     }
 }
