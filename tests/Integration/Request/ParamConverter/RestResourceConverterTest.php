@@ -9,6 +9,7 @@ namespace App\Tests\Integration\Request\ParamConverter;
 
 use App\Entity\Role;
 use App\Request\ParamConverter\RestResourceConverter;
+use App\Resource\Collection;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
 use Psr\Log\LoggerInterface;
@@ -125,6 +126,6 @@ class RestResourceConverterTest extends KernelTestCase
 
         self::bootKernel();
 
-        $this->converter = new RestResourceConverter(static::$kernel->getContainer());
+        $this->converter = new RestResourceConverter(static::$kernel->getContainer()->get(Collection::class));
     }
 }

@@ -38,6 +38,9 @@ services:
         exclude: '../src/Resource/Collection.php'
         tags: [ 'app.rest.resource', 'public_on_test' ]
 
+    App\Resource\Collection:
+        tags: [ 'public_on_test' ]
+
     App\Rest\Describer\ApiDocDescriber:
         tags:
             - { name: nelmio_api_doc.describer, priority: -500 }
