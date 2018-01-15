@@ -112,7 +112,7 @@ make generate-jwt-keys
 
 Next thing is to make sure that application `var` directory has correct
 permissions. Instructions for that you can find
-[here](https://symfony.com/doc/current/setup/file_permissions.html).
+[here](https://symfony.com/doc/3.4/setup/file_permissions.html).
 
 _I really recommend_ that you use `ACL` option in your development environment.
 
@@ -169,13 +169,16 @@ supported (main commands) make commands, note that you can get this same list
 with just running `make` command:
 
 ```bash
-cache-clear       Clears the cache
-cache-warmup      Warms up an empty cache
-generate-jwt-keys Generates JWT auth keys
-phpmetrics        Generates PhpMetrics static analysis
-run-tests-fastest Runs all test via fastest
-run-tests         Runs all tests via phpunit
-serve             Runs a local web server
+cache-clear       # Clears the cache
+cache-warmup      # Warms up an empty cache
+generate-jwt-keys # Generates JWT auth keys
+merge-clover      # Creates clover from fastest run
+merge-junit       # Creates JUnit xml from fastest run
+phpcs             # Runs PHP CodeSniffer
+phpmetrics        # Generates PhpMetrics static analysis
+run-tests-fastest # Runs all test via fastest
+run-tests         # Runs all tests via phpunit
+serve             # Runs a local web server
 ```
 
 ### Symfony console
@@ -315,9 +318,7 @@ library use following command:
 ```bash
 make run-tests-fastest
 # or alternative
-./vendor/bin/fastest -x phpunit.xml.dist
-# or another alternative
-find tests/ -name "*Test.php" | ./vendor/bin/fastest -v
+find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
 ```
 
 Note that you need to create `.env.test` file to define your testing
