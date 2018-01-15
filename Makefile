@@ -74,7 +74,7 @@ run-tests-fastest: ## Runs all test via fastest
 merge-clover: ## Creates clover from fastest run
 	vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml
 
-merge-junit: ## Created JUnit xml  file
+merge-junit: ## Creates JUnit xml from fastest run
 	php merge-phpunit-xml.php ./build/fastest/ ./build/logs/junit.xml
 ###< phpunit ###
 
