@@ -16,6 +16,6 @@ insert_final_newline = true
 [composer.json]
 indent_style = tab
 
-[.travis.yml]
+[{.codeclimate.yml,.travis.yml}]
 indent_style = space
 indent_size = 2
