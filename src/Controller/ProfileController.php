@@ -10,6 +10,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Security\ApiKeyUser;
 use App\Security\RolesService;
+use Doctrine\Common\Collections\Collection;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -215,17 +216,7 @@ class ProfileController
      */
     public function groupsAction(TokenStorageInterface $tokenStorage, SerializerInterface $serializer): ?JsonResponse
     {
-        /** @var User|ApiKeyUser $user */
-        /** @noinspection NullPointerExceptionInspection */
-        $user = $tokenStorage->getToken()->getUser();
-
-        $data = null;
-
-        if ($user instanceof User) {
-            $data = $user->getUserGroups();
-        } elseif ($user instanceof ApiKeyUser) {
-            $data = $user->getApiKey()->getUserGroups();
-        }
+        $data = $this->getUserGroups($tokenStorage);
 
         if ($data === null) {
             throw new AccessDeniedException('Not supported user');
@@ -248,6 +239,8 @@ class ProfileController
      */
     private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): ?array
     {
+        $groups = null;
+
         if ($user instanceof User) {
             $groups = $this->getSerializationGroupsForUser();
 
@@ -257,7 +250,7 @@ class ProfileController
             $groups = $this->getSerializationGroupsForApiKey();
         }
 
-        if (!isset($groups)) {
+        if ($groups === null) {
             throw new AccessDeniedException('Not supported user');
         }
 
@@ -304,5 +297,27 @@ class ProfileController
             'UserGroup',
             'UserGroup.role',
         ];
+    }
+
+    /**
+     * @param TokenStorageInterface $tokenStorage
+     *
+     * @return Collection|null
+     */
+    private function getUserGroups(TokenStorageInterface $tokenStorage): ?Collection
+    {
+        /** @var User|ApiKeyUser $user */
+        /** @noinspection NullPointerExceptionInspection */
+        $user = $tokenStorage->getToken()->getUser();
+
+        $data = null;
+
+        if ($user instanceof User) {
+            $data = $user->getUserGroups();
+        } elseif ($user instanceof ApiKeyUser) {
+            $data = $user->getApiKey()->getUserGroups();
+        }
+
+        return $data;
     }
 }
