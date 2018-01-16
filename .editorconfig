@@ -1,0 +1,21 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[*.php]
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+
+[composer.json]
+indent_style = tab
+
+[.travis.yml]
+indent_style = space
+indent_size = 2
