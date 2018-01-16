@@ -55,7 +55,7 @@ class ApiKeyHelper
     {
         $apiKeyFound = false;
 
-        while ($apiKeyFound === false) {
+        while ($apiKeyFound !== true) {
             $apiKeyEntity = $this->getApiKeyEntity($io, $question);
 
             if ($apiKeyEntity === null) {
@@ -69,7 +69,7 @@ class ApiKeyHelper
                 $apiKeyEntity->getDescription()
             );
 
-            $apiKeyFound = $io->confirm($message, false);
+            $apiKeyFound = (bool)$io->confirm($message, false);
         }
 
         return $apiKeyEntity ?? null;

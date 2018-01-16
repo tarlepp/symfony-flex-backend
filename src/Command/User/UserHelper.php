@@ -56,7 +56,7 @@ class UserHelper
     {
         $userFound = false;
 
-        while ($userFound === false) {
+        while ($userFound !== true) {
             $userEntity = $this->getUserEntity($io, $question);
 
             if ($userEntity === null) {
@@ -82,7 +82,7 @@ class UserHelper
     {
         $userGroupFound = false;
 
-        while ($userGroupFound === false) {
+        while ($userGroupFound !== true) {
             $userGroupEntity = $this->getUserGroupEntity($io, $question);
 
             if ($userGroupEntity === null) {
