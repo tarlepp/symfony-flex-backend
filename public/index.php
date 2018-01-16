@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 /**
  * /public/index.php
  *
@@ -24,7 +24,7 @@ if (!\getenv('APP_ENV')) {
     require __DIR__ . '/../bootstrap.php';
 }
 
-if (getenv('APP_DEBUG')) {
+if (\getenv('APP_DEBUG')) {
     // Get allowed IP addresses
     /** @noinspection UsingInclusionReturnValueInspection */
     $allowedAddress = require __DIR__ . '/../allowed_addresses.php';
