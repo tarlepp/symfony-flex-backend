@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e708f05eb33d8fc299874579a9e8c44",
+    "content-hash": "f7a0615fc5b3ecb98e093cef99dd6106",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2283,12 +2283,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "a54d4cf91890993ee599c446e2eb3dba3f9eae32"
+                "reference": "402a514551804df5b4b2150f217e23a15408795a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a54d4cf91890993ee599c446e2eb3dba3f9eae32",
-                "reference": "a54d4cf91890993ee599c446e2eb3dba3f9eae32",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/402a514551804df5b4b2150f217e23a15408795a",
+                "reference": "402a514551804df5b4b2150f217e23a15408795a",
                 "shasum": ""
             },
             "conflict": {
@@ -2302,9 +2302,10 @@
                 "codeigniter/framework": "<=3.0.6",
                 "composer/composer": "<=1.0.0-alpha11",
                 "contao-components/mediaelement": ">=2.14.2,<2.21.1",
-                "contao/core": ">=2,<3.5.31",
+                "contao/core": ">=2,<3.5.32",
                 "contao/core-bundle": ">=4,<4.4.8",
                 "contao/listing-bundle": ">=4,<4.4.8",
+                "contao/newsletter-bundle": ">=4,<4.1",
                 "doctrine/annotations": ">=1,<1.2.7",
                 "doctrine/cache": ">=1,<1.3.2|>=1.4,<1.4.2",
                 "doctrine/common": ">=2,<2.4.3|>=2.5,<2.5.1",
@@ -2420,7 +2421,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-01-13T18:31:46+00:00"
+            "time": "2018-01-18T10:00:53+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -3228,16 +3229,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.62",
+            "version": "v1.0.63",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "c233143ef550f6acbe033fe63d15dad15ca8566a"
+                "reference": "c409fe47e94c3c3c255e94356718ff15417afb0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/c233143ef550f6acbe033fe63d15dad15ca8566a",
-                "reference": "c233143ef550f6acbe033fe63d15dad15ca8566a",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/c409fe47e94c3c3c255e94356718ff15417afb0e",
+                "reference": "c409fe47e94c3c3c255e94356718ff15417afb0e",
                 "shasum": ""
             },
             "require": {
@@ -3270,7 +3271,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2018-01-17T07:28:24+00:00"
+            "time": "2018-01-17T19:45:47+00:00"
         },
         {
             "name": "symfony/form",
@@ -7142,16 +7143,16 @@
         },
         {
             "name": "phpunit/phpcov",
-            "version": "4.0.3",
+            "version": "4.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpcov.git",
-                "reference": "522e81f50964c13d7ca621fdfff8accbf0f289e3"
+                "reference": "1fc7ed3179a3ed27a386cd2336e91d8e747a3d71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpcov/zipball/522e81f50964c13d7ca621fdfff8accbf0f289e3",
-                "reference": "522e81f50964c13d7ca621fdfff8accbf0f289e3",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpcov/zipball/1fc7ed3179a3ed27a386cd2336e91d8e747a3d71",
+                "reference": "1fc7ed3179a3ed27a386cd2336e91d8e747a3d71",
                 "shasum": ""
             },
             "require": {
@@ -7161,7 +7162,7 @@
                 "sebastian/diff": "^1.1 || ^2.0",
                 "sebastian/finder-facade": "^1.1",
                 "sebastian/version": "^2.0",
-                "symfony/console": "^3.0|^4.0"
+                "symfony/console": "^3.0 || ^4.0"
             },
             "bin": [
                 "phpcov"
@@ -7188,9 +7189,9 @@
                     "role": "lead"
                 }
             ],
-            "description": "CLI frontend for PHP_CodeCoverage",
+            "description": "CLI frontend for php-code-coverage",
             "homepage": "https://github.com/sebastianbergmann/phpcov",
-            "time": "2017-11-18T17:38:29+00:00"
+            "time": "2018-01-17T16:55:55+00:00"
         },
         {
             "name": "phpunit/phpunit",
