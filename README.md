@@ -308,8 +308,6 @@ run simply by following command:
 
 ```bash
 make run-tests
-# or alternative
-./vendor/bin/phpunit
 ```
 
 And if you want to run tests with [fastest](https://github.com/liuggio/fastest)
@@ -317,8 +315,6 @@ library use following command:
 
 ```bash
 make run-tests-fastest
-# or alternative
-find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
 ```
 
 Note that you need to create `.env.test` file to define your testing
@@ -337,8 +333,6 @@ to make some analyze of your code. You can run this by following command:
 
 ```
 make phpmetrics
-# or alternative
-./vendor/bin/phpmetrics --report-html=build/phpmetrics .
 ```
 
 And after that open `build/phpmetrics/index.html` with your favorite browser.
