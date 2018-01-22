@@ -18,7 +18,7 @@ class JSON
     /**
      * @var string
      */
-    const JSON_UNKNOWN_ERROR = 'Unknown error.';
+    private const JSON_UNKNOWN_ERROR = 'Unknown error.';
 
     /**
      * @var array<string>
