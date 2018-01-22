@@ -9,7 +9,6 @@ namespace App\Utils;
 
 use App\Entity\ApiKey;
 use App\Resource\LogRequestResource;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
