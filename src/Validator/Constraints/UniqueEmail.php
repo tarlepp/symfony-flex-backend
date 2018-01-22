@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraint;
 class UniqueEmail extends Constraint
 {
     // Unique constant for validator constrain
-    const IS_UNIQUE_EMAIL_ERROR = 'd487278d-8b13-4da0-b4cc-f862e6e99af6';
+    private const IS_UNIQUE_EMAIL_ERROR = 'd487278d-8b13-4da0-b4cc-f862e6e99af6';
 
     // Error names configuration
     protected static $errorNames = [
