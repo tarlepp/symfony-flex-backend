@@ -24,6 +24,10 @@ $input = new ArgvInput();
 $env = $input->getParameterOption(['--env', '-e'], getenv('APP_ENV') ?: 'dev');
 $debug = getenv('APP_DEBUG') !== '0' && !$input->hasParameterOption(['--no-debug', '']);
 
+if (\file_exists(__DIR__ . '/../.env.' . $env)) {
+    (new Dotenv())->load(__DIR__ . '/../.env.' . $env);
+}
+
 if ($debug && class_exists(Debug::class)) {
     Debug::enable();
 }
