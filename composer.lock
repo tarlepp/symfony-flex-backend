@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e75206bd20dfe9251d3b0c3a0848b5f",
+    "content-hash": "c4dc9cb138d8b36acf5dfd7aa3e7d5da",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3227,16 +3227,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.66",
+            "version": "v1.0.67",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "b366e902710c8dc8d8be97ed8d64ef574d9bffcb"
+                "reference": "ac1c6aaafc4a9fddba3626867d786d151d2cc2ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/b366e902710c8dc8d8be97ed8d64ef574d9bffcb",
-                "reference": "b366e902710c8dc8d8be97ed8d64ef574d9bffcb",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/ac1c6aaafc4a9fddba3626867d786d151d2cc2ac",
+                "reference": "ac1c6aaafc4a9fddba3626867d786d151d2cc2ac",
                 "shasum": ""
             },
             "require": {
@@ -3269,7 +3269,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2018-01-21T09:15:48+00:00"
+            "time": "2018-01-25T06:46:31+00:00"
         },
         {
             "name": "symfony/form",
@@ -5332,16 +5332,16 @@
     "packages-dev": [
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.5.3",
+            "version": "0.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "f20153a255dcf444a8abe4ac3051aa35ef865b90"
+                "reference": "ce3b989eeb6d2b8cab367897275e120520bdca18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/f20153a255dcf444a8abe4ac3051aa35ef865b90",
-                "reference": "f20153a255dcf444a8abe4ac3051aa35ef865b90",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/ce3b989eeb6d2b8cab367897275e120520bdca18",
+                "reference": "ce3b989eeb6d2b8cab367897275e120520bdca18",
                 "shasum": ""
             },
             "require": {
@@ -5376,7 +5376,7 @@
                 "printer",
                 "result-printer"
             ],
-            "time": "2018-01-11T17:18:07+00:00"
+            "time": "2018-01-24T00:13:26+00:00"
         },
         {
             "name": "composer/ca-bundle",
