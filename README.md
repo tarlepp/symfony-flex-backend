@@ -277,6 +277,10 @@ to do is to run following command:
 ./bin/console doctrine:migrations:diff
 ```
 
+### Docker
+
+Todo
+
 This will create a migration file which contains all necessary database changes
 to get application running with default database structure. You can migrate
 these changes to your database with following command:
