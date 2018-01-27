@@ -43,6 +43,7 @@ Note that this project is build with [Symfony 4](https://symfony.com/4) and
     * [IDE](#ide)
     * [PHP Code Sniffer](#php-code-sniffer)
     * [Database changes](#database-changes)
+    * [Docker](#docker)
   * [Testing](#testing)
   * [Metrics](#metrics)
   * [Links / resources](#links--resources)
@@ -277,10 +278,6 @@ to do is to run following command:
 ./bin/console doctrine:migrations:diff
 ```
 
-### Docker
-
-Todo
-
 This will create a migration file which contains all necessary database changes
 to get application running with default database structure. You can migrate
 these changes to your database with following command:
@@ -304,6 +301,10 @@ application. And you don't need to make any migrations files by hand (just let
 Doctrine handle those). Although remember to really take a closer look of those
 generated migration files to make sure that those doesn't contain anything that
 you really don't want.
+
+### Docker
+
+Todo
 
 ## Testing
 
