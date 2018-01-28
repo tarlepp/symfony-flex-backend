@@ -16,11 +16,11 @@ namespace App\Security;
 interface RolesServiceInterface
 {
     // Used role constants
-    const ROLE_LOGGED   = 'ROLE_LOGGED';
-    const ROLE_USER     = 'ROLE_USER';
-    const ROLE_ADMIN    = 'ROLE_ADMIN';
-    const ROLE_ROOT     = 'ROLE_ROOT';
-    const ROLE_API      = 'ROLE_API';
+    public const ROLE_LOGGED = 'ROLE_LOGGED';
+    public const ROLE_USER   = 'ROLE_USER';
+    public const ROLE_ADMIN  = 'ROLE_ADMIN';
+    public const ROLE_ROOT   = 'ROLE_ROOT';
+    public const ROLE_API    = 'ROLE_API';
 
     /**
      * RolesHelper constructor.
