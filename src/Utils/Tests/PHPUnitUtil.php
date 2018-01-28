@@ -75,11 +75,13 @@ class PHPUnitUtil
     /**
      * Method to call specified 'protected' or 'private' method on given class.
      *
-     * @param mixed     $object The instantiated instance of your class
-     * @param string    $name   The name of your private/protected method
-     * @param array     $args   Method arguments
+     * @param mixed  $object The instantiated instance of your class
+     * @param string $name   The name of your private/protected method
+     * @param array  $args   Method arguments
      *
      * @return mixed
+     *
+     * @throws \ReflectionException
      */
     public static function callMethod($object, string $name, array $args)
     {
@@ -93,10 +95,11 @@ class PHPUnitUtil
      *      $foo = PHPUnitUtil::getPrivateMethod($cls, 'foo');
      *      $foo->invoke($cls, $...);
      *
-     * @param mixed     $object The instantiated instance of your class
-     * @param string    $name   The name of your private/protected method
+     * @param mixed  $object The instantiated instance of your class
+     * @param string $name   The name of your private/protected method
      *
      * @return \ReflectionMethod The method you asked for
+     * @throws \ReflectionException
      */
     public static function getMethod($object, string $name): \ReflectionMethod
     {
@@ -115,6 +118,8 @@ class PHPUnitUtil
      * @param mixed  $object
      *
      * @return mixed
+     *
+     * @throws \ReflectionException
      */
     public static function getProperty(string $property, $object)
     {
@@ -170,9 +175,11 @@ class PHPUnitUtil
     /**
      * Helper method to override any property value within given class.
      *
-     * @param string    $property
-     * @param mixed     $value
-     * @param mixed     $object
+     * @param string $property
+     * @param mixed  $value
+     * @param mixed  $object
+     *
+     * @throws \ReflectionException
      */
     public static function setProperty(string $property, $value, $object): void
     {

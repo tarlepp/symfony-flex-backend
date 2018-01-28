@@ -33,13 +33,9 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
      */
     protected $resourceClass;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->controller = $this->getContainer()->get($this->controllerClass);
-    }
-
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatGivenControllerIsCorrect(): void
     {
         $expected = \mb_substr((new \ReflectionClass($this))->getShortName(), 0, -4);
@@ -53,13 +49,20 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
         static::assertSame($expected, (new \ReflectionClass($this->controller))->getShortName(), $message);
     }
 
+    /**
+     * This test is to make sure that controller has set the expected resource. There is multiple resources and each
+     * controller needs to use specified one.
+     */
     public function testThatGetResourceReturnsExpected(): void
     {
+        /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf($this->resourceClass, $this->controller->getResource());
     }
 
-    public function testThatGetResponseHandlerReturnsExpected(): void
+    protected function setUp(): void
     {
-        static::assertInstanceOf(ResponseHandlerInterface::class, $this->controller->getResponseHandler());
+        parent::setUp();
+
+        $this->controller = $this->getContainer()->get($this->controllerClass);
     }
 }
