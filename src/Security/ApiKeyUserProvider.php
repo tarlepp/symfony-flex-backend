@@ -105,6 +105,6 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
      */
     public function supportsClass($class): bool
     {
-        return ApiKeyUser::class === $class;
+        return $class === ApiKeyUser::class;
     }
 }
