@@ -39,7 +39,6 @@ class HealthzRepository extends BaseRepository
      * @return Entity|null
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
      */
     public function read(): ?Entity
     {

@@ -34,9 +34,13 @@ final class HealthzService
     }
 
     /**
-     * @return Healthz
+     * @return Healthz|null
      *
      * @throws \Exception
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function check(): ?Healthz
     {
