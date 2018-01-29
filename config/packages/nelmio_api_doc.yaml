@@ -1,4 +1,4 @@
 nelmio_api_doc:
-    routes:
+    areas:
         path_patterns: # an array of regexps
             - ^/[a-z]
