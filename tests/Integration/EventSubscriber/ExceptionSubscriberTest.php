@@ -33,6 +33,15 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class ExceptionSubscriberTest extends KernelTestCase
 {
+    public function testThatGetSubscribedEventsReturnsExcpected(): void
+    {
+        $expected = [
+            'kernel.exception' => 'onKernelException',
+        ];
+
+        static::assertSame($expected, ExceptionSubscriber::getSubscribedEvents());
+    }
+
     public function testThatOnKernelExceptionMethodCallsLogger(): void
     {
         /**
@@ -127,6 +136,8 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @param array  $expectedKeys
      * @param string $environment
+     *
+     * @throws \ReflectionException
      */
     public function testThatResponseHasExpectedKeys(array $expectedKeys, string $environment): void
     {
@@ -168,6 +179,8 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @param int        $expectedStatusCode
      * @param \Exception $exception
      * @param bool       $user
+     *
+     * @throws \ReflectionException
      */
     public function testThatGetStatusCodeReturnsExpected(
         int $expectedStatusCode,
@@ -203,6 +216,8 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @param string     $expectedMessage
      * @param \Exception $exception
      * @param string     $environment
+     *
+     * @throws \ReflectionException
      */
     public function testThatGetExceptionMessageReturnsExpected(
         string $expectedMessage,

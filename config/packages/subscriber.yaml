@@ -23,7 +23,7 @@ services:
 
     App\EventSubscriber\ExceptionSubscriber:
         tags:
-            - { name: kernel.event_listener, event: kernel.exception }
+            - { name: kernel.event_subscriber, event: kernel.exception }
 
     App\EventSubscriber\JWTCreatedSubscriber:
         tags:
