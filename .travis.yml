@@ -66,6 +66,7 @@ install:
 
 before_script:
   - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini; fi
+  - mysql --version
   - php --version
   - php ./bin/console --version
   - php ./vendor/bin/phpunit --version
