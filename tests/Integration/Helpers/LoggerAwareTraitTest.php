@@ -25,6 +25,9 @@ class LoggerAwareTraitTest extends KernelTestCase
         static::assertClassHasAttribute('logger', LoggerAwareService::class);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatLoggerIsInstanceOfLoggerInterface(): void
     {
         static::bootKernel();
@@ -34,5 +37,7 @@ class LoggerAwareTraitTest extends KernelTestCase
         $logger = PHPUnitUtil::getProperty('logger', $service);
 
         static::assertInstanceOf(LoggerInterface::class, $logger);
+
+        unset($service, $logger);
     }
 }

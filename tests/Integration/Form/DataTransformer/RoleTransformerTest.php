@@ -25,16 +25,6 @@ class RoleTransformerTest extends KernelTestCase
      */
     private $roleResource;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->roleResource = $this
-            ->getMockBuilder(RoleResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
@@ -60,6 +50,8 @@ class RoleTransformerTest extends KernelTestCase
 
         $transformer = new RoleTransformer($this->roleResource);
         $transformer->reverseTransform('rolename');
+
+        unset($transformer, $entity);
     }
 
     /**
@@ -76,6 +68,8 @@ class RoleTransformerTest extends KernelTestCase
 
         $transformer = new RoleTransformer($this->roleResource);
         $transformer->reverseTransform('rolename');
+
+        unset($transformer);
     }
 
     public function testThatReverseTransformReturnsExpected(): void
@@ -91,6 +85,8 @@ class RoleTransformerTest extends KernelTestCase
         $transformer = new RoleTransformer($this->roleResource);
 
         static::assertSame($entity, $transformer->reverseTransform('rolename'));
+
+        unset($transformer, $entity);
     }
 
     /**
@@ -104,5 +100,26 @@ class RoleTransformerTest extends KernelTestCase
             ['', null],
             [$entity->getId(), $entity],
         ];
+    }
+
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        $this->roleResource = $this
+            ->getMockBuilder(RoleResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->roleResource);
+
+        gc_collect_cycles();
     }
 }

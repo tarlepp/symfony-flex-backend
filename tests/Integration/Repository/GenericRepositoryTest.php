@@ -32,13 +32,9 @@ class GenericRepositoryTest extends KernelTestCase
     private $repositoryClass = UserRepository::class;
     private $resourceClass = UserResource::class;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-    }
-
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     */
     public function testThatGetReferenceReturnsExpected(): void
     {
         /** @var EntityInterface $entity */
@@ -48,6 +44,8 @@ class GenericRepositoryTest extends KernelTestCase
         $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
 
         static::assertInstanceOf(Proxy::class, $repository->getReference($entity->getId()));
+
+        unset($repository, $entity);
     }
 
     /**
@@ -69,6 +67,8 @@ class GenericRepositoryTest extends KernelTestCase
         $message = 'addLeftJoin method did not return expected';
 
         static::assertSame($expected, $queryBuilder->getDQL(), $message);
+
+        unset($repository, $queryBuilder);
     }
 
     /**
@@ -90,6 +90,8 @@ class GenericRepositoryTest extends KernelTestCase
         $message = 'addLeftJoin method did not return expected';
 
         static::assertSame($expected, $queryBuilder->getDQL(), $message);
+
+        unset($repository, $queryBuilder);
     }
 
     /**
@@ -113,6 +115,8 @@ class GenericRepositoryTest extends KernelTestCase
         $message = 'addLeftJoin method did not return expected';
 
         static::assertSame($expected, $queryBuilder->getDQL(), $message);
+
+        unset($repository, $queryBuilder);
     }
 
     /**
@@ -136,6 +140,8 @@ class GenericRepositoryTest extends KernelTestCase
         $message = 'addLeftJoin method did not return expected';
 
         static::assertSame($expected, $queryBuilder->getDQL(), $message);
+
+        unset($repository, $queryBuilder);
     }
 
     public function testThatAddCallbackWorks(): void
@@ -153,6 +159,8 @@ class GenericRepositoryTest extends KernelTestCase
 
         $repository->addCallback($callable, [1, 'string']);
         $repository->processQueryBuilder($queryBuilder);
+
+        unset($repository, $queryBuilder);
     }
 
     public function testThatAddCallbackCallsCallbackJustOnce(): void
@@ -180,6 +188,8 @@ class GenericRepositoryTest extends KernelTestCase
         $repository->processQueryBuilder($queryBuilder);
 
         static::assertSame(1, $count);
+
+        unset($repository, $queryBuilder);
     }
 
     public function testThatFindMethodCallsExpectedEntityManagerMethod(): void
@@ -223,6 +233,8 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $repository = new $this->repositoryClass($managerObject);
         $repository->find(...$arguments);
+
+        unset($repository, $managerObject, $entityManager);
     }
 
     public function testThatFindOneByMethodCallsExpectedEntityManagerMethod(): void
@@ -271,6 +283,8 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $repository = new $this->repositoryClass($managerObject);
         $repository->findOneBy(...$arguments);
+
+        unset($repository, $managerObject, $entityManager, $repositoryMock);
     }
 
     public function testThatFindByMethodCallsExpectedEntityManagerMethod(): void
@@ -322,6 +336,8 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $repository = new $this->repositoryClass($managerObject);
         $repository->findBy(...$arguments);
+
+        unset($repository, $managerObject, $entityManager, $repositoryMock);
     }
 
     public function testThatFindAllMethodCallsExpectedEntityManagerMethod(): void
@@ -365,6 +381,8 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $repository = new $this->repositoryClass($managerObject);
         $repository->findAll();
+
+        unset($repository, $managerObject, $entityManager, $repositoryMock);
     }
 
     /**
@@ -417,5 +435,21 @@ class GenericRepositoryTest extends KernelTestCase
             ],
         ];
         // @codingStandardsIgnoreEnd
+    }
+
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        static::bootKernel();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        gc_collect_cycles();
     }
 }

@@ -25,16 +25,6 @@ class UserGroupTransformerTest extends KernelTestCase
      */
     private $userGroupResource;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->userGroupResource = $this
-            ->getMockBuilder(UserGroupResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
@@ -46,6 +36,8 @@ class UserGroupTransformerTest extends KernelTestCase
         $transformer = new UserGroupTransformer($this->userGroupResource);
 
         static::assertSame($expected, $transformer->transform($input));
+
+        unset($transformer);
     }
 
     public function testThatReverseTransformCallsExpectedObjectManagerMethods(): void
@@ -61,6 +53,8 @@ class UserGroupTransformerTest extends KernelTestCase
 
         $transformer = new UserGroupTransformer($this->userGroupResource);
         $transformer->reverseTransform(['1', '2']);
+
+        unset($transformer, $entity1, $entity2);
     }
 
     /**
@@ -79,6 +73,8 @@ class UserGroupTransformerTest extends KernelTestCase
 
         $transformer = new UserGroupTransformer($this->userGroupResource);
         $transformer->reverseTransform(['1', '2']);
+
+        unset($transformer, $entity);
     }
 
     public function testThatReverseTransformReturnsExpected(): void
@@ -95,6 +91,8 @@ class UserGroupTransformerTest extends KernelTestCase
         $transformer = new UserGroupTransformer($this->userGroupResource);
 
         static::assertSame([$entity1, $entity2], $transformer->reverseTransform(['1', '2']));
+
+        unset($transformer, $entity1, $entity2);
     }
 
     /**
@@ -108,5 +106,26 @@ class UserGroupTransformerTest extends KernelTestCase
             [[], null],
             [[$entity->getId()], [$entity]],
         ];
+    }
+
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        $this->userGroupResource = $this
+            ->getMockBuilder(UserGroupResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->userGroupResource);
+
+        gc_collect_cycles();
     }
 }

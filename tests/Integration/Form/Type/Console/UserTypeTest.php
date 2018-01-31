@@ -90,13 +90,26 @@ class UserTypeTest extends TypeTestCase
         foreach (\array_keys($formData) as $key) {
             $this->assertArrayHasKey($key, $children);
         }
+
+        unset($view, $dto, $form, $userGroupEntity, $roleEntity);
     }
 
     protected function setUp(): void
     {
+        gc_enable();
+
         $this->mockUserGroupResource = $this->createMock(UserGroupResource::class);
 
         parent::setUp();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->mockUserGroupResource);
+
+        gc_collect_cycles();
     }
 
     /**

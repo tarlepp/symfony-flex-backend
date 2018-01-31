@@ -52,16 +52,6 @@ class RepositoryTestCase extends KernelTestCase
      */
     protected $searchColumns = [];
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        self::bootKernel();
-
-        $this->resource = static::$kernel->getContainer()->get($this->resourceName);
-        $this->repository = $this->resource->getRepository();
-    }
-
     public function testThatGetEntityNameReturnsExpected(): void
     {
         static::assertSame($this->entityName, $this->repository->getEntityName());
@@ -87,5 +77,26 @@ class RepositoryTestCase extends KernelTestCase
             $this->repository->getSearchColumns(),
             $message
         );
+    }
+
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        self::bootKernel();
+
+        $this->resource = static::$kernel->getContainer()->get($this->resourceName);
+        $this->repository = $this->resource->getRepository();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->resource, $this->repository);
+
+        gc_collect_cycles();
     }
 }
