@@ -41,6 +41,8 @@ class ProfileControllerTest extends KernelTestCase
 
         $controller = new ProfileController();
         $controller->profileAction($tokenStorage, $serializer, $rolesService);
+
+        unset($controller, $tokenStorage, $user, $rolesService, $serializer);
     }
 
     /**
@@ -61,5 +63,7 @@ class ProfileControllerTest extends KernelTestCase
 
         $controller = new ProfileController();
         $controller->groupsAction($tokenStorage, $serializer);
+
+        unset($controller, $tokenStorage, $token, $user, $serializer);
     }
 }

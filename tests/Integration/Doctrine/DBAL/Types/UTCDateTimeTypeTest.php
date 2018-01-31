@@ -32,21 +32,6 @@ class UTCDateTimeTypeTest extends KernelTestCase
      */
     private $type;
 
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->platform = new MySqlPlatform();
-
-        if (Type::hasType('datetime')) {
-            Type::overrideType('datetime', UTCDateTimeType::class);
-        } else {
-            Type::addType('datetime', UTCDateTimeType::class);
-        }
-
-        $this->type = Type::getType('datetime');
-    }
-
     public function testThatDateTimeConvertsToDatabaseValue(): void
     {
         $dateInput = new \DateTime('1981-04-07 10:00:00', new \DateTimeZone('Europe/Helsinki'));
@@ -59,8 +44,13 @@ class UTCDateTimeTypeTest extends KernelTestCase
         $actual = $this->type->convertToDatabaseValue($dateInput, $this->platform);
 
         static::assertSame($expected, $actual);
+
+        unset($actual, $expected, $dateExpected, $dateInput);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatConvertToDatabaseValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
         PHPUnitUtil::setProperty('utc', null, $this->type);
@@ -76,6 +66,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         static::assertInstanceOf(\DateTimeZone::class, $property);
         static::assertSame('UTC', $property->getName());
+
+        unset($dateInput);
     }
 
     /**
@@ -113,6 +105,9 @@ class UTCDateTimeTypeTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatConvertToPHPValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
         PHPUnitUtil::setProperty('utc', null, $this->type);
@@ -134,5 +129,30 @@ class UTCDateTimeTypeTest extends KernelTestCase
     public function testThatConvertToPHPValueThrowsAnExceptionWithInvalidValue(): void
     {
         $this->type->convertToPHPValue('foobar', $this->platform);
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->platform = new MySqlPlatform();
+
+        if (Type::hasType('datetime')) {
+            Type::overrideType('datetime', UTCDateTimeType::class);
+        } else {
+            Type::addType('datetime', UTCDateTimeType::class);
+        }
+
+        $this->type = Type::getType('datetime');
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->type, $this->platform);
     }
 }

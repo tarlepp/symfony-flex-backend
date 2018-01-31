@@ -61,8 +61,19 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 
     protected function setUp(): void
     {
+        gc_enable();
+
         parent::setUp();
 
         $this->controller = $this->getContainer()->get($this->controllerClass);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->controller);
+
+        gc_collect_cycles();
     }
 }
