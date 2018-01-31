@@ -40,15 +40,6 @@ abstract class ResourceTestCase extends KernelTestCase
      */
     protected $resource;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        self::bootKernel();
-
-        $this->resource = static::$kernel->getContainer()->get($this->resourceClass);
-    }
-
     public function testThatGetRepositoryReturnsExpected(): void
     {
         $message = \sprintf(
@@ -56,6 +47,7 @@ abstract class ResourceTestCase extends KernelTestCase
             $this->repositoryClass
         );
 
+        /** @noinspection UnnecessaryAssertionInspection */
         self::assertInstanceOf($this->repositoryClass, $this->resource->getRepository(), $message);
     }
 
@@ -67,5 +59,25 @@ abstract class ResourceTestCase extends KernelTestCase
         );
 
         self::assertSame($this->entityClass, $this->resource->getEntityName(), $message);
+    }
+
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        self::bootKernel();
+
+        $this->resource = static::$kernel->getContainer()->get($this->resourceClass);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->resource);
+
+        gc_collect_cycles();
     }
 }

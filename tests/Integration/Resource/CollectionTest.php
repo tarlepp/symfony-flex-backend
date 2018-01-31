@@ -26,5 +26,7 @@ class CollectionTest extends KernelTestCase
     {
         $collection = new Collection();
         $collection->get('FooBar');
+
+        unset($collection);
     }
 }

@@ -55,6 +55,8 @@ class RestResourceConverterTest extends KernelTestCase
         ]);
 
         $this->converter->apply($request, $paramConverter);
+
+        unset($paramConverter, $request);
     }
 
     /**
@@ -75,6 +77,8 @@ class RestResourceConverterTest extends KernelTestCase
         static::assertTrue($this->converter->apply($request, $paramConverter));
         static::assertInstanceOf(Role::class, $request->attributes->get('role'));
         static::assertSame('Description - ' . $role, $request->attributes->get('role')->getDescription());
+
+        unset ($paramConverter, $request);
     }
 
     /**
@@ -116,16 +120,23 @@ class RestResourceConverterTest extends KernelTestCase
         ];
     }
 
-    /**
-     * Sets up the fixture, for example, open a network connection.
-     * This method is called before a test is executed.
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
+        gc_enable();
+
         parent::setUp();
 
         self::bootKernel();
 
         $this->converter = new RestResourceConverter(static::$kernel->getContainer()->get(Collection::class));
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->converter);
+
+        gc_collect_cycles();
     }
 }

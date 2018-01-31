@@ -43,6 +43,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $provider = new ApiKeyUserProvider($apiKeyRepository, $rolesService);
 
         static::assertSame($expected, $provider->supportsClass($input));
+
+        unset($provider, $rolesService, $apiKeyRepository);
     }
 
     /**
@@ -62,6 +64,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $provider = new ApiKeyUserProvider($apiKeyRepository, $rolesService);
         $provider->refreshUser($user);
+
+        unset($provider, $user, $rolesService, $apiKeyRepository);
     }
 
     /**
@@ -85,6 +89,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $provider = new ApiKeyUserProvider($apiKeyRepository, $rolesService);
         $provider->loadUserByUsername('guid');
+
+        unset($provider, $apiKeyRepository, $rolesService);
     }
 
     public function testThatLoadUserByUsernameCreatesExpectedApiKeyUser(): void
@@ -108,6 +114,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $user = $provider->loadUserByUsername('guid');
 
         static::assertSame($apiKey, $user->getApiKey());
+
+        unset($user, $provider, $apiKeyRepository, $apiKey, $rolesService);
     }
 
     public function testThatGetApiKeyForTokenCallsExpectedRepositoryMethod(): void
@@ -127,6 +135,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $provider = new ApiKeyUserProvider($apiKeyRepository, $rolesService);
         $provider->getApiKeyForToken('some_token');
+
+        unset($provider, $apiKeyRepository, $rolesService);
     }
 
     /**

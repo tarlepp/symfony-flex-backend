@@ -47,18 +47,6 @@ class UserProviderTest extends KernelTestCase
         return static::$kernel->getContainer()->get('doctrine.orm.entity_manager');
     }
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = new $this->repositoryClass(
-            static::getEntityManager(),
-            new ClassMetadata($this->entityClass)
-        );
-    }
-
     /**
      * @dataProvider dataProviderTestThatSupportsClassMethodReturnsExpected
      *
@@ -77,16 +65,24 @@ class UserProviderTest extends KernelTestCase
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      * @expectedExceptionMessage Instance of "Symfony\Component\Security\Core\User\User" is not supported.
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testThatRefreshUserThrowsAnExceptionWhenNotSupportedUserInterfaceIsUsed(): void
     {
         $user = new CoreUser('username', 'password');
 
         $this->repository->refreshUser($user);
+
+        unset($user);
     }
 
     /**
      * @expectedException \Doctrine\ORM\NoResultException
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
     {
@@ -103,5 +99,28 @@ class UserProviderTest extends KernelTestCase
             [false, UserGroup::class],
             [false, CoreUser::class],
         ];
+    }
+
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = new $this->repositoryClass(
+            static::getEntityManager(),
+            new ClassMetadata($this->entityClass)
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->repository);
+
+        gc_collect_cycles();
     }
 }

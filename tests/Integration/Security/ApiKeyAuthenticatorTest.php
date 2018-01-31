@@ -37,6 +37,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         $apiKeyAuthenticator = new ApiKeyAuthenticator();
 
         static::assertEquals($expected, $apiKeyAuthenticator->createToken($request, $providerKey));
+
+        unset($apiKeyAuthenticator);
     }
 
     /**
@@ -50,6 +52,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         $apiKeyAuthenticator = new ApiKeyAuthenticator();
 
         static::assertEquals($expected, $apiKeyAuthenticator->supportsToken(...$args));
+
+        unset($apiKeyAuthenticator);
     }
 
     /**
@@ -67,6 +71,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $apiKeyAuthenticator = new ApiKeyAuthenticator();
         $apiKeyAuthenticator->authenticateToken($token, $userProvider, 'providerKey');
+
+        unset($apiKeyAuthenticator, $userProvider, $token);
     }
 
     /**
@@ -91,6 +97,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $apiKeyAuthenticator = new ApiKeyAuthenticator();
         $apiKeyAuthenticator->authenticateToken($token, $chainProvider, 'providerKey');
+
+        unset($apiKeyAuthenticator, $chainProvider, $userProvider, $token);
     }
 
     /**
@@ -126,6 +134,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $apiKeyAuthenticator = new ApiKeyAuthenticator();
         $apiKeyAuthenticator->authenticateToken($token, $chainProvider, 'providerKey');
+
+        unset($apiKeyAuthenticator, $apiKeyUserProvider, $token, $chainProvider);
     }
 
     /**
