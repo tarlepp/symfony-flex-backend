@@ -49,32 +49,6 @@ abstract class EntityTestCase extends KernelTestCase
      */
     protected $repository;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        self::bootKernel();
-
-        // Store container and entity manager
-        $this->container = static::$kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
-
-        // Create new entity object
-        $this->entity = new $this->entityName();
-
-        $this->repository = $this->entityManager->getRepository($this->entityName);
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->entityManager->close();
-        $this->entityManager = null; // avoid memory leaks
-
-        self::$kernel->shutdown();
-    }
-
     /**
      * Method to test that getId() method exists on entity
      */
@@ -388,6 +362,8 @@ abstract class EntityTestCase extends KernelTestCase
         $collection = \call_user_func([$this->entity, $methodGetter]);
 
         static::assertTrue($collection->isEmpty());
+
+        unset($collection);
     }
 
     /**
@@ -481,6 +457,8 @@ abstract class EntityTestCase extends KernelTestCase
          * @param string $field
          *
          * @return array
+         *
+         * @throws \Doctrine\ORM\Mapping\MappingException
          */
         $iterator = function (string $field) use ($meta): array {
             return [
@@ -774,5 +752,35 @@ abstract class EntityTestCase extends KernelTestCase
         }
 
         return $output;
+    }
+
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        self::bootKernel();
+
+        // Store container and entity manager
+        $this->container = static::$kernel->getContainer();
+        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
+
+        // Create new entity object
+        $this->entity = new $this->entityName();
+
+        $this->repository = $this->entityManager->getRepository($this->entityName);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->entityManager->close();
+        $this->entityManager = null; // avoid memory leaks
+
+        self::$kernel->shutdown();
+
+        unset($this->repository, $this->entity, $this->entityManager, $this->container);
     }
 }

@@ -34,6 +34,8 @@ class BodySubscriberTest extends KernelTestCase
 
         static::assertEmpty($request->query->all());
         static::assertEmpty($request->request->all());
+
+        unset($subscriber, $event, $request);
     }
 
     public function testThatNonJsonContentTypeWorksLikeExpected(): void

@@ -27,27 +27,6 @@ class LogLoginTest extends EntityTestCase
     protected $entityName = LogLogin::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
-    public function setUp(): void
-    {
-        self::bootKernel();
-
-        // Store container and entity manager
-        $this->container = static::$kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
-
-        $request = Request::create('');
-
-        // Parse user agent data with device detector
-        $deviceDetector = new DeviceDetector($request->headers->get('User-Agent'));
-        $deviceDetector->parse();
-
-        // Create new entity object
-        $this->entity = new $this->entityName('', $request, $deviceDetector, new User());
-
-        $this->repository = $this->entityManager->getRepository($this->entityName);
-    }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * @param string $field
      * @param string $type
@@ -117,5 +96,30 @@ class LogLoginTest extends EntityTestCase
         } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
             static::assertInstanceOf($type, $logRequest->$getter());
         }
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        self::bootKernel();
+
+        // Store container and entity manager
+        $this->container = static::$kernel->getContainer();
+        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
+
+        $request = Request::create('');
+
+        // Parse user agent data with device detector
+        $deviceDetector = new DeviceDetector($request->headers->get('User-Agent'));
+        $deviceDetector->parse();
+
+        // Create new entity object
+        $this->entity = new $this->entityName('', $request, $deviceDetector, new User());
+
+        $this->repository = $this->entityManager->getRepository($this->entityName);
+
+        unset($deviceDetector);
     }
 }

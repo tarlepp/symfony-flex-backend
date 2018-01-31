@@ -92,6 +92,8 @@ class LogRequestTest extends EntityTestCase
         } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
             static::assertInstanceOf($type, $logRequest->$getter());
         }
+
+        unset($logRequest);
     }
 
     /**
@@ -108,6 +110,8 @@ class LogRequestTest extends EntityTestCase
         $logRequest = new LogRequest($request, Response::create());
 
         static::assertSame($expected, $logRequest->getHeaders());
+
+        unset($logRequest, $request);
     }
 
     /**
@@ -124,13 +128,17 @@ class LogRequestTest extends EntityTestCase
         $logRequest = new LogRequest($request, Response::create());
 
         static::assertSame($expected, $logRequest->getParameters());
+
+        unset($logRequest, $request);
     }
 
     /**
      * @dataProvider dataProviderTestThatDetermineParametersWorksLikeExpected
      *
-     * @param   string  $content
-     * @param   array   $expected
+     * @param   string $content
+     * @param   array  $expected
+     *
+     * @throws \ReflectionException
      */
     public function testThatDetermineParametersWorksLikeExpected(string $content, array $expected)
     {
@@ -139,6 +147,8 @@ class LogRequestTest extends EntityTestCase
         $request = Request::create('', 'GET', [], [], [], [], $content);
 
         static::assertSame($expected, PHPUnitUtil::callMethod($logRequest, 'determineParameters', [$request]));
+
+        unset($request, $logRequest);
     }
 
     /**

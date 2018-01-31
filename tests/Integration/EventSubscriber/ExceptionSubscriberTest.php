@@ -33,7 +33,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class ExceptionSubscriberTest extends KernelTestCase
 {
-    public function testThatGetSubscribedEventsReturnsExcpected(): void
+    public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [
             'kernel.exception' => 'onKernelException',
@@ -68,6 +68,8 @@ class ExceptionSubscriberTest extends KernelTestCase
         $subscriber = new ExceptionSubscriber($stubTokenStorage);
         $subscriber->setLogger($stubLogger);
         $subscriber->onKernelException($stubEvent);
+
+        unset($subscriber, $stubLogger, $stubEvent, $exception, $stubTokenStorage);
     }
 
     public function testThatOnKernelExceptionMethodSetResponse(): void
@@ -95,6 +97,8 @@ class ExceptionSubscriberTest extends KernelTestCase
         $subscriber = new ExceptionSubscriber($stubTokenStorage);
         $subscriber->setLogger($stubLogger);
         $subscriber->onKernelException($stubEvent);
+
+        unset($subscriber, $stubEvent, $exception, $stubLogger, $stubTokenStorage);
     }
 
     /**
@@ -129,6 +133,8 @@ class ExceptionSubscriberTest extends KernelTestCase
         $subscriber->onKernelException($event);
 
         static::assertSame($expectedStatus, $event->getResponse()->getStatusCode());
+
+        unset($subscriber, $event, $stubRequest, $stubHttpKernel, $stubLogger, $stubTokenStorage);
     }
 
     /**
@@ -171,6 +177,8 @@ class ExceptionSubscriberTest extends KernelTestCase
         $result = JSON::decode($event->getResponse()->getContent(), true);
 
         static::assertSame($expectedKeys, \array_keys($result));
+
+        unset($result, $subscriber, $event, $stubRequest, $stubHttpKernel, $stubLogger, $stubTokenStorage);
     }
 
     /**
@@ -208,6 +216,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             $expectedStatusCode,
             PHPUnitUtil::callMethod($subscriber, 'getStatusCode', [$exception])
         );
+
+        unset($subscriber, $stubLogger, $stubTokenStorage);
     }
 
     /**
@@ -241,6 +251,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             $expectedMessage,
             PHPUnitUtil::callMethod($subscriber, 'getExceptionMessage', [$exception])
         );
+
+        unset($subscriber, $stubLogger, $stubTokenStorage);
     }
 
     /**

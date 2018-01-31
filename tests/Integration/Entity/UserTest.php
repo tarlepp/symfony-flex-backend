@@ -80,6 +80,8 @@ class UserTest extends EntityTestCase
         // Assert that unserialized object returns expected data
         static::assertSame('john', $entity->getUsername());
         static::assertSame('cnffjbeq', $entity->getPassword());
+
+        unset($entity);
     }
 
     public function testThatGetSaltMethodReturnsNull(): void
@@ -107,6 +109,8 @@ class UserTest extends EntityTestCase
             static::assertArrayHasKey($key, $data);
             static::assertSame($key, $data[$key]);
         }
+
+        unset($data);
     }
 
     public function testThatEraseCredentialsMethodWorksAsExpected(): void
@@ -130,6 +134,8 @@ class UserTest extends EntityTestCase
         $message = 'Failed to check if User entity is equal.';
 
         static::assertSame($expected, $this->entity->isEqualTo($entity), $message);
+
+        unset($entity);
     }
 
     /**

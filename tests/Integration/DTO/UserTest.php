@@ -50,6 +50,8 @@ class UserTest extends DtoTestCase
         static::assertSame('surname', $dto->getSurname());
         static::assertSame('firstname.surname@test.com', $dto->getEmail());
         static::assertSame([$userGroupEntity->getId()], $dto->getUserGroups());
+
+        unset($dto, $userEntity, $userGroupEntity, $roleEntity);
     }
 
     public function testThatUpdateMethodCallsExpectedEntityMethodIfPasswordIsVisited(): void
@@ -68,6 +70,8 @@ class UserTest extends DtoTestCase
         $dto = new $this->dtoClass();
         $dto->setPassword('password');
         $dto->update($entity);
+
+        unset($dto, $entity);
     }
 
     public function testThatUpdateMethodCallsExpectedEntityMethodsIfUserGroupsIsVisited(): void
@@ -95,5 +99,7 @@ class UserTest extends DtoTestCase
         $dto = new $this->dtoClass();
         $dto->setUserGroups($userGroups);
         $dto->update($entity);
+
+        unset($dto, $entity, $userGroups);
     }
 }

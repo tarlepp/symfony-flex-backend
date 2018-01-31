@@ -28,6 +28,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 class RequestSubscriberTest extends KernelTestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function testThatMethodCallsExpectedLoggerMethods(): void
     {
         static::bootKernel();
@@ -68,8 +71,13 @@ class RequestSubscriberTest extends KernelTestCase
 
         $subscriber = new RequestSubscriber($logger, $tokenStorage);
         $subscriber->onKernelResponse($event);
+
+        unset($subscriber, $logger, $tokenStorage, $logger, $event, $response, $request);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatSetUserIsCalled(): void
     {
         static::bootKernel();
@@ -106,8 +114,13 @@ class RequestSubscriberTest extends KernelTestCase
 
         $subscriber = new RequestSubscriber($logger, $tokenStorage);
         $subscriber->onKernelResponse($event);
+
+        unset($subscriber, $logger, $tokenStorage, $token, $user, $event, $response, $request);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatSetApiKeyIsCalled(): void
     {
         static::bootKernel();
@@ -151,8 +164,13 @@ class RequestSubscriberTest extends KernelTestCase
 
         $subscriber = new RequestSubscriber($logger, $tokenStorage);
         $subscriber->onKernelResponse($event);
+
+        unset($subscriber, $logger, $tokenStorage, $token, $user, $apiKey, $event, $response, $request);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatLoggerServiceIsNotCalledIfOptionsRequest(): void
     {
         static::bootKernel();
@@ -177,8 +195,13 @@ class RequestSubscriberTest extends KernelTestCase
 
         $subscriber = new RequestSubscriber($logger, $tokenStorage);
         $subscriber->onKernelResponse($event);
+
+        unset($subscriber, $logger, $tokenStorage, $event, $response, $request);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatLoggerServiceIsNotCalledIfHealthzRequest(): void
     {
         static::bootKernel();
@@ -203,5 +226,7 @@ class RequestSubscriberTest extends KernelTestCase
 
         $subscriber = new RequestSubscriber($logger, $tokenStorage);
         $subscriber->onKernelResponse($event);
+
+        unset($subscriber, $logger, $tokenStorage, $event, $response, $request);
     }
 }

@@ -25,6 +25,9 @@ class DtoTestCase extends KernelTestCase
      */
     protected $dtoClass;
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatPropertiesHaveGetters(): void
     {
         $dtoReflection = new \ReflectionClass($this->dtoClass);
@@ -47,8 +50,13 @@ class DtoTestCase extends KernelTestCase
 
             self::assertTrue($dtoReflection->hasMethod($method), $message);
         }
+
+        unset($dtoReflection);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatPropertiesHaveSetters(): void
     {
         $dtoReflection = new \ReflectionClass($this->dtoClass);
@@ -71,8 +79,13 @@ class DtoTestCase extends KernelTestCase
 
             self::assertTrue($dtoReflection->hasMethod($method), $message);
         }
+
+        unset($dtoReflection);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatSetterCallsSetVisitedMethod(): void
     {
         $dtoClass = $this->dtoClass;
@@ -109,8 +122,13 @@ class DtoTestCase extends KernelTestCase
         }
 
         self::assertEquals($expectedVisited, $mock->getVisited());
+
+        unset($mock, $properties, $dtoReflection);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatGetterMethodReturnExpectedAfterSetter(): void
     {
         $dtoClass = $this->dtoClass;
@@ -138,6 +156,8 @@ class DtoTestCase extends KernelTestCase
 
             self::assertSame($value, $dto->$getter());
         }
+
+        unset($dto, $dtoReflection);
     }
 
     /**
@@ -169,6 +189,8 @@ class DtoTestCase extends KernelTestCase
 
     /**
      * @return array
+     *
+     * @throws \ReflectionException
      */
     public function dataProviderTestThatSetterOnlyAcceptSpecifiedType(): array
     {

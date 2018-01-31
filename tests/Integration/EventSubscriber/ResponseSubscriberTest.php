@@ -45,5 +45,7 @@ class ResponseSubscriberTest extends KernelTestCase
 
         static::assertNotNull($version);
         static::assertSame(JSON::decode(\file_get_contents(__DIR__ . '/../../../composer.json'))->version, $version);
+
+        unset($response, $subscriber, $event, $request);
     }
 }

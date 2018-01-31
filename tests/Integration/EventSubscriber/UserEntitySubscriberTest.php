@@ -49,47 +49,6 @@ class UserEntitySubscriberTest extends KernelTestCase
      */
     protected $subscriber;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        self::bootKernel();
-
-        // Store container and entity manager
-        $this->container = static::$kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
-
-        $this->encoder = $this->container->get('security.password_encoder');
-
-        // Create listener
-        $this->subscriber = new UserEntitySubscriber($this->encoder);
-
-        // Create new user but not store it at this time
-        $this->entity = new User();
-        $this->entity->setUsername('john_doe_the_tester');
-        $this->entity->setEmail('john.doe_the_tester@test.com');
-        $this->entity->setFirstname('John');
-        $this->entity->setSurname('Doe');
-    }
-
-    /**
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function tearDown(): void
-    {
-        if ($this->entityManager->contains($this->entity)) {
-            $this->entityManager->remove($this->entity);
-            $this->entityManager->flush();
-        }
-
-        $this->entityManager->close();
-        $this->entityManager = null; // avoid memory leaks
-
-        static::$kernel->shutdown();
-
-        parent::tearDown();
-    }
-
     /**
      * @expectedException \LengthException
      * @expectedExceptionMessage Too short password
@@ -183,5 +142,54 @@ class UserEntitySubscriberTest extends KernelTestCase
             $this->encoder->isPasswordValid($this->entity, 'test_test_test'),
             'Changed password is not valid.'
         );
+    }
+
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        self::bootKernel();
+
+        // Store container and entity manager
+        $this->container = static::$kernel->getContainer();
+        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
+
+        $this->encoder = $this->container->get('security.password_encoder');
+
+        // Create listener
+        $this->subscriber = new UserEntitySubscriber($this->encoder);
+
+        // Create new user but not store it at this time
+        $this->entity = new User();
+        $this->entity->setUsername('john_doe_the_tester');
+        $this->entity->setEmail('john.doe_the_tester@test.com');
+        $this->entity->setFirstname('John');
+        $this->entity->setSurname('Doe');
+    }
+
+
+    /**
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function tearDown(): void
+    {
+        if ($this->entityManager->contains($this->entity)) {
+            $this->entityManager->remove($this->entity);
+            $this->entityManager->flush();
+        }
+
+        $this->entityManager->close();
+        $this->entityManager = null; // avoid memory leaks
+
+        static::$kernel->shutdown();
+
+        parent::tearDown();
+
+        unset($this->entity, $this->subscriber, $this->encoder, $this->entityManager, $this->container);
+
+        gc_collect_cycles();
     }
 }

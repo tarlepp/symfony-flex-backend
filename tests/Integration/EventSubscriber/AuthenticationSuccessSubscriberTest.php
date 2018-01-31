@@ -22,6 +22,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AuthenticationSuccessSubscriberTest extends KernelTestCase
 {
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatOnAuthenticationSuccessMethodCallsExpectedLoggerMethods(): void
     {
         $user = new User();
@@ -42,5 +45,7 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
 
         $subscriber = new AuthenticationSuccessSubscriber($loginLogger);
         $subscriber->onAuthenticationSuccess($event);
+
+        unset($subscriber, $loginLogger, $event, $user);
     }
 }

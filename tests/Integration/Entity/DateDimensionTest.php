@@ -75,6 +75,8 @@ class DateDimensionTest extends EntityTestCase
         } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
             static::assertInstanceOf($type, $dateDimension->$getter());
         }
+
+        unset($dateDimension);
     }
 
     public function testThatConstructorCallsExpectedMethods(): void
@@ -95,5 +97,7 @@ class DateDimensionTest extends EntityTestCase
         static::assertSame((bool)$dateTime->format('L'), $entity->isLeapYear());
         static::assertSame((int)$dateTime->format('o'), $entity->getWeekNumberingYear());
         static::assertSame((int)$dateTime->format('U'), $entity->getUnixTime());
+
+        unset($entity, $dateTime);
     }
 }

@@ -58,6 +58,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         foreach ($keys as $key) {
             static::assertArrayHasKey($key, $event->getData());
         }
+
+        unset($subscriber, $event, $roles, $requestStack, $request, $user);
     }
 
     public function testThatPayloadContainsExpectedDataWhenRequestIsNotPresent(): void
@@ -95,6 +97,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         }
 
         static::assertArrayNotHasKey('checksum', $event->getData());
+
+        unset($subscriber, $event, $logger, $roles, $requestStack, $user);
     }
 
     public function testThatLoggerAlertIsCalledIfRequestDoesNotExist(): void
@@ -129,5 +133,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $subscriber = new JWTCreatedSubscriber($roles, $requestStack);
         $subscriber->setLogger($logger);
         $subscriber->onJWTCreated($event);
+
+        unset($subscriber, $event, $logger, $roles, $requestStack, $user);
     }
 }

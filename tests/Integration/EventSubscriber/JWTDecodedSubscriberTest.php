@@ -44,6 +44,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $subscriber->onJWTDecoded($event);
 
         static::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
+
+        unset($subscriber, $event, $requestStack, $request);
     }
 
     public function testThatJwtIsNotMarkedInvalidIfChecksumMatches(): void
@@ -74,6 +76,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $subscriber->onJWTDecoded($event);
 
         static::assertTrue($event->isValid(), 'JWTDecodedEvent did mark event as invalid.');
+
+        unset($subscriber, $event, $requestStack, $request);
     }
 
     public function testThatEventIsMarkedInvalidIfRequestDoesNotExist(): void
@@ -96,6 +100,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $subscriber->onJWTDecoded($event);
 
         static::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
+
+        unset($subscriber, $logger, $event, $requestStack);
     }
 
     public function testThatEventIsNotTouchedIfItHasAlreadyBeenMarkedInvalid(): void
@@ -118,5 +124,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
         static::assertSame($expectedEvent->getPayload(), $event->getPayload());
         static::assertFalse($event->isValid());
+
+        unset($subscriber, $expectedEvent, $event, $requestStack);
     }
 }

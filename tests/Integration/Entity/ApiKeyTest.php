@@ -49,6 +49,8 @@ class ApiKeyTest extends EntityTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expectedRoles, $apiKey->getRoles());
+
+        unset($apiKey);
     }
 
     /**

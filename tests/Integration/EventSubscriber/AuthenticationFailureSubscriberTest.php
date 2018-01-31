@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\EventSubscriber\AuthenticationFailureSubscriber;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
+use Doctrine\ORM\NonUniqueResultException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,6 +26,9 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class AuthenticationFailureSubscriberTest extends KernelTestCase
 {
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserPresent(): void
     {
         $user = new User();
@@ -64,6 +68,8 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
         $subscriber = new AuthenticationFailureSubscriber($loginLogger, $userRepository);
         $subscriber->onAuthenticationFailure($event);
+
+        unset($subscriber, $loginLogger, $userRepository, $event, $response, $authenticationException, $token, $user);
     }
 
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserNotPresent(): void
@@ -104,6 +110,12 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
             ->method('process');
 
         $subscriber = new AuthenticationFailureSubscriber($loginLogger, $userRepository);
-        $subscriber->onAuthenticationFailure($event);
+
+        try {
+            $subscriber->onAuthenticationFailure($event);
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (NonUniqueResultException $exception) {
+        }
+
+        unset($subscriber, $loginLogger, $userRepository, $event, $response, $authenticationException, $token, $user);
     }
 }
