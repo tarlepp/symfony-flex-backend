@@ -38,13 +38,9 @@ class UniqueEmailValidatorTest extends KernelTestCase
      */
     private $builder;
 
-    public function setUp(): void
-    {
-        $this->constraint = new UniqueEmail();
-        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
-        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-    }
-
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatValidateCallsExpectedMethods(): void
     {
         // Create new user
@@ -76,5 +72,24 @@ class UniqueEmailValidatorTest extends KernelTestCase
         $validator = new UniqueEmailValidator($repository);
         $validator->initialize($this->context);
         $validator->validate($user, $this->constraint);
+
+        unset($validator, $repository, $user);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setUp(): void
+    {
+        $this->constraint = new UniqueEmail();
+        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
+        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->constraint, $this->context, $this->builder);
     }
 }

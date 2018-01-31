@@ -19,6 +19,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class HealthzServiceTest extends KernelTestCase
 {
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Exception
+     */
     public function testThatCheckMethodCallsExpectedRepositoryMethods(): void
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|HealthzRepository $mockRepository */
@@ -40,5 +46,7 @@ class HealthzServiceTest extends KernelTestCase
 
         $healthzService = new HealthzService($mockRepository);
         $healthzService->check();
+
+        unset($healthzService, $mockRepository);
     }
 }

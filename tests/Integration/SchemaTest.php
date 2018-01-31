@@ -26,11 +26,38 @@ class SchemaTest extends KernelTestCase
      */
     private $validator;
 
+    public function testThatMappingsAreValid(): void
+    {
+        $errors = $this->validator->validateMapping();
+
+        $messages = [];
+
+        $formatter = function ($errors, $className) use (&$messages) {
+            $messages[] = $className . ': ' . \implode(', ', $errors);
+        };
+
+        \array_walk($errors, $formatter);
+
+        static::assertEmpty($errors, \implode("\n", $messages));
+
+        unset($errors, $messages);
+    }
+
+    public function testThatSchemaInSyncWithMetadata(): void
+    {
+        static::assertTrue(
+            $this->validator->schemaInSyncWithMetadata(),
+            'The database schema is not in sync with the current mapping file.'
+        );
+    }
+
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
+        gc_enable();
+
         self::bootKernel();
 
         if (!Type::hasType('EnumLogLogin')) {
@@ -45,26 +72,15 @@ class SchemaTest extends KernelTestCase
         $this->validator = new SchemaValidator($em);
     }
 
-    public function testThatMappingsAreValid()
+    /**
+     * {@inheritDoc}
+     */
+    protected function tearDown(): void
     {
-        $errors = $this->validator->validateMapping();
+        parent::tearDown();
 
-        $messages = [];
+        unset($this->validator);
 
-        $formatter = function ($errors, $className) use (&$messages) {
-            $messages[] = $className . ': ' . \implode(', ', $errors);
-        };
-
-        \array_walk($errors, $formatter);
-
-        static::assertEmpty($errors, \implode("\n", $messages));
-    }
-
-    public function testThatSchemaInSyncWithMetadata()
-    {
-        static::assertTrue(
-            $this->validator->schemaInSyncWithMetadata(),
-            'The database schema is not in sync with the current mapping file.'
-        );
+        gc_collect_cycles();
     }
 }

@@ -22,6 +22,9 @@ use Symfony\Component\Security\Core\User\User;
  */
 class LoginLoggerTest extends KernelTestCase
 {
+    /**
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function testThatSetUserCallsRepositoryMethodIfWrongUserProvided(): void
     {
         /**
@@ -42,6 +45,8 @@ class LoginLoggerTest extends KernelTestCase
 
         $loginLogger = new LoginLogger($logLoginResource, $userRepository, $requestStack);
         $loginLogger->setUser($user);
+
+        unset($loginLogger, $user, $userRepository, $requestStack, $logLoginResource);
     }
 
     /**

@@ -22,6 +22,9 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class RequestLoggerTest extends KernelTestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
     {
         /**
@@ -36,8 +39,13 @@ class RequestLoggerTest extends KernelTestCase
         (new RequestLogger($resource))
             ->setResponse(new Response())
             ->handle();
+
+        unset($resource);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatLogIsNotCreatedIfResponseObjectIsNotSet(): void
     {
         /**
@@ -52,8 +60,13 @@ class RequestLoggerTest extends KernelTestCase
         (new RequestLogger($resource))
             ->setRequest(new Request())
             ->handle();
+
+        unset($resource);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatResourceSaveMethodIsCalled(): void
     {
         /**
@@ -75,8 +88,13 @@ class RequestLoggerTest extends KernelTestCase
             ->setUser()
             ->setApiKey()
             ->handle();
+
+        unset($resource, $response, $request);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatLoggerIsCalledIfExceptionIsThrown(): void
     {
         /**
@@ -108,5 +126,7 @@ class RequestLoggerTest extends KernelTestCase
             ->setUser()
             ->setApiKey()
             ->handle();
+
+        unset($logger, $resource, $exception, $response, $request, $logger);
     }
 }
