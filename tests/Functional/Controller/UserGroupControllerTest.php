@@ -23,6 +23,9 @@ class UserGroupControllerTest extends WebTestCase
 {
     private $baseUrl = '/user_group';
 
+    /**
+     * @throws \Exception
+     */
     public function testThatGetBaseRouteReturn403(): void
     {
         $client = $this->getClient();
@@ -34,6 +37,8 @@ class UserGroupControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
+
+        unset($response, $client);
     }
 
     /**
@@ -41,6 +46,8 @@ class UserGroupControllerTest extends WebTestCase
      *
      * @param int    $userCount
      * @param string $userGroupId
+     *
+     * @throws \Exception
      */
     public function testThatGetUserGroupUsersActionReturnsExpected(int $userCount, string $userGroupId): void
     {
@@ -56,6 +63,8 @@ class UserGroupControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount($userCount, JSON::decode($response->getContent()));
+
+        unset($response, $client);
     }
 
     /**
@@ -63,16 +72,16 @@ class UserGroupControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatAttachUserActionReturns403ForInvalidUser(string $username, string $password): void
     {
-        self::bootKernel();
-
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+        $userGroupResource = $this->container->get(UserGroupResource::class);
 
         /** @var UserResource $userResource */
-        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+        $userResource = $this->container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -100,22 +109,24 @@ class UserGroupControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
     }
 
     /**
      * @dataProvider dataProviderTestThatAttachUserActionWorksAsExpected
      *
      * @param int $expectedStatus
+     *
+     * @throws \Exception
      */
     public function testThatAttachUserActionWorksAsExpected(int $expectedStatus): void
     {
-        self::bootKernel();
-
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+        $userGroupResource = $this->container->get(UserGroupResource::class);
 
         /** @var UserResource $userResource */
-        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+        $userResource = $this->container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -140,20 +151,21 @@ class UserGroupControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount(2, JSON::decode($response->getContent()));
+
+        unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
     }
 
     /**
      * @depends testThatAttachUserActionWorksAsExpected
+     * @throws \Exception
      */
     public function testThatDetachUserActionWorksAsExpected(): void
     {
-        self::bootKernel();
-
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+        $userGroupResource = $this->container->get(UserGroupResource::class);
 
         /** @var UserResource $userResource */
-        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+        $userResource = $this->container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -178,25 +190,27 @@ class UserGroupControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount(1, JSON::decode($response->getContent()));
+
+        unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
     }
 
     /**
-     * @depends testThatDetachUserActionWorksAsExpected
+     * @depends      testThatDetachUserActionWorksAsExpected
      *
      * @dataProvider dataProviderTestThatDetachUserActionReturns403ForInvalidUser
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatDetachUserActionReturns403ForInvalidUser(string $username, string $password): void
     {
-        self::bootKernel();
-
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+        $userGroupResource = $this->container->get(UserGroupResource::class);
 
         /** @var UserResource $userResource */
-        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+        $userResource = $this->container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -224,6 +238,8 @@ class UserGroupControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
     }
 
     /**

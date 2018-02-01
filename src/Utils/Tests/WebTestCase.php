@@ -22,44 +22,25 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * @var ContainerInterface
      */
-    private $container;
+    protected $container;
 
     /**
      * @var Auth
      */
     private $authService;
 
-    /**
-     * Getter method for container
-     *
-     * @return ContainerInterface
-     */
-    public function getContainer(): ContainerInterface
+    public static function setUpBeforeClass(): void
     {
-        if (!($this->container instanceof ContainerInterface)) {
-            self::bootKernel();
+        parent::setUpBeforeClass();
 
-            $this->container = static::$kernel->getContainer();
-        }
-
-        return $this->container;
+        gc_enable();
     }
 
-    /**
-     * Getter method for auth service
-     *
-     * @return Auth
-     */
-    public function getAuthService(): Auth
+    public static function tearDownAfterClass(): void
     {
-        if (!($this->authService instanceof Auth)) {
-            // We need to boot kernel up to get auth service
-            self::bootKernel();
+        parent::tearDownAfterClass();
 
-            $this->authService = $this->getContainer()->get('test.service_locator')->get(Auth::class);
-        }
-
-        return $this->authService;
+        gc_collect_cycles();
     }
 
     /**
@@ -85,9 +66,9 @@ abstract class WebTestCase extends BaseWebTestCase
 
         // Merge authorization headers
         $server = \array_merge(
-            $username === null ? [] : $this->getAuthService()->getAuthorizationHeadersForUser($username, $password),
+            $username === null ? [] : $this->authService->getAuthorizationHeadersForUser($username, $password),
             \array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
-            $this->getAuthService()->getJwtHeaders(),
+            $this->authService->getJwtHeaders(),
             $server
         );
 
@@ -110,9 +91,9 @@ abstract class WebTestCase extends BaseWebTestCase
 
         // Merge authorization headers
         $server = \array_merge(
-            $role === null ? [] : $this->getAuthService()->getAuthorizationHeadersForApiKey($role),
+            $role === null ? [] : $this->authService->getAuthorizationHeadersForApiKey($role),
             \array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
-            $this->getAuthService()->getJwtHeaders(),
+            $this->authService->getJwtHeaders(),
             $server
         );
 
@@ -146,5 +127,15 @@ abstract class WebTestCase extends BaseWebTestCase
         }
 
         return $output;
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::bootKernel();
+
+        $this->container = static::$kernel->getContainer();
+        $this->authService = $this->container->get('test.service_locator')->get(Auth::class);
     }
 }

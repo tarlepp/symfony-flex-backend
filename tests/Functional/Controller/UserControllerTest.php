@@ -45,6 +45,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"JWT Token not found","code":401}',
             $response->getContent()
         );
+
+        unset($response, $client);
     }
 
     /**
@@ -69,6 +71,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent());
+
+        unset($response, $client);
     }
 
     /**
@@ -90,6 +94,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent());
+
+        unset($response, $client);
     }
 
     /**
@@ -117,6 +123,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client);
     }
 
     /**
@@ -141,6 +149,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client);
     }
 
     /**
@@ -165,6 +175,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount(6, JSON::decode($response->getContent()));
+
+        unset($response, $client);
     }
 
     /**
@@ -192,6 +204,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client);
     }
 
     /**
@@ -216,6 +230,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount(6, JSON::decode($response->getContent()));
+
+        unset($response, $client);
     }
 
     /**
@@ -243,6 +259,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client);
     }
 
     /**
@@ -279,6 +297,8 @@ class UserControllerTest extends WebTestCase
 
         static::assertJsonStringEqualsJsonString(JSON::encode($data), $responseData);
 
+        unset($responseData, $response, $client);
+
         return $data['id'];
     }
 
@@ -314,6 +334,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client);
     }
 
     /**
@@ -348,6 +370,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(JSON::encode($data), $response->getContent());
+
+        unset($response, $client);
 
         return $userId;
     }
@@ -392,6 +416,8 @@ class UserControllerTest extends WebTestCase
             $response->getContent()
         );
 
+        unset($response, $client);
+
         return $userId;
     }
 
@@ -425,6 +451,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client);
     }
 
     /**
@@ -445,6 +473,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        unset($response, $client);
     }
 
     /**
@@ -452,10 +482,8 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
-        self::bootKernel();
-
         /** @var UserResource $userResource */
-        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+        $userResource = $this->container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john-root'], null, true);
 
@@ -476,6 +504,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"You cannot remove yourself...","code":0,"status":400}',
             $response->getContent()
         );
+
+        unset($response, $client, $user, $userResource);
     }
 
     /**
@@ -503,7 +533,11 @@ class UserControllerTest extends WebTestCase
 
             /** @noinspection NullPointerExceptionInspection */
             static::assertSame(403, $response->getStatusCode(), $response->getContent());
+
+            unset($response);
         }
+
+        unset($client);
     }
 
     /**
@@ -534,6 +568,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
+
+        unset($response, $client);
     }
 
     /**
@@ -558,6 +594,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
+
+        unset($response, $client);
     }
 
     /**
@@ -585,7 +623,11 @@ class UserControllerTest extends WebTestCase
 
             /** @noinspection NullPointerExceptionInspection */
             static::assertSame(403, $response->getStatusCode(), $response->getContent());
+
+            unset($response);
         }
+
+        unset($client);
     }
 
     /**
@@ -622,6 +664,8 @@ class UserControllerTest extends WebTestCase
         } else {
             static::assertSame($expectedResponse, $data[0]->role->id);
         }
+
+        unset($data, $response, $client);
     }
 
     /**
@@ -634,13 +678,11 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatAttachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
-        self::bootKernel();
-
         /** @var UserResource $userResource */
-        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+        $userResource = $this->container->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+        $userGroupResource = $this->container->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -668,6 +710,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
     }
 
     /**
@@ -679,13 +723,11 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatAttachUserGroupActionWorksAsExpected(int $expectedStatus): void
     {
-        self::bootKernel();
-
         /** @var UserResource $userResource */
-        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+        $userResource = $this->container->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+        $userGroupResource = $this->container->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -710,6 +752,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount(1, JSON::decode($response->getContent()));
+
+        unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
     }
 
     /**
@@ -719,13 +763,11 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatDetachUserGroupActionWorksAsExpected(): void
     {
-        self::bootKernel();
-
         /** @var UserResource $userResource */
-        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+        $userResource = $this->container->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+        $userGroupResource = $this->container->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -750,6 +792,8 @@ class UserControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount(0, JSON::decode($response->getContent()));
+
+        unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
     }
 
     /**
@@ -764,13 +808,11 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatDetachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
-        self::bootKernel();
-
         /** @var UserResource $userResource */
-        $userResource = static::$kernel->getContainer()->get(UserResource::class);
+        $userResource = $this->container->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = static::$kernel->getContainer()->get(UserGroupResource::class);
+        $userGroupResource = $this->container->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -798,6 +840,8 @@ class UserControllerTest extends WebTestCase
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent()
         );
+
+        unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
     }
 
     /**
@@ -833,6 +877,8 @@ class UserControllerTest extends WebTestCase
             /** @noinspection NullPointerExceptionInspection */
             static::assertSame($expectedResponse, $data[0]->role->id, $response->getContent());
         }
+
+        unset($data, $response, $client);
     }
 
     /**

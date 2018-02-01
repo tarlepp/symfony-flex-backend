@@ -22,6 +22,9 @@ class ProfileControllerTest extends WebTestCase
 {
     private $baseUrl = '/profile';
 
+    /**
+     * @throws \Exception
+     */
     public function testThatProfileActionReturns401WithoutToken(): void
     {
         $client = $this->getClient();
@@ -42,6 +45,8 @@ class ProfileControllerTest extends WebTestCase
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+
+        unset($responseContent, $response, $client);
     }
 
     /**
@@ -49,6 +54,8 @@ class ProfileControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatProfileActionReturnExpectedWithValidToken(string $username, string $password): void
     {
@@ -61,6 +68,8 @@ class ProfileControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        unset($response, $client);
     }
 
     public function testThatProfileActionReturns401WithInvalidApiKey(): void
@@ -83,6 +92,8 @@ class ProfileControllerTest extends WebTestCase
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+
+        unset($response, $client);
     }
 
     /**
@@ -109,8 +120,13 @@ class ProfileControllerTest extends WebTestCase
         static::assertObjectHasAttribute('apiKey', $responseContent);
         static::assertObjectHasAttribute('roles', $responseContent);
         static::assertSame($token, $responseContent->username);
+
+        unset($responseContent, $response, $client);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatRolesActionReturns401WithoutToken(): void
     {
         $client = $this->getClient();
@@ -131,6 +147,8 @@ class ProfileControllerTest extends WebTestCase
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+
+        unset($responseContent, $response, $client);
     }
 
     public function testThatRolesActionReturns401WithInvalidApiKey(): void
@@ -153,6 +171,8 @@ class ProfileControllerTest extends WebTestCase
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+
+        unset($responseContent, $response, $client);
     }
 
     /**
@@ -161,6 +181,8 @@ class ProfileControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      * @param array  $expected
+     *
+     * @throws \Exception
      */
     public function testThatRolesActionReturnsExpected(string $username, string $password, array $expected): void
     {
@@ -176,6 +198,8 @@ class ProfileControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expected, JSON::decode($response->getContent(), true), $response->getContent());
+
+        unset($response, $client);
     }
 
     /**
@@ -204,8 +228,13 @@ class ProfileControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expected, $actual, $response->getContent());
+
+        unset($actual, $response, $client);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatGroupsActionReturns401WithoutToken(): void
     {
         $client = $this->getClient();
@@ -226,6 +255,8 @@ class ProfileControllerTest extends WebTestCase
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+
+        unset($responseContent, $response, $client);
     }
 
     public function testThatGroupsActionReturns401WithInvalidApiKey(): void
@@ -248,6 +279,8 @@ class ProfileControllerTest extends WebTestCase
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+
+        unset($responseContent, $response, $client);
     }
 
     /**
@@ -256,6 +289,8 @@ class ProfileControllerTest extends WebTestCase
      * @param array  $expected
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatGroupsActionReturnExpected(string $username, string $password, array $expected): void
     {
@@ -281,6 +316,8 @@ class ProfileControllerTest extends WebTestCase
 
             static::assertSame($expected, \array_map($iterator, $responseContent));
         }
+
+        unset($responseContent, $response, $client);
     }
 
     /**
@@ -313,6 +350,8 @@ class ProfileControllerTest extends WebTestCase
 
             static::assertSame($expected, \array_map($iterator, $responseContent));
         }
+
+        unset($responseContent, $response, $client);
     }
 
     /**

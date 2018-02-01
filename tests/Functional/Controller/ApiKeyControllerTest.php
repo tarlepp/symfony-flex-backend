@@ -20,6 +20,9 @@ class ApiKeyControllerTest extends WebTestCase
 {
     private $baseUrl = '/api_key';
 
+    /**
+     * @throws \Exception
+     */
     public function testThatGetBaseRouteReturn401(): void
     {
         $client = $this->getClient();
@@ -31,6 +34,8 @@ class ApiKeyControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
+
+        unset($response, $client);
     }
 
     /**
@@ -39,6 +44,8 @@ class ApiKeyControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      * @param int    $expectedStatus
+     *
+     * @throws \Exception
      */
     public function testThatFindActionWorksAsExpected(string $username, string $password, int $expectedStatus): void
     {
@@ -51,6 +58,8 @@ class ApiKeyControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expectedStatus, $response->getStatusCode(), $response->getContent());
+
+        unset($response, $client);
     }
 
     /**

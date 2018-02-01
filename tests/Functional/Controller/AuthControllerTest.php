@@ -25,6 +25,8 @@ class AuthControllerTest extends WebTestCase
      * @dataProvider dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost
      *
      * @param string $method
+     *
+     * @throws \Exception
      */
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
@@ -37,6 +39,8 @@ class AuthControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame(405, $response->getStatusCode());
+
+        unset($response, $client);
     }
 
     /**
@@ -44,6 +48,8 @@ class AuthControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $username, string $password): void
     {
@@ -88,6 +94,8 @@ class AuthControllerTest extends WebTestCase
             static::assertObjectHasAttribute($attribute, $responseContent, $messageNotPresent);
             static::assertNotEmpty($responseContent->{$attribute}, $messageEmpty);
         }
+
+        unset($responseContent, $response, $client);
     }
 
     public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
@@ -120,6 +128,8 @@ class AuthControllerTest extends WebTestCase
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
         static::assertSame('Bad credentials', $responseContent->message, 'Response message was not expected');
+
+        unset($response, $client);
     }
 
     /**

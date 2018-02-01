@@ -21,6 +21,9 @@ class RoleControllerTest extends WebTestCase
 {
     private $baseUrl = '/role';
 
+    /**
+     * @throws \Exception
+     */
     public function testThatGetBaseRouteReturn403(): void
     {
         $client = $this->getClient();
@@ -32,6 +35,8 @@ class RoleControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
+
+        unset($response, $client);
     }
 
     /**
@@ -39,6 +44,8 @@ class RoleControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatFindOneActionWorksAsExpected(string $username, string $password): void
     {
@@ -52,6 +59,8 @@ class RoleControllerTest extends WebTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent());
+
+        unset($response, $client);
     }
 
     /**
@@ -59,6 +68,8 @@ class RoleControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
+     *
+     * @throws \Exception
      */
     public function testThatGetInheritedRolesActionWorksAsExpected(string $username, string $password): void
     {
@@ -81,7 +92,11 @@ class RoleControllerTest extends WebTestCase
 
             /** @noinspection NullPointerExceptionInspection */
             static::assertJsonStringEqualsJsonString(JSON::encode($foo), $response->getContent());
+
+            unset($response);
         }
+
+        unset($client);
     }
 
     /**
