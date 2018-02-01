@@ -26,20 +26,6 @@ class UserProviderTest extends KernelTestCase
      */
     private $userProvider;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        // Store container and entity manager
-        $container = static::$kernel->getContainer();
-        $entityManager = $container->get('doctrine.orm.default_entity_manager');
-        $repository = UserProvider::class;
-
-        $this->userProvider = new $repository($entityManager, new ClassMetadata(User::class));
-    }
-
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -60,6 +46,8 @@ class UserProviderTest extends KernelTestCase
         $user->setUsername('test');
 
         $this->userProvider->refreshUser($user);
+
+        unset($user);
     }
 
     /**
@@ -76,6 +64,8 @@ class UserProviderTest extends KernelTestCase
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame($user->getId(), $this->userProvider->refreshUser($user)->getId());
+
+        unset($user);
     }
 
     /**
@@ -90,5 +80,28 @@ class UserProviderTest extends KernelTestCase
         $user = new CoreUser('test', 'password');
 
         $this->userProvider->refreshUser($user);
+
+        unset($user);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        // Store container and entity manager
+        $container = static::$kernel->getContainer();
+        $entityManager = $container->get('doctrine.orm.default_entity_manager');
+        $repository = UserProvider::class;
+
+        $this->userProvider = new $repository($entityManager, new ClassMetadata(User::class));
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->userProvider);
     }
 }

@@ -28,24 +28,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     private $apiKeyUserProvider;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        // Store container and entity manager
-        $container = static::$kernel->getContainer();
-        $managerRegistry = $container->get('doctrine');
-
-        $repository = ApiKeyRepository::class;
-
-        $this->apiKeyUserProvider = new ApiKeyUserProvider(
-            new $repository($managerRegistry),
-            $container->get('test.service_locator')->get(RolesService::class)
-        );
-    }
-
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsExpected
      *
@@ -58,6 +40,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
         static::assertInstanceOf(ApiKey::class, $apiKey);
+
+        unset($apiKey);
     }
 
     /**
@@ -72,6 +56,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
         static::assertNull($apiKey);
+
+        unset($apiKey);
     }
 
     /**
@@ -95,6 +81,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         static::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
         static::assertSame($roles, $apiKeyUser->getApiKey()->getRoles());
+
+        unset($apiKeyUser);
     }
 
     /**
@@ -106,6 +94,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $user = new User('username', 'password');
 
         $this->apiKeyUserProvider->refreshUser($user);
+
+        unset($user);
     }
 
     /**
@@ -172,5 +162,32 @@ class ApiKeyUserProviderTest extends KernelTestCase
             [false, User::class],
             [true, ApiKeyUser::class],
         ];
+    }
+
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        static::bootKernel();
+
+        // Store container and entity manager
+        $container = static::$kernel->getContainer();
+        $managerRegistry = $container->get('doctrine');
+
+        $repository = ApiKeyRepository::class;
+
+        $this->apiKeyUserProvider = new ApiKeyUserProvider(
+            new $repository($managerRegistry),
+            $container->get('test.service_locator')->get(RolesService::class)
+        );
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->apiKeyUserProvider);
     }
 }

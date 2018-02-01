@@ -17,19 +17,29 @@ use App\Utils\Tests\WebTestCase;
  */
 class DocumentationTest extends WebTestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function testThatDocumentationUiWorks(): void
     {
         $client = $this->getClient();
         $client->request('GET', '/api/doc/');
 
         static::assertSame(200, $client->getResponse()->getStatusCode());
+
+        unset($client);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function testThatDocumentationJsonWorks(): void
     {
         $client = $this->getClient();
         $client->request('GET', '/api/doc.json');
 
         static::assertSame(200, $client->getResponse()->getStatusCode());
+
+        unset($client);
     }
 }
