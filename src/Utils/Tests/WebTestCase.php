@@ -29,6 +29,9 @@ abstract class WebTestCase extends BaseWebTestCase
      */
     private $authService;
 
+    /**
+     * @codeCoverageIgnore
+     */
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -36,6 +39,9 @@ abstract class WebTestCase extends BaseWebTestCase
         gc_enable();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
