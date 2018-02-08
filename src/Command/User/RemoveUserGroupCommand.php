@@ -66,7 +66,6 @@ class RemoveUserGroupCommand extends Command
 
         $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to remove?');
 
-        /** @var UserGroup $userGroup */
         if ($userGroup instanceof UserGroup) {
             // Delete user group
             $this->userGroupResource->delete($userGroup->getId());

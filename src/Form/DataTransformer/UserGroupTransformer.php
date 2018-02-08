@@ -65,7 +65,7 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * Transforms a string (Role id) to an object (Role).
      *
-     * @param array $userGroups
+     * @param array|mixed $userGroups
      *
      * @return array|null
      *
