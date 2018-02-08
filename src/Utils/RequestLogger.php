@@ -28,12 +28,12 @@ class RequestLogger implements RequestLoggerInterface
     use LoggerAwareTrait;
 
     /**
-     * @var Response
+     * @var Response|null
      */
     private $response;
 
     /**
-     * @var Request
+     * @var Request|null
      */
     private $request;
 
