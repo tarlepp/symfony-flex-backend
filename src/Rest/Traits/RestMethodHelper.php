@@ -44,12 +44,12 @@ trait RestMethodHelper
     protected static $formTypes = [];
 
     /**
-     * @var RestResourceInterface
+     * @var RestResourceInterface|null
      */
     protected $resource;
 
     /**
-     * @var ResponseHandlerInterface
+     * @var ResponseHandlerInterface|null
      */
     protected $responseHandler;
 
