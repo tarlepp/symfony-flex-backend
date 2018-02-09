@@ -9,10 +9,6 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
-    App\EventSubscriber\JWTCreatedSubscriber:
-        tags:
-            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
-
     App\EventSubscriber\JWTDecodedSubscriber:
         tags:
             - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecoded }

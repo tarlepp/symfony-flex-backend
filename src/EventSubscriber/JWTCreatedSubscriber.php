@@ -11,6 +11,8 @@ use App\Entity\User;
 use App\Helpers\LoggerAwareTrait;
 use App\Security\RolesService;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Events;
+use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -20,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @package App\EventSubscriber
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class JWTCreatedSubscriber
+class JWTCreatedSubscriber implements ServiceSubscriberInterface
 {
     // Traits
     use LoggerAwareTrait;
@@ -45,6 +47,31 @@ class JWTCreatedSubscriber
     {
         $this->rolesService = $rolesService;
         $this->requestStack = $requestStack;
+    }
+
+    /**
+     * Returns an array of service types required by such instances, optionally keyed by the service names used internally.
+     *
+     * For mandatory dependencies:
+     *
+     *  * array('logger' => 'Psr\Log\LoggerInterface') means the objects use the "logger" name
+     *    internally to fetch a service which must implement Psr\Log\LoggerInterface.
+     *  * array('Psr\Log\LoggerInterface') is a shortcut for
+     *  * array('Psr\Log\LoggerInterface' => 'Psr\Log\LoggerInterface')
+     *
+     * otherwise:
+     *
+     *  * array('logger' => '?Psr\Log\LoggerInterface') denotes an optional dependency
+     *  * array('?Psr\Log\LoggerInterface') is a shortcut for
+     *  * array('Psr\Log\LoggerInterface' => '?Psr\Log\LoggerInterface')
+     *
+     * @return array The required service types, optionally keyed by service names
+     */
+    public static function getSubscribedServices(): array
+    {
+        return [
+            Events::JWT_CREATED => 'onJWTCreated',
+        ];
     }
 
     /**
