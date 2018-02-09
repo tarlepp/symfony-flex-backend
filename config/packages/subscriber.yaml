@@ -9,10 +9,6 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
-    App\EventSubscriber\JWTDecodedSubscriber:
-        tags:
-            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_decoded, method: onJWTDecoded }
-
     App\EventSubscriber\RequestSubscriber:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 15 }
