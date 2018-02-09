@@ -9,10 +9,6 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: false
 
-    App\EventSubscriber\RequestSubscriber:
-        tags:
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 15 }
-
     App\EventSubscriber\ResponseSubscriber:
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 10 }

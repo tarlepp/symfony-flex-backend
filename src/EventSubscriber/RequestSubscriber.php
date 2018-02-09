@@ -10,7 +10,9 @@ namespace App\EventSubscriber;
 use App\Entity\UserInterface as ApplicationUser;
 use App\Security\ApiKeyUser;
 use App\Utils\RequestLogger;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -21,7 +23,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @package App\EventSubscriber
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RequestSubscriber
+class RequestSubscriber implements EventSubscriberInterface
 {
     /**
      * @var RequestLogger
@@ -44,6 +46,34 @@ class RequestSubscriber
         // Store logger service
         $this->logger = $requestLogger;
         $this->tokenStorage = $tokenStorage;
+    }
+
+    /**
+     * Returns an array of event names this subscriber wants to listen to.
+     *
+     * The array keys are event names and the value can be:
+     *
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
+     *
+     * For instance:
+     *
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
+     *
+     * @return array The event names to listen to
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            KernelEvents::RESPONSE => [
+                'onKernelResponse',
+                15,
+            ],
+        ];
     }
 
     /**
