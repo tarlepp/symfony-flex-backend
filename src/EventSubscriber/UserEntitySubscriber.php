@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Entity\User;
+use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -18,7 +19,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  * @package App\EventSubscriber
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserEntitySubscriber
+class UserEntitySubscriber implements EventSubscriber
 {
     /**
      * Used password encoder
@@ -35,6 +36,19 @@ class UserEntitySubscriber
     public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
     {
         $this->userPasswordEncoder = $userPasswordEncoder;
+    }
+
+    /**
+     * Returns an array of events this subscriber wants to listen to.
+     *
+     * @return array
+     */
+    public function getSubscribedEvents(): array
+    {
+        return [
+            'prePersist',
+            'preUpdate',
+        ];
     }
 
     /**

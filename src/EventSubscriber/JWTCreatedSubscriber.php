@@ -12,7 +12,7 @@ use App\Helpers\LoggerAwareTrait;
 use App\Security\RolesService;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
-use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @package App\EventSubscriber
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class JWTCreatedSubscriber implements ServiceSubscriberInterface
+class JWTCreatedSubscriber implements EventSubscriberInterface
 {
     // Traits
     use LoggerAwareTrait;
@@ -50,24 +50,24 @@ class JWTCreatedSubscriber implements ServiceSubscriberInterface
     }
 
     /**
-     * Returns an array of service types required by such instances, optionally keyed by the service names used internally.
+     * Returns an array of event names this subscriber wants to listen to.
      *
-     * For mandatory dependencies:
+     * The array keys are event names and the value can be:
      *
-     *  * array('logger' => 'Psr\Log\LoggerInterface') means the objects use the "logger" name
-     *    internally to fetch a service which must implement Psr\Log\LoggerInterface.
-     *  * array('Psr\Log\LoggerInterface') is a shortcut for
-     *  * array('Psr\Log\LoggerInterface' => 'Psr\Log\LoggerInterface')
+     *  * The method name to call (priority defaults to 0)
+     *  * An array composed of the method name to call and the priority
+     *  * An array of arrays composed of the method names to call and respective
+     *    priorities, or 0 if unset
      *
-     * otherwise:
+     * For instance:
      *
-     *  * array('logger' => '?Psr\Log\LoggerInterface') denotes an optional dependency
-     *  * array('?Psr\Log\LoggerInterface') is a shortcut for
-     *  * array('Psr\Log\LoggerInterface' => '?Psr\Log\LoggerInterface')
+     *  * array('eventName' => 'methodName')
+     *  * array('eventName' => array('methodName', $priority))
+     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return array The required service types, optionally keyed by service names
+     * @return array The event names to listen to
      */
-    public static function getSubscribedServices(): array
+    public static function getSubscribedEvents(): array
     {
         return [
             Events::JWT_CREATED => 'onJWTCreated',
