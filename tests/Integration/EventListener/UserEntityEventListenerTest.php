@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Integration/EventSubscriber/UserEntitySubscriberTest.php
+ * /tests/Integration/EventListener/UserEntityEventListenerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\EventSubscriber;
 
 use App\Entity\User;
-use App\EventSubscriber\UserEntitySubscriber;
+use App\EventListener\UserEntityEventListener;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -17,12 +17,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * Class UserEntitySubscriberTest
+ * Class UserEntityEventListenerTest
  *
  * @package App\Tests\Integration\EventSubscriber
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserEntitySubscriberTest extends KernelTestCase
+class UserEntityEventListenerTest extends KernelTestCase
 {
     /**
      * @var EntityManager
@@ -45,7 +45,7 @@ class UserEntitySubscriberTest extends KernelTestCase
     protected $encoder;
 
     /**
-     * @var UserEntitySubscriber
+     * @var UserEntityEventListener
      */
     protected $subscriber;
 
@@ -159,7 +159,7 @@ class UserEntitySubscriberTest extends KernelTestCase
         $this->encoder = $this->container->get('security.password_encoder');
 
         // Create listener
-        $this->subscriber = new UserEntitySubscriber($this->encoder);
+        $this->subscriber = new UserEntityEventListener($this->encoder);
 
         // Create new user but not store it at this time
         $this->entity = new User();

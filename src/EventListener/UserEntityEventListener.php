@@ -1,25 +1,23 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/EventSubscriber/UserEntitySubscriber.php
+ * /src/EventListener/UserEntityEventListener.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\EventSubscriber;
+namespace App\EventListener;
 
 use App\Entity\User;
-use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
- * Class UserEntitySubscriber
+ * Class UserEntityEventListener
  *
  * @package App\EventSubscriber
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserEntitySubscriber implements EventSubscriber
+class UserEntityEventListener
 {
     /**
      * Used password encoder
@@ -36,19 +34,6 @@ class UserEntitySubscriber implements EventSubscriber
     public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
     {
         $this->userPasswordEncoder = $userPasswordEncoder;
-    }
-
-    /**
-     * Returns an array of events this subscriber wants to listen to.
-     *
-     * @return array
-     */
-    public function getSubscribedEvents(): array
-    {
-        return [
-            'prePersist',
-            'preUpdate',
-        ];
     }
 
     /**
@@ -69,14 +54,14 @@ class UserEntitySubscriber implements EventSubscriber
     /**
      * Doctrine lifecycle event for 'preUpdate' event.
      *
-     * @param PreUpdateEventArgs $event
+     * @param LifecycleEventArgs $event
      *
      * @return void
      *
      * @throws \LengthException
      * @throws \RuntimeException
      */
-    public function preUpdate(PreUpdateEventArgs $event): void
+    public function preUpdate(LifecycleEventArgs $event): void
     {
         $this->process($event);
     }
@@ -90,7 +75,7 @@ class UserEntitySubscriber implements EventSubscriber
     private function process(LifecycleEventArgs $event): void
     {
         // Get user entity object
-        $user = $event->getEntity();
+        $user = $event->getObject();
 
         // Valid user so lets change password
         if ($user instanceof User) {
