@@ -9,6 +9,7 @@ namespace App\Form\Type\Console;
 
 use App\DTO\User as UserDto;
 use App\Form\DataTransformer\UserGroupTransformer;
+use App\Form\Type\Label;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
@@ -39,51 +40,51 @@ class UserType extends AbstractType
             'username',
             Type\TextType::class,
             [
-                'label'         => 'Username',
-                'required'      => true,
-                'empty_data'    => '',
+                Label::LABEL      => 'Username',
+                Label::REQUIRED   => true,
+                Label::EMPTY_DATA => '',
             ],
         ],
         [
             'firstname',
             Type\TextType::class,
             [
-                'label'         => 'Firstname',
-                'required'      => true,
-                'empty_data'    => '',
+                Label::LABEL      => 'Firstname',
+                Label::REQUIRED   => true,
+                Label::EMPTY_DATA => '',
             ],
         ],
         [
             'surname',
             Type\TextType::class,
             [
-                'label'         => 'Surname',
-                'required'      => true,
-                'empty_data'    => '',
+                Label::LABEL      => 'Surname',
+                Label::REQUIRED   => true,
+                Label::EMPTY_DATA => '',
             ],
         ],
         [
             'email',
             Type\EmailType::class,
             [
-                'label'         => 'Email address',
-                'required'      => true,
-                'empty_data'    => '',
+                Label::LABEL      => 'Email address',
+                Label::REQUIRED   => true,
+                Label::EMPTY_DATA => '',
             ],
         ],
         [
             'password',
             Type\RepeatedType::class,
             [
-                'type'              => Type\PasswordType::class,
-                'required'          => true,
-                'first_name'        => 'password1',
-                'first_options'     => [
-                    'label' => 'Password',
+                Label::TYPE           => Type\PasswordType::class,
+                Label::REQUIRED       => true,
+                Label::FIRST_NAME     => 'password1',
+                Label::FIRST_OPTIONS  => [
+                    Label::LABEL      => 'Password',
                 ],
-                'second_name'       => 'password2',
-                'second_options'    => [
-                    'label' => 'Repeat password',
+                Label::SECOND_NAME    => 'password2',
+                Label::SECOND_OPTIONS => [
+                    Label::LABEL      => 'Repeat password',
                 ],
             ],
         ],
@@ -125,8 +126,8 @@ class UserType extends AbstractType
                 [
                     'choices'       => $this->getUserGroupChoices(),
                     'multiple'      => true,
-                    'required'      => true,
-                    'empty_data'    => '',
+                    Label::REQUIRED      => true,
+                    Label::EMPTY_DATA    => '',
                 ]
             );
 

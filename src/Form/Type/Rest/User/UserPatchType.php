@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Form\Type\Rest\User;
 
 use App\DTO\User as UserDto;
+use App\Form\Type\Label;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
@@ -35,35 +36,35 @@ class UserPatchType extends AbstractType
             'username',
             Type\TextType::class,
             [
-                'label' => 'Username',
+                Label::LABEL => 'Username',
             ],
         ],
         [
             'firstname',
             Type\TextType::class,
             [
-                'label' => 'Firstname',
+                Label::LABEL => 'Firstname',
             ],
         ],
         [
             'surname',
             Type\TextType::class,
             [
-                'label' => 'Surname',
+                Label::LABEL => 'Surname',
             ],
         ],
         [
             'email',
             Type\EmailType::class,
             [
-                'label' => 'Email address',
+                Label::LABEL => 'Email address',
             ],
         ],
         [
             'password',
             Type\TextType::class,
             [
-                'label' => 'Password',
+                Label::LABEL => 'Password',
             ],
         ],
     ];
