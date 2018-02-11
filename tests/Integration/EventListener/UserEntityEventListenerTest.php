@@ -5,7 +5,7 @@ declare(strict_types=1);
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\EventSubscriber;
+namespace App\Tests\Integration\EventListener;
 
 use App\Entity\User;
 use App\EventListener\UserEntityEventListener;
