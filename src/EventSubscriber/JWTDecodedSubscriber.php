@@ -56,6 +56,8 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
+     * @codeCoverageIgnore
+     *
      * @return array The event names to listen to
      */
     public static function getSubscribedEvents(): array

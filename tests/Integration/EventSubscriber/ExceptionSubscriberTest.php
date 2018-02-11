@@ -33,15 +33,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class ExceptionSubscriberTest extends KernelTestCase
 {
-    public function testThatGetSubscribedEventsReturnsExpected(): void
-    {
-        $expected = [
-            'kernel.exception' => 'onKernelException',
-        ];
-
-        static::assertSame($expected, ExceptionSubscriber::getSubscribedEvents());
-    }
-
     public function testThatOnKernelExceptionMethodCallsLogger(): void
     {
         /**
