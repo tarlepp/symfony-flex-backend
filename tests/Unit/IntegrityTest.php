@@ -143,6 +143,25 @@ FORMAT;
     }
 
     /**
+     * @dataProvider dataProviderTestThatEventListenerHaveIntegrationTest
+     *
+     * @param string $eventListenerTestClass
+     * @param string $eventListenerClass
+     */
+    public function testThatEventListenerHaveIntegrationTest(
+        string $eventListenerTestClass,
+        string $eventListenerClass
+    ): void {
+        $message = \sprintf(
+            'EventListener \'%s\' doesn\'t have required test class \'%s\'.',
+            $eventListenerClass,
+            $eventListenerTestClass
+        );
+
+        static::assertTrue(\class_exists($eventListenerTestClass), $message);
+    }
+
+    /**
      * @dataProvider dataProviderTestThatResourceHaveIntegrationTest
      *
      * @param string $resourceTestClass
@@ -444,6 +463,33 @@ FORMAT;
 
         $namespace = '\\App\\EventSubscriber\\';
         $namespaceTest = '\\App\\Tests\\Integration\\EventSubscriber\\';
+
+        $iterator = function (string $file) use ($folder, $namespace, $namespaceTest) {
+            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
+            $class = $namespace . \str_replace('.php', '', $base);
+            $classTest = $namespaceTest . \str_replace('.php', 'Test', $base);
+
+            return [
+                $classTest,
+                $class,
+            ];
+        };
+
+        return \array_map($iterator, PHPUnitUtil::recursiveFileSearch($folder, $pattern));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatEventListenerHaveIntegrationTest(): array
+    {
+        self::bootKernel();
+
+        $folder = static::$kernel->getRootDir() . '/EventListener/';
+        $pattern = '/^.+\.php$/i';
+
+        $namespace = '\\App\\EventListener\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\EventListener\\';
 
         $iterator = function (string $file) use ($folder, $namespace, $namespaceTest) {
             $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
