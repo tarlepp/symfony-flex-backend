@@ -9,7 +9,7 @@ namespace App\Form\Type\Console;
 
 use App\DTO\ApiKey;
 use App\Form\DataTransformer\UserGroupTransformer;
-use App\Form\Type\Label;
+use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
@@ -40,9 +40,9 @@ class ApiKeyType extends AbstractType
             'description',
             Type\TextType::class,
             [
-                Label::LABEL      => 'Description',
-                Label::REQUIRED   => true,
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Description',
+                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
     ];

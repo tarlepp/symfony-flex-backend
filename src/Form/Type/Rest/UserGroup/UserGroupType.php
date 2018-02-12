@@ -10,7 +10,7 @@ namespace App\Form\Type\Rest\UserGroup;
 use App\DTO\UserGroup as UserGroupDto;
 use App\Entity\Role as RoleEntity;
 use App\Form\DataTransformer\RoleTransformer;
-use App\Form\Type\Label;
+use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
@@ -40,9 +40,9 @@ class UserGroupType extends AbstractType
             'name',
             Type\TextType::class,
             [
-                Label::LABEL      => 'Group name',
-                Label::REQUIRED   => true,
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Group name',
+                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
     ];
@@ -96,9 +96,9 @@ class UserGroupType extends AbstractType
                 'role',
                 Type\ChoiceType::class,
                 [
-                    Label::LABEL    => 'Role',
-                    Label::CHOICES  => $this->getRoleChoices(),
-                    Label::REQUIRED => true,
+                    FormTypeLabelInterface::LABEL    => 'Role',
+                    FormTypeLabelInterface::CHOICES  => $this->getRoleChoices(),
+                    FormTypeLabelInterface::REQUIRED => true,
                 ]
             );
 

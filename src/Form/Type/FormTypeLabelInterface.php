@@ -1,19 +1,19 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Form/Type/Label.php
+ * /src/Form/Type/FormTypeLabelInterface.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Form\Type;
 
 /**
- * Interface Label
+ * Interface FormTypeLabelInterface
  *
  * @package App\Form\Type
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-interface Label
+interface FormTypeLabelInterface
 {
     public const LABEL = 'label';
     public const REQUIRED = 'required';

@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Form\Type\Rest\User;
 
-use App\Form\Type\Label;
+use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
@@ -34,40 +34,40 @@ abstract class UserType extends AbstractType
             'username',
             Type\TextType::class,
             [
-                Label::LABEL      => 'Username',
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Username',
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
             'firstname',
             Type\TextType::class,
             [
-                Label::LABEL      => 'Firstname',
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Firstname',
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
             'surname',
             Type\TextType::class,
             [
-                Label::LABEL      => 'Surname',
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Surname',
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
             'email',
             Type\EmailType::class,
             [
-                Label::LABEL      => 'Email address',
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Email address',
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
             'password',
             Type\TextType::class,
             [
-                Label::LABEL      => 'Password',
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Password',
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
     ];

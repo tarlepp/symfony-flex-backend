@@ -9,7 +9,7 @@ namespace App\Form\Type\Console;
 
 use App\DTO\User as UserDto;
 use App\Form\DataTransformer\UserGroupTransformer;
-use App\Form\Type\Label;
+use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
@@ -40,51 +40,51 @@ class UserType extends AbstractType
             'username',
             Type\TextType::class,
             [
-                Label::LABEL      => 'Username',
-                Label::REQUIRED   => true,
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Username',
+                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
             'firstname',
             Type\TextType::class,
             [
-                Label::LABEL      => 'Firstname',
-                Label::REQUIRED   => true,
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Firstname',
+                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
             'surname',
             Type\TextType::class,
             [
-                Label::LABEL      => 'Surname',
-                Label::REQUIRED   => true,
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Surname',
+                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
             'email',
             Type\EmailType::class,
             [
-                Label::LABEL      => 'Email address',
-                Label::REQUIRED   => true,
-                Label::EMPTY_DATA => '',
+                FormTypeLabelInterface::LABEL      => 'Email address',
+                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
             'password',
             Type\RepeatedType::class,
             [
-                Label::TYPE           => Type\PasswordType::class,
-                Label::REQUIRED       => true,
-                Label::FIRST_NAME     => 'password1',
-                Label::FIRST_OPTIONS  => [
-                    Label::LABEL      => 'Password',
+                FormTypeLabelInterface::TYPE           => Type\PasswordType::class,
+                FormTypeLabelInterface::REQUIRED       => true,
+                FormTypeLabelInterface::FIRST_NAME     => 'password1',
+                FormTypeLabelInterface::FIRST_OPTIONS  => [
+                    FormTypeLabelInterface::LABEL      => 'Password',
                 ],
-                Label::SECOND_NAME    => 'password2',
-                Label::SECOND_OPTIONS => [
-                    Label::LABEL      => 'Repeat password',
+                FormTypeLabelInterface::SECOND_NAME    => 'password2',
+                FormTypeLabelInterface::SECOND_OPTIONS => [
+                    FormTypeLabelInterface::LABEL      => 'Repeat password',
                 ],
             ],
         ],
@@ -126,8 +126,8 @@ class UserType extends AbstractType
                 [
                     'choices'       => $this->getUserGroupChoices(),
                     'multiple'      => true,
-                    Label::REQUIRED      => true,
-                    Label::EMPTY_DATA    => '',
+                    FormTypeLabelInterface::REQUIRED      => true,
+                    FormTypeLabelInterface::EMPTY_DATA    => '',
                 ]
             );
 
