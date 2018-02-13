@@ -36,6 +36,9 @@ class ControllerTest extends KernelTestCase
         $controller->getResource();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {
         /** @var RestResourceInterface $resource */
@@ -48,6 +51,7 @@ class ControllerTest extends KernelTestCase
 
         PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
+        /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
     }
 
@@ -62,6 +66,9 @@ class ControllerTest extends KernelTestCase
         $controller->getResponseHandler();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatGetResponseHandlerDoesNotThrowsAnExceptionIfSet(): void
     {
         /** @var RestResourceInterface $resource */
@@ -74,9 +81,13 @@ class ControllerTest extends KernelTestCase
 
         PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
+        /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatGetDtoClassCallsExpectedServiceMethods(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dtoClass */
@@ -103,6 +114,8 @@ class ControllerTest extends KernelTestCase
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Given DTO class 'stdClass' is not implementing 'App\DTO\RestDtoInterface' interface.
+     *
+     * @throws \ReflectionException
      */
     public function testThatGetDtoClassThrowsAnExceptionIfResourceDoesNotReturnExpectedClass(): void
     {
@@ -124,6 +137,9 @@ class ControllerTest extends KernelTestCase
         $controller->getDtoClass();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatGetDtoClassWorksAsExpectedWithGivenDtoClasses(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dtoClass */
@@ -150,6 +166,9 @@ class ControllerTest extends KernelTestCase
         static::assertSame(\get_class($dtoClass), $controller->getDtoClass('foo'));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatGetFormTypeClassCallsExpectedServiceMethods(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|FormTypeInterface $formTypeClass */
@@ -173,6 +192,9 @@ class ControllerTest extends KernelTestCase
         $controller->getFormTypeClass();
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatGetFormTypeClassWorksAsExpectedWithGivenFormTypes(): void
     {
         /** @var PHPUnit_Framework_MockObject_MockObject|FormTypeInterface $formTypeClass */
