@@ -65,7 +65,7 @@ class PatchMethodTest extends KernelTestCase
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockBuilder|FormFactoryInterface $formFactoryMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|FormFactoryInterface $formFactoryMock */
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|PatchMethodTestClass $testClass */
