@@ -104,7 +104,7 @@ class FindOneMethodTest extends KernelTestCase
         $testClass->findOneMethod($request, $uuid);
     }
 
-    public function testThatTraitCallsServiceMethods()
+    public function testThatTraitCallsServiceMethods(): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
