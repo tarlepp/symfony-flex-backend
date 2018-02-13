@@ -123,7 +123,7 @@ class FindMethodTest extends KernelTestCase
         $testClass->findMethod($request);
     }
 
-    public function testThatTraitCallsServiceMethods()
+    public function testThatTraitCallsServiceMethods(): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
