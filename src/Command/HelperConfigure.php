@@ -21,7 +21,7 @@ class HelperConfigure
 {
     /**
      * @param Command $command
-     * @param array   $parameters
+     * @param mixed[] $parameters
      *
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
