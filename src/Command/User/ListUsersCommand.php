@@ -84,7 +84,7 @@ class ListUsersCommand extends Command
     /**
      * Getter method for formatted user rows for console table.
      *
-     * @return array
+     * @return mixed[]
      */
     private function getRows(): array
     {

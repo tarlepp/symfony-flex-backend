@@ -27,7 +27,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class CreateUserGroupCommand extends Command
 {
     /**
-     * @var array
+     * @var mixed[]
      */
     private static $commandParameters = [
         [

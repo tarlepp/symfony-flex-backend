@@ -124,7 +124,7 @@ class CreateRolesCommand extends Command
     /**
      * Method to clean existing roles from database that does not really exists.
      *
-     * @param array $roles
+     * @param string[] $roles
      *
      * @return int
      */

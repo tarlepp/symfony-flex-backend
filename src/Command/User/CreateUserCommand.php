@@ -35,7 +35,7 @@ class CreateUserCommand extends Command
     private const PARAMETER_DESCRIPTION = 'description';
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private static $commandParameters = [
         [

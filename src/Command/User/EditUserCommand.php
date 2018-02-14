@@ -95,7 +95,7 @@ class EditUserCommand extends Command
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
-    private function updateUser(InputInterface $input, OutputInterface $output, $user): string
+    private function updateUser(InputInterface $input, OutputInterface $output, UserEntity $user): string
     {
         // Load entity to DTO
         $dtoLoaded = new UserDto();

@@ -139,7 +139,7 @@ class UserHelper
     /**
      * Getter method for user formatter closure. This closure will format single User entity for choice list.
      *
-     * @param array $choices
+     * @param mixed[] $choices
      *
      * @return \Closure
      */
@@ -161,7 +161,7 @@ class UserHelper
     /**
      * Getter method for user group formatter closure. This closure will format single UserGroup entity for choice list.
      *
-     * @param array $choices
+     * @param mixed[] $choices
      *
      * @return \Closure
      */
