@@ -24,7 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 trait ExecuteMultipleCommandTrait
 {
     /**
-     * @var array
+     * @var mixed[]
      */
     private $choices = [];
 
@@ -36,7 +36,7 @@ trait ExecuteMultipleCommandTrait
     /**
      * Setter method for choices to use.
      *
-     * @param array $choices
+     * @param mixed[] $choices
      */
     protected function setChoices(array $choices): void
     {

@@ -17,16 +17,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @package App\Command\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method Application getApplication()
  */
 trait ApiKeyUserManagementHelperTrait
 {
-    /**
-     * Gets the application instance for this command.
-     *
-     * @return Application An Application instance
-     */
-    abstract public function getApplication();
-
     /**
      * @return RolesService
      */
