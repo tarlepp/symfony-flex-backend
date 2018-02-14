@@ -233,7 +233,7 @@ class ProfileController
      * @param RolesService  $rolesService
      * @param UserInterface $user
      *
-     * @return array|null
+     * @return string[]|null
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
@@ -258,7 +258,7 @@ class ProfileController
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     private function getSerializationGroupsForUser(): array
     {
@@ -273,7 +273,7 @@ class ProfileController
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     private function getSerializationGroupsForApiKey(): array
     {
@@ -289,7 +289,7 @@ class ProfileController
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     private function getUserGroupGroups(): array
     {
