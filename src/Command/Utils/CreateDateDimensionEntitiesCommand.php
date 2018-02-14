@@ -122,7 +122,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Exception
      */
-    private function process(int $yearStart, int $yearEnd)
+    private function process(int $yearStart, int $yearEnd): void
     {
         $dateStart = new \DateTime($yearStart . '-01-01 00:00:00', new \DateTimeZone('UTC'));
         $dateEnd = new \DateTime($yearEnd . '-12-31 00:00:00', new \DateTimeZone('UTC'));
