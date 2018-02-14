@@ -1,5 +1,6 @@
 <?php
 declare(strict_types = 1);
+
 /**
  * /src/Annotation/RestApiDoc.php
  *
@@ -20,5 +21,8 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class RestApiDoc
 {
+    /**
+     * @var bool
+     */
     public $disabled = false;
 }
