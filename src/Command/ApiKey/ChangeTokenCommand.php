@@ -86,9 +86,9 @@ class ChangeTokenCommand extends Command
      *
      * @param ApiKeyEntity $apiKey
      *
-     * @return array
+     * @return mixed[]
      */
-    private function changeApiKeyToken($apiKey): array
+    private function changeApiKeyToken(ApiKeyEntity $apiKey): array
     {
         // Generate new token for API key
         $apiKey->generateToken();

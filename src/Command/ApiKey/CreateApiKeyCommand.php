@@ -33,7 +33,7 @@ class CreateApiKeyCommand extends Command
     use ApiKeyUserManagementHelperTrait;
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private static $commandParameters = [
         [

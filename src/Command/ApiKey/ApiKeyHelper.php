@@ -85,7 +85,7 @@ class ApiKeyHelper
      * @param string       $message
      * @param ApiKeyEntity $apiKey
      *
-     * @return array
+     * @return mixed[]
      */
     public function getApiKeyMessage(string $message, ApiKeyEntity $apiKey): array
     {
@@ -122,11 +122,11 @@ class ApiKeyHelper
     /**
      * Method to return ApiKeyIterator closure. This will format ApiKey entities for choice list.
      *
-     * @param array $choices
+     * @param string[] &$choices
      *
      * @return \Closure
      */
-    private function getApiKeyIterator(&$choices): \Closure
+    private function getApiKeyIterator(array &$choices): \Closure
     {
         /**
          * Lambda function create api key choices

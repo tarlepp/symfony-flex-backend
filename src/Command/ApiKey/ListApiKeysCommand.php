@@ -88,7 +88,7 @@ class ListApiKeysCommand extends Command
     /**
      * Getter method for formatted API key rows for console table.
      *
-     * @return array
+     * @return mixed[]
      */
     private function getRows(): array
     {

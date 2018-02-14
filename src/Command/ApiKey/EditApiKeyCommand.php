@@ -90,7 +90,7 @@ class EditApiKeyCommand extends Command
      * @param OutputInterface $output
      * @param ApiKeyEntity    $apiKey
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
