@@ -328,7 +328,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
     /**
      * Method to get login data for JWT token.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getLoginData(): array
     {

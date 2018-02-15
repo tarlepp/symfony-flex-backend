@@ -256,9 +256,9 @@ class DateDimension implements EntityInterface
     /**
      * DateDimension constructor.
      *
-     * @param \DateTime $dateTime
+     * @param \DateTime|null $dateTime
      */
-    public function __construct(\DateTime $dateTime = null)
+    public function __construct(?\DateTime $dateTime = null)
     {
         $this->id = Uuid::uuid4()->toString();
 

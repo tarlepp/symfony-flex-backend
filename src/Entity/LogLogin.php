@@ -307,7 +307,7 @@ class LogLogin implements EntityInterface
      *
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
-    public function __construct(string $type, Request $request, DeviceDetector $deviceDetector, User $user = null)
+    public function __construct(string $type, Request $request, DeviceDetector $deviceDetector, ?User $user = null)
     {
         $this->id = Uuid::uuid4()->toString();
 

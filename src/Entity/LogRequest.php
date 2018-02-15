@@ -162,11 +162,11 @@ class LogRequest implements EntityInterface
      * @throws \LogicException
      */
     public function __construct(
-        Request $request = null,
-        Response $response = null,
-        User $user = null,
-        ApiKey $apiKey = null,
-        bool $masterRequest = null
+        ?Request $request = null,
+        ?Response $response = null,
+        ?User $user = null,
+        ?ApiKey $apiKey = null,
+        ?bool $masterRequest = null
     ) {
         $this->id = Uuid::uuid4()->toString();
         $this->user = $user;
