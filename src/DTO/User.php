@@ -25,7 +25,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User extends RestDto implements UserInterface
 {
-    static protected $mappings = [
+    /**
+     * @var mixed[]
+     */
+    protected static $mappings = [
         'password'      => 'updatePassword',
         'userGroups'    => 'updateUserGroups',
     ];
@@ -72,7 +75,7 @@ class User extends RestDto implements UserInterface
     protected $email = '';
 
     /**
-     * @var array
+     * @var string[]|UserGroupEntity[]
      */
     protected $userGroups = [];
 
@@ -98,7 +101,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    public function setId(string $id = null): User
+    public function setId(?string $id = null): User
     {
         $this->setVisited('id');
 
@@ -196,7 +199,7 @@ class User extends RestDto implements UserInterface
     }
 
     /**
-     * @return array
+     * @return string[]|UserGroupEntity[]
      */
     public function getUserGroups(): array
     {
@@ -204,7 +207,7 @@ class User extends RestDto implements UserInterface
     }
 
     /**
-     * @param array $userGroups
+     * @param string[]|UserGroupEntity[] $userGroups
      *
      * @return User
      */
@@ -230,7 +233,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    public function setPassword(string $password = null): User
+    public function setPassword(?string $password = null): User
     {
         if ($password !== null) {
             $this->setVisited('password');
@@ -257,7 +260,7 @@ class User extends RestDto implements UserInterface
          *
          * @return string
          */
-        $iterator = function (UserGroupEntity $group) {
+        $iterator = function (UserGroupEntity $group): string {
             return $group->getId();
         };
 
@@ -289,8 +292,8 @@ class User extends RestDto implements UserInterface
     /**
      * Method to update User entity user groups.
      *
-     * @param UserEntity $entity
-     * @param array      $value
+     * @param UserEntity        $entity
+     * @param UserGroupEntity[] $value
      *
      * @return User
      */

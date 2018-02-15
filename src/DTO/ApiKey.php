@@ -20,7 +20,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ApiKey extends RestDto
 {
-    static protected $mappings = [
+    /**
+     * @var mixed[]
+     */
+    protected static $mappings = [
         'userGroups' => 'updateUserGroups',
     ];
 
@@ -43,7 +46,7 @@ class ApiKey extends RestDto
     protected $token;
 
     /**
-     * @var array
+     * @var string[]
      */
     protected $userGroups = [];
 
@@ -60,7 +63,7 @@ class ApiKey extends RestDto
      *
      * @return ApiKey
      */
-    public function setId(string $id = null): ApiKey
+    public function setId(?string $id = null): ApiKey
     {
         $this->setVisited('id');
 
@@ -114,7 +117,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getUserGroups(): array
     {
@@ -122,7 +125,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * @param array $userGroups
+     * @param string[]|UserGroupEntity[] $userGroups
      *
      * @return ApiKey
      */
@@ -165,8 +168,8 @@ class ApiKey extends RestDto
     /**
      * Method to update ApiKey entity user groups.
      *
-     * @param ApiKeyEntity $entity
-     * @param array        $value
+     * @param ApiKeyEntity      $entity
+     * @param UserGroupEntity[] $value
      *
      * @return ApiKey
      */

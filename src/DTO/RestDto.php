@@ -30,21 +30,21 @@ abstract class RestDto implements RestDtoInterface
      *
      * And in that method make all necessary that you need to set that specified value.
      *
-     * @var array
+     * @var mixed[]
      */
-    static protected $mappings = [];
+    protected static $mappings = [];
 
     /**
      * An array of 'visited' setter properties of current dto.
      *
-     * @var array
+     * @var string[]
      */
     private $visited = [];
 
     /**
      * Getter method for visited setters. This is needed for dto patching.
      *
-     * @return array
+     * @return string[]
      */
     public function getVisited(): array
     {
@@ -171,8 +171,8 @@ abstract class RestDto implements RestDtoInterface
     }
 
     /**
-     * @param string $property
-     * @param array  $getterMethods
+     * @param string   $property
+     * @param string[] $getterMethods
      *
      * @return string|null
      *

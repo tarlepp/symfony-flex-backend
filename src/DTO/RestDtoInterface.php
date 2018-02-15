@@ -20,7 +20,7 @@ interface RestDtoInterface
     /**
      * Getter method for visited setters. This is needed for dto patching.
      *
-     * @return array
+     * @return string[]
      */
     public function getVisited(): array;
 
