@@ -45,7 +45,7 @@ trait UserSerializer
      *
      * @throws \LogicException
      */
-    public function unserialize($serialized): void
+    public function unserialize(string $serialized): void
     {
         $data = JSON::decode($serialized);
 

@@ -75,7 +75,7 @@ trait Blameable
      *
      * @return $this
      */
-    public function setCreatedBy(User $createdBy = null)
+    public function setCreatedBy(?User $createdBy = null): self
     {
         $this->createdBy = $createdBy;
 
@@ -95,7 +95,7 @@ trait Blameable
      *
      * @return $this
      */
-    public function setUpdatedBy(User $updatedBy = null)
+    public function setUpdatedBy(?User $updatedBy = null): self
     {
         $this->updatedBy = $updatedBy;
 

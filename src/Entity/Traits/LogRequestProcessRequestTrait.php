@@ -19,10 +19,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 trait LogRequestProcessRequestTrait
 {
+    /**
+     * @var string
+     */
     private $replaceValue = '*** REPLACED ***';
 
     /**
-     * @var array
+     * @var mixed[]
      *
      * @Groups({
      *      "LogRequest",
@@ -254,7 +257,7 @@ trait LogRequestProcessRequestTrait
     private $content;
 
     /**
-     * @var array
+     * @var mixed[]
      *
      * @Groups({
      *      "LogRequest",
@@ -309,7 +312,7 @@ trait LogRequestProcessRequestTrait
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getHeaders(): array
     {
@@ -317,7 +320,7 @@ trait LogRequestProcessRequestTrait
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getParameters(): array
     {
@@ -412,7 +415,7 @@ trait LogRequestProcessRequestTrait
         $rawHeaders = $request->headers->all();
 
         // Clean possible sensitive data from parameters
-        \array_walk($rawHeaders, function (&$value, string $key) {
+        \array_walk($rawHeaders, function (&$value, string $key): void {
             $this->cleanParameters($value, $key);
         });
 
@@ -421,7 +424,7 @@ trait LogRequestProcessRequestTrait
         $rawParameters = $this->determineParameters($request);
 
         // Clean possible sensitive data from parameters
-        \array_walk($rawParameters, function (&$value, string $key) {
+        \array_walk($rawParameters, function (&$value, string $key): void {
             $this->cleanParameters($value, $key);
         });
 
@@ -454,7 +457,7 @@ trait LogRequestProcessRequestTrait
     private function determineAction(Request $request): string
     {
         $rawAction = $request->get('_controller', '');
-        $rawAction = explode(\strpos($rawAction, '::') ? '::' : ':', $rawAction);
+        $rawAction = \explode(\strpos($rawAction, '::') ? '::' : ':', $rawAction);
 
         return $rawAction[1] ?? '';
     }
@@ -464,7 +467,7 @@ trait LogRequestProcessRequestTrait
      *
      * @param Request $request
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws \LogicException
      */
@@ -517,7 +520,7 @@ trait LogRequestProcessRequestTrait
 
         // Recursive call
         if (\is_array($value)) {
-            \array_walk($value, function (&$value, string $key) {
+            \array_walk($value, function (&$value, string $key): void {
                 $this->cleanParameters($value, $key);
             });
         }
@@ -532,7 +535,7 @@ trait LogRequestProcessRequestTrait
      */
     private function cleanContent(string $inputContent): string
     {
-        $iterator = function ($search) use (&$inputContent) {
+        $iterator = function ($search) use (&$inputContent): void {
             $inputContent = \preg_replace('/(' . $search . '":)\s*"(.*)"/', '$1"*** REPLACED ***"', $inputContent);
         };
 
