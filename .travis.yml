@@ -55,10 +55,6 @@ before_install:
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_7;'
   - mysql -e 'CREATE DATABASE IF NOT EXISTS travis_test_8;'
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - sudo add-apt-repository ppa:ondrej/php -y
-  - sudo apt-get update -q
-  - sudo apt-get install libsodium-dev -y
-  - pecl install libsodium
 
 install:
   - composer install
