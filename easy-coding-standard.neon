@@ -12,3 +12,5 @@ parameters:
     skip_codes:
         - SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.UselessParameterAnnotation
         - SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.UselessReturnAnnotation
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
+            - *src/Entity/Traits/UserSerializer.php
