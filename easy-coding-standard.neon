@@ -1,0 +1,14 @@
+includes:
+    - vendor/symplify/easy-coding-standard/config/psr2.neon
+    - vendor/symplify/easy-coding-standard/config/php71.neon
+    #- vendor/symplify/easy-coding-standard/config/clean-code.neon
+    #- vendor/symplify/easy-coding-standard/config/symplify.neon
+    #- vendor/symplify/easy-coding-standard/config/common.neon
+
+parameters:
+    exclude_checkers:
+        - PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer
+        - Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer
+    skip_codes:
+        - SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.UselessParameterAnnotation
+        - SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.UselessReturnAnnotation

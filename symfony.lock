@@ -8,6 +8,9 @@
     "composer/ca-bundle": {
         "version": "1.1.0"
     },
+    "composer/semver": {
+        "version": "1.4.2"
+    },
     "doctrine/annotations": {
         "version": "v1.5.0"
     },
@@ -83,6 +86,18 @@
     "exsyst/swagger": {
         "version": "v0.3.1"
     },
+    "friendsofphp/php-cs-fixer": {
+        "version": "2.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.2",
+            "ref": "bb31a3bbec00a8fc8aa1c9fbf9b0ef9fc492f93d"
+        }
+    },
+    "gecko-packages/gecko-php-unit": {
+        "version": "v3.1"
+    },
     "gedmo/doctrine-extensions": {
         "version": "v2.4.31"
     },
@@ -146,6 +161,9 @@
     "nette/bootstrap": {
         "version": "v2.4.5"
     },
+    "nette/caching": {
+        "version": "v2.5.6"
+    },
     "nette/di": {
         "version": "v2.4.10"
     },
@@ -181,6 +199,9 @@
     },
     "php-coveralls/php-coveralls": {
         "version": "v2.0.0"
+    },
+    "php-cs-fixer/diff": {
+        "version": "v1.2.1"
     },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
@@ -310,6 +331,9 @@
             "version": "4.0",
             "ref": "576d653444dade07f272c889d52fe4594caa4fc3"
         }
+    },
+    "slevomat/coding-standard": {
+        "version": "4.4.5"
     },
     "squizlabs/php_codesniffer": {
         "version": "3.1.1"
@@ -464,6 +488,9 @@
     "symfony/polyfill-php56": {
         "version": "v1.6.0"
     },
+    "symfony/polyfill-php70": {
+        "version": "v1.7.0"
+    },
     "symfony/polyfill-php72": {
         "version": "v1.6.0"
     },
@@ -565,6 +592,21 @@
     },
     "symfony/yaml": {
         "version": "v3.3.10"
+    },
+    "symplify/better-reflection-docblock": {
+        "version": "v3.2.20"
+    },
+    "symplify/coding-standard": {
+        "version": "v3.2.20"
+    },
+    "symplify/easy-coding-standard": {
+        "version": "v3.2.20"
+    },
+    "symplify/package-builder": {
+        "version": "v3.2.20"
+    },
+    "symplify/token-runner": {
+        "version": "v3.2.20"
     },
     "theseer/fdomdocument": {
         "version": "1.6.6"
