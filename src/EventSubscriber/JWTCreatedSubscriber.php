@@ -67,7 +67,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
      *
      * @codeCoverageIgnore
      *
-     * @return array The event names to listen to
+     * @return mixed[] The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -104,7 +104,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     /**
      * Method to set/modify JWT expiration date dynamically.
      *
-     * @param array $payload
+     * @param mixed[] $payload
      */
     private function setExpiration(array &$payload): void
     {
@@ -117,7 +117,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
      *
      * @see JWTDecodedListener
      *
-     * @param array $payload
+     * @param mixed[] $payload
      */
     private function setSecurityData(array &$payload): void
     {
@@ -143,7 +143,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     /**
      * Method to add all necessary user information to JWT payload.
      *
-     * @param array              $payload
+     * @param mixed[]            $payload
      * @param User|UserInterface $user
      */
     private function setUserData(array &$payload, User $user): void

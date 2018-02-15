@@ -66,7 +66,7 @@ class RequestSubscriber implements EventSubscriberInterface
      *
      * @codeCoverageIgnore
      *
-     * @return array The event names to listen to
+     * @return mixed[] The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {

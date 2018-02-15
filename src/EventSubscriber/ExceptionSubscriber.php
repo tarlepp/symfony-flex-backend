@@ -61,7 +61,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
      *
      * @codeCoverageIgnore
      *
-     * @return array The event names to listen to
+     * @return mixed[] The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -111,11 +111,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * Method to get "proper" status code for exception response.
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
      * @return int
      */
-    private function getStatusCode(\Exception $exception): int
+    private function getStatusCode(\Throwable $exception): int
     {
         // Get current token, and determine if request is made from logged in user or not
         $token = $this->tokenStorage->getToken();
@@ -127,12 +127,12 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * Method to get actual error message.
      *
-     * @param \Exception    $exception
+     * @param \Throwable    $exception
      * @param Response      $response
      *
-     * @return array
+     * @return mixed[]
      */
-    private function getErrorMessage(\Exception $exception, Response $response): array
+    private function getErrorMessage(\Throwable $exception, Response $response): array
     {
         // Set base of error message
         $error = [
@@ -161,11 +161,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * Helper method to convert exception message for user. This method is used in 'production' environment so, that
      * application won't reveal any sensitive error data to users.
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
      * @return string
      */
-    private function getExceptionMessage(\Exception $exception): string
+    private function getExceptionMessage(\Throwable $exception): string
     {
         return $this->environment === 'dev'
             ? $exception->getMessage()
@@ -173,11 +173,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
      * @return string
      */
-    private function getMessageForProductionEnvironment(\Exception $exception): string
+    private function getMessageForProductionEnvironment(\Throwable $exception): string
     {
         $message = $exception->getMessage();
 
@@ -192,12 +192,12 @@ class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $exception
      * @param bool       $isUser
      *
      * @return int
      */
-    private function determineStatusCode(\Exception $exception, bool $isUser): int
+    private function determineStatusCode(\Throwable $exception, bool $isUser): int
     {
         // Default status code is always 500
         $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;

@@ -58,7 +58,7 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
      *
      * @codeCoverageIgnore
      *
-     * @return array The event names to listen to
+     * @return mixed[] The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -98,7 +98,7 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
      * @param JWTDecodedEvent $event
      * @param Request|null    $request
      */
-    private function checkPayload(JWTDecodedEvent $event, Request $request = null): void
+    private function checkPayload(JWTDecodedEvent $event, ?Request $request = null): void
     {
         if ($request === null) {
             return;
