@@ -104,8 +104,9 @@ class RestApiMaker implements MakerInterface
      *
      * @param InputInterface $input
      *
-     * @return array
+     * @return mixed[]
      *
+     * @throws \Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function getParameters(InputInterface $input): array
@@ -141,9 +142,9 @@ class RestApiMaker implements MakerInterface
      *
      * These files are parsed as PHP.
      *
-     * @param array $params The parameters returned from getParameters()
+     * @param mixed[] $params The parameters returned from getParameters()
      *
-     * @return array
+     * @return mixed[]
      */
     public function getFiles(array $params): array
     {
@@ -164,7 +165,7 @@ class RestApiMaker implements MakerInterface
     /**
      * An opportunity to write a nice message after generation finishes.
      *
-     * @param array        $params
+     * @param mixed[]      $params
      * @param ConsoleStyle $io
      */
     public function writeNextStepsMessage(array $params, ConsoleStyle $io): void
@@ -195,10 +196,10 @@ class RestApiMaker implements MakerInterface
     }
 
     /**
-     * @param array  $params
-     * @param string $baseDir
+     * @param mixed[] $params
+     * @param string  $baseDir
      *
-     * @return array
+     * @return mixed[]
      */
     private function getTestFiles(array $params, string $baseDir): array
     {
