@@ -29,9 +29,9 @@ class UserPatchType extends AbstractType
     /**
      * Base form fields
      *
-     * @var array
+     * @var mixed[]
      */
-    static private $formFields = [
+    private static $formFields = [
         [
             'username',
             Type\TextType::class,
@@ -72,8 +72,8 @@ class UserPatchType extends AbstractType
     /**
      * @SuppressWarnings("unused")
      *
-     * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param FormBuilderInterface $buildersss
+     * @param mixed[]              $options
      *
      * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
      */

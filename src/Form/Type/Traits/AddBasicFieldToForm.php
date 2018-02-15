@@ -19,7 +19,7 @@ trait AddBasicFieldToForm
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array                $fields
+     * @param mixed[]              $fields
      */
     protected function addBasicFieldToForm(FormBuilderInterface $builder, array $fields): void
     {

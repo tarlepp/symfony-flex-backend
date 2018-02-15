@@ -26,7 +26,7 @@ trait UserGroupChoices
     /**
      * Method to create choices array for user groups.
      *
-     * @return  array
+     * @return mixed[]
      */
     protected function getUserGroupChoices(): array
     {
@@ -40,7 +40,7 @@ trait UserGroupChoices
          *
          * @return void
          */
-        $iterator = function (UserGroup $userGroup) use (&$choices) {
+        $iterator = function (UserGroup $userGroup) use (&$choices): void {
             $name = $userGroup->getName() . ' [' . $userGroup->getRole()->getId() . ']';
 
             $choices[$name] = $userGroup->getId();

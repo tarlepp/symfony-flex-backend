@@ -27,9 +27,9 @@ abstract class UserType extends AbstractType
     /**
      * Base form fields
      *
-     * @var array
+     * @var mixed[]
      */
-    static private $formFields = [
+    private static $formFields = [
         [
             'username',
             Type\TextType::class,
@@ -76,7 +76,7 @@ abstract class UserType extends AbstractType
      * @SuppressWarnings("unused")
      *
      * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param mixed[]              $options
      *
      * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
      */

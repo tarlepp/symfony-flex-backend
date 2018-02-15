@@ -38,9 +38,9 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * Transforms an object (Role) to a string (Role id).
      *
-     * @param array|null $userGroups
+     * @param string[]|UserGroup[]|null $userGroups
      *
-     * @return array
+     * @return string[]
      */
     public function transform($userGroups): ?array
     {
@@ -52,7 +52,7 @@ class UserGroupTransformer implements DataTransformerInterface
              *
              * @return string
              */
-            $iterator = function ($userGroup) {
+            $iterator = function ($userGroup): string {
                 return \is_string($userGroup) ? $userGroup : $userGroup->getId();
             };
 
@@ -65,9 +65,9 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * Transforms a string (Role id) to an object (Role).
      *
-     * @param array|mixed $userGroups
+     * @param string[]|mixed $userGroups
      *
-     * @return array|null
+     * @return UserGroup[]|null
      *
      * @throws TransformationFailedException if object (issue) is not found.
      */
@@ -76,7 +76,7 @@ class UserGroupTransformer implements DataTransformerInterface
         $output = null;
 
         if (\is_array($userGroups)) {
-            $iterator = function (string $groupId) {
+            $iterator = function (string $groupId): UserGroup {
                 $group = $this->resource->findOne($groupId);
 
                 if ($group === null) {

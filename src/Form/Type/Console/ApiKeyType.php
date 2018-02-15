@@ -33,9 +33,9 @@ class ApiKeyType extends AbstractType
     /**
      * Base form fields
      *
-     * @var array
+     * @var mixed[]
      */
-    static private $formFields = [
+    private static $formFields = [
         [
             'description',
             Type\TextType::class,
@@ -68,7 +68,7 @@ class ApiKeyType extends AbstractType
      * @SuppressWarnings("unused")
      *
      * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param mixed[]              $options
      *
      * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
      */

@@ -33,9 +33,9 @@ class UserGroupType extends AbstractType
     /**
      * Base form fields
      *
-     * @var array
+     * @var mixed[]
      */
-    static private $formFields = [
+    private static $formFields = [
         [
             'name',
             Type\TextType::class,
@@ -83,7 +83,7 @@ class UserGroupType extends AbstractType
      * @SuppressWarnings("unused")
      *
      * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param mixed[]              $options
      *
      * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
      */
@@ -122,14 +122,14 @@ class UserGroupType extends AbstractType
     /**
      * Method to  choices array for user groups.
      *
-     * @return  array
+     * @return mixed[]
      */
     public function getRoleChoices(): array
     {
         // Initialize output
         $choices = [];
 
-        $iterator = function (RoleEntity $role) use (&$choices) {
+        $iterator = function (RoleEntity $role) use (&$choices): void {
             $name = $this->rolesService->getRoleLabel($role->getId());
 
             $choices[$name] = $role->getId();
