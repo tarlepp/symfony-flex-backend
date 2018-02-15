@@ -15,8 +15,8 @@ namespace App\Doctrine\DBAL\Types;
  */
 class EnumLogLoginType extends EnumType
 {
-    const TYPE_FAILURE = 'failure';
-    const TYPE_SUCCESS = 'success';
+    public const TYPE_FAILURE = 'failure';
+    public const TYPE_SUCCESS = 'success';
 
     /**
      * @var string
@@ -24,7 +24,7 @@ class EnumLogLoginType extends EnumType
     protected static $name = 'EnumLogLogin';
 
     /**
-     * @var array
+     * @var string[]
      */
     protected static $values = [
         self::TYPE_FAILURE,

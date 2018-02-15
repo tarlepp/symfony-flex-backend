@@ -24,16 +24,16 @@ abstract class EnumType extends Type
     protected static $name;
 
     /**
-     * @var array
+     * @var string[]
      */
-    protected static $values = array();
+    protected static $values = [];
 
     /**
      * Gets the SQL declaration snippet for a field of this type.
      *
      * @SuppressWarnings("unused")
      *
-     * @param array            $fieldDeclaration
+     * @param mixed[]          $fieldDeclaration
      * @param AbstractPlatform $platform
      *
      * @return string

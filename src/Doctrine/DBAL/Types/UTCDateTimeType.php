@@ -26,7 +26,7 @@ class UTCDateTimeType extends DateTimeType
      *
      * @var \DateTimeZone|null
      */
-    static private $utc;
+    private static $utc;
 
     /**
      * Converts a value from its PHP representation to its database representation
@@ -36,6 +36,8 @@ class UTCDateTimeType extends DateTimeType
      * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform The currently used database platform.
      *
      * @return mixed The database representation of the value.
+     *
+     * @throws ConversionException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
