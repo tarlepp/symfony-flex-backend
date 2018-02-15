@@ -350,7 +350,7 @@ class UserGroupController extends Controller
     private function getUserResponse(
         UserGroup $userGroup,
         SerializerInterface $serializer,
-        int $status = null
+        ?int $status = null
     ): JsonResponse {
         $status = $status ?? 200;
 

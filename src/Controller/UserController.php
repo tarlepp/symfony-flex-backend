@@ -485,8 +485,11 @@ class UserController extends Controller
      *
      * @return JsonResponse
      */
-    private function getUserGroupResponse(User $user, SerializerInterface $serializer, int $status = null): JsonResponse
-    {
+    private function getUserGroupResponse(
+        User $user,
+        SerializerInterface $serializer,
+        ?int $status = null
+    ): JsonResponse {
         $status = $status ?? 200;
 
         static $groups = [
