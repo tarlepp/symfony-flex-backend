@@ -45,7 +45,7 @@ class LoadUserData extends Fixture implements OrderedFixtureInterface, Container
      *
      * @param ContainerInterface|null $container
      */
-    public function setContainer(ContainerInterface $container = null): void
+    public function setContainer(?ContainerInterface $container = null): void
     {
         $this->container = $container;
     }
@@ -87,12 +87,12 @@ class LoadUserData extends Fixture implements OrderedFixtureInterface, Container
     /**
      * Method to create User entity with specified role.
      *
-     * @param string $role
+     * @param string|null $role
      *
      * @throws \BadMethodCallException
      * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
-    private function createUser(string $role = null): void
+    private function createUser(?string $role = null): void
     {
         $suffix = $role === null ? '' : '-' . $this->roles->getShort($role);
 

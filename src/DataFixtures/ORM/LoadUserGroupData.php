@@ -45,7 +45,7 @@ class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, Cont
      *
      * @param ContainerInterface|null $container
      */
-    public function setContainer(ContainerInterface $container = null): void
+    public function setContainer(?ContainerInterface $container = null): void
     {
         $this->container = $container;
     }

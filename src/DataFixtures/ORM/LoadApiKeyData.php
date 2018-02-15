@@ -45,7 +45,7 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
      *
      * @param ContainerInterface|null $container
      */
-    public function setContainer(ContainerInterface $container = null): void
+    public function setContainer(?ContainerInterface $container = null): void
     {
         $this->container = $container;
     }
@@ -89,12 +89,12 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
     /**
      * Helper method to create new ApiKey entity with specified role.
      *
-     * @param string $role
+     * @param string|null $role
      *
      * @throws \BadMethodCallException
      * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      */
-    private function createApiKey(string $role = null): void
+    private function createApiKey(?string $role = null): void
     {
         // Create new entity
         $entity = new ApiKey();
