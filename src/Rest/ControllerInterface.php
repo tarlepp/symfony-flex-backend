@@ -20,15 +20,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 interface ControllerInterface
 {
-    const METHOD_COUNT      = 'countMethod';
-    const METHOD_CREATE     = 'createMethod';
-    const METHOD_DELETE     = 'deleteMethod';
-    const METHOD_FIND       = 'findMethod';
-    const METHOD_FIND_ONE   = 'findOneMethod';
-    const METHOD_IDS        = 'idsMethod';
-    const METHOD_PATCH      = 'patchMethod';
-    const METHOD_UPDATE     = 'updateMethod';
-
     /**
      * @return RestResourceInterface
      *
@@ -52,7 +43,7 @@ interface ControllerInterface
      *
      * @throws \UnexpectedValueException
      */
-    public function getDtoClass(string $method = null): string;
+    public function getDtoClass(?string $method = null): string;
 
     /**
      * Getter method for used DTO class for current controller.
@@ -63,13 +54,13 @@ interface ControllerInterface
      *
      * @throws \UnexpectedValueException
      */
-    public function getFormTypeClass(string $method = null): string;
+    public function getFormTypeClass(?string $method = null): string;
 
     /**
      * Method to validate REST trait method.
      *
-     * @param Request $request
-     * @param array   $allowedHttpMethods
+     * @param Request  $request
+     * @param string[] $allowedHttpMethods
      *
      * @throws \LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
@@ -79,18 +70,18 @@ interface ControllerInterface
     /**
      * Method to handle possible REST method trait exception.
      *
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
      * @return HttpException
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function handleRestMethodException(\Exception $exception): HttpException;
+    public function handleRestMethodException(\Throwable $exception): HttpException;
 
     /**
      * Method to process current criteria array.
      *
-     * @param array $criteria
+     * @param mixed[] $criteria
      */
     public function processCriteria(array &$criteria): void;
 
@@ -114,6 +105,6 @@ interface ControllerInterface
         Request $request,
         FormFactoryInterface $formFactory,
         string $method,
-        string $id = null
+        ?string $id = null
     ): FormInterface;
 }

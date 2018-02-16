@@ -65,13 +65,13 @@ class RepositoryHelper
      * @see \App\Controller\Rest::processCriteria
      *
      * @param QueryBuilder $queryBuilder
-     * @param array|null   $criteria
+     * @param mixed[]|null $criteria
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function processCriteria(QueryBuilder $queryBuilder, array $criteria = null): void
+    public static function processCriteria(QueryBuilder $queryBuilder, ?array $criteria = null): void
     {
         $criteria = $criteria ?? [];
 
@@ -96,14 +96,14 @@ class RepositoryHelper
      * @see \App\Controller\Rest::getSearchTerms
      *
      * @param QueryBuilder $queryBuilder
-     * @param array        $columns
-     * @param array|null   $terms
+     * @param string[]     $columns
+     * @param mixed[]|null $terms
      *
      * @return void
      *
      * @throws \InvalidArgumentException
      */
-    public static function processSearchTerms(QueryBuilder $queryBuilder, array $columns, array $terms = null): void
+    public static function processSearchTerms(QueryBuilder $queryBuilder, array $columns, ?array $terms = null): void
     {
         $terms = $terms ?? [];
 
@@ -125,11 +125,11 @@ class RepositoryHelper
      * Simple process method for order by part of for current query builder.
      *
      * @param QueryBuilder $queryBuilder
-     * @param array|null   $orderBy
+     * @param mixed[]|null $orderBy
      *
      * @return void
      */
-    public static function processOrderBy(QueryBuilder $queryBuilder, array $orderBy = null): void
+    public static function processOrderBy(QueryBuilder $queryBuilder, ?array $orderBy = null): void
     {
         $orderBy = $orderBy ?? [];
 
@@ -216,7 +216,7 @@ class RepositoryHelper
      *
      * @param QueryBuilder $queryBuilder
      * @param Composite    $expression
-     * @param array        $criteria
+     * @param mixed[]      $criteria
      *
      * @return Composite
      *
@@ -235,7 +235,7 @@ class RepositoryHelper
     /**
      * @param QueryBuilder $queryBuilder
      * @param Composite    $expression
-     * @param array        $criteria
+     * @param mixed[]      $criteria
      *
      * @throws \InvalidArgumentException
      */
@@ -285,7 +285,7 @@ class RepositoryHelper
      * @param string $column
      * @param mixed  $value
      *
-     * @return array
+     * @return mixed[]
      */
     private static function createCriteria(string $column, $value): array
     {
@@ -300,9 +300,9 @@ class RepositoryHelper
 
     /**
      * @param QueryBuilder $queryBuilder
-     * @param array        $comparison
+     * @param mixed[]      $comparison
      *
-     * @return array
+     * @return mixed[]
      */
     private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, array $comparison): array
     {
@@ -331,10 +331,10 @@ class RepositoryHelper
     /**
      * @param QueryBuilder $queryBuilder
      * @param string       $lowercaseOperator
-     * @param array        $parameters
-     * @param array        $value
+     * @param mixed[]      $parameters
+     * @param mixed[]      $value
      *
-     * @return array
+     * @return mixed[]
      */
     private static function getParameters(
         QueryBuilder $queryBuilder,
@@ -361,13 +361,13 @@ class RepositoryHelper
     }
 
     /**
-     * @param array $condition
+     * @param mixed[] &$condition
      *
      * @return \Closure
      */
     private static function getIterator(array &$condition): \Closure
     {
-        return function ($value, $column) use (&$condition) {
+        return function ($value, $column) use (&$condition): void {
             // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
             if (\strcmp($column, 'and') === 0 || \strcmp($column, 'or') === 0) {
                 $condition[$column] = $value;
@@ -381,9 +381,9 @@ class RepositoryHelper
      * @param QueryBuilder $queryBuilder
      * @param \stdClass    $comparison
      * @param string       $lowercaseOperator
-     * @param array        $parameters
+     * @param mixed[]      $parameters
      *
-     * @return array
+     * @return mixed[]
      */
     private static function getComparisonParameters(
         QueryBuilder $queryBuilder,

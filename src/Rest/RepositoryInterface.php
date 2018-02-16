@@ -42,7 +42,7 @@ interface RepositoryInterface
     /**
      * Gets all association mappings of the class.
      *
-     * @return array
+     * @return string[]
      */
     public function getAssociations(): array;
 
@@ -87,44 +87,44 @@ interface RepositoryInterface
     /**
      * Generic count method to determine count of entities for specified criteria and search term(s).
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
      * @return integer
      *
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countAdvanced(array $criteria = null, array $search = null): int;
+    public function countAdvanced(?array $criteria = null, ?array $search = null): int;
 
     /**
      * Generic replacement for basic 'findBy' method if/when you want to use generic LIKE search.
      *
-     * @param array         $criteria
-     * @param null|array    $orderBy
+     * @param mixed[]       $criteria
+     * @param null|mixed[]  $orderBy
      * @param null|integer  $limit
      * @param null|integer  $offset
-     * @param null|array    $search
+     * @param null|mixed[]  $search
      *
      * @return EntityInterface[]
      */
     public function findByAdvanced(
         array $criteria,
-        array $orderBy = null,
-        int $limit = null,
-        int $offset = null,
-        array $search = null
+        ?array $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?array $search = null
     ): array;
 
     /**
      * Repository method to fetch current entity id values from database and return those as an array.
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
-     * @return array
+     * @return string[]
      */
-    public function findIds(array $criteria = null, array $search = null): array;
+    public function findIds(?array $criteria = null, ?array $search = null): array;
 
     /**
      * Helper method to 'reset' repository entity table - in other words delete all records - so be carefully with
@@ -150,7 +150,7 @@ interface RepositoryInterface
      *
      * @see QueryBuilder::leftJoin() for parameters
      *
-     * @param array $parameters
+     * @param mixed[] $parameters
      *
      * @return RepositoryInterface
      *
@@ -165,7 +165,7 @@ interface RepositoryInterface
      *
      * @see QueryBuilder::innerJoin() for parameters
      *
-     * @param array $parameters
+     * @param mixed[] $parameters
      *
      * @return RepositoryInterface
      *
@@ -182,12 +182,12 @@ interface RepositoryInterface
      *
      * Note that every callback will get 'QueryBuilder' as in first parameter.
      *
-     * @param callable   $callable
-     * @param array|null $args
+     * @param callable     $callable
+     * @param mixed[]|null $args
      *
      * @return RepositoryInterface
      */
-    public function addCallback(callable $callable, array $args = null): RepositoryInterface;
+    public function addCallback(callable $callable, ?array $args = null): RepositoryInterface;
 
     /**
      * Process defined joins for current QueryBuilder instance.

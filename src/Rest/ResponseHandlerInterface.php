@@ -63,7 +63,7 @@ interface ResponseHandlerInterface
      *
      * @param Request $request
      *
-     * @return array
+     * @return mixed[]
      */
     public function getSerializeContext(Request $request): array;
 
@@ -74,7 +74,7 @@ interface ResponseHandlerInterface
      * @param mixed        $data
      * @param null|integer $httpStatus
      * @param null|string  $format
-     * @param null|array   $context
+     * @param null|mixed[] $context
      *
      * @return Response
      *
@@ -83,9 +83,9 @@ interface ResponseHandlerInterface
     public function createResponse(
         Request $request,
         $data,
-        int $httpStatus = null,
-        string $format = null,
-        array $context = null
+        ?int $httpStatus = null,
+        ?string $format = null,
+        ?array $context = null
     ): Response;
 
     /**

@@ -25,7 +25,7 @@ final class ResponseHandler implements ResponseHandlerInterface
     /**
      * Content types for supported response output formats.
      *
-     * @var array
+     * @var mixed[]
      */
     private $contentTypes = [
         self::FORMAT_JSON   => 'application/json',
@@ -91,7 +91,7 @@ final class ResponseHandler implements ResponseHandlerInterface
      *
      * @param Request $request
      *
-     * @return array
+     * @return mixed[]
      */
     public function getSerializeContext(Request $request): array
     {
@@ -126,7 +126,7 @@ final class ResponseHandler implements ResponseHandlerInterface
      * @param mixed        $data
      * @param null|integer $httpStatus
      * @param null|string  $format
-     * @param null|array   $context
+     * @param null|mixed[] $context
      *
      * @return Response
      *
@@ -136,9 +136,9 @@ final class ResponseHandler implements ResponseHandlerInterface
     public function createResponse(
         Request $request,
         $data,
-        int $httpStatus = null,
-        string $format = null,
-        array $context = null
+        ?int $httpStatus = null,
+        ?string $format = null,
+        ?array $context = null
     ): Response {
         $httpStatus = $httpStatus ?? 200;
         $context = $context ?? $this->getSerializeContext($request);
@@ -185,13 +185,13 @@ final class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param $populateAll
-     * @param $populate
-     * @param $entityName
+     * @param bool     $populateAll
+     * @param string[] $populate
+     * @param string   $entityName
      *
-     * @return array
+     * @return string[]
      */
-    private function checkPopulateAll($populateAll, $populate, $entityName): array
+    private function checkPopulateAll(bool $populateAll, array $populate, string $entityName): array
     {
         // Set all associations to be populated
         if ($populateAll && \count($populate) === 0) {
@@ -213,16 +213,16 @@ final class ResponseHandler implements ResponseHandlerInterface
      *
      * @return string
      */
-    private function getFormat(Request $request, string $format = null): string
+    private function getFormat(Request $request, ?string $format = null): string
     {
         return $format ?? ($request->getContentType() === self::FORMAT_XML ? self::FORMAT_XML : self::FORMAT_JSON);
     }
 
     /**
-     * @param mixed  $data
-     * @param int    $httpStatus
-     * @param string $format
-     * @param array  $context
+     * @param mixed   $data
+     * @param int     $httpStatus
+     * @param string  $format
+     * @param mixed[] $context
      *
      * @return Response
      *
@@ -235,7 +235,7 @@ final class ResponseHandler implements ResponseHandlerInterface
             $response = new Response();
             $response->setContent($this->serializer->serialize($data, $format, $context));
             $response->setStatusCode($httpStatus);
-        } catch (\Exception $error) {
+        } catch (\Throwable $error) {
             $status = Response::HTTP_BAD_REQUEST;
 
             throw new HttpException($status, $error->getMessage(), $error, [], $status);

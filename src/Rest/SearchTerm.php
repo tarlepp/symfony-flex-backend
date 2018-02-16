@@ -18,15 +18,15 @@ final class SearchTerm implements SearchTermInterface
     /**
      * Static method to get search term criteria for specified columns and search terms with specified operand and mode.
      *
-     * @param string|array $column  Search column(s), could be a string or an array of strings.
-     * @param string|array $search  Search term(s), could be a string or an array of strings.
-     * @param null|string  $operand Used operand with multiple search terms. See OPERAND_* constants. Defaults
+     * @param string|string[] $column  Search column(s), could be a string or an array of strings.
+     * @param string|string[] $search  Search term(s), could be a string or an array of strings.
+     * @param null|string     $operand Used operand with multiple search terms. See OPERAND_* constants. Defaults
      *                              to self::OPERAND_OR
      * @param null|integer $mode    Used mode on LIKE search. See MODE_* constants. Defaults to self::MODE_FULL
      *
-     * @return array|null
+     * @return mixed[]|null
      */
-    public static function getCriteria($column, $search, string $operand = null, int $mode = null): ?array
+    public static function getCriteria($column, $search, ?string $operand = null, ?int $mode = null): ?array
     {
         $operand = $operand ?? self::OPERAND_OR;
         $mode = $mode ?? self::MODE_FULL;
@@ -45,12 +45,12 @@ final class SearchTerm implements SearchTermInterface
     /**
      * Helper method to create used criteria array with given columns and search terms.
      *
-     * @param array   $columns
-     * @param array   $searchTerms
-     * @param string  $operand
-     * @param integer $mode
+     * @param string[] $columns
+     * @param string[] $searchTerms
+     * @param string   $operand
+     * @param integer  $mode
      *
-     * @return array|null
+     * @return mixed[]|null
      */
     private static function createCriteria(array $columns, array $searchTerms, string $operand, int $mode): ?array
     {
@@ -78,8 +78,8 @@ final class SearchTerm implements SearchTermInterface
     /**
      * Method to get term iterator closure.
      *
-     * @param array $columns
-     * @param int   $mode
+     * @param string[] $columns
+     * @param int      $mode
      *
      * @return \Closure
      */
@@ -112,7 +112,7 @@ final class SearchTerm implements SearchTermInterface
          *
          * @param string $column
          *
-         * @return array
+         * @return string[]
          */
         return function (string $column) use ($term, $mode): array {
             if (\strpos($column, '.') === false) {
@@ -150,9 +150,9 @@ final class SearchTerm implements SearchTermInterface
     }
 
     /**
-     * @param $column
+     * @param string|string[] $column  Search column(s), could be a string or an array of strings.
      *
-     * @return array
+     * @return string[]
      */
     private static function getColumns($column): array
     {
@@ -170,9 +170,9 @@ final class SearchTerm implements SearchTermInterface
     /**
      * Method to get search terms.
      *
-     * @param array|string $search
+     * @param string|string[] $search  Search term(s), could be a string or an array of strings.
      *
-     * @return array
+     * @return string[]
      */
     private static function getSearchTerms($search): array
     {

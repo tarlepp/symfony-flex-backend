@@ -189,7 +189,7 @@ abstract class RestResource implements RestResourceInterface
     /**
      * Getter method for all associations that current entity contains.
      *
-     * @return array
+     * @return string[]
      */
     public function getAssociations(): array
     {
@@ -209,7 +209,7 @@ abstract class RestResource implements RestResourceInterface
      * @throws \BadMethodCallException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function getDtoForEntity(string $id, string $dtoClass, RestDtoInterface $dto = null): RestDtoInterface
+    public function getDtoForEntity(string $id, string $dtoClass, ?RestDtoInterface $dto = null): RestDtoInterface
     {
         // Fetch entity
         $entity = $this->getEntity($id);

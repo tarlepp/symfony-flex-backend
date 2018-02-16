@@ -110,7 +110,7 @@ interface RestResourceInterface
     /**
      * Getter method for all associations that current entity contains.
      *
-     * @return array
+     * @return string[]
      */
     public function getAssociations(): array;
 
@@ -130,20 +130,20 @@ interface RestResourceInterface
      * Generic find method to return an array of items from database. Return value is an array of specified repository
      * entities.
      *
-     * @param null|array   $criteria
-     * @param null|array   $orderBy
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $orderBy
      * @param null|integer $limit
      * @param null|integer $offset
-     * @param null|array   $search
+     * @param null|mixed[] $search
      *
      * @return EntityInterface[]
      */
     public function find(
-        array $criteria = null,
-        array $orderBy = null,
-        int $limit = null,
-        int $offset = null,
-        array $search = null
+        ?array $criteria = null,
+        ?array $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?array $search = null
     ): array;
 
     /**
@@ -157,14 +157,14 @@ interface RestResourceInterface
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function findOne(string $id, bool $throwExceptionIfNotFound = null): ?EntityInterface;
+    public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface;
 
     /**
      * Generic findOneBy method to return single item from database by given criteria. Return value is single entity
      * from specified repository or null if entity was not found.
      *
-     * @param array        $criteria
-     * @param null|array   $orderBy
+     * @param mixed[]      $criteria
+     * @param null|mixed[] $orderBy
      * @param null|boolean $throwExceptionIfNotFound
      *
      * @return null|EntityInterface
@@ -173,22 +173,22 @@ interface RestResourceInterface
      */
     public function findOneBy(
         array $criteria,
-        array $orderBy = null,
-        bool $throwExceptionIfNotFound = null
+        ?array $orderBy = null,
+        ?bool $throwExceptionIfNotFound = null
     ): ?EntityInterface;
 
     /**
      * Generic count method to return entity count for specified criteria and search terms.
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
      * @return integer
      *
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function count(array $criteria = null, array $search = null): int;
+    public function count(?array $criteria = null, ?array $search = null): int;
 
     /**
      * Generic method to create new item (entity) to specified database repository. Return value is created entity for
@@ -204,7 +204,7 @@ interface RestResourceInterface
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function create(RestDtoInterface $dto, bool $skipValidation = null): EntityInterface;
+    public function create(RestDtoInterface $dto, ?bool $skipValidation = null): EntityInterface;
 
     /**
      * Generic method to update specified entity with new data.
@@ -223,7 +223,7 @@ interface RestResourceInterface
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function update(string $id, RestDtoInterface $dto, bool $skipValidation = null): EntityInterface;
+    public function update(string $id, RestDtoInterface $dto, ?bool $skipValidation = null): EntityInterface;
 
     /**
      * Generic method to delete specified entity from database.
@@ -243,14 +243,14 @@ interface RestResourceInterface
      * Generic ids method to return an array of id values from database. Return value is an array of specified
      * repository entity id values.
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
-     * @return array
+     * @return string[]
      *
      * @throws \InvalidArgumentException
      */
-    public function getIds(array $criteria = null, array $search = null): array;
+    public function getIds(?array $criteria = null, ?array $search = null): array;
 
     /**
      * Generic method to save given entity to specified repository. Return value is created entity.
@@ -265,5 +265,5 @@ interface RestResourceInterface
      * @throws \Doctrine\ORM\ORMException
      * @throws \Symfony\Component\Validator\Exception\ValidatorException
      */
-    public function save(EntityInterface $entity, bool $skipValidation = null): EntityInterface;
+    public function save(EntityInterface $entity, ?bool $skipValidation = null): EntityInterface;
 }

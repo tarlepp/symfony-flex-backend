@@ -38,7 +38,7 @@ final class RequestHandler
      *
      * @param HttpFoundationRequest $request
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws HttpException
      */
@@ -83,7 +83,7 @@ final class RequestHandler
      *
      * @param HttpFoundationRequest $request
      *
-     * @return array
+     * @return mixed[]
      */
     public static function getOrderBy(HttpFoundationRequest $request): array
     {
@@ -146,7 +146,7 @@ final class RequestHandler
      *
      * @param HttpFoundationRequest $request
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
@@ -162,7 +162,7 @@ final class RequestHandler
      *
      * @param string $search
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
@@ -188,7 +188,7 @@ final class RequestHandler
      *
      * @param string $search
      *
-     * @return array|null
+     * @return mixed[]|null
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
@@ -207,7 +207,7 @@ final class RequestHandler
     }
 
     /**
-     * @param $searchTerms
+     * @param mixed $searchTerms
      *
      * @throws \LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
@@ -230,9 +230,9 @@ final class RequestHandler
      * Method to normalize specified search terms. Within this we will just filter out any "empty" values and return
      * unique terms after that.
      *
-     * @param array $searchTerms
+     * @param string[] $searchTerms
      *
-     * @return array
+     * @return string[]
      */
     private static function normalizeSearchTerms(array $searchTerms): array
     {
@@ -241,7 +241,7 @@ final class RequestHandler
          *
          * @param string|array $terms
          */
-        $iterator = function (&$terms) {
+        $iterator = function (&$terms): void {
             $terms = \array_unique(\array_values(\array_filter($terms)));
         };
 
@@ -252,13 +252,13 @@ final class RequestHandler
     }
 
     /**
-     * @param array $output
+     * @param mixed[] $output
      *
      * @return \Closure
      */
     private static function getIterator(array &$output): \Closure
     {
-        return function (string &$value, $key) use (&$output) {
+        return function (string &$value, $key) use (&$output): void {
             $order = \in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
             $column = \is_string($key) ? $key : $value;
 
