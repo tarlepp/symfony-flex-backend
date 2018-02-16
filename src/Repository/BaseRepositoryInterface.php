@@ -44,7 +44,7 @@ interface BaseRepositoryInterface
     /**
      * Gets all association mappings of the class.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getAssociations(): array;
 
@@ -65,12 +65,12 @@ interface BaseRepositoryInterface
     /**
      * Method to create new query builder for current entity.
      *
-     * @param string $alias
-     * @param string $indexBy
+     * @param null|string $alias
+     * @param null|string $indexBy
      *
      * @return QueryBuilder
      */
-    public function createQueryBuilder(string $alias = null, string $indexBy = null): QueryBuilder;
+    public function createQueryBuilder(?string $alias = null, ?string $indexBy = null): QueryBuilder;
 
     /**
      * Helper method to persist specified entity to database.
@@ -101,15 +101,15 @@ interface BaseRepositoryInterface
     /**
      * Generic count method to determine count of entities for specified criteria and search term(s).
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
      * @return integer
      *
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countAdvanced(array $criteria = null, array $search = null): int;
+    public function countAdvanced(?array $criteria = null, ?array $search = null): int;
 
     /** @noinspection GenericObjectTypeUsageInspection */
     /**
@@ -121,66 +121,66 @@ interface BaseRepositoryInterface
      *
      * @return EntityInterface|object|null
      */
-    public function find(string $id, int $lockMode = null, int $lockVersion = null);
+    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null);
 
     /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Wrapper for default Doctrine repository findOneBy method.
      *
-     * @param array      $criteria
-     * @param array|null $orderBy
+     * @param mixed[]      $criteria
+     * @param mixed[]|null $orderBy
      *
      * @return EntityInterface|object|null
      */
-    public function findOneBy(array $criteria, array $orderBy = null);
+    public function findOneBy(array $criteria, ?array $orderBy = null);
 
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @param array      $criteria
-     * @param array|null $orderBy
-     * @param int|null   $limit
-     * @param int|null   $offset
+     * @param mixed[]      $criteria
+     * @param mixed[]|null $orderBy
+     * @param int|null    $limit
+     * @param int|null    $offset
      *
-     * @return array
+     * @return EntityInterface[]
      */
-    public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): array;
+    public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array;
 
     /**
      * Generic replacement for basic 'findBy' method if/when you want to use generic LIKE search.
      *
-     * @param array         $criteria
-     * @param null|array    $orderBy
+     * @param mixed[]       $criteria
+     * @param null|mixed[]  $orderBy
      * @param null|integer  $limit
      * @param null|integer  $offset
-     * @param null|array    $search
+     * @param null|mixed[]  $search
      *
      * @return EntityInterface[]
      */
     public function findByAdvanced(
         array $criteria,
-        array $orderBy = null,
-        int $limit = null,
-        int $offset = null,
-        array $search = null
+        ?array $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?array $search = null
     ): array;
 
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @return array
+     * @return EntityInterface[]
      */
     public function findAll(): array;
 
     /**
      * Repository method to fetch current entity id values from database and return those as an array.
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
-     * @return array
+     * @return string[]
      */
-    public function findIds(array $criteria = null, array $search = null): array;
+    public function findIds(?array $criteria = null, ?array $search = null): array;
 
     /**
      * Helper method to 'reset' repository entity table - in other words delete all records - so be carefully with
@@ -206,7 +206,7 @@ interface BaseRepositoryInterface
      *
      * @see QueryBuilder::leftJoin() for parameters
      *
-     * @param array $parameters
+     * @param mixed[] $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -221,7 +221,7 @@ interface BaseRepositoryInterface
      *
      * @see QueryBuilder::innerJoin() for parameters
      *
-     * @param array $parameters
+     * @param mixed[] $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -238,10 +238,10 @@ interface BaseRepositoryInterface
      *
      * Note that every callback will get 'QueryBuilder' as in first parameter.
      *
-     * @param callable   $callable
-     * @param array|null $args
+     * @param callable     $callable
+     * @param mixed[]|null $args
      *
      * @return BaseRepositoryInterface
      */
-    public function addCallback(callable $callable, array $args = null): BaseRepositoryInterface;
+    public function addCallback(callable $callable, ?array $args = null): BaseRepositoryInterface;
 }

@@ -29,6 +29,7 @@ use App\Repository\Traits\LoadUserByUserNameTrait;
  */
 class UserRepository extends BaseRepository
 {
+    // Traits
     use LoadUserByUserNameTrait;
 
     /**
@@ -53,7 +54,7 @@ class UserRepository extends BaseRepository
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isUsernameAvailable(string $username, string $id = null): bool
+    public function isUsernameAvailable(string $username, ?string $id = null): bool
     {
         // Build query
         $query = $this
@@ -81,7 +82,7 @@ class UserRepository extends BaseRepository
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function isEmailAvailable(string $email, string $id = null): bool
+    public function isEmailAvailable(string $email, ?string $id = null): bool
     {
         // Build query
         $query = $this

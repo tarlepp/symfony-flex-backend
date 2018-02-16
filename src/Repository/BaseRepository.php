@@ -48,7 +48,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
      *
-     * @var array
+     * @var mixed[]
      */
     private static $joins = [
         self::INNER_JOIN => [],
@@ -56,7 +56,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     ];
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private static $processedJoins = [
         self::INNER_JOIN => [],
@@ -64,12 +64,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
     ];
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private static $callbacks = [];
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private static $processedCallbacks = [];
 
@@ -127,7 +127,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @see QueryBuilder::leftJoin() for parameters
      *
-     * @param array $parameters
+     * @param mixed[] $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -149,7 +149,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @see QueryBuilder::innerJoin() for parameters
      *
-     * @param array $parameters
+     * @param mixed[] $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -173,12 +173,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * Note that every callback will get 'QueryBuilder' as in first parameter.
      *
-     * @param callable   $callable
-     * @param array|null $args
+     * @param callable     $callable
+     * @param mixed[]|null $args
      *
      * @return BaseRepositoryInterface
      */
-    public function addCallback(callable $callable, array $args = null): BaseRepositoryInterface
+    public function addCallback(callable $callable, ?array $args = null): BaseRepositoryInterface
     {
         $args = $args ?? [];
         $hash = \sha1(\serialize(\array_merge([\spl_object_hash((object)$callable)], $args)));
@@ -199,8 +199,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected function processJoins(QueryBuilder $queryBuilder): void
     {
         /**
-         * @var string $joinType
-         * @var array  $joins
+         * @var string  $joinType
+         * @var mixed[] $joins
          */
         foreach (self::$joins as $joinType => $joins) {
             foreach ($joins as $joinParameters) {
@@ -220,7 +220,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         /**
          * @var callable $callback
-         * @var array    $args
+         * @var mixed[]  $args
          */
         foreach (self::$callbacks as [$callback, $args]) {
             \array_unshift($args, $queryBuilder);
@@ -241,8 +241,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @see QueryBuilder::leftJoin()
      * @see QueryBuilder::innerJoin()
      *
-     * @param string $type       Join type; leftJoin, innerJoin or join
-     * @param array  $parameters Query builder join parameters
+     * @param string  $type       Join type; leftJoin, innerJoin or join
+     * @param mixed[] $parameters Query builder join parameters
      */
     private function addJoinToQuery(string $type, array $parameters): void
     {
