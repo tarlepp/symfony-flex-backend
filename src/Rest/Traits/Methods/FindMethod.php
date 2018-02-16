@@ -25,8 +25,8 @@ trait FindMethod
     /**
      * Generic 'findMethod' method for REST resources.
      *
-     * @param Request    $request
-     * @param array|null $allowedHttpMethods
+     * @param Request       $request
+     * @param string[]|null $allowedHttpMethods
      *
      * @return Response
      *
@@ -34,7 +34,7 @@ trait FindMethod
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
-    public function findMethod(Request $request, array $allowedHttpMethods = null): Response
+    public function findMethod(Request $request, ?array $allowedHttpMethods = null): Response
     {
         $allowedHttpMethods = $allowedHttpMethods ?? ['GET'];
 
@@ -42,10 +42,10 @@ trait FindMethod
         $this->validateRestMethod($request, $allowedHttpMethods);
 
         // Determine used parameters
-        $orderBy    = RequestHandler::getOrderBy($request);
-        $limit      = RequestHandler::getLimit($request);
-        $offset     = RequestHandler::getOffset($request);
-        $search     = RequestHandler::getSearchTerms($request);
+        $orderBy = RequestHandler::getOrderBy($request);
+        $limit = RequestHandler::getLimit($request);
+        $offset = RequestHandler::getOffset($request);
+        $search = RequestHandler::getSearchTerms($request);
 
         try {
             $criteria = RequestHandler::getCriteria($request);
@@ -55,7 +55,7 @@ trait FindMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, $this->getResource()->find($criteria, $orderBy, $limit, $offset, $search));
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }
     }

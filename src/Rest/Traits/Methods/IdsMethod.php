@@ -25,8 +25,8 @@ trait IdsMethod
     /**
      * Generic 'idsMethod' method for REST resources.
      *
-     * @param Request    $request
-     * @param array|null $allowedHttpMethods
+     * @param Request       $request
+     * @param string[]|null $allowedHttpMethods
      *
      * @return Response
      *
@@ -34,7 +34,7 @@ trait IdsMethod
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
-    public function idsMethod(Request $request, array $allowedHttpMethods = null): Response
+    public function idsMethod(Request $request, ?array $allowedHttpMethods = null): Response
     {
         $allowedHttpMethods = $allowedHttpMethods ?? ['GET'];
 
@@ -52,7 +52,7 @@ trait IdsMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, $this->getResource()->getIds($criteria, $search));
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }
     }

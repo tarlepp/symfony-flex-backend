@@ -28,7 +28,7 @@ trait CreateMethod
      *
      * @param Request              $request
      * @param FormFactoryInterface $formFactory
-     * @param array|null           $allowedHttpMethods
+     * @param string[]|null        $allowedHttpMethods
      *
      * @return Response
      *
@@ -39,7 +39,7 @@ trait CreateMethod
     public function createMethod(
         Request $request,
         FormFactoryInterface $formFactory,
-        array $allowedHttpMethods = null
+        ?array $allowedHttpMethods = null
     ): Response {
         $allowedHttpMethods = $allowedHttpMethods ?? ['POST'];
 
@@ -54,7 +54,7 @@ trait CreateMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, $data, Response::HTTP_CREATED);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }
     }

@@ -24,9 +24,9 @@ trait DeleteMethod
     /**
      * Generic 'deleteMethod' method for REST resources.
      *
-     * @param Request    $request
-     * @param string     $id
-     * @param array|null $allowedHttpMethods
+     * @param Request       $request
+     * @param string        $id
+     * @param string[]|null $allowedHttpMethods
      *
      * @return Response
      *
@@ -34,7 +34,7 @@ trait DeleteMethod
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
-    public function deleteMethod(Request $request, string $id, array $allowedHttpMethods = null): Response
+    public function deleteMethod(Request $request, string $id, ?array $allowedHttpMethods = null): Response
     {
         $allowedHttpMethods = $allowedHttpMethods ?? ['DELETE'];
 
@@ -46,7 +46,7 @@ trait DeleteMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, $this->getResource()->delete($id));
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw $this->handleRestMethodException($exception, $id);
         }
     }

@@ -37,8 +37,8 @@ trait AbstractGenericMethods
     /**
      * Method to validate REST trait method.
      *
-     * @param Request $request
-     * @param array   $allowedHttpMethods
+     * @param Request  $request
+     * @param string[] $allowedHttpMethods
      *
      * @throws \LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
@@ -48,19 +48,19 @@ trait AbstractGenericMethods
     /**
      * Method to process current criteria array.
      *
-     * @param array $criteria
+     * @param mixed[] &$criteria
      */
     abstract public function processCriteria(array &$criteria): void;
 
     /**
      * Method to handle possible REST method trait exception.
      *
-     * @param \Exception  $exception
+     * @param \Throwable  $exception
      * @param string|null $id
      *
      * @return HttpException
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    abstract public function handleRestMethodException(\Exception $exception, string $id = null): HttpException;
+    abstract public function handleRestMethodException(\Throwable $exception, ?string $id = null): HttpException;
 }

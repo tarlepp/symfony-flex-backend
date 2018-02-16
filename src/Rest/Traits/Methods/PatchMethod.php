@@ -29,7 +29,7 @@ trait PatchMethod
      * @param Request              $request
      * @param FormFactoryInterface $formFactory
      * @param string               $id
-     * @param array|null           $allowedHttpMethods
+     * @param string[]|null        $allowedHttpMethods
      *
      * @return Response
      *
@@ -41,7 +41,7 @@ trait PatchMethod
         Request $request,
         FormFactoryInterface $formFactory,
         string $id,
-        array $allowedHttpMethods = null
+        ?array $allowedHttpMethods = null
     ): Response {
         $allowedHttpMethods = $allowedHttpMethods ?? ['PATCH'];
 
@@ -54,7 +54,7 @@ trait PatchMethod
                 ->update($id, $this->processForm($request, $formFactory, __METHOD__, $id)->getData(), true);
 
             return $this->getResponseHandler()->createResponse($request, $data);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw $this->handleRestMethodException($exception, $id);
         }
     }

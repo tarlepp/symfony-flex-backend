@@ -24,9 +24,9 @@ trait FindOneMethod
     /**
      * Generic 'findOneMethod' method for REST resources.
      *
-     * @param Request    $request
-     * @param string     $id
-     * @param array|null $allowedHttpMethods
+     * @param Request       $request
+     * @param string        $id
+     * @param string[]|null $allowedHttpMethods
      *
      * @return Response
      *
@@ -34,7 +34,7 @@ trait FindOneMethod
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
-    public function findOneMethod(Request $request, string $id, array $allowedHttpMethods = null): Response
+    public function findOneMethod(Request $request, string $id, ?array $allowedHttpMethods = null): Response
     {
         $allowedHttpMethods = $allowedHttpMethods ?? ['GET'];
 
@@ -46,7 +46,7 @@ trait FindOneMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, $this->getResource()->findOne($id, true));
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw $this->handleRestMethodException($exception, $id);
         }
     }

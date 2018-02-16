@@ -25,8 +25,8 @@ trait CountMethod
     /**
      * Generic 'countMethod' method for REST resources.
      *
-     * @param Request    $request
-     * @param array|null $allowedHttpMethods
+     * @param Request       $request
+     * @param string[]|null $allowedHttpMethods
      *
      * @return Response
      *
@@ -34,7 +34,7 @@ trait CountMethod
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
-    public function countMethod(Request $request, array $allowedHttpMethods = null): Response
+    public function countMethod(Request $request, ?array $allowedHttpMethods = null): Response
     {
         $allowedHttpMethods = $allowedHttpMethods ?? ['GET'];
 
@@ -52,7 +52,7 @@ trait CountMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, ['count' => $this->getResource()->count($criteria, $search)]);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }
     }

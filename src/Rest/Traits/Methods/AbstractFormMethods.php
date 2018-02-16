@@ -37,6 +37,6 @@ trait AbstractFormMethods
      * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
      * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
-    abstract public function processForm(Request $request, FormFactoryInterface $formFactory, string $method, string $id = null): FormInterface;
+    abstract public function processForm(Request $request, FormFactoryInterface $formFactory, string $method, ?string $id = null): FormInterface;
     // @codingStandardsIgnoreEnd
 }
