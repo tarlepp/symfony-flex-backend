@@ -23,7 +23,7 @@ class AnonActionsTest extends RestTraitTestCase
     protected static $route = '/test_anon_actions';
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getValidUsers(): array
     {
@@ -38,7 +38,7 @@ class AnonActionsTest extends RestTraitTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getInvalidUsers(): array
     {

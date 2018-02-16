@@ -20,15 +20,18 @@ use Symfony\Component\HttpFoundation\Response;
  */
 abstract class RestTraitTestCase extends WebTestCase
 {
+    /**
+     * @var string;
+     */
     private const END_POINT_COUNT = '/count';
 
     /**
-     * @return array
+     * @return mixed[]
      */
     abstract public function getValidUsers(): array;
 
     /**
-     * @return array
+     * @return mixed[]
      */
     abstract public function getInvalidUsers(): array;
 
@@ -48,9 +51,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatCountRouteDoesNotAllowNotSupportedHttpMethods(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -76,9 +79,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatCountRouteWorksWithAllowedHttpMethods(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -104,9 +107,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatCountRouteDoesNotAllowInvalidUser(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -132,9 +135,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatRootRouteDoesNotAllowNotSupportedHttpMethods(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -160,9 +163,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatRootRouteWorksWithAllowedHttpMethods(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -188,9 +191,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatRootRouteDoesNotAllowInvalidUser(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -216,9 +219,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -246,9 +249,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -276,9 +279,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatRootRouteWithIdDoesNotAllowInvalidUser(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -306,9 +309,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatIdsRouteDoesNotAllowNotSupportedHttpMethods(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -334,9 +337,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatIdsRouteWorksWithAllowedHttpMethods(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -362,9 +365,9 @@ abstract class RestTraitTestCase extends WebTestCase
      * @throws \Exception
      */
     public function testThatIdsRouteDoesNotAllowInvalidUser(
-        string $username = null,
-        string $password = null,
-        string $method = null
+        ?string $username = null,
+        ?string $password = null,
+        ?string $method = null
     ): void {
         $method = $method ?? 'GET';
 
@@ -380,7 +383,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods(): array
     {
@@ -398,7 +401,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatCountRouteWorksWithAllowedHttpMethods(): array
     {
@@ -410,7 +413,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatCountRouteDoesNotAllowInvalidUser(): array
     {
@@ -422,7 +425,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods(): array
     {
@@ -438,7 +441,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatRootRouteWorksWithAllowedHttpMethods(): array
     {
@@ -451,7 +454,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatRootRouteDoesNotAllowInvalidUser(): array
     {
@@ -464,7 +467,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(): array
     {
@@ -479,7 +482,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods(): array
     {
@@ -493,7 +496,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser(): array
     {
@@ -507,7 +510,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods(): array
     {
@@ -524,7 +527,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods(): array
     {
@@ -536,7 +539,7 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function dataProviderTestThatIdsRouteDoesNotAllowInvalidUser(): array
     {
@@ -548,10 +551,10 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @param array $users
-     * @param array $methods
+     * @param mixed[] $users
+     * @param mixed[] $methods
      *
-     * @return array
+     * @return mixed[]
      */
     private function createDataForTest(array $users, array $methods): array
     {

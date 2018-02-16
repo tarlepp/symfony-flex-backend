@@ -23,7 +23,7 @@ class RootActionsTest extends RestTraitTestCase
     protected static $route = '/test_root_actions';
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getValidUsers(): array
     {
@@ -33,7 +33,7 @@ class RootActionsTest extends RestTraitTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getInvalidUsers(): array
     {
