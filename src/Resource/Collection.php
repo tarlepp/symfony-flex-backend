@@ -66,8 +66,14 @@ class Collection
      *
      * @return bool
      */
-    public function has(string $resourceName = null): bool
+    public function has(?string $resourceName = null): bool
     {
-        return $resourceName === null ? false : \array_key_exists($resourceName, $this->resources);
+        $output = false;
+
+        if ($resourceName !== null && \array_key_exists($resourceName, $this->resources)) {
+            $output = true;
+        }
+
+        return $output;
     }
 }
