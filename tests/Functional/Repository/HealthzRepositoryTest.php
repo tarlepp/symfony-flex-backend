@@ -10,7 +10,7 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
 use App\Resource\HealthzResource;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -38,7 +38,7 @@ class HealthzRepositoryTest extends KernelTestCase
         static::bootKernel();
 
         if (!self::$initialized) {
-            PHPUnitUtil::loadFixtures(static::$kernel);
+            PhpUnitUtil::loadFixtures(static::$kernel);
 
             self::$initialized = true;
         }

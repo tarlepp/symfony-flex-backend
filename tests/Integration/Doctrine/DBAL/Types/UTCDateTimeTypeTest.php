@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\UTCDateTimeType;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -53,16 +53,16 @@ class UTCDateTimeTypeTest extends KernelTestCase
      */
     public function testThatConvertToDatabaseValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
-        PHPUnitUtil::setProperty('utc', null, $this->type);
+        PhpUnitUtil::setProperty('utc', null, $this->type);
 
-        static::assertNull(PHPUnitUtil::getProperty('utc', $this->type));
+        static::assertNull(PhpUnitUtil::getProperty('utc', $this->type));
 
         $dateInput = new \DateTime('1981-04-07 10:00:00', new \DateTimeZone('Europe/Helsinki'));
 
         $this->type->convertToDatabaseValue($dateInput, $this->platform);
 
         /** @var \DateTimeZone $property */
-        $property = PHPUnitUtil::getProperty('utc', $this->type);
+        $property = PhpUnitUtil::getProperty('utc', $this->type);
 
         static::assertInstanceOf(\DateTimeZone::class, $property);
         static::assertSame('UTC', $property->getName());
@@ -110,14 +110,14 @@ class UTCDateTimeTypeTest extends KernelTestCase
      */
     public function testThatConvertToPHPValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
-        PHPUnitUtil::setProperty('utc', null, $this->type);
+        PhpUnitUtil::setProperty('utc', null, $this->type);
 
-        static::assertNull(PHPUnitUtil::getProperty('utc', $this->type));
+        static::assertNull(PhpUnitUtil::getProperty('utc', $this->type));
 
         $this->type->convertToPHPValue('1981-04-07 10:00:00', $this->platform);
 
         /** @var \DateTimeZone $property */
-        $property = PHPUnitUtil::getProperty('utc', $this->type);
+        $property = PhpUnitUtil::getProperty('utc', $this->type);
 
         static::assertInstanceOf(\DateTimeZone::class, $property);
         static::assertSame('UTC', $property->getName());

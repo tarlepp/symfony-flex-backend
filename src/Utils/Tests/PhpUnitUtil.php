@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
  * @package App\Utils\Tests
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class PHPUnitUtil
+class PhpUnitUtil
 {
     private const TYPE_INTEGER = 'integer';
     private const TYPE_STRING = 'string';
@@ -55,7 +55,7 @@ class PHPUnitUtil
      * @param string $folder
      * @param string $pattern
      *
-     * @return array
+     * @return string[]
      */
     public static function recursiveFileSearch(string $folder, string $pattern): array
     {
@@ -63,7 +63,7 @@ class PHPUnitUtil
         $ite = new \RecursiveIteratorIterator($dir);
 
         $files = new \RegexIterator($ite, $pattern, \RegexIterator::GET_MATCH);
-        $fileList = array();
+        $fileList = [];
 
         foreach ($files as $file) {
             $fileList[] = $file[0];
@@ -75,9 +75,9 @@ class PHPUnitUtil
     /**
      * Method to call specified 'protected' or 'private' method on given class.
      *
-     * @param mixed  $object The instantiated instance of your class
-     * @param string $name   The name of your private/protected method
-     * @param array  $args   Method arguments
+     * @param mixed   $object The instantiated instance of your class
+     * @param string  $name   The name of your private/protected method
+     * @param mixed[] $args   Method arguments
      *
      * @return mixed
      *
@@ -99,6 +99,7 @@ class PHPUnitUtil
      * @param string $name   The name of your private/protected method
      *
      * @return \ReflectionMethod The method you asked for
+     *
      * @throws \ReflectionException
      */
     public static function getMethod($object, string $name): \ReflectionMethod
@@ -194,12 +195,12 @@ class PHPUnitUtil
     /**
      * Helper method to get valid value for specified type.
      *
-     * @param string     $type
-     * @param array|null $meta
+     * @param string       $type
+     * @param mixed[]|null $meta
      *
      * @return mixed
      */
-    public static function getValidValueForType(string $type, array $meta = null)
+    public static function getValidValueForType(string $type, ?array $meta = null)
     {
         $meta = $meta ?? [];
 

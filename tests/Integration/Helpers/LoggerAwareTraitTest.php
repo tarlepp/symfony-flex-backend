@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Helpers;
 
 use App\Tests\Integration\Helpers\src\LoggerAwareService;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -34,7 +34,7 @@ class LoggerAwareTraitTest extends KernelTestCase
 
         $service = static::$kernel->getContainer()->get(LoggerAwareService::class);
 
-        $logger = PHPUnitUtil::getProperty('logger', $service);
+        $logger = PhpUnitUtil::getProperty('logger', $service);
 
         static::assertInstanceOf(LoggerInterface::class, $logger);
 

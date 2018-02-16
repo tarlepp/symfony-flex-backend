@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\DTO;
 
 use App\DTO\RestDtoInterface;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Psr\Log\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -169,7 +169,7 @@ class DtoTestCase extends KernelTestCase
     public function testThatSetterOnlyAcceptSpecifiedType(string $field, string $type): void
     {
         // Get "valid" value for current property
-        $value = PHPUnitUtil::getInvalidValueForType($type);
+        $value = PhpUnitUtil::getInvalidValueForType($type);
 
         $this->expectException(\TypeError::class);
 
@@ -231,7 +231,7 @@ class DtoTestCase extends KernelTestCase
             throw new \DomainException($message);
         }
 
-        return PHPUnitUtil::getValidValueForType($type);
+        return PhpUnitUtil::getValidValueForType($type);
     }
 
     /**

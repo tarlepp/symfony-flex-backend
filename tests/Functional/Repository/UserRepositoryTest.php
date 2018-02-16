@@ -10,7 +10,7 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -31,7 +31,7 @@ class UserRepositoryTest extends KernelTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        PHPUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(static::$kernel);
     }
 
     public function setUp(): void

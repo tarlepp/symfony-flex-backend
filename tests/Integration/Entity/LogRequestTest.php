@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\ApiKey;
 use App\Entity\LogRequest;
 use App\Entity\User;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -146,7 +146,7 @@ class LogRequestTest extends EntityTestCase
 
         $request = Request::create('', 'GET', [], [], [], [], $content);
 
-        static::assertSame($expected, PHPUnitUtil::callMethod($logRequest, 'determineParameters', [$request]));
+        static::assertSame($expected, PhpUnitUtil::callMethod($logRequest, 'determineParameters', [$request]));
 
         unset($request, $logRequest);
     }

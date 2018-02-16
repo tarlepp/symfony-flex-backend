@@ -11,7 +11,7 @@ use App\DTO\RestDtoInterface;
 use App\Rest\Controller;
 use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandler;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormTypeInterface;
@@ -49,7 +49,7 @@ class ControllerTest extends KernelTestCase
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
 
-        PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
         /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
@@ -79,7 +79,7 @@ class ControllerTest extends KernelTestCase
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
 
-        PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
         /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
@@ -106,7 +106,7 @@ class ControllerTest extends KernelTestCase
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
 
-        PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
         $controller->getDtoClass();
     }
@@ -132,7 +132,7 @@ class ControllerTest extends KernelTestCase
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
 
-        PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
         $controller->getDtoClass();
     }
@@ -157,7 +157,7 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
 
-        PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
         $reflection = new \ReflectionProperty(\get_class($controller), 'dtoClasses');
         $reflection->setAccessible(true);
@@ -187,7 +187,7 @@ class ControllerTest extends KernelTestCase
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
 
-        PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
         $controller->getFormTypeClass();
     }
@@ -212,7 +212,7 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class);
 
-        PHPUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
 
         $reflection = new \ReflectionProperty(\get_class($controller), 'formTypes');
         $reflection->setAccessible(true);

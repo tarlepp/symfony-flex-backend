@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\EntityInterface;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -136,7 +136,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $this->expectException(\TypeError::class);
 
-        $value = PHPUnitUtil::getInvalidValueForType($type);
+        $value = PhpUnitUtil::getInvalidValueForType($type);
 
         $this->entity->{$setter}($value);
 
@@ -169,7 +169,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             \get_class($this->entity),
-            \call_user_func([$this->entity, $setter], PHPUnitUtil::getValidValueForType($type, $meta)),
+            \call_user_func([$this->entity, $setter], PhpUnitUtil::getValidValueForType($type, $meta)),
             \sprintf(
                 "Entity '%s' setter '%s()' method for '%s' property did not return expected value.",
                 $this->entityName,
@@ -196,7 +196,7 @@ abstract class EntityTestCase extends KernelTestCase
         }
 
         if (\array_key_exists('columnName', $meta) || \array_key_exists('joinColumns', $meta)) {
-            $value = PHPUnitUtil::getValidValueForType($type, $meta);
+            $value = PhpUnitUtil::getValidValueForType($type, $meta);
 
             $this->entity->{$setter}($value);
 
@@ -463,7 +463,7 @@ abstract class EntityTestCase extends KernelTestCase
         $iterator = function (string $field) use ($meta): array {
             return [
                 $field,
-                PHPUnitUtil::getType($meta->getTypeOfField($field)),
+                PhpUnitUtil::getType($meta->getTypeOfField($field)),
                 $meta->getFieldMapping($field),
                 $meta->isReadOnly
             ];

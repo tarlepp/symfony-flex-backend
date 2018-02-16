@@ -7,7 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Tests\Integration\Rest\Traits\Actions\Anon;
 
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -99,6 +99,6 @@ class ActionTest extends KernelTestCase
             ];
         };
 
-        return \array_map($iterator, PHPUnitUtil::recursiveFileSearch($folder, $pattern));
+        return \array_map($iterator, PhpUnitUtil::recursiveFileSearch($folder, $pattern));
     }
 }

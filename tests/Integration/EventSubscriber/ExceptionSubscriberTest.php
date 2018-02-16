@@ -9,7 +9,7 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\ExceptionSubscriber;
 use App\Utils\JSON;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
 use Psr\Log\LoggerInterface;
@@ -161,7 +161,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         $subscriber = new ExceptionSubscriber($stubTokenStorage);
         $subscriber->setLogger($stubLogger);
 
-        PHPUnitUtil::setProperty('environment', $environment, $subscriber);
+        PhpUnitUtil::setProperty('environment', $environment, $subscriber);
 
         $subscriber->onKernelException($event);
 
@@ -205,7 +205,7 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         static::assertSame(
             $expectedStatusCode,
-            PHPUnitUtil::callMethod($subscriber, 'getStatusCode', [$exception])
+            PhpUnitUtil::callMethod($subscriber, 'getStatusCode', [$exception])
         );
 
         unset($subscriber, $stubLogger, $stubTokenStorage);
@@ -236,11 +236,11 @@ class ExceptionSubscriberTest extends KernelTestCase
         $subscriber = new ExceptionSubscriber($stubTokenStorage);
         $subscriber->setLogger($stubLogger);
 
-        PHPUnitUtil::setProperty('environment', $environment, $subscriber);
+        PhpUnitUtil::setProperty('environment', $environment, $subscriber);
 
         static::assertSame(
             $expectedMessage,
-            PHPUnitUtil::callMethod($subscriber, 'getExceptionMessage', [$exception])
+            PhpUnitUtil::callMethod($subscriber, 'getExceptionMessage', [$exception])
         );
 
         unset($subscriber, $stubLogger, $stubTokenStorage);

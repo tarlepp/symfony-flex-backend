@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Utils\Tests;
 
 use App\Entity\User;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -25,7 +25,7 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function testThatGetTypeThrowsAnExceptionWithNotKnowType(): void
     {
-        PHPUnitUtil::getType('666');
+        PhpUnitUtil::getType('666');
     }
 
     /**
@@ -36,7 +36,7 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function testThatGetTypeReturnExpected(string $expected, string $input): void
     {
-        static::assertSame($expected, PHPUnitUtil::getType($input));
+        static::assertSame($expected, PhpUnitUtil::getType($input));
     }
 
     /**
@@ -45,7 +45,7 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function testThatGetValidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
-        PHPUnitUtil::getValidValueForType('666');
+        PhpUnitUtil::getValidValueForType('666');
     }
 
     /**
@@ -57,14 +57,14 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function testThatGetValidValueReturnsExpectedValue($expected, string $input, bool $strict): void
     {
-        $value = PHPUnitUtil::getValidValueForType(PHPUnitUtil::getType($input));
+        $value = PhpUnitUtil::getValidValueForType(PhpUnitUtil::getType($input));
 
         $strict ? static::assertSame($expected, $value) : static::assertInstanceOf($expected, $value);
     }
 
     public function testThatGetValidValueForTypeWorksWithCustomType(): void
     {
-        static::assertInstanceOf(User::class, PHPUnitUtil::getValidValueForType(User::class));
+        static::assertInstanceOf(User::class, PhpUnitUtil::getValidValueForType(User::class));
     }
 
     /**
@@ -73,7 +73,7 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function testThatGetInvalidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
-        PHPUnitUtil::getInvalidValueForType('666');
+        PhpUnitUtil::getInvalidValueForType('666');
     }
 
     /**
@@ -84,7 +84,7 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function testThatGetInvalidValueForTypeReturnsExpectedValue($expected, string $input): void
     {
-        static::assertInstanceOf($expected, PHPUnitUtil::getInvalidValueForType($input));
+        static::assertInstanceOf($expected, PhpUnitUtil::getInvalidValueForType($input));
     }
 
     /**

@@ -10,7 +10,7 @@ namespace App\Tests\Unit;
 use App\Entity\EntityInterface;
 use App\Rest\ControllerInterface;
 use App\Rest\RepositoryInterface;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\DBAL\Types\Type;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\DataTransformerInterface;
@@ -293,7 +293,7 @@ FORMAT;
             ];
         };
 
-        return \array_map($iterator, PHPUnitUtil::recursiveFileSearch($folder, $pattern));
+        return \array_map($iterator, PhpUnitUtil::recursiveFileSearch($folder, $pattern));
     }
 
     /**
@@ -358,7 +358,7 @@ FORMAT;
             \array_filter(
                 \array_map(
                     $iterator,
-                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -402,7 +402,7 @@ FORMAT;
             \array_filter(
                 \array_map(
                     $iterator,
-                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -444,7 +444,7 @@ FORMAT;
             \array_filter(
                 \array_map(
                     $iterator,
-                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -475,7 +475,7 @@ FORMAT;
             ];
         };
 
-        return \array_map($iterator, PHPUnitUtil::recursiveFileSearch($folder, $pattern));
+        return \array_map($iterator, PhpUnitUtil::recursiveFileSearch($folder, $pattern));
     }
 
     /**
@@ -502,7 +502,7 @@ FORMAT;
             ];
         };
 
-        return \array_map($iterator, PHPUnitUtil::recursiveFileSearch($folder, $pattern));
+        return \array_map($iterator, PhpUnitUtil::recursiveFileSearch($folder, $pattern));
     }
 
     /**
@@ -529,7 +529,7 @@ FORMAT;
             ];
         };
 
-        return \array_map($iterator, PHPUnitUtil::recursiveFileSearch($folder, $pattern));
+        return \array_map($iterator, PhpUnitUtil::recursiveFileSearch($folder, $pattern));
     }
 
     /**
@@ -567,7 +567,7 @@ FORMAT;
             \array_filter(
                 \array_map(
                     $iterator,
-                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -611,7 +611,7 @@ FORMAT;
             \array_filter(
                 \array_map(
                     $iterator,
-                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -655,7 +655,7 @@ FORMAT;
             \array_filter(
                 \array_map(
                     $iterator,
-                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -699,7 +699,7 @@ FORMAT;
             \array_filter(
                 \array_map(
                     $iterator,
-                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -743,7 +743,7 @@ FORMAT;
             \array_filter(
                 \array_map(
                     $iterator,
-                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )
@@ -787,7 +787,7 @@ FORMAT;
             \array_filter(
                 \array_map(
                     $iterator,
-                    PHPUnitUtil::recursiveFileSearch($folder, $pattern)
+                    PhpUnitUtil::recursiveFileSearch($folder, $pattern)
                 ),
                 $filter
             )

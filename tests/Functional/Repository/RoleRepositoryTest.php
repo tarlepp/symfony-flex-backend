@@ -9,7 +9,7 @@ namespace App\Tests\Functional\Repository;
 
 use App\Repository\RoleRepository;
 use App\Resource\RoleResource;
-use App\Utils\Tests\PHPUnitUtil;
+use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -30,7 +30,7 @@ class RoleRepositoryTest extends KernelTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        PHPUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(static::$kernel);
     }
 
     public function setUp(): void
