@@ -43,12 +43,12 @@ class RouteModel
     private $route;
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private $methodAnnotations;
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private $controllerAnnotations;
 
@@ -133,7 +133,7 @@ class RouteModel
     }
 
     /**
-     * @return mixed
+     * @return Route
      */
     public function getRoute(): Route
     {
@@ -153,7 +153,7 @@ class RouteModel
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getMethodAnnotations(): array
     {
@@ -161,7 +161,7 @@ class RouteModel
     }
 
     /**
-     * @param array $methodAnnotations
+     * @param mixed[] $methodAnnotations
      *
      * @return RouteModel
      */
@@ -173,7 +173,7 @@ class RouteModel
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getControllerAnnotations(): array
     {
@@ -181,7 +181,7 @@ class RouteModel
     }
 
     /**
-     * @param array $controllerAnnotations
+     * @param mixed[] $controllerAnnotations
      *
      * @return RouteModel
      */
