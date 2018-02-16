@@ -21,30 +21,46 @@ use Psr\Container\ContainerInterface;
  */
 class Parameters
 {
-    // Specify used examples for this parameter
-    static private $orderByExamples = [
+    /**
+     * Specify used examples for this parameter
+     *
+     * @var mixed[]
+     */
+    private static $orderByExamples = [
         '?order=column1     => ORDER BY entity.column1 ASC',
         '?order=-column1    => ORDER BY entity.column1 DESC',
     ];
 
-    // Specify used advanced examples for this parameter
-    static private $orderByAdvancedExamples = [
+    /**
+     * Specify used advanced examples for this parameter
+     *
+     * @var mixed[]
+     */
+    private static $orderByAdvancedExamples = [
         '?order[column1]=ASC                        => ORDER BY entity.column1 ASC',
         '?order[column1]=DESC                       => ORDER BY entity.column1 DESC',
         '?order[column1]=foobar                     => ORDER BY entity.column1 ASC',
         '?order[column1]=DESC&order[column2]=DESC   => ORDER BY entity.column1 DESC, entity.column2 DESC',
     ];
 
-    // Specify used  examples for this parameter
-    static private $criteriaExamples = [
+    /**
+     * Specify used advanced examples for this parameter
+     *
+     * @var mixed[]
+     */
+    private static $criteriaExamples = [
         '?where={"property": "value"}                => WHERE entity.property = \'value\'',
         '?where={"id": [1,2,3]}                      => WHERE entity.id IN (1,2,3)',
         '?where={"prop1": "val1", "prop2": "val2"}   => WHERE entity.prop1 = \'val1\' AND entity.prop2 = \'val2\'',
         '?where={"property": "value", "id": [1,2,3]} => WHERE entity.property = \'value\' AND entity.id IN (1,2,3)',
     ];
 
-    // Specify used  examples for this parameter
-    static private $searchExamples = [
+    /**
+     * Specify used advanced examples for this parameter
+     *
+     * @var mixed[]
+     */
+    private static $searchExamples = [
         '?search=term',
         '?search=term1+term2',
         '?search={"and": ["term1", "term2"]}',
@@ -85,6 +101,7 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
+     * @throws \InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -110,6 +127,7 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
+     * @throws \InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -138,6 +156,7 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
+     * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
@@ -178,6 +197,7 @@ class Parameters
     /**
      * @param Operation $operation
      *
+     * @throws \InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -204,6 +224,7 @@ class Parameters
     /**
      * @param Operation $operation
      *
+     * @throws \InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -229,8 +250,9 @@ class Parameters
     }
 
     /**
-     * @param Operation  $operation
+     * @param Operation $operation
      *
+     * @throws \InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -250,6 +272,7 @@ class Parameters
     /**
      * @param Operation $operation
      *
+     * @throws \InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -267,12 +290,13 @@ class Parameters
     }
 
     /**
-     * @param string $name
-     * @param string $template
-     * @param array  $examples
+     * @param string  $name
+     * @param string  $template
+     * @param mixed[] $examples
      *
      * @return Parameter
      *
+     * @throws \InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -300,6 +324,7 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
+     * @throws \InvalidArgumentException
      * @throws \UnexpectedValueException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
@@ -352,7 +377,7 @@ class Parameters
     /**
      * @param Controller $controller
      *
-     * @return array
+     * @return string[]
      *
      * @throws \UnexpectedValueException
      */
@@ -376,8 +401,8 @@ class Parameters
     }
 
     /**
-     * @param string $template
-     * @param array  $data
+     * @param string  $template
+     * @param mixed[] $data
      *
      * @return string
      *

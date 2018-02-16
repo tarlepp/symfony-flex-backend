@@ -153,11 +153,11 @@ class ApiDocDescriber implements DescriberInterface
     }
 
     /**
-     * @param Route $route
-     * @param array $annotations
-     * @param bool  $disabled
+     * @param Route   $route
+     * @param mixed[] $annotations
+     * @param bool    $disabled
      */
-    private function isRestApiDocDisabled(Route $route, array $annotations, bool &$disabled)
+    private function isRestApiDocDisabled(Route $route, array $annotations, bool &$disabled): void
     {
         foreach ($annotations as $annotation) {
             if ($annotation instanceof RestApiDoc && $annotation->disabled) {
@@ -196,13 +196,13 @@ class ApiDocDescriber implements DescriberInterface
     }
 
     /**
-     * @param array $supported
+     * @param mixed[] &$supported
      *
      * @return \Closure
      */
     private function isRouteSupported(array &$supported): \Closure
     {
-        return function ($annotation) use (&$supported) {
+        return function ($annotation) use (&$supported): void {
             if ($annotation instanceof RestApiDoc || $annotation instanceof Method) {
                 $supported[] = true;
             }

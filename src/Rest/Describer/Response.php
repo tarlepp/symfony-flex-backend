@@ -72,9 +72,9 @@ class Response
     }
 
     /**
-     * @param string $action
-     * @param string $description
-     * @param array  $responses
+     * @param string   $action
+     * @param string   &$description
+     * @param string[] &$responses
      */
     private function processResponseForRead(
         string $action,
@@ -94,10 +94,10 @@ class Response
     }
 
     /**
-     * @param string $action
-     * @param string $description
-     * @param int    $statusCode
-     * @param array  $responses
+     * @param string   $action
+     * @param string   &$description
+     * @param int      &$statusCode
+     * @param string[] &$responses
      */
     private function processResponseForWrite(
         string $action,
@@ -125,7 +125,7 @@ class Response
      * @param RouteModel $routeModel
      * @param string     $description
      * @param int        $statusCode
-     * @param array      $responses
+     * @param string[]   $responses
      *
      * @throws \UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -153,7 +153,7 @@ class Response
     /**
      * @param RouteModel $routeModel
      *
-     * @return array
+     * @return mixed[]
      */
     private function getDefaults(RouteModel $routeModel): array
     {
