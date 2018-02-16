@@ -20,8 +20,8 @@ trait RestResourceCount
     /**
      * Before lifecycle method for count method.
      *
-     * @param array $criteria
-     * @param array $search
+     * @param mixed[] &$criteria
+     * @param mixed[] &$search
      */
     public function beforeCount(array &$criteria, array &$search): void
     {
@@ -30,9 +30,9 @@ trait RestResourceCount
     /**
      * Before lifecycle method for count method.
      *
-     * @param array   $criteria
-     * @param array   $search
-     * @param integer $count
+     * @param mixed[] &$criteria
+     * @param mixed[] &$search
+     * @param integer &$count
      */
     public function afterCount(array &$criteria, array &$search, int &$count): void
     {

@@ -22,8 +22,8 @@ trait RestResourceFindOneBy
     /**
      * Before lifecycle method for findOneBy method.
      *
-     * @param array $criteria
-     * @param array $orderBy
+     * @param mixed[] &$criteria
+     * @param mixed[] &$orderBy
      */
     public function beforeFindOneBy(array &$criteria, array &$orderBy): void
     {
@@ -38,11 +38,11 @@ trait RestResourceFindOneBy
      *          Also note that if you've made some changes to entity and you eg. throw an exception within this method
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
      *
-     * @param array                $criteria
-     * @param array                $orderBy
+     * @param mixed[]              $criteria
+     * @param mixed[]              $orderBy
      * @param null|EntityInterface $entity
      */
-    public function afterFindOneBy(array &$criteria, array &$orderBy, EntityInterface $entity = null): void
+    public function afterFindOneBy(array &$criteria, array &$orderBy, ?EntityInterface $entity = null): void
     {
     }
 }

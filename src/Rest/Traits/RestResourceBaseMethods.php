@@ -54,29 +54,29 @@ trait RestResourceBaseMethods
     abstract public function getDtoForEntity(
         string $id,
         string $dtoClass,
-        RestDtoInterface $dto = null
+        ?RestDtoInterface $dto = null
     ): RestDtoInterface;
 
     /**
      * Generic find method to return an array of items from database. Return value is an array of specified repository
      * entities.
      *
-     * @param null|array   $criteria
-     * @param null|array   $orderBy
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $orderBy
      * @param null|integer $limit
      * @param null|integer $offset
-     * @param null|array   $search
+     * @param null|mixed[] $search
      *
      * @return EntityInterface[]
      *
      * @throws \InvalidArgumentException
      */
     public function find(
-        array $criteria = null,
-        array $orderBy = null,
-        int $limit = null,
-        int $offset = null,
-        array $search = null
+        ?array $criteria = null,
+        ?array $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?array $search = null
     ): array {
         $criteria = $criteria ?? [];
         $orderBy = $orderBy ?? [];
@@ -107,7 +107,7 @@ trait RestResourceBaseMethods
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function findOne(string $id, bool $throwExceptionIfNotFound = null): ?EntityInterface
+    public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
     {
         $throwExceptionIfNotFound = $throwExceptionIfNotFound ?? false;
 
@@ -132,8 +132,8 @@ trait RestResourceBaseMethods
      * Generic findOneBy method to return single item from database by given criteria. Return value is single entity
      * from specified repository or null if entity was not found.
      *
-     * @param array        $criteria
-     * @param null|array   $orderBy
+     * @param mixed[]      $criteria
+     * @param null|mixed[] $orderBy
      * @param null|boolean $throwExceptionIfNotFound
      *
      * @return null|EntityInterface
@@ -142,8 +142,8 @@ trait RestResourceBaseMethods
      */
     public function findOneBy(
         array $criteria,
-        array $orderBy = null,
-        bool $throwExceptionIfNotFound = null
+        ?array $orderBy = null,
+        ?bool $throwExceptionIfNotFound = null
     ): ?EntityInterface {
         $orderBy = $orderBy ?? [];
         $throwExceptionIfNotFound = $throwExceptionIfNotFound ?? false;
@@ -168,15 +168,15 @@ trait RestResourceBaseMethods
     /**
      * Generic count method to return entity count for specified criteria and search terms.
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
      * @return integer
      *
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function count(array $criteria = null, array $search = null): int
+    public function count(?array $criteria = null, ?array $search = null): int
     {
         $criteria = $criteria ?? [];
         $search = $search ?? [];
@@ -206,7 +206,7 @@ trait RestResourceBaseMethods
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function create(RestDtoInterface $dto, bool $skipValidation = null): EntityInterface
+    public function create(RestDtoInterface $dto, ?bool $skipValidation = null): EntityInterface
     {
         $skipValidation = $skipValidation ?? false;
 
@@ -245,7 +245,7 @@ trait RestResourceBaseMethods
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function update(string $id, RestDtoInterface $dto, bool $skipValidation = null): EntityInterface
+    public function update(string $id, RestDtoInterface $dto, ?bool $skipValidation = null): EntityInterface
     {
         $skipValidation = $skipValidation ?? false;
 
@@ -306,14 +306,14 @@ trait RestResourceBaseMethods
      * Generic ids method to return an array of id values from database. Return value is an array of specified
      * repository entity id values.
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
-     * @return array
+     * @return string[]
      *
      * @throws \InvalidArgumentException
      */
-    public function getIds(array $criteria = null, array $search = null): array
+    public function getIds(?array $criteria = null, ?array $search = null): array
     {
         $criteria = $criteria ?? [];
         $search = $search ?? [];
@@ -343,7 +343,7 @@ trait RestResourceBaseMethods
      * @throws \Doctrine\ORM\ORMException
      * @throws \Symfony\Component\Validator\Exception\ValidatorException
      */
-    public function save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
+    public function save(EntityInterface $entity, ?bool $skipValidation = null): EntityInterface
     {
         $skipValidation = $skipValidation ?? false;
 

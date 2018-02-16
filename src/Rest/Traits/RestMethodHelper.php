@@ -90,7 +90,7 @@ trait RestMethodHelper
      *
      * @throws \UnexpectedValueException
      */
-    public function getDtoClass(string $method = null): string
+    public function getDtoClass(?string $method = null): string
     {
         $dtoClass = \array_key_exists($method, static::$dtoClasses)
             ? static::$dtoClasses[$method]
@@ -118,7 +118,7 @@ trait RestMethodHelper
      *
      * @throws \UnexpectedValueException
      */
-    public function getFormTypeClass(string $method = null): string
+    public function getFormTypeClass(?string $method = null): string
     {
         $method = $method ?? '';
 
@@ -134,8 +134,8 @@ trait RestMethodHelper
     /**
      * Method to validate REST trait method.
      *
-     * @param Request $request
-     * @param array   $allowedHttpMethods
+     * @param Request  $request
+     * @param string[] $allowedHttpMethods
      *
      * @throws \LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
@@ -161,14 +161,14 @@ trait RestMethodHelper
     /**
      * Method to handle possible REST method trait exception.
      *
-     * @param \Exception  $exception
+     * @param \Throwable  $exception
      * @param string|null $id
      *
      * @return HttpException
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function handleRestMethodException(\Exception $exception, string $id = null): HttpException
+    public function handleRestMethodException(\Throwable $exception, ?string $id = null): HttpException
     {
         if ($id !== null) {
             $this->detachEntityFromManager($id);
@@ -182,7 +182,7 @@ trait RestMethodHelper
      *
      * @SuppressWarnings("unused")
      *
-     * @param array $criteria
+     * @param mixed[] &$criteria
      */
     public function processCriteria(/** @scrutinizer ignore-unused */ array &$criteria): void
     {
@@ -209,7 +209,7 @@ trait RestMethodHelper
         Request $request,
         FormFactoryInterface $formFactory,
         string $method,
-        string $id = null
+        ?string $id = null
     ): FormInterface {
         $formType = $this->getFormTypeClass($method);
 
@@ -230,11 +230,11 @@ trait RestMethodHelper
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
      * @return int
      */
-    private function getExceptionCode(\Exception $exception): int
+    private function getExceptionCode(\Throwable $exception): int
     {
         return (int)$exception->getCode() !== 0 ? (int)$exception->getCode() : Response::HTTP_BAD_REQUEST;
     }
@@ -264,11 +264,11 @@ trait RestMethodHelper
     }
 
     /**
-     * @param \Exception $exception
+     * @param \Throwable $exception
      *
      * @return \Exception|HttpException
      */
-    private function determineOutputAndStatusCodeForRestMethodException(\Exception $exception)
+    private function determineOutputAndStatusCodeForRestMethodException(\Throwable $exception)
     {
         $code = $this->getExceptionCode($exception);
 
