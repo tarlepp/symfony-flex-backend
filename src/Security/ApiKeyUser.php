@@ -40,7 +40,7 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     private $apiKey;
 
     /**
-     * @var array
+     * @var string[]
      *
      * @Groups({
      *      "ApiKeyUser",
@@ -65,7 +65,7 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
         $roles = [RolesService::ROLE_API];
 
         // Iterate API key user groups and attach those roles for API user
-        $this->apiKey->getUserGroups()->map(function (UserGroup $userGroup) use (&$roles) {
+        $this->apiKey->getUserGroups()->map(function (UserGroup $userGroup) use (&$roles): void {
             $roles[] = $userGroup->getRole()->getId();
         });
 

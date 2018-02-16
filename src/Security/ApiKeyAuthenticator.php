@@ -149,7 +149,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
         ApiKeyUserProvider $apiKeyProvider,
         string $providerKey,
         string $token,
-        ApiKey $apiKey = null
+        ?ApiKey $apiKey = null
     ): PreAuthenticatedToken {
         /**
          * Token not found, so cannot continue

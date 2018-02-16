@@ -21,12 +21,12 @@ class RolesService implements RolesServiceInterface
     /**
      * Roles hierarchy.
      *
-     * @var array
+     * @var mixed[]
      */
     private $rolesHierarchy;
 
     /**
-     * @var array
+     * @var mixed[]
      */
     private static $roleNames = [
         self::ROLE_LOGGED   => 'Logged in users',
@@ -39,7 +39,7 @@ class RolesService implements RolesServiceInterface
     /**
      * RolesHelper constructor.
      *
-     * @param array $rolesHierarchy This is a 'security.role_hierarchy.roles' parameter value
+     * @param mixed[] $rolesHierarchy This is a 'security.role_hierarchy.roles' parameter value
      */
     public function __construct(array $rolesHierarchy)
     {
@@ -49,7 +49,7 @@ class RolesService implements RolesServiceInterface
     /**
      * Getter for role hierarchy.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getHierarchy(): array
     {
@@ -105,9 +105,9 @@ class RolesService implements RolesServiceInterface
     /**
      * Helper method to get inherited roles for given roles.
      *
-     * @param array $roles
+     * @param string[] $roles
      *
-     * @return array
+     * @return string[]
      */
     public function getInheritedRoles(array $roles): array
     {

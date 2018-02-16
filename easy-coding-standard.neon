@@ -15,3 +15,7 @@ parameters:
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
             - *src/Entity/Traits/UserSerializer.php
             - *src/Repository/Traits/LoadUserByUserNameTrait.php
+            - *src/Security/ApiKeyAuthenticator.php
+            - *src/Security/ApiKeyUserProvider.php
+            - *src/Security/IsUserHimselfVoter.php
+            - *src/Security/UserProvider.php
