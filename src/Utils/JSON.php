@@ -76,7 +76,7 @@ class JSON
      * @param integer   $options    Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
      *                              (default is to cast large integers as floats)
      *
-     * @return \stdClass|array|mixed
+     * @return \stdClass|array|mixed|mixed[]
      *
      * @throws \LogicException
      */

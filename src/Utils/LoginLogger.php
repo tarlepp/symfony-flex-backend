@@ -76,7 +76,7 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function setUser(UserInterface $user = null): LoginLoggerInterface
+    public function setUser(?UserInterface $user = null): LoginLoggerInterface
     {
         if ($user !== null) {
             // We need to make sure that User object is right one

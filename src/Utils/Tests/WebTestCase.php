@@ -52,20 +52,20 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * Helper method to get authorized client for specified username and password.
      *
-     * @param string|null $username
-     * @param string|null $password
-     * @param array|null  $options
-     * @param array|null  $server
+     * @param string|null  $username
+     * @param string|null  $password
+     * @param mixed[]|null $options
+     * @param mixed[]|null $server
      *
      * @return Client
      *
      * @throws \Exception
      */
     public function getClient(
-        string $username = null,
-        string $password = null,
-        array $options = null,
-        array $server = null
+        ?string $username = null,
+        ?string $password = null,
+        ?array $options = null,
+        ?array $server = null
     ): Client {
         $options = $options ?? [];
         $server = $server ?? [];
@@ -84,13 +84,13 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * Helper method to get authorized API Key client for specified role.
      *
-     * @param string|null $role
-     * @param array|null  $options
-     * @param array|null  $server
+     * @param string|null  $role
+     * @param mixed[]|null $options
+     * @param mixed[]|null $server
      *
      * @return Client
      */
-    public function getApiKeyClient(string $role = null, array $options = null, array $server = null): Client
+    public function getApiKeyClient(?string $role = null, ?array $options = null, ?array $server = null): Client
     {
         $options = $options ?? [];
         $server = $server ?? [];
@@ -107,7 +107,7 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getJsonHeaders(): array
     {
@@ -120,7 +120,7 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * @codeCoverageIgnore
      *
-     * @return array
+     * @return mixed[]
      */
     public function getFastestHeaders(): array
     {

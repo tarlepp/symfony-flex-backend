@@ -102,7 +102,7 @@ class RequestLogger implements RequestLoggerInterface
      *
      * @return RequestLoggerInterface
      */
-    public function setUser(UserInterface $user = null): RequestLoggerInterface
+    public function setUser(?UserInterface $user = null): RequestLoggerInterface
     {
         $this->user = $user;
 
@@ -116,7 +116,7 @@ class RequestLogger implements RequestLoggerInterface
      *
      * @return RequestLoggerInterface
      */
-    public function setApiKey(ApiKey $apiKey = null): RequestLoggerInterface
+    public function setApiKey(?ApiKey $apiKey = null): RequestLoggerInterface
     {
         $this->apiKey = $apiKey;
 
@@ -139,8 +139,6 @@ class RequestLogger implements RequestLoggerInterface
 
     /**
      * Method to handle current response and log it to database.
-     *
-     * @throws \Exception
      */
     public function handle(): void
     {
@@ -151,7 +149,7 @@ class RequestLogger implements RequestLoggerInterface
 
         try {
             $this->createRequestLogEntry();
-        } catch (\Exception $error) {
+        } catch (\Throwable $error) {
             $this->logger->error($error->getMessage());
         }
     }
@@ -161,7 +159,7 @@ class RequestLogger implements RequestLoggerInterface
      *
      * @throws \LogicException
      */
-    private function createRequestLogEntry()
+    private function createRequestLogEntry(): void
     {
         // Create new request log entity
         $entity = new LogRequest($this->request, $this->response, $this->user, $this->apiKey, $this->masterRequest);

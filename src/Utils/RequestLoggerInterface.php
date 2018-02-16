@@ -53,7 +53,7 @@ interface RequestLoggerInterface
      *
      * @return RequestLoggerInterface
      */
-    public function setUser(UserInterface $user = null): RequestLoggerInterface;
+    public function setUser(?UserInterface $user = null): RequestLoggerInterface;
 
     /**
      * Setter method for current api key
@@ -62,7 +62,7 @@ interface RequestLoggerInterface
      *
      * @return RequestLoggerInterface
      */
-    public function setApiKey(ApiKey $apiKey = null): RequestLoggerInterface;
+    public function setApiKey(?ApiKey $apiKey = null): RequestLoggerInterface;
 
     /**
      * Setter method for 'master request' info.
