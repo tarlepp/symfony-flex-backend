@@ -41,7 +41,7 @@ class UniqueEmailValidator extends ConstraintValidator
      *
      * @throws  NonUniqueResultException
      *
-     * @param UserInterface             $value      The value that should be validated
+     * @param UserInterface|mixed       $value      The value that should be validated
      * @param Constraint|UniqueUsername $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint): void

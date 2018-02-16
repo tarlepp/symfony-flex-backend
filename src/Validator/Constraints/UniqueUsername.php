@@ -20,15 +20,27 @@ use Symfony\Component\Validator\Constraint;
  */
 class UniqueUsername extends Constraint
 {
-    // Unique constant for validator constrain
+    /**
+     * Unique constant for validator constrain
+     *
+     * @var string
+     */
     private const IS_UNIQUE_USERNAME_ERROR = 'ea62740a-4d9b-4a25-9a56-46fb4c3d5fea';
 
-    // Error names configuration
+    /**
+     * Error names configuration
+     *
+     * @var mixed[]
+     */
     protected static $errorNames = [
         self::IS_UNIQUE_USERNAME_ERROR => 'IS_UNIQUE_USERNAME_ERROR'
     ];
 
-    // Message for validation error
+    /**
+     * Message for validation error
+     *
+     * @var string
+     */
     public $message = 'This username is already taken.';
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -38,9 +50,9 @@ class UniqueUsername extends Constraint
      * This method should return one or more of the constants
      * Constraint::CLASS_CONSTRAINT and Constraint::PROPERTY_CONSTRAINT.
      *
-     * @return string|array One or more constant values
+     * @return string One or more constant values
      */
-    public function getTargets()
+    public function getTargets(): string
     {
         return self::CLASS_CONSTRAINT;
     }

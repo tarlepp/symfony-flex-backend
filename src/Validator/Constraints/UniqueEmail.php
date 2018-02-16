@@ -20,15 +20,27 @@ use Symfony\Component\Validator\Constraint;
  */
 class UniqueEmail extends Constraint
 {
-    // Unique constant for validator constrain
+    /**
+     * Unique constant for validator constrain
+     *
+     * @var string;
+     */
     private const IS_UNIQUE_EMAIL_ERROR = 'd487278d-8b13-4da0-b4cc-f862e6e99af6';
 
-    // Error names configuration
+    /**
+     * Error names configuration
+     *
+     * @var mixed[]
+     */
     protected static $errorNames = [
         self::IS_UNIQUE_EMAIL_ERROR => 'IS_UNIQUE_EMAIL_ERROR'
     ];
 
-    // Message for validation error
+    /**
+     * Message for validation error
+     *
+     * @var string
+     */
     public $message = 'This email is already taken.';
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -38,9 +50,9 @@ class UniqueEmail extends Constraint
      * This method should return one or more of the constants
      * Constraint::CLASS_CONSTRAINT and Constraint::PROPERTY_CONSTRAINT.
      *
-     * @return string|array One or more constant values
+     * @return string One or more constant values
      */
-    public function getTargets()
+    public function getTargets(): string
     {
         return self::CLASS_CONSTRAINT;
     }
