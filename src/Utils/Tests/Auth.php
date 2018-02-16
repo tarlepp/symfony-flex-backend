@@ -47,7 +47,7 @@ class Auth
      * @param string $username
      * @param string $password
      *
-     * @return array
+     * @return mixed[]
      *
      * @throws \Exception
      */
@@ -62,7 +62,7 @@ class Auth
      *
      * @param string $role
      *
-     * @return array
+     * @return mixed[]
      */
     public function getAuthorizationHeadersForApiKey(string $role): array
     {
@@ -79,7 +79,7 @@ class Auth
      *
      * @param string $token
      *
-     * @return array
+     * @return mixed[]
      */
     public function getAuthorizationHeaders(string $token): array
     {
@@ -92,7 +92,7 @@ class Auth
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     public function getJwtHeaders(): array
     {
@@ -155,7 +155,7 @@ class Auth
     }
 
     /**
-     * @return array
+     * @return mixed[]
      */
     private function getContentTypeHeader(): array
     {
