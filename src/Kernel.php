@@ -141,7 +141,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      * @throws \Exception
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         // Within test environment we need to expose certain services as public
         if (\getenv('APP_ENV') === 'test') {
