@@ -56,9 +56,9 @@ class UserController extends Controller
      * @var string[]
      */
     protected static $formTypes = [
-        self::METHOD_PATCH  => UserPatchType::class,
-        self::METHOD_CREATE => UserCreateType::class,
-        self::METHOD_UPDATE => UserUpdateType::class,
+        Controller::METHOD_PATCH  => UserPatchType::class,
+        Controller::METHOD_CREATE => UserCreateType::class,
+        Controller::METHOD_UPDATE => UserUpdateType::class,
     ];
 
     // Traits for REST actions

@@ -50,9 +50,9 @@ class UserGroupController extends Controller
      * @var string[]
      */
     protected static $formTypes = [
-        self::METHOD_PATCH  => UserGroupType::class,
-        self::METHOD_CREATE => UserGroupType::class,
-        self::METHOD_UPDATE => UserGroupType::class,
+        Controller::METHOD_PATCH  => UserGroupType::class,
+        Controller::METHOD_CREATE => UserGroupType::class,
+        Controller::METHOD_UPDATE => UserGroupType::class,
     ];
 
     // Traits for REST actions
