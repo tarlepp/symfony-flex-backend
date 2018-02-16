@@ -43,7 +43,7 @@ trait RepositoryMethodsTrait
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function find(string $id, int $lockMode = null, int $lockVersion = null)
+    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getEntityManager()
@@ -54,12 +54,12 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findOneBy method.
      *
-     * @param array      $criteria
-     * @param array|null $orderBy
+     * @param mixed[]      $criteria
+     * @param mixed[]|null $orderBy
      *
      * @return EntityInterface|object|null
      */
-    public function findOneBy(array $criteria, array $orderBy = null)
+    public function findOneBy(array $criteria, ?array $orderBy = null)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->getEntityManager()
@@ -70,14 +70,14 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @param array      $criteria
-     * @param array|null $orderBy
-     * @param int|null   $limit
-     * @param int|null   $offset
+     * @param mixed[]      $criteria
+     * @param mixed[]|null $orderBy
+     * @param int|null     $limit
+     * @param int|null     $offset
      *
-     * @return array
+     * @return EntityInterface[]
      */
-    public function findBy(array $criteria, array $orderBy = null, int $limit = null, int $offset = null): array
+    public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
         return $this
             ->getEntityManager()
@@ -88,11 +88,11 @@ trait RepositoryMethodsTrait
     /**
      * Generic replacement for basic 'findBy' method if/when you want to use generic LIKE search.
      *
-     * @param array        $criteria
-     * @param null|array   $orderBy
+     * @param mixed[]      $criteria
+     * @param null|mixed[] $orderBy
      * @param null|integer $limit
      * @param null|integer $offset
-     * @param null|array   $search
+     * @param null|mixed[] $search
      *
      * @return EntityInterface[]
      *
@@ -100,10 +100,10 @@ trait RepositoryMethodsTrait
      */
     public function findByAdvanced(
         array $criteria,
-        array $orderBy = null,
-        int $limit = null,
-        int $offset = null,
-        array $search = null
+        ?array $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null,
+        ?array $search = null
     ): array {
         // Get query builder
         $queryBuilder = $this->getQueryBuilder($criteria, $search, $orderBy, $limit, $offset);
@@ -119,7 +119,7 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @return array
+     * @return EntityInterface[]
      */
     public function findAll(): array
     {
@@ -131,14 +131,14 @@ trait RepositoryMethodsTrait
     /**
      * Repository method to fetch current entity id values from database and return those as an array.
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
-     * @return array
+     * @return string[]
      *
      * @throws \InvalidArgumentException
      */
-    public function findIds(array $criteria = null, array $search = null): array
+    public function findIds(?array $criteria = null, ?array $search = null): array
     {
         // Get query builder
         $queryBuilder = $this->getQueryBuilder($criteria, $search);
@@ -159,15 +159,15 @@ trait RepositoryMethodsTrait
     /**
      * Generic count method to determine count of entities for specified criteria and search term(s).
      *
-     * @param null|array $criteria
-     * @param null|array $search
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
      *
      * @return integer
      *
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function countAdvanced(array $criteria = null, array $search = null): int
+    public function countAdvanced(?array $criteria = null, ?array $search = null): int
     {
         // Get query builder
         $queryBuilder = $this->getQueryBuilder($criteria, $search);
@@ -248,22 +248,22 @@ trait RepositoryMethodsTrait
     /**
      * Helper method to get QueryBuilder for current instance within specified default parameters.
      *
-     * @param null|array $criteria
-     * @param null|array $search
-     * @param null|array $orderBy
-     * @param null|int   $limit
-     * @param null|int   $offset
+     * @param null|mixed[] $criteria
+     * @param null|mixed[] $search
+     * @param null|mixed[] $orderBy
+     * @param null|int     $limit
+     * @param null|int     $offset
      *
      * @return QueryBuilder
      *
      * @throws \InvalidArgumentException
      */
     private function getQueryBuilder(
-        array $criteria = null,
-        array $search = null,
-        array $orderBy = null,
-        int $limit = null,
-        int $offset = null
+        ?array $criteria = null,
+        ?array $search = null,
+        ?array $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null
     ): QueryBuilder {
         // Normalize inputs
         $limit = $limit ?? 0;

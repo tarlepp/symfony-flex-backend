@@ -47,7 +47,7 @@ trait RepositoryWrappersTrait
     /**
      * Gets all association mappings of the class.
      *
-     * @return array
+     * @return mixed[]
      */
     public function getAssociations(): array
     {
@@ -75,12 +75,12 @@ trait RepositoryWrappersTrait
     /**
      * Method to create new query builder for current entity.
      *
-     * @param string $alias
-     * @param string $indexBy
+     * @param string|null $alias
+     * @param string|null $indexBy
      *
      * @return QueryBuilder
      */
-    public function createQueryBuilder(string $alias = null, string $indexBy = null): QueryBuilder
+    public function createQueryBuilder(?string $alias = null, ?string $indexBy = null): QueryBuilder
     {
         $alias = $alias ?? 'entity';
 
