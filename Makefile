@@ -92,3 +92,8 @@ phpmetrics: ## Generates PhpMetrics static analysis
 phpcs: ## Runs PHP CodeSniffer
 	php ./vendor/bin/phpcs --standard=PSR2 --colors src
 ###< phpcs ###
+
+###> ecs ###
+ecs: ## Runs The Easiest Way to Use Any Coding Standard
+	php ./vendor/bin/ecs check src
+###< ecs ###
