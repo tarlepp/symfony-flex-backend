@@ -214,6 +214,8 @@ class PhpUnitUtil
 
         if (\strpos($type, '|') !== false) {
             $output = self::getValidValueForType(\explode('|', $type)[0], $meta);
+        } elseif (\strpos($type, '[]') !== false) {
+            $output = self::getValidValueForType(self::TYPE_ARRAY, $meta);
         } else {
             switch ($type) {
                 case self::TYPE_CUSTOM_CLASS:
@@ -262,6 +264,8 @@ class PhpUnitUtil
 
         if (\strpos($type, '|') !== false) {
             $output = self::getInvalidValueForType(\explode('|', $type)[0]);
+        } elseif (\strpos($type, '[]') !== false) {
+            $output = self::getInvalidValueForType(self::TYPE_ARRAY);
         } else {
             switch ($type) {
                 case \stdClass::class:
