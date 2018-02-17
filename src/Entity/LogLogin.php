@@ -436,15 +436,15 @@ class LogLogin implements EntityInterface
      */
     private function processClientData(DeviceDetector $deviceDetector): void
     {
-        $this->clientType = (string) $deviceDetector->getClient('type');
-        $this->clientName = (string) $deviceDetector->getClient('name');
-        $this->clientShortName = (string) $deviceDetector->getClient('short_name');
-        $this->clientVersion = (string) $deviceDetector->getClient('version');
-        $this->clientEngine = (string) $deviceDetector->getClient('engine');
-        $this->osName = (string) $deviceDetector->getOs('name');
-        $this->osShortName = (string) $deviceDetector->getOs('short_name');
-        $this->osVersion = (string) $deviceDetector->getOs('version');
-        $this->osPlatform = (string) $deviceDetector->getOs('platform');
+        $this->clientType = (string)$deviceDetector->getClient('type');
+        $this->clientName = (string)$deviceDetector->getClient('name');
+        $this->clientShortName = (string)$deviceDetector->getClient('short_name');
+        $this->clientVersion = (string)$deviceDetector->getClient('version');
+        $this->clientEngine = (string)$deviceDetector->getClient('engine');
+        $this->osName = (string)$deviceDetector->getOs('name');
+        $this->osShortName = (string)$deviceDetector->getOs('short_name');
+        $this->osVersion = (string)$deviceDetector->getOs('version');
+        $this->osPlatform = (string)$deviceDetector->getOs('platform');
         $this->deviceName = $deviceDetector->getDeviceName();
         $this->brandName = $deviceDetector->getBrandName();
         $this->model = $deviceDetector->getModel();

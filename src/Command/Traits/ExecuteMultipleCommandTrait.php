@@ -67,7 +67,7 @@ trait ExecuteMultipleCommandTrait
 
             $input = new ArrayInput($arguments);
 
-            $cmd = $this->getApplication()->find((string) $command);
+            $cmd = $this->getApplication()->find((string)$command);
             $cmd->run($input, $output);
         }
 
@@ -91,6 +91,6 @@ trait ExecuteMultipleCommandTrait
             true
         );
 
-        return \array_values(\array_flip($this->choices))[(int) $index];
+        return \array_values(\array_flip($this->choices))[(int)$index];
     }
 }

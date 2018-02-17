@@ -7,6 +7,7 @@ includes:
 
 parameters:
     exclude_checkers:
+        - PhpCsFixer\Fixer\CastNotation\CastSpacesFixer
         - PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer
         - PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer
         - PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer

@@ -96,7 +96,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $exception = $event->getException();
 
         // Log  error
-        $this->logger->error((string) $exception);
+        $this->logger->error((string)$exception);
 
         // Create new response
         $response = new Response();
