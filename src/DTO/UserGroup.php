@@ -7,9 +7,9 @@ declare(strict_types = 1);
  */
 namespace App\DTO;
 
+use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;
-use App\Entity\EntityInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

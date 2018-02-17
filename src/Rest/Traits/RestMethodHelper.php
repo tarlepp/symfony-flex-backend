@@ -9,8 +9,8 @@ namespace App\Rest\Traits;
 
 use App\DTO\RestDtoInterface;
 use App\Rest\ControllerInterface;
-use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
+use App\Rest\RestResourceInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnitOfWork;

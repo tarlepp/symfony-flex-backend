@@ -8,8 +8,8 @@ declare(strict_types = 1);
 namespace App\Resource;
 
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
 use App\Entity\ApiKey as Entity;
+use App\Entity\EntityInterface;
 use App\Repository\ApiKeyRepository as Repository;
 use App\Rest\RestResource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

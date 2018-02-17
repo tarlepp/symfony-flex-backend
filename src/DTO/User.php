@@ -7,8 +7,8 @@ declare(strict_types = 1);
  */
 namespace App\DTO;
 
-use App\Entity\User as UserEntity;
 use App\Entity\EntityInterface;
+use App\Entity\User as UserEntity;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Entity\UserInterface;
 use App\Validator\Constraints as AppAssert;

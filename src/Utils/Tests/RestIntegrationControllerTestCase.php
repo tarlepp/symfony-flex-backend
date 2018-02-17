@@ -8,7 +8,6 @@ declare(strict_types = 1);
 namespace App\Utils\Tests;
 
 use App\Rest\ControllerInterface;
-use App\Rest\ResponseHandlerInterface;
 
 /**
  * Class RestIntegrationControllerTestCase

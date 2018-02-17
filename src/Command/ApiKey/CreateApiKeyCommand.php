@@ -16,7 +16,6 @@ use App\Resource\ApiKeyResource;
 use App\Resource\UserGroupResource;
 use App\Security\RolesService;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
