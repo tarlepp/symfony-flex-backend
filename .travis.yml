@@ -78,6 +78,7 @@ before_script:
 
 script:
   - make phpcs
+  - make ecs
   - make run-tests-fastest
 #  - make run-tests
 
