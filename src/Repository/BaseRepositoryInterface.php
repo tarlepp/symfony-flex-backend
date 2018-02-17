@@ -194,8 +194,6 @@ interface BaseRepositoryInterface
      * With this method you can attach some custom functions for generic REST API find / count queries.
      *
      * @param QueryBuilder $queryBuilder
-     *
-     * @return void
      */
     public function processQueryBuilder(QueryBuilder $queryBuilder): void;
 
@@ -212,7 +210,7 @@ interface BaseRepositoryInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function addLeftJoin(array $parameters): BaseRepositoryInterface;
+    public function addLeftJoin(array $parameters): self;
 
     /**
      * Adds inner join to current QueryBuilder query.
@@ -227,7 +225,7 @@ interface BaseRepositoryInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function addInnerJoin(array $parameters): BaseRepositoryInterface;
+    public function addInnerJoin(array $parameters): self;
 
     /**
      * Method to add callback to current query builder instance which is calling 'processQueryBuilder' method. By
@@ -243,5 +241,5 @@ interface BaseRepositoryInterface
      *
      * @return BaseRepositoryInterface
      */
-    public function addCallback(callable $callable, ?array $args = null): BaseRepositoryInterface;
+    public function addCallback(callable $callable, ?array $args = null): self;
 }

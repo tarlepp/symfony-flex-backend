@@ -39,27 +39,27 @@ class CreateUserCommand extends Command
      */
     private static $commandParameters = [
         [
-            self::PARAMETER_NAME        => 'username',
+            self::PARAMETER_NAME => 'username',
             self::PARAMETER_DESCRIPTION => 'Username',
         ],
         [
-            self::PARAMETER_NAME        => 'firstname',
+            self::PARAMETER_NAME => 'firstname',
             self::PARAMETER_DESCRIPTION => 'Firstname of the user',
         ],
         [
-            self::PARAMETER_NAME        => 'surname',
+            self::PARAMETER_NAME => 'surname',
             self::PARAMETER_DESCRIPTION => 'Surname of the user',
         ],
         [
-            self::PARAMETER_NAME        => 'email',
+            self::PARAMETER_NAME => 'email',
             self::PARAMETER_DESCRIPTION => 'Email of the user',
         ],
         [
-            self::PARAMETER_NAME        => 'plainPassword',
+            self::PARAMETER_NAME => 'plainPassword',
             self::PARAMETER_DESCRIPTION => 'Plain password for user',
         ],
         [
-            self::PARAMETER_NAME        => 'userGroups',
+            self::PARAMETER_NAME => 'userGroups',
             self::PARAMETER_DESCRIPTION => 'User groups where to attach user',
         ],
     ];

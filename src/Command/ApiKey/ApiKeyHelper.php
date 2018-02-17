@@ -69,7 +69,7 @@ class ApiKeyHelper
                 $apiKeyEntity->getDescription()
             );
 
-            $apiKeyFound = (bool)$io->confirm($message, false);
+            $apiKeyFound = (bool) $io->confirm($message, false);
         }
 
         return $apiKeyEntity ?? null;
@@ -95,7 +95,7 @@ class ApiKeyHelper
                 "GUID:  %s\nToken: %s",
                 $apiKey->getId(),
                 $apiKey->getToken()
-            )
+            ),
         ];
     }
 

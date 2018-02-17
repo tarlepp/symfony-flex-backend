@@ -67,8 +67,8 @@ final class SearchTerm implements SearchTermInterface
             // Create used criteria array
             $output = [
                 'and' => [
-                    $operand => \array_merge(...\array_values($criteria))
-                ]
+                    $operand => \array_merge(...\array_values($criteria)),
+                ],
             ];
         }
 
@@ -162,7 +162,7 @@ final class SearchTerm implements SearchTermInterface
 
         // Normalize column and search parameters
         return \array_filter(
-            \array_map('\trim', (\is_array($column) ? $column : (array)$column)),
+            \array_map('\trim', (\is_array($column) ? $column : (array) $column)),
             $filter
         );
     }
@@ -182,7 +182,7 @@ final class SearchTerm implements SearchTermInterface
 
         return \array_unique(
             \array_filter(
-                \array_map('\trim', (\is_array($search) ? $search : \explode(' ', (string)$search))),
+                \array_map('\trim', (\is_array($search) ? $search : \explode(' ', (string) $search))),
                 $filter
             )
         );

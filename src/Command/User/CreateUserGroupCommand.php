@@ -31,12 +31,12 @@ class CreateUserGroupCommand extends Command
      */
     private static $commandParameters = [
         [
-            'name'          => 'name',
-            'description'   => 'Name of the user group',
+            'name' => 'name',
+            'description' => 'Name of the user group',
         ],
         [
-            'name'          => 'role',
-            'description'   => 'Role of the user group',
+            'name' => 'role',
+            'description' => 'Role of the user group',
         ],
     ];
 

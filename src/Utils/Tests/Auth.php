@@ -86,7 +86,7 @@ class Auth
         return \array_merge(
             $this->getContentTypeHeader(),
             [
-                'HTTP_AUTHORIZATION'    => 'Bearer ' . $token
+                'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
             ]
         );
     }
@@ -97,8 +97,8 @@ class Auth
     public function getJwtHeaders(): array
     {
         return [
-            'REMOTE_ADDR'       => '123.123.123.123',
-            'HTTP_USER_AGENT'   => 'foobar',
+            'REMOTE_ADDR' => '123.123.123.123',
+            'HTTP_USER_AGENT' => 'foobar',
         ];
     }
 
@@ -131,7 +131,7 @@ class Auth
                     $this->getJwtHeaders(),
                     $this->getContentTypeHeader(),
                     [
-                        'HTTP_X-Requested-With' => 'XMLHttpRequest'
+                        'HTTP_X-Requested-With' => 'XMLHttpRequest',
                     ]
                 ),
                 \json_encode(\compact('username', 'password'))
@@ -148,7 +148,7 @@ class Auth
                 throw new \UnexpectedValueException('Invalid status code: ' . $response->getStatusCode());
             }
 
-            $this->cache[$username . $password] =  JSON::decode($response->getContent())->token;
+            $this->cache[$username . $password] = JSON::decode($response->getContent())->token;
         }
 
         return $this->cache[$username . $password];

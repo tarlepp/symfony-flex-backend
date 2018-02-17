@@ -202,7 +202,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      *
      * @return User
      */
-    public function setUsername(string $username): User
+    public function setUsername(string $username): self
     {
         $this->username = $username;
 
@@ -222,7 +222,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      *
      * @return User
      */
-    public function setFirstname(string $firstname): User
+    public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -242,7 +242,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      *
      * @return User
      */
-    public function setSurname(string $surname): User
+    public function setSurname(string $surname): self
     {
         $this->surname = $surname;
 
@@ -262,7 +262,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      *
      * @return User
      */
-    public function setEmail(string $email): User
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
@@ -283,7 +283,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      *
      * @return User
      */
-    public function setPassword(callable $encoder, string $plainPassword): User
+    public function setPassword(callable $encoder, string $plainPassword): self
     {
         $this->password = $encoder($plainPassword);
 
@@ -303,7 +303,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      *
      * @return User
      */
-    public function setPlainPassword(string $plainPassword): User
+    public function setPlainPassword(string $plainPassword): self
     {
         if (!empty($plainPassword)) {
             $this->plainPassword = $plainPassword;
@@ -333,11 +333,11 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
     public function getLoginData(): array
     {
         return [
-            'id'        => $this->getId(),
+            'id' => $this->getId(),
             'firstname' => $this->getFirstname(),
-            'surname'   => $this->getSurname(),
-            'email'     => $this->getEmail(),
-            'roles'     => $this->getRoles(),
+            'surname' => $this->getSurname(),
+            'email' => $this->getEmail(),
+            'roles' => $this->getRoles(),
         ];
     }
 

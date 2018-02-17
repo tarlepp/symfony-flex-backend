@@ -40,8 +40,8 @@ class ApiKeyType extends AbstractType
             'description',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Description',
-                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::LABEL => 'Description',
+                FormTypeLabelInterface::REQUIRED => true,
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -81,10 +81,10 @@ class ApiKeyType extends AbstractType
                 'userGroups',
                 Type\ChoiceType::class,
                 [
-                    'choices'       => $this->getUserGroupChoices(),
-                    'multiple'      => true,
-                    'required'      => true,
-                    'empty_data'    => '',
+                    'choices' => $this->getUserGroupChoices(),
+                    'multiple' => true,
+                    'required' => true,
+                    'empty_data' => '',
                 ]
             );
 
@@ -101,7 +101,7 @@ class ApiKeyType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ApiKey::class
+            'data_class' => ApiKey::class,
         ]);
     }
 }

@@ -36,8 +36,8 @@ class CreateApiKeyCommand extends Command
      */
     private static $commandParameters = [
         [
-            'name'          => 'description',
-            'description'   => 'Description',
+            'name' => 'description',
+            'description' => 'Description',
         ],
     ];
 

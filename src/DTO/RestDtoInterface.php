@@ -31,7 +31,7 @@ interface RestDtoInterface
      *
      * @return RestDtoInterface
      */
-    public function setVisited(string $property): RestDtoInterface;
+    public function setVisited(string $property): self;
 
     /**
      * Method to patch current dto with another one.
@@ -43,7 +43,7 @@ interface RestDtoInterface
      * @throws \LogicException
      * @throws \BadMethodCallException
      */
-    public function patch(RestDtoInterface $dto): RestDtoInterface;
+    public function patch(self $dto): self;
 
     /**
      * Method to load DTO data from specified entity.
@@ -52,7 +52,7 @@ interface RestDtoInterface
      *
      * @return RestDtoInterface
      */
-    public function load(EntityInterface $entity): RestDtoInterface;
+    public function load(EntityInterface $entity): self;
 
     /**
      * Method to update specified entity with DTO data.

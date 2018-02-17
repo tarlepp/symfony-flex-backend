@@ -76,7 +76,7 @@ abstract class RestDto implements RestDtoInterface
     {
         foreach ($this->getVisited() as $property) {
             if (\array_key_exists($property, static::$mappings)) {
-                $this->{static::$mappings[$property]}($entity, $this->$property);
+                $this->{static::$mappings[$property]}($entity, $this->{$property});
 
                 continue;
             }
@@ -85,7 +85,7 @@ abstract class RestDto implements RestDtoInterface
             $setter = 'set' . \ucfirst($property);
 
             // Update current dto property value
-            $entity->$setter($this->$property);
+            $entity->{$setter}($this->{$property});
         }
 
         return $entity;
@@ -111,7 +111,7 @@ abstract class RestDto implements RestDtoInterface
             $setter = 'set' . \ucfirst($property);
 
             // Update current dto property value
-            $this->$setter($dto->$getter());
+            $this->{$setter}($dto->{$getter}());
         }
 
         return $this;

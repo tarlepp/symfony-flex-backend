@@ -52,7 +52,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     private static $joins = [
         self::INNER_JOIN => [],
-        self::LEFT_JOIN  => [],
+        self::LEFT_JOIN => [],
     ];
 
     /**
@@ -60,7 +60,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     private static $processedJoins = [
         self::INNER_JOIN => [],
-        self::LEFT_JOIN  => [],
+        self::LEFT_JOIN => [],
     ];
 
     /**
@@ -107,13 +107,11 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * With this method you can attach some custom functions for generic REST API find / count queries.
      *
      * @param QueryBuilder $queryBuilder
-     *
-     * @return void
      */
     public function processQueryBuilder(QueryBuilder $queryBuilder): void
     {
         // Reset processed joins and callbacks
-        self::$processedJoins = [self::INNER_JOIN => [], self::LEFT_JOIN  => []];
+        self::$processedJoins = [self::INNER_JOIN => [], self::LEFT_JOIN => []];
         self::$processedCallbacks = [];
 
         $this->processJoins($queryBuilder);
@@ -181,7 +179,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     public function addCallback(callable $callable, ?array $args = null): BaseRepositoryInterface
     {
         $args = $args ?? [];
-        $hash = \sha1(\serialize(\array_merge([\spl_object_hash((object)$callable)], $args)));
+        $hash = \sha1(\serialize(\array_merge([\spl_object_hash((object) $callable)], $args)));
 
         if (!\in_array($hash, self::$processedCallbacks, true)) {
             self::$callbacks[$hash] = [$callable, $args];
@@ -199,12 +197,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected function processJoins(QueryBuilder $queryBuilder): void
     {
         /**
-         * @var string  $joinType
+         * @var string
          * @var mixed[] $joins
          */
         foreach (self::$joins as $joinType => $joins) {
             foreach ($joins as $joinParameters) {
-                $queryBuilder->$joinType(...$joinParameters);
+                $queryBuilder->{$joinType}(...$joinParameters);
             }
 
             self::$joins[$joinType] = [];
@@ -219,7 +217,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected function processCallbacks(QueryBuilder $queryBuilder): void
     {
         /**
-         * @var callable $callback
+         * @var callable
          * @var mixed[]  $args
          */
         foreach (self::$callbacks as [$callback, $args]) {

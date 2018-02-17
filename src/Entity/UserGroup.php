@@ -163,7 +163,7 @@ class UserGroup implements EntityInterface
      *
      * @return UserGroup
      */
-    public function setRole(Role $role): UserGroup
+    public function setRole(Role $role): self
     {
         $this->role = $role;
 
@@ -183,7 +183,7 @@ class UserGroup implements EntityInterface
      *
      * @return UserGroup
      */
-    public function setName(string $name): UserGroup
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -213,7 +213,7 @@ class UserGroup implements EntityInterface
      *
      * @return  UserGroup
      */
-    public function addUser(User $user): UserGroup
+    public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
@@ -230,7 +230,7 @@ class UserGroup implements EntityInterface
      *
      * @return  UserGroup
      */
-    public function removeUser(User $user): UserGroup
+    public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {
             $user->removeUserGroup($this);
@@ -244,7 +244,7 @@ class UserGroup implements EntityInterface
      *
      * @return  UserGroup
      */
-    public function clearUsers(): UserGroup
+    public function clearUsers(): self
     {
         $this->users->clear();
 
@@ -258,7 +258,7 @@ class UserGroup implements EntityInterface
      *
      * @return UserGroup
      */
-    public function addApiKey(ApiKey $apiKey): UserGroup
+    public function addApiKey(ApiKey $apiKey): self
     {
         if (!$this->apiKeys->contains($apiKey)) {
             $this->apiKeys->add($apiKey);
@@ -275,7 +275,7 @@ class UserGroup implements EntityInterface
      *
      * @return UserGroup
      */
-    public function removeApiKey(ApiKey $apiKey): UserGroup
+    public function removeApiKey(ApiKey $apiKey): self
     {
         if ($this->apiKeys->removeElement($apiKey)) {
             $apiKey->removeUserGroup($this);
@@ -289,7 +289,7 @@ class UserGroup implements EntityInterface
      *
      * @return  UserGroup
      */
-    public function clearApiKeys(): UserGroup
+    public function clearApiKeys(): self
     {
         $this->apiKeys->clear();
 

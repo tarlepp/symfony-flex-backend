@@ -28,8 +28,8 @@ final class ResponseHandler implements ResponseHandlerInterface
      * @var mixed[]
      */
     private $contentTypes = [
-        self::FORMAT_JSON   => 'application/json',
-        self::FORMAT_XML    => 'application/xml'
+        self::FORMAT_JSON => 'application/json',
+        self::FORMAT_XML => 'application/xml',
     ];
 
     /**
@@ -96,7 +96,7 @@ final class ResponseHandler implements ResponseHandlerInterface
     public function getSerializeContext(Request $request): array
     {
         // Specify used populate settings
-        $populate = (array)$request->get('populate', []);
+        $populate = (array) $request->get('populate', []);
         $populateAll = \array_key_exists('populateAll', $request->query->all());
         $populateOnly = \array_key_exists('populateOnly', $request->query->all());
 

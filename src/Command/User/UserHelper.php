@@ -191,7 +191,7 @@ class UserHelper
             $userEntity->getEmail()
         );
 
-        return (bool)$io->confirm($message, false);
+        return (bool) $io->confirm($message, false);
     }
 
     /**
@@ -211,6 +211,6 @@ class UserHelper
             $userGroupEntity->getRole()->getId()
         );
 
-        return (bool)$io->confirm($message, false);
+        return (bool) $io->confirm($message, false);
     }
 }

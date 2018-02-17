@@ -50,7 +50,7 @@ class UserGroup extends RestDto
      *
      * @return UserGroup
      */
-    public function setName(string $name): UserGroup
+    public function setName(string $name): self
     {
         $this->setVisited('name');
 
@@ -72,7 +72,7 @@ class UserGroup extends RestDto
      *
      * @return UserGroup
      */
-    public function setRole(RoleEntity $role): UserGroup
+    public function setRole(RoleEntity $role): self
     {
         $this->setVisited('role');
 

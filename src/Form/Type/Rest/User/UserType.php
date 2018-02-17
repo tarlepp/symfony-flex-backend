@@ -34,7 +34,7 @@ abstract class UserType extends AbstractType
             'username',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Username',
+                FormTypeLabelInterface::LABEL => 'Username',
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -42,7 +42,7 @@ abstract class UserType extends AbstractType
             'firstname',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Firstname',
+                FormTypeLabelInterface::LABEL => 'Firstname',
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -50,7 +50,7 @@ abstract class UserType extends AbstractType
             'surname',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Surname',
+                FormTypeLabelInterface::LABEL => 'Surname',
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -58,7 +58,7 @@ abstract class UserType extends AbstractType
             'email',
             Type\EmailType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Email address',
+                FormTypeLabelInterface::LABEL => 'Email address',
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -66,7 +66,7 @@ abstract class UserType extends AbstractType
             'password',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Password',
+                FormTypeLabelInterface::LABEL => 'Password',
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],

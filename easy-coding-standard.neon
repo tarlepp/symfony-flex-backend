@@ -3,13 +3,18 @@ includes:
     - vendor/symplify/easy-coding-standard/config/php71.neon
     - vendor/symplify/easy-coding-standard/config/clean-code.neon
     #- vendor/symplify/easy-coding-standard/config/symplify.neon
-    #- vendor/symplify/easy-coding-standard/config/common.neon
+    - vendor/symplify/easy-coding-standard/config/common.neon
 
 parameters:
     exclude_checkers:
+        - PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer
         - PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer
+        - PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer
+        - PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer
+        - Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer
         - Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer
     skip_codes:
+        - PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.Found
         - SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.UselessParameterAnnotation
         - SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.UselessReturnAnnotation
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:

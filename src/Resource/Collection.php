@@ -52,7 +52,7 @@ class Collection
      *
      * @return Collection
      */
-    public function set(RestResource $resource): Collection
+    public function set(RestResource $resource): self
     {
         $this->resources[\get_class($resource)] = $resource;
 

@@ -29,8 +29,8 @@ class User extends RestDto implements UserInterface
      * @var mixed[]
      */
     protected static $mappings = [
-        'password'      => 'updatePassword',
-        'userGroups'    => 'updateUserGroups',
+        'password' => 'updatePassword',
+        'userGroups' => 'updateUserGroups',
     ];
 
     /**
@@ -101,7 +101,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    public function setId(?string $id = null): User
+    public function setId(?string $id = null): self
     {
         $this->setVisited('id');
 
@@ -123,7 +123,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    public function setUsername(string $username): User
+    public function setUsername(string $username): self
     {
         $this->setVisited('username');
 
@@ -145,7 +145,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    public function setFirstname(string $firstname): User
+    public function setFirstname(string $firstname): self
     {
         $this->setVisited('firstname');
 
@@ -167,7 +167,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    public function setSurname(string $surname): User
+    public function setSurname(string $surname): self
     {
         $this->setVisited('surname');
 
@@ -189,7 +189,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    public function setEmail(string $email): User
+    public function setEmail(string $email): self
     {
         $this->setVisited('email');
 
@@ -211,7 +211,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    public function setUserGroups(array $userGroups): User
+    public function setUserGroups(array $userGroups): self
     {
         $this->setVisited('userGroups');
 
@@ -233,7 +233,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    public function setPassword(?string $password = null): User
+    public function setPassword(?string $password = null): self
     {
         if ($password !== null) {
             $this->setVisited('password');
@@ -282,7 +282,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    protected function updatePassword(UserEntity $entity, string $value): User
+    protected function updatePassword(UserEntity $entity, string $value): self
     {
         $entity->setPlainPassword($value);
 
@@ -297,7 +297,7 @@ class User extends RestDto implements UserInterface
      *
      * @return User
      */
-    protected function updateUserGroups(UserEntity $entity, array $value): User
+    protected function updateUserGroups(UserEntity $entity, array $value): self
     {
         $entity->clearUserGroups();
 

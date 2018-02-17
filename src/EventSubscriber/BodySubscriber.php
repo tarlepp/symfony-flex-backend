@@ -92,13 +92,12 @@ class BodySubscriber implements EventSubscriberInterface
      *
      * @param Request $request
      *
-     * @return void
      *
      * @throws \LogicException
      */
     private function transformJsonBody(Request $request): void
     {
-        $data = JSON::decode((string)$request->getContent(), true);
+        $data = JSON::decode((string) $request->getContent(), true);
 
         $request->request->replace($data);
     }

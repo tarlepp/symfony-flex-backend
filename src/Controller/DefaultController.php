@@ -83,8 +83,8 @@ class DefaultController
             ResponseHandler::FORMAT_JSON,
             [
                 'groups' => [
-                    'Healthz.timestamp'
-                ]
+                    'Healthz.timestamp',
+                ],
             ]
         );
     }

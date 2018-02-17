@@ -28,20 +28,20 @@ class UniqueUsername extends Constraint
     private const IS_UNIQUE_USERNAME_ERROR = 'ea62740a-4d9b-4a25-9a56-46fb4c3d5fea';
 
     /**
-     * Error names configuration
-     *
-     * @var mixed[]
-     */
-    protected static $errorNames = [
-        self::IS_UNIQUE_USERNAME_ERROR => 'IS_UNIQUE_USERNAME_ERROR'
-    ];
-
-    /**
      * Message for validation error
      *
      * @var string
      */
     public $message = 'This username is already taken.';
+
+    /**
+     * Error names configuration
+     *
+     * @var mixed[]
+     */
+    protected static $errorNames = [
+        self::IS_UNIQUE_USERNAME_ERROR => 'IS_UNIQUE_USERNAME_ERROR',
+    ];
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**

@@ -118,15 +118,15 @@ class RestApiMaker implements MakerInterface
         Validator::validateClassName($resourceName);
 
         return [
-            'resource'          => $resourceName,
-            'controllerName'    => $resourceName . 'Controller',
-            'entityName'        => $resourceName,
-            'repositoryName'    => $resourceName . 'Repository',
-            'resourceName'      => $resourceName . 'Resource',
-            'author'            => $author,
-            'swaggerTag'        => $swaggerTag,
-            'routePath'         => '/' . $this->convertToSnakeCase($resourceName),
-            'tableName'         => $this->convertToSnakeCase($resourceName),
+            'resource' => $resourceName,
+            'controllerName' => $resourceName . 'Controller',
+            'entityName' => $resourceName,
+            'repositoryName' => $resourceName . 'Repository',
+            'resourceName' => $resourceName . 'Resource',
+            'author' => $author,
+            'swaggerTag' => $swaggerTag,
+            'routePath' => '/' . $this->convertToSnakeCase($resourceName),
+            'tableName' => $this->convertToSnakeCase($resourceName),
         ];
     }
 
@@ -153,10 +153,10 @@ class RestApiMaker implements MakerInterface
         return \array_merge(
             [
                 $baseDir . 'Controller.tpl.php' => 'src/Controller/' . $params[self::PARAM_CONTROLLER_NAME] . '.php',
-                $baseDir . 'Dto.tpl.php'        => 'src/DTO/' . $params[self::PARAM_ENTITY_NAME] . '.php',
-                $baseDir . 'Entity.tpl.php'     => 'src/Entity/' . $params[self::PARAM_ENTITY_NAME] . '.php',
+                $baseDir . 'Dto.tpl.php' => 'src/DTO/' . $params[self::PARAM_ENTITY_NAME] . '.php',
+                $baseDir . 'Entity.tpl.php' => 'src/Entity/' . $params[self::PARAM_ENTITY_NAME] . '.php',
                 $baseDir . 'Repository.tpl.php' => 'src/Repository/' . $params[self::PARAM_REPOSITORY_NAME] . '.php',
-                $baseDir . 'Resource.tpl.php'   => 'src/Resource/' . $params[self::PARAM_RESOURCE_NAME] . '.php',
+                $baseDir . 'Resource.tpl.php' => 'src/Resource/' . $params[self::PARAM_RESOURCE_NAME] . '.php',
             ],
             $this->getTestFiles($params, $baseDir)
         );
@@ -210,7 +210,7 @@ class RestApiMaker implements MakerInterface
                 'ControllerTestFunctional.tpl.php' => [
                     'tests/Functional/Controller/',
                     $params[self::PARAM_CONTROLLER_NAME] . $suffix,
-                ]
+                ],
             ],
             'Integration' => [
                 'ControllerTestIntegration.tpl.php' => [
@@ -239,7 +239,7 @@ class RestApiMaker implements MakerInterface
         $output = [];
 
         /**
-         * @var array $items
+         * @var array
          */
         foreach ($tests as $items) {
             foreach ($items as $key => $parts) {

@@ -88,7 +88,7 @@ final class RequestHandler
     public static function getOrderBy(HttpFoundationRequest $request): array
     {
         // Normalize parameter value
-        $input = \array_filter((array)$request->get('order', []));
+        $input = \array_filter((array) $request->get('order', []));
 
         // Initialize output
         $output = [];
@@ -113,7 +113,7 @@ final class RequestHandler
     {
         $limit = $request->get('limit');
 
-        return $limit === null ? null : (int)\abs($limit);
+        return $limit === null ? null : (int) \abs($limit);
     }
 
     /**
@@ -130,7 +130,7 @@ final class RequestHandler
     {
         $offset = $request->get('offset');
 
-        return $offset === null ? null : (int)\abs($offset);
+        return $offset === null ? null : (int) \abs($offset);
     }
 
     /**
@@ -172,7 +172,7 @@ final class RequestHandler
 
         // By default we want to use 'OR' operand with given search words.
         $output = [
-            'or' => \array_unique(\array_values(\array_filter(\explode(' ', $search))))
+            'or' => \array_unique(\array_values(\array_filter(\explode(' ', $search)))),
         ];
 
         if ($searchTerms !== null) {

@@ -65,7 +65,7 @@ class RouteModel
      *
      * @return RouteModel
      */
-    public function setController(string $controller): RouteModel
+    public function setController(string $controller): self
     {
         $this->controller = $controller;
 
@@ -85,7 +85,7 @@ class RouteModel
      *
      * @return RouteModel
      */
-    public function setMethod(string $method): RouteModel
+    public function setMethod(string $method): self
     {
         $this->method = $method;
 
@@ -105,7 +105,7 @@ class RouteModel
      *
      * @return RouteModel
      */
-    public function setHttpMethod(string $httpMethod): RouteModel
+    public function setHttpMethod(string $httpMethod): self
     {
         $this->httpMethod = $httpMethod;
 
@@ -125,7 +125,7 @@ class RouteModel
      *
      * @return RouteModel
      */
-    public function setBaseRoute(string $baseRoute): RouteModel
+    public function setBaseRoute(string $baseRoute): self
     {
         $this->baseRoute = $baseRoute;
 
@@ -145,7 +145,7 @@ class RouteModel
      *
      * @return RouteModel
      */
-    public function setRoute(Route $route): RouteModel
+    public function setRoute(Route $route): self
     {
         $this->route = $route;
 
@@ -165,7 +165,7 @@ class RouteModel
      *
      * @return RouteModel
      */
-    public function setMethodAnnotations(array $methodAnnotations): RouteModel
+    public function setMethodAnnotations(array $methodAnnotations): self
     {
         $this->methodAnnotations = $methodAnnotations;
 
@@ -185,7 +185,7 @@ class RouteModel
      *
      * @return RouteModel
      */
-    public function setControllerAnnotations(array $controllerAnnotations): RouteModel
+    public function setControllerAnnotations(array $controllerAnnotations): self
     {
         $this->controllerAnnotations = $controllerAnnotations;
 

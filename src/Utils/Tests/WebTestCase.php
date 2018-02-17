@@ -49,6 +49,16 @@ abstract class WebTestCase extends BaseWebTestCase
         gc_collect_cycles();
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::bootKernel();
+
+        $this->container = static::$kernel->getContainer();
+        $this->authService = $this->container->get('test.service_locator')->get(Auth::class);
+    }
+
     /**
      * Helper method to get authorized client for specified username and password.
      *
@@ -112,7 +122,7 @@ abstract class WebTestCase extends BaseWebTestCase
     public function getJsonHeaders(): array
     {
         return [
-            'CONTENT_TYPE'          => 'application/json',
+            'CONTENT_TYPE' => 'application/json',
             'HTTP_X-Requested-With' => 'XMLHttpRequest',
         ];
     }
@@ -133,15 +143,5 @@ abstract class WebTestCase extends BaseWebTestCase
         }
 
         return $output;
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        self::bootKernel();
-
-        $this->container = static::$kernel->getContainer();
-        $this->authService = $this->container->get('test.service_locator')->get(Auth::class);
     }
 }

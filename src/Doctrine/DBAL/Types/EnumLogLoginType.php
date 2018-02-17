@@ -28,6 +28,6 @@ class EnumLogLoginType extends EnumType
      */
     protected static $values = [
         self::TYPE_FAILURE,
-        self::TYPE_SUCCESS
+        self::TYPE_SUCCESS,
     ];
 }

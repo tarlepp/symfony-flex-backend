@@ -50,17 +50,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class UserController extends Controller
 {
-    /**
-     * Method + Form type class names (key + value)
-     *
-     * @var string[]
-     */
-    protected static $formTypes = [
-        Controller::METHOD_PATCH  => UserPatchType::class,
-        Controller::METHOD_CREATE => UserCreateType::class,
-        Controller::METHOD_UPDATE => UserUpdateType::class,
-    ];
-
     // Traits for REST actions
     use Actions\Admin\CountAction;
     use Actions\Admin\FindAction;
@@ -70,6 +59,16 @@ class UserController extends Controller
     use Actions\Root\PatchAction;
     use Actions\Root\UpdateAction;
     use Methods\DeleteMethod;
+    /**
+     * Method + Form type class names (key + value)
+     *
+     * @var string[]
+     */
+    protected static $formTypes = [
+        Controller::METHOD_PATCH => UserPatchType::class,
+        Controller::METHOD_CREATE => UserCreateType::class,
+        Controller::METHOD_UPDATE => UserUpdateType::class,
+    ];
 
     /**
      * UserController constructor.

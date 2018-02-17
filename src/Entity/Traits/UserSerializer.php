@@ -32,9 +32,9 @@ trait UserSerializer
     public function serialize(): string
     {
         return JSON::encode([
-            'id'        => $this->id,
-            'username'  => $this->username,
-            'password'  => $this->password
+            'id' => $this->id,
+            'username' => $this->username,
+            'password' => $this->password,
         ]);
     }
 

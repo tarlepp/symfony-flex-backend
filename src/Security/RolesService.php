@@ -29,11 +29,11 @@ class RolesService implements RolesServiceInterface
      * @var mixed[]
      */
     private static $roleNames = [
-        self::ROLE_LOGGED   => 'Logged in users',
-        self::ROLE_USER     => 'Normal users',
-        self::ROLE_ADMIN    => 'Admin users',
-        self::ROLE_ROOT     => 'Root users',
-        self::ROLE_API      => 'API users',
+        self::ROLE_LOGGED => 'Logged in users',
+        self::ROLE_USER => 'Normal users',
+        self::ROLE_ADMIN => 'Admin users',
+        self::ROLE_ROOT => 'Root users',
+        self::ROLE_API => 'API users',
     ];
 
     /**

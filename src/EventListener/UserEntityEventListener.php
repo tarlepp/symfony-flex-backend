@@ -41,7 +41,6 @@ class UserEntityEventListener
      *
      * @param LifecycleEventArgs $event
      *
-     * @return void
      *
      * @throws \LengthException
      * @throws \RuntimeException
@@ -56,7 +55,6 @@ class UserEntityEventListener
      *
      * @param LifecycleEventArgs $event
      *
-     * @return void
      *
      * @throws \LengthException
      * @throws \RuntimeException
@@ -88,7 +86,6 @@ class UserEntityEventListener
      *
      * @param User $user
      *
-     * @return void
      *
      * @throws \LengthException
      * @throws \RuntimeException

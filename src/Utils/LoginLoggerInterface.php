@@ -42,7 +42,7 @@ interface LoginLoggerInterface
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function setUser(?UserInterface $user = null): LoginLoggerInterface;
+    public function setUser(?UserInterface $user = null): self;
 
     /**
      * Method to handle login event.

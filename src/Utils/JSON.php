@@ -24,15 +24,15 @@ class JSON
      * @var array<string>
      */
     private static $errorReference = [
-        \JSON_ERROR_NONE                => 'No error has occurred.',
-        \JSON_ERROR_DEPTH               => 'The maximum stack depth has been exceeded.',
-        \JSON_ERROR_STATE_MISMATCH      => 'Invalid or malformed JSON.',
-        \JSON_ERROR_CTRL_CHAR           => 'Control character error, possibly incorrectly encoded.',
-        \JSON_ERROR_SYNTAX              => 'Syntax error, malformed JSON',
-        \JSON_ERROR_UTF8                => 'Malformed UTF-8 characters, possibly incorrectly encoded.',
-        \JSON_ERROR_RECURSION           => 'One or more recursive references in the value to be encoded.',
-        \JSON_ERROR_INF_OR_NAN          => 'One or more NAN or INF values in the value to be encoded.',
-        \JSON_ERROR_UNSUPPORTED_TYPE    => 'A value of a type that cannot be encoded was given.'
+        \JSON_ERROR_NONE => 'No error has occurred.',
+        \JSON_ERROR_DEPTH => 'The maximum stack depth has been exceeded.',
+        \JSON_ERROR_STATE_MISMATCH => 'Invalid or malformed JSON.',
+        \JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded.',
+        \JSON_ERROR_SYNTAX => 'Syntax error, malformed JSON',
+        \JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded.',
+        \JSON_ERROR_RECURSION => 'One or more recursive references in the value to be encoded.',
+        \JSON_ERROR_INF_OR_NAN => 'One or more NAN or INF values in the value to be encoded.',
+        \JSON_ERROR_UNSUPPORTED_TYPE => 'A value of a type that cannot be encoded was given.',
     ];
 
     /**
@@ -121,6 +121,6 @@ class JSON
     private static function getErrorMessage(int $error): string
     {
         return !\array_key_exists($error, self::$errorReference) ?
-            self::JSON_UNKNOWN_ERROR : (string)self::$errorReference[$error];
+            self::JSON_UNKNOWN_ERROR : (string) self::$errorReference[$error];
     }
 }

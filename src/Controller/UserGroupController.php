@@ -44,17 +44,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class UserGroupController extends Controller
 {
-    /**
-     * Method + Form type class names (key + value)
-     *
-     * @var string[]
-     */
-    protected static $formTypes = [
-        Controller::METHOD_PATCH  => UserGroupType::class,
-        Controller::METHOD_CREATE => UserGroupType::class,
-        Controller::METHOD_UPDATE => UserGroupType::class,
-    ];
-
     // Traits for REST actions
     use Actions\Admin\CountAction;
     use Actions\Admin\FindAction;
@@ -64,6 +53,16 @@ class UserGroupController extends Controller
     use Actions\Root\DeleteAction;
     use Actions\Root\PatchAction;
     use Actions\Root\UpdateAction;
+    /**
+     * Method + Form type class names (key + value)
+     *
+     * @var string[]
+     */
+    protected static $formTypes = [
+        Controller::METHOD_PATCH => UserGroupType::class,
+        Controller::METHOD_CREATE => UserGroupType::class,
+        Controller::METHOD_UPDATE => UserGroupType::class,
+    ];
 
     /**
      * UserGroupController constructor.

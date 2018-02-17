@@ -35,7 +35,7 @@ interface RequestLoggerInterface
      *
      * @return RequestLoggerInterface
      */
-    public function setResponse(Response $response): RequestLoggerInterface;
+    public function setResponse(Response $response): self;
 
     /**
      * Setter for request object.
@@ -44,7 +44,7 @@ interface RequestLoggerInterface
      *
      * @return RequestLoggerInterface
      */
-    public function setRequest(Request $request): RequestLoggerInterface;
+    public function setRequest(Request $request): self;
 
     /**
      * Setter method for current user.
@@ -53,7 +53,7 @@ interface RequestLoggerInterface
      *
      * @return RequestLoggerInterface
      */
-    public function setUser(?UserInterface $user = null): RequestLoggerInterface;
+    public function setUser(?UserInterface $user = null): self;
 
     /**
      * Setter method for current api key
@@ -62,7 +62,7 @@ interface RequestLoggerInterface
      *
      * @return RequestLoggerInterface
      */
-    public function setApiKey(?ApiKey $apiKey = null): RequestLoggerInterface;
+    public function setApiKey(?ApiKey $apiKey = null): self;
 
     /**
      * Setter method for 'master request' info.
@@ -71,7 +71,7 @@ interface RequestLoggerInterface
      *
      * @return RequestLoggerInterface
      */
-    public function setMasterRequest(bool $masterRequest): RequestLoggerInterface;
+    public function setMasterRequest(bool $masterRequest): self;
 
     /**
      * Method to handle current response and log it to database.

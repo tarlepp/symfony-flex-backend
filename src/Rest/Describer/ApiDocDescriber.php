@@ -41,7 +41,7 @@ class ApiDocDescriber implements DescriberInterface
     private $annotationReader;
 
     /**
-     * @var Swagger $api
+     * @var Swagger
      */
     private $api;
 

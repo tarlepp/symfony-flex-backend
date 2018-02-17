@@ -26,6 +26,11 @@ abstract class RestTraitTestCase extends WebTestCase
     private const END_POINT_COUNT = '/count';
 
     /**
+     * @var string
+     */
+    protected static $route;
+
+    /**
      * @return mixed[]
      */
     abstract public function getValidUsers(): array;
@@ -34,11 +39,6 @@ abstract class RestTraitTestCase extends WebTestCase
      * @return mixed[]
      */
     abstract public function getInvalidUsers(): array;
-
-    /**
-     * @var string
-     */
-    protected static $route;
 
     /** @noinspection PhpUndefinedNamespaceInspection */
     /**
@@ -532,7 +532,7 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods(): array
     {
         $methods = [
-            ['GET']
+            ['GET'],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
@@ -544,7 +544,7 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatIdsRouteDoesNotAllowInvalidUser(): array
     {
         $methods = [
-            ['GET']
+            ['GET'],
         ];
 
         return $this->createDataForTest($this->getInvalidUsers(), $methods);

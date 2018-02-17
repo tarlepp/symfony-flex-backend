@@ -40,8 +40,8 @@ class UserGroupType extends AbstractType
             'name',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Group name',
-                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::LABEL => 'Group name',
+                FormTypeLabelInterface::REQUIRED => true,
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -96,8 +96,8 @@ class UserGroupType extends AbstractType
                 'role',
                 Type\ChoiceType::class,
                 [
-                    FormTypeLabelInterface::LABEL    => 'Role',
-                    FormTypeLabelInterface::CHOICES  => $this->getRoleChoices(),
+                    FormTypeLabelInterface::LABEL => 'Role',
+                    FormTypeLabelInterface::CHOICES => $this->getRoleChoices(),
                     FormTypeLabelInterface::REQUIRED => true,
                 ]
             );

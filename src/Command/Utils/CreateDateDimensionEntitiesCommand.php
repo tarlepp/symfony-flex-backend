@@ -95,7 +95,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function getYearStart(): int
     {
-        return (int)$this->io->ask('Give a year where to start', self::YEAR_MIN, $this->validatorYearStart());
+        return (int) $this->io->ask('Give a year where to start', self::YEAR_MIN, $this->validatorYearStart());
     }
 
     /**
@@ -109,7 +109,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function getYearEnd(int $yearStart): int
     {
-        return (int)$this->io->ask('Give a year where to end', self::YEAR_MAX, $this->validatorYearEnd($yearStart));
+        return (int) $this->io->ask('Give a year where to end', self::YEAR_MAX, $this->validatorYearEnd($yearStart));
     }
 
     /**
@@ -128,7 +128,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         $dateEnd = new \DateTime($yearEnd . '-12-31 00:00:00', new \DateTimeZone('UTC'));
 
         $progress = $this->getProgressBar(
-            (int)$dateEnd->diff($dateStart)->format('%a') + 1,
+            (int) $dateEnd->diff($dateStart)->format('%a') + 1,
             \sprintf('Creating DateDimension entities between years %d and %d...', $yearStart, $yearEnd)
         );
 
@@ -180,7 +180,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         $em = $this->repository->getEntityManager();
 
         // You spin me round (like a record... er like a date)
-        while ((int)$dateStart->format('Y') < $yearEnd + 1) {
+        while ((int) $dateStart->format('Y') < $yearEnd + 1) {
             $em->persist(new DateDimension(clone $dateStart));
 
             $dateStart->add(new \DateInterval('P1D'));
@@ -209,7 +209,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
     private function validatorYearStart(): \Closure
     {
         return function ($year): ?int {
-            $year = (int)$year;
+            $year = (int) $year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
                 $message = \sprintf(
@@ -237,7 +237,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
     private function validatorYearEnd(int $yearStart): \Closure
     {
         return function ($year) use ($yearStart): ?int {
-            $year = (int)$year;
+            $year = (int) $year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart) {
                 $message = \sprintf(

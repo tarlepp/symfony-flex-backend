@@ -20,14 +20,14 @@ abstract class Controller implements ControllerInterface
     // Traits
     use RestMethodHelper;
 
-    public const METHOD_COUNT      = 'countMethod';
-    public const METHOD_CREATE     = 'createMethod';
-    public const METHOD_DELETE     = 'deleteMethod';
-    public const METHOD_FIND       = 'findMethod';
-    public const METHOD_FIND_ONE   = 'findOneMethod';
-    public const METHOD_IDS        = 'idsMethod';
-    public const METHOD_PATCH      = 'patchMethod';
-    public const METHOD_UPDATE     = 'updateMethod';
+    public const METHOD_COUNT = 'countMethod';
+    public const METHOD_CREATE = 'createMethod';
+    public const METHOD_DELETE = 'deleteMethod';
+    public const METHOD_FIND = 'findMethod';
+    public const METHOD_FIND_ONE = 'findOneMethod';
+    public const METHOD_IDS = 'idsMethod';
+    public const METHOD_PATCH = 'patchMethod';
+    public const METHOD_UPDATE = 'updateMethod';
 
     /**
      * Method to initialize REST controller.

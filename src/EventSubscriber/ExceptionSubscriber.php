@@ -44,6 +44,17 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private $environment;
 
     /**
+     * ExceptionSubscriber constructor.
+     *
+     * @param TokenStorageInterface $tokenStorage
+     */
+    public function __construct(TokenStorageInterface $tokenStorage)
+    {
+        $this->tokenStorage = $tokenStorage;
+        $this->environment = \getenv('APP_ENV');
+    }
+
+    /**
      * Returns an array of event names this subscriber wants to listen to.
      *
      * The array keys are event names and the value can be:
@@ -71,17 +82,6 @@ class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * ExceptionSubscriber constructor.
-     *
-     * @param TokenStorageInterface $tokenStorage
-     */
-    public function __construct(TokenStorageInterface $tokenStorage)
-    {
-        $this->tokenStorage = $tokenStorage;
-        $this->environment = \getenv('APP_ENV');
-    }
-
-    /**
      * Method to handle kernel exception.
      *
      * @param GetResponseForExceptionEvent $event
@@ -96,7 +96,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $exception = $event->getException();
 
         // Log  error
-        $this->logger->error((string)$exception);
+        $this->logger->error((string) $exception);
 
         // Create new response
         $response = new Response();
@@ -136,20 +136,20 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         // Set base of error message
         $error = [
-            'message'   => $this->getExceptionMessage($exception),
-            'code'      => $exception->getCode(),
-            'status'    => $response->getStatusCode(),
+            'message' => $this->getExceptionMessage($exception),
+            'code' => $exception->getCode(),
+            'status' => $response->getStatusCode(),
         ];
 
         // Attach more info to error response in dev environment
         if ($this->environment === 'dev') {
             $error += [
                 'debug' => [
-                    'file'          => $exception->getFile(),
-                    'line'          => $exception->getLine(),
-                    'message'       => $exception->getMessage(),
-                    'trace'         => $exception->getTrace(),
-                    'traceString'   => $exception->getTraceAsString(),
+                    'file' => $exception->getFile(),
+                    'line' => $exception->getLine(),
+                    'message' => $exception->getMessage(),
+                    'trace' => $exception->getTrace(),
+                    'traceString' => $exception->getTraceAsString(),
                 ],
             ];
         }

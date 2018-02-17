@@ -182,7 +182,7 @@ trait RepositoryMethodsTrait
 
         RepositoryHelper::resetParameterCount();
 
-        return (int)$queryBuilder->getQuery()->getSingleScalarResult();
+        return (int) $queryBuilder->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -200,7 +200,7 @@ trait RepositoryMethodsTrait
         $queryBuilder->delete();
 
         // Return deleted row count
-        return (int)$queryBuilder->getQuery()->execute();
+        return (int) $queryBuilder->getQuery()->execute();
     }
 
     /**

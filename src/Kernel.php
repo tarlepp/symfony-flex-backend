@@ -69,6 +69,32 @@ class Kernel extends BaseKernel implements CompilerPassInterface
         }
     }
 
+    /**
+     * You can modify the container here before it is dumped to PHP code.
+     *
+     * @param ContainerBuilder $container
+     *
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @throws \Exception
+     */
+    public function process(ContainerBuilder $container): void
+    {
+        // Within test environment we need to expose certain services as public
+        if (\getenv('APP_ENV') === 'test') {
+            foreach ($container->findTaggedServiceIds('public_on_test') as $id => $tags) {
+                $container->getDefinition($id)->setPublic(true);
+            }
+        }
+
+        $collection = $container->getDefinition(Collection::class);
+
+        foreach ($container->findTaggedServiceIds('app.rest.resource') as $id => $tags) {
+            $collection->addMethodCall('set', [new Reference($id)]);
+        }
+    }
+
     /** @noinspection PhpUnusedParameterInspection */
     /**
      * Configures the container.
@@ -129,31 +155,5 @@ class Kernel extends BaseKernel implements CompilerPassInterface
         }
 
         $routes->import($confDir . '/routes' . self::CONFIG_EXTS, '/', 'glob');
-    }
-
-    /**
-     * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param ContainerBuilder $container
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @throws \Exception
-     */
-    public function process(ContainerBuilder $container): void
-    {
-        // Within test environment we need to expose certain services as public
-        if (\getenv('APP_ENV') === 'test') {
-            foreach ($container->findTaggedServiceIds('public_on_test') as $id => $tags) {
-                $container->getDefinition($id)->setPublic(true);
-            }
-        }
-
-        $collection = $container->getDefinition(Collection::class);
-
-        foreach ($container->findTaggedServiceIds('app.rest.resource') as $id => $tags) {
-            $collection->addMethodCall('set', [new Reference($id)]);
-        }
     }
 }

@@ -35,7 +35,7 @@ interface RestResourceInterface
      *
      * @return RestResourceInterface
      */
-    public function setRepository(BaseRepositoryInterface $repository): RestResourceInterface;
+    public function setRepository(BaseRepositoryInterface $repository): self;
 
     /**
      * Getter for used validator.
@@ -51,7 +51,7 @@ interface RestResourceInterface
      *
      * @return RestResourceInterface
      */
-    public function setValidator(ValidatorInterface $validator): RestResourceInterface;
+    public function setValidator(ValidatorInterface $validator): self;
 
     /**
      * Getter method for used DTO class for this REST service.
@@ -69,7 +69,7 @@ interface RestResourceInterface
      *
      * @return RestResourceInterface
      */
-    public function setDtoClass(string $dtoClass): RestResourceInterface;
+    public function setDtoClass(string $dtoClass): self;
 
     /**
      * Getter method for used default FormType class for this REST resource.
@@ -85,7 +85,7 @@ interface RestResourceInterface
      *
      * @return RestResourceInterface
      */
-    public function setFormTypeClass(string $formTypeClass): RestResourceInterface;
+    public function setFormTypeClass(string $formTypeClass): self;
 
     /**
      * Getter method for current entity name.

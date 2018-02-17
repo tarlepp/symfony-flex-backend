@@ -119,7 +119,7 @@ class Role extends BaseRole implements EntityInterface
      *
      * @return Role
      */
-    public function setDescription(string $description): Role
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 

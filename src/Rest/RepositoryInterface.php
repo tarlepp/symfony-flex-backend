@@ -69,7 +69,7 @@ interface RepositoryInterface
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(EntityInterface $entity): RepositoryInterface;
+    public function save(EntityInterface $entity): self;
 
     /**
      * Helper method to remove specified entity from database.
@@ -82,7 +82,7 @@ interface RepositoryInterface
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(EntityInterface $entity): RepositoryInterface;
+    public function remove(EntityInterface $entity): self;
 
     /**
      * Generic count method to determine count of entities for specified criteria and search term(s).
@@ -138,8 +138,6 @@ interface RepositoryInterface
      * With this method you can attach some custom functions for generic REST API find / count queries.
      *
      * @param QueryBuilder $queryBuilder
-     *
-     * @return void
      */
     public function processQueryBuilder(QueryBuilder $queryBuilder): void;
 
@@ -156,7 +154,7 @@ interface RepositoryInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function addLeftJoin(array $parameters): RepositoryInterface;
+    public function addLeftJoin(array $parameters): self;
 
     /**
      * Adds inner join to current QueryBuilder query.
@@ -171,7 +169,7 @@ interface RepositoryInterface
      *
      * @throws \InvalidArgumentException
      */
-    public function addInnerJoin(array $parameters): RepositoryInterface;
+    public function addInnerJoin(array $parameters): self;
 
     /**
      * Method to add callback to current query builder instance which is calling 'processQueryBuilder' method. By
@@ -187,7 +185,7 @@ interface RepositoryInterface
      *
      * @return RepositoryInterface
      */
-    public function addCallback(callable $callable, ?array $args = null): RepositoryInterface;
+    public function addCallback(callable $callable, ?array $args = null): self;
 
     /**
      * Process defined joins for current QueryBuilder instance.

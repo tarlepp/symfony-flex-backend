@@ -88,7 +88,7 @@ class Healthz implements EntityInterface
      *
      * @return Healthz
      */
-    public function setTimestamp(\DateTime $timestamp): Healthz
+    public function setTimestamp(\DateTime $timestamp): self
     {
         $this->timestamp = $timestamp;
 

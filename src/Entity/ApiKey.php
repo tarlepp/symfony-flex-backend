@@ -157,7 +157,7 @@ class ApiKey implements EntityInterface
      *
      * @return ApiKey
      */
-    public function setToken(string $token): ApiKey
+    public function setToken(string $token): self
     {
         $this->token = $token;
 
@@ -167,13 +167,13 @@ class ApiKey implements EntityInterface
     /**
      * @return ApiKey
      */
-    public function generateToken(): ApiKey
+    public function generateToken(): self
     {
         $random = '';
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $max = \mb_strlen($chars, '8bit') - 1;
 
-        for ($i = 0; $i < 40; $i++) {
+        for ($i = 0; $i < 40; ++$i) {
             $random .= $chars[\random_int(0, $max)];
         }
 
@@ -193,7 +193,7 @@ class ApiKey implements EntityInterface
      *
      * @return ApiKey
      */
-    public function setDescription(string $description): ApiKey
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -250,7 +250,7 @@ class ApiKey implements EntityInterface
      *
      * @return ApiKey
      */
-    public function addUserGroup(UserGroup $userGroup): ApiKey
+    public function addUserGroup(UserGroup $userGroup): self
     {
         if (!$this->userGroups->contains($userGroup)) {
             $this->userGroups->add($userGroup);
@@ -267,7 +267,7 @@ class ApiKey implements EntityInterface
      *
      * @return ApiKey
      */
-    public function removeUserGroup(UserGroup $userGroup): ApiKey
+    public function removeUserGroup(UserGroup $userGroup): self
     {
         if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeApiKey($this);
@@ -281,7 +281,7 @@ class ApiKey implements EntityInterface
      *
      * @return ApiKey
      */
-    public function clearUserGroups(): ApiKey
+    public function clearUserGroups(): self
     {
         $this->userGroups->clear();
 

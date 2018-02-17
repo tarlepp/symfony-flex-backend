@@ -25,11 +25,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 trait UserRelations
 {
     /**
-     * @var RolesServiceInterface
-     */
-    private $rolesService;
-
-    /**
      * @var Collection<UserGroup>
      *
      * @Groups({
@@ -73,6 +68,10 @@ trait UserRelations
      *  )
      */
     protected $logsLogin;
+    /**
+     * @var RolesServiceInterface
+     */
+    private $rolesService;
 
     /**
      * @param RolesServiceInterface $rolesService

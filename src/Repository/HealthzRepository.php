@@ -93,6 +93,6 @@ class HealthzRepository extends BaseRepository
             ->setParameter('timestamp', $date);
 
         // Return deleted row count
-        return (int)$queryBuilder->getQuery()->execute();
+        return (int) $queryBuilder->getQuery()->execute();
     }
 }

@@ -177,18 +177,18 @@ class Parameters
         }
 
         $parameter = [
-            'type'          => 'string',
-            'name'          => 'search',
-            'in'            => 'query',
-            'required'      => false,
-            'description'   => $this->getDescription(
+            'type' => 'string',
+            'name' => 'search',
+            'in' => 'query',
+            'required' => false,
+            'description' => $this->getDescription(
                 'parameter_search.twig',
                 [
                     'properties' => $searchColumns,
-                    'examples'   => self::$searchExamples,
+                    'examples' => self::$searchExamples,
                 ]
             ),
-            'default'       => 'term',
+            'default' => 'term',
         ];
 
         $operation->getParameters()->add(new Parameter($parameter));
@@ -205,17 +205,17 @@ class Parameters
     private function addParameterCriteria(Operation $operation): void
     {
         $parameter = [
-            'type'          => 'string',
-            'name'          => 'where',
-            'in'            => 'query',
-            'required'      => false,
-            'description'   => $this->getDescription(
+            'type' => 'string',
+            'name' => 'where',
+            'in' => 'query',
+            'required' => false,
+            'description' => $this->getDescription(
                 'parameter_criteria.twig',
                 [
                     'examples' => self::$criteriaExamples,
                 ]
             ),
-            'default'       => '{"property": "value"}',
+            'default' => '{"property": "value"}',
         ];
 
         $operation->getParameters()->add(new Parameter($parameter));
@@ -232,18 +232,18 @@ class Parameters
     private function addParameterOrderBy(Operation $operation): void
     {
         $parameter = [
-            'type'          => 'string',
-            'name'          => 'order',
-            'in'            => 'query',
-            'required'      => false,
-            'description'   => $this->getDescription(
+            'type' => 'string',
+            'name' => 'order',
+            'in' => 'query',
+            'required' => false,
+            'description' => $this->getDescription(
                 'parameter_order.twig',
                 [
-                    'examples'          => self::$orderByExamples,
-                    'advancedExamples'  => self::$orderByAdvancedExamples,
+                    'examples' => self::$orderByExamples,
+                    'advancedExamples' => self::$orderByAdvancedExamples,
                 ]
             ),
-            'default'       => 'column',
+            'default' => 'column',
         ];
 
         $operation->getParameters()->add(new Parameter($parameter));
@@ -304,17 +304,17 @@ class Parameters
     private function getLimitOffsetParameter(string $name, string $template, array $examples): Parameter
     {
         $parameter = [
-            'type'          => 'integer',
-            'name'          => $name,
-            'in'            => 'query',
-            'required'      => false,
-            'description'   => $this->getDescription(
+            'type' => 'integer',
+            'name' => $name,
+            'in' => 'query',
+            'required' => false,
+            'description' => $this->getDescription(
                 $template,
                 [
                     'examples' => $examples,
                 ]
             ),
-            'default'       => 10,
+            'default' => 10,
         ];
 
         return new Parameter($parameter);
@@ -338,20 +338,20 @@ class Parameters
         $controller = $this->container->get($routeModel->getController());
 
         $parameter = [
-            'type'              => 'array',
-            'name'              => 'populate[]',
-            'collectionFormat'  => 'multi',
-            'in'                => 'query',
-            'required'          => false,
-            'description'       => $this->getDescription(
+            'type' => 'array',
+            'name' => 'populate[]',
+            'collectionFormat' => 'multi',
+            'in' => 'query',
+            'required' => false,
+            'description' => $this->getDescription(
                 'parameter_populate.twig',
                 [
-                    'examples'     => $this->getPopulateExamples($controller),
+                    'examples' => $this->getPopulateExamples($controller),
                     'associations' => $controller->getResource()->getAssociations(),
                 ]
             ),
-            'items'             => [
-                'type'          => 'string',
+            'items' => [
+                'type' => 'string',
             ],
         ];
 

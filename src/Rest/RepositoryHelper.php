@@ -67,7 +67,6 @@ class RepositoryHelper
      * @param QueryBuilder $queryBuilder
      * @param mixed[]|null $criteria
      *
-     * @return void
      *
      * @throws \InvalidArgumentException
      */
@@ -99,7 +98,6 @@ class RepositoryHelper
      * @param string[]     $columns
      * @param mixed[]|null $terms
      *
-     * @return void
      *
      * @throws \InvalidArgumentException
      */
@@ -126,8 +124,6 @@ class RepositoryHelper
      *
      * @param QueryBuilder $queryBuilder
      * @param mixed[]|null $orderBy
-     *
-     * @return void
      */
     public static function processOrderBy(QueryBuilder $queryBuilder, ?array $orderBy = null): void
     {
@@ -306,10 +302,10 @@ class RepositoryHelper
      */
     private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, array $comparison): array
     {
-        $comparisonObject = (object)\array_combine(['field', 'operator', 'value'], $comparison);
+        $comparisonObject = (object) \array_combine(['field', 'operator', 'value'], $comparison);
 
         // Increase parameter count
-        self::$parameterCount++;
+        ++self::$parameterCount;
 
         // Initialize used callback parameters
         $parameters = [$comparisonObject->field];
@@ -347,7 +343,7 @@ class RepositoryHelper
             $parameters[] = '?' . self::$parameterCount;
             $queryBuilder->setParameter(self::$parameterCount, $value[0]);
 
-            self::$parameterCount++;
+            ++self::$parameterCount;
 
             $parameters[] = '?' . self::$parameterCount;
             $queryBuilder->setParameter(self::$parameterCount, $value[1]);

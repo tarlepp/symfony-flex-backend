@@ -56,7 +56,7 @@ interface ResponseHandlerInterface
      *
      * @return ResponseHandlerInterface
      */
-    public function setResource(RestResourceInterface $resource): ResponseHandlerInterface;
+    public function setResource(RestResourceInterface $resource): self;
 
     /**
      * Helper method to get serialization context for request.

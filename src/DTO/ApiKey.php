@@ -63,7 +63,7 @@ class ApiKey extends RestDto
      *
      * @return ApiKey
      */
-    public function setId(?string $id = null): ApiKey
+    public function setId(?string $id = null): self
     {
         $this->setVisited('id');
 
@@ -85,7 +85,7 @@ class ApiKey extends RestDto
      *
      * @return ApiKey
      */
-    public function setToken(string $token): ApiKey
+    public function setToken(string $token): self
     {
         $this->setVisited('token');
 
@@ -107,7 +107,7 @@ class ApiKey extends RestDto
      *
      * @return ApiKey
      */
-    public function setDescription(string $description): ApiKey
+    public function setDescription(string $description): self
     {
         $this->setVisited('description');
 
@@ -129,7 +129,7 @@ class ApiKey extends RestDto
      *
      * @return ApiKey
      */
-    public function setUserGroups(array $userGroups): ApiKey
+    public function setUserGroups(array $userGroups): self
     {
         $this->setVisited('userGroups');
 
@@ -173,7 +173,7 @@ class ApiKey extends RestDto
      *
      * @return ApiKey
      */
-    protected function updateUserGroups(ApiKeyEntity $entity, array $value): ApiKey
+    protected function updateUserGroups(ApiKeyEntity $entity, array $value): self
     {
         $entity->clearUserGroups();
 

@@ -417,7 +417,7 @@ trait RestResourceBaseMethods
 
         // Oh noes, we have some errors
         if (\count($errors) > 0) {
-            throw new ValidatorException((string)$errors);
+            throw new ValidatorException((string) $errors);
         }
     }
 
@@ -435,7 +435,7 @@ trait RestResourceBaseMethods
 
         // Oh noes, we have some errors
         if (\count($errors) > 0) {
-            throw new ValidatorException((string)$errors);
+            throw new ValidatorException((string) $errors);
         }
     }
 

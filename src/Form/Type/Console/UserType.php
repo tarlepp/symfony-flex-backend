@@ -40,8 +40,8 @@ class UserType extends AbstractType
             'username',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Username',
-                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::LABEL => 'Username',
+                FormTypeLabelInterface::REQUIRED => true,
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -49,8 +49,8 @@ class UserType extends AbstractType
             'firstname',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Firstname',
-                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::LABEL => 'Firstname',
+                FormTypeLabelInterface::REQUIRED => true,
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -58,8 +58,8 @@ class UserType extends AbstractType
             'surname',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Surname',
-                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::LABEL => 'Surname',
+                FormTypeLabelInterface::REQUIRED => true,
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -67,8 +67,8 @@ class UserType extends AbstractType
             'email',
             Type\EmailType::class,
             [
-                FormTypeLabelInterface::LABEL      => 'Email address',
-                FormTypeLabelInterface::REQUIRED   => true,
+                FormTypeLabelInterface::LABEL => 'Email address',
+                FormTypeLabelInterface::REQUIRED => true,
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -76,15 +76,15 @@ class UserType extends AbstractType
             'password',
             Type\RepeatedType::class,
             [
-                FormTypeLabelInterface::TYPE           => Type\PasswordType::class,
-                FormTypeLabelInterface::REQUIRED       => true,
-                FormTypeLabelInterface::FIRST_NAME     => 'password1',
-                FormTypeLabelInterface::FIRST_OPTIONS  => [
-                    FormTypeLabelInterface::LABEL      => 'Password',
+                FormTypeLabelInterface::TYPE => Type\PasswordType::class,
+                FormTypeLabelInterface::REQUIRED => true,
+                FormTypeLabelInterface::FIRST_NAME => 'password1',
+                FormTypeLabelInterface::FIRST_OPTIONS => [
+                    FormTypeLabelInterface::LABEL => 'Password',
                 ],
-                FormTypeLabelInterface::SECOND_NAME    => 'password2',
+                FormTypeLabelInterface::SECOND_NAME => 'password2',
                 FormTypeLabelInterface::SECOND_OPTIONS => [
-                    FormTypeLabelInterface::LABEL      => 'Repeat password',
+                    FormTypeLabelInterface::LABEL => 'Repeat password',
                 ],
             ],
         ],
@@ -124,10 +124,10 @@ class UserType extends AbstractType
                 'userGroups',
                 Type\ChoiceType::class,
                 [
-                    'choices'       => $this->getUserGroupChoices(),
-                    'multiple'      => true,
-                    FormTypeLabelInterface::REQUIRED      => true,
-                    FormTypeLabelInterface::EMPTY_DATA    => '',
+                    'choices' => $this->getUserGroupChoices(),
+                    'multiple' => true,
+                    FormTypeLabelInterface::REQUIRED => true,
+                    FormTypeLabelInterface::EMPTY_DATA => '',
                 ]
             );
 
@@ -144,7 +144,7 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => UserDto::class
+            'data_class' => UserDto::class,
         ]);
     }
 }

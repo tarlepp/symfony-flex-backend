@@ -33,12 +33,12 @@ class ApiKeyManagementCommand extends Command
         $this->setDescription('Console command to manage API keys');
 
         $this->setChoices([
-            'api-key:list'          => 'List API keys',
-            'api-key:create'        => 'Create API key',
-            'api-key:edit'          => 'Edit API key',
-            'api-key:change-token'  => 'Change API key token',
-            'api-key:remove'        => 'Remove API key',
-            false                   => 'Exit',
+            'api-key:list' => 'List API keys',
+            'api-key:create' => 'Create API key',
+            'api-key:edit' => 'Edit API key',
+            'api-key:change-token' => 'Change API key token',
+            'api-key:remove' => 'Remove API key',
+            false => 'Exit',
         ]);
     }
 }

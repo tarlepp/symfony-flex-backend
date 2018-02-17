@@ -37,8 +37,6 @@ trait UserGroupChoices
          * Lambda function to iterate all user groups and to create necessary choices array.
          *
          * @param UserGroup $userGroup
-         *
-         * @return void
          */
         $iterator = function (UserGroup $userGroup) use (&$choices): void {
             $name = $userGroup->getName() . ' [' . $userGroup->getRole()->getId() . ']';

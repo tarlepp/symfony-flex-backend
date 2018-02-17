@@ -145,7 +145,7 @@ class Response
             $this->responses->addOk($operation, $description, $statusCode, $controller->getResource()->getEntityName());
 
             foreach ($responses as $method) {
-                $this->responses->$method($operation, $routeModel);
+                $this->responses->{$method}($operation, $routeModel);
             }
         }
     }

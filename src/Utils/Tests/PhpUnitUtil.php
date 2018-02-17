@@ -39,9 +39,9 @@ class PhpUnitUtil
         $application->setAutoExit(false);
 
         $input = new ArrayInput([
-            'command'           => 'doctrine:fixtures:load',
-            '--no-interaction'  => true,
-            '--quiet'           => true,
+            'command' => 'doctrine:fixtures:load',
+            '--no-interaction' => true,
+            '--quiet' => true,
         ]);
 
         $input->setInteractive(false);

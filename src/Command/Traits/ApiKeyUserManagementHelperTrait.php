@@ -43,9 +43,9 @@ trait ApiKeyUserManagementHelperTrait
         foreach ($this->getRolesService()->getRoles() as $role) {
             $arguments = [
                 'command' => 'user:create-group',
-                '--name'  => $this->getRolesService()->getRoleLabel($role),
-                '--role'  => $role,
-                '-n'      => true,
+                '--name' => $this->getRolesService()->getRoleLabel($role),
+                '--role' => $role,
+                '-n' => true,
             ];
 
             $input = new ArrayInput($arguments);

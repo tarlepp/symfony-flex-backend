@@ -52,12 +52,12 @@ class Security
 
         if (\count(\array_values(\array_filter($routeModel->getMethodAnnotations(), $filter))) === 1) {
             $parameter = [
-                'type'          => 'string',
-                'name'          => 'Authorization',
-                'in'            => 'header',
-                'required'      => true,
-                'description'   => 'Authorization header',
-                'default'       => 'Bearer _your_jwt_here_',
+                'type' => 'string',
+                'name' => 'Authorization',
+                'in' => 'header',
+                'required' => true,
+                'description' => 'Authorization header',
+                'default' => 'Bearer _your_jwt_here_',
             ];
 
             // Add Authorization header parameter

@@ -236,7 +236,7 @@ trait RestMethodHelper
      */
     private function getExceptionCode(\Throwable $exception): int
     {
-        return (int)$exception->getCode() !== 0 ? (int)$exception->getCode() : Response::HTTP_BAD_REQUEST;
+        return (int) $exception->getCode() !== 0 ? (int) $exception->getCode() : Response::HTTP_BAD_REQUEST;
     }
 
     /**
