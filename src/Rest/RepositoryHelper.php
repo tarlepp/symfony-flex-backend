@@ -305,7 +305,7 @@ class RepositoryHelper
         $comparisonObject = (object)\array_combine(['field', 'operator', 'value'], $comparison);
 
         // Increase parameter count
-        ++self::$parameterCount;
+        self::$parameterCount++;
 
         // Initialize used callback parameters
         $parameters = [$comparisonObject->field];
@@ -343,7 +343,7 @@ class RepositoryHelper
             $parameters[] = '?' . self::$parameterCount;
             $queryBuilder->setParameter(self::$parameterCount, $value[0]);
 
-            ++self::$parameterCount;
+            self::$parameterCount++;
 
             $parameters[] = '?' . self::$parameterCount;
             $queryBuilder->setParameter(self::$parameterCount, $value[1]);

@@ -11,6 +11,7 @@ parameters:
         - PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer
         - PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer
         - PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer
+        - PhpCsFixer\Fixer\Operator\IncrementStyleFixer
         - PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer
         - Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer
         - Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer
