@@ -9,6 +9,7 @@ namespace App\Maker;
 
 use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
+use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
 use Symfony\Bundle\MakerBundle\MakerInterface;
 use Symfony\Bundle\MakerBundle\Str;
@@ -95,6 +96,17 @@ class RestApiMaker implements MakerInterface
      * @param Command        $command
      */
     public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
+    {
+    }
+
+    /**
+     * Called after normal code generation: allows you to do anything.
+     *
+     * @param InputInterface $input
+     * @param ConsoleStyle   $io
+     * @param Generator      $generator
+     */
+    public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
     }
 
@@ -239,9 +251,12 @@ class RestApiMaker implements MakerInterface
         $output = [];
 
         /**
-         * @var array
+         * @var mixed[] $items
          */
         foreach ($tests as $items) {
+            /**
+             * @var string[] $parts
+             */
             foreach ($items as $key => $parts) {
                 $output[$baseDir . $key] = \implode('', $parts);
             }
