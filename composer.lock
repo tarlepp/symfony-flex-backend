@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "89935440ea135188e7a22497e0350e66",
+    "content-hash": "d1064b12bb3083cec4f0d08af0894ca4",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6684,16 +6684,16 @@
         },
         {
             "name": "nette/utils",
-            "version": "v2.5.0",
+            "version": "v2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "b7b7d583eb04d7a8fe787e40cf12e14cfa61520e"
+                "reference": "8a85ce76298c8a8941f912b8fa3ee93ca17d2ebc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/b7b7d583eb04d7a8fe787e40cf12e14cfa61520e",
-                "reference": "b7b7d583eb04d7a8fe787e40cf12e14cfa61520e",
+                "url": "https://api.github.com/repos/nette/utils/zipball/8a85ce76298c8a8941f912b8fa3ee93ca17d2ebc",
+                "reference": "8a85ce76298c8a8941f912b8fa3ee93ca17d2ebc",
                 "shasum": ""
             },
             "require": {
@@ -6762,7 +6762,7 @@
                 "utility",
                 "validation"
             ],
-            "time": "2018-02-17T17:33:12+00:00"
+            "time": "2018-02-19T14:42:42+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -8779,16 +8779,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.0.2",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "bf97703ddb68c6b37bd6bab5f5ebd5c7542ca1ef"
+                "reference": "14fa7ef58f662a8cf83508aa7df7b1002fcccf90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/bf97703ddb68c6b37bd6bab5f5ebd5c7542ca1ef",
-                "reference": "bf97703ddb68c6b37bd6bab5f5ebd5c7542ca1ef",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/14fa7ef58f662a8cf83508aa7df7b1002fcccf90",
+                "reference": "14fa7ef58f662a8cf83508aa7df7b1002fcccf90",
                 "shasum": ""
             },
             "require": {
@@ -8801,6 +8801,7 @@
                 "symfony/http-kernel": "^3.4|^4.0"
             },
             "require-dev": {
+                "allocine/twigcs": "^3.0",
                 "friendsofphp/php-cs-fixer": "^2.8",
                 "symfony/phpunit-bridge": "^3.4|^4.0",
                 "symfony/process": "^3.4|^4.0"
@@ -8826,13 +8827,15 @@
                     "homepage": "https://symfony.com/contributors"
                 }
             ],
+            "description": "Symfony Maker helps you create empty commands, controllers, form classes, tests and more so you can forget about writing boilerplate code.",
+            "homepage": "https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html",
             "keywords": [
                 "code generator",
                 "generator",
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2017-12-04T17:50:28+00:00"
+            "time": "2018-02-19T19:05:18+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",
@@ -9383,16 +9386,16 @@
         },
         {
             "name": "symplify/better-reflection-docblock",
-            "version": "v3.2.21",
+            "version": "v3.2.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/BetterReflectionDocBlock.git",
-                "reference": "cb4299387261f770b9850758b697cf224ea5644a"
+                "reference": "b4b932bfbe963dee84f495efaa60096149949826"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/BetterReflectionDocBlock/zipball/cb4299387261f770b9850758b697cf224ea5644a",
-                "reference": "cb4299387261f770b9850758b697cf224ea5644a",
+                "url": "https://api.github.com/repos/Symplify/BetterReflectionDocBlock/zipball/b4b932bfbe963dee84f495efaa60096149949826",
+                "reference": "b4b932bfbe963dee84f495efaa60096149949826",
                 "shasum": ""
             },
             "require": {
@@ -9419,11 +9422,11 @@
                 "MIT"
             ],
             "description": "Slim wrapper around phpdocumentor/reflection-docblock with better DX and simpler API.",
-            "time": "2018-01-28T08:42:03+00:00"
+            "time": "2018-02-20T15:14:49+00:00"
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v3.2.21",
+            "version": "v3.2.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
@@ -9470,20 +9473,21 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v3.2.21",
+            "version": "v3.2.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "7c073dde049881df818916885f3e90ece75ffaf5"
+                "reference": "61147650032718c837014eb29ac3d0380efb3587"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/7c073dde049881df818916885f3e90ece75ffaf5",
-                "reference": "7c073dde049881df818916885f3e90ece75ffaf5",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/61147650032718c837014eb29ac3d0380efb3587",
+                "reference": "61147650032718c837014eb29ac3d0380efb3587",
                 "shasum": ""
             },
             "require": {
                 "friendsofphp/php-cs-fixer": "2.10",
+                "jean85/pretty-package-versions": "^1.0",
                 "nette/caching": "^2.4",
                 "nette/di": "^2.4",
                 "nette/neon": "^2.4",
@@ -9527,11 +9531,11 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2018-02-07T14:08:30+00:00"
+            "time": "2018-02-17T13:16:53+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v3.2.21",
+            "version": "v3.2.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
@@ -9573,7 +9577,7 @@
         },
         {
             "name": "symplify/token-runner",
-            "version": "v3.2.21",
+            "version": "v3.2.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/TokenRunner.git",
