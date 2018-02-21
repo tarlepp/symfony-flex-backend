@@ -41,7 +41,7 @@
 		"symfony/asset": "4.0.4",
 		"symfony/console": "4.0.4",
 		"symfony/expression-language": "4.0.4",
-		"symfony/flex": "1.0.68",
+		"symfony/flex": "1.0.69",
 		"symfony/form": "4.0.4",
 		"symfony/framework-bundle": "4.0.4",
 		"symfony/lts": "^4@dev",
@@ -62,14 +62,14 @@
 		"phpunit/phpcov": "4.0.4",
 		"sebastian/finder-facade": "1.2.2",
 		"sensiolabs/security-checker": "4.1.7",
-		"squizlabs/php_codesniffer": "3.2.2",
+		"squizlabs/php_codesniffer": "3.2.3",
 		"symfony/browser-kit": "4.0.4",
 		"symfony/debug-pack": "1.0.4",
 		"symfony/dotenv": "4.0.4",
 		"symfony/maker-bundle": "1.1.0",
 		"symfony/requirements-checker": "1.0.3",
 		"symfony/web-server-bundle": "4.0.4",
-		"symplify/easy-coding-standard": "3.2.22"
+		"symplify/easy-coding-standard": "3.2.24"
 	},
 	"config": {
 		"preferred-install": {

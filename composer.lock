@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d1064b12bb3083cec4f0d08af0894ca4",
+    "content-hash": "fc696887d7e9f299a52a65869d0f2802",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2432,15 +2432,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "94230db36bded9d164ffccabcb38c67eedd63595"
+                "reference": "ca42897e0363c973cbbc80454771608595d8c36a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/94230db36bded9d164ffccabcb38c67eedd63595",
-                "reference": "94230db36bded9d164ffccabcb38c67eedd63595",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ca42897e0363c973cbbc80454771608595d8c36a",
+                "reference": "ca42897e0363c973cbbc80454771608595d8c36a",
                 "shasum": ""
             },
             "conflict": {
+                "3f/pygmentize": "<1.2",
                 "adodb/adodb-php": "<5.20.6",
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
                 "aws/aws-sdk-php": ">=3,<3.2.1",
@@ -2491,6 +2492,8 @@
                 "phpmailer/phpmailer": ">=5,<5.2.24",
                 "phpunit/phpunit": ">=4.8.19,<4.8.28|>=5.0.10,<5.6.3",
                 "phpxmlrpc/extras": "<0.6.1",
+                "propel/propel": ">=2.0.0-alpha1,<=2.0.0-alpha7",
+                "propel/propel1": ">=1,<=1.7.1",
                 "pusher/pusher-php-server": "<2.2.1",
                 "sabre/dav": ">=1.6,<1.6.99|>=1.7,<1.7.11|>=1.8,<1.8.9",
                 "shopware/shopware": "<5.3.7",
@@ -2522,7 +2525,7 @@
                 "symfony/web-profiler-bundle": ">=2,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
+                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
                 "twig/twig": "<1.20",
                 "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.22|>=8,<8.7.5",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
@@ -2571,7 +2574,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-02-19T09:31:21+00:00"
+            "time": "2018-02-21T13:02:47+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
@@ -3379,16 +3382,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.68",
+            "version": "v1.0.69",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "0241b2acbb58df29e633b03fb56eb349a207613f"
+                "reference": "9f73868b361692629c73929c4dc2003f8d4bcae8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/0241b2acbb58df29e633b03fb56eb349a207613f",
-                "reference": "0241b2acbb58df29e633b03fb56eb349a207613f",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/9f73868b361692629c73929c4dc2003f8d4bcae8",
+                "reference": "9f73868b361692629c73929c4dc2003f8d4bcae8",
                 "shasum": ""
             },
             "require": {
@@ -3421,7 +3424,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2018-01-31T19:34:57+00:00"
+            "time": "2018-02-19T11:25:02+00:00"
         },
         {
             "name": "symfony/form",
@@ -8462,16 +8465,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.2.2",
+            "version": "3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "d7c00c3000ac0ce79c96fcbfef86b49a71158cd1"
+                "reference": "4842476c434e375f9d3182ff7b89059583aa8b27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d7c00c3000ac0ce79c96fcbfef86b49a71158cd1",
-                "reference": "d7c00c3000ac0ce79c96fcbfef86b49a71158cd1",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/4842476c434e375f9d3182ff7b89059583aa8b27",
+                "reference": "4842476c434e375f9d3182ff7b89059583aa8b27",
                 "shasum": ""
             },
             "require": {
@@ -8481,7 +8484,7 @@
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0"
+                "phpunit/phpunit": "^4.0 || ^5.0 || ^6.0 || ^7.0"
             },
             "bin": [
                 "bin/phpcs",
@@ -8509,7 +8512,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-12-19T21:44:46+00:00"
+            "time": "2018-02-20T21:35:23+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -9386,7 +9389,7 @@
         },
         {
             "name": "symplify/better-reflection-docblock",
-            "version": "v3.2.22",
+            "version": "v3.2.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/BetterReflectionDocBlock.git",
@@ -9426,7 +9429,7 @@
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v3.2.22",
+            "version": "v3.2.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
@@ -9473,16 +9476,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v3.2.22",
+            "version": "v3.2.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "61147650032718c837014eb29ac3d0380efb3587"
+                "reference": "ba21d0838de866bd8ef02257d987285c8df5c44c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/61147650032718c837014eb29ac3d0380efb3587",
-                "reference": "61147650032718c837014eb29ac3d0380efb3587",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/ba21d0838de866bd8ef02257d987285c8df5c44c",
+                "reference": "ba21d0838de866bd8ef02257d987285c8df5c44c",
                 "shasum": ""
             },
             "require": {
@@ -9531,11 +9534,11 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2018-02-17T13:16:53+00:00"
+            "time": "2018-02-20T21:10:22+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v3.2.22",
+            "version": "v3.2.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
@@ -9577,7 +9580,7 @@
         },
         {
             "name": "symplify/token-runner",
-            "version": "v3.2.22",
+            "version": "v3.2.24",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/TokenRunner.git",
