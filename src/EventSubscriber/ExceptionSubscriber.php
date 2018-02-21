@@ -145,6 +145,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         if ($this->environment === 'dev') {
             $error += [
                 'debug' => [
+                    'exception' => \get_class($exception),
                     'file' => $exception->getFile(),
                     'line' => $exception->getLine(),
                     'message' => $exception->getMessage(),
