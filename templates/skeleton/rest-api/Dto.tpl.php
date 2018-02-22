@@ -33,6 +33,8 @@ class <?= $entityName ?> extends RestDto
     public function load(EntityInterface $entity): RestDtoInterface
     {
         $this->id = $entity->getId();
+
+        return $this;
     }
 
     /**
