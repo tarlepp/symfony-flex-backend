@@ -11,9 +11,8 @@ use Symfony\Bundle\MakerBundle\ConsoleStyle;
 use Symfony\Bundle\MakerBundle\DependencyBuilder;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\InputConfiguration;
-use Symfony\Bundle\MakerBundle\MakerInterface;
+use Symfony\Bundle\MakerBundle\Maker\AbstractMaker;
 use Symfony\Bundle\MakerBundle\Str;
-use Symfony\Bundle\MakerBundle\Validator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +23,7 @@ use Symfony\Component\Console\Input\InputInterface;
  * @package App\Maker
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class RestApiMaker implements MakerInterface
+class RestApiMaker extends AbstractMaker
 {
     private const PARAM_RESOURCE_NAME = 'resourceName';
     private const PARAM_AUTHOR = 'author';
@@ -32,6 +31,11 @@ class RestApiMaker implements MakerInterface
     private const PARAM_CONTROLLER_NAME = 'controllerName';
     private const PARAM_ENTITY_NAME = 'entityName';
     private const PARAM_REPOSITORY_NAME = 'repositoryName';
+
+    /**
+     * @var string[]
+     */
+    private $createdFiles = [];
 
     /**
      * Return the command name for your maker (e.g. make:report).
@@ -51,9 +55,13 @@ class RestApiMaker implements MakerInterface
      *
      * @param Command            $command
      * @param InputConfiguration $inputConfig
+     *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function configureCommand(Command $command, InputConfiguration $inputConfig): void
     {
+        $command->setName(self::getCommandName());
+
         $message = \sprintf(
             'Creates necessary classes for new REST resource (%s)',
             implode(', ', ['Entity', 'Repository', 'Resource', 'Controller', 'Test classes'])
@@ -89,25 +97,35 @@ class RestApiMaker implements MakerInterface
     }
 
     /**
-     * If necessary, you can use this method to interactively ask the user for input.
-     *
-     * @param InputInterface $input
-     * @param ConsoleStyle   $io
-     * @param Command        $command
-     */
-    public function interact(InputInterface $input, ConsoleStyle $io, Command $command): void
-    {
-    }
-
-    /**
      * Called after normal code generation: allows you to do anything.
      *
      * @param InputInterface $input
      * @param ConsoleStyle   $io
      * @param Generator      $generator
+     *
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws \Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException
      */
     public function generate(InputInterface $input, ConsoleStyle $io, Generator $generator): void
     {
+        $parameters = $this->getParameters($input);
+
+        $processFile = function (array $input) use ($generator, $parameters): string {
+            $details = $generator->createClassNameDetails($input['name'], $input['namespace'], $input['suffix']);
+
+            return $generator->generateClass($details->getFullName(), $input['template'], $parameters);
+        };
+
+        $this->setCreatedFiles(\array_map($processFile, $this->getFiles($parameters)));
+
+        $generator->writeChanges();
+
+        $this->writeSuccessMessage($io);
+
+        $io->text([
+            'Next: Customize your entity.',
+            'Then, change your REST traits in controller how you like to use those',
+        ]);
     }
 
     /**
@@ -127,8 +145,6 @@ class RestApiMaker implements MakerInterface
         $author = $input->getArgument(self::PARAM_AUTHOR);
         $swaggerTag = $input->getArgument(self::PARAM_SWAGGER_TAG);
 
-        Validator::validateClassName($resourceName);
-
         return [
             'resource' => $resourceName,
             'controllerName' => $resourceName . 'Controller',
@@ -143,18 +159,27 @@ class RestApiMaker implements MakerInterface
     }
 
     /**
-     * Return the array of files that should be generated into the user's project.
+     * @return string[]
+     */
+    public function getCreatedFiles(): array
+    {
+        return $this->createdFiles;
+    }
+
+    /**
+     * @param string[] $createdFiles
      *
-     * For example:
-     *
-     *    return array(
-     *        __DIR__.'/../Resources/skeleton/command/Command.tpl.php' =>
-     *        'src/Command/'.$params['command_class_name'].'.php',
-     *    );
-     *
-     * These files are parsed as PHP.
-     *
-     * @param mixed[] $params The parameters returned from getParameters()
+     * @return RestApiMaker
+     */
+    public function setCreatedFiles(array $createdFiles): RestApiMaker
+    {
+        $this->createdFiles = $createdFiles;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed[] $params
      *
      * @return mixed[]
      */
@@ -164,28 +189,40 @@ class RestApiMaker implements MakerInterface
 
         return \array_merge(
             [
-                $baseDir . 'Controller.tpl.php' => 'src/Controller/' . $params[self::PARAM_CONTROLLER_NAME] . '.php',
-                $baseDir . 'Dto.tpl.php' => 'src/DTO/' . $params[self::PARAM_ENTITY_NAME] . '.php',
-                $baseDir . 'Entity.tpl.php' => 'src/Entity/' . $params[self::PARAM_ENTITY_NAME] . '.php',
-                $baseDir . 'Repository.tpl.php' => 'src/Repository/' . $params[self::PARAM_REPOSITORY_NAME] . '.php',
-                $baseDir . 'Resource.tpl.php' => 'src/Resource/' . $params[self::PARAM_RESOURCE_NAME] . '.php',
+                [
+                    'name' => $params[self::PARAM_CONTROLLER_NAME],
+                    'namespace' => 'Controller',
+                    'template' => $baseDir . 'Controller.tpl.php',
+                    'suffix' => '',
+                ],
+                [
+                    'name' => $params[self::PARAM_ENTITY_NAME],
+                    'namespace' => 'Entity',
+                    'template' => $baseDir . 'Entity.tpl.php',
+                    'suffix' => '',
+                ],
+                [
+                    'name' => $params[self::PARAM_ENTITY_NAME],
+                    'namespace' => 'DTO',
+                    'template' => $baseDir . 'Dto.tpl.php',
+                    'suffix' => '',
+                ],
+                [
+                    'name' => $params[self::PARAM_REPOSITORY_NAME],
+                    'namespace' => 'Repository',
+                    'template' => $baseDir . 'Repository.tpl.php',
+                    'parameters' => $params,
+                    'suffix' => '',
+                ],
+                [
+                    'name' => $params[self::PARAM_RESOURCE_NAME],
+                    'namespace' => 'Resource',
+                    'template' => $baseDir . 'Resource.tpl.php',
+                    'suffix' => '',
+                ],
             ],
             $this->getTestFiles($params, $baseDir)
         );
-    }
-
-    /**
-     * An opportunity to write a nice message after generation finishes.
-     *
-     * @param mixed[]      $params
-     * @param ConsoleStyle $io
-     */
-    public function writeNextStepsMessage(array $params, ConsoleStyle $io): void
-    {
-        $io->text([
-            'Next: Customize your entity.',
-            'Then, change your REST traits in controller how you like to use those',
-        ]);
     }
 
     /**
@@ -215,53 +252,43 @@ class RestApiMaker implements MakerInterface
      */
     private function getTestFiles(array $params, string $baseDir): array
     {
-        $suffix = 'Test.php';
-
-        $tests = [
-            'Functional' => [
-                'ControllerTestFunctional.tpl.php' => [
-                    'tests/Functional/Controller/',
-                    $params[self::PARAM_CONTROLLER_NAME] . $suffix,
-                ],
+        return [
+            [
+                'name' => $params[self::PARAM_CONTROLLER_NAME],
+                'namespace' => 'Tests\\Functional\\Controller\\',
+                'template' => $baseDir . 'ControllerTestFunctional.tpl.php',
+                'suffix' => 'Test',
             ],
-            'Integration' => [
-                'ControllerTestIntegration.tpl.php' => [
-                    'tests/Integration/Controller/',
-                    $params[self::PARAM_CONTROLLER_NAME] . $suffix,
-                ],
-                'DtoTestIntegration.tpl.php' => [
-                    'tests/Integration/DTO/',
-                    $params[self::PARAM_ENTITY_NAME] . $suffix,
-                ],
-                'EntityTestIntegration.tpl.php' => [
-                    'tests/Integration/Entity/',
-                    $params[self::PARAM_ENTITY_NAME] . $suffix,
-                ],
-                'RepositoryTestIntegration.tpl.php' => [
-                    'tests/Integration/Repository/',
-                    $params[self::PARAM_REPOSITORY_NAME] . $suffix,
-                ],
-                'ResourceTestIntegration.tpl.php' => [
-                    'tests/Integration/Resource/',
-                    $params[self::PARAM_RESOURCE_NAME] . $suffix,
-                ],
+            [
+                'name' => $params[self::PARAM_CONTROLLER_NAME],
+                'namespace' => 'Tests\\Integration\\Controller\\',
+                'template' => $baseDir . 'ControllerTestIntegration.tpl.php',
+                'suffix' => 'Test',
+            ],
+            [
+                'name' => $params[self::PARAM_ENTITY_NAME],
+                'namespace' => 'Tests\\Integration\\DTO\\',
+                'template' => $baseDir . 'DtoTestIntegration.tpl.php',
+                'suffix' => 'Test',
+            ],
+            [
+                'name' => $params[self::PARAM_ENTITY_NAME],
+                'namespace' => 'Tests\\Integration\\Entity\\',
+                'template' => $baseDir . 'EntityTestIntegration.tpl.php',
+                'suffix' => 'Test',
+            ],
+            [
+                'name' => $params[self::PARAM_REPOSITORY_NAME],
+                'namespace' => 'Tests\\Integration\\Repository\\',
+                'template' => $baseDir . 'RepositoryTestIntegration.tpl.php',
+                'suffix' => 'Test',
+            ],
+            [
+                'name' => $params[self::PARAM_RESOURCE_NAME],
+                'namespace' => 'Tests\\Integration\\Resource\\',
+                'template' => $baseDir . 'ResourceTestIntegration.tpl.php',
+                'suffix' => 'Test',
             ],
         ];
-
-        $output = [];
-
-        /**
-         * @var mixed[] $items
-         */
-        foreach ($tests as $items) {
-            /**
-             * @var string[] $parts
-             */
-            foreach ($items as $key => $parts) {
-                $output[$baseDir . $key] = \implode('', $parts);
-            }
-        }
-
-        return $output;
     }
 }
