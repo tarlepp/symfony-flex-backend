@@ -49,6 +49,7 @@ Note that this project is build with [Symfony 4](https://symfony.com/4) and
   * [Links / resources](#links--resources)
   * [Notes](#notes)
     * [User password hashing](#user-password-hashing)
+      * [Installing libsodium](#installing-libsodium)
   * [Authors](#authors)
   * [License](#license)
 
@@ -366,6 +367,24 @@ library.
 If you cannot or don't want to use this as password hashing method you need to
 change [security.yaml](config/packages/security.yaml#L3-L7) before [installation](#installation)
 step.
+
+#### Installing libsodium
+
+To check if your current PHP has libsodium you can use following command
+
+```bash
+php -m
+```
+
+If [PHP Modules] does not contain `libsodium' you need to install it to get
+password hashing to work. You can install it with following commands on your 
+*nix box.
+
+```bash
+git clone -b stable https://github.com/jedisct1/libsodium.git
+cd libsodium && sudo ./configure && sudo make check && sudo make install
+pecl install libsodium
+```
 
 ## Authors
 
