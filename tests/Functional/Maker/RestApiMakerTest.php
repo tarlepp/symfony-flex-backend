@@ -23,23 +23,9 @@ class RestApiMakerTest extends KernelTestCase
      */
     private $fs;
 
-    /**
-     * @var string
-     */
-    private $targetDir;
-
     public function setUp()
     {
-        $this->targetDir = \sys_get_temp_dir() .'/' . \uniqid('sf_maker_', true);
         $this->fs = new Filesystem();
-        $this->fs->mkdir($this->targetDir);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        $this->fs->remove($this->targetDir);
     }
 
     public function testThatCommandRunsWithSuccess(): void
@@ -51,7 +37,7 @@ class RestApiMakerTest extends KernelTestCase
             'Library',
         ];
 
-        $command = new MakerCommand($maker, $this->createGenerator());
+        $command = new MakerCommand($maker, $this->createFileManager());
         $command->setCheckDependencies(false);
 
         $tester = new CommandTester($command);
@@ -59,11 +45,14 @@ class RestApiMakerTest extends KernelTestCase
         $tester->execute(array());
 
         $this->assertContains('Success', $tester->getDisplay());
+
+        // Clean up files
+        $this->fs->remove($maker->getCreatedFiles());
     }
 
     /**
      * @expectedException \Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException
-     * @expectedExceptionMessage "123Book" is not valid as a PHP class name (it must start with a letter or underscore, followed by any number of letters, numbers, or underscores)
+     * @expectedExceptionMessage "App\Controller\123BookController" is not valid as a PHP class name (it must start with a letter or underscore, followed by any number of letters, numbers, or underscores)
      */
     public function testThatCommandReturnsAnErrorWithInvalidInput(): void
     {
@@ -74,7 +63,7 @@ class RestApiMakerTest extends KernelTestCase
             'Library',
         ];
 
-        $command = new MakerCommand($maker, $this->createGenerator());
+        $command = new MakerCommand($maker, $this->createFileManager());
 
         $tester = new CommandTester($command);
         $tester->setInputs($inputs);
@@ -84,10 +73,10 @@ class RestApiMakerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
+     * @return FileManager
      */
-    private function createGenerator(): Generator
+    private function createFileManager(): FileManager
     {
-        return new Generator(new FileManager(new Filesystem(), $this->targetDir));
+        return new FileManager($this->fs, __DIR__ . '/../../../');
     }
 }

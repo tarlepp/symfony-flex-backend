@@ -376,7 +376,7 @@ To check if your current PHP has libsodium you can use following command
 php -m
 ```
 
-If [PHP Modules] does not contain `libsodium' you need to install it to get
+If _[PHP Modules]_ does not contain `libsodium` you need to install it to get
 password hashing to work. You can install it with following commands on your 
 *nix box.
 
