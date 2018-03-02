@@ -171,7 +171,7 @@ class RestApiMaker extends AbstractMaker
      *
      * @return RestApiMaker
      */
-    public function setCreatedFiles(array $createdFiles): RestApiMaker
+    public function setCreatedFiles(array $createdFiles): self
     {
         $this->createdFiles = $createdFiles;
 
