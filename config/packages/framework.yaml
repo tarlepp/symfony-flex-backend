@@ -3,6 +3,7 @@ framework:
     secret: '%env(APP_SECRET)%'
     serializer:
         enable_annotations: true
+    csrf_protection: false
     php_errors:
         log: true
     router:
