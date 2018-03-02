@@ -286,7 +286,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(201, $response->getStatusCode());
+        static::assertSame(201, $response->getStatusCode(), $response->getContent());
 
         /** @noinspection NullPointerExceptionInspection */
         $responseData = $response->getContent();
