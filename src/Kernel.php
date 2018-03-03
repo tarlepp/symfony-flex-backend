@@ -7,13 +7,12 @@ declare(strict_types = 1);
  */
 namespace App;
 
+use App\DependencyInjection\Compiler\ResourceCollectionPass;
 use App\DependencyInjection\Compiler\TestCasePass;
-use App\Resource\Collection;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
@@ -71,34 +70,27 @@ class Kernel extends BaseKernel implements CompilerPassInterface
     }
 
     /**
+     * You can modify the container here before it is dumped to PHP code.
+     *
+     * @param ContainerBuilder $container
+     */
+    public function process(ContainerBuilder $container): void
+    {
+    }
+
+    /**
      * The extension point similar to the Bundle::build() method.
      *
      * Use this method to register compiler passes and manipulate the container during the building process.
      *
      * @param ContainerBuilder $container
      */
-    public function build(ContainerBuilder $container): void
+    protected function build(ContainerBuilder $container): void
     {
         parent::build($container);
 
+        $container->addCompilerPass(new ResourceCollectionPass());
         $container->addCompilerPass(new TestCasePass());
-    }
-
-    /**
-     * You can modify the container here before it is dumped to PHP code.
-     *
-     * @param ContainerBuilder $container
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     */
-    public function process(ContainerBuilder $container): void
-    {
-        $collection = $container->getDefinition(Collection::class);
-
-        foreach ($container->findTaggedServiceIds('app.rest.resource') as $id => $tags) {
-            $collection->addMethodCall('set', [new Reference($id)]);
-        }
     }
 
     /** @noinspection PhpUnusedParameterInspection */
