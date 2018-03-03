@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App;
 
+use App\DependencyInjection\Compiler\TestCasePass;
 use App\Resource\Collection;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -70,24 +71,29 @@ class Kernel extends BaseKernel implements CompilerPassInterface
     }
 
     /**
+     * The extension point similar to the Bundle::build() method.
+     *
+     * Use this method to register compiler passes and manipulate the container during the building process.
+     *
+     * @param ContainerBuilder $container
+     */
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new TestCasePass());
+    }
+
+    /**
      * You can modify the container here before it is dumped to PHP code.
      *
      * @param ContainerBuilder $container
      *
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
-     * @throws \Exception
      */
     public function process(ContainerBuilder $container): void
     {
-        // Within test environment we need to expose certain services as public
-        if (\getenv('APP_ENV') === 'test') {
-            foreach ($container->findTaggedServiceIds('public_on_test') as $id => $tags) {
-                $container->getDefinition($id)->setPublic(true);
-            }
-        }
-
         $collection = $container->getDefinition(Collection::class);
 
         foreach ($container->findTaggedServiceIds('app.rest.resource') as $id => $tags) {
