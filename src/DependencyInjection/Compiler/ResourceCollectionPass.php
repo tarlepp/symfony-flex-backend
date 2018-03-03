@@ -24,6 +24,8 @@ class ResourceCollectionPass implements CompilerPassInterface
     /**
      * This process will attach all REST resource objects to collection class, where we can use those on certain cases.
      *
+     * @codeCoverageIgnore
+     *
      * @param ContainerBuilder $container
      *
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException

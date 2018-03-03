@@ -23,6 +23,8 @@ class TestCasePass implements CompilerPassInterface
      * Within this compiler pass we're setting some tagged services to public so that we can use those on tests a
      * proper way.
      *
+     * @codeCoverageIgnore
+     *
      * @param ContainerBuilder $container
      *
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
