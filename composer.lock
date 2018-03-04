@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c38d66472928c0bdb0175ddca76de2e",
+    "content-hash": "6bb5854a606e2b06c622351eed7372d6",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5258,16 +5258,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.4.4",
+            "version": "v2.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "eddb97148ad779f27e670e1e3f19fb323aedafeb"
+                "reference": "d2117ec118c1ff3d28ccddca8212d82787a4809f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/eddb97148ad779f27e670e1e3f19fb323aedafeb",
-                "reference": "eddb97148ad779f27e670e1e3f19fb323aedafeb",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/d2117ec118c1ff3d28ccddca8212d82787a4809f",
+                "reference": "d2117ec118c1ff3d28ccddca8212d82787a4809f",
                 "shasum": ""
             },
             "require": {
@@ -5320,7 +5320,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-09-27T18:10:31+00:00"
+            "time": "2018-03-03T16:23:01+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -5545,16 +5545,16 @@
     "packages-dev": [
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.6.0",
+            "version": "0.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "34659fcb48ef35fc27c09ded46ac79b25ee95d2f"
+                "reference": "e4cbf937b422bd2ce5ff9929e77592eb8188dbe6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/34659fcb48ef35fc27c09ded46ac79b25ee95d2f",
-                "reference": "34659fcb48ef35fc27c09ded46ac79b25ee95d2f",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/e4cbf937b422bd2ce5ff9929e77592eb8188dbe6",
+                "reference": "e4cbf937b422bd2ce5ff9929e77592eb8188dbe6",
                 "shasum": ""
             },
             "require": {
@@ -5590,7 +5590,7 @@
                 "printer",
                 "result-printer"
             ],
-            "time": "2018-02-04T21:48:07+00:00"
+            "time": "2018-03-02T23:02:03+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -6142,16 +6142,16 @@
         },
         {
             "name": "liuggio/fastest",
-            "version": "v1.6.0",
+            "version": "v1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liuggio/fastest.git",
-                "reference": "171919067208ac67d1e21cf2cf893cb7bd9909a4"
+                "reference": "f61c3b0936998dfb342e0882d510128212a5fe6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liuggio/fastest/zipball/171919067208ac67d1e21cf2cf893cb7bd9909a4",
-                "reference": "171919067208ac67d1e21cf2cf893cb7bd9909a4",
+                "url": "https://api.github.com/repos/liuggio/fastest/zipball/f61c3b0936998dfb342e0882d510128212a5fe6f",
+                "reference": "f61c3b0936998dfb342e0882d510128212a5fe6f",
                 "shasum": ""
             },
             "require": {
@@ -6195,7 +6195,7 @@
                 }
             ],
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
-            "time": "2017-12-22T12:19:20+00:00"
+            "time": "2018-03-04T11:30:31+00:00"
         },
         {
             "name": "myclabs/deep-copy",
