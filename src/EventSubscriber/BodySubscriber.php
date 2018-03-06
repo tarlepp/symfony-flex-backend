@@ -12,6 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use function in_array;
 
 /**
  * Class BodySubscriber
@@ -84,14 +85,13 @@ class BodySubscriber implements EventSubscriberInterface
      */
     private function isJsonRequest(Request $request): bool
     {
-        return \in_array($request->getContentType(), [null, 'json', 'txt'], true);
+        return in_array($request->getContentType(), [null, 'json', 'txt'], true);
     }
 
     /**
      * Method to transform JSON type request to proper request parameters.
      *
      * @param Request $request
-     *
      *
      * @throws \LogicException
      */
