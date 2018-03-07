@@ -11,10 +11,14 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Resource\UserResource;
 use App\Security\RolesService;
+use Closure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function array_map;
+use function implode;
+use function sprintf;
 
 /**
  * Class ListUsersCommand
@@ -88,15 +92,15 @@ class ListUsersCommand extends Command
      */
     private function getRows(): array
     {
-        return \array_map($this->getFormatterUser(), $this->userResource->find(null, ['username' => 'ASC']));
+        return array_map($this->getFormatterUser(), $this->userResource->find(null, ['username' => 'ASC']));
     }
 
     /**
      * Getter method for user formatter closure. This closure will format single User entity for console table.
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function getFormatterUser(): \Closure
+    private function getFormatterUser(): Closure
     {
         return function (User $user): array {
             return [
@@ -104,8 +108,8 @@ class ListUsersCommand extends Command
                 $user->getUsername(),
                 $user->getEmail(),
                 $user->getFirstname() . ' ' . $user->getSurname(),
-                \implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
-                \implode(",\n", $user->getUserGroups()->map($this->formatterUserGroup())->toArray()),
+                implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
+                implode(",\n", $user->getUserGroups()->map($this->formatterUserGroup())->toArray()),
             ];
         };
     }
@@ -114,12 +118,12 @@ class ListUsersCommand extends Command
      * Getter method for user group formatter closure. This closure will format single UserGroup entity for console
      * table.
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function formatterUserGroup(): \Closure
+    private function formatterUserGroup(): Closure
     {
         return function (UserGroup $userGroup): string {
-            return \sprintf(
+            return sprintf(
                 '%s (%s)',
                 $userGroup->getName(),
                 $userGroup->getRole()->getId()
