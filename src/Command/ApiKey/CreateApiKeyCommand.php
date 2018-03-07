@@ -172,7 +172,6 @@ class CreateApiKeyCommand extends Command
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      */
     private function checkUserGroups(OutputInterface $output, bool $interactive): void
