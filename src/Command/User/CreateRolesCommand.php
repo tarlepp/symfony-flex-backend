@@ -15,6 +15,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function array_map;
+use function array_sum;
+use function sprintf;
 
 /**
  * Class CreateRolesCommand
@@ -80,7 +83,7 @@ class CreateRolesCommand extends Command
             return $this->createRole($role);
         };
 
-        $created = \array_sum(\array_map($iterator, $this->rolesService->getRoles()));
+        $created = array_sum(array_map($iterator, $this->rolesService->getRoles()));
 
         $this->entityManager->flush();
 
