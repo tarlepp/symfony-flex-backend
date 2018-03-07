@@ -11,7 +11,10 @@ use App\Entity\User as UserEntity;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
+use Closure;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function array_map;
+use function sprintf;
 
 /**
  * Class UserHelper
@@ -108,7 +111,7 @@ class UserHelper
         $choices = [];
         $iterator = $this->getUserIterator($choices);
 
-        \array_map($iterator, $this->userResource->find([], ['username' => 'asc']));
+        array_map($iterator, $this->userResource->find([], ['username' => 'asc']));
 
         $choices['Exit'] = 'Exit command';
 
@@ -129,7 +132,7 @@ class UserHelper
         $choices = [];
         $iterator = $this->getUserGroupIterator($choices);
 
-        \array_map($iterator, $this->userGroupResource->find([], ['name' => 'asc']));
+        array_map($iterator, $this->userGroupResource->find([], ['name' => 'asc']));
 
         $choices['Exit'] = 'Exit command';
 
@@ -141,12 +144,12 @@ class UserHelper
      *
      * @param mixed[] $choices
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function getUserIterator(array &$choices): \Closure
+    private function getUserIterator(array &$choices): Closure
     {
         return function (UserEntity $user) use (&$choices): void {
-            $message = \sprintf(
+            $message = sprintf(
                 '%s (%s %s <%s>)',
                 $user->getUsername(),
                 $user->getFirstname(),
@@ -163,12 +166,12 @@ class UserHelper
      *
      * @param mixed[] $choices
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function getUserGroupIterator(array &$choices): \Closure
+    private function getUserGroupIterator(array &$choices): Closure
     {
         return function (UserGroupEntity $userGroup) use (&$choices): void {
-            $choices[$userGroup->getId()] = \sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
+            $choices[$userGroup->getId()] = sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
         };
     }
 
@@ -182,7 +185,7 @@ class UserHelper
      */
     private function isCorrectUser(SymfonyStyle $io, UserEntity $userEntity): bool
     {
-        $message = \sprintf(
+        $message = sprintf(
             'Is this the correct  user [%s - %s (%s %s <%s>)]?',
             $userEntity->getId(),
             $userEntity->getUsername(),
@@ -204,7 +207,7 @@ class UserHelper
      */
     private function isCorrectUserGroup(SymfonyStyle $io, UserGroupEntity $userGroupEntity): bool
     {
-        $message = \sprintf(
+        $message = sprintf(
             'Is this the correct user group [%s - %s (%s)]?',
             $userGroupEntity->getId(),
             $userGroupEntity->getName(),
