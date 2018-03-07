@@ -7,9 +7,12 @@ declare(strict_types = 1);
  */
 namespace App\Command;
 
+use Closure;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
+use function array_map;
 
 /**
  * Class HelperConfigure
@@ -23,9 +26,20 @@ class HelperConfigure
      * @param Command $command
      * @param mixed[] $parameters
      *
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function configure(Command $command, array $parameters): void
+    {
+        // Configure command
+        $command->setDefinition(new InputDefinition(array_map(self::getParameterIterator(), $parameters)));
+    }
+
+    /**
+     * @return Closure
+     *
+     * @throws InvalidArgumentException
+     */
+    private static function getParameterIterator(): Closure
     {
         /**
          * Lambda iterator function to parse specified inputs.
@@ -34,7 +48,7 @@ class HelperConfigure
          *
          * @return InputOption
          */
-        $iterator = function (array $input): InputOption {
+        return function (array $input): InputOption {
             return new InputOption(
                 $input['name'],
                 $input['shortcut'] ?? null,
@@ -43,8 +57,5 @@ class HelperConfigure
                 $input['default'] ?? null
             );
         };
-
-        // Configure command
-        $command->setDefinition(new InputDefinition(\array_map($iterator, $parameters)));
     }
 }
