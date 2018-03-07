@@ -10,6 +10,7 @@ namespace App\Command\ApiKey;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
+use Closure;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function array_map;
 use function implode;
@@ -127,9 +128,9 @@ class ApiKeyHelper
      *
      * @param string[] &$choices
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function getApiKeyIterator(array &$choices): \Closure
+    private function getApiKeyIterator(array &$choices): Closure
     {
         /**
          * Lambda function create api key choices
