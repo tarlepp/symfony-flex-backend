@@ -58,10 +58,8 @@ class CreateUserGroupCommand extends Command
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      */
-    public function __construct(
-        UserGroupResource $userGroupResource,
-        RoleRepository $roleRepository
-    ) {
+    public function __construct(UserGroupResource $userGroupResource, RoleRepository $roleRepository)
+    {
         parent::__construct('user:create-group');
 
         $this->userGroupResource = $userGroupResource;
@@ -92,7 +90,6 @@ class CreateUserGroupCommand extends Command
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      * @throws \Symfony\Component\Console\Exception\LogicException
@@ -128,7 +125,6 @@ class CreateUserGroupCommand extends Command
      *
      * @throws \Exception
      * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
      */
