@@ -11,6 +11,9 @@ use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function array_map;
+use function implode;
+use function sprintf;
 
 /**
  * Class ApiKeyHelper
@@ -62,7 +65,7 @@ class ApiKeyHelper
                 break;
             }
 
-            $message = \sprintf(
+            $message = sprintf(
                 'Is this the correct API key \'[%s] [%s] %s\'?',
                 $apiKeyEntity->getId(),
                 $apiKeyEntity->getToken(),
@@ -112,7 +115,7 @@ class ApiKeyHelper
         $choices = [];
         $iterator = $this->getApiKeyIterator($choices);
 
-        \array_map($iterator, $this->apiKeyResource->find([], ['token' => 'ASC']));
+        array_map($iterator, $this->apiKeyResource->find([], ['token' => 'ASC']));
 
         $choices['Exit'] = 'Exit command';
 
@@ -134,11 +137,11 @@ class ApiKeyHelper
          * @param ApiKeyEntity $apiKey
          */
         return function (ApiKeyEntity $apiKey) use (&$choices): void {
-            $value = \sprintf(
+            $value = sprintf(
                 '[%s] %s - Roles: %s',
                 $apiKey->getToken(),
                 $apiKey->getDescription(),
-                \implode(', ', $this->rolesService->getInheritedRoles($apiKey->getRoles()))
+                implode(', ', $this->rolesService->getInheritedRoles($apiKey->getRoles()))
             );
 
             $choices[$apiKey->getId()] = $value;
