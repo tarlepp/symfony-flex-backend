@@ -10,10 +10,14 @@ namespace App\Command\User;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
+use Closure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function array_map;
+use function implode;
+use function sprintf;
 
 /**
  * Class ListUserGroupsCommand
@@ -78,23 +82,23 @@ class ListUserGroupsCommand extends Command
      */
     private function getRows(): array
     {
-        return \array_map($this->getFormatterUserGroup(), $this->userGroupResource->find(null, ['name' => 'ASC']));
+        return array_map($this->getFormatterUserGroup(), $this->userGroupResource->find(null, ['name' => 'ASC']));
     }
 
     /**
      * Getter method for user group formatter closure. This closure will format single UserGroup entity for console
      * table.
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function getFormatterUserGroup(): \Closure
+    private function getFormatterUserGroup(): Closure
     {
         return function (UserGroup $userGroup): array {
             return [
                 $userGroup->getId(),
                 $userGroup->getName(),
                 $userGroup->getRole()->getId(),
-                \implode(",\n", $userGroup->getUsers()->map($this->getFormatterUser())->toArray()),
+                implode(",\n", $userGroup->getUsers()->map($this->getFormatterUser())->toArray()),
             ];
         };
     }
@@ -102,12 +106,12 @@ class ListUserGroupsCommand extends Command
     /**
      * Getter method for user formatter closure. This closure will format single User entity for console table.
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function getFormatterUser(): \Closure
+    private function getFormatterUser(): Closure
     {
         return function (User $user): string {
-            return \sprintf(
+            return sprintf(
                 '%s %s <%s>',
                 $user->getFirstname(),
                 $user->getSurname(),
