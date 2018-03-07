@@ -15,6 +15,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function array_map;
+use function implode;
+use function sprintf;
 
 /**
  * Class ListApiKeysCommand
@@ -92,7 +95,7 @@ class ListApiKeysCommand extends Command
      */
     private function getRows(): array
     {
-        return \array_map($this->getFormatterApiKey(), $this->apiKeyResource->find(null, ['token' => 'ASC']));
+        return array_map($this->getFormatterApiKey(), $this->apiKeyResource->find(null, ['token' => 'ASC']));
     }
 
     /**
@@ -108,8 +111,8 @@ class ListApiKeysCommand extends Command
                 $apiToken->getId(),
                 $apiToken->getToken(),
                 $apiToken->getDescription(),
-                \implode(",\n", $apiToken->getUserGroups()->map($this->getFormatterUserGroup())->toArray()),
-                \implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
+                implode(",\n", $apiToken->getUserGroups()->map($this->getFormatterUserGroup())->toArray()),
+                implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
             ];
         };
     }
@@ -123,7 +126,7 @@ class ListApiKeysCommand extends Command
     private function getFormatterUserGroup(): \Closure
     {
         return function (UserGroup $userGroup): string {
-            return \sprintf(
+            return sprintf(
                 '%s (%s)',
                 $userGroup->getName(),
                 $userGroup->getRole()->getId()
