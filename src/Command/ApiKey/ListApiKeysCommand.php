@@ -11,6 +11,7 @@ use App\Entity\ApiKey;
 use App\Entity\UserGroup;
 use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
+use Closure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -102,9 +103,9 @@ class ListApiKeysCommand extends Command
      * Getter method for API key formatter closure. This closure will format single ApiKey entity for console
      * table.
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function getFormatterApiKey(): \Closure
+    private function getFormatterApiKey(): Closure
     {
         return function (ApiKey $apiToken): array {
             return [
@@ -121,9 +122,9 @@ class ListApiKeysCommand extends Command
      * Getter method for user group formatter closure. This closure will format single UserGroup entity for console
      * table.
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function getFormatterUserGroup(): \Closure
+    private function getFormatterUserGroup(): Closure
     {
         return function (UserGroup $userGroup): string {
             return sprintf(
