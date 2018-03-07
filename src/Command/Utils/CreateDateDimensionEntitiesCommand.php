@@ -9,11 +9,20 @@ namespace App\Command\Utils;
 
 use App\Entity\DateDimension;
 use App\Repository\DateDimensionRepository;
+use Closure;
+use DateInterval;
+use DateTime;
+use DateTimeZone;
+use Doctrine\ORM\ORMInvalidArgumentException;
+use Exception;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function sprintf;
 
 /**
  * Class CreateDateDimensionEntitiesCommand
@@ -41,7 +50,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      *
      * @param DateDimensionRepository $dateDimensionRepository
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(DateDimensionRepository $dateDimensionRepository)
     {
@@ -61,10 +70,9 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      *
      * @return null|int null or 0 if everything went fine, or an error code
      *
-     * @throws \Exception
-     * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws Exception
+     * @throws InvalidArgumentException
+     * @throws ORMInvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -91,7 +99,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      *
      * @return int
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function getYearStart(): int
     {
@@ -105,7 +113,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      *
      * @return int
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function getYearEnd(int $yearStart): int
     {
@@ -118,18 +126,17 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      * @param int $yearStart
      * @param int $yearEnd
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Exception
+     * @throws ORMInvalidArgumentException
+     * @throws Exception
      */
     private function process(int $yearStart, int $yearEnd): void
     {
-        $dateStart = new \DateTime($yearStart . '-01-01 00:00:00', new \DateTimeZone('UTC'));
-        $dateEnd = new \DateTime($yearEnd . '-12-31 00:00:00', new \DateTimeZone('UTC'));
+        $dateStart = new DateTime($yearStart . '-01-01 00:00:00', new DateTimeZone('UTC'));
+        $dateEnd = new DateTime($yearEnd . '-12-31 00:00:00', new DateTimeZone('UTC'));
 
         $progress = $this->getProgressBar(
             (int)$dateEnd->diff($dateStart)->format('%a') + 1,
-            \sprintf('Creating DateDimension entities between years %d and %d...', $yearStart, $yearEnd)
+            sprintf('Creating DateDimension entities between years %d and %d...', $yearStart, $yearEnd)
         );
 
         // Remove existing entities
@@ -142,10 +149,10 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
     /**
      * Helper method to get progress bar for console.
      *
-     * @param   int     $steps
-     * @param   string  $message
+     * @param int    $steps
+     * @param string $message
      *
-     * @return  ProgressBar
+     * @return ProgressBar
      */
     private function getProgressBar(int $steps, string $message): ProgressBar
     {
@@ -167,14 +174,13 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
 
     /**
      * @param int           $yearEnd
-     * @param \DateTime     $dateStart
+     * @param DateTime     $dateStart
      * @param ProgressBar   $progress
      *
-     * @throws \Exception
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Exception
+     * @throws ORMInvalidArgumentException
      */
-    private function createEntities(int $yearEnd, \DateTime $dateStart, ProgressBar $progress): void
+    private function createEntities(int $yearEnd, DateTime $dateStart, ProgressBar $progress): void
     {
         // Get entity manager for _fast_ database handling.
         $em = $this->repository->getEntityManager();
@@ -183,7 +189,7 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
         while ((int)$dateStart->format('Y') < $yearEnd + 1) {
             $em->persist(new DateDimension(clone $dateStart));
 
-            $dateStart->add(new \DateInterval('P1D'));
+            $dateStart->add(new DateInterval('P1D'));
 
             // Flush in 1000 batches to database
             if ($progress->getProgress() % 1000 === 0) {
@@ -202,23 +208,23 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
     /**
      * Getter method for year start validator closure.
      *
-     * @return \Closure
+     * @return Closure
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    private function validatorYearStart(): \Closure
+    private function validatorYearStart(): Closure
     {
         return function ($year): ?int {
             $year = (int)$year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
-                $message = \sprintf(
+                $message = sprintf(
                     'Start year must be between %d and %d',
                     self::YEAR_MIN,
                     self::YEAR_MAX
                 );
 
-                throw new \InvalidArgumentException($message);
+                throw new InvalidArgumentException($message);
             }
 
             return $year;
@@ -230,24 +236,24 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      *
      * @param int $yearStart
      *
-     * @return \Closure
+     * @return Closure
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    private function validatorYearEnd(int $yearStart): \Closure
+    private function validatorYearEnd(int $yearStart): Closure
     {
         return function ($year) use ($yearStart): ?int {
             $year = (int)$year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart) {
-                $message = \sprintf(
+                $message = sprintf(
                     'End year must be between %d and %d and after given start year %d',
                     self::YEAR_MIN,
                     self::YEAR_MAX,
                     $yearStart
                 );
 
-                throw new \InvalidArgumentException($message);
+                throw new InvalidArgumentException($message);
             }
 
             return $year;
