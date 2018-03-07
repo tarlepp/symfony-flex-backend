@@ -12,6 +12,9 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use function array_flip;
+use function array_search;
+use function array_values;
 
 /**
  * Trait ExecuteMultipleCommandTrait
@@ -85,12 +88,12 @@ trait ExecuteMultipleCommandTrait
      */
     private function ask()
     {
-        $index = \array_search(
-            $this->io->choice('What you want to do', \array_values($this->choices)),
-            \array_values($this->choices),
+        $index = array_search(
+            $this->io->choice('What you want to do', array_values($this->choices)),
+            array_values($this->choices),
             true
         );
 
-        return \array_values(\array_flip($this->choices))[(int)$index];
+        return array_values(array_flip($this->choices))[(int)$index];
     }
 }
