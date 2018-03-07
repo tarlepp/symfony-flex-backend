@@ -10,6 +10,8 @@ namespace App\Command\ApiKey;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -38,7 +40,7 @@ class ChangeTokenCommand extends Command
      * @param ApiKeyResource $apiKeyResource
      * @param ApiKeyHelper   $apiKeyHelper
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
@@ -59,8 +61,8 @@ class ChangeTokenCommand extends Command
      *
      * @return int|null
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws LogicException
+     * @throws InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
