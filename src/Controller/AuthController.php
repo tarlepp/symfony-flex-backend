@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use function sprintf;
 
 /**
  * Class AuthController
@@ -77,7 +78,7 @@ class AuthController
      */
     public function getTokenAction(): void
     {
-        $message = \sprintf(
+        $message = sprintf(
             'You need to send JSON body to obtain token eg. %s',
             JSON::encode(['username' => 'username', 'password' => 'password'])
         );
