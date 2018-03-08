@@ -67,6 +67,10 @@ class DefaultController
      *
      * @return Response
      *
+     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Exception
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
