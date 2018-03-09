@@ -9,7 +9,10 @@ namespace App\EventListener;
 
 use App\Entity\User;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use LengthException;
+use RuntimeException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use function strlen;
 
 /**
  * Class UserEntityEventListener
@@ -42,8 +45,8 @@ class UserEntityEventListener
      * @param LifecycleEventArgs $event
      *
      *
-     * @throws \LengthException
-     * @throws \RuntimeException
+     * @throws LengthException
+     * @throws RuntimeException
      */
     public function prePersist(LifecycleEventArgs $event): void
     {
@@ -56,8 +59,8 @@ class UserEntityEventListener
      * @param LifecycleEventArgs $event
      *
      *
-     * @throws \LengthException
-     * @throws \RuntimeException
+     * @throws LengthException
+     * @throws RuntimeException
      */
     public function preUpdate(LifecycleEventArgs $event): void
     {
@@ -67,8 +70,8 @@ class UserEntityEventListener
     /**
      * @param LifecycleEventArgs $event
      *
-     * @throws \RuntimeException
-     * @throws \LengthException
+     * @throws RuntimeException
+     * @throws LengthException
      */
     private function process(LifecycleEventArgs $event): void
     {
@@ -87,8 +90,8 @@ class UserEntityEventListener
      * @param User $user
      *
      *
-     * @throws \LengthException
-     * @throws \RuntimeException
+     * @throws LengthException
+     * @throws RuntimeException
      */
     private function changePassword(User $user): void
     {
@@ -97,8 +100,8 @@ class UserEntityEventListener
 
         // Yeah, we have new plain password set, so we need to encode it
         if (!empty($plainPassword)) {
-            if (\strlen($plainPassword) < 8) {
-                throw new \LengthException('Too short password');
+            if (strlen($plainPassword) < 8) {
+                throw new LengthException('Too short password');
             }
 
             // Password hash callback
