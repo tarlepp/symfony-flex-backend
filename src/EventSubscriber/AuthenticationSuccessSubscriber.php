@@ -12,6 +12,7 @@ use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use UnexpectedValueException;
 
 /**
  * Class AuthenticationSuccessSubscriber
@@ -70,7 +71,7 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
      *
      * @param AuthenticationSuccessEvent $event
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
