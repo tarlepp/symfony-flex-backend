@@ -10,6 +10,7 @@ namespace App\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use function getenv;
 
 /**
  * Class TestCasePass
@@ -31,7 +32,7 @@ class TestCasePass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        if (\getenv('APP_ENV') !== 'test') {
+        if (getenv('APP_ENV') !== 'test') {
             return;
         }
 
