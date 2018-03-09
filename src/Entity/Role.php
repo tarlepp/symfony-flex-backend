@@ -70,7 +70,7 @@ class Role extends BaseRole implements EntityInterface
     private $description = '';
 
     /**
-     * Author books.
+     * User groups that belongs to this role.
      *
      * @var Collection<App\Entity\UserGroup>
      *
