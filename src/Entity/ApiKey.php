@@ -17,6 +17,10 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use function mb_strlen;
+use function random_int;
+use function array_unique;
+use function array_merge;
 
 /**
  * Class ApiKey
@@ -171,10 +175,10 @@ class ApiKey implements EntityInterface
     {
         $random = '';
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $max = \mb_strlen($chars, '8bit') - 1;
+        $max = mb_strlen($chars, '8bit') - 1;
 
         for ($i = 0; $i < 40; ++$i) {
-            $random .= $chars[\random_int(0, $max)];
+            $random .= $chars[random_int(0, $max)];
         }
 
         return $this->setToken($random);
@@ -240,7 +244,7 @@ class ApiKey implements EntityInterface
             return $userGroup->getRole()->getId();
         };
 
-        return \array_unique(\array_merge([RolesService::ROLE_API], $this->userGroups->map($iterator)->toArray()));
+        return array_unique(array_merge([RolesService::ROLE_API], $this->userGroups->map($iterator)->toArray()));
     }
 
     /**
