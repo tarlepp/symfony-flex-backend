@@ -8,6 +8,16 @@ declare(strict_types = 1);
 namespace App\DTO;
 
 use App\Entity\EntityInterface;
+use BadMethodCallException;
+use LogicException;
+use function array_filter;
+use function array_key_exists;
+use function count;
+use function current;
+use function get_class;
+use function method_exists;
+use function sprintf;
+use function ucfirst;
 
 /**
  * Class RestDto
@@ -75,14 +85,14 @@ abstract class RestDto implements RestDtoInterface
     public function update(EntityInterface $entity): EntityInterface
     {
         foreach ($this->getVisited() as $property) {
-            if (\array_key_exists($property, static::$mappings)) {
+            if (array_key_exists($property, static::$mappings)) {
                 $this->{static::$mappings[$property]}($entity, $this->{$property});
 
                 continue;
             }
 
             // Determine setter method
-            $setter = 'set' . \ucfirst($property);
+            $setter = 'set' . ucfirst($property);
 
             // Update current dto property value
             $entity->{$setter}($this->{$property});
@@ -98,8 +108,8 @@ abstract class RestDto implements RestDtoInterface
      *
      * @return RestDtoInterface
      *
-     * @throws \LogicException
-     * @throws \BadMethodCallException
+     * @throws LogicException
+     * @throws BadMethodCallException
      */
     public function patch(RestDtoInterface $dto): RestDtoInterface
     {
@@ -108,7 +118,7 @@ abstract class RestDto implements RestDtoInterface
             $getter = $this->determineGetterMethod($dto, $property);
 
             // Determine setter method
-            $setter = 'set' . \ucfirst($property);
+            $setter = 'set' . ucfirst($property);
 
             // Update current dto property value
             $this->{$setter}($dto->{$getter}());
@@ -125,7 +135,7 @@ abstract class RestDto implements RestDtoInterface
      *
      * @return string
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     private function determineGetterMethod(RestDtoInterface $dto, string $property): string
     {
@@ -133,13 +143,13 @@ abstract class RestDto implements RestDtoInterface
 
         // Oh noes - required getter method does not exist
         if ($getter === null) {
-            $message = \sprintf(
+            $message = sprintf(
                 'DTO class \'%s\' does not have getter method property \'%s\' - cannot patch dto',
-                \get_class($dto),
+                get_class($dto),
                 $property
             );
 
-            throw new \BadMethodCallException($message);
+            throw new BadMethodCallException($message);
         }
 
         return $getter;
@@ -151,21 +161,21 @@ abstract class RestDto implements RestDtoInterface
      *
      * @return string|null
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     private function getGetterMethod(RestDtoInterface $dto, string $property): ?string
     {
         $getters = [
-            'get' . \ucfirst($property),
-            'is' . \ucfirst($property),
-            'has' . \ucfirst($property),
+            'get' . ucfirst($property),
+            'is' . ucfirst($property),
+            'has' . ucfirst($property),
         ];
 
         $filter = function (string $method) use ($dto): bool {
-            return \method_exists($dto, $method);
+            return method_exists($dto, $method);
         };
 
-        $getterMethods = \array_filter($getters, $filter);
+        $getterMethods = array_filter($getters, $filter);
 
         return $this->validateGetterMethod($property, $getterMethods);
     }
@@ -176,20 +186,20 @@ abstract class RestDto implements RestDtoInterface
      *
      * @return string|null
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     private function validateGetterMethod(string $property, array $getterMethods): ?string
     {
-        if (\count($getterMethods) > 1) {
-            $message = \sprintf(
+        if (count($getterMethods) > 1) {
+            $message = sprintf(
                 'Property \'%s\' has multiple getter methods - this is insane!',
                 $property
             );
 
-            throw new \LogicException($message);
+            throw new LogicException($message);
         }
 
-        $method = \current($getterMethods);
+        $method = current($getterMethods);
 
         return $method === false ? null : $method;
     }

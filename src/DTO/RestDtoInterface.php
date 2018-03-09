@@ -8,6 +8,8 @@ declare(strict_types = 1);
 namespace App\DTO;
 
 use App\Entity\EntityInterface;
+use BadMethodCallException;
+use LogicException;
 
 /**
  * Interface RestDtoInterface
@@ -40,8 +42,8 @@ interface RestDtoInterface
      *
      * @return RestDtoInterface
      *
-     * @throws \LogicException
-     * @throws \BadMethodCallException
+     * @throws LogicException
+     * @throws BadMethodCallException
      */
     public function patch(self $dto): self;
 

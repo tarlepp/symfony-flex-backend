@@ -13,6 +13,7 @@ use App\Entity\UserGroup as UserGroupEntity;
 use App\Entity\UserInterface;
 use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
+use function array_map;
 
 /**
  * Class User
@@ -301,7 +302,7 @@ class User extends RestDto implements UserInterface
     {
         $entity->clearUserGroups();
 
-        \array_map([$entity, 'addUserGroup'], $value);
+        array_map([$entity, 'addUserGroup'], $value);
 
         return $this;
     }

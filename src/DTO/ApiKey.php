@@ -11,6 +11,7 @@ use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\EntityInterface;
 use App\Entity\UserGroup as UserGroupEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use function array_map;
 
 /**
  * Class ApiKey
@@ -152,7 +153,7 @@ class ApiKey extends RestDto
          *
          * @return string
          */
-        $iterator = function (UserGroupEntity $userGroup) {
+        $iterator = function (UserGroupEntity $userGroup): string {
             return $userGroup->getId();
         };
 
@@ -177,7 +178,7 @@ class ApiKey extends RestDto
     {
         $entity->clearUserGroups();
 
-        \array_map([$entity, 'addUserGroup'], $value);
+        array_map([$entity, 'addUserGroup'], $value);
 
         return $this;
     }
