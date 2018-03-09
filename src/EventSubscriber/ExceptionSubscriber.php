@@ -11,6 +11,8 @@ use App\Helpers\LoggerAwareTrait;
 use App\Utils\JSON;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
+use InvalidArgumentException;
+use LogicException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -21,6 +23,10 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Throwable;
+use UnexpectedValueException;
+use function get_class;
+use function getenv;
 
 /**
  * Class ExceptionSubscriber
@@ -51,7 +57,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function __construct(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->environment = \getenv('APP_ENV');
+        $this->environment = getenv('APP_ENV');
     }
 
     /**
@@ -86,9 +92,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
      *
      * @param GetResponseForExceptionEvent $event
      *
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
-     * @throws \LogicException
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
+     * @throws LogicException
      */
     public function onKernelException(GetResponseForExceptionEvent $event): void
     {
@@ -111,11 +117,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * Method to get "proper" status code for exception response.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return int
      */
-    private function getStatusCode(\Throwable $exception): int
+    private function getStatusCode(Throwable $exception): int
     {
         // Get current token, and determine if request is made from logged in user or not
         $token = $this->tokenStorage->getToken();
@@ -127,12 +133,12 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * Method to get actual error message.
      *
-     * @param \Throwable    $exception
-     * @param Response      $response
+     * @param Throwable $exception
+     * @param Response  $response
      *
      * @return mixed[]
      */
-    private function getErrorMessage(\Throwable $exception, Response $response): array
+    private function getErrorMessage(Throwable $exception, Response $response): array
     {
         // Set base of error message
         $error = [
@@ -145,7 +151,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         if ($this->environment === 'dev') {
             $error += [
                 'debug' => [
-                    'exception' => \get_class($exception),
+                    'exception' => get_class($exception),
                     'file' => $exception->getFile(),
                     'line' => $exception->getLine(),
                     'message' => $exception->getMessage(),
@@ -162,11 +168,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * Helper method to convert exception message for user. This method is used in 'production' environment so, that
      * application won't reveal any sensitive error data to users.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return string
      */
-    private function getExceptionMessage(\Throwable $exception): string
+    private function getExceptionMessage(Throwable $exception): string
     {
         return $this->environment === 'dev'
             ? $exception->getMessage()
@@ -174,11 +180,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return string
      */
-    private function getMessageForProductionEnvironment(\Throwable $exception): string
+    private function getMessageForProductionEnvironment(Throwable $exception): string
     {
         $message = $exception->getMessage();
 
@@ -193,12 +199,12 @@ class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param \Throwable $exception
-     * @param bool       $isUser
+     * @param Throwable $exception
+     * @param bool      $isUser
      *
      * @return int
      */
-    private function determineStatusCode(\Throwable $exception, bool $isUser): int
+    private function determineStatusCode(Throwable $exception, bool $isUser): int
     {
         // Default status code is always 500
         $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
