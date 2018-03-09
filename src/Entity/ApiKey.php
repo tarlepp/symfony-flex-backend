@@ -17,10 +17,10 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use function array_merge;
+use function array_unique;
 use function mb_strlen;
 use function random_int;
-use function array_unique;
-use function array_merge;
 
 /**
  * Class ApiKey
