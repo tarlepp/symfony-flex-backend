@@ -21,6 +21,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use function array_merge;
 
 /**
  * Class ProfileController
@@ -262,7 +263,7 @@ class ProfileController
      */
     private function getSerializationGroupsForUser(): array
     {
-        return \array_merge(
+        return array_merge(
             [
                 'User',
                 'User.userGroups',
