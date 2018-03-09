@@ -16,6 +16,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use function array_map;
 
 /**
  * Class LoadUserGroupData
@@ -71,7 +72,7 @@ class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, Cont
         };
 
         // Create entities
-        \array_map($iterator, $this->roles->getRoles());
+        array_map($iterator, $this->roles->getRoles());
 
         // Flush database changes
         $this->manager->flush();

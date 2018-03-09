@@ -16,6 +16,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use function array_map;
 
 /**
  * Class LoadUserData
@@ -57,6 +58,7 @@ class LoadUserData extends Fixture implements OrderedFixtureInterface, Container
      *
      * @throws \BadMethodCallException
      * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
+     * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
@@ -66,7 +68,7 @@ class LoadUserData extends Fixture implements OrderedFixtureInterface, Container
         $this->roles = $this->container->get('test.service_locator')->get(RolesService::class);
 
         // Create entities
-        \array_map([$this, 'createUser'], $this->roles->getRoles());
+        array_map([$this, 'createUser'], $this->roles->getRoles());
 
         $this->createUser();
 

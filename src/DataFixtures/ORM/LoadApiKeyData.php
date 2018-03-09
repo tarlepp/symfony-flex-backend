@@ -16,6 +16,8 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use function array_map;
+use function str_pad;
 
 /**
  * Class LoadApiKeyData
@@ -68,7 +70,7 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
         $this->roles = $this->container->get('test.service_locator')->get(RolesService::class);
 
         // Create entities
-        \array_map([$this, 'createApiKey'], $this->roles->getRoles());
+        array_map([$this, 'createApiKey'], $this->roles->getRoles());
 
         $this->createApiKey();
 
@@ -100,7 +102,7 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
         $entity = new ApiKey();
         $entity->setDescription('ApiKey Description: ' . ($role === null ? '' : $this->roles->getShort($role)));
         $entity->setToken(
-            \str_pad(($role === null ? '' : $this->roles->getShort($role)), 40, '_')
+            str_pad(($role === null ? '' : $this->roles->getShort($role)), 40, '_')
         );
 
         $suffix = '';
