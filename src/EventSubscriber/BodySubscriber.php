@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Utils\JSON;
+use LogicException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -58,7 +59,7 @@ class BodySubscriber implements EventSubscriberInterface
      *
      * @param GetResponseEvent $event
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function onKernelRequest(GetResponseEvent $event): void
     {
@@ -93,7 +94,7 @@ class BodySubscriber implements EventSubscriberInterface
      *
      * @param Request $request
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     private function transformJsonBody(Request $request): void
     {
