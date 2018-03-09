@@ -319,7 +319,18 @@ class UserController extends Controller
      *  )
      * @SWG\Response(
      *      response=200,
-     *      description="User groups",
+     *      description="User groups (user already belongs to this group)",
+     *      @SWG\Schema(
+     *          type="array",
+     *          @Model(
+     *              type=App\Entity\UserGroup::class,
+     *              groups={"UserGroup", "UserGroup.role"},
+     *          ),
+     *      ),
+     *  )
+     * @SWG\Response(
+     *      response=201,
+     *      description="User groups (user added to this group)",
      *      @SWG\Schema(
      *          type="array",
      *          @Model(
