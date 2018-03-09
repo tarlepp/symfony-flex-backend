@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use App\Utils\JSON;
+use LogicException;
 
 /**
  * Trait UserSerializer
@@ -27,7 +28,7 @@ trait UserSerializer
      *
      * @return string the string representation of the object
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function serialize(): string
     {
@@ -43,7 +44,7 @@ trait UserSerializer
      *
      * @param string $serialized The string representation of the object.
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function unserialize($serialized): void
     {

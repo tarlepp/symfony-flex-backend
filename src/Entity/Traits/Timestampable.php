@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use App\Entity\EntityInterface;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -21,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 trait Timestampable
 {
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @Gedmo\Timestampable(on="create")
      *
@@ -40,7 +41,7 @@ trait Timestampable
     protected $createdAt;
 
     /**
-     * @var \DateTime|null
+     * @var DateTime|null
      *
      * @Gedmo\Timestampable(on="update")
      *
@@ -61,11 +62,11 @@ trait Timestampable
     /**
      * Sets createdAt.
      *
-     * @param \DateTime $createdAt
+     * @param DateTime $createdAt
      *
      * @return EntityInterface|$this
      */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setCreatedAt(DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -75,9 +76,9 @@ trait Timestampable
     /**
      * Returns createdAt.
      *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?DateTime
     {
         return $this->createdAt;
     }
@@ -85,11 +86,11 @@ trait Timestampable
     /**
      * Sets updatedAt.
      *
-     * @param \DateTime $updatedAt
+     * @param DateTime $updatedAt
      *
      * @return EntityInterface|$this
      */
-    public function setUpdatedAt(\DateTime $updatedAt)
+    public function setUpdatedAt(DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 
@@ -99,9 +100,9 @@ trait Timestampable
     /**
      * Returns updatedAt.
      *
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?DateTime
     {
         return $this->updatedAt;
     }

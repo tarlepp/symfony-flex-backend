@@ -8,6 +8,8 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use App\Entity\User;
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -23,7 +25,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 trait LogEntityTrait
 {
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Groups({
      *      "LogLogin",
@@ -41,7 +43,7 @@ trait LogEntityTrait
     protected $time;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Groups({
      *      "LogLogin",
@@ -115,17 +117,17 @@ trait LogEntityTrait
     private $clientIp;
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getTime(): \DateTime
+    public function getTime(): DateTime
     {
         return $this->time;
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getDate(): \DateTime
+    public function getDate(): DateTime
     {
         return $this->date;
     }
@@ -167,7 +169,7 @@ trait LogEntityTrait
      */
     protected function processTimeAndDate(): void
     {
-        $now = new \DateTime('NOW', new \DateTimeZone('UTC'));
+        $now = new DateTime('NOW', new DateTimeZone('UTC'));
 
         $this->time = $this->time ?? $now;
         $this->date = $this->time ?? $now;

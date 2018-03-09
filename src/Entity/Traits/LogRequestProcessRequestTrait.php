@@ -8,8 +8,19 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use App\Utils\JSON;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
+use function array_key_exists;
+use function array_map;
+use function array_walk;
+use function basename;
+use function explode;
+use function is_array;
+use function mb_strtolower;
+use function parse_str;
+use function preg_replace;
+use function strpos;
 
 /**
  * Trait LogRequestProcessRequestTrait
@@ -394,7 +405,7 @@ trait LogRequestProcessRequestTrait
     /**
      * @param Request $request
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     protected function processRequest(Request $request): void
     {
@@ -408,14 +419,14 @@ trait LogRequestProcessRequestTrait
     /**
      * @param Request $request
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     private function processHeadersAndParameters(Request $request): void
     {
         $rawHeaders = $request->headers->all();
 
         // Clean possible sensitive data from parameters
-        \array_walk($rawHeaders, function (&$value, string $key): void {
+        array_walk($rawHeaders, function (&$value, string $key): void {
             $this->cleanParameters($value, $key);
         });
 
@@ -424,7 +435,7 @@ trait LogRequestProcessRequestTrait
         $rawParameters = $this->determineParameters($request);
 
         // Clean possible sensitive data from parameters
-        \array_walk($rawParameters, function (&$value, string $key): void {
+        array_walk($rawParameters, function (&$value, string $key): void {
             $this->cleanParameters($value, $key);
         });
 
@@ -439,7 +450,7 @@ trait LogRequestProcessRequestTrait
         $this->method = $request->getRealMethod();
         $this->scheme = $request->getScheme();
         $this->basePath = $request->getBasePath();
-        $this->script = '/' . \basename($request->getScriptName());
+        $this->script = '/' . basename($request->getScriptName());
         $this->path = $request->getPathInfo();
         $this->queryString = $request->getRequestUri();
         $this->uri = $request->getUri();
@@ -457,7 +468,7 @@ trait LogRequestProcessRequestTrait
     private function determineAction(Request $request): string
     {
         $rawAction = $request->get('_controller', '');
-        $rawAction = \explode(\strpos($rawAction, '::') ? '::' : ':', $rawAction);
+        $rawAction = explode(strpos($rawAction, '::') ? '::' : ':', $rawAction);
 
         return $rawAction[1] ?? '';
     }
@@ -469,7 +480,7 @@ trait LogRequestProcessRequestTrait
      *
      * @return mixed[]
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     private function determineParameters(Request $request): array
     {
@@ -484,10 +495,10 @@ trait LogRequestProcessRequestTrait
             try {
                 $output = JSON::decode($rawContent, true);
             } /** @noinspection BadExceptionsProcessingInspection */
-            catch (\LogicException $error) { // Oh noes content isn't JSON so just parse it
+            catch (LogicException $error) { // Oh noes content isn't JSON so just parse it
                 $output = [];
 
-                \parse_str($rawContent, $output);
+                parse_str($rawContent, $output);
             }
         }
 
@@ -511,16 +522,16 @@ trait LogRequestProcessRequestTrait
         ];
 
         // Normalize current key
-        $key = \mb_strtolower($key);
+        $key = mb_strtolower($key);
 
         // Replace current value
-        if (\array_key_exists($key, $replacements)) {
+        if (array_key_exists($key, $replacements)) {
             $value = $this->cleanContent($replacements[$key]);
         }
 
         // Recursive call
-        if (\is_array($value)) {
-            \array_walk($value, function (&$value, string $key): void {
+        if (is_array($value)) {
+            array_walk($value, function (&$value, string $key): void {
                 $this->cleanParameters($value, $key);
             });
         }
@@ -536,7 +547,7 @@ trait LogRequestProcessRequestTrait
     private function cleanContent(string $inputContent): string
     {
         $iterator = function ($search) use (&$inputContent): void {
-            $inputContent = \preg_replace('/(' . $search . '":)\s*"(.*)"/', '$1"*** REPLACED ***"', $inputContent);
+            $inputContent = preg_replace('/(' . $search . '":)\s*"(.*)"/', '$1"*** REPLACED ***"', $inputContent);
         };
 
         static $replacements = [
@@ -546,7 +557,7 @@ trait LogRequestProcessRequestTrait
             'cookie',
         ];
 
-        \array_map($iterator, $replacements);
+        array_map($iterator, $replacements);
 
         return $inputContent;
     }

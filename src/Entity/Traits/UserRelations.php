@@ -13,6 +13,7 @@ use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
+use function array_unique;
 
 /**
  * Class UserRelations
@@ -104,7 +105,7 @@ trait UserRelations
          *
          * @return string
          */
-        $iterator = function (UserGroup $userGroup) {
+        $iterator = function (UserGroup $userGroup): string {
             return $userGroup->getRole()->getId();
         };
 
@@ -116,7 +117,7 @@ trait UserRelations
             $output = $this->rolesService->getInheritedRoles($output);
         }
 
-        return \array_unique($output);
+        return array_unique($output);
     }
 
     /**
