@@ -7,6 +7,8 @@ declare(strict_types = 1);
  */
 namespace App\Entity;
 
+use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -42,7 +44,7 @@ class Healthz implements EntityInterface
     private $id;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Groups({
      *      "Healthz",
@@ -64,7 +66,7 @@ class Healthz implements EntityInterface
     {
         $this->id = Uuid::uuid4()->toString();
 
-        $this->setTimestamp(new \DateTime('NOW', new \DateTimeZone('UTC')));
+        $this->setTimestamp(new DateTime('NOW', new DateTimeZone('UTC')));
     }
 
     /**
@@ -76,19 +78,19 @@ class Healthz implements EntityInterface
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getTimestamp(): \DateTime
+    public function getTimestamp(): DateTime
     {
         return $this->timestamp;
     }
 
     /**
-     * @param \DateTime $timestamp
+     * @param DateTime $timestamp
      *
      * @return Healthz
      */
-    public function setTimestamp(\DateTime $timestamp): self
+    public function setTimestamp(DateTime $timestamp): self
     {
         $this->timestamp = $timestamp;
 
