@@ -7,9 +7,11 @@ declare(strict_types = 1);
  */
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use function floor;
 
 /**
  * Class DateDimension
@@ -47,7 +49,7 @@ class DateDimension implements EntityInterface
     private $id;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @Groups({
      *      "DateDimension",
@@ -256,9 +258,9 @@ class DateDimension implements EntityInterface
     /**
      * DateDimension constructor.
      *
-     * @param \DateTime|null $dateTime
+     * @param DateTime|null $dateTime
      */
-    public function __construct(?\DateTime $dateTime = null)
+    public function __construct(?DateTime $dateTime = null)
     {
         $this->id = Uuid::uuid4()->toString();
 
@@ -267,7 +269,7 @@ class DateDimension implements EntityInterface
             $this->year = (int)$dateTime->format('Y');
             $this->month = (int)$dateTime->format('n');
             $this->day = (int)$dateTime->format('j');
-            $this->quarter = (int)\floor(((int)$dateTime->format('n') - 1) / 3) + 1;
+            $this->quarter = (int)floor(((int)$dateTime->format('n') - 1) / 3) + 1;
             $this->weekNumber = (int)$dateTime->format('W');
             $this->dayNumberOfWeek = (int)$dateTime->format('N');
             $this->dayNumberOfYear = (int)$dateTime->format('z');
@@ -286,9 +288,9 @@ class DateDimension implements EntityInterface
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime
      */
-    public function getDate(): \DateTime
+    public function getDate(): DateTime
     {
         return $this->date;
     }
