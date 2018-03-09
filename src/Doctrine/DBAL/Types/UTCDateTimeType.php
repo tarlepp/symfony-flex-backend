@@ -7,6 +7,8 @@ declare(strict_types = 1);
  */
 namespace App\Doctrine\DBAL\Types;
 
+use DateTime;
+use DateTimeZone;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\DateTimeType;
@@ -24,7 +26,7 @@ class UTCDateTimeType extends DateTimeType
     /**
      * UTC date time zone object.
      *
-     * @var \DateTimeZone|null
+     * @var DateTimeZone|null
      */
     private static $utc;
 
@@ -43,7 +45,7 @@ class UTCDateTimeType extends DateTimeType
     {
         $this->initializeUtcDateTimeZone();
 
-        if ($value instanceof \DateTime) {
+        if ($value instanceof DateTime) {
             $value->setTimezone(self::$utc);
         }
 
@@ -65,10 +67,10 @@ class UTCDateTimeType extends DateTimeType
     {
         $this->initializeUtcDateTimeZone();
 
-        if ($value instanceof \DateTime) {
+        if ($value instanceof DateTime) {
             $value->setTimezone(self::$utc);
         } elseif ($value !== null) {
-            $converted = \DateTime::createFromFormat($platform->getDateTimeFormatString(), $value, self::$utc);
+            $converted = DateTime::createFromFormat($platform->getDateTimeFormatString(), $value, self::$utc);
 
             $this->checkConvertedValue($value, $platform, $converted);
 
@@ -84,7 +86,7 @@ class UTCDateTimeType extends DateTimeType
     private function initializeUtcDateTimeZone(): void
     {
         if (self::$utc === null) {
-            self::$utc = new \DateTimeZone('UTC');
+            self::$utc = new DateTimeZone('UTC');
         }
     }
 
@@ -93,13 +95,13 @@ class UTCDateTimeType extends DateTimeType
      *
      * @param mixed             $value
      * @param AbstractPlatform  $platform
-     * @param \DateTime|boolean $converted
+     * @param DateTime|boolean $converted
      *
      * @throws ConversionException
      */
     private function checkConvertedValue($value, AbstractPlatform $platform, $converted): void
     {
-        if ($converted instanceof \DateTime) {
+        if ($converted instanceof DateTime) {
             return;
         }
 

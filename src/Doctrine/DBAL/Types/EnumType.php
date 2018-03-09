@@ -9,6 +9,11 @@ namespace App\Doctrine\DBAL\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use InvalidArgumentException;
+use function array_map;
+use function implode;
+use function in_array;
+use function sprintf;
 
 /**
  * Class EnumType
@@ -44,7 +49,7 @@ abstract class EnumType extends Type
             return "'" . $value . "'";
         };
 
-        return 'ENUM(' . \implode(', ', \array_map($iterator, static::$values)) . ')';
+        return 'ENUM(' . implode(', ', array_map($iterator, static::$values)) . ')';
     }
 
     /**
@@ -53,19 +58,19 @@ abstract class EnumType extends Type
      *
      * @return mixed
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         $value = parent::convertToDatabaseValue($value, $platform);
 
-        if (!\in_array($value, static::$values, true)) {
-            $message = \sprintf(
+        if (!in_array($value, static::$values, true)) {
+            $message = sprintf(
                 "Invalid '%s' value",
                 $this->getName()
             );
 
-            throw new \InvalidArgumentException($message);
+            throw new InvalidArgumentException($message);
         }
 
         return $value;
