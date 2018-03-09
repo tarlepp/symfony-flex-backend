@@ -10,10 +10,12 @@ namespace App\Entity;
 use App\Entity\Traits\LogEntityTrait;
 use App\Entity\Traits\LogRequestProcessRequestTrait;
 use Doctrine\ORM\Mapping as ORM;
+use LogicException;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Annotation\Groups;
+use function mb_strlen;
 
 /**
  * Class LogRequest
@@ -159,7 +161,7 @@ class LogRequest implements EntityInterface
      * @param ApiKey|null   $apiKey
      * @param bool          $masterRequest
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function __construct(
         ?Request $request = null,
@@ -231,6 +233,6 @@ class LogRequest implements EntityInterface
     private function processResponse(Response $response): void
     {
         $this->statusCode = $response->getStatusCode();
-        $this->responseContentLength = \mb_strlen($response->getContent());
+        $this->responseContentLength = mb_strlen($response->getContent());
     }
 }
