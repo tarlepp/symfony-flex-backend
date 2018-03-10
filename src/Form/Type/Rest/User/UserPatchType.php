@@ -72,7 +72,7 @@ class UserPatchType extends AbstractType
     /**
      * @SuppressWarnings("unused")
      *
-     * @param FormBuilderInterface $buildersss
+     * @param FormBuilderInterface $builder
      * @param mixed[]              $options
      *
      * @throws \Symfony\Component\Form\Exception\InvalidArgumentException
