@@ -13,6 +13,9 @@ use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use function array_key_exists;
+use function hash;
+use function implode;
 
 /**
  * Class JWTDecodedSubscriber
@@ -113,10 +116,10 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
         ];
 
         // Calculate checksum
-        $checksum = \hash('sha512', \implode('|', $bits));
+        $checksum = hash('sha512', implode('|', $bits));
 
         // Custom checks to validate user's JWT
-        if (!\array_key_exists('checksum', $payload) || $payload['checksum'] !== $checksum) {
+        if (!array_key_exists('checksum', $payload) || $payload['checksum'] !== $checksum) {
             $event->markAsInvalid();
         }
     }
