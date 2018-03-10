@@ -11,6 +11,9 @@ use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use function array_map;
+use function is_array;
+use function is_string;
 
 /**
  * Class UserGroupTransformer
@@ -46,17 +49,17 @@ class UserGroupTransformer implements DataTransformerInterface
     {
         $output = [];
 
-        if (\is_array($userGroups)) {
+        if (is_array($userGroups)) {
             /**
              * @param string|UserGroup $userGroup
              *
              * @return string
              */
             $iterator = function ($userGroup): string {
-                return \is_string($userGroup) ? $userGroup : $userGroup->getId();
+                return is_string($userGroup) ? $userGroup : $userGroup->getId();
             };
 
-            $output = \array_map($iterator, $userGroups);
+            $output = array_map($iterator, $userGroups);
         }
 
         return $output;
@@ -75,7 +78,7 @@ class UserGroupTransformer implements DataTransformerInterface
     {
         $output = null;
 
-        if (\is_array($userGroups)) {
+        if (is_array($userGroups)) {
             $iterator = function (string $groupId): UserGroup {
                 $group = $this->resource->findOne($groupId);
 
@@ -89,7 +92,7 @@ class UserGroupTransformer implements DataTransformerInterface
                 return $group;
             };
 
-            $output = \array_map($iterator, $userGroups);
+            $output = array_map($iterator, $userGroups);
         }
 
         return $output;
