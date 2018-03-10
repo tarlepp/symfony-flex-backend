@@ -18,6 +18,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function array_map;
 
 /**
  * Class UserGroupType
@@ -135,7 +136,7 @@ class UserGroupType extends AbstractType
             $choices[$name] = $role->getId();
         };
 
-        \array_map($iterator, $this->roleResource->find());
+        array_map($iterator, $this->roleResource->find());
 
         return $choices;
     }
