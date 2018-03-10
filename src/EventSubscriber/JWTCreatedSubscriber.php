@@ -10,11 +10,16 @@ namespace App\EventSubscriber;
 use App\Entity\User;
 use App\Helpers\LoggerAwareTrait;
 use App\Security\RolesService;
+use DateTime;
+use DateTimeZone;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function array_merge;
+use function hash;
+use function implode;
 
 /**
  * Class JWTCreatedSubscriber
@@ -109,7 +114,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     private function setExpiration(array &$payload): void
     {
         // Set new exp value for JWT
-        $payload['exp'] = (new \DateTime('+1 day', new \DateTimeZone('UTC')))->getTimestamp();
+        $payload['exp'] = (new DateTime('+1 day', new DateTimeZone('UTC')))->getTimestamp();
     }
 
     /**
@@ -137,7 +142,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
         ];
 
         // Attach checksum to JWT payload
-        $payload['checksum'] = \hash('sha512', \implode('|', $bits));
+        $payload['checksum'] = hash('sha512', implode('|', $bits));
     }
 
     /**
@@ -152,6 +157,6 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
         $user->setRolesService($this->rolesService);
 
         // Merge login data to current payload
-        $payload = \array_merge($payload, $user->getLoginData());
+        $payload = array_merge($payload, $user->getLoginData());
     }
 }
