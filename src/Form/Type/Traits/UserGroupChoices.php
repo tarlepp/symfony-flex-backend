@@ -9,6 +9,7 @@ namespace App\Form\Type\Traits;
 
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
+use function array_map;
 
 /**
  * Trait UserGroupChoices
@@ -44,7 +45,7 @@ trait UserGroupChoices
             $choices[$name] = $userGroup->getId();
         };
 
-        \array_map($iterator, $this->userGroupResource->find());
+        array_map($iterator, $this->userGroupResource->find());
 
         return $choices;
     }
