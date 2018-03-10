@@ -11,6 +11,7 @@ use App\Utils\JSON;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use function file_get_contents;
 
 /**
  * Class ResponseSubscriber
@@ -74,6 +75,6 @@ class ResponseSubscriber implements EventSubscriberInterface
      */
     private function getApiVersion(): string
     {
-        return JSON::decode(\file_get_contents(__DIR__ . '/../../composer.json'))->version;
+        return JSON::decode(file_get_contents(__DIR__ . '/../../composer.json'))->version;
     }
 }
