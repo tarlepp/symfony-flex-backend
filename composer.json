@@ -69,7 +69,7 @@
 		"symfony/maker-bundle": "1.1.1",
 		"symfony/requirements-checker": "1.0.3",
 		"symfony/web-server-bundle": "4.0.6",
-		"symplify/easy-coding-standard": "3.2.29"
+		"symplify/easy-coding-standard": "3.2.30"
 	},
 	"config": {
 		"preferred-install": {
