@@ -12,6 +12,13 @@ use App\Repository\Traits\RepositoryWrappersTrait;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use function array_merge;
+use function array_unshift;
+use function implode;
+use function in_array;
+use function serialize;
+use function sha1;
+use function spl_object_hash;
 
 /**
  * Class BaseRepository
@@ -179,9 +186,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
     public function addCallback(callable $callable, ?array $args = null): BaseRepositoryInterface
     {
         $args = $args ?? [];
-        $hash = \sha1(\serialize(\array_merge([\spl_object_hash((object) $callable)], $args)));
+        $hash = sha1(serialize(array_merge([spl_object_hash((object) $callable)], $args)));
 
-        if (!\in_array($hash, self::$processedCallbacks, true)) {
+        if (!in_array($hash, self::$processedCallbacks, true)) {
             self::$callbacks[$hash] = [$callable, $args];
             self::$processedCallbacks[] = $hash;
         }
@@ -221,7 +228,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
          * @var mixed[]  $args
          */
         foreach (self::$callbacks as [$callback, $args]) {
-            \array_unshift($args, $queryBuilder);
+            array_unshift($args, $queryBuilder);
 
             $callback(...$args);
         }
@@ -244,9 +251,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     private function addJoinToQuery(string $type, array $parameters): void
     {
-        $comparision = \implode('|', $parameters);
+        $comparision = implode('|', $parameters);
 
-        if (!\in_array($comparision, self::$processedJoins[$type], true)) {
+        if (!in_array($comparision, self::$processedJoins[$type], true)) {
             self::$joins[$type][] = $parameters;
 
             self::$processedJoins[$type][] = $comparision;
