@@ -9,6 +9,8 @@ namespace App\Rest\Describer;
 
 use App\Rest\Doc\RouteModel;
 use EXSyst\Component\Swagger\Operation;
+use InvalidArgumentException;
+use UnexpectedValueException;
 
 /**
  * Class Rest
@@ -79,7 +81,8 @@ class Rest
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws \UnexpectedValueException
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Twig_Error_Loader
