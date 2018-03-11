@@ -9,7 +9,11 @@ namespace App\Rest\Describer;
 
 use App\Utils\JSON;
 use EXSyst\Component\Swagger\Swagger;
+use LogicException;
 use Nelmio\ApiDocBundle\Describer\DescriberInterface;
+use function file_get_contents;
+use function implode;
+use function is_array;
 
 /**
  * Class ApiDocDescriberInformation
@@ -37,12 +41,12 @@ class ApiDocDescriberInformation implements DescriberInterface
     /**
      * @param Swagger $api
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function describe(Swagger $api): void
     {
         // Read composer.json to an object
-        $composer = JSON::decode(\file_get_contents($this->rootDir . '/../composer.json'));
+        $composer = JSON::decode(file_get_contents($this->rootDir . '/../composer.json'));
 
         // Get API info
         $info = $api->getInfo();
@@ -52,7 +56,7 @@ class ApiDocDescriberInformation implements DescriberInterface
         $info->setDescription($composer->description);
         $info->setVersion($composer->version);
         $info->getLicense()->setName(
-            \is_array($composer->license) ? \implode(', ', $composer->license) : $composer->license
+            is_array($composer->license) ? implode(', ', $composer->license) : $composer->license
         );
     }
 }
