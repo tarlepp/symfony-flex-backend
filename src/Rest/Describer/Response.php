@@ -11,6 +11,8 @@ use App\Rest\Controller;
 use App\Rest\Doc\RouteModel;
 use EXSyst\Component\Swagger\Operation;
 use Psr\Container\ContainerInterface;
+use UnexpectedValueException;
+use function in_array;
 
 /**
  * Class Response
@@ -46,7 +48,7 @@ class Response
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
@@ -54,13 +56,13 @@ class Response
     {
         [$action, $description, $statusCode, $responses] = $this->getDefaults($routeModel);
 
-        if (\in_array(
+        if (in_array(
             $action,
             [Rest::COUNT_ACTION, Rest::FIND_ACTION, Rest::FIND_ONE_ACTION, Rest::IDS_ACTION],
             true
         )) {
             $this->processResponseForRead($action, $description, $responses);
-        } elseif (\in_array(
+        } elseif (in_array(
             $action,
             [Rest::CREATE_ACTION, Rest::DELETE_ACTION, Rest::PATCH_ACTION, Rest::UPDATE_ACTION],
             true
@@ -127,7 +129,7 @@ class Response
      * @param int        $statusCode
      * @param string[]   $responses
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
