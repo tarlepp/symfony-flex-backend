@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Command\ApiKey;
 
 use App\Entity\ApiKey as ApiKeyEntity;
+use App\Entity\EntityInterface;
 use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
 use Closure;
@@ -109,7 +110,7 @@ class ApiKeyHelper
      * @param SymfonyStyle $io
      * @param string       $question
      *
-     * @return ApiKeyEntity|null
+     * @return ApiKeyEntity|EntityInterface|null
      */
     private function getApiKeyEntity(SymfonyStyle $io, string $question): ?ApiKeyEntity
     {

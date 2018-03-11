@@ -80,6 +80,7 @@ class UserGroupTransformer implements DataTransformerInterface
 
         if (is_array($userGroups)) {
             $iterator = function (string $groupId): UserGroup {
+                /** @var UserGroup $group */
                 $group = $this->resource->findOne($groupId);
 
                 if ($group === null) {
