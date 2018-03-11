@@ -13,6 +13,8 @@ use App\Rest\RepositoryHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use function array_map;
+use function current;
 
 /**
  * Trait RepositoryMethodsTrait
@@ -153,7 +155,7 @@ trait RepositoryMethodsTrait
 
         RepositoryHelper::resetParameterCount();
 
-        return \array_map('\current', $queryBuilder->getQuery()->getArrayResult());
+        return array_map('current', $queryBuilder->getQuery()->getArrayResult());
     }
 
     /**
