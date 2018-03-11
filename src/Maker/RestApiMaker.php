@@ -16,6 +16,14 @@ use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use function array_map;
+use function array_merge;
+use function implode;
+use function lcfirst;
+use function preg_match_all;
+use function sprintf;
+use function strtolower;
+use function strtoupper;
 
 /**
  * Class RestApiMaker
@@ -62,7 +70,7 @@ class RestApiMaker extends AbstractMaker
     {
         $command->setName(self::getCommandName());
 
-        $message = \sprintf(
+        $message = sprintf(
             'Creates necessary classes for new REST resource (%s)',
             implode(', ', ['Entity', 'Repository', 'Resource', 'Controller', 'Test classes'])
         );
@@ -116,7 +124,7 @@ class RestApiMaker extends AbstractMaker
             return $generator->generateClass($details->getFullName(), $input['template'], $parameters);
         };
 
-        $this->setCreatedFiles(\array_map($processFile, $this->getFiles($parameters)));
+        $this->setCreatedFiles(array_map($processFile, $this->getFiles($parameters)));
 
         $generator->writeChanges();
 
@@ -187,7 +195,7 @@ class RestApiMaker extends AbstractMaker
     {
         $baseDir = __DIR__ . '/../../templates/skeleton/rest-api/';
 
-        return \array_merge(
+        return array_merge(
             [
                 [
                     'name' => $params[self::PARAM_CONTROLLER_NAME],
@@ -232,16 +240,16 @@ class RestApiMaker extends AbstractMaker
      */
     private function convertToSnakeCase(string $input): string
     {
-        \preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $input, $matches);
 
         /** @var array $ret */
         $ret = $matches[0];
 
         foreach ($ret as &$match) {
-            $match = $match === \strtoupper($match) ? \strtolower($match) : \lcfirst($match);
+            $match = $match === strtoupper($match) ? strtolower($match) : lcfirst($match);
         }
 
-        return \implode('_', $ret);
+        return implode('_', $ret);
     }
 
     /**
