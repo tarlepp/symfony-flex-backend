@@ -8,6 +8,9 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\LogRequest as Entity;
+use DateInterval;
+use DateTime;
+use DateTimeZone;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /**
@@ -43,8 +46,8 @@ class LogRequestRepository extends BaseRepository
     public function cleanHistory(): int
     {
         // Determine date
-        $date = new \DateTime('now', new \DateTimeZone('UTC'));
-        $date->sub(new \DateInterval('P3Y'));
+        $date = new DateTime('now', new DateTimeZone('UTC'));
+        $date->sub(new DateInterval('P3Y'));
 
         // Create query builder and define delete query
         $queryBuilder = $this
