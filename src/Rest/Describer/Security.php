@@ -10,7 +10,11 @@ namespace App\Rest\Describer;
 use App\Rest\Doc\RouteModel;
 use EXSyst\Component\Swagger\Operation;
 use EXSyst\Component\Swagger\Parameter;
+use InvalidArgumentException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as SecurityAnnotation;
+use function array_filter;
+use function array_values;
+use function count;
 
 /**
  * Class Security
@@ -43,6 +47,8 @@ class Security
      *
      * @param Operation  $operation
      * @param RouteModel $routeModel
+     *
+     * @throws InvalidArgumentException
      */
     public function process(Operation $operation, RouteModel $routeModel): void
     {
@@ -50,7 +56,7 @@ class Security
             return $annotation instanceof SecurityAnnotation;
         };
 
-        if (\count(\array_values(\array_filter($routeModel->getMethodAnnotations(), $filter))) === 1) {
+        if (count(array_values(array_filter($routeModel->getMethodAnnotations(), $filter))) === 1) {
             $parameter = [
                 'type' => 'string',
                 'name' => 'Authorization',
