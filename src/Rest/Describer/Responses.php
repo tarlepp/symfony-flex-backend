@@ -9,6 +9,7 @@ namespace App\Rest\Describer;
 
 use EXSyst\Component\Swagger\Operation;
 use EXSyst\Component\Swagger\Response as SwaggerResponse;
+use function sprintf;
 
 /**
  * Class Responses
@@ -82,7 +83,7 @@ class Responses
     public function addOk(Operation $operation, string $description, int $statusCode, string $entityName): void
     {
         $data = [
-            'description' => \sprintf($description, $entityName),
+            'description' => sprintf($description, $entityName),
         ];
 
         $response = new SwaggerResponse($data);
