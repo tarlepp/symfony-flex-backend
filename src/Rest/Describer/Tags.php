@@ -10,6 +10,9 @@ namespace App\Rest\Describer;
 use App\Rest\Doc\RouteModel;
 use EXSyst\Component\Swagger\Operation;
 use Swagger\Annotations as SWG;
+use function array_filter;
+use function array_values;
+use function count;
 
 /**
  * Class Tags
@@ -48,10 +51,10 @@ class Tags
             return $annotation instanceof SWG\Tag;
         };
 
-        $annotations = \array_values(\array_filter($routeModel->getControllerAnnotations(), $filter));
+        $annotations = array_values(array_filter($routeModel->getControllerAnnotations(), $filter));
 
         // If controller has 'SWG\Tag' annotation we will use that as a tag
-        if (\count($annotations) === 1) {
+        if (count($annotations) === 1) {
             /** @var SWG\Tag $annotation */
             $annotation = $annotations[0];
 
