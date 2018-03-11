@@ -8,6 +8,9 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\Healthz as Entity;
+use DateInterval;
+use DateTime;
+use DateTimeZone;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /**
@@ -82,8 +85,8 @@ class HealthzRepository extends BaseRepository
     public function cleanup(): int
     {
         // Determine date
-        $date = new \DateTime('NOW', new \DateTimeZone('UTC'));
-        $date->sub(new \DateInterval('P7D'));
+        $date = new DateTime('NOW', new DateTimeZone('UTC'));
+        $date->sub(new DateInterval('P7D'));
 
         // Create query builder
         $queryBuilder = $this
