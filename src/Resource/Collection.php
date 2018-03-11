@@ -8,6 +8,10 @@ declare(strict_types = 1);
 namespace App\Resource;
 
 use App\Rest\RestResource;
+use InvalidArgumentException;
+use function array_key_exists;
+use function get_class;
+use function sprintf;
 
 /**
  * Class Collection
@@ -29,17 +33,17 @@ class Collection
      *
      * @return RestResource
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function get(string $resourceName): RestResource
     {
         if ($this->has($resourceName) === false) {
-            $message = \sprintf(
+            $message = sprintf(
                 'Resource \'%s\' does not exists',
                 $resourceName
             );
 
-            throw new \InvalidArgumentException($message);
+            throw new InvalidArgumentException($message);
         }
 
         return $this->resources[$resourceName];
@@ -54,7 +58,7 @@ class Collection
      */
     public function set(RestResource $resource): self
     {
-        $this->resources[\get_class($resource)] = $resource;
+        $this->resources[get_class($resource)] = $resource;
 
         return $this;
     }
@@ -70,7 +74,7 @@ class Collection
     {
         $output = false;
 
-        if ($resourceName !== null && \array_key_exists($resourceName, $this->resources)) {
+        if ($resourceName !== null && array_key_exists($resourceName, $this->resources)) {
             $output = true;
         }
 
