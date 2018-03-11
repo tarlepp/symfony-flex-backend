@@ -16,6 +16,9 @@ use App\Repository\UserRepository as Repository;
 use App\Rest\RestResource;
 use App\Security\RolesService;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use function in_array;
+use function array_values;
+use function array_filter;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -43,23 +46,22 @@ class UserResource extends RestResource
     /**
      * @var RolesService
      */
-    private $roles;
+    private $rolesService;
 
     /**
      * Class constructor.
      *
      * @param Repository         $repository
      * @param ValidatorInterface $validator
-     * @param RolesService       $roles
+     * @param RolesService       $rolesService
      */
-    public function __construct(Repository $repository, ValidatorInterface $validator, RolesService $roles)
+    public function __construct(Repository $repository, ValidatorInterface $validator, RolesService $rolesService)
     {
         $this->setRepository($repository);
         $this->setValidator($validator);
-
-        $this->roles = $roles;
-
         $this->setDtoClass(User::class);
+
+        $this->rolesService = $rolesService;
     }
 
     /**
@@ -80,11 +82,11 @@ class UserResource extends RestResource
          * @return bool
          */
         $filter = function (Entity $user) use ($userGroup): bool {
-            $user->setRolesService($this->roles);
+            $user->setRolesService($this->rolesService);
 
-            return \in_array($userGroup->getRole()->getId(), $user->getRoles(), true);
+            return in_array($userGroup->getRole()->getId(), $user->getRoles(), true);
         };
 
-        return \array_values(\array_filter($this->find(), $filter));
+        return array_values(array_filter($this->find(), $filter));
     }
 }
