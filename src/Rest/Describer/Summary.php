@@ -11,6 +11,9 @@ use App\Rest\Controller;
 use App\Rest\Doc\RouteModel;
 use EXSyst\Component\Swagger\Operation;
 use Psr\Container\ContainerInterface;
+use UnexpectedValueException;
+use function in_array;
+use function sprintf;
 
 /**
  * Class Summary
@@ -41,7 +44,7 @@ class Summary
      * @param RouteModel $routeModel
      * @param Operation  $operation
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
@@ -49,13 +52,13 @@ class Summary
     {
         [$action, $summary] = $this->getDefaults($routeModel);
 
-        if (\in_array(
+        if (in_array(
             $action,
             [Rest::COUNT_ACTION, Rest::FIND_ACTION, Rest::FIND_ONE_ACTION, Rest::IDS_ACTION],
             true
         )) {
             $this->processSummaryForRead($action, $summary);
-        } elseif (\in_array(
+        } elseif (in_array(
             $action,
             [Rest::CREATE_ACTION, Rest::DELETE_ACTION, Rest::PATCH_ACTION, Rest::UPDATE_ACTION],
             true
@@ -71,7 +74,7 @@ class Summary
      * @param RouteModel $routeModel
      * @param string     $summary
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
@@ -81,7 +84,7 @@ class Summary
             /** @var Controller $controller */
             $controller = $this->container->get($routeModel->getController());
 
-            $operation->setSummary(\sprintf(
+            $operation->setSummary(sprintf(
                 $summary,
                 $controller->getResource()->getEntityName(),
                 $routeModel->getBaseRoute()
