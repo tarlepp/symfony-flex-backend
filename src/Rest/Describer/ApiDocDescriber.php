@@ -9,13 +9,24 @@ namespace App\Rest\Describer;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Doc\RouteModel;
+use Closure;
 use Doctrine\Common\Annotations\AnnotationReader;
 use EXSyst\Component\Swagger\Swagger;
 use Nelmio\ApiDocBundle\Describer\DescriberInterface;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use function array_filter;
+use function array_map;
+use function array_values;
+use function count;
+use function explode;
+use function mb_strrpos;
+use function mb_strtolower;
 
 /**
  * Class ApiDocDescriber
@@ -61,7 +72,7 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param Swagger $api
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      * @throws \UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -85,7 +96,7 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @return RouteModel[]
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function getRouteModels(): array
     {
@@ -93,22 +104,22 @@ class ApiDocDescriber implements DescriberInterface
         $annotationFilterRoute = $this->getClosureAnnotationFilterRoute();
 
         $iterator = function (Route $route) use ($annotationFilterMethod, $annotationFilterRoute): RouteModel {
-            [$controller, $method] = \explode('::', $route->getDefault('_controller'));
+            [$controller, $method] = explode('::', $route->getDefault('_controller'));
 
-            $reflection = new \ReflectionMethod($controller, $method);
+            $reflection = new ReflectionMethod($controller, $method);
             $methodAnnotations = $this->annotationReader->getMethodAnnotations($reflection);
             $controllerAnnotations = $this->annotationReader->getClassAnnotations($reflection->getDeclaringClass());
 
             /** @var Method $httpMethodAnnotation */
-            $httpMethodAnnotation = \array_values(\array_filter($methodAnnotations, $annotationFilterMethod))[0];
+            $httpMethodAnnotation = array_values(array_filter($methodAnnotations, $annotationFilterMethod))[0];
 
             /** @var \Sensio\Bundle\FrameworkExtraBundle\Configuration\Route $routeAnnotation */
-            $routeAnnotation = \array_values(\array_filter($controllerAnnotations, $annotationFilterRoute))[0];
+            $routeAnnotation = array_values(array_filter($controllerAnnotations, $annotationFilterRoute))[0];
 
             $routeModel = new RouteModel();
             $routeModel->setController($controller);
             $routeModel->setMethod($method);
-            $routeModel->setHttpMethod(\mb_strtolower($httpMethodAnnotation->getMethods()[0]));
+            $routeModel->setHttpMethod(mb_strtolower($httpMethodAnnotation->getMethods()[0]));
             $routeModel->setBaseRoute($routeAnnotation->getPath());
             $routeModel->setRoute($route);
             $routeModel->setMethodAnnotations($methodAnnotations);
@@ -121,7 +132,7 @@ class ApiDocDescriber implements DescriberInterface
             return $this->routeFilter($route);
         };
 
-        return \array_map($iterator, \array_filter($this->routeCollection->all(), $filter));
+        return array_map($iterator, array_filter($this->routeCollection->all(), $filter));
     }
 
     /**
@@ -129,20 +140,20 @@ class ApiDocDescriber implements DescriberInterface
      *
      * @return bool
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function routeFilter(Route $route): bool
     {
         $output = false;
 
-        if (!$route->hasDefault('_controller') || \mb_strrpos($route->getDefault('_controller'), '::')) {
+        if (!$route->hasDefault('_controller') || mb_strrpos($route->getDefault('_controller'), '::')) {
             $output = true;
         }
 
         if ($output) {
-            [$controller] = \explode('::', $route->getDefault('_controller'));
+            [$controller] = explode('::', $route->getDefault('_controller'));
 
-            $reflection = new \ReflectionClass($controller);
+            $reflection = new ReflectionClass($controller);
 
             $annotations = $this->annotationReader->getClassAnnotations($reflection);
 
@@ -174,22 +185,22 @@ class ApiDocDescriber implements DescriberInterface
      *
      * @return bool
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     private function routeFilterMethod(Route $route, bool $output): bool
     {
         if ($output) {
-            [$controller, $method] = \explode('::', $route->getDefault('_controller'));
+            [$controller, $method] = explode('::', $route->getDefault('_controller'));
 
-            $reflection = new \ReflectionMethod($controller, $method);
+            $reflection = new ReflectionMethod($controller, $method);
 
             $annotations = $this->annotationReader->getMethodAnnotations($reflection);
 
             $supported = [];
 
-            \array_map($this->isRouteSupported($supported), $annotations);
+            array_map($this->isRouteSupported($supported), $annotations);
 
-            $output = \count($supported) === 2;
+            $output = count($supported) === 2;
         }
 
         return $output;
@@ -198,9 +209,9 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param mixed[] &$supported
      *
-     * @return \Closure
+     * @return Closure
      */
-    private function isRouteSupported(array &$supported): \Closure
+    private function isRouteSupported(array &$supported): Closure
     {
         return function ($annotation) use (&$supported): void {
             if ($annotation instanceof RestApiDoc || $annotation instanceof Method) {
@@ -210,9 +221,9 @@ class ApiDocDescriber implements DescriberInterface
     }
 
     /**
-     * @return \Closure
+     * @return Closure
      */
-    private function getClosureAnnotationFilterMethod(): \Closure
+    private function getClosureAnnotationFilterMethod(): Closure
     {
         /**
          * Simple filter lambda function to filter out all but Method class
@@ -227,9 +238,9 @@ class ApiDocDescriber implements DescriberInterface
     }
 
     /**
-     * @return \Closure
+     * @return Closure
      */
-    private function getClosureAnnotationFilterRoute(): \Closure
+    private function getClosureAnnotationFilterRoute(): Closure
     {
         /**
          * Simple filter lambda function to filter out all but Method class
