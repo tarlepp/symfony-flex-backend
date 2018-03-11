@@ -11,7 +11,11 @@ use App\Rest\Controller;
 use App\Rest\Doc\RouteModel;
 use EXSyst\Component\Swagger\Operation;
 use EXSyst\Component\Swagger\Parameter;
+use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
+use Twig_Environment;
+use function in_array;
+use UnexpectedValueException;
 
 /**
  * Class Parameters
@@ -74,7 +78,7 @@ class Parameters
     private $container;
 
     /**
-     * @var \Twig_Environment
+     * @var Twig_Environment
      */
     private $templateEngine;
 
@@ -87,10 +91,10 @@ class Parameters
      * Parameters constructor.
      *
      * @param ContainerInterface $container
-     * @param \Twig_Environment  $templateEngine
+     * @param Twig_Environment   $templateEngine
      * @param Responses          $responses
      */
-    public function __construct(ContainerInterface $container, \Twig_Environment $templateEngine, Responses $responses)
+    public function __construct(ContainerInterface $container, Twig_Environment $templateEngine, Responses $responses)
     {
         $this->container = $container;
         $this->templateEngine = $templateEngine;
@@ -101,24 +105,24 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function process(Operation $operation, RouteModel $routeModel): void
     {
         $action = $routeModel->getMethod();
 
-        if (\in_array($action, [Rest::COUNT_ACTION, Rest::IDS_ACTION], true)) {
+        if (in_array($action, [Rest::COUNT_ACTION, Rest::IDS_ACTION], true)) {
             $this->responses->add404($operation);
             $this->addParameterCriteria($operation);
-        } elseif (\in_array($action, [Rest::DELETE_ACTION, Rest::PATCH_ACTION, Rest::UPDATE_ACTION], true)) {
+        } elseif (in_array($action, [Rest::DELETE_ACTION, Rest::PATCH_ACTION, Rest::UPDATE_ACTION], true)) {
             $this->changePathParameter($operation);
-        } elseif (\in_array($action, [Rest::FIND_ONE_ACTION, Rest::FIND_ACTION], true)) {
+        } elseif (in_array($action, [Rest::FIND_ONE_ACTION, Rest::FIND_ACTION], true)) {
             $this->processFind($operation, $routeModel);
         }
     }
@@ -127,13 +131,13 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function processFind(Operation $operation, RouteModel $routeModel): void
     {
@@ -156,8 +160,8 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -197,7 +201,7 @@ class Parameters
     /**
      * @param Operation $operation
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -224,7 +228,7 @@ class Parameters
     /**
      * @param Operation $operation
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -252,7 +256,7 @@ class Parameters
     /**
      * @param Operation $operation
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -272,7 +276,7 @@ class Parameters
     /**
      * @param Operation $operation
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -296,7 +300,7 @@ class Parameters
      *
      * @return Parameter
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -324,8 +328,8 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws \InvalidArgumentException
-     * @throws \UnexpectedValueException
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
      * @throws \Twig_Error_Runtime
@@ -379,7 +383,7 @@ class Parameters
      *
      * @return string[]
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function getPopulateExamples(Controller $controller): array
     {
