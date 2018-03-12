@@ -9,6 +9,7 @@ namespace App\Rest\Traits\Actions\Anon;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\FindOneMethod;
+use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +47,7 @@ trait FindOneAction
      *
      * @return Response
      *
-     * @throws \LogicException
+     * @throws LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */

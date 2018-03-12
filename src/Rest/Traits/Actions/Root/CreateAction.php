@@ -9,12 +9,14 @@ namespace App\Rest\Traits\Actions\Root;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CreateMethod;
+use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use UnexpectedValueException;
 
 /**
  * Trait CreateAction
@@ -45,8 +47,8 @@ trait CreateAction
      *
      * @return Response
      *
-     * @throws \LogicException
-     * @throws \UnexpectedValueException
+     * @throws LogicException
+     * @throws UnexpectedValueException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException

@@ -9,12 +9,14 @@ namespace App\Rest\Traits\Actions\Logged;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\PatchMethod;
+use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use UnexpectedValueException;
 
 /**
  * Trait PatchAction
@@ -51,8 +53,8 @@ trait PatchAction
      *
      * @return Response
      *
-     * @throws \LogicException
-     * @throws \UnexpectedValueException
+     * @throws LogicException
+     * @throws UnexpectedValueException
      * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      * @throws \Symfony\Component\Form\Exception\LogicException
      * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
