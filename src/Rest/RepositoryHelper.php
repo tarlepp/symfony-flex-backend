@@ -7,8 +7,20 @@ declare(strict_types = 1);
  */
 namespace App\Rest;
 
+use Closure;
 use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\QueryBuilder;
+use InvalidArgumentException;
+use stdClass;
+use function array_combine;
+use function array_key_exists;
+use function array_map;
+use function array_walk;
+use function call_user_func_array;
+use function is_array;
+use function strcmp;
+use function strpos;
+use function strtolower;
 
 /**
  * Class RepositoryHelper
@@ -67,8 +79,7 @@ class RepositoryHelper
      * @param QueryBuilder $queryBuilder
      * @param mixed[]|null $criteria
      *
-     *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function processCriteria(QueryBuilder $queryBuilder, ?array $criteria = null): void
     {
@@ -82,7 +93,7 @@ class RepositoryHelper
         $condition = [];
 
         // Create used condition array
-        \array_walk($criteria, self::getIterator($condition));
+        array_walk($criteria, self::getIterator($condition));
 
         // And attach search term condition to main query
         $queryBuilder->andWhere(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $condition));
@@ -98,8 +109,7 @@ class RepositoryHelper
      * @param string[]     $columns
      * @param mixed[]|null $terms
      *
-     *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function processSearchTerms(QueryBuilder $queryBuilder, array $columns, ?array $terms = null): void
     {
@@ -130,7 +140,7 @@ class RepositoryHelper
         $orderBy = $orderBy ?? [];
 
         foreach ($orderBy as $column => $order) {
-            if (\strpos($column, '.') === false) {
+            if (strpos($column, '.') === false) {
                 $column = 'entity.' . $column;
             }
 
@@ -216,7 +226,7 @@ class RepositoryHelper
      *
      * @return Composite
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function getExpression(
         QueryBuilder $queryBuilder,
@@ -233,18 +243,18 @@ class RepositoryHelper
      * @param Composite    $expression
      * @param mixed[]      $criteria
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private static function processExpression(QueryBuilder $queryBuilder, Composite $expression, array $criteria): void
     {
         $iterator = function ($comparison, $key) use ($queryBuilder, $expression): void {
-            $expressionAnd = ($key === 'and' || \array_key_exists('and', $comparison));
-            $expressionOr = ($key === 'or' || \array_key_exists('or', $comparison));
+            $expressionAnd = ($key === 'and' || array_key_exists('and', $comparison));
+            $expressionOr = ($key === 'or' || array_key_exists('or', $comparison));
 
             self::buildExpression($queryBuilder, $expression, $expressionAnd, $expressionOr, $comparison);
         };
 
-        \array_walk($criteria, $iterator);
+        array_walk($criteria, $iterator);
     }
 
     /**
@@ -254,7 +264,7 @@ class RepositoryHelper
      * @param bool         $expressionOr
      * @param mixed        $comparison
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private static function buildExpression(
         QueryBuilder $queryBuilder,
@@ -271,7 +281,7 @@ class RepositoryHelper
             [$comparison, $parameters] = self::determineComparisonAndParameters($queryBuilder, $comparison);
 
             // And finally add new expression to main one with specified parameters
-            $expression->add(\call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters));
+            $expression->add(call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters));
         }
     }
 
@@ -285,11 +295,11 @@ class RepositoryHelper
      */
     private static function createCriteria(string $column, $value): array
     {
-        if (\strpos($column, '.') === false) {
+        if (strpos($column, '.') === false) {
             $column = 'entity.' . $column;
         }
 
-        $operator = \is_array($value) ? 'in' : 'eq';
+        $operator = is_array($value) ? 'in' : 'eq';
 
         return [$column, $operator, $value];
     }
@@ -302,7 +312,7 @@ class RepositoryHelper
      */
     private static function determineComparisonAndParameters(QueryBuilder $queryBuilder, array $comparison): array
     {
-        $comparisonObject = (object)\array_combine(['field', 'operator', 'value'], $comparison);
+        $comparisonObject = (object)array_combine(['field', 'operator', 'value'], $comparison);
 
         // Increase parameter count
         self::$parameterCount++;
@@ -310,7 +320,7 @@ class RepositoryHelper
         // Initialize used callback parameters
         $parameters = [$comparisonObject->field];
 
-        $lowercaseOperator = \strtolower($comparisonObject->operator);
+        $lowercaseOperator = strtolower($comparisonObject->operator);
 
         if (!($lowercaseOperator === 'isnull' || $lowercaseOperator === 'isnotnull')) {
             $parameters = self::getComparisonParameters(
@@ -348,7 +358,7 @@ class RepositoryHelper
             $parameters[] = '?' . self::$parameterCount;
             $queryBuilder->setParameter(self::$parameterCount, $value[1]);
         } else { // Otherwise this must be IN or NOT IN expression
-            $parameters[] = \array_map(function ($value) use ($queryBuilder) {
+            $parameters[] = array_map(function ($value) use ($queryBuilder) {
                 return $queryBuilder->expr()->literal($value);
             }, $value);
         }
@@ -359,13 +369,13 @@ class RepositoryHelper
     /**
      * @param mixed[] &$condition
      *
-     * @return \Closure
+     * @return Closure
      */
-    private static function getIterator(array &$condition): \Closure
+    private static function getIterator(array &$condition): Closure
     {
         return function ($value, $column) use (&$condition): void {
             // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
-            if (\strcmp($column, 'and') === 0 || \strcmp($column, 'or') === 0) {
+            if (strcmp($column, 'and') === 0 || strcmp($column, 'or') === 0) {
                 $condition[$column] = $value;
             } else { // Add condition
                 $condition[] = self::createCriteria($column, $value);
@@ -375,7 +385,7 @@ class RepositoryHelper
 
     /**
      * @param QueryBuilder $queryBuilder
-     * @param \stdClass    $comparison
+     * @param stdClass     $comparison
      * @param string       $lowercaseOperator
      * @param mixed[]      $parameters
      *
@@ -383,11 +393,11 @@ class RepositoryHelper
      */
     private static function getComparisonParameters(
         QueryBuilder $queryBuilder,
-        \stdClass $comparison,
+        stdClass $comparison,
         string $lowercaseOperator,
         array $parameters
     ): array {
-        if (\is_array($comparison->value)) {
+        if (is_array($comparison->value)) {
             $value = $comparison->value;
 
             $parameters = self::getParameters($queryBuilder, $lowercaseOperator, $parameters, $value);

@@ -7,10 +7,13 @@ declare(strict_types = 1);
  */
 namespace App\Rest;
 
+use LogicException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
+use UnexpectedValueException;
 
 /**
  * Interface ControllerInterface
@@ -23,14 +26,14 @@ interface ControllerInterface
     /**
      * @return RestResourceInterface
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getResource(): RestResourceInterface;
 
     /**
      * @return ResponseHandlerInterface
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getResponseHandler(): ResponseHandlerInterface;
 
@@ -41,7 +44,7 @@ interface ControllerInterface
      *
      * @return string
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getDtoClass(?string $method = null): string;
 
@@ -52,7 +55,7 @@ interface ControllerInterface
      *
      * @return string
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getFormTypeClass(?string $method = null): string;
 
@@ -62,7 +65,7 @@ interface ControllerInterface
      * @param Request  $request
      * @param string[] $allowedHttpMethods
      *
-     * @throws \LogicException
+     * @throws LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
@@ -70,13 +73,13 @@ interface ControllerInterface
     /**
      * Method to handle possible REST method trait exception.
      *
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
-     * @return HttpException
+     * @return Throwable
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function handleRestMethodException(\Throwable $exception): HttpException;
+    public function handleRestMethodException(Throwable $exception): Throwable;
 
     /**
      * Method to process current criteria array.
