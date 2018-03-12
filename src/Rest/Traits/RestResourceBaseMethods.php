@@ -10,9 +10,14 @@ namespace App\Rest\Traits;
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
+use BadMethodCallException;
+use InvalidArgumentException;
+use LogicException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use function count;
+use function get_class;
 
 /**
  * Trait RestResourceBaseMethods
@@ -47,8 +52,8 @@ trait RestResourceBaseMethods
      *
      * @return RestDtoInterface
      *
-     * @throws \LogicException
-     * @throws \BadMethodCallException
+     * @throws LogicException
+     * @throws BadMethodCallException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     abstract public function getDtoForEntity(
@@ -69,7 +74,7 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface[]
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function find(
         ?array $criteria = null,
@@ -173,7 +178,7 @@ trait RestResourceBaseMethods
      *
      * @return integer
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function count(?array $criteria = null, ?array $search = null): int
@@ -237,8 +242,8 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface
      *
-     * @throws \LogicException
-     * @throws \BadMethodCallException
+     * @throws LogicException
+     * @throws BadMethodCallException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Symfony\Component\Validator\Exception\ValidatorException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -256,7 +261,7 @@ trait RestResourceBaseMethods
          * Determine used dto class and create new instance of that and load entity to that. And after that patch
          * that dto with given partial OR whole dto class.
          */
-        $restDto = $this->getDtoForEntity($id, \get_class($dto), $dto);
+        $restDto = $this->getDtoForEntity($id, get_class($dto), $dto);
 
         // Validate DTO
         $this->validateDto($restDto, $skipValidation);
@@ -311,7 +316,7 @@ trait RestResourceBaseMethods
      *
      * @return string[]
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getIds(?array $criteria = null, ?array $search = null): array
     {
@@ -416,7 +421,7 @@ trait RestResourceBaseMethods
         $errors = !$skipValidation ? $this->getValidator()->validate($dto) : [];
 
         // Oh noes, we have some errors
-        if (\count($errors) > 0) {
+        if (count($errors) > 0) {
             throw new ValidatorException((string)$errors);
         }
     }
@@ -434,7 +439,7 @@ trait RestResourceBaseMethods
         $errors = !$skipValidation ? $this->getValidator()->validate($entity) : [];
 
         // Oh noes, we have some errors
-        if (\count($errors) > 0) {
+        if (count($errors) > 0) {
             throw new ValidatorException((string)$errors);
         }
     }

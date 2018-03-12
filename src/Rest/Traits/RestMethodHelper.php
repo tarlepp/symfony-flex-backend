@@ -24,12 +24,12 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 use UnexpectedValueException;
 use function array_key_exists;
-use function in_array;
 use function class_implements;
-use function sprintf;
+use function get_class;
+use function in_array;
 use function mb_strrpos;
 use function mb_substr;
-use function get_class;
+use function sprintf;
 
 /**
  * Trait MethodValidator
