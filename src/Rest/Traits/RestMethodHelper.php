@@ -14,12 +14,22 @@ use App\Rest\RestResourceInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnitOfWork;
+use LogicException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Throwable;
+use UnexpectedValueException;
+use function array_key_exists;
+use function in_array;
+use function class_implements;
+use function sprintf;
+use function mb_strrpos;
+use function mb_substr;
+use function get_class;
 
 /**
  * Trait MethodValidator
@@ -56,12 +66,12 @@ trait RestMethodHelper
     /**
      * @return RestResourceInterface
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getResource(): RestResourceInterface
     {
         if (!$this->resource instanceof RestResourceInterface) {
-            throw new \UnexpectedValueException('Resource service not set', 500);
+            throw new UnexpectedValueException('Resource service not set', 500);
         }
 
         return $this->resource;
@@ -70,12 +80,12 @@ trait RestMethodHelper
     /**
      * @return ResponseHandlerInterface
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getResponseHandler(): ResponseHandlerInterface
     {
         if (!$this->responseHandler instanceof ResponseHandlerInterface) {
-            throw new \UnexpectedValueException('ResponseHandler service not set', 500);
+            throw new UnexpectedValueException('ResponseHandler service not set', 500);
         }
 
         return $this->responseHandler;
@@ -88,22 +98,22 @@ trait RestMethodHelper
      *
      * @return string
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getDtoClass(?string $method = null): string
     {
-        $dtoClass = \array_key_exists($method, static::$dtoClasses)
+        $dtoClass = array_key_exists($method, static::$dtoClasses)
             ? static::$dtoClasses[$method]
             : $this->getResource()->getDtoClass();
 
-        if (!\in_array(RestDtoInterface::class, \class_implements($dtoClass), true)) {
-            $message = \sprintf(
+        if (!in_array(RestDtoInterface::class, class_implements($dtoClass), true)) {
+            $message = sprintf(
                 'Given DTO class \'%s\' is not implementing \'%s\' interface.',
                 $dtoClass,
                 RestDtoInterface::class
             );
 
-            throw new \UnexpectedValueException($message);
+            throw new UnexpectedValueException($message);
         }
 
         return $dtoClass;
@@ -116,7 +126,7 @@ trait RestMethodHelper
      *
      * @return string
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getFormTypeClass(?string $method = null): string
     {
@@ -126,7 +136,7 @@ trait RestMethodHelper
             $method = mb_substr($method, $position + 2);
         }
 
-        return \array_key_exists($method, static::$formTypes)
+        return array_key_exists($method, static::$formTypes)
             ? static::$formTypes[$method]
             : $this->getResource()->getFormTypeClass();
     }
@@ -137,23 +147,23 @@ trait RestMethodHelper
      * @param Request  $request
      * @param string[] $allowedHttpMethods
      *
-     * @throws \LogicException
+     * @throws LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function validateRestMethod(Request $request, array $allowedHttpMethods): void
     {
         // Make sure that we have everything we need to make this work
         if (!($this instanceof ControllerInterface)) {
-            $message = \sprintf(
+            $message = sprintf(
                 'You cannot use \'%s\' controller class with REST traits if that does not implement \'%s\'',
-                \get_class($this),
+                get_class($this),
                 ControllerInterface::class
             );
 
-            throw new \LogicException($message);
+            throw new LogicException($message);
         }
 
-        if (!\in_array($request->getMethod(), $allowedHttpMethods, true)) {
+        if (!in_array($request->getMethod(), $allowedHttpMethods, true)) {
             throw new MethodNotAllowedHttpException($allowedHttpMethods);
         }
     }
@@ -161,14 +171,14 @@ trait RestMethodHelper
     /**
      * Method to handle possible REST method trait exception.
      *
-     * @param \Throwable  $exception
+     * @param Throwable   $exception
      * @param string|null $id
      *
-     * @return HttpException
+     * @return Throwable
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function handleRestMethodException(\Throwable $exception, ?string $id = null): HttpException
+    public function handleRestMethodException(Throwable $exception, ?string $id = null): Throwable
     {
         if ($id !== null) {
             $this->detachEntityFromManager($id);
@@ -198,7 +208,7 @@ trait RestMethodHelper
      *
      * @return FormInterface
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\Form\Exception\LogicException
@@ -230,11 +240,11 @@ trait RestMethodHelper
     }
 
     /**
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
      * @return int
      */
-    private function getExceptionCode(\Throwable $exception): int
+    private function getExceptionCode(Throwable $exception): int
     {
         return (int)$exception->getCode() !== 0 ? (int)$exception->getCode() : Response::HTTP_BAD_REQUEST;
     }
@@ -264,11 +274,11 @@ trait RestMethodHelper
     }
 
     /**
-     * @param \Throwable $exception
+     * @param Throwable $exception
      *
-     * @return \Exception|HttpException
+     * @return Throwable
      */
-    private function determineOutputAndStatusCodeForRestMethodException(\Throwable $exception)
+    private function determineOutputAndStatusCodeForRestMethodException(Throwable $exception): Throwable
     {
         $code = $this->getExceptionCode($exception);
 
