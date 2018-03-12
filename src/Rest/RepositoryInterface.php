@@ -11,6 +11,7 @@ use App\Entity\EntityInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use InvalidArgumentException;
 
 /**
  * Interface RepositoryInterface
@@ -92,7 +93,7 @@ interface RepositoryInterface
      *
      * @return integer
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function countAdvanced(?array $criteria = null, ?array $search = null): int;
@@ -152,7 +153,7 @@ interface RepositoryInterface
      *
      * @return RepositoryInterface
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addLeftJoin(array $parameters): self;
 
@@ -167,7 +168,7 @@ interface RepositoryInterface
      *
      * @return RepositoryInterface
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addInnerJoin(array $parameters): self;
 
