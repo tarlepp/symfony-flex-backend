@@ -7,9 +7,11 @@ declare(strict_types = 1);
  */
 namespace App\Rest\Traits\Methods;
 
+use LogicException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Trait PatchMethod
@@ -33,7 +35,7 @@ trait PatchMethod
      *
      * @return Response
      *
-     * @throws \LogicException
+     * @throws LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
@@ -54,7 +56,7 @@ trait PatchMethod
                 ->update($id, $this->processForm($request, $formFactory, __METHOD__, $id)->getData(), true);
 
             return $this->getResponseHandler()->createResponse($request, $data);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception, $id);
         }
     }

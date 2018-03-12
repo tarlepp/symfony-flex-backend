@@ -8,8 +8,10 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Methods;
 
 use App\Rest\RequestHandler;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Trait CountMethod
@@ -30,7 +32,7 @@ trait CountMethod
      *
      * @return Response
      *
-     * @throws \LogicException
+     * @throws LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
@@ -52,7 +54,7 @@ trait CountMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, ['count' => $this->getResource()->count($criteria, $search)]);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }
     }

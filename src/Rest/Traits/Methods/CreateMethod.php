@@ -7,9 +7,11 @@ declare(strict_types = 1);
  */
 namespace App\Rest\Traits\Methods;
 
+use LogicException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Trait CreateMethod
@@ -32,7 +34,7 @@ trait CreateMethod
      *
      * @return Response
      *
-     * @throws \LogicException
+     * @throws LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
@@ -54,7 +56,7 @@ trait CreateMethod
             return $this
                 ->getResponseHandler()
                 ->createResponse($request, $data, Response::HTTP_CREATED);
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }
     }

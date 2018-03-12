@@ -10,6 +10,7 @@ namespace App\Rest\Traits\Methods;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use UnexpectedValueException;
 
 /**
  * Trait AbstractFormMethods
@@ -30,7 +31,7 @@ trait AbstractFormMethods
      *
      * @return FormInterface
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\Form\Exception\LogicException
