@@ -8,9 +8,23 @@ declare(strict_types = 1);
 namespace App\Rest;
 
 use App\Utils\JSON;
+use Closure;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use function abs;
+use function array_filter;
+use function array_key_exists;
+use function array_unique;
+use function array_values;
+use function array_walk;
+use function explode;
+use function in_array;
+use function is_array;
+use function is_string;
+use function mb_strtoupper;
+use function mb_substr;
 
 /**
  * Class RequestHandler
@@ -45,13 +59,13 @@ final class RequestHandler
     public static function getCriteria(HttpFoundationRequest $request): array
     {
         try {
-            $where = \array_filter(
+            $where = array_filter(
                 JSON::decode($request->get('where', '{}'), true),
                 function ($value) {
                     return $value !== null;
                 }
             );
-        } catch (\LogicException $error) {
+        } catch (LogicException $error) {
             throw new HttpException(
                 HttpFoundationResponse::HTTP_BAD_REQUEST,
                 'Current \'where\' parameter is not valid JSON.',
@@ -88,13 +102,13 @@ final class RequestHandler
     public static function getOrderBy(HttpFoundationRequest $request): array
     {
         // Normalize parameter value
-        $input = \array_filter((array)$request->get('order', []));
+        $input = array_filter((array)$request->get('order', []));
 
         // Initialize output
         $output = [];
 
         // Process user input
-        \array_walk($input, self::getIterator($output));
+        array_walk($input, self::getIterator($output));
 
         return $output;
     }
@@ -113,7 +127,7 @@ final class RequestHandler
     {
         $limit = $request->get('limit');
 
-        return $limit === null ? null : (int)\abs($limit);
+        return $limit === null ? null : (int)abs($limit);
     }
 
     /**
@@ -130,7 +144,7 @@ final class RequestHandler
     {
         $offset = $request->get('offset');
 
-        return $offset === null ? null : (int)\abs($offset);
+        return $offset === null ? null : (int)abs($offset);
     }
 
     /**
@@ -172,7 +186,7 @@ final class RequestHandler
 
         // By default we want to use 'OR' operand with given search words.
         $output = [
-            'or' => \array_unique(\array_values(\array_filter(\explode(' ', $search)))),
+            'or' => array_unique(array_values(array_filter(explode(' ', $search)))),
         ];
 
         if ($searchTerms !== null) {
@@ -199,7 +213,7 @@ final class RequestHandler
 
             self::checkSearchTerms($searchTerms);
         } /** @noinspection BadExceptionsProcessingInspection */
-        catch (\LogicException $error) { // Parameter was not JSON so just use parameter values as search strings
+        catch (LogicException $error) { // Parameter was not JSON so just use parameter values as search strings
             $searchTerms = null;
         }
 
@@ -209,16 +223,16 @@ final class RequestHandler
     /**
      * @param mixed $searchTerms
      *
-     * @throws \LogicException
+     * @throws LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     private static function checkSearchTerms($searchTerms): void
     {
-        if (!\is_array($searchTerms)) {
-            throw new \LogicException('Search term is not an array, fallback to string handling');
+        if (!is_array($searchTerms)) {
+            throw new LogicException('Search term is not an array, fallback to string handling');
         }
 
-        if (!\array_key_exists('and', $searchTerms) && !\array_key_exists('or', $searchTerms)) {
+        if (!array_key_exists('and', $searchTerms) && !array_key_exists('or', $searchTerms)) {
             throw new HttpException(
                 HttpFoundationResponse::HTTP_BAD_REQUEST,
                 'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.'
@@ -242,11 +256,11 @@ final class RequestHandler
          * @param string|array $terms
          */
         $iterator = function (&$terms): void {
-            $terms = \array_unique(\array_values(\array_filter($terms)));
+            $terms = array_unique(array_values(array_filter($terms)));
         };
 
         // Normalize user input, note that this support array and string formats on value
-        \array_walk($searchTerms, $iterator);
+        array_walk($searchTerms, $iterator);
 
         return $searchTerms;
     }
@@ -254,13 +268,13 @@ final class RequestHandler
     /**
      * @param mixed[] $output
      *
-     * @return \Closure
+     * @return Closure
      */
-    private static function getIterator(array &$output): \Closure
+    private static function getIterator(array &$output): Closure
     {
         return function (string &$value, $key) use (&$output): void {
-            $order = \in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
-            $column = \is_string($key) ? $key : $value;
+            $order = in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
+            $column = is_string($key) ? $key : $value;
 
             if ($column[0] === '-') {
                 $column = mb_substr($column, 1);
