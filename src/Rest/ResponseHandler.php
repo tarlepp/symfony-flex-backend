@@ -7,12 +7,23 @@ declare(strict_types = 1);
  */
 namespace App\Rest;
 
+use InvalidArgumentException;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\SerializerInterface;
+use Throwable;
+use function array_key_exists;
+use function array_map;
+use function array_merge;
+use function array_pop;
+use function count;
+use function end;
+use function explode;
+use function implode;
+use function sprintf;
 
 /**
  * Class ResponseHandler
@@ -97,21 +108,21 @@ final class ResponseHandler implements ResponseHandlerInterface
     {
         // Specify used populate settings
         $populate = (array)$request->get('populate', []);
-        $populateAll = \array_key_exists('populateAll', $request->query->all());
-        $populateOnly = \array_key_exists('populateOnly', $request->query->all());
+        $populateAll = array_key_exists('populateAll', $request->query->all());
+        $populateOnly = array_key_exists('populateOnly', $request->query->all());
 
         // Get current entity name
         $entityName = $this->getResource()->getEntityName();
 
-        $bits = \explode('\\', $entityName);
-        $entityName = \end($bits);
+        $bits = explode('\\', $entityName);
+        $entityName = end($bits);
 
         $populate = $this->checkPopulateAll($populateAll, $populate, $entityName);
 
-        $groups = \array_merge([$entityName], $populate);
+        $groups = array_merge([$entityName], $populate);
 
         if ($populateOnly) {
-            $groups = \count($populate) === 0 ? [$entityName] : $populate;
+            $groups = count($populate) === 0 ? [$entityName] : $populate;
         }
 
         return [
@@ -130,7 +141,7 @@ final class ResponseHandler implements ResponseHandlerInterface
      *
      * @return Response
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function createResponse(
@@ -168,20 +179,20 @@ final class ResponseHandler implements ResponseHandlerInterface
         foreach ($form->getErrors(true) as $error) {
             $name = $error->getOrigin()->getName();
 
-            $errors[] = \sprintf(
+            $errors[] = sprintf(
                 'Field \'%s\': %s',
                 $name,
                 $error->/** @scrutinizer ignore-call */getMessage()
             );
 
             if (empty($name)) {
-                \array_pop($errors);
+                array_pop($errors);
 
                 $errors[] = $error->getMessage();
             }
         }
 
-        throw new HttpException(Response::HTTP_BAD_REQUEST, \implode("\n", $errors));
+        throw new HttpException(Response::HTTP_BAD_REQUEST, implode("\n", $errors));
     }
 
     /**
@@ -194,14 +205,14 @@ final class ResponseHandler implements ResponseHandlerInterface
     private function checkPopulateAll(bool $populateAll, array $populate, string $entityName): array
     {
         // Set all associations to be populated
-        if ($populateAll && \count($populate) === 0) {
+        if ($populateAll && count($populate) === 0) {
             $associations = $this->getResource()->getAssociations();
 
             $iterator = function (string $assocName) use ($entityName): string {
                 return $entityName . '.' . $assocName;
             };
 
-            $populate = \array_map($iterator, $associations);
+            $populate = array_map($iterator, $associations);
         }
 
         return $populate;
@@ -235,7 +246,7 @@ final class ResponseHandler implements ResponseHandlerInterface
             $response = new Response();
             $response->setContent($this->serializer->serialize($data, $format, $context));
             $response->setStatusCode($httpStatus);
-        } catch (\Throwable $error) {
+        } catch (Throwable $error) {
             $status = Response::HTTP_BAD_REQUEST;
 
             throw new HttpException($status, $error->getMessage(), $error, [], $status);
