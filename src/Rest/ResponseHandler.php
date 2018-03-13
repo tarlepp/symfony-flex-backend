@@ -7,7 +7,6 @@ declare(strict_types = 1);
  */
 namespace App\Rest;
 
-use InvalidArgumentException;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -141,7 +140,6 @@ final class ResponseHandler implements ResponseHandlerInterface
      *
      * @return Response
      *
-     * @throws InvalidArgumentException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function createResponse(
