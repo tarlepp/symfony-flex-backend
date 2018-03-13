@@ -61,9 +61,9 @@ trait AbstractGenericMethods
      * @param Throwable   $exception
      * @param string|null $id
      *
-     * @return HttpException
+     * @return Throwable
      *
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    abstract public function handleRestMethodException(Throwable $exception, ?string $id = null): HttpException;
+    abstract public function handleRestMethodException(Throwable $exception, ?string $id = null): Throwable;
 }

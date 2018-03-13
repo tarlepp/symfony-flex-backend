@@ -38,6 +38,7 @@ trait PatchMethod
      * @throws LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     * @throws Throwable
      */
     public function patchMethod(
         Request $request,
