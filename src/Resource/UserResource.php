@@ -16,9 +16,9 @@ use App\Repository\UserRepository as Repository;
 use App\Rest\RestResource;
 use App\Security\RolesService;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use function in_array;
-use function array_values;
 use function array_filter;
+use function array_values;
+use function in_array;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */

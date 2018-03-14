@@ -11,7 +11,6 @@ use App\Rest\ResponseHandlerInterface;
 use App\Rest\RestResourceInterface;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 use UnexpectedValueException;
 

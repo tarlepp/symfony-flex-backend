@@ -14,8 +14,8 @@ use EXSyst\Component\Swagger\Parameter;
 use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Twig_Environment;
-use function in_array;
 use UnexpectedValueException;
+use function in_array;
 
 /**
  * Class Parameters
