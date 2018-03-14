@@ -10,8 +10,12 @@ namespace App\Rest;
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
+use BadMethodCallException;
 use Doctrine\Common\Proxy\Proxy;
+use InvalidArgumentException;
+use LogicException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use UnexpectedValueException;
 
 /**
  * Interface ResourceInterface
@@ -58,7 +62,7 @@ interface RestResourceInterface
      *
      * @return string
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getDtoClass(): string;
 
@@ -185,7 +189,7 @@ interface RestResourceInterface
      *
      * @return integer
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function count(?array $criteria = null, ?array $search = null): int;
@@ -215,8 +219,8 @@ interface RestResourceInterface
      *
      * @return EntityInterface
      *
-     * @throws \LogicException
-     * @throws \BadMethodCallException
+     * @throws LogicException
+     * @throws BadMethodCallException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Symfony\Component\Validator\Exception\ValidatorException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -248,7 +252,7 @@ interface RestResourceInterface
      *
      * @return string[]
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getIds(?array $criteria = null, ?array $search = null): array;
 

@@ -9,8 +9,13 @@ namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
 use App\Repository\BaseRepositoryInterface;
+use BadMethodCallException;
 use Doctrine\Common\Proxy\Proxy;
+use LogicException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use UnexpectedValueException;
+use function array_keys;
+use function sprintf;
 
 /**
  * Class RestResource
@@ -20,6 +25,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 abstract class RestResource implements RestResourceInterface
 {
+    // Traits
     use Traits\RestResourceBaseMethods;
 
     /**
@@ -95,17 +101,17 @@ abstract class RestResource implements RestResourceInterface
      *
      * @return string
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getDtoClass(): string
     {
         if ($this->dtoClass === '') {
-            $message = \sprintf(
+            $message = sprintf(
                 'DTO class not specified for \'%s\' resource',
                 static::class
             );
 
-            throw new \UnexpectedValueException($message);
+            throw new UnexpectedValueException($message);
         }
 
         return $this->dtoClass;
@@ -130,17 +136,17 @@ abstract class RestResource implements RestResourceInterface
      *
      * @return string
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     public function getFormTypeClass(): string
     {
         if ($this->formTypeClass === '') {
-            $message = \sprintf(
+            $message = sprintf(
                 'FormType class not specified for \'%s\' resource',
                 static::class
             );
 
-            throw new \UnexpectedValueException($message);
+            throw new UnexpectedValueException($message);
         }
 
         return $this->formTypeClass;
@@ -193,7 +199,7 @@ abstract class RestResource implements RestResourceInterface
      */
     public function getAssociations(): array
     {
-        return \array_keys($this->getRepository()->getAssociations());
+        return array_keys($this->getRepository()->getAssociations());
     }
 
     /**
@@ -205,8 +211,8 @@ abstract class RestResource implements RestResourceInterface
      *
      * @return RestDtoInterface
      *
-     * @throws \LogicException
-     * @throws \BadMethodCallException
+     * @throws LogicException
+     * @throws BadMethodCallException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function getDtoForEntity(string $id, string $dtoClass, ?RestDtoInterface $dto = null): RestDtoInterface
@@ -214,11 +220,8 @@ abstract class RestResource implements RestResourceInterface
         // Fetch entity
         $entity = $this->getEntity($id);
 
-        /**
-         * Create new instance of DTO and load entity to that.
-         *
-         * @var RestDtoInterface
-         */
+        // Create new instance of DTO and load entity to that.
+        /** @var RestDtoInterface $restDto */
         $restDto = new $dtoClass();
         $restDto->load($entity);
 
