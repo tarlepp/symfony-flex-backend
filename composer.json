@@ -30,7 +30,7 @@
 		"easycorp/easy-log-handler": "1.0.4",
 		"ext-iconv": "*",
 		"lexik/jwt-authentication-bundle": "2.4.4",
-		"matthiasnoback/symfony-console-form": "2.5.0",
+		"matthiasnoback/symfony-console-form": "3.0.0",
 		"nelmio/api-doc-bundle": "3.1.0",
 		"nelmio/cors-bundle": "1.5.4",
 		"piwik/device-detector": "3.10.0",
