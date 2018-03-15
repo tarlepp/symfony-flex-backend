@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6fdb4b709832897fb558e000da63fe1",
+    "content-hash": "19b5990b2e4b7443bc5e50b17c28c4be",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3390,16 +3390,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.70",
+            "version": "v1.0.71",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "1f00c05d35523dc0ac52e4a457989a069be5a7a4"
+                "reference": "51d7ddce85ca8b73a1fc16771f607b7d56692dbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/1f00c05d35523dc0ac52e4a457989a069be5a7a4",
-                "reference": "1f00c05d35523dc0ac52e4a457989a069be5a7a4",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/51d7ddce85ca8b73a1fc16771f607b7d56692dbd",
+                "reference": "51d7ddce85ca8b73a1fc16771f607b7d56692dbd",
                 "shasum": ""
             },
             "require": {
@@ -3432,7 +3432,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2018-02-22T07:00:47+00:00"
+            "time": "2018-03-10T21:15:53+00:00"
         },
         {
             "name": "symfony/form",
@@ -8736,16 +8736,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.1.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "ba427289009de6f0fd51fb51186eeaa70ab3a33d"
+                "reference": "9db72995231c12c701249f07743c0591ccf70e73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/ba427289009de6f0fd51fb51186eeaa70ab3a33d",
-                "reference": "ba427289009de6f0fd51fb51186eeaa70ab3a33d",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/9db72995231c12c701249f07743c0591ccf70e73",
+                "reference": "9db72995231c12c701249f07743c0591ccf70e73",
                 "shasum": ""
             },
             "require": {
@@ -8792,7 +8792,7 @@
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2018-02-21T19:43:12+00:00"
+            "time": "2018-03-14T01:02:47+00:00"
         },
         {
             "name": "symfony/phpunit-bridge",

@@ -41,7 +41,7 @@
 		"symfony/asset": "4.0.6",
 		"symfony/console": "4.0.6",
 		"symfony/expression-language": "4.0.6",
-		"symfony/flex": "1.0.70",
+		"symfony/flex": "1.0.71",
 		"symfony/form": "4.0.6",
 		"symfony/framework-bundle": "4.0.6",
 		"symfony/lts": "^4@dev",
@@ -66,7 +66,7 @@
 		"symfony/browser-kit": "4.0.6",
 		"symfony/debug-pack": "1.0.4",
 		"symfony/dotenv": "4.0.6",
-		"symfony/maker-bundle": "1.1.1",
+		"symfony/maker-bundle": "1.2.0",
 		"symfony/requirements-checker": "1.0.3",
 		"symfony/web-server-bundle": "4.0.6",
 		"symplify/easy-coding-standard": "3.2.30"
