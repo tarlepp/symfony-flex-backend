@@ -7,6 +7,19 @@ declare(strict_types = 1);
  */
 namespace App\Rest;
 
+use Closure;
+use function array_filter;
+use function array_map;
+use function array_merge;
+use function array_unique;
+use function array_values;
+use function count;
+use function explode;
+use function is_array;
+use function mb_strlen;
+use function strpos;
+use function trim;
+
 /**
  * Class SearchTerm
  *
@@ -57,7 +70,7 @@ final class SearchTerm implements SearchTermInterface
         $iteratorTerm = self::getTermIterator($columns, $mode);
 
         // Get criteria
-        $criteria = \array_filter(\array_map($iteratorTerm, $searchTerms));
+        $criteria = array_filter(array_map($iteratorTerm, $searchTerms));
 
         // Initialize output
         $output = null;
@@ -67,7 +80,7 @@ final class SearchTerm implements SearchTermInterface
             // Create used criteria array
             $output = [
                 'and' => [
-                    $operand => \array_merge(...\array_values($criteria)),
+                    $operand => array_merge(...array_values($criteria)),
                 ],
             ];
         }
@@ -81,9 +94,9 @@ final class SearchTerm implements SearchTermInterface
      * @param string[] $columns
      * @param int      $mode
      *
-     * @return \Closure
+     * @return Closure
      */
-    private static function getTermIterator(array $columns, int $mode): \Closure
+    private static function getTermIterator(array $columns, int $mode): Closure
     {
         /**
          * Lambda function to process each search term to specified search columns.
@@ -93,7 +106,7 @@ final class SearchTerm implements SearchTermInterface
          * @return array
          */
         return function (string $term) use ($columns, $mode): ?array {
-            return \count($columns) ? \array_map(self::getColumnIterator($term, $mode), $columns) : null;
+            return count($columns) ? array_map(self::getColumnIterator($term, $mode), $columns) : null;
         };
     }
 
@@ -103,9 +116,9 @@ final class SearchTerm implements SearchTermInterface
      * @param string $term
      * @param int    $mode
      *
-     * @return \Closure
+     * @return Closure
      */
-    private static function getColumnIterator(string $term, int $mode): \Closure
+    private static function getColumnIterator(string $term, int $mode): Closure
     {
         /**
          * Lambda function to create actual criteria for specified column + term + mode combo.
@@ -115,7 +128,7 @@ final class SearchTerm implements SearchTermInterface
          * @return string[]
          */
         return function (string $column) use ($term, $mode): array {
-            if (\strpos($column, '.') === false) {
+            if (strpos($column, '.') === false) {
                 $column = 'entity.' . $column;
             }
 
@@ -157,12 +170,12 @@ final class SearchTerm implements SearchTermInterface
     private static function getColumns($column): array
     {
         $filter = function (string $value): bool {
-            return \mb_strlen(\trim($value)) > 0;
+            return mb_strlen(trim($value)) > 0;
         };
 
         // Normalize column and search parameters
-        return \array_filter(
-            \array_map('\trim', (\is_array($column) ? $column : (array)$column)),
+        return array_filter(
+            array_map('trim', (is_array($column) ? $column : (array)$column)),
             $filter
         );
     }
@@ -177,12 +190,12 @@ final class SearchTerm implements SearchTermInterface
     private static function getSearchTerms($search): array
     {
         $filter = function (string $value): bool {
-            return \mb_strlen(\trim($value)) > 0;
+            return mb_strlen(trim($value)) > 0;
         };
 
-        return \array_unique(
-            \array_filter(
-                \array_map('\trim', (\is_array($search) ? $search : \explode(' ', (string)$search))),
+        return array_unique(
+            array_filter(
+                array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
                 $filter
             )
         );
