@@ -11,6 +11,7 @@ use App\Entity\ApiKey;
 use App\Entity\UserGroup;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use function array_unique;
 
 /**
  * Class ApiKeyUser
@@ -69,7 +70,7 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
             $roles[] = $userGroup->getRole()->getId();
         });
 
-        $this->roles = \array_unique($rolesService->getInheritedRoles($roles));
+        $this->roles = array_unique($rolesService->getInheritedRoles($roles));
     }
 
     /**
