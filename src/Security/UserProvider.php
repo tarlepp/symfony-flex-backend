@@ -15,6 +15,9 @@ use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use function get_class;
+use function is_subclass_of;
+use function sprintf;
 
 /**
  * Class UserProvider
@@ -43,10 +46,10 @@ class UserProvider extends EntityRepository implements UserProviderInterface, Us
      */
     public function refreshUser(UserInterface $user): Entity
     {
-        $class = \get_class($user);
+        $class = get_class($user);
 
         if (!$this->supportsClass($class)) {
-            throw new UnsupportedUserException(\sprintf('Instance of "%s" is not supported.', $class));
+            throw new UnsupportedUserException(sprintf('Instance of "%s" is not supported.', $class));
         }
 
         $output = $this->loadUserByUsername($user->getUsername());
@@ -67,6 +70,6 @@ class UserProvider extends EntityRepository implements UserProviderInterface, Us
      */
     public function supportsClass($class): bool
     {
-        return $class === $this->getEntityName() || \is_subclass_of($class, $this->getEntityName());
+        return $class === $this->getEntityName() || is_subclass_of($class, $this->getEntityName());
     }
 }
