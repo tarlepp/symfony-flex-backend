@@ -9,6 +9,12 @@ namespace App\Security;
 
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
+use function array_key_exists;
+use function array_map;
+use function array_unique;
+use function mb_strpos;
+use function mb_strtolower;
+use function mb_substr;
 
 /**
  * Class Roles
@@ -83,7 +89,7 @@ class RolesService implements RolesServiceInterface
     {
         $output = 'Unknown - ' . $role;
 
-        if (\array_key_exists($role, self::$roleNames)) {
+        if (array_key_exists($role, self::$roleNames)) {
             $output = self::$roleNames[$role];
         }
 
@@ -99,7 +105,7 @@ class RolesService implements RolesServiceInterface
      */
     public function getShort(string $role): string
     {
-        return \mb_strtolower(\mb_substr($role, \mb_strpos($role, '_') + 1));
+        return mb_strtolower(mb_substr($role, mb_strpos($role, '_') + 1));
     }
 
     /**
@@ -113,12 +119,12 @@ class RolesService implements RolesServiceInterface
     {
         $hierarchy = new RoleHierarchy($this->rolesHierarchy);
 
-        return \array_unique(
-            \array_map(
+        return array_unique(
+            array_map(
                 function (Role $role) {
                     return $role->getRole();
                 },
-                $hierarchy->getReachableRoles(\array_map(
+                $hierarchy->getReachableRoles(array_map(
                     function (string $role) {
                         return new Role($role);
                     },
