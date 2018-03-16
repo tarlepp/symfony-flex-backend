@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Entity\ApiKey;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -16,6 +17,11 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationExc
 use Symfony\Component\Security\Core\User\ChainUserProvider;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
+use function array_filter;
+use function count;
+use function current;
+use function preg_match;
+use function sprintf;
 
 /**
  * Class ApiKeyAuthenticator
@@ -42,7 +48,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
         $apiKey = $request->headers->get('Authorization');
 
         // Authorization header found and it contains 'ApiKey TOKEN' data, so we can make PreAuthenticatedToken
-        if ($apiKey && \preg_match('#^ApiKey (\w+)$#', $apiKey, $matches)) {
+        if ($apiKey && preg_match('#^ApiKey (\w+)$#', $apiKey, $matches)) {
             $output = new PreAuthenticatedToken('anon', $matches[1], $providerKey);
         }
 
@@ -78,7 +84,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
      *
      * @return PreAuthenticatedToken
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException
      * @throws \Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
@@ -89,12 +95,12 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
         $providerKey
     ): PreAuthenticatedToken {
         if (!($userProvider instanceof ChainUserProvider)) {
-            $message = \sprintf(
+            $message = sprintf(
                 'User provider must be instance of \'%s\' class',
                 ChainUserProvider::class
             );
 
-            throw new \InvalidArgumentException($message);
+            throw new InvalidArgumentException($message);
         }
 
         $apiKeyProvider = $this->getProvider($userProvider);
@@ -127,11 +133,11 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
         };
 
         // Oh noes, we don't have ApiKeyUserProvider
-        if (\count($providers = \array_filter($userProvider->getProviders(), $filter)) !== 1) {
+        if (count($providers = array_filter($userProvider->getProviders(), $filter)) !== 1) {
             throw new AuthenticationException('The user provider must be an instance of ApiKeyUserProvider');
         }
 
-        return \current($providers);
+        return current($providers);
     }
 
     /**
