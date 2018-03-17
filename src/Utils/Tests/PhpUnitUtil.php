@@ -7,10 +7,26 @@ declare(strict_types = 1);
  */
 namespace App\Utils\Tests;
 
+use DateTime;
+use Exception;
+use LogicException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
+use RegexIterator;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpKernel\KernelInterface;
+use function count;
+use function explode;
+use function get_class;
+use function sprintf;
+use function strpos;
+use function substr_count;
 
 /**
  * Class PHPUnitUtil
@@ -31,7 +47,7 @@ class PhpUnitUtil
      *
      * @param KernelInterface $kernel
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public static function loadFixtures(KernelInterface $kernel): void
     {
@@ -59,10 +75,10 @@ class PhpUnitUtil
      */
     public static function recursiveFileSearch(string $folder, string $pattern): array
     {
-        $dir = new \RecursiveDirectoryIterator($folder);
-        $ite = new \RecursiveIteratorIterator($dir);
+        $dir = new RecursiveDirectoryIterator($folder);
+        $ite = new RecursiveIteratorIterator($dir);
 
-        $files = new \RegexIterator($ite, $pattern, \RegexIterator::GET_MATCH);
+        $files = new RegexIterator($ite, $pattern, RegexIterator::GET_MATCH);
         $fileList = [];
 
         foreach ($files as $file) {
@@ -81,7 +97,7 @@ class PhpUnitUtil
      *
      * @return mixed
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function callMethod($object, string $name, array $args)
     {
@@ -98,14 +114,14 @@ class PhpUnitUtil
      * @param mixed  $object The instantiated instance of your class
      * @param string $name   The name of your private/protected method
      *
-     * @return \ReflectionMethod The method you asked for
+     * @return ReflectionMethod The method you asked for
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public static function getMethod($object, string $name): \ReflectionMethod
+    public static function getMethod($object, string $name): ReflectionMethod
     {
         // Get reflection and make specified method accessible
-        $class = new \ReflectionClass($object);
+        $class = new ReflectionClass($object);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
 
@@ -120,11 +136,11 @@ class PhpUnitUtil
      *
      * @return mixed
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function getProperty(string $property, $object)
     {
-        $clazz = new \ReflectionClass(\get_class($object));
+        $clazz = new ReflectionClass(get_class($object));
 
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $property = $clazz->getProperty($property);
@@ -148,7 +164,7 @@ class PhpUnitUtil
             case 'time':
             case 'date':
             case 'datetime':
-                $output = \DateTime::class;
+                $output = DateTime::class;
                 break;
             case 'text':
             case self::TYPE_STRING:
@@ -162,12 +178,12 @@ class PhpUnitUtil
                 $output = self::TYPE_BOOLEAN;
                 break;
             default:
-                $message = \sprintf(
+                $message = sprintf(
                     "Currently type '%s' is not supported within type normalizer",
                     $type
                 );
 
-                throw new \LogicException($message);
+                throw new LogicException($message);
         }
 
         return $output;
@@ -180,11 +196,11 @@ class PhpUnitUtil
      * @param mixed  $value
      * @param mixed  $object
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public static function setProperty(string $property, $value, $object): void
     {
-        $clazz = new \ReflectionClass(\get_class($object));
+        $clazz = new ReflectionClass(get_class($object));
 
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $property = $clazz->getProperty($property);
@@ -204,17 +220,17 @@ class PhpUnitUtil
     {
         $meta = $meta ?? [];
 
-        $class = \stdClass::class;
+        $class = stdClass::class;
 
-        if (\substr_count($type, '\\') > 1) {
-            $class = \count($meta) ? $meta['targetEntity'] : $type;
+        if (substr_count($type, '\\') > 1) {
+            $class = count($meta) ? $meta['targetEntity'] : $type;
 
             $type = self::TYPE_CUSTOM_CLASS;
         }
 
-        if (\strpos($type, '|') !== false) {
-            $output = self::getValidValueForType(\explode('|', $type)[0], $meta);
-        } elseif (\strpos($type, '[]') !== false) {
+        if (strpos($type, '|') !== false) {
+            $output = self::getValidValueForType(explode('|', $type)[0], $meta);
+        } elseif (strpos($type, '[]') !== false) {
             $output = self::getValidValueForType(self::TYPE_ARRAY, $meta);
         } else {
             switch ($type) {
@@ -224,8 +240,8 @@ class PhpUnitUtil
                 case self::TYPE_INTEGER:
                     $output = 666;
                     break;
-                case \DateTime::class:
-                    $output = new \DateTime();
+                case DateTime::class:
+                    $output = new DateTime();
                     break;
                 case self::TYPE_STRING:
                     $output = 'Some text here';
@@ -237,12 +253,12 @@ class PhpUnitUtil
                     $output = true;
                     break;
                 default:
-                    $message = \sprintf(
+                    $message = sprintf(
                         "Cannot create valid value for type '%s'.",
                         $type
                     );
 
-                    throw new \LogicException($message);
+                    throw new LogicException($message);
             }
         }
 
@@ -258,35 +274,35 @@ class PhpUnitUtil
      */
     public static function getInvalidValueForType(string $type)
     {
-        if ($type !== \stdClass::class && \substr_count($type, '\\') > 1) {
+        if ($type !== stdClass::class && substr_count($type, '\\') > 1) {
             $type = self::TYPE_CUSTOM_CLASS;
         }
 
-        if (\strpos($type, '|') !== false) {
-            $output = self::getInvalidValueForType(\explode('|', $type)[0]);
-        } elseif (\strpos($type, '[]') !== false) {
+        if (strpos($type, '|') !== false) {
+            $output = self::getInvalidValueForType(explode('|', $type)[0]);
+        } elseif (strpos($type, '[]') !== false) {
             $output = self::getInvalidValueForType(self::TYPE_ARRAY);
         } else {
             switch ($type) {
-                case \stdClass::class:
-                    $output = new \DateTime();
+                case stdClass::class:
+                    $output = new DateTime();
                     break;
                 case self::TYPE_CUSTOM_CLASS:
                 case self::TYPE_INTEGER:
-                case \DateTime::class:
+                case DateTime::class:
                 case self::TYPE_STRING:
                 case self::TYPE_ARRAY:
                 case self::TYPE_BOOLEAN:
                 case 'enumLogLogin':
-                    $output = new \stdClass();
+                    $output = new stdClass();
                     break;
                 default:
-                    $message = \sprintf(
+                    $message = sprintf(
                         "Cannot create invalid value for type '%s'.",
                         $type
                     );
 
-                    throw new \LogicException($message);
+                    throw new LogicException($message);
             }
         }
 
