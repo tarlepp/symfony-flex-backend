@@ -10,6 +10,9 @@ namespace App\Utils\Tests;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use function array_merge;
+use function gc_collect_cycles;
+use function gc_enable;
 
 /**
  * Class WebTestCase
@@ -49,16 +52,6 @@ abstract class WebTestCase extends BaseWebTestCase
         gc_collect_cycles();
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        self::bootKernel();
-
-        $this->container = static::$kernel->getContainer();
-        $this->authService = $this->container->get('test.service_locator')->get(Auth::class);
-    }
-
     /**
      * Helper method to get authorized client for specified username and password.
      *
@@ -81,9 +74,9 @@ abstract class WebTestCase extends BaseWebTestCase
         $server = $server ?? [];
 
         // Merge authorization headers
-        $server = \array_merge(
+        $server = array_merge(
             $username === null ? [] : $this->authService->getAuthorizationHeadersForUser($username, $password),
-            \array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
+            array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
             $this->authService->getJwtHeaders(),
             $server
         );
@@ -106,9 +99,9 @@ abstract class WebTestCase extends BaseWebTestCase
         $server = $server ?? [];
 
         // Merge authorization headers
-        $server = \array_merge(
+        $server = array_merge(
             $role === null ? [] : $this->authService->getAuthorizationHeadersForApiKey($role),
-            \array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
+            array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
             $this->authService->getJwtHeaders(),
             $server
         );
@@ -143,5 +136,18 @@ abstract class WebTestCase extends BaseWebTestCase
         }
 
         return $output;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::bootKernel();
+
+        $this->container = static::$kernel->getContainer();
+        $this->authService = $this->container->get('test.service_locator')->get(Auth::class);
     }
 }
