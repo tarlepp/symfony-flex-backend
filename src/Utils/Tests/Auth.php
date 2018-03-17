@@ -10,6 +10,11 @@ namespace App\Utils\Tests;
 use App\Utils\JSON;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use UnexpectedValueException;
+use function array_key_exists;
+use function array_merge;
+use function compact;
+use function str_pad;
 
 /**
  * Class Auth
@@ -66,10 +71,10 @@ class Auth
      */
     public function getAuthorizationHeadersForApiKey(string $role): array
     {
-        return \array_merge(
+        return array_merge(
             $this->getContentTypeHeader(),
             [
-                'HTTP_AUTHORIZATION' => 'ApiKey ' . \str_pad($role, 40, '_'),
+                'HTTP_AUTHORIZATION' => 'ApiKey ' . str_pad($role, 40, '_'),
             ]
         );
     }
@@ -83,7 +88,7 @@ class Auth
      */
     public function getAuthorizationHeaders(string $token): array
     {
-        return \array_merge(
+        return array_merge(
             $this->getContentTypeHeader(),
             [
                 'HTTP_AUTHORIZATION' => 'Bearer ' . $token,
@@ -112,11 +117,11 @@ class Auth
      *
      * @return string
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      */
     private function getToken(string $username, string $password): string
     {
-        if (!\array_key_exists($username . $password, $this->cache)) {
+        if (!array_key_exists($username . $password, $this->cache)) {
             // Get client
             /** @noinspection MissingService */
             $client = $this->container->get('test.client');
@@ -127,25 +132,25 @@ class Auth
                 '/auth/getToken',
                 [],
                 [],
-                \array_merge(
+                array_merge(
                     $this->getJwtHeaders(),
                     $this->getContentTypeHeader(),
                     [
                         'HTTP_X-Requested-With' => 'XMLHttpRequest',
                     ]
                 ),
-                \json_encode(\compact('username', 'password'))
+                JSON::encode(compact('username', 'password'))
             );
 
             /** @var Response $response */
             $response = $client->getResponse();
 
             if ($response === null) {
-                throw new \UnexpectedValueException('Test client did not return response at all');
+                throw new UnexpectedValueException('Test client did not return response at all');
             }
 
             if ($response->getStatusCode() !== 200) {
-                throw new \UnexpectedValueException('Invalid status code: ' . $response->getStatusCode());
+                throw new UnexpectedValueException('Invalid status code: ' . $response->getStatusCode());
             }
 
             $this->cache[$username . $password] = JSON::decode($response->getContent())->token;
