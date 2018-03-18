@@ -15,6 +15,7 @@ use DeviceDetector\DeviceDetector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
+use UnexpectedValueException;
 
 /**
  * Class LoginLogger
@@ -93,7 +94,7 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @param string $type
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
     public function process(string $type): void
@@ -102,7 +103,7 @@ class LoginLogger implements LoginLoggerInterface
         $request = $this->requestStack->getCurrentRequest();
 
         if ($request === null) {
-            throw new \UnexpectedValueException('Could not get request from current request stack');
+            throw new UnexpectedValueException('Could not get request from current request stack');
         }
 
         // Specify user agent
