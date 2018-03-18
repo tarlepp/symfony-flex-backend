@@ -11,6 +11,7 @@ use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
+use UnexpectedValueException;
 
 /**
  * Interface LoginLogger
@@ -49,7 +50,7 @@ interface LoginLoggerInterface
      *
      * @param string $type
      *
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
     public function process(string $type): void;
