@@ -75,8 +75,6 @@ interface RequestLoggerInterface
 
     /**
      * Method to handle current response and log it to database.
-     *
-     * @throws \Exception
      */
     public function handle(): void;
 }

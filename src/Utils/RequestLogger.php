@@ -12,9 +12,11 @@ use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Helpers\LoggerAwareTrait;
 use App\Resource\LogRequestResource;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Throwable;
 
 /**
  * Class RequestLogger
@@ -149,7 +151,7 @@ class RequestLogger implements RequestLoggerInterface
 
         try {
             $this->createRequestLogEntry();
-        } catch (\Throwable $error) {
+        } catch (Throwable $error) {
             $this->logger->error($error->getMessage());
         }
     }
@@ -157,7 +159,7 @@ class RequestLogger implements RequestLoggerInterface
     /**
      * Store request log and  clean history
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     private function createRequestLogEntry(): void
     {
