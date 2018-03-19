@@ -15,6 +15,8 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\RouteCollectionBuilder;
+use function dirname;
+use function is_dir;
 
 /**
  * Class Kernel
@@ -37,7 +39,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
      */
     public function getCacheDir(): string
     {
-        return \dirname(__DIR__) . '/var/cache/' . $this->environment;
+        return dirname(__DIR__) . '/var/cache/' . $this->environment;
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -48,7 +50,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
      */
     public function getLogDir(): string
     {
-        return \dirname(__DIR__) . '/var/log';
+        return dirname(__DIR__) . '/var/log';
     }
 
     /**
@@ -60,7 +62,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
     {
         /** @noinspection UsingInclusionReturnValueInspection */
         /** @var array $contents */
-        $contents = require \dirname(__DIR__) . '/config/bundles.php';
+        $contents = require dirname(__DIR__) . '/config/bundles.php';
 
         foreach ($contents as $class => $envs) {
             if (isset($envs['all']) || isset($envs[$this->environment])) {
@@ -118,7 +120,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
      */
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
-        $confDir = \dirname(__DIR__) . '/config';
+        $confDir = dirname(__DIR__) . '/config';
 
         $loader->load($confDir . '/packages/*' . self::CONFIG_EXTS, 'glob');
 
@@ -142,7 +144,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
      */
     protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
-        $confDir = \dirname(__DIR__) . '/config';
+        $confDir = dirname(__DIR__) . '/config';
 
         if (is_dir($confDir . '/routes/')) {
             $routes->import($confDir . '/routes/*' . self::CONFIG_EXTS, '/', 'glob');
