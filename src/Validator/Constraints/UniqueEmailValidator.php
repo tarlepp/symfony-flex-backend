@@ -39,7 +39,7 @@ class UniqueEmailValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @throws  NonUniqueResultException
+     * @throws NonUniqueResultException
      *
      * @param UserInterface|mixed       $value      The value that should be validated
      * @param Constraint|UniqueUsername $constraint The constraint for the validation

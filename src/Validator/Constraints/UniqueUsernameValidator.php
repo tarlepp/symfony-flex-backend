@@ -41,7 +41,7 @@ class UniqueUsernameValidator extends ConstraintValidator
      *
      * In this case check if 'username' is available or not within User repository.
      *
-     * @throws  NonUniqueResultException
+     * @throws NonUniqueResultException
      *
      * @param UserInterface|mixed       $value      The value that should be validated
      * @param Constraint|UniqueUsername $constraint The constraint for the validation
