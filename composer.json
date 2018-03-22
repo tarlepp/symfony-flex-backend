@@ -54,7 +54,7 @@
 		"symfony/yaml": "4.0.6"
 	},
 	"require-dev": {
-		"codedungeon/phpunit-result-printer": "0.6.1",
+		"codedungeon/phpunit-result-printer": "0.7.0",
 		"liuggio/fastest": "1.6.1",
 		"php-coveralls/php-coveralls": "2.0.0",
 		"phpmetrics/phpmetrics": "2.3.2",
