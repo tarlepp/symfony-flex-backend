@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "dfa539784381fb1f25d36a14f4db9138",
+    "content-hash": "ddbe09f41a26bdfb29fc2deff464479b",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2104,16 +2104,16 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.10.0",
+            "version": "3.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "d2769e8b6e983cf31666a0f5b921ef1c8564cfb1"
+                "reference": "76a9e32ac6842239ac66a3877079cbfb84f29789"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/d2769e8b6e983cf31666a0f5b921ef1c8564cfb1",
-                "reference": "d2769e8b6e983cf31666a0f5b921ef1c8564cfb1",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/76a9e32ac6842239ac66a3877079cbfb84f29789",
+                "reference": "76a9e32ac6842239ac66a3877079cbfb84f29789",
                 "shasum": ""
             },
             "require": {
@@ -2154,7 +2154,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2018-03-05T12:45:57+00:00"
+            "time": "2018-03-23T15:19:45+00:00"
         },
         {
             "name": "psr/cache",
@@ -2432,12 +2432,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "6da6150c9fb568739c8508a9859e9d5d7a5e99e9"
+                "reference": "4a272b63452f4d8ff0d48a759e59db9359a9b5b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/6da6150c9fb568739c8508a9859e9d5d7a5e99e9",
-                "reference": "6da6150c9fb568739c8508a9859e9d5d7a5e99e9",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4a272b63452f4d8ff0d48a759e59db9359a9b5b7",
+                "reference": "4a272b63452f4d8ff0d48a759e59db9359a9b5b7",
                 "shasum": ""
             },
             "conflict": {
@@ -2531,7 +2531,7 @@
                 "symfony/web-profiler-bundle": ">=2,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
+                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "titon/framework": ">=0,<9.9.99",
                 "twig/twig": "<1.20",
                 "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.22|>=8,<8.7.5",
@@ -2583,7 +2583,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-03-20T15:54:02+00:00"
+            "time": "2018-03-22T21:16:54+00:00"
         },
         {
             "name": "sensio/framework-extra-bundle",
