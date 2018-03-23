@@ -48,6 +48,7 @@ class UserRepositoryTest extends RepositoryTestCase
         'userGroups',
         'logsRequest',
         'logsLogin',
+        'logsLoginFailure',
     ];
 
     /**

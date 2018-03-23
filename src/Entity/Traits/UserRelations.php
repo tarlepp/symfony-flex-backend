@@ -69,6 +69,21 @@ trait UserRelations
      *  )
      */
     protected $logsLogin;
+
+    /**
+     * @var Collection<LogLoginFailure>
+     *
+     * @Groups({
+     *      "User.logsLoginFailure",
+     *  })
+     *
+     * @ORM\OneToMany(
+     *      targetEntity="App\Entity\LogLoginFailure",
+     *      mappedBy="user",
+     *  )
+     */
+    protected $logsLoginFailure;
+
     /**
      * @var RolesServiceInterface
      */
@@ -148,6 +163,16 @@ trait UserRelations
     public function getLogsLogin(): Collection
     {
         return $this->logsLogin;
+    }
+
+    /**
+     * Getter for user login failure log collection.
+     *
+     * @return Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>
+     */
+    public function getLogsLoginFailure(): Collection
+    {
+        return $this->logsLoginFailure;
     }
 
     /**

@@ -1,0 +1,107 @@
+<?php
+declare(strict_types=1);
+/**
+ * /tests/Integration/Entity/LogLoginFailureTest.php
+ *
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
+namespace App\Tests\Integration\Entity;
+
+use App\Entity\LogLoginFailure;
+use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use function gc_enable;
+
+/**
+ * Class LogLoginFailureTest
+ *
+ * @package App\Tests\Integration\Entity
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
+class LogLoginFailureTest extends EntityTestCase
+{
+    /**
+     * @var string
+     */
+    protected $entityName = LogLoginFailure::class;
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @param string $field
+     * @param string $type
+     * @param array  $meta
+     */
+    public function testThatSetterOnlyAcceptSpecifiedType(
+        string $field = null,
+        string $type = null,
+        array $meta = null
+    ): void {
+        static::markTestSkipped('There is not setter in read only entity...');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @param string $field
+     * @param string $type
+     * @param array  $meta
+     */
+    public function testThatSetterReturnsInstanceOfEntity(
+        string $field = null,
+        string $type = null,
+        array $meta = null
+    ): void {
+        static::markTestSkipped('There is not setter in read only entity...');
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @dataProvider dataProviderTestThatSetterAndGettersWorks
+     *
+     * @param string $field
+     * @param string $type
+     * @param array  $meta
+     */
+    public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
+    {
+        $getter = 'get' . \ucfirst($field);
+
+        if ($type === 'boolean') {
+            $getter = 'is' . \ucfirst($field);
+        }
+
+
+        $logRequest = new LogLoginFailure(
+            new User()
+        );
+
+        if (!(\array_key_exists('columnName', $meta) || \array_key_exists('joinColumns', $meta))) {
+            $type = ArrayCollection::class;
+
+            static::assertInstanceOf($type, $logRequest->$getter());
+        }
+
+        try {
+            if (static::isType($type)) {
+                static::assertInternalType($type, $logRequest->$getter());
+            }
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
+            static::assertInstanceOf($type, $logRequest->$getter());
+        }
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        self::bootKernel();
+
+        // Store container and entity manager
+        $this->container = static::$kernel->getContainer();
+        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
+
+        // Create new entity object and set repository
+        $this->entity = new $this->entityName(new User());
+        $this->repository = $this->entityManager->getRepository($this->entityName);
+    }
+}
