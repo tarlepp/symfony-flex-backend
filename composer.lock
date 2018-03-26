@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9721709d73e9c31d9efa4f83bb31b029",
+    "content-hash": "3e181f4660952ddf0a3badca0010f0bb",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5548,16 +5548,16 @@
     "packages-dev": [
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.8.4",
+            "version": "0.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "cb9bf244b62392909ee61ee174874de137fe698a"
+                "reference": "07d2412b68a0296ff1e33425ee9010d8a70966e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/cb9bf244b62392909ee61ee174874de137fe698a",
-                "reference": "cb9bf244b62392909ee61ee174874de137fe698a",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/07d2412b68a0296ff1e33425ee9010d8a70966e3",
+                "reference": "07d2412b68a0296ff1e33425ee9010d8a70966e3",
                 "shasum": ""
             },
             "require": {
@@ -5593,7 +5593,7 @@
                 "printer",
                 "result-printer"
             ],
-            "time": "2018-03-23T23:03:37+00:00"
+            "time": "2018-03-26T01:05:43+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -5802,16 +5802,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.3.0",
+            "version": "6.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "f4db5a78a5ea468d4831de7f0bf9d9415e348699"
+                "reference": "49e42e6539f775e80c74086a710a882e1d5a8111"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/f4db5a78a5ea468d4831de7f0bf9d9415e348699",
-                "reference": "f4db5a78a5ea468d4831de7f0bf9d9415e348699",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/49e42e6539f775e80c74086a710a882e1d5a8111",
+                "reference": "49e42e6539f775e80c74086a710a882e1d5a8111",
                 "shasum": ""
             },
             "require": {
@@ -5821,7 +5821,7 @@
             },
             "require-dev": {
                 "ext-curl": "*",
-                "phpunit/phpunit": "^4.0 || ^5.0",
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.4",
                 "psr/log": "^1.0"
             },
             "suggest": {
@@ -5830,7 +5830,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.2-dev"
+                    "dev-master": "6.3-dev"
                 }
             },
             "autoload": {
@@ -5863,7 +5863,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2017-06-22T18:50:49+00:00"
+            "time": "2018-03-26T12:06:26+00:00"
         },
         {
             "name": "guzzlehttp/promises",
