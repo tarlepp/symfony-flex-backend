@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e181f4660952ddf0a3badca0010f0bb",
+    "content-hash": "0c3b2aa8abf54329b28b2e2fb0f98785",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -549,39 +549,39 @@
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
-            "version": "1.3.2",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineCacheBundle.git",
-                "reference": "9baecbd6bfdd1123b0cf8c1b88fee0170a84ddd1"
+                "reference": "4c8e363f96427924e7e519c5b5119b4f54512697"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineCacheBundle/zipball/9baecbd6bfdd1123b0cf8c1b88fee0170a84ddd1",
-                "reference": "9baecbd6bfdd1123b0cf8c1b88fee0170a84ddd1",
+                "url": "https://api.github.com/repos/doctrine/DoctrineCacheBundle/zipball/4c8e363f96427924e7e519c5b5119b4f54512697",
+                "reference": "4c8e363f96427924e7e519c5b5119b4f54512697",
                 "shasum": ""
             },
             "require": {
                 "doctrine/cache": "^1.4.2",
                 "doctrine/inflector": "~1.0",
                 "php": ">=5.3.2",
-                "symfony/doctrine-bridge": "~2.2|~3.0|~4.0"
+                "symfony/doctrine-bridge": "~2.7|~3.3|~4.0"
             },
             "require-dev": {
                 "instaclick/coding-standard": "~1.1",
                 "instaclick/object-calisthenics-sniffs": "dev-master",
                 "instaclick/symfony2-coding-standard": "dev-remaster",
-                "phpunit/phpunit": "~4",
+                "phpunit/phpunit": "~4|~5",
                 "predis/predis": "~0.8",
                 "satooshi/php-coveralls": "^1.0",
                 "squizlabs/php_codesniffer": "~1.5",
-                "symfony/console": "~2.2|~3.0|~4.0",
-                "symfony/finder": "~2.2|~3.0|~4.0",
-                "symfony/framework-bundle": "~2.2|~3.0|~4.0",
-                "symfony/phpunit-bridge": "~2.7|~3.0|~4.0",
-                "symfony/security-acl": "~2.3|~3.0",
-                "symfony/validator": "~2.2|~3.0|~4.0",
-                "symfony/yaml": "~2.2|~3.0|~4.0"
+                "symfony/console": "~2.7|~3.3|~4.0",
+                "symfony/finder": "~2.7|~3.3|~4.0",
+                "symfony/framework-bundle": "~2.7|~3.3|~4.0",
+                "symfony/phpunit-bridge": "~2.7|~3.3|~4.0",
+                "symfony/security-acl": "~2.7|~3.3",
+                "symfony/validator": "~2.7|~3.3|~4.0",
+                "symfony/yaml": "~2.7|~3.3|~4.0"
             },
             "suggest": {
                 "symfony/security-acl": "For using this bundle to cache ACLs"
@@ -633,7 +633,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2017-10-12T17:23:29+00:00"
+            "time": "2018-03-27T09:22:12+00:00"
         },
         {
             "name": "doctrine/doctrine-fixtures-bundle",
@@ -3393,16 +3393,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.76",
+            "version": "v1.0.78",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "202c981673b255a41bac4076cb82629a0b8481cb"
+                "reference": "eead30b31db70691cd1fd1e7225190c818a1a5f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/202c981673b255a41bac4076cb82629a0b8481cb",
-                "reference": "202c981673b255a41bac4076cb82629a0b8481cb",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/eead30b31db70691cd1fd1e7225190c818a1a5f6",
+                "reference": "eead30b31db70691cd1fd1e7225190c818a1a5f6",
                 "shasum": ""
             },
             "require": {
@@ -3435,7 +3435,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2018-03-23T16:30:50+00:00"
+            "time": "2018-03-27T10:04:58+00:00"
         },
         {
             "name": "symfony/form",
@@ -5548,16 +5548,16 @@
     "packages-dev": [
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.9.1",
+            "version": "0.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "07d2412b68a0296ff1e33425ee9010d8a70966e3"
+                "reference": "9e45322cca36496240cc7cc799c3d4045f21576d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/07d2412b68a0296ff1e33425ee9010d8a70966e3",
-                "reference": "07d2412b68a0296ff1e33425ee9010d8a70966e3",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/9e45322cca36496240cc7cc799c3d4045f21576d",
+                "reference": "9e45322cca36496240cc7cc799c3d4045f21576d",
                 "shasum": ""
             },
             "require": {
@@ -5593,7 +5593,7 @@
                 "printer",
                 "result-printer"
             ],
-            "time": "2018-03-26T01:05:43+00:00"
+            "time": "2018-03-27T00:16:57+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -5802,16 +5802,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.3.1",
+            "version": "6.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "49e42e6539f775e80c74086a710a882e1d5a8111"
+                "reference": "68d0ea14d5a3f42a20e87632a5f84931e2709c90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/49e42e6539f775e80c74086a710a882e1d5a8111",
-                "reference": "49e42e6539f775e80c74086a710a882e1d5a8111",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/68d0ea14d5a3f42a20e87632a5f84931e2709c90",
+                "reference": "68d0ea14d5a3f42a20e87632a5f84931e2709c90",
                 "shasum": ""
             },
             "require": {
@@ -5863,7 +5863,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2018-03-26T12:06:26+00:00"
+            "time": "2018-03-26T16:33:04+00:00"
         },
         {
             "name": "guzzlehttp/promises",

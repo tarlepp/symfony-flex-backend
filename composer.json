@@ -41,7 +41,7 @@
 		"symfony/asset": "4.0.6",
 		"symfony/console": "4.0.6",
 		"symfony/expression-language": "4.0.6",
-		"symfony/flex": "1.0.76",
+		"symfony/flex": "1.0.78",
 		"symfony/form": "4.0.6",
 		"symfony/framework-bundle": "4.0.6",
 		"symfony/lts": "^4@dev",
@@ -54,7 +54,7 @@
 		"symfony/yaml": "4.0.6"
 	},
 	"require-dev": {
-		"codedungeon/phpunit-result-printer": "0.9.1",
+		"codedungeon/phpunit-result-printer": "0.9.3",
 		"liuggio/fastest": "1.6.1",
 		"php-coveralls/php-coveralls": "2.0.0",
 		"phpmetrics/phpmetrics": "2.3.2",
