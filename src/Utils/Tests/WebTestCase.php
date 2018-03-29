@@ -53,6 +53,19 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::bootKernel();
+
+        $this->container = static::$kernel->getContainer();
+        $this->authService = $this->container->get('test.service_locator')->get(Auth::class);
+    }
+
+    /**
      * Helper method to get authorized client for specified username and password.
      *
      * @param string|null  $username
@@ -136,18 +149,5 @@ abstract class WebTestCase extends BaseWebTestCase
         }
 
         return $output;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        self::bootKernel();
-
-        $this->container = static::$kernel->getContainer();
-        $this->authService = $this->container->get('test.service_locator')->get(Auth::class);
     }
 }
