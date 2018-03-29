@@ -12,6 +12,7 @@ use App\Entity\EntityInterface;
 use App\Entity\LogLoginFailure as Entity;
 use App\Repository\LogLoginFailureRepository as Repository;
 use App\Rest\RestResource;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
@@ -47,5 +48,13 @@ class LogLoginFailureResource extends RestResource
     {
         $this->setRepository($repository);
         $this->setValidator($validator);
+    }
+
+    /**
+     * @param UserInterface $user
+     */
+    public function reset(UserInterface $user): void
+    {
+        $this->getRepository()->clear($user);
     }
 }
