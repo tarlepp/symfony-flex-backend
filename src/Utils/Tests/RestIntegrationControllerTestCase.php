@@ -40,6 +40,30 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
     protected $resourceClass;
 
     /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        gc_enable();
+
+        parent::setUp();
+
+        $this->controller = $this->getContainer()->get($this->controllerClass);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        unset($this->controller);
+
+        gc_collect_cycles();
+    }
+
+    /**
      * @throws ReflectionException
      */
     public function testThatGivenControllerIsCorrect(): void
@@ -63,29 +87,5 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
     {
         /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf($this->resourceClass, $this->controller->getResource());
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        gc_enable();
-
-        parent::setUp();
-
-        $this->controller = $this->getContainer()->get($this->controllerClass);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->controller);
-
-        gc_collect_cycles();
     }
 }
