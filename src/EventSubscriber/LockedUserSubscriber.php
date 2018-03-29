@@ -45,6 +45,18 @@ class LockedUserSubscriber implements EventSubscriberInterface
     private $reset = true;
 
     /**
+     * LockedUserSubscriber constructor.
+     *
+     * @param UserRepository          $userRepository
+     * @param LogLoginFailureResource $logLoginFailureResource
+     */
+    public function __construct(UserRepository $userRepository, LogLoginFailureResource $logLoginFailureResource)
+    {
+        $this->userRepository = $userRepository;
+        $this->logLoginFailureResource = $logLoginFailureResource;
+    }
+
+    /**
      * Returns an array of event names this subscriber wants to listen to.
      *
      * The array keys are event names and the value can be:
@@ -69,18 +81,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
             Events::JWT_AUTHENTICATED => 'onJWTAuthenticated',
             AuthenticationEvents::AUTHENTICATION_SUCCESS => 'onAuthenticationSuccess',
         ];
-    }
-
-    /**
-     * LockedUserSubscriber constructor.
-     *
-     * @param UserRepository          $userRepository
-     * @param LogLoginFailureResource $logLoginFailureResource
-     */
-    public function __construct(UserRepository $userRepository, LogLoginFailureResource $logLoginFailureResource)
-    {
-        $this->userRepository = $userRepository;
-        $this->logLoginFailureResource = $logLoginFailureResource;
     }
 
     /**
