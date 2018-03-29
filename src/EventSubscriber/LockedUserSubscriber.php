@@ -213,7 +213,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
     private function getUser($user): ?User
     {
         if (is_string($user)) {
-            /** @var User $user */
             $user = $this->userRepository->loadUserByUsername($user);
         }
 
