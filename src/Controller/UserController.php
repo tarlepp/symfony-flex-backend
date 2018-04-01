@@ -371,6 +371,9 @@ class UserController extends Controller
      * @param SerializerInterface $serializer
      *
      * @return JsonResponse
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function attachUserGroupAction(
         User $user,
@@ -475,6 +478,9 @@ class UserController extends Controller
      * @param SerializerInterface $serializer
      *
      * @return JsonResponse
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function detachUserGroupAction(
         User $user,
