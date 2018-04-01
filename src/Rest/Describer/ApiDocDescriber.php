@@ -12,6 +12,7 @@ use App\Rest\Doc\RouteModel;
 use Closure;
 use Doctrine\Common\Annotations\AnnotationReader;
 use EXSyst\Component\Swagger\Swagger;
+use InvalidArgumentException;
 use Nelmio\ApiDocBundle\Describer\DescriberInterface;
 use ReflectionClass;
 use ReflectionException;
@@ -20,6 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
+use UnexpectedValueException;
 use function array_filter;
 use function array_map;
 use function array_values;
@@ -72,8 +74,9 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param Swagger $api
      *
+     * @throws InvalidArgumentException
      * @throws ReflectionException
-     * @throws \UnexpectedValueException
+     * @throws UnexpectedValueException
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Twig_Error_Loader
