@@ -129,7 +129,6 @@
       <path value="$PROJECT_DIR$/vendor/symfony/orm-pack" />
       <path value="$PROJECT_DIR$/vendor/symfony/property-info" />
       <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
-      <path value="$PROJECT_DIR$/vendor/symfony/phpunit-bridge" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-icu" />
       <path value="$PROJECT_DIR$/vendor/symfony/validator" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php72" />
@@ -159,6 +158,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php70" />
       <path value="$PROJECT_DIR$/vendor/slevomat/coding-standard" />
       <path value="$PROJECT_DIR$/vendor/nette/caching" />
+      <path value="$PROJECT_DIR$/vendor/symfony/phpunit-bridge" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />

@@ -3,11 +3,13 @@
     <option name="myName" value="Project Default" />
     <inspection_tool class="ArgumentEqualsDefaultValueInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ArrayCastingEquivalentInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="AssignmentToForLoopParameterJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="BadExceptionsProcessingInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ClassConstantCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CompactCanBeUsedInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ComparisonOperandsOrderInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="ConstantCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="DefaultNotLastCaseInSwitchJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DefaultValueInElseBranchInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DegradedSwitchInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DisallowWritingIntoStaticPropertiesInspection" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -47,28 +49,47 @@
       <option name="limit" value="6" />
     </inspection_tool>
     <inspection_tool class="MultipleReturnStatementsInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="NestedSwitchStatementJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="NullCoalescingOperatorCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="OffsetOperationsInspection" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="OnlyWritesOnParameterInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PackedHashtableOptimizationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ParameterDefaultValueIsNotNullInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PdoApiUsageInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpAssignmentInConditionInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpAssignmentReplaceableWithOperatorAssignmentInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpAssignmentReplaceableWithPrefixExpressionInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpCSValidationInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="CODING_STANDARD" value="PSR2" />
       <option name="SHOW_SNIFF_NAMES" value="true" />
     </inspection_tool>
+    <inspection_tool class="PhpDivisionByZeroInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpIllegalPsrClassPathInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpMethodOrClassCallIsNotCaseSensitiveInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingDocCommentInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingParentCallCommonInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpMissingParentCallMagicInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpMissingStrictTypesDeclarationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpMultipleClassesDeclarationsInOneFile" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpShortOpenTagInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpStaticAsDynamicMethodCallInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpTooManyParametersInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="limit" value="8" />
+    </inspection_tool>
+    <inspection_tool class="PhpTraditionalSyntaxArrayLiteralInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpUndefinedCallbackInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpUsageOfSilenceOperatorInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpVariableVariableInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="PropertyInitializationFlawsInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ReturnTypeCanBeDeclaredInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SecurityAdvisoriesInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="optionConfiguration">
         <list>
           <option value="behat/behat" />
+          <option value="brianium/paratest" />
+          <option value="codeception/codeception" />
           <option value="composer/composer" />
+          <option value="filp/whoops" />
           <option value="friendsofphp/php-cs-fixer" />
           <option value="humbug/humbug" />
           <option value="infection/infection" />
@@ -76,6 +97,7 @@
           <option value="johnkary/phpunit-speedtrap" />
           <option value="mikey179/vfsStream" />
           <option value="mockery/mockery" />
+          <option value="mybuilder/phpunit-accelerator" />
           <option value="pdepend/pdepend" />
           <option value="phan/phan" />
           <option value="phing/phing" />
@@ -85,23 +107,27 @@
           <option value="phpspec/prophecy" />
           <option value="phpstan/phpstan" />
           <option value="phpunit/dbunit" />
+          <option value="phpunit/phpcov" />
           <option value="phpunit/phpunit" />
+          <option value="phpunit/phpunit-selenium" />
           <option value="povils/phpmnd" />
+          <option value="roave/security-advisories" />
           <option value="satooshi/php-coveralls" />
           <option value="sebastian/phpcpd" />
           <option value="slevomat/coding-standard" />
           <option value="squizlabs/php_codesniffer" />
+          <option value="sstalle/php7cc" />
           <option value="symfony/debug" />
           <option value="symfony/phpunit-bridge" />
           <option value="symfony/var-dumper" />
           <option value="vimeo/psalm" />
+          <option value="wimg/php-compatibility" />
           <option value="yiisoft/yii2-debug" />
           <option value="yiisoft/yii2-gii" />
           <option value="zendframework/zend-debug" />
           <option value="zendframework/zend-test" />
         </list>
       </option>
-      <option name="optionConfigurationMigrated" value="true" />
     </inspection_tool>
     <inspection_tool class="SequentialUnSetCallsInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ShortListSyntaxCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -110,6 +136,7 @@
     <inspection_tool class="StringCaseManipulationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StringNormalizationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SubStrUsedAsStrPosInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="SwitchStatementWithNoDefaultBranchJS" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TernaryOperatorSimplifyInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ThrowRawExceptionInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="TypeUnsafeArraySearchInspection" enabled="true" level="WARNING" enabled_by_default="true" />
