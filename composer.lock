@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "52e3c95de3afd9605b50f83fd5480df7",
+    "content-hash": "9b16e7b87db147102ee9778cecd26727",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5880,6 +5880,244 @@
             "time": "2016-02-11T16:21:17+00:00"
         },
         {
+            "name": "illuminate/config",
+            "version": "v5.6.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/config.git",
+                "reference": "e8158dff3189deed846c84c66c60fa68c21ee579"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/config/zipball/e8158dff3189deed846c84c66c60fa68c21ee579",
+                "reference": "e8158dff3189deed846c84c66c60fa68c21ee579",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "5.6.*",
+                "illuminate/support": "5.6.*",
+                "php": "^7.1.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Config\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "The Illuminate Config package.",
+            "homepage": "https://laravel.com",
+            "time": "2017-11-07T20:23:51+00:00"
+        },
+        {
+            "name": "illuminate/container",
+            "version": "v5.6.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/container.git",
+                "reference": "4a42d667a05ec6d31f05b532cdac7e8e68e5ea2a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/4a42d667a05ec6d31f05b532cdac7e8e68e5ea2a",
+                "reference": "4a42d667a05ec6d31f05b532cdac7e8e68e5ea2a",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "5.6.*",
+                "php": "^7.1.3",
+                "psr/container": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Container\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "The Illuminate Container package.",
+            "homepage": "https://laravel.com",
+            "time": "2018-01-21T02:13:38+00:00"
+        },
+        {
+            "name": "illuminate/contracts",
+            "version": "v5.6.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/contracts.git",
+                "reference": "965b814964cc4649cd7e933bba2ae3eeb11f2927"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/965b814964cc4649cd7e933bba2ae3eeb11f2927",
+                "reference": "965b814964cc4649cd7e933bba2ae3eeb11f2927",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1.3",
+                "psr/container": "~1.0",
+                "psr/simple-cache": "~1.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Contracts\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "The Illuminate Contracts package.",
+            "homepage": "https://laravel.com",
+            "time": "2018-03-25T12:54:46+00:00"
+        },
+        {
+            "name": "illuminate/support",
+            "version": "v5.6.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminate/support.git",
+                "reference": "79d074f5a49fa972b3c0ccf4468be2ad92eb3e3d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/79d074f5a49fa972b3c0ccf4468be2ad92eb3e3d",
+                "reference": "79d074f5a49fa972b3c0ccf4468be2ad92eb3e3d",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/inflector": "~1.1",
+                "ext-mbstring": "*",
+                "illuminate/contracts": "5.6.*",
+                "nesbot/carbon": "^1.24.1",
+                "php": "^7.1.3"
+            },
+            "conflict": {
+                "tightenco/collect": "<5.5.33"
+            },
+            "suggest": {
+                "illuminate/filesystem": "Required to use the composer class (5.6.*).",
+                "symfony/process": "Required to use the composer class (~4.0).",
+                "symfony/var-dumper": "Required to use the dd function (~4.0)."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.6-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminate\\Support\\": ""
+                },
+                "files": [
+                    "helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylor@laravel.com"
+                }
+            ],
+            "description": "The Illuminate Support package.",
+            "homepage": "https://laravel.com",
+            "time": "2018-03-29T15:55:16+00:00"
+        },
+        {
+            "name": "jackiedo/dotenv-editor",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JackieDo/Laravel-Dotenv-Editor.git",
+                "reference": "d27e12b8b120d49234d6759810ad06f076ee52cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JackieDo/Laravel-Dotenv-Editor/zipball/d27e12b8b120d49234d6759810ad06f076ee52cc",
+                "reference": "d27e12b8b120d49234d6759810ad06f076ee52cc",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": ">=5.0",
+                "illuminate/container": ">=5.0",
+                "illuminate/support": ">=5.0",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jackiedo\\DotenvEditor\\": "src/Jackiedo/DotenvEditor"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jackie Do",
+                    "email": "anhvudo@gmail.com"
+                }
+            ],
+            "description": "The .env file editor tool for Laravel 5+",
+            "keywords": [
+                "dotenv",
+                "dotenv-editor",
+                "laravel"
+            ],
+            "time": "2017-06-26T06:36:42+00:00"
+        },
+        {
             "name": "jean85/pretty-package-versions",
             "version": "1.1",
             "source": {
@@ -6031,6 +6269,59 @@
                 "object graph"
             ],
             "time": "2017-10-19T19:58:43+00:00"
+        },
+        {
+            "name": "nesbot/carbon",
+            "version": "1.25.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/briannesbitt/Carbon.git",
+                "reference": "cbcf13da0b531767e39eb86e9687f5deba9857b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/cbcf13da0b531767e39eb86e9687f5deba9857b4",
+                "reference": "cbcf13da0b531767e39eb86e9687f5deba9857b4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9",
+                "symfony/translation": "~2.6 || ~3.0 || ~4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "~2",
+                "phpunit/phpunit": "^4.8.35 || ^5.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.23-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Carbon\\": "src/Carbon/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brian Nesbitt",
+                    "email": "brian@nesbot.com",
+                    "homepage": "http://nesbot.com"
+                }
+            ],
+            "description": "A simple API extension for DateTime.",
+            "homepage": "http://carbon.nesbot.com",
+            "keywords": [
+                "date",
+                "datetime",
+                "time"
+            ],
+            "time": "2018-03-19T15:50:49+00:00"
         },
         {
             "name": "nette/bootstrap",
@@ -8471,6 +8762,59 @@
                 "standards"
             ],
             "time": "2018-02-20T21:35:23+00:00"
+        },
+        {
+            "name": "sroze/companienv",
+            "version": "0.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sroze/companienv.git",
+                "reference": "5d1986d70347d21cc30ca1d11b9e78986292ceb6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sroze/companienv/zipball/5d1986d70347d21cc30ca1d11b9e78986292ceb6",
+                "reference": "5d1986d70347d21cc30ca1d11b9e78986292ceb6",
+                "shasum": ""
+            },
+            "require": {
+                "jackiedo/dotenv-editor": "~1.0",
+                "php": ">=7.0",
+                "symfony/console": "~3.0 || ~4.0",
+                "symfony/dotenv": "~3.4 || ~4.0",
+                "symfony/process": "~3.0 || ~4.0"
+            },
+            "require-dev": {
+                "behat/behat": "^3.4",
+                "composer/composer": "1.0.*@dev",
+                "phpspec/phpspec": "^4.3"
+            },
+            "bin": [
+                "bin/companienv"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Companienv": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Samuel ROZE",
+                    "email": "samuel.roze@gmail.com"
+                }
+            ],
+            "description": "Companion for .env files",
+            "keywords": [
+                ".env",
+                "configuration",
+                "dotenv"
+            ],
+            "time": "2018-02-19T18:26:23+00:00"
         },
         {
             "name": "symfony/browser-kit",

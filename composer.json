@@ -63,6 +63,7 @@
 		"sebastian/finder-facade": "1.2.2",
 		"sensiolabs/security-checker": "4.1.8",
 		"squizlabs/php_codesniffer": "3.2.3",
+		"sroze/companienv": "0.0.8",
 		"symfony/browser-kit": "4.0.6",
 		"symfony/debug-pack": "1.0.5",
 		"symfony/dotenv": "4.0.6",
@@ -97,10 +98,12 @@
 			"security-checker security:check --end-point=http://security.sensiolabs.org/check_lock": "script"
 		},
 		"post-install-cmd": [
-			"@auto-scripts"
+			"@auto-scripts",
+			"Companienv\\Composer\\ScriptHandler::run"
 		],
 		"post-update-cmd": [
-			"@auto-scripts"
+			"@auto-scripts",
+			"Companienv\\Composer\\ScriptHandler::run"
 		]
 	},
 	"conflict": {
