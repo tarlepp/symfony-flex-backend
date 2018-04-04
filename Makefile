@@ -95,5 +95,5 @@ phpcs: ## Runs PHP CodeSniffer
 
 ###> ecs ###
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
-	php ./vendor/bin/ecs check src
+	php ./vendor/bin/ecs --clear-cache check src
 ###< ecs ###
