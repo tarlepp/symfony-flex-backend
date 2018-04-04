@@ -1,0 +1,26 @@
+imports:
+    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/psr2.yml' }
+    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/php71.yml' }
+    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/clean-code.yml' }
+    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/common.yml' }
+
+parameters:
+    exclude_checkers:
+        - 'PhpCsFixer\Fixer\CastNotation\CastSpacesFixer'
+        - 'PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer'
+        - 'PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer'
+        - 'PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer'
+        - 'PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer'
+        - 'Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer'
+        - 'Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer'
+    skip:
+        PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.Found: ~
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
+            - '*src/Entity/Traits/UserSerializer.php'
+            - '*src/Repository/Traits/LoadUserByUserNameTrait.php'
+            - '*src/Security/ApiKeyAuthenticator.php'
+            - '*src/Security/ApiKeyUserProvider.php'
+            - '*src/Security/IsUserHimselfVoter.php'
+            - '*src/Security/UserProvider.php'
+        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingTraversableReturnTypeHintSpecification:
+            - '*src/Kernel.php'

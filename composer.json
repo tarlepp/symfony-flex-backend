@@ -71,7 +71,7 @@
 		"symfony/phpunit-bridge": "4.0.7",
 		"symfony/requirements-checker": "1.0.3",
 		"symfony/web-server-bundle": "4.0.7",
-		"symplify/easy-coding-standard": "3.2.30"
+		"symplify/easy-coding-standard": "4.0.0"
 	},
 	"config": {
 		"preferred-install": {
