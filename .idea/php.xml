@@ -166,6 +166,7 @@
       <path value="$PROJECT_DIR$/vendor/illuminate/container" />
       <path value="$PROJECT_DIR$/vendor/illuminate/config" />
       <path value="$PROJECT_DIR$/vendor/illuminate/support" />
+      <path value="$PROJECT_DIR$/vendor/codedungeon/php-cli-colors" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
