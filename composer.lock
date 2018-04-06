@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8bb09cf9d311efdd571cd33ef3e32bf3",
+    "content-hash": "2c2da16277769a5da7c6b767d5365fe8",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1906,16 +1906,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.11",
+            "version": "v2.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8"
+                "reference": "258c89a6b97de7dfaf5b8c7607d0478e236b04fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/5da4d3c796c275c55f057af5a643ae297d96b4d8",
-                "reference": "5da4d3c796c275c55f057af5a643ae297d96b4d8",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/258c89a6b97de7dfaf5b8c7607d0478e236b04fb",
+                "reference": "258c89a6b97de7dfaf5b8c7607d0478e236b04fb",
                 "shasum": ""
             },
             "require": {
@@ -1950,7 +1950,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-09-27T21:40:39+00:00"
+            "time": "2018-04-04T21:24:14+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -5391,27 +5391,72 @@
     ],
     "packages-dev": [
         {
-            "name": "codedungeon/phpunit-result-printer",
-            "version": "0.11.2",
+            "name": "codedungeon/php-cli-colors",
+            "version": "1.10.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "a93a43128e53a41e383a4af42056b4cd37b5c994"
+                "url": "https://github.com/mikeerickson/php-cli-colors.git",
+                "reference": "1beb5c21b21b2c125aff26a75caf02fcec12571f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/a93a43128e53a41e383a4af42056b4cd37b5c994",
-                "reference": "a93a43128e53a41e383a4af42056b4cd37b5c994",
+                "url": "https://api.github.com/repos/mikeerickson/php-cli-colors/zipball/1beb5c21b21b2c125aff26a75caf02fcec12571f",
+                "reference": "1beb5c21b21b2c125aff26a75caf02fcec12571f",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Codedungeon\\PHPCliColors\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mike Erickson",
+                    "email": "codedungeon@gmail.com"
+                }
+            ],
+            "description": "PHP Package for using color output in CLI commands",
+            "homepage": "https://github.com/mikeerickson/php-cli-colors",
+            "keywords": [
+                "color",
+                "colors",
+                "composer",
+                "package",
+                "php"
+            ],
+            "time": "2017-09-12T17:12:52+00:00"
+        },
+        {
+            "name": "codedungeon/phpunit-result-printer",
+            "version": "0.11.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
+                "reference": "9a9a5cf126d9bf2adf74163a7ea9ad7dc12a1d3c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/9a9a5cf126d9bf2adf74163a7ea9ad7dc12a1d3c",
+                "reference": "9a9a5cf126d9bf2adf74163a7ea9ad7dc12a1d3c",
                 "shasum": ""
             },
             "require": {
+                "codedungeon/php-cli-colors": "^1.10",
                 "hassankhan/config": "^0.10.0",
                 "php": "^7.1",
                 "symfony/yaml": "^2.7|^3.0|^4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=5.2",
-                "spatie/phpunit-watcher": "^1.3"
+                "phpunit/phpunit": ">=7.0",
+                "spatie/phpunit-watcher": "^1.5"
             },
             "type": "library",
             "autoload": {
@@ -5435,9 +5480,10 @@
                 "package",
                 "phpunit",
                 "printer",
-                "result-printer"
+                "result-printer",
+                "testing"
             ],
-            "time": "2018-03-29T15:53:01+00:00"
+            "time": "2018-04-04T23:47:54+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -7387,16 +7433,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "6.0.1",
+            "version": "6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "f8ca4b604baf23dab89d87773c28cc07405189ba"
+                "reference": "774a82c0c5da4c1c7701790c262035d235ab7856"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/f8ca4b604baf23dab89d87773c28cc07405189ba",
-                "reference": "f8ca4b604baf23dab89d87773c28cc07405189ba",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/774a82c0c5da4c1c7701790c262035d235ab7856",
+                "reference": "774a82c0c5da4c1c7701790c262035d235ab7856",
                 "shasum": ""
             },
             "require": {
@@ -7407,7 +7453,7 @@
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-token-stream": "^3.0",
                 "sebastian/code-unit-reverse-lookup": "^1.0.1",
-                "sebastian/environment": "^3.0",
+                "sebastian/environment": "^3.1",
                 "sebastian/version": "^2.0.1",
                 "theseer/tokenizer": "^1.1"
             },
@@ -7446,7 +7492,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-02-02T07:01:41+00:00"
+            "time": "2018-04-06T15:39:20+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -7768,16 +7814,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "6.0.1",
+            "version": "6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "e3249dedc2d99259ccae6affbc2684eac37c2e53"
+                "reference": "3f5ca97eee66a07951d018f6726017629c85c86d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/e3249dedc2d99259ccae6affbc2684eac37c2e53",
-                "reference": "e3249dedc2d99259ccae6affbc2684eac37c2e53",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/3f5ca97eee66a07951d018f6726017629c85c86d",
+                "reference": "3f5ca97eee66a07951d018f6726017629c85c86d",
                 "shasum": ""
             },
             "require": {
@@ -7795,7 +7841,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "6.0.x-dev"
+                    "dev-master": "6.1-dev"
                 }
             },
             "autoload": {
@@ -7820,7 +7866,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2018-02-15T05:27:38+00:00"
+            "time": "2018-04-06T08:14:40+00:00"
         },
         {
             "name": "psr/http-message",
@@ -9697,16 +9743,16 @@
         },
         {
             "name": "symplify/better-reflection-docblock",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/BetterReflectionDocBlock.git",
-                "reference": "9e81cde7a7259132c36210b97f68f2e80cdd4009"
+                "reference": "e4df42654ef221222907bcf7915c26536e24f189"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/BetterReflectionDocBlock/zipball/9e81cde7a7259132c36210b97f68f2e80cdd4009",
-                "reference": "9e81cde7a7259132c36210b97f68f2e80cdd4009",
+                "url": "https://api.github.com/repos/Symplify/BetterReflectionDocBlock/zipball/e4df42654ef221222907bcf7915c26536e24f189",
+                "reference": "e4df42654ef221222907bcf7915c26536e24f189",
                 "shasum": ""
             },
             "require": {
@@ -9734,20 +9780,20 @@
                 "MIT"
             ],
             "description": "Slim wrapper around phpdocumentor/reflection-docblock with better DX and simpler API.",
-            "time": "2018-03-24T17:11:39+00:00"
+            "time": "2018-04-03T17:56:24+00:00"
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
-                "reference": "60aa4ee3c7a62caf5925c43bdc51ce4dfe133b0a"
+                "reference": "0a5e2a4d9d24a04d1b505ad31f01fe9ad9d5f15b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/60aa4ee3c7a62caf5925c43bdc51ce4dfe133b0a",
-                "reference": "60aa4ee3c7a62caf5925c43bdc51ce4dfe133b0a",
+                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/0a5e2a4d9d24a04d1b505ad31f01fe9ad9d5f15b",
+                "reference": "0a5e2a4d9d24a04d1b505ad31f01fe9ad9d5f15b",
                 "shasum": ""
             },
             "require": {
@@ -9781,7 +9827,7 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer.",
-            "time": "2018-03-31T22:52:51+00:00"
+            "time": "2018-04-03T17:44:55+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
@@ -9849,16 +9895,16 @@
         },
         {
             "name": "symplify/package-builder",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
-                "reference": "010c68359f5dd6d65f4dca1d8599ebb75306024a"
+                "reference": "c75a4311d8bcd4a5c72c6bac150b9131b935d5b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/010c68359f5dd6d65f4dca1d8599ebb75306024a",
-                "reference": "010c68359f5dd6d65f4dca1d8599ebb75306024a",
+                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/c75a4311d8bcd4a5c72c6bac150b9131b935d5b4",
+                "reference": "c75a4311d8bcd4a5c72c6bac150b9131b935d5b4",
                 "shasum": ""
             },
             "require": {
@@ -9891,20 +9937,20 @@
                 "MIT"
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
-            "time": "2018-04-01T22:25:48+00:00"
+            "time": "2018-04-05T07:54:37+00:00"
         },
         {
             "name": "symplify/token-runner",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/TokenRunner.git",
-                "reference": "e1d4ba355ca9a742dcd083779affa8f9aa36f4ca"
+                "reference": "29bedbb2cce82742a26b6cfa328941417235426c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/e1d4ba355ca9a742dcd083779affa8f9aa36f4ca",
-                "reference": "e1d4ba355ca9a742dcd083779affa8f9aa36f4ca",
+                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/29bedbb2cce82742a26b6cfa328941417235426c",
+                "reference": "29bedbb2cce82742a26b6cfa328941417235426c",
                 "shasum": ""
             },
             "require": {
@@ -9936,7 +9982,7 @@
                 "MIT"
             ],
             "description": "Set of utils for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2018-03-31T22:52:51+00:00"
+            "time": "2018-04-03T17:44:55+00:00"
         },
         {
             "name": "theseer/fdomdocument",

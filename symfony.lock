@@ -2,6 +2,9 @@
     "behat/transliterator": {
         "version": "v1.2.0"
     },
+    "codedungeon/php-cli-colors": {
+        "version": "1.10.3"
+    },
     "codedungeon/phpunit-result-printer": {
         "version": "0.4.4"
     },
