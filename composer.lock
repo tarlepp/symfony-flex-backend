@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4301a4960d6e842538d20698b0f6f1b7",
+    "content-hash": "983c42b5bc04697cabf3bd1734c90e23",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5436,16 +5436,16 @@
         },
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.11.4",
+            "version": "0.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "9a9a5cf126d9bf2adf74163a7ea9ad7dc12a1d3c"
+                "reference": "a3f8ba9e716f0e8818b6d01040002888ecc00cb3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/9a9a5cf126d9bf2adf74163a7ea9ad7dc12a1d3c",
-                "reference": "9a9a5cf126d9bf2adf74163a7ea9ad7dc12a1d3c",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/a3f8ba9e716f0e8818b6d01040002888ecc00cb3",
+                "reference": "a3f8ba9e716f0e8818b6d01040002888ecc00cb3",
                 "shasum": ""
             },
             "require": {
@@ -5455,7 +5455,7 @@
                 "symfony/yaml": "^2.7|^3.0|^4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=7.0",
+                "phpunit/phpunit": ">=7.1",
                 "spatie/phpunit-watcher": "^1.5"
             },
             "type": "library",
@@ -5483,7 +5483,7 @@
                 "result-printer",
                 "testing"
             ],
-            "time": "2018-04-04T23:47:54+00:00"
+            "time": "2018-04-06T23:59:42+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -7734,16 +7734,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.0.3",
+            "version": "7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "536f4d853c12d8189963435088e8ff7c0daeab2e"
+                "reference": "f7fe5127889519e421600fe0feeb113a5e210f20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/536f4d853c12d8189963435088e8ff7c0daeab2e",
-                "reference": "536f4d853c12d8189963435088e8ff7c0daeab2e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f7fe5127889519e421600fe0feeb113a5e210f20",
+                "reference": "f7fe5127889519e421600fe0feeb113a5e210f20",
                 "shasum": ""
             },
             "require": {
@@ -7761,7 +7761,7 @@
                 "phpunit/php-file-iterator": "^1.4.3",
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-timer": "^2.0",
-                "phpunit/phpunit-mock-objects": "^6.0",
+                "phpunit/phpunit-mock-objects": "^6.1",
                 "sebastian/comparator": "^2.1",
                 "sebastian/diff": "^3.0",
                 "sebastian/environment": "^3.1",
@@ -7784,7 +7784,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.0-dev"
+                    "dev-master": "7.1-dev"
                 }
             },
             "autoload": {
@@ -7810,7 +7810,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-03-26T07:36:48+00:00"
+            "time": "2018-04-06T12:39:30+00:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
