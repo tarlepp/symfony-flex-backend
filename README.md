@@ -85,6 +85,9 @@ cp .env.dist .env
 Then open that file and make necessary changes to it. Note that this `.env`
 file is ignored on VCS.
 
+_note that this optional way to do this, installing dependencies will prompt you
+on every needed configuration_
+
 ### 3. Dependencies installation
 
 Next phase is to install all needed dependencies. This you can do with following
