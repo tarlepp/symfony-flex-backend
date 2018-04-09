@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "983c42b5bc04697cabf3bd1734c90e23",
+    "content-hash": "9ab733e7dbcdda3c0e840369886dfef5",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -391,16 +391,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "v2.7.0",
+            "version": "v2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "f76bf5ef631cec551a86c2291fc749534febebf1"
+                "reference": "11037b4352c008373561dc6fc836834eed80c3b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/f76bf5ef631cec551a86c2291fc749534febebf1",
-                "reference": "f76bf5ef631cec551a86c2291fc749534febebf1",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/11037b4352c008373561dc6fc836834eed80c3b5",
+                "reference": "11037b4352c008373561dc6fc836834eed80c3b5",
                 "shasum": ""
             },
             "require": {
@@ -462,7 +462,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2018-04-01T23:33:17+00:00"
+            "time": "2018-04-07T18:44:18+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -5436,16 +5436,16 @@
         },
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.12.2",
+            "version": "0.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "a3f8ba9e716f0e8818b6d01040002888ecc00cb3"
+                "reference": "fe0624ebe81a6dcc4441ace455b419b590cbb51e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/a3f8ba9e716f0e8818b6d01040002888ecc00cb3",
-                "reference": "a3f8ba9e716f0e8818b6d01040002888ecc00cb3",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/fe0624ebe81a6dcc4441ace455b419b590cbb51e",
+                "reference": "fe0624ebe81a6dcc4441ace455b419b590cbb51e",
                 "shasum": ""
             },
             "require": {
@@ -5455,7 +5455,7 @@
                 "symfony/yaml": "^2.7|^3.0|^4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=7.1",
+                "phpunit/phpunit": "7.1.1",
                 "spatie/phpunit-watcher": "^1.5"
             },
             "type": "library",
@@ -5483,7 +5483,7 @@
                 "result-printer",
                 "testing"
             ],
-            "time": "2018-04-06T23:59:42+00:00"
+            "time": "2018-04-08T17:45:48+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -9743,16 +9743,16 @@
         },
         {
             "name": "symplify/better-reflection-docblock",
-            "version": "v4.0.1",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/BetterReflectionDocBlock.git",
-                "reference": "e4df42654ef221222907bcf7915c26536e24f189"
+                "reference": "14023f6fc5042c9f38c9aafef7592c47a87c9898"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/BetterReflectionDocBlock/zipball/e4df42654ef221222907bcf7915c26536e24f189",
-                "reference": "e4df42654ef221222907bcf7915c26536e24f189",
+                "url": "https://api.github.com/repos/Symplify/BetterReflectionDocBlock/zipball/14023f6fc5042c9f38c9aafef7592c47a87c9898",
+                "reference": "14023f6fc5042c9f38c9aafef7592c47a87c9898",
                 "shasum": ""
             },
             "require": {
@@ -9767,7 +9767,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -9780,20 +9780,20 @@
                 "MIT"
             ],
             "description": "Slim wrapper around phpdocumentor/reflection-docblock with better DX and simpler API.",
-            "time": "2018-04-03T17:56:24+00:00"
+            "time": "2018-04-08T22:58:47+00:00"
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v4.0.1",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
-                "reference": "0a5e2a4d9d24a04d1b505ad31f01fe9ad9d5f15b"
+                "reference": "f989b561b390cea8477ca634fb059f4642ae9fae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/0a5e2a4d9d24a04d1b505ad31f01fe9ad9d5f15b",
-                "reference": "0a5e2a4d9d24a04d1b505ad31f01fe9ad9d5f15b",
+                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/f989b561b390cea8477ca634fb059f4642ae9fae",
+                "reference": "f989b561b390cea8477ca634fb059f4642ae9fae",
                 "shasum": ""
             },
             "require": {
@@ -9814,7 +9814,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -9827,7 +9827,7 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer.",
-            "time": "2018-04-03T17:44:55+00:00"
+            "time": "2018-04-09T08:38:35+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
@@ -9895,16 +9895,16 @@
         },
         {
             "name": "symplify/package-builder",
-            "version": "v4.0.1",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
-                "reference": "c75a4311d8bcd4a5c72c6bac150b9131b935d5b4"
+                "reference": "76bf106f53603d1da2ea0eea5eb8c1a5bbccdccb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/c75a4311d8bcd4a5c72c6bac150b9131b935d5b4",
-                "reference": "c75a4311d8bcd4a5c72c6bac150b9131b935d5b4",
+                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/76bf106f53603d1da2ea0eea5eb8c1a5bbccdccb",
+                "reference": "76bf106f53603d1da2ea0eea5eb8c1a5bbccdccb",
                 "shasum": ""
             },
             "require": {
@@ -9924,7 +9924,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -9937,20 +9937,20 @@
                 "MIT"
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
-            "time": "2018-04-05T07:54:37+00:00"
+            "time": "2018-04-07T12:24:53+00:00"
         },
         {
             "name": "symplify/token-runner",
-            "version": "v4.0.1",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/TokenRunner.git",
-                "reference": "29bedbb2cce82742a26b6cfa328941417235426c"
+                "reference": "5e39e766d4fff439627a8e2fb3fe3a634c815819"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/29bedbb2cce82742a26b6cfa328941417235426c",
-                "reference": "29bedbb2cce82742a26b6cfa328941417235426c",
+                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/5e39e766d4fff439627a8e2fb3fe3a634c815819",
+                "reference": "5e39e766d4fff439627a8e2fb3fe3a634c815819",
                 "shasum": ""
             },
             "require": {
@@ -9969,7 +9969,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -9982,7 +9982,7 @@
                 "MIT"
             ],
             "description": "Set of utils for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2018-04-03T17:44:55+00:00"
+            "time": "2018-04-07T12:24:53+00:00"
         },
         {
             "name": "theseer/fdomdocument",
