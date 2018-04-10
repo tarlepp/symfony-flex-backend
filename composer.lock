@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9ab733e7dbcdda3c0e840369886dfef5",
+    "content-hash": "80548bff09da82f4adcd8b5b36e09477",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6456,75 +6456,6 @@
             "time": "2017-08-20T17:36:59+00:00"
         },
         {
-            "name": "nette/caching",
-            "version": "v2.5.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nette/caching.git",
-                "reference": "7fba7c7ab2585fafb7b31152f2595e1551120555"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/caching/zipball/7fba7c7ab2585fafb7b31152f2595e1551120555",
-                "reference": "7fba7c7ab2585fafb7b31152f2595e1551120555",
-                "shasum": ""
-            },
-            "require": {
-                "nette/finder": "^2.2 || ~3.0.0",
-                "nette/utils": "^2.4 || ~3.0.0",
-                "php": ">=5.6.0"
-            },
-            "conflict": {
-                "nette/nette": "<2.2"
-            },
-            "require-dev": {
-                "latte/latte": "^2.4",
-                "nette/di": "^2.4 || ~3.0.0",
-                "nette/tester": "^2.0",
-                "tracy/tracy": "^2.4"
-            },
-            "suggest": {
-                "ext-pdo_sqlite": "to use SQLiteStorage or SQLiteJournal"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.5-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause",
-                "GPL-2.0",
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "David Grudl",
-                    "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
-                }
-            ],
-            "description": "⏱ Nette Caching: library with easy-to-use API and many cache backends.",
-            "homepage": "https://nette.org",
-            "keywords": [
-                "cache",
-                "journal",
-                "memcached",
-                "nette",
-                "sqlite"
-            ],
-            "time": "2018-03-21T11:04:32+00:00"
-        },
-        {
             "name": "nette/di",
             "version": "v2.4.11",
             "source": {
@@ -9831,27 +9762,27 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v4.0.0",
+            "version": "v4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "f5aa88ca4f3097d9bf6f5a43ba2c85bc5f38aa3b"
+                "reference": "9ddeb0d20c7749a0c6e98c931ecff6357cd5e955"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/f5aa88ca4f3097d9bf6f5a43ba2c85bc5f38aa3b",
-                "reference": "f5aa88ca4f3097d9bf6f5a43ba2c85bc5f38aa3b",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/9ddeb0d20c7749a0c6e98c931ecff6357cd5e955",
+                "reference": "9ddeb0d20c7749a0c6e98c931ecff6357cd5e955",
                 "shasum": ""
             },
             "require": {
                 "friendsofphp/php-cs-fixer": "^2.11",
                 "jean85/pretty-package-versions": "^1.0",
-                "nette/caching": "^2.4",
                 "nette/robot-loader": "^3.0",
                 "nette/utils": "^2.4",
                 "php": "^7.1",
                 "slevomat/coding-standard": "^4.5",
                 "squizlabs/php_codesniffer": "^3.2",
+                "symfony/cache": "^4.0",
                 "symfony/config": "^4.0",
                 "symfony/console": "^4.0",
                 "symfony/dependency-injection": "^4.0",
@@ -9873,7 +9804,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -9891,7 +9822,7 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2018-04-01T22:21:01+00:00"
+            "time": "2018-04-09T08:53:48+00:00"
         },
         {
             "name": "symplify/package-builder",

@@ -179,9 +179,6 @@
     "nette/bootstrap": {
         "version": "v2.4.5"
     },
-    "nette/caching": {
-        "version": "v2.5.6"
-    },
     "nette/di": {
         "version": "v2.4.10"
     },
