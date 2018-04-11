@@ -157,7 +157,6 @@
       <path value="$PROJECT_DIR$/vendor/symplify/better-reflection-docblock" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php70" />
       <path value="$PROJECT_DIR$/vendor/slevomat/coding-standard" />
-      <path value="$PROJECT_DIR$/vendor/nette/caching" />
       <path value="$PROJECT_DIR$/vendor/symfony/phpunit-bridge" />
       <path value="$PROJECT_DIR$/vendor/sroze/companienv" />
       <path value="$PROJECT_DIR$/vendor/jackiedo/dotenv-editor" />

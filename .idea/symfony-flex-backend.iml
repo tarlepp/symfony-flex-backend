@@ -52,7 +52,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/nelmio/cors-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nesbot/carbon" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nette/bootstrap" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/nette/caching" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nette/di" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nette/finder" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nette/neon" />
