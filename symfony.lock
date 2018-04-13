@@ -14,6 +14,9 @@
     "composer/semver": {
         "version": "1.4.2"
     },
+    "composer/xdebug-handler": {
+        "version": "1.1.0"
+    },
     "doctrine/annotations": {
         "version": "v1.5.0"
     },
@@ -152,6 +155,9 @@
     "monolog/monolog": {
         "version": "1.23.0"
     },
+    "muglug/package-versions-56": {
+        "version": "1.2.4"
+    },
     "mustangostang/spyc": {
         "version": "0.6.2"
     },
@@ -202,6 +208,9 @@
     },
     "ocramius/proxy-manager": {
         "version": "2.1.1"
+    },
+    "openlss/lib-array2xml": {
+        "version": "0.5.1"
     },
     "paragonie/random_compat": {
         "version": "v2.0.11"
@@ -634,6 +643,9 @@
     },
     "twig/twig": {
         "version": "v2.4.4"
+    },
+    "vimeo/psalm": {
+        "version": "1.1.0"
     },
     "webmozart/assert": {
         "version": "1.2.0"

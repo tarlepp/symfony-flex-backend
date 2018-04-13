@@ -72,7 +72,8 @@
 		"symfony/phpunit-bridge": "4.0.8",
 		"symfony/requirements-checker": "1.0.3",
 		"symfony/web-server-bundle": "4.0.8",
-		"symplify/easy-coding-standard": "4.0.3"
+		"symplify/easy-coding-standard": "4.0.3",
+		"vimeo/psalm": "1.1.0"
 	},
 	"config": {
 		"preferred-install": {
