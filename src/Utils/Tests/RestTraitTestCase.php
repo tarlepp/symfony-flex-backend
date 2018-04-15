@@ -66,8 +66,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -94,8 +97,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -122,8 +128,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -150,8 +159,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -178,8 +190,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -206,8 +221,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -236,8 +254,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -266,8 +287,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -296,8 +320,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -324,8 +351,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -352,8 +382,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /** @noinspection PhpUndefinedNamespaceInspection */
@@ -380,8 +413,11 @@ abstract class RestTraitTestCase extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        if ($response !== null) {
+            static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        } else {
+            static::fail('Client did not return a proper response');
+        }
     }
 
     /**

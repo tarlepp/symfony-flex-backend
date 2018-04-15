@@ -88,7 +88,9 @@ abstract class WebTestCase extends BaseWebTestCase
 
         // Merge authorization headers
         $server = array_merge(
-            $username === null ? [] : $this->authService->getAuthorizationHeadersForUser($username, $password),
+            $username === null || $password === null
+                ? []
+                : $this->authService->getAuthorizationHeadersForUser($username, $password),
             array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
             $this->authService->getJwtHeaders(),
             $server
