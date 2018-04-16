@@ -43,7 +43,7 @@ class LogRequest implements EntityInterface
     use LogRequestProcessRequestTrait;
 
     /**
-     * @var \App\Entity\User|null
+     * @var User|null
      *
      * @Groups({
      *      "LogRequest.user",
