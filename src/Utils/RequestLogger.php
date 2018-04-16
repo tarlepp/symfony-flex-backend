@@ -12,10 +12,8 @@ use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Helpers\LoggerAwareTrait;
 use App\Resource\LogRequestResource;
-use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
 /**
@@ -45,7 +43,7 @@ class RequestLogger implements RequestLoggerInterface
     private $resource;
 
     /**
-     * @var UserInterface|null
+     * @var User|null
      */
     private $user;
 
@@ -100,11 +98,11 @@ class RequestLogger implements RequestLoggerInterface
     /**
      * Setter method for current user.
      *
-     * @param UserInterface|User|null $user
+     * @param User|null $user
      *
      * @return RequestLoggerInterface
      */
-    public function setUser(?UserInterface $user = null): RequestLoggerInterface
+    public function setUser(?User $user = null): RequestLoggerInterface
     {
         $this->user = $user;
 
@@ -159,7 +157,8 @@ class RequestLogger implements RequestLoggerInterface
     /**
      * Store request log and  clean history
      *
-     * @throws LogicException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function createRequestLogEntry(): void
     {

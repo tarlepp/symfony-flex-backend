@@ -8,10 +8,10 @@ declare(strict_types = 1);
 namespace App\Utils;
 
 use App\Entity\ApiKey;
+use App\Entity\User;
 use App\Resource\LogRequestResource;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Interface RequestLoggerInterface
@@ -49,11 +49,11 @@ interface RequestLoggerInterface
     /**
      * Setter method for current user.
      *
-     * @param UserInterface|null $user
+     * @param User|null $user
      *
      * @return RequestLoggerInterface
      */
-    public function setUser(?UserInterface $user = null): self;
+    public function setUser(?User $user = null): self;
 
     /**
      * Setter method for current api key
