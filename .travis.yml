@@ -47,14 +47,14 @@ jdk:
 before_install:
   - cp .env.travis .env
   - cp .env.travis .env.test
-  - mysql -e 'DROP DATABASE IF EXISTS travis_test_1; CREATE DATABASE IF NOT EXISTS travis_test_1;'
-  - mysql -e 'DROP DATABASE IF EXISTS travis_test_2; CREATE DATABASE IF NOT EXISTS travis_test_2;'
-  - mysql -e 'DROP DATABASE IF EXISTS travis_test_3; CREATE DATABASE IF NOT EXISTS travis_test_3;'
-  - mysql -e 'DROP DATABASE IF EXISTS travis_test_4; CREATE DATABASE IF NOT EXISTS travis_test_4;'
-  - mysql -e 'DROP DATABASE IF EXISTS travis_test_5; CREATE DATABASE IF NOT EXISTS travis_test_5;'
-  - mysql -e 'DROP DATABASE IF EXISTS travis_test_6; CREATE DATABASE IF NOT EXISTS travis_test_6;'
-  - mysql -e 'DROP DATABASE IF EXISTS travis_test_7; CREATE DATABASE IF NOT EXISTS travis_test_7;'
-  - mysql -e 'DROP DATABASE IF EXISTS travis_test_8; CREATE DATABASE IF NOT EXISTS travis_test_8;'
+  - mysql -e 'DROP DATABASE IF EXISTS travis_test_1; CREATE DATABASE travis_test_1;'
+  - mysql -e 'DROP DATABASE IF EXISTS travis_test_2; CREATE DATABASE travis_test_2;'
+  - mysql -e 'DROP DATABASE IF EXISTS travis_test_3; CREATE DATABASE travis_test_3;'
+  - mysql -e 'DROP DATABASE IF EXISTS travis_test_4; CREATE DATABASE travis_test_4;'
+  - mysql -e 'DROP DATABASE IF EXISTS travis_test_5; CREATE DATABASE travis_test_5;'
+  - mysql -e 'DROP DATABASE IF EXISTS travis_test_6; CREATE DATABASE travis_test_6;'
+  - mysql -e 'DROP DATABASE IF EXISTS travis_test_7; CREATE DATABASE travis_test_7;'
+  - mysql -e 'DROP DATABASE IF EXISTS travis_test_8; CREATE DATABASE travis_test_8;'
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
   - git clone -b stable https://github.com/jedisct1/libsodium.git
   - cd libsodium && sudo ./configure && sudo make check && sudo make install && cd ..
