@@ -9,6 +9,7 @@ namespace App\Security;
 
 use App\Entity\ApiKey;
 use App\Repository\ApiKeyRepository;
+use Exception;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -53,7 +54,11 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
      */
     public function getApiKeyForToken(string $token): ?ApiKey
     {
-        return $this->apiKeyRepository->findOneBy(['token' => $token]);
+        /** @noinspection OneTimeUseVariablesInspection */
+        /** @var ApiKey|null $output */
+        $output = $this->apiKeyRepository->findOneBy(['token' => $token]);
+
+        return $output;
     }
 
     /**
@@ -66,10 +71,12 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
      *
      * @return ApiKeyUserInterface
      *
-     * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
+     * @throws Exception
+     * @throws UsernameNotFoundException
      */
     public function loadUserByUsername($token): ApiKeyUserInterface
     {
+        /** @var ApiKey|null $apiKey */
         $apiKey = $this->apiKeyRepository->findOneBy(['token' => $token]);
 
         if ($apiKey === null) {
@@ -89,9 +96,12 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
      *
      * @param UserInterface $user
      *
-     * @throws \Symfony\Component\Security\Core\Exception\UnsupportedUserException
+     * @return UserInterface
+     *
+     * @throws Exception
+     * @throws UnsupportedUserException
      */
-    public function refreshUser(UserInterface $user): void
+    public function refreshUser(UserInterface $user): UserInterface
     {
         throw new UnsupportedUserException('API key cannot refresh user');
     }

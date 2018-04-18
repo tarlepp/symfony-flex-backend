@@ -9,7 +9,6 @@ namespace App\Security;
 
 use App\Entity\ApiKey;
 use App\Entity\UserGroup;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use function array_unique;
 
@@ -19,7 +18,7 @@ use function array_unique;
  * @package App\Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ApiKeyUser implements ApiKeyUserInterface, UserInterface
+class ApiKeyUser implements ApiKeyUserInterface
 {
     /**
      * @var string
@@ -100,9 +99,12 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
      * password will be salted, encoded, and then compared to this value.
      *
      * @codeCoverageIgnore
+     *
+     * @return string
      */
-    public function getPassword(): void
+    public function getPassword(): string
     {
+        return '';
     }
 
     /**

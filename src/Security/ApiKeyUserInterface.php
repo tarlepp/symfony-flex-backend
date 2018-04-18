@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Entity\ApiKey;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Interface ApiKeyUserInterface
@@ -15,7 +16,7 @@ use App\Entity\ApiKey;
  * @package App\Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-interface ApiKeyUserInterface
+interface ApiKeyUserInterface extends UserInterface
 {
     /**
      * ApiKeyUser constructor.
