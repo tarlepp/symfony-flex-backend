@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0b03a0cb1acd8d7c449e08e8e86c6d8",
+    "content-hash": "72f653f5fc9dc47cd8357135b98f4b63",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5439,16 +5439,16 @@
         },
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.15.5",
+            "version": "0.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "af0db2011b1914ab115e8e88c484fa887abec217"
+                "reference": "f591cffbe6d1bfc87dfc3c90e5f97c42fbc1f907"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/af0db2011b1914ab115e8e88c484fa887abec217",
-                "reference": "af0db2011b1914ab115e8e88c484fa887abec217",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/f591cffbe6d1bfc87dfc3c90e5f97c42fbc1f907",
+                "reference": "f591cffbe6d1bfc87dfc3c90e5f97c42fbc1f907",
                 "shasum": ""
             },
             "require": {
@@ -5487,7 +5487,7 @@
                 "result-printer",
                 "testing"
             ],
-            "time": "2018-04-17T01:25:22+00:00"
+            "time": "2018-04-17T18:14:34+00:00"
         },
         {
             "name": "composer/ca-bundle",
@@ -6432,16 +6432,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.26.3",
+            "version": "1.26.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "b63c0d809256a434ea74e6b41ca5f5f9d16220e6"
+                "reference": "e3d9014279133a3cccc01f6a691322a2d5a6a87b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/b63c0d809256a434ea74e6b41ca5f5f9d16220e6",
-                "reference": "b63c0d809256a434ea74e6b41ca5f5f9d16220e6",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/e3d9014279133a3cccc01f6a691322a2d5a6a87b",
+                "reference": "e3d9014279133a3cccc01f6a691322a2d5a6a87b",
                 "shasum": ""
             },
             "require": {
@@ -6476,7 +6476,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-04-16T14:54:26+00:00"
+            "time": "2018-04-17T15:35:42+00:00"
         },
         {
             "name": "nette/bootstrap",
@@ -8003,12 +8003,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "bf3a473c42c3640103645f9477fd425749341780"
+                "reference": "2b28787651b69de2b14ae222737deb05befbb33b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/bf3a473c42c3640103645f9477fd425749341780",
-                "reference": "bf3a473c42c3640103645f9477fd425749341780",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2b28787651b69de2b14ae222737deb05befbb33b",
+                "reference": "2b28787651b69de2b14ae222737deb05befbb33b",
                 "shasum": ""
             },
             "conflict": {
@@ -8025,8 +8025,8 @@
                 "codeigniter/framework": "<=3.0.6",
                 "composer/composer": "<=1.0.0-alpha11",
                 "contao-components/mediaelement": ">=2.14.2,<2.21.1",
-                "contao/core": ">=2,<3.5.32",
-                "contao/core-bundle": ">=4,<4.4.8",
+                "contao/core": ">=2,<3.5.35",
+                "contao/core-bundle": ">=4,<4.4.18|>=4.5,<4.5.8",
                 "contao/listing-bundle": ">=4,<4.4.8",
                 "contao/newsletter-bundle": ">=4,<4.1",
                 "doctrine/annotations": ">=1,<1.2.7",
@@ -8106,7 +8106,7 @@
                 "symfony/web-profiler-bundle": ">=2,<2.3.19|>=2.4,<2.4.9|>=2.5,<2.5.4",
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
+                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
                 "titon/framework": ">=0,<9.9.99",
                 "twig/twig": "<1.20",
                 "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.22|>=8,<8.7.5",
@@ -8158,7 +8158,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-04-14T07:19:11+00:00"
+            "time": "2018-04-18T09:24:34+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
