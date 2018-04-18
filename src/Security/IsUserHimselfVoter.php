@@ -41,7 +41,7 @@ class IsUserHimselfVoter extends Voter
      * @SuppressWarnings("unused")
      *
      * @param string         $attribute
-     * @param User           $subject
+     * @param User|mixed     $subject
      * @param TokenInterface $token
      *
      * @return bool
