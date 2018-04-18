@@ -97,3 +97,8 @@ phpcs: ## Runs PHP CodeSniffer
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
 	php ./vendor/bin/ecs --clear-cache check src
 ###< ecs ###
+
+###> psalm ###
+psalm: ## Runs Psalm static analysis tool
+	php ./vendor/bin/psalm --no-cache
+###< psalm ###

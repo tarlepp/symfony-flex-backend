@@ -176,11 +176,13 @@ with just running `make` command:
 ```bash
 cache-clear       # Clears the cache
 cache-warmup      # Warms up an empty cache
+ecs               # Runs The Easiest Way to Use Any Coding Standard
 generate-jwt-keys # Generates JWT auth keys
 merge-clover      # Creates clover from fastest run
 merge-junit       # Creates JUnit xml from fastest run
 phpcs             # Runs PHP CodeSniffer
 phpmetrics        # Generates PhpMetrics static analysis
+psalm             # Runs Psalm static analysis tool
 run-tests-fastest # Runs all test via fastest
 run-tests         # Runs all tests via phpunit
 serve             # Runs a local web server
