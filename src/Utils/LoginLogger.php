@@ -12,10 +12,11 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
 use DeviceDetector\DeviceDetector;
+use Exception;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
-use UnexpectedValueException;
 
 /**
  * Class LoginLogger
@@ -41,7 +42,7 @@ class LoginLogger implements LoginLoggerInterface
     private $requestStack;
 
     /**
-     * @var User
+     * @var User|null
      */
     private $user;
 
@@ -94,7 +95,10 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @param string $type
      *
-     * @throws UnexpectedValueException
+     * @throws Exception
+     * @throws RuntimeException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
     public function process(string $type): void
@@ -103,10 +107,11 @@ class LoginLogger implements LoginLoggerInterface
         $request = $this->requestStack->getCurrentRequest();
 
         if ($request === null) {
-            throw new UnexpectedValueException('Could not get request from current request stack');
+            throw new RuntimeException('Could not get request from current request stack');
         }
 
         // Specify user agent
+        /** @var string $agent */
         $agent = $request->headers->get('User-Agent');
 
         // Parse user agent data with device detector
@@ -123,6 +128,8 @@ class LoginLogger implements LoginLoggerInterface
      * @param string  $type
      * @param Request $request
      *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
     private function createEntry(string $type, Request $request): void
