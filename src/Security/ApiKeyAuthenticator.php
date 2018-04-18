@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Entity\ApiKey;
+use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
@@ -45,10 +46,12 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
     public function createToken(Request $request, $providerKey): ?PreAuthenticatedToken
     {
         // Look up 'Authorization' header from current request
-        $apiKey = $request->headers->get('Authorization');
+        /** @var string $apiKey */
+        $apiKey = $request->headers->get('Authorization', '');
 
         // Authorization header found and it contains 'ApiKey TOKEN' data, so we can make PreAuthenticatedToken
         if ($apiKey && preg_match('#^ApiKey (\w+)$#', $apiKey, $matches)) {
+            /** @var array $matches */
             $output = new PreAuthenticatedToken('anon', $matches[1], $providerKey);
         }
 
@@ -84,8 +87,9 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
      *
      * @return PreAuthenticatedToken
      *
+     * @throws Exception
      * @throws InvalidArgumentException
-     * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @throws AuthenticationException
      * @throws \Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
@@ -117,7 +121,8 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
      *
      * @return ApiKeyUserProvider
      *
-     * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @throws Exception
+     * @throws AuthenticationException
      */
     private function getProvider(ChainUserProvider $userProvider): ApiKeyUserProvider
     {
@@ -148,6 +153,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
      *
      * @return PreAuthenticatedToken
      *
+     * @throws Exception
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      * @throws \Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException
      */
