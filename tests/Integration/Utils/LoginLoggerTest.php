@@ -50,8 +50,11 @@ class LoginLoggerTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Could not get request from current request stack
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function testThatExceptionIsThrownIfRequestIsNotAvailable(): void
     {
