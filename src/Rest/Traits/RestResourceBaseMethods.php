@@ -10,13 +10,16 @@ namespace App\Rest\Traits;
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
+use App\Utils\JSON;
 use BadMethodCallException;
+use Exception;
 use InvalidArgumentException;
 use LogicException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use function count;
 use function get_class;
 
 /**
@@ -206,7 +209,8 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface
      *
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
+     * @throws Exception
+     * @throws ValidatorException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
@@ -242,10 +246,10 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface
      *
-     * @throws LogicException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws ValidatorException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
@@ -314,7 +318,7 @@ trait RestResourceBaseMethods
      * @param null|mixed[] $criteria
      * @param null|mixed[] $search
      *
-     * @return string[]
+     * @return string[]|array<mixed, mixed>
      *
      * @throws InvalidArgumentException
      */
@@ -343,10 +347,11 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface
      *
+     * @throws Exception
+     * @throws ValidatorException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
      */
     public function save(EntityInterface $entity, ?bool $skipValidation = null): EntityInterface
     {
@@ -373,10 +378,11 @@ trait RestResourceBaseMethods
      * @param EntityInterface  $entity
      * @param RestDtoInterface $dto
      *
+     * @throws Exception
+     * @throws ValidatorException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
      */
     protected function persistEntity(EntityInterface $entity, RestDtoInterface $dto): void
     {
@@ -413,16 +419,17 @@ trait RestResourceBaseMethods
      * @param RestDtoInterface $dto
      * @param bool             $skipValidation
      *
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
+     * @throws Exception
+     * @throws ValidatorException
      */
     private function validateDto(RestDtoInterface $dto, bool $skipValidation): void
     {
-        // Check possible errors of DTO
-        $errors = !$skipValidation ? $this->getValidator()->validate($dto) : [];
+        /** @var ConstraintViolationListInterface|null $errors */
+        $errors = !$skipValidation ? $this->getValidator()->validate($dto) : null;
 
         // Oh noes, we have some errors
-        if (count($errors) > 0) {
-            throw new ValidatorException((string)$errors);
+        if ($errors !== null) {
+            $this->createValidatorException($errors);
         }
     }
 
@@ -432,15 +439,17 @@ trait RestResourceBaseMethods
      * @param EntityInterface $entity
      * @param bool            $skipValidation
      *
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
+     * @throws Exception
+     * @throws ValidatorException
      */
     private function validateEntity(EntityInterface $entity, bool $skipValidation): void
     {
-        $errors = !$skipValidation ? $this->getValidator()->validate($entity) : [];
+        /** @var ConstraintViolationListInterface|null $errors */
+        $errors = !$skipValidation ? $this->getValidator()->validate($entity) : null;
 
         // Oh noes, we have some errors
-        if (count($errors) > 0) {
-            throw new ValidatorException((string)$errors);
+        if ($errors !== null) {
+            $this->createValidatorException($errors);
         }
     }
 
@@ -451,6 +460,33 @@ trait RestResourceBaseMethods
     {
         $entityClass = $this->getRepository()->getEntityName();
 
-        return new $entityClass();
+        /** @noinspection OneTimeUseVariablesInspection */
+        /** @var EntityInterface $output */
+        $output = new $entityClass();
+
+        return $output;
+    }
+
+    /**
+     * @param ConstraintViolationListInterface $errors
+     *
+     * @throws Exception
+     * @throws ValidatorException
+     */
+    private function createValidatorException(ConstraintViolationListInterface $errors): void
+    {
+        $output = [];
+
+        /** @var ConstraintViolationInterface $error */
+        foreach ($errors as $error) {
+            $output[] = [
+                'message' => $error->getMessage(),
+                'propertyPath' => $error->getPropertyPath(),
+                'code' => $error->getCode(),
+            ];
+        }
+
+        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
+        throw new ValidatorException(JSON::encode($output));
     }
 }
