@@ -11,9 +11,11 @@ use App\DTO\RestDtoInterface;
 use App\Rest\ControllerInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\RestResourceInterface;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnitOfWork;
+use Exception;
 use LogicException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -102,7 +104,7 @@ trait RestMethodHelper
      */
     public function getDtoClass(?string $method = null): string
     {
-        $dtoClass = array_key_exists($method, static::$dtoClasses)
+        $dtoClass = $method !== null && array_key_exists($method, static::$dtoClasses)
             ? static::$dtoClasses[$method]
             : $this->getResource()->getDtoClass();
 
@@ -226,8 +228,10 @@ trait RestMethodHelper
         // Create form, load possible entity data for form and handle request
         $form = $formFactory->createNamed('', $formType, null, ['method' => $request->getMethod()]);
 
-        if ($id !== null) {
-            $form->setData($this->getResource()->getDtoForEntity($id, $form->getConfig()->getDataClass()));
+        $dtoClass = $form->getConfig()->getDataClass();
+
+        if ($id !== null && $dtoClass !== null) {
+            $form->setData($this->getResource()->getDtoForEntity($id, $dtoClass));
         }
 
         $form->handleRequest($request);
@@ -259,6 +263,8 @@ trait RestMethodHelper
     private function detachEntityFromManager(string $id): void
     {
         $currentResource = $this->getResource();
+
+        /** @var EntityManager $entityManager */
         $entityManager = $currentResource->getRepository()->getEntityManager();
 
         // Fetch entity
@@ -282,6 +288,7 @@ trait RestMethodHelper
     {
         $code = $this->getExceptionCode($exception);
 
+        /** @var Exception $exception */
         $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
 
         if ($exception instanceof HttpException) {
