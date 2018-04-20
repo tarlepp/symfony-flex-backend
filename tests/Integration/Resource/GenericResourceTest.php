@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -403,10 +404,18 @@ class GenericResourceTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|ValidatorInterface $validator */
         $validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
 
+        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository|ConstraintViolationListInterface $repository */
+        $constraintViolationList = $this->getMockBuilder(ConstraintViolationListInterface::class)->getMock();
+
+        $constraintViolationList
+            ->expects(static::exactly(2))
+            ->method('count')
+            ->willReturn(0);
+
         $validator
             ->expects(static::exactly(2))
             ->method('validate')
-            ->willReturn([]);
+            ->willReturn($constraintViolationList);
 
         /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
         $dto = $this->getDtoMockBuilder()->getMock();

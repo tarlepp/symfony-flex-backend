@@ -428,7 +428,7 @@ trait RestResourceBaseMethods
         $errors = !$skipValidation ? $this->getValidator()->validate($dto) : null;
 
         // Oh noes, we have some errors
-        if ($errors !== null) {
+        if ($errors !== null && $errors->count() > 0) {
             $this->createValidatorException($errors);
         }
     }
@@ -448,7 +448,7 @@ trait RestResourceBaseMethods
         $errors = !$skipValidation ? $this->getValidator()->validate($entity) : null;
 
         // Oh noes, we have some errors
-        if ($errors !== null) {
+        if ($errors !== null && $errors->count() > 0) {
             $this->createValidatorException($errors);
         }
     }
