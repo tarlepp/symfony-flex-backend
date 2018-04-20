@@ -228,11 +228,7 @@ trait RestMethodHelper
         // Create form, load possible entity data for form and handle request
         $form = $formFactory->createNamed('', $formType, null, ['method' => $request->getMethod()]);
 
-        $dtoClass = $form->getConfig()->getDataClass();
-
-        if ($id !== null && $dtoClass !== null) {
-            $form->setData($this->getResource()->getDtoForEntity($id, $dtoClass));
-        }
+        $this->setDtoToForm($form, $id);
 
         $form->handleRequest($request);
 
@@ -275,6 +271,7 @@ trait RestMethodHelper
             /** @scrutinizer ignore-call */
             && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED
         ) {
+            /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $entityManager->detach($entity);
         }
     }
@@ -304,5 +301,22 @@ trait RestMethodHelper
         }
 
         return $output;
+    }
+
+    /**
+     * @param FormInterface $form
+     * @param null|string   $id
+     *
+     * @throws \Symfony\Component\Form\Exception\LogicException
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
+     */
+    private function setDtoToForm(FormInterface $form, ?string $id): void
+    {
+        $dtoClass = $form->getConfig()->getDataClass();
+
+        if ($id !== null && $dtoClass !== null) {
+            $form->setData($this->getResource()->getDtoForEntity($id, $dtoClass));
+        }
     }
 }
