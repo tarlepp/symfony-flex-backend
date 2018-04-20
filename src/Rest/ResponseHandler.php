@@ -114,7 +114,7 @@ final class ResponseHandler implements ResponseHandlerInterface
         $entityName = $this->getResource()->getEntityName();
 
         $bits = explode('\\', $entityName);
-        $entityName = end($bits);
+        $entityName = (string)end($bits);
 
         $populate = $this->checkPopulateAll($populateAll, $populate, $entityName);
 
@@ -198,7 +198,7 @@ final class ResponseHandler implements ResponseHandlerInterface
      * @param string[] $populate
      * @param string   $entityName
      *
-     * @return string[]
+     * @return string[]|array<mixed, mixed>
      */
     private function checkPopulateAll(bool $populateAll, array $populate, string $entityName): array
     {
@@ -244,10 +244,10 @@ final class ResponseHandler implements ResponseHandlerInterface
             $response = new Response();
             $response->setContent($this->serializer->serialize($data, $format, $context));
             $response->setStatusCode($httpStatus);
-        } catch (Throwable $error) {
+        } catch (Throwable $exception) {
             $status = Response::HTTP_BAD_REQUEST;
 
-            throw new HttpException($status, $error->getMessage(), $error, [], $status);
+            throw new HttpException($status, $exception->getMessage(), $exception, [], $status);
         }
 
         return $response;
