@@ -13,6 +13,7 @@ use App\Rest\ResponseHandlerInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\CreateMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\CreateMethodTestClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -108,6 +109,9 @@ class CreateMethodTest extends KernelTestCase
         $testClass->createMethod($request, $formFactoryMock);
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testThatTraitCallsServiceMethods(): void
     {
         self::bootKernel();
@@ -123,6 +127,7 @@ class CreateMethodTest extends KernelTestCase
          */
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
         $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
+        $formConfigInterfaceMock = $this->getMockBuilder(FormConfigInterface::class)->getMock();
         $dtoInterface = $this->createMock(RestDtoInterface::class);
         $request = $this->createMock(Request::class);
 
@@ -151,6 +156,16 @@ class CreateMethodTest extends KernelTestCase
             ->expects(static::once())
             ->method('getData')
             ->willReturn($dtoInterface);
+
+        $formConfigInterfaceMock
+            ->expects(static::once())
+            ->method('getDataClass')
+            ->willReturn(null);
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('getConfig')
+            ->willReturn($formConfigInterfaceMock);
 
         $formFactoryMock
             ->expects(static::once())
@@ -182,6 +197,7 @@ class CreateMethodTest extends KernelTestCase
          */
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
         $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
+        $formConfigInterfaceMock = $this->getMockBuilder(FormConfigInterface::class)->getMock();
         $request = $this->createMock(Request::class);
 
         $request
@@ -194,10 +210,20 @@ class CreateMethodTest extends KernelTestCase
             ->method('handleRequest')
             ->with($request);
 
+        $formConfigInterfaceMock
+            ->expects(static::once())
+            ->method('getDataClass')
+            ->willReturn(null);
+
         $formInterfaceMock
             ->expects(static::once())
             ->method('isValid')
             ->willReturn(false);
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('getConfig')
+            ->willReturn($formConfigInterfaceMock);
 
         $formFactoryMock
             ->expects(static::once())
