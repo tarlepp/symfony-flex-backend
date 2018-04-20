@@ -87,6 +87,9 @@ class UserResource extends RestResource
             return in_array($userGroup->getRole()->getId(), $user->getRoles(), true);
         };
 
-        return array_values(array_filter($this->find(), $filter));
+        /** @var Entity[] $users */
+        $users = $this->find();
+
+        return array_values(array_filter($users, $filter));
     }
 }
