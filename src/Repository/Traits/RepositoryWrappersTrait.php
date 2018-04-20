@@ -47,7 +47,7 @@ trait RepositoryWrappersTrait
     /**
      * Gets all association mappings of the class.
      *
-     * @return string[]
+     * @return string[]|array<int, string>
      */
     public function getAssociations(): array
     {
