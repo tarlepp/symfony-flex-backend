@@ -45,7 +45,10 @@ trait UserGroupChoices
             $choices[$name] = $userGroup->getId();
         };
 
-        array_map($iterator, $this->userGroupResource->find());
+        /** @var UserGroup[] $userGroups */
+        $userGroups = $this->userGroupResource->find();
+
+        array_map($iterator, $userGroups);
 
         return $choices;
     }
