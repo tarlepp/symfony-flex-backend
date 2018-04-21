@@ -12,6 +12,7 @@ use App\Resource\UserGroupResource;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use function array_map;
+use function array_values;
 use function is_array;
 use function is_string;
 
@@ -41,7 +42,7 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * Transforms an object (Role) to a string (Role id).
      *
-     * @param string[]|UserGroup[]|null $userGroups
+     * @param string[]|UserGroup[]|null|mixed $userGroups
      *
      * @return string[]
      */
@@ -59,7 +60,7 @@ class UserGroupTransformer implements DataTransformerInterface
                 return is_string($userGroup) ? $userGroup : $userGroup->getId();
             };
 
-            $output = array_map($iterator, $userGroups);
+            $output = array_values(array_map('\strval', array_map($iterator, $userGroups)));
         }
 
         return $output;
@@ -70,7 +71,7 @@ class UserGroupTransformer implements DataTransformerInterface
      *
      * @param string[]|mixed $userGroups
      *
-     * @return UserGroup[]|null
+     * @return UserGroup[]|null|array<int, mixed>
      *
      * @throws TransformationFailedException if object (issue) is not found.
      */
@@ -93,7 +94,7 @@ class UserGroupTransformer implements DataTransformerInterface
                 return $group;
             };
 
-            $output = array_map($iterator, $userGroups);
+            $output = array_values(array_map($iterator, $userGroups));
         }
 
         return $output;
