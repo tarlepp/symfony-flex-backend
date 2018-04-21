@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use function array_map;
-use function current;
 
 /**
  * Trait RepositoryMethodsTrait
@@ -77,14 +76,16 @@ trait RepositoryMethodsTrait
      * @param int|null     $limit
      * @param int|null     $offset
      *
-     * @return EntityInterface[]
+     * @return EntityInterface[]|array<int, mixed>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
-        return $this
-            ->getEntityManager()
-            ->getRepository($this->getEntityName())
-            ->findBy($criteria, $orderBy, $limit, $offset);
+        return array_values(
+            $this
+                ->getEntityManager()
+                ->getRepository($this->getEntityName())
+                ->findBy($criteria, $orderBy, $limit, $offset)
+        );
     }
 
     /**
@@ -121,13 +122,15 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @return EntityInterface[]
+     * @return EntityInterface[]|array<int, mixed>
      */
     public function findAll(): array
     {
-        return $this->getEntityManager()
-            ->getRepository($this->getEntityName())
-            ->findAll();
+        return array_values(
+            $this->getEntityManager()
+                ->getRepository($this->getEntityName())
+                ->findAll()
+        );
     }
 
     /**
@@ -155,7 +158,7 @@ trait RepositoryMethodsTrait
 
         RepositoryHelper::resetParameterCount();
 
-        return array_map('current', $queryBuilder->getQuery()->getArrayResult());
+        return array_values(array_map('\strval', array_map('\current', $queryBuilder->getQuery()->getArrayResult())));
     }
 
     /**
