@@ -136,7 +136,10 @@ class UserGroupType extends AbstractType
             $choices[$name] = $role->getId();
         };
 
-        array_map($iterator, $this->roleResource->find());
+        /** @var RoleEntity[] $roles */
+        $roles = $this->roleResource->find();
+
+        array_map($iterator, $roles);
 
         return $choices;
     }
