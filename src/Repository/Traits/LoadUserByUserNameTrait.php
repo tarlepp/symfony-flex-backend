@@ -30,6 +30,8 @@ trait LoadUserByUserNameTrait
      * @link http://symfony2-document.readthedocs.org/en/latest/cookbook/security/entity_provider.html
      *       #managing-roles-in-the-database
      *
+     * @psalm-suppress ImplementedReturnTypeMismatch
+     *
      * @param string $username The username
      *
      * @return null|Entity
