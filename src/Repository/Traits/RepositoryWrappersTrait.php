@@ -65,6 +65,9 @@ trait RepositoryWrappersTrait
     /**
      * Getter method for EntityManager for current entity.
      *
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress InvalidNullableReturnType
+     *
      * @return EntityManager
      */
     public function getEntityManager(): EntityManager
