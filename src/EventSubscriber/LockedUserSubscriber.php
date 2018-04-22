@@ -147,12 +147,12 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param User|UserInterface                                                         $user
+     * @param User                                                                       $user
      * @param Event|JWTAuthenticatedEvent|AuthenticationFailureEvent|AuthenticationEvent $event
      *
      * @throws \Doctrine\ORM\ORMException
      */
-    private function checkLockedAccount(UserInterface $user, Event $event): void
+    private function checkLockedAccount(User $user, Event $event): void
     {
         switch (true) {
             case $event instanceof JWTAuthenticatedEvent:
