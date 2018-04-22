@@ -47,7 +47,7 @@ class ApiKey extends RestDto
     protected $token;
 
     /**
-     * @var string[]
+     * @var string[]|UserGroupEntity[]
      */
     protected $userGroups = [];
 
@@ -118,7 +118,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * @return string[]
+     * @return string[]|UserGroupEntity[]
      */
     public function getUserGroups(): array
     {

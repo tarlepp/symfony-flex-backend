@@ -84,6 +84,8 @@ class UserGroup extends RestDto
     /**
      * Method to load DTO data from specified entity.
      *
+     * @psalm-suppress PossiblyUndefinedMethod
+     *
      * @param EntityInterface|UserGroupEntity $entity
      *
      * @return RestDtoInterface|UserGroup

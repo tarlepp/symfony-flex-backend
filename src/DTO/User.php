@@ -248,6 +248,8 @@ class User extends RestDto implements UserInterface
     /**
      * Method to load DTO data from specified entity.
      *
+     * @psalm-suppress PossiblyUndefinedMethod
+     *
      * @param EntityInterface|UserEntity $entity
      *
      * @return RestDtoInterface|User
