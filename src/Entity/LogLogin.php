@@ -433,6 +433,8 @@ class LogLogin implements EntityInterface
 
     /**
      * @param DeviceDetector $deviceDetector
+     *
+     * @psalm-suppress InvalidCast
      */
     private function processClientData(DeviceDetector $deviceDetector): void
     {

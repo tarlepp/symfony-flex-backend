@@ -180,8 +180,11 @@ trait LogEntityTrait
      */
     protected function processRequestData(Request $request): void
     {
+        /** @var string $agent */
+        $agent = $request->headers->get('User-Agent') ?? '';
+
         $this->clientIp = (string)$request->getClientIp();
         $this->httpHost = $request->getHttpHost();
-        $this->agent = (string)$request->headers->get('User-Agent');
+        $this->agent = $agent;
     }
 }

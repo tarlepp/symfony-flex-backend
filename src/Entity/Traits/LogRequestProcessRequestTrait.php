@@ -412,8 +412,11 @@ trait LogRequestProcessRequestTrait
         $this->processRequestBaseInfo($request);
         $this->processHeadersAndParameters($request);
 
+        /** @var string $content */
+        $content = $request->getContent();
+
         $this->action = $this->determineAction($request);
-        $this->content = $this->cleanContent((string)$request->getContent());
+        $this->content = $this->cleanContent($content);
     }
 
     /**
@@ -455,7 +458,7 @@ trait LogRequestProcessRequestTrait
         $this->queryString = $request->getRequestUri();
         $this->uri = $request->getUri();
         $this->controller = $request->get('_controller', '');
-        $this->contentType = (string)$request->getMimeType($request->getContentType());
+        $this->contentType = (string)$request->getMimeType($request->getContentType() ?? '');
         $this->contentTypeShort = (string)$request->getContentType();
         $this->xmlHttpRequest = $request->isXmlHttpRequest();
     }
@@ -484,7 +487,8 @@ trait LogRequestProcessRequestTrait
      */
     private function determineParameters(Request $request): array
     {
-        $rawContent = (string)$request->getContent();
+        /** @var string $rawContent */
+        $rawContent = $request->getContent();
 
         // By default just get whole parameter bag
         $output = $request->request->all();

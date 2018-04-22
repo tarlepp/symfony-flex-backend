@@ -17,6 +17,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use function array_map;
 use function array_merge;
 use function array_unique;
 use function mb_strlen;
@@ -98,7 +99,7 @@ class ApiKey implements EntityInterface
     private $description = '';
 
     /**
-     * @var Collection<UserGroup>|ArrayCollection<UserGroup>
+     * @var Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
      *
      * @Groups({
      *      "ApiKey.userGroups",
@@ -115,7 +116,7 @@ class ApiKey implements EntityInterface
     private $userGroups;
 
     /**
-     * @var Collection<LogRequest>
+     * @var Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>
      *
      * @Groups({
      *      "ApiKey.logsRequest",
@@ -205,7 +206,7 @@ class ApiKey implements EntityInterface
     }
 
     /**
-     * @return Collection<App\Entity\UserGroup>|ArrayCollection<App\Entity\UserGroup>
+     * @return Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
      */
     public function getUserGroups(): Collection
     {
@@ -215,7 +216,7 @@ class ApiKey implements EntityInterface
     /**
      * Getter for user request log collection.
      *
-     * @return Collection<App\Entity\LogRequest>|ArrayCollection<App\Entity\LogRequest>
+     * @return Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>
      */
     public function getLogsRequest(): Collection
     {
@@ -240,11 +241,19 @@ class ApiKey implements EntityInterface
          *
          * @return string
          */
-        $iterator = function (UserGroup $userGroup) {
+        $iterator = function (UserGroup $userGroup): string {
             return $userGroup->getRole()->getId();
         };
 
-        return array_unique(array_merge([RolesService::ROLE_API], $this->userGroups->map($iterator)->toArray()));
+        return array_map(
+            '\strval',
+            array_unique(
+                array_merge(
+                    [RolesService::ROLE_API],
+                    $this->userGroups->map($iterator)->toArray()
+                )
+            )
+        );
     }
 
     /**
