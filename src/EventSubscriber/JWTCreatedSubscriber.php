@@ -16,7 +16,6 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\User\UserInterface;
 use function array_merge;
 use function hash;
 use function implode;
@@ -99,8 +98,12 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
         // Add some extra security data to payload
         $this->setSecurityData($payload);
 
+        $user = $event->getUser();
+
         // Add necessary user data to payload
-        $this->setUserData($payload, $event->getUser());
+        if ($user instanceof User) {
+            $this->setUserData($payload, $user);
+        }
 
         // And set new payload for JWT
         $event->setData($payload);
@@ -148,8 +151,8 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     /**
      * Method to add all necessary user information to JWT payload.
      *
-     * @param mixed[]            $payload
-     * @param User|UserInterface $user
+     * @param mixed[] $payload
+     * @param User    $user
      */
     private function setUserData(array &$payload, User $user): void
     {
