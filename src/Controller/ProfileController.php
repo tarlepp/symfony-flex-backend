@@ -85,6 +85,8 @@ class ProfileController
      *
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
+     *
+     * @psalm-suppress PossiblyNullReference
      */
     public function profileAction(
         TokenStorageInterface $tokenStorage,
@@ -146,9 +148,12 @@ class ProfileController
      * @return JsonResponse
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+     *
+     * @psalm-suppress PossiblyNullReference
      */
     public function rolesAction(TokenStorageInterface $tokenStorage, RolesService $rolesService): JsonResponse
     {
+        /** @var User|ApiKeyUser $user */
         /** @noinspection NullPointerExceptionInspection */
         $user = $tokenStorage->getToken()->getUser();
 
@@ -304,6 +309,8 @@ class ProfileController
      * @param TokenStorageInterface $tokenStorage
      *
      * @return Collection|null
+     *
+     * @psalm-suppress PossiblyNullReference
      */
     private function getUserGroups(TokenStorageInterface $tokenStorage): ?Collection
     {
