@@ -98,7 +98,7 @@ class UserGroup implements EntityInterface
     private $name = '';
 
     /**
-     * @var Collection<App\Entity\User>|ArrayCollection<App\Entity\User>
+     * @var Collection|ArrayCollection|Collection<User>|ArrayCollection<User>
      *
      * @Groups({
      *      "UserGroup.users",
@@ -115,7 +115,7 @@ class UserGroup implements EntityInterface
     private $users;
 
     /**
-     * @var Collection<App\Entity\ApiKey>|ArrayCollection<App\Entity\ApiKey>
+     * @var Collection|ArrayCollection|Collection<ApiKey>|ArrayCollection<ApiKey>
      *
      * @Groups({
      *      "UserGroup.apiKeys",
@@ -191,7 +191,7 @@ class UserGroup implements EntityInterface
     }
 
     /**
-     * @return Collection<User>|ArrayCollection<User>
+     * @return Collection|ArrayCollection|Collection<User>|ArrayCollection<User>
      */
     public function getUsers(): Collection
     {
@@ -199,7 +199,7 @@ class UserGroup implements EntityInterface
     }
 
     /**
-     * @return Collection<ApiKey>|ArrayCollection<ApiKey>
+     * @return Collection|ArrayCollection|Collection<ApiKey>|ArrayCollection<ApiKey>
      */
     public function getApiKeys(): Collection
     {
