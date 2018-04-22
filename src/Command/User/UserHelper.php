@@ -61,7 +61,7 @@ class UserHelper
         $userFound = false;
 
         while ($userFound !== true) {
-            /** @var UserEntity $userEntity */
+            /** @var UserEntity|null $userEntity */
             $userEntity = $this->getUserEntity($io, $question);
 
             if ($userEntity === null) {

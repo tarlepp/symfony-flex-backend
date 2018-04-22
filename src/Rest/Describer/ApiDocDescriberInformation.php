@@ -24,7 +24,7 @@ use function is_array;
 class ApiDocDescriberInformation implements DescriberInterface
 {
     /**
-     * @var string;
+     * @var string
      */
     private $rootDir;
 

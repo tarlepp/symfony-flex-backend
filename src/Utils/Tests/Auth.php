@@ -142,7 +142,7 @@ class Auth
                 JSON::encode(compact('username', 'password'))
             );
 
-            /** @var Response $response */
+            /** @var Response|null $response */
             $response = $client->getResponse();
 
             if ($response === null) {

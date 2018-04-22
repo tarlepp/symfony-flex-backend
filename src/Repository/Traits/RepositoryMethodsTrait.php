@@ -213,7 +213,7 @@ trait RepositoryMethodsTrait
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface|$this
+     * @return BaseRepositoryInterface|static
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
@@ -234,7 +234,7 @@ trait RepositoryMethodsTrait
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface|$this
+     * @return BaseRepositoryInterface|static
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
