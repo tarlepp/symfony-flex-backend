@@ -27,7 +27,7 @@ use function array_unique;
 trait UserRelations
 {
     /**
-     * @var Collection<UserGroup>
+     * @var Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
      *
      * @Groups({
      *      "User.userGroups",
@@ -44,7 +44,7 @@ trait UserRelations
     protected $userGroups;
 
     /**
-     * @var Collection<LogRequest>
+     * @var Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>
      *
      * @Groups({
      *      "User.logsRequest",
@@ -58,7 +58,7 @@ trait UserRelations
     protected $logsRequest;
 
     /**
-     * @var Collection<LogLogin>
+     * @var Collection|ArrayCollection|Collection<LogLogin>|ArrayCollection<LogLogin>
      *
      * @Groups({
      *      "User.logsLogin",
@@ -72,7 +72,7 @@ trait UserRelations
     protected $logsLogin;
 
     /**
-     * @var Collection<LogLoginFailure>
+     * @var Collection|ArrayCollection|Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>
      *
      * @Groups({
      *      "User.logsLoginFailure",
@@ -133,7 +133,7 @@ trait UserRelations
             $output = $this->rolesService->getInheritedRoles($output);
         }
 
-        return array_unique($output);
+        return array_map('\strval', array_unique($output));
     }
 
     /**
