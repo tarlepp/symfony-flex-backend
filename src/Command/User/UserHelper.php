@@ -61,6 +61,7 @@ class UserHelper
         $userFound = false;
 
         while ($userFound !== true) {
+            /** @var UserEntity $userEntity */
             $userEntity = $this->getUserEntity($io, $question);
 
             if ($userEntity === null) {
@@ -87,6 +88,7 @@ class UserHelper
         $userGroupFound = false;
 
         while ($userGroupFound !== true) {
+            /** @var UserGroupEntity|null $userGroupEntity */
             $userGroupEntity = $this->getUserGroupEntity($io, $question);
 
             if ($userGroupEntity === null) {
@@ -105,7 +107,7 @@ class UserHelper
      * @param SymfonyStyle $io
      * @param string       $question
      *
-     * @return UserEntity|EntityInterface|null
+     * @return UserEntity|null
      */
     private function getUserEntity(SymfonyStyle $io, string $question): ?UserEntity
     {
@@ -126,7 +128,7 @@ class UserHelper
      * @param SymfonyStyle $io
      * @param string       $question
      *
-     * @return UserGroupEntity|EntityInterface|null
+     * @return UserGroupEntity|null
      */
     private function getUserGroupEntity(SymfonyStyle $io, string $question): ?UserGroupEntity
     {

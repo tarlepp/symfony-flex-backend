@@ -10,6 +10,7 @@ namespace App\Command\ApiKey;
 use App\Command\HelperConfigure;
 use App\Command\Traits\ApiKeyUserManagementHelperTrait;
 use App\DTO\ApiKey;
+use App\Entity\ApiKey as ApiKeyEntity;
 use App\Form\Type\Console\ApiKeyType;
 use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
@@ -148,6 +149,7 @@ class CreateApiKeyCommand extends Command
         $dto = $this->getHelper('form')->interactUsingForm(ApiKeyType::class, $input, $output);
 
         // Create new API key
+        /** @var ApiKeyEntity $apiKey */
         $apiKey = $this->apiKeyResource->create($dto);
 
         if ($input->isInteractive()) {

@@ -85,8 +85,6 @@ class ProfileController
      *
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     *
-     * @psalm-suppress PossiblyNullReference
      */
     public function profileAction(
         TokenStorageInterface $tokenStorage,
@@ -95,6 +93,7 @@ class ProfileController
     ): JsonResponse {
         /** @var User|ApiKeyUser $user */
         /** @noinspection NullPointerExceptionInspection */
+        /** @psalm-suppress PossiblyNullReference */
         $user = $tokenStorage->getToken()->getUser();
 
         // Get serializer groups for current user instance
@@ -148,13 +147,12 @@ class ProfileController
      * @return JsonResponse
      *
      * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
-     *
-     * @psalm-suppress PossiblyNullReference
      */
     public function rolesAction(TokenStorageInterface $tokenStorage, RolesService $rolesService): JsonResponse
     {
         /** @var User|ApiKeyUser $user */
         /** @noinspection NullPointerExceptionInspection */
+        /** @psalm-suppress PossiblyNullReference */
         $user = $tokenStorage->getToken()->getUser();
 
         return new JsonResponse($rolesService->getInheritedRoles($user->getRoles()));
@@ -309,13 +307,12 @@ class ProfileController
      * @param TokenStorageInterface $tokenStorage
      *
      * @return Collection|null
-     *
-     * @psalm-suppress PossiblyNullReference
      */
     private function getUserGroups(TokenStorageInterface $tokenStorage): ?Collection
     {
         /** @var User|ApiKeyUser $user */
         /** @noinspection NullPointerExceptionInspection */
+        /** @psalm-suppress PossiblyNullReference */
         $user = $tokenStorage->getToken()->getUser();
 
         $data = null;

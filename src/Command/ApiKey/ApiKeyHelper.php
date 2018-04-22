@@ -110,7 +110,7 @@ class ApiKeyHelper
      * @param SymfonyStyle $io
      * @param string       $question
      *
-     * @return ApiKeyEntity|EntityInterface|null
+     * @return ApiKeyEntity|null
      */
     private function getApiKeyEntity(SymfonyStyle $io, string $question): ?ApiKeyEntity
     {

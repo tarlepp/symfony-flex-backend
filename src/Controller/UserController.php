@@ -109,13 +109,12 @@ class UserController extends Controller
      * @throws \LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     *
-     * @psalm-suppress PossiblyNullReference
      */
     public function deleteAction(Request $request, User $requestUser, TokenStorageInterface $tokenStorage): Response
     {
         /** @var User $currentUser */
         /** @noinspection NullPointerExceptionInspection */
+        /** @psalm-suppress PossiblyNullReference */
         $currentUser = $tokenStorage->getToken()->getUser();
 
         if ($currentUser === $requestUser) {
