@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use function array_unique;
@@ -138,7 +139,7 @@ trait UserRelations
     /**
      * Getter for user groups collection.
      *
-     * @return Collection<UserGroup>|ArrayCollection<UserGroup>
+     * @return Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
      */
     public function getUserGroups(): Collection
     {
@@ -148,7 +149,7 @@ trait UserRelations
     /**
      * Getter for user request log collection.
      *
-     * @return Collection<LogRequest>|ArrayCollection<LogRequest>
+     * @return Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>
      */
     public function getLogsRequest(): Collection
     {
@@ -158,7 +159,7 @@ trait UserRelations
     /**
      * Getter for user login log collection.
      *
-     * @return Collection<LogLogin>|ArrayCollection<LogLogin>
+     * @return Collection|ArrayCollection|Collection<LogLogin>|ArrayCollection<LogLogin>
      */
     public function getLogsLogin(): Collection
     {
@@ -168,7 +169,7 @@ trait UserRelations
     /**
      * Getter for user login failure log collection.
      *
-     * @return Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>
+     * @return Collection|ArrayCollection|Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>
      */
     public function getLogsLoginFailure(): Collection
     {
