@@ -61,7 +61,7 @@ final class RequestHandler
         try {
             $where = array_filter(
                 JSON::decode($request->get('where', '{}'), true),
-                function ($value) {
+                function ($value): bool {
                     return $value !== null;
                 }
             );

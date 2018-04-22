@@ -9,6 +9,7 @@ namespace App\Rest;
 
 use Closure;
 use Doctrine\ORM\Query\Expr\Composite;
+use Doctrine\ORM\Query\Expr\Literal;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 use stdClass;
@@ -358,7 +359,7 @@ class RepositoryHelper
             $parameters[] = '?' . self::$parameterCount;
             $queryBuilder->setParameter(self::$parameterCount, $value[1]);
         } else { // Otherwise this must be IN or NOT IN expression
-            $parameters[] = array_map(function ($value) use ($queryBuilder) {
+            $parameters[] = array_map(function ($value) use ($queryBuilder): Literal {
                 return $queryBuilder->expr()->literal($value);
             }, $value);
         }
