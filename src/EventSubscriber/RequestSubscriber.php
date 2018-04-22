@@ -7,9 +7,10 @@ declare(strict_types = 1);
  */
 namespace App\EventSubscriber;
 
-use App\Entity\UserInterface as ApplicationUser;
+use App\Entity\User as ApplicationUser;
 use App\Security\ApiKeyUser;
 use App\Utils\RequestLogger;
+use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -83,7 +84,7 @@ class RequestSubscriber implements EventSubscriberInterface
      *
      * @param FilterResponseEvent $event
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function onKernelResponse(FilterResponseEvent $event): void
     {
@@ -106,7 +107,7 @@ class RequestSubscriber implements EventSubscriberInterface
      *
      * @param FilterResponseEvent $event
      *
-     * @throws \Exception
+     * @throws Exception
      */
     private function process(FilterResponseEvent $event): void
     {
@@ -119,7 +120,7 @@ class RequestSubscriber implements EventSubscriberInterface
         $user = $this->getUser();
 
         if ($user instanceof ApplicationUser) {
-            $this->logger->setUser(/** @scrutinizer ignore-type */$user);
+            $this->logger->setUser($user);
         } elseif ($user instanceof ApiKeyUser) {
             $this->logger->setApiKey($user->getApiKey());
         }
@@ -131,7 +132,7 @@ class RequestSubscriber implements EventSubscriberInterface
     /**
      * Method to get current user from token storage.
      *
-     * @return null|UserInterface|ApplicationUser|ApiKeyUser
+     * @return null|string|mixed|UserInterface|ApplicationUser|ApiKeyUser
      */
     private function getUser()
     {
