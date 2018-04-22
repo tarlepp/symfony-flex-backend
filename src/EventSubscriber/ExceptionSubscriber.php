@@ -57,7 +57,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function __construct(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->environment = getenv('APP_ENV');
+        $this->environment = (string)getenv('APP_ENV');
     }
 
     /**
