@@ -49,7 +49,9 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
      */
     public function setContainer(?ContainerInterface $container = null): void
     {
-        $this->container = $container;
+        if ($container !== null) {
+            $this->container = $container;
+        }
     }
 
     /**

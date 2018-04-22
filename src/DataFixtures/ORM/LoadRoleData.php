@@ -47,7 +47,9 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
      */
     public function setContainer(?ContainerInterface $container = null): void
     {
-        $this->container = $container;
+        if ($container !== null) {
+            $this->container = $container;
+        }
     }
 
     /**
