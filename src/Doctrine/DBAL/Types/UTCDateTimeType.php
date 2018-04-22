@@ -26,7 +26,7 @@ class UTCDateTimeType extends DateTimeType
     /**
      * UTC date time zone object.
      *
-     * @var DateTimeZone|null
+     * @var DateTimeZone
      */
     private static $utc;
 
