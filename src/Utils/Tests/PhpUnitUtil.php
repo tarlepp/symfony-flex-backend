@@ -222,7 +222,7 @@ class PhpUnitUtil
 
         $class = stdClass::class;
 
-        if (substr_count($type, '\\') > 1) {
+        if (substr_count($type, '\\') > 1 && strpos($type, '|') === false) {
             $class = count($meta) ? $meta['targetEntity'] : $type;
 
             $type = self::TYPE_CUSTOM_CLASS;
