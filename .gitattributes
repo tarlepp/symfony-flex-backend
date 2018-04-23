@@ -1,1 +1,4 @@
 *.php text eol=lf
+
+composer.lock binary -text diff
+symfony.lock binary -text diff
