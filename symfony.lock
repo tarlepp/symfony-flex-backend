@@ -182,20 +182,8 @@
     "nesbot/carbon": {
         "version": "1.25.0"
     },
-    "nette/bootstrap": {
-        "version": "v2.4.5"
-    },
-    "nette/di": {
-        "version": "v2.4.10"
-    },
     "nette/finder": {
         "version": "v2.4.1"
-    },
-    "nette/neon": {
-        "version": "v2.4.2"
-    },
-    "nette/php-generator": {
-        "version": "v3.0.1"
     },
     "nette/robot-loader": {
         "version": "v3.0.2"
