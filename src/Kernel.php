@@ -59,9 +59,10 @@ class Kernel extends BaseKernel implements CompilerPassInterface
      */
     public function registerBundles(): iterable
     {
+        /** @var array $contents */
         /** @noinspection UsingInclusionReturnValueInspection */
         /** @noinspection PhpIncludeInspection */
-        /** @var array $contents */
+        /** @psalm-suppress UnresolvableInclude */
         $contents = require $this->getProjectDir() . '/config/bundles.php';
 
         foreach ($contents as $class => $environments) {
