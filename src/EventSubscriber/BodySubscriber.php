@@ -101,6 +101,7 @@ class BodySubscriber implements EventSubscriberInterface
         /** @var string $content */
         $content = $request->getContent();
 
+        /** @var array $data */
         $data = JSON::decode($content, true);
 
         $request->request->replace($data);
