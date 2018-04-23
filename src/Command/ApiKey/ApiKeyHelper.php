@@ -8,7 +8,6 @@ declare(strict_types = 1);
 namespace App\Command\ApiKey;
 
 use App\Entity\ApiKey as ApiKeyEntity;
-use App\Entity\EntityInterface;
 use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
 use Closure;
