@@ -30,7 +30,7 @@ class UserGroup extends RestDto
     protected $name = '';
 
     /**
-     * @var \App\Entity\Role
+     * @var \App\Entity\Role|string
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
@@ -84,14 +84,14 @@ class UserGroup extends RestDto
     /**
      * Method to load DTO data from specified entity.
      *
-     * @psalm-suppress PossiblyUndefinedMethod
-     *
      * @param EntityInterface|UserGroupEntity $entity
      *
      * @return RestDtoInterface|UserGroup
      */
     public function load(EntityInterface $entity): RestDtoInterface
     {
+        /** @psalm-var UserGroupEntity $entity */
+
         $this->name = $entity->getName();
         $this->role = $entity->getRole()->getId();
 

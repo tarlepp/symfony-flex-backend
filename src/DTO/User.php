@@ -248,8 +248,6 @@ class User extends RestDto implements UserInterface
     /**
      * Method to load DTO data from specified entity.
      *
-     * @psalm-suppress PossiblyUndefinedMethod
-     *
      * @param EntityInterface|UserEntity $entity
      *
      * @return RestDtoInterface|User
@@ -266,6 +264,8 @@ class User extends RestDto implements UserInterface
         $iterator = function (UserGroupEntity $group): string {
             return $group->getId();
         };
+
+        /** @psalm-var UserEntity $entity */
 
         $this->id = $entity->getId();
         $this->username = $entity->getUsername();
