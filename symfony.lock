@@ -608,8 +608,8 @@
     "symfony/yaml": {
         "version": "v3.3.10"
     },
-    "symplify/better-reflection-docblock": {
-        "version": "v3.2.20"
+    "symplify/better-phpdoc-parser": {
+        "version": "v4.1.1"
     },
     "symplify/coding-standard": {
         "version": "v3.2.20"
