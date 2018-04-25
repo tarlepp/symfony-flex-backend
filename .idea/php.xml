@@ -140,7 +140,6 @@
       <path value="$PROJECT_DIR$/vendor/sebastian/global-state" />
       <path value="$PROJECT_DIR$/vendor/symplify/token-runner" />
       <path value="$PROJECT_DIR$/vendor/symplify/coding-standard" />
-      <path value="$PROJECT_DIR$/vendor/symplify/better-reflection-docblock" />
       <path value="$PROJECT_DIR$/vendor/symplify/package-builder" />
       <path value="$PROJECT_DIR$/vendor/slevomat/coding-standard" />
       <path value="$PROJECT_DIR$/vendor/symplify/easy-coding-standard" />
@@ -165,6 +164,7 @@
       <path value="$PROJECT_DIR$/vendor/theseer/fdomdocument" />
       <path value="$PROJECT_DIR$/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/vendor/phpstan/phpstan-shim" />
+      <path value="$PROJECT_DIR$/vendor/symplify/better-phpdoc-parser" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
