@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9db7f27d95551fb77f6d4dc80f396324",
+    "content-hash": "c0c923e8a67d945d20bb0dff2b44c45e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5277,16 +5277,16 @@
         },
         {
             "name": "zendframework/zend-eventmanager",
-            "version": "3.2.0",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-eventmanager.git",
-                "reference": "9d72db10ceb6e42fb92350c0cb54460da61bd79c"
+                "reference": "a5e2583a211f73604691586b8406ff7296a946dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/9d72db10ceb6e42fb92350c0cb54460da61bd79c",
-                "reference": "9d72db10ceb6e42fb92350c0cb54460da61bd79c",
+                "url": "https://api.github.com/repos/zendframework/zend-eventmanager/zipball/a5e2583a211f73604691586b8406ff7296a946dd",
+                "reference": "a5e2583a211f73604691586b8406ff7296a946dd",
                 "shasum": ""
             },
             "require": {
@@ -5295,7 +5295,7 @@
             "require-dev": {
                 "athletic/athletic": "^0.1",
                 "container-interop/container-interop": "^1.1.0",
-                "phpunit/phpunit": "^6.0.7 || ^5.7.14",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.2",
                 "zendframework/zend-coding-standard": "~1.0.0",
                 "zendframework/zend-stdlib": "^2.7.3 || ^3.0"
             },
@@ -5327,7 +5327,7 @@
                 "events",
                 "zf2"
             ],
-            "time": "2017-07-11T19:17:22+00:00"
+            "time": "2018-04-25T15:33:34+00:00"
         },
         {
             "name": "zircote/swagger-php",
@@ -9624,16 +9624,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v4.0.4",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "d39a51ebb4a80316bb8c9be442cf468bb000f106"
+                "reference": "04b75cf792b0b444d145aa5719ba11b31644d119"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/d39a51ebb4a80316bb8c9be442cf468bb000f106",
-                "reference": "d39a51ebb4a80316bb8c9be442cf468bb000f106",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/04b75cf792b0b444d145aa5719ba11b31644d119",
+                "reference": "04b75cf792b0b444d145aa5719ba11b31644d119",
                 "shasum": ""
             },
             "require": {
@@ -9651,13 +9651,13 @@
                 "symfony/finder": "^4.0",
                 "symfony/http-kernel": "^4.0",
                 "symfony/yaml": "^4.0",
-                "symplify/coding-standard": "^4.0",
-                "symplify/package-builder": "^4.0",
-                "symplify/token-runner": "^4.0"
+                "symplify/coding-standard": "^4.1",
+                "symplify/package-builder": "^4.1",
+                "symplify/token-runner": "^4.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0",
-                "symplify/easy-coding-standard-tester": "^4.0"
+                "symplify/easy-coding-standard-tester": "^4.1"
             },
             "bin": [
                 "bin/ecs",
@@ -9666,7 +9666,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -9684,7 +9684,7 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2018-04-09T22:46:40+00:00"
+            "time": "2018-04-25T11:40:25+00:00"
         },
         {
             "name": "symplify/package-builder",
