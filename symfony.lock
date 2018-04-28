@@ -236,6 +236,9 @@
     "phpstan/phpstan": {
         "version": "0.9.1"
     },
+    "phpstan/phpstan-shim": {
+        "version": "0.9.2"
+    },
     "phpunit/php-code-coverage": {
         "version": "5.3.0"
     },
@@ -633,7 +636,7 @@
         "version": "v2.4.4"
     },
     "vimeo/psalm": {
-        "version": "1.1.0"
+        "version": "1.1.1"
     },
     "webmozart/assert": {
         "version": "1.2.0"

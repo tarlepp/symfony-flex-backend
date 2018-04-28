@@ -40,7 +40,7 @@
 		"symfony/asset": "4.0.8",
 		"symfony/console": "4.0.8",
 		"symfony/expression-language": "4.0.8",
-		"symfony/flex": "1.0.78",
+		"symfony/flex": "1.0.79",
 		"symfony/form": "4.0.8",
 		"symfony/framework-bundle": "4.0.8",
 		"symfony/lts": "^4@dev",
@@ -73,7 +73,7 @@
 		"symfony/requirements-checker": "1.1.0",
 		"symfony/web-server-bundle": "4.0.8",
 		"symplify/easy-coding-standard": "4.1.1",
-		"vimeo/psalm": "1.1.1"
+		"vimeo/psalm": "1.1.2"
 	},
 	"config": {
 		"preferred-install": {

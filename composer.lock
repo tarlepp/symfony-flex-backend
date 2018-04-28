@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0c923e8a67d945d20bb0dff2b44c45e",
+    "content-hash": "9161cff8ace5526bfcde691503f5b189",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3239,16 +3239,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.78",
+            "version": "v1.0.79",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "eead30b31db70691cd1fd1e7225190c818a1a5f6"
+                "reference": "399e72968d5baa698788e6116fe0f47f269724e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/eead30b31db70691cd1fd1e7225190c818a1a5f6",
-                "reference": "eead30b31db70691cd1fd1e7225190c818a1a5f6",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/399e72968d5baa698788e6116fe0f47f269724e0",
+                "reference": "399e72968d5baa698788e6116fe0f47f269724e0",
                 "shasum": ""
             },
             "require": {
@@ -3281,7 +3281,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2018-03-27T10:04:58+00:00"
+            "time": "2018-04-27T05:19:26+00:00"
         },
         {
             "name": "symfony/form",
@@ -9858,16 +9858,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "7109364313827125f04095127887413caf0cf700"
+                "reference": "e26b46dc6ae7eb6d9170770df35150438e639a09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/7109364313827125f04095127887413caf0cf700",
-                "reference": "7109364313827125f04095127887413caf0cf700",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/e26b46dc6ae7eb6d9170770df35150438e639a09",
+                "reference": "e26b46dc6ae7eb6d9170770df35150438e639a09",
                 "shasum": ""
             },
             "require": {
@@ -9912,7 +9912,7 @@
                 "inspection",
                 "php"
             ],
-            "time": "2018-04-17T19:42:42+00:00"
+            "time": "2018-04-26T23:15:16+00:00"
         }
     ],
     "aliases": [],
