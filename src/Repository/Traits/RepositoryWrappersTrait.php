@@ -50,6 +50,7 @@ trait RepositoryWrappersTrait
      */
     public function getAssociations(): array
     {
+        /** @psalm-suppress UndefinedMethod */
         return $this->getClassMetaData()->getAssociationMappings();
     }
 
