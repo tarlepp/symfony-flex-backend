@@ -63,6 +63,7 @@ trait RepositoryMethodsTrait
     public function findOneBy(array $criteria, ?array $orderBy = null)
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /** @psalm-suppress TooManyArguments */
         return $this->getEntityManager()
             ->getRepository($this->getEntityName())
             ->/** @scrutinizer ignore-call */findOneBy($criteria, $orderBy);
@@ -116,6 +117,7 @@ trait RepositoryMethodsTrait
 
         RepositoryHelper::resetParameterCount();
 
+        /** @psalm-suppress UndefinedMethod */
         return (new Paginator($queryBuilder, true))->getIterator()->getArrayCopy();
     }
 
