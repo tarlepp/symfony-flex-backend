@@ -55,6 +55,7 @@ class LogLoginFailureResource extends RestResource
      */
     public function reset(UserInterface $user): void
     {
+        /** @psalm-suppress UndefinedMethod */
         $this->getRepository()->clear($user);
     }
 }
