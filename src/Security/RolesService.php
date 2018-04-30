@@ -105,7 +105,10 @@ class RolesService implements RolesServiceInterface
      */
     public function getShort(string $role): string
     {
-        return mb_strtolower(mb_substr($role, mb_strpos($role, '_') + 1));
+        $offset = mb_strpos($role, '_');
+        $offset = $offset !== false ? $offset + 1 : 0;
+
+        return mb_strtolower(mb_substr($role, $offset));
     }
 
     /**
