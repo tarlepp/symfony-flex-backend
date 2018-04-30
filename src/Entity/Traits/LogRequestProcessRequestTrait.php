@@ -412,11 +412,11 @@ trait LogRequestProcessRequestTrait
         $this->processRequestBaseInfo($request);
         $this->processHeadersAndParameters($request);
 
-        /** @var string $content */
-        $content = $request->getContent();
+        /** @var string $bodyContent */
+        $bodyContent = $request->getContent();
 
         $this->action = $this->determineAction($request);
-        $this->content = $this->cleanContent($content);
+        $this->content = $this->cleanContent($bodyContent);
     }
 
     /**
