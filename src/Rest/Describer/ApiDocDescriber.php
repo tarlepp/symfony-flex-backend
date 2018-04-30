@@ -107,7 +107,10 @@ class ApiDocDescriber implements DescriberInterface
         $annotationFilterRoute = $this->getClosureAnnotationFilterRoute();
 
         $iterator = function (Route $route) use ($annotationFilterMethod, $annotationFilterRoute): RouteModel {
-            [$controller, $method] = explode('::', $route->getDefault('_controller'));
+            [$controller, $method] = explode(
+                Constants::KEY_CONTROLLER_DELIMITER,
+                $route->getDefault(Constants::KEY_CONTROLLER)
+            );
 
             $reflection = new ReflectionMethod($controller, $method);
             $methodAnnotations = $this->annotationReader->getMethodAnnotations($reflection);
@@ -149,12 +152,14 @@ class ApiDocDescriber implements DescriberInterface
     {
         $output = false;
 
-        if (!$route->hasDefault('_controller') || mb_strrpos($route->getDefault('_controller'), '::')) {
+        if (!$route->hasDefault(Constants::KEY_CONTROLLER)
+            || mb_strrpos($route->getDefault(Constants::KEY_CONTROLLER), Constants::KEY_CONTROLLER_DELIMITER)
+        ) {
             $output = true;
         }
 
         if ($output) {
-            [$controller] = explode('::', $route->getDefault('_controller'));
+            [$controller] = explode(Constants::KEY_CONTROLLER_DELIMITER, $route->getDefault(Constants::KEY_CONTROLLER));
 
             $reflection = new ReflectionClass($controller);
 
@@ -193,7 +198,10 @@ class ApiDocDescriber implements DescriberInterface
     private function routeFilterMethod(Route $route, bool $output): bool
     {
         if ($output) {
-            [$controller, $method] = explode('::', $route->getDefault('_controller'));
+            [$controller, $method] = explode(
+                Constants::KEY_CONTROLLER_DELIMITER,
+                $route->getDefault(Constants::KEY_CONTROLLER)
+            );
 
             $reflection = new ReflectionMethod($controller, $method);
 
