@@ -44,6 +44,11 @@ class RestApiMaker extends AbstractMaker
     private const PARAM_REPOSITORY = 'Repository';
     private const PARAM_RESOURCE = 'Resource';
     private const PARAM_CONTROLLER = 'Controller';
+    private const KEY_SUFFIX = 'suffix';
+    private const KEY_NAMESPACE = 'namespace';
+    private const KEY_TEMPLATE = 'template';
+    private const KEY_NAME = 'name';
+    private const KEY_PARAMETERS = 'parameters';
 
     /**
      * @var string[]
@@ -133,9 +138,13 @@ class RestApiMaker extends AbstractMaker
         $parameters = $this->getParameters($input);
 
         $processFile = function (array $input) use ($generator, $parameters): string {
-            $details = $generator->createClassNameDetails($input['name'], $input['namespace'], $input['suffix']);
+            $details = $generator->createClassNameDetails(
+                $input[self::KEY_NAME],
+                $input[self::KEY_NAMESPACE],
+                $input[self::KEY_SUFFIX]
+            );
 
-            return $generator->generateClass($details->getFullName(), $input['template'], $parameters);
+            return $generator->generateClass($details->getFullName(), $input[self::KEY_TEMPLATE], $parameters);
         };
 
         $this->setCreatedFiles(array_map($processFile, $this->getFiles($parameters)));
@@ -212,35 +221,35 @@ class RestApiMaker extends AbstractMaker
         return array_merge(
             [
                 [
-                    'name' => $params[self::PARAM_CONTROLLER_NAME],
-                    'namespace' => self::PARAM_CONTROLLER,
-                    'template' => $baseDir . 'Controller.tpl.php',
-                    'suffix' => '',
+                    self::KEY_NAME => $params[self::PARAM_CONTROLLER_NAME],
+                    self::KEY_NAMESPACE => self::PARAM_CONTROLLER,
+                    self::KEY_TEMPLATE => $baseDir . 'Controller.tpl.php',
+                    self::KEY_SUFFIX => '',
                 ],
                 [
-                    'name' => $params[self::PARAM_ENTITY_NAME],
-                    'namespace' => self::PARAM_ENTITY,
-                    'template' => $baseDir . 'Entity.tpl.php',
-                    'suffix' => '',
+                    self::KEY_NAME => $params[self::PARAM_ENTITY_NAME],
+                    self::KEY_NAMESPACE => self::PARAM_ENTITY,
+                    self::KEY_TEMPLATE => $baseDir . 'Entity.tpl.php',
+                    self::KEY_SUFFIX => '',
                 ],
                 [
-                    'name' => $params[self::PARAM_ENTITY_NAME],
-                    'namespace' => self::PARAM_DTO,
-                    'template' => $baseDir . 'Dto.tpl.php',
-                    'suffix' => '',
+                    self::KEY_NAME => $params[self::PARAM_ENTITY_NAME],
+                    self::KEY_NAMESPACE => self::PARAM_DTO,
+                    self::KEY_TEMPLATE => $baseDir . 'Dto.tpl.php',
+                    self::KEY_SUFFIX => '',
                 ],
                 [
-                    'name' => $params[self::PARAM_REPOSITORY_NAME],
-                    'namespace' => self::PARAM_REPOSITORY,
-                    'template' => $baseDir . 'Repository.tpl.php',
-                    'parameters' => $params,
-                    'suffix' => '',
+                    self::KEY_NAME => $params[self::PARAM_REPOSITORY_NAME],
+                    self::KEY_NAMESPACE => self::PARAM_REPOSITORY,
+                    self::KEY_TEMPLATE => $baseDir . 'Repository.tpl.php',
+                    self::KEY_PARAMETERS => $params,
+                    self::KEY_SUFFIX => '',
                 ],
                 [
-                    'name' => $params[self::PARAM_RESOURCE_NAME],
-                    'namespace' => self::PARAM_RESOURCE,
-                    'template' => $baseDir . 'Resource.tpl.php',
-                    'suffix' => '',
+                    self::KEY_NAME => $params[self::PARAM_RESOURCE_NAME],
+                    self::KEY_NAMESPACE => self::PARAM_RESOURCE,
+                    self::KEY_TEMPLATE => $baseDir . 'Resource.tpl.php',
+                    self::KEY_SUFFIX => '',
                 ],
             ],
             $this->getTestFiles($params, $baseDir)
@@ -276,40 +285,40 @@ class RestApiMaker extends AbstractMaker
     {
         return [
             [
-                'name' => $params[self::PARAM_CONTROLLER_NAME],
-                'namespace' => 'Tests\\Functional\\Controller\\',
-                'template' => $baseDir . 'ControllerTestFunctional.tpl.php',
-                'suffix' => 'Test',
+                self::KEY_NAME => $params[self::PARAM_CONTROLLER_NAME],
+                self::KEY_NAMESPACE => 'Tests\\Functional\\Controller\\',
+                self::KEY_TEMPLATE => $baseDir . 'ControllerTestFunctional.tpl.php',
+                self::KEY_SUFFIX => 'Test',
             ],
             [
-                'name' => $params[self::PARAM_CONTROLLER_NAME],
-                'namespace' => 'Tests\\Integration\\Controller\\',
-                'template' => $baseDir . 'ControllerTestIntegration.tpl.php',
-                'suffix' => 'Test',
+                self::KEY_NAME => $params[self::PARAM_CONTROLLER_NAME],
+                self::KEY_NAMESPACE => 'Tests\\Integration\\Controller\\',
+                self::KEY_TEMPLATE => $baseDir . 'ControllerTestIntegration.tpl.php',
+                self::KEY_SUFFIX => 'Test',
             ],
             [
-                'name' => $params[self::PARAM_ENTITY_NAME],
-                'namespace' => 'Tests\\Integration\\DTO\\',
-                'template' => $baseDir . 'DtoTestIntegration.tpl.php',
-                'suffix' => 'Test',
+                self::KEY_NAME => $params[self::PARAM_ENTITY_NAME],
+                self::KEY_NAMESPACE => 'Tests\\Integration\\DTO\\',
+                self::KEY_TEMPLATE => $baseDir . 'DtoTestIntegration.tpl.php',
+                self::KEY_SUFFIX => 'Test',
             ],
             [
-                'name' => $params[self::PARAM_ENTITY_NAME],
-                'namespace' => 'Tests\\Integration\\Entity\\',
-                'template' => $baseDir . 'EntityTestIntegration.tpl.php',
-                'suffix' => 'Test',
+                self::KEY_NAME => $params[self::PARAM_ENTITY_NAME],
+                self::KEY_NAMESPACE => 'Tests\\Integration\\Entity\\',
+                self::KEY_TEMPLATE => $baseDir . 'EntityTestIntegration.tpl.php',
+                self::KEY_SUFFIX => 'Test',
             ],
             [
-                'name' => $params[self::PARAM_REPOSITORY_NAME],
-                'namespace' => 'Tests\\Integration\\Repository\\',
-                'template' => $baseDir . 'RepositoryTestIntegration.tpl.php',
-                'suffix' => 'Test',
+                self::KEY_NAME => $params[self::PARAM_REPOSITORY_NAME],
+                self::KEY_NAMESPACE => 'Tests\\Integration\\Repository\\',
+                self::KEY_TEMPLATE => $baseDir . 'RepositoryTestIntegration.tpl.php',
+                self::KEY_SUFFIX => 'Test',
             ],
             [
-                'name' => $params[self::PARAM_RESOURCE_NAME],
-                'namespace' => 'Tests\\Integration\\Resource\\',
-                'template' => $baseDir . 'ResourceTestIntegration.tpl.php',
-                'suffix' => 'Test',
+                self::KEY_NAME => $params[self::PARAM_RESOURCE_NAME],
+                self::KEY_NAMESPACE => 'Tests\\Integration\\Resource\\',
+                self::KEY_TEMPLATE => $baseDir . 'ResourceTestIntegration.tpl.php',
+                self::KEY_SUFFIX => 'Test',
             ],
         ];
     }
