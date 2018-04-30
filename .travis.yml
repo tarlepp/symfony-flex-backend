@@ -80,6 +80,7 @@ before_script:
 script:
   - make phpcs
   - make ecs
+  - make psalm
   - make run-tests-fastest
 #  - make run-tests
 
