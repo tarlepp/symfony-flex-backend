@@ -39,6 +39,11 @@ class RestApiMaker extends AbstractMaker
     private const PARAM_CONTROLLER_NAME = 'controllerName';
     private const PARAM_ENTITY_NAME = 'entityName';
     private const PARAM_REPOSITORY_NAME = 'repositoryName';
+    private const PARAM_DTO = 'DTO';
+    private const PARAM_ENTITY = 'Entity';
+    private const PARAM_REPOSITORY = 'Repository';
+    private const PARAM_RESOURCE = 'Resource';
+    private const PARAM_CONTROLLER = 'Controller';
 
     /**
      * @var string[]
@@ -72,7 +77,16 @@ class RestApiMaker extends AbstractMaker
 
         $message = sprintf(
             'Creates necessary classes for new REST resource (%s)',
-            implode(', ', ['Entity', 'Repository', 'Resource', 'Controller', 'Test classes'])
+            implode(
+                ', ',
+                [
+                    self::PARAM_ENTITY,
+                    self::PARAM_REPOSITORY,
+                    self::PARAM_RESOURCE,
+                    self::PARAM_CONTROLLER,
+                    'Test classes',
+                ]
+            )
         );
 
         $command
@@ -155,10 +169,10 @@ class RestApiMaker extends AbstractMaker
 
         return [
             'resource' => $resourceName,
-            'controllerName' => $resourceName . 'Controller',
+            'controllerName' => $resourceName . self::PARAM_CONTROLLER,
             'entityName' => $resourceName,
-            'repositoryName' => $resourceName . 'Repository',
-            'resourceName' => $resourceName . 'Resource',
+            'repositoryName' => $resourceName . self::PARAM_REPOSITORY,
+            'resourceName' => $resourceName . self::PARAM_RESOURCE,
             'author' => $author,
             'swaggerTag' => $swaggerTag,
             'routePath' => '/' . $this->convertToSnakeCase($resourceName),
@@ -199,32 +213,32 @@ class RestApiMaker extends AbstractMaker
             [
                 [
                     'name' => $params[self::PARAM_CONTROLLER_NAME],
-                    'namespace' => 'Controller',
+                    'namespace' => self::PARAM_CONTROLLER,
                     'template' => $baseDir . 'Controller.tpl.php',
                     'suffix' => '',
                 ],
                 [
                     'name' => $params[self::PARAM_ENTITY_NAME],
-                    'namespace' => 'Entity',
+                    'namespace' => self::PARAM_ENTITY,
                     'template' => $baseDir . 'Entity.tpl.php',
                     'suffix' => '',
                 ],
                 [
                     'name' => $params[self::PARAM_ENTITY_NAME],
-                    'namespace' => 'DTO',
+                    'namespace' => self::PARAM_DTO,
                     'template' => $baseDir . 'Dto.tpl.php',
                     'suffix' => '',
                 ],
                 [
                     'name' => $params[self::PARAM_REPOSITORY_NAME],
-                    'namespace' => 'Repository',
+                    'namespace' => self::PARAM_REPOSITORY,
                     'template' => $baseDir . 'Repository.tpl.php',
                     'parameters' => $params,
                     'suffix' => '',
                 ],
                 [
                     'name' => $params[self::PARAM_RESOURCE_NAME],
-                    'namespace' => 'Resource',
+                    'namespace' => self::PARAM_RESOURCE,
                     'template' => $baseDir . 'Resource.tpl.php',
                     'suffix' => '',
                 ],
