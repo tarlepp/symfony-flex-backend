@@ -228,9 +228,11 @@ class UserController extends Controller
      *      description="User groups",
      *      @SWG\Schema(
      *          type="array",
-     *          @Model(
-     *              type=App\Entity\UserGroup::class,
-     *              groups={"UserGroup", "UserGroup.role"},
+     *          @SWG\Items(
+     *              ref=@Model(
+     *                  type=App\Entity\UserGroup::class,
+     *                  groups={"UserGroup", "UserGroup.role"},
+     *              ),
      *          ),
      *      ),
      *  )
@@ -324,9 +326,11 @@ class UserController extends Controller
      *      description="User groups (user already belongs to this group)",
      *      @SWG\Schema(
      *          type="array",
-     *          @Model(
-     *              type=App\Entity\UserGroup::class,
-     *              groups={"UserGroup", "UserGroup.role"},
+     *          @SWG\Items(
+     *              ref=@Model(
+     *                  type=App\Entity\UserGroup::class,
+     *                  groups={"UserGroup", "UserGroup.role"},
+     *              ),
      *          ),
      *      ),
      *  )
@@ -335,9 +339,11 @@ class UserController extends Controller
      *      description="User groups (user added to this group)",
      *      @SWG\Schema(
      *          type="array",
-     *          @Model(
-     *              type=App\Entity\UserGroup::class,
-     *              groups={"UserGroup", "UserGroup.role"},
+     *          @SWG\Items(
+     *              ref=@Model(
+     *                  type=App\Entity\UserGroup::class,
+     *                  groups={"UserGroup", "UserGroup.role"},
+     *              ),
      *          ),
      *      ),
      *  )
@@ -442,9 +448,11 @@ class UserController extends Controller
      *      description="User groups",
      *      @SWG\Schema(
      *          type="array",
-     *          @Model(
-     *              type=App\Entity\UserGroup::class,
-     *              groups={"UserGroup", "UserGroup.role"},
+     *          @SWG\Items(
+     *              ref=@Model(
+     *                  type=App\Entity\UserGroup::class,
+     *                  groups={"UserGroup", "UserGroup.role"},
+     *              ),
      *          ),
      *      ),
      *  )

@@ -56,7 +56,7 @@ class ProfileController
      *      response=200,
      *      description="User profile data",
      *      @SWG\Schema(
-     *          @Model(
+     *          ref=@Model(
      *              type=User::class,
      *              groups={"User", "User.userGroups", "User.roles", "UserGroup", "UserGroup.role"},
      *          ),
@@ -178,9 +178,11 @@ class ProfileController
      *      description="User groups",
      *      @SWG\Schema(
      *          type="array",
-     *          @Model(
-     *              type=App\Entity\UserGroup::class,
-     *              groups={"UserGroup", "UserGroup.role"},
+     *          @SWG\Items(
+     *              ref=@Model(
+     *                  type=App\Entity\UserGroup::class,
+     *                  groups={"UserGroup", "UserGroup.role"},
+     *              ),
      *          ),
      *      ),
      *  )

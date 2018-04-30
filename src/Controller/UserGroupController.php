@@ -106,7 +106,7 @@ class UserGroupController extends Controller
      *      response=200,
      *      description="User group users",
      *      @SWG\Schema(
-     *          @Model(
+     *          ref=@Model(
      *              type=User::class,
      *              groups={"User", "User.userGroups", "User.roles", "UserGroup", "UserGroup.role"},
      *          ),
@@ -199,9 +199,11 @@ class UserGroupController extends Controller
      *      description="List of user group users - specified user already exists on this group",
      *      @SWG\Schema(
      *          type="array",
-     *          @Model(
-     *              type=App\Entity\User::class,
-     *              groups={"User"},
+     *          @SWG\Items(
+     *              ref=@Model(
+     *                  type=App\Entity\User::class,
+     *                  groups={"User"},
+     *              ),
      *          ),
      *      ),
      *  )
@@ -210,9 +212,11 @@ class UserGroupController extends Controller
      *      description="List of user group users - specified user has been attached to this group",
      *      @SWG\Schema(
      *          type="array",
-     *          @Model(
-     *              type=App\Entity\User::class,
-     *              groups={"User"},
+     *          @SWG\Items(
+     *              ref=@Model(
+     *                  type=App\Entity\User::class,
+     *                  groups={"User"},
+     *              ),
      *          ),
      *      ),
      *  )
@@ -235,6 +239,9 @@ class UserGroupController extends Controller
      * @param SerializerInterface $serializer
      *
      * @return JsonResponse
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function attachUserAction(
         UserGroup $userGroup,
@@ -301,9 +308,11 @@ class UserGroupController extends Controller
      *      description="Users",
      *      @SWG\Schema(
      *          type="array",
-     *          @Model(
-     *              type=App\Entity\User::class,
-     *              groups={"User"},
+     *          @SWG\Items(
+     *              ref=@Model(
+     *                  type=App\Entity\User::class,
+     *                  groups={"User"},
+     *              ),
      *          ),
      *      ),
      *  )
@@ -326,6 +335,9 @@ class UserGroupController extends Controller
      * @param SerializerInterface $serializer
      *
      * @return JsonResponse
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function detachUserAction(
         UserGroup $userGroup,

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8facc485927eaa32191752016af56a4f",
+    "content-hash": "a2444590f42341e0c70570a36aac3e44",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1652,23 +1652,24 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "v3.1.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "dad7f7735132b48b4ccaeff41ddefd1ce71eda2a"
+                "reference": "2c72aa4efff07862514aaf2cf078fabc58c465d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/dad7f7735132b48b4ccaeff41ddefd1ce71eda2a",
-                "reference": "dad7f7735132b48b4ccaeff41ddefd1ce71eda2a",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/2c72aa4efff07862514aaf2cf078fabc58c465d6",
+                "reference": "2c72aa4efff07862514aaf2cf078fabc58c465d6",
                 "shasum": ""
             },
             "require": {
-                "exsyst/swagger": "~0.3",
+                "exsyst/swagger": "~0.3|~0.4",
                 "php": "^7.0",
                 "phpdocumentor/reflection-docblock": "^3.1|^4.0",
                 "symfony/framework-bundle": "^3.4|^4.0",
+                "symfony/options-resolver": "^3.4.4|^4.0",
                 "symfony/property-info": "^3.4|^4.0",
                 "zircote/swagger-php": "^2.0.9"
             },
@@ -1700,7 +1701,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1.x-dev"
+                    "dev-master": "3.2.x-dev"
                 }
             },
             "autoload": {
@@ -1729,7 +1730,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2018-01-26T16:09:38+00:00"
+            "time": "2018-04-27T17:36:50+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -9858,16 +9859,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "1.1.2",
+            "version": "1.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "e26b46dc6ae7eb6d9170770df35150438e639a09"
+                "reference": "f9cb79d6fe212a1d2098a049d5e7d45b21c52d2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/e26b46dc6ae7eb6d9170770df35150438e639a09",
-                "reference": "e26b46dc6ae7eb6d9170770df35150438e639a09",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/f9cb79d6fe212a1d2098a049d5e7d45b21c52d2d",
+                "reference": "f9cb79d6fe212a1d2098a049d5e7d45b21c52d2d",
                 "shasum": ""
             },
             "require": {
@@ -9912,12 +9913,13 @@
                 "inspection",
                 "php"
             ],
-            "time": "2018-04-26T23:15:16+00:00"
+            "time": "2018-04-30T05:57:44+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "nelmio/api-doc-bundle": 20,
         "symfony/lts": 20,
         "roave/security-advisories": 20
     },
