@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "427017629cea2cd98fc159a1bd680d7c",
+    "content-hash": "3147f9c7b56bb5808c40a98c7c0ce061",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1652,7 +1652,7 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "dev-master",
+            "version": "v3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
@@ -9919,7 +9919,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "nelmio/api-doc-bundle": 20,
         "symfony/lts": 20,
         "roave/security-advisories": 20
     },
