@@ -47,7 +47,10 @@ class UniqueEmailValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint): void
     {
         if (!$this->repository->isEmailAvailable($value->getEmail(), $value->getId())) {
-            $this->context->buildViolation($constraint->message)->addViolation();
+            $this->context
+                ->buildViolation($constraint->message)
+                ->setCode(UniqueEmail::IS_UNIQUE_EMAIL_ERROR)
+                ->addViolation();
         }
     }
 }

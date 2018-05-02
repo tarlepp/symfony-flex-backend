@@ -25,7 +25,7 @@ class UniqueUsername extends Constraint
      *
      * @var string
      */
-    private const IS_UNIQUE_USERNAME_ERROR = 'ea62740a-4d9b-4a25-9a56-46fb4c3d5fea';
+    public const IS_UNIQUE_USERNAME_ERROR = 'ea62740a-4d9b-4a25-9a56-46fb4c3d5fea';
 
     /**
      * Message for validation error

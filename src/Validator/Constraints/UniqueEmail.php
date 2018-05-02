@@ -25,7 +25,7 @@ class UniqueEmail extends Constraint
      *
      * @var string;
      */
-    private const IS_UNIQUE_EMAIL_ERROR = 'd487278d-8b13-4da0-b4cc-f862e6e99af6';
+    public const IS_UNIQUE_EMAIL_ERROR = 'd487278d-8b13-4da0-b4cc-f862e6e99af6';
 
     /**
      * Message for validation error
