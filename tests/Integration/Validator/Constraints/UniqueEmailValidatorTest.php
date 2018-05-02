@@ -66,6 +66,12 @@ class UniqueEmailValidatorTest extends KernelTestCase
 
         $this->builder
             ->expects(static::once())
+            ->method('setCode')
+            ->with(UniqueEmail::IS_UNIQUE_EMAIL_ERROR)
+            ->willReturn($this->builder);
+
+        $this->builder
+            ->expects(static::once())
             ->method('addViolation');
 
         // Run validator

@@ -66,6 +66,12 @@ class UniqueUsernameValidatorTest extends KernelTestCase
 
         $this->builder
             ->expects(static::once())
+            ->method('setCode')
+            ->with(UniqueUsername::IS_UNIQUE_USERNAME_ERROR)
+            ->willReturn($this->builder);
+
+        $this->builder
+            ->expects(static::once())
             ->method('addViolation');
 
         // Run validator
