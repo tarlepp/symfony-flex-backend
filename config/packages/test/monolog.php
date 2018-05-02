@@ -14,7 +14,7 @@ $handlers = [
     'nested'            => [
         'type'          => 'stream',
         'path'          => '%kernel.logs_dir%/%kernel.environment%.log',
-        'level'         => 'debug',
+        'level'         => 'error',
     ],
     'buffered'          => [
         'type'          => 'buffer',
@@ -22,7 +22,7 @@ $handlers = [
         'channels'      => [
             '!event',
         ],
-        'level'         => 'debug',
+        'level'         => 'error',
     ],
     'easylog'           => [
         'type'          => 'service',

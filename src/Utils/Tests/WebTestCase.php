@@ -96,7 +96,7 @@ abstract class WebTestCase extends BaseWebTestCase
             $server
         );
 
-        return static::createClient($options, $server);
+        return static::createClient(array_merge($options, ['debug' => false]), $server);
     }
 
     /**
