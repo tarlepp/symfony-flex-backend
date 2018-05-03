@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3147f9c7b56bb5808c40a98c7c0ce061",
+    "content-hash": "db2f744149c895b8133d39a2d287f139",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3240,16 +3240,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.0.79",
+            "version": "v1.0.80",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "399e72968d5baa698788e6116fe0f47f269724e0"
+                "reference": "729aee08d62b47224e85b83c97e2824ff7d1735e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/399e72968d5baa698788e6116fe0f47f269724e0",
-                "reference": "399e72968d5baa698788e6116fe0f47f269724e0",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/729aee08d62b47224e85b83c97e2824ff7d1735e",
+                "reference": "729aee08d62b47224e85b83c97e2824ff7d1735e",
                 "shasum": ""
             },
             "require": {
@@ -3282,7 +3282,7 @@
                     "email": "fabien.potencier@gmail.com"
                 }
             ],
-            "time": "2018-04-27T05:19:26+00:00"
+            "time": "2018-05-02T19:08:56+00:00"
         },
         {
             "name": "symfony/form",
@@ -5986,7 +5986,7 @@
         },
         {
             "name": "illuminate/config",
-            "version": "v5.6.19",
+            "version": "v5.6.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/config.git",
@@ -6030,7 +6030,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.6.19",
+            "version": "v5.6.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -6074,7 +6074,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.6.19",
+            "version": "v5.6.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -6118,16 +6118,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.6.19",
+            "version": "v5.6.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "4ecadcab0816eae4a2aeca5ec402c681ee62b191"
+                "reference": "2a97d211c052f6d6ce9756c89d64b855d860d923"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/4ecadcab0816eae4a2aeca5ec402c681ee62b191",
-                "reference": "4ecadcab0816eae4a2aeca5ec402c681ee62b191",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/2a97d211c052f6d6ce9756c89d64b855d860d923",
+                "reference": "2a97d211c052f6d6ce9756c89d64b855d860d923",
                 "shasum": ""
             },
             "require": {
@@ -6171,7 +6171,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-04-29T13:02:42+00:00"
+            "time": "2018-05-02T14:59:13+00:00"
         },
         {
             "name": "jackiedo/dotenv-editor",
@@ -9539,19 +9539,20 @@
         },
         {
             "name": "symplify/better-phpdoc-parser",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/BetterPhpDocParser.git",
-                "reference": "85afad188fa7e4ae3183616712abd4f892e17ab1"
+                "reference": "b17b6e16edff15a0291a3baae4f89cd26ea43137"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/BetterPhpDocParser/zipball/85afad188fa7e4ae3183616712abd4f892e17ab1",
-                "reference": "85afad188fa7e4ae3183616712abd4f892e17ab1",
+                "url": "https://api.github.com/repos/Symplify/BetterPhpDocParser/zipball/b17b6e16edff15a0291a3baae4f89cd26ea43137",
+                "reference": "b17b6e16edff15a0291a3baae4f89cd26ea43137",
                 "shasum": ""
             },
             "require": {
+                "nette/utils": "^2.5",
                 "php": "^7.1",
                 "phpstan/phpdoc-parser": "^0.2",
                 "symplify/package-builder": "^4.1"
@@ -9575,20 +9576,20 @@
                 "MIT"
             ],
             "description": "Slim wrapper around phpstan/phpdoc-parser with format preserving printer",
-            "time": "2018-04-25T13:52:54+00:00"
+            "time": "2018-05-02T13:01:51+00:00"
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
-                "reference": "09259f05ef906a5bd06d5e260ee40247a1102eb6"
+                "reference": "627b6167a967b15ecb5f517fceced1caab88e443"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/09259f05ef906a5bd06d5e260ee40247a1102eb6",
-                "reference": "09259f05ef906a5bd06d5e260ee40247a1102eb6",
+                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/627b6167a967b15ecb5f517fceced1caab88e443",
+                "reference": "627b6167a967b15ecb5f517fceced1caab88e443",
                 "shasum": ""
             },
             "require": {
@@ -9621,20 +9622,20 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer.",
-            "time": "2018-04-25T13:42:14+00:00"
+            "time": "2018-05-02T12:46:09+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "04b75cf792b0b444d145aa5719ba11b31644d119"
+                "reference": "b21461c2e659cadb7e5587b81461995a52917770"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/04b75cf792b0b444d145aa5719ba11b31644d119",
-                "reference": "04b75cf792b0b444d145aa5719ba11b31644d119",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/b21461c2e659cadb7e5587b81461995a52917770",
+                "reference": "b21461c2e659cadb7e5587b81461995a52917770",
                 "shasum": ""
             },
             "require": {
@@ -9685,20 +9686,20 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2018-04-25T11:40:25+00:00"
+            "time": "2018-04-29T23:26:29+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
-                "reference": "5f9dd7ae5d51064c148d68c8cf942f9ab2402664"
+                "reference": "d397dc3626fa17e343959cfa2ea9f459b54f8aaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/5f9dd7ae5d51064c148d68c8cf942f9ab2402664",
-                "reference": "5f9dd7ae5d51064c148d68c8cf942f9ab2402664",
+                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/d397dc3626fa17e343959cfa2ea9f459b54f8aaa",
+                "reference": "d397dc3626fa17e343959cfa2ea9f459b54f8aaa",
                 "shasum": ""
             },
             "require": {
@@ -9731,20 +9732,20 @@
                 "MIT"
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
-            "time": "2018-04-24T12:42:53+00:00"
+            "time": "2018-04-25T16:11:49+00:00"
         },
         {
             "name": "symplify/token-runner",
-            "version": "v4.1.1",
+            "version": "v4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/TokenRunner.git",
-                "reference": "590d0824a94fff189a5492e4f6bb641fd7409dee"
+                "reference": "c0b8be887607384ef81815b78c6a0d6231b91124"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/590d0824a94fff189a5492e4f6bb641fd7409dee",
-                "reference": "590d0824a94fff189a5492e4f6bb641fd7409dee",
+                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/c0b8be887607384ef81815b78c6a0d6231b91124",
+                "reference": "c0b8be887607384ef81815b78c6a0d6231b91124",
                 "shasum": ""
             },
             "require": {
@@ -9775,7 +9776,7 @@
                 "MIT"
             ],
             "description": "Set of utils for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2018-04-25T13:42:14+00:00"
+            "time": "2018-05-02T12:46:09+00:00"
         },
         {
             "name": "theseer/fdomdocument",
