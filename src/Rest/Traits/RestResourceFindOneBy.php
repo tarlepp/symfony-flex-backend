@@ -42,7 +42,7 @@ trait RestResourceFindOneBy
      * @param mixed[]              $orderBy
      * @param null|EntityInterface $entity
      */
-    public function afterFindOneBy(array &$criteria, array &$orderBy, ?EntityInterface $entity = null): void
+    public function afterFindOneBy(array &$criteria, array &$orderBy, ?EntityInterface $entity): void
     {
     }
 }
