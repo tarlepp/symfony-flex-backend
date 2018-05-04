@@ -12,7 +12,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
 use DeviceDetector\DeviceDetector;
-use Exception;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -95,7 +94,6 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @param string $type
      *
-     * @throws Exception
      * @throws RuntimeException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
