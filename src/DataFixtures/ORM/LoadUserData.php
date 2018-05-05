@@ -11,12 +11,14 @@ use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
+use BadMethodCallException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use function array_map;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 
 /**
  * Class LoadUserData
@@ -58,16 +60,19 @@ class LoadUserData extends Fixture implements OrderedFixtureInterface, Container
      *
      * @param ObjectManager $manager
      *
-     * @throws \BadMethodCallException
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
+     * @throws BadMethodCallException
      * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
     public function load(ObjectManager $manager): void
     {
+        /** @var ServiceLocator $serviceLocator */
+        $serviceLocator = $this->container->get('test.service_locator');
+
         $this->manager = $manager;
-        $this->roles = $this->container->get('test.service_locator')->get(RolesService::class);
+        $this->roles = $serviceLocator->get(RolesService::class);
 
         // Create entities
         array_map([$this, 'createUser'], $this->roles->getRoles());
@@ -93,8 +98,7 @@ class LoadUserData extends Fixture implements OrderedFixtureInterface, Container
      *
      * @param string|null $role
      *
-     * @throws \BadMethodCallException
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
+     * @throws BadMethodCallException
      */
     private function createUser(?string $role = null): void
     {

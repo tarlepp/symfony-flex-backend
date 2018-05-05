@@ -11,11 +11,13 @@ use App\Entity\ApiKey;
 use App\Entity\UserGroup;
 use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
+use BadMethodCallException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use function array_map;
 use function str_pad;
 
@@ -59,17 +61,19 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
      *
      * @param ObjectManager $manager
      *
-     * @throws \BadMethodCallException
+     * @throws BadMethodCallException
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
     public function load(ObjectManager $manager): void
     {
+        /** @var ServiceLocator $serviceLocator */
+        $serviceLocator = $this->container->get('test.service_locator');
+
         $this->manager = $manager;
-        $this->roles = $this->container->get('test.service_locator')->get(RolesService::class);
+        $this->roles = $serviceLocator->get(RolesService::class);
 
         // Create entities
         array_map([$this, 'createApiKey'], $this->roles->getRoles());
@@ -95,8 +99,7 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
      *
      * @param string|null $role
      *
-     * @throws \BadMethodCallException
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
+     * @throws BadMethodCallException
      */
     private function createApiKey(?string $role = null): void
     {

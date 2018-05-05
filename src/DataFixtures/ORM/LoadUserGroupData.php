@@ -11,12 +11,14 @@ use App\Entity\Role;
 use App\Entity\UserGroup;
 use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
+use BadMethodCallException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use function array_map;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 
 /**
  * Class LoadUserGroupData
@@ -58,7 +60,7 @@ class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, Cont
      *
      * @param ObjectManager $manager
      *
-     * @throws \BadMethodCallException
+     * @throws BadMethodCallException
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
@@ -66,8 +68,11 @@ class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, Cont
      */
     public function load(ObjectManager $manager): void
     {
+        /** @var ServiceLocator $serviceLocator */
+        $serviceLocator = $this->container->get('test.service_locator');
+
         $this->manager = $manager;
-        $this->roles = $this->container->get('test.service_locator')->get(RolesService::class);
+        $this->roles = $serviceLocator->get(RolesService::class);
 
         $iterator = function (string $role): void {
             $this->createUserGroup($role);
@@ -95,8 +100,7 @@ class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, Cont
      *
      * @param string $role
      *
-     * @throws \BadMethodCallException
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
+     * @throws BadMethodCallException
      */
     private function createUserGroup(string $role): void
     {

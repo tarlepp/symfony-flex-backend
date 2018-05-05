@@ -10,11 +10,13 @@ namespace App\DataFixtures\ORM;
 use App\Entity\Role;
 use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
+use BadMethodCallException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use function array_map;
 
 /**
@@ -57,7 +59,7 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
      *
      * @param ObjectManager $manager
      *
-     * @throws \BadMethodCallException
+     * @throws BadMethodCallException
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
@@ -65,8 +67,11 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
      */
     public function load(ObjectManager $manager): void
     {
+        /** @var ServiceLocator $serviceLocator */
+        $serviceLocator = $this->container->get('test.service_locator');
+
         $this->manager = $manager;
-        $this->roles = $this->container->get('test.service_locator')->get(RolesService::class);
+        $this->roles = $serviceLocator->get(RolesService::class);
 
         $iterator = function (string $role): void {
             $this->createRole($role);
@@ -94,8 +99,7 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
      *
      * @param string $role
      *
-     * @throws \BadMethodCallException
-     * @throws \Doctrine\Common\DataFixtures\BadMethodCallException
+     * @throws BadMethodCallException
      */
     private function createRole(string $role): void
     {
