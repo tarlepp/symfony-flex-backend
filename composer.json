@@ -70,7 +70,7 @@
 		"symfony/dotenv": "4.0.9",
 		"symfony/maker-bundle": "1.2.0",
 		"symfony/phpunit-bridge": "4.0.9",
-		"symfony/requirements-checker": "1.1.0",
+		"symfony/requirements-checker": "1.1.1",
 		"symfony/web-server-bundle": "4.0.9",
 		"symplify/easy-coding-standard": "4.1.2",
 		"vimeo/psalm": "1.1.3"

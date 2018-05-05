@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db2f744149c895b8133d39a2d287f139",
+    "content-hash": "de552bac7248d963d4647da94bc57c16",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -334,26 +334,29 @@
         },
         {
             "name": "doctrine/data-fixtures",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/data-fixtures.git",
-                "reference": "7b76ccc8e648c4502aad7f61347326c8a072bd3b"
+                "reference": "3a1e2c3c600e615a2dffe56d4ca0875cc5233e0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/7b76ccc8e648c4502aad7f61347326c8a072bd3b",
-                "reference": "7b76ccc8e648c4502aad7f61347326c8a072bd3b",
+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/3a1e2c3c600e615a2dffe56d4ca0875cc5233e0a",
+                "reference": "3a1e2c3c600e615a2dffe56d4ca0875cc5233e0a",
                 "shasum": ""
             },
             "require": {
                 "doctrine/common": "~2.2",
                 "php": "^7.1"
             },
+            "conflict": {
+                "doctrine/phpcr-odm": "<1.3.0"
+            },
             "require-dev": {
                 "doctrine/dbal": "^2.5.4",
                 "doctrine/orm": "^2.5.4",
-                "phpunit/phpunit": "^6.3"
+                "phpunit/phpunit": "^7.0"
             },
             "suggest": {
                 "alcaeus/mongo-php-adapter": "For using MongoDB ODM with PHP 7",
@@ -387,7 +390,7 @@
             "keywords": [
                 "database"
             ],
-            "time": "2017-11-27T18:48:06+00:00"
+            "time": "2018-03-20T09:06:36+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -6602,16 +6605,16 @@
         },
         {
             "name": "nette/utils",
-            "version": "v2.5.1",
+            "version": "v2.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "8a85ce76298c8a8941f912b8fa3ee93ca17d2ebc"
+                "reference": "183069866dc477fcfbac393ed486aaa6d93d19a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/8a85ce76298c8a8941f912b8fa3ee93ca17d2ebc",
-                "reference": "8a85ce76298c8a8941f912b8fa3ee93ca17d2ebc",
+                "url": "https://api.github.com/repos/nette/utils/zipball/183069866dc477fcfbac393ed486aaa6d93d19a5",
+                "reference": "183069866dc477fcfbac393ed486aaa6d93d19a5",
                 "shasum": ""
             },
             "require": {
@@ -6680,7 +6683,7 @@
                 "utility",
                 "validation"
             ],
-            "time": "2018-02-19T14:42:42+00:00"
+            "time": "2018-05-02T17:16:08+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -9249,16 +9252,16 @@
         },
         {
             "name": "symfony/requirements-checker",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/requirements-checker.git",
-                "reference": "83e76e23b61eb6a26987533d68cab770ca20f054"
+                "reference": "dd66b5ec68d2ad5f1b28631eb64a3d59a1a13d44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/requirements-checker/zipball/83e76e23b61eb6a26987533d68cab770ca20f054",
-                "reference": "83e76e23b61eb6a26987533d68cab770ca20f054",
+                "url": "https://api.github.com/repos/symfony/requirements-checker/zipball/dd66b5ec68d2ad5f1b28631eb64a3d59a1a13d44",
+                "reference": "dd66b5ec68d2ad5f1b28631eb64a3d59a1a13d44",
                 "shasum": ""
             },
             "require": {
@@ -9293,7 +9296,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2018-04-25T06:17:02+00:00"
+            "time": "2018-05-05T07:36:35+00:00"
         },
         {
             "name": "symfony/stopwatch",
