@@ -11,8 +11,8 @@ use App\Entity\LogLogin;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
+use BadMethodCallException;
 use DeviceDetector\DeviceDetector;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -94,7 +94,7 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @param string $type
      *
-     * @throws RuntimeException
+     * @throws BadMethodCallException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
@@ -105,7 +105,7 @@ class LoginLogger implements LoginLoggerInterface
         $request = $this->requestStack->getCurrentRequest();
 
         if ($request === null) {
-            throw new RuntimeException('Could not get request from current request stack');
+            throw new BadMethodCallException('Could not get request from current request stack');
         }
 
         // Specify user agent

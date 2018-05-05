@@ -9,9 +9,9 @@ namespace App\Utils;
 
 use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
+use BadMethodCallException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
-use UnexpectedValueException;
 
 /**
  * Interface LoginLogger
@@ -50,7 +50,9 @@ interface LoginLoggerInterface
      *
      * @param string $type
      *
-     * @throws UnexpectedValueException
+     * @throws BadMethodCallException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
     public function process(string $type): void;

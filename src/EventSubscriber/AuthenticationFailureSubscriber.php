@@ -11,6 +11,7 @@ use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
+use BadMethodCallException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -81,7 +82,10 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
      *
      * @param AuthenticationFailureEvent $event
      *
+     * @throws BadMethodCallException
      * @throws UnexpectedValueException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
      */
