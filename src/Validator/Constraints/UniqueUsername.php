@@ -32,7 +32,7 @@ class UniqueUsername extends Constraint
      *
      * @var string
      */
-    public $message = 'This username is already taken.';
+    public const MESSAGE = 'This username is already taken.';
 
     /**
      * Error names configuration

@@ -32,7 +32,7 @@ class UniqueEmail extends Constraint
      *
      * @var string
      */
-    public $message = 'This email is already taken.';
+    public const MESSAGE = 'This email is already taken.';
 
     /**
      * Error names configuration

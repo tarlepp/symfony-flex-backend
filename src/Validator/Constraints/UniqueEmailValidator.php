@@ -42,13 +42,13 @@ class UniqueEmailValidator extends ConstraintValidator
      * @throws NonUniqueResultException
      *
      * @param UserInterface|mixed       $value      The value that should be validated
-     * @param Constraint|UniqueUsername $constraint The constraint for the validation
+     * @param Constraint|UniqueEmail $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint): void
     {
         if (!$this->repository->isEmailAvailable($value->getEmail(), $value->getId())) {
             $this->context
-                ->buildViolation($constraint->message)
+                ->buildViolation(UniqueEmail::MESSAGE)
                 ->setCode(UniqueEmail::IS_UNIQUE_EMAIL_ERROR)
                 ->addViolation();
         }
