@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Utils;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
 use App\Utils\LoginLogger;
+use BadMethodCallException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\User;
@@ -50,7 +51,7 @@ class LoginLoggerTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException BadMethodCallException
      * @expectedExceptionMessage Could not get request from current request stack
      *
      * @throws \Doctrine\ORM\ORMException
