@@ -58,6 +58,9 @@ class RemoveApiKeyCommand extends Command
      * @param OutputInterface $output
      *
      * @return int|null
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {

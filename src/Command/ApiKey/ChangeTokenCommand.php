@@ -61,8 +61,10 @@ class ChangeTokenCommand extends Command
      *
      * @return int|null
      *
-     * @throws LogicException
      * @throws InvalidArgumentException
+     * @throws LogicException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -89,6 +91,9 @@ class ChangeTokenCommand extends Command
      * @param ApiKeyEntity $apiKey
      *
      * @return mixed[]
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function changeApiKeyToken(ApiKeyEntity $apiKey): array
     {
