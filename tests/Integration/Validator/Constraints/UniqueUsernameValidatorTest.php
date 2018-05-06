@@ -61,7 +61,7 @@ class UniqueUsernameValidatorTest extends KernelTestCase
         $this->context
             ->expects(static::once())
             ->method('buildViolation')
-            ->with($this->constraint->message)
+            ->with(UniqueUsername::MESSAGE)
             ->willReturn($this->builder);
 
         $this->builder

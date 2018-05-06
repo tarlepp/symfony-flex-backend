@@ -61,7 +61,7 @@ class UniqueEmailValidatorTest extends KernelTestCase
         $this->context
             ->expects(static::once())
             ->method('buildViolation')
-            ->with($this->constraint->message)
+            ->with(UniqueEmail::MESSAGE)
             ->willReturn($this->builder);
 
         $this->builder
