@@ -248,7 +248,6 @@ final class ResponseHandler implements ResponseHandlerInterface
         } catch (Exception $exception) {
             $status = Response::HTTP_BAD_REQUEST;
 
-            /** @psalm-suppress TypeCoercion */
             throw new HttpException($status, $exception->getMessage(), $exception, [], $status);
         }
 
