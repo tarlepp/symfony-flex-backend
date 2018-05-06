@@ -206,7 +206,7 @@ class ApiKey implements EntityInterface
     }
 
     /**
-     * @return Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
+     * @return Collection|ArrayCollection
      */
     public function getUserGroups(): Collection
     {
@@ -216,7 +216,7 @@ class ApiKey implements EntityInterface
     /**
      * Getter for user request log collection.
      *
-     * @return Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>
+     * @return Collection|ArrayCollection
      */
     public function getLogsRequest(): Collection
     {

@@ -127,7 +127,7 @@ class Role extends BaseRole implements EntityInterface
     }
 
     /**
-     * @return Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
+     * @return Collection|ArrayCollection
      */
     public function getUserGroups(): Collection
     {

@@ -191,7 +191,7 @@ class UserGroup implements EntityInterface
     }
 
     /**
-     * @return Collection|ArrayCollection|Collection<User>|ArrayCollection<User>
+     * @return Collection|ArrayCollection
      */
     public function getUsers(): Collection
     {
@@ -199,7 +199,7 @@ class UserGroup implements EntityInterface
     }
 
     /**
-     * @return Collection|ArrayCollection|Collection<ApiKey>|ArrayCollection<ApiKey>
+     * @return Collection|ArrayCollection
      */
     public function getApiKeys(): Collection
     {
@@ -287,7 +287,7 @@ class UserGroup implements EntityInterface
     /**
      * Method to remove all many-to-many api key relations from current user group.
      *
-     * @return  UserGroup
+     * @return UserGroup
      */
     public function clearApiKeys(): self
     {
