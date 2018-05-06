@@ -183,7 +183,7 @@ final class SearchTerm implements SearchTermInterface
     /**
      * Method to get search terms.
      *
-     * @param string|string[] $search  Search term(s), could be a string or an array of strings.
+     * @param string|string[]|null $search Search term(s), could be a string or an array of strings.
      *
      * @return string[]
      */
@@ -195,7 +195,7 @@ final class SearchTerm implements SearchTermInterface
 
         return array_unique(
             array_filter(
-                array_map('trim', (is_array($search) ? $search : explode(' ', $search))),
+                array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
                 $filter
             )
         );
