@@ -73,7 +73,10 @@ trait RepositoryWrappersTrait
     public function getEntityManager(): EntityManager
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->managerRegistry->getManagerForClass($this->getEntityName());
+        /** @var EntityManager $entityManager */
+        $entityManager = $this->managerRegistry->getManagerForClass($this->getEntityName());
+
+        return $entityManager;
     }
 
     /**

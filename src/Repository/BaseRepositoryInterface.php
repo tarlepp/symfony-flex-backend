@@ -8,7 +8,6 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\EntityInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
@@ -58,9 +57,9 @@ interface BaseRepositoryInterface
     /**
      * Getter method for EntityManager for current entity.
      *
-     * @return EntityManager|ObjectManager
+     * @return EntityManager
      */
-    public function getEntityManager();
+    public function getEntityManager(): EntityManager;
 
     /**
      * Method to create new query builder for current entity.
