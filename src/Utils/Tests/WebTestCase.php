@@ -10,6 +10,7 @@ namespace App\Utils\Tests;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use function array_merge;
 use function gc_collect_cycles;
 use function gc_enable;
@@ -61,8 +62,11 @@ abstract class WebTestCase extends BaseWebTestCase
 
         self::bootKernel();
 
+        /** @var ServiceLocator $serviceLocator */
+        $serviceLocator = $this->container->get('test.service_locator');
+
         $this->container = static::$kernel->getContainer();
-        $this->authService = $this->container->get('test.service_locator')->get(Auth::class);
+        $this->authService = $serviceLocator->get(Auth::class);
     }
 
     /**
