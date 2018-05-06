@@ -90,10 +90,10 @@ class UserGroup extends RestDto
      */
     public function load(EntityInterface $entity): RestDtoInterface
     {
-        /** @psalm-var UserGroupEntity $entity */
-
-        $this->name = $entity->getName();
-        $this->role = $entity->getRole()->getId();
+        if ($entity instanceof UserGroupEntity) {
+            $this->name = $entity->getName();
+            $this->role = $entity->getRole()->getId();
+        }
 
         return $this;
     }

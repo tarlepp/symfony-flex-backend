@@ -265,14 +265,14 @@ class User extends RestDto implements UserInterface
             return $group->getId();
         };
 
-        /** @psalm-var UserEntity $entity */
-
-        $this->id = $entity->getId();
-        $this->username = $entity->getUsername();
-        $this->firstname = $entity->getFirstname();
-        $this->surname = $entity->getSurname();
-        $this->email = $entity->getEmail();
-        $this->userGroups = $entity->getUserGroups()->map($iterator)->toArray();
+        if ($entity instanceof UserEntity) {
+            $this->id = $entity->getId();
+            $this->username = $entity->getUsername();
+            $this->firstname = $entity->getFirstname();
+            $this->surname = $entity->getSurname();
+            $this->email = $entity->getEmail();
+            $this->userGroups = $entity->getUserGroups()->map($iterator)->toArray();
+        }
 
         return $this;
     }

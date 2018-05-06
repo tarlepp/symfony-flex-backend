@@ -142,7 +142,7 @@ class ApiKey extends RestDto
     /**
      * Method to load DTO data from specified entity.
      *
-     * @param EntityInterface $entity
+     * @param EntityInterface|ApiKeyEntity $entity
      *
      * @return RestDtoInterface|ApiKey
      */
@@ -157,11 +157,12 @@ class ApiKey extends RestDto
             return $userGroup->getId();
         };
 
-        /** @var ApiKeyEntity $entity */
-        $this->id = $entity->getId();
-        $this->token = $entity->getToken();
-        $this->description = $entity->getDescription();
-        $this->userGroups = $entity->getUserGroups()->map($iterator)->toArray();
+        if ($entity instanceof ApiKeyEntity) {
+            $this->id = $entity->getId();
+            $this->token = $entity->getToken();
+            $this->description = $entity->getDescription();
+            $this->userGroups = $entity->getUserGroups()->map($iterator)->toArray();
+        }
 
         return $this;
     }
