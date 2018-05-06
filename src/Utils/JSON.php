@@ -138,6 +138,6 @@ class JSON
     private static function getErrorMessage(int $error): string
     {
         return !array_key_exists($error, self::$errorReference) ?
-            self::JSON_UNKNOWN_ERROR : (string)self::$errorReference[$error];
+            self::JSON_UNKNOWN_ERROR : self::$errorReference[$error];
     }
 }
