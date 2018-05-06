@@ -36,7 +36,7 @@ trait RepositoryMethodsTrait
      * @param int|null $lockMode
      * @param int|null $lockVersion
      *
-     * @return EntityInterface|object|null
+     * @return EntityInterface|null|mixed
      *
      * @throws \Doctrine\ORM\TransactionRequiredException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -56,7 +56,7 @@ trait RepositoryMethodsTrait
      * @param mixed[]      $criteria
      * @param mixed[]|null $orderBy
      *
-     * @return EntityInterface|object|null
+     * @return EntityInterface|null|mixed
      */
     public function findOneBy(array $criteria, ?array $orderBy = null)
     {

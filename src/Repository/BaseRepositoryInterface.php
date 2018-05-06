@@ -118,7 +118,7 @@ interface BaseRepositoryInterface
      * @param int|null $lockMode
      * @param int|null $lockVersion
      *
-     * @return EntityInterface|object|null
+     * @return EntityInterface|null|mixed
      */
     public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null);
 
@@ -129,7 +129,7 @@ interface BaseRepositoryInterface
      * @param mixed[]      $criteria
      * @param mixed[]|null $orderBy
      *
-     * @return EntityInterface|object|null
+     * @return EntityInterface|null|mixed
      */
     public function findOneBy(array $criteria, ?array $orderBy = null);
 
