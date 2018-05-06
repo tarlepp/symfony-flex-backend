@@ -25,7 +25,7 @@ use function sprintf;
 abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 {
     /**
-     * @var ControllerInterface
+     * @var ControllerInterface|mixed
      */
     protected $controller;
 
@@ -48,7 +48,6 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 
         parent::setUp();
 
-        /** @var ControllerInterface controller */
         $this->controller = $this->getContainer()->get($this->controllerClass);
     }
 
