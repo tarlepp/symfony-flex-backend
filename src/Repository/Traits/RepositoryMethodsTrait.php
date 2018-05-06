@@ -29,7 +29,6 @@ use function array_map;
  */
 trait RepositoryMethodsTrait
 {
-    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Wrapper for default Doctrine repository find method.
      *
@@ -51,7 +50,6 @@ trait RepositoryMethodsTrait
             ->find($this->getEntityName(), $id, $lockMode, $lockVersion);
     }
 
-    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Wrapper for default Doctrine repository findOneBy method.
      *
