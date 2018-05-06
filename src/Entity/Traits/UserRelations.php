@@ -21,8 +21,6 @@ use function array_unique;
  *
  * @package App\Entity\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @property $this User
  */
 trait UserRelations
 {
