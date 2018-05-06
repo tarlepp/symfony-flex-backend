@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Rest;
 
+use Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -244,7 +245,7 @@ final class ResponseHandler implements ResponseHandlerInterface
             $response = new Response();
             $response->setContent($this->serializer->serialize($data, $format, $context));
             $response->setStatusCode($httpStatus);
-        } catch (Throwable $exception) {
+        } catch (Exception $exception) {
             $status = Response::HTTP_BAD_REQUEST;
 
             /** @psalm-suppress TypeCoercion */
