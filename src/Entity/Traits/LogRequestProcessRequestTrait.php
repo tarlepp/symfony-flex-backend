@@ -416,7 +416,7 @@ trait LogRequestProcessRequestTrait
         $bodyContent = $request->getContent();
 
         $this->action = $this->determineAction($request);
-        $this->content = $this->cleanContent($bodyContent);
+        $this->content = $this->cleanContent((string)$bodyContent);
     }
 
     /**
@@ -497,7 +497,7 @@ trait LogRequestProcessRequestTrait
         if ($rawContent) {
             // First try to convert content to array from JSON
             try {
-                $output = JSON::decode($rawContent, true);
+                $output = JSON::decode((string)$rawContent, true);
             } /** @noinspection BadExceptionsProcessingInspection */
             catch (LogicException $error) { // Oh noes content isn't JSON so just parse it
                 $output = [];
