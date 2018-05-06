@@ -194,7 +194,7 @@ trait RestMethodHelper
      *
      * @SuppressWarnings("unused")
      *
-     * @param mixed[] &$criteria
+     * @param mixed[] $criteria
      */
     public function processCriteria(/** @scrutinizer ignore-unused */ array &$criteria): void
     {

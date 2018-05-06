@@ -75,8 +75,8 @@ class Response
 
     /**
      * @param string   $action
-     * @param string   &$description
-     * @param string[] &$responses
+     * @param string   $description
+     * @param string[] $responses
      */
     private function processResponseForRead(
         string $action,
@@ -97,9 +97,9 @@ class Response
 
     /**
      * @param string   $action
-     * @param string   &$description
-     * @param int      &$statusCode
-     * @param string[] &$responses
+     * @param string   $description
+     * @param int      $statusCode
+     * @param string[] $responses
      */
     private function processResponseForWrite(
         string $action,
