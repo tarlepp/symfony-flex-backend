@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -91,10 +92,13 @@ class ProfileController
         SerializerInterface $serializer,
         RolesService $rolesService
     ): JsonResponse {
+        /** @var TokenInterface $tokenInterface */
+        $tokenInterface = $tokenStorage->getToken();
+
         /** @var User|ApiKeyUser $user */
         /** @noinspection NullPointerExceptionInspection */
         /** @psalm-suppress PossiblyNullReference */
-        $user = $tokenStorage->getToken()->getUser();
+        $user = $tokenInterface->getUser();
 
         // Get serializer groups for current user instance
         $groups = $this->getSerializationGroupsForProfile($rolesService, $user);
@@ -150,10 +154,13 @@ class ProfileController
      */
     public function rolesAction(TokenStorageInterface $tokenStorage, RolesService $rolesService): JsonResponse
     {
+        /** @var TokenInterface $tokenInterface */
+        $tokenInterface = $tokenStorage->getToken();
+
         /** @var User|ApiKeyUser $user */
         /** @noinspection NullPointerExceptionInspection */
         /** @psalm-suppress PossiblyNullReference */
-        $user = $tokenStorage->getToken()->getUser();
+        $user = $tokenInterface->getUser();
 
         return new JsonResponse($rolesService->getInheritedRoles($user->getRoles()));
     }
@@ -312,10 +319,13 @@ class ProfileController
      */
     private function getUserGroups(TokenStorageInterface $tokenStorage): ?Collection
     {
+        /** @var TokenInterface $tokenInterface */
+        $tokenInterface = $tokenStorage->getToken();
+
         /** @var User|ApiKeyUser $user */
         /** @noinspection NullPointerExceptionInspection */
         /** @psalm-suppress PossiblyNullReference */
-        $user = $tokenStorage->getToken()->getUser();
+        $user = $tokenInterface->getUser();
 
         $data = null;
 

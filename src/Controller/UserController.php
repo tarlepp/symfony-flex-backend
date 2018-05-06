@@ -19,6 +19,7 @@ use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
 use App\Security\RolesService;
+use LogicException;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -30,7 +31,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Throwable;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -106,16 +109,20 @@ class UserController extends Controller
      *
      * @return Response
      *
-     * @throws \LogicException
+     * @throws LogicException
+     * @throws Throwable
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function deleteAction(Request $request, User $requestUser, TokenStorageInterface $tokenStorage): Response
     {
+        /** @var TokenInterface $tokenInterface */
+        $tokenInterface = $tokenStorage->getToken();
+
         /** @var User $currentUser */
         /** @noinspection NullPointerExceptionInspection */
         /** @psalm-suppress PossiblyNullReference */
-        $currentUser = $tokenStorage->getToken()->getUser();
+        $currentUser = $tokenInterface->getUser();
 
         if ($currentUser === $requestUser) {
             throw new HttpException(400, 'You cannot remove yourself...');
