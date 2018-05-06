@@ -11,6 +11,7 @@ parameters:
         - 'PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer'
         - 'PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer'
         - 'PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer'
+        - 'SlevomatCodingStandard\Sniffs\Exceptions\ReferenceThrowableOnlySniff'
         - 'Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer'
         - 'Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer'
     skip:
