@@ -195,7 +195,7 @@ final class SearchTerm implements SearchTermInterface
 
         return array_unique(
             array_filter(
-                array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
+                array_map('trim', (is_array($search) ? $search : explode(' ', $search))),
                 $filter
             )
         );
