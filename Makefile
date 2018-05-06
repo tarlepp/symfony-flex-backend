@@ -104,3 +104,8 @@ ecs: ## Runs The Easiest Way to Use Any Coding Standard
 psalm: ## Runs Psalm static analysis tool
 	php ./vendor/bin/psalm --no-cache
 ###< psalm ###
+
+###> phpstan ###
+phpstan: ## Runs PHPStan static analysis tool
+	./vendor/bin/phpstan analyze src --level 2
+###< phpstan ###
