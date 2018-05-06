@@ -16,6 +16,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTAuthenticatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -97,7 +98,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
         // Fetch user entity
-        if ($event->getException()->getToken() !== null) {
+        if ($event->getException()->getToken() instanceof TokenInterface) {
             $user = $this->getUser($event->getException()->getToken()->getUser());
 
             if ($user instanceof User) {

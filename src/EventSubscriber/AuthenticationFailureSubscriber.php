@@ -15,6 +15,7 @@ use BadMethodCallException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use UnexpectedValueException;
 
 /**
@@ -92,7 +93,7 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
         // Fetch user entity
-        if ($event->getException()->getToken() !== null) {
+        if ($event->getException()->getToken() instanceof TokenInterface) {
             /** @var User $user */
             $user = $this->userRepository->loadUserByUsername($event->getException()->getToken()->getUser());
 

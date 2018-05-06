@@ -458,7 +458,7 @@ trait LogRequestProcessRequestTrait
         $this->queryString = $request->getRequestUri();
         $this->uri = $request->getUri();
         $this->controller = $request->get('_controller', '');
-        $this->contentType = (string)$request->getMimeType($request->getContentType() ?? '');
+        $this->contentType = $request->getMimeType($request->getContentType() ?? '');
         $this->contentTypeShort = (string)$request->getContentType();
         $this->xmlHttpRequest = $request->isXmlHttpRequest();
     }
