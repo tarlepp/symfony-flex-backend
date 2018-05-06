@@ -73,6 +73,10 @@ class CreateRolesCommand extends Command
      * @param OutputInterface $output An OutputInterface instance
      *
      * @return null|int null or 0 if everything went fine, or an error code
+     *
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -108,6 +112,10 @@ class CreateRolesCommand extends Command
      * @param string $role
      *
      * @return int
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     private function createRole(string $role): int
     {
