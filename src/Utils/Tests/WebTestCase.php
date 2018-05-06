@@ -62,10 +62,11 @@ abstract class WebTestCase extends BaseWebTestCase
 
         self::bootKernel();
 
+        $this->container = static::$kernel->getContainer();
+
         /** @var ServiceLocator $serviceLocator */
         $serviceLocator = $this->container->get('test.service_locator');
 
-        $this->container = static::$kernel->getContainer();
         $this->authService = $serviceLocator->get(Auth::class);
     }
 
