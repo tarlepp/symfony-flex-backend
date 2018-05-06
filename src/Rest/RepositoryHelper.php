@@ -368,7 +368,7 @@ class RepositoryHelper
     }
 
     /**
-     * @param mixed[] &$condition
+     * @param mixed[] $condition
      *
      * @return Closure
      */

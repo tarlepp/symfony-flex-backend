@@ -43,7 +43,7 @@ class Tags
 
     /**
      * @param RouteModel $routeModel
-     * @param mixed[]    &$data
+     * @param mixed[]    $data
      */
     private function processTags(RouteModel $routeModel, array &$data): void
     {

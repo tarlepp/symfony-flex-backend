@@ -20,8 +20,8 @@ trait RestResourceIds
     /**
      * Before lifecycle method for ids method.
      *
-     * @param mixed[] &$criteria
-     * @param mixed[] &$search
+     * @param mixed[] $criteria
+     * @param mixed[] $search
      */
     public function beforeIds(array &$criteria, array &$search): void
     {

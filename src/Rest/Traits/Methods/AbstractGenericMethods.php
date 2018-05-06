@@ -50,7 +50,7 @@ trait AbstractGenericMethods
     /**
      * Method to process current criteria array.
      *
-     * @param mixed[] &$criteria
+     * @param mixed[] $criteria
      */
     abstract public function processCriteria(array &$criteria): void;
 

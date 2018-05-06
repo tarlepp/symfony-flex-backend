@@ -218,7 +218,7 @@ class ApiDocDescriber implements DescriberInterface
     }
 
     /**
-     * @param mixed[] &$supported
+     * @param mixed[] $supported
      *
      * @return Closure
      */

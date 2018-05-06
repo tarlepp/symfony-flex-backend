@@ -22,11 +22,11 @@ trait RestResourceFind
     /**
      * Before lifecycle method for find method.
      *
-     * @param mixed[] &$criteria
-     * @param mixed[] &$orderBy
-     * @param integer &$limit
-     * @param integer &$offset
-     * @param mixed[] &$search
+     * @param mixed[] $criteria
+     * @param mixed[] $orderBy
+     * @param integer $limit
+     * @param integer $offset
+     * @param mixed[] $search
      */
     public function beforeFind(array &$criteria, array &$orderBy, int &$limit, int &$offset, array &$search): void
     {
@@ -38,12 +38,12 @@ trait RestResourceFind
      * Notes:   If you make changes to entities in this lifecycle method by default it will be saved on end of current
      *          request. To prevent this you need to clone each entity and use those.
      *
-     * @param mixed[]           &$criteria
-     * @param mixed[]           &$orderBy
-     * @param integer           &$limit
-     * @param integer           &$offset
-     * @param mixed[]           &$search
-     * @param EntityInterface[] &$entities
+     * @param mixed[]           $criteria
+     * @param mixed[]           $orderBy
+     * @param integer           $limit
+     * @param integer           $offset
+     * @param mixed[]           $search
+     * @param EntityInterface[] $entities
      */
     public function afterFind(
         array &$criteria,

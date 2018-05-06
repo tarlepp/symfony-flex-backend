@@ -128,7 +128,7 @@ class ApiKeyHelper
     /**
      * Method to return ApiKeyIterator closure. This will format ApiKey entities for choice list.
      *
-     * @param string[] &$choices
+     * @param string[] $choices
      *
      * @return Closure
      */

@@ -107,7 +107,7 @@ class Summary
 
     /**
      * @param string $action
-     * @param string &$summary
+     * @param string $summary
      */
     private function processSummaryForRead(string $action, string &$summary): void
     {
@@ -124,7 +124,7 @@ class Summary
 
     /**
      * @param string $action
-     * @param string &$summary
+     * @param string $summary
      */
     private function processSummaryForWrite(string $action, string &$summary): void
     {

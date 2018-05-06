@@ -22,8 +22,8 @@ trait RestResourceFindOneBy
     /**
      * Before lifecycle method for findOneBy method.
      *
-     * @param mixed[] &$criteria
-     * @param mixed[] &$orderBy
+     * @param mixed[] $criteria
+     * @param mixed[] $orderBy
      */
     public function beforeFindOneBy(array &$criteria, array &$orderBy): void
     {
