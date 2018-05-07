@@ -14,6 +14,9 @@ use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use function get_class;
+use function is_array;
+use function is_object;
 
 /**
  * Class LogRequestTest
@@ -79,18 +82,28 @@ class LogRequestTest extends EntityTestCase
             new ApiKey()
         );
 
+        $value = $logRequest->$getter();
+
         if (!(\array_key_exists('columnName', $meta) || \array_key_exists('joinColumns', $meta))) {
             $type = ArrayCollection::class;
 
-            static::assertInstanceOf($type, $logRequest->$getter());
+            static::assertInstanceOf($type, $value);
         }
+
+        $message = sprintf(
+            'Getter \'%s\' for field \'%s\' did not return expected type \'%s\' return value was \'%s\'',
+            $getter,
+            $field,
+            $type,
+            is_object($value) ? get_class($value) : (is_array($value) ? 'array' : $value)
+        );
 
         try {
             if (static::isType($type)) {
-                static::assertInternalType($type, $logRequest->$getter());
+                static::assertInternalType($type, $value, $message);
             }
         } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
-            static::assertInstanceOf($type, $logRequest->$getter());
+            static::assertInstanceOf($type, $value, $message);
         }
 
         unset($logRequest);
@@ -102,7 +115,7 @@ class LogRequestTest extends EntityTestCase
      * @param array $headers
      * @param array $expected
      */
-    public function testThatSensitiveDataIsCleanedFromHeaders(array $headers, array $expected)
+    public function testThatSensitiveDataIsCleanedFromHeaders(array $headers, array $expected): void
     {
         $request = Request::create('');
         $request->headers->replace($headers);
@@ -120,7 +133,7 @@ class LogRequestTest extends EntityTestCase
      * @param array $parameters
      * @param array $expected
      */
-    public function testThatSensitiveDataIsCleanedFromParameters(array $parameters, array $expected)
+    public function testThatSensitiveDataIsCleanedFromParameters(array $parameters, array $expected): void
     {
         $request = Request::create('', 'POST');
         $request->request->replace($parameters);
@@ -140,7 +153,7 @@ class LogRequestTest extends EntityTestCase
      *
      * @throws \ReflectionException
      */
-    public function testThatDetermineParametersWorksLikeExpected(string $content, array $expected)
+    public function testThatDetermineParametersWorksLikeExpected(string $content, array $expected): void
     {
         $logRequest = new LogRequest(Request::create(''), Response::create());
 
