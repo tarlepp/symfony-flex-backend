@@ -21,6 +21,7 @@ use function mb_strtolower;
 use function parse_str;
 use function preg_replace;
 use function strpos;
+use function strval;
 
 /**
  * Trait LogRequestProcessRequestTrait
@@ -458,7 +459,7 @@ trait LogRequestProcessRequestTrait
         $this->queryString = $request->getRequestUri();
         $this->uri = $request->getUri();
         $this->controller = $request->get('_controller', '');
-        $this->contentType = $request->getMimeType($request->getContentType() ?? '');
+        $this->contentType = strval($request->getMimeType($request->getContentType() ?? ''));
         $this->contentTypeShort = (string)$request->getContentType();
         $this->xmlHttpRequest = $request->isXmlHttpRequest();
     }
