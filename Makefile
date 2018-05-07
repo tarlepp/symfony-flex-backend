@@ -107,5 +107,5 @@ psalm: ## Runs Psalm static analysis tool
 
 ###> phpstan ###
 phpstan: ## Runs PHPStan static analysis tool
-	./vendor/bin/phpstan analyze src --level 2
+	./vendor/bin/phpstan analyze --level 7 src
 ###< phpstan ###
