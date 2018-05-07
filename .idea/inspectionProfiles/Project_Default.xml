@@ -19,7 +19,9 @@
     </inspection_tool>
     <inspection_tool class="ElvisOperatorCanBeUsedInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="EmptyClassInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="ExceptionsAnnotatingAndHandlingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="FixedTimeStartWithInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ForeachSourceInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ForgottenDebugOutputInspection" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="configuration">
         <list>
@@ -98,6 +100,7 @@
           <option value="mikey179/vfsStream" />
           <option value="mockery/mockery" />
           <option value="mybuilder/phpunit-accelerator" />
+          <option value="orchestra/testbench" />
           <option value="pdepend/pdepend" />
           <option value="phan/phan" />
           <option value="phing/phing" />
@@ -118,6 +121,7 @@
           <option value="squizlabs/php_codesniffer" />
           <option value="sstalle/php7cc" />
           <option value="symfony/debug" />
+          <option value="symfony/maker-bundle" />
           <option value="symfony/phpunit-bridge" />
           <option value="symfony/var-dumper" />
           <option value="vimeo/psalm" />
