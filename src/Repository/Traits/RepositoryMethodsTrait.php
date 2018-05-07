@@ -11,6 +11,7 @@ use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
 use App\Rest\RepositoryHelper;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use function array_map;
@@ -60,11 +61,9 @@ trait RepositoryMethodsTrait
      */
     public function findOneBy(array $criteria, ?array $orderBy = null)
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        /** @psalm-suppress TooManyArguments */
-        return $this->getEntityManager()
-            ->getRepository($this->getEntityName())
-            ->/** @scrutinizer ignore-call */findOneBy($criteria, $orderBy);
+        $repository = $this->getEntityManager()->getRepository($this->getEntityName());
+
+        return $repository instanceof EntityRepository ? $repository->findOneBy($criteria, $orderBy) : null;
     }
 
     /**
