@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de552bac7248d963d4647da94bc57c16",
+    "content-hash": "de8fe13e2b8a815f4858ce5de7f2535e",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -939,16 +939,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "v1.7.0",
+            "version": "v1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "bb942dfc9364d97662325678ef6ba0e8fc6ff4df"
+                "reference": "d3e8b903233d5fb7f00193c95eec501f27c0b908"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/bb942dfc9364d97662325678ef6ba0e8fc6ff4df",
-                "reference": "bb942dfc9364d97662325678ef6ba0e8fc6ff4df",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/d3e8b903233d5fb7f00193c95eec501f27c0b908",
+                "reference": "d3e8b903233d5fb7f00193c95eec501f27c0b908",
                 "shasum": ""
             },
             "require": {
@@ -1008,7 +1008,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2018-05-05T22:46:31+00:00"
+            "time": "2018-05-07T12:37:11+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -1183,16 +1183,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.34",
+            "version": "v2.4.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "f61d14436c30d0faa35b1e7f53b3855597c46c5a"
+                "reference": "1e400fbd05b7e5f912f55fe95805450f7d3bed60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/f61d14436c30d0faa35b1e7f53b3855597c46c5a",
-                "reference": "f61d14436c30d0faa35b1e7f53b3855597c46c5a",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/1e400fbd05b7e5f912f55fe95805450f7d3bed60",
+                "reference": "1e400fbd05b7e5f912f55fe95805450f7d3bed60",
                 "shasum": ""
             },
             "require": {
@@ -1260,7 +1260,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2018-04-13T13:49:18+00:00"
+            "time": "2018-05-08T12:28:40+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -2114,16 +2114,16 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.10.1",
+            "version": "3.10.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "76a9e32ac6842239ac66a3877079cbfb84f29789"
+                "reference": "67e96595cd7649b7967533053fcbfbe02d5c55a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/76a9e32ac6842239ac66a3877079cbfb84f29789",
-                "reference": "76a9e32ac6842239ac66a3877079cbfb84f29789",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/67e96595cd7649b7967533053fcbfbe02d5c55a3",
+                "reference": "67e96595cd7649b7967533053fcbfbe02d5c55a3",
                 "shasum": ""
             },
             "require": {
@@ -2164,7 +2164,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2018-03-23T15:19:45+00:00"
+            "time": "2018-05-07T19:33:29+00:00"
         },
         {
             "name": "psr/cache",
@@ -5990,7 +5990,7 @@
         },
         {
             "name": "illuminate/config",
-            "version": "v5.6.20",
+            "version": "v5.6.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/config.git",
@@ -6034,7 +6034,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.6.20",
+            "version": "v5.6.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -6078,16 +6078,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.6.20",
+            "version": "v5.6.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "322ec80498b3bf85bc4025d028e130a9b50242b9"
+                "reference": "6a11fbccbc7da16a85fcd1d4b08e51b5658de0d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/322ec80498b3bf85bc4025d028e130a9b50242b9",
-                "reference": "322ec80498b3bf85bc4025d028e130a9b50242b9",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/6a11fbccbc7da16a85fcd1d4b08e51b5658de0d4",
+                "reference": "6a11fbccbc7da16a85fcd1d4b08e51b5658de0d4",
                 "shasum": ""
             },
             "require": {
@@ -6118,20 +6118,20 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2018-04-07T17:05:26+00:00"
+            "time": "2018-05-08T13:22:33+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.6.20",
+            "version": "v5.6.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "2a97d211c052f6d6ce9756c89d64b855d860d923"
+                "reference": "6e84d4140310246ace38fdb0909da5b2fb22eadf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/2a97d211c052f6d6ce9756c89d64b855d860d923",
-                "reference": "2a97d211c052f6d6ce9756c89d64b855d860d923",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/6e84d4140310246ace38fdb0909da5b2fb22eadf",
+                "reference": "6e84d4140310246ace38fdb0909da5b2fb22eadf",
                 "shasum": ""
             },
             "require": {
@@ -6175,7 +6175,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-05-02T14:59:13+00:00"
+            "time": "2018-05-07T14:12:37+00:00"
         },
         {
             "name": "jackiedo/dotenv-editor",
