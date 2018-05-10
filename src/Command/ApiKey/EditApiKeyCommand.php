@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Command\ApiKey;
 
+use App\Command\Traits\SymfonyStyleTrait;
 use App\DTO\ApiKey as ApiKeyDto;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Form\Type\Console\ApiKeyType;
@@ -14,7 +15,6 @@ use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class EditApiKeyCommand
@@ -24,6 +24,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class EditApiKeyCommand extends Command
 {
+    // Traits
+    use SymfonyStyleTrait;
+
     /**
      * @var ApiKeyResource
      */
@@ -68,8 +71,7 @@ class EditApiKeyCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->write("\033\143");
+        $io = $this->getSymfonyStyle($input, $output);
 
         // Get API key entity
         $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to edit?');

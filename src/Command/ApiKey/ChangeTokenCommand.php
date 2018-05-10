@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Command\ApiKey;
 
+use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
@@ -14,7 +15,6 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class ChangeTokenCommand
@@ -24,6 +24,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class ChangeTokenCommand extends Command
 {
+    // Traits
+    use SymfonyStyleTrait;
+
     /**
      * @var ApiKeyResource
      */
@@ -68,8 +71,7 @@ class ChangeTokenCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->write("\033\143");
+        $io = $this->getSymfonyStyle($input, $output);
 
         // Get API key entity
         $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key token you want to change?');
