@@ -7,12 +7,12 @@ declare(strict_types = 1);
  */
 namespace App\Command\User;
 
+use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class RemoveUserGroupCommand
@@ -22,6 +22,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class RemoveUserGroupCommand extends Command
 {
+    // Traits
+    use SymfonyStyleTrait;
+
     /**
      * @var UserGroupResource
      */
@@ -58,11 +61,13 @@ class RemoveUserGroupCommand extends Command
      * @param OutputInterface $output
      *
      * @return int|null
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->write("\033\143");
+        $io = $this->getSymfonyStyle($input, $output);
 
         $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to remove?');
 

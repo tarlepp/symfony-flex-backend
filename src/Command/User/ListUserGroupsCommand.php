@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Command\User;
 
+use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
@@ -14,7 +15,6 @@ use Closure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use function array_map;
 use function implode;
 use function sprintf;
@@ -27,6 +27,9 @@ use function sprintf;
  */
 class ListUserGroupsCommand extends Command
 {
+    // Traits
+    use SymfonyStyleTrait;
+
     /**
      * @var UserGroupResource
      */
@@ -59,8 +62,7 @@ class ListUserGroupsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->write("\033\143");
+        $io = $this->getSymfonyStyle($input, $output);
 
         static $headers = [
             'Id',

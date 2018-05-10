@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Command\User;
 
 use App\Command\HelperConfigure;
+use App\Command\Traits\SymfonyStyleTrait;
 use App\DTO\UserGroup as UserGroupDto;
 use App\Form\Type\Console\UserGroupType;
 use App\Repository\RoleRepository;
@@ -26,6 +27,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CreateUserGroupCommand extends Command
 {
+    // Traits
+    use SymfonyStyleTrait;
+
     /**
      * @var mixed[]
      */
@@ -96,8 +100,7 @@ class CreateUserGroupCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->write("\033\143");
+        $io = $this->getSymfonyStyle($input, $output);
 
         // Check that roles exists
         $this->checkRoles($output, $input->isInteractive(), $io);

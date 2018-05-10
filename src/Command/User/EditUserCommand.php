@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Command\User;
 
+use App\Command\Traits\SymfonyStyleTrait;
 use App\DTO\User as UserDto;
 use App\Entity\User as UserEntity;
 use App\Form\Type\Console\UserType;
@@ -14,7 +15,6 @@ use App\Resource\UserResource;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class EditUserCommand
@@ -24,6 +24,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class EditUserCommand extends Command
 {
+    // Traits
+    use SymfonyStyleTrait;
+
     /**
      * @var UserResource
      */
@@ -56,18 +59,19 @@ class EditUserCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int|null
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->write("\033\143");
+        $io = $this->getSymfonyStyle($input, $output);
 
         // Get user entity
         $user = $this->userHelper->getUser($io, 'Which user you want to edit?');
@@ -94,6 +98,8 @@ class EditUserCommand extends Command
      *
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     private function updateUser(InputInterface $input, OutputInterface $output, UserEntity $user): string
     {

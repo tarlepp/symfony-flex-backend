@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Command\User;
 
+use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\Role;
 use App\Repository\RoleRepository;
 use App\Security\RolesService;
@@ -14,7 +15,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use function array_map;
 use function array_sum;
 use function sprintf;
@@ -27,6 +27,9 @@ use function sprintf;
  */
 class CreateRolesCommand extends Command
 {
+    // Traits
+    use SymfonyStyleTrait;
+
     /**
      * @var EntityManagerInterface
      */
@@ -80,9 +83,12 @@ class CreateRolesCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->write("\033\143");
+        $io = $this->getSymfonyStyle($input, $output);
 
+        /**
+         * @param string $role
+         * @return int
+         */
         $iterator = function (string $role): int {
             return $this->createRole($role);
         };

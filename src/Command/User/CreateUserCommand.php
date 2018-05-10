@@ -9,6 +9,7 @@ namespace App\Command\User;
 
 use App\Command\HelperConfigure;
 use App\Command\Traits\ApiKeyUserManagementHelperTrait;
+use App\Command\Traits\SymfonyStyleTrait;
 use App\DTO\User as UserDto;
 use App\Form\Type\Console\UserType;
 use App\Repository\RoleRepository;
@@ -30,6 +31,7 @@ class CreateUserCommand extends Command
 {
     // Traits
     use ApiKeyUserManagementHelperTrait;
+    use SymfonyStyleTrait;
 
     private const PARAMETER_NAME = 'name';
     private const PARAMETER_DESCRIPTION = 'description';
@@ -148,8 +150,7 @@ class CreateUserCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->write("\033\143");
+        $io = $this->getSymfonyStyle($input, $output);
 
         // Check that roles exists
         $this->checkUserGroups($output, $input->isInteractive(), $io);

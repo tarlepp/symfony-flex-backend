@@ -7,6 +7,7 @@ declare(strict_types = 1);
  */
 namespace App\Command\User;
 
+use App\Command\Traits\SymfonyStyleTrait;
 use App\DTO\UserGroup as UserGroupDto;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Form\Type\Console\UserGroupType;
@@ -14,7 +15,6 @@ use App\Resource\UserGroupResource;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Class EditUserGroupCommand
@@ -24,6 +24,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class EditUserGroupCommand extends Command
 {
+    // Traits
+    use SymfonyStyleTrait;
+
     /**
      * @var UserGroupResource
      */
@@ -61,13 +64,14 @@ class EditUserGroupCommand extends Command
      *
      * @return int|null
      *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $io = new SymfonyStyle($input, $output);
-        $io->write("\033\143");
+        $io = $this->getSymfonyStyle($input, $output);
 
         $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to edit?');
 
@@ -91,6 +95,8 @@ class EditUserGroupCommand extends Command
      *
      * @return string
      *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Symfony\Component\Console\Exception\LogicException
      * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      */
