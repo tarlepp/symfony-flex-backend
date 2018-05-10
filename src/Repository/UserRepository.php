@@ -56,20 +56,7 @@ class UserRepository extends BaseRepository
      */
     public function isUsernameAvailable(string $username, ?string $id = null): bool
     {
-        // Build query
-        $query = $this
-            ->createQueryBuilder('u')
-            ->select('u')
-            ->where('u.username = :username')
-            ->setParameter('username', $username);
-
-        if ($id !== null) {
-            $query
-                ->andWhere('u.id <> :id')
-                ->setParameter('id', $id);
-        }
-
-        return $query->getQuery()->getOneOrNullResult() === null;
+        return $this->isUnique('username', $username, $id);
     }
 
     /**
@@ -84,12 +71,26 @@ class UserRepository extends BaseRepository
      */
     public function isEmailAvailable(string $email, ?string $id = null): bool
     {
+        return $this->isUnique('email', $email, $id);
+    }
+
+    /**
+     * @param string      $column Column to check
+     * @param string      $value  Value of specified column
+     * @param null|string $id     User id to ignore
+     *
+     * @return bool
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    private function isUnique(string $column, string $value, ?string $id = null): bool
+    {
         // Build query
         $query = $this
             ->createQueryBuilder('u')
             ->select('u')
-            ->where('u.email = :email')
-            ->setParameter('email', $email);
+            ->where('u.' . $column . ' = :value')
+            ->setParameter('value', $value);
 
         if ($id !== null) {
             $query
