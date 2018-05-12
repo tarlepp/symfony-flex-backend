@@ -153,7 +153,7 @@ class ApiKey extends RestDto
          *
          * @return string
          */
-        $iterator = function (UserGroupEntity $userGroup): string {
+        $iterator = static function (UserGroupEntity $userGroup): string {
             return $userGroup->getId();
         };
 

@@ -39,7 +39,7 @@ trait UserGroupChoices
          *
          * @param UserGroup $userGroup
          */
-        $iterator = function (UserGroup $userGroup) use (&$choices): void {
+        $iterator = static function (UserGroup $userGroup) use (&$choices): void {
             $name = $userGroup->getName() . ' [' . $userGroup->getRole()->getId() . ']';
 
             $choices[$name] = $userGroup->getId();

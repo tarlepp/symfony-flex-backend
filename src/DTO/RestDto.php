@@ -171,7 +171,7 @@ abstract class RestDto implements RestDtoInterface
             'has' . ucfirst($property),
         ];
 
-        $filter = function (string $method) use ($dto): bool {
+        $filter = static function (string $method) use ($dto): bool {
             return method_exists($dto, $method);
         };
 

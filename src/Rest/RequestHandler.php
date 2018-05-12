@@ -255,7 +255,7 @@ final class RequestHandler
          *
          * @param string|array $terms
          */
-        $iterator = function (&$terms): void {
+        $iterator = static function (&$terms): void {
             $terms = array_unique(array_values(array_filter($terms)));
         };
 

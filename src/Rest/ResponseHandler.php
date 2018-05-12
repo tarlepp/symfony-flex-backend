@@ -206,7 +206,7 @@ final class ResponseHandler implements ResponseHandlerInterface
         if ($populateAll && count($populate) === 0) {
             $associations = $this->getResource()->getAssociations();
 
-            $iterator = function (string $assocName) use ($entityName): string {
+            $iterator = static function (string $assocName) use ($entityName): string {
                 return $entityName . '.' . $assocName;
             };
 

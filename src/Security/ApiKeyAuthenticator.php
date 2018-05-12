@@ -133,7 +133,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
          *
          * @return bool
          */
-        $filter = function (UserProviderInterface $userProvider): bool {
+        $filter = static function (UserProviderInterface $userProvider): bool {
             return $userProvider instanceof ApiKeyUserProvider;
         };
 

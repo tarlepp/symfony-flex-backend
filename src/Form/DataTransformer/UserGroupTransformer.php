@@ -56,7 +56,7 @@ class UserGroupTransformer implements DataTransformerInterface
              *
              * @return string
              */
-            $iterator = function ($userGroup): string {
+            $iterator = static function ($userGroup): string {
                 return is_string($userGroup) ? $userGroup : $userGroup->getId();
             };
 

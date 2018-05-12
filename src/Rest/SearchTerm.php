@@ -169,7 +169,7 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getColumns($column): array
     {
-        $filter = function (string $value): bool {
+        $filter = static function (string $value): bool {
             return mb_strlen(trim($value)) > 0;
         };
 
@@ -189,7 +189,7 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getSearchTerms($search): array
     {
-        $filter = function (string $value): bool {
+        $filter = static function (string $value): bool {
             return mb_strlen(trim($value)) > 0;
         };
 

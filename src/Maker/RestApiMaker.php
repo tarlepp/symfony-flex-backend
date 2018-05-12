@@ -137,7 +137,7 @@ class RestApiMaker extends AbstractMaker
     {
         $parameters = $this->getParameters($input);
 
-        $processFile = function (array $input) use ($generator, $parameters): string {
+        $processFile = static function (array $input) use ($generator, $parameters): string {
             $details = $generator->createClassNameDetails(
                 $input[self::KEY_NAME],
                 $input[self::KEY_NAMESPACE],

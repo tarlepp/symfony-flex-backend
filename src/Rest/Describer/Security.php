@@ -52,7 +52,7 @@ class Security
      */
     public function process(Operation $operation, RouteModel $routeModel): void
     {
-        $filter = function ($annotation): bool {
+        $filter = static function ($annotation): bool {
             return $annotation instanceof SecurityAnnotation;
         };
 

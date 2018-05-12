@@ -47,7 +47,7 @@ class Tags
      */
     private function processTags(RouteModel $routeModel, array &$data): void
     {
-        $filter = function ($annotation): bool {
+        $filter = static function ($annotation): bool {
             return $annotation instanceof SWG\Tag;
         };
 

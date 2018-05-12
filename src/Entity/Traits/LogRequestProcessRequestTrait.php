@@ -551,7 +551,7 @@ trait LogRequestProcessRequestTrait
      */
     private function cleanContent(string $inputContent): string
     {
-        $iterator = function ($search) use (&$inputContent): void {
+        $iterator = static function ($search) use (&$inputContent): void {
             $inputContent = preg_replace('/(' . $search . '":)\s*"(.*)"/', '$1"*** REPLACED ***"', $inputContent);
         };
 

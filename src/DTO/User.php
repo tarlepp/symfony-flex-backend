@@ -261,7 +261,7 @@ class User extends RestDto implements UserInterface
          *
          * @return string
          */
-        $iterator = function (UserGroupEntity $group): string {
+        $iterator = static function (UserGroupEntity $group): string {
             return $group->getId();
         };
 
