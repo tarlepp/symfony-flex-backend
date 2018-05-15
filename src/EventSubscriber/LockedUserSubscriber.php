@@ -165,8 +165,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
             case $event instanceof AuthenticationEvent:
                 $this->onAuthenticationEvent($user);
                 break;
-            default:
-                break;
         }
     }
 
