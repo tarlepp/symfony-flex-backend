@@ -12,6 +12,7 @@ use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Helpers\LoggerAwareTrait;
 use App\Resource\LogRequestResource;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -157,6 +158,7 @@ class RequestLogger implements RequestLoggerInterface
     /**
      * Store request log and  clean history
      *
+     * @throws LogicException
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
