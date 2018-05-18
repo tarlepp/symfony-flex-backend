@@ -76,7 +76,7 @@ final class SearchTerm implements SearchTermInterface
         $output = null;
 
         // We have some generated criteria
-        if (\count($criteria)) {
+        if (count($criteria)) {
             // Create used criteria array
             $output = [
                 'and' => [
