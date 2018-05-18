@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 use function array_merge;
 use function gc_collect_cycles;
 use function gc_enable;
+use function getenv;
 
 /**
  * Class WebTestCase
@@ -149,9 +150,9 @@ abstract class WebTestCase extends BaseWebTestCase
     {
         $output = [];
 
-        if (\getenv('ENV_TEST_CHANNEL_READABLE')) {
+        if (getenv('ENV_TEST_CHANNEL_READABLE')) {
             $output = [
-                'X-FASTEST-ENV-TEST-CHANNEL-READABLE' => \getenv('ENV_TEST_CHANNEL_READABLE'),
+                'X-FASTEST-ENV-TEST-CHANNEL-READABLE' => getenv('ENV_TEST_CHANNEL_READABLE'),
             ];
         }
 
