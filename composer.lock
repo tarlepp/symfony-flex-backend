@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42f61e530bf602a4f0855ae1794373e0",
+    "content-hash": "fb56da0689c78d4a8609c0f716be42df",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5401,16 +5401,16 @@
     "packages-dev": [
         {
             "name": "codedungeon/php-cli-colors",
-            "version": "1.10.3",
+            "version": "1.10.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/php-cli-colors.git",
-                "reference": "1beb5c21b21b2c125aff26a75caf02fcec12571f"
+                "reference": "5649ef76ec0c9ed626e95bf40fdfaf4b8efcf79b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/php-cli-colors/zipball/1beb5c21b21b2c125aff26a75caf02fcec12571f",
-                "reference": "1beb5c21b21b2c125aff26a75caf02fcec12571f",
+                "url": "https://api.github.com/repos/mikeerickson/php-cli-colors/zipball/5649ef76ec0c9ed626e95bf40fdfaf4b8efcf79b",
+                "reference": "5649ef76ec0c9ed626e95bf40fdfaf4b8efcf79b",
                 "shasum": ""
             },
             "require-dev": {
@@ -5441,20 +5441,20 @@
                 "package",
                 "php"
             ],
-            "time": "2017-09-12T17:12:52+00:00"
+            "time": "2018-05-17T01:34:14+00:00"
         },
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.18.7",
+            "version": "v0.19.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "cceb485b0a05ed29abbddf4e3133c9f03ae7368d"
+                "reference": "18ae074d32d237073e97d1123971191203c128b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/cceb485b0a05ed29abbddf4e3133c9f03ae7368d",
-                "reference": "cceb485b0a05ed29abbddf4e3133c9f03ae7368d",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/18ae074d32d237073e97d1123971191203c128b7",
+                "reference": "18ae074d32d237073e97d1123971191203c128b7",
                 "shasum": ""
             },
             "require": {
@@ -5493,7 +5493,7 @@
                 "result-printer",
                 "testing"
             ],
-            "time": "2018-05-15T18:39:34+00:00"
+            "time": "2018-05-17T00:43:43+00:00"
         },
         {
             "name": "composer/ca-bundle",
