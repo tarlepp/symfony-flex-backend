@@ -15,6 +15,7 @@ namespace App\Rest\Traits;
  */
 trait RestResourceLifeCycles
 {
+    // Traits
     use RestResourceFind;
     use RestResourceFindOne;
     use RestResourceFindOneBy;
