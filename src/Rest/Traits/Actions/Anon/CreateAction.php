@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 use UnexpectedValueException;
 
 /**
@@ -46,6 +47,7 @@ trait CreateAction
      *
      * @throws LogicException
      * @throws UnexpectedValueException
+     * @throws Throwable
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException

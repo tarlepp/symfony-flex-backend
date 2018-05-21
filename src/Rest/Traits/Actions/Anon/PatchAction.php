@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 use UnexpectedValueException;
 
 /**
@@ -52,6 +53,7 @@ trait PatchAction
      *
      * @throws LogicException
      * @throws UnexpectedValueException
+     * @throws Throwable
      * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      * @throws \Symfony\Component\Form\Exception\LogicException
      * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
