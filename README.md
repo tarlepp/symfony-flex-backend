@@ -55,7 +55,7 @@ Note that this project is build with [Symfony 4](https://symfony.com/4) and
 
 ## Requirements
 
-* PHP 7.1.3 or higher
+* PHP 7.2 or higher
 * [Composer](https://getcomposer.org/)
 * Database that is supported by [Doctrine](http://www.doctrine-project.org/)
 * [Sodium crypto library (libsodium)](https://download.libsodium.org/doc/)
