@@ -90,7 +90,7 @@ phpmetrics: ## Generates PhpMetrics static analysis
 		make run-tests or make run-tests-fastests ; \
 	fi;
 	@echo "\033[32mRunning PhpMetrics\033[39m"
-    @php ./vendor/bin/phpmetrics --version
+	@php ./vendor/bin/phpmetrics --version
 	@./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
 ###< phpmetrics ###
 
