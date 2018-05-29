@@ -64,6 +64,8 @@ endif
 
 ###> phpunit ###
 run-tests: ## Runs all tests via phpunit
+	@echo "\033[32mRunning PhpUnit\033[39m"
+	@php ./vendor/bin/phpunit --version
 	@mkdir -p build/logs
 	@bin/console cache:clear --env=test
 	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
@@ -71,7 +73,7 @@ run-tests: ## Runs all tests via phpunit
 run-tests-fastest: ## Runs all test via fastest
 	@mkdir -p build/fastest
 	@bin/console cache:clear --env=test
-	find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
+	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
 
 merge-clover: ## Creates clover from fastest run
 	@./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml
@@ -87,25 +89,35 @@ phpmetrics: ## Generates PhpMetrics static analysis
 		printf "\033[32;49mclover.xml not found running tests...\033[39m\n" ; \
 		make run-tests or make run-tests-fastests ; \
 	fi;
+	@echo "\033[32mRunning PhpMetrics\033[39m"
+    @php ./vendor/bin/phpmetrics --version
 	@./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
 ###< phpmetrics ###
 
 ###> phpcs ###
 phpcs: ## Runs PHP CodeSniffer
-	@php ./vendor/bin/phpcs --standard=PSR2 --colors src
+	@echo "\033[32mRunning PhpCodeSniffer\033[39m"
+	@php ./vendor/bin/phpcs --version
+	@php ./vendor/bin/phpcs --standard=PSR2 --colors -p src
 ###< phpcs ###
 
 ###> ecs ###
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
+	@echo "\033[32mRunning EasyCodingStandard\033[39m"
+	@php ./vendor/bin/ecs --version
 	@php ./vendor/bin/ecs --clear-cache check src
 ###< ecs ###
 
 ###> psalm ###
 psalm: ## Runs Psalm static analysis tool
+	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
+	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache
 ###< psalm ###
 
 ###> phpstan ###
 phpstan: ## Runs PHPStan static analysis tool
+	@echo "\033[32mRunning PHPStan - PHP Static Analysis Tool\033[39m"
+	@./vendor/bin/phpstan --version
 	@./vendor/bin/phpstan analyze --level 7 src
 ###< phpstan ###
