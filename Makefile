@@ -56,21 +56,23 @@ generate-jwt-keys: ## Generates JWT auth keys
 ifndef OPENSSL_BIN
 	$(error "Unable to generate keys (needs OpenSSL)")
 endif
-	mkdir -p config/jwt
-	openssl genrsa -passout pass:${JWT_PASSPHRASE} -out ${JWT_PRIVATE_KEY_PATH} -aes256 4096
-	openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${JWT_PRIVATE_KEY_PATH} -out ${JWT_PUBLIC_KEY_PATH}
+	@echo "\033[32mGenerating RSA keys for JWT\033[39m"
+	@mkdir -p config/jwt
+	@openssl genrsa -passout pass:${JWT_PASSPHRASE} -out ${JWT_PRIVATE_KEY_PATH} -aes256 4096
+	@openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${JWT_PRIVATE_KEY_PATH} -out ${JWT_PUBLIC_KEY_PATH}
 	@echo "\033[32mRSA key pair successfully generated\033[39m"
 ###< lexik/jwt-authentication-bundle ###
 
 ###> phpunit ###
 run-tests: ## Runs all tests via phpunit
-	@echo "\033[32mRunning PhpUnit\033[39m"
+	@echo "\033[32mRunning test with PhpUnit in single thread\033[39m"
 	@php ./vendor/bin/phpunit --version
 	@mkdir -p build/logs
 	@bin/console cache:clear --env=test
 	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 
 run-tests-fastest: ## Runs all test via fastest
+	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads\033[39m"
 	@mkdir -p build/fastest
 	@bin/console cache:clear --env=test
 	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
@@ -121,3 +123,10 @@ phpstan: ## Runs PHPStan static analysis tool
 	@./vendor/bin/phpstan --version
 	@./vendor/bin/phpstan analyze --level 7 src
 ###< phpstan ###
+
+###> clear vendor-bin ###
+clear-vendor-bin: ## Runs PHPStan static analysis tool
+	@echo "\033[32mClearing vendor-bin dependencies\033[39m"
+	@find -type d -name vendor | grep vendor-bin | xargs rm -rf
+	@echo "\033[32mremember to run 'composer update' command after this\033[39m"
+###< clear vendor-bin ###
