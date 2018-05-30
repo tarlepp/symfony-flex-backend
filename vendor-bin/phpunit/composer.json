@@ -1,0 +1,18 @@
+{
+	"require": {},
+    "require-dev": {
+		"codedungeon/phpunit-result-printer": "0.19.10",
+		"liuggio/fastest": "1.6.1",
+        "phpunit/phpunit": "7.1.5",
+        "phpunit/phpcov": "5.0.0",
+		"roave/security-advisories": "dev-master",
+		"sebastian/finder-facade": "1.2.2",
+		"symfony/phpunit-bridge": "4.0.11"
+    },
+	"config": {
+		"preferred-install": {
+			"*": "dist"
+		},
+		"sort-packages": true
+	}
+}
