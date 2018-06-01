@@ -6,6 +6,12 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/ecs" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phan" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/php-coveralls" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpmetrics" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpstan" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/psalm" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/bamarni/composer-bin-plugin" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/behat/transliterator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
