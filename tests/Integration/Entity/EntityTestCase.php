@@ -32,7 +32,7 @@ abstract class EntityTestCase extends KernelTestCase
     /**
      * @var Container
      */
-    protected $container;
+    protected $testContainer;
 
     /**
      * @var EntityInterface
@@ -763,8 +763,8 @@ abstract class EntityTestCase extends KernelTestCase
         self::bootKernel();
 
         // Store container and entity manager
-        $this->container = static::$kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
+        $this->testContainer = static::$kernel->getContainer();
+        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
         // Create new entity object
         $this->entity = new $this->entityName();
@@ -781,6 +781,6 @@ abstract class EntityTestCase extends KernelTestCase
 
         self::$kernel->shutdown();
 
-        unset($this->repository, $this->entity, $this->entityManager, $this->container);
+        unset($this->repository, $this->entity, $this->entityManager, $this->testContainer);
     }
 }

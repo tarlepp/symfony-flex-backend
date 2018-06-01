@@ -21,7 +21,7 @@ abstract class ContainerTestCase extends KernelTestCase
     /**
      * @var ContainerInterface
      */
-    private $container;
+    private $testContainer;
 
     /**
      * Getter method for container
@@ -30,12 +30,12 @@ abstract class ContainerTestCase extends KernelTestCase
      */
     public function getContainer(): ContainerInterface
     {
-        if (!($this->container instanceof ContainerInterface)) {
+        if (!($this->testContainer instanceof ContainerInterface)) {
             self::bootKernel();
 
-            $this->container = static::$kernel->getContainer();
+            $this->testContainer = static::$kernel->getContainer();
         }
 
-        return $this->container;
+        return $this->testContainer;
     }
 }

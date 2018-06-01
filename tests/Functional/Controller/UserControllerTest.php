@@ -483,7 +483,7 @@ class UserControllerTest extends WebTestCase
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
         /** @var UserResource $userResource */
-        $userResource = $this->container->get(UserResource::class);
+        $userResource = $this->testContainer->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john-root'], null, true);
 
@@ -679,10 +679,10 @@ class UserControllerTest extends WebTestCase
     public function testThatAttachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
         /** @var UserResource $userResource */
-        $userResource = $this->container->get(UserResource::class);
+        $userResource = $this->testContainer->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = $this->container->get(UserGroupResource::class);
+        $userGroupResource = $this->testContainer->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -724,10 +724,10 @@ class UserControllerTest extends WebTestCase
     public function testThatAttachUserGroupActionWorksAsExpected(int $expectedStatus): void
     {
         /** @var UserResource $userResource */
-        $userResource = $this->container->get(UserResource::class);
+        $userResource = $this->testContainer->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = $this->container->get(UserGroupResource::class);
+        $userGroupResource = $this->testContainer->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -764,10 +764,10 @@ class UserControllerTest extends WebTestCase
     public function testThatDetachUserGroupActionWorksAsExpected(): void
     {
         /** @var UserResource $userResource */
-        $userResource = $this->container->get(UserResource::class);
+        $userResource = $this->testContainer->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = $this->container->get(UserGroupResource::class);
+        $userGroupResource = $this->testContainer->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -809,10 +809,10 @@ class UserControllerTest extends WebTestCase
     public function testThatDetachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
         /** @var UserResource $userResource */
-        $userResource = $this->container->get(UserResource::class);
+        $userResource = $this->testContainer->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = $this->container->get(UserGroupResource::class);
+        $userGroupResource = $this->testContainer->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);

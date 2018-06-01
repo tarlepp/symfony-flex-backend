@@ -97,8 +97,8 @@ class LogLoginFailureTest extends EntityTestCase
         self::bootKernel();
 
         // Store container and entity manager
-        $this->container = static::$kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
+        $this->testContainer = static::$kernel->getContainer();
+        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
         // Create new entity object and set repository
         $this->entity = new $this->entityName(new User());

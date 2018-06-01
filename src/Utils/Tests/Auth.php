@@ -28,7 +28,7 @@ class Auth
     /**
      * @var ContainerInterface
      */
-    private $container;
+    private $testContainer;
 
     /**
      * JWT cache
@@ -44,7 +44,7 @@ class Auth
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
+        $this->testContainer = $container;
     }
 
     /**
@@ -126,7 +126,7 @@ class Auth
             // Get client
             /** @noinspection MissingService */
             /** @var Client $client */
-            $client = $this->container->get('test.client');
+            $client = $this->testContainer->get('test.client');
 
             // Create request to make login using given credentials
             $client->request(

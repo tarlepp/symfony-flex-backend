@@ -32,7 +32,7 @@ class UserEntityEventListenerTest extends KernelTestCase
     /**
      * @var ContainerInterface
      */
-    private $container;
+    private $testContainer;
 
     /**
      * @var User
@@ -153,10 +153,10 @@ class UserEntityEventListenerTest extends KernelTestCase
         self::bootKernel();
 
         // Store container and entity manager
-        $this->container = static::$kernel->getContainer();
-        $this->entityManager = $this->container->get('doctrine.orm.default_entity_manager');
+        $this->testContainer = static::$kernel->getContainer();
+        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
-        $this->encoder = $this->container->get('security.password_encoder');
+        $this->encoder = $this->testContainer->get('security.password_encoder');
 
         // Create listener
         $this->subscriber = new UserEntityEventListener($this->encoder);
@@ -188,7 +188,7 @@ class UserEntityEventListenerTest extends KernelTestCase
 
         parent::tearDown();
 
-        unset($this->entity, $this->subscriber, $this->encoder, $this->entityManager, $this->container);
+        unset($this->entity, $this->subscriber, $this->encoder, $this->entityManager, $this->testContainer);
 
         gc_collect_cycles();
     }
