@@ -9,7 +9,6 @@ namespace App\Utils\Tests;
 
 use Exception;
 use Ramsey\Uuid\Uuid;
-use Symfony\Component\HttpFoundation\Response;
 use function array_merge;
 
 /**
