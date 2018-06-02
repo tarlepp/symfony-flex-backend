@@ -18,15 +18,16 @@ use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Filesystem\Filesystem;
 
 // Specify used environment file
-\putenv('ENVIRONMENT_FILE=.env.test');
+putenv('ENVIRONMENT_FILE=.env.test');
 
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../bootstrap.php';
 
 // Create and boot 'test' kernel
-$kernel = new Kernel(\getenv('APP_ENV'), (bool)\getenv('APP_DEBUG'));
+$kernel = new Kernel(getenv('APP_ENV'), (bool)getenv('APP_DEBUG'));
 $kernel->boot();
 
 // Create new application
@@ -81,13 +82,20 @@ $loadFixturesDoctrineCommand = function () use ($application) {
     $application->run($input, new ConsoleOutput());
 };
 
+// Ensure that used cache folder is cleared
+$clearCaches = function () use ($kernel) {
+    $fs = new Filesystem();
+    $fs->remove($kernel->getCacheDir());
+};
+
 // And finally call each of initialize functions to make test environment ready
-\array_map(
-    '\call_user_func',
+array_map(
+    'call_user_func',
     [
         $dropDatabaseDoctrineCommand,
         $createDatabaseDoctrineCommand,
         $updateSchemaDoctrineCommand,
         $loadFixturesDoctrineCommand,
+        $clearCaches,
     ]
 );
