@@ -70,6 +70,50 @@
             "time": "2016-08-30T16:08:34+00:00"
         },
         {
+            "name": "composer/xdebug-handler",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/xdebug-handler.git",
+                "reference": "c919dc6c62e221fc6406f861ea13433c0aa24f08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/c919dc6c62e221fc6406f861ea13433c0aa24f08",
+                "reference": "c919dc6c62e221fc6406f861ea13433c0aa24f08",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0",
+                "psr/log": "^1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35 || ^5.7 || ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Composer\\XdebugHandler\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "John Stevenson",
+                    "email": "john-stevenson@blueyonder.co.uk"
+                }
+            ],
+            "description": "Restarts a process without xdebug.",
+            "keywords": [
+                "Xdebug",
+                "performance"
+            ],
+            "time": "2018-04-11T15:42:36+00:00"
+        },
+        {
             "name": "doctrine/annotations",
             "version": "v1.6.0",
             "source": {
@@ -193,20 +237,21 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.11.1",
+            "version": "v2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "ad94441c17b8ef096e517acccdbf3238af8a2da8"
+                "reference": "a53f39a72cf0baa03909fae779a4de6d3772c74f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/ad94441c17b8ef096e517acccdbf3238af8a2da8",
-                "reference": "ad94441c17b8ef096e517acccdbf3238af8a2da8",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/a53f39a72cf0baa03909fae779a4de6d3772c74f",
+                "reference": "a53f39a72cf0baa03909fae779a4de6d3772c74f",
                 "shasum": ""
             },
             "require": {
                 "composer/semver": "^1.4",
+                "composer/xdebug-handler": "^1.0",
                 "doctrine/annotations": "^1.2",
                 "ext-json": "*",
                 "ext-tokenizer": "*",
@@ -228,16 +273,20 @@
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^1.1 || ^2.0 || ^3.0",
                 "justinrainbow/json-schema": "^5.0",
-                "keradus/cli-executor": "^1.0",
+                "keradus/cli-executor": "^1.1",
                 "mikey179/vfsstream": "^1.6",
-                "php-coveralls/php-coveralls": "^2.0",
+                "php-coveralls/php-coveralls": "^2.1",
                 "php-cs-fixer/accessible-object": "^1.0",
-                "phpunit/phpunit": "^5.7.23 || ^6.4.3 || ^7.0",
-                "phpunitgoodpractices/traits": "^1.3.1",
-                "symfony/phpunit-bridge": "^3.2.2 || ^4.0"
+                "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.0",
+                "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.0",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1",
+                "phpunitgoodpractices/traits": "^1.4",
+                "symfony/phpunit-bridge": "^4.0"
             },
             "suggest": {
                 "ext-mbstring": "For handling non-UTF8 characters in cache signature.",
+                "php-cs-fixer/phpunit-constraint-isidenticalstring": "For IsIdenticalString constraint.",
+                "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "For XmlMatchesXsd constraint.",
                 "symfony/polyfill-mbstring": "When enabling `ext-mbstring` is not possible."
             },
             "bin": [
@@ -246,7 +295,7 @@
             "type": "application",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.11-dev"
+                    "dev-master": "2.12-dev"
                 }
             },
             "autoload": {
@@ -258,9 +307,6 @@
                     "tests/Test/AbstractIntegrationCaseFactory.php",
                     "tests/Test/AbstractIntegrationTestCase.php",
                     "tests/Test/Assert/AssertTokensTrait.php",
-                    "tests/Test/Constraint/SameStringsConstraint.php",
-                    "tests/Test/Constraint/SameStringsConstraintForV5.php",
-                    "tests/Test/Constraint/SameStringsConstraintForV7.php",
                     "tests/Test/IntegrationCase.php",
                     "tests/Test/IntegrationCaseFactory.php",
                     "tests/Test/IntegrationCaseFactoryInterface.php",
@@ -283,7 +329,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2018-03-21T17:41:26+00:00"
+            "time": "2018-06-02T17:33:35+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
@@ -2249,23 +2295,23 @@
         },
         {
             "name": "symplify/better-phpdoc-parser",
-            "version": "v4.3.0",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/BetterPhpDocParser.git",
-                "reference": "b495e951fb618fdb620efc5b2413ae676b7cd309"
+                "reference": "62698d2f8c4a0e63e96a9000f5d932c21ff41e75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/BetterPhpDocParser/zipball/b495e951fb618fdb620efc5b2413ae676b7cd309",
-                "reference": "b495e951fb618fdb620efc5b2413ae676b7cd309",
+                "url": "https://api.github.com/repos/Symplify/BetterPhpDocParser/zipball/62698d2f8c4a0e63e96a9000f5d932c21ff41e75",
+                "reference": "62698d2f8c4a0e63e96a9000f5d932c21ff41e75",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^2.5",
                 "php": "^7.1",
                 "phpstan/phpdoc-parser": "^0.2",
-                "symplify/package-builder": "^4.3"
+                "symplify/package-builder": "^4.4"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0"
@@ -2286,35 +2332,35 @@
                 "MIT"
             ],
             "description": "Slim wrapper around phpstan/phpdoc-parser with format preserving printer",
-            "time": "2018-05-20T20:18:10+00:00"
+            "time": "2018-06-03T13:03:44+00:00"
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v4.3.0",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
-                "reference": "1c06a398724def73a869aefe591dbe317e486656"
+                "reference": "9c888149e2ca53fb455084324079c96cfcea8f6d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/1c06a398724def73a869aefe591dbe317e486656",
-                "reference": "1c06a398724def73a869aefe591dbe317e486656",
+                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/9c888149e2ca53fb455084324079c96cfcea8f6d",
+                "reference": "9c888149e2ca53fb455084324079c96cfcea8f6d",
                 "shasum": ""
             },
             "require": {
-                "friendsofphp/php-cs-fixer": "^2.11",
+                "friendsofphp/php-cs-fixer": "^2.12",
                 "nette/finder": "^2.4",
                 "nette/utils": "^2.4",
                 "php": "^7.1",
                 "squizlabs/php_codesniffer": "^3.2",
-                "symplify/token-runner": "^4.3"
+                "symplify/token-runner": "^4.4"
             },
             "require-dev": {
                 "nette/application": "^2.4",
                 "phpunit/phpunit": "^7.0",
-                "symplify/easy-coding-standard-tester": "^4.3",
-                "symplify/package-builder": "^4.3"
+                "symplify/easy-coding-standard-tester": "^4.4",
+                "symplify/package-builder": "^4.4"
             },
             "type": "library",
             "extra": {
@@ -2332,7 +2378,7 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer.",
-            "time": "2018-05-20T20:18:10+00:00"
+            "time": "2018-06-03T13:03:44+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
@@ -2401,16 +2447,16 @@
         },
         {
             "name": "symplify/package-builder",
-            "version": "v4.3.0",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
-                "reference": "b286cf037701b0a2dbe8d70529347f964befc10a"
+                "reference": "22ffad96e3879cb346f8ab8d6c14b2808f0f6d9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/b286cf037701b0a2dbe8d70529347f964befc10a",
-                "reference": "b286cf037701b0a2dbe8d70529347f964befc10a",
+                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/22ffad96e3879cb346f8ab8d6c14b2808f0f6d9b",
+                "reference": "22ffad96e3879cb346f8ab8d6c14b2808f0f6d9b",
                 "shasum": ""
             },
             "require": {
@@ -2443,30 +2489,30 @@
                 "MIT"
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
-            "time": "2018-05-12T17:19:09+00:00"
+            "time": "2018-06-02T23:03:08+00:00"
         },
         {
             "name": "symplify/token-runner",
-            "version": "v4.3.0",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/TokenRunner.git",
-                "reference": "bb68de8cf1945433665a1aaad5695a13ad1d61c5"
+                "reference": "c99b968f13e87437a6735c7c179cafa406cab451"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/bb68de8cf1945433665a1aaad5695a13ad1d61c5",
-                "reference": "bb68de8cf1945433665a1aaad5695a13ad1d61c5",
+                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/c99b968f13e87437a6735c7c179cafa406cab451",
+                "reference": "c99b968f13e87437a6735c7c179cafa406cab451",
                 "shasum": ""
             },
             "require": {
-                "friendsofphp/php-cs-fixer": "^2.11",
+                "friendsofphp/php-cs-fixer": "^2.12",
                 "nette/finder": "^2.4",
                 "nette/utils": "^2.4",
                 "php": "^7.1",
                 "squizlabs/php_codesniffer": "^3.2",
-                "symplify/better-phpdoc-parser": "^4.3",
-                "symplify/package-builder": "^4.3"
+                "symplify/better-phpdoc-parser": "^4.4",
+                "symplify/package-builder": "^4.4"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0"
@@ -2487,7 +2533,7 @@
                 "MIT"
             ],
             "description": "Set of utils for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2018-05-20T20:18:10+00:00"
+            "time": "2018-06-03T13:03:44+00:00"
         }
     ],
     "aliases": [],
