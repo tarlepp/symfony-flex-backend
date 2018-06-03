@@ -8,6 +8,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\MakerBundle\Command\MakerCommand;
 use Symfony\Bundle\MakerBundle\FileManager;
 use Symfony\Bundle\MakerBundle\Generator;
+use Symfony\Bundle\MakerBundle\Util\AutoloaderUtil;
+use Symfony\Bundle\MakerBundle\Util\ComposerAutoloaderFinder;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -37,14 +39,14 @@ class RestApiMakerTest extends KernelTestCase
             'Library',
         ];
 
-        $command = new MakerCommand($maker, $this->createFileManager());
+        $command = new MakerCommand($maker, $this->createFileManager(), $this->createGenerator());
         $command->setCheckDependencies(false);
 
         $tester = new CommandTester($command);
         $tester->setInputs($inputs);
         $tester->execute(array());
 
-        $this->assertContains('Success', $tester->getDisplay());
+        static::assertContains('Success', $tester->getDisplay());
 
         // Clean up files
         $this->fs->remove($maker->getCreatedFiles());
@@ -63,13 +65,13 @@ class RestApiMakerTest extends KernelTestCase
             'Library',
         ];
 
-        $command = new MakerCommand($maker, $this->createFileManager());
+        $command = new MakerCommand($maker, $this->createFileManager(), $this->createGenerator());
 
         $tester = new CommandTester($command);
         $tester->setInputs($inputs);
-        $tester->execute(array());
+        $tester->execute([]);
 
-        $this->assertContains('ERROR', $tester->getDisplay());
+        static::assertContains('ERROR', $tester->getDisplay());
     }
 
     /**
@@ -77,6 +79,16 @@ class RestApiMakerTest extends KernelTestCase
      */
     private function createFileManager(): FileManager
     {
-        return new FileManager($this->fs, __DIR__ . '/../../../');
+        $autoLoaderUtil = new AutoloaderUtil(new ComposerAutoloaderFinder());
+
+        return new FileManager($this->fs, $autoLoaderUtil, __DIR__ . '/../../../');
+    }
+
+    /**
+     * @return Generator
+     */
+    private function createGenerator(): Generator
+    {
+        return new Generator($this->createFileManager(), 'App');
     }
 }
