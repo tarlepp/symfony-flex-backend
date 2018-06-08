@@ -61,7 +61,7 @@
 		"symfony/debug-pack": "1.0.5",
 		"symfony/dotenv": "4.1.0",
 		"symfony/maker-bundle": "1.5.0",
-		"symfony/requirements-checker": "1.1.1",
+		"symfony/requirements-checker": "1.1.2",
 		"symfony/web-server-bundle": "4.1.0"
 	},
 	"config": {
