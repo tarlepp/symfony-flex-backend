@@ -208,12 +208,13 @@ final class RequestHandler
      */
     private static function determineSearchTerms(string $search): ?array
     {
+
         try {
             $searchTerms = JSON::decode($search, true);
 
             self::checkSearchTerms($searchTerms);
-        } /** @noinspection BadExceptionsProcessingInspection */
-        catch (LogicException $error) { // Parameter was not JSON so just use parameter values as search strings
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (LogicException $error) {
+            // Parameter was not JSON so just use parameter values as search strings
             $searchTerms = null;
         }
 
