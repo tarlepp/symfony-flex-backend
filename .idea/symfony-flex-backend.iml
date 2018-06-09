@@ -20,7 +20,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/phar-io" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/phpdocumentor" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/phpspec" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/sebastian" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/console" />
