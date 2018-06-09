@@ -1,14 +1,15 @@
 {
 	"require": {},
-    "require-dev": {
+	"require-dev": {
 		"codedungeon/phpunit-result-printer": "0.19.10",
 		"liuggio/fastest": "1.6.1",
-        "phpunit/phpunit": "7.1.5",
-        "phpunit/phpcov": "5.0.0",
+		"phpunit/phpunit": "7.2.4",
+		"phpunit/phpcov": "5.0.0",
 		"roave/security-advisories": "dev-master",
 		"sebastian/finder-facade": "1.2.2",
-		"symfony/phpunit-bridge": "4.0.11"
-    },
+		"symfony/phpunit-bridge": "4.1.0",
+		"theofidry/composer-inheritance-plugin": "1.0.1"
+	},
 	"config": {
 		"preferred-install": {
 			"*": "dist"

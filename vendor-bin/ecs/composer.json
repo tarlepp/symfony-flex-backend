@@ -1,5 +1,5 @@
 {
-    "require": {},
+	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
 		"symplify/easy-coding-standard": "4.4.0"

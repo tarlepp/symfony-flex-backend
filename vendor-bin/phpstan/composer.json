@@ -1,9 +1,9 @@
 {
 	"require": {},
-    "require-dev": {
+	"require-dev": {
 		"phpstan/phpstan-shim": "0.9.2",
 		"roave/security-advisories": "dev-master"
-    },
+	},
 	"config": {
 		"preferred-install": {
 			"*": "dist"

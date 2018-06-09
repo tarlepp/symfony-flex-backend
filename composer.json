@@ -73,13 +73,7 @@
 	"autoload": {
 		"psr-4": {
 			"App\\": "src/"
-		},
-		"classmap": [
-			"vendor-bin/phpunit"
-		],
-		"exclude-from-classmap": [
-			"vendor-bin/phpunit/**/Behat2"
-		]
+		}
 	},
 	"autoload-dev": {
 		"psr-4": {
@@ -97,14 +91,12 @@
 		"post-install-cmd": [
 			"@auto-scripts",
 			"Companienv\\Composer\\ScriptHandler::run",
-			"@composer bin all install --ansi",
-			"@composer dump-autoload"
+			"@composer bin all install --ansi"
 		],
 		"post-update-cmd": [
 			"@auto-scripts",
 			"Companienv\\Composer\\ScriptHandler::run",
-			"@composer bin all update --ansi",
-			"@composer dump-autoload"
+			"@composer bin all update --ansi"
 		]
 	},
 	"conflict": {

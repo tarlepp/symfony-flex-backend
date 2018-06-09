@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "071409dd9da335312e28c180ae7ba5dc",
+    "content-hash": "26209a92bcae730f0319a6f4e901d4b9",
     "packages": [],
     "packages-dev": [
         {
@@ -239,16 +239,16 @@
         },
         {
             "name": "phan/phan",
-            "version": "0.12.10",
+            "version": "0.12.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phan/phan.git",
-                "reference": "f209e2c10e187eb7e27ed067c867432fec0df5a6"
+                "reference": "1982905515eb017554483b53635c454f37b18dc4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phan/phan/zipball/f209e2c10e187eb7e27ed067c867432fec0df5a6",
-                "reference": "f209e2c10e187eb7e27ed067c867432fec0df5a6",
+                "url": "https://api.github.com/repos/phan/phan/zipball/1982905515eb017554483b53635c454f37b18dc4",
+                "reference": "1982905515eb017554483b53635c454f37b18dc4",
                 "shasum": ""
             },
             "require": {
@@ -263,6 +263,9 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^6.3.0"
+            },
+            "suggest": {
+                "ext-tokenizer": "Needed for non-AST support and file/line-based suppressions"
             },
             "bin": [
                 "phan",
@@ -296,7 +299,7 @@
                 "php",
                 "static"
             ],
-            "time": "2018-05-27T19:45:14+00:00"
+            "time": "2018-06-08T16:40:56+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
