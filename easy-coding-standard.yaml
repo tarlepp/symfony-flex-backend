@@ -6,6 +6,7 @@ imports:
 
 parameters:
     exclude_checkers:
+        - 'PhpCsFixer\Fixer\ArrayNotation\TrailingCommaInMultilineArrayFixer'
         - 'PhpCsFixer\Fixer\CastNotation\CastSpacesFixer'
         - 'PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer'
         - 'PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer'
@@ -16,6 +17,8 @@ parameters:
         - 'Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer'
     skip:
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.Found: ~
+        PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition:
+            - '*src/Command/Traits/ExecuteMultipleCommandTrait.php'
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
             - '*src/Entity/Traits/UserSerializer.php'
             - '*src/Repository/Traits/LoadUserByUserNameTrait.php'
