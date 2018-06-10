@@ -24,11 +24,6 @@ matrix:
     - php: nightly
   include:
     - php: 7.2
-      env:
-        - USE_XDEBUG=false
-    - php: 7.2
-      env:
-        - USE_XDEBUG=false
         - COVERAGE=true
 
 addons:
@@ -64,9 +59,10 @@ install:
   - make generate-jwt-keys
 
 before_script:
-  - if [[ ${USE_XDEBUG} == false ]]; then phpenv config-rm xdebug.ini; fi
+  - phpenv config-rm xdebug.ini
   - mysql --version
   - php --version
+  - phpdbg --version
   - php ./bin/console --version
   - php ./vendor/bin/phpunit --version
   - php ./vendor/bin/requirements-checker
@@ -74,6 +70,7 @@ before_script:
   - if [[ $COVERAGE == true ]]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
   - if [[ $COVERAGE == true ]]; then chmod +x ./cc-test-reporter; fi
   - if [[ $COVERAGE == true ]]; then ./cc-test-reporter before-build; fi
+  - ulimit -n 10000
 
 script:
   - make phpcs
