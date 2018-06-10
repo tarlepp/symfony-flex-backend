@@ -54,11 +54,7 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
      */
     public function getApiKeyForToken(string $token): ?ApiKey
     {
-        /** @noinspection OneTimeUseVariablesInspection */
-        /** @var ApiKey|null $output */
-        $output = $this->apiKeyRepository->findOneBy(['token' => $token]);
-
-        return $output;
+        return $this->apiKeyRepository->findOneBy(['token' => $token]);
     }
 
     /**
