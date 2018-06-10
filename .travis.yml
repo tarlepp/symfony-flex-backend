@@ -79,8 +79,8 @@ script:
   - make psalm
   - make phpstan
   - if [[ $COVERAGE == true ]];
-    then make sh -c "run-tests-fastest-phpdbg";
-    else make sh -c "run-tests-fastest-php";
+    then sh -c "make run-tests-fastest-phpdbg";
+    else sh -c "make run-tests-fastest-php";
     fi
 #  - make run-tests-fastest
 #  - make run-tests
