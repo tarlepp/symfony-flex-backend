@@ -80,27 +80,27 @@ else
 endif
 
 run-tests-php: ## Runs all tests via phpunit (pure PHP)
-	@echo "\033[32mRunning test with PhpUnit in single thread\033[39m"
+	@echo "\033[32mRunning test with PhpUnit in single thread (pure PHP)\033[39m"
 	@php ./vendor/bin/phpunit --version
 	@mkdir -p build/logs
 	@bin/console cache:clear --env=test
 	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 
 run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
-	@echo "\033[32mRunning test with PhpUnit in single thread\033[39m"
+	@echo "\033[32mRunning test with PhpUnit in single thread (phpdbg)\033[39m"
 	@php ./vendor/bin/phpunit --version
 	@mkdir -p build/logs
 	@bin/console cache:clear --env=test
 	@phpdbg -qrr ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 
 run-tests-fastest-php: ## Runs all test via fastest (pure PHP)
-	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads\033[39m"
+	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads (pure PHP)\033[39m"
 	@mkdir -p build/fastest
 	@bin/console cache:clear --env=test
 	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
 
 run-tests-fastest-phpdbg: ## Runs all test via fastest (phpdbg)
-	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads\033[39m"
+	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads (phpdbg)\033[39m"
 	@mkdir -p build/fastest
 	@bin/console cache:clear --env=test
 	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "phpdbg -qrr ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
