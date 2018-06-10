@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
  * Class RestResourceConverter
  *
  * This is meant to be used within controller actions that uses @ParamConverter annotation. Example:
- *
  *  /**
  *   * @Route(
  *   *    "/{userEntity}",
