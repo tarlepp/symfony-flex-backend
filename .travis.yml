@@ -24,6 +24,7 @@ matrix:
     - php: nightly
   include:
     - php: 7.2
+      env:
         - COVERAGE=true
 
 addons:
