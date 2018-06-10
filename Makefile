@@ -5,7 +5,7 @@ endif
 .DEFAULT_GOAL := help
 .PHONY: help
 help:
-	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "[32m%-17s[0m %s\n", $$1, $$2}'
+	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "[32m%-27s[0m %s\n", $$1, $$2}'
 
 ###> symfony/framework-bundle ###
 CONSOLE := $(shell which bin/console)
@@ -64,18 +64,46 @@ endif
 ###< lexik/jwt-authentication-bundle ###
 
 ###> phpunit ###
+PHPDBG := $(shell which phpdbg)
 run-tests: ## Runs all tests via phpunit
+ifndef PHPDBG
+	@${MAKE} run-tests-php
+else
+	@${MAKE} run-tests-phpdbg
+endif
+
+run-tests-fastest: ## Runs all test via fastest
+ifndef PHPDBG
+	@${MAKE} run-tests-fastest-php
+else
+	@${MAKE} run-tests-fastest-phpdbg
+endif
+
+run-tests-php: ## Runs all tests via phpunit (pure PHP)
 	@echo "\033[32mRunning test with PhpUnit in single thread\033[39m"
 	@php ./vendor/bin/phpunit --version
 	@mkdir -p build/logs
 	@bin/console cache:clear --env=test
 	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
 
-run-tests-fastest: ## Runs all test via fastest
+run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
+	@echo "\033[32mRunning test with PhpUnit in single thread\033[39m"
+	@php ./vendor/bin/phpunit --version
+	@mkdir -p build/logs
+	@bin/console cache:clear --env=test
+	@phpdbg -qrr ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
+
+run-tests-fastest-php: ## Runs all test via fastest (pure PHP)
 	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads\033[39m"
 	@mkdir -p build/fastest
 	@bin/console cache:clear --env=test
 	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
+
+run-tests-fastest-phpdbg: ## Runs all test via fastest (phpdbg)
+	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads\033[39m"
+	@mkdir -p build/fastest
+	@bin/console cache:clear --env=test
+	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "phpdbg -qrr ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
 
 merge-clover: ## Creates clover from fastest run
 	@./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml
@@ -107,7 +135,7 @@ phpcs: ## Runs PHP CodeSniffer
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
 	@echo "\033[32mRunning EasyCodingStandard\033[39m"
 	@php ./vendor/bin/ecs --version
-	@php ./vendor/bin/ecs --clear-cache check src
+	@php -d error_reporting=0 ./vendor/bin/ecs --clear-cache check src
 ###< ecs ###
 
 ###> psalm ###
@@ -129,4 +157,10 @@ clear-vendor-bin: ## Runs PHPStan static analysis tool
 	@echo "\033[32mClearing vendor-bin dependencies\033[39m"
 	@find -type d -name vendor | grep vendor-bin | xargs rm -rf
 	@echo "\033[32mremember to run 'composer update' command after this\033[39m"
+###< clear vendor-bin ###
+
+###> check vendor-bin ###
+check-vendor-dependencies: ## Checks if any vendor dependency can be updated
+	@echo "\033[32mChecking dependencies\033[39m"
+	@bin/console check-vendor-dependencies
 ###< clear vendor-bin ###
