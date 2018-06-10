@@ -454,17 +454,15 @@ trait RestResourceBaseMethods
     }
 
     /**
+     * @psalm-suppress MoreSpecificReturnType
+     *
      * @return EntityInterface
      */
     private function createEntity(): EntityInterface
     {
         $entityClass = $this->getRepository()->getEntityName();
 
-        /** @noinspection OneTimeUseVariablesInspection */
-        /** @var EntityInterface $output */
-        $output = new $entityClass();
-
-        return $output;
+        return new $entityClass();
     }
 
     /**

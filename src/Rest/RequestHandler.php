@@ -208,7 +208,6 @@ final class RequestHandler
      */
     private static function determineSearchTerms(string $search): ?array
     {
-
         try {
             $searchTerms = JSON::decode($search, true);
 
