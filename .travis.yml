@@ -59,7 +59,7 @@ install:
   - pecl install ast-0.1.6
   - composer install
   - make generate-jwt-keys
-  - sudo sh -c "ulimit -n 65535"
+  - sudo sh -c "ulimit -n 131070"
 
 before_script:
   - mysql --version
@@ -79,8 +79,8 @@ script:
   - make psalm
   - make phpstan
   - if [[ $COVERAGE == true ]];
-    then make run-tests-fastest-phpdbg;
-    else make run-tests-fastest-php;
+    then make sh -c "run-tests-fastest-phpdbg";
+    else make sh -c "run-tests-fastest-php";
     fi
 #  - make run-tests-fastest
 #  - make run-tests
