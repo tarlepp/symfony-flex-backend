@@ -44,7 +44,6 @@ class UserEntityEventListener
      *
      * @param LifecycleEventArgs $event
      *
-     *
      * @throws LengthException
      * @throws RuntimeException
      */
@@ -57,7 +56,6 @@ class UserEntityEventListener
      * Doctrine lifecycle event for 'preUpdate' event.
      *
      * @param LifecycleEventArgs $event
-     *
      *
      * @throws LengthException
      * @throws RuntimeException
@@ -88,7 +86,6 @@ class UserEntityEventListener
      * Method to change user password whenever it's needed.
      *
      * @param User $user
-     *
      *
      * @throws LengthException
      * @throws RuntimeException
