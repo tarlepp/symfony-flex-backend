@@ -78,8 +78,8 @@ script:
   - make psalm
   - make phpstan
   - if [[ $COVERAGE == true ]];
-    then make run-tests-phpdbg;
-    else make run-tests-php;
+    then make run-tests-fastest-phpdbg;
+    else make run-tests-fastest-php;
     fi
 #  - make run-tests-fastest
 #  - make run-tests
