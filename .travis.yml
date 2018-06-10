@@ -71,7 +71,6 @@ before_script:
   - if [[ $COVERAGE == true ]]; then curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter; fi
   - if [[ $COVERAGE == true ]]; then chmod +x ./cc-test-reporter; fi
   - if [[ $COVERAGE == true ]]; then ./cc-test-reporter before-build; fi
-  - ulimit -n 65536
 
 script:
   - make phpcs
