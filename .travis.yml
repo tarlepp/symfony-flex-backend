@@ -59,7 +59,7 @@ install:
   - pecl install ast-0.1.6
   - composer install
   - make generate-jwt-keys
-  - sudo sh -c "ulimit -n 131070"
+  - sudo sh -c "ulimit -n 262140"
 
 before_script:
   - mysql --version
