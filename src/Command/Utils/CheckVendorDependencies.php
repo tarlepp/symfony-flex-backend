@@ -122,8 +122,6 @@ class CheckVendorDependencies extends Command
             $progressBar->advance();
         };
 
-        //$this->io->section('Starting to check vendor-bin dependencies');
-
         array_map($bar, $directories);
 
         $headers = [
