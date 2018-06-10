@@ -103,7 +103,7 @@ run-tests-fastest-phpdbg: ## Runs all test via fastest (phpdbg)
 	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads (phpdbg)\033[39m"
 	@mkdir -p build/fastest
 	@bin/console cache:clear --env=test
-	@ulimit -n 1000000 && find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "phpdbg -qrr -d memory_limit=4096M ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
+	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -b "php ./tests/bootstrap.php" "phpdbg -qrr -d memory_limit=4096M ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
 
 merge-clover: ## Creates clover from fastest run
 	@./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml
