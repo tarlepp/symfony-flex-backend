@@ -82,7 +82,6 @@
 			"vendor-bin/phpunit/**/codedungeon",
 			"vendor-bin/phpunit/**/composer",
 			"vendor-bin/phpunit/**/doctrine",
-			"vendor-bin/phpunit/**/liuggio",
 			"vendor-bin/phpunit/**/sebastian",
 			"vendor-bin/phpunit/**/symfony/console",
 			"vendor-bin/phpunit/**/symfony/finder",
