@@ -15,12 +15,12 @@ use RuntimeException;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
+use Traversable;
 use function array_map;
 use function array_unshift;
 use function basename;
@@ -105,13 +105,9 @@ class CheckVendorDependencies extends Command
             'New version',
         ];
 
-        if (empty($rows)) {
-            $rows[] = [
-                new TableCell('All good, there is no dependencies to update.', ['colspan' => 6]),
-            ];
-        }
-
-        $this->io->table($headers, $rows);
+        !empty($rows)
+            ? $this->io->table($headers, $rows)
+            : $this->io->success('Good news, there is not any vendor dependency to update at this time!');
 
         return null;
     }
@@ -144,7 +140,7 @@ class CheckVendorDependencies extends Command
             return $fileInfo->getPath();
         };
 
-        /** @var \Traversable $iterator */
+        /** @var Traversable $iterator */
         $iterator = $finder->getIterator();
 
         // Determine namespace directories
@@ -158,9 +154,9 @@ class CheckVendorDependencies extends Command
     /**
      * Method to determine table rows.
      *
-     * @param array $directories
+     * @param array|string[]|array<int, string> $directories
      *
-     * @return array
+     * @return array|string[]|array<int, string>
      *
      * @throws RuntimeException
      * @throws \Symfony\Component\Process\Exception\RuntimeException
