@@ -15,6 +15,8 @@ use RuntimeException;
 use SplFileInfo;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
@@ -29,6 +31,7 @@ use function preg_match_all;
 use function sort;
 use function sprintf;
 use function str_replace;
+use function wordwrap;
 
 /**
  * Class CheckVendorDependencies
@@ -79,6 +82,7 @@ class CheckVendorDependencies extends Command
      * @throws InvalidArgumentException
      * @throws LogicException
      * @throws RuntimeException
+     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
      * @throws \Symfony\Component\Process\Exception\RuntimeException
      * @throws \Symfony\Component\Process\Exception\LogicException
      */
@@ -90,50 +94,24 @@ class CheckVendorDependencies extends Command
 
         array_unshift($directories, $this->projectDir);
 
-        $progressBar = $this->getProgressBar(count($directories), 'Checking all vendor dependencies');
-        $output = [];
-
-        $bar = function (string $path) use ($progressBar, &$output): void {
-            $process = $this->processNamespacePath($path);
-
-            if (!empty($process)) {
-                $libraries = $this->parseLibraries($process);
-
-                foreach ($libraries as $row => $data) {
-                    $title = '';
-                    $relativePath = '';
-
-                    if ($row === 0) {
-                        $title = basename($path);
-                        $relativePath = str_replace($this->projectDir, '', $path) . '/composer.json';
-                    }
-
-                    $output[] = [
-                        $title,
-                        $relativePath,
-                        $data[1],
-                        $data[4],
-                        $data[2],
-                        $data[3],
-                    ];
-                }
-            }
-
-            $progressBar->advance();
-        };
-
-        array_map($bar, $directories);
+        $rows = $this->determineTableRows($directories);
 
         $headers = [
             'Namespace',
             'Path',
             'Dependency',
             'Description',
-            'Current version',
-            'Available version'
+            'Version',
+            'New version',
         ];
 
-        $this->io->table($headers, $output);
+        if (empty($rows)) {
+            $rows[] = [
+                new TableCell('All good, there is no dependencies to update.', ['colspan' => 6]),
+            ];
+        }
+
+        $this->io->table($headers, $rows);
 
         return null;
     }
@@ -143,7 +121,7 @@ class CheckVendorDependencies extends Command
      *
      * @return array|string[]|array<int, string>
      *
-     * @throws \LogicException
+     * @throws LogicException
      * @throws InvalidArgumentException
      */
     private function getNamespaceDirectories(): array
@@ -177,6 +155,69 @@ class CheckVendorDependencies extends Command
         return $directories;
     }
 
+    /**
+     * Method to determine table rows.
+     *
+     * @param array $directories
+     *
+     * @return array
+     *
+     * @throws RuntimeException
+     * @throws \Symfony\Component\Process\Exception\RuntimeException
+     * @throws \Symfony\Component\Process\Exception\LogicException
+     */
+    private function determineTableRows(array $directories): array
+    {
+        // Initialize progress bar for process
+        $progressBar = $this->getProgressBar(count($directories), 'Checking all vendor dependencies');
+
+        // Initialize output rows
+        $rows = [];
+
+        /**
+         * Closure to process each vendor directory and check if there is libraries to be updated.
+         *
+         * @param string $directory
+         */
+        $iterator = function (string $directory) use ($progressBar, &$rows): void {
+            $process = $this->processNamespacePath($directory);
+
+            if (!empty($process)) {
+                $libraries = $this->parseLibraries($process);
+
+                foreach ($libraries as $row => $data) {
+                    $title = '';
+                    $relativePath = '';
+
+                    // First row of current library
+                    if ($row === 0) {
+                        // We want to add table separator between different libraries
+                        if (count($rows) > 0) {
+                            $rows[] = new TableSeparator();
+                        }
+
+                        $title = basename($directory);
+                        $relativePath = str_replace($this->projectDir, '', $directory) . '/composer.json';
+                    }
+
+                    $rows[] = [
+                        $title,
+                        $relativePath,
+                        $data[1],
+                        wordwrap($data[4], 60),
+                        $data[2],
+                        $data[3],
+                    ];
+                }
+            }
+
+            $progressBar->advance();
+        };
+
+        array_map($iterator, $directories);
+
+        return $rows;
+    }
 
     /**
      * Method to process namespace inside 'vendor-bin' directory.
