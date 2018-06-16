@@ -161,8 +161,11 @@ class ApiDocDescriber implements DescriberInterface
         if ($output) {
             [$controller] = explode(Constants::KEY_CONTROLLER_DELIMITER, $route->getDefault(Constants::KEY_CONTROLLER));
 
-            $reflection = new ReflectionClass($controller);
+            if (!class_exists($controller)) {
+                return false;
+            }
 
+            $reflection = new ReflectionClass($controller);
             $annotations = $this->annotationReader->getClassAnnotations($reflection);
 
             $this->isRestApiDocDisabled($route, $annotations, $output);
