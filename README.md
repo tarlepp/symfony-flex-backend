@@ -5,9 +5,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/tarlepp/symfony-flex-backend/badge.svg?branch=master)](https://coveralls.io/github/tarlepp/symfony-flex-backend?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/69d6dc6b9fb4791e6b92/maintainability)](https://codeclimate.com/github/tarlepp/symfony-flex-backend/maintainability)
-[![Quality Gate](https://sonarcloud.io/api/badges/gate?key=github.com.tarlepp.symfony-flex-backend)](https://sonarcloud.io/dashboard/index/github.com.tarlepp.symfony-flex-backend)
-[![SonarCloud Bugs](https://sonarcloud.io/api/badges/measure?key=github.com.tarlepp.symfony-flex-backend&metric=bugs)](https://sonarcloud.io/component_measures/metric/reliability_rating/list?id=github.com.tarlepp.symfony-flex-backend)
-[![SonarCloud Vulnerabilities](https://sonarcloud.io/api/badges/measure?key=github.com.tarlepp.symfony-flex-backend&metric=vulnerabilities)](https://sonarcloud.io/component_measures/metric/security_rating/list?id=github.com.tarlepp.symfony-flex-backend)
+[![Sonarcloud Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=alert_status)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
+[![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=bugs)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
+[![Sonarcloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/e59c1ed3-b870-457a-971e-570a27a04784/mini.png)](https://insight.sensiolabs.com/projects/e59c1ed3-b870-457a-971e-570a27a04784)
 
 JSON REST API which is build on top of [Symfony](https://symfony.com/) framework.
