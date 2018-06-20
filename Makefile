@@ -65,14 +65,14 @@ endif
 
 ###> phpunit ###
 PHPDBG := $(shell which phpdbg)
-run-tests: ## Runs all tests via phpunit
+run-tests: ## Runs all tests via phpunit (Uses phpdbg if that is installed)
 ifndef PHPDBG
 	@${MAKE} run-tests-php
 else
 	@${MAKE} run-tests-phpdbg
 endif
 
-run-tests-fastest: ## Runs all test via fastest
+run-tests-fastest: ## Runs all test via fastest (Uses phpdbg if that is installed)
 ifndef PHPDBG
 	@${MAKE} run-tests-fastest-php
 else
