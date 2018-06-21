@@ -175,18 +175,26 @@ supported (main commands) make commands, note that you can get this same list
 with just running `make` command:
 
 ```bash
-cache-clear       # Clears the cache
-cache-warmup      # Warms up an empty cache
-ecs               # Runs The Easiest Way to Use Any Coding Standard
-generate-jwt-keys # Generates JWT auth keys
-merge-clover      # Creates clover from fastest run
-merge-junit       # Creates JUnit xml from fastest run
-phpcs             # Runs PHP CodeSniffer
-phpmetrics        # Generates PhpMetrics static analysis
-psalm             # Runs Psalm static analysis tool
-run-tests-fastest # Runs all test via fastest
-run-tests         # Runs all tests via phpunit
-serve             # Runs a local web server
+cache-clear                # Clears the cache
+cache-warmup               # Warms up an empty cache
+check-vendor-dependencies  # Checks if any vendor dependency can be updated
+clear-vendor-bin           # Runs PHPStan static analysis tool
+ecs                        # Runs The Easiest Way to Use Any Coding Standard
+generate-jwt-keys          # Generates JWT auth keys
+merge-clover               # Creates clover from fastest run
+merge-junit                # Creates JUnit xml from fastest run
+phpcs                      # Runs PHP CodeSniffer
+phpmetrics                 # Generates PhpMetrics static analysis
+phpstan                    # Runs PHPStan static analysis tool
+psalm                      # Runs Psalm static analysis tool
+run-tests-fastest-phpdbg   # Runs all test via fastest (phpdbg)
+run-tests-fastest-php      # Runs all test via fastest (pure PHP)
+run-tests-fastest          # Runs all test via fastest (Uses phpdbg if that is installed)
+run-tests-phpdbg           # Runs all tests via phpunit (phpdbg)
+run-tests-php              # Runs all tests via phpunit (pure PHP)
+run-tests                  # Runs all tests via phpunit (Uses phpdbg if that is installed)
+serve                      # Runs a local web server
+
 ```
 
 ### Symfony console
