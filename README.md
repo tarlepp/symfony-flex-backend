@@ -210,9 +210,10 @@ You can list all Symfony console commands via following command:
 Project contains following custom console commands to help eg. user management:
 
 ```bash
-./bin/console user:management     # To manage your users and user groups
-./bin/console api-key:management  # To manage your API keys
-./bin/console make:rest-api       # To create skeleton classes for new REST resource
+./bin/console user:management                       # To manage your users and user groups
+./bin/console api-key:management                    # To manage your API keys
+./bin/console make:rest-api                         # To create skeleton classes for new REST resource
+./bin/console utils:create-date-dimension-entities  # Console command to create 'DateDimension' entities.
 ```
 
 #### user:management
@@ -242,6 +243,10 @@ This command is just a wrapper for following commands:
 ./bin/console api-key:remove          # To remove API key
 ./bin/console api-key:list            # To list API keys
 ```
+
+#### utils:create-date-dimension-entities
+
+Command to create `DateDimension` entities that can be used with date/time related report queries.
 
 ## Structure
 
