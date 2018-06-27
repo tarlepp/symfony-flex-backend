@@ -25,11 +25,6 @@ use function getenv;
 abstract class WebTestCase extends BaseWebTestCase
 {
     /**
-     * @var ContainerInterface
-     */
-    protected $testContainer;
-
-    /**
      * @var Auth
      */
     private $authService;
@@ -63,12 +58,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
         self::bootKernel();
 
-        $this->testContainer = static::$kernel->getContainer();
-
-        /** @var ServiceLocator $serviceLocator */
-        $serviceLocator = $this->testContainer->get('test.service_locator');
-
-        $this->authService = $serviceLocator->get(Auth::class);
+        $this->authService  = self::$container->get(Auth::class);
     }
 
     /**
