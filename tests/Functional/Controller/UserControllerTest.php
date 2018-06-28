@@ -995,7 +995,7 @@ class UserControllerTest extends WebTestCase
         $userResource = self::$container->get(UserResource::class);
 
         /** @var RolesService $rolesService */
-        $rolesService = self::$container->get('test.service_locator')->get(RolesService::class);
+        $rolesService = self::$container->get(RolesService::class);
 
         $users = $userResource->find();
 
@@ -1041,7 +1041,7 @@ class UserControllerTest extends WebTestCase
         $userResource = self::$container->get(UserResource::class);
 
         /** @var RolesService $rolesService */
-        $rolesService = self::$container->get('test.service_locator')->get(RolesService::class);
+        $rolesService = self::$container->get(RolesService::class);
 
         $output = [];
 
