@@ -60,7 +60,7 @@ class DefaultControllerTest extends WebTestCase
         static::bootKernel();
 
         /** @var LogRequestResource $resource */
-        $resource = static::$kernel->getContainer()->get(LogRequestResource::class);
+        $resource = self::$container->get(LogRequestResource::class);
 
         $expectedLogCount = $resource->count();
 
@@ -97,7 +97,7 @@ class DefaultControllerTest extends WebTestCase
         static::bootKernel();
 
         /** @var LogRequestResource $resource */
-        $resource = static::$kernel->getContainer()->get(LogRequestResource::class);
+        $resource = self::$container->get(LogRequestResource::class);
 
         $expectedLogCount = $resource->count();
 
