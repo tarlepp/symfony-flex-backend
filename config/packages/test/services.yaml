@@ -23,10 +23,3 @@ services:
     App\Tests\Integration\Helpers\src\:
         resource: '../../../tests/Integration/Helpers/src/*'
 
-    test.service_locator:
-        class: Symfony\Component\DependencyInjection\ServiceLocator
-        tags: [ 'container.service_locator' ]
-        arguments:
-            -
-              App\Security\RolesService: '@App\Security\RolesService'
-              App\Utils\Tests\Auth: '@App\Utils\Tests\Auth'
