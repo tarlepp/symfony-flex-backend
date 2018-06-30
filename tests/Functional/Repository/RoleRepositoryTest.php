@@ -39,7 +39,7 @@ class RoleRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->repository = static::$kernel->getContainer()->get(RoleResource::class)->getRepository();
+        $this->repository = self::$container->get(RoleRepository::class);
     }
 
     /**

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Repository;
 
 use App\Repository\LogRequestRepository;
-use App\Resource\LogRequestResource;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -30,7 +29,7 @@ class LogRequestRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->repository = static::$kernel->getContainer()->get(LogRequestResource::class)->getRepository();
+        $this->repository = self::$container->get(LogRequestRepository::class);
     }
 
     public function testThatCleanHistoryReturnsExpected(): void

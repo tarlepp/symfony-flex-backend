@@ -7,9 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Functional\Repository;
 
-use App\Entity\User;
 use App\Repository\LogLoginFailureRepository;
-use App\Resource\LogLoginFailureResource;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -31,7 +29,7 @@ class LogLoginFailureRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->repository = static::$kernel->getContainer()->get(LogLoginFailureResource::class)->getRepository();
+        $this->repository = self::$container->get(LogLoginFailureRepository::class);
     }
 
     public function testThatClearReturnsExpected(): void

@@ -9,7 +9,6 @@ namespace App\Tests\Functional\Repository;
 
 use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
-use App\Resource\HealthzResource;
 use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -43,7 +42,7 @@ class HealthzRepositoryTest extends KernelTestCase
             self::$initialized = true;
         }
 
-        $this->repository = static::$kernel->getContainer()->get(HealthzResource::class)->getRepository();
+        $this->repository = self::$container->get(HealthzRepository::class);
     }
 
     /**

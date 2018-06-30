@@ -40,7 +40,7 @@ class UserRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->userRepository = static::$kernel->getContainer()->get(UserResource::class)->getRepository();
+        $this->userRepository = self::$container->get(UserRepository::class);
     }
 
     /**
