@@ -116,9 +116,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         static::bootKernel();
 
-        // Store container and entity manager
-        $container = static::$kernel->getContainer();
-        $rolesService = $container->get('test.service_locator')->get(RolesService::class);
+        $rolesService = self::$container->get(RolesService::class);
 
         $iterator = function (string $role) use ($rolesService): array {
             return [$rolesService->getShort($role)];
@@ -134,10 +132,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         static::bootKernel();
 
-        // Store container and entity manager
-        $container = static::$kernel->getContainer();
-        $managerRegistry = $container->get('doctrine');
-
+        $managerRegistry = self::$container->get('doctrine');
         $repositoryClass = ApiKeyRepository::class;
 
         /** @var ApiKeyRepository $repository */
@@ -172,15 +167,13 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         static::bootKernel();
 
-        // Store container and entity manager
-        $container = static::$kernel->getContainer();
-        $managerRegistry = $container->get('doctrine');
+        $managerRegistry = self::$container->get('doctrine');
 
         $repository = ApiKeyRepository::class;
 
         $this->apiKeyUserProvider = new ApiKeyUserProvider(
             new $repository($managerRegistry),
-            $container->get('test.service_locator')->get(RolesService::class)
+            self::$container->get(RolesService::class)
         );
     }
 

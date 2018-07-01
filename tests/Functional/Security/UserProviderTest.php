@@ -88,11 +88,9 @@ class UserProviderTest extends KernelTestCase
     {
         parent::setUp();
 
-        static::bootKernel();
+        self::bootKernel();
 
-        // Store container and entity manager
-        $container = static::$kernel->getContainer();
-        $entityManager = $container->get('doctrine.orm.default_entity_manager');
+        $entityManager = self::$container->get('doctrine')->getManager();
         $repository = UserProvider::class;
 
         $this->userProvider = new $repository($entityManager, new ClassMetadata(User::class));
