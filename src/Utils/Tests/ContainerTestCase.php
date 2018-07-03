@@ -33,7 +33,7 @@ abstract class ContainerTestCase extends KernelTestCase
         if (!($this->testContainer instanceof ContainerInterface)) {
             self::bootKernel();
 
-            $this->testContainer = static::$kernel->getContainer();
+            $this->testContainer = self::$container;
         }
 
         return $this->testContainer;

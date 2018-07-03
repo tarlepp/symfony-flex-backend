@@ -67,11 +67,8 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
      */
     public function load(ObjectManager $manager): void
     {
-        /** @var ServiceLocator $serviceLocator */
-        $serviceLocator = $this->container->get('test.service_locator');
-
         $this->manager = $manager;
-        $this->roles = $serviceLocator->get(RolesService::class);
+        $this->roles = $this->container->get('test.App\Security\RolesService');
 
         $iterator = function (string $role): void {
             $this->createRole($role);

@@ -93,7 +93,6 @@ class Kernel extends BaseKernel implements CompilerPassInterface
         parent::build($container);
 
         $container->addCompilerPass(new ResourceCollectionPass());
-        $container->addCompilerPass(new TestCasePass());
     }
 
     /** @noinspection PhpUnusedParameterInspection */

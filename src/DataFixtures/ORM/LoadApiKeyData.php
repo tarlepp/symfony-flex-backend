@@ -69,11 +69,8 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
      */
     public function load(ObjectManager $manager): void
     {
-        /** @var ServiceLocator $serviceLocator */
-        $serviceLocator = $this->container->get('test.service_locator');
-
         $this->manager = $manager;
-        $this->roles = $serviceLocator->get(RolesService::class);
+        $this->roles = $this->container->get('test.App\Security\RolesService');
 
         // Create entities
         array_map([$this, 'createApiKey'], $this->roles->getRoles());
