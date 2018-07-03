@@ -60,7 +60,7 @@ class ApiKeyTest extends EntityTestCase
     {
         self::bootKernel();
 
-        $rolesService = static::$kernel->getContainer()->get('test.service_locator')->get(RolesService::class);
+        $rolesService = self::$container->get(RolesService::class);
 
         $output = [];
 
