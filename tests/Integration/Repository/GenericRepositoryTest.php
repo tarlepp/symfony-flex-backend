@@ -41,7 +41,7 @@ class GenericRepositoryTest extends KernelTestCase
         $entity = new $this->entityClass();
 
         /** @var BaseRepositoryInterface $repository */
-        $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
+        $repository = self::$container->get($this->resourceClass)->getRepository();
 
         static::assertInstanceOf(Proxy::class, $repository->getReference($entity->getId()));
 
@@ -57,7 +57,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddLeftJoinWorksAsExpected(string $expected, array $parameters): void
     {
         /** @var BaseRepositoryInterface $repository */
-        $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
+        $repository = self::$container->get($this->resourceClass)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -80,7 +80,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddInnerJoinWorksAsExpected(string $expected, array $parameters): void
     {
         /** @var BaseRepositoryInterface $repository */
-        $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
+        $repository = self::$container->get($this->resourceClass)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -103,7 +103,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddLeftJoinAddsJoinJustOnce(string $expected, array $parameters): void
     {
         /** @var BaseRepositoryInterface $repository */
-        $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
+        $repository = self::$container->get($this->resourceClass)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -128,7 +128,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddInnerJoinAddsJoinJustOnce(string $expected, array $parameters): void
     {
         /** @var BaseRepositoryInterface $repository */
-        $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
+        $repository = self::$container->get($this->resourceClass)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -147,7 +147,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddCallbackWorks(): void
     {
         /** @var BaseRepositoryInterface $repository */
-        $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
+        $repository = self::$container->get($this->resourceClass)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
@@ -166,7 +166,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddCallbackCallsCallbackJustOnce(): void
     {
         /** @var BaseRepositoryInterface $repository */
-        $repository = static::$kernel->getContainer()->get($this->resourceClass)->getRepository();
+        $repository = self::$container->get($this->resourceClass)->getRepository();
 
         $count = 0;
 
