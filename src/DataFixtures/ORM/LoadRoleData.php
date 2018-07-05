@@ -16,7 +16,6 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ServiceLocator;
 use function array_map;
 
 /**
@@ -67,8 +66,9 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
      */
     public function load(ObjectManager $manager): void
     {
-        $this->manager = $manager;
+        /** @var RolesService roles */
         $this->roles = $this->container->get('test.App\Security\RolesService');
+        $this->manager = $manager;
 
         $iterator = function (string $role): void {
             $this->createRole($role);
