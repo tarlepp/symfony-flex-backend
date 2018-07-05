@@ -21,15 +21,14 @@ use App\Rest\Traits\Methods;
 use App\Security\RolesService;
 use LogicException;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -40,7 +39,9 @@ use Throwable;
 /**
  * Class UserController
  *
- * @Route(path="/user")
+ * @Route(
+ *     path="/user",
+ *  )
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
@@ -88,16 +89,15 @@ class UserController extends Controller
      * @Route(
      *      "/{requestUser}",
      *      requirements={
-     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-     *      }
+     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *      },
+     *      methods={"DELETE"},
      *  )
      *
      * @ParamConverter(
      *     "requestUser",
      *     class="App\Resource\UserResource"
      *  )
-     *
-     * @Method({"DELETE"})
      *
      * @Security("has_role('ROLE_ROOT')")
      *
@@ -137,16 +137,15 @@ class UserController extends Controller
      * @Route(
      *      "/{requestUser}/roles",
      *      requirements={
-     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-     *      }
+     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *      },
+     *      methods={"GET"},
      *  )
      *
      * @ParamConverter(
      *     "requestUser",
      *     class="App\Resource\UserResource"
      *  )
-     *
-     * @Method({"GET"})
      *
      * @Security("is_granted('IS_USER_HIMSELF', requestUser) or has_role('ROLE_ROOT')")
      *
@@ -209,16 +208,15 @@ class UserController extends Controller
      * @Route(
      *      "/{requestUser}/groups",
      *      requirements={
-     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-     *      }
+     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *      },
+     *      methods={"GET"},
      *  )
      *
      * @ParamConverter(
      *     "requestUser",
      *     class="App\Resource\UserResource"
      *  )
-     *
-     * @Method({"GET"})
      *
      * @Security("is_granted('IS_USER_HIMSELF', requestUser) or has_role('ROLE_ROOT')")
      *
@@ -288,7 +286,8 @@ class UserController extends Controller
      *      requirements={
      *          "user" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
      *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *      }
+     *      },
+     *      methods={"POST"},
      *  )
      *
      * @ParamConverter(
@@ -299,8 +298,6 @@ class UserController extends Controller
      *      "userGroup",
      *      class="App\Resource\UserGroupResource",
      *  )
-     *
-     * @Method({"POST"})
      *
      * @Security("has_role('ROLE_ROOT')")
      *
@@ -410,7 +407,8 @@ class UserController extends Controller
      *      requirements={
      *          "user" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
      *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *      }
+     *      },
+     *      methods={"DELETE"},
      *  )
      *
      * @ParamConverter(
@@ -421,8 +419,6 @@ class UserController extends Controller
      *      "userGroup",
      *      class="App\Resource\UserGroupResource",
      *  )
-     *
-     * @Method({"DELETE"})
      *
      * @Security("has_role('ROLE_ROOT')")
      *

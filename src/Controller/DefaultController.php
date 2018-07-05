@@ -10,17 +10,18 @@ namespace App\Controller;
 use App\Rest\ResponseHandler;
 use App\Utils\HealthzService;
 use App\Utils\JSON;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class DefaultController
  *
- * @Route(path="/")
+ * @Route(
+ *     path="/",
+ *  )
  *
  * @package App\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -30,7 +31,9 @@ class DefaultController
     /**
      * Default application response when requested root.
      *
-     * @Route("")
+     * @Route(
+     *     path="",
+     *  )
      *
      * @return Response
      *
@@ -47,9 +50,10 @@ class DefaultController
      *
      * @link https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
      *
-     * @Route("/healthz")
-     *
-     * @Method("GET")
+     * @Route(
+     *     path="/healthz",
+     *     methods={"GET"}
+     *  )
      *
      * @SWG\Response(
      *      response=200,
@@ -96,9 +100,10 @@ class DefaultController
     /**
      * Route for get API version.
      *
-     * @Route("/version")
-     *
-     * @Method("GET")
+     * @Route(
+     *     path="/version",
+     *     methods={"GET"}
+     *  )
      *
      * @SWG\Response(
      *      response=200,

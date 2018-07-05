@@ -15,21 +15,24 @@ use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
 use App\Security\RolesService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class RoleController
  *
- * @Route(path="/role")
+ * @Route(
+ *     path="/role",
+ *  )
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
@@ -61,13 +64,12 @@ class RoleController extends Controller
 
     /**
      * @Route(
-     *      "/{role}",
+     *      path="/{role}",
      *      requirements={
-     *          "role" = "^ROLE_\w+$"
-     *      }
+     *          "role" = "^ROLE_\w+$",
+     *      },
+     *      methods={"GET"},
      *  )
-     *
-     * @Method({"GET"})
      *
      * @Security("has_role('ROLE_ADMIN')")
      *
@@ -78,7 +80,8 @@ class RoleController extends Controller
      *
      * @return Response
      *
-     * @throws \LogicException
+     * @throws LogicException
+     * @throws Throwable
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
@@ -93,16 +96,15 @@ class RoleController extends Controller
      * @Route(
      *      "/{role}/inherited",
      *      requirements={
-     *          "role" = "^ROLE_\w+$"
-     *      }
+     *          "role" = "^ROLE_\w+$",
+     *      },
+     *     methods={"GET"}
      *  )
      *
      * @ParamConverter(
      *     "role",
      *     class="App\Resource\RoleResource"
      * )
-     *
-     * @Method({"GET"})
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *

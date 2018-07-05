@@ -12,11 +12,10 @@ use App\Security\ApiKeyUser;
 use App\Security\RolesService;
 use Doctrine\Common\Collections\Collection;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -41,9 +40,10 @@ class ProfileController
     /**
      * Endpoint action to get current user profile data.
      *
-     * @Route("");
-     *
-     * @Method("GET")
+     * @Route(
+     *     path="",
+     *     methods={"GET"}
+     *  );
      *
      * @SWG\Parameter(
      *      type="string",
@@ -110,9 +110,10 @@ class ProfileController
     /**
      * Endpoint action to get current user roles as an array.
      *
-     * @Route("/roles");
-     *
-     * @Method("GET")
+     * @Route(
+     *     path="/roles",
+     *     methods={"GET"},
+     *  );
      *
      * @SWG\Parameter(
      *      type="string",
@@ -168,9 +169,10 @@ class ProfileController
     /**
      * Endpoint action to get current user user groups.
      *
-     * @Route("/groups");
-     *
-     * @Method("GET")
+     * @Route(
+     *     path="/groups",
+     *     methods={"GET"}
+     *  );
      *
      * @SWG\Parameter(
      *      type="string",

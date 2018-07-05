@@ -16,14 +16,13 @@ use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use Nelmio\ApiDocBundle\Annotation\Model;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
@@ -31,7 +30,9 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * Class UserGroupController
  *
- * @Route(path="/user_group")
+ * @Route(
+ *     path="/user_group",
+ *  )
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
@@ -81,16 +82,15 @@ class UserGroupController extends Controller
      * @Route(
      *      "/{userGroup}/users",
      *      requirements={
-     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-     *      }
+     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *      },
+     *      methods={"GET"},
      *  )
      *
      * @ParamConverter(
      *      "userGroup",
      *      class="App\Resource\UserGroupResource",
      *  )
-     *
-     * @Method({"GET"})
      *
      * @Security("has_role('ROLE_ADMIN')")
      *
@@ -154,7 +154,8 @@ class UserGroupController extends Controller
      *      requirements={
      *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
      *          "user" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *      }
+     *      },
+     *      methods={"POST"},
      *  )
      *
      * @ParamConverter(
@@ -165,8 +166,6 @@ class UserGroupController extends Controller
      *      "user",
      *      class="App\Resource\UserResource",
      *  )
-     *
-     * @Method({"POST"})
      *
      * @Security("has_role('ROLE_ROOT')")
      *
@@ -263,7 +262,8 @@ class UserGroupController extends Controller
      *      requirements={
      *          "userGroupId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
      *          "userId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *      }
+     *      },
+     *      methods={"DELETE"},
      *  )
      *
      * @ParamConverter(
@@ -274,8 +274,6 @@ class UserGroupController extends Controller
      *      "user",
      *      class="App\Resource\UserResource",
      *  )
-     *
-     * @Method({"DELETE"})
      *
      * @Security("has_role('ROLE_ROOT')")
      *

@@ -8,10 +8,9 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Utils\JSON;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Routing\Annotation\Route;
 use function sprintf;
 
 /**
@@ -29,9 +28,10 @@ class AuthController
     /**
      * Endpoint action to get user Json Web Token (JWT) for authentication.
      *
-     * @Route("/getToken");
-     *
-     * @Method("POST")
+     * @Route(
+     *      path="/getToken",
+     *      methods={"POST"},
+     *  );
      *
      * @SWG\Parameter(
      *      name="body",
