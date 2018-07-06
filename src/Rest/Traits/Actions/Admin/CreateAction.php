@@ -10,8 +10,7 @@ namespace App\Rest\Traits\Actions\Admin;
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CreateMethod;
 use LogicException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,9 +34,10 @@ trait CreateAction
     use CreateMethod;
 
     /**
-     * @Route("")
-     *
-     * @Method({"POST"})
+     * @Route(
+     *     path="",
+     *     methods={"POST"},
+     *  )
      *
      * @Security("has_role('ROLE_ADMIN')")
      *
