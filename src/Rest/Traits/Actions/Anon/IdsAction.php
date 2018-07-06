@@ -10,10 +10,9 @@ namespace App\Rest\Traits\Actions\Anon;
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\IdsMethod;
 use LogicException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
@@ -32,9 +31,10 @@ trait IdsAction
     use IdsMethod;
 
     /**
-     * @Route("/ids")
-     *
-     * @Method({"GET"})
+     * @Route(
+     *     path="/ids",
+     *     methods={"GET"},
+     *  )
      *
      * @RestApiDoc()
      *

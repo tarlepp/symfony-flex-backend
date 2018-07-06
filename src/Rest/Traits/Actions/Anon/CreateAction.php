@@ -10,11 +10,10 @@ namespace App\Rest\Traits\Actions\Anon;
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CreateMethod;
 use LogicException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 use UnexpectedValueException;
 
@@ -34,9 +33,10 @@ trait CreateAction
     use CreateMethod;
 
     /**
-     * @Route("")
-     *
-     * @Method({"POST"})
+     * @Route(
+     *     path="",
+     *     methods={"POST"},
+     *  )
      *
      * @RestApiDoc()
      *

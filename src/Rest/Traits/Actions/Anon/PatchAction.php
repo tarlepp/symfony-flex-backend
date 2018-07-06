@@ -10,11 +10,10 @@ namespace App\Rest\Traits\Actions\Anon;
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\PatchMethod;
 use LogicException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 use UnexpectedValueException;
 
@@ -37,11 +36,10 @@ trait PatchAction
      * @Route(
      *      "/{id}",
      *      requirements={
-     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-     *      }
+     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *      },
+     *      methods={"PATCH"},
      *  )
-     *
-     * @Method({"PATCH"})
      *
      * @RestApiDoc()
      *

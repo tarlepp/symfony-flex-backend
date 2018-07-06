@@ -10,10 +10,9 @@ namespace App\Rest\Traits\Actions\Anon;
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CountMethod;
 use LogicException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
@@ -32,9 +31,10 @@ trait CountAction
     use CountMethod;
 
     /**
-     * @Route("/count")
-     *
-     * @Method({"GET"})
+     * @Route(
+     *     path="/count",
+     *     methods={"GET"},
+     *  )
      *
      * @RestApiDoc()
      *
