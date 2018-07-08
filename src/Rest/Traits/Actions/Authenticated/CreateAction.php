@@ -10,12 +10,11 @@ namespace App\Rest\Traits\Actions\Authenticated;
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CreateMethod;
 use LogicException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 use UnexpectedValueException;
 
@@ -35,9 +34,10 @@ trait CreateAction
     use CreateMethod;
 
     /**
-     * @Route("")
-     *
-     * @Method({"POST"})
+     * @Route(
+     *     path="",
+     *     methods={"POST"},
+     *  )
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *

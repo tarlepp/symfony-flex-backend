@@ -10,11 +10,10 @@ namespace App\Rest\Traits\Actions\Authenticated;
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CountMethod;
 use LogicException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
@@ -33,9 +32,10 @@ trait CountAction
     use CountMethod;
 
     /**
-     * @Route("/count")
-     *
-     * @Method({"GET"})
+     * @Route(
+     *     path="/count",
+     *     methods={"GET"},
+     *  )
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *

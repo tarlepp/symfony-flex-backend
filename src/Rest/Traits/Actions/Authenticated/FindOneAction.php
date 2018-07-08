@@ -10,11 +10,10 @@ namespace App\Rest\Traits\Actions\Authenticated;
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\FindOneMethod;
 use LogicException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
@@ -36,11 +35,10 @@ trait FindOneAction
      * @Route(
      *      "/{id}",
      *      requirements={
-     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
-     *      }
+     *          "id" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *      },
+     *      methods={"GET"},
      *  )
-     *
-     * @Method({"GET"})
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
