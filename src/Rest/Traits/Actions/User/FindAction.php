@@ -10,11 +10,10 @@ namespace App\Rest\Traits\Actions\User;
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\FindMethod;
 use LogicException;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
 /**
@@ -33,9 +32,10 @@ trait FindAction
     use FindMethod;
 
     /**
-     * @Route("")
-     *
-     * @Method({"GET"})
+     * @Route(
+     *      path="",
+     *      methods={"GET"},
+     *  )
      *
      * @Security("has_role('ROLE_USER')")
      *
