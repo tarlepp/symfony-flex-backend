@@ -12,15 +12,18 @@ use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use App\Rest\Traits\Methods;
 use App\Tests\Functional\Rest\src\Resource\ResourceForLifeCycleTests;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 
 /**
  * Class ControllerForLifeCycleTests
  *
- * @Route(path="/test_lifecycle_behaviour")
+ * @Route(
+ *     path="/test_lifecycle_behaviour",
+ *  )
  *
  * @RestApiDoc(disabled=true)
  *
@@ -48,17 +51,17 @@ class ControllerForLifeCycleTests extends Controller
      *      "/{role}",
      *      requirements={
      *          "role" = "^ROLE_\w+$"
-     *      }
+     *      },
+     *      methods={"GET"}
      *  )
-     *
-     * @Method({"GET"})
      *
      * @param Request $request
      * @param string  $role
      *
      * @return Response
      *
-     * @throws \LogicException
+     * @throws LogicException
+     * @throws Throwable
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
