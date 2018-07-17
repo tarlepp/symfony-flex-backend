@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "59c18a53cb9439a17bdce6753f7c1937",
+    "content-hash": "b732303e74d967123ad53489dc2208be",
     "packages": [],
     "packages-dev": [
         {
@@ -2388,16 +2388,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v4.4.2",
+            "version": "v4.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "1a18f72e888b2b20e2f8ebad3058c3adc5b71b38"
+                "reference": "5bd41c719028fef8a3a02e681abcd507cdc07158"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/1a18f72e888b2b20e2f8ebad3058c3adc5b71b38",
-                "reference": "1a18f72e888b2b20e2f8ebad3058c3adc5b71b38",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/5bd41c719028fef8a3a02e681abcd507cdc07158",
+                "reference": "5bd41c719028fef8a3a02e681abcd507cdc07158",
                 "shasum": ""
             },
             "require": {
@@ -2416,17 +2416,16 @@
                 "symfony/finder": "^3.4|^4.0",
                 "symfony/http-kernel": "^3.4|^4.0",
                 "symfony/yaml": "^3.4|^4.0",
-                "symplify/coding-standard": "^4.4.2",
-                "symplify/package-builder": "^4.4.2",
-                "symplify/token-runner": "^4.4.2"
+                "symplify/coding-standard": "^4.5",
+                "symplify/package-builder": "^4.5",
+                "symplify/token-runner": "^4.5"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.0",
-                "symplify/easy-coding-standard-tester": "^4.4.2"
+                "symplify/easy-coding-standard-tester": "^4.5"
             },
             "bin": [
-                "bin/ecs",
-                "bin/ecs-container.php"
+                "bin/ecs"
             ],
             "type": "library",
             "extra": {
@@ -2440,8 +2439,7 @@
                     "Symplify\\EasyCodingStandard\\ChangedFilesDetector\\": "packages/ChangedFilesDetector/src",
                     "Symplify\\EasyCodingStandard\\Configuration\\": "packages/Configuration/src",
                     "Symplify\\EasyCodingStandard\\FixerRunner\\": "packages/FixerRunner/src",
-                    "Symplify\\EasyCodingStandard\\SniffRunner\\": "packages/SniffRunner/src",
-                    "Symplify\\EasyCodingStandard\\Performance\\": "packages/Performance/src"
+                    "Symplify\\EasyCodingStandard\\SniffRunner\\": "packages/SniffRunner/src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2449,7 +2447,7 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2018-06-09T22:55:51+00:00"
+            "time": "2018-07-12T22:45:18+00:00"
         },
         {
             "name": "symplify/package-builder",
