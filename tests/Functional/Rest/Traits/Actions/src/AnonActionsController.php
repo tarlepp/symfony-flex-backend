@@ -10,12 +10,14 @@ namespace App\Tests\Functional\Rest\Traits\Actions\src;
 use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\Anon as Actions;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class AnonActionsController
  *
- * @Route(path="/test_anon_actions")
+ * @Route(
+ *     path="/test_anon_actions",
+ *  )
  *
  * @RestApiDoc(disabled=true)
  *

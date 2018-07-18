@@ -10,13 +10,15 @@ namespace App\Tests\Functional\Rest\Traits\Actions\src;
 use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\Logged as Actions;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Class LoggedActionsController
  *
- * @Route(path="/test_logged_actions")
+ * @Route(
+ *     path="/test_logged_actions",
+ *  )
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *

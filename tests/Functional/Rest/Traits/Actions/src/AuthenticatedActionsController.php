@@ -10,12 +10,14 @@ namespace App\Tests\Functional\Rest\Traits\Actions\src;
 use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\Authenticated as Actions;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class AuthenticatedActionsController
  *
- * @Route(path="/test_authenticated_actions")
+ * @Route(
+ *     path="/test_authenticated_actions",
+ *  )
  *
  * @RestApiDoc(disabled=true)
  *
