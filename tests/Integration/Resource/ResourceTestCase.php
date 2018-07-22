@@ -69,7 +69,7 @@ abstract class ResourceTestCase extends KernelTestCase
 
         self::bootKernel();
 
-        $this->resource = static::$kernel->getContainer()->get($this->resourceClass);
+        $this->resource = self::$container->get($this->resourceClass);
     }
 
     protected function tearDown(): void
