@@ -36,7 +36,7 @@ class RestResourceConverterTest extends KernelTestCase
      * @param bool           $expected
      * @param ParamConverter $configuration
      */
-    public function testThatSupportMethodReturnsExpected(bool $expected, ParamConverter $configuration)
+    public function testThatSupportMethodReturnsExpected(bool $expected, ParamConverter $configuration): void
     {
         static::assertSame($expected, $this->converter->supports($configuration));
     }
@@ -44,7 +44,7 @@ class RestResourceConverterTest extends KernelTestCase
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function testThatApplyMethodThrowsAnException()
+    public function testThatApplyMethodThrowsAnException(): void
     {
         $request = new Request();
         $request->attributes->set('foo', 'bar');
@@ -78,7 +78,7 @@ class RestResourceConverterTest extends KernelTestCase
         static::assertInstanceOf(Role::class, $request->attributes->get('role'));
         static::assertSame('Description - ' . $role, $request->attributes->get('role')->getDescription());
 
-        unset ($paramConverter, $request);
+        unset($paramConverter, $request);
     }
 
     /**
@@ -128,7 +128,7 @@ class RestResourceConverterTest extends KernelTestCase
 
         self::bootKernel();
 
-        $this->converter = new RestResourceConverter(static::$kernel->getContainer()->get(Collection::class));
+        $this->converter = new RestResourceConverter(self::$container->get(Collection::class));
     }
 
     protected function tearDown(): void
