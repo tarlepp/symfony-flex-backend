@@ -26,7 +26,7 @@ class UTCDateTimeType extends DateTimeType
     /**
      * UTC date time zone object.
      *
-     * @var DateTimeZone
+     * @var DateTimeZone|null
      */
     private static $utc;
 
@@ -43,10 +43,8 @@ class UTCDateTimeType extends DateTimeType
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        $this->initializeUtcDateTimeZone();
-
         if ($value instanceof DateTime) {
-            $value->setTimezone(self::$utc);
+            $value->setTimezone($this->getUtcDateTimeZone());
         }
 
         return parent::convertToDatabaseValue($value, $platform);
@@ -65,12 +63,15 @@ class UTCDateTimeType extends DateTimeType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-        $this->initializeUtcDateTimeZone();
 
         if ($value instanceof DateTime) {
-            $value->setTimezone(self::$utc);
+            $value->setTimezone($this->getUtcDateTimeZone());
         } elseif ($value !== null) {
-            $converted = DateTime::createFromFormat($platform->getDateTimeFormatString(), $value, self::$utc);
+            $converted = DateTime::createFromFormat(
+                $platform->getDateTimeFormatString(),
+                $value,
+                $this->getUtcDateTimeZone()
+            );
 
             $this->checkConvertedValue($value, $platform, $converted);
 
@@ -82,12 +83,16 @@ class UTCDateTimeType extends DateTimeType
 
     /**
      * Method to initialize DateTimeZone as in UTC.
+     *
+     * @return \DateTimeZone
      */
-    private function initializeUtcDateTimeZone(): void
+    private function getUtcDateTimeZone(): DateTimeZone
     {
         if (self::$utc === null) {
             self::$utc = new DateTimeZone('UTC');
         }
+
+        return self::$utc;
     }
 
     /**

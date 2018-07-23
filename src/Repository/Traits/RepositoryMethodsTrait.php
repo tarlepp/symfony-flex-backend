@@ -212,13 +212,13 @@ trait RepositoryMethodsTrait
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface|static
+     * @return BaseRepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(EntityInterface $entity)
+    public function save(EntityInterface $entity): BaseRepositoryInterface
     {
         // Persist on database
         $this->getEntityManager()->persist($entity);
@@ -233,13 +233,13 @@ trait RepositoryMethodsTrait
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface|static
+     * @return BaseRepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(EntityInterface $entity)
+    public function remove(EntityInterface $entity): BaseRepositoryInterface
     {
         // Remove from database
         $this->getEntityManager()->remove($entity);

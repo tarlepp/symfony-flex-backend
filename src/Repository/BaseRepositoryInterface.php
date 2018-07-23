@@ -76,26 +76,26 @@ interface BaseRepositoryInterface
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface|$this
+     * @return BaseRepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function save(EntityInterface $entity);
+    public function save(EntityInterface $entity): self;
 
     /**
      * Helper method to remove specified entity from database.
      *
      * @param EntityInterface $entity
      *
-     * @return BaseRepositoryInterface|$this
+     * @return BaseRepositoryInterface
      *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
      */
-    public function remove(EntityInterface $entity);
+    public function remove(EntityInterface $entity): self;
 
     /**
      * Generic count method to determine count of entities for specified criteria and search term(s).
