@@ -38,7 +38,6 @@ jdk:
   - oraclejdk8
 
 before_install:
-  - if [[ ${COVERAGE} != true ]]; then phpenv config-rm xdebug.ini; fi
   - cp .env.travis .env
   - cp .env.travis .env.test
   - phpenv config-rm xdebug.ini
@@ -62,6 +61,7 @@ install:
   - make generate-jwt-keys
 
 before_script:
+  - if [[ ${COVERAGE} != true ]]; then phpenv config-rm xdebug.ini; fi
   - mysql --version
   - php --version
   - php ./bin/console --version
