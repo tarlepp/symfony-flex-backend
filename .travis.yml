@@ -38,6 +38,7 @@ jdk:
   - oraclejdk8
 
 before_install:
+  - if [[ ${COVERAGE} != true ]]; then phpenv config-rm xdebug.ini; fi
   - cp .env.travis .env
   - cp .env.travis .env.test
   - phpenv config-rm xdebug.ini
@@ -59,12 +60,10 @@ install:
   - pecl install ast-0.1.6
   - composer install
   - make generate-jwt-keys
-  - sudo sh -c "ulimit -n 262140"
 
 before_script:
   - mysql --version
   - php --version
-  - phpdbg --version
   - php ./bin/console --version
   - php ./vendor/bin/phpunit --version
   - php ./vendor/bin/requirements-checker
@@ -78,10 +77,7 @@ script:
   - make ecs
   - make psalm
   - make phpstan
-  - if [[ $COVERAGE == true ]];
-    then sh -c "make run-tests-fastest-phpdbg";
-    else sh -c "make run-tests-fastest-php";
-    fi
+  - make run-tests-fastest-php
 #  - make run-tests-fastest
 #  - make run-tests
 
