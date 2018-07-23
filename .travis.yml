@@ -40,7 +40,6 @@ jdk:
 before_install:
   - cp .env.travis .env
   - cp .env.travis .env.test
-  - phpenv config-rm xdebug.ini
   - mysql -e 'DROP DATABASE IF EXISTS travis_test_1; CREATE DATABASE travis_test_1;'
   - mysql -e 'DROP DATABASE IF EXISTS travis_test_2; CREATE DATABASE travis_test_2;'
   - mysql -e 'DROP DATABASE IF EXISTS travis_test_3; CREATE DATABASE travis_test_3;'
