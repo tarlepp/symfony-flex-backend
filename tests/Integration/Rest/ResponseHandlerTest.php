@@ -27,6 +27,7 @@ class ResponseHandlerTest extends ContainerTestCase
 {
     public function testThatGetSerializerReturnsExpected(): void
     {
+
         $serializer = $this->getContainer()->get('serializer');
 
         $responseClass = new ResponseHandler($serializer);
