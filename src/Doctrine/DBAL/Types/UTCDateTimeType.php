@@ -63,7 +63,6 @@ class UTCDateTimeType extends DateTimeType
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
-
         if ($value instanceof DateTime) {
             $value->setTimezone($this->getUtcDateTimeZone());
         } elseif ($value !== null) {
