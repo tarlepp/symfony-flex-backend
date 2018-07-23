@@ -88,7 +88,6 @@ class ApiDocDescriber implements DescriberInterface
         foreach ($this->getRouteModels() as $routeModel) {
             $path = $api->getPaths()->get($routeModel->getRoute()->getPath());
 
-
             if ($path->hasOperation($routeModel->getHttpMethod())) {
                 $this->rest->createDocs($path->getOperation($routeModel->getHttpMethod()), $routeModel);
             }
@@ -202,9 +201,7 @@ class ApiDocDescriber implements DescriberInterface
             );
 
             $reflection = new ReflectionMethod($controller, $method);
-
             $annotations = $this->annotationReader->getMethodAnnotations($reflection);
-
             $supported = [];
 
             array_map($this->isRouteSupported($supported), $annotations);
