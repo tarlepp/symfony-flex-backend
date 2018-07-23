@@ -17,7 +17,6 @@ use Nelmio\ApiDocBundle\Describer\DescriberInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouterInterface;
@@ -28,7 +27,6 @@ use function array_values;
 use function count;
 use function explode;
 use function mb_strrpos;
-use function mb_strtolower;
 
 /**
  * Class ApiDocDescriber
@@ -90,6 +88,7 @@ class ApiDocDescriber implements DescriberInterface
         foreach ($this->getRouteModels() as $routeModel) {
             $path = $api->getPaths()->get($routeModel->getRoute()->getPath());
 
+
             if ($path->hasOperation($routeModel->getHttpMethod())) {
                 $this->rest->createDocs($path->getOperation($routeModel->getHttpMethod()), $routeModel);
             }
@@ -103,10 +102,9 @@ class ApiDocDescriber implements DescriberInterface
      */
     private function getRouteModels(): array
     {
-        $annotationFilterMethod = $this->getClosureAnnotationFilterMethod();
         $annotationFilterRoute = $this->getClosureAnnotationFilterRoute();
 
-        $iterator = function (Route $route) use ($annotationFilterMethod, $annotationFilterRoute): RouteModel {
+        $iterator = function (Route $route) use ($annotationFilterRoute): RouteModel {
             [$controller, $method] = explode(
                 Constants::KEY_CONTROLLER_DELIMITER,
                 $route->getDefault(Constants::KEY_CONTROLLER)
@@ -116,16 +114,13 @@ class ApiDocDescriber implements DescriberInterface
             $methodAnnotations = $this->annotationReader->getMethodAnnotations($reflection);
             $controllerAnnotations = $this->annotationReader->getClassAnnotations($reflection->getDeclaringClass());
 
-            /** @var Method $httpMethodAnnotation */
-            $httpMethodAnnotation = array_values(array_filter($methodAnnotations, $annotationFilterMethod))[0];
-
-            /** @var \Sensio\Bundle\FrameworkExtraBundle\Configuration\Route $routeAnnotation */
+            /** @var \Symfony\Component\Routing\Annotation\Route $routeAnnotation */
             $routeAnnotation = array_values(array_filter($controllerAnnotations, $annotationFilterRoute))[0];
 
             $routeModel = new RouteModel();
             $routeModel->setController($controller);
             $routeModel->setMethod($method);
-            $routeModel->setHttpMethod(mb_strtolower($httpMethodAnnotation->getMethods()[0]));
+            $routeModel->setHttpMethod($route->getMethods()[0]);
             $routeModel->setBaseRoute($routeAnnotation->getPath());
             $routeModel->setRoute($route);
             $routeModel->setMethodAnnotations($methodAnnotations);
@@ -214,7 +209,7 @@ class ApiDocDescriber implements DescriberInterface
 
             array_map($this->isRouteSupported($supported), $annotations);
 
-            $output = count($supported) === 2;
+            $output = count($supported) === 1;
         }
 
         return $output;
@@ -228,28 +223,12 @@ class ApiDocDescriber implements DescriberInterface
     private function isRouteSupported(array &$supported): Closure
     {
         return function ($annotation) use (&$supported): void {
-            if ($annotation instanceof RestApiDoc || $annotation instanceof Method) {
+            if ($annotation instanceof RestApiDoc) {
                 $supported[] = true;
             }
         };
     }
 
-    /**
-     * @return Closure
-     */
-    private function getClosureAnnotationFilterMethod(): Closure
-    {
-        /**
-         * Simple filter lambda function to filter out all but Method class
-         *
-         * @param $annotation
-         *
-         * @return bool
-         */
-        return function ($annotation): bool {
-            return $annotation instanceof Method;
-        };
-    }
 
     /**
      * @return Closure
@@ -264,7 +243,7 @@ class ApiDocDescriber implements DescriberInterface
          * @return bool
          */
         return function ($annotation): bool {
-            return $annotation instanceof \Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+            return $annotation instanceof \Symfony\Component\Routing\Annotation\Route;
         };
     }
 }
