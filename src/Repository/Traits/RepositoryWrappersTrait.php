@@ -55,7 +55,7 @@ trait RepositoryWrappersTrait
     }
 
     /**
-     * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata|\Doctrine\ORM\Mapping\ClassMetadata
+     * @return \Doctrine\ORM\Mapping\ClassMetadata|\Doctrine\Common\Persistence\Mapping\ClassMetadata
      */
     public function getClassMetaData()
     {
@@ -65,14 +65,14 @@ trait RepositoryWrappersTrait
     /**
      * Getter method for EntityManager for current entity.
      *
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress InvalidNullableReturnType
-     *
      * @return EntityManager
      */
     public function getEntityManager(): EntityManager
     {
-        return $this->managerRegistry->getManagerForClass($this->getEntityName());
+        /** @var EntityManager $manager */
+        $manager = $this->managerRegistry->getManagerForClass($this->getEntityName());
+
+        return $manager;
     }
 
     /**

@@ -69,10 +69,10 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @param mixed[]      $criteria
-     * @param mixed[]|null $orderBy
-     * @param int|null     $limit
-     * @param int|null     $offset
+     * @param mixed[]       $criteria
+     * @param string[]|null $orderBy
+     * @param int|null      $limit
+     * @param int|null      $offset
      *
      * @return EntityInterface[]|array<int, mixed>
      */
