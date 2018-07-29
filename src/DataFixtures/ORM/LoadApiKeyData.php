@@ -9,7 +9,6 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\ApiKey;
 use App\Entity\UserGroup;
-use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
 use BadMethodCallException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -68,8 +67,10 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
      */
     public function load(ObjectManager $manager): void
     {
-        /** @var RolesService roles */
-        $this->roles = $this->container->get('test.App\Security\RolesService');
+        /** @var RolesServiceInterface $roles */
+        $roles = $roles = $this->container->get('test.App\Security\RolesService');
+
+        $this->roles = $roles;
         $this->manager = $manager;
 
         // Create entities

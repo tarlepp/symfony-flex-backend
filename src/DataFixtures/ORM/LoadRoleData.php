@@ -8,7 +8,6 @@ declare(strict_types = 1);
 namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
-use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
 use BadMethodCallException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -66,8 +65,10 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
      */
     public function load(ObjectManager $manager): void
     {
-        /** @var RolesService roles */
-        $this->roles = $this->container->get('test.App\Security\RolesService');
+        /** @var RolesServiceInterface $roles */
+        $roles = $this->container->get('test.App\Security\RolesService');
+
+        $this->roles = $roles;
         $this->manager = $manager;
 
         $iterator = function (string $role): void {
