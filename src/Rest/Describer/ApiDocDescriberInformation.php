@@ -46,7 +46,7 @@ class ApiDocDescriberInformation implements DescriberInterface
     public function describe(Swagger $api): void
     {
         // Read composer.json to an object
-        $composer = JSON::decode(file_get_contents($this->rootDir . '/../composer.json'));
+        $composer = JSON::decode((string)file_get_contents($this->rootDir . '/../composer.json'));
 
         // Get API info
         $info = $api->getInfo();

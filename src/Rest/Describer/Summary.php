@@ -41,12 +41,8 @@ class Summary
     /**
      * Method to process operation 'summary' information.
      *
-     * @param RouteModel $routeModel
      * @param Operation  $operation
-     *
-     * @throws UnexpectedValueException
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @param RouteModel $routeModel
      */
     public function process(Operation $operation, RouteModel $routeModel): void
     {
@@ -73,10 +69,6 @@ class Summary
      * @param Operation  $operation
      * @param RouteModel $routeModel
      * @param string     $summary
-     *
-     * @throws UnexpectedValueException
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     private function processSummary(Operation $operation, RouteModel $routeModel, string $summary): void
     {

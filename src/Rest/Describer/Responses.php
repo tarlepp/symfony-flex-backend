@@ -34,9 +34,7 @@ class Responses
 
         $response = new SwaggerResponse($data);
 
-        /** @noinspection PhpParamsInspection */
-        /** @psalm-suppress InvalidScalarArgument */
-        $operation->getResponses()->set(401, $response);
+        $operation->getResponses()->set('401', $response);
     }
 
     /**
@@ -53,9 +51,7 @@ class Responses
 
         $response = new SwaggerResponse($data);
 
-        /** @noinspection PhpParamsInspection */
-        /** @psalm-suppress InvalidScalarArgument */
-        $operation->getResponses()->set(403, $response);
+        $operation->getResponses()->set('403', $response);
     }
 
     /**
@@ -72,9 +68,7 @@ class Responses
 
         $response = new SwaggerResponse($data);
 
-        /** @noinspection PhpParamsInspection */
-        /** @psalm-suppress InvalidScalarArgument */
-        $operation->getResponses()->set(404, $response);
+        $operation->getResponses()->set('404', $response);
     }
 
     /**
@@ -91,8 +85,6 @@ class Responses
 
         $response = new SwaggerResponse($data);
 
-        /** @noinspection PhpParamsInspection */
-        /** @psalm-suppress InvalidScalarArgument */
-        $operation->getResponses()->set($statusCode, $response);
+        $operation->getResponses()->set((string)$statusCode, $response);
     }
 }

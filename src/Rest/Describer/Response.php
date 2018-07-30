@@ -47,10 +47,6 @@ class Response
     /**
      * @param Operation  $operation
      * @param RouteModel $routeModel
-     *
-     * @throws UnexpectedValueException
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function process(Operation $operation, RouteModel $routeModel): void
     {
@@ -128,10 +124,6 @@ class Response
      * @param string     $description
      * @param int        $statusCode
      * @param string[]   $responses
-     *
-     * @throws UnexpectedValueException
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     private function processResponse(
         Operation $operation,

@@ -72,11 +72,7 @@ class ApiDocDescriber implements DescriberInterface
     /**
      * @param Swagger $api
      *
-     * @throws InvalidArgumentException
-     * @throws ReflectionException
-     * @throws UnexpectedValueException
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \ReflectionException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax

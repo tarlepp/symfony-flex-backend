@@ -105,13 +105,9 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws UnexpectedValueException
      */
     public function process(Operation $operation, RouteModel $routeModel): void
     {
@@ -131,13 +127,9 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws UnexpectedValueException
      */
     private function processFind(Operation $operation, RouteModel $routeModel): void
     {
@@ -160,13 +152,9 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     private function addParameterSearch(Operation $operation, RouteModel $routeModel): void
     {
@@ -201,7 +189,6 @@ class Parameters
     /**
      * @param Operation $operation
      *
-     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -228,7 +215,6 @@ class Parameters
     /**
      * @param Operation $operation
      *
-     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -256,7 +242,6 @@ class Parameters
     /**
      * @param Operation $operation
      *
-     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -276,7 +261,6 @@ class Parameters
     /**
      * @param Operation $operation
      *
-     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -300,7 +284,6 @@ class Parameters
      *
      * @return Parameter
      *
-     * @throws InvalidArgumentException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
@@ -328,13 +311,9 @@ class Parameters
      * @param Operation  $operation
      * @param RouteModel $routeModel
      *
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Syntax
      * @throws \Twig_Error_Runtime
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     private function addParameterPopulate(Operation $operation, RouteModel $routeModel): void
     {
