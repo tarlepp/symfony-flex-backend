@@ -140,6 +140,10 @@ class RepositoryHelper
     {
         $orderBy = $orderBy ?? [];
 
+        /**
+         * @var string $column
+         * @var string $order
+         */
         foreach ($orderBy as $column => $order) {
             if (strpos($column, '.') === false) {
                 $column = 'entity.' . $column;
@@ -281,8 +285,11 @@ class RepositoryHelper
         } else {
             [$comparison, $parameters] = self::determineComparisonAndParameters($queryBuilder, $comparison);
 
+            /** @var callable $callable */
+            $callable = [$queryBuilder->expr(), $comparison->operator];
+
             // And finally add new expression to main one with specified parameters
-            $expression->add(call_user_func_array([$queryBuilder->expr(), $comparison->operator], $parameters));
+            $expression->add(call_user_func_array($callable, $parameters));
         }
     }
 

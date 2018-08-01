@@ -133,8 +133,9 @@ trait RestMethodHelper
     public function getFormTypeClass(?string $method = null): string
     {
         $method = $method ?? '';
+        $position = mb_strrpos($method, '::');
 
-        if ($position = mb_strrpos($method, '::')) {
+        if ($position !== false) {
             $method = mb_substr($method, $position + 2);
         }
 
@@ -271,13 +272,12 @@ trait RestMethodHelper
             /** @scrutinizer ignore-call */
             && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED
         ) {
-            /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
             $entityManager->detach($entity);
         }
     }
 
     /**
-     * @param Throwable|Exception $exception
+     * @param Exception|Throwable $exception
      *
      * @return Throwable
      */
