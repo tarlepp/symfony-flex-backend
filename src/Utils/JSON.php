@@ -76,9 +76,11 @@ class JSON
 
         $output = json_encode($input, $options, $depth);
 
-        self::handleError();
+        if ($output === false) {
+            self::handleError();
+        }
 
-        return $output;
+        return (string)$output;
     }
 
     /**
