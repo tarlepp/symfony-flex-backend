@@ -180,7 +180,7 @@ class PhpUnitUtil
             default:
                 $message = sprintf(
                     "Currently type '%s' is not supported within type normalizer",
-                    $type
+                    (string)$type
                 );
 
                 throw new LogicException($message);
