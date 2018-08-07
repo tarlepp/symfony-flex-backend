@@ -131,6 +131,9 @@
     "jean85/pretty-package-versions": {
         "version": "1.0.3"
     },
+    "lcobucci/jwt": {
+        "version": "3.2.4"
+    },
     "lexik/jwt-authentication-bundle": {
         "version": "2.3",
         "recipe": {
