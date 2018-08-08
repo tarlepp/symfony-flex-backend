@@ -1,0 +1,15 @@
+monolog:
+    handlers:
+        main:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: error
+            channels: ["!event"]
+        buffered:
+            type: buffer
+            handler: easylog
+            channels: ['!event']
+            level: error
+        easylog:
+            type: service
+            id: EasyCorp\EasyLog\EasyLogHandler

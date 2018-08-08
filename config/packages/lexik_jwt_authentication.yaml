@@ -1,18 +1,4 @@
-# https://github.com/lexik/LexikJWTAuthenticationBundle/blob/master/Resources/doc/1-configuration-reference.md
 lexik_jwt_authentication:
-    private_key_path: '%kernel.project_dir%/%env(JWT_PRIVATE_KEY_PATH)%'
-    public_key_path:  '%kernel.project_dir%/%env(JWT_PUBLIC_KEY_PATH)%'
-    pass_phrase:      '%env(JWT_PASSPHRASE)%'
-
-    # token extraction settings
-    token_extractors:
-        authorization_header:      # look for a token as Authorization Header
-            enabled: true
-            prefix:  Bearer
-            name:    Authorization
-        cookie:                    # check token in a cookie
-            enabled: false
-            name:    BEARER
-        query_parameter:           # check token in query string parameter
-            enabled: true
-            name:    bearer
+    secret_key: '%env(resolve:JWT_SECRET_KEY)%'
+    public_key: '%env(resolve:JWT_PUBLIC_KEY)%'
+    pass_phrase: '%env(JWT_PASSPHRASE)%'
