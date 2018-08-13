@@ -96,8 +96,6 @@ class ProfileController
         $tokenInterface = $tokenStorage->getToken();
 
         /** @var User|ApiKeyUser $user */
-        /** @noinspection NullPointerExceptionInspection */
-        /** @psalm-suppress PossiblyNullReference */
         $user = $tokenInterface->getUser();
 
         // Get serializer groups for current user instance
@@ -159,8 +157,6 @@ class ProfileController
         $tokenInterface = $tokenStorage->getToken();
 
         /** @var User|ApiKeyUser $user */
-        /** @noinspection NullPointerExceptionInspection */
-        /** @psalm-suppress PossiblyNullReference */
         $user = $tokenInterface->getUser();
 
         return new JsonResponse($rolesService->getInheritedRoles($user->getRoles()));
