@@ -94,8 +94,11 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     {
         // Fetch user entity
         if ($event->getException()->getToken() instanceof TokenInterface) {
+            /** @var string $username */
+            $username = $event->getException()->getToken()->getUser();
+
             /** @var User $user */
-            $user = $this->userRepository->loadUserByUsername($event->getException()->getToken()->getUser());
+            $user = $this->userRepository->loadUserByUsername($username);
 
             $this->loginLogger->setUser($user);
         }
