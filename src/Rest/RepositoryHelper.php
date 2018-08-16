@@ -140,10 +140,6 @@ class RepositoryHelper
     {
         $orderBy = $orderBy ?? [];
 
-        /**
-         * @var string $column
-         * @var string $order
-         */
         foreach ($orderBy as $column => $order) {
             if (strpos($column, '.') === false) {
                 $column = 'entity.' . $column;
