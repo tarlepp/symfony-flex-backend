@@ -71,16 +71,16 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.1.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "c919dc6c62e221fc6406f861ea13433c0aa24f08"
+                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/c919dc6c62e221fc6406f861ea13433c0aa24f08",
-                "reference": "c919dc6c62e221fc6406f861ea13433c0aa24f08",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/e37cbd80da64afe314c72de8d2d2fec0e40d9373",
+                "reference": "e37cbd80da64afe314c72de8d2d2fec0e40d9373",
                 "shasum": ""
             },
             "require": {
@@ -111,7 +111,7 @@
                 "Xdebug",
                 "performance"
             ],
-            "time": "2018-04-11T15:42:36+00:00"
+            "time": "2018-08-23T12:00:19+00:00"
         },
         {
             "name": "felixfbecker/advanced-json-rpc",
@@ -506,12 +506,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "f834fd02a512672f298ed7c59e44e46621b6423d"
+                "reference": "0abc14e0df387fe74b4b32e0b8647d1639256d38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f834fd02a512672f298ed7c59e44e46621b6423d",
-                "reference": "f834fd02a512672f298ed7c59e44e46621b6423d",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0abc14e0df387fe74b4b32e0b8647d1639256d38",
+                "reference": "0abc14e0df387fe74b4b32e0b8647d1639256d38",
                 "shasum": ""
             },
             "conflict": {
@@ -648,7 +648,7 @@
                 "zendframework/zend-validator": ">=2.3,<2.3.6",
                 "zendframework/zend-view": ">=2,<2.2.7|>=2.3,<2.3.1",
                 "zendframework/zend-xmlrpc": ">=2.1,<2.1.6|>=2.2,<2.2.6",
-                "zendframework/zendframework": ">=2,<2.4.11|>=2.5,<2.5.1",
+                "zendframework/zendframework": "<2.5.1",
                 "zendframework/zendframework1": "<1.12.20",
                 "zendframework/zendopenid": ">=2,<2.0.2",
                 "zendframework/zendxml": ">=1,<1.0.1",
@@ -670,7 +670,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-08-10T10:05:21+00:00"
+            "time": "2018-08-14T15:39:17+00:00"
         },
         {
             "name": "sabre/event",

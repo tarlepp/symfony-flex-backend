@@ -120,16 +120,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "v1.7.1",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a"
+                "reference": "d768d58baee9a4862ca783840eca1b9add7a7f57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/b3217d58609e9c8e661cd41357a54d926c4a2a1a",
-                "reference": "b3217d58609e9c8e661cd41357a54d926c4a2a1a",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/d768d58baee9a4862ca783840eca1b9add7a7f57",
+                "reference": "d768d58baee9a4862ca783840eca1b9add7a7f57",
                 "shasum": ""
             },
             "require": {
@@ -140,8 +140,9 @@
             },
             "require-dev": {
                 "alcaeus/mongo-php-adapter": "^1.1",
+                "doctrine/coding-standard": "^4.0",
                 "mongodb/mongodb": "^1.1",
-                "phpunit/phpunit": "^5.7",
+                "phpunit/phpunit": "^7.0",
                 "predis/predis": "~1.0"
             },
             "suggest": {
@@ -150,7 +151,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7.x-dev"
+                    "dev-master": "1.8.x-dev"
                 }
             },
             "autoload": {
@@ -185,12 +186,12 @@
                 }
             ],
             "description": "Caching library offering an object-oriented API for many cache backends",
-            "homepage": "http://www.doctrine-project.org",
+            "homepage": "https://www.doctrine-project.org",
             "keywords": [
                 "cache",
                 "caching"
             ],
-            "time": "2017-08-25T07:02:50+00:00"
+            "time": "2018-08-21T18:01:43+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -5606,16 +5607,16 @@
         },
         {
             "name": "zendframework/zend-code",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-code.git",
-                "reference": "6b1059db5b368db769e4392c6cb6cc139e56640d"
+                "reference": "c21db169075c6ec4b342149f446e7b7b724f95eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/6b1059db5b368db769e4392c6cb6cc139e56640d",
-                "reference": "6b1059db5b368db769e4392c6cb6cc139e56640d",
+                "url": "https://api.github.com/repos/zendframework/zend-code/zipball/c21db169075c6ec4b342149f446e7b7b724f95eb",
+                "reference": "c21db169075c6ec4b342149f446e7b7b724f95eb",
                 "shasum": ""
             },
             "require": {
@@ -5636,8 +5637,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev",
-                    "dev-develop": "3.3-dev"
+                    "dev-master": "3.3.x-dev",
+                    "dev-develop": "3.4.x-dev"
                 }
             },
             "autoload": {
@@ -5655,7 +5656,7 @@
                 "code",
                 "zf2"
             ],
-            "time": "2017-10-20T15:21:32+00:00"
+            "time": "2018-08-13T20:36:59+00:00"
         },
         {
             "name": "zendframework/zend-eventmanager",
@@ -5872,7 +5873,7 @@
         },
         {
             "name": "illuminate/config",
-            "version": "v5.6.33",
+            "version": "v5.6.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/config.git",
@@ -5916,7 +5917,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.6.33",
+            "version": "v5.6.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -5960,7 +5961,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.6.33",
+            "version": "v5.6.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -6004,16 +6005,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.6.33",
+            "version": "v5.6.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "0561e4e48797fbaeafeec0054b14605b08722a5a"
+                "reference": "4eb12aa00bbf2d5e73c355ad404a9d0679879094"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/0561e4e48797fbaeafeec0054b14605b08722a5a",
-                "reference": "0561e4e48797fbaeafeec0054b14605b08722a5a",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/4eb12aa00bbf2d5e73c355ad404a9d0679879094",
+                "reference": "4eb12aa00bbf2d5e73c355ad404a9d0679879094",
                 "shasum": ""
             },
             "require": {
@@ -6058,7 +6059,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-08-06T19:58:11+00:00"
+            "time": "2018-08-15T21:02:31+00:00"
         },
         {
             "name": "jackiedo/dotenv-editor",
@@ -6221,12 +6222,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "f834fd02a512672f298ed7c59e44e46621b6423d"
+                "reference": "0abc14e0df387fe74b4b32e0b8647d1639256d38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f834fd02a512672f298ed7c59e44e46621b6423d",
-                "reference": "f834fd02a512672f298ed7c59e44e46621b6423d",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0abc14e0df387fe74b4b32e0b8647d1639256d38",
+                "reference": "0abc14e0df387fe74b4b32e0b8647d1639256d38",
                 "shasum": ""
             },
             "conflict": {
@@ -6363,7 +6364,7 @@
                 "zendframework/zend-validator": ">=2.3,<2.3.6",
                 "zendframework/zend-view": ">=2,<2.2.7|>=2.3,<2.3.1",
                 "zendframework/zend-xmlrpc": ">=2.1,<2.1.6|>=2.2,<2.2.6",
-                "zendframework/zendframework": ">=2,<2.4.11|>=2.5,<2.5.1",
+                "zendframework/zendframework": "<2.5.1",
                 "zendframework/zendframework1": "<1.12.20",
                 "zendframework/zendopenid": ">=2,<2.0.2",
                 "zendframework/zendxml": ">=1,<1.0.1",
@@ -6385,7 +6386,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-08-10T10:05:21+00:00"
+            "time": "2018-08-14T15:39:17+00:00"
         },
         {
             "name": "sensiolabs/security-checker",
