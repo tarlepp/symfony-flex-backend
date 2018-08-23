@@ -2,6 +2,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
+    env(JWT_PRIVATE_KEY_PATH): '%kernel.project_dir%/%env(SECRET_KEY)%'
+    env(JWT_PUBLIC_KEY_PATH): '%kernel.project_dir%/%env(PUBLIC_KEY)%'
 
 services:
     # default configuration for services in *this* file
