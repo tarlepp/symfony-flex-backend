@@ -33,9 +33,9 @@
         <!-- ###- doctrine/doctrine-bundle ### -->
 
         <!-- ###+ lexik/jwt-authentication-bundle ### -->
-        <env name="JWT_SECRET_KEY" value="%kernel.project_dir%/config/jwt/private.pem"/>
-        <env name="JWT_PUBLIC_KEY" value="%kernel.project_dir%/config/jwt/public.pem"/>
-        <env name="JWT_PASSPHRASE" value="d40901677c0effac3caa5c7060fa29ef"/>
+        <env name="JWT_SECRET_KEY" value="config/jwt/private.pem"/>
+        <env name="JWT_PUBLIC_KEY" value="config/jwt/public.pem"/>
+        <env name="JWT_PASSPHRASE" value="af054e015d550967a9bda3d059b93461"/>
         <!-- ###- lexik/jwt-authentication-bundle ### -->
 
         <!-- ###+ nelmio/cors-bundle ### -->
