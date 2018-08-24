@@ -58,10 +58,10 @@ ifndef OPENSSL_BIN
 endif
 	@echo "\033[32mGenerating RSA keys for JWT\033[39m"
 	@mkdir -p config/jwt
-	@openssl genrsa -passout pass:${JWT_PASSPHRASE} -out ${JWT_PRIVATE_KEY_PATH} -aes256 4096
-	@openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${JWT_PRIVATE_KEY_PATH} -out ${JWT_PUBLIC_KEY_PATH}
-	@chmod 664 ${JWT_PRIVATE_KEY_PATH}
-	@chmod 664 ${JWT_PUBLIC_KEY_PATH}
+	@openssl genrsa -passout pass:${JWT_PASSPHRASE} -out ${SECRET_KEY} -aes256 4096
+	@openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${SECRET_KEY} -out ${PUBLIC_KEY}
+	@chmod 664 ${SECRET_KEY}
+	@chmod 664 ${PUBLIC_KEY}
 	@echo "\033[32mRSA key pair successfully generated\033[39m"
 ###< lexik/jwt-authentication-bundle ###
 
