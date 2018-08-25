@@ -72,10 +72,10 @@ before_script:
   - if [[ $COVERAGE == true ]]; then ./cc-test-reporter before-build; fi
 
 script:
-  - make phpcs
-  - make ecs
-  - make psalm
-  - make phpstan
+#  - make phpcs
+#  - make ecs
+#  - make psalm
+#  - make phpstan
   - make run-tests-fastest-php
 #  - make run-tests-fastest
 #  - make run-tests
