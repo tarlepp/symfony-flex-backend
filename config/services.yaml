@@ -36,10 +36,7 @@ services:
     App\Resource\:
         resource: '../src/Resource/*'
         exclude: '../src/Resource/Collection.php'
-        tags: [ 'app.rest.resource', 'public_on_test' ]
-
-    App\Resource\Collection:
-        tags: [ 'public_on_test' ]
+        tags: [ 'app.rest.resource' ]
 
     App\Rest\Describer\ApiDocDescriber:
         tags:
