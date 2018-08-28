@@ -76,7 +76,7 @@ script:
 #  - make ecs
 #  - make psalm
 #  - make phpstan
-  - make run-tests-fastest-php
+  - travis_wait make run-tests-fastest-php
 #  - make run-tests-fastest
 #  - make run-tests
 
