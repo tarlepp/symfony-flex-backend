@@ -14,7 +14,7 @@
         <ini name="display_startup_errors" value="On" />
         <ini name="date.timezone" value="UTC" />
 
-        <!-- <env name="KERNEL_CLASS" value="App\Kernel" /> -->
+        <env name="KERNEL_CLASS" value="App\Kernel" />
         <env name="SHELL_VERBOSITY" value="-1" />
 
         <!-- ###+ symfony/framework-bundle ### -->
@@ -33,9 +33,9 @@
         <!-- ###- doctrine/doctrine-bundle ### -->
 
         <!-- ###+ lexik/jwt-authentication-bundle ### -->
-        <env name="JWT_SECRET_KEY" value="config/jwt/private.pem"/>
-        <env name="JWT_PUBLIC_KEY" value="config/jwt/public.pem"/>
-        <env name="JWT_PASSPHRASE" value="af054e015d550967a9bda3d059b93461"/>
+        <!-- <env name="JWT_SECRET_KEY" value="config/jwt/private.pem"/> -->
+        <!-- <env name="JWT_PUBLIC_KEY" value="config/jwt/public.pem"/> -->
+        <!-- <env name="JWT_PASSPHRASE" value="af054e015d550967a9bda3d059b93461"/> -->
         <!-- ###- lexik/jwt-authentication-bundle ### -->
 
         <!-- ###+ nelmio/cors-bundle ### -->

@@ -76,7 +76,8 @@ script:
 #  - make ecs
 #  - make psalm
 #  - make phpstan
-  - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done & make run-tests-fastest-php
+  - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
+  - make run-tests-fastest-php
 #  - make run-tests-fastest
 #  - make run-tests
 
