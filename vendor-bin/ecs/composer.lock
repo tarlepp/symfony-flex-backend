@@ -446,16 +446,16 @@
         },
         {
             "name": "nette/robot-loader",
-            "version": "v3.0.4",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/robot-loader.git",
-                "reference": "3cf88781a05e0bf4618ae605361afcbaa4d5b392"
+                "reference": "fc76c70e740b10f091e502b2e393d0be912f38d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/robot-loader/zipball/3cf88781a05e0bf4618ae605361afcbaa4d5b392",
-                "reference": "3cf88781a05e0bf4618ae605361afcbaa4d5b392",
+                "url": "https://api.github.com/repos/nette/robot-loader/zipball/fc76c70e740b10f091e502b2e393d0be912f38d4",
+                "reference": "fc76c70e740b10f091e502b2e393d0be912f38d4",
                 "shasum": ""
             },
             "require": {
@@ -474,7 +474,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -507,7 +507,7 @@
                 "nette",
                 "trait"
             ],
-            "time": "2018-06-22T09:34:04+00:00"
+            "time": "2018-08-13T14:19:06+00:00"
         },
         {
             "name": "nette/utils",
@@ -1146,16 +1146,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "4.7.0",
+            "version": "4.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "51be3826dc2123c405aac0d84154f540ed78dd08"
+                "reference": "48791724c29374840443dd5404b8dab75cc56a65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/51be3826dc2123c405aac0d84154f540ed78dd08",
-                "reference": "51be3826dc2123c405aac0d84154f540ed78dd08",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/48791724c29374840443dd5404b8dab75cc56a65",
+                "reference": "48791724c29374840443dd5404b8dab75cc56a65",
                 "shasum": ""
             },
             "require": {
@@ -1181,7 +1181,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2018-08-24T23:06:51+00:00"
+            "time": "2018-08-29T20:31:52+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",

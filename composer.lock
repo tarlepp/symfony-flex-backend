@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0d61f5ba073a30d99c358083804e365",
+    "content-hash": "d741bcbd2c7b3f780b8500152a37b74a",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6754,16 +6754,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.6.0",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "a1b0d9ff35219ec36c44fcc6213056cc339a1cf8"
+                "reference": "22a9bf33868f0fed6cab013fe5231e8485d15e20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/a1b0d9ff35219ec36c44fcc6213056cc339a1cf8",
-                "reference": "a1b0d9ff35219ec36c44fcc6213056cc339a1cf8",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/22a9bf33868f0fed6cab013fe5231e8485d15e20",
+                "reference": "22a9bf33868f0fed6cab013fe5231e8485d15e20",
                 "shasum": ""
             },
             "require": {
@@ -6784,7 +6784,8 @@
                 "doctrine/orm": "^2.3",
                 "friendsofphp/php-cs-fixer": "^2.8",
                 "symfony/phpunit-bridge": "^3.4|^4.0",
-                "symfony/process": "^3.4|^4.0"
+                "symfony/process": "^3.4|^4.0",
+                "symfony/yaml": "^3.4|^4.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -6815,7 +6816,7 @@
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2018-08-07T16:05:09+00:00"
+            "time": "2018-08-30T01:08:06+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
