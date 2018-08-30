@@ -91,6 +91,9 @@
 			"vendor-bin/phpunit/**/symfony/polyfill-process",
 			"vendor-bin/phpunit/**/symfony/polyfill-stopwatch",
 			"vendor-bin/phpunit/**/symfony/polyfill-syaml",
+			"vendor-bin/phpunit/**/symfony/process",
+			"vendor-bin/phpunit/**/symfony/stopwatch",
+			"vendor-bin/phpunit/**/symfony/yaml",
 			"vendor-bin/phpunit/**/theseer"
 		]
 	},
