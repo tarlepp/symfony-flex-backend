@@ -90,12 +90,13 @@ $clearCaches = function () use ($kernel) {
 
 // And finally call each of initialize functions to make test environment ready
 array_map(
-    'call_user_func',
+    '\call_user_func',
     [
         $dropDatabaseDoctrineCommand,
         $createDatabaseDoctrineCommand,
         $updateSchemaDoctrineCommand,
         $loadFixturesDoctrineCommand,
-        $clearCaches,
+        // Weird - really weird this cache delete will slowdown tests ~50%
+        //$clearCaches,
     ]
 );
