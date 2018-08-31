@@ -76,26 +76,11 @@
 			"App\\": "src/"
 		},
 		"classmap": [
-			"vendor-bin/phpunit/"
+			"vendor-bin/phpunit/vendor/symfony/browser-kit",
+			"vendor-bin/phpunit/vendor/symfony/dom-crawler",
+			"vendor-bin/phpunit/vendor/symfony/phpunit-bridge"
 		],
-		"exclude-from-classmap": [
-			"vendor-bin/phpunit/**/Behat2",
-			"vendor-bin/phpunit/**/codedungeon",
-			"vendor-bin/phpunit/**/composer",
-			"vendor-bin/phpunit/**/doctrine",
-			"vendor-bin/phpunit/**/sebastian",
-			"vendor-bin/phpunit/**/symfony/console",
-			"vendor-bin/phpunit/**/symfony/finder",
-			"vendor-bin/phpunit/**/symfony/polyfill-ctype",
-			"vendor-bin/phpunit/**/symfony/polyfill-mbstring",
-			"vendor-bin/phpunit/**/symfony/polyfill-process",
-			"vendor-bin/phpunit/**/symfony/polyfill-stopwatch",
-			"vendor-bin/phpunit/**/symfony/polyfill-syaml",
-			"vendor-bin/phpunit/**/symfony/process",
-			"vendor-bin/phpunit/**/symfony/stopwatch",
-			"vendor-bin/phpunit/**/symfony/yaml",
-			"vendor-bin/phpunit/**/theseer"
-		]
+		"exclude-from-classmap": []
 	},
 	"autoload-dev": {
 		"psr-4": {
