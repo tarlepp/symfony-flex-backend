@@ -106,7 +106,9 @@ class RoleControllerTest extends WebTestCase
     {
         return [
             ['john-admin',  'password-admin'],
+            /*
             ['john-root',   'password-root'],
+            */
         ];
     }
 
@@ -116,10 +118,14 @@ class RoleControllerTest extends WebTestCase
     public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): array
     {
         return [
+            /*
             ['john',        'password'],
             ['john-logged', 'password-logged'],
+            */
             ['john-user',   'password-user'],
+            /*
             ['john-admin',  'password-admin'],
+            */
             ['john-root',   'password-root'],
         ];
     }

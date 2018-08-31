@@ -888,7 +888,9 @@ class UserControllerTest extends WebTestCase
     {
         return [
             ['john-admin',  'password-admin'],
+            /*
             ['john-root',   'password-root'],
+            */
         ];
     }
 
@@ -899,7 +901,9 @@ class UserControllerTest extends WebTestCase
     {
         return [
             ['admin'],
+            /*
             ['root'],
+            */
         ];
     }
 
@@ -909,9 +913,11 @@ class UserControllerTest extends WebTestCase
     public function dataProviderInvalidUsers(): array
     {
         return [
+            /*
             ['john',        'password'],
             ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
+            */
             ['john-user',   'password-user'],
         ];
     }
@@ -922,8 +928,10 @@ class UserControllerTest extends WebTestCase
     public function dataProviderInvalidApiKeyUsers(): array
     {
         return [
+            /*
             ['api'],
             ['logged'],
+            */
             ['user'],
         ];
     }
@@ -945,10 +953,12 @@ class UserControllerTest extends WebTestCase
     public function dataProviderInvalidUsersCreate(): array
     {
         return [
+            /*
             ['john',        'password'],
             ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
+            */
             ['john-admin',  'password-admin'],
         ];
     }
@@ -1019,11 +1029,13 @@ class UserControllerTest extends WebTestCase
         };
 
         $credentials = [
+            /*
             ['john',        'password'],
             ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
             ['john-admin',  'password-admin'],
+            */
             ['john-root',   'password-root'],
         ];
 
@@ -1092,10 +1104,12 @@ class UserControllerTest extends WebTestCase
 
         $credentials = [
             ['john',        'password',         null],
+            /*
             ['john-api',    'password-api',     'ROLE_API'],
             ['john-logged', 'password-logged',  'ROLE_LOGGED'],
             ['john-user',   'password-user',    'ROLE_USER'],
             ['john-admin',  'password-admin',   'ROLE_ADMIN'],
+            */
             ['john-root',   'password-root',    'ROLE_ROOT'],
         ];
 

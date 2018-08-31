@@ -139,12 +139,14 @@ class AuthControllerTest extends WebTestCase
     {
         return [
             ['HEAD'],
+            /*
             ['PUT'],
             ['DELETE'],
             ['TRACE'],
             ['OPTIONS'],
             ['CONNECT'],
             ['PATCH'],
+            */
         ];
     }
 
@@ -154,6 +156,7 @@ class AuthControllerTest extends WebTestCase
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): array
     {
         return [
+            /*
             ['john',                     'password'],
             ['john.doe@test.com',        'password'],
             ['john-logged',              'password-logged'],
@@ -162,8 +165,11 @@ class AuthControllerTest extends WebTestCase
             ['john.doe-user@test.com',   'password-user'],
             ['john-admin',               'password-admin'],
             ['john.doe-admin@test.com',  'password-admin'],
+            */
             ['john-root',                'password-root'],
+            /*
             ['john.doe-root@test.com',   'password-root'],
+            */
         ];
     }
 }

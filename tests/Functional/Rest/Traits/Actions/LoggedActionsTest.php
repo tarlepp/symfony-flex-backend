@@ -28,9 +28,11 @@ class LoggedActionsTest extends RestTraitTestCase
     public function getValidUsers(): array
     {
         return [
+            /*
             ['john-root',   'password-root'],
             ['john-admin',  'password-admin'],
             ['john-user',   'password-user'],
+            */
             ['john-logged', 'password-logged'],
         ];
     }

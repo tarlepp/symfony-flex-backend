@@ -360,6 +360,7 @@ class ProfileControllerTest extends WebTestCase
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): array
     {
         return [
+            /*
             ['john',                     'password'],
             ['john.doe@test.com',        'password'],
             ['john-logged',              'password-logged'],
@@ -369,6 +370,7 @@ class ProfileControllerTest extends WebTestCase
             ['john-admin',               'password-admin'],
             ['john.doe-admin@test.com',  'password-admin'],
             ['john-root',                'password-root'],
+            */
             ['john.doe-root@test.com',   'password-root'],
         ];
     }
@@ -395,6 +397,7 @@ class ProfileControllerTest extends WebTestCase
     public function dataProviderTestThatRolesActionReturnsExpected(): array
     {
         return [
+            /*
             ['john',                     'password',        []],
             ['john.doe@test.com',        'password',        []],
             ['john-logged',              'password-logged', ['ROLE_LOGGED']],
@@ -403,8 +406,11 @@ class ProfileControllerTest extends WebTestCase
             ['john.doe-user@test.com',   'password-user',   ['ROLE_USER', 'ROLE_LOGGED']],
             ['john-admin',               'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
             ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
+            */
             ['john-root',                'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
+            /*
             ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
+            */
         ];
     }
 
@@ -433,6 +439,7 @@ class ProfileControllerTest extends WebTestCase
     public function dataProviderTestThatGroupsActionReturnExpected(): array
     {
         return [
+            /*
             ['john',                     'password',        []],
             ['john.doe@test.com',        'password',        []],
             ['john-logged',              'password-logged', ['ROLE_LOGGED']],
@@ -441,8 +448,11 @@ class ProfileControllerTest extends WebTestCase
             ['john.doe-user@test.com',   'password-user',   ['ROLE_USER']],
             ['john-admin',               'password-admin',  ['ROLE_ADMIN']],
             ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN']],
+            */
             ['john-root',                'password-root',   ['ROLE_ROOT']],
+            /*
             ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT']],
+            */
         ];
     }
 

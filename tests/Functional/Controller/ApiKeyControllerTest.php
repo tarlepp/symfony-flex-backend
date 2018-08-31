@@ -68,10 +68,12 @@ class ApiKeyControllerTest extends WebTestCase
     public function dataProviderTestThatFindActionWorksAsExpected(): array
     {
         return [
+            /*
             ['john',        'password',         403],
             ['john-api',    'password-api',     403],
             ['john-logged', 'password-logged',  403],
             ['john-user',   'password-user',    403],
+            */
             ['john-admin',  'password-admin',   403],
             ['john-root',   'password-root',    200],
         ];

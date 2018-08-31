@@ -268,10 +268,12 @@ class UserGroupControllerTest extends WebTestCase
     public function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): array
     {
         return [
+            /*
             ['john',        'password'],
             ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
+            */
             ['john-admin',  'password-admin'],
         ];
     }

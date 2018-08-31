@@ -28,7 +28,9 @@ class AdminActionsTest extends RestTraitTestCase
     public function getValidUsers(): array
     {
         return [
+            /*
             ['john-root',   'password-root'],
+            */
             ['john-admin',  'password-admin'],
         ];
     }
@@ -39,9 +41,11 @@ class AdminActionsTest extends RestTraitTestCase
     public function getInvalidUsers(): array
     {
         return [
+            /*
             [null,          null],
             ['john',        'password'],
             ['john-logged', 'password-logged'],
+            */
             ['john-user',   'password-user'],
         ];
     }

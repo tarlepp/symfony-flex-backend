@@ -38,10 +38,12 @@ class RootActionsTest extends RestTraitTestCase
     public function getInvalidUsers(): array
     {
         return [
+            /*
             [null,          null],
             ['john',        'password'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
+            */
             ['john-admin',  'password-admin'],
         ];
     }
