@@ -75,11 +75,7 @@
 		"psr-4": {
 			"App\\": "src/"
 		},
-		"classmap": [
-			"vendor-bin/phpunit/vendor/symfony/browser-kit",
-			"vendor-bin/phpunit/vendor/symfony/dom-crawler",
-			"vendor-bin/phpunit/vendor/symfony/phpunit-bridge"
-		],
+		"classmap": [],
 		"exclude-from-classmap": []
 	},
 	"autoload-dev": {
