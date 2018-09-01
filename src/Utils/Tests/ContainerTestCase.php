@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class ContainerTestCase extends KernelTestCase
 {
     /**
-     * @var ContainerInterface
+     * @var ContainerInterface|null
      */
     private $testContainer;
 
