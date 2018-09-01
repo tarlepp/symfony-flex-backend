@@ -15,7 +15,10 @@ use UnexpectedValueException;
 use function array_key_exists;
 use function array_merge;
 use function compact;
+use function getenv;
+use function sha1;
 use function str_pad;
+use function sys_get_temp_dir;
 
 /**
  * Class Auth
@@ -122,7 +125,22 @@ class Auth
      */
     private function getToken(string $username, string $password): string
     {
-        if (!array_key_exists($username . $password, $this->cache)) {
+        // Specify used cache file
+        $filename = sprintf(
+            '%s%stest_jwt_auth_cache%s.json',
+            sys_get_temp_dir(),
+            DIRECTORY_SEPARATOR,
+            (string)getenv('ENV_TEST_CHANNEL_READABLE')
+        );
+
+        // Read current cache
+        $cache = JSON::decode(file_get_contents($filename), true);
+
+        // Create hash for username + password
+        $hash = sha1($username . $password);
+
+        // User + password doesn't exists on cache - so we need to make real login
+        if (!array_key_exists($hash, $cache)) {
             // Get client
             /** @noinspection MissingService */
             /** @var Client $client */
@@ -155,10 +173,13 @@ class Auth
                 throw new UnexpectedValueException('Invalid status code: ' . $response->getStatusCode());
             }
 
-            $this->cache[$username . $password] = JSON::decode($response->getContent())->token;
+            $cache[$hash] = JSON::decode($response->getContent())->token;
         }
 
-        return $this->cache[$username . $password];
+        // And finally store cache for later usage
+        file_put_contents($filename, JSON::encode($cache));
+
+        return $cache[$hash];
     }
 
     /**

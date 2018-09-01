@@ -88,6 +88,25 @@ $clearCaches = function () use ($kernel) {
     $fs->remove($kernel->getCacheDir());
 };
 
+// Ensure that we have "clean" JWT auth cache file
+$createJwtAuthCache = function () {
+    // Specify used cache file
+    $filename = sprintf(
+        '%s%stest_jwt_auth_cache%s.json',
+        sys_get_temp_dir(),
+        DIRECTORY_SEPARATOR,
+        (string)getenv('ENV_TEST_CHANNEL_READABLE')
+    );
+
+    // Remove existing cache if exists
+    $fs = new Filesystem();
+    $fs->remove($filename);
+    unset($fs);
+
+    // Create empty cache file
+    file_put_contents($filename, '{}');
+};
+
 // And finally call each of initialize functions to make test environment ready
 array_map(
     '\call_user_func',
@@ -98,5 +117,6 @@ array_map(
         $loadFixturesDoctrineCommand,
         // Weird - really weird this cache delete will slowdown tests ~50%
         //$clearCaches,
+        $createJwtAuthCache,
     ]
 );
