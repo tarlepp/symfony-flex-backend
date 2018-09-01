@@ -80,7 +80,11 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"App\\Tests\\": "tests/"
+			"App\\Tests\\": "tests/",
+			"PHPUnit\\": "vendor-bin/phpunit/vendor/phpunit/phpunit/src/",
+			"Symfony\\Component\\BrowserKit\\": "vendor-bin/phpunit/vendor/symfony/browser-kit",
+			"Symfony\\Component\\DomCrawler\\": "vendor-bin/phpunit/vendor/symfony/dom-crawler",
+			"Symfony\\Bridge\\PhpUnit\\": "vendor-bin/phpunit/vendor/symfony/phpunit-bridge"
 		}
 	},
 	"scripts": {
@@ -95,15 +99,15 @@
 			"security-checker security:check": "script"
 		},
 		"post-install-cmd": [
+			"@composer bin all install --ansi",
 			"@auto-scripts",
 			"Companienv\\Composer\\ScriptHandler::run",
-			"@composer bin all install --ansi",
 			"@composer dump-autoload"
 		],
 		"post-update-cmd": [
+			"@composer bin all update --ansi",
 			"@auto-scripts",
 			"Companienv\\Composer\\ScriptHandler::run",
-			"@composer bin all update --ansi",
 			"@composer dump-autoload"
 		]
 	},
