@@ -114,6 +114,12 @@ merge-junit: ## Creates JUnit xml from fastest run
 	@php merge-phpunit-xml.php ./build/fastest/ ./build/logs/junit.xml
 ###< phpunit ###
 
+infection: ## Runs Infection to codebase
+	@echo "\033[32mRunning Infection to codebase (pure PHP)\033[39m"
+	@mkdir -p build/infection
+	@bin/console cache:clear --env=test
+	@./vendor/bin/infection --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Integration,Unit"
+
 ###> phpmetrics ###
 phpmetrics: ## Generates PhpMetrics static analysis
 	@mkdir -p build/phpmetrics

@@ -16,6 +16,7 @@
 
         <env name="KERNEL_CLASS" value="App\Kernel" />
         <env name="SHELL_VERBOSITY" value="-1" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="/Doctrine\Common\ClassLoader is deprecated./" />
 
         <!-- ###+ symfony/framework-bundle ### -->
         <env name="APP_ENV" value="test"/>
@@ -48,13 +49,13 @@
     </listeners>
 
     <testsuites>
-        <testsuite name="Functional tests">
+        <testsuite name="Functional">
             <directory>./tests/Functional/</directory>
         </testsuite>
-        <testsuite name="Integration tests">
+        <testsuite name="Integration">
             <directory>./tests/Integration/</directory>
         </testsuite>
-        <testsuite name="Unit tests">
+        <testsuite name="Unit">
             <directory>./tests/Unit/</directory>
         </testsuite>
     </testsuites>
