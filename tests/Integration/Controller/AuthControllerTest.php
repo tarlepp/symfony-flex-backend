@@ -9,6 +9,7 @@ namespace App\Tests\Integration\Controller;
 
 use App\Controller\AuthController;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class AuthControllerTest
@@ -18,17 +19,18 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class AuthControllerTest extends KernelTestCase
 {
-    /**
-     * @codingStandardsIgnoreStart
-     *
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     * @expectedExceptionMessage You need to send JSON body to obtain token eg. {"username":"username","password":"password"}
-     *
-     * @codingStandardsIgnoreEnd
-     */
     public function testThatGetTokenThrowsAnException(): void
     {
-        $controller = new AuthController();
-        $controller->getTokenAction();
+        try {
+            $controller = new AuthController();
+            $controller->getTokenAction();
+        } catch (\Exception $exception) {
+            static::assertInstanceOf(HttpException::class, $exception);
+            static::assertSame(
+                'You need to send JSON body to obtain token eg. {"username":"username","password":"password"}',
+                $exception->getMessage()
+            );
+            static::assertSame(400, $exception->getStatusCode());
+        }
     }
 }
