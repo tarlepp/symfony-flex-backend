@@ -1,0 +1,15 @@
+{
+	"name": "",
+	"description": "",
+	"require": {},
+	"require-dev": {
+		"infection/infection": "0.10.3",
+		"roave/security-advisories": "dev-master"
+	},
+	"config": {
+		"preferred-install": {
+			"*": "dist"
+		},
+		"sort-packages": true
+	}
+}

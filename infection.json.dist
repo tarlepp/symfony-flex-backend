@@ -1,0 +1,22 @@
+{
+    "timeout": 360,
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "*Maker/"
+        ]
+    },
+    "logs": {
+        "text": "build/infection/infection-log.txt",
+        "summary": "build/infection/summary.log",
+        "debug": "build/infection/debug.log",
+        "perMutator": "build/infection/per-mutator.md"
+    },
+    "mutators": {
+        "@default": true,
+        "IdenticalEqual": false,
+        "NotIdenticalNotEqual": false
+    }
+}
