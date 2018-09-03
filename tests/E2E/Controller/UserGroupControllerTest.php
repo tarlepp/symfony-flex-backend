@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Controller/UserGroupControllerTest.php
+ * /tests/E2E/Controller/UserGroupControllerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Controller;
+namespace App\Tests\E2E\Controller;
 
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class UserGroupControllerTest
  *
- * @package App\Tests\Functional\Controller
+ * @package App\Tests\E2E\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroupControllerTest extends WebTestCase

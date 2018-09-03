@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/DocumentationTest.php
+ * /tests/E2E/DocumentationTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional;
+namespace App\Tests\E2E;
 
 use App\Utils\Tests\WebTestCase;
 

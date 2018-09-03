@@ -1,30 +1,33 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/Traits/Actions/src/AuthenticatedActionsController.php
+ * /tests/E2E/Rest/Traits/Actions/src/RootActionsController.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Rest\Traits\Actions\src;
+namespace App\Tests\E2E\Rest\Traits\Actions\src;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
-use App\Rest\Traits\Actions\Authenticated as Actions;
+use App\Rest\Traits\Actions\Root as Actions;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
- * Class AuthenticatedActionsController
+ * Class RootActionsController
  *
  * @Route(
- *     path="/test_authenticated_actions",
+ *     path="/test_root_actions",
  *  )
+ *
+ * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
  * @RestApiDoc(disabled=true)
  *
- * @package App\Tests\Functional\Rest\Traits\Actions\src
+ * @package App\Tests\E2E\Rest\Traits\Actions\src
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class AuthenticatedActionsController extends Controller
+class RootActionsController extends Controller
 {
     use Actions\CountAction;
     use Actions\CreateAction;

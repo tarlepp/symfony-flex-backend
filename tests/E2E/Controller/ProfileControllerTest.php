@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Controller/ProfileControllerTest.php
+ * /tests/E2E/Controller/ProfileControllerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Controller;
+namespace App\Tests\E2E\Controller;
 
 use App\Security\RolesService;
 use App\Utils\JSON;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class ProfileControllerTest
  *
- * @package App\Tests\Functional\Controller
+ * @package App\Tests\E2E\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ProfileControllerTest extends WebTestCase

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Controller/DefaultControllerTest.php
+ * /tests/E2E/Controller/DefaultControllerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Controller;
+namespace App\Tests\E2E\Controller;
 
 use App\Resource\LogRequestResource;
 use App\Utils\JSON;
@@ -14,7 +14,7 @@ use App\Utils\Tests\WebTestCase;
 /**
  * Class DefaultControllerTest
  *
- * @package App\Tests\Functional\Controller
+ * @package App\Tests\E2E\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class DefaultControllerTest extends WebTestCase

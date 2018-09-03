@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/Traits/Actions/AdminActionsTest.php
+ * /tests/E2E/Rest/Traits/Actions/UserActionsTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Rest\Traits\Actions;
+namespace App\Tests\E2E\Rest\Traits\Actions;
 
 use App\Utils\Tests\RestTraitTestCase;
 
 /**
- * Class AdminActionsTest
+ * Class UserActionsTest
  *
- * @package App\Tests\Functional\Rest\Traits\Actions
+ * @package App\Tests\E2E\Rest\Traits\Actions
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class AdminActionsTest extends RestTraitTestCase
+class UserActionsTest extends RestTraitTestCase
 {
     /**
      * @var string
      */
-    protected static $route = '/test_admin_actions';
+    protected static $route = '/test_user_actions';
 
     /**
      * @return mixed[]
@@ -30,8 +30,9 @@ class AdminActionsTest extends RestTraitTestCase
         return [
             /*
             ['john-root',   'password-root'],
-            */
             ['john-admin',  'password-admin'],
+            */
+            ['john-user',   'password-user'],
         ];
     }
 
@@ -44,9 +45,8 @@ class AdminActionsTest extends RestTraitTestCase
             /*
             [null,          null],
             ['john',        'password'],
-            ['john-logged', 'password-logged'],
             */
-            ['john-user',   'password-user'],
+            ['john-logged', 'password-logged'],
         ];
     }
 }

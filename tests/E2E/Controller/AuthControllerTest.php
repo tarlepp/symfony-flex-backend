@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Controller/AuthControllerTest.php
+ * /tests/E2E/Controller/AuthControllerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Controller;
+namespace App\Tests\E2E\Controller;
 
 use App\Utils\Tests\WebTestCase;
 use App\Utils\JSON;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class AuthControllerTest
  *
- * @package App\Tests\Functional\Controller
+ * @package App\Tests\E2E\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AuthControllerTest extends WebTestCase

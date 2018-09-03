@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Controller/RoleControllerTest.php
+ * /tests/E2E/Controller/RoleControllerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Controller;
+namespace App\Tests\E2E\Controller;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Class RoleControllerTest
  *
- * @package App\Tests\Functional\Controller
+ * @package App\Tests\E2E\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RoleControllerTest extends WebTestCase

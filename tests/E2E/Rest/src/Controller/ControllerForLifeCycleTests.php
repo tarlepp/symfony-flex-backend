@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/src/Controller/ControllerForLifeCycleTests.php
+ * /tests/E2E/Rest/src/Controller/ControllerForLifeCycleTests.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Rest\src\Controller;
+namespace App\Tests\E2E\Rest\src\Controller;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use App\Rest\Traits\Methods;
-use App\Tests\Functional\Rest\src\Resource\ResourceForLifeCycleTests;
+use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +27,7 @@ use Throwable;
  *
  * @RestApiDoc(disabled=true)
  *
- * @package App\Tests\Functional\Rest\src\Controller
+ * @package App\Tests\E2E\Rest\src\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ControllerForLifeCycleTests extends Controller

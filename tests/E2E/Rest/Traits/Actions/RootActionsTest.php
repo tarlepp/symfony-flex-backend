@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/Traits/Actions/LoggedActionsTest.php
+ * /tests/E2E/Rest/Traits/Actions/RootActionsTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Rest\Traits\Actions;
+namespace App\Tests\E2E\Rest\Traits\Actions;
 
 use App\Utils\Tests\RestTraitTestCase;
 
 /**
- * Class LoggedActionsTest
+ * Class RootActionsTest
  *
- * @package App\Tests\Functional\Rest\Traits\Actions
+ * @package App\Tests\E2E\Rest\Traits\Actions
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LoggedActionsTest extends RestTraitTestCase
+class RootActionsTest extends RestTraitTestCase
 {
     /**
      * @var string
      */
-    protected static $route = '/test_logged_actions';
+    protected static $route = '/test_root_actions';
 
     /**
      * @return mixed[]
@@ -28,12 +28,7 @@ class LoggedActionsTest extends RestTraitTestCase
     public function getValidUsers(): array
     {
         return [
-            /*
             ['john-root',   'password-root'],
-            ['john-admin',  'password-admin'],
-            ['john-user',   'password-user'],
-            */
-            ['john-logged', 'password-logged'],
         ];
     }
 
@@ -43,8 +38,13 @@ class LoggedActionsTest extends RestTraitTestCase
     public function getInvalidUsers(): array
     {
         return [
-            [null,      null],
-            ['john',    'password'],
+            /*
+            [null,          null],
+            ['john',        'password'],
+            ['john-logged', 'password-logged'],
+            ['john-user',   'password-user'],
+            */
+            ['john-admin',  'password-admin'],
         ];
     }
 }

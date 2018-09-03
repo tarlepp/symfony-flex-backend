@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/src/Resource/ResourceForLifeCycleTests.php
+ * /tests/E2E/Rest/src/Resource/ResourceForLifeCycleTests.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Rest\src\Resource;
+namespace App\Tests\E2E\Rest\src\Resource;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 /**
  * Class ResourceForLifeCycleTests
  *
- * @package App\Tests\Functional\Rest\src\Resource
+ * @package App\Tests\E2E\Rest\src\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @codingStandardsIgnoreStart

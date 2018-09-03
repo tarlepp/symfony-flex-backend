@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/Traits/Actions/AuthenticatedActionsTest.php
+ * /tests/E2E/Rest/Traits/Actions/AnonActionsTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Rest\Traits\Actions;
+namespace App\Tests\E2E\Rest\Traits\Actions;
 
 use App\Utils\Tests\RestTraitTestCase;
 
 /**
- * Class AuthenticatedActionsTest
+ * Class AnonActionsTest
  *
- * @package App\Tests\Functional\Rest\Traits\Actions
+ * @package App\Tests\E2E\Rest\Traits\Actions
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class AuthenticatedActionsTest extends RestTraitTestCase
+class AnonActionsTest extends RestTraitTestCase
 {
     /**
      * @var string
      */
-    protected static $route = '/test_authenticated_actions';
+    protected static $route = '/test_anon_actions';
 
     /**
      * @return mixed[]
@@ -33,8 +33,9 @@ class AuthenticatedActionsTest extends RestTraitTestCase
             ['john-admin',  'password-admin'],
             ['john-user',   'password-user'],
             ['john-logged', 'password-logged'],
-            */
             ['john',        'password'],
+            */
+            [null,          null],
         ];
     }
 
@@ -43,8 +44,6 @@ class AuthenticatedActionsTest extends RestTraitTestCase
      */
     public function getInvalidUsers(): array
     {
-        return [
-            [null, null],
-        ];
+        return [];
     }
 }

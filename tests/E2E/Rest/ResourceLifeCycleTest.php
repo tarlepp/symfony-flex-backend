@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/ResourceLifeCycleTest.php
+ * /tests/E2E/Rest/ResourceLifeCycleTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Rest;
+namespace App\Tests\E2E\Rest;
 
 use App\Entity\Role;
 use App\Repository\RoleRepository;
 use App\Security\RolesService;
-use App\Tests\Functional\Rest\src\Resource\ResourceForLifeCycleTests;
+use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use App\Utils\Tests\WebTestCase;
 
 /**
  * Class ResourceLifeCycleTest
  *
- * @package App\Tests\Functional\Rest
+ * @package App\Tests\E2E\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ResourceLifeCycleTest extends WebTestCase

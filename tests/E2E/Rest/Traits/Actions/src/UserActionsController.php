@@ -1,33 +1,33 @@
 <?php
 declare(strict_types=1);
 /**
- * /tests/Functional/Rest/Traits/Actions/src/LoggedActionsController.php
+ * /tests/E2E/Rest/Traits/Actions/src/UserActionsController.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Rest\Traits\Actions\src;
+namespace App\Tests\E2E\Rest\Traits\Actions\src;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
-use App\Rest\Traits\Actions\Logged as Actions;
+use App\Rest\Traits\Actions\User as Actions;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
- * Class LoggedActionsController
+ * Class UserActionsController
  *
  * @Route(
- *     path="/test_logged_actions",
+ *     path="/test_user_actions",
  *  )
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
  * @RestApiDoc(disabled=true)
  *
- * @package App\Tests\Functional\Rest\Traits\Actions\src
+ * @package App\Tests\E2E\Rest\Traits\Actions\src
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LoggedActionsController extends Controller
+class UserActionsController extends Controller
 {
     use Actions\CountAction;
     use Actions\CreateAction;
