@@ -118,7 +118,7 @@ infection: ## Runs Infection to codebase
 	@echo "\033[32mRunning Infection to codebase (pure PHP)\033[39m"
 	@mkdir -p build/infection
 	@bin/console cache:clear --env=test
-	@./vendor/bin/infection --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Integration,Unit"
+	@./vendor/bin/infection --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Functional,Integration,Unit"
 
 ###> phpmetrics ###
 phpmetrics: ## Generates PhpMetrics static analysis
