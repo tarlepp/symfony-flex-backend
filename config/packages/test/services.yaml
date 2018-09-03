@@ -9,15 +9,15 @@ services:
         # if you need to do this, you can override this setting on individual services
         public: true
 
-    App\Tests\Functional\Rest\src\:
-        resource: '../../../tests/Functional/Rest/src/*'
+    App\Tests\E2E\Rest\src\:
+        resource: '../../../tests/E2E/Rest/src/*'
 
-    App\Tests\Functional\Rest\src\Controller\:
-        resource: '../../../tests/Functional/Rest/src/Controller/*'
+    App\Tests\E2E\Rest\src\Controller\:
+        resource: '../../../tests/E2E/Rest/src/Controller/*'
         tags: [ 'controller.service_arguments' ]
 
-    App\Tests\Functional\Rest\Traits\Actions\src\:
-        resource: '../../../tests/Functional/Rest/Traits/Actions/src/*'
+    App\Tests\E2E\Rest\Traits\Actions\src\:
+        resource: '../../../tests/E2E/Rest/Traits/Actions/src/*'
         tags: [ 'controller.service_arguments' ]
 
     App\Tests\Integration\Helpers\src\:
