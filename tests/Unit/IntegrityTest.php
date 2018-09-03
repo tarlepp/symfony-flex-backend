@@ -26,12 +26,12 @@ use Symfony\Component\Validator\ConstraintValidatorInterface;
 class IntegrityTest extends KernelTestCase
 {
     /**
-     * @dataProvider dataProviderTestThatControllersHaveFunctionalTests
+     * @dataProvider dataProviderTestThatControllerHasE2ETests
      *
      * @param string $controllerTestClass
      * @param string $controllerClass
      */
-    public function testThatControllerHaveFunctionalTests(string $controllerTestClass, string $controllerClass): void
+    public function testThatControllerHasE2ETests(string $controllerTestClass, string $controllerClass): void
     {
         $message = \sprintf(
             'Controller \'%s\' doesn\'t have required test class \'%s\'.',
@@ -272,7 +272,7 @@ FORMAT;
     /**
      * @return array
      */
-    public function dataProviderTestThatControllersHaveFunctionalTests(): array
+    public function dataProviderTestThatControllerHasE2ETests(): array
     {
         self::bootKernel();
 
@@ -280,7 +280,7 @@ FORMAT;
         $pattern = '/^.+Controller\.php$/i';
 
         $namespace = '\\App\\Controller\\';
-        $namespaceTest = '\\App\\Tests\\Functional\\Controller\\';
+        $namespaceTest = '\\App\\Tests\\E2E\\Controller\\';
 
         $iterator = function (string $file) use ($folder, $namespace, $namespaceTest) {
             $base = \str_replace([$folder, \DIRECTORY_SEPARATOR], ['', '\\'], $file);
