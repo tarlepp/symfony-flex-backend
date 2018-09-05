@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97a5bd072b48936a650b8d478b11fb40",
+    "content-hash": "83e46fee13e9c60d4798b67bb53dd642",
     "packages": [],
     "packages-dev": [
         {
@@ -468,16 +468,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "2.0.10",
+            "version": "2.0.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "366f625c83000a701ce0a69b8a05b387c7bf4bce"
+                "reference": "3e69a333c9683596ad4a4325e0039374516295a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/366f625c83000a701ce0a69b8a05b387c7bf4bce",
-                "reference": "366f625c83000a701ce0a69b8a05b387c7bf4bce",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/3e69a333c9683596ad4a4325e0039374516295a0",
+                "reference": "3e69a333c9683596ad4a4325e0039374516295a0",
                 "shasum": ""
             },
             "require": {
@@ -531,7 +531,7 @@
                 "inspection",
                 "php"
             ],
-            "time": "2018-08-14T15:51:17+00:00"
+            "time": "2018-08-30T00:54:48+00:00"
         }
     ],
     "aliases": [],
