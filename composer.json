@@ -84,7 +84,8 @@
 			"PHPUnit\\": "vendor-bin/phpunit/vendor/phpunit/phpunit/src/",
 			"Symfony\\Component\\BrowserKit\\": "vendor-bin/phpunit/vendor/symfony/browser-kit",
 			"Symfony\\Component\\DomCrawler\\": "vendor-bin/phpunit/vendor/symfony/dom-crawler",
-			"Symfony\\Bridge\\PhpUnit\\": "vendor-bin/phpunit/vendor/symfony/phpunit-bridge"
+			"Symfony\\Bridge\\PhpUnit\\": "vendor-bin/phpunit/vendor/symfony/phpunit-bridge",
+			"Liuggio\\Fastest\\": ["vendor-bin/phpunit/vendor/liuggio/fastest/src", "vendor-bin/phpunit/vendor/liuggio/fastest/adapters"]
 		}
 	},
 	"scripts": {

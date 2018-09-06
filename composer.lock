@@ -5863,7 +5863,7 @@
         },
         {
             "name": "illuminate/config",
-            "version": "v5.7.1",
+            "version": "v5.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/config.git",
@@ -5907,7 +5907,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.7.1",
+            "version": "v5.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -5951,16 +5951,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.7.1",
+            "version": "v5.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "31112aa75ef2aadb9f4e6662d6b88ecde7a3e847"
+                "reference": "fd5d68eddfe49647f8354ac4c5f09cb88ccece7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/31112aa75ef2aadb9f4e6662d6b88ecde7a3e847",
-                "reference": "31112aa75ef2aadb9f4e6662d6b88ecde7a3e847",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/fd5d68eddfe49647f8354ac4c5f09cb88ccece7a",
+                "reference": "fd5d68eddfe49647f8354ac4c5f09cb88ccece7a",
                 "shasum": ""
             },
             "require": {
@@ -5991,27 +5991,27 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2018-08-31T18:58:53+00:00"
+            "time": "2018-09-05T21:56:43+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.7.1",
+            "version": "v5.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "800277753547b925c9442cc4f937e3daea39c1c5"
+                "reference": "3dabc8fe2eebf614ba133fa34a4c160119ec7241"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/800277753547b925c9442cc4f937e3daea39c1c5",
-                "reference": "800277753547b925c9442cc4f937e3daea39c1c5",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/3dabc8fe2eebf614ba133fa34a4c160119ec7241",
+                "reference": "3dabc8fe2eebf614ba133fa34a4c160119ec7241",
                 "shasum": ""
             },
             "require": {
                 "doctrine/inflector": "^1.1",
                 "ext-mbstring": "*",
                 "illuminate/contracts": "5.7.*",
-                "nesbot/carbon": "^1.24.1",
+                "nesbot/carbon": "^1.26.3",
                 "php": "^7.1.3"
             },
             "conflict": {
@@ -6019,6 +6019,7 @@
             },
             "suggest": {
                 "illuminate/filesystem": "Required to use the composer class (5.7.*).",
+                "moontoast/math": "Required to use ordered UUIDs (^1.1).",
                 "ramsey/uuid": "Required to use Str::uuid() (^3.7).",
                 "symfony/process": "Required to use the composer class (^4.1).",
                 "symfony/var-dumper": "Required to use the dd function (^4.1)."
@@ -6049,7 +6050,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-08-29T10:50:44+00:00"
+            "time": "2018-09-06T13:40:39+00:00"
         },
         {
             "name": "jackiedo/dotenv-editor",
