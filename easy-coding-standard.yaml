@@ -13,6 +13,7 @@ parameters:
         - 'PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer'
         - 'PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer'
         - 'SlevomatCodingStandard\Sniffs\Exceptions\ReferenceThrowableOnlySniff'
+        - 'SlevomatCodingStandard\Sniffs\Classes\TraitUseSpacingSniff'
         - 'Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer'
         - 'Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer'
     skip:
