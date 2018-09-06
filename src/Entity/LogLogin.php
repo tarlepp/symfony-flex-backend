@@ -336,7 +336,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getClientType(): ?string
     {
@@ -344,7 +344,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getClientName(): ?string
     {
@@ -352,7 +352,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getClientShortName(): ?string
     {
@@ -360,7 +360,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getClientVersion(): ?string
     {
@@ -368,7 +368,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getClientEngine(): ?string
     {
@@ -376,7 +376,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getOsName(): ?string
     {
@@ -384,7 +384,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getOsShortName(): ?string
     {
@@ -392,7 +392,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getOsVersion(): ?string
     {
@@ -400,7 +400,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getOsPlatform(): ?string
     {
@@ -408,7 +408,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getDeviceName(): ?string
     {
@@ -416,7 +416,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getBrandName(): ?string
     {
@@ -424,7 +424,7 @@ class LogLogin implements EntityInterface
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getModel(): ?string
     {

@@ -16,7 +16,7 @@ namespace App\Entity;
 interface UserInterface
 {
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getId(): ?string;
 

@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 trait Blameable
 {
     /**
-     * @var null|User
+     * @var User|null
      *
      * @Gedmo\Blameable(on="create")
      *
@@ -42,7 +42,7 @@ trait Blameable
     protected $createdBy;
 
     /**
-     * @var null|User
+     * @var User|null
      *
      * @Gedmo\Blameable(on="update")
      *
