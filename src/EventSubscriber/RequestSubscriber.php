@@ -132,7 +132,7 @@ class RequestSubscriber implements EventSubscriberInterface
     /**
      * Method to get current user from token storage.
      *
-     * @return null|string|mixed|UserInterface|ApplicationUser|ApiKeyUser
+     * @return string|mixed|UserInterface|ApplicationUser|ApiKeyUser|null
      */
     private function getUser()
     {
