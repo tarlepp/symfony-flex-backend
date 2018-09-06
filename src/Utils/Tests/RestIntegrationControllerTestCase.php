@@ -72,7 +72,7 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 
         $message = sprintf(
             'Your REST controller integration test \'%s\' uses likely wrong controller class \'%s\'',
-            get_class($this),
+            static::class,
             $this->controllerClass
         );
 
