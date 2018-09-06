@@ -12,6 +12,7 @@ use App\Resource\Collection;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use function array_keys;
 
 /**
  * Class ResourceCollectionPass
@@ -35,7 +36,7 @@ class ResourceCollectionPass implements CompilerPassInterface
     {
         $collection = $container->getDefinition(Collection::class);
 
-        foreach ($container->findTaggedServiceIds('app.rest.resource') as $id => $tags) {
+        foreach (array_keys($container->findTaggedServiceIds('app.rest.resource')) as $id) {
             $collection->addMethodCall('set', [new Reference($id)]);
         }
     }
