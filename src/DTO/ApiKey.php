@@ -52,7 +52,7 @@ class ApiKey extends RestDto
     protected $userGroups = [];
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getId(): ?string
     {
@@ -60,7 +60,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * @param null|string $id
+     * @param string|null $id
      *
      * @return ApiKey
      */
@@ -96,7 +96,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getDescription(): ?string
     {

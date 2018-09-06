@@ -90,7 +90,7 @@ class User extends RestDto implements UserInterface
     protected $password = '';
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getId(): ?string
     {
@@ -98,7 +98,7 @@ class User extends RestDto implements UserInterface
     }
 
     /**
-     * @param null|string $id
+     * @param string|null $id
      *
      * @return User
      */
