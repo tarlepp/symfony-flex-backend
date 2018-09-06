@@ -50,7 +50,7 @@ class RoleTransformer implements DataTransformerInterface
     /**
      * Transforms a string (Role id) to an object (Role).
      *
-     * @param string|null $roleName
+     * @param string|mixed|null $roleName
      *
      * @return Role|null
      *
