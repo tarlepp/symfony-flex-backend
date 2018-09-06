@@ -34,13 +34,6 @@ class Auth
     private $testContainer;
 
     /**
-     * JWT cache
-     *
-     * @var string[]
-     */
-    private $cache = [];
-
-    /**
      * Auth constructor.
      *
      * @param ContainerInterface $container
