@@ -42,7 +42,7 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * Transforms an object (Role) to a string (Role id).
      *
-     * @param string[]|UserGroup[]|null|mixed $userGroups
+     * @param string[]|UserGroup[]|null $userGroups
      *
      * @return string[]
      */
@@ -71,7 +71,7 @@ class UserGroupTransformer implements DataTransformerInterface
      *
      * @param string[]|mixed $userGroups
      *
-     * @return UserGroup[]|null|array<int, mixed>
+     * @return UserGroup[]|array<int, mixed>|null
      *
      * @throws TransformationFailedException if object (issue) is not found.
      */
