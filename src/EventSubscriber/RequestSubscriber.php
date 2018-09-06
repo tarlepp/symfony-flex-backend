@@ -138,6 +138,6 @@ class RequestSubscriber implements EventSubscriberInterface
     {
         $token = $this->tokenStorage->getToken();
 
-        return ($token === null || $token instanceof AnonymousToken) ? null : $token->getUser();
+        return $token === null || $token instanceof AnonymousToken ? null : $token->getUser();
     }
 }
