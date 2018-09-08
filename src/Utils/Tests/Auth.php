@@ -127,7 +127,7 @@ class Auth
         );
 
         // Read current cache
-        $cache = JSON::decode(file_get_contents($filename), true);
+        $cache = JSON::decode((string)file_get_contents($filename), true);
 
         // Create hash for username + password
         $hash = sha1($username . $password);
