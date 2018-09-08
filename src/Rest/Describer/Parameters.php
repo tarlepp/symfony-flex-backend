@@ -11,7 +11,6 @@ use App\Rest\Controller;
 use App\Rest\Doc\RouteModel;
 use EXSyst\Component\Swagger\Operation;
 use EXSyst\Component\Swagger\Parameter;
-use InvalidArgumentException;
 use Psr\Container\ContainerInterface;
 use Twig_Environment;
 use UnexpectedValueException;

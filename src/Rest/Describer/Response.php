@@ -11,7 +11,6 @@ use App\Rest\Controller;
 use App\Rest\Doc\RouteModel;
 use EXSyst\Component\Swagger\Operation;
 use Psr\Container\ContainerInterface;
-use UnexpectedValueException;
 use function in_array;
 
 /**

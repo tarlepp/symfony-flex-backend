@@ -9,8 +9,6 @@ namespace App\Rest\Describer;
 
 use App\Rest\Doc\RouteModel;
 use EXSyst\Component\Swagger\Operation;
-use InvalidArgumentException;
-use UnexpectedValueException;
 
 /**
  * Class Rest
