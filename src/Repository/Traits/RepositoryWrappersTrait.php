@@ -66,13 +66,13 @@ trait RepositoryWrappersTrait
      * Getter method for EntityManager for current entity.
      *
      * @return EntityManager
+     *
+     * @psalm-suppress MoreSpecificReturnType
+     * @psalm-suppress InvalidNullableReturnType
      */
     public function getEntityManager(): EntityManager
     {
-        /** @var EntityManager $manager */
-        $manager = $this->managerRegistry->getManagerForClass($this->getEntityName());
-
-        return $manager;
+        return $this->managerRegistry->getManagerForClass($this->getEntityName());
     }
 
     /**
