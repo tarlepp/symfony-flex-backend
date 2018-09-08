@@ -34,7 +34,7 @@ trait LoadUserByUserNameTrait
      *
      * @param string $username The username
      *
-     * @return null|Entity
+     * @return Entity|null
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
      */

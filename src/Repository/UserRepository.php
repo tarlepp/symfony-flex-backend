@@ -77,7 +77,7 @@ class UserRepository extends BaseRepository
     /**
      * @param string      $column Column to check
      * @param string      $value  Value of specified column
-     * @param null|string $id     User id to ignore
+     * @param string|null $id     User id to ignore
      *
      * @return bool
      *

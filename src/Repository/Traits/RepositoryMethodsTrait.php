@@ -37,7 +37,7 @@ trait RepositoryMethodsTrait
      * @param int|null $lockMode
      * @param int|null $lockVersion
      *
-     * @return EntityInterface|null|mixed
+     * @return EntityInterface|mixed|null
      *
      * @throws \Doctrine\ORM\TransactionRequiredException
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -57,7 +57,7 @@ trait RepositoryMethodsTrait
      * @param mixed[]      $criteria
      * @param mixed[]|null $orderBy
      *
-     * @return EntityInterface|null|mixed
+     * @return EntityInterface|mixed|null
      */
     public function findOneBy(array $criteria, ?array $orderBy = null)
     {
@@ -90,10 +90,10 @@ trait RepositoryMethodsTrait
      * Generic replacement for basic 'findBy' method if/when you want to use generic LIKE search.
      *
      * @param mixed[]      $criteria
-     * @param null|mixed[] $orderBy
-     * @param null|integer $limit
-     * @param null|integer $offset
-     * @param null|mixed[] $search
+     * @param mixed[]|null $orderBy
+     * @param integer|null $limit
+     * @param integer|null $offset
+     * @param mixed[]|null $search
      *
      * @return EntityInterface[]
      *
@@ -135,8 +135,8 @@ trait RepositoryMethodsTrait
     /**
      * Repository method to fetch current entity id values from database and return those as an array.
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
      *
      * @return string[]
      *
@@ -163,8 +163,8 @@ trait RepositoryMethodsTrait
     /**
      * Generic count method to determine count of entities for specified criteria and search term(s).
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
      *
      * @return integer
      *
@@ -252,11 +252,11 @@ trait RepositoryMethodsTrait
     /**
      * Helper method to get QueryBuilder for current instance within specified default parameters.
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $search
-     * @param null|mixed[] $orderBy
-     * @param null|int     $limit
-     * @param null|int     $offset
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
+     * @param mixed[]|null $orderBy
+     * @param int|null     $limit
+     * @param int|null     $offset
      *
      * @return QueryBuilder
      *
