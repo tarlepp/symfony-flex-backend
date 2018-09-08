@@ -159,7 +159,7 @@ trait RestMethodHelper
         if (!($this instanceof ControllerInterface)) {
             $message = sprintf(
                 'You cannot use \'%s\' controller class with REST traits if that does not implement \'%s\'',
-                get_class($this),
+                static::class,
                 ControllerInterface::class
             );
 
