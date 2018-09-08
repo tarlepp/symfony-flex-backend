@@ -41,7 +41,7 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
      * @param Request $request
      * @param string  $providerKey
      *
-     * @return null|PreAuthenticatedToken
+     * @return PreAuthenticatedToken|null
      */
     public function createToken(Request $request, $providerKey): ?PreAuthenticatedToken
     {
