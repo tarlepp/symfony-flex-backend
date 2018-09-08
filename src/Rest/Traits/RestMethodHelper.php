@@ -27,7 +27,6 @@ use Throwable;
 use UnexpectedValueException;
 use function array_key_exists;
 use function class_implements;
-use function get_class;
 use function in_array;
 use function mb_strrpos;
 use function mb_substr;
