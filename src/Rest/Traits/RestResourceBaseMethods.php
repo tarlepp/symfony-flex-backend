@@ -51,7 +51,7 @@ trait RestResourceBaseMethods
      *
      * @param string                $id
      * @param string                $dtoClass
-     * @param null|RestDtoInterface $dto
+     * @param RestDtoInterface|null $dto
      *
      * @return RestDtoInterface
      *
@@ -69,11 +69,11 @@ trait RestResourceBaseMethods
      * Generic find method to return an array of items from database. Return value is an array of specified repository
      * entities.
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $orderBy
-     * @param null|integer $limit
-     * @param null|integer $offset
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $orderBy
+     * @param integer|null $limit
+     * @param integer|null $offset
+     * @param mixed[]|null $search
      *
      * @return EntityInterface[]
      *
@@ -109,9 +109,9 @@ trait RestResourceBaseMethods
      * repository.
      *
      * @param string       $id
-     * @param null|boolean $throwExceptionIfNotFound
+     * @param boolean|null $throwExceptionIfNotFound
      *
-     * @return null|EntityInterface
+     * @return EntityInterface|null
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
@@ -122,7 +122,7 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOne($id);
 
-        /** @var null|EntityInterface $entity */
+        /** @var EntityInterface|null $entity */
         $entity = $this->getRepository()->find($id);
 
         // Entity not found
@@ -141,10 +141,10 @@ trait RestResourceBaseMethods
      * from specified repository or null if entity was not found.
      *
      * @param mixed[]      $criteria
-     * @param null|mixed[] $orderBy
-     * @param null|boolean $throwExceptionIfNotFound
+     * @param mixed[]|null $orderBy
+     * @param boolean|null $throwExceptionIfNotFound
      *
-     * @return null|EntityInterface
+     * @return EntityInterface|null
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
@@ -159,7 +159,7 @@ trait RestResourceBaseMethods
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
 
-        /** @var null|EntityInterface $entity */
+        /** @var EntityInterface|null $entity */
         $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
 
         // Entity not found
@@ -176,8 +176,8 @@ trait RestResourceBaseMethods
     /**
      * Generic count method to return entity count for specified criteria and search terms.
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
      *
      * @return integer
      *
@@ -315,8 +315,8 @@ trait RestResourceBaseMethods
      * Generic ids method to return an array of id values from database. Return value is an array of specified
      * repository entity id values.
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
      *
      * @return string[]|array<mixed, mixed>
      *
@@ -343,7 +343,7 @@ trait RestResourceBaseMethods
      * Generic method to save given entity to specified repository. Return value is created entity.
      *
      * @param EntityInterface $entity
-     * @param null|boolean    $skipValidation
+     * @param boolean|null    $skipValidation
      *
      * @return EntityInterface
      *

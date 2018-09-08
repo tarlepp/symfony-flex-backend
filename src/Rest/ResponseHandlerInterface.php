@@ -72,9 +72,9 @@ interface ResponseHandlerInterface
      *
      * @param Request      $request
      * @param mixed        $data
-     * @param null|integer $httpStatus
-     * @param null|string  $format
-     * @param null|mixed[] $context
+     * @param integer|null $httpStatus
+     * @param string|null  $format
+     * @param mixed[]|null $context
      *
      * @return Response
      *

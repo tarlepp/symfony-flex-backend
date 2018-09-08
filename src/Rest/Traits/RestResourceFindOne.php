@@ -38,7 +38,7 @@ trait RestResourceFindOne
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
      *
      * @param string               $id
-     * @param null|EntityInterface $entity
+     * @param EntityInterface|null $entity
      */
     public function afterFindOne(string &$id, ?EntityInterface $entity = null): void
     {

@@ -134,11 +134,11 @@ interface RestResourceInterface
      * Generic find method to return an array of items from database. Return value is an array of specified repository
      * entities.
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $orderBy
-     * @param null|integer $limit
-     * @param null|integer $offset
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $orderBy
+     * @param integer|null $limit
+     * @param integer|null $offset
+     * @param mixed[]|null $search
      *
      * @return EntityInterface[]
      */
@@ -155,9 +155,9 @@ interface RestResourceInterface
      * repository.
      *
      * @param string       $id
-     * @param null|boolean $throwExceptionIfNotFound
+     * @param boolean|null $throwExceptionIfNotFound
      *
-     * @return null|EntityInterface
+     * @return EntityInterface|null
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
@@ -168,10 +168,10 @@ interface RestResourceInterface
      * from specified repository or null if entity was not found.
      *
      * @param mixed[]      $criteria
-     * @param null|mixed[] $orderBy
-     * @param null|boolean $throwExceptionIfNotFound
+     * @param mixed[]|null $orderBy
+     * @param boolean|null $throwExceptionIfNotFound
      *
-     * @return null|EntityInterface
+     * @return EntityInterface|null
      *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
@@ -184,8 +184,8 @@ interface RestResourceInterface
     /**
      * Generic count method to return entity count for specified criteria and search terms.
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
      *
      * @return integer
      *
@@ -247,8 +247,8 @@ interface RestResourceInterface
      * Generic ids method to return an array of id values from database. Return value is an array of specified
      * repository entity id values.
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
      *
      * @return string[]
      *
@@ -260,7 +260,7 @@ interface RestResourceInterface
      * Generic method to save given entity to specified repository. Return value is created entity.
      *
      * @param EntityInterface $entity
-     * @param null|boolean    $skipValidation
+     * @param boolean|null    $skipValidation
      *
      * @return EntityInterface
      *

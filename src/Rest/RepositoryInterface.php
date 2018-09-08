@@ -88,8 +88,8 @@ interface RepositoryInterface
     /**
      * Generic count method to determine count of entities for specified criteria and search term(s).
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
      *
      * @return integer
      *
@@ -101,11 +101,11 @@ interface RepositoryInterface
     /**
      * Generic replacement for basic 'findBy' method if/when you want to use generic LIKE search.
      *
-     * @param mixed[]       $criteria
-     * @param null|mixed[]  $orderBy
-     * @param null|integer  $limit
-     * @param null|integer  $offset
-     * @param null|mixed[]  $search
+     * @param mixed[]      $criteria
+     * @param mixed[]|null $orderBy
+     * @param integer|null $limit
+     * @param integer|null $offset
+     * @param mixed[]|null $search
      *
      * @return EntityInterface[]
      */
@@ -120,8 +120,8 @@ interface RepositoryInterface
     /**
      * Repository method to fetch current entity id values from database and return those as an array.
      *
-     * @param null|mixed[] $criteria
-     * @param null|mixed[] $search
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
      *
      * @return string[]
      */

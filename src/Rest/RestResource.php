@@ -207,7 +207,7 @@ abstract class RestResource implements RestResourceInterface
      *
      * @param string                $id
      * @param string                $dtoClass
-     * @param null|RestDtoInterface $dto
+     * @param RestDtoInterface|null $dto
      *
      * @return RestDtoInterface
      *

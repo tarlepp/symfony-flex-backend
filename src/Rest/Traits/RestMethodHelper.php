@@ -305,7 +305,7 @@ trait RestMethodHelper
 
     /**
      * @param FormInterface $form
-     * @param null|string   $id
+     * @param string|null   $id
      *
      * @throws \Symfony\Component\Form\Exception\LogicException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
