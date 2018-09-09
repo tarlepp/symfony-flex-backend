@@ -57,7 +57,7 @@
 		"bamarni/composer-bin-plugin": "1.2.0",
 		"roave/security-advisories": "dev-master",
 		"sensiolabs/security-checker": "4.1.8",
-		"sroze/companienv": "0.0.8",
+		"sroze/companienv": "0.0.10",
 		"symfony/browser-kit": "4.1.4",
 		"symfony/debug-pack": "1.0.6",
 		"symfony/dotenv": "4.1.4",

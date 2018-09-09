@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3609a76e450e39f296427cdeaf0ff8e3",
+    "content-hash": "1f81eba0868cee45db9173b6464c5e38",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6415,16 +6415,16 @@
         },
         {
             "name": "sroze/companienv",
-            "version": "0.0.8",
+            "version": "0.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sroze/companienv.git",
-                "reference": "5d1986d70347d21cc30ca1d11b9e78986292ceb6"
+                "reference": "c725fd8c0c65a710f7a58e0ceb4fb6b05b74e796"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sroze/companienv/zipball/5d1986d70347d21cc30ca1d11b9e78986292ceb6",
-                "reference": "5d1986d70347d21cc30ca1d11b9e78986292ceb6",
+                "url": "https://api.github.com/repos/sroze/companienv/zipball/c725fd8c0c65a710f7a58e0ceb4fb6b05b74e796",
+                "reference": "c725fd8c0c65a710f7a58e0ceb4fb6b05b74e796",
                 "shasum": ""
             },
             "require": {
@@ -6454,7 +6454,7 @@
             ],
             "authors": [
                 {
-                    "name": "Samuel Roze",
+                    "name": "Samuel ROZE",
                     "email": "samuel.roze@gmail.com"
                 }
             ],
@@ -6464,7 +6464,7 @@
                 "configuration",
                 "dotenv"
             ],
-            "time": "2018-02-19T18:26:23+00:00"
+            "time": "2018-08-27T18:48:49+00:00"
         },
         {
             "name": "symfony/browser-kit",
