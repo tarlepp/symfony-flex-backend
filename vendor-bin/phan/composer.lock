@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0a25f6f356edec343e48cde602c4099e",
+    "content-hash": "8f94cc367e39f2f3e4f54628f191d5b4",
     "packages": [],
     "packages-dev": [
         {
@@ -115,16 +115,16 @@
         },
         {
             "name": "felixfbecker/advanced-json-rpc",
-            "version": "v3.0.1",
+            "version": "v3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/felixfbecker/php-advanced-json-rpc.git",
-                "reference": "29f1d8c2c17f8c04f9768d382b72aeeb0715ebb8"
+                "reference": "241c470695366e7b83672be04ea0e64d8085a551"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/felixfbecker/php-advanced-json-rpc/zipball/29f1d8c2c17f8c04f9768d382b72aeeb0715ebb8",
-                "reference": "29f1d8c2c17f8c04f9768d382b72aeeb0715ebb8",
+                "url": "https://api.github.com/repos/felixfbecker/php-advanced-json-rpc/zipball/241c470695366e7b83672be04ea0e64d8085a551",
+                "reference": "241c470695366e7b83672be04ea0e64d8085a551",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 }
             ],
             "description": "A more advanced JSONRPC implementation",
-            "time": "2017-10-28T21:26:16+00:00"
+            "time": "2018-09-10T08:58:41+00:00"
         },
         {
             "name": "microsoft/tolerant-php-parser",
@@ -239,16 +239,16 @@
         },
         {
             "name": "phan/phan",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phan/phan.git",
-                "reference": "b92c6a497e79f25f04af649f0fd677993888f88e"
+                "reference": "d1573162443915fca6e7cd4add15af77ab168525"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phan/phan/zipball/b92c6a497e79f25f04af649f0fd677993888f88e",
-                "reference": "b92c6a497e79f25f04af649f0fd677993888f88e",
+                "url": "https://api.github.com/repos/phan/phan/zipball/d1573162443915fca6e7cd4add15af77ab168525",
+                "reference": "d1573162443915fca6e7cd4add15af77ab168525",
                 "shasum": ""
             },
             "require": {
@@ -257,7 +257,7 @@
                 "ext-ast": "^0.1.5",
                 "ext-filter": "*",
                 "ext-json": "*",
-                "felixfbecker/advanced-json-rpc": "^3.0",
+                "felixfbecker/advanced-json-rpc": "^3.0.3",
                 "microsoft/tolerant-php-parser": "0.0.13",
                 "php": "^7.0.0",
                 "sabre/event": "^5.0",
@@ -301,7 +301,7 @@
                 "php",
                 "static"
             ],
-            "time": "2018-09-08T02:14:06+00:00"
+            "time": "2018-09-10T13:08:54+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
