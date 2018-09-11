@@ -1,9 +1,9 @@
 {
 	"require": {},
 	"require-dev": {
-		"codedungeon/phpunit-result-printer": "0.19.13",
+		"codedungeon/phpunit-result-printer": "0.20.1",
 		"liuggio/fastest": "1.6.1",
-		"phpunit/phpunit": "7.3.2",
+		"phpunit/phpunit": "7.3.5",
 		"phpunit/phpcov": "5.0.0",
 		"roave/security-advisories": "dev-master",
 		"sebastian/finder-facade": "1.2.2",
