@@ -248,13 +248,7 @@ class CheckVendorDependencies extends Command
             throw new RuntimeException($message);
         }
 
-        $data = json_decode($process->getOutput());
-
-        $filter = function (\stdClass $library): bool {
-            return $library->version !== 'dev-master';
-        };
-
-        return array_filter($data->installed ?? [], $filter);
+        return json_decode($process->getOutput())->installed ?? [];
     }
 
     /**
