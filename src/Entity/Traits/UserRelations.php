@@ -137,7 +137,7 @@ trait UserRelations
     /**
      * Getter for user groups collection.
      *
-     * @return Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>|mixed
+     * @return Collection|ArrayCollection|mixed|Collection<UserGroup>|ArrayCollection<UserGroup>
      */
     public function getUserGroups()
     {
@@ -147,7 +147,7 @@ trait UserRelations
     /**
      * Getter for user request log collection.
      *
-     * @return Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>|mixed
+     * @return Collection|ArrayCollection|mixed|Collection<LogRequest>|ArrayCollection<LogRequest>
      */
     public function getLogsRequest()
     {
@@ -157,7 +157,7 @@ trait UserRelations
     /**
      * Getter for user login log collection.
      *
-     * @return Collection|ArrayCollection|Collection<LogLogin>|ArrayCollection<LogLogin>|mixed
+     * @return Collection|ArrayCollection|mixed|Collection<LogLogin>|ArrayCollection<LogLogin>
      */
     public function getLogsLogin()
     {
@@ -167,7 +167,7 @@ trait UserRelations
     /**
      * Getter for user login failure log collection.
      *
-     * @return Collection|ArrayCollection|Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>|mixed
+     * @return Collection|ArrayCollection|mixed|Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>
      */
     public function getLogsLoginFailure()
     {

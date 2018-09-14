@@ -413,11 +413,8 @@ trait LogRequestProcessRequestTrait
         $this->processRequestBaseInfo($request);
         $this->processHeadersAndParameters($request);
 
-        /** @var string $bodyContent */
-        $bodyContent = $request->getContent();
-
         $this->action = $this->determineAction($request);
-        $this->content = $this->cleanContent((string)$bodyContent);
+        $this->content = $this->cleanContent((string)$request->getContent());
     }
 
     /**
@@ -488,8 +485,7 @@ trait LogRequestProcessRequestTrait
      */
     private function determineParameters(Request $request): array
     {
-        /** @var string $rawContent */
-        $rawContent = $request->getContent();
+        $rawContent = (string)$request->getContent();
 
         // By default just get whole parameter bag
         $output = $request->request->all();
@@ -498,7 +494,7 @@ trait LogRequestProcessRequestTrait
         if ($rawContent) {
             // First try to convert content to array from JSON
             try {
-                $output = JSON::decode((string)$rawContent, true);
+                $output = JSON::decode($rawContent, true);
             } /** @noinspection BadExceptionsProcessingInspection */ catch (LogicException $error) {
                 // Oh noes content isn't JSON so just parse it
                 $output = [];
