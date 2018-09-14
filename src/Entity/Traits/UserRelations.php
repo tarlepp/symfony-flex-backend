@@ -137,9 +137,9 @@ trait UserRelations
     /**
      * Getter for user groups collection.
      *
-     * @return Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
+     * @return Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>|mixed
      */
-    public function getUserGroups(): Collection
+    public function getUserGroups()
     {
         return $this->userGroups;
     }
@@ -147,9 +147,9 @@ trait UserRelations
     /**
      * Getter for user request log collection.
      *
-     * @return Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>
+     * @return Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>|mixed
      */
-    public function getLogsRequest(): Collection
+    public function getLogsRequest()
     {
         return $this->logsRequest;
     }
@@ -157,9 +157,9 @@ trait UserRelations
     /**
      * Getter for user login log collection.
      *
-     * @return Collection|ArrayCollection|Collection<LogLogin>|ArrayCollection<LogLogin>
+     * @return Collection|ArrayCollection|Collection<LogLogin>|ArrayCollection<LogLogin>|mixed
      */
-    public function getLogsLogin(): Collection
+    public function getLogsLogin()
     {
         return $this->logsLogin;
     }
@@ -167,9 +167,9 @@ trait UserRelations
     /**
      * Getter for user login failure log collection.
      *
-     * @return Collection|ArrayCollection|Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>
+     * @return Collection|ArrayCollection|Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>|mixed
      */
-    public function getLogsLoginFailure(): Collection
+    public function getLogsLoginFailure()
     {
         return $this->logsLoginFailure;
     }
