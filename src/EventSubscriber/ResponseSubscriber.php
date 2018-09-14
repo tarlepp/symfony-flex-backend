@@ -75,6 +75,6 @@ class ResponseSubscriber implements EventSubscriberInterface
      */
     private function getApiVersion(): string
     {
-        return JSON::decode(file_get_contents(__DIR__ . '/../../composer.json'))->version;
+        return JSON::decode((string)file_get_contents(__DIR__ . '/../../composer.json'))->version ?? 'unknown';
     }
 }
