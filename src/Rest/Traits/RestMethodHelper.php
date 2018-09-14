@@ -276,7 +276,7 @@ trait RestMethodHelper
     }
 
     /**
-     * @param Exception|Throwable $exception
+     * @param Throwable|Exception $exception
      *
      * @return Throwable
      */
