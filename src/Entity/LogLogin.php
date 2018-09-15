@@ -13,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
+use function implode;
+use function is_array;
 
 /**
  * Class LogLogin
@@ -306,6 +308,7 @@ class LogLogin implements EntityInterface
      * @param User|null      $user
      *
      * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
+     * @throws \Exception
      */
     public function __construct(string $type, Request $request, DeviceDetector $deviceDetector, ?User $user = null)
     {
@@ -433,22 +436,34 @@ class LogLogin implements EntityInterface
 
     /**
      * @param DeviceDetector $deviceDetector
-     *
-     * @psalm-suppress InvalidCast
      */
     private function processClientData(DeviceDetector $deviceDetector): void
     {
-        $this->clientType = (string)$deviceDetector->getClient('type');
-        $this->clientName = (string)$deviceDetector->getClient('name');
-        $this->clientShortName = (string)$deviceDetector->getClient('short_name');
-        $this->clientVersion = (string)$deviceDetector->getClient('version');
-        $this->clientEngine = (string)$deviceDetector->getClient('engine');
-        $this->osName = (string)$deviceDetector->getOs('name');
-        $this->osShortName = (string)$deviceDetector->getOs('short_name');
-        $this->osVersion = (string)$deviceDetector->getOs('version');
-        $this->osPlatform = (string)$deviceDetector->getOs('platform');
+        $this->clientType = $this->getClientData($deviceDetector, 'getClient', 'type');
+        $this->clientName = $this->getClientData($deviceDetector, 'getClient', 'name');
+        $this->clientShortName = $this->getClientData($deviceDetector, 'getClient', 'short_name');
+        $this->clientVersion = $this->getClientData($deviceDetector, 'getClient', 'version');
+        $this->clientEngine = $this->getClientData($deviceDetector, 'getClient', 'engine');
+        $this->osName = $this->getClientData($deviceDetector, 'getOs', 'name');
+        $this->osShortName = $this->getClientData($deviceDetector, 'getOs', 'short_name');
+        $this->osVersion = $this->getClientData($deviceDetector, 'getOs', 'version');
+        $this->osPlatform = $this->getClientData($deviceDetector, 'getOs', 'platform');
         $this->deviceName = $deviceDetector->getDeviceName();
         $this->brandName = $deviceDetector->getBrandName();
         $this->model = $deviceDetector->getModel();
+    }
+
+    /**
+     * @param DeviceDetector $deviceDetector
+     * @param string         $method
+     * @param string         $attribute
+     *
+     * @return string
+     */
+    private function getClientData(DeviceDetector $deviceDetector, string $method, string $attribute): string
+    {
+        $value = $deviceDetector->$method($attribute);
+
+        return is_array($value) ? implode(', ', $value) : $value;
     }
 }
