@@ -300,6 +300,11 @@ class LogLogin implements EntityInterface
     private $model;
 
     /**
+     * @var DeviceDetector
+     */
+    private $deviceDetector;
+
+    /**
      * LogLogin constructor.
      *
      * @param string         $type
@@ -315,11 +320,12 @@ class LogLogin implements EntityInterface
         $this->id = Uuid::uuid4()->toString();
 
         $this->type = $type;
+        $this->deviceDetector = $deviceDetector;
         $this->user = $user;
 
         $this->processTimeAndDate();
         $this->processRequestData($request);
-        $this->processClientData($deviceDetector);
+        $this->processClientData();
     }
 
     /**
@@ -434,35 +440,31 @@ class LogLogin implements EntityInterface
         return $this->model;
     }
 
-    /**
-     * @param DeviceDetector $deviceDetector
-     */
-    private function processClientData(DeviceDetector $deviceDetector): void
+    private function processClientData(): void
     {
-        $this->clientType = $this->getClientData($deviceDetector, 'getClient', 'type');
-        $this->clientName = $this->getClientData($deviceDetector, 'getClient', 'name');
-        $this->clientShortName = $this->getClientData($deviceDetector, 'getClient', 'short_name');
-        $this->clientVersion = $this->getClientData($deviceDetector, 'getClient', 'version');
-        $this->clientEngine = $this->getClientData($deviceDetector, 'getClient', 'engine');
-        $this->osName = $this->getClientData($deviceDetector, 'getOs', 'name');
-        $this->osShortName = $this->getClientData($deviceDetector, 'getOs', 'short_name');
-        $this->osVersion = $this->getClientData($deviceDetector, 'getOs', 'version');
-        $this->osPlatform = $this->getClientData($deviceDetector, 'getOs', 'platform');
+        $this->clientType = $this->getClientData('getClient', 'type');
+        $this->clientName = $this->getClientData('getClient', 'name');
+        $this->clientShortName = $this->getClientData('getClient', 'short_name');
+        $this->clientVersion = $this->getClientData('getClient', 'version');
+        $this->clientEngine = $this->getClientData('getClient', 'engine');
+        $this->osName = $this->getClientData('getOs', 'name');
+        $this->osShortName = $this->getClientData('getOs', 'short_name');
+        $this->osVersion = $this->getClientData('getOs', 'version');
+        $this->osPlatform = $this->getClientData('getOs', 'platform');
         $this->deviceName = $deviceDetector->getDeviceName();
         $this->brandName = $deviceDetector->getBrandName();
         $this->model = $deviceDetector->getModel();
     }
 
     /**
-     * @param DeviceDetector $deviceDetector
-     * @param string         $method
-     * @param string         $attribute
+     * @param string $method
+     * @param string $attribute
      *
      * @return string
      */
-    private function getClientData(DeviceDetector $deviceDetector, string $method, string $attribute): string
+    private function getClientData(string $method, string $attribute): string
     {
-        $value = $deviceDetector->$method($attribute);
+        $value = $this->deviceDetector->{$method}($attribute);
 
         return is_array($value) ? implode(', ', $value) : $value;
     }
