@@ -451,9 +451,9 @@ class LogLogin implements EntityInterface
         $this->osShortName = $this->getClientData('getOs', 'short_name');
         $this->osVersion = $this->getClientData('getOs', 'version');
         $this->osPlatform = $this->getClientData('getOs', 'platform');
-        $this->deviceName = $deviceDetector->getDeviceName();
-        $this->brandName = $deviceDetector->getBrandName();
-        $this->model = $deviceDetector->getModel();
+        $this->deviceName = $this->deviceDetector->getDeviceName();
+        $this->brandName = $this->deviceDetector->getBrandName();
+        $this->model = $this->deviceDetector->getModel();
     }
 
     /**
