@@ -1,7 +1,7 @@
 {
 	"require": {},
 	"require-dev": {
-		"codedungeon/phpunit-result-printer": "0.20.1",
+		"codedungeon/phpunit-result-printer": "0.20.3",
 		"liuggio/fastest": "1.6.1",
 		"phpunit/phpunit": "7.3.5",
 		"phpunit/phpcov": "5.0.0",

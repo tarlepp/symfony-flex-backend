@@ -113,12 +113,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "4cba0c7eed71b81bc83d4abbe36fc2fce0e90152"
+                "reference": "814780b8f1c78b7a8151afd715eff0cdf75228b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/4cba0c7eed71b81bc83d4abbe36fc2fce0e90152",
-                "reference": "4cba0c7eed71b81bc83d4abbe36fc2fce0e90152",
+                "url": "https://api.github.com/repos/infection/infection/zipball/814780b8f1c78b7a8151afd715eff0cdf75228b5",
+                "reference": "814780b8f1c78b7a8151afd715eff0cdf75228b5",
                 "shasum": ""
             },
             "require": {

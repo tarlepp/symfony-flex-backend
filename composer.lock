@@ -5875,16 +5875,16 @@
         },
         {
             "name": "illuminate/config",
-            "version": "v5.7.3",
+            "version": "v5.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/config.git",
-                "reference": "4bf5ad8913e41e934160fa0d9ba8f42f4cd3cee6"
+                "reference": "3cc6f07804b0a349c81b6479765a0bb58050fea0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/config/zipball/4bf5ad8913e41e934160fa0d9ba8f42f4cd3cee6",
-                "reference": "4bf5ad8913e41e934160fa0d9ba8f42f4cd3cee6",
+                "url": "https://api.github.com/repos/illuminate/config/zipball/3cc6f07804b0a349c81b6479765a0bb58050fea0",
+                "reference": "3cc6f07804b0a349c81b6479765a0bb58050fea0",
                 "shasum": ""
             },
             "require": {
@@ -5919,16 +5919,16 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.7.3",
+            "version": "v5.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
-                "reference": "b2adca648536dfdfc13c2b93a2d717149794b682"
+                "reference": "0fc33b14ae6cf9a1e694fd43f2a274e590a824b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/container/zipball/b2adca648536dfdfc13c2b93a2d717149794b682",
-                "reference": "b2adca648536dfdfc13c2b93a2d717149794b682",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/0fc33b14ae6cf9a1e694fd43f2a274e590a824b2",
+                "reference": "0fc33b14ae6cf9a1e694fd43f2a274e590a824b2",
                 "shasum": ""
             },
             "require": {
@@ -5963,16 +5963,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.7.3",
+            "version": "v5.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "fd5d68eddfe49647f8354ac4c5f09cb88ccece7a"
+                "reference": "2daf3c078610f744e2a4dc2f44fb5060cce9835b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/fd5d68eddfe49647f8354ac4c5f09cb88ccece7a",
-                "reference": "fd5d68eddfe49647f8354ac4c5f09cb88ccece7a",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/2daf3c078610f744e2a4dc2f44fb5060cce9835b",
+                "reference": "2daf3c078610f744e2a4dc2f44fb5060cce9835b",
                 "shasum": ""
             },
             "require": {
@@ -6003,20 +6003,20 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2018-09-05T21:56:43+00:00"
+            "time": "2018-09-18T12:50:05+00:00"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.7.3",
+            "version": "v5.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "966c3198b5f82c00f8e5f7b6f16c35ffcb636acc"
+                "reference": "bb579d7174181c343259933cac430869eada7edb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/966c3198b5f82c00f8e5f7b6f16c35ffcb636acc",
-                "reference": "966c3198b5f82c00f8e5f7b6f16c35ffcb636acc",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/bb579d7174181c343259933cac430869eada7edb",
+                "reference": "bb579d7174181c343259933cac430869eada7edb",
                 "shasum": ""
             },
             "require": {
@@ -6062,7 +6062,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2018-09-07T22:44:17+00:00"
+            "time": "2018-09-16T20:37:01+00:00"
         },
         {
             "name": "jackiedo/dotenv-editor",

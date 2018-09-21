@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe6c5fd1d1b642351bd29a3b17924269",
+    "content-hash": "6daa406c7748f8e3ff19d3ca609a9b33",
     "packages": [],
     "packages-dev": [
         {
@@ -98,28 +98,28 @@
         },
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.20.1",
+            "version": "0.20.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "b2e6265830e8ad04dc5b42c407cdd406ef0bb067"
+                "reference": "3d5773927969ab71ba5acd8bb90c3a183c406118"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/b2e6265830e8ad04dc5b42c407cdd406ef0bb067",
-                "reference": "b2e6265830e8ad04dc5b42c407cdd406ef0bb067",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/3d5773927969ab71ba5acd8bb90c3a183c406118",
+                "reference": "3d5773927969ab71ba5acd8bb90c3a183c406118",
                 "shasum": ""
             },
             "require": {
                 "2bj/phanybar": "^1.0",
                 "codedungeon/php-cli-colors": "^1.10.2",
-                "hassankhan/config": "^1.0",
+                "hassankhan/config": "^0.11.2",
                 "php": "^7.1",
                 "symfony/yaml": "^2.7|^3.0|^4.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "7.1.1",
-                "spatie/phpunit-watcher": "^1.5"
+                "spatie/phpunit-watcher": "^1.6"
             },
             "type": "library",
             "autoload": {
@@ -147,7 +147,7 @@
                 "result-printer",
                 "testing"
             ],
-            "time": "2018-09-09T20:25:05+00:00"
+            "time": "2018-09-20T03:43:34+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -272,29 +272,28 @@
         },
         {
             "name": "hassankhan/config",
-            "version": "1.1.0",
+            "version": "0.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/hassankhan/config.git",
-                "reference": "930556337783acfd95bde723354119178db01d10"
+                "reference": "7fbc236c32dc6cc53a7b00992a2739cf8b41c085"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/hassankhan/config/zipball/930556337783acfd95bde723354119178db01d10",
-                "reference": "930556337783acfd95bde723354119178db01d10",
+                "url": "https://api.github.com/repos/hassankhan/config/zipball/7fbc236c32dc6cc53a7b00992a2739cf8b41c085",
+                "reference": "7fbc236c32dc6cc53a7b00992a2739cf8b41c085",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "php": ">=5.3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "~4.0",
                 "scrutinizer/ocular": "~1.1",
-                "squizlabs/php_codesniffer": "~2.2",
-                "symfony/yaml": "~3.4"
+                "squizlabs/php_codesniffer": "~2.2"
             },
             "suggest": {
-                "symfony/yaml": "~3.4"
+                "symfony/yaml": "~2.5"
             },
             "type": "library",
             "autoload": {
@@ -326,7 +325,7 @@
                 "yaml",
                 "yml"
             ],
-            "time": "2018-08-22T14:18:52+00:00"
+            "time": "2017-11-07T22:49:43+00:00"
         },
         {
             "name": "liuggio/fastest",
