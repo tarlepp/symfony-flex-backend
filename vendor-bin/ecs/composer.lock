@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d6542b6cf2073137fb7d62cf21df2e80",
+    "content-hash": "0630f64bac6cfcd3222a4e83e799dcc3",
     "packages": [],
     "packages-dev": [
         {
@@ -2369,16 +2369,16 @@
         },
         {
             "name": "symplify/better-phpdoc-parser",
-            "version": "v5.0.1",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/BetterPhpDocParser.git",
-                "reference": "e6c45517615a92b4acf7c895554821b8d54430d6"
+                "reference": "4dba6406725cc8b3d7822e617034fef21ffe3f3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/BetterPhpDocParser/zipball/e6c45517615a92b4acf7c895554821b8d54430d6",
-                "reference": "e6c45517615a92b4acf7c895554821b8d54430d6",
+                "url": "https://api.github.com/repos/Symplify/BetterPhpDocParser/zipball/4dba6406725cc8b3d7822e617034fef21ffe3f3a",
+                "reference": "4dba6406725cc8b3d7822e617034fef21ffe3f3a",
                 "shasum": ""
             },
             "require": {
@@ -2407,20 +2407,20 @@
                 "MIT"
             ],
             "description": "Slim wrapper around phpstan/phpdoc-parser with format preserving printer",
-            "time": "2018-09-19T16:39:54+00:00"
+            "time": "2018-09-21T12:58:37+00:00"
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v5.0.1",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
-                "reference": "9e68813dbfb54ad2b1123835c24c96998ce0838a"
+                "reference": "463b901f4907ad6d6a3ad4778749f0d69c00c708"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/9e68813dbfb54ad2b1123835c24c96998ce0838a",
-                "reference": "9e68813dbfb54ad2b1123835c24c96998ce0838a",
+                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/463b901f4907ad6d6a3ad4778749f0d69c00c708",
+                "reference": "463b901f4907ad6d6a3ad4778749f0d69c00c708",
                 "shasum": ""
             },
             "require": {
@@ -2455,20 +2455,20 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2018-09-19T16:39:54+00:00"
+            "time": "2018-09-21T12:58:37+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v5.0.1",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "ea85a91882b94a7d230096e2fbab297d0c6954ac"
+                "reference": "57ec87e149e799acae4e6dbe6f43c25936444bb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/ea85a91882b94a7d230096e2fbab297d0c6954ac",
-                "reference": "ea85a91882b94a7d230096e2fbab297d0c6954ac",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/57ec87e149e799acae4e6dbe6f43c25936444bb4",
+                "reference": "57ec87e149e799acae4e6dbe6f43c25936444bb4",
                 "shasum": ""
             },
             "require": {
@@ -2519,11 +2519,11 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2018-09-19T16:39:54+00:00"
+            "time": "2018-09-21T12:58:37+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v5.0.1",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
@@ -2570,16 +2570,16 @@
         },
         {
             "name": "symplify/token-runner",
-            "version": "v5.0.1",
+            "version": "v5.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/TokenRunner.git",
-                "reference": "378aadc862ce0e038fe1cbaf5e28a2de04d36f8d"
+                "reference": "81fecd5d093b57c05b9d3549f6b0ceaa49e9a262"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/378aadc862ce0e038fe1cbaf5e28a2de04d36f8d",
-                "reference": "378aadc862ce0e038fe1cbaf5e28a2de04d36f8d",
+                "url": "https://api.github.com/repos/Symplify/TokenRunner/zipball/81fecd5d093b57c05b9d3549f6b0ceaa49e9a262",
+                "reference": "81fecd5d093b57c05b9d3549f6b0ceaa49e9a262",
                 "shasum": ""
             },
             "require": {
@@ -2611,7 +2611,7 @@
                 "MIT"
             ],
             "description": "Set of utils for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2018-09-19T16:39:54+00:00"
+            "time": "2018-09-21T12:58:37+00:00"
         },
         {
             "name": "thecodingmachine/safe",
