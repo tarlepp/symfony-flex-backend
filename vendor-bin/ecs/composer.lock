@@ -1207,16 +1207,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "4.8.0",
+            "version": "4.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "7b33fb140a8ee1502754c4c8dc44c3082746f30c"
+                "reference": "f74119f752141e3fb409ace21b5b5d735bacdda2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/7b33fb140a8ee1502754c4c8dc44c3082746f30c",
-                "reference": "7b33fb140a8ee1502754c4c8dc44c3082746f30c",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/f74119f752141e3fb409ace21b5b5d735bacdda2",
+                "reference": "f74119f752141e3fb409ace21b5b5d735bacdda2",
                 "shasum": ""
             },
             "require": {
@@ -1242,20 +1242,20 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2018-09-19T22:49:38+00:00"
+            "time": "2018-09-21T22:09:42+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.3.1",
+            "version": "3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "628a481780561150481a9ec74709092b9759b3ec"
+                "reference": "6ad28354c04b364c3c71a34e4a18b629cc3b231e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/628a481780561150481a9ec74709092b9759b3ec",
-                "reference": "628a481780561150481a9ec74709092b9759b3ec",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/6ad28354c04b364c3c71a34e4a18b629cc3b231e",
+                "reference": "6ad28354c04b364c3c71a34e4a18b629cc3b231e",
                 "shasum": ""
             },
             "require": {
@@ -1293,7 +1293,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2018-07-26T23:47:18+00:00"
+            "time": "2018-09-23T23:08:17+00:00"
         },
         {
             "name": "symfony/cache",
