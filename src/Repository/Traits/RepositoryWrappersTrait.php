@@ -10,7 +10,9 @@ namespace App\Repository\Traits;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\QueryBuilder;
+use UnexpectedValueException;
 
 /**
  * Class RepositoryWrappersTrait
@@ -50,14 +52,13 @@ trait RepositoryWrappersTrait
      */
     public function getAssociations(): array
     {
-        /** @psalm-suppress UndefinedMethod */
         return $this->getClassMetaData()->getAssociationMappings();
     }
 
     /**
-     * @return \Doctrine\ORM\Mapping\ClassMetadata|\Doctrine\Common\Persistence\Mapping\ClassMetadata
+     * @return ClassMetadataInfo
      */
-    public function getClassMetaData()
+    public function getClassMetaData(): ClassMetadataInfo
     {
         return $this->getEntityManager()->getClassMetadata($this->getEntityName());
     }
@@ -66,13 +67,18 @@ trait RepositoryWrappersTrait
      * Getter method for EntityManager for current entity.
      *
      * @return EntityManager
-     *
-     * @psalm-suppress MoreSpecificReturnType
-     * @psalm-suppress InvalidNullableReturnType
      */
     public function getEntityManager(): EntityManager
     {
-        return $this->managerRegistry->getManagerForClass($this->getEntityName());
+        $manager = $this->managerRegistry->getManagerForClass($this->getEntityName());
+
+        if (!($manager instanceof EntityManager)) {
+            throw new UnexpectedValueException(
+                'Cannot get entity manager for entity \'' . $this->getEntityName() . '\''
+            );
+        }
+
+        return $manager;
     }
 
     /**

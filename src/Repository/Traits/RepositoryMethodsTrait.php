@@ -74,7 +74,7 @@ trait RepositoryMethodsTrait
      * @param int|null      $limit
      * @param int|null      $offset
      *
-     * @return array<int, mixed>|EntityInterface[]
+     * @return array<int, mixed>|EntityInterface[]|\Traversable
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
