@@ -74,7 +74,7 @@ trait RepositoryMethodsTrait
      * @param int|null      $limit
      * @param int|null      $offset
      *
-     * @return EntityInterface[]|array<int, mixed>
+     * @return array<int, mixed>|EntityInterface[]
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
@@ -121,7 +121,7 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @return EntityInterface[]|array<int, mixed>
+     * @return array<int, mixed>|EntityInterface[]
      */
     public function findAll(): array
     {
