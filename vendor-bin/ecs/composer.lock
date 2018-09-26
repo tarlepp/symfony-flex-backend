@@ -1207,16 +1207,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "4.8.1",
+            "version": "4.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "f74119f752141e3fb409ace21b5b5d735bacdda2"
+                "reference": "32e1ca205fc34920f323582ed29c0602e3897ae3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/f74119f752141e3fb409ace21b5b5d735bacdda2",
-                "reference": "f74119f752141e3fb409ace21b5b5d735bacdda2",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/32e1ca205fc34920f323582ed29c0602e3897ae3",
+                "reference": "32e1ca205fc34920f323582ed29c0602e3897ae3",
                 "shasum": ""
             },
             "require": {
@@ -1242,7 +1242,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2018-09-21T22:09:42+00:00"
+            "time": "2018-09-25T21:21:11+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -2615,16 +2615,16 @@
         },
         {
             "name": "thecodingmachine/safe",
-            "version": "v0.1.4",
+            "version": "v0.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/safe.git",
-                "reference": "b5446e5a8a92b26c613bb9f76bb16d23bf076445"
+                "reference": "56fcae888155f6ae0070545c5f80505c511598d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/b5446e5a8a92b26c613bb9f76bb16d23bf076445",
-                "reference": "b5446e5a8a92b26c613bb9f76bb16d23bf076445",
+                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/56fcae888155f6ae0070545c5f80505c511598d5",
+                "reference": "56fcae888155f6ae0070545c5f80505c511598d5",
                 "shasum": ""
             },
             "require": {
@@ -2741,7 +2741,7 @@
                 "MIT"
             ],
             "description": "PHP core functions that throw exceptions instead of returning FALSE on error",
-            "time": "2018-09-18T07:41:17+00:00"
+            "time": "2018-09-24T20:24:12+00:00"
         }
     ],
     "aliases": [],
