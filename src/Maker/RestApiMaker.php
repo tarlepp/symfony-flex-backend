@@ -19,6 +19,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use function array_map;
 use function array_merge;
 use function implode;
+use function is_array;
 use function lcfirst;
 use function preg_match_all;
 use function sprintf;
@@ -172,7 +173,8 @@ class RestApiMaker extends AbstractMaker
      */
     public function getParameters(InputInterface $input): array
     {
-        $resourceName = Str::asClassName($input->getArgument(self::PARAM_RESOURCE_NAME));
+        $resourceName = $input->getArgument(self::PARAM_RESOURCE_NAME);
+        $resourceName = is_array($resourceName) ? $resourceName[0] : Str::asClassName($resourceName);
         $author = $input->getArgument(self::PARAM_AUTHOR);
         $swaggerTag = $input->getArgument(self::PARAM_SWAGGER_TAG);
 
