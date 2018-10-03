@@ -567,17 +567,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "8605f2e74f558d3e349b219e58414b75b0adc30e"
+                "reference": "67643fa62d521fb76855b0a4cc9a3de7ba38f85b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/8605f2e74f558d3e349b219e58414b75b0adc30e",
-                "reference": "8605f2e74f558d3e349b219e58414b75b0adc30e",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/67643fa62d521fb76855b0a4cc9a3de7ba38f85b",
+                "reference": "67643fa62d521fb76855b0a4cc9a3de7ba38f85b",
                 "shasum": ""
             },
             "conflict": {
                 "3f/pygmentize": "<1.2",
                 "adodb/adodb-php": "<5.20.12",
+                "alterphp/easyadmin-extension-bundle": ">=1.2,<1.2.11|>=1.3,<1.3.1",
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
                 "amphp/http": "<1.0.1",
                 "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
@@ -745,7 +746,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2018-09-17T20:20:31+00:00"
+            "time": "2018-10-02T16:19:22+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -805,16 +806,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.1.5",
+            "version": "v4.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "d3dbe91fd5b8b11ecb73508c844bc6a490de15b4"
+                "reference": "dc7122fe5f6113cfaba3b3de575d31112c9aa60b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/d3dbe91fd5b8b11ecb73508c844bc6a490de15b4",
-                "reference": "d3dbe91fd5b8b11ecb73508c844bc6a490de15b4",
+                "url": "https://api.github.com/repos/symfony/console/zipball/dc7122fe5f6113cfaba3b3de575d31112c9aa60b",
+                "reference": "dc7122fe5f6113cfaba3b3de575d31112c9aa60b",
                 "shasum": ""
             },
             "require": {
@@ -869,20 +870,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-30T03:38:13+00:00"
+            "time": "2018-10-03T08:15:46+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.1.5",
+            "version": "v4.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "a10ae719b02c47ecba5c684ca2b505f3a49bf397"
+                "reference": "596d12b40624055c300c8b619755b748ca5cf0b5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/a10ae719b02c47ecba5c684ca2b505f3a49bf397",
-                "reference": "a10ae719b02c47ecba5c684ca2b505f3a49bf397",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/596d12b40624055c300c8b619755b748ca5cf0b5",
+                "reference": "596d12b40624055c300c8b619755b748ca5cf0b5",
                 "shasum": ""
             },
             "require": {
@@ -919,20 +920,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-30T03:38:13+00:00"
+            "time": "2018-10-02T12:40:59+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v4.1.5",
+            "version": "v4.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "f0b042d445c155501793e7b8007457f9f5bb1c8c"
+                "reference": "1f17195b44543017a9c9b2d437c670627e96ad06"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/f0b042d445c155501793e7b8007457f9f5bb1c8c",
-                "reference": "f0b042d445c155501793e7b8007457f9f5bb1c8c",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/1f17195b44543017a9c9b2d437c670627e96ad06",
+                "reference": "1f17195b44543017a9c9b2d437c670627e96ad06",
                 "shasum": ""
             },
             "require": {
@@ -968,7 +969,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-21T12:49:42+00:00"
+            "time": "2018-10-03T08:47:56+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1089,16 +1090,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v4.1.5",
+            "version": "v4.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "c64647828bc7733ba9427f1eeb1b542588635427"
+                "reference": "ee33c0322a8fee0855afcc11fff81e6b1011b529"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/c64647828bc7733ba9427f1eeb1b542588635427",
-                "reference": "c64647828bc7733ba9427f1eeb1b542588635427",
+                "url": "https://api.github.com/repos/symfony/process/zipball/ee33c0322a8fee0855afcc11fff81e6b1011b529",
+                "reference": "ee33c0322a8fee0855afcc11fff81e6b1011b529",
                 "shasum": ""
             },
             "require": {
@@ -1134,20 +1135,20 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-08T13:24:10+00:00"
+            "time": "2018-10-02T12:40:59+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.1.5",
+            "version": "v4.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "ac5af7c14c4f8abf0f77419e8397eff7a370df19"
+                "reference": "367e689b2fdc19965be435337b50bc8adf2746c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/ac5af7c14c4f8abf0f77419e8397eff7a370df19",
-                "reference": "ac5af7c14c4f8abf0f77419e8397eff7a370df19",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/367e689b2fdc19965be435337b50bc8adf2746c9",
+                "reference": "367e689b2fdc19965be435337b50bc8adf2746c9",
                 "shasum": ""
             },
             "require": {
@@ -1193,7 +1194,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-30T03:38:13+00:00"
+            "time": "2018-10-02T16:36:10+00:00"
         },
         {
             "name": "webmozart/assert",
