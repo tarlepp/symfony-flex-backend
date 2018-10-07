@@ -117,7 +117,11 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function getYearEnd(int $yearStart): int
     {
-        return (int)$this->io->ask('Give a year where to end', (string)self::YEAR_MAX, $this->validatorYearEnd($yearStart));
+        return (int)$this->io->ask(
+            'Give a year where to end',
+            (string)self::YEAR_MAX,
+            $this->validatorYearEnd($yearStart)
+        );
     }
 
     /**
