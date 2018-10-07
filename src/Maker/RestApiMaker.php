@@ -174,7 +174,7 @@ class RestApiMaker extends AbstractMaker
     public function getParameters(InputInterface $input): array
     {
         $resourceName = $input->getArgument(self::PARAM_RESOURCE_NAME);
-        $resourceName = is_array($resourceName) ? $resourceName[0] : Str::asClassName($resourceName);
+        $resourceName = is_array($resourceName) ? $resourceName[0] : Str::asClassName((string)$resourceName);
         $author = $input->getArgument(self::PARAM_AUTHOR);
         $swaggerTag = $input->getArgument(self::PARAM_SWAGGER_TAG);
 
