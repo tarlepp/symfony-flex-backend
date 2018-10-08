@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "169065fd4d45456b084b63da60fd4e3f",
+    "content-hash": "4d97fe92a07928688b5f767d96c10691",
     "packages": [],
     "packages-dev": [
         {
@@ -156,16 +156,16 @@
         },
         {
             "name": "microsoft/tolerant-php-parser",
-            "version": "v0.0.13",
+            "version": "v0.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Microsoft/tolerant-php-parser.git",
-                "reference": "89ade271e639e0612deeccb0555f13c2224ecf84"
+                "reference": "54a84f1250dcde5641e86b5e966fec5f0e201f71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Microsoft/tolerant-php-parser/zipball/89ade271e639e0612deeccb0555f13c2224ecf84",
-                "reference": "89ade271e639e0612deeccb0555f13c2224ecf84",
+                "url": "https://api.github.com/repos/Microsoft/tolerant-php-parser/zipball/54a84f1250dcde5641e86b5e966fec5f0e201f71",
+                "reference": "54a84f1250dcde5641e86b5e966fec5f0e201f71",
                 "shasum": ""
             },
             "require": {
@@ -193,7 +193,7 @@
                 }
             ],
             "description": "Tolerant PHP-to-AST parser designed for IDE usage scenarios",
-            "time": "2018-08-07T04:52:21+00:00"
+            "time": "2018-09-26T05:43:26+00:00"
         },
         {
             "name": "netresearch/jsonmapper",
@@ -239,16 +239,16 @@
         },
         {
             "name": "phan/phan",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phan/phan.git",
-                "reference": "11eb4f3235ccc2ce5a5709bccdbdb674152e36ba"
+                "reference": "a0727954afb3cd87dd97d2026434b4b248218f42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phan/phan/zipball/11eb4f3235ccc2ce5a5709bccdbdb674152e36ba",
-                "reference": "11eb4f3235ccc2ce5a5709bccdbdb674152e36ba",
+                "url": "https://api.github.com/repos/phan/phan/zipball/a0727954afb3cd87dd97d2026434b4b248218f42",
+                "reference": "a0727954afb3cd87dd97d2026434b4b248218f42",
                 "shasum": ""
             },
             "require": {
@@ -257,7 +257,7 @@
                 "ext-filter": "*",
                 "ext-json": "*",
                 "felixfbecker/advanced-json-rpc": "^3.0.3",
-                "microsoft/tolerant-php-parser": "0.0.13",
+                "microsoft/tolerant-php-parser": "0.0.15",
                 "php": "^7.0.0",
                 "sabre/event": "^5.0",
                 "symfony/console": "^2.3|^3.0|~4.0"
@@ -301,7 +301,7 @@
                 "php",
                 "static"
             ],
-            "time": "2018-09-25T21:55:43+00:00"
+            "time": "2018-10-03T00:33:26+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
