@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4d97fe92a07928688b5f767d96c10691",
+    "content-hash": "3347745849fe32bd691396d71bac3bd2",
     "packages": [],
     "packages-dev": [
         {
@@ -239,16 +239,16 @@
         },
         {
             "name": "phan/phan",
-            "version": "1.0.7",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phan/phan.git",
-                "reference": "a0727954afb3cd87dd97d2026434b4b248218f42"
+                "reference": "aba95779b350f8b19a86d498c141bec2e105a556"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phan/phan/zipball/a0727954afb3cd87dd97d2026434b4b248218f42",
-                "reference": "a0727954afb3cd87dd97d2026434b4b248218f42",
+                "url": "https://api.github.com/repos/phan/phan/zipball/aba95779b350f8b19a86d498c141bec2e105a556",
+                "reference": "aba95779b350f8b19a86d498c141bec2e105a556",
                 "shasum": ""
             },
             "require": {
@@ -301,7 +301,7 @@
                 "php",
                 "static"
             ],
-            "time": "2018-10-03T00:33:26+00:00"
+            "time": "2018-10-08T16:23:47+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
