@@ -61,7 +61,7 @@
 		"symfony/browser-kit": "4.1.6",
 		"symfony/debug-pack": "1.0.6",
 		"symfony/dotenv": "4.1.6",
-		"symfony/maker-bundle": "1.7.0",
+		"symfony/maker-bundle": "1.8.0",
 		"symfony/requirements-checker": "1.1.2",
 		"symfony/web-server-bundle": "4.1.6"
 	},
