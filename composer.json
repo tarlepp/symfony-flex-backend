@@ -45,9 +45,9 @@
 		"symfony/form": "*",
 		"symfony/framework-bundle": "*",
 		"symfony/monolog-bundle": "3.3.0",
-		"symfony/orm-pack": "1.0.5",
+		"symfony/orm-pack": "*",
 		"symfony/security-bundle": "*",
-		"symfony/serializer": "*",
+		"symfony/serializer-pack": "*",
 		"symfony/twig-bundle": "*",
 		"symfony/validator": "*",
 		"symfony/yaml": "*"
