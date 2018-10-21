@@ -2,11 +2,11 @@
 	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"vimeo/psalm": "2.0.14"
+		"vimeo/psalm": "2.0.15"
 	},
 	"config": {
 		"preferred-install": {
-			"*": "dist"
+			"*": "dis
 		},
 		"sort-packages": true
 	}
