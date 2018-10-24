@@ -140,7 +140,7 @@ abstract class RestResource implements RestResourceInterface
      */
     public function getFormTypeClass(): string
     {
-        if ($this->formTypeClass === '') {
+        if (!$this->formTypeClass) {
             $message = sprintf(
                 'FormType class not specified for \'%s\' resource',
                 static::class
