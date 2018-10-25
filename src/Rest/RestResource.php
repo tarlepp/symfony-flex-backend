@@ -46,7 +46,7 @@ abstract class RestResource implements RestResourceInterface
     /**
      * @var string
      */
-    private $formTypeClass;
+    private $formTypeClass = null;
 
     /**
      * Getter method for entity repository.
