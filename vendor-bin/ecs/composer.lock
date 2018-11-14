@@ -2621,16 +2621,16 @@
         },
         {
             "name": "thecodingmachine/safe",
-            "version": "v0.1.7",
+            "version": "v0.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thecodingmachine/safe.git",
-                "reference": "70cdfb7732ab22b1bd82c6c4a3f8650a45759c5e"
+                "reference": "4547d4684086d463b00cbd1a7763395280355e7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/70cdfb7732ab22b1bd82c6c4a3f8650a45759c5e",
-                "reference": "70cdfb7732ab22b1bd82c6c4a3f8650a45759c5e",
+                "url": "https://api.github.com/repos/thecodingmachine/safe/zipball/4547d4684086d463b00cbd1a7763395280355e7d",
+                "reference": "4547d4684086d463b00cbd1a7763395280355e7d",
                 "shasum": ""
             },
             "require": {
@@ -2747,7 +2747,7 @@
                 "MIT"
             ],
             "description": "PHP core functions that throw exceptions instead of returning FALSE on error",
-            "time": "2018-11-08T14:45:50+00:00"
+            "time": "2018-11-13T09:01:03+00:00"
         }
     ],
     "aliases": [],
