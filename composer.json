@@ -41,7 +41,7 @@
 		"symfony/asset": "*",
 		"symfony/console": "*",
 		"symfony/expression-language": "*",
-		"symfony/flex": "1.1.7",
+		"symfony/flex": "1.1.8",
 		"symfony/form": "*",
 		"symfony/framework-bundle": "*",
 		"symfony/monolog-bundle": "3.3.1",
