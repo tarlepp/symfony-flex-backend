@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce4fdcee3127e547858f1c8081985f1d",
+    "content-hash": "961e52c17cadca6a932512ef0f9db7e7",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1618,16 +1618,16 @@
         },
         {
             "name": "lexik/jwt-authentication-bundle",
-            "version": "v2.6.0",
+            "version": "v2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lexik/LexikJWTAuthenticationBundle.git",
-                "reference": "dc10bb43a8c9fef24edbc9d6fab8cf40d575a903"
+                "reference": "ba179c2f876b96e5cffe5ee75cac883cfe3f8847"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/dc10bb43a8c9fef24edbc9d6fab8cf40d575a903",
-                "reference": "dc10bb43a8c9fef24edbc9d6fab8cf40d575a903",
+                "url": "https://api.github.com/repos/lexik/LexikJWTAuthenticationBundle/zipball/ba179c2f876b96e5cffe5ee75cac883cfe3f8847",
+                "reference": "ba179c2f876b96e5cffe5ee75cac883cfe3f8847",
                 "shasum": ""
             },
             "require": {
@@ -1711,7 +1711,7 @@
                 "rest",
                 "symfony"
             ],
-            "time": "2018-11-01T14:48:31+00:00"
+            "time": "2018-11-18T21:13:33+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
