@@ -78,6 +78,12 @@ trait RepositoryWrappersTrait
             );
         }
 
+        if ($manager->isOpen() === false) {
+            $this->managerRegistry->resetManager();
+
+            $manager = $this->getEntityManager();
+        }
+
         return $manager;
     }
 
