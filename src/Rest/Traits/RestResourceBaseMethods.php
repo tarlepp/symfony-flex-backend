@@ -484,7 +484,6 @@ trait RestResourceBaseMethods
             ];
         }
 
-        /** @noinspection ExceptionsAnnotatingAndHandlingInspection */
         throw new ValidatorException(JSON::encode($output));
     }
 }
