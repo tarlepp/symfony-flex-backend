@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalDependencies">
+    <plugin id="Git4Idea" />
+    <plugin id="com.intellij.apacheConfig" />
+    <plugin id="com.intellij.database" />
+    <plugin id="com.jetbrains.php" />
+    <plugin id="com.jetbrains.php.dql" />
+    <plugin id="com.kalessil.phpStorm.phpInspectionsEA" />
+    <plugin id="de.espend.idea.php.annotation" />
+    <plugin id="fr.adrienbrault.idea.symfony2plugin" />
+    <plugin id="org.editorconfig.editorconfigjetbrains" />
+    <plugin id="org.intellij.plugins.markdown" />
+    <plugin id="org.jetbrains.plugins.github" />
+    <plugin id="org.jetbrains.plugins.yaml" />
+    <plugin id="ru.adelf.idea.dotenv" />
+  </component>
+</project>
