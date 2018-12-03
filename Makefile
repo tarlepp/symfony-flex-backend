@@ -142,7 +142,6 @@ phpcs: ## Runs PHP CodeSniffer
 ###> ecs ###
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
 	@echo "\033[32mRunning EasyCodingStandard\033[39m"
-	@php ./vendor/bin/ecs --version
 	@php -d error_reporting=0 ./vendor/bin/ecs --clear-cache --no-progress-bar check src
 ###< ecs ###
 
