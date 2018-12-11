@@ -3,12 +3,12 @@
 	"require-dev": {
 		"codedungeon/phpunit-result-printer": "0.23.4",
 		"liuggio/fastest": "1.6.1",
-		"phpunit/phpunit": "7.4.4",
+		"phpunit/phpunit": "7.5.0",
 		"phpunit/phpcov": "5.0.0",
 		"roave/security-advisories": "dev-master",
 		"sebastian/finder-facade": "1.2.2",
-		"symfony/browser-kit": "4.1.7",
-		"symfony/phpunit-bridge": "4.1.7"
+		"symfony/browser-kit": "4.2.1",
+		"symfony/phpunit-bridge": "4.2.1"
 	},
 	"config": {
 		"preferred-install": {
