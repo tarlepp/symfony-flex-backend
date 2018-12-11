@@ -40,7 +40,7 @@ trait DeleteAction
      *      methods={"DELETE"},
      *  )
      *
-     * @Security("has_role('ROLE_USER')")
+     * @Security("is_granted('ROLE_USER')")
      *
      * @RestApiDoc()
      *

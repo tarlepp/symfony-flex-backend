@@ -92,7 +92,7 @@ class UserGroupController extends Controller
      *      class="App\Resource\UserGroupResource",
      *  )
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      *
      * @SWG\Parameter(
      *      type="string",
@@ -167,7 +167,7 @@ class UserGroupController extends Controller
      *      class="App\Resource\UserResource",
      *  )
      *
-     * @Security("has_role('ROLE_ROOT')")
+     * @Security("is_granted('ROLE_ROOT')")
      *
      * @SWG\Parameter(
      *      type="string",
@@ -275,7 +275,7 @@ class UserGroupController extends Controller
      *      class="App\Resource\UserResource",
      *  )
      *
-     * @Security("has_role('ROLE_ROOT')")
+     * @Security("is_granted('ROLE_ROOT')")
      *
      * @SWG\Parameter(
      *      type="string",

@@ -39,7 +39,7 @@ trait CreateAction
      *     methods={"POST"},
      *  )
      *
-     * @Security("has_role('ROLE_LOGGED')")
+     * @Security("is_granted('ROLE_LOGGED')")
      *
      * @RestApiDoc()
      *

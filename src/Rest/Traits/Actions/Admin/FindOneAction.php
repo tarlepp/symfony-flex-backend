@@ -40,7 +40,7 @@ trait FindOneAction
      *      methods={"GET"},
      *  )
      *
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      *
      * @RestApiDoc()
      *

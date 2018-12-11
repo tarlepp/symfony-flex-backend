@@ -42,7 +42,7 @@ trait PatchAction
      *      methods={"PATCH"},
      *  )
      *
-     * @Security("has_role('ROLE_ROOT')")
+     * @Security("is_granted('ROLE_ROOT')")
      *
      * @RestApiDoc()
      *

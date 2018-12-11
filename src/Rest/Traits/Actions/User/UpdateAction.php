@@ -42,7 +42,7 @@ trait UpdateAction
      *      methods={"PUT"},
      *  )
      *
-     * @Security("has_role('ROLE_USER')")
+     * @Security("is_granted('ROLE_USER')")
      *
      * @RestApiDoc()
      *

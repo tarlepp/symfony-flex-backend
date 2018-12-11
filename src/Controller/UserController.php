@@ -99,7 +99,7 @@ class UserController extends Controller
      *     class="App\Resource\UserResource"
      *  )
      *
-     * @Security("has_role('ROLE_ROOT')")
+     * @Security("is_granted('ROLE_ROOT')")
      *
      * @RestApiDoc()
      *
@@ -147,7 +147,7 @@ class UserController extends Controller
      *     class="App\Resource\UserResource"
      *  )
      *
-     * @Security("is_granted('IS_USER_HIMSELF', requestUser) or has_role('ROLE_ROOT')")
+     * @Security("is_granted('IS_USER_HIMSELF', requestUser) or is_granted('ROLE_ROOT')")
      *
      * @SWG\Parameter(
      *      type="string",
@@ -218,7 +218,7 @@ class UserController extends Controller
      *     class="App\Resource\UserResource"
      *  )
      *
-     * @Security("is_granted('IS_USER_HIMSELF', requestUser) or has_role('ROLE_ROOT')")
+     * @Security("is_granted('IS_USER_HIMSELF', requestUser) or is_granted('ROLE_ROOT')")
      *
      * @SWG\Parameter(
      *      type="string",
@@ -299,7 +299,7 @@ class UserController extends Controller
      *      class="App\Resource\UserGroupResource",
      *  )
      *
-     * @Security("has_role('ROLE_ROOT')")
+     * @Security("is_granted('ROLE_ROOT')")
      *
      * @SWG\Parameter(
      *      type="string",
@@ -420,7 +420,7 @@ class UserController extends Controller
      *      class="App\Resource\UserGroupResource",
      *  )
      *
-     * @Security("has_role('ROLE_ROOT')")
+     * @Security("is_granted('ROLE_ROOT')")
      *
      * @SWG\Parameter(
      *      type="string",

@@ -37,7 +37,7 @@ trait IdsAction
      *      methods={"GET"},
      *  )
      *
-     * @Security("has_role('ROLE_ROOT')")
+     * @Security("is_granted('ROLE_ROOT')")
      *
      * @RestApiDoc()
      *
