@@ -232,7 +232,7 @@ class CheckVendorDependencies extends Command
             'json',
         ];
 
-        $process = new Process(implode(' ', $command));
+        $process = new Process($command);
         $process->enableOutput();
         $process->run();
 
