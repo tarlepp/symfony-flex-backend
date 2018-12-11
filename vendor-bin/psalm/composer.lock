@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cbcf28313b2f110d533c45ec8b8d03b8",
+    "content-hash": "775bae5b49b1ed3a0099085e7cf532d1",
     "packages": [],
     "packages-dev": [
         {
@@ -1097,16 +1097,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "3.0.2",
+            "version": "3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "bcc062cfc5a7561a9a2a763eb693be6b2b29e28a"
+                "reference": "f9753e1517efd2f7282bf9c7c141fd7224e242ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/bcc062cfc5a7561a9a2a763eb693be6b2b29e28a",
-                "reference": "bcc062cfc5a7561a9a2a763eb693be6b2b29e28a",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/f9753e1517efd2f7282bf9c7c141fd7224e242ec",
+                "reference": "f9753e1517efd2f7282bf9c7c141fd7224e242ec",
                 "shasum": ""
             },
             "require": {
@@ -1130,9 +1130,7 @@
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.2",
-                "php-coveralls/php-coveralls": "^2.0",
                 "phpunit/phpunit": "^6.0 || ^7.0",
-                "psalm/plugin-phpunit": "dev-master",
                 "squizlabs/php_codesniffer": "^3.0"
             },
             "suggest": {
@@ -1173,7 +1171,7 @@
                 "inspection",
                 "php"
             ],
-            "time": "2018-11-27T05:46:19+00:00"
+            "time": "2018-12-11T04:20:46+00:00"
         },
         {
             "name": "webmozart/assert",
