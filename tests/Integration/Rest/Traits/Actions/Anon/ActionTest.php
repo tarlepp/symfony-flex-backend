@@ -63,7 +63,7 @@ class ActionTest extends KernelTestCase
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Rest/Traits/Actions/Anon/';
+        $folder = static::$kernel->getProjectDir() . '/src/Rest/Traits/Actions/Anon/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Rest\\Traits\\Actions\\Anon\\';

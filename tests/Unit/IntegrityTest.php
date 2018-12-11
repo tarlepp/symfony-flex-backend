@@ -276,7 +276,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Controller/';
+        $folder = static::$kernel->getProjectDir() . '/src/Controller/';
         $pattern = '/^.+Controller\.php$/i';
 
         $namespace = '\\App\\Controller\\';
@@ -303,7 +303,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Repository/';
+        $folder = static::$kernel->getProjectDir() . '/src/Repository/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Repository\\';
@@ -372,7 +372,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Repository/';
+        $folder = static::$kernel->getProjectDir() . '/src/Repository/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Repository\\';
@@ -414,7 +414,7 @@ FORMAT;
      */
     public function dataProviderTestThatEntityHaveIntegrationTests(): array
     {
-        $folder = static::$kernel->getRootDir() . '/Entity/';
+        $folder = static::$kernel->getProjectDir() . '/src/Entity/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Entity\\';
@@ -458,7 +458,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/EventSubscriber/';
+        $folder = static::$kernel->getProjectDir() . '/src/EventSubscriber/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\EventSubscriber\\';
@@ -485,7 +485,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/EventListener/';
+        $folder = static::$kernel->getProjectDir() . '/src/EventListener/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\EventListener\\';
@@ -512,7 +512,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Resource/';
+        $folder = static::$kernel->getProjectDir() . '/src/Resource/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Resource\\';
@@ -537,7 +537,7 @@ FORMAT;
      */
     public function dataProviderTestThatDtoHaveIntegrationTest(): array
     {
-        $folder = static::$kernel->getRootDir() . '/DTO/';
+        $folder = static::$kernel->getProjectDir() . '/src/DTO/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\DTO\\';
@@ -581,7 +581,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Form/';
+        $folder = static::$kernel->getProjectDir() . '/src/Form/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Form\\';
@@ -625,7 +625,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Form/';
+        $folder = static::$kernel->getProjectDir() . '/src/Form/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Form\\';
@@ -669,7 +669,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Controller/';
+        $folder = static::$kernel->getProjectDir() . '/src/Controller/';
         $pattern = '/^.+Controller\.php$/i';
 
         $namespace = '\\App\\Controller\\';
@@ -713,7 +713,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Validator/';
+        $folder = static::$kernel->getProjectDir() . '/src/Validator/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Validator\\';
@@ -757,7 +757,7 @@ FORMAT;
     {
         self::bootKernel();
 
-        $folder = static::$kernel->getRootDir() . '/Doctrine/DBAL/Types/';
+        $folder = static::$kernel->getProjectDir() . '/src/Doctrine/DBAL/Types/';
         $pattern = '/^.+\.php$/i';
 
         $namespace = '\\App\\Doctrine\\DBAL\\Types\\';
