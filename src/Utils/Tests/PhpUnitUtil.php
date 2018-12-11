@@ -215,6 +215,8 @@ class PhpUnitUtil
      * @param mixed[]|null $meta
      *
      * @return mixed
+     *
+     * @throws \Exception
      */
     public static function getValidValueForType(string $type, ?array $meta = null)
     {
@@ -241,6 +243,7 @@ class PhpUnitUtil
                     $output = 666;
                     break;
                 case DateTime::class:
+                    /** @noinspection PhpUnhandledExceptionInspection */
                     $output = new DateTime();
                     break;
                 case self::TYPE_STRING:
