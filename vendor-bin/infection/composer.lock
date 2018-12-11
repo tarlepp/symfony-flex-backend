@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "04dce7ddc86351ebf82211de88689f6d",
+    "content-hash": "a2b880d43501cb14d7fc89f7d4e94b49",
     "packages": [],
     "packages-dev": [
         {
@@ -109,16 +109,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.11.2",
+            "version": "0.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "62b41f817e116052b7fbdc9c2bababd64aa7f48a"
+                "reference": "f71d7af4332e0c3760aab45c16a6f750db1475a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/62b41f817e116052b7fbdc9c2bababd64aa7f48a",
-                "reference": "62b41f817e116052b7fbdc9c2bababd64aa7f48a",
+                "url": "https://api.github.com/repos/infection/infection/zipball/f71d7af4332e0c3760aab45c16a6f750db1475a6",
+                "reference": "f71d7af4332e0c3760aab45c16a6f750db1475a6",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "testing",
                 "unit testing"
             ],
-            "time": "2018-11-18T02:40:38+00:00"
+            "time": "2018-12-09T15:26:00+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
