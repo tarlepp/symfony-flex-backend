@@ -114,11 +114,13 @@ merge-junit: ## Creates JUnit xml from fastest run
 	@php merge-phpunit-xml.php ./build/fastest/ ./build/logs/junit.xml
 ###< phpunit ###
 
+###> infection ###
 infection: ## Runs Infection to codebase
 	@echo "\033[32mRunning Infection to codebase (pure PHP)\033[39m"
 	@mkdir -p build/infection
 	@bin/console cache:clear --env=test
 	@./vendor/bin/infection --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Functional,Integration,Unit"
+###< infection ###
 
 ###> phpmetrics ###
 phpmetrics: ## Generates PhpMetrics static analysis
@@ -142,7 +144,11 @@ phpcs: ## Runs PHP CodeSniffer
 ###> ecs ###
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
 	@echo "\033[32mRunning EasyCodingStandard\033[39m"
-	@php -d error_reporting=0 ./vendor/bin/ecs --clear-cache --no-progress-bar check src
+	@php -d error_reporting=0 ./vendor/bin/ecs --clear-cache check src
+
+ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
+	@echo "\033[32mRunning EasyCodingStandard\033[39m"
+	@php -d error_reporting=0 ./vendor/bin/ecs --clear-cache --fix check src
 ###< ecs ###
 
 ###> psalm ###
