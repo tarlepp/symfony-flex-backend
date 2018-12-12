@@ -21,5 +21,6 @@
         <PropertyNotSetInConstructor errorLevel="suppress" />
         <MissingClosureParamType errorLevel="suppress" />
         <MissingParamType errorLevel="suppress" />
+        <InvalidStringClass errorLevel="suppress" />
     </issueHandlers>
 </psalm>
