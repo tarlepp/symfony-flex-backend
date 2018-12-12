@@ -318,7 +318,7 @@ trait RestResourceBaseMethods
      * @param mixed[]|null $criteria
      * @param mixed[]|null $search
      *
-     * @return string[]|array<mixed, mixed>
+     * @return string[]<mixed, mixed>
      *
      * @throws InvalidArgumentException
      */

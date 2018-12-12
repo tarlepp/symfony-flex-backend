@@ -89,7 +89,7 @@ class ApiDocDescriber implements DescriberInterface
     }
 
     /**
-     * @return RouteModel[]|array<mixed, mixed>
+     * @return RouteModel[]<mixed, mixed>
      *
      * @throws ReflectionException
      */

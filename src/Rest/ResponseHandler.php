@@ -198,7 +198,7 @@ final class ResponseHandler implements ResponseHandlerInterface
      * @param string[] $populate
      * @param string   $entityName
      *
-     * @return string[]|array<mixed, mixed>
+     * @return string[]<mixed, mixed>
      */
     private function checkPopulateAll(bool $populateAll, array $populate, string $entityName): array
     {

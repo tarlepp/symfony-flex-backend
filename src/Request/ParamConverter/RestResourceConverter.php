@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
  *   *      class="App\Resource\UserResource",
  *   *  )
  *   *
- *   * @param User $userEntity
+ *   * @param User $collection
  *   *\/
  *  public function testAction(User $userEntity)
  *  {
