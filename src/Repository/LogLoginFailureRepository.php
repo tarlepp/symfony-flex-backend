@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null find(string $id, ?string $lockMode = null, ?string $lockVersion = null)
+ * @method Entity|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
  * @method Entity[]    findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
  * @method Entity[]    findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null): array
