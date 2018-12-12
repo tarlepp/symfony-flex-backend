@@ -246,7 +246,7 @@ final class RequestHandler
      *
      * @param string[] $searchTerms
      *
-     * @return string[]<mixed, mixed>
+     * @return string[]
      */
     private static function normalizeSearchTerms(array $searchTerms): array
     {

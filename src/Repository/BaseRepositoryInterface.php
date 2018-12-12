@@ -43,7 +43,7 @@ interface BaseRepositoryInterface
     /**
      * Gets all association mappings of the class.
      *
-     * @return string[]<int, string>
+     * @return string[]
      */
     public function getAssociations(): array;
 

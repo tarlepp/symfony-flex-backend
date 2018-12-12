@@ -195,7 +195,7 @@ abstract class RestResource implements RestResourceInterface
     /**
      * Getter method for all associations that current entity contains.
      *
-     * @return string[]|array<int, string><int, mixed>
+     * @return string[]
      */
     public function getAssociations(): array
     {

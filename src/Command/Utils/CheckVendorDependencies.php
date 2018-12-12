@@ -114,7 +114,7 @@ class CheckVendorDependencies extends Command
     /**
      * Method to determine all namespace directories under 'vendor-bin' directory.
      *
-     * @return string[]<int, string>
+     * @return string[]
      *
      * @throws LogicException
      * @throws InvalidArgumentException
@@ -153,9 +153,9 @@ class CheckVendorDependencies extends Command
     /**
      * Method to determine table rows.
      *
-     * @param string[]<int, string> $directories
+     * @param string[] $directories
      *
-     * @return string[]<int, string>
+     * @return string[]
      *
      * @throws RuntimeException
      * @throws \Symfony\Component\Process\Exception\RuntimeException
