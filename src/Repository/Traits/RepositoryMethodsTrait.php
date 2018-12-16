@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use function array_map;
+use function array_values;
 
 /**
  * Trait RepositoryMethodsTrait
@@ -26,7 +27,7 @@ use function array_map;
  * @method string        getEntityName(): string
  * @method array         getSearchColumns(): array
  * @method QueryBuilder  createQueryBuilder(string $alias = null, string $indexBy = null): QueryBuilder
- * @method void          processQueryBuilder(QueryBuilder $queryBuilder): void;
+ * @method void          processQueryBuilder(QueryBuilder $queryBuilder): void
  */
 trait RepositoryMethodsTrait
 {
