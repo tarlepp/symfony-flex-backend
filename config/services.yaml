@@ -38,15 +38,5 @@ services:
         exclude: '../src/Resource/Collection.php'
         tags: [ 'app.rest.resource' ]
 
-    App\Rest\Describer\ApiDocDescriber:
-        tags:
-            - { name: nelmio_api_doc.describer, priority: -500 }
-
-    App\Rest\Describer\ApiDocDescriberInformation:
-        arguments:
-            $rootDir: '%kernel.root_dir%'
-        tags:
-            - { name: nelmio_api_doc.describer, priority: -500 }
-
     App\Security\RolesService:
         arguments: [ '%security.role_hierarchy.roles%' ]
