@@ -3,7 +3,7 @@
 	"require-dev": {
 		"codedungeon/phpunit-result-printer": "0.23.4",
 		"liuggio/fastest": "1.6.1",
-		"phpunit/phpunit": "7.5.0",
+		"phpunit/phpunit": "7.5.1",
 		"phpunit/phpcov": "5.0.0",
 		"roave/security-advisories": "dev-master",
 		"sebastian/finder-facade": "1.2.2",
