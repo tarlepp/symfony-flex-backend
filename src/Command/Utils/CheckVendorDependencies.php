@@ -222,9 +222,6 @@ class CheckVendorDependencies extends Command
     private function processNamespacePath(string $path): array
     {
         $command = [
-            'cd',
-            $path,
-            '&&',
             'composer',
             'outdated',
             '-D',
@@ -232,7 +229,7 @@ class CheckVendorDependencies extends Command
             'json',
         ];
 
-        $process = new Process($command);
+        $process = new Process($command, $path);
         $process->enableOutput();
         $process->run();
 
