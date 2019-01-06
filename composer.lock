@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d35a27f3745aabe7edfdce7ece998a6",
+    "content-hash": "e77e2cb24244af9df5dab80f237a7dd9",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1111,12 +1111,12 @@
             "version": "v2.6.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/doctrine2.git",
+                "url": "https://github.com/doctrine/orm.git",
                 "reference": "434820973cadf2da2d66e7184be370084cc32ca8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/434820973cadf2da2d66e7184be370084cc32ca8",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/434820973cadf2da2d66e7184be370084cc32ca8",
                 "reference": "434820973cadf2da2d66e7184be370084cc32ca8",
                 "shasum": ""
             },
@@ -7014,16 +7014,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.11.1",
+            "version": "v1.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "2ba2b563a6ca17cd7723b451b9ed4702ece9d8ae"
+                "reference": "24b19cccad0c658eca516b35b08668d123fabf92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/2ba2b563a6ca17cd7723b451b9ed4702ece9d8ae",
-                "reference": "2ba2b563a6ca17cd7723b451b9ed4702ece9d8ae",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/24b19cccad0c658eca516b35b08668d123fabf92",
+                "reference": "24b19cccad0c658eca516b35b08668d123fabf92",
                 "shasum": ""
             },
             "require": {
@@ -7076,7 +7076,7 @@
                 "scaffold",
                 "scaffolding"
             ],
-            "time": "2018-12-20T19:51:03+00:00"
+            "time": "2019-01-05T04:30:01+00:00"
         },
         {
             "name": "symfony/polyfill-php72",
