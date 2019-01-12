@@ -4,7 +4,7 @@
 	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"symplify/easy-coding-standard": "5.2.22"
+		"symplify/easy-coding-standard": "5.3.6"
 	},
 	"config": {
 		"preferred-install": {
