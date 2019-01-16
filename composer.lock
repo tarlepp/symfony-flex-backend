@@ -4361,21 +4361,21 @@
         },
         {
             "name": "symfony/orm-pack",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/orm-pack.git",
-                "reference": "1b58f752cd917a08c9c8df020781d9c46a2275b1"
+                "reference": "36c2a928482dc5f05c5c1c1b947242ae03ff1335"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/orm-pack/zipball/1b58f752cd917a08c9c8df020781d9c46a2275b1",
-                "reference": "1b58f752cd917a08c9c8df020781d9c46a2275b1",
+                "url": "https://api.github.com/repos/symfony/orm-pack/zipball/36c2a928482dc5f05c5c1c1b947242ae03ff1335",
+                "reference": "36c2a928482dc5f05c5c1c1b947242ae03ff1335",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^1.6.10",
-                "doctrine/doctrine-migrations-bundle": "^1.3",
+                "doctrine/doctrine-migrations-bundle": "^1.3|^2.0",
                 "doctrine/orm": "^2.5.11",
                 "php": "^7.0"
             },
@@ -4385,7 +4385,7 @@
                 "MIT"
             ],
             "description": "A pack for the Doctrine ORM",
-            "time": "2017-12-12T01:47:50+00:00"
+            "time": "2019-01-16T09:49:15+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -6094,7 +6094,7 @@
         },
         {
             "name": "illuminate/config",
-            "version": "v5.7.20",
+            "version": "v5.7.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/config.git",
@@ -6138,7 +6138,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v5.7.20",
+            "version": "v5.7.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -6183,16 +6183,16 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.7.20",
+            "version": "v5.7.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "758927e5e925c1d442a1faaa1356675ceba0194c"
+                "reference": "3d67e2d7c9087ae3a2a53d9b102697e5f482d6d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/758927e5e925c1d442a1faaa1356675ceba0194c",
-                "reference": "758927e5e925c1d442a1faaa1356675ceba0194c",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/3d67e2d7c9087ae3a2a53d9b102697e5f482d6d0",
+                "reference": "3d67e2d7c9087ae3a2a53d9b102697e5f482d6d0",
                 "shasum": ""
             },
             "require": {
@@ -6223,7 +6223,7 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2018-11-15T13:49:08+00:00"
+            "time": "2019-01-09T10:34:49+00:00"
         },
         {
             "name": "illuminate/support",
@@ -6448,12 +6448,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "d0f41598a2af18496fe7f21533af576e713e12ce"
+                "reference": "d155baccb43ba2542941fbcba258b85ce7786419"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d0f41598a2af18496fe7f21533af576e713e12ce",
-                "reference": "d0f41598a2af18496fe7f21533af576e713e12ce",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d155baccb43ba2542941fbcba258b85ce7786419",
+                "reference": "d155baccb43ba2542941fbcba258b85ce7786419",
                 "shasum": ""
             },
             "conflict": {
@@ -6462,6 +6462,7 @@
                 "alterphp/easyadmin-extension-bundle": ">=1.2,<1.2.11|>=1.3,<1.3.1",
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
                 "amphp/http": "<1.0.1",
+                "api-platform/core": ">=2.2,<2.2.10|>=2.3,<2.3.6",
                 "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
                 "aws/aws-sdk-php": ">=3,<3.2.1",
                 "brightlocal/phpwhois": "<=4.2.5",
@@ -6585,7 +6586,7 @@
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "tecnickcom/tcpdf": "<6.2.22",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
+                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "theonedemon/phpwhois": "<=4.2.5",
                 "titon/framework": ">=0,<9.9.99",
                 "truckersmp/phpwhois": "<=4.3.1",
@@ -6643,7 +6644,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2019-01-15T04:15:58+00:00"
+            "time": "2019-01-15T19:39:37+00:00"
         },
         {
             "name": "sensiolabs/security-checker",

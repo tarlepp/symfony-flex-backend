@@ -593,12 +593,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "d0f41598a2af18496fe7f21533af576e713e12ce"
+                "reference": "d155baccb43ba2542941fbcba258b85ce7786419"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d0f41598a2af18496fe7f21533af576e713e12ce",
-                "reference": "d0f41598a2af18496fe7f21533af576e713e12ce",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d155baccb43ba2542941fbcba258b85ce7786419",
+                "reference": "d155baccb43ba2542941fbcba258b85ce7786419",
                 "shasum": ""
             },
             "conflict": {
@@ -607,6 +607,7 @@
                 "alterphp/easyadmin-extension-bundle": ">=1.2,<1.2.11|>=1.3,<1.3.1",
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
                 "amphp/http": "<1.0.1",
+                "api-platform/core": ">=2.2,<2.2.10|>=2.3,<2.3.6",
                 "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
                 "aws/aws-sdk-php": ">=3,<3.2.1",
                 "brightlocal/phpwhois": "<=4.2.5",
@@ -730,7 +731,7 @@
                 "symfony/yaml": ">=2,<2.0.22|>=2.1,<2.1.7",
                 "tecnickcom/tcpdf": "<6.2.22",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
-                "thelia/thelia": ">=2.1,<2.1.2|>=2.1.0-beta1,<2.1.3",
+                "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "theonedemon/phpwhois": "<=4.2.5",
                 "titon/framework": ">=0,<9.9.99",
                 "truckersmp/phpwhois": "<=4.3.1",
@@ -788,7 +789,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2019-01-15T04:15:58+00:00"
+            "time": "2019-01-15T19:39:37+00:00"
         },
         {
             "name": "sabre/event",
