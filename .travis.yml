@@ -49,12 +49,9 @@ before_install:
   - mysql -e 'DROP DATABASE IF EXISTS travis_test_7; CREATE DATABASE travis_test_7;'
   - mysql -e 'DROP DATABASE IF EXISTS travis_test_8; CREATE DATABASE travis_test_8;'
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
-  - git clone -b stable https://github.com/jedisct1/libsodium.git
-  - cd libsodium && sudo ./configure && sudo make check && sudo make install && cd ..
 
 install:
   - pecl channel-update pecl.php.net
-  - pecl install libsodium
   - pecl install ast-0.1.6
   - composer install
   - make generate-jwt-keys
