@@ -8,7 +8,3 @@ global_exclude_dirs:
     - tests
     - var
     - vendor
-
-pre_composer_script: |
-    #!/bin/bash
-    cp ./../.env.dist ./../.env
