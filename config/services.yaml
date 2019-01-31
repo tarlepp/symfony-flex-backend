@@ -2,8 +2,13 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
-    env(JWT_PRIVATE_KEY_PATH): '%kernel.project_dir%/%env(SECRET_KEY)%'
-    env(JWT_PUBLIC_KEY_PATH): '%kernel.project_dir%/%env(PUBLIC_KEY)%'
+    app.config: '%env(json:file:APPLICATION_CONFIG)%'
+    env(DATABASE_NAME): '%env(string:key:DATABASE_NAME:json:file:APPLICATION_CONFIG)%'
+    env(DATABASE_URL): '%env(string:key:DATABASE_URL:json:file:APPLICATION_CONFIG)%'
+    env(JWT_PASSPHRASE): '%env(string:key:JWT_PASSPHRASE:json:file:APPLICATION_CONFIG)%'
+    env(JWT_PRIVATE_KEY_PATH): '%env(string:key:JWT_SECRET_KEY:json:file:APPLICATION_CONFIG)%'
+    env(JWT_PUBLIC_KEY_PATH): '%env(string:key:JWT_PUBLIC_KEY:json:file:APPLICATION_CONFIG)%'
+    env(CORS_ALLOW_ORIGIN): '%env(string:key:CORS_ALLOW_ORIGIN:json:file:APPLICATION_CONFIG)%'
 
 services:
     # default configuration for services in *this* file

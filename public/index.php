@@ -8,8 +8,8 @@ declare(strict_types = 1);
  */
 use App\Kernel;
 use Liuggio\Fastest\Environment\FastestEnvironment;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Debug\Debug;
+use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -18,37 +18,26 @@ if (class_exists(FastestEnvironment::class)) {
     FastestEnvironment::setFromRequest();
 }
 
+$bootstrapFile = dirname(__DIR__) . '/config/bootstrap.php';
+
 // The check is to ensure we don't use .env in production
 if (!getenv('APP_ENV')) {
     // Specify used environment file
     \putenv('ENVIRONMENT_FILE=.env');
 
-    require __DIR__ . '/../bootstrap.php';
+    $bootstrapFile = __DIR__ . '/../bootstrap.php';
 }
 
-if (getenv('APP_DEBUG')) {
-    // Get allowed IP addresses
-    /** @noinspection UsingInclusionReturnValueInspection */
-    $allowedAddress = require __DIR__ . '/../allowed_addresses.php';
+require $bootstrapFile;
 
-    if (!in_array('*', $allowedAddress, true)
-        && (
-            isset($_SERVER['HTTP_CLIENT_IP'])
-            || isset($_SERVER['HTTP_X_FORWARDED_FOR'])
-            || !(\in_array($_SERVER['REMOTE_ADDR'], $allowedAddress, true)
-            || PHP_SAPI === 'cli-server')
-        )
-    ) {
-        header('HTTP/1.0 403 Forbidden');
-        exit('You are not allowed to access this file. Check ' . basename(__FILE__) . ' for more information.');
-    }
+if ($_SERVER['APP_DEBUG']) {
+    umask(0000);
 
-    /** @noinspection ForgottenDebugOutputInspection */
     Debug::enable();
 }
 
-$trustedProxies = getenv('TRUSTED_PROXIES') ?? false;
-$trustedHosts = getenv('TRUSTED_HOSTS') ?? false;
+$trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false;
+$trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false;
 
 if ($trustedProxies !== false) {
     Request::setTrustedProxies(
@@ -58,11 +47,11 @@ if ($trustedProxies !== false) {
 }
 
 if ($trustedHosts !== false) {
-    Request::setTrustedHosts(explode(',', $trustedHosts));
+    Request::setTrustedHosts([$trustedHosts]);
 }
 
 // Create new application kernel
-$kernel = new Kernel(getenv('APP_ENV'), (bool)getenv('APP_DEBUG'));
+$kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
 
 // Create request
 $request = Request::createFromGlobals();

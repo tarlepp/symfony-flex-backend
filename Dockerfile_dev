@@ -1,0 +1,26 @@
+FROM php:7.2.13-fpm
+
+RUN apt-get update \
+    && apt-get install -y \
+        zlib1g-dev libxml2-dev \
+        nano vim git unzip jq \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN docker-php-ext-install -j$(nproc) \
+    bcmath \
+    pdo \
+    pdo_mysql \
+    zip
+
+ENV COMPOSER_ALLOW_SUPERUSER 1
+
+WORKDIR /app
+
+ADD . .
+
+RUN chmod +x bin/console
+RUN chmod +x docker-entrypoint-dev.sh
+
+EXPOSE 9000
+
+ENTRYPOINT ["/app/docker-entrypoint-dev.sh"]

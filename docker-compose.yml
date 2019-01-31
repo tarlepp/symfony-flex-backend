@@ -1,0 +1,39 @@
+version: '3'
+services:
+    php:
+        build:
+            context: .
+            dockerfile: ./Dockerfile_dev
+        command: php-fpm
+        #environment:
+            #APP_ENV=dev|test|prod
+            #APP_DEBUG=1|0
+            #APP_SECRET=8822e9bb81605a603006c9260793d983
+            #APPLICATION_CONFIG: /app/secrets/application.json
+        ports:
+            - 9000:9000
+        volumes:
+            - ./:/app:cached
+
+    nginx:
+        build:
+            context: ./docker/nginx/
+        ports:
+            - 8000:80
+        volumes:
+            - ./:/app:cached
+
+    mysql:
+        build:
+            context: ./docker/mysql/
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: password
+        ports:
+            - 3310:3306
+        volumes:
+            - mysql:/var/lib/mysql
+
+volumes:
+    mysql:

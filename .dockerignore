@@ -1,12 +1,8 @@
 ###> symfony/framework-bundle ###
-/.env.local
-/.env.*.local
 /public/bundles/
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
-
-/secrets/application.*.json
 
 # User-specific stuff:
 .idea/**/workspace.xml
@@ -16,7 +12,6 @@
 ## File-based project format:
 *.iws
 
-allowed_addresses_local.php
 phpunit.xml
 infection.json
 
@@ -34,3 +29,6 @@ infection.json
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
+### Vendor bin dependencies
+/vendor-bin/*/vendor/
