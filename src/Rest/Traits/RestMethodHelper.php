@@ -15,15 +15,18 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnitOfWork;
+use Error;
 use Exception;
 use LogicException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
+use TypeError;
 use UnexpectedValueException;
 use function array_key_exists;
 use function class_implements;
@@ -211,6 +214,7 @@ trait RestMethodHelper
      * @return FormInterface
      *
      * @throws UnexpectedValueException
+     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      * @throws \Symfony\Component\Form\Exception\LogicException
@@ -231,6 +235,10 @@ trait RestMethodHelper
         $this->setDtoToForm($form, $id);
 
         $form->handleRequest($request);
+
+        if (!$form->isSubmitted()) {
+            throw new BadRequestHttpException('Bad request');
+        }
 
         if (!$form->isValid()) {
             $this->getResponseHandler()->handleFormError($form);
@@ -276,13 +284,18 @@ trait RestMethodHelper
     }
 
     /**
-     * @param Throwable|Exception $exception
+     * @param Throwable|Exception|TypeError|Error $exception
      *
      * @return Throwable
      */
     private function determineOutputAndStatusCodeForRestMethodException($exception): Throwable
     {
         $code = $this->getExceptionCode($exception);
+
+        // Ensure that we have proper exception, otherwise REST resource isn't configured properly
+        if (!($exception instanceof Exception)) {
+            $exception = new Exception($exception->getMessage(), $code);
+        }
 
         /** @var Exception $exception */
         $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
