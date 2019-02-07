@@ -178,9 +178,7 @@ trait RepositoryMethodsTrait
         $queryBuilder = $this->getQueryBuilder($criteria, $search);
 
         // Build query
-        $queryBuilder
-            ->select('COUNT(entity.id)')
-            ->distinct();
+        $queryBuilder->select('COUNT(DISTINCT(entity.id))');
 
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
