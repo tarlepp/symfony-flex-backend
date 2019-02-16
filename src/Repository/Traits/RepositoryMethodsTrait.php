@@ -76,8 +76,11 @@ trait RepositoryMethodsTrait
             ->where('entity.id = :id')
             ->setParameter('id', $id);
 
-        // This is just to help debug queries
-        //dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
+        /**
+         * This is just to help debug queries
+         *
+         * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
+         */
 
         return $queryBuilder->getQuery()->getSingleResult($hydrationMode);
     }
@@ -143,6 +146,12 @@ trait RepositoryMethodsTrait
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
 
+        /**
+         * This is just to help debug queries
+         *
+         * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
+         */
+
         RepositoryHelper::resetParameterCount();
 
         /** @psalm-suppress UndefinedMethod */
@@ -186,6 +195,12 @@ trait RepositoryMethodsTrait
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
 
+        /**
+         * This is just to help debug queries
+         *
+         * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
+         */
+
         RepositoryHelper::resetParameterCount();
 
         return array_values(array_map('\strval', array_map('\current', $queryBuilder->getQuery()->getArrayResult())));
@@ -212,6 +227,12 @@ trait RepositoryMethodsTrait
 
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
+
+        /**
+         * This is just to help debug queries
+         *
+         * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
+         */
 
         RepositoryHelper::resetParameterCount();
 
