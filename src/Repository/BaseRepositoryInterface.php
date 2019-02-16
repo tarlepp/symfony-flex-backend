@@ -124,6 +124,21 @@ interface BaseRepositoryInterface
 
     /** @noinspection GenericObjectTypeUsageInspection */
     /**
+     * Advanced version of find method, with this you can process query as you like, eg. add joins and callbacks to
+     * modify / optimize current query.
+     *
+     * @param string     $id
+     * @param string|int $hydrationMode
+     *
+     * @return EntityInterface|array|mixed|null
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findAdvanced(string $id, $hydrationMode = null);
+
+    /** @noinspection GenericObjectTypeUsageInspection */
+    /**
      * Wrapper for default Doctrine repository findOneBy method.
      *
      * @param mixed[]      $criteria

@@ -53,6 +53,36 @@ trait RepositoryMethodsTrait
     }
 
     /**
+     * Advanced version of find method, with this you can process query as you like, eg. add joins and callbacks to
+     * modify / optimize current query.
+     *
+     * @param string     $id
+     * @param string|int $hydrationMode
+     *
+     * @return EntityInterface|array|mixed|null
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findAdvanced(string $id, $hydrationMode = null)
+    {
+        // Get query builder
+        $queryBuilder = $this->getQueryBuilder();
+
+        // Process custom QueryBuilder actions
+        $this->processQueryBuilder($queryBuilder);
+
+        $queryBuilder
+            ->where('entity.id = :id')
+            ->setParameter('id', $id);
+
+        // This is just to help debug queries
+        //dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
+
+        return $queryBuilder->getQuery()->getSingleResult($hydrationMode);
+    }
+
+    /**
      * Wrapper for default Doctrine repository findOneBy method.
      *
      * @param mixed[]      $criteria
