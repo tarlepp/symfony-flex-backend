@@ -159,7 +159,8 @@ interface RestResourceInterface
      *
      * @return EntityInterface|null
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface;
 

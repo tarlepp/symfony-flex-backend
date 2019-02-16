@@ -113,7 +113,8 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface|null
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
     {
@@ -123,7 +124,7 @@ trait RestResourceBaseMethods
         $this->beforeFindOne($id);
 
         /** @var EntityInterface|null $entity */
-        $entity = $this->getRepository()->find($id);
+        $entity = $this->getRepository()->findAdvanced($id);
 
         // Entity not found
         if ($throwExceptionIfNotFound && $entity === null) {
