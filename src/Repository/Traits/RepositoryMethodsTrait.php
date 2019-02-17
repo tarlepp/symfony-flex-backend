@@ -261,18 +261,24 @@ trait RepositoryMethodsTrait
      * Helper method to persist specified entity to database.
      *
      * @param EntityInterface $entity
+     * @param bool|null       $flush
      *
      * @return BaseRepositoryInterface
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(EntityInterface $entity): BaseRepositoryInterface
+    public function save(EntityInterface $entity, ?bool $flush = null): BaseRepositoryInterface
     {
+        $flush = $flush ?? true;
+
         // Persist on database
         $this->getEntityManager()->persist($entity);
-        $this->getEntityManager()->flush();
+
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
 
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this;
@@ -282,18 +288,23 @@ trait RepositoryMethodsTrait
      * Helper method to remove specified entity from database.
      *
      * @param EntityInterface $entity
+     * @param bool|null       $flush
      *
      * @return BaseRepositoryInterface
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
      * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function remove(EntityInterface $entity): BaseRepositoryInterface
+    public function remove(EntityInterface $entity, ?bool $flush = null): BaseRepositoryInterface
     {
+        $flush = $flush ?? true;
+
         // Remove from database
         $this->getEntityManager()->remove($entity);
-        $this->getEntityManager()->flush();
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
 
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this;
