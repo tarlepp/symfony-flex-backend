@@ -7,7 +7,6 @@ declare(strict_types = 1);
  */
 namespace App;
 
-use App\DependencyInjection\Compiler\ResourceCollectionPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Resource\FileResource;
@@ -78,20 +77,6 @@ class Kernel extends BaseKernel implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-    }
-
-    /**
-     * The extension point similar to the Bundle::build() method.
-     *
-     * Use this method to register compiler passes and manipulate the container during the building process.
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function build(ContainerBuilder $container): void
-    {
-        parent::build($container);
-
-        $container->addCompilerPass(new ResourceCollectionPass());
     }
 
     /** @noinspection PhpUnusedParameterInspection */

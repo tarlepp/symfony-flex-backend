@@ -7,10 +7,14 @@ declare(strict_types = 1);
  */
 namespace App\Resource;
 
-use App\Rest\RestResource;
+use App\Rest\RestResourceInterface;
+use Closure;
 use InvalidArgumentException;
-use function array_key_exists;
-use function get_class;
+use Traversable;
+use function array_filter;
+use function array_values;
+use function count;
+use function iterator_to_array;
 use function sprintf;
 
 /**
@@ -22,22 +26,49 @@ use function sprintf;
 class Collection
 {
     /**
-     * @var RestResource[]
+     * @var Traversable|Traversable<RestResourceInterface>
      */
-    private $resources = [];
+    private $resources;
+
+    /**
+     * Collection constructor.
+     *
+     * @param Traversable|Traversable<RestResourceInterface> $resources
+     */
+    public function __construct(Traversable $resources)
+    {
+        $this->resources = $resources;
+    }
+
+    /**
+     * Getter method to get _all_ resources.
+     *
+     * @return Traversable|Traversable<RestResourceInterface>
+     */
+    public function getAll(): Traversable
+    {
+        return $this->resources;
+    }
 
     /**
      * Getter method for RestResource class.
      *
      * @param string $resourceName
      *
-     * @return RestResource
+     * @return RestResourceInterface
      *
      * @throws InvalidArgumentException
      */
-    public function get(string $resourceName): RestResource
+    public function get(string $resourceName): RestResourceInterface
     {
-        if ($this->has($resourceName) === false) {
+        $resources = array_values(
+            array_filter(
+                iterator_to_array($this->resources),
+                $this->resourceFilter($resourceName)
+            )
+        );
+
+        if (count($resources) !== 1) {
             $message = sprintf(
                 'Resource \'%s\' does not exists',
                 $resourceName
@@ -46,21 +77,7 @@ class Collection
             throw new InvalidArgumentException($message);
         }
 
-        return $this->resources[$resourceName];
-    }
-
-    /**
-     * Setter method for RestResource class.
-     *
-     * @param RestResource $resource
-     *
-     * @return Collection
-     */
-    public function set(RestResource $resource): self
-    {
-        $this->resources[get_class($resource)] = $resource;
-
-        return $this;
+        return $resources[0];
     }
 
     /**
@@ -72,12 +89,18 @@ class Collection
      */
     public function has(?string $resourceName = null): bool
     {
-        $output = false;
+        return count(array_filter(iterator_to_array($this->resources), $this->resourceFilter($resourceName))) === 1;
+    }
 
-        if ($resourceName !== null && array_key_exists($resourceName, $this->resources)) {
-            $output = true;
-        }
-
-        return $output;
+    /**
+     * @param string|null $resourceName
+     *
+     * @return Closure
+     */
+    private function resourceFilter(?string $resourceName): Closure
+    {
+        return function (RestResourceInterface $restResource) use ($resourceName) {
+            return $resourceName !== null && $restResource instanceof $resourceName;
+        };
     }
 }
