@@ -43,38 +43,24 @@ interface ResponseHandlerInterface
     public function getSerializer(): SerializerInterface;
 
     /**
-     * Getter for current resource service
-     *
-     * @return RestResourceInterface
-     */
-    public function getResource(): RestResourceInterface;
-
-    /**
-     * Setter for resource service.
-     *
-     * @param RestResourceInterface $resource
-     *
-     * @return ResponseHandlerInterface
-     */
-    public function setResource(RestResourceInterface $resource): self;
-
-    /**
      * Helper method to get serialization context for request.
      *
-     * @param Request $request
+     * @param Request                    $request
+     * @param RestResourceInterface|null $restResource
      *
      * @return mixed[]
      */
-    public function getSerializeContext(Request $request): array;
+    public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array;
 
     /**
      * Helper method to create response for request.
      *
-     * @param Request      $request
-     * @param mixed        $data
-     * @param integer|null $httpStatus
-     * @param string|null  $format
-     * @param mixed[]|null $context
+     * @param Request                    $request
+     * @param mixed                      $data
+     * @param RestResourceInterface|null $restResource
+     * @param integer|null               $httpStatus
+     * @param string|null                $format
+     * @param mixed[]|null               $context
      *
      * @return Response
      *
@@ -83,6 +69,7 @@ interface ResponseHandlerInterface
     public function createResponse(
         Request $request,
         $data,
+        ?RestResourceInterface $restResource = null,
         ?int $httpStatus = null,
         ?string $format = null,
         ?array $context = null

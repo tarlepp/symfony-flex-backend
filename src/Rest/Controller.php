@@ -30,16 +30,26 @@ abstract class Controller implements ControllerInterface
     public const METHOD_UPDATE = 'updateMethod';
 
     /**
-     * Method to initialize REST controller.
+     * Controller constructor.
      *
-     * @param RestResourceInterface    $resource
-     * @param ResponseHandlerInterface $responseHandler
+     * @param RestResourceInterface $resource
      */
-    protected function init(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler): void
+    public function __construct(RestResourceInterface $resource)
     {
         $this->resource = $resource;
+    }
+
+    /**
+     * @required
+     *
+     * @param ResponseHandler $responseHandler
+     *
+     * @return self
+     */
+    public function setResponseHandler(ResponseHandler $responseHandler): self
+    {
         $this->responseHandler = $responseHandler;
 
-        $this->responseHandler->setResource($this->resource);
+        return $this;
     }
 }

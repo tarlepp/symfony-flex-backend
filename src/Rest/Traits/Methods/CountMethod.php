@@ -47,6 +47,9 @@ trait CountMethod
         // Determine used parameters
         $search = RequestHandler::getSearchTerms($request);
 
+        // Get current resource service
+        $resource = $this->getResource();
+
         try {
             $criteria = RequestHandler::getCriteria($request);
 
@@ -54,7 +57,7 @@ trait CountMethod
 
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, ['count' => $this->getResource()->count($criteria, $search)]);
+                ->createResponse($request, ['count' => $resource->count($criteria, $search)], $resource);
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }

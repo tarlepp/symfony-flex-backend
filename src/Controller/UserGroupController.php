@@ -13,7 +13,6 @@ use App\Form\Type\Rest\UserGroup\UserGroupType;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Rest\Controller;
-use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -25,8 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class UserGroupController
  *
@@ -68,12 +65,11 @@ class UserGroupController extends Controller
     /**
      * UserGroupController constructor.
      *
-     * @param UserGroupResource $userGroupResource
-     * @param ResponseHandler   $responseHandler
+     * @param UserGroupResource $resource
      */
-    public function __construct(UserGroupResource $userGroupResource, ResponseHandler $responseHandler)
+    public function __construct(UserGroupResource $resource)
     {
-        $this->init($userGroupResource, $responseHandler);
+        parent::__construct($resource);
     }
 
     /**
@@ -140,10 +136,9 @@ class UserGroupController extends Controller
         UserResource $userResource,
         UserGroup $userGroup
     ): Response {
-        // Manually change used resource class, so that serializer groups are correct ones
-        $this->getResponseHandler()->setResource($userResource);
-
-        return $this->getResponseHandler()->createResponse($request, $userResource->getUsersForGroup($userGroup));
+        return $this
+            ->getResponseHandler()
+            ->createResponse($request, $userResource->getUsersForGroup($userGroup), $userResource);
     }
 
     /**

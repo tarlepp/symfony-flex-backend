@@ -23,6 +23,7 @@ use function end;
 use function explode;
 use function implode;
 use function sprintf;
+use function strncmp;
 
 /**
  * Class ResponseHandler
@@ -48,11 +49,6 @@ final class ResponseHandler implements ResponseHandlerInterface
     private $serializer;
 
     /**
-     * @var RestResourceInterface
-     */
-    private $resource;
-
-    /**
      * ResponseHandler constructor.
      *
      * @param SerializerInterface $serializer
@@ -73,55 +69,44 @@ final class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * Getter for current resource service
-     *
-     * @return RestResourceInterface
-     */
-    public function getResource(): RestResourceInterface
-    {
-        return $this->resource;
-    }
-
-    /**
-     * Setter for resource service.
-     *
-     * @param RestResourceInterface $resource
-     *
-     * @return ResponseHandlerInterface
-     */
-    public function setResource(RestResourceInterface $resource): ResponseHandlerInterface
-    {
-        $this->resource = $resource;
-
-        return $this;
-    }
-
-    /**
      * Helper method to get serialization context for request.
      *
-     * @param Request $request
+     * @param Request                    $request
+     * @param RestResourceInterface|null $restResource
      *
      * @return mixed[]
      */
-    public function getSerializeContext(Request $request): array
+    public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array
     {
         // Specify used populate settings
         $populate = (array)$request->get('populate', []);
-        $populateAll = array_key_exists('populateAll', $request->query->all());
-        $populateOnly = array_key_exists('populateOnly', $request->query->all());
 
-        // Get current entity name
-        $entityName = $this->getResource()->getEntityName();
+        $groups = array_merge(['default', $populate]);
 
-        $bits = explode('\\', $entityName);
-        $entityName = (string)end($bits);
+        if ($restResource !== null) {
+            // Get current entity name
+            $bits = explode('\\', $restResource->getEntityName());
+            $entityName = (string)end($bits);
 
-        $populate = $this->checkPopulateAll($populateAll, $populate, $entityName);
+            $populate = $this->checkPopulateAll(
+                array_key_exists('populateAll', $request->query->all()),
+                $populate,
+                $entityName,
+                $restResource
+            );
 
-        $groups = array_merge([$entityName], $populate);
+            $groups = array_merge([$entityName], $populate);
 
-        if ($populateOnly) {
-            $groups = count($populate) === 0 ? [$entityName] : $populate;
+            $filter = function (string $groupName): bool {
+                return strncmp($groupName, 'Set.', 4) === 0;
+            };
+
+            if (
+                array_key_exists('populateOnly', $request->query->all())
+                || count(array_filter($groups, $filter)) > 0
+            ) {
+                $groups = count($populate) === 0 ? [$entityName] : $populate;
+            }
         }
 
         return [
@@ -132,11 +117,12 @@ final class ResponseHandler implements ResponseHandlerInterface
     /**
      * Helper method to create response for request.
      *
-     * @param Request      $request
-     * @param mixed        $data
-     * @param integer|null $httpStatus
-     * @param string|null  $format
-     * @param mixed[]|null $context
+     * @param Request                    $request
+     * @param mixed                      $data
+     * @param RestResourceInterface|null $restResource
+     * @param integer|null               $httpStatus
+     * @param string|null                $format
+     * @param mixed[]|null               $context
      *
      * @return Response
      *
@@ -145,12 +131,13 @@ final class ResponseHandler implements ResponseHandlerInterface
     public function createResponse(
         Request $request,
         $data,
+        ?RestResourceInterface $restResource = null,
         ?int $httpStatus = null,
         ?string $format = null,
         ?array $context = null
     ): Response {
         $httpStatus = $httpStatus ?? 200;
-        $context = $context ?? $this->getSerializeContext($request);
+        $context = $context ?? $this->getSerializeContext($request, $restResource);
         $format = $this->getFormat($request, $format);
 
         // Get response
@@ -194,17 +181,22 @@ final class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param bool     $populateAll
-     * @param string[] $populate
-     * @param string   $entityName
+     * @param bool                  $populateAll
+     * @param string[]              $populate
+     * @param string                $entityName
+     * @param RestResourceInterface $restResource
      *
      * @return string[]
      */
-    private function checkPopulateAll(bool $populateAll, array $populate, string $entityName): array
-    {
+    private function checkPopulateAll(
+        bool $populateAll,
+        array $populate,
+        string $entityName,
+        RestResourceInterface $restResource
+    ): array {
         // Set all associations to be populated
         if ($populateAll && count($populate) === 0) {
-            $associations = $this->getResource()->getAssociations();
+            $associations = $restResource->getAssociations();
 
             $iterator = static function (string $assocName) use ($entityName): string {
                 return $entityName . '.' . $assocName;

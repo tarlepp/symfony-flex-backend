@@ -51,12 +51,17 @@ trait PatchMethod
         // Make sure that we have everything we need to make this work
         $this->validateRestMethod($request, $allowedHttpMethods);
 
-        try {
-            $data = $this
-                ->getResource()
-                ->update($id, $this->processForm($request, $formFactory, __METHOD__, $id)->getData(), true);
+        // Get current resource service
+        $resource = $this->getResource();
 
-            return $this->getResponseHandler()->createResponse($request, $data);
+        try {
+            $data = $resource->update(
+                $id,
+                $this->processForm($request, $formFactory, __METHOD__, $id)->getData(),
+                true
+            );
+
+            return $this->getResponseHandler()->createResponse($request, $data, $resource);
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception, $id);
         }

@@ -47,6 +47,9 @@ trait IdsMethod
         // Determine used parameters
         $search = RequestHandler::getSearchTerms($request);
 
+        // Get current resource service
+        $resource = $this->getResource();
+
         try {
             $criteria = RequestHandler::getCriteria($request);
 
@@ -54,7 +57,7 @@ trait IdsMethod
 
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, $this->getResource()->getIds($criteria, $search));
+                ->createResponse($request, $resource->getIds($criteria, $search), $resource);
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }

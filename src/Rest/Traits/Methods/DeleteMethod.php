@@ -44,11 +44,14 @@ trait DeleteMethod
         // Make sure that we have everything we need to make this work
         $this->validateRestMethod($request, $allowedHttpMethods);
 
+        // Get current resource service
+        $resource = $this->getResource();
+
         try {
             // Fetch data from database
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, $this->getResource()->delete($id));
+                ->createResponse($request, $resource->delete($id), $resource);
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception, $id);
         }

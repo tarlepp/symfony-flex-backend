@@ -15,7 +15,6 @@ use App\Form\Type\Rest\User\UserPatchType;
 use App\Form\Type\Rest\User\UserUpdateType;
 use App\Resource\UserResource;
 use App\Rest\Controller;
-use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
 use App\Security\RolesService;
@@ -34,8 +33,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class UserController
  *
@@ -43,7 +40,7 @@ use Throwable;
  *     path="/user",
  *  )
  *
- * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ * ecurity("is_granted('IS_AUTHENTICATED_FULLY')")
  *
  * @SWG\Tag(name="User Management")
  *
@@ -56,7 +53,7 @@ class UserController extends Controller
 {
     // Traits for REST actions
     use Actions\Admin\CountAction;
-    use Actions\Admin\FindAction;
+    use Actions\Anon\FindAction;
     use Actions\Admin\FindOneAction;
     use Actions\Admin\IdsAction;
     use Actions\Root\CreateAction;
@@ -77,12 +74,11 @@ class UserController extends Controller
     /**
      * UserController constructor.
      *
-     * @param UserResource    $resource
-     * @param ResponseHandler $responseHandler
+     * @param UserResource $resource
      */
-    public function __construct(UserResource $resource, ResponseHandler $responseHandler)
+    public function __construct(UserResource $resource)
     {
-        $this->init($resource, $responseHandler);
+        parent::__construct($resource);
     }
 
     /**

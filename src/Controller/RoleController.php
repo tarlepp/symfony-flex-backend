@@ -11,7 +11,6 @@ use App\Annotation\RestApiDoc;
 use App\Entity\Role;
 use App\Resource\RoleResource;
 use App\Rest\Controller;
-use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
 use App\Security\RolesService;
@@ -25,8 +24,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class RoleController
  *
@@ -54,12 +51,11 @@ class RoleController extends Controller
     /**
      * RoleController constructor.
      *
-     * @param RoleResource    $resource
-     * @param ResponseHandler $responseHandler
+     * @param RoleResource $resource
      */
-    public function __construct(RoleResource $resource, ResponseHandler $responseHandler)
+    public function __construct(RoleResource $resource)
     {
-        $this->init($resource, $responseHandler);
+        parent::__construct($resource);
     }
 
     /**

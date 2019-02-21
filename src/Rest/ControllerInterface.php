@@ -23,6 +23,15 @@ use UnexpectedValueException;
 interface ControllerInterface
 {
     /**
+     * @required
+     *
+     * @param ResponseHandler $responseHandler
+     *
+     * @return ControllerInterface|Controller|self
+     */
+    public function setResponseHandler(ResponseHandler $responseHandler);
+
+    /**
      * @return RestResourceInterface
      *
      * @throws UnexpectedValueException

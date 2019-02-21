@@ -9,14 +9,11 @@ namespace App\Controller;
 
 use App\Resource\ApiKeyResource;
 use App\Rest\Controller;
-use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\Routing\Annotation\Route;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class ApiKeyController
  *
@@ -48,11 +45,10 @@ class ApiKeyController extends Controller
     /**
      * ApiKeyController constructor.
      *
-     * @param ApiKeyResource  $resource
-     * @param ResponseHandler $responseHandler
+     * @param ApiKeyResource $resource
      */
-    public function __construct(ApiKeyResource $resource, ResponseHandler $responseHandler)
+    public function __construct(ApiKeyResource $resource)
     {
-        $this->init($resource, $responseHandler);
+        parent::__construct($resource);
     }
 }

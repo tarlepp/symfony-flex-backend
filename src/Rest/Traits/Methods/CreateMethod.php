@@ -49,14 +49,15 @@ trait CreateMethod
         // Make sure that we have everything we need to make this work
         $this->validateRestMethod($request, $allowedHttpMethods);
 
+        // Get current resource service
+        $resource = $this->getResource();
+
         try {
-            $data = $this
-                ->getResource()
-                ->create($this->processForm($request, $formFactory, __METHOD__)->getData(), true);
+            $data = $resource->create($this->processForm($request, $formFactory, __METHOD__)->getData(), true);
 
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, $data, Response::HTTP_CREATED);
+                ->createResponse($request, $data, $resource, Response::HTTP_CREATED);
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }

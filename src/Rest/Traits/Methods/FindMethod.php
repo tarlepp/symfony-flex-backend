@@ -50,6 +50,9 @@ trait FindMethod
         $offset = RequestHandler::getOffset($request);
         $search = RequestHandler::getSearchTerms($request);
 
+        // Get current resource service
+        $resource = $this->getResource();
+
         try {
             $criteria = RequestHandler::getCriteria($request);
 
@@ -57,7 +60,7 @@ trait FindMethod
 
             return $this
                 ->getResponseHandler()
-                ->createResponse($request, $this->getResource()->find($criteria, $orderBy, $limit, $offset, $search));
+                ->createResponse($request, $resource->find($criteria, $orderBy, $limit, $offset, $search), $resource);
         } catch (Throwable $exception) {
             throw $this->handleRestMethodException($exception);
         }
