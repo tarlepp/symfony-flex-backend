@@ -40,7 +40,7 @@ use Throwable;
  *     path="/user",
  *  )
  *
- * ecurity("is_granted('IS_AUTHENTICATED_FULLY')")
+ * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
  * @SWG\Tag(name="User Management")
  *
@@ -60,6 +60,7 @@ class UserController extends Controller
     use Actions\Root\PatchAction;
     use Actions\Root\UpdateAction;
     use Methods\DeleteMethod;
+
     /**
      * Method + Form type class names (key + value)
      *
