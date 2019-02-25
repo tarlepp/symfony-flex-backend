@@ -101,8 +101,7 @@ final class ResponseHandler implements ResponseHandlerInterface
                 return strncmp($groupName, 'Set.', 4) === 0;
             };
 
-            if (
-                array_key_exists('populateOnly', $request->query->all())
+            if (array_key_exists('populateOnly', $request->query->all())
                 || count(array_filter($groups, $filter)) > 0
             ) {
                 $groups = count($populate) === 0 ? [$entityName] : $populate;
