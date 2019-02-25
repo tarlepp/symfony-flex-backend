@@ -88,6 +88,7 @@ class DefaultController
         return $responseHandler->createResponse(
             $request,
             $healthzService->check(),
+            null,
             200,
             ResponseHandler::FORMAT_JSON,
             [
