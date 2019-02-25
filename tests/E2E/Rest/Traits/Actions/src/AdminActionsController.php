@@ -9,6 +9,7 @@ namespace App\Tests\E2E\Rest\Traits\Actions\src;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
+use App\Rest\RestResourceInterface;
 use App\Rest\Traits\Actions\Admin as Actions;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -36,4 +37,9 @@ class AdminActionsController extends Controller
     use Actions\FindOneAction;
     use Actions\IdsAction;
     use Actions\UpdateAction;
+
+    /** @noinspection PhpMissingParentConstructorInspection */
+    public function __construct()
+    {
+    }
 }

@@ -33,4 +33,9 @@ class AnonActionsController extends Controller
     use Actions\FindOneAction;
     use Actions\IdsAction;
     use Actions\UpdateAction;
+
+    /** @noinspection PhpMissingParentConstructorInspection */
+    public function __construct()
+    {
+    }
 }
