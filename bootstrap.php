@@ -9,6 +9,8 @@ declare(strict_types = 1);
  * @package App
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
+use App\Utils\JSON;
 use Symfony\Component\Dotenv\Dotenv;
 
 $environmentFile = (string)\getenv('ENVIRONMENT_FILE');
@@ -19,22 +21,21 @@ if (\strlen($readableChannel) > 0) {
     // Parse current '.env.test' file
     $variables = (new Dotenv())->parse(\file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $environmentFile));
 
-    // Specify new database name for current test env
-    $databaseName = $variables['DATABASE_NAME'] . '_' . $readableChannel;
+    $applicationConfig = JSON::decode(file_get_contents($variables['APPLICATION_CONFIG']), true);
 
-    // Replace DATABASE_URL variable
-    $variables['DATABASE_URL'] = \str_replace(
-        '/' . $variables['DATABASE_NAME'] . '?',
+    // Specify new database name for current test env
+    $databaseName = $applicationConfig['DATABASE_NAME'] . '_' . $readableChannel;
+
+    // Replace DATABASE_URL variable with proper database name
+    $databaseUrl = \str_replace(
+        '/' . $applicationConfig['DATABASE_NAME'] . '?',
         '/' . $databaseName . '?',
-        $variables['DATABASE_URL']
+        $applicationConfig['DATABASE_URL']
     );
 
-    // Replace DATABASE_NAME variable
-    $variables['DATABASE_NAME'] = $databaseName;
-
     // And finally populate new variables to current environment
-    (new Dotenv())->populate($variables);
-} else {
-    // Load environment variables normally
-    (new Dotenv())->load(__DIR__ . DIRECTORY_SEPARATOR . $environmentFile);
+    \putenv('DATABASE_NAME=' . $databaseName);
+    \putenv('DATABASE_URL=' . $databaseUrl);
 }
+
+require __DIR__ . '/config/bootstrap.php';
