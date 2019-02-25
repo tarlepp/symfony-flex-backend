@@ -2,19 +2,46 @@
 
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.4/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.1/phpunit.xsd"
+         backupGlobals="false"
          colors="true"
-         bootstrap="tests/bootstrap_fastest.php"
+         bootstrap="tests/bootstrap.php"
+         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer"
 >
     <php>
         <ini name="error_reporting" value="-1" />
         <ini name="display_errors" value="On" />
         <ini name="display_startup_errors" value="On" />
         <ini name="date.timezone" value="UTC" />
+
         <env name="KERNEL_CLASS" value="App\Kernel" />
-        <env name="APP_DEBUG" value="1" />
-        <env name="APP_SECRET" value="s$cretf0rt3st" />
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="1" />
+        <env name="SHELL_VERBOSITY" value="-1" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="/Doctrine\Common\ClassLoader is deprecated./" />
+
+        <!-- ###+ symfony/framework-bundle ### -->
+        <env name="APP_ENV" value="test"/>
+        <env name="APP_DEBUG" value="0" />
+        <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb"/>
+        <!-- env name="TRUSTED_PROXIES" value="127.0.0.1,127.0.0.2" -->
+        <!-- env name="TRUSTED_HOSTS" value="localhost,example.com" -->
+        <!-- ###- symfony/framework-bundle ### -->
+
+        <!-- ###+ doctrine/doctrine-bundle ### -->
+        <!-- Format described at http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html#connecting-using-a-url -->
+        <!-- For an SQLite database, use: "sqlite:///%kernel.project_dir%/var/data.db" -->
+        <!-- Configure your db driver and server_version in config/packages/doctrine.yaml -->
+        <!-- <env name="DATABASE_URL" value="mysql://db_user:db_password@127.0.0.1:3306/db_name"/> -->
+        <!-- ###- doctrine/doctrine-bundle ### -->
+
+        <!-- ###+ lexik/jwt-authentication-bundle ### -->
+        <!-- <env name="JWT_SECRET_KEY" value="config/jwt/private.pem"/> -->
+        <!-- <env name="JWT_PUBLIC_KEY" value="config/jwt/public.pem"/> -->
+        <!-- <env name="JWT_PASSPHRASE" value="af054e015d550967a9bda3d059b93461"/> -->
+        <!-- ###- lexik/jwt-authentication-bundle ### -->
+
+        <!-- ###+ nelmio/cors-bundle ### -->
+        <!-- <env name="CORS_ALLOW_ORIGIN" value="^https?://localhost(:[0-9]+)?$"/> -->
+        <!-- ###- nelmio/cors-bundle ### -->
     </php>
 
     <listeners>
@@ -22,20 +49,25 @@
     </listeners>
 
     <testsuites>
-        <testsuite name="Functional tests">
-            <directory>tests/Functional/</directory>
+        <!--
+        <testsuite name="E2E">
+            <directory>./tests/E2E/</directory>
         </testsuite>
-        <testsuite name="Integration tests">
-            <directory>tests/Integration/</directory>
+        <testsuite name="Functional">
+            <directory>./tests/Functional/</directory>
         </testsuite>
-        <testsuite name="Unit tests">
-            <directory>tests/Unit/</directory>
+        <testsuite name="Integration">
+            <directory>./tests/Integration/</directory>
+        </testsuite>
+        -->
+        <testsuite name="Unit">
+            <directory>./tests/Unit/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>src</directory>
+            <directory>./src</directory>
             <exclude>
                 <file>src/Kernel.php</file>
             </exclude>
