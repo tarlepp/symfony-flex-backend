@@ -40,6 +40,8 @@ abstract class Controller implements ControllerInterface
     }
 
     /**
+     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
+     *
      * @required
      *
      * @param ResponseHandler $responseHandler

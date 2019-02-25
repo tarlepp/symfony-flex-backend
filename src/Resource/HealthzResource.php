@@ -12,7 +12,6 @@ use App\Entity\EntityInterface;
 use App\Entity\Healthz as Entity;
 use App\Repository\HealthzRepository as Repository;
 use App\Rest\RestResource;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -40,12 +39,10 @@ class HealthzResource extends RestResource
     /**
      * HealthzResource constructor.
      *
-     * @param Repository         $repository
-     * @param ValidatorInterface $validator
+     * @param Repository $repository
      */
-    public function __construct(Repository $repository, ValidatorInterface $validator)
+    public function __construct(Repository $repository)
     {
         $this->setRepository($repository);
-        $this->setValidator($validator);
     }
 }

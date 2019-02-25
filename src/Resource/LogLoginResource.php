@@ -40,12 +40,10 @@ class LogLoginResource extends RestResource
     /**
      * LogLoginFailureResource constructor.
      *
-     * @param Repository         $repository
-     * @param ValidatorInterface $validator
+     * @param Repository $repository
      */
-    public function __construct(Repository $repository, ValidatorInterface $validator)
+    public function __construct(Repository $repository)
     {
         $this->setRepository($repository);
-        $this->setValidator($validator);
     }
 }

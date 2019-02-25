@@ -15,7 +15,6 @@ use App\Entity\UserGroup;
 use App\Repository\UserRepository as Repository;
 use App\Rest\RestResource;
 use App\Security\RolesService;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function array_filter;
 use function array_values;
 use function in_array;
@@ -51,14 +50,12 @@ class UserResource extends RestResource
     /**
      * Class constructor.
      *
-     * @param Repository         $repository
-     * @param ValidatorInterface $validator
-     * @param RolesService       $rolesService
+     * @param Repository $repository
+     * @param RolesService $rolesService
      */
-    public function __construct(Repository $repository, ValidatorInterface $validator, RolesService $rolesService)
+    public function __construct(Repository $repository, RolesService $rolesService)
     {
         $this->setRepository($repository);
-        $this->setValidator($validator);
         $this->setDtoClass(User::class);
 
         $this->rolesService = $rolesService;

@@ -12,7 +12,6 @@ use App\Entity\ApiKey as Entity;
 use App\Entity\EntityInterface;
 use App\Repository\ApiKeyRepository as Repository;
 use App\Rest\RestResource;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -40,12 +39,10 @@ class ApiKeyResource extends RestResource
     /**
      * LogLoginFailureResource constructor.
      *
-     * @param Repository         $repository
-     * @param ValidatorInterface $validator
+     * @param Repository $repository
      */
-    public function __construct(Repository $repository, ValidatorInterface $validator)
+    public function __construct(Repository $repository)
     {
         $this->setRepository($repository);
-        $this->setValidator($validator);
     }
 }

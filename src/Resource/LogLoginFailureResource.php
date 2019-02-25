@@ -13,7 +13,6 @@ use App\Entity\LogLoginFailure as Entity;
 use App\Repository\LogLoginFailureRepository as Repository;
 use App\Rest\RestResource;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -41,13 +40,11 @@ class LogLoginFailureResource extends RestResource
     /**
      * LogLoginFailureResource constructor.
      *
-     * @param Repository         $repository
-     * @param ValidatorInterface $validator
+     * @param Repository $repository
      */
-    public function __construct(Repository $repository, ValidatorInterface $validator)
+    public function __construct(Repository $repository)
     {
         $this->setRepository($repository);
-        $this->setValidator($validator);
     }
 
     /**

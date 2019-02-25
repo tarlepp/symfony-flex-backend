@@ -85,6 +85,10 @@ abstract class RestResource implements RestResourceInterface
     /**
      * Setter for used validator.
      *
+     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
+     *
+     * @required
+     *
      * @param ValidatorInterface $validator
      *
      * @return RestResourceInterface
