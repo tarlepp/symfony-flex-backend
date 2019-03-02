@@ -6,7 +6,7 @@
         "version": "v1.2.0"
     },
     "composer/ca-bundle": {
-        "version": "1.1.1"
+        "version": "1.1.4"
     },
     "doctrine/annotations": {
         "version": "1.0",
@@ -101,21 +101,6 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.36"
     },
-    "illuminate/config": {
-        "version": "v5.6.29"
-    },
-    "illuminate/container": {
-        "version": "v5.6.29"
-    },
-    "illuminate/contracts": {
-        "version": "v5.6.29"
-    },
-    "illuminate/support": {
-        "version": "v5.6.29"
-    },
-    "jackiedo/dotenv-editor": {
-        "version": "1.0.7"
-    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -160,9 +145,6 @@
             "version": "1.5",
             "ref": "1fee84e00c71edee81aa54b470260779a890c9c6"
         }
-    },
-    "nesbot/carbon": {
-        "version": "1.33.0"
     },
     "nikic/php-parser": {
         "version": "v4.0.3"
@@ -218,11 +200,8 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "4.0",
-            "ref": "421933bf8f0e75546ac8e00cb3eb12904fa2ac1a"
+            "ref": "05daf6b214e54aed4089f3480f944a67ac3a7889"
         }
-    },
-    "sroze/companienv": {
-        "version": "0.0.8"
     },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
@@ -440,7 +419,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "3.3",
-            "ref": "6bcd6c570c017ea6ae5a7a6a027c929fd3542cd8"
+            "ref": "1fb02a6e1c8f3d4232cce485c9afa868d63b115a"
         }
     },
     "symfony/twig-bridge": {
