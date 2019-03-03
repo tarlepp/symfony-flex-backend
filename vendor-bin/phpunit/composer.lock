@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0711d3f44ab805de686965072d050f24",
+    "content-hash": "b0896d9fbd79f6feaf239341245afc27",
     "packages": [],
     "packages-dev": [
         {
@@ -98,16 +98,16 @@
         },
         {
             "name": "codedungeon/phpunit-result-printer",
-            "version": "0.23.4",
+            "version": "0.26.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikeerickson/phpunit-pretty-result-printer.git",
-                "reference": "83d77172a342c1df6ecbfeada7c7919aa5943fbb"
+                "reference": "70efe139f174954392582103355a1b4a3d9022e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/83d77172a342c1df6ecbfeada7c7919aa5943fbb",
-                "reference": "83d77172a342c1df6ecbfeada7c7919aa5943fbb",
+                "url": "https://api.github.com/repos/mikeerickson/phpunit-pretty-result-printer/zipball/70efe139f174954392582103355a1b4a3d9022e5",
+                "reference": "70efe139f174954392582103355a1b4a3d9022e5",
                 "shasum": ""
             },
             "require": {
@@ -118,7 +118,7 @@
                 "symfony/yaml": "^2.7|^3.0|^4.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "7.4.*",
+                "phpunit/phpunit": "8.0.*",
                 "spatie/phpunit-watcher": "^1.6"
             },
             "type": "library",
@@ -147,7 +147,7 @@
                 "result-printer",
                 "testing"
             ],
-            "time": "2018-11-08T04:12:52+00:00"
+            "time": "2019-02-28T18:52:43+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -1948,16 +1948,16 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v4.2.1",
+            "version": "v4.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "db7e59fec9c82d45e745eb500e6ede2d96f4a6e9"
+                "reference": "ee4462581eb54bf34b746e4a5d522a4f21620160"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/db7e59fec9c82d45e745eb500e6ede2d96f4a6e9",
-                "reference": "db7e59fec9c82d45e745eb500e6ede2d96f4a6e9",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/ee4462581eb54bf34b746e4a5d522a4f21620160",
+                "reference": "ee4462581eb54bf34b746e4a5d522a4f21620160",
                 "shasum": ""
             },
             "require": {
@@ -2001,7 +2001,7 @@
             ],
             "description": "Symfony BrowserKit Component",
             "homepage": "https://symfony.com",
-            "time": "2018-11-26T11:49:31+00:00"
+            "time": "2019-01-16T21:31:25+00:00"
         },
         {
             "name": "symfony/console",
@@ -2251,16 +2251,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v4.2.1",
+            "version": "v4.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "3f03b625710f24071e2937e88112e9a19099c9eb"
+                "reference": "4ea7d80a7512ddc41d5af598978edcd395140edc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/3f03b625710f24071e2937e88112e9a19099c9eb",
-                "reference": "3f03b625710f24071e2937e88112e9a19099c9eb",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/4ea7d80a7512ddc41d5af598978edcd395140edc",
+                "reference": "4ea7d80a7512ddc41d5af598978edcd395140edc",
                 "shasum": ""
             },
             "require": {
@@ -2313,7 +2313,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-11-26T10:55:26+00:00"
+            "time": "2019-01-24T21:39:51+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
