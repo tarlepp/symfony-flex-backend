@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Serializer/ArrayCollectionNormalizer.php
+ * /src/Serializer/CollectionNormalizer.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use function is_object;
 
 /**
- * Class ArrayCollectionNormalizer
+ * Class CollectionNormalizer
  *
  * @package App\Serializer
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -27,7 +27,7 @@ class CollectionNormalizer implements NormalizerInterface
     private $normalizer;
 
     /**
-     * ArrayCollectionNormalizer constructor.
+     * CollectionNormalizer constructor.
      *
      * @param ObjectNormalizer $normalizer
      */
