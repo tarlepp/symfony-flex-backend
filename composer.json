@@ -31,7 +31,7 @@
 		"doctrine/doctrine-migrations-bundle": "2.0.0",
 		"easycorp/easy-log-handler": "1.0.7",
 		"lexik/jwt-authentication-bundle": "2.6.1",
-		"matthiasnoback/symfony-console-form": "3.2.0",
+		"matthiasnoback/symfony-console-form": "3.3.0",
 		"nelmio/api-doc-bundle": "3.4.0",
 		"nelmio/cors-bundle": "1.5.5",
 		"piwik/device-detector": "3.11.5",
@@ -60,7 +60,7 @@
 		"symfony/browser-kit": "*",
 		"symfony/debug-pack": "1.0.7",
 		"symfony/dotenv": "*",
-		"symfony/maker-bundle": "1.11.4",
+		"symfony/maker-bundle": "1.11.5",
 		"symfony/requirements-checker": "1.1.4",
 		"symfony/web-server-bundle": "*"
 	},
