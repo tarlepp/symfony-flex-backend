@@ -413,4 +413,4 @@ pecl install libsodium
 
 [The MIT License (MIT)](LICENSE)
 
-Copyright (c) 2019 Tarmo Leppänen
+Copyright © 2019 Tarmo Leppänen
