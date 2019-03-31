@@ -194,7 +194,7 @@ class CheckVendorDependencies extends Command
                     $title,
                     $relativePath,
                     $data->name,
-                    wordwrap($data->description, 60),
+                    wordwrap((string)$data->description, 60),
                     $data->version,
                     $data->latest,
                 ];
