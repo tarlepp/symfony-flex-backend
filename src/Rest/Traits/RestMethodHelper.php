@@ -58,42 +58,14 @@ trait RestMethodHelper
     protected static $formTypes = [];
 
     /**
-     * @var RestResourceInterface|null
-     */
-    protected $resource;
-
-    /**
-     * @var ResponseHandlerInterface|null
-     */
-    protected $responseHandler;
-
-    /**
      * @return RestResourceInterface
-     *
-     * @throws UnexpectedValueException
      */
-    public function getResource(): RestResourceInterface
-    {
-        if (!$this->resource instanceof RestResourceInterface) {
-            throw new UnexpectedValueException('Resource service not set', 500);
-        }
-
-        return $this->resource;
-    }
+    abstract public function getResource(): RestResourceInterface;
 
     /**
      * @return ResponseHandlerInterface
-     *
-     * @throws UnexpectedValueException
      */
-    public function getResponseHandler(): ResponseHandlerInterface
-    {
-        if (!$this->responseHandler instanceof ResponseHandlerInterface) {
-            throw new UnexpectedValueException('ResponseHandler service not set', 500);
-        }
-
-        return $this->responseHandler;
-    }
+    abstract public function getResponseHandler(): ResponseHandlerInterface;
 
     /**
      * Getter method for used DTO class for current controller.

@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Rest;
 
 use App\Rest\Traits\RestMethodHelper;
+use UnexpectedValueException;
 
 /**
  * Class Controller
@@ -30,6 +31,16 @@ abstract class Controller implements ControllerInterface
     public const METHOD_UPDATE = 'updateMethod';
 
     /**
+     * @var RestResourceInterface|null
+     */
+    protected $resource;
+
+    /**
+     * @var ResponseHandlerInterface|null
+     */
+    protected $responseHandler;
+
+    /**
      * Controller constructor.
      *
      * @param RestResourceInterface $resource
@@ -37,6 +48,34 @@ abstract class Controller implements ControllerInterface
     public function __construct(RestResourceInterface $resource)
     {
         $this->resource = $resource;
+    }
+
+    /**
+     * @return RestResourceInterface
+     *
+     * @throws UnexpectedValueException
+     */
+    public function getResource(): RestResourceInterface
+    {
+        if (!$this->resource instanceof RestResourceInterface) {
+            throw new UnexpectedValueException('Resource service not set', 500);
+        }
+
+        return $this->resource;
+    }
+
+    /**
+     * @return ResponseHandlerInterface
+     *
+     * @throws UnexpectedValueException
+     */
+    public function getResponseHandler(): ResponseHandlerInterface
+    {
+        if (!$this->responseHandler instanceof ResponseHandlerInterface) {
+            throw new UnexpectedValueException('ResponseHandler service not set', 500);
+        }
+
+        return $this->responseHandler;
     }
 
     /**
