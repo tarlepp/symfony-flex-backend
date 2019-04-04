@@ -42,7 +42,7 @@
 		"symfony/asset": "*",
 		"symfony/console": "*",
 		"symfony/expression-language": "*",
-		"symfony/flex": "1.2.0",
+		"symfony/flex": "1.2.1",
 		"symfony/form": "*",
 		"symfony/framework-bundle": "*",
 		"symfony/monolog-bundle": "3.3.1",
@@ -118,7 +118,7 @@
 		"symfony": {
 			"id": "01BFA135DXTPRA5CR250NTJJJP",
 			"allow-contrib": "true",
-			"require": "4.2.4"
+			"require": "4.2.5"
 		}
 	}
 }
