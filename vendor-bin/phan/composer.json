@@ -1,7 +1,7 @@
 {
 	"require": {},
 	"require-dev": {
-		"phan/phan": "1.2.6",
+		"phan/phan": "1.2.8",
 		"roave/security-advisories": "dev-master"
 	},
 	"config": {
