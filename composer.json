@@ -42,7 +42,7 @@
 		"symfony/asset": "*",
 		"symfony/console": "*",
 		"symfony/expression-language": "*",
-		"symfony/flex": "1.2.1",
+		"symfony/flex": "1.2.3",
 		"symfony/form": "*",
 		"symfony/framework-bundle": "*",
 		"symfony/monolog-bundle": "3.3.1",
@@ -60,7 +60,7 @@
 		"symfony/browser-kit": "*",
 		"symfony/debug-pack": "1.0.7",
 		"symfony/dotenv": "*",
-		"symfony/maker-bundle": "1.11.5",
+		"symfony/maker-bundle": "1.11.6",
 		"symfony/requirements-checker": "1.1.4",
 		"symfony/web-server-bundle": "*"
 	},
