@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8b94d3b0d964e4bbd8bb38540d420578",
+    "content-hash": "57e4e6da8dbbed7c4f187780382fe1e0",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1099,16 +1099,16 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "0101f5bd7f4e5043bf8630db2930f8fd7da552b6"
+                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/0101f5bd7f4e5043bf8630db2930f8fd7da552b6",
-                "reference": "0101f5bd7f4e5043bf8630db2930f8fd7da552b6",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/2d5c1141e91833ae706d5611cb74c56cdc7a7402",
+                "reference": "2d5c1141e91833ae706d5611cb74c56cdc7a7402",
                 "shasum": ""
             },
             "require": {
@@ -1177,7 +1177,7 @@
                 "migrations",
                 "php"
             ],
-            "time": "2019-01-03T18:59:09+00:00"
+            "time": "2019-04-23T14:41:17+00:00"
         },
         {
             "name": "doctrine/orm",
@@ -1263,16 +1263,16 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "v1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38"
+                "reference": "3da7c9d125591ca83944f477e65ed3d7b4617c48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38",
-                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/3da7c9d125591ca83944f477e65ed3d7b4617c48",
+                "reference": "3da7c9d125591ca83944f477e65ed3d7b4617c48",
                 "shasum": ""
             },
             "require": {
@@ -1341,7 +1341,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2018-11-21T00:33:13+00:00"
+            "time": "2019-04-23T08:28:24+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -1795,33 +1795,33 @@
         },
         {
             "name": "matthiasnoback/symfony-console-form",
-            "version": "v3.3.0",
+            "version": "v3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasnoback/symfony-console-form.git",
-                "reference": "288356a6bed092a4d8b19173d48874b3036db684"
+                "reference": "e6edf5d180fb8d6fdf33f4eb2abdaaeb9985a490"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/288356a6bed092a4d8b19173d48874b3036db684",
-                "reference": "288356a6bed092a4d8b19173d48874b3036db684",
+                "url": "https://api.github.com/repos/matthiasnoback/symfony-console-form/zipball/e6edf5d180fb8d6fdf33f4eb2abdaaeb9985a490",
+                "reference": "e6edf5d180fb8d6fdf33f4eb2abdaaeb9985a490",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0",
-                "symfony/console": "~3.0|~4.0",
-                "symfony/form": "~3.0|~4.0",
-                "symfony/translation": "~3.0|~4.0"
+                "symfony/console": "~3.4|~4.0",
+                "symfony/form": "~3.4|~4.0",
+                "symfony/translation": "~3.4|~4.0"
             },
             "require-dev": {
                 "beberlei/assert": "~2.1",
                 "behat/behat": "~3.0",
                 "friendsofphp/php-cs-fixer": "^1.10|^2.2",
-                "symfony/finder": "~3.0|~4.0",
-                "symfony/framework-bundle": "~3.0|~4.0",
-                "symfony/security": "~3.0|~4.0",
-                "symfony/validator": "~3.0|~4.0",
-                "symfony/yaml": "~3.0|~4.0"
+                "symfony/finder": "~3.4|~4.0",
+                "symfony/framework-bundle": "~3.4|~4.0",
+                "symfony/security": "~3.4|~4.0",
+                "symfony/validator": "~3.4|~4.0",
+                "symfony/yaml": "~3.4|~4.0"
             },
             "type": "library",
             "autoload": {
@@ -1847,7 +1847,7 @@
                 "form",
                 "symfony"
             ],
-            "time": "2019-03-11T18:20:31+00:00"
+            "time": "2019-04-23T13:03:39+00:00"
         },
         {
             "name": "monolog/monolog",
