@@ -9,6 +9,7 @@ namespace App\Tests\Integration\Resource;
 
 use App\Resource\Collection;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\PropertyAccess\Tests\Fixtures\TraversableArrayObject;
 
 /**
  * Class CollectionTest
@@ -24,7 +25,7 @@ class CollectionTest extends KernelTestCase
      */
     public function testThatGetMethodThrowsAnException(): void
     {
-        $collection = new Collection();
+        $collection = new Collection(new TraversableArrayObject());
         $collection->get('FooBar');
 
         unset($collection);
