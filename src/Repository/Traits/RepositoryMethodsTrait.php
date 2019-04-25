@@ -82,7 +82,7 @@ trait RepositoryMethodsTrait
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
          */
 
-        return $queryBuilder->getQuery()->getSingleResult($hydrationMode);
+        return $queryBuilder->getQuery()->getOneOrNullResult($hydrationMode);
     }
 
     /**
