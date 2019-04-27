@@ -23,7 +23,7 @@ $bootstrapFile = dirname(__DIR__) . '/config/bootstrap.php';
 // The check is to ensure we don't use .env in production
 if (!getenv('APP_ENV')) {
     // Specify used environment file
-    \putenv('ENVIRONMENT_FILE=.env');
+    putenv('ENVIRONMENT_FILE=.env');
 
     $bootstrapFile = __DIR__ . '/../bootstrap.php';
 }
