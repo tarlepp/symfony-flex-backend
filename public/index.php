@@ -28,11 +28,13 @@ if (!getenv('APP_ENV')) {
     $bootstrapFile = __DIR__ . '/../bootstrap.php';
 }
 
+/** @noinspection PhpIncludeInspection */
 require $bootstrapFile;
 
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 
+    /** @noinspection ForgottenDebugOutputInspection */
     Debug::enable();
 }
 
@@ -57,6 +59,7 @@ $kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
 $request = Request::createFromGlobals();
 
 // Handle request and send response to client
+/** @noinspection PhpUnhandledExceptionInspection */
 $response = $kernel->handle($request);
 $response->send();
 
