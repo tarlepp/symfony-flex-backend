@@ -21,8 +21,7 @@ set -e
 mkdir -p /app/var
 
 # Step 2
-curl -sS https://getcomposer.org/installer | php
-php -d memory_limit=-1 composer.phar install --ansi
+composer install --ansi
 
 # Step 3
 make generate-jwt-keys

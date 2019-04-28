@@ -1,16 +1,19 @@
+FROM composer:1.8.5 AS composer
 FROM php:7.2.13-fpm
 
-RUN apt-get update \
-    && apt-get install -y \
-        zlib1g-dev libxml2-dev \
-        nano vim git unzip jq \
+RUN apt-get update && apt-get install -y \
+    zlib1g-dev libxml2-dev nano vim git unzip jq \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install -j$(nproc) \
-    bcmath \
-    pdo \
-    pdo_mysql \
-    zip
+RUN docker-php-ext-install -j$(nproc) bcmath \
+    && docker-php-ext-install pdo \
+    && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install zip \
+    && pecl install xdebug-2.7.1 \
+    && docker-php-ext-enable xdebug
+
+# copy the Composer PHAR from the Composer image into the PHP image
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
@@ -18,8 +21,10 @@ WORKDIR /app
 
 ADD . .
 
-RUN chmod +x bin/console
-RUN chmod +x docker-entrypoint-dev.sh
+RUN chmod +x /app/bin/console
+RUN chmod +x /app/docker-entrypoint-dev.sh
+RUN chmod +x /usr/bin/composer
+RUN echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
 
 EXPOSE 9000
 
