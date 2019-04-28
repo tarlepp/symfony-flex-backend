@@ -1,0 +1,9 @@
+#
+# For osx users, see http://docker-sync.io/
+# this file should be added to your VCS
+#
+version: '2'
+
+syncs:
+    backend-code:
+        src: ./
