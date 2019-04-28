@@ -9,6 +9,7 @@ application.
    * [Table of Contents](#table-of-contents)
    * [Testing](#testing)
       * [Commands to run tests](#commands-to-run-tests)
+      * [Parallel testing](#parallel-testing)
       * [Own environment for testing](#own-environment-for-testing)
    * [Metrics](#metrics)
 
@@ -20,7 +21,7 @@ itself relies to PHPUnit library.
 * [PHPUnit](https://phpunit.de/)
 
 Note that this project doesn't use simple phpunit as does Symfony by default.
- 
+
 
 ### Commands to run tests
 
@@ -44,7 +45,13 @@ could use following command:
 ```bash
 ./vendor/bin/phpunit ./tests/Integration/Controller/ProfileControllerTest.php # Just this single test class
 ./vendor/bin/phpunit ./tests/Integration/Controller/                          # All tests in this directory
-``` 
+```
+
+### Parallel testing
+
+Note that all those `make` commands that contains `fastest` are actually run
+with eight (8) different process with [fastest](https://github.com/liuggio/fastest)
+library.
 
 ### Own environment for testing
 
