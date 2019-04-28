@@ -34,7 +34,7 @@ Note that this project is build with [Symfony 4](https://symfony.com/4) and
 
 ## Requirements
 
-* [docker-compose]((https://docs.docker.com/compose/install/)
+* [docker-compose](https://docs.docker.com/compose/install/)
 * If you are not using docker / docker-compose then follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md)
 
 ## Installation
