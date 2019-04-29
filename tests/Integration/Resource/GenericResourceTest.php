@@ -211,7 +211,7 @@ class GenericResourceTest extends KernelTestCase
 
         $repository
             ->expects(static::once())
-            ->method('find')
+            ->method('findAdvanced')
             ->withAnyParameters();
 
         $this->resource->setRepository($repository);
@@ -231,7 +231,7 @@ class GenericResourceTest extends KernelTestCase
 
         $repository
             ->expects(static::once())
-            ->method('find')
+            ->method('findAdvanced')
             ->withAnyParameters()
             ->willReturn(null);
 
@@ -250,7 +250,7 @@ class GenericResourceTest extends KernelTestCase
 
         $repository
             ->expects(static::once())
-            ->method('find')
+            ->method('findAdvanced')
             ->withAnyParameters()
             ->willReturn($entity);
 
@@ -702,9 +702,7 @@ class GenericResourceTest extends KernelTestCase
      */
     private function getEntityMock(): PHPUnit_Framework_MockObject_MockObject
     {
-        return $this
-            ->getMockBuilder($this->entityClass)
-            ->getMock();
+        return $this->createMock($this->entityClass);
     }
 
     /**

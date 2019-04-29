@@ -43,7 +43,9 @@ class ControllerForLifeCycleTests extends Controller
      */
     public function __construct(ResourceForLifeCycleTests $resource, ResponseHandler $responseHandler)
     {
-        $this->init($resource, $responseHandler);
+        parent::__construct($resource);
+
+        $this->responseHandler = $responseHandler;
     }
 
     /**

@@ -169,6 +169,11 @@ class UpdateMethodTest extends KernelTestCase
 
         $formInterfaceMock
             ->expects(static::once())
+            ->method('isSubmitted')
+            ->willReturn(true);
+
+        $formInterfaceMock
+            ->expects(static::once())
             ->method('isValid')
             ->willReturn(true);
 
@@ -238,6 +243,11 @@ class UpdateMethodTest extends KernelTestCase
             ->expects(static::once())
             ->method('getConfig')
             ->willReturn($formConfigInterface);
+
+        $formInterfaceMock
+            ->expects(static::once())
+            ->method('isSubmitted')
+            ->willReturn(true);
 
         $formInterfaceMock
             ->expects(static::once())

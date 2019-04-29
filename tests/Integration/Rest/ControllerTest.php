@@ -32,7 +32,7 @@ class ControllerTest extends KernelTestCase
     public function testThatGetResourceThrowsAnExceptionIfNotSet(): void
     {
         /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
+        $controller = $this->getMockForAbstractClass(Controller::class, [], '', false);
         $controller->getResource();
     }
 
@@ -44,12 +44,8 @@ class ControllerTest extends KernelTestCase
         /** @var RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
-        $responseHandler = new ResponseHandler(new Serializer());
-
         /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
-
-        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
         /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
@@ -62,7 +58,7 @@ class ControllerTest extends KernelTestCase
     public function testThatGetResponseHandlerThrowsAnExceptionIfNotSet(): void
     {
         /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
+        $controller = $this->getMockForAbstractClass(Controller::class, [], '', false);
         $controller->getResponseHandler();
     }
 
@@ -74,12 +70,9 @@ class ControllerTest extends KernelTestCase
         /** @var RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
-        $responseHandler = new ResponseHandler(new Serializer());
-
         /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
-
-        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
+        $controller->setResponseHandler(new ResponseHandler(new Serializer()));
 
         /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
@@ -101,13 +94,8 @@ class ControllerTest extends KernelTestCase
             ->method('getDtoClass')
             ->willReturn(\get_class($dtoClass));
 
-        $responseHandler = new ResponseHandler(new Serializer());
-
         /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
-
-        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
-
+        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
         $controller->getDtoClass();
     }
 
@@ -127,13 +115,8 @@ class ControllerTest extends KernelTestCase
             ->method('getDtoClass')
             ->willReturn(\stdClass::class);
 
-        $responseHandler = new ResponseHandler(new Serializer());
-
         /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
-
-        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
-
+        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
         $controller->getDtoClass();
     }
 
@@ -148,16 +131,12 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
-        $responseHandler = new ResponseHandler(new Serializer());
-
         $dtoClasses = [
             'foo' => \get_class($dtoClass),
         ];
 
         /** @var PHPUnit_Framework_MockObject_MockObject|Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
-
-        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
         $reflection = new \ReflectionProperty(\get_class($controller), 'dtoClasses');
         $reflection->setAccessible(true);
@@ -182,13 +161,8 @@ class ControllerTest extends KernelTestCase
             ->method('getFormTypeClass')
             ->willReturn(\get_class($formTypeClass));
 
-        $responseHandler = new ResponseHandler(new Serializer());
-
         /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
-
-        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
-
+        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
         $controller->getFormTypeClass();
     }
 
@@ -203,16 +177,12 @@ class ControllerTest extends KernelTestCase
         /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
-        $responseHandler = new ResponseHandler(new Serializer());
-
         $formTypes = [
             'foo' => \get_class($formTypeClass),
         ];
 
         /** @var PHPUnit_Framework_MockObject_MockObject|Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class);
-
-        PhpUnitUtil::callMethod($controller, 'init', [$resource, $responseHandler]);
+        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
         $reflection = new \ReflectionProperty(\get_class($controller), 'formTypes');
         $reflection->setAccessible(true);

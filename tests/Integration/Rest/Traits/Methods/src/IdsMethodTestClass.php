@@ -7,11 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest\Traits\Methods\src;
 
-use App\Rest\ControllerInterface;
-use App\Rest\RestResourceInterface;
+use App\Rest\Controller;
 use App\Rest\ResponseHandlerInterface;
+use App\Rest\RestResourceInterface;
 use App\Rest\Traits\Methods\IdsMethod;
-use App\Rest\Traits\RestMethodHelper;
 
 /**
  * Class IdsMethodTestClass - just a dummy class so that we can actually test that trait.
@@ -19,10 +18,9 @@ use App\Rest\Traits\RestMethodHelper;
  * @package App\Tests\Integration\Rest\Traits\Methods\src
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class IdsMethodTestClass implements ControllerInterface
+abstract class IdsMethodTestClass extends Controller
 {
     use IdsMethod;
-    use RestMethodHelper;
 
     /**
      * FindMethodTestClass constructor.
@@ -32,7 +30,8 @@ abstract class IdsMethodTestClass implements ControllerInterface
      */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
-        $this->resource = $resource;
+        parent::__construct($resource);
+
         $this->responseHandler = $responseHandler;
     }
 }
