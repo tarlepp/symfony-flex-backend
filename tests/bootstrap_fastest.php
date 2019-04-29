@@ -7,8 +7,6 @@ declare(strict_types=1);
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-// Specify used environment file
-putenv('ENVIRONMENT_FILE=.env.test');
+$pattern = sprintf('%s%stest_database_cache*', sys_get_temp_dir(), DIRECTORY_SEPARATOR);
 
-require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../bootstrap.php';
+array_map('unlink', glob($pattern));

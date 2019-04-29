@@ -114,16 +114,20 @@ run-tests-fastest-php: ## Runs all test via fastest (pure PHP)
 	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads (pure PHP)\033[39m"
 	@mkdir -p build/fastest
 	@bin/console cache:clear --env=test
-	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -o -b "php ./tests/bootstrap.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
+	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -o -b "php ./tests/bootstrap_fastest.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
+	@${MAKE} merge-clover
+	@${MAKE} merge-junit
 
 run-tests-fastest-phpdbg: ## Runs all test via fastest (phpdbg)
 	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads (phpdbg)\033[39m"
 	@mkdir -p build/fastest
 	@bin/console cache:clear --env=test
-	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -o -b "php ./tests/bootstrap.php" "phpdbg -qrr -d memory_limit=4096M ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
+	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -o -b "php ./tests/bootstrap_fastest.php" "phpdbg -qrr -d memory_limit=4096M ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
+	@${MAKE} merge-clover
+	@${MAKE} merge-junit
 
 merge-clover: ## Creates clover from fastest run
-	@./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml
+	@./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml --html ./build/report/
 
 merge-junit: ## Creates JUnit xml from fastest run
 	@php merge-phpunit-xml.php ./build/fastest/ ./build/logs/junit.xml

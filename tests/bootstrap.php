@@ -26,6 +26,18 @@ putenv('ENVIRONMENT_FILE=.env.test');
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . '/../bootstrap.php';
 
+$databaseCacheFile = sprintf(
+    '%s%stest_database_cache%s.json',
+    sys_get_temp_dir(),
+    DIRECTORY_SEPARATOR,
+    (string)getenv('ENV_TEST_CHANNEL_READABLE')
+);
+
+// Oh yeah, database is already created we don't want to do any lifting anymore \o/
+if (is_readable($databaseCacheFile)) {
+    return;
+}
+
 // Create and boot 'test' kernel
 $kernel = new Kernel(getenv('APP_ENV'), (bool)getenv('APP_DEBUG'));
 $kernel->boot();
@@ -35,7 +47,7 @@ $application = new Application($kernel);
 $application->setAutoExit(false);
 
 // Add the doctrine:database:drop command to the application and run it
-$dropDatabaseDoctrineCommand = function () use ($application) {
+$dropDatabaseDoctrineCommand = static function () use ($application) {
     $input = new ArrayInput([
         'command'       => 'doctrine:database:drop',
         '--force'       => true,
@@ -48,7 +60,7 @@ $dropDatabaseDoctrineCommand = function () use ($application) {
 };
 
 // Add the doctrine:database:create command to the application and run it
-$createDatabaseDoctrineCommand = function () use ($application) {
+$createDatabaseDoctrineCommand = static function () use ($application) {
     $input = new ArrayInput([
         'command' => 'doctrine:database:create',
     ]);
@@ -59,7 +71,7 @@ $createDatabaseDoctrineCommand = function () use ($application) {
 };
 
 // Add the doctrine:schema:update command to the application and run it
-$updateSchemaDoctrineCommand = function () use ($application) {
+$updateSchemaDoctrineCommand = static function () use ($application) {
     $input = new ArrayInput([
         'command' => 'doctrine:schema:update',
         '--force' => true,
@@ -71,7 +83,7 @@ $updateSchemaDoctrineCommand = function () use ($application) {
 };
 
 // Add the doctrine:fixtures:load command to the application and run it
-$loadFixturesDoctrineCommand = function () use ($application) {
+$loadFixturesDoctrineCommand = static function () use ($application) {
     $input = new ArrayInput([
         'command'           => 'doctrine:fixtures:load',
         '--no-interaction'  => true,
@@ -83,13 +95,13 @@ $loadFixturesDoctrineCommand = function () use ($application) {
 };
 
 // Ensure that used cache folder is cleared
-$clearCaches = function () use ($kernel) {
+$clearCaches = static function () use ($kernel) {
     $fs = new Filesystem();
     $fs->remove($kernel->getCacheDir());
 };
 
 // Ensure that we have "clean" JWT auth cache file
-$createJwtAuthCache = function () {
+$createJwtAuthCache = static function () {
     // Specify used cache file
     $filename = sprintf(
         '%s%stest_jwt_auth_cache%s.json',
@@ -107,6 +119,12 @@ $createJwtAuthCache = function () {
     file_put_contents($filename, '{}');
 };
 
+// Create database cache file
+$createDatabaseCreateCache = static function () use ($databaseCacheFile) {
+    // Create database cache file
+    file_put_contents($databaseCacheFile, '{"init": ' . (new DateTime())->format(DATE_RFC3339) . '}');
+};
+
 // And finally call each of initialize functions to make test environment ready
 array_map(
     '\call_user_func',
@@ -118,5 +136,6 @@ array_map(
         // Weird - really weird this cache delete will slowdown tests ~50%
         //$clearCaches,
         $createJwtAuthCache,
+        $createDatabaseCreateCache,
     ]
 );
