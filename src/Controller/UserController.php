@@ -53,7 +53,7 @@ class UserController extends Controller
 {
     // Traits for REST actions
     use Actions\Admin\CountAction;
-    use Actions\Anon\FindAction;
+    use Actions\Admin\FindAction;
     use Actions\Admin\FindOneAction;
     use Actions\Admin\IdsAction;
     use Actions\Root\CreateAction;
