@@ -13,22 +13,24 @@ services:
   - mysql
 
 php:
-  - 7.2
+  - "7.2"
+  - "7.3"
   - master
   - nightly
 
 matrix:
   fast_finish: true
   allow_failures:
+    - php: "7.3"
     - php: master
     - php: nightly
   include:
-    - php: 7.2
+    - php: "7.2"
       env:
         - COVERAGE=true
 
 addons:
-  mariadb: 10.2
+  mariadb: "10.2"
   sonarcloud:
     organization: "tarlepp-github"
     token:
@@ -69,9 +71,9 @@ before_script:
   - if [[ $COVERAGE == true ]]; then ./cc-test-reporter before-build; fi
 
 script:
-  - make phpcs
-  - make ecs
-  - make psalm
+#  - make phpcs
+#  - make ecs
+#  - make psalm
 #  - make phpstan
   - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
   - make run-tests-fastest-php
