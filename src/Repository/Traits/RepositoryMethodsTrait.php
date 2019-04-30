@@ -59,7 +59,7 @@ trait RepositoryMethodsTrait
      * @param string     $id
      * @param string|int $hydrationMode
      *
-     * @return EntityInterface|array|array<EntityInterface>|mixed|null
+     * @return array<array-key|EntityInterface, mixed>|EntityInterface
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException

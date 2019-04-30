@@ -40,7 +40,7 @@ class CollectionNormalizer implements NormalizerInterface
     /**
      * @inheritdoc
      *
-     * @param Collection|ArrayCollection $collection
+     * @param Collection|ArrayCollection|mixed $collection
      */
     public function normalize($collection, $format = null, array $context = [])
     {

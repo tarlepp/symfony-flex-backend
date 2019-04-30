@@ -99,7 +99,7 @@ class Collection
      */
     private function resourceFilter(?string $resourceName): Closure
     {
-        return function (RestResourceInterface $restResource) use ($resourceName) {
+        return static function (RestResourceInterface $restResource) use ($resourceName): bool {
             return $resourceName !== null && $restResource instanceof $resourceName;
         };
     }
