@@ -12,7 +12,6 @@ use App\Entity\EntityInterface;
 use App\Entity\LogLogin as Entity;
 use App\Repository\LogLoginRepository as Repository;
 use App\Rest\RestResource;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */

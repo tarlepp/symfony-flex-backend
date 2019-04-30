@@ -59,7 +59,7 @@ trait RepositoryMethodsTrait
      * @param string     $id
      * @param string|int $hydrationMode
      *
-     * @return EntityInterface|array|mixed|null
+     * @return EntityInterface|array|array<EntityInterface>|mixed|null
      *
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -274,7 +274,6 @@ trait RepositoryMethodsTrait
 
         // Persist on database
         $this->getEntityManager()->persist($entity);
-
 
         if ($flush) {
             $this->getEntityManager()->flush();
