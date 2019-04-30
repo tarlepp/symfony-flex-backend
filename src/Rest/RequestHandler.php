@@ -25,6 +25,7 @@ use function is_array;
 use function is_string;
 use function mb_strtoupper;
 use function mb_substr;
+use function strncmp;
 
 /**
  * Class RequestHandler
@@ -61,7 +62,14 @@ final class RequestHandler
         try {
             $where = array_filter(
                 JSON::decode($request->get('where', '{}'), true),
-                function ($value): bool {
+                /**
+                 * @psalm-suppress MissingClosureParamType
+                 *
+                 * @param mixed $value
+                 *
+                 * @return bool
+                 */
+                static function ($value): bool {
                     return $value !== null;
                 }
             );
@@ -162,7 +170,7 @@ final class RequestHandler
      *
      * @return mixed[]
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     public static function getSearchTerms(HttpFoundationRequest $request): array
     {
@@ -178,7 +186,7 @@ final class RequestHandler
      *
      * @return mixed[]
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     private static function getSearchTermCriteria(string $search): array
     {
@@ -204,7 +212,7 @@ final class RequestHandler
      *
      * @return mixed[]|null
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     private static function determineSearchTerms(string $search): ?array
     {
@@ -224,7 +232,7 @@ final class RequestHandler
      * @param mixed $searchTerms
      *
      * @throws LogicException
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     private static function checkSearchTerms($searchTerms): void
     {
@@ -255,7 +263,7 @@ final class RequestHandler
          *
          * @param string|array $terms
          */
-        $iterator = static function (&$terms): void {
+        $iterator = static function (array &$terms): void {
             $terms = array_unique(array_values(array_filter($terms)));
         };
 
@@ -272,11 +280,17 @@ final class RequestHandler
      */
     private static function getIterator(array &$output): Closure
     {
-        return function (string &$value, $key) use (&$output): void {
+        /**
+         * @psalm-suppress MissingClosureParamType
+         *
+         * @param string     $value
+         * @param int|string $key
+         */
+        return static function (string &$value, $key) use (&$output): void {
             $order = in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
             $column = is_string($key) ? $key : $value;
 
-            if ($column[0] === '-') {
+            if (strncmp($column, '-', 1) === 0) {
                 $column = mb_substr($column, 1);
                 $order = 'DESC';
             }

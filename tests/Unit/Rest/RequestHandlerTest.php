@@ -10,6 +10,8 @@ namespace App\Tests\Unit\Rest;
 use App\Rest\RequestHandler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use function json_encode;
 
 /**
  * Class RequestTest
@@ -20,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 class RequestHandlerTest extends KernelTestCase
 {
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
+     * @expectedException HttpException
      * @expectedExceptionMessage Current 'where' parameter is not valid JSON.
      */
     public function testThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(): void
@@ -38,7 +40,7 @@ class RequestHandlerTest extends KernelTestCase
      */
     public function testThatGetCriteriaMethodsReturnsExpectedArray(array $expected, array $where): void
     {
-        $fakeRequest = Request::create('/', 'GET', ['where' => \json_encode($where)]);
+        $fakeRequest = Request::create('/', 'GET', ['where' => json_encode($where)]);
 
         static::assertSame($expected, RequestHandler::getCriteria($fakeRequest));
 
@@ -154,7 +156,7 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
+     * @expectedException HttpException
      * @expectedExceptionMessage Given search parameter is not valid, within JSON provide 'and' and/or 'or' property.
      */
     public function testThatGetSearchTermsThrowsAnExceptionWithInvalidJson(): void
