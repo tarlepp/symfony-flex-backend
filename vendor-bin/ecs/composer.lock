@@ -392,7 +392,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.8.14",
+            "version": "v5.8.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -436,16 +436,16 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v5.8.14",
+            "version": "v5.8.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "e1b62fbf219dc1fa7154b0abef3975a41038bca7"
+                "reference": "7fbf8d76946ee53587955b670bd8a47e3d48e854"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/e1b62fbf219dc1fa7154b0abef3975a41038bca7",
-                "reference": "e1b62fbf219dc1fa7154b0abef3975a41038bca7",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/7fbf8d76946ee53587955b670bd8a47e3d48e854",
+                "reference": "7fbf8d76946ee53587955b670bd8a47e3d48e854",
                 "shasum": ""
             },
             "require": {
@@ -493,7 +493,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2019-04-22T13:12:35+00:00"
+            "time": "2019-04-25T14:06:24+00:00"
         },
         {
             "name": "jean85/pretty-package-versions",
@@ -1204,12 +1204,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "1b329f4f2d9a0a3981fd79dbfe37754bedd383e2"
+                "reference": "1dfa887a7e87ba9b7c635299462554b9ad241d5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1b329f4f2d9a0a3981fd79dbfe37754bedd383e2",
-                "reference": "1b329f4f2d9a0a3981fd79dbfe37754bedd383e2",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1dfa887a7e87ba9b7c635299462554b9ad241d5b",
+                "reference": "1dfa887a7e87ba9b7c635299462554b9ad241d5b",
                 "shasum": ""
             },
             "conflict": {
@@ -1230,7 +1230,7 @@
                 "composer/composer": "<=1.0.0-alpha11",
                 "contao-components/mediaelement": ">=2.14.2,<2.21.1",
                 "contao/core": ">=2,<3.5.39",
-                "contao/core-bundle": ">=4,<4.4.37|>=4.5,<4.7.3",
+                "contao/core-bundle": ">=4,<4.4.39|>=4.5,<4.7.5",
                 "contao/listing-bundle": ">=4,<4.4.8",
                 "contao/newsletter-bundle": ">=4,<4.1",
                 "david-garcia/phpwhois": "<=4.3.1",
@@ -1404,7 +1404,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2019-04-24T06:22:37+00:00"
+            "time": "2019-04-30T09:56:45+00:00"
         },
         {
             "name": "slam/php-cs-fixer-extensions",
