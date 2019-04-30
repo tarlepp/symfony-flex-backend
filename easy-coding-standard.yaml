@@ -5,18 +5,18 @@ imports:
     - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/common.yml' }
 
 parameters:
-    exclude_checkers:
-        - 'PhpCsFixer\Fixer\ArrayNotation\TrailingCommaInMultilineArrayFixer'
-        - 'PhpCsFixer\Fixer\CastNotation\CastSpacesFixer'
-        - 'PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer'
-        - 'PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer'
-        - 'PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer'
-        - 'PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer'
-        - 'SlevomatCodingStandard\Sniffs\Exceptions\ReferenceThrowableOnlySniff'
-        - 'SlevomatCodingStandard\Sniffs\Classes\TraitUseSpacingSniff'
-        - 'Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer'
-        - 'Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer'
     skip:
+        PhpCsFixer\Fixer\ArrayNotation\TrailingCommaInMultilineArrayFixer: ~
+        PhpCsFixer\Fixer\CastNotation\CastSpacesFixer: ~
+        PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
+        PhpCsFixer\Fixer\Import\OrderedImportsFixer: ~
+        PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer: ~
+        PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer: ~
+        PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer: ~
+        SlevomatCodingStandard\Sniffs\Exceptions\ReferenceThrowableOnlySniff: ~
+        SlevomatCodingStandard\Sniffs\Classes\TraitUseSpacingSniff: ~
+        Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer: ~
+        Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer: ~
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.Found: ~
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition:
             - '*src/Command/Traits/ExecuteMultipleCommandTrait.php'
