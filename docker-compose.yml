@@ -10,6 +10,8 @@ services:
             #APP_DEBUG=1|0
             #APP_SECRET=8822e9bb81605a603006c9260793d983
             #APPLICATION_CONFIG: /app/secrets/application.json
+        depends_on:
+            - mysql
         ports:
             - 9000:9000
         volumes:
@@ -18,6 +20,8 @@ services:
     nginx:
         build:
             context: ./docker/nginx/
+        depends_on:
+            - php
         ports:
             - 8000:80
         volumes:
