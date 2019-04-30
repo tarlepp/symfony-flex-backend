@@ -19,6 +19,7 @@ use function array_map;
 use function array_walk;
 use function call_user_func_array;
 use function is_array;
+use function is_numeric;
 use function strcmp;
 use function strpos;
 use function strtolower;
@@ -248,7 +249,7 @@ class RepositoryHelper
      */
     private static function processExpression(QueryBuilder $queryBuilder, Composite $expression, array $criteria): void
     {
-        $iterator = static function ($comparison, $key) use ($queryBuilder, $expression): void {
+        $iterator = static function (array $comparison, string $key) use ($queryBuilder, $expression): void {
             $expressionAnd = ($key === 'and' || array_key_exists('and', $comparison));
             $expressionOr = ($key === 'or' || array_key_exists('or', $comparison));
 
@@ -362,8 +363,8 @@ class RepositoryHelper
             $parameters[] = '?' . self::$parameterCount;
             $queryBuilder->setParameter(self::$parameterCount, $value[1]);
         } else { // Otherwise this must be IN or NOT IN expression
-            $parameters[] = array_map(function ($value) use ($queryBuilder): Literal {
-                return $queryBuilder->expr()->literal($value);
+            $parameters[] = array_map(static function (string $value) use ($queryBuilder): Literal {
+                return $queryBuilder->expr()->literal(is_numeric($value) ? (int)$value : $value);
             }, $value);
         }
 
@@ -377,12 +378,18 @@ class RepositoryHelper
      */
     private static function getIterator(array &$condition): Closure
     {
-        return function ($value, $column) use (&$condition): void {
+        /**
+         * @psalm-suppress MissingClosureParamType
+         *
+         * @param string|array|mixed $value
+         * @param string|int         $column
+         */
+        return static function ($value, $column) use (&$condition): void {
             // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
             if (strcmp($column, 'and') === 0 || strcmp($column, 'or') === 0) {
                 $condition[$column] = $value;
             } else { // Add condition
-                $condition[] = self::createCriteria($column, $value);
+                $condition[] = self::createCriteria(is_numeric($column) ? (int)$column : $column, $value);
             }
         };
     }
