@@ -71,7 +71,7 @@ before_script:
 
 script:
 #  - make phpcs
-#  - make ecs
+  - make ecs
 #  - make psalm
 #  - make phpstan
   - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
