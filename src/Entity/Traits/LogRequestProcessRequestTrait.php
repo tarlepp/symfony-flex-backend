@@ -427,18 +427,32 @@ trait LogRequestProcessRequestTrait
         $rawHeaders = $request->headers->all();
 
         // Clean possible sensitive data from parameters
-        array_walk($rawHeaders, function (&$value, string $key): void {
-            $this->cleanParameters($value, $key);
-        });
+        array_walk(
+            $rawHeaders,
+            /**
+             * @param mixed  $value
+             * @param string $key
+             */
+            function (&$value, string $key): void {
+                $this->cleanParameters($value, $key);
+            }
+        );
 
         $this->headers = $rawHeaders;
 
         $rawParameters = $this->determineParameters($request);
 
         // Clean possible sensitive data from parameters
-        array_walk($rawParameters, function (&$value, string $key): void {
-            $this->cleanParameters($value, $key);
-        });
+        array_walk(
+            $rawParameters,
+            /**
+             * @param mixed  $value
+             * @param string $key
+             */
+            function (&$value, string $key): void {
+                $this->cleanParameters($value, $key);
+            }
+        );
 
         $this->parameters = $rawParameters;
     }
@@ -532,9 +546,16 @@ trait LogRequestProcessRequestTrait
 
         // Recursive call
         if (is_array($value)) {
-            array_walk($value, function (&$value, string $key): void {
-                $this->cleanParameters($value, $key);
-            });
+            array_walk(
+                $value,
+                /**
+                 * @param mixed  $value
+                 * @param string $key
+                 */
+                function (&$value, string $key): void {
+                    $this->cleanParameters($value, $key);
+                }
+            );
         }
     }
 
@@ -547,7 +568,7 @@ trait LogRequestProcessRequestTrait
      */
     private function cleanContent(string $inputContent): string
     {
-        $iterator = static function ($search) use (&$inputContent): void {
+        $iterator = static function (string $search) use (&$inputContent): void {
             $inputContent = preg_replace('/(' . $search . '":)\s*"(.*)"/', '$1"*** REPLACED ***"', $inputContent);
         };
 

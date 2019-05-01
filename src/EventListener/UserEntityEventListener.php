@@ -102,7 +102,7 @@ class UserEntityEventListener
             }
 
             // Password hash callback
-            $callback = function ($plainPassword) use ($user): string {
+            $callback = function (string $plainPassword) use ($user): string {
                 return $this->userPasswordEncoder->encodePassword($user, $plainPassword);
             };
 

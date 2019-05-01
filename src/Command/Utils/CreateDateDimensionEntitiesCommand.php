@@ -16,7 +16,7 @@ use DateTimeZone;
 use Doctrine\ORM\ORMInvalidArgumentException;
 use Exception;
 use InvalidArgumentException;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,7 +30,7 @@ use function sprintf;
  * @package App\Command\Utils
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
+class CreateDateDimensionEntitiesCommand extends Command
 {
     private const YEAR_MIN = 1970;
     private const YEAR_MAX = 2047; // This should be the year when I'm officially retired
@@ -218,7 +218,13 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function validatorYearStart(): Closure
     {
-        return function ($year): ?int {
+        return
+        /**
+         * @param int|string $year
+         *
+         * @return int
+         */
+        static function ($year): int {
             $year = (int)$year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
@@ -246,7 +252,13 @@ class CreateDateDimensionEntitiesCommand extends ContainerAwareCommand
      */
     private function validatorYearEnd(int $yearStart): Closure
     {
-        return function ($year) use ($yearStart): ?int {
+        return
+        /**
+         * @param int|string $year
+         *
+         * @return int
+         */
+        static function ($year) use ($yearStart): int {
             $year = (int)$year;
 
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart) {
