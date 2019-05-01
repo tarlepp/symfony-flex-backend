@@ -85,6 +85,8 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
      *
      * This method is called when 'lexik_jwt_authentication.on_jwt_created' event is broadcast.
      *
+     * @psalm-suppress MissingDependency
+     *
      * @param JWTCreatedEvent $event
      */
     public function onJWTCreated(JWTCreatedEvent $event): void

@@ -81,6 +81,8 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
      * This method is called when '\Lexik\Bundle\JWTAuthenticationBundle\Events::AUTHENTICATION_FAILURE'
      * event is broadcast.
      *
+     * @psalm-suppress MissingDependency
+     *
      * @param AuthenticationFailureEvent $event
      *
      * @throws BadMethodCallException

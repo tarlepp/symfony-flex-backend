@@ -90,6 +90,8 @@ class LockedUserSubscriber implements EventSubscriberInterface
      * This method is called when '\Lexik\Bundle\JWTAuthenticationBundle\Events::AUTHENTICATION_FAILURE'
      * event is broadcast.
      *
+     * @psalm-suppress MissingDependency
+     *
      * @param AuthenticationFailureEvent $event
      *
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -112,6 +114,8 @@ class LockedUserSubscriber implements EventSubscriberInterface
      *
      * This method is called when '\Lexik\Bundle\JWTAuthenticationBundle\Events::JWTAuthenticatedEvent' event is
      * broadcast.
+     *
+     * @psalm-suppress MissingDependency
      *
      * @param JWTAuthenticatedEvent $event
      *
@@ -148,6 +152,9 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @psalm-suppress MissingDependency
+     * @psalm-suppress MismatchingDocblockParamType
+     *
      * @param User                                                                       $user
      * @param Event|JWTAuthenticatedEvent|AuthenticationFailureEvent|AuthenticationEvent $event
      *
@@ -169,6 +176,8 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @psalm-suppress MissingDependency
+     *
      * @param User                  $user
      * @param JWTAuthenticatedEvent $event
      */

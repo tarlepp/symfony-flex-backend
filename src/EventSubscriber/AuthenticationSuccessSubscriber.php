@@ -70,6 +70,8 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
      *
      * This method is called when 'lexik_jwt_authentication.on_authentication_success' event is broadcast.
      *
+     * @psalm-suppress MissingDependency
+     *
      * @param AuthenticationSuccessEvent $event
      *
      * @throws BadMethodCallException

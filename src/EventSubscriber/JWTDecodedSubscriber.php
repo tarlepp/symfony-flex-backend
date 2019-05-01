@@ -75,6 +75,8 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
      *
      * This method is called when 'lexik_jwt_authentication.on_jwt_decoded' event is broadcast.
      *
+     * @psalm-suppress MissingDependency
+     *
      * @param JWTDecodedEvent $event
      */
     public function onJWTDecoded(JWTDecodedEvent $event): void
@@ -97,6 +99,8 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
 
     /**
      * Method to check payload data.
+     *
+     * @psalm-suppress MissingDependency
      *
      * @param JWTDecodedEvent $event
      * @param Request|null    $request
