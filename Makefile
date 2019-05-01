@@ -170,7 +170,7 @@ ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
 psalm: ## Runs Psalm static analysis tool
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache
+	@php ./vendor/bin/psalm --no-cache --shepherd
 ###< psalm ###
 
 ###> phpstan ###
