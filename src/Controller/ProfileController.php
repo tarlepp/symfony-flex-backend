@@ -244,11 +244,11 @@ class ProfileController
      * @param RolesService  $rolesService
      * @param UserInterface $user
      *
-     * @return string[]|null
+     * @return array|string[]
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
-    private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): ?array
+    private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): array
     {
         $groups = null;
 
