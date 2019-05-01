@@ -218,8 +218,7 @@ class CreateDateDimensionEntitiesCommand extends Command
      */
     private function validatorYearStart(): Closure
     {
-        return
-        /**
+        return /**
          * @param int|string $year
          *
          * @return int
@@ -252,8 +251,7 @@ class CreateDateDimensionEntitiesCommand extends Command
      */
     private function validatorYearEnd(int $yearStart): Closure
     {
-        return
-        /**
+        return /**
          * @param int|string $year
          *
          * @return int

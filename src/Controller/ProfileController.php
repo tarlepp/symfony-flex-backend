@@ -244,7 +244,7 @@ class ProfileController
      * @param RolesService  $rolesService
      * @param UserInterface $user
      *
-     * @return array|string[]
+     * @return string[]
      *
      * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
