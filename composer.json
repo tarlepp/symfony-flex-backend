@@ -121,7 +121,7 @@
 		"symfony": {
 			"id": "01BFA135DXTPRA5CR250NTJJJP",
 			"allow-contrib": "true",
-			"require": "4.2.7"
+			"require": "4.2.8"
 		}
 	}
 }
