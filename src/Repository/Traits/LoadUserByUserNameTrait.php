@@ -9,6 +9,7 @@ namespace App\Repository\Traits;
 
 use App\Entity\User as Entity;
 use Doctrine\ORM\QueryBuilder;
+use function array_key_exists;
 
 /**
  * Trait LoadUserByUserNameTrait
@@ -40,17 +41,23 @@ trait LoadUserByUserNameTrait
      */
     public function loadUserByUsername($username): ?Entity
     {
-        // Build query
-        $query = $this
-            ->createQueryBuilder('u')
-            ->select('u, g, r')
-            ->leftJoin('u.userGroups', 'g')
-            ->leftJoin('g.role', 'r')
-            ->where('u.username = :username OR u.email = :email')
-            ->setParameter('username', $username)
-            ->setParameter('email', $username)
-            ->getQuery();
+        static $cache = [];
 
-        return $query->getOneOrNullResult();
+        if (!array_key_exists($username, $cache)) {
+            // Build query
+            $query = $this
+                ->createQueryBuilder('u')
+                ->select('u, g, r')
+                ->leftJoin('u.userGroups', 'g')
+                ->leftJoin('g.role', 'r')
+                ->where('u.username = :username OR u.email = :email')
+                ->setParameter('username', $username)
+                ->setParameter('email', $username)
+                ->getQuery();
+
+            $cache[$username] = $query->getOneOrNullResult() ?? false;
+        }
+
+        return $cache[$username] instanceof Entity ? $cache[$username] : null;
     }
 }
