@@ -6,7 +6,7 @@ set -e
 #   1) Ensure that /app/var directory exists
 #   2) Install all dependencies
 #   3) Generate JWT encryption keys + allow apache to read this file
-#   4) Clear caches from dev and prod environments
+#   4) Clear and warmup caches
 #   5) Create database if it not exists yet
 #   6) Run possible migrations, so that database is always up to date
 #   7) Install public assets
@@ -29,6 +29,7 @@ chmod 644 /app/config/jwt/private.pem
 
 # Step 4
 php /app/bin/console cache:clear
+php /app/bin/console cache:warmup
 
 # Step 5
 php /app/bin/console doctrine:database:create --if-not-exists --no-interaction
