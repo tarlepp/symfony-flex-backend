@@ -11,6 +11,7 @@ use App\Utils\JSON;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 use UnexpectedValueException;
 use function array_key_exists;
 use function array_merge;
@@ -51,7 +52,7 @@ class Auth
      *
      * @return mixed[]
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function getAuthorizationHeadersForUser(string $username, string $password): array
     {
@@ -163,7 +164,9 @@ class Auth
             }
 
             if ($response->getStatusCode() !== 200) {
-                throw new UnexpectedValueException('Invalid status code: ' . $response->getStatusCode());
+                throw new UnexpectedValueException(
+                    'Invalid status code: ' . $response->getStatusCode() . " Response:\n" . $response
+                );
             }
 
             $cache[$hash] = JSON::decode($response->getContent())->token;
