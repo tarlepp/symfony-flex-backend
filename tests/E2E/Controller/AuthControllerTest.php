@@ -7,9 +7,11 @@ declare(strict_types=1);
  */
 namespace App\Tests\E2E\Controller;
 
-use App\Utils\Tests\WebTestCase;
 use App\Utils\JSON;
+use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
+use function json_encode;
 
 /**
  * Class AuthControllerTest
@@ -26,7 +28,7 @@ class AuthControllerTest extends WebTestCase
      *
      * @param string $method
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
@@ -38,7 +40,7 @@ class AuthControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(405, $response->getStatusCode());
+        static::assertSame(405, $response->getStatusCode(), $response->getContent());
 
         unset($response, $client);
     }
@@ -49,10 +51,12 @@ class AuthControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable'
      */
     public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $username, string $password): void
     {
+        $payload = json_encode(compact('username', 'password'));
+
         $client = $this->getClient();
         $client->request(
             'POST',
@@ -63,7 +67,7 @@ class AuthControllerTest extends WebTestCase
                 'CONTENT_TYPE'          => 'application/json',
                 'HTTP_X-Requested-With' => 'XMLHttpRequest'
             ],
-            \json_encode(['username' => $username, 'password' => $password])
+            $payload
         );
 
         $response = $client->getResponse();
@@ -75,7 +79,7 @@ class AuthControllerTest extends WebTestCase
         static::assertSame(
             200,
             $response->getStatusCode(),
-            "User login was not successfully.\n" . $response
+            "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response
         );
 
         /** @noinspection NullPointerExceptionInspection */
@@ -98,6 +102,9 @@ class AuthControllerTest extends WebTestCase
         unset($responseContent, $response, $client);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
     {
         $client = $this->getClient();
@@ -110,7 +117,7 @@ class AuthControllerTest extends WebTestCase
                 'CONTENT_TYPE'          => 'application/json',
                 'HTTP_X-Requested-With' => 'XMLHttpRequest'
             ],
-            \json_encode(['username' => 'username', 'password' => 'password'])
+            json_encode(['username' => 'username', 'password' => 'password'])
         );
 
         $response = $client->getResponse();
@@ -123,11 +130,13 @@ class AuthControllerTest extends WebTestCase
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
-        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+        $info = "\nResponse: \n" . $response;
 
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
-        static::assertSame('Bad credentials', $responseContent->message, 'Response message was not expected');
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected'. $info);
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame('Bad credentials', $responseContent->message, 'Response message was not expected' . $info);
 
         unset($response, $client);
     }
@@ -139,14 +148,12 @@ class AuthControllerTest extends WebTestCase
     {
         return [
             ['HEAD'],
-            /*
             ['PUT'],
             ['DELETE'],
             ['TRACE'],
             ['OPTIONS'],
             ['CONNECT'],
             ['PATCH'],
-            */
         ];
     }
 
@@ -156,7 +163,6 @@ class AuthControllerTest extends WebTestCase
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): array
     {
         return [
-            /*
             ['john',                     'password'],
             ['john.doe@test.com',        'password'],
             ['john-logged',              'password-logged'],
@@ -165,11 +171,8 @@ class AuthControllerTest extends WebTestCase
             ['john.doe-user@test.com',   'password-user'],
             ['john-admin',               'password-admin'],
             ['john.doe-admin@test.com',  'password-admin'],
-            */
             ['john-root',                'password-root'],
-            /*
             ['john.doe-root@test.com',   'password-root'],
-            */
         ];
     }
 }
