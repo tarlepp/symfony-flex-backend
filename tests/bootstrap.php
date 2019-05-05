@@ -94,12 +94,6 @@ $loadFixturesDoctrineCommand = static function () use ($application) {
     $application->run($input, new ConsoleOutput());
 };
 
-// Ensure that used cache folder is cleared
-$clearCaches = static function () use ($kernel) {
-    $fs = new Filesystem();
-    $fs->remove($kernel->getCacheDir());
-};
-
 // Ensure that we have "clean" JWT auth cache file
 $createJwtAuthCache = static function () {
     // Specify used cache file
@@ -133,8 +127,6 @@ array_map(
         $createDatabaseDoctrineCommand,
         $updateSchemaDoctrineCommand,
         $loadFixturesDoctrineCommand,
-        // Weird - really weird this cache delete will slowdown tests ~50%
-        //$clearCaches,
         $createJwtAuthCache,
         $createDatabaseCreateCache,
     ]
