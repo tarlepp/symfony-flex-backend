@@ -14,6 +14,12 @@ use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
+use function array_filter;
+use function array_map;
+use function array_values;
+use function count;
+use function sprintf;
 
 /**
  * Class UserControllerTest
@@ -26,7 +32,7 @@ class UserControllerTest extends WebTestCase
     private $baseUrl = '/user';
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -38,12 +44,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(401, $response->getStatusCode());
+        static::assertSame(401, $response->getStatusCode(), (string)$response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"JWT Token not found","code":401}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client);
@@ -55,7 +62,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatCountActionReturnsExpected(string $username, string $password): void
     {
@@ -67,10 +74,10 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent(), "Response:\n" . $response);
 
         unset($response, $client);
     }
@@ -90,10 +97,10 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent());
+        static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent(), "Response:\n" . $response);
 
         unset($response, $client);
     }
@@ -104,7 +111,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -116,12 +123,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(403, $response->getStatusCode());
+        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client);
@@ -142,12 +150,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(403, $response->getStatusCode());
+        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client);
@@ -159,7 +168,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatFindActionReturnsExpected(string $username, string $password): void
     {
@@ -171,10 +180,10 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertCount(6, JSON::decode($response->getContent()));
+        static::assertCount(6, JSON::decode($response->getContent()), "Response:\n" . $response);
 
         unset($response, $client);
     }
@@ -185,7 +194,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -197,12 +206,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(403, $response->getStatusCode(), $response->getContent());
+        static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client);
@@ -214,7 +224,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatIdsActionReturnExpected(string $username, string $password): void
     {
@@ -226,10 +236,10 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertCount(6, JSON::decode($response->getContent()));
+        static::assertCount(6, JSON::decode($response->getContent()), "Response:\n" . $response);
 
         unset($response, $client);
     }
@@ -240,7 +250,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -252,12 +262,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(403, $response->getStatusCode());
+        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client);
@@ -266,7 +277,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @return string
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatCreateActionWorksLikeExpected(): string
     {
@@ -286,7 +297,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(201, $response->getStatusCode(), $response->getContent());
+        static::assertSame(201, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseData = $response->getContent();
@@ -308,7 +319,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatCreateActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -327,12 +338,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(403, $response->getStatusCode());
+        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client);
@@ -345,7 +357,7 @@ class UserControllerTest extends WebTestCase
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatUpdateActionWorksLikeExpected(string $userId): string
     {
@@ -364,7 +376,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         $data['id'] = $userId;
 
@@ -386,7 +398,7 @@ class UserControllerTest extends WebTestCase
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatUpdateActionReturns403ForInvalidUser(
         string $username,
@@ -408,12 +420,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(403, $response->getStatusCode());
+        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client);
@@ -429,7 +442,7 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param string $userId
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatDeleteActionReturns403ForInvalidUser(
         string $username,
@@ -444,12 +457,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(403, $response->getStatusCode());
+        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client);
@@ -460,7 +474,7 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $userId
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatDeleteActionWorksLikeExpected(string $userId): void
     {
@@ -472,13 +486,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "Response:\n" . $response);
 
         unset($response, $client);
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
@@ -497,7 +511,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(400, $response->getStatusCode(), $response->getContent());
+        static::assertSame(400, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
@@ -515,7 +529,7 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param array  $userIds
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetUserRolesActionsReturns403ForInvalidUser(
         string $username,
@@ -532,7 +546,7 @@ class UserControllerTest extends WebTestCase
             static::assertInstanceOf(Response::class, $response);
 
             /** @noinspection NullPointerExceptionInspection */
-            static::assertSame(403, $response->getStatusCode(), $response->getContent());
+            static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
             unset($response);
         }
@@ -548,7 +562,7 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      * @param string $expectedResponse
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetUserRolesActionsReturns200ForUserHimself(
         string $username,
@@ -564,7 +578,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
@@ -578,7 +592,7 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      * @param string $expectedResponse
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetUserRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
     {
@@ -590,7 +604,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
@@ -605,7 +619,7 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      * @param array  $userIds
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetUserGroupsActionsReturns403ForInvalidUser(
         string $username,
@@ -622,7 +636,7 @@ class UserControllerTest extends WebTestCase
             static::assertInstanceOf(Response::class, $response);
 
             /** @noinspection NullPointerExceptionInspection */
-            static::assertSame(403, $response->getStatusCode(), $response->getContent());
+            static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
             unset($response);
         }
@@ -638,12 +652,12 @@ class UserControllerTest extends WebTestCase
      * @param string $expectedResponse
      * @param string $userId
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetUserGroupsActionsReturns200ForUserHimself(
         string $username,
         string $password,
-        string $expectedResponse = null,
+        string $expectedResponse,
         string $userId
     ): void {
         $client = $this->getClient($username, $password);
@@ -654,12 +668,12 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $data = JSON::decode($response->getContent());
 
-        if ($expectedResponse === null) {
+        if ($expectedResponse === '') {
             static::assertEmpty($data);
         } else {
             static::assertSame($expectedResponse, $data[0]->role->id);
@@ -674,7 +688,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatAttachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -688,7 +702,7 @@ class UserControllerTest extends WebTestCase
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
 
         /** @noinspection NullPointerExceptionInspection */
-        $url = \sprintf(
+        $url = sprintf(
             '%s/%s/group/%s',
             $this->baseUrl,
             $user->getId(),
@@ -703,12 +717,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(403, $response->getStatusCode());
+        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
@@ -719,7 +734,7 @@ class UserControllerTest extends WebTestCase
      *
      * @param int $expectedStatus
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatAttachUserGroupActionWorksAsExpected(int $expectedStatus): void
     {
@@ -733,7 +748,7 @@ class UserControllerTest extends WebTestCase
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
 
         /** @noinspection NullPointerExceptionInspection */
-        $url = \sprintf(
+        $url = sprintf(
             '%s/%s/group/%s',
             $this->baseUrl,
             $user->getId(),
@@ -748,7 +763,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame($expectedStatus, $response->getStatusCode());
+        static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount(1, JSON::decode($response->getContent()));
@@ -759,7 +774,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @depends testThatAttachUserGroupActionWorksAsExpected
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatDetachUserGroupActionWorksAsExpected(): void
     {
@@ -773,7 +788,7 @@ class UserControllerTest extends WebTestCase
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
 
         /** @noinspection NullPointerExceptionInspection */
-        $url = \sprintf(
+        $url = sprintf(
             '%s/%s/group/%s',
             $this->baseUrl,
             $user->getId(),
@@ -788,7 +803,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertCount(0, JSON::decode($response->getContent()));
@@ -804,7 +819,7 @@ class UserControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatDetachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -818,7 +833,7 @@ class UserControllerTest extends WebTestCase
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
 
         /** @noinspection NullPointerExceptionInspection */
-        $url = \sprintf(
+        $url = sprintf(
             '%s/%s/group/%s',
             $this->baseUrl,
             $user->getId(),
@@ -833,12 +848,13 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(403, $response->getStatusCode());
+        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent()
+            $response->getContent(),
+            "Response:\n" . $response
         );
 
         unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
@@ -852,7 +868,7 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      * @param string $expectedResponse
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetUserGroupsActionReturns200ForRootRoleUser(
         string $userId,
@@ -866,7 +882,7 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $data = JSON::decode($response->getContent());
@@ -888,9 +904,7 @@ class UserControllerTest extends WebTestCase
     {
         return [
             ['john-admin',  'password-admin'],
-            /*
             ['john-root',   'password-root'],
-            */
         ];
     }
 
@@ -901,9 +915,7 @@ class UserControllerTest extends WebTestCase
     {
         return [
             ['admin'],
-            /*
             ['root'],
-            */
         ];
     }
 
@@ -913,11 +925,9 @@ class UserControllerTest extends WebTestCase
     public function dataProviderInvalidUsers(): array
     {
         return [
-            /*
             ['john',        'password'],
             ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
-            */
             ['john-user',   'password-user'],
         ];
     }
@@ -928,10 +938,8 @@ class UserControllerTest extends WebTestCase
     public function dataProviderInvalidApiKeyUsers(): array
     {
         return [
-            /*
             ['api'],
             ['logged'],
-            */
             ['user'],
         ];
     }
@@ -953,12 +961,10 @@ class UserControllerTest extends WebTestCase
     public function dataProviderInvalidUsersCreate(): array
     {
         return [
-            /*
             ['john',        'password'],
             ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
-            */
             ['john-admin',  'password-admin'],
         ];
     }
@@ -975,7 +981,7 @@ class UserControllerTest extends WebTestCase
 
         $users = $userResource->find();
 
-        $iterator = function (array $userData) use ($users): array {
+        $iterator = static function (array $userData) use ($users): array {
             $ids = [];
 
             foreach ($users as $user) {
@@ -991,7 +997,7 @@ class UserControllerTest extends WebTestCase
             return $userData;
         };
 
-        return \array_map($iterator, $this->dataProviderInvalidUsersCreate());
+        return array_map($iterator, $this->dataProviderInvalidUsersCreate());
     }
 
     /**
@@ -1009,12 +1015,12 @@ class UserControllerTest extends WebTestCase
 
         $users = $userResource->find();
 
-        $iterator = function (array $userData) use ($users, $rolesService): array {
+        $iterator = static function (array $userData) use ($users, $rolesService): array {
             /** @var User $user */
-            $user = \array_values(
-                \array_filter(
+            $user = array_values(
+                array_filter(
                     $users,
-                    function (User $user) use ($userData) {
+                    static function (User $user) use ($userData) {
                         return $userData[0] === $user->getUsername();
                     }
                 )
@@ -1029,17 +1035,15 @@ class UserControllerTest extends WebTestCase
         };
 
         $credentials = [
-            /*
             ['john',        'password'],
             ['john-api',    'password-api'],
             ['john-logged', 'password-logged'],
             ['john-user',   'password-user'],
             ['john-admin',  'password-admin'],
-            */
             ['john-root',   'password-root'],
         ];
 
-        return \array_map($iterator, $credentials);
+        return array_map($iterator, $credentials);
     }
 
     /**
@@ -1086,12 +1090,12 @@ class UserControllerTest extends WebTestCase
 
         $users = $userResource->find();
 
-        $iterator = function (array $userData) use ($users): array {
+        $iterator = static function (array $userData) use ($users): array {
             /** @var User $user */
-            $user = \array_values(
-                \array_filter(
+            $user = array_values(
+                array_filter(
                     $users,
-                    function (User $user) use ($userData) {
+                    static function (User $user) use ($userData) {
                         return $userData[0] === $user->getUsername();
                     }
                 )
@@ -1103,17 +1107,15 @@ class UserControllerTest extends WebTestCase
         };
 
         $credentials = [
-            ['john',        'password',         null],
-            /*
+            ['john',        'password',         ''],
             ['john-api',    'password-api',     'ROLE_API'],
             ['john-logged', 'password-logged',  'ROLE_LOGGED'],
             ['john-user',   'password-user',    'ROLE_USER'],
             ['john-admin',  'password-admin',   'ROLE_ADMIN'],
-            */
             ['john-root',   'password-root',    'ROLE_ROOT'],
         ];
 
-        return \array_map($iterator, $credentials);
+        return array_map($iterator, $credentials);
     }
 
     /**
@@ -1129,7 +1131,7 @@ class UserControllerTest extends WebTestCase
         $output = [];
 
         foreach ($userResource->find() as $user) {
-            $output[] = [$user->getId(), \count($user->getRoles()) ? $user->getRoles()[0] : null];
+            $output[] = [$user->getId(), count($user->getRoles()) ? $user->getRoles()[0] : null];
         }
 
         return $output;
