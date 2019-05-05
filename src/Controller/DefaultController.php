@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Throwable;
 use function file_get_contents;
 
 /**
@@ -38,7 +39,7 @@ class DefaultController
      *
      * @return Response
      *
-     * @throws \InvalidArgumentException
+     * @throws Throwable
      */
     public function indexAction(): Response
     {
@@ -72,13 +73,7 @@ class DefaultController
      *
      * @return Response
      *
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Exception
-     * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws Throwable
      */
     public function healthzAction(
         Request $request,
@@ -119,7 +114,7 @@ class DefaultController
      *
      * @return JsonResponse
      *
-     * @throws \LogicException
+     * @throws Throwable
      */
     public function versionAction(): JsonResponse
     {
