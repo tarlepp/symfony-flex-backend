@@ -44,7 +44,7 @@ trait LoadUserByUserNameTrait
     {
         static $cache = [];
 
-        if (!array_key_exists($username, $cache) && getenv('APP_ENV') !== 'test') {
+        if (!array_key_exists($username, $cache) || getenv('APP_ENV') === 'test') {
             // Build query
             $query = $this
                 ->createQueryBuilder('u')
