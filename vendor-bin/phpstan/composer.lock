@@ -1103,7 +1103,7 @@
         },
         {
             "name": "symfony/console",
-            "version": "v4.2.8",
+            "version": "v4.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
@@ -1243,7 +1243,7 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.2.8",
+            "version": "v4.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
