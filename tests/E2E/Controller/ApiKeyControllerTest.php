@@ -9,6 +9,7 @@ namespace App\Tests\E2E\Controller;
 
 use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Class ApiKeyControllerTest
@@ -21,7 +22,7 @@ class ApiKeyControllerTest extends WebTestCase
     private $baseUrl = '/api_key';
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -33,7 +34,7 @@ class ApiKeyControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(401, $response->getStatusCode());
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
     }
@@ -45,7 +46,7 @@ class ApiKeyControllerTest extends WebTestCase
      * @param string $password
      * @param int    $expectedStatus
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatFindActionWorksAsExpected(string $username, string $password, int $expectedStatus): void
     {
@@ -57,7 +58,7 @@ class ApiKeyControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame($expectedStatus, $response->getStatusCode(), $response->getContent());
+        static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
     }
@@ -68,12 +69,10 @@ class ApiKeyControllerTest extends WebTestCase
     public function dataProviderTestThatFindActionWorksAsExpected(): array
     {
         return [
-            /*
             ['john',        'password',         403],
             ['john-api',    'password-api',     403],
             ['john-logged', 'password-logged',  403],
             ['john-user',   'password-user',    403],
-            */
             ['john-admin',  'password-admin',   403],
             ['john-root',   'password-root',    200],
         ];

@@ -10,6 +10,9 @@ namespace App\Tests\E2E\Controller;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
+use function array_search;
+use function array_slice;
 
 /**
  * Class RoleControllerTest
@@ -22,7 +25,7 @@ class RoleControllerTest extends WebTestCase
     private $baseUrl = '/role';
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetBaseRouteReturn403(): void
     {
@@ -34,7 +37,7 @@ class RoleControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(401, $response->getStatusCode());
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
     }
@@ -45,7 +48,7 @@ class RoleControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatFindOneActionWorksAsExpected(string $username, string $password): void
     {
@@ -58,7 +61,7 @@ class RoleControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         unset($response, $client);
     }
@@ -69,7 +72,7 @@ class RoleControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGetInheritedRolesActionWorksAsExpected(string $username, string $password): void
     {
@@ -78,8 +81,8 @@ class RoleControllerTest extends WebTestCase
         $client = $this->getClient($username, $password);
 
         foreach ($roles as $role) {
-            $offset = \array_search($role, $roles, true);
-            $foo = \array_slice($roles, $offset);
+            $offset = array_search($role, $roles, true);
+            $foo = array_slice($roles, $offset);
 
             $client->request('GET', $this->baseUrl . '/' . $role . '/inherited');
 
@@ -88,7 +91,7 @@ class RoleControllerTest extends WebTestCase
             static::assertInstanceOf(Response::class, $response);
 
             /** @noinspection NullPointerExceptionInspection */
-            static::assertSame(200, $response->getStatusCode(), $response->getContent());
+            static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
             /** @noinspection NullPointerExceptionInspection */
             static::assertJsonStringEqualsJsonString(JSON::encode($foo), $response->getContent());
@@ -106,9 +109,7 @@ class RoleControllerTest extends WebTestCase
     {
         return [
             ['john-admin',  'password-admin'],
-            /*
             ['john-root',   'password-root'],
-            */
         ];
     }
 
@@ -118,14 +119,10 @@ class RoleControllerTest extends WebTestCase
     public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): array
     {
         return [
-            /*
             ['john',        'password'],
             ['john-logged', 'password-logged'],
-            */
             ['john-user',   'password-user'],
-            /*
             ['john-admin',  'password-admin'],
-            */
             ['john-root',   'password-root'],
         ];
     }

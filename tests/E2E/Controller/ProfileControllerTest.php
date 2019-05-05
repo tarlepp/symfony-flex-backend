@@ -10,7 +10,14 @@ namespace App\Tests\E2E\Controller;
 use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
+use stdClass;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
+use function array_map;
+use function array_merge;
+use function array_unique;
+use function sort;
+use function str_pad;
 
 /**
  * Class ProfileControllerTest
@@ -23,7 +30,7 @@ class ProfileControllerTest extends WebTestCase
     private $baseUrl = '/profile';
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatProfileActionReturns401WithoutToken(): void
     {
@@ -35,16 +42,22 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(401, $response->getStatusCode());
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
-        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+        $info = "\nResponse:\n" . $response;
 
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
-        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame(
+            'JWT Token not found',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
 
         unset($responseContent, $response, $client);
     }
@@ -55,7 +68,7 @@ class ProfileControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatProfileActionReturnExpectedWithValidToken(string $username, string $password): void
     {
@@ -67,7 +80,7 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         unset($response, $client);
     }
@@ -82,16 +95,22 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(401, $response->getStatusCode());
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
-        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+        $info = "\nResponse:\n" . $response;
 
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
-        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame(
+            'JWT Token not found',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
 
         unset($response, $client);
     }
@@ -111,7 +130,7 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
@@ -125,7 +144,7 @@ class ProfileControllerTest extends WebTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatRolesActionReturns401WithoutToken(): void
     {
@@ -137,16 +156,22 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(401, $response->getStatusCode());
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
-        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+        $info = "\nResponse:\n" . $response;
 
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
-        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame(
+            'JWT Token not found',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
 
         unset($responseContent, $response, $client);
     }
@@ -161,16 +186,22 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(401, $response->getStatusCode());
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
-        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+        $info = "\nResponse:\n" . $response;
 
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
-        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame(
+            'JWT Token not found',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
 
         unset($responseContent, $response, $client);
     }
@@ -182,7 +213,7 @@ class ProfileControllerTest extends WebTestCase
      * @param string $password
      * @param array  $expected
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatRolesActionReturnsExpected(string $username, string $password, array $expected): void
     {
@@ -194,7 +225,7 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expected, JSON::decode($response->getContent(), true), $response->getContent());
@@ -218,13 +249,13 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $actual = JSON::decode($response->getContent(), true);
 
-        \sort($expected);
-        \sort($actual);
+        sort($expected);
+        sort($actual);
 
         /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expected, $actual, $response->getContent());
@@ -233,7 +264,7 @@ class ProfileControllerTest extends WebTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGroupsActionReturns401WithoutToken(): void
     {
@@ -245,16 +276,22 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(401, $response->getStatusCode());
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
-        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+        $info = "\nResponse:\n" . $response;
 
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
-        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame(
+            'JWT Token not found',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
 
         unset($responseContent, $response, $client);
     }
@@ -269,16 +306,22 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(401, $response->getStatusCode());
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain \'code\'');
-        static::assertSame(401, $responseContent->code, 'Response code was not expected');
+        $info = "\nResponse:\n" . $response;
 
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain \'message\'');
-        static::assertSame('JWT Token not found', $responseContent->message, 'Response message was not expected');
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame(
+            'JWT Token not found',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
 
         unset($responseContent, $response, $client);
     }
@@ -290,7 +333,7 @@ class ProfileControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatGroupsActionReturnExpected(string $username, string $password, array $expected): void
     {
@@ -302,7 +345,7 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
@@ -310,11 +353,11 @@ class ProfileControllerTest extends WebTestCase
         if (empty($expected)) {
             static::assertEmpty($responseContent);
         } else {
-            $iterator = function (\stdClass $userGroup): string {
+            $iterator = static function (stdClass $userGroup): string {
                 return $userGroup->role->id;
             };
 
-            static::assertSame($expected, \array_map($iterator, $responseContent));
+            static::assertSame($expected, array_map($iterator, $responseContent));
         }
 
         unset($responseContent, $response, $client);
@@ -336,7 +379,7 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
@@ -344,11 +387,11 @@ class ProfileControllerTest extends WebTestCase
         if (empty($expected)) {
             static::assertEmpty($responseContent);
         } else {
-            $iterator = function (\stdClass $userGroup): string {
+            $iterator = static function (stdClass $userGroup): string {
                 return $userGroup->role->id;
             };
 
-            static::assertSame($expected, \array_map($iterator, $responseContent));
+            static::assertSame($expected, array_map($iterator, $responseContent));
         }
 
         unset($responseContent, $response, $client);
@@ -360,7 +403,6 @@ class ProfileControllerTest extends WebTestCase
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): array
     {
         return [
-            /*
             ['john',                     'password'],
             ['john.doe@test.com',        'password'],
             ['john-logged',              'password-logged'],
@@ -370,7 +412,6 @@ class ProfileControllerTest extends WebTestCase
             ['john-admin',               'password-admin'],
             ['john.doe-admin@test.com',  'password-admin'],
             ['john-root',                'password-root'],
-            */
             ['john.doe-root@test.com',   'password-root'],
         ];
     }
@@ -384,11 +425,11 @@ class ProfileControllerTest extends WebTestCase
 
         $rolesService = self::$container->get(RolesService::class);
 
-        $iterator = function (string $role) use ($rolesService): array {
-            return [\str_pad($rolesService->getShort($role), 40, '_')];
+        $iterator = static function (string $role) use ($rolesService): array {
+            return [str_pad($rolesService->getShort($role), 40, '_')];
         };
 
-        return \array_map($iterator, $rolesService->getRoles());
+        return array_map($iterator, $rolesService->getRoles());
     }
 
     /**
@@ -397,7 +438,6 @@ class ProfileControllerTest extends WebTestCase
     public function dataProviderTestThatRolesActionReturnsExpected(): array
     {
         return [
-            /*
             ['john',                     'password',        []],
             ['john.doe@test.com',        'password',        []],
             ['john-logged',              'password-logged', ['ROLE_LOGGED']],
@@ -406,11 +446,8 @@ class ProfileControllerTest extends WebTestCase
             ['john.doe-user@test.com',   'password-user',   ['ROLE_USER', 'ROLE_LOGGED']],
             ['john-admin',               'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
             ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
-            */
             ['john-root',                'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
-            /*
             ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
-            */
         ];
     }
 
@@ -423,14 +460,14 @@ class ProfileControllerTest extends WebTestCase
 
         $rolesService = self::$container->get(RolesService::class);
 
-        $iterator = function (string $role) use ($rolesService): array {
+        $iterator = static function (string $role) use ($rolesService): array {
             return [
-                \str_pad($rolesService->getShort($role), 40, '_'),
-                \array_unique(\array_merge([RolesService::ROLE_API], $rolesService->getInheritedRoles([$role]))),
+                str_pad($rolesService->getShort($role), 40, '_'),
+                array_unique(array_merge([RolesService::ROLE_API], $rolesService->getInheritedRoles([$role]))),
             ];
         };
 
-        return \array_map($iterator, $rolesService->getRoles());
+        return array_map($iterator, $rolesService->getRoles());
     }
 
     /**
@@ -439,7 +476,6 @@ class ProfileControllerTest extends WebTestCase
     public function dataProviderTestThatGroupsActionReturnExpected(): array
     {
         return [
-            /*
             ['john',                     'password',        []],
             ['john.doe@test.com',        'password',        []],
             ['john-logged',              'password-logged', ['ROLE_LOGGED']],
@@ -448,11 +484,8 @@ class ProfileControllerTest extends WebTestCase
             ['john.doe-user@test.com',   'password-user',   ['ROLE_USER']],
             ['john-admin',               'password-admin',  ['ROLE_ADMIN']],
             ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN']],
-            */
             ['john-root',                'password-root',   ['ROLE_ROOT']],
-            /*
             ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT']],
-            */
         ];
     }
 
@@ -465,13 +498,13 @@ class ProfileControllerTest extends WebTestCase
 
         $rolesService = self::$container->get(RolesService::class);
 
-        $iterator = function (string $role) use ($rolesService): array {
+        $iterator = static function (string $role) use ($rolesService): array {
             return [
-                \str_pad($rolesService->getShort($role), 40, '_'),
+                str_pad($rolesService->getShort($role), 40, '_'),
                 [$role],
             ];
         };
 
-        return \array_map($iterator, $rolesService->getRoles());
+        return array_map($iterator, $rolesService->getRoles());
     }
 }

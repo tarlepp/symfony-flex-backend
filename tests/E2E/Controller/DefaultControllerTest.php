@@ -10,6 +10,8 @@ namespace App\Tests\E2E\Controller;
 use App\Resource\LogRequestResource;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
+use Throwable;
+use function file_get_contents;
 
 /**
  * Class DefaultControllerTest
@@ -20,7 +22,7 @@ use App\Utils\Tests\WebTestCase;
 class DefaultControllerTest extends WebTestCase
 {
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatDefaultRouteReturns200(): void
     {
@@ -30,13 +32,13 @@ class DefaultControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatHealthzRouteReturns200(): void
     {
@@ -46,14 +48,13 @@ class DefaultControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatHealthzRouteDoesNotMakeRequestLog(): void
     {
@@ -73,7 +74,7 @@ class DefaultControllerTest extends WebTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatVersionRouteReturns200(): void
     {
@@ -83,14 +84,13 @@ class DefaultControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatVersionRouteDoesNotMakeRequestLog(): void
     {
@@ -110,7 +110,7 @@ class DefaultControllerTest extends WebTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatApiVersionIsAddedToResponseHeaders(): void
     {
@@ -123,7 +123,7 @@ class DefaultControllerTest extends WebTestCase
         $version = $response->headers->get('X-API-VERSION');
 
         static::assertNotNull($version);
-        static::assertSame(JSON::decode(\file_get_contents(__DIR__ . '/../../../composer.json'))->version, $version);
+        static::assertSame(JSON::decode(file_get_contents(__DIR__ . '/../../../composer.json'))->version, $version);
 
         unset($response, $client);
     }
