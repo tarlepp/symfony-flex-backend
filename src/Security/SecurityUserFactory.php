@@ -28,12 +28,12 @@ class SecurityUserFactory implements UserProviderInterface
      * @var UserRepository
      */
     private $userRepository;
-    
+
     /**
      * @var RolesService
      */
     private $rolesService;
-    
+
     /**
      * SecurityUserFactory constructor.
      *
@@ -45,7 +45,7 @@ class SecurityUserFactory implements UserProviderInterface
         $this->userRepository = $userRepository;
         $this->rolesService = $rolesService;
     }
-    
+
     /**
      * Loads the user for the given username.
      *
@@ -60,11 +60,11 @@ class SecurityUserFactory implements UserProviderInterface
     public function loadUserByUsername($username): ?UserInterface
     {
         $user = $this->userRepository->loadUserByUsername($username);
-        
+
         if (!($user instanceof User)) {
             throw new UsernameNotFoundException(sprintf('User not found for UUID: "%s".', $username));
         }
-        
+
         return (new SecurityUser($user))->setRoles($this->rolesService->getInheritedRoles($user->getRoles()));
     }
 

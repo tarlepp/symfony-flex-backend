@@ -27,5 +27,6 @@ parameters:
             - '*src/Security/ApiKeyUserProvider.php'
             - '*src/Security/IsUserHimselfVoter.php'
             - '*src/Security/UserProvider.php'
+            - '*src/Security/SecurityUserFactory.php'
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingTraversableReturnTypeHintSpecification:
             - '*src/Kernel.php'
