@@ -5,12 +5,16 @@ security:
             algorithm: argon2i
         App\Entity\User:
             algorithm: argon2i
+        App\Security\SecurityUser:
+            algorithm: argon2i
 
     # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         chain_provider:
             chain:
-                providers: [user_provider, api_key_user_provider]
+                providers: [user_provider, api_key_user_provider, security_user_provider]
+        security_user_provider:
+            id: App\Security\SecurityUserFactory
         api_key_user_provider:
             id: App\Security\ApiKeyUserProvider
         user_provider:
