@@ -15,6 +15,7 @@ parameters:
         PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer: ~
         SlevomatCodingStandard\Sniffs\Exceptions\ReferenceThrowableOnlySniff: ~
         SlevomatCodingStandard\Sniffs\Classes\TraitUseSpacingSniff: ~
+        Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer: ~
         Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer: ~
         Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer: ~
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.Found: ~
