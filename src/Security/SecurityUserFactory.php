@@ -53,11 +53,11 @@ class SecurityUserFactory implements UserProviderInterface
      *
      * @param string $username The username
      *
-     * @return UserInterface|null
+     * @return UserInterface
      *
      * @throws Throwable
      */
-    public function loadUserByUsername($username): ?UserInterface
+    public function loadUserByUsername($username): UserInterface
     {
         $user = $this->userRepository->loadUserByUsername($username);
 
