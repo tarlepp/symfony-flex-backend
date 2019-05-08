@@ -46,6 +46,8 @@ class SecurityUser implements UserInterface
 
     /**
      * @inheritDoc
+     *
+     * @return string[]
      */
     public function getRoles(): array
     {
