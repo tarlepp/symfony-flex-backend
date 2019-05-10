@@ -48,16 +48,10 @@
         <whitelist>
             <directory>./src</directory>
             <exclude>
-                <file>./src/Kernel.php</file>
-            </exclude>
-            <exclude>
                 <directory>./src/Command</directory>
-            </exclude>
-            <exclude>
                 <directory>./src/DataFixtures</directory>
-            </exclude>
-            <exclude>
                 <directory>./src/Migrations</directory>
+                <file>./src/Kernel.php</file>
             </exclude>
         </whitelist>
     </filter>
