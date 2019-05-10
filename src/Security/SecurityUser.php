@@ -71,7 +71,8 @@ class SecurityUser implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        /** @noinspection UnnecessaryCastingInspection */
+        return (string)($this->password ?? '');
     }
 
     /**
