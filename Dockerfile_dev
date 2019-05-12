@@ -1,8 +1,10 @@
 FROM composer:1.8.5 AS composer
 FROM php:7.2.13-fpm
 
+SHELL ["/bin/bash", "-c"]
+
 RUN apt-get update && apt-get install -y \
-    zlib1g-dev libxml2-dev nano vim git unzip jq \
+    zlib1g-dev libxml2-dev nano vim git unzip jq bash-completion \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install -j$(nproc) bcmath \
@@ -25,6 +27,15 @@ RUN chmod +x /app/bin/console
 RUN chmod +x /app/docker-entrypoint-dev.sh
 RUN chmod +x /usr/bin/composer
 RUN echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+RUN echo $'\n\
+if ! shopt -oq posix; then\n\
+   if [ -f /usr/share/bash-completion/bash_completion ]; then\n\
+     . /usr/share/bash-completion/bash_completion\n\
+   elif [ -f /etc/bash_completion ]; then\n\
+     . /etc/bash_completion\n\
+   fi \n\
+fi \n' \
+>> /etc/bash.bashrc
 
 EXPOSE 9000
 
