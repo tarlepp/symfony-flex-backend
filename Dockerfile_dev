@@ -18,24 +18,19 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
+ENV PATH "$PATH:/root/.composer/vendor/bin"
 
 WORKDIR /app
 
 ADD . .
 
+RUN composer global require bamarni/symfony-console-autocomplete
 RUN chmod +x /app/bin/console
 RUN chmod +x /app/docker-entrypoint-dev.sh
 RUN chmod +x /usr/bin/composer
 RUN echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
-RUN echo $'\n\
-if ! shopt -oq posix; then\n\
-   if [ -f /usr/share/bash-completion/bash_completion ]; then\n\
-     . /usr/share/bash-completion/bash_completion\n\
-   elif [ -f /etc/bash_completion ]; then\n\
-     . /etc/bash_completion\n\
-   fi \n\
-fi \n' \
->> /etc/bash.bashrc
+RUN echo 'source /usr/share/bash-completion/bash_completion' >> /etc/bash.bashrc
+RUN echo 'eval "$(symfony-autocomplete --shell bash)"' >> /etc/bash.bashrc
 
 EXPOSE 9000
 
