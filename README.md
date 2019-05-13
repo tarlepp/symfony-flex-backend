@@ -112,6 +112,7 @@ docker-compose up --build
 * [Development guide](doc/DEVELOPMENT.md)
 * [Testing guide](doc/TESTING.md)
 * [Speed problems with docker-compose?](doc/SPEED_UP_DOCKER_COMPOSE.md)
+* [Using Xdebug](doc/XDEBUG.md)
 
 ## External links / resources
 

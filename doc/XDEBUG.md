@@ -1,0 +1,57 @@
+# What is this?
+
+This document contains basic information how you can use [Xdebug](https://xdebug.org/) 
+and [PhpStorm](https://www.jetbrains.com/phpstorm/) within this application.
+
+## Table of Contents
+
+* [What is this?](#what-is-this)
+   * [Table of Contents](#table-of-contents)
+   * [Configuration and usage](#configuration-and-usage)
+      * [PhpStorm basic configuration](#phpstorm-basic-configuration)
+      * [First connection](#first-connection)
+      * [Configuring debugging server](#configuring-debugging-server)
+   * [Closure](#closure)
+
+## Configuration and usage
+
+These instructions relies heavily to screenshots, so you might need to use
+your own brains for some parts of these instructions - but I bet you can get
+this working in couple of minutes.
+
+### PhpStorm basic configuration
+
+1) Make sure that Xdebug port is `9009`
+2) Validate debugger configuration
+3) Install needed browser extensions
+
+You can check all those within screen as below: 
+
+![Basic settings](images/_xdebug_01.png)
+
+### First connection
+
+After you have make sure that all basic things are configured properly you can
+start to listen incoming PHP debug connections. After this you need to do 
+following:
+
+1) Add breakpoint to your code
+2) Enable Xdebug in your browser
+3) Reload browser page
+
+After that you should see following: 
+
+![Incoming connection from Xdebug](images/xdebug_02.png)
+
+And in this screen select the correct `index.php` file.
+
+### Configuring debugging server
+
+Last step is to configure used paths on debugging server to match with your
+local paths. See the image below: 
+
+![Path mappings](images/xdebug_03.png)
+
+## Closure
+
+Happy debugging \o/ - it has not ever be as easy as this...
