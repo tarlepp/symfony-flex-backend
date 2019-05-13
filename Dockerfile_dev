@@ -1,7 +1,7 @@
 FROM composer:1.8.5 AS composer
 FROM php:7.2.13-fpm
 
-# Let's  use bash as a default shell
+# Let's use bash as a default shell
 SHELL ["/bin/bash", "-c"]
 
 # Update package list and install necessary libraries
@@ -20,7 +20,7 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
 # copy the Composer PHAR from the Composer image into the PHP image
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-# Allow use of of composer as a root and add composer bin to path
+# Allow use of composer as a root and add composer bin to path
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV PATH "$PATH:/root/.composer/vendor/bin"
 
