@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-c"]
 
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
-    zlib1g-dev libxml2-dev nano vim git unzip jq bash-completion \
+    zlib1g-dev libxml2-dev nano vim git unzip jq bash-completion iproute \
     && rm -rf /var/lib/apt/lists/*
 
 # Enable all necessary PHP packages
@@ -32,6 +32,15 @@ ADD . .
 
 # Install bamarni/symfony-console-autocomplete as a global one to get autocomplete working
 RUN composer global require bamarni/symfony-console-autocomplete
+
+RUN echo "xdebug.idekey = PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
+    && echo "xdebug.default_enable = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
+    && echo "xdebug.remote_enable = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
+    && echo "xdebug.remote_autostart = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
+    && echo "xdebug.remote_connect_back = 0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
+    && echo "xdebug.profiler_enable = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
+    && echo "xdebug.remote_host = 127.0.0.1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.remote_port = 9009" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Ensure that all required files has execute rights
 RUN chmod +x /app/bin/console \
