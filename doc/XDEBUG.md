@@ -6,12 +6,12 @@ and [PhpStorm](https://www.jetbrains.com/phpstorm/) within this application.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [Configuration and usage](#configuration-and-usage)
-      * [PhpStorm basic configuration](#phpstorm-basic-configuration)
-      * [First connection](#first-connection)
-      * [Configuring debugging server](#configuring-debugging-server)
-   * [Closure](#closure)
+    * [Table of Contents](#table-of-contents)
+    * [Configuration and usage](#configuration-and-usage)
+       * [PhpStorm basic configuration](#phpstorm-basic-configuration)
+       * [First connection](#first-connection)
+       * [Configuring debugging server](#configuring-debugging-server)
+    * [Closure](#closure)
 
 ## Configuration and usage
 
@@ -27,7 +27,15 @@ this working in couple of minutes.
 
 You can check all those within screen as below: 
 
-![Basic settings](images/_xdebug_01.png)
+![Basic settings](images/xdebug_01.png)
+
+Note that validation screen should look like image below:
+
+![Validation](images/xdebug_02.png)
+
+Create Run/Debug Configuration like in image below:
+
+![Run/Debug Configuration](images/xdebug_03.png)
 
 ### First connection
 
@@ -41,7 +49,7 @@ following:
 
 After that you should see following: 
 
-![Incoming connection from Xdebug](images/xdebug_02.png)
+![Incoming connection from Xdebug](images/xdebug_04.png)
 
 And in this screen select the correct `index.php` file.
 
@@ -50,7 +58,7 @@ And in this screen select the correct `index.php` file.
 Last step is to configure used paths on debugging server to match with your
 local paths. See the image below: 
 
-![Path mappings](images/xdebug_03.png)
+![Path mappings](images/xdebug_05.png)
 
 ## Closure
 
