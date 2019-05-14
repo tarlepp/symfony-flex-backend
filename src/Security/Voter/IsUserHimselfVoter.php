@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Security/IsUserHimselfVoter.php
+ * /src/Security/Voter/IsUserHimselfVoter.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Security;
+namespace App\Security\Voter;
 
 use App\Entity\User;
 use App\Entity\UserInterface;
