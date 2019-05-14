@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Utils\Tests;
 
 use DateTime;
+use Doctrine\DBAL\Types\Type;
 use Exception;
 use LogicException;
 use RecursiveDirectoryIterator;
@@ -21,6 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Throwable;
 use function count;
 use function explode;
 use function get_class;
@@ -39,6 +41,7 @@ class PhpUnitUtil
     private const TYPE_INTEGER = 'integer';
     private const TYPE_STRING = 'string';
     private const TYPE_ARRAY = 'array';
+    private const TYPE_BOOL = 'bool';
     private const TYPE_BOOLEAN = 'boolean';
     private const TYPE_CUSTOM_CLASS = 'CustomClass';
 
@@ -150,7 +153,7 @@ class PhpUnitUtil
     }
 
     /**
-     * @param \Doctrine\DBAL\Types\Type|string|null $type
+     * @param Type|string|null $type
      *
      * @return string
      */
@@ -174,6 +177,7 @@ class PhpUnitUtil
             case self::TYPE_ARRAY:
                 $output = self::TYPE_ARRAY;
                 break;
+            case self::TYPE_BOOL:
             case self::TYPE_BOOLEAN:
                 $output = self::TYPE_BOOLEAN;
                 break;
@@ -216,7 +220,7 @@ class PhpUnitUtil
      *
      * @return mixed
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public static function getValidValueForType(string $type, ?array $meta = null)
     {
@@ -252,6 +256,7 @@ class PhpUnitUtil
                 case self::TYPE_ARRAY:
                     $output = ['some', self::TYPE_ARRAY, 'here'];
                     break;
+                case self::TYPE_BOOL:
                 case self::TYPE_BOOLEAN:
                     $output = true;
                     break;
@@ -274,6 +279,8 @@ class PhpUnitUtil
      * @param string $type
      *
      * @return mixed
+     *
+     * @throws Throwable
      */
     public static function getInvalidValueForType(string $type)
     {
@@ -295,6 +302,7 @@ class PhpUnitUtil
                 case DateTime::class:
                 case self::TYPE_STRING:
                 case self::TYPE_ARRAY:
+                case self::TYPE_BOOL:
                 case self::TYPE_BOOLEAN:
                 case 'enumLogLogin':
                     $output = new stdClass();
