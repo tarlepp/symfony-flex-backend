@@ -108,6 +108,7 @@ docker-compose up --build
 
 ## Resources
 
+* [Installation without docker](doc/INSTALLATION_WITHOUT_DOCKER.md)
 * [Application commands](doc/COMMANDS.md)
 * [Development guide](doc/DEVELOPMENT.md)
 * [Testing guide](doc/TESTING.md)
