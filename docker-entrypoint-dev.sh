@@ -4,7 +4,7 @@ set -e
 #
 # If we're starting web-server we need to do following:
 #   1) Modify docker-php-ext-xdebug.ini file to contain correct remote host value
-#   2) Ensure that /app/var directory exists
+#   2) Ensure that /app/var directory exists and clear possible existing one before that
 #   3) Install all dependencies
 #   4) Generate JWT encryption keys + allow apache to read this file
 #   5) Create database if it not exists yet
@@ -21,6 +21,7 @@ HOST=`/sbin/ip route|awk '/default/ { print $3 }'`
 sed -i "s/xdebug\.remote_host \=.*/xdebug\.remote_host\=$HOST/g" /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Step 2
+rm -rf /app/var
 mkdir -p /app/var
 
 # Step 3
