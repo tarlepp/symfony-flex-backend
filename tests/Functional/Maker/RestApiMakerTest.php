@@ -25,11 +25,6 @@ class RestApiMakerTest extends KernelTestCase
      */
     private $fs;
 
-    public function setUp()
-    {
-        $this->fs = new Filesystem();
-    }
-
     public function testThatCommandRunsWithSuccess(): void
     {
         $maker = new RestApiMaker();
@@ -72,6 +67,13 @@ class RestApiMakerTest extends KernelTestCase
         $tester->execute([]);
 
         static::assertContains('ERROR', $tester->getDisplay());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->fs = new Filesystem();
     }
 
     /**

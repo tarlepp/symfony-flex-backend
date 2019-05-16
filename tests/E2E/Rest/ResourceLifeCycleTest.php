@@ -26,15 +26,6 @@ class ResourceLifeCycleTest extends WebTestCase
      */
     private $repository;
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$kernel->getContainer()->get(ResourceForLifeCycleTests::class)->getRepository();
-    }
-
     /**
      * @dataProvider dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException
      *
@@ -71,5 +62,14 @@ class ResourceLifeCycleTest extends WebTestCase
             [RolesService::ROLE_ROOT],
             [RolesService::ROLE_USER],
         ];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$kernel->getContainer()->get(ResourceForLifeCycleTests::class)->getRepository();
     }
 }

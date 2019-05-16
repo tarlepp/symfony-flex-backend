@@ -9,9 +9,13 @@ namespace App\Tests\Functional\Repository;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Resource\UserResource;
 use App\Utils\Tests\PhpUnitUtil;
+use function array_fill;
+use function array_map;
+use function array_merge;
+use function count;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class UserRepositoryTest
@@ -27,25 +31,17 @@ class UserRepositoryTest extends KernelTestCase
     private $userRepository;
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public static function tearDownAfterClass(): void
     {
+        parent::tearDownAfterClass();
+
         PhpUnitUtil::loadFixtures(static::$kernel);
     }
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->userRepository = static::$container->get(UserRepository::class);
-    }
-
     /**
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatCountAdvancedReturnsExpected(): void
     {
@@ -65,11 +61,11 @@ class UserRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatIsUsernameAvailableMethodReturnsExpected(): void
     {
-        $iterator = function (User $user, bool $expected) {
+        $iterator = static function (User $user, bool $expected) {
             return [
                 $expected,
                 $user->getUsername(),
@@ -79,9 +75,9 @@ class UserRepositoryTest extends KernelTestCase
 
         $users = $this->userRepository->findAll();
 
-        $data = \array_merge(
-            \array_map($iterator, $users, \array_fill(0, \count($users), true)),
-            \array_map($iterator, $users, \array_fill(0, \count($users), false))
+        $data = array_merge(
+            array_map($iterator, $users, array_fill(0, count($users), true)),
+            array_map($iterator, $users, array_fill(0, count($users), false))
         );
 
         foreach ($data as $set) {
@@ -93,11 +89,11 @@ class UserRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatIsEmailAvailableMethodReturnsExpected(): void
     {
-        $iterator = function (User $user, bool $expected) {
+        $iterator = static function (User $user, bool $expected) {
             return [
                 $expected,
                 $user->getEmail(),
@@ -107,9 +103,9 @@ class UserRepositoryTest extends KernelTestCase
 
         $users = $this->userRepository->findAll();
 
-        $data = \array_merge(
-            \array_map($iterator, $users, \array_fill(0, \count($users), true)),
-            \array_map($iterator, $users, \array_fill(0, \count($users), false))
+        $data = array_merge(
+            array_map($iterator, $users, array_fill(0, count($users), true)),
+            array_map($iterator, $users, array_fill(0, count($users), false))
         );
 
         foreach ($data as $set) {
@@ -124,13 +120,21 @@ class UserRepositoryTest extends KernelTestCase
      * @depends testThatIsUsernameAvailableMethodReturnsExpected
      * @depends testThatIsEmailAvailableMethodReturnsExpected
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
         static::assertSame(6, $this->userRepository->countAdvanced());
         static::assertSame(6, $this->userRepository->reset());
         static::assertSame(0, $this->userRepository->countAdvanced());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->userRepository = static::$container->get(UserRepository::class);
     }
 }

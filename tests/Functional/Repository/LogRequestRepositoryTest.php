@@ -9,6 +9,7 @@ namespace App\Tests\Functional\Repository;
 
 use App\Repository\LogRequestRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class LogRequestRepositoryTest
@@ -23,17 +24,20 @@ class LogRequestRepositoryTest extends KernelTestCase
      */
     private $repository;
 
-    public function setUp(): void
+    /**
+     * @throws Throwable
+     */
+    public function testThatCleanHistoryReturnsExpected(): void
+    {
+        static::assertSame(0, $this->repository->cleanHistory());
+    }
+
+    protected function setUp(): void
     {
         parent::setUp();
 
         static::bootKernel();
 
         $this->repository = static::$container->get(LogRequestRepository::class);
-    }
-
-    public function testThatCleanHistoryReturnsExpected(): void
-    {
-        static::assertSame(0, $this->repository->cleanHistory());
     }
 }

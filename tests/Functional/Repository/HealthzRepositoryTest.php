@@ -10,7 +10,9 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
 use App\Utils\Tests\PhpUnitUtil;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class UserRepositoryTest
@@ -25,29 +27,18 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     private $repository;
 
-    private static $initialized = false;
-
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
-    public function setUp(): void
+    public static function tearDownAfterClass(): void
     {
-        parent::setUp();
+        parent::tearDownAfterClass();
 
-        static::bootKernel();
-
-        if (!static::$initialized) {
-            PhpUnitUtil::loadFixtures(static::$kernel);
-
-            static::$initialized = true;
-        }
-
-        $this->repository = static::$container->get(HealthzRepository::class);
+        PhpUnitUtil::loadFixtures(static::$kernel);
     }
 
     /**
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatReadValueMethodReturnsExpectedWithEmptyDatabase(): void
     {
@@ -57,19 +48,18 @@ class HealthzRepositoryTest extends KernelTestCase
     /**
      * @depends testThatReadValueMethodReturnsExpectedWithEmptyDatabase
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     public function testThatCreateValueReturnsExpected(): void
     {
+        /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(Healthz::class, $this->repository->create());
     }
 
     /**
      * @depends testThatCreateValueReturnsExpected
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatReadValueReturnExpectedAfterCreate(): void
     {
@@ -79,10 +69,22 @@ class HealthzRepositoryTest extends KernelTestCase
     /**
      * @depends testThatReadValueReturnExpectedAfterCreate
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function testThatCleanupMethodClearsDatabaseReturnsExpected(): void
     {
         static::assertSame(0, $this->repository->cleanup());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$container->get(HealthzRepository::class);
     }
 }

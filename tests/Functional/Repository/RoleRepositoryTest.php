@@ -11,6 +11,7 @@ use App\Repository\RoleRepository;
 use App\Resource\RoleResource;
 use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class RoleRepositoryTest
@@ -26,30 +27,31 @@ class RoleRepositoryTest extends KernelTestCase
     private $repository;
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public static function tearDownAfterClass(): void
     {
+        parent::tearDownAfterClass();
+
         PhpUnitUtil::loadFixtures(static::$kernel);
     }
 
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$container->get(RoleRepository::class);
-    }
-
     /**
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
         static::assertSame(5, $this->repository->countAdvanced());
         static::assertSame(5, $this->repository->reset());
         static::assertSame(0, $this->repository->countAdvanced());
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$container->get(RoleRepository::class);
     }
 }

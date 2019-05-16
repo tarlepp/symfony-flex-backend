@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Rest;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\RepositoryHelper;
+use Doctrine\Orm\Query\Parameter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -24,17 +25,6 @@ class RepositoryHelperTest extends KernelTestCase
      * @var UserRepository
      */
     protected $repository;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$container->get(UserResource::class)->getRepository();
-
-        RepositoryHelper::resetParameterCount();
-    }
 
     /**
      * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
@@ -144,7 +134,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         static::assertSame($expectedDQL, $queryBuilder->getQuery()->getDQL());
 
-        /** @var \Doctrine\Orm\Query\Parameter $parameter */
+        /** @var Parameter $parameter */
         foreach ($queryBuilder->getParameters()->toArray() as $key => $parameter) {
             static::assertSame($expectedParameters[$key]['name'], $parameter->getName());
             static::assertSame($expectedParameters[$key]['value'], $parameter->getValue());
@@ -170,7 +160,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         static::assertSame($expectedDQL, $queryBuilder->getQuery()->getDQL());
 
-        /** @var \Doctrine\Orm\Query\Parameter $parameter */
+        /** @var Parameter $parameter */
         foreach ($queryBuilder->getParameters()->toArray() as $key => $parameter) {
             static::assertSame($expectedParameters[$key]['name'], $parameter->getName());
             static::assertSame($expectedParameters[$key]['value'], $parameter->getValue());
@@ -566,5 +556,16 @@ DQL
             ]
         ];
         // @codingStandardsIgnoreEnd
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$container->get(UserResource::class)->getRepository();
+
+        RepositoryHelper::resetParameterCount();
     }
 }

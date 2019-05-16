@@ -23,17 +23,17 @@ class LogLoginFailureRepositoryTest extends KernelTestCase
      */
     private $repository;
 
-    public function setUp(): void
+    public function testThatClearReturnsExpected(): void
+    {
+        static::markTestIncomplete('TODO implemented this test');
+    }
+
+    protected function setUp(): void
     {
         parent::setUp();
 
         static::bootKernel();
 
         $this->repository = static::$container->get(LogLoginFailureRepository::class);
-    }
-
-    public function testThatClearReturnsExpected(): void
-    {
-        static::markTestIncomplete('TODO implemented this test');
     }
 }
