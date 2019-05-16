@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Rest;
 
 use App\Rest\SearchTerm;
+use function call_user_func_array;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -37,209 +39,219 @@ class SearchTermTest extends KernelTestCase
      */
     public function testThatReturnedCriteriaIsExpected(array $inputArguments, array $expected): void
     {
-        static::assertSame($expected, \call_user_func_array([SearchTerm::class, 'getCriteria'], $inputArguments));
+        static::assertSame($expected, call_user_func_array([SearchTerm::class, 'getCriteria'], $inputArguments));
     }
 
     /**
      * Data provider for testThatWithoutColumnOrSearchTermCriteriaIsNull
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull(): array
+    public function dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull(): Generator
     {
-        return [
-            [null, null],
-            ['foo', null],
-            [null, 'foo'],
-            ['', ''],
-            [' ', ''],
-            ['', ' '],
-            [' ', ' '],
-            ['foo', ''],
-            ['foo', ' '],
-            ['', 'foo'],
-            [' ', 'foo'],
-            [[], []],
-            [[null], [null]],
-            [['foo'], [null]],
-            [[null], ['foo']],
-            [[''], ['']],
-            [[' '], ['']],
-            [[''], [' ']],
-            [[' '], [' ']],
-            [['foo'], ['']],
-            [['foo'], [' ']],
-            [[''], ['foo']],
-            [[' '], ['foo']],
-        ];
+        yield [null, null];
+        yield ['foo', null];
+        yield [null, 'foo'];
+        yield ['', ''];
+        yield [' ', ''];
+        yield ['', ' '];
+        yield [' ', ' '];
+        yield ['foo', ''];
+        yield ['foo', ' '];
+        yield ['', 'foo'];
+        yield [' ', 'foo'];
+        yield [[], []];
+        yield [[null], [null]];
+        yield [['foo'], [null]];
+        yield [[null], ['foo']];
+        yield [[''], ['']];
+        yield [[' '], ['']];
+        yield [[''], [' ']];
+        yield [[' '], [' ']];
+        yield [['foo'], ['']];
+        yield [['foo'], [' ']];
+        yield [[''], ['foo']];
+        yield [[' '], ['foo']];
     }
 
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatReturnedCriteriaIsExpected(): array
+    public function dataProviderTestThatReturnedCriteriaIsExpected(): Generator
     {
-        return [
+
+        yield [
+            ['c1', 'word'],
             [
-                ['c1', 'word'],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            [['c1', 'c2'], ['search', 'word']],
             [
-                [['c1', 'c2'], ['search', 'word']],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%search%'],
-                            ['entity.c2', 'like', '%search%'],
-                            ['entity.c1', 'like', '%word%'],
-                            ['entity.c2', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c2', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['entity.c2', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            [['c1', 'c2'], 'search word'],
             [
-                [['c1', 'c2'], 'search word'],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%search%'],
-                            ['entity.c2', 'like', '%search%'],
-                            ['entity.c1', 'like', '%word%'],
-                            ['entity.c2', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c2', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['entity.c2', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            ['someTable.c1', 'search word'],
             [
-                ['someTable.c1', 'search word'],
-                [
-                    'and' => [
-                        'or' => [
-                            ['someTable.c1', 'like', '%search%'],
-                            ['someTable.c1', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['someTable.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            ['someTable.c1', ['search', 'word']],
             [
-                ['someTable.c1', ['search', 'word']],
-                [
-                    'and' => [
-                        'or' => [
-                            ['someTable.c1', 'like', '%search%'],
-                            ['someTable.c1', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['someTable.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            [['c1', 'someTable.c1'], 'search word'],
             [
-                [['c1', 'someTable.c1'], 'search word'],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%search%'],
-                            ['someTable.c1', 'like', '%search%'],
-                            ['entity.c1', 'like', '%word%'],
-                            ['someTable.c1', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['someTable.c1', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            [['c1', 'someTable.c1'], ['search', 'word']],
             [
-                [['c1', 'someTable.c1'], ['search', 'word']],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%search%'],
-                            ['someTable.c1', 'like', '%search%'],
-                            ['entity.c1', 'like', '%word%'],
-                            ['someTable.c1', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['someTable.c1', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            ['c1', 'search word', SearchTerm::OPERAND_AND],
             [
-                ['c1', 'search word', SearchTerm::OPERAND_AND],
-                [
+                'and' => [
                     'and' => [
-                        'and' => [
-                            ['entity.c1', 'like', '%search%'],
-                            ['entity.c1', 'like', '%word%'],
-                        ],
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            ['c1', 'search word', SearchTerm::OPERAND_OR],
             [
-                ['c1', 'search word', SearchTerm::OPERAND_OR],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%search%'],
-                            ['entity.c1', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            ['c1', 'search word', 'notSupportedOperand'],
             [
-                ['c1', 'search word', 'notSupportedOperand'],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%search%'],
-                            ['entity.c1', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            ['c1', 'search word', SearchTerm::OPERAND_OR, SearchTerm::MODE_FULL],
             [
-                ['c1', 'search word', SearchTerm::OPERAND_OR, SearchTerm::MODE_FULL],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%search%'],
-                            ['entity.c1', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            ['c1', 'search word', SearchTerm::OPERAND_OR, SearchTerm::MODE_STARTS_WITH],
             [
-                ['c1', 'search word', SearchTerm::OPERAND_OR, SearchTerm::MODE_STARTS_WITH],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', 'search%'],
-                            ['entity.c1', 'like', 'word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', 'search%'],
+                        ['entity.c1', 'like', 'word%'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            ['c1', 'search word', SearchTerm::OPERAND_OR, SearchTerm::MODE_ENDS_WITH],
             [
-                ['c1', 'search word', SearchTerm::OPERAND_OR, SearchTerm::MODE_ENDS_WITH],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%search'],
-                            ['entity.c1', 'like', '%word'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search'],
+                        ['entity.c1', 'like', '%word'],
                     ],
                 ],
             ],
+        ];
+
+        yield [
+            ['c1', 'search word', SearchTerm::OPERAND_OR, 666],
             [
-                ['c1', 'search word', SearchTerm::OPERAND_OR, 666],
-                [
-                    'and' => [
-                        'or' => [
-                            ['entity.c1', 'like', '%search%'],
-                            ['entity.c1', 'like', '%word%'],
-                        ],
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
                     ],
                 ],
             ],
