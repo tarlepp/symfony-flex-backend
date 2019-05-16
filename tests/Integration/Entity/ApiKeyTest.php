@@ -58,9 +58,9 @@ class ApiKeyTest extends EntityTestCase
      */
     public function dataProviderTestThatApiKeyHasExpectedRoles(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
-        $rolesService = self::$container->get(RolesService::class);
+        $rolesService = static::$container->get(RolesService::class);
 
         $output = [];
 

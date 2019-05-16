@@ -48,7 +48,7 @@ class DtoTestCase extends KernelTestCase
                 $reflectionProperty->getName()
             );
 
-            self::assertTrue($dtoReflection->hasMethod($method), $message);
+            static::assertTrue($dtoReflection->hasMethod($method), $message);
         }
 
         unset($dtoReflection);
@@ -77,7 +77,7 @@ class DtoTestCase extends KernelTestCase
                 $reflectionProperty->getName()
             );
 
-            self::assertTrue($dtoReflection->hasMethod($method), $message);
+            static::assertTrue($dtoReflection->hasMethod($method), $message);
         }
 
         unset($dtoReflection);
@@ -121,7 +121,7 @@ class DtoTestCase extends KernelTestCase
             $mock->$setter($value);
         }
 
-        self::assertEquals($expectedVisited, $mock->getVisited());
+        static::assertEquals($expectedVisited, $mock->getVisited());
 
         unset($mock, $properties, $dtoReflection);
     }
@@ -154,7 +154,7 @@ class DtoTestCase extends KernelTestCase
             // Call setter method
             $dto->$setter($value);
 
-            self::assertSame($value, $dto->$getter());
+            static::assertSame($value, $dto->$getter());
         }
 
         unset($dto, $dtoReflection);

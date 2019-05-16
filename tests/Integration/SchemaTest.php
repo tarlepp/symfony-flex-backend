@@ -58,7 +58,7 @@ class SchemaTest extends KernelTestCase
     {
         gc_enable();
 
-        self::bootKernel();
+        static::bootKernel();
 
         if (!Type::hasType('EnumLogLogin')) {
             Type::addType('EnumLogLogin', EnumLogLoginType::class);

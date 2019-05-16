@@ -56,9 +56,9 @@ class UserProviderTest extends KernelTestCase
     public function testThatSupportsClassMethodReturnsExpected(bool $expected, string $class): void
     {
         if ($expected) {
-            self::assertTrue($this->repository->supportsClass($class));
+            static::assertTrue($this->repository->supportsClass($class));
         } else {
-            self::assertFalse($this->repository->supportsClass($class));
+            static::assertFalse($this->repository->supportsClass($class));
         }
     }
 

@@ -44,7 +44,7 @@ class GenericResourceTest extends KernelTestCase
      */
     private static function getEntityManager(): EntityManagerInterface
     {
-        return self::$container->get('doctrine')->getManager();
+        return static::$container->get('doctrine')->getManager();
     }
 
     /**
@@ -663,9 +663,9 @@ class GenericResourceTest extends KernelTestCase
 
         parent::setUp();
 
-        self::bootKernel();
+        static::bootKernel();
 
-        $this->resource = self::$container->get($this->resourceClass);
+        $this->resource = static::$container->get($this->resourceClass);
     }
 
     protected function tearDown(): void
@@ -684,7 +684,7 @@ class GenericResourceTest extends KernelTestCase
     {
         return $this
             ->getMockBuilder(UserRepository::class)
-            ->setConstructorArgs([self::getEntityManager(), new ClassMetadata($this->entityClass)]);
+            ->setConstructorArgs([static::getEntityManager(), new ClassMetadata($this->entityClass)]);
     }
 
     /**

@@ -114,7 +114,7 @@ class CreateMethodTest extends KernelTestCase
      */
     public function testThatTraitCallsServiceMethods(): void
     {
-        self::bootKernel();
+        static::bootKernel();
 
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);

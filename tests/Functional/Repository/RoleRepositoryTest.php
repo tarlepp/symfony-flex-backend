@@ -39,7 +39,7 @@ class RoleRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->repository = self::$container->get(RoleRepository::class);
+        $this->repository = static::$container->get(RoleRepository::class);
     }
 
     /**
@@ -48,8 +48,8 @@ class RoleRepositoryTest extends KernelTestCase
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
-        self::assertSame(5, $this->repository->countAdvanced());
-        self::assertSame(5, $this->repository->reset());
-        self::assertSame(0, $this->repository->countAdvanced());
+        static::assertSame(5, $this->repository->countAdvanced());
+        static::assertSame(5, $this->repository->reset());
+        static::assertSame(0, $this->repository->countAdvanced());
     }
 }

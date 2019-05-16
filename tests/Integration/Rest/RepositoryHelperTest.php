@@ -29,9 +29,9 @@ class RepositoryHelperTest extends KernelTestCase
     {
         parent::setUp();
 
-        self::bootKernel();
+        static::bootKernel();
 
-        $this->repository = self::$container->get(UserResource::class)->getRepository();
+        $this->repository = static::$container->get(UserResource::class)->getRepository();
 
         RepositoryHelper::resetParameterCount();
     }

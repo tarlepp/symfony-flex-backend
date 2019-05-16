@@ -36,13 +36,13 @@ class HealthzRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        if (!self::$initialized) {
+        if (!static::$initialized) {
             PhpUnitUtil::loadFixtures(static::$kernel);
 
-            self::$initialized = true;
+            static::$initialized = true;
         }
 
-        $this->repository = self::$container->get(HealthzRepository::class);
+        $this->repository = static::$container->get(HealthzRepository::class);
     }
 
     /**

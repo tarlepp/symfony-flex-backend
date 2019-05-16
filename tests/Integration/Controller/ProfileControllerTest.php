@@ -28,10 +28,10 @@ class ProfileControllerTest extends KernelTestCase
      */
     public function testThatProfileActionThrowsAnExceptionIfTokenStorageContainsWrongUserInstance(): void
     {
-        self::bootKernel();
+        static::bootKernel();
 
-        $serializer = self::$container->get('serializer');
-        $rolesService = self::$container->get(RolesService::class);
+        $serializer = static::$container->get('serializer');
+        $rolesService = static::$container->get(RolesService::class);
 
         $user = new User('test_user', 'test_password');
         $token = new PreAuthenticatedToken($user, 'credentials', 'providerKey', [RolesService::ROLE_LOGGED]);
@@ -51,9 +51,9 @@ class ProfileControllerTest extends KernelTestCase
      */
     public function testThatGroupsActionThrowsAnExceptionIfTokenStorageContainsWrongUserInstance(): void
     {
-        self::bootKernel();
+        static::bootKernel();
 
-        $serializer = self::$container->get('serializer');
+        $serializer = static::$container->get('serializer');
 
         $user = new User('test_user', 'test_password');
         $token = new PreAuthenticatedToken($user, 'credentials', 'providerKey', [RolesService::ROLE_LOGGED]);

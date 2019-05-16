@@ -126,9 +126,9 @@ class RestResourceConverterTest extends KernelTestCase
 
         parent::setUp();
 
-        self::bootKernel();
+        static::bootKernel();
 
-        $this->converter = new RestResourceConverter(self::$container->get(Collection::class));
+        $this->converter = new RestResourceConverter(static::$container->get(Collection::class));
     }
 
     protected function tearDown(): void

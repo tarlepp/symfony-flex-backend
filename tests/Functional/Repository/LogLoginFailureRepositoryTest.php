@@ -29,7 +29,7 @@ class LogLoginFailureRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->repository = self::$container->get(LogLoginFailureRepository::class);
+        $this->repository = static::$container->get(LogLoginFailureRepository::class);
     }
 
     public function testThatClearReturnsExpected(): void

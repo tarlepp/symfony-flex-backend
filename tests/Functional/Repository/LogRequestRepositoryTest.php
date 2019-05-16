@@ -29,7 +29,7 @@ class LogRequestRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->repository = self::$container->get(LogRequestRepository::class);
+        $this->repository = static::$container->get(LogRequestRepository::class);
     }
 
     public function testThatCleanHistoryReturnsExpected(): void

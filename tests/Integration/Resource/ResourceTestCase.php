@@ -48,7 +48,7 @@ abstract class ResourceTestCase extends KernelTestCase
         );
 
         /** @noinspection UnnecessaryAssertionInspection */
-        self::assertInstanceOf($this->repositoryClass, $this->resource->getRepository(), $message);
+        static::assertInstanceOf($this->repositoryClass, $this->resource->getRepository(), $message);
     }
 
     public function testThatGetEntityNameReturnsExpected(): void
@@ -58,7 +58,7 @@ abstract class ResourceTestCase extends KernelTestCase
             $this->entityClass
         );
 
-        self::assertSame($this->entityClass, $this->resource->getEntityName(), $message);
+        static::assertSame($this->entityClass, $this->resource->getEntityName(), $message);
     }
 
     protected function setUp(): void
@@ -67,9 +67,9 @@ abstract class ResourceTestCase extends KernelTestCase
 
         parent::setUp();
 
-        self::bootKernel();
+        static::bootKernel();
 
-        $this->resource = self::$container->get($this->resourceClass);
+        $this->resource = static::$container->get($this->resourceClass);
     }
 
     protected function tearDown(): void

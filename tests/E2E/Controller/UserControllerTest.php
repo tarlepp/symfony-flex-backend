@@ -497,7 +497,7 @@ class UserControllerTest extends WebTestCase
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john-root'], null, true);
 
@@ -693,10 +693,10 @@ class UserControllerTest extends WebTestCase
     public function testThatAttachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = self::$container->get(UserGroupResource::class);
+        $userGroupResource = static::$container->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -739,10 +739,10 @@ class UserControllerTest extends WebTestCase
     public function testThatAttachUserGroupActionWorksAsExpected(int $expectedStatus): void
     {
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = self::$container->get(UserGroupResource::class);
+        $userGroupResource = static::$container->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -779,10 +779,10 @@ class UserControllerTest extends WebTestCase
     public function testThatDetachUserGroupActionWorksAsExpected(): void
     {
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = self::$container->get(UserGroupResource::class);
+        $userGroupResource = static::$container->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -824,10 +824,10 @@ class UserControllerTest extends WebTestCase
     public function testThatDetachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = self::$container->get(UserGroupResource::class);
+        $userGroupResource = static::$container->get(UserGroupResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
@@ -974,10 +974,10 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetRolesActionsReturns403ForInvalidUser(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         $users = $userResource->find();
 
@@ -1005,13 +1005,13 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetRolesActionsReturns200ForUserHimself(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         /** @var RolesService $rolesService */
-        $rolesService = self::$container->get(RolesService::class);
+        $rolesService = static::$container->get(RolesService::class);
 
         $users = $userResource->find();
 
@@ -1051,13 +1051,13 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetRolesActionReturns200ForRootRoleUser(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         /** @var RolesService $rolesService */
-        $rolesService = self::$container->get(RolesService::class);
+        $rolesService = static::$container->get(RolesService::class);
 
         $output = [];
 
@@ -1083,10 +1083,10 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         $users = $userResource->find();
 
@@ -1123,10 +1123,10 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetUserGroupsActionReturns200ForRootRoleUser(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var UserResource $userResource */
-        $userResource = self::$container->get(UserResource::class);
+        $userResource = static::$container->get(UserResource::class);
 
         $output = [];
 

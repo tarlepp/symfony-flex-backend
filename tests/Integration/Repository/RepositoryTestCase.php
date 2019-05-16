@@ -85,9 +85,9 @@ class RepositoryTestCase extends KernelTestCase
 
         parent::setUp();
 
-        self::bootKernel();
+        static::bootKernel();
 
-        $this->resource = self::$container->get($this->resourceName);
+        $this->resource = static::$container->get($this->resourceName);
         $this->repository = $this->resource->getRepository();
     }
 

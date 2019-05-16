@@ -145,8 +145,8 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->securityUserFactory = self::$container->get(SecurityUserFactory::class);
-        $this->userRepository = self::$container->get(UserRepository::class);
+        $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
+        $this->userRepository = static::$container->get(UserRepository::class);
     }
 
     protected function tearDown(): void

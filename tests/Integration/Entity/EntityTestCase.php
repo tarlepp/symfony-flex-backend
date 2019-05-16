@@ -244,7 +244,7 @@ abstract class EntityTestCase extends KernelTestCase
         $expectedOutput
     ): void {
         if ($method === '') {
-            self::markTestSkipped("Entity doesn't have associations, so cannot test those...");
+            static::markTestSkipped("Entity doesn't have associations, so cannot test those...");
         }
 
         static::assertTrue(
@@ -439,7 +439,7 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public function dataProviderTestThatSetterAndGettersWorks(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
@@ -516,7 +516,7 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public function dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
@@ -550,7 +550,7 @@ abstract class EntityTestCase extends KernelTestCase
         $entityManager->close();
         $entityManager = null; // avoid memory leaks
 
-        self::$kernel->shutdown();
+        static::$kernel->shutdown();
 
         $items = \array_filter($meta->getAssociationMappings(), $filter);
 
@@ -570,7 +570,7 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public function dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
@@ -599,7 +599,7 @@ abstract class EntityTestCase extends KernelTestCase
         $entityManager->close();
         $entityManager = null; // avoid memory leaks
 
-        self::$kernel->shutdown();
+        static::$kernel->shutdown();
 
         $items = \array_filter($meta->getAssociationMappings(), $filter);
 
@@ -619,7 +619,7 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public function dataProviderTestThatAssociationMethodsExists(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
@@ -695,7 +695,7 @@ abstract class EntityTestCase extends KernelTestCase
         $entityManager->close();
         $entityManager = null; // avoid memory leaks
 
-        self::$kernel->shutdown();
+        static::$kernel->shutdown();
 
         // These isn't associations, so return special values that marks test skipped
         if (empty($meta->getAssociationMappings())) {
@@ -714,7 +714,7 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public function dataProviderTestThatOneToManyAssociationMethodsWorksAsExpected(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var EntityManagerInterface $entityManager */
         $entityManager = static::$kernel->getContainer()->get('doctrine.orm.default_entity_manager');
@@ -739,7 +739,7 @@ abstract class EntityTestCase extends KernelTestCase
         $entityManager->close();
         $entityManager = null; // avoid memory leaks
 
-        self::$kernel->shutdown();
+        static::$kernel->shutdown();
 
         $items = \array_filter($meta->getAssociationMappings(), $filter);
 
@@ -760,7 +760,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         parent::setUp();
 
-        self::bootKernel();
+        static::bootKernel();
 
         // Store container and entity manager
         $this->testContainer = static::$kernel->getContainer();
@@ -779,7 +779,7 @@ abstract class EntityTestCase extends KernelTestCase
         $this->entityManager->close();
         $this->entityManager = null; // avoid memory leaks
 
-        self::$kernel->shutdown();
+        static::$kernel->shutdown();
 
         unset($this->repository, $this->entity, $this->entityManager, $this->testContainer);
     }

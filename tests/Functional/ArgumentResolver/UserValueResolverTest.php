@@ -38,10 +38,10 @@ class UserValueResolverTest extends KernelTestCase
      */
     public function testThatResolveReturnsExpectedUserObject(string $username): void
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var UserResource $resource */
-        $resource = self::$container->get(UserResource::class);
+        $resource = static::$container->get(UserResource::class);
 
         $user = $resource->findOneBy(['username' => $username]);
 
@@ -64,10 +64,10 @@ class UserValueResolverTest extends KernelTestCase
      */
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(string $username): void
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var UserResource $resource */
-        $resource = self::$container->get(UserResource::class);
+        $resource = static::$container->get(UserResource::class);
 
         $user = $resource->findOneBy(['username' => $username]);
 

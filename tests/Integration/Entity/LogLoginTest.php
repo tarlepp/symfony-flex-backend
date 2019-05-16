@@ -103,7 +103,7 @@ class LogLoginTest extends EntityTestCase
     {
         gc_enable();
 
-        self::bootKernel();
+        static::bootKernel();
 
         // Store container and entity manager
         $this->testContainer = static::$kernel->getContainer();

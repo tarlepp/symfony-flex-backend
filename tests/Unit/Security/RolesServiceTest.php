@@ -28,9 +28,9 @@ class RolesServiceTest extends KernelTestCase
     {
         parent::setUp();
 
-        self::bootKernel();
+        static::bootKernel();
 
-        $this->service = self::$container->get(RolesService::class);
+        $this->service = static::$container->get(RolesService::class);
     }
 
     public function testThatGetHierarchyReturnsExpected(): void

@@ -61,7 +61,7 @@ class ActionTest extends KernelTestCase
      */
     public function dataProviderTestThatTraitCallsExpectedMethod(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
         $folder = static::$kernel->getProjectDir() . '/src/Rest/Traits/Actions/Anon/';
         $pattern = '/^.+\.php$/i';

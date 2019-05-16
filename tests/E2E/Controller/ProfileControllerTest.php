@@ -421,9 +421,9 @@ class ProfileControllerTest extends WebTestCase
      */
     public function dataProviderTestThatProfileActionReturnsExpected(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
-        $rolesService = self::$container->get(RolesService::class);
+        $rolesService = static::$container->get(RolesService::class);
 
         $iterator = static function (string $role) use ($rolesService): array {
             return [str_pad($rolesService->getShort($role), 40, '_')];
@@ -456,9 +456,9 @@ class ProfileControllerTest extends WebTestCase
      */
     public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
-        $rolesService = self::$container->get(RolesService::class);
+        $rolesService = static::$container->get(RolesService::class);
 
         $iterator = static function (string $role) use ($rolesService): array {
             return [
@@ -494,9 +494,9 @@ class ProfileControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): array
     {
-        self::bootKernel();
+        static::bootKernel();
 
-        $rolesService = self::$container->get(RolesService::class);
+        $rolesService = static::$container->get(RolesService::class);
 
         $iterator = static function (string $role) use ($rolesService): array {
             return [

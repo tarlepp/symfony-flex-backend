@@ -30,9 +30,9 @@ class ApiKeyUserTest extends KernelTestCase
      */
     public function testThatGetRolesReturnsExpected(ApiKey $apiKey, array $expectedRoles): void
     {
-        self::bootKernel();
+        static::bootKernel();
 
-        $rolesService = self::$container->get(RolesService::class);
+        $rolesService = static::$container->get(RolesService::class);
 
         $apiKeyUser = new ApiKeyUser($apiKey, $rolesService);
 
@@ -47,8 +47,7 @@ class ApiKeyUserTest extends KernelTestCase
         static::bootKernel();
 
         /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = self::$container->get(UserGroupResource::class);
-
+        $userGroupResource = static::$container->get(UserGroupResource::class);
 
         yield [new ApiKey(), ['ROLE_API', 'ROLE_LOGGED']];
 
