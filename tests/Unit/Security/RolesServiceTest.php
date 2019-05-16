@@ -3,11 +3,12 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Security/RolesServiceTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Unit\Security;
 
 use App\Security\RolesService;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -101,61 +102,59 @@ class RolesServiceTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetRoleLabelReturnsExpected(): array
+    public function dataProviderTestThatGetRoleLabelReturnsExpected(): Generator
     {
-        return [
-            [RolesService::ROLE_LOGGED, 'Logged in users'],
-            [RolesService::ROLE_USER, 'Normal users'],
-            [RolesService::ROLE_ADMIN, 'Admin users'],
-            [RolesService::ROLE_ROOT, 'Root users'],
-            [RolesService::ROLE_API, 'API users'],
-            ['Not supported role', 'Unknown - Not supported role'],
-        ];
+        yield [RolesService::ROLE_LOGGED, 'Logged in users'];
+        yield [RolesService::ROLE_USER, 'Normal users'];
+        yield [RolesService::ROLE_ADMIN, 'Admin users'];
+        yield [RolesService::ROLE_ROOT, 'Root users'];
+        yield [RolesService::ROLE_API, 'API users'];
+        yield ['Not supported role', 'Unknown - Not supported role'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetShortReturnsExpected(): array
+    public function dataProviderTestThatGetShortReturnsExpected(): Generator
     {
-        return [
-            [RolesService::ROLE_LOGGED, 'logged'],
-            [RolesService::ROLE_USER, 'user'],
-            [RolesService::ROLE_ADMIN, 'admin'],
-            [RolesService::ROLE_ROOT, 'root'],
-            [RolesService::ROLE_API, 'api'],
-            ['SOME_CUSTOM_ROLE', 'custom_role']
-        ];
+        yield [RolesService::ROLE_LOGGED, 'logged'];
+        yield [RolesService::ROLE_USER, 'user'];
+        yield [RolesService::ROLE_ADMIN, 'admin'];
+        yield [RolesService::ROLE_ROOT, 'root'];
+        yield [RolesService::ROLE_API, 'api'];
+        yield ['SOME_CUSTOM_ROLE', 'custom_role'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetInheritedRolesReturnsExpected(): array
+    public function dataProviderTestThatGetInheritedRolesReturnsExpected(): Generator
     {
-        return [
-            [
-                [RolesService::ROLE_LOGGED],
-                [RolesService::ROLE_LOGGED]
-            ],
-            [
-                [RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
-                [RolesService::ROLE_USER]
-            ],
-            [
-                [RolesService::ROLE_API, RolesService::ROLE_LOGGED],
-                [RolesService::ROLE_API]
-            ],
-            [
-                [RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
-                [RolesService::ROLE_ADMIN]
-            ],
-            [
-                [RolesService::ROLE_ROOT, RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
-                [RolesService::ROLE_ROOT]
-            ],
+        yield [
+            [RolesService::ROLE_LOGGED],
+            [RolesService::ROLE_LOGGED],
+        ];
+
+        yield [
+            [RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
+            [RolesService::ROLE_USER],
+        ];
+
+        yield [
+            [RolesService::ROLE_API, RolesService::ROLE_LOGGED],
+            [RolesService::ROLE_API],
+        ];
+
+        yield [
+            [RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
+            [RolesService::ROLE_ADMIN],
+        ];
+
+        yield [
+            [RolesService::ROLE_ROOT, RolesService::ROLE_ADMIN, RolesService::ROLE_USER, RolesService::ROLE_LOGGED],
+            [RolesService::ROLE_ROOT],
         ];
     }
 }
