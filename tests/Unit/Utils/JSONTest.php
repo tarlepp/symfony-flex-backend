@@ -8,7 +8,11 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Utils;
 
 use App\Utils\JSON;
+use Generator;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use function is_array;
+use function serialize;
 
 /**
  * Class JSONTest
@@ -38,11 +42,12 @@ class JSONTest extends KernelTestCase
     public function testThatDecodeWorksLikeExpected(array $parameters, $expected): void
     {
         static::assertSame(
-            \serialize($expected),
-            \serialize(JSON::decode(...$parameters))
+            serialize($expected),
+            serialize(JSON::decode(...$parameters))
         );
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @dataProvider dataProviderTestThatEncodeThrowsAnExceptionOnMaximumDepth
      *
@@ -56,6 +61,7 @@ class JSONTest extends KernelTestCase
         JSON::encode(...$arguments);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @dataProvider dataProviderTestThatDecodeThrowsAnExceptionOnMaximumDepth
      *
@@ -69,6 +75,7 @@ class JSONTest extends KernelTestCase
         JSON::decode(...$arguments);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @dataProvider dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson
      *
@@ -82,6 +89,7 @@ class JSONTest extends KernelTestCase
         JSON::decode($json);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @dataProvider dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters
      *
@@ -98,121 +106,117 @@ class JSONTest extends KernelTestCase
     /**
      * Data provider for 'testThatEncodeWorksLikeExpected'
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatEncodeWorksLikeExpected(): array
+    public function dataProviderTestThatEncodeWorksLikeExpected(): Generator
     {
+        yield [
+            null,
+            'null',
+        ];
+
+        yield [
+            true,
+            'true',
+        ];
+
+        yield [
+            false,
+            'false',
+        ];
+
+        yield [
+            ['foo' => 'bar'],
+            '{"foo":"bar"}',
+        ];
+
         // Create simple object for test
-        $object = new \stdClass();
+        $object = new stdClass();
         $object->bar = 'foo';
-        $object->foo = new \stdClass();
+        $object->foo = new stdClass();
         $object->foo->a = 'foobar';
         $object->foo->b = 12;
         $object->foo->c = '12';
         $object->foo->d = true;
 
-        return [
-            [
-                null,
-                'null',
-            ],
-            [
-                true,
-                'true',
-            ],
-            [
-                false,
-                'false',
-            ],
-            [
-                ['foo' => 'bar'],
-                '{"foo":"bar"}',
-            ],
-            [
-                $object,
-                '{"bar":"foo","foo":{"a":"foobar","b":12,"c":"12","d":true}}',
-            ],
+        yield [
+            $object,
+            '{"bar":"foo","foo":{"a":"foobar","b":12,"c":"12","d":true}}',
         ];
     }
 
     /**
      * Data provider for 'testThatDecodeWorksLikeExpected'
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatDecodeWorksLikeExpected(): array
+    public function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {
-        $iterator = function ($data) {
+        $iterator = static function ($data) {
             return [
-                [$data[1], \is_array($data[0]) ? true : false],
+                [$data[1], is_array($data[0]) ? true : false],
                 $data[0],
             ];
         };
 
-        return \array_map($iterator, $this->dataProviderTestThatEncodeWorksLikeExpected());
+        foreach ($this->dataProviderTestThatEncodeWorksLikeExpected() as $data) {
+            yield $iterator($data);
+        }
     }
 
     /**
      * Date provider for 'testThatEncodeThrowsAnExceptionOnMaximumDepth'
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatEncodeThrowsAnExceptionOnMaximumDepth(): array
+    public function dataProviderTestThatEncodeThrowsAnExceptionOnMaximumDepth(): Generator
     {
-        return [
+        yield [
             [
-                [
-                    ['foo' => ['bar' => ['foo' => ['bar' => 'foo']]]],
-                    0,
-                    3,
-                ]
-            ],
+                ['foo' => ['bar' => ['foo' => ['bar' => 'foo']]]],
+                0,
+                3,
+            ]
         ];
     }
 
     /**
      * Data provider for 'testThatDecodeThrowsAnExceptionOnMaximumDepth'
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatDecodeThrowsAnExceptionOnMaximumDepth(): array
+    public function dataProviderTestThatDecodeThrowsAnExceptionOnMaximumDepth(): Generator
     {
-        return [
+        yield [
             [
-                [
-                    '{"bar":"foo","foo":{"a":"foobar","b":{"c":2}}}',
-                    false,
-                    3,
-                ]
-            ],
+                '{"bar":"foo","foo":{"a":"foobar","b":{"c":2}}}',
+                false,
+                3,
+            ]
         ];
     }
 
     /**
      * Data provider for 'testThatDecodeThrowsAnExceptionOnMalformedJson'
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson(): array
+    public function dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson(): Generator
     {
-        return [
-            ['{foo:bar}'],
-            ["{'foo':'bar'}"],
-            ['{"foo":bar}'],
-            ['{"foo":}'],
-        ];
+        yield ['{foo:bar}'];
+        yield ["{'foo':'bar'}"];
+        yield ['{"foo":bar}'];
+        yield ['{"foo":}'];
     }
 
     /**
      * Data provider for 'testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters'
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(): array
+    public function dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(): Generator
     {
-        return [
-            ["\xB1\x31"],
-            [mb_convert_encoding('{"data":"äöäö"}', 'ISO-8859-15', 'UTF8')]
-        ];
+        yield ["\xB1\x31"];
+        yield [mb_convert_encoding('{"data":"äöäö"}', 'ISO-8859-15', 'UTF8')];
     }
 }
