@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Security/ApiKeyUserTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Unit\Security;
 
@@ -11,6 +11,7 @@ use App\Entity\ApiKey;
 use App\Resource\UserGroupResource;
 use App\Security\ApiKeyUser;
 use App\Security\RolesService;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -33,35 +34,37 @@ class ApiKeyUserTest extends KernelTestCase
 
         $rolesService = self::$container->get(RolesService::class);
 
-        $foo = new ApiKeyUser($apiKey, $rolesService);
+        $apiKeyUser = new ApiKeyUser($apiKey, $rolesService);
 
-        static::assertSame($expectedRoles, $foo->getRoles());
+        static::assertSame($expectedRoles, $apiKeyUser->getRoles());
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetRolesReturnsExpected(): array
+    public function dataProviderTestThatGetRolesReturnsExpected(): Generator
     {
-        self::bootKernel();
+        static::bootKernel();
 
         /** @var UserGroupResource $userGroupResource */
         $userGroupResource = self::$container->get(UserGroupResource::class);
 
-        return [
-            [new ApiKey(), ['ROLE_API', 'ROLE_LOGGED']],
-            [
-                (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Normal users'])),
-                ['ROLE_API', 'ROLE_USER', 'ROLE_LOGGED'],
-            ],
-            [
-                (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Admin users'])),
-                ['ROLE_API', 'ROLE_ADMIN', 'ROLE_LOGGED', 'ROLE_USER'],
-            ],
-            [
-                (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Root users'])),
-                ['ROLE_API', 'ROLE_ROOT', 'ROLE_LOGGED', 'ROLE_ADMIN', 'ROLE_USER'],
-            ],
+
+        yield [new ApiKey(), ['ROLE_API', 'ROLE_LOGGED']];
+
+        yield [
+            (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Normal users'])),
+            ['ROLE_API', 'ROLE_USER', 'ROLE_LOGGED'],
+        ];
+
+        yield [
+            (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Admin users'])),
+            ['ROLE_API', 'ROLE_ADMIN', 'ROLE_LOGGED', 'ROLE_USER'],
+        ];
+
+        yield [
+            (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Root users'])),
+            ['ROLE_API', 'ROLE_ROOT', 'ROLE_LOGGED', 'ROLE_ADMIN', 'ROLE_USER'],
         ];
     }
 }
