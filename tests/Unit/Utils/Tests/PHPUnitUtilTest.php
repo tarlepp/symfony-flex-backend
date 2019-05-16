@@ -9,7 +9,11 @@ namespace App\Tests\Unit\Utils\Tests;
 
 use App\Entity\User;
 use App\Utils\Tests\PhpUnitUtil;
+use DateTime;
+use Generator;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class PHPUnitUtilTest
@@ -19,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class PHPUnitUtilTest extends KernelTestCase
 {
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessage Currently type '666' is not supported within type normalizer
@@ -39,9 +44,12 @@ class PHPUnitUtilTest extends KernelTestCase
         static::assertSame($expected, PhpUnitUtil::getType($input));
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot create valid value for type '666'.
+     *
+     * @throws Throwable
      */
     public function testThatGetValidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
@@ -54,6 +62,8 @@ class PHPUnitUtilTest extends KernelTestCase
      * @param mixed  $expected
      * @param string $input
      * @param bool   $strict
+     *
+     * @throws Throwable
      */
     public function testThatGetValidValueReturnsExpectedValue($expected, string $input, bool $strict): void
     {
@@ -62,14 +72,20 @@ class PHPUnitUtilTest extends KernelTestCase
         $strict ? static::assertSame($expected, $value) : static::assertInstanceOf($expected, $value);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetValidValueForTypeWorksWithCustomType(): void
     {
         static::assertInstanceOf(User::class, PhpUnitUtil::getValidValueForType(User::class));
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessage Cannot create invalid value for type '666'.
+     *
+     * @throws Throwable
      */
     public function testThatGetInvalidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
@@ -79,8 +95,10 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue
      *
-     * @param mixed  $expected
+     * @param mixed $expected
      * @param string $input
+     *
+     * @throws Throwable
      */
     public function testThatGetInvalidValueForTypeReturnsExpectedValue($expected, string $input): void
     {
@@ -88,53 +106,50 @@ class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue(): array
+    public function dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue(): Generator
     {
-        return [
-            [\DateTime::class, \stdClass::class],
-            [\stdClass::class, User::class],
-            [\stdClass::class, 'integer'],
-            [\stdClass::class, \DateTime::class],
-            [\stdClass::class, 'string'],
-            [\stdClass::class, 'array'],
-            [\stdClass::class, 'boolean'],
-        ];
+        yield [DateTime::class, stdClass::class];
+        yield [stdClass::class, User::class];
+        yield [stdClass::class, 'integer'];
+        yield [stdClass::class, DateTime::class];
+        yield [stdClass::class, 'string'];
+        yield [stdClass::class, 'array'];
+        yield [stdClass::class, 'boolean'];
+        yield [stdClass::class, 'bool'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetTypeReturnExpected(): array
+    public function dataProviderTestThatGetTypeReturnExpected(): Generator
     {
-        return [
-            ['integer', 'integer'],
-            ['integer', 'bigint'],
-            [\DateTime::class, 'time'],
-            [\DateTime::class, 'date'],
-            [\DateTime::class, 'datetime'],
-            ['string', 'string'],
-            ['string', 'text'],
-            ['array', 'array'],
-            ['boolean', 'boolean'],
-        ];
+        yield ['integer', 'integer'];
+        yield ['integer', 'bigint'];
+        yield [DateTime::class, 'time'];
+        yield [DateTime::class, 'date'];
+        yield [DateTime::class, 'datetime'];
+        yield ['string', 'string'];
+        yield ['string', 'text'];
+        yield ['array', 'array'];
+        yield ['boolean', 'boolean'];
+        yield ['boolean', 'bool'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetValidValueReturnsExpectedValue(): array
+    public function dataProviderTestThatGetValidValueReturnsExpectedValue(): Generator
     {
-        return [
-            [666, 'integer', true],
-            [666, 'bigint', true],
-            [\DateTime::class, 'time', false],
-            [\DateTime::class, 'date', false],
-            [\DateTime::class, 'datetime', false],
-            ['Some text here', 'string', true],
-            [['some', 'array', 'here'], 'array', true],
-            [true, 'boolean', true],
-        ];
+        yield [666, 'integer', true];
+        yield [666, 'bigint', true];
+        yield [DateTime::class, 'time', false];
+        yield [DateTime::class, 'date', false];
+        yield [DateTime::class, 'datetime', false];
+        yield ['Some text here', 'string', true];
+        yield [['some', 'array', 'here'], 'array', true];
+        yield [true, 'boolean', true];
+        yield [true, 'bool', true];
     }
 }
