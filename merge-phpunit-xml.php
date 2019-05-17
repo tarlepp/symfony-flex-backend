@@ -7,7 +7,7 @@ require __DIR__ . '/vendor/autoload.php';
 use SebastianBergmann\FinderFacade\FinderFacade;
 use TheSeer\fDOM\fDOMDocument;
 
-$input  = new FinderFacade([$argv[1]], array(), array('*.xml'));
+$input  = new FinderFacade([$argv[1]], [], ['*.xml']);
 $output = $argv[2];
 
 $outXml = new fDOMDocument();
