@@ -3,7 +3,8 @@ set -e
 
 #
 # If we're starting web-server we need to do following:
-#   1) Modify docker-php-ext-xdebug.ini file to contain correct remote host value
+#   1) Modify docker-php-ext-xdebug.ini file to contain correct remote host value, note that for mac we need to use
+#      another value within this.
 #   2) Ensure that /app/var directory exists and clear possible existing one before that
 #   3) Install all dependencies
 #   4) Generate JWT encryption keys + allow apache to read this file
@@ -17,7 +18,14 @@ set -e
 #
 
 # Step 1
-HOST=`/sbin/ip route|awk '/default/ { print $3 }'`
+if [[ -z "${DOCKER_WITH_MAC}" ]]; then
+  # Not Mac, so determine actual docker container IP address
+  HOST=`/sbin/ip route|awk '/default/ { print $3 }'`
+else
+  # Otherwise use special value, which works wit Mac
+  HOST="docker.for.mac.localhost"
+fi
+
 sed -i "s/xdebug\.remote_host \=.*/xdebug\.remote_host\=$HOST/g" /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 # Step 2
