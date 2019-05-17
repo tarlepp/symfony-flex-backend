@@ -38,6 +38,8 @@ return [
 
     'remove' => [
         //  ExampleInsight::class,
+        ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff::class,
+        ObjectCalisthenics\Sniffs\NamingConventions\NoSetterSniff::class,
     ],
 
     'config' => [
