@@ -10,7 +10,7 @@ use TheSeer\fDOM\fDOMDocument;
 $input  = new FinderFacade(array($argv[1]), array(), array('*.xml'));
 $output = $argv[2];
 
-$outXml = new fDOMDocument;
+$outXml = new fDOMDocument();
 $outXml->formatOutput = true;
 
 $outTestSuites = $outXml->createElement('testsuites');
@@ -27,7 +27,7 @@ $time       = 0;
 
 try {
     foreach ($input->findFiles() as $file) {
-        $inXml = new fDOMDocument;
+        $inXml = new fDOMDocument();
         $inXml->load($file);
 
         foreach ($inXml->getElementsByTagName('testsuite') as $inElement) {
