@@ -5,6 +5,7 @@ declare(strict_types = 1);
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
 namespace App\Rest\Traits\Actions\Anon;
 
 use App\Annotation\RestApiDoc;

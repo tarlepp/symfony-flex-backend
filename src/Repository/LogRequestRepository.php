@@ -5,6 +5,7 @@ declare(strict_types = 1);
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
 namespace App\Repository;
 
 use App\Entity\LogRequest as Entity;
