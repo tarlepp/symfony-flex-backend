@@ -43,8 +43,7 @@ class ControllerForLifeCycleTests extends Controller
      */
     public function __construct(ResourceForLifeCycleTests $resource, ResponseHandler $responseHandler)
     {
-        parent::__construct($resource);
-
+        $this->resource = $resource;
         $this->responseHandler = $responseHandler;
     }
 

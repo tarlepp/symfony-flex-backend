@@ -21,6 +21,7 @@ use App\Rest\Traits\Methods\FindOneMethod;
 abstract class FindOneMethodTestClass extends Controller
 {
     use FindOneMethod;
+
     /**
      * FindOneMethodTestClass constructor.
      *
@@ -29,7 +30,7 @@ abstract class FindOneMethodTestClass extends Controller
      */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
-        parent::__construct($resource);
+        $this->resource = $resource;
 
         $this->responseHandler = $responseHandler;
     }

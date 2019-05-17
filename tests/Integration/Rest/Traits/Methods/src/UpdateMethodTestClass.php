@@ -30,7 +30,7 @@ abstract class UpdateMethodTestClass extends Controller
      */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
-        parent::__construct($resource);
+        $this->resource = $resource;
 
         $this->responseHandler = $responseHandler;
     }

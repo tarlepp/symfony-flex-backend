@@ -8,14 +8,16 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest;
 
 use App\DTO\RestDtoInterface;
-use App\Rest\Controller;
-use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandler;
-use App\Utils\Tests\PhpUnitUtil;
-use PHPUnit_Framework_MockObject_MockObject;
+use App\Rest\RestResourceInterface;
+use App\Tests\Integration\Rest\src\AbstractController as Controller;
+use function get_class;
+use PHPUnit\Framework\MockObject\MockObject;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Serializer\Serializer;
+use Throwable;
 
 /**
  * Class ControllerTest
@@ -25,9 +27,12 @@ use Symfony\Component\Serializer\Serializer;
  */
 class ControllerTest extends KernelTestCase
 {
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Resource service not set
+     *
+     * @throws Throwable
      */
     public function testThatGetResourceThrowsAnExceptionIfNotSet(): void
     {
@@ -37,7 +42,7 @@ class ControllerTest extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {
@@ -51,9 +56,12 @@ class ControllerTest extends KernelTestCase
         static::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage ResponseHandler service not set
+     *
+     * @throws Throwable
      */
     public function testThatGetResponseHandlerThrowsAnExceptionIfNotSet(): void
     {
@@ -63,7 +71,7 @@ class ControllerTest extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatGetResponseHandlerDoesNotThrowsAnExceptionIfSet(): void
     {
@@ -79,41 +87,42 @@ class ControllerTest extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatGetDtoClassCallsExpectedServiceMethods(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dtoClass */
+        /** @var MockObject|RestDtoInterface $dtoClass */
         $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        /** @var MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $resource
             ->expects(static::once())
             ->method('getDtoClass')
-            ->willReturn(\get_class($dtoClass));
+            ->willReturn(get_class($dtoClass));
 
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
         $controller->getDtoClass();
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Given DTO class 'stdClass' is not implementing 'App\DTO\RestDtoInterface' interface.
      *
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatGetDtoClassThrowsAnExceptionIfResourceDoesNotReturnExpectedClass(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        /** @var MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $resource
             ->expects(static::once())
             ->method('getDtoClass')
-            ->willReturn(\stdClass::class);
+            ->willReturn(stdClass::class);
 
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
@@ -121,45 +130,45 @@ class ControllerTest extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatGetDtoClassWorksAsExpectedWithGivenDtoClasses(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dtoClass */
+        /** @var MockObject|RestDtoInterface $dtoClass */
         $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        /** @var MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $dtoClasses = [
-            'foo' => \get_class($dtoClass),
+            'foo' => get_class($dtoClass),
         ];
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|Controller $controller */
+        /** @var MockObject|Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
-        $reflection = new \ReflectionProperty(\get_class($controller), 'dtoClasses');
+        $reflection = new \ReflectionProperty(get_class($controller), 'dtoClasses');
         $reflection->setAccessible(true);
         $reflection->setValue(null, $dtoClasses);
 
-        static::assertSame(\get_class($dtoClass), $controller->getDtoClass('foo'));
+        static::assertSame(get_class($dtoClass), $controller->getDtoClass('foo'));
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatGetFormTypeClassCallsExpectedServiceMethods(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|FormTypeInterface $formTypeClass */
+        /** @var MockObject|FormTypeInterface $formTypeClass */
         $formTypeClass = $this->getMockBuilder(FormTypeInterface::class)->getMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        /** @var MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $resource
             ->expects(static::once())
             ->method('getFormTypeClass')
-            ->willReturn(\get_class($formTypeClass));
+            ->willReturn(get_class($formTypeClass));
 
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
@@ -167,27 +176,27 @@ class ControllerTest extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatGetFormTypeClassWorksAsExpectedWithGivenFormTypes(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|FormTypeInterface $formTypeClass */
+        /** @var MockObject|FormTypeInterface $formTypeClass */
         $formTypeClass = $this->getMockBuilder(FormTypeInterface::class)->getMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $resource */
+        /** @var MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $formTypes = [
-            'foo' => \get_class($formTypeClass),
+            'foo' => get_class($formTypeClass),
         ];
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|Controller $controller */
+        /** @var MockObject|Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
-        $reflection = new \ReflectionProperty(\get_class($controller), 'formTypes');
+        $reflection = new \ReflectionProperty(get_class($controller), 'formTypes');
         $reflection->setAccessible(true);
         $reflection->setValue(null, $formTypes);
 
-        static::assertSame(\get_class($formTypeClass), $controller->getFormTypeClass('bar::foo'));
+        static::assertSame(get_class($formTypeClass), $controller->getFormTypeClass('bar::foo'));
     }
 }
