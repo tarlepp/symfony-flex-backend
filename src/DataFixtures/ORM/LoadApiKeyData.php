@@ -69,7 +69,7 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
     public function load(ObjectManager $manager): void
     {
         /** @var RolesServiceInterface $roles */
-        $roles = $roles = $this->container->get('test.App\Security\RolesService');
+        $roles = $this->container->get('test.App\Security\RolesService');
 
         $this->roles = $roles;
         $this->manager = $manager;
