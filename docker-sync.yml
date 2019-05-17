@@ -7,3 +7,9 @@ version: '2'
 syncs:
     backend-code:
         src: ./
+        sync_args:
+            - "-ignore='Path .idea'"          # no need to send PHPStorm config to container
+            - "-ignore='Path .git'"           # ignore the main .git repo
+            - "-ignore='BelowPath .git'"      # also ignore .git repos in subfolders such as in composer vendor dirs
+            - "-ignore='Path var/cache/*'"    # don't share the cache
+            - "-ignore='Path var/sessions/*'" # we don't need the sessions locally
