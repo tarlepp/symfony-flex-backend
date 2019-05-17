@@ -70,7 +70,7 @@ class UserGroupController extends Controller
      */
     public function __construct(UserGroupResource $resource)
     {
-        parent::__construct($resource);
+        $this->resource = $resource;
     }
 
     /**

@@ -50,6 +50,6 @@ class ApiKeyController extends Controller
      */
     public function __construct(ApiKeyResource $resource)
     {
-        parent::__construct($resource);
+        $this->resource = $resource;
     }
 }

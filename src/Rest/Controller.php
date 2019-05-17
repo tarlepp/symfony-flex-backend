@@ -42,16 +42,6 @@ abstract class Controller implements ControllerInterface
     protected $responseHandler;
 
     /**
-     * Controller constructor.
-     *
-     * @param RestResourceInterface $resource
-     */
-    public function __construct(RestResourceInterface $resource)
-    {
-        $this->resource = $resource;
-    }
-
-    /**
      * @return RestResourceInterface
      *
      * @throws UnexpectedValueException

@@ -56,7 +56,7 @@ class RoleController extends Controller
      */
     public function __construct(RoleResource $resource)
     {
-        parent::__construct($resource);
+        $this->resource = $resource;
     }
 
     /**

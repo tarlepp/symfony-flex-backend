@@ -80,7 +80,7 @@ class UserController extends Controller
      */
     public function __construct(UserResource $resource)
     {
-        parent::__construct($resource);
+        $this->resource = $resource;
     }
 
     /**
