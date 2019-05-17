@@ -31,6 +31,7 @@ return [
     ],
     'remove' => [
         //  ExampleInsight::class,
+        NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits::class,
         ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff::class,
         ObjectCalisthenics\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
