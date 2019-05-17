@@ -38,6 +38,7 @@ return [
 
     'remove' => [
         //  ExampleInsight::class,
+        NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits::class,
         ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff::class,
         ObjectCalisthenics\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
         ObjectCalisthenics\Sniffs\NamingConventions\NoSetterSniff::class,
@@ -45,19 +46,32 @@ return [
         PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousInterfaceNamingSniff::class,
         SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
+        SlevomatCodingStandard\Sniffs\Classes\SuperfluousTraitNamingSniff::class,
     ],
 
     'config' => [
         //  ExampleInsight::class => [
         //      'key' => 'value',
         //  ],
+        ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff::class => [
+            'maxLength' => 40,
+        ],
+        ObjectCalisthenics\Sniffs\Metrics\MethodPerClassLimitSniff::class => [
+            'maxCount' => 15,
+        ],
+        ObjectCalisthenics\Sniffs\Metrics\PropertyPerClassLimitSniff::class => [
+            'maxCount' => 20,
+        ],
         PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff::class => [
             'lineLimit' => 120,
-            'absoluteLineLimit' => 120,
+            'absoluteLineLimit' => 140,
             'ignoreComments' => true,
         ],
         SlevomatCodingStandard\Sniffs\Namespaces\UnusedUsesSniff::class => [
             'searchAnnotations' => true,
+        ],
+        SlevomatCodingStandard\Sniffs\TypeHints\DeclareStrictTypesSniff::class => [
+            'newlinesCountAfterDeclare' => 1,
         ],
     ],
 
