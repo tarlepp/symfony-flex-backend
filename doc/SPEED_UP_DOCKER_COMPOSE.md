@@ -14,6 +14,7 @@ usage in development stage.
          * [Installation](#installation)
          * [Configuration](#configuration)
          * [Startup](#startup)
+         * [Notes](#notes)
       * [Linux](#linux)
 
 ## Reasons?
@@ -24,7 +25,7 @@ causes slowness problems within certain environments.
 
 ## Environments with problems
 
-Basically Windows and Mac with linux you should not have these problems at all.
+Basically Windows and Mac; with linux you should not have these problems at all.
 
 ### Windows
 
@@ -55,20 +56,25 @@ Create a `docker-compose.override.yml` file with following content:
 #
 version: '3'
 services:
-  php:
-    volumes:
-      - backend-code:/app:cached
-  nginx:
-    volumes:
-      - backend-code:/app:cached
+    php:
+        volumes:
+            - backend-code:/app:cached
+    nginx:
+        volumes:
+            - backend-code:/app:cached
 volumes:
-  backend-code:
-    external: true
+    backend-code:
+        external: true
 ```
 
 #### Startup
 
 To start application you just need to use command `docker-sync-stack start`
+
+#### Notes
+
+If / when you want to use Xdebug, you should read this document: 
+[Using Xdebug](XDEBUG.md)
 
 ### Linux
 
