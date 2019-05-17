@@ -5,11 +5,6 @@ services:
             context: .
             dockerfile: ./Dockerfile_dev
         command: php-fpm
-        #environment:
-            #APP_ENV=dev|test|prod
-            #APP_DEBUG=1|0
-            #APP_SECRET=8822e9bb81605a603006c9260793d983
-            #APPLICATION_CONFIG: /app/secrets/application.json
         depends_on:
             - mysql
         ports:
