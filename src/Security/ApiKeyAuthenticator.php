@@ -138,8 +138,10 @@ class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
             return $userProvider instanceof ApiKeyUserProvider;
         };
 
+        $providers = array_filter($userProvider->getProviders(), $filter);
+
         // Oh noes, we don't have ApiKeyUserProvider
-        if (count($providers = array_filter($userProvider->getProviders(), $filter)) !== 1) {
+        if (count($providers) !== 1) {
             throw new AuthenticationException('The user provider must be an instance of ApiKeyUserProvider');
         }
 
