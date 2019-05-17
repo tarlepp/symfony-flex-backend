@@ -1,13 +1,15 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 /**
  * /tests/Unit/Rest/RequestHandlerTest.php
  *
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
 namespace App\Tests\Unit\Rest;
 
 use App\Rest\RequestHandler;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use function json_encode;
@@ -20,6 +22,7 @@ use function json_encode;
  */
 class RequestHandlerTest extends KernelTestCase
 {
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
      * @expectedExceptionMessage Current 'where' parameter is not valid JSON.
@@ -32,12 +35,12 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetCriteriaMethodsReturnsExpectedArray
+     * @dataProvider dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator
      *
      * @param array $expected
      * @param array $where
      */
-    public function testThatGetCriteriaMethodsReturnsExpectedArray(array $expected, array $where): void
+    public function testThatGetCriteriaMethodsReturnsExpectedGenerator(array $expected, array $where): void
     {
         $fakeRequest = Request::create('/', 'GET', ['where' => json_encode($where)]);
 
@@ -80,8 +83,8 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetLimitReturnsExpectedValue
      *
-     * @param   array   $parameters
-     * @param   integer $expected
+     * @param array   $parameters
+     * @param integer $expected
      */
     public function testThatGetLimitReturnsExpectedValue(array $parameters, int $expected): void
     {
@@ -118,8 +121,8 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetOffsetReturnsExpectedValue
      *
-     * @param   array   $parameters
-     * @param   integer $expected
+     * @param array   $parameters
+     * @param integer $expected
      */
     public function testThatGetOffsetReturnsExpectedValue(array $parameters, int $expected): void
     {
@@ -141,7 +144,7 @@ class RequestHandlerTest extends KernelTestCase
         unset($actual, $fakeRequest);
     }
 
-    public function testThatGetSearchTermsReturnsEmptyArrayWithoutParameters(): void
+    public function testThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(): void
     {
         $fakeRequest = Request::create('/');
 
@@ -154,6 +157,7 @@ class RequestHandlerTest extends KernelTestCase
         unset($fakeRequest);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
      * @expectedExceptionMessage Given search parameter is not valid, within JSON provide 'and' and/or 'or' property.
@@ -174,8 +178,8 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetSearchTermsReturnsExpectedValue
      *
-     * @param   array   $expected
-     * @param   string  $search
+     * @param array  $expected
+     * @param string $search
      */
     public function testThatGetSearchTermsReturnsExpectedValue(array $expected, string $search): void
     {
@@ -195,88 +199,93 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetCriteriaMethodsReturnsExpectedArray(): array
+    public function dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator(): Generator
     {
-        return [
+        yield [
             [
-                [
-                    'foo' => 'bar',
-                ],
-                [
-                    'foo' => 'bar',
-                ],
+                'foo' => 'bar',
             ],
             [
-                [
-                    'foo' => '',
-                ],
-                [
-                    'foo' => '',
-                ],
+                'foo' => 'bar',
+            ],
+        ];
+
+        yield [
+            [
+                'foo' => '',
             ],
             [
-                [
-                    'foo' => '0',
-                ],
-                [
-                    'foo' => '0',
-                ],
+                'foo' => '',
+            ],
+        ];
+
+        yield [
+            [
+                'foo' => '0',
             ],
             [
-                [
-                    'foo' => 0,
-                ],
-                [
-                    'foo' => 0,
-                ],
+                'foo' => '0',
+            ],
+        ];
+
+        yield [
+            [
+                'foo' => 0,
             ],
             [
-                [
-                    'foo' => true,
-                ],
-                [
-                    'foo' => true,
-                ],
+                'foo' => 0,
+            ],
+        ];
+
+        yield [
+            [
+                'foo' => true,
             ],
             [
-                [
-                    'foo' => false,
-                ],
-                [
-                    'foo' => false,
-                ],
+                'foo' => true,
+            ],
+        ];
+
+        yield [
+            [
+                'foo' => false,
             ],
             [
-                [],
-                [
-                    'foo' => null,
-                ],
+                'foo' => false,
+            ],
+        ];
+
+        yield [
+            [],
+            [
+                'foo' => null,
+            ],
+        ];
+
+        yield [
+            [
+                'foo1' => 'bar',
+                'foo2' => '',
+                'foo3' => '0',
+                'foo4' => 0,
+                'foo5' => true,
+                'foo6' => false,
             ],
             [
-                [
-                    'foo1' => 'bar',
-                    'foo2' => '',
-                    'foo3' => '0',
-                    'foo4' => 0,
-                    'foo5' => true,
-                    'foo6' => false,
-                ],
-                [
-                    'foo1' => 'bar',
-                    'foo11' => null,
-                    'foo2' => '',
-                    'foo21' => null,
-                    'foo3' => '0',
-                    'foo31' => null,
-                    'foo4' => 0,
-                    'foo41' => null,
-                    'foo5' => true,
-                    'foo51' => null,
-                    'foo6' => false,
-                    'foo61' => null,
-                ],
+                'foo1' => 'bar',
+                'foo11' => null,
+                'foo2' => '',
+                'foo21' => null,
+                'foo3' => '0',
+                'foo31' => null,
+                'foo4' => 0,
+                'foo41' => null,
+                'foo5' => true,
+                'foo51' => null,
+                'foo6' => false,
+                'foo61' => null,
             ],
         ];
     }
@@ -284,122 +293,133 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetOrderByReturnsExpectedValue' test.
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetOrderByReturnsExpectedValue(): array
+    public function dataProviderTestThatGetOrderByReturnsExpectedValue(): Generator
     {
-        return [
+        yield [
+            ['order' => 'column1'],
+            ['column1' => 'ASC'],
+        ];
+
+        yield [
+            ['order' => '-column1'],
+            ['column1' => 'DESC'],
+        ];
+
+        yield [
+            ['order' => 't.column1'],
+            ['t.column1' => 'ASC'],
+        ];
+
+        yield [
+            ['order' => '-t.column1'],
+            ['t.column1' => 'DESC'],
+        ];
+
+        yield [
             [
-                ['order' => 'column1'],
-                ['column1' => 'ASC'],
-            ],
-            [
-                ['order' => '-column1'],
-                ['column1' => 'DESC'],
-            ],
-            [
-                ['order' => 't.column1'],
-                ['t.column1' => 'ASC'],
-            ],
-            [
-                ['order' => '-t.column1'],
-                ['t.column1' => 'DESC'],
-            ],
-            [
-                [
-                    'order' => [
-                        'column1' => 'ASC',
-                    ],
+                'order' => [
+                    'column1' => 'ASC',
                 ],
-                ['column1' => 'ASC'],
             ],
+            ['column1' => 'ASC'],
+        ];
+
+        yield [
             [
-                [
-                    'order' => [
-                        'column1' => 'DESC',
-                    ],
+                'order' => [
+                    'column1' => 'DESC',
                 ],
-                ['column1' => 'DESC'],
             ],
+            ['column1' => 'DESC'],
+        ];
+
+        yield [
             [
-                [
-                    'order' => [
-                        'column1' => 'foobar',
-                    ],
+                'order' => [
+                    'column1' => 'foobar',
                 ],
-                ['column1' => 'ASC'],
             ],
+            ['column1' => 'ASC'],
+        ];
+
+        yield [
             [
-                [
-                    'order' => [
-                        't.column1' => 'ASC',
-                    ],
+                'order' => [
+                    't.column1' => 'ASC',
                 ],
-                ['t.column1' => 'ASC'],
             ],
+            ['t.column1' => 'ASC'],
+        ];
+
+        yield [
             [
-                [
-                    'order' => [
-                        't.column1' => 'DESC',
-                    ],
+                'order' => [
+                    't.column1' => 'DESC',
                 ],
-                ['t.column1' => 'DESC'],
             ],
+            ['t.column1' => 'DESC'],
+        ];
+
+        yield [
             [
-                [
-                    'order' => [
-                        't.column1' => 'foobar',
-                    ],
+                'order' => [
+                    't.column1' => 'foobar',
                 ],
-                ['t.column1' => 'ASC'],
             ],
+            ['t.column1' => 'ASC'],
+        ];
+
+        yield [
             [
-                [
-                    'order' => [
-                        'column1' => 'ASC',
-                        'column2' => 'DESC',
-                    ],
-                ],
-                [
+                'order' => [
                     'column1' => 'ASC',
                     'column2' => 'DESC',
                 ],
             ],
             [
-                [
-                    'order' => [
-                        't.column1' => 'ASC',
-                        't.column2' => 'DESC',
-                    ],
-                ],
-                [
+                'column1' => 'ASC',
+                'column2' => 'DESC',
+            ],
+        ];
+
+        yield [
+            [
+                'order' => [
                     't.column1' => 'ASC',
                     't.column2' => 'DESC',
                 ],
             ],
             [
-                [
-                    'order' => [
-                        't.column1' => 'ASC',
-                        'column2' => 'ASC',
-                    ],
-                ],
-                [
+                't.column1' => 'ASC',
+                't.column2' => 'DESC',
+            ],
+        ];
+
+        yield [
+            [
+                'order' => [
                     't.column1' => 'ASC',
                     'column2' => 'ASC',
                 ],
             ],
             [
-                [
-                    'order' => [
-                        'column1' => 'ASC',
-                        'column2' => 'foobar',
-                    ],
-                ],
-                [
+                't.column1' => 'ASC',
+                'column2' => 'ASC',
+            ],
+        ];
+
+        yield [
+            [
+                'order' => [
                     'column1' => 'ASC',
-                    'column2' => 'ASC',
+                    'column2' => 'foobar',
                 ],
+            ],
+            [
+                'column1' => 'ASC',
+                'column2' => 'ASC',
             ],
         ];
     }
@@ -407,157 +427,166 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetLimitReturnsExpectedValue' test.
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetLimitReturnsExpectedValue(): array
+    public function dataProviderTestThatGetLimitReturnsExpectedValue(): Generator
     {
-        return [
-            [
-                ['limit' => 10],
-                10,
-            ],
-            [
-                ['limit' => 'ddd'],
-                0,
-            ],
-            [
-                ['limit' => 'E10'],
-                0,
-            ],
-            [
-                ['limit' => -10],
-                10,
-            ],
+        yield [
+            ['limit' => 10],
+            10,
+        ];
+
+        yield [
+            ['limit' => 'ddd'],
+            0,
+        ];
+
+        yield [
+            ['limit' => 'E10'],
+            0,
+        ];
+
+        yield [
+            ['limit' => -10],
+            10,
         ];
     }
 
     /**
      * Data provider method for 'testThatGetOffsetReturnsExpectedValue' test.
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetOffsetReturnsExpectedValue(): array
+    public function dataProviderTestThatGetOffsetReturnsExpectedValue(): Generator
     {
-        return [
-            [
-                ['offset' => 10],
-                10,
-            ],
-            [
-                ['offset' => 'ddd'],
-                0,
-            ],
-            [
-                ['offset' => 'E10'],
-                0,
-            ],
-            [
-                ['offset' => -10],
-                10,
-            ],
+        yield [
+            ['offset' => 10],
+            10,
+        ];
+
+        yield [
+            ['offset' => 'ddd'],
+            0,
+        ];
+
+        yield [
+            ['offset' => 'E10'],
+            0,
+        ];
+
+        yield [
+            ['offset' => -10],
+            10,
         ];
     }
 
     /**
      * Data provider method for 'testThatGetSearchTermsReturnsExpectedValue' test.
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): array
+    public function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
     {
-        return [
+        yield [
             [
-                [
-                    'or' => [
-                        '1',
-                    ],
+                'or' => [
+                    '1',
                 ],
-                true,
             ],
+            true,
+        ];
+
+        yield [
             [
-                [
-                    'or' => [
-                        'bar',
-                    ],
+                'or' => [
+                    'bar',
                 ],
-                'bar',
             ],
+            'bar',
+        ];
+
+        yield [
             [
-                [
-                    'or' => [
-                        'bar',
-                        'foo',
-                    ],
+                'or' => [
+                    'bar',
+                    'foo',
                 ],
-                'bar foo',
             ],
+            'bar foo',
+        ];
+
+        yield [
             [
-                [
-                    'or' => [
-                        'bar',
-                        'f',
-                        'oo',
-                    ],
+                'or' => [
+                    'bar',
+                    'f',
+                    'oo',
                 ],
-                'bar  f    oo ',
             ],
+            'bar  f    oo ',
+        ];
+
+        yield [
             [
-                [
-                    'and' => [
-                        'foo',
-                    ],
+                'and' => [
+                    'foo',
                 ],
-                '{"and": ["foo"]}'
             ],
+            '{"and": ["foo"]}'
+        ];
+
+        yield [
             [
-                [
-                    'or' => [
-                        'bar',
-                    ],
+                'or' => [
+                    'bar',
                 ],
-                '{"or": ["bar"]}'
             ],
+            '{"or": ["bar"]}'
+        ];
+
+        yield [
             [
-                [
-                    'and' => [
-                        'foo',
-                        'bar',
-                    ],
+                'and' => [
+                    'foo',
+                    'bar',
                 ],
-                '{"and": ["foo", "bar"]}'
             ],
+            '{"and": ["foo", "bar"]}'
+        ];
+
+        yield [
             [
-                [
-                    'or' => [
-                        'bar',
-                        'foo',
-                    ],
+                'or' => [
+                    'bar',
+                    'foo',
                 ],
-                '{"or": ["bar", "foo"]}'
             ],
+            '{"or": ["bar", "foo"]}'
+        ];
+
+        yield [
             [
-                [
-                    'or' => [
-                        'bar',
-                        'foo',
-                    ],
-                    'and' => [
-                        'foo',
-                        'bar',
-                    ],
+                'or' => [
+                    'bar',
+                    'foo',
                 ],
-                '{"or": ["bar", "foo"], "and": ["foo", "bar"]}'
+                'and' => [
+                    'foo',
+                    'bar',
+                ],
             ],
+            '{"or": ["bar", "foo"], "and": ["foo", "bar"]}'
+        ];
+
+        yield [
             [
-                [
-                    'or' => [
-                        '{"or":',
-                        '["bar",',
-                        '"foo"],',
-                    ],
+                'or' => [
+                    '{"or":',
+                    '["bar",',
+                    '"foo"],',
                 ],
-                '{"or": ["bar", "foo"], ', // With invalid JSON input it should fallback to string handling
             ],
+            '{"or": ["bar", "foo"], ', // With invalid JSON input it should fallback to string handling
         ];
     }
 }
