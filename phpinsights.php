@@ -41,6 +41,7 @@ return [
         ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff::class,
         ObjectCalisthenics\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
         ObjectCalisthenics\Sniffs\NamingConventions\NoSetterSniff::class,
+        SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
     ],
 
     'config' => [
