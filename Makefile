@@ -173,7 +173,7 @@ ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
 ###> phpinsights ###
 phpinsights: ## Runs PHP Insights
 	@echo "\033[32mRunning phpinsights\033[39m"
-	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse
+	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse --no-interaction
 ###< phpinsights ###
 
 ###> psalm ###
