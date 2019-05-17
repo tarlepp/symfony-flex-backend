@@ -37,6 +37,7 @@ generate-jwt-keys          # Generates JWT auth keys
 merge-clover               # Creates clover from fastest run
 merge-junit                # Creates JUnit xml from fastest run
 phpcs                      # Runs PHP CodeSniffer
+phpinsights                # Runs PHP Insights
 phpmetrics                 # Generates PhpMetrics static analysis
 phpstan                    # Runs PHPStan static analysis tool
 psalm                      # Runs Psalm static analysis tool

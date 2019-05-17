@@ -170,6 +170,12 @@ ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
 	@php -d error_reporting=0 ./vendor/bin/ecs --clear-cache --fix check src
 ###< ecs ###
 
+###> phpinsights ###
+phpinsights: ## Runs PHP Insights
+	@echo "\033[32mRunning phpinsights\033[39m"
+	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse
+###< phpinsights ###
+
 ###> psalm ###
 psalm: ## Runs Psalm static analysis tool
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
