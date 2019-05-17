@@ -16,6 +16,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/infection" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phan" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/php-coveralls" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpinsights" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpmetrics" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpstan" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/codedungeon" />
