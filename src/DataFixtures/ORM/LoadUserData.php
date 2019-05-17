@@ -25,7 +25,7 @@ use function array_map;
  * @package App\DataFixtures\ORM
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class LoadUserData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
+final class LoadUserData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
