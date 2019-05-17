@@ -41,6 +41,8 @@ return [
         ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff::class,
         ObjectCalisthenics\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
         ObjectCalisthenics\Sniffs\NamingConventions\NoSetterSniff::class,
+        PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterCastSniff::class,
+        PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class,
         SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
     ],
 
