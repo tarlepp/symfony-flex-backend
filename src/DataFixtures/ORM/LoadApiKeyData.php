@@ -86,7 +86,7 @@ class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, Contain
     /**
      * Get the order of this fixture
      *
-     * @return integer
+     * @return int
      */
     public function getOrder(): int
     {

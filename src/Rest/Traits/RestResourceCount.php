@@ -33,7 +33,7 @@ trait RestResourceCount
      *
      * @param mixed[] $criteria
      * @param mixed[] $search
-     * @param integer $count
+     * @param int     $count
      */
     public function afterCount(array &$criteria, array &$search, int &$count): void
     {

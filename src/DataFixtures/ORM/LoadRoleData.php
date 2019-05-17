@@ -86,7 +86,7 @@ class LoadRoleData extends Fixture implements OrderedFixtureInterface, Container
     /**
      * Get the order of this fixture
      *
-     * @return integer
+     * @return int
      */
     public function getOrder(): int
     {

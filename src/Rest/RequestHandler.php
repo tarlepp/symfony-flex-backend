@@ -130,7 +130,7 @@ final class RequestHandler
      *
      * @param HttpFoundationRequest $request
      *
-     * @return integer|null
+     * @return int|null
      */
     public static function getLimit(HttpFoundationRequest $request): ?int
     {
@@ -147,7 +147,7 @@ final class RequestHandler
      *
      * @param HttpFoundationRequest $request
      *
-     * @return integer|null
+     * @return int|null
      */
     public static function getOffset(HttpFoundationRequest $request): ?int
     {

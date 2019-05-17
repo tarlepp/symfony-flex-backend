@@ -59,7 +59,7 @@ interface ResponseHandlerInterface
      * @param Request                    $request
      * @param mixed                      $data
      * @param RestResourceInterface|null $restResource
-     * @param integer|null               $httpStatus
+     * @param int|null                   $httpStatus
      * @param string|null                $format
      * @param mixed[]|null               $context
      *

@@ -104,7 +104,7 @@ interface BaseRepositoryInterface
      * @param mixed[]|null $criteria
      * @param mixed[]|null $search
      *
-     * @return integer
+     * @return int
      *
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -201,7 +201,7 @@ interface BaseRepositoryInterface
      * Helper method to 'reset' repository entity table - in other words delete all records - so be carefully with
      * this...
      *
-     * @return integer
+     * @return int
      */
     public function reset(): int;
 

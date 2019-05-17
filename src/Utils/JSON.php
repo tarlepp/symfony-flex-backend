@@ -60,11 +60,11 @@ class JSON
      * @see http://php.net/manual/en/function.json-last-error.php
      *
      * @param mixed     $input      The value being encoded. Can be any type except a resource.
-     * @param integer   $options    Bitmask consisting of JSON_HEX_QUOT, JSON_HEX_TAG, JSON_HEX_AMP, JSON_HEX_APOS,
+     * @param int       $options    Bitmask consisting of JSON_HEX_QUOT, JSON_HEX_TAG, JSON_HEX_AMP, JSON_HEX_APOS,
      *                              JSON_NUMERIC_CHECK, JSON_PRETTY_PRINT, JSON_UNESCAPED_SLASHES, JSON_FORCE_OBJECT,
      *                              JSON_PRESERVE_ZERO_FRACTION, JSON_UNESCAPED_UNICODE, JSON_PARTIAL_OUTPUT_ON_ERROR.
      *                              The behaviour of these constants is described on the JSON constants page.
-     * @param integer   $depth      Set the maximum depth. Must be greater than zero.
+     * @param int       $depth      Set the maximum depth. Must be greater than zero.
      *
      * @return string
      *
@@ -92,8 +92,8 @@ class JSON
      *
      * @param string    $json       The json string being decoded.
      * @param boolean   $assoc      When TRUE, returned objects will be converted into associative arrays.
-     * @param integer   $depth      User specified recursion depth.
-     * @param integer   $options    Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
+     * @param int       $depth      User specified recursion depth.
+     * @param int       $options    Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
      *                              (default is to cast large integers as floats)
      *
      * @return stdClass|mixed|mixed[]
@@ -134,7 +134,7 @@ class JSON
      *
      * @see http://php.net/manual/en/function.json-last-error.php
      *
-     * @param integer $error
+     * @param int $error
      *
      * @return string
      */

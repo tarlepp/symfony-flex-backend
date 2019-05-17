@@ -41,7 +41,7 @@ class LogRequestRepository extends BaseRepository
     /**
      * Helper method to clean history data from request_log table.
      *
-     * @return integer
+     * @return int
      *
      * @throws \Exception
      */

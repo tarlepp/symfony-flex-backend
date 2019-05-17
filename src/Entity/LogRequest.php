@@ -106,7 +106,7 @@ class LogRequest implements EntityInterface
     private $apiKey;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "LogRequest",
@@ -122,7 +122,7 @@ class LogRequest implements EntityInterface
     private $statusCode;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "LogRequest",

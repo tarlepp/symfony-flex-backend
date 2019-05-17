@@ -128,8 +128,8 @@ trait RepositoryMethodsTrait
      *
      * @param mixed[]      $criteria
      * @param mixed[]|null $orderBy
-     * @param integer|null $limit
-     * @param integer|null $offset
+     * @param int|null     $limit
+     * @param int|null     $offset
      * @param mixed[]|null $search
      *
      * @return array<EntityInterface>|EntityInterface[]
@@ -215,7 +215,7 @@ trait RepositoryMethodsTrait
      * @param mixed[]|null $criteria
      * @param mixed[]|null $search
      *
-     * @return integer
+     * @return int
      *
      * @throws \InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException
@@ -246,7 +246,7 @@ trait RepositoryMethodsTrait
      * Helper method to 'reset' repository entity table - in other words delete all records - so be carefully with
      * this...
      *
-     * @return integer
+     * @return int
      */
     public function reset(): int
     {

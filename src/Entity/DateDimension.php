@@ -66,7 +66,7 @@ class DateDimension implements EntityInterface
     private $date;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "DateDimension",
@@ -85,7 +85,7 @@ class DateDimension implements EntityInterface
     private $year;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "DateDimension",
@@ -104,7 +104,7 @@ class DateDimension implements EntityInterface
     private $month;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "DateDimension",
@@ -123,7 +123,7 @@ class DateDimension implements EntityInterface
     private $day;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "DateDimension",
@@ -142,7 +142,7 @@ class DateDimension implements EntityInterface
     private $quarter;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "DateDimension",
@@ -161,7 +161,7 @@ class DateDimension implements EntityInterface
     private $weekNumber;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "DateDimension",
@@ -180,7 +180,7 @@ class DateDimension implements EntityInterface
     private $dayNumberOfWeek;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "DateDimension",
@@ -218,7 +218,7 @@ class DateDimension implements EntityInterface
     private $leapYear;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "DateDimension",
@@ -237,7 +237,7 @@ class DateDimension implements EntityInterface
     private $weekNumberingYear;
 
     /**
-     * @var integer
+     * @var int
      *
      * @Groups({
      *      "Default",

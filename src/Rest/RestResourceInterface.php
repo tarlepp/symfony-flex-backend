@@ -137,8 +137,8 @@ interface RestResourceInterface
      *
      * @param mixed[]|null $criteria
      * @param mixed[]|null $orderBy
-     * @param integer|null $limit
-     * @param integer|null $offset
+     * @param int|null     $limit
+     * @param int|null     $offset
      * @param mixed[]|null $search
      *
      * @return EntityInterface[]
@@ -189,7 +189,7 @@ interface RestResourceInterface
      * @param mixed[]|null $criteria
      * @param mixed[]|null $search
      *
-     * @return integer
+     * @return int
      *
      * @throws InvalidArgumentException
      * @throws \Doctrine\ORM\NonUniqueResultException

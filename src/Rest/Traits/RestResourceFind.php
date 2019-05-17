@@ -25,8 +25,8 @@ trait RestResourceFind
      *
      * @param mixed[] $criteria
      * @param mixed[] $orderBy
-     * @param integer $limit
-     * @param integer $offset
+     * @param int     $limit
+     * @param int     $offset
      * @param mixed[] $search
      */
     public function beforeFind(array &$criteria, array &$orderBy, int &$limit, int &$offset, array &$search): void
@@ -41,8 +41,8 @@ trait RestResourceFind
      *
      * @param mixed[]           $criteria
      * @param mixed[]           $orderBy
-     * @param integer           $limit
-     * @param integer           $offset
+     * @param int               $limit
+     * @param int               $offset
      * @param mixed[]           $search
      * @param EntityInterface[] $entities
      */

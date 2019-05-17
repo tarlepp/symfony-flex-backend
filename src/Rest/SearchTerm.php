@@ -36,7 +36,7 @@ final class SearchTerm implements SearchTermInterface
      * @param string|string[] $search  Search term(s), could be a string or an array of strings.
      * @param string|null     $operand Used operand with multiple search terms. See OPERAND_* constants. Defaults
      *                                 to self::OPERAND_OR
-     * @param integer|null    $mode    Used mode on LIKE search. See MODE_* constants. Defaults to self::MODE_FULL
+     * @param int|null        $mode    Used mode on LIKE search. See MODE_* constants. Defaults to self::MODE_FULL
      *
      * @return mixed[]|null
      */
@@ -62,7 +62,7 @@ final class SearchTerm implements SearchTermInterface
      * @param string[] $columns
      * @param string[] $searchTerms
      * @param string   $operand
-     * @param integer  $mode
+     * @param int      $mode
      *
      * @return mixed[]|null
      */

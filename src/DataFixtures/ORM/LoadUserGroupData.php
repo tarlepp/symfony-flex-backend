@@ -87,7 +87,7 @@ class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, Cont
     /**
      * Get the order of this fixture
      *
-     * @return integer
+     * @return int
      */
     public function getOrder(): int
     {

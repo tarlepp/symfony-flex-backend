@@ -36,7 +36,7 @@ class RepositoryHelper
     /**
      * Parameter count in current query, this is used to track parameters which are bind to current query.
      *
-     * @var integer
+     * @var int
      */
     public static $parameterCount = 0;
 
