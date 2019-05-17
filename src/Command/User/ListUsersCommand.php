@@ -125,7 +125,7 @@ class ListUsersCommand extends Command
      */
     private function formatterUserGroup(): Closure
     {
-        return function (UserGroup $userGroup): string {
+        return static function (UserGroup $userGroup): string {
             return sprintf(
                 '%s (%s)',
                 $userGroup->getName(),

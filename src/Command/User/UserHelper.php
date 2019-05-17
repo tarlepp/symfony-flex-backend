@@ -152,7 +152,7 @@ class UserHelper
      */
     private function getUserIterator(array &$choices): Closure
     {
-        return function (UserEntity $user) use (&$choices): void {
+        return static function (UserEntity $user) use (&$choices): void {
             $message = sprintf(
                 '%s (%s %s <%s>)',
                 $user->getUsername(),
@@ -174,7 +174,7 @@ class UserHelper
      */
     private function getUserGroupIterator(array &$choices): Closure
     {
-        return function (UserGroupEntity $userGroup) use (&$choices): void {
+        return static function (UserGroupEntity $userGroup) use (&$choices): void {
             $choices[$userGroup->getId()] = sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
         };
     }

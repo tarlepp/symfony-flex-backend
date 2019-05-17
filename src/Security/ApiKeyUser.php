@@ -66,7 +66,7 @@ class ApiKeyUser implements ApiKeyUserInterface
         $roles = [RolesService::ROLE_API];
 
         // Iterate API key user groups and attach those roles for API user
-        $this->apiKey->getUserGroups()->map(function (UserGroup $userGroup) use (&$roles): void {
+        $this->apiKey->getUserGroups()->map(static function (UserGroup $userGroup) use (&$roles): void {
             $roles[] = $userGroup->getRole()->getId();
         });
 

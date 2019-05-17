@@ -98,7 +98,7 @@ final class ResponseHandler implements ResponseHandlerInterface
 
             $groups = array_merge([$entityName], $populate);
 
-            $filter = function (string $groupName): bool {
+            $filter = static function (string $groupName): bool {
                 return strncmp($groupName, 'Set.', 4) === 0;
             };
 

@@ -113,7 +113,7 @@ class ListUserGroupsCommand extends Command
      */
     private function getFormatterUser(): Closure
     {
-        return function (User $user): string {
+        return static function (User $user): string {
             return sprintf(
                 '%s %s <%s>',
                 $user->getFirstname(),

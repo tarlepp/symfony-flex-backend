@@ -59,6 +59,9 @@ return [
         ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff::class => [
             'maxLength' => 45,
         ],
+        ObjectCalisthenics\Sniffs\Metrics\MaxNestingLevelSniff::class => [
+            'maxNestingLevel' => 3,
+        ],
         ObjectCalisthenics\Sniffs\Metrics\MethodPerClassLimitSniff::class => [
             'maxCount' => 25,
         ],
@@ -75,6 +78,8 @@ return [
         ],
         SlevomatCodingStandard\Sniffs\TypeHints\DeclareStrictTypesSniff::class => [
             'newlinesCountAfterDeclare' => 1,
+            'newlinesCountBetweenOpenTagAndDeclare' => 1,
+            'spacesCountAroundEqualsSign' => 1,
         ],
     ],
 

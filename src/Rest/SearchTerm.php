@@ -106,7 +106,7 @@ final class SearchTerm implements SearchTermInterface
          *
          * @return array
          */
-        return function (string $term) use ($columns, $mode): ?array {
+        return static function (string $term) use ($columns, $mode): ?array {
             return count($columns) ? array_map(self::getColumnIterator($term, $mode), $columns) : null;
         };
     }
@@ -128,7 +128,7 @@ final class SearchTerm implements SearchTermInterface
          *
          * @return string[]
          */
-        return function (string $column) use ($term, $mode): array {
+        return static function (string $column) use ($term, $mode): array {
             if (strpos($column, '.') === false) {
                 $column = 'entity.' . $column;
             }

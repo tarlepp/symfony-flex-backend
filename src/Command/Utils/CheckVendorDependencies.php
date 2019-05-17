@@ -135,7 +135,7 @@ class CheckVendorDependencies extends Command
          *
          * @return string
          */
-        $closure = function (SplFileInfo $fileInfo): string {
+        $closure = static function (SplFileInfo $fileInfo): string {
             return $fileInfo->getPath();
         };
 

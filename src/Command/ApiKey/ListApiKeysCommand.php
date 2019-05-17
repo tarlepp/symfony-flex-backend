@@ -127,7 +127,7 @@ class ListApiKeysCommand extends Command
      */
     private function getFormatterUserGroup(): Closure
     {
-        return function (UserGroup $userGroup): string {
+        return static function (UserGroup $userGroup): string {
             return sprintf(
                 '%s (%s)',
                 $userGroup->getName(),
