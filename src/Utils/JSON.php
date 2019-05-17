@@ -10,6 +10,11 @@ namespace App\Utils;
 
 use LogicException;
 use stdClass;
+use function array_key_exists;
+use function json_decode;
+use function json_encode;
+use function json_last_error;
+use function json_last_error_msg;
 use const JSON_ERROR_CTRL_CHAR;
 use const JSON_ERROR_DEPTH;
 use const JSON_ERROR_INF_OR_NAN;
@@ -19,11 +24,6 @@ use const JSON_ERROR_STATE_MISMATCH;
 use const JSON_ERROR_SYNTAX;
 use const JSON_ERROR_UNSUPPORTED_TYPE;
 use const JSON_ERROR_UTF8;
-use function array_key_exists;
-use function json_decode;
-use function json_encode;
-use function json_last_error;
-use function json_last_error_msg;
 
 /**
  * Class JSON
