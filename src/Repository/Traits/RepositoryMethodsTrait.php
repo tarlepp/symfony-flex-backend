@@ -345,8 +345,13 @@ trait RepositoryMethodsTrait
         RepositoryHelper::processOrderBy($queryBuilder, $orderBy);
 
         // Process limit and offset
-        $limit === 0 ?: $queryBuilder->setMaxResults($limit);
-        $offset === 0 ?: $queryBuilder->setFirstResult($offset);
+        if ($limit !== 0) {
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        if ($offset !== 0) {
+            $queryBuilder->setFirstResult($offset);
+        }
 
         return $queryBuilder;
     }
