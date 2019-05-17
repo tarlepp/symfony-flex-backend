@@ -155,8 +155,8 @@ interface RestResourceInterface
      * Generic findOne method to return single item from database. Return value is single entity from specified
      * repository.
      *
-     * @param string       $id
-     * @param boolean|null $throwExceptionIfNotFound
+     * @param string     $id
+     * @param boole|null $throwExceptionIfNotFound
      *
      * @return EntityInterface|null
      *
@@ -171,7 +171,7 @@ interface RestResourceInterface
      *
      * @param mixed[]      $criteria
      * @param mixed[]|null $orderBy
-     * @param boolean|null $throwExceptionIfNotFound
+     * @param bool|null    $throwExceptionIfNotFound
      *
      * @return EntityInterface|null
      *
@@ -262,7 +262,7 @@ interface RestResourceInterface
      * Generic method to save given entity to specified repository. Return value is created entity.
      *
      * @param EntityInterface $entity
-     * @param boolean|null    $skipValidation
+     * @param bool|null       $skipValidation
      *
      * @return EntityInterface
      *

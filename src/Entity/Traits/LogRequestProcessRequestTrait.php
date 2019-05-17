@@ -341,7 +341,7 @@ trait LogRequestProcessRequestTrait
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isXmlHttpRequest(): bool
     {

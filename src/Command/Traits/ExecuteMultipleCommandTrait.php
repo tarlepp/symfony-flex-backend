@@ -85,7 +85,7 @@ trait ExecuteMultipleCommandTrait
     /**
      * Method to ask user to make choose one of defined choices.
      *
-     * @return string|boolean
+     * @return string|bool
      */
     private function ask()
     {

@@ -90,11 +90,11 @@ class JSON
      * @see http://php.net/manual/en/function.json-decode.php
      * @see http://php.net/manual/en/function.json-last-error.php
      *
-     * @param string    $json       The json string being decoded.
-     * @param boolean   $assoc      When TRUE, returned objects will be converted into associative arrays.
-     * @param int       $depth      User specified recursion depth.
-     * @param int       $options    Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
-     *                              (default is to cast large integers as floats)
+     * @param string $json    The json string being decoded.
+     * @param bool   $assoc   When TRUE, returned objects will be converted into associative arrays.
+     * @param int    $depth   User specified recursion depth.
+     * @param int    $options Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
+     *                        (default is to cast large integers as floats)
      *
      * @return stdClass|mixed|mixed[]
      *

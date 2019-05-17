@@ -98,9 +98,9 @@ class UTCDateTimeType extends DateTimeType
     /**
      * Method to check if conversion was successfully or not.
      *
-     * @param mixed             $value
-     * @param AbstractPlatform  $platform
-     * @param DateTime|boolean $converted
+     * @param mixed            $value
+     * @param AbstractPlatform $platform
+     * @param DateTime|bool    $converted
      *
      * @throws ConversionException
      */

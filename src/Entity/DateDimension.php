@@ -199,7 +199,7 @@ class DateDimension implements EntityInterface
     private $dayNumberOfYear;
 
     /**
-     * @var boolean
+     * @var boold
      *
      * @Groups({
      *      "DateDimension",
@@ -353,7 +353,7 @@ class DateDimension implements EntityInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isLeapYear(): bool
     {

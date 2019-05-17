@@ -221,7 +221,7 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isMasterRequest(): bool
     {
