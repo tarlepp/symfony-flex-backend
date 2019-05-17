@@ -42,6 +42,8 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public function testThatReadValueMethodReturnsExpectedWithEmptyDatabase(): void
     {
+        PhpUnitUtil::loadFixtures(static::$kernel);
+
         static::assertNull($this->repository->read());
     }
 
