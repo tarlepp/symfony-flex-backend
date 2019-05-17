@@ -1,9 +1,7 @@
 <?php
-
-declare(strict_types=1);
+declare(strict_types = 1);
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Preset
@@ -16,9 +14,7 @@ return [
     | Supported: "default", "laravel", "symfony"
     |
     */
-
     'preset' => 'symfony',
-
     /*
     |--------------------------------------------------------------------------
     | Configuration
@@ -29,13 +25,11 @@ return [
     | mind, that all added `Insights` must belong to a specific `Metric`.
     |
     */
-
     'add' => [
         //  ExampleMetric::class => [
         //      ExampleInsight::class,
         //  ]
     ],
-
     'remove' => [
         //  ExampleInsight::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits::class,
@@ -48,7 +42,6 @@ return [
         SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousTraitNamingSniff::class,
     ],
-
     'config' => [
         //  ExampleInsight::class => [
         //      'key' => 'value',
@@ -82,5 +75,4 @@ return [
             'spacesCountAroundEqualsSign' => 1,
         ],
     ],
-
 ];
