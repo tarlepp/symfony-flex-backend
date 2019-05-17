@@ -49,7 +49,7 @@ class HelperConfigure
          *
          * @return InputOption
          */
-        return function (array $input): InputOption {
+        return static function (array $input): InputOption {
             return new InputOption(
                 $input['name'],
                 $input['shortcut'] ?? null,
