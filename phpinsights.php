@@ -53,11 +53,14 @@ return [
         //  ExampleInsight::class => [
         //      'key' => 'value',
         //  ],
+        ObjectCalisthenics\Sniffs\Files\ClassTraitAndInterfaceLengthSniff::class => [
+            'maxLength' => 600,
+        ],
         ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff::class => [
-            'maxLength' => 40,
+            'maxLength' => 45,
         ],
         ObjectCalisthenics\Sniffs\Metrics\MethodPerClassLimitSniff::class => [
-            'maxCount' => 15,
+            'maxCount' => 25,
         ],
         ObjectCalisthenics\Sniffs\Metrics\PropertyPerClassLimitSniff::class => [
             'maxCount' => 20,
