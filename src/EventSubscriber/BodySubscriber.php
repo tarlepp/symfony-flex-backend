@@ -14,7 +14,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use function fstat;
 use function in_array;
+use function is_resource;
+use function is_string;
 
 /**
  * Class BodySubscriber
@@ -66,9 +69,10 @@ class BodySubscriber implements EventSubscriberInterface
     {
         // Get current request
         $request = $event->getRequest();
+        $content = $request->getContent();
 
         // Request content is empty so assume that it's ok - probably DELETE or OPTION request
-        if (empty($request->getContent())) {
+        if ((is_string($content) && $content === '') || (is_resource($content) && fstat($content)['size']) === 0) {
             return;
         }
 

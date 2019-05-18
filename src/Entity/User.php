@@ -307,7 +307,7 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
      */
     public function setPlainPassword(string $plainPassword): self
     {
-        if (!empty($plainPassword)) {
+        if ($plainPassword !== '') {
             $this->plainPassword = $plainPassword;
 
             // Change some mapped values so preUpdate will get called.

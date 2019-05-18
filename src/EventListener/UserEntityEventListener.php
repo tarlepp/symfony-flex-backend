@@ -97,7 +97,7 @@ class UserEntityEventListener
         $plainPassword = $user->getPlainPassword();
 
         // Yeah, we have new plain password set, so we need to encode it
-        if (!empty($plainPassword)) {
+        if ($plainPassword !== '') {
             if (strlen($plainPassword) < 8) {
                 throw new LengthException('Too short password');
             }

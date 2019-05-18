@@ -170,7 +170,7 @@ final class ResponseHandler implements ResponseHandlerInterface
                 $error->/** @scrutinizer ignore-call */getMessage()
             );
 
-            if (empty($name)) {
+            if ($name === '') {
                 array_pop($errors);
 
                 $errors[] = $error->getMessage();

@@ -19,6 +19,7 @@ use function array_key_exists;
 use function array_map;
 use function array_walk;
 use function call_user_func_array;
+use function count;
 use function is_array;
 use function is_numeric;
 use function strcmp;
@@ -88,7 +89,7 @@ class RepositoryHelper
     {
         $criteria = $criteria ?? [];
 
-        if (empty($criteria)) {
+        if (count($criteria) === 0) {
             return;
         }
 
@@ -118,7 +119,7 @@ class RepositoryHelper
     {
         $terms = $terms ?? [];
 
-        if (empty($columns)) {
+        if (count($columns) === 0) {
             return;
         }
 

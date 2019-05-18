@@ -10,6 +10,7 @@ namespace App\Repository;
 
 use App\Repository\Traits\RepositoryMethodsTrait;
 use App\Repository\Traits\RepositoryWrappersTrait;
+use function count;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
@@ -141,7 +142,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     public function addLeftJoin(array $parameters): BaseRepositoryInterface
     {
-        if (!empty($parameters)) {
+        if (count($parameters) > 1) {
             $this->addJoinToQuery(self::LEFT_JOIN, $parameters);
         }
 
@@ -163,7 +164,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     public function addInnerJoin(array $parameters): BaseRepositoryInterface
     {
-        if (!empty($parameters)) {
+        if (count($parameters) > 0) {
             $this->addJoinToQuery(self::INNER_JOIN, $parameters);
         }
 

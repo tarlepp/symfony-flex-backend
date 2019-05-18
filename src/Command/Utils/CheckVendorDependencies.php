@@ -13,11 +13,13 @@ use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 use SplFileInfo;
+use stdClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 use Traversable;
@@ -49,7 +51,7 @@ class CheckVendorDependencies extends Command
     private $projectDir;
 
     /**
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var SymfonyStyle
      */
     private $io;
 
@@ -73,8 +75,8 @@ class CheckVendorDependencies extends Command
     /**
      * Executes the current command.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface $input
+     * @param OutputInterface $output
      *
      * @return int|null
      *
@@ -104,7 +106,7 @@ class CheckVendorDependencies extends Command
             'New version',
         ];
 
-        !empty($rows)
+        count($rows)
             ? $this->io->table($headers, $rows)
             : $this->io->success('Good news, there is not any vendor dependency to update at this time!');
 
@@ -213,7 +215,7 @@ class CheckVendorDependencies extends Command
      *
      * @param string $path
      *
-     * @return \stdClass[]
+     * @return stdClass[]
      *
      * @throws RuntimeException
      * @throws \Symfony\Component\Process\Exception\LogicException
@@ -233,7 +235,7 @@ class CheckVendorDependencies extends Command
         $process->enableOutput();
         $process->run();
 
-        if (!empty($process->getErrorOutput())
+        if ($process->getErrorOutput() !== ''
             && !($process->getExitCode() === 0 || $process->getExitCode() === null)
         ) {
             $message = sprintf(
@@ -245,7 +247,7 @@ class CheckVendorDependencies extends Command
             throw new RuntimeException($message);
         }
 
-        return json_decode($process->getOutput())->installed ?? [];
+        return json_decode($process->getOutput(), false)->installed ?? [];
     }
 
     /**
