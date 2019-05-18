@@ -39,8 +39,10 @@ return [
         PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterCastSniff::class,
         PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousInterfaceNamingSniff::class,
-        SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousTraitNamingSniff::class,
+        SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
+        SlevomatCodingStandard\Sniffs\TypeHints\DisallowMixedTypeHintSniff::class,
+        SlevomatCodingStandard\Sniffs\TypeHints\DisallowArrayTypeHintSyntaxSniff::class,
     ],
     'config' => [
         //  ExampleInsight::class => [
