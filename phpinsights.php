@@ -24,6 +24,10 @@ return [
     | mind, that all added `Insights` must belong to a specific `Metric`.
     |
     */
+    'exclude' => [
+        'templates',
+        'src/Migrations',
+    ],
     'add' => [
         //  ExampleMetric::class => [
         //      ExampleInsight::class,
@@ -38,6 +42,7 @@ return [
         ObjectCalisthenics\Sniffs\NamingConventions\NoSetterSniff::class,
         PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterCastSniff::class,
         PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class,
+        PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\CharacterBeforePHPOpeningTagSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousInterfaceNamingSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousTraitNamingSniff::class,
         SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
