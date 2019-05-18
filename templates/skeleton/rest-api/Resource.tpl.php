@@ -1,26 +1,26 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
- * /src/Resource/<?= $resourceName ?>.php
+ * /src/Resource/<?php echo $resourceName ?>.php
  *
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
 namespace App\Resource;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
-use App\Entity\<?= $entityName ?> as Entity;
-use App\Repository\<?= $repositoryName ?> as Repository;
+use App\Entity\<?php echo $entityName ?> as Entity;
+use App\Repository\<?php echo $repositoryName ?> as Repository;
 use App\Rest\RestResource;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
 /**
- * Class <?= $resourceName . "\n" ?>
+ * Class <?php echo $resourceName . "\n" ?>
  *
  * @package App\Resource
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  *
  * @codingStandardsIgnoreStart
  *
@@ -35,10 +35,10 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  *
  * @codingStandardsIgnoreEnd
  */
-class <?= $resourceName ?> extends RestResource
+class <?php echo $resourceName ?> extends RestResource
 {
     /**
-     * <?= $resourceName ?> constructor.
+     * <?php echo $resourceName ?> constructor.
      *
      * @param Repository         $repository
      * @param ValidatorInterface $validator

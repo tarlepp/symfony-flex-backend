@@ -1,24 +1,24 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
- * /tests/Integration/Entity//<?= $entityName ?>Test.php
+ * /tests/Integration/Entity//<?php echo $entityName ?>Test.php
  *
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
 namespace App\Tests\Integration\Entity;
 
-use App\Entity\<?= $entityName ?>;
+use App\Entity\<?php echo $entityName ?>;
 
 /**
- * Class <?= $entityName ?>Test
+ * Class <?php echo $entityName ?>Test
  *
  * @package App\Tests\Integration\Entity
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
-class <?= $entityName ?>Test extends EntityTestCase
+class <?php echo $entityName ?>Test extends EntityTestCase
 {
     /**
      * @var string
      */
-    protected $entityName = <?= $entityName ?>::class;
+    protected $entityName = <?php echo $entityName ?>::class;
 }

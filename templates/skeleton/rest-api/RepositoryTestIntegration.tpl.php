@@ -1,38 +1,38 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
- * /tests/Integration/Integration/<?= $repositoryName ?>Test.php
+ * /tests/Integration/Integration/<?php echo $repositoryName ?>Test.php
  *
-* @author  <?= $author . "\n" ?>
+* @author  <?php echo $author . "\n" ?>
  */
 namespace App\Tests\Integration\Repository;
 
-use App\Entity\<?= $entityName ?>;
-use App\Repository\<?= $repositoryName ?>;
-use App\Resource\<?= $resourceName ?>;
+use App\Entity\<?php echo $entityName ?>;
+use App\Repository\<?php echo $repositoryName ?>;
+use App\Resource\<?php echo $resourceName ?>;
 
 /**
- * Class <?= $repositoryName ?>Test
+ * Class <?php echo $repositoryName ?>Test
  *
  * @package App\Tests\Integration\Repository
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
-class <?= $repositoryName ?>Test extends RepositoryTestCase
+class <?php echo $repositoryName ?>Test extends RepositoryTestCase
 {
     /**
      * @var string
      */
-    protected $entityName = <?= $entityName ?>::class;
+    protected $entityName = <?php echo $entityName ?>::class;
 
     /**
      * @var string
      */
-    protected $repositoryName = <?= $repositoryName ?>::class;
+    protected $repositoryName = <?php echo $repositoryName ?>::class;
 
     /**
      * @var string
      */
-    protected $resourceName = <?= $resourceName ?>::class;
+    protected $resourceName = <?php echo $resourceName ?>::class;
 
     /**
      * @var array

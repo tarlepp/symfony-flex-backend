@@ -1,9 +1,9 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
- * /tests/Functional/Controller/<?= $controllerName ?>Test.php
+ * /tests/Functional/Controller/<?php echo $controllerName ?>Test.php
  *
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
 namespace App\Tests\Functional\Controller;
 
@@ -11,14 +11,14 @@ use App\Utils\Tests\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class <?= $controllerName ?>Test
+ * Class <?php echo $controllerName ?>Test
  *
  * @package App\Tests\Functional\Controller
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
-class <?= $controllerName ?>Test extends WebTestCase
+class <?php echo $controllerName ?>Test extends WebTestCase
 {
-    private $baseUrl = '<?= $routePath ?>';
+    private $baseUrl = '<?php echo $routePath ?>';
 
     /**
      * @throws \Exception

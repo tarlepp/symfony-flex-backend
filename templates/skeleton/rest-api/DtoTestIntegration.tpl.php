@@ -1,32 +1,32 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
- * /tests/Integration/DTO/<?= $entityName ?>Test.php
+ * /tests/Integration/DTO/<?php echo $entityName ?>Test.php
  *
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
 namespace App\Tests\Integration\DTO;
 
-use App\DTO\<?= $entityName ?> as <?= $entityName ?>Dto;
-use App\Entity\<?= $entityName ?> as <?= $entityName ?>Entity;
+use App\DTO\<?php echo $entityName ?> as <?php echo $entityName ?>Dto;
+use App\Entity\<?php echo $entityName ?> as <?php echo $entityName ?>Entity;
 
 /**
- * Class <?= $entityName ?>Test
+ * Class <?php echo $entityName ?>Test
  *
  * @package App\Tests\Integration\DTO
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
-class <?= $entityName ?>Test extends DtoTestCase
+class <?php echo $entityName ?>Test extends DtoTestCase
 {
-    protected $dtoClass = <?= $entityName ?>Dto::class;
+    protected $dtoClass = <?php echo $entityName ?>Dto::class;
 
     public function testThatLoadMethodWorks(): void
     {
         // Create entity
-        $entity = new <?= $entityName ?>Entity();
+        $entity = new <?php echo $entityName ?>Entity();
 
         // Create DTO and load entity
-        $dto = new <?= $entityName ?>Dto();
+        $dto = new <?php echo $entityName ?>Dto();
         $dto->load($entity);
 
         static::assertSame($entity->getId(), $dto->getId());

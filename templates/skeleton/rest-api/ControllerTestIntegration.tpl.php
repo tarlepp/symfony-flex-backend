@@ -1,31 +1,31 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
- * /tests/Integration/Controller/<?= $controllerName ?>Test.php
+ * /tests/Integration/Controller/<?php echo $controllerName ?>Test.php
  *
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
 namespace App\Tests\Integration\Controller;
 
-use App\Controller\<?= $controllerName ?>;
-use App\Resource\<?= $resourceName ?>;
+use App\Controller\<?php echo $controllerName ?>;
+use App\Resource\<?php echo $resourceName ?>;
 use App\Utils\Tests\RestIntegrationControllerTestCase;
 
 /**
- * Class <?= $controllerName ?>Test
+ * Class <?php echo $controllerName ?>Test
  *
  * @package Integration\Controller
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
-class <?= $controllerName ?>Test extends RestIntegrationControllerTestCase
+class <?php echo $controllerName ?>Test extends RestIntegrationControllerTestCase
 {
     /**
      * @var string
      */
-    protected $controllerClass = <?= $controllerName ?>::class;
+    protected $controllerClass = <?php echo $controllerName ?>::class;
 
     /**
      * @var string
      */
-    protected $resourceClass = <?= $resourceName ?>::class;
+    protected $resourceClass = <?php echo $resourceName ?>::class;
 }

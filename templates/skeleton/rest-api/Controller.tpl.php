@@ -1,13 +1,13 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
- * /src/Controller/<?= $controllerName ?>.php
+ * /src/Controller/<?php echo $controllerName ?>.php
  *
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
 namespace App\Controller;
 
-use App\Resource\<?= $resourceName ?>;
+use App\Resource\<?php echo $resourceName ?>;
 use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use App\Rest\Traits\Actions;
@@ -16,18 +16,18 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 
 /**
- * @Route(path="<?= $routePath ?>")
+ * @Route(path="<?php echo $routePath ?>")
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
- * @SWG\Tag(name="<?= $swaggerTag ?>")
+ * @SWG\Tag(name="<?php echo $swaggerTag ?>")
  *
  * @package App\Controller
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  *
- * @method <?= $resourceName ?> getResource()
+ * @method <?php echo $resourceName ?> getResource()
  */
-class <?= $controllerName ?> extends Controller
+class <?php echo $controllerName ?> extends Controller
 {
     // Traits for REST actions
     use Actions\User\CountAction;
@@ -40,12 +40,12 @@ class <?= $controllerName ?> extends Controller
     use Actions\User\UpdateAction;
 
     /**
-     * <?= $controllerName ?> constructor.
+     * <?php echo $controllerName ?> constructor.
      *
-     * @param <?= $resourceName ?> $resource
+     * @param <?php echo $resourceName ?> $resource
      * @param ResponseHandler $responseHandler
      */
-    public function __construct(<?= $resourceName ?> $resource, ResponseHandler $responseHandler)
+    public function __construct(<?php echo $resourceName ?> $resource, ResponseHandler $responseHandler)
     {
         $this->init($resource, $responseHandler);
     }

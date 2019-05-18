@@ -1,20 +1,20 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
- * /src/Repository/<?= $repositoryName ?>.php
+ * /src/Repository/<?php echo $repositoryName ?>.php
  *
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
 namespace App\Repository;
 
-use App\Entity\<?= $entityName ?> as Entity;
+use App\Entity\<?php echo $entityName ?> as Entity;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /**
- * Class <?= $repositoryName . "\n" ?>
+ * Class <?php echo $repositoryName . "\n" ?>
  *
  * @package App\Repository
- * @author  <?= $author ?>
+ * @author  <?php echo $author ?>
  *
  * @codingStandardsIgnoreStart
  *
@@ -26,7 +26,7 @@ use App\Entity\<?= $entityName ?> as Entity;
  *
  * @codingStandardsIgnoreEnd
  */
-class <?= $repositoryName ?> extends BaseRepository
+class <?php echo $repositoryName ?> extends BaseRepository
 {
     /**
      * @var string

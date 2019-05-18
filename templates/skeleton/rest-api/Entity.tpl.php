@@ -1,9 +1,9 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
- * /src/Entity/<?= $entityName ?>.php
+ * /src/Entity/<?php echo $entityName ?>.php
  *
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
 namespace App\Entity;
 
@@ -15,17 +15,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class <?= $entityName . "\n" ?>
+ * Class <?php echo $entityName . "\n" ?>
  *
  * @ORM\Table(
- *      name="<?= $tableName ?>",
+ *      name="<?php echo $tableName ?>",
  *  )
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
-class <?= $entityName ?> implements EntityInterface
+class <?php echo $entityName ?> implements EntityInterface
 {
     // Traits
     use Blameable;
@@ -35,8 +35,8 @@ class <?= $entityName ?> implements EntityInterface
      * @var string
      *
      * @Groups({
-     *      "<?= $entityName ?>",
-     *      "<?= $entityName ?>.id",
+     *      "<?php echo $entityName ?>",
+     *      "<?php echo $entityName ?>.id",
      *  })
      *
      * @ORM\Column(
@@ -49,7 +49,7 @@ class <?= $entityName ?> implements EntityInterface
     private $id;
 
     /**
-     * <?= $entityName ?> constructor.
+     * <?php echo $entityName ?> constructor.
      */
     public function __construct()
     {

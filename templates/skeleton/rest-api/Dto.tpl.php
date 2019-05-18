@@ -1,22 +1,22 @@
-<?= "<?php\n" ?>
+<?php echo "<?php\n" ?>
 declare(strict_types = 1);
 /**
-* /src/DTO/<?= $entityName ?>.php
+* /src/DTO/<?php echo $entityName ?>.php
 *
-* @author  <?= $author . "\n" ?>
+* @author  <?php echo $author . "\n" ?>
 */
 namespace App\DTO;
 
 use App\Entity\EntityInterface;
-use App\Entity\<?= $entityName ?> as <?= $entityName ?>Entity;
+use App\Entity\<?php echo $entityName ?> as <?php echo $entityName ?>Entity;
 
 /**
- * Class <?= $entityName . "\n" ?>
+ * Class <?php echo $entityName . "\n" ?>
  *
  * @package App\DTO
- * @author  <?= $author . "\n" ?>
+ * @author  <?php echo $author . "\n" ?>
  */
-class <?= $entityName ?> extends RestDto
+class <?php echo $entityName ?> extends RestDto
 {
     /**
      * @var string|null
@@ -26,9 +26,9 @@ class <?= $entityName ?> extends RestDto
     /**
      * Method to load DTO data from specified entity.
      *
-     * @param EntityInterface||<?= $entityName ?>Entity $entity
+     * @param EntityInterface||<?php echo $entityName ?>Entity $entity
      *
-     * @return RestDtoInterface|<?= $entityName . "\n" ?>
+     * @return RestDtoInterface|<?php echo $entityName . "\n" ?>
      */
     public function load(EntityInterface $entity): RestDtoInterface
     {
@@ -48,9 +48,9 @@ class <?= $entityName ?> extends RestDto
     /**
      * @param null|string $id
      *
-     * @return <?= $entityName . "\n" ?>
+     * @return <?php echo $entityName . "\n" ?>
      */
-    public function setId(string $id = null): <?= $entityName . "\n" ?>
+    public function setId(string $id = null): <?php echo $entityName . "\n" ?>
     {
         $this->setVisited('id');
 
