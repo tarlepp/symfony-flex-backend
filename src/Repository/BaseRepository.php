@@ -10,12 +10,12 @@ namespace App\Repository;
 
 use App\Repository\Traits\RepositoryMethodsTrait;
 use App\Repository\Traits\RepositoryWrappersTrait;
-use function count;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use function array_merge;
 use function array_unshift;
+use function count;
 use function implode;
 use function in_array;
 use function serialize;
