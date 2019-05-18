@@ -155,8 +155,8 @@ interface RestResourceInterface
      * Generic findOne method to return single item from database. Return value is single entity from specified
      * repository.
      *
-     * @param string     $id
-     * @param boole|null $throwExceptionIfNotFound
+     * @param string    $id
+     * @param bool|null $throwExceptionIfNotFound
      *
      * @return EntityInterface|null
      *
