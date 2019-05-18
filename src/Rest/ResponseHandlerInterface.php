@@ -23,8 +23,6 @@ interface ResponseHandlerInterface
 {
     /**
      * Constants for response output formats.
-     *
-     * @var string
      */
     public const FORMAT_JSON = 'json';
     public const FORMAT_XML = 'xml';

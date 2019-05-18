@@ -33,9 +33,6 @@ use const JSON_ERROR_UTF8;
  */
 class JSON
 {
-    /**
-     * @var string
-     */
     private const JSON_UNKNOWN_ERROR = 'Unknown error.';
 
     /**
