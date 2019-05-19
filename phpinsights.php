@@ -1,4 +1,6 @@
 <?php
+/** @noinspection PhpUndefinedNamespaceInspection */
+/** @noinspection PhpUndefinedClassInspection */
 declare(strict_types = 1);
 return [
     /*
@@ -37,12 +39,8 @@ return [
         //  ExampleInsight::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits::class,
-        ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff::class,
         ObjectCalisthenics\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
         ObjectCalisthenics\Sniffs\NamingConventions\NoSetterSniff::class,
-        PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterCastSniff::class,
-        PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class,
-        PHP_CodeSniffer\Standards\Generic\Sniffs\PHP\CharacterBeforePHPOpeningTagSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousInterfaceNamingSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousTraitNamingSniff::class,
         SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
@@ -59,6 +57,9 @@ return [
         ObjectCalisthenics\Sniffs\Files\FunctionLengthSniff::class => [
             'maxLength' => 45,
         ],
+        ObjectCalisthenics\Sniffs\NamingConventions\ElementNameMinimalLengthSniff::class => [
+            'allowedShortNames' => ['i', 'id', 'to', 'up', 'io', 'em'],
+        ],
         ObjectCalisthenics\Sniffs\Metrics\MaxNestingLevelSniff::class => [
             'maxNestingLevel' => 3,
         ],
@@ -72,6 +73,12 @@ return [
             'lineLimit' => 120,
             'absoluteLineLimit' => 140,
             'ignoreComments' => true,
+        ],
+        PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterCastSniff::class => [
+            'spacing' => 0,
+        ],
+        PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class => [
+            'spacing' => 0,
         ],
         SlevomatCodingStandard\Sniffs\Namespaces\UnusedUsesSniff::class => [
             'searchAnnotations' => true,
