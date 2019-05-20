@@ -16,9 +16,11 @@ use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class GenericRepositoryTest
@@ -33,7 +35,7 @@ class GenericRepositoryTest extends KernelTestCase
     private $resourceClass = UserResource::class;
 
     /**
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
     public function testThatGetReferenceReturnsExpected(): void
     {
@@ -46,6 +48,126 @@ class GenericRepositoryTest extends KernelTestCase
         static::assertInstanceOf(Proxy::class, $repository->getReference($entity->getId()));
 
         unset($repository, $entity);
+    }
+
+    public function testThatGetAssociationsReturnsExpected(): void
+    {
+        /** @var UserRepository $repository */
+        $repository = static::$container->get($this->resourceClass)->getRepository();
+
+        static::assertSame(
+            ['createdBy', 'updatedBy', 'userGroups', 'logsRequest', 'logsLogin', 'logsLoginFailure'],
+            array_keys($repository->getAssociations())
+        );
+    }
+
+    public function testThatGetClassMetaDataReturnsExpected(): void
+    {
+        /** @var UserRepository $repository */
+        $repository = static::$container->get($this->resourceClass)->getRepository();
+
+        static::assertInstanceOf(ClassMetadata::class, $repository->getClassMetaData());
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Cannot get entity manager for entity 'App\Entity\User'
+     *
+     * @throws Throwable
+     */
+    public function testThatGetEntityManagerThrowsAnExceptionIfManagerIsNotValid(): void
+    {
+        $managerObject = $this->getMockForAbstractClass(
+            AbstractManagerRegistry::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getManagerForClass']
+        );
+
+        $managerObject
+            ->expects(static::once())
+            ->method('getManagerForClass')
+            ->willReturn(null);
+
+        /** @var UserRepository $repository */
+        $repository = new $this->repositoryClass($managerObject);
+        $repository->getEntityManager();
+    }
+
+    public function testThatGetEntityManagerDoNotResetExistingManagerIfItIsOpen(): void
+    {
+        $managerObject = $this->getMockForAbstractClass(
+            AbstractManagerRegistry::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getManagerForClass', 'isOpen']
+        );
+
+        $entityManager = $this->getMockBuilder(EntityManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $entityManager
+            ->expects(static::once())
+            ->method('isOpen')
+            ->willReturn(true);
+
+        $managerObject
+            ->expects(static::once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManager);
+
+        /** @var UserRepository $repository */
+        $repository = new $this->repositoryClass($managerObject);
+
+        static::assertSame($entityManager, $repository->getEntityManager());
+    }
+
+    public function testThatGetEntityManagerResetManagerIfItIsNotOpen(): void
+    {
+        $managerObject = $this->getMockForAbstractClass(
+            AbstractManagerRegistry::class,
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getManagerForClass', 'isOpen', 'resetManager']
+        );
+
+        $entityManager = $this->getMockBuilder(EntityManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $entityManager
+            ->expects(static::exactly(2))
+            ->method('isOpen')
+            ->willReturn(false, true);
+
+        $secondEntityManager = clone $entityManager;
+
+        $managerObject
+            ->expects(static::exactly(2))
+            ->method('getManagerForClass')
+            ->willReturn($entityManager, $secondEntityManager);
+
+        $managerObject
+            ->expects(static::once())
+            ->method('resetManager');
+
+        /** @var UserRepository $repository */
+        $repository = new $this->repositoryClass($managerObject);
+
+        $actualEntityManager = $repository->getEntityManager();
+
+        static::assertNotSame($entityManager, $actualEntityManager);
+        static::assertSame($secondEntityManager, $actualEntityManager);
     }
 
     /**
@@ -151,7 +273,7 @@ class GenericRepositoryTest extends KernelTestCase
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
-        $callable = function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder) {
+        $callable = static function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder) {
             static::assertSame($queryBuilder, $qb);
             static::assertSame(1, $foo);
             static::assertSame('string', $bar);
@@ -172,7 +294,7 @@ class GenericRepositoryTest extends KernelTestCase
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
-        $callable = function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder, &$count) {
+        $callable = static function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder, &$count) {
             static::assertSame($queryBuilder, $qb);
             static::assertSame(1, $foo);
             static::assertSame('string', $bar);
