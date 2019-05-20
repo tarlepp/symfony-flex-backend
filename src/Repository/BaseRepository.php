@@ -13,6 +13,7 @@ use App\Repository\Traits\RepositoryWrappersTrait;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
+use InvalidArgumentException;
 use function array_merge;
 use function array_unshift;
 use function count;
@@ -138,7 +139,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @return BaseRepositoryInterface
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addLeftJoin(array $parameters): BaseRepositoryInterface
     {
@@ -160,7 +161,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @return BaseRepositoryInterface
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addInnerJoin(array $parameters): BaseRepositoryInterface
     {
