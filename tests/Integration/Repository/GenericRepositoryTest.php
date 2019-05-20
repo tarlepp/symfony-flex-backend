@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -69,6 +70,7 @@ class GenericRepositoryTest extends KernelTestCase
         static::assertInstanceOf(ClassMetadata::class, $repository->getClassMetaData());
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage Cannot get entity manager for entity 'App\Entity\User'
@@ -97,6 +99,9 @@ class GenericRepositoryTest extends KernelTestCase
         $repository->getEntityManager();
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetEntityManagerDoNotResetExistingManagerIfItIsOpen(): void
     {
         $managerObject = $this->getMockForAbstractClass(
@@ -129,6 +134,9 @@ class GenericRepositoryTest extends KernelTestCase
         static::assertSame($entityManager, $repository->getEntityManager());
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetEntityManagerResetManagerIfItIsNotOpen(): void
     {
         $managerObject = $this->getMockForAbstractClass(
@@ -317,8 +325,8 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatFindMethodCallsExpectedEntityManagerMethod(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|AbstractManagerRegistry $managerObject
-         * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager           $entityManager
+         * @var MockObject|AbstractManagerRegistry $managerObject
+         * @var MockObject|EntityManager           $entityManager
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
@@ -362,9 +370,9 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatFindOneByMethodCallsExpectedEntityManagerMethod(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|AbstractManagerRegistry $managerObject
-         * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager           $entityManager
-         * @var \PHPUnit_Framework_MockObject_MockObject|EntityRepository        $repositoryMock
+         * @var MockObject|AbstractManagerRegistry $managerObject
+         * @var MockObject|EntityManager           $entityManager
+         * @var MockObject|EntityRepository        $repositoryMock
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
@@ -412,9 +420,9 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatFindByMethodCallsExpectedEntityManagerMethod(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|AbstractManagerRegistry $managerObject
-         * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager           $entityManager
-         * @var \PHPUnit_Framework_MockObject_MockObject|EntityRepository        $repositoryMock
+         * @var MockObject|AbstractManagerRegistry $managerObject
+         * @var MockObject|EntityManager           $entityManager
+         * @var MockObject|EntityRepository        $repositoryMock
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
@@ -465,9 +473,9 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatFindAllMethodCallsExpectedEntityManagerMethod(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|AbstractManagerRegistry $managerObject
-         * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager           $entityManager
-         * @var \PHPUnit_Framework_MockObject_MockObject|EntityRepository        $repositoryMock
+         * @var MockObject|AbstractManagerRegistry $managerObject
+         * @var MockObject|EntityManager           $entityManager
+         * @var MockObject|EntityRepository        $repositoryMock
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
