@@ -12,15 +12,12 @@ use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
 use App\Utils\JSON;
-use BadMethodCallException;
-use Exception;
-use InvalidArgumentException;
-use LogicException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Throwable;
 use function get_class;
 
 /**
@@ -56,9 +53,7 @@ trait RestResourceBaseMethods
      *
      * @return RestDtoInterface
      *
-     * @throws LogicException
-     * @throws BadMethodCallException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws Throwable
      */
     abstract public function getDtoForEntity(
         string $id,
@@ -78,7 +73,7 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface[]
      *
-     * @throws InvalidArgumentException
+     * @throws Throwable
      */
     public function find(
         ?array $criteria = null,
@@ -114,8 +109,7 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface|null
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
     {
@@ -148,7 +142,7 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface|null
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws Throwable
      */
     public function findOneBy(
         array $criteria,
@@ -183,8 +177,7 @@ trait RestResourceBaseMethods
      *
      * @return int
      *
-     * @throws InvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function count(?array $criteria = null, ?array $search = null): int
     {
@@ -207,18 +200,16 @@ trait RestResourceBaseMethods
      * specified repository.
      *
      * @param RestDtoInterface $dto
+     * @param bool|null        $flush
      * @param bool|null        $skipValidation
      *
      * @return EntityInterface
      *
-     * @throws Exception
-     * @throws ValidatorException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
-    public function create(RestDtoInterface $dto, ?bool $skipValidation = null): EntityInterface
+    public function create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
     {
+        $flush = $flush ?? true;
         $skipValidation = $skipValidation ?? false;
 
         // Validate DTO
@@ -231,7 +222,7 @@ trait RestResourceBaseMethods
         $this->beforeCreate($dto, $entity);
 
         // Create or update entity
-        $this->persistEntity($entity, $dto);
+        $this->persistEntity($entity, $dto, $flush, $skipValidation);
 
         // After callback method call
         $this->afterCreate($dto, $entity);
@@ -244,20 +235,20 @@ trait RestResourceBaseMethods
      *
      * @param string           $id
      * @param RestDtoInterface $dto
+     * @param bool|null        $flush
      * @param bool|null        $skipValidation
      *
      * @return EntityInterface
      *
-     * @throws BadMethodCallException
-     * @throws Exception
-     * @throws ValidatorException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
-    public function update(string $id, RestDtoInterface $dto, ?bool $skipValidation = null): EntityInterface
-    {
+    public function update(
+        string $id,
+        RestDtoInterface $dto,
+        ?bool $flush = null,
+        ?bool $skipValidation = null
+    ): EntityInterface {
+        $flush = $flush ?? true;
         $skipValidation = $skipValidation ?? false;
 
         // Fetch entity
@@ -276,7 +267,7 @@ trait RestResourceBaseMethods
         $this->beforeUpdate($id, $restDto, $entity);
 
         // Create or update entity
-        $this->persistEntity($entity, $restDto);
+        $this->persistEntity($entity, $restDto, $flush, $skipValidation);
 
         // After callback method call
         $this->afterUpdate($id, $restDto, $entity);
@@ -287,17 +278,17 @@ trait RestResourceBaseMethods
     /**
      * Generic method to delete specified entity from database.
      *
-     * @param string $id
+     * @param string    $id
+     * @param bool|null $flush
      *
      * @return EntityInterface
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
-    public function delete(string $id): EntityInterface
+    public function delete(string $id, ?bool $flush = null): EntityInterface
     {
+        $flush = $flush ?? true;
+
         // Fetch entity
         $entity = $this->getEntity($id);
 
@@ -305,7 +296,7 @@ trait RestResourceBaseMethods
         $this->beforeDelete($id, $entity);
 
         // And remove entity from repo
-        $this->getRepository()->remove($entity);
+        $this->getRepository()->remove($entity, $flush);
 
         // After callback method call
         $this->afterDelete($id, $entity);
@@ -322,7 +313,7 @@ trait RestResourceBaseMethods
      *
      * @return string[]
      *
-     * @throws InvalidArgumentException
+     * @throws Throwable
      */
     public function getIds(?array $criteria = null, ?array $search = null): array
     {
@@ -345,18 +336,16 @@ trait RestResourceBaseMethods
      * Generic method to save given entity to specified repository. Return value is created entity.
      *
      * @param EntityInterface $entity
+     * @param bool|null       $flush
      * @param bool|null       $skipValidation
      *
      * @return EntityInterface
      *
-     * @throws Exception
-     * @throws ValidatorException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
-    public function save(EntityInterface $entity, ?bool $skipValidation = null): EntityInterface
+    public function save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
     {
+        $flush = $flush ?? true;
         $skipValidation = $skipValidation ?? false;
 
         // Before callback method call
@@ -366,7 +355,7 @@ trait RestResourceBaseMethods
         $this->validateEntity($entity, $skipValidation);
 
         // Persist on database
-        $this->getRepository()->save($entity);
+        $this->getRepository()->save($entity, $flush);
 
         // After callback method call
         $this->afterSave($entity);
@@ -379,20 +368,22 @@ trait RestResourceBaseMethods
      *
      * @param EntityInterface  $entity
      * @param RestDtoInterface $dto
+     * @param bool             $flush
+     * @param bool             $skipValidation
      *
-     * @throws Exception
-     * @throws ValidatorException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
-    protected function persistEntity(EntityInterface $entity, RestDtoInterface $dto): void
-    {
+    protected function persistEntity(
+        EntityInterface $entity,
+        RestDtoInterface $dto,
+        bool $flush,
+        bool $skipValidation
+    ): void {
         // Update entity according to DTO current state
         $dto->update($entity);
 
         // And save current entity
-        $this->save($entity);
+        $this->save($entity, $flush, $skipValidation);
     }
 
     /**
@@ -400,7 +391,7 @@ trait RestResourceBaseMethods
      *
      * @return EntityInterface
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws Throwable
      */
     protected function getEntity(string $id): EntityInterface
     {
@@ -421,8 +412,7 @@ trait RestResourceBaseMethods
      * @param RestDtoInterface $dto
      * @param bool             $skipValidation
      *
-     * @throws Exception
-     * @throws ValidatorException
+     * @throws Throwable
      */
     private function validateDto(RestDtoInterface $dto, bool $skipValidation): void
     {
@@ -441,8 +431,7 @@ trait RestResourceBaseMethods
      * @param EntityInterface $entity
      * @param bool            $skipValidation
      *
-     * @throws Exception
-     * @throws ValidatorException
+     * @throws Throwable
      */
     private function validateEntity(EntityInterface $entity, bool $skipValidation): void
     {
@@ -470,8 +459,7 @@ trait RestResourceBaseMethods
     /**
      * @param ConstraintViolationListInterface $errors
      *
-     * @throws Exception
-     * @throws ValidatorException
+     * @throws Throwable
      */
     private function createValidatorException(ConstraintViolationListInterface $errors): void
     {

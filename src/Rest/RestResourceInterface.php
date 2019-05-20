@@ -16,6 +16,7 @@ use Doctrine\Common\Proxy\Proxy;
 use InvalidArgumentException;
 use LogicException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Throwable;
 use UnexpectedValueException;
 
 /**
@@ -127,7 +128,7 @@ interface RestResourceInterface
      *
      * @return RestDtoInterface
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws Throwable
      */
     public function getDtoForEntity(string $id, string $dtoClass): RestDtoInterface;
 
@@ -142,6 +143,8 @@ interface RestResourceInterface
      * @param mixed[]|null $search
      *
      * @return EntityInterface[]
+     *
+     * @throws Throwable
      */
     public function find(
         ?array $criteria = null,
@@ -160,8 +163,7 @@ interface RestResourceInterface
      *
      * @return EntityInterface|null
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface;
 
@@ -175,7 +177,7 @@ interface RestResourceInterface
      *
      * @return EntityInterface|null
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws Throwable
      */
     public function findOneBy(
         array $criteria,
@@ -191,8 +193,7 @@ interface RestResourceInterface
      *
      * @return int
      *
-     * @throws InvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function count(?array $criteria = null, ?array $search = null): int;
 
@@ -201,49 +202,45 @@ interface RestResourceInterface
      * specified repository.
      *
      * @param RestDtoInterface $dto
+     * @param bool|null        $flush
      * @param bool|null        $skipValidation
      *
      * @return EntityInterface
      *
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
-    public function create(RestDtoInterface $dto, ?bool $skipValidation = null): EntityInterface;
+    public function create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface;
 
     /**
      * Generic method to update specified entity with new data.
      *
      * @param string           $id
      * @param RestDtoInterface $dto
+     * @param bool|null        $flush
      * @param bool|null        $skipValidation
      *
      * @return EntityInterface
      *
-     * @throws LogicException
-     * @throws BadMethodCallException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
-    public function update(string $id, RestDtoInterface $dto, ?bool $skipValidation = null): EntityInterface;
+    public function update(
+        string $id,
+        RestDtoInterface $dto,
+        ?bool $flush = null,
+        ?bool $skipValidation = null
+    ): EntityInterface;
 
     /**
      * Generic method to delete specified entity from database.
      *
-     * @param string $id
+     * @param string    $id
+     * @param bool|null $flush
      *
      * @return EntityInterface
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
-    public function delete(string $id): EntityInterface;
+    public function delete(string $id, ?bool $flush = null): EntityInterface;
 
     /**
      * Generic ids method to return an array of id values from database. Return value is an array of specified
@@ -254,7 +251,7 @@ interface RestResourceInterface
      *
      * @return string[]
      *
-     * @throws InvalidArgumentException
+     * @throws Throwable
      */
     public function getIds(?array $criteria = null, ?array $search = null): array;
 
@@ -262,14 +259,12 @@ interface RestResourceInterface
      * Generic method to save given entity to specified repository. Return value is created entity.
      *
      * @param EntityInterface $entity
+     * @param bool|null       $flush
      * @param bool|null       $skipValidation
      *
      * @return EntityInterface
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Symfony\Component\Validator\Exception\ValidatorException
+     * @throws Throwable
      */
-    public function save(EntityInterface $entity, ?bool $skipValidation = null): EntityInterface;
+    public function save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface;
 }
