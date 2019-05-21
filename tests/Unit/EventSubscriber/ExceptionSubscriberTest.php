@@ -7,10 +7,8 @@ declare(strict_types=1);
  */
 namespace App\Tests\Unit\EventSubscriber;
 
-use App\EventSubscriber\BodySubscriber;
 use App\EventSubscriber\ExceptionSubscriber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Class BodySubscriberTest
