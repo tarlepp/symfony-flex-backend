@@ -3,13 +3,15 @@ declare(strict_types=1);
 /**
  * /tests/Integration/Utils/HealthzServiceTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Utils;
 
 use App\Repository\HealthzRepository;
 use App\Utils\HealthzService;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class HealthzServiceTest
@@ -20,14 +22,11 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class HealthzServiceTest extends KernelTestCase
 {
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatCheckMethodCallsExpectedRepositoryMethods(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|HealthzRepository $mockRepository */
+        /** @var MockObject|HealthzRepository $mockRepository */
         $mockRepository = $this->getMockBuilder(HealthzRepository::class)
             ->disableOriginalConstructor()
             ->getMock();

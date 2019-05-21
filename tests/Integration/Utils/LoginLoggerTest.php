@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * /tests/Integration/Utils/LoginLoggerTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Utils;
 
@@ -11,9 +11,11 @@ use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
 use App\Utils\LoginLogger;
 use BadMethodCallException;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\User;
+use Throwable;
 
 /**
  * Class LoginLoggerTest
@@ -24,13 +26,13 @@ use Symfony\Component\Security\Core\User\User;
 class LoginLoggerTest extends KernelTestCase
 {
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatSetUserCallsRepositoryMethodIfWrongUserProvided(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogLoginResource $logLoginResource
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository   $userRepository
+         * @var MockObject|LogLoginResource $logLoginResource
+         * @var MockObject|UserRepository   $userRepository
          */
         $logLoginResource = $this->getMockBuilder(LogLoginResource::class)->disableOriginalConstructor()->getMock();
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
@@ -54,14 +56,13 @@ class LoginLoggerTest extends KernelTestCase
      * @expectedException BadMethodCallException
      * @expectedExceptionMessage Could not get request from current request stack
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     public function testThatExceptionIsThrownIfRequestIsNotAvailable(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogLoginResource $logLoginResource
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository   $userRepository
+         * @var MockObject|LogLoginResource $logLoginResource
+         * @var MockObject|UserRepository   $userRepository
          */
         $logLoginResource = $this->getMockBuilder(LogLoginResource::class)->disableOriginalConstructor()->getMock();
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();

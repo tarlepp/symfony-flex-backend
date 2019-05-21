@@ -9,10 +9,13 @@ namespace App\Tests\Integration\Utils;
 
 use App\Resource\LogRequestResource;
 use App\Utils\RequestLogger;
+use Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Class RequestLoggerTest
@@ -23,12 +26,12 @@ use Symfony\Component\HttpFoundation\Response;
 class RequestLoggerTest extends KernelTestCase
 {
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
+         * @var MockObject|LogRequestResource $resource
          */
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
@@ -44,12 +47,12 @@ class RequestLoggerTest extends KernelTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatLogIsNotCreatedIfResponseObjectIsNotSet(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
+         * @var MockObject|LogRequestResource $resource
          */
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
@@ -65,12 +68,12 @@ class RequestLoggerTest extends KernelTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatResourceSaveMethodIsCalled(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
+         * @var MockObject|LogRequestResource $resource
          */
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
@@ -93,20 +96,20 @@ class RequestLoggerTest extends KernelTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatLoggerIsCalledIfExceptionIsThrown(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface    $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogRequestResource $resource
+         * @var MockObject|LoggerInterface    $logger
+         * @var MockObject|LogRequestResource $resource
          */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
 
         $request = new Request();
         $response = new Response();
-        $exception = new \Exception('test exception');
+        $exception = new Exception('test exception');
 
         $resource
             ->expects(static::once())
