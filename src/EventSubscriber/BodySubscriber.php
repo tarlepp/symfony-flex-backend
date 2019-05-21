@@ -72,7 +72,7 @@ class BodySubscriber implements EventSubscriberInterface
         $content = $request->getContent();
 
         // Request content is empty so assume that it's ok - probably DELETE or OPTION request
-        if ((is_string($content) && $content === '') || (is_resource($content) && fstat($content)['size']) === 0) {
+        if ((is_string($content) && $content === '') || (is_resource($content) && fstat($content)['size'] === 0)) {
             return;
         }
 
