@@ -9,6 +9,8 @@ namespace App\Tests\Integration\Security;
 
 use App\Security\ApiKeyAuthenticator;
 use App\Security\ApiKeyUserProvider;
+use Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -16,6 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\ChainUserProvider;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Throwable;
 
 /**
  * Class ApiKeyAuthenticatorTest
@@ -56,15 +59,18 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         unset($apiKeyAuthenticator);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessageRegExp /User provider must be instance of '.*' class/
+     *
+     * @throws Throwable
      */
     public function testThatAuthenticateTokenThrowsAnExceptionIfChainUserProviderNotProvided(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|TokenInterface        $token
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserProviderInterface $userProvider
+         * @var MockObject|TokenInterface        $token
+         * @var MockObject|UserProviderInterface $userProvider
          */
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $userProvider = $this->getMockBuilder(UserProviderInterface::class)->getMock();
@@ -75,16 +81,19 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         unset($apiKeyAuthenticator, $userProvider, $token);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      * @expectedExceptionMessage The user provider must be an instance of ApiKeyUserProvider
+     *
+     * @throws Throwable
      */
     public function testThatAuthenticateTokenThrowsAnExceptionIfApiKeyUserProviderIsNotPresent(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|TokenInterface        $token
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserProviderInterface $userProvider
-         * @var \PHPUnit_Framework_MockObject_MockObject|ChainUserProvider     $chainProvider
+         * @var MockObject|TokenInterface        $token
+         * @var MockObject|UserProviderInterface $userProvider
+         * @var MockObject|ChainUserProvider     $chainProvider
          */
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $userProvider = $this->getMockBuilder(UserProviderInterface::class)->getMock();
@@ -101,16 +110,19 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         unset($apiKeyAuthenticator, $chainProvider, $userProvider, $token);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException
      * @expectedExceptionMessage Invalid API key
+     *
+     * @throws Throwable
      */
     public function testThatAuthenticateTokenThrowsAnExceptionWhenApiKeyIsNotFound(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|TokenInterface     $token
-         * @var \PHPUnit_Framework_MockObject_MockObject|ApiKeyUserProvider $apiKeyUserProvider
-         * @var \PHPUnit_Framework_MockObject_MockObject|ChainUserProvider  $chainProvider
+         * @var MockObject|TokenInterface     $token
+         * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
+         * @var MockObject|ChainUserProvider  $chainProvider
          */
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
@@ -139,61 +151,62 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatCreateTokenReturnsExpected(): array
+    public function dataProviderTestThatCreateTokenReturnsExpected(): Generator
     {
-        return [
-            [
-                new Request(),
-                'api',
-                null,
-            ],
-            [
-                new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'Bearer token']),
-                'api',
-                null,
-            ],
-            [
-                new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'ApiKey']),
-                'api',
-                null,
-            ],
-            [
-                new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'ApiKey some_token']),
-                'api',
-                new PreAuthenticatedToken('anon', 'some_token', 'api'),
-            ],
+        yield [
+            new Request(),
+            'api',
+            null,
+        ];
+
+        yield [
+            new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'Bearer token']),
+            'api',
+            null,
+        ];
+
+        yield [
+            new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'ApiKey']),
+            'api',
+            null,
+        ];
+
+        yield [
+            new Request([], [], [], [], [], ['HTTP_AUTHORIZATION' => 'ApiKey some_token']),
+            'api',
+            new PreAuthenticatedToken('anon', 'some_token', 'api'),
         ];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatSupportsTokenReturnsExpected(): array
+    public function dataProviderTestThatSupportsTokenReturnsExpected(): Generator
     {
-        return [
+        yield [
             [
-                [
-                    new AnonymousToken('secret', 'user'),
-                    'someProvider',
-                ],
-                false,
+                new AnonymousToken('secret', 'user'),
+                'someProvider',
             ],
+            false,
+        ];
+
+        yield [
             [
-                [
-                    new PreAuthenticatedToken('user', 'credentials', 'providerKey'),
-                    'notValidProviderKey',
-                ],
-                false,
+                new PreAuthenticatedToken('user', 'credentials', 'providerKey'),
+                'notValidProviderKey',
             ],
+            false,
+        ];
+
+        yield [
             [
-                [
-                    new PreAuthenticatedToken('user', 'credentials', 'providerKey'),
-                    'providerKey',
-                ],
-                true,
-            ]
+                new PreAuthenticatedToken('user', 'credentials', 'providerKey'),
+                'providerKey',
+            ],
+            true,
         ];
     }
 }

@@ -12,8 +12,10 @@ use App\Entity\UserGroup;
 use App\Security\UserProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\User\User as CoreUser;
+use Throwable;
 
 /**
  * Class UserProviderTest
@@ -62,12 +64,12 @@ class UserProviderTest extends KernelTestCase
         }
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      * @expectedExceptionMessage Instance of "Symfony\Component\Security\Core\User\User" is not supported.
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnExceptionWhenNotSupportedUserInterfaceIsUsed(): void
     {
@@ -78,11 +80,11 @@ class UserProviderTest extends KernelTestCase
         unset($user);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Doctrine\ORM\NoResultException
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
     {
@@ -90,15 +92,13 @@ class UserProviderTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatSupportsClassMethodReturnsExpected(): array
+    public function dataProviderTestThatSupportsClassMethodReturnsExpected(): Generator
     {
-        return [
-            [true, User::class],
-            [false, UserGroup::class],
-            [false, CoreUser::class],
-        ];
+        yield [true, User::class];
+        yield [false, UserGroup::class];
+        yield [false, CoreUser::class];
     }
 
     protected function setUp(): void

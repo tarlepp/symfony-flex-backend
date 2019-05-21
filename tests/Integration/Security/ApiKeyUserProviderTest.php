@@ -13,9 +13,13 @@ use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
 use App\Security\ApiKeyUserProvider;
 use App\Security\RolesService;
+use Generator;
+use PHPUnit\Framework\MockObject\MockObject;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Throwable;
 
 /**
  * Class ApiKeyUserProviderTest
@@ -34,8 +38,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
     public function testThatSupportClassReturnsExpected(bool $expected, string $input): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|ApiKeyRepository $apiKeyRepository
-         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService     $rolesService
+         * @var MockObject|ApiKeyRepository $apiKeyRepository
+         * @var MockObject|RolesService     $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
@@ -47,15 +51,18 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($provider, $rolesService, $apiKeyRepository);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      * @expectedExceptionMessage API key cannot refresh user
+     *
+     * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnException(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|ApiKeyRepository $apiKeyRepository
-         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService     $rolesService
+         * @var MockObject|ApiKeyRepository $apiKeyRepository
+         * @var MockObject|RolesService     $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
@@ -68,15 +75,18 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($provider, $user, $rolesService, $apiKeyRepository);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      * @expectedExceptionMessage API key is not valid
+     *
+     * @throws Throwable
      */
     public function testThatLoadUserByUsernameThrowsAnException(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|ApiKeyRepository $apiKeyRepository
-         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService     $rolesService
+         * @var MockObject|ApiKeyRepository $apiKeyRepository
+         * @var MockObject|RolesService     $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
@@ -93,11 +103,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($provider, $apiKeyRepository, $rolesService);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatLoadUserByUsernameCreatesExpectedApiKeyUser(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|ApiKeyRepository $apiKeyRepository
-         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService     $rolesService
+         * @var MockObject|ApiKeyRepository $apiKeyRepository
+         * @var MockObject|RolesService     $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
@@ -121,8 +134,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
     public function testThatGetApiKeyForTokenCallsExpectedRepositoryMethod(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|ApiKeyRepository $apiKeyRepository
-         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService     $rolesService
+         * @var MockObject|ApiKeyRepository $apiKeyRepository
+         * @var MockObject|RolesService     $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
@@ -140,15 +153,13 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatSupportClassReturnsExpected(): array
+    public function dataProviderTestThatSupportClassReturnsExpected(): Generator
     {
-        return [
-            [false, \stdClass::class],
-            [false, UserInterface::class],
-            [false, UserEntity::class],
-            [true, ApiKeyUser::class]
-        ];
+        yield [false, stdClass::class];
+        yield [false, UserInterface::class];
+        yield [false, UserEntity::class];
+        yield [true, ApiKeyUser::class];
     }
 }
