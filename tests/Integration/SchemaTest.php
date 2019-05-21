@@ -12,6 +12,9 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaValidator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
+use function array_walk;
+use function implode;
 
 /**
  * Class SchemaTest
@@ -32,13 +35,13 @@ class SchemaTest extends KernelTestCase
 
         $messages = [];
 
-        $formatter = function ($errors, $className) use (&$messages) {
-            $messages[] = $className . ': ' . \implode(', ', $errors);
+        $formatter = static function ($errors, $className) use (&$messages) {
+            $messages[] = $className . ': ' . implode(', ', $errors);
         };
 
-        \array_walk($errors, $formatter);
+        array_walk($errors, $formatter);
 
-        static::assertEmpty($errors, \implode("\n", $messages));
+        static::assertEmpty($errors, implode("\n", $messages));
 
         unset($errors, $messages);
     }
@@ -52,10 +55,12 @@ class SchemaTest extends KernelTestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @throws Throwable
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         gc_enable();
 
         static::bootKernel();
