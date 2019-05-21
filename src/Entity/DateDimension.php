@@ -12,6 +12,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Throwable;
 use function floor;
 
 /**
@@ -199,7 +200,7 @@ class DateDimension implements EntityInterface
     private $dayNumberOfYear;
 
     /**
-     * @var boold
+     * @var bool
      *
      * @Groups({
      *      "DateDimension",
@@ -260,6 +261,8 @@ class DateDimension implements EntityInterface
      * DateDimension constructor.
      *
      * @param DateTime|null $dateTime
+     *
+     * @throws Throwable
      */
     public function __construct(?DateTime $dateTime = null)
     {

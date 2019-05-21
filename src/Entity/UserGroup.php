@@ -16,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Throwable;
 
 /**
  * Class UserGroup
@@ -54,7 +55,7 @@ class UserGroup implements EntityInterface
     private $id;
 
     /**
-     * @var \App\Entity\Role
+     * @var Role
      *
      * @Groups({
      *      "UserGroup.role",
@@ -99,7 +100,7 @@ class UserGroup implements EntityInterface
     private $name = '';
 
     /**
-     * @var Collection|ArrayCollection|Collection<User>|ArrayCollection<User>
+     * @var Collection|ArrayCollection|Collection<int, User>|ArrayCollection<int, User>
      *
      * @Groups({
      *      "UserGroup.users",
@@ -116,7 +117,7 @@ class UserGroup implements EntityInterface
     private $users;
 
     /**
-     * @var Collection|ArrayCollection|Collection<ApiKey>|ArrayCollection<ApiKey>
+     * @var Collection|ArrayCollection|Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
      *
      * @Groups({
      *      "UserGroup.apiKeys",
@@ -134,6 +135,8 @@ class UserGroup implements EntityInterface
 
     /**
      * UserGroup constructor.
+     *
+     * @throws Throwable
      */
     public function __construct()
     {
@@ -192,7 +195,7 @@ class UserGroup implements EntityInterface
     }
 
     /**
-     * @return Collection|ArrayCollection
+     * @return Collection|ArrayCollection|Collection<int, User>|ArrayCollection<int, User>
      */
     public function getUsers(): Collection
     {
@@ -200,7 +203,7 @@ class UserGroup implements EntityInterface
     }
 
     /**
-     * @return Collection|ArrayCollection
+     * @return Collection|ArrayCollection|Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
      */
     public function getApiKeys(): Collection
     {

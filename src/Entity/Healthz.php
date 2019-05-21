@@ -13,6 +13,7 @@ use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Throwable;
 
 /**
  * Class Healthz
@@ -62,6 +63,8 @@ class Healthz implements EntityInterface
 
     /**
      * Healthz constructor.
+     *
+     * @throws Throwable
      */
     public function __construct()
     {

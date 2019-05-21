@@ -18,6 +18,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Throwable;
 use function array_map;
 use function array_merge;
 use function array_unique;
@@ -132,6 +133,8 @@ class ApiKey implements EntityInterface
 
     /**
      * ApiKey constructor.
+     *
+     * * @throws Throwable
      */
     public function __construct()
     {
@@ -172,6 +175,8 @@ class ApiKey implements EntityInterface
 
     /**
      * @return ApiKey
+     *
+     * @throws Throwable
      */
     public function generateToken(): self
     {

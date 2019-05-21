@@ -8,6 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Entity\Traits;
 
+use App\Entity\LogLogin;
+use App\Entity\LogLoginFailure;
+use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Security\RolesService;
@@ -26,7 +29,7 @@ use function array_unique;
 trait UserRelations
 {
     /**
-     * @var Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
+     * @var Collection|ArrayCollection|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      *
      * @Groups({
      *      "User.userGroups",
@@ -43,7 +46,7 @@ trait UserRelations
     protected $userGroups;
 
     /**
-     * @var Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>
+     * @var Collection|ArrayCollection|Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      *
      * @Groups({
      *      "User.logsRequest",
@@ -57,7 +60,7 @@ trait UserRelations
     protected $logsRequest;
 
     /**
-     * @var Collection|ArrayCollection|Collection<LogLogin>|ArrayCollection<LogLogin>
+     * @var Collection|ArrayCollection|Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
      *
      * @Groups({
      *      "User.logsLogin",
@@ -71,7 +74,7 @@ trait UserRelations
     protected $logsLogin;
 
     /**
-     * @var Collection|ArrayCollection|Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>
+     * @var Collection|ArrayCollection|Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
      *
      * @Groups({
      *      "User.logsLoginFailure",
@@ -138,7 +141,7 @@ trait UserRelations
     /**
      * Getter for user groups collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<UserGroup>|ArrayCollection<UserGroup>
+     * @return Collection|ArrayCollection|mixed|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
     public function getUserGroups()
     {
@@ -148,7 +151,7 @@ trait UserRelations
     /**
      * Getter for user request log collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<LogRequest>|ArrayCollection<LogRequest>
+     * @return Collection|ArrayCollection|mixed|Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
     public function getLogsRequest()
     {
@@ -158,7 +161,7 @@ trait UserRelations
     /**
      * Getter for user login log collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<LogLogin>|ArrayCollection<LogLogin>
+     * @return Collection|ArrayCollection|mixed|Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
      */
     public function getLogsLogin()
     {
@@ -168,7 +171,7 @@ trait UserRelations
     /**
      * Getter for user login failure log collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<LogLoginFailure>|ArrayCollection<LogLoginFailure>
+     * @return Collection|ArrayCollection|mixed|Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
      */
     public function getLogsLoginFailure()
     {

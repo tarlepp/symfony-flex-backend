@@ -73,7 +73,7 @@ class Role extends BaseRole implements EntityInterface
     /**
      * User groups that belongs to this role.
      *
-     * @var Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
+     * @var Collection|ArrayCollection|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      *
      * @Groups({
      *      "Role.userGroups",
@@ -128,7 +128,7 @@ class Role extends BaseRole implements EntityInterface
     }
 
     /**
-     * @return Collection|ArrayCollection
+     * @return Collection|ArrayCollection|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
     public function getUserGroups(): Collection
     {

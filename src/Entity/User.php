@@ -15,11 +15,13 @@ use App\Entity\Traits\UserSerializer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Serializable;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Throwable;
 
 /**
  * Class User
@@ -41,7 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class User implements CoreUserInterface, EquatableInterface, \Serializable, EntityInterface, UserInterface
+class User implements CoreUserInterface, EquatableInterface, Serializable, EntityInterface, UserInterface
 {
     // Traits
     use Blameable;
@@ -172,6 +174,8 @@ class User implements CoreUserInterface, EquatableInterface, \Serializable, Enti
 
     /**
      * User constructor.
+     *
+     * @throws Throwable
      */
     public function __construct()
     {

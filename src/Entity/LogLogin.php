@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Throwable;
 use function implode;
 use function is_array;
 
@@ -41,7 +42,7 @@ class LogLogin implements EntityInterface
     use LogEntityTrait;
 
     /**
-     * @var \App\Entity\User|null
+     * @var User|null
      *
      * @Groups({
      *      "LogLogin",
@@ -313,8 +314,7 @@ class LogLogin implements EntityInterface
      * @param DeviceDetector $deviceDetector
      * @param User|null      $user
      *
-     * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
-     * @throws \Exception
+     * @throws Throwable
      */
     public function __construct(string $type, Request $request, DeviceDetector $deviceDetector, ?User $user = null)
     {

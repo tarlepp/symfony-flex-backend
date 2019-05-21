@@ -13,6 +13,7 @@ use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Throwable;
 
 /**
  * Class LogLoginFailure
@@ -50,7 +51,7 @@ class LogLoginFailure implements EntityInterface
     private $id;
 
     /**
-     * @var \App\Entity\User
+     * @var User
      *
      * @Groups({
      *      "LogLoginFailure",
@@ -91,6 +92,8 @@ class LogLoginFailure implements EntityInterface
      * LogLoginFailure constructor.
      *
      * @param User $user
+     *
+     * @throws Throwable
      */
     public function __construct(User $user)
     {
