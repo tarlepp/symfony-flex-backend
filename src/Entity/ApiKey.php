@@ -101,7 +101,7 @@ class ApiKey implements EntityInterface
     private $description = '';
 
     /**
-     * @var Collection|ArrayCollection|Collection<UserGroup>|ArrayCollection<UserGroup>
+     * @var Collection|ArrayCollection|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      *
      * @Groups({
      *      "ApiKey.userGroups",
@@ -118,7 +118,7 @@ class ApiKey implements EntityInterface
     private $userGroups;
 
     /**
-     * @var Collection|ArrayCollection|Collection<LogRequest>|ArrayCollection<LogRequest>
+     * @var Collection|ArrayCollection|Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      *
      * @Groups({
      *      "ApiKey.logsRequest",
@@ -212,7 +212,7 @@ class ApiKey implements EntityInterface
     }
 
     /**
-     * @return Collection|ArrayCollection
+     * @return Collection|ArrayCollection|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
     public function getUserGroups(): Collection
     {
@@ -222,7 +222,7 @@ class ApiKey implements EntityInterface
     /**
      * Getter for user request log collection.
      *
-     * @return Collection|ArrayCollection
+     * @return Collection|ArrayCollection|Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
     public function getLogsRequest(): Collection
     {
