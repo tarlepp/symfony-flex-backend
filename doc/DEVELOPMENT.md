@@ -45,11 +45,10 @@ command is available via following example command.
 ./vendor/bin/phpcs -i
 ```
 
-If you're using [PhpStorm](https://www.jetbrains.com/phpstorm/) following links
+If you're using [PhpStorm](https://www.jetbrains.com/phpstorm/) this following link
 will help you to get things rolling.
 
-* [Using PHP Code Sniffer Tool](https://www.jetbrains.com/help/phpstorm/10.0/using-php-code-sniffer-tool.html)
-* [PHP Code Sniffer in PhpStorm](https://confluence.jetbrains.com/display/PhpStorm/PHP+Code+Sniffer+in+PhpStorm)
+* [Using PHP Code Sniffer Tool](https://www.jetbrains.com/help/phpstorm/using-php-code-sniffer.html)
 
 ### Database changes
 
