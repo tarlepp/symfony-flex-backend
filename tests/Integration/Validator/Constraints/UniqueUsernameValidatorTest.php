@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Validator\Constraints\UniqueUsername;
 use App\Validator\Constraints\UniqueUsernameValidator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
@@ -29,15 +30,16 @@ class UniqueUsernameValidatorTest extends KernelTestCase
     private $constraint;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContext
+     * @var MockObject|ExecutionContext
      */
     private $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ConstraintViolationBuilderInterface
+     * @var MockObject|ConstraintViolationBuilderInterface
      */
     private $builder;
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -48,7 +50,7 @@ class UniqueUsernameValidatorTest extends KernelTestCase
         $user->setUsername('john');
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository $repository
+         * @var MockObject|UserRepository $repository
          */
         $repository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
@@ -84,6 +86,8 @@ class UniqueUsernameValidatorTest extends KernelTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->constraint = new UniqueUsername();
         $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
         $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
