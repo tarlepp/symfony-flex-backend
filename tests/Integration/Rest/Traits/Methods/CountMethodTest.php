@@ -7,16 +7,20 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
-use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
+use App\Rest\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\CountMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\CountMethodTestClass;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Exception;
+use Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 /**
  * Class CountMethodTest
@@ -26,6 +30,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class CountMethodTest extends KernelTestCase
 {
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @codingStandardsIgnoreStart
      *
@@ -33,10 +38,12 @@ class CountMethodTest extends KernelTestCase
      * @expectedExceptionMessageRegExp /You cannot use '.*' controller class with REST traits if that does not implement 'App\\Rest\\ControllerInterface'/
      *
      * @codingStandardsIgnoreEnd
+     *
+     * @throws Throwable
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var CountMethodInvalidTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|CountMethodInvalidTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(CountMethodInvalidTestClass::class);
 
         $request = Request::create('/');
@@ -44,19 +51,22 @@ class CountMethodTest extends KernelTestCase
         $testClass->countMethod($request);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      *
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
      *
      * @param string $httpMethod
+     *
+     * @throws Throwable
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var CountMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|CountMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             CountMethodTestClass::class,
             [$resource, $responseHandler]
@@ -68,12 +78,15 @@ class CountMethodTest extends KernelTestCase
         $testClass->countMethod($request)->getContent();
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatTraitCallsProcessCriteriaIfItExists(): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var CountMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|CountMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             CountMethodTestClass::class,
             [$resource, $responseHandler],
@@ -98,15 +111,17 @@ class CountMethodTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
-     * @param   \Exception  $exception
-     * @param   int         $expectedCode
+     * @param Exception $exception
+     * @param int        $expectedCode
+     *
+     * @throws Throwable
      */
-    public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
+    public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var CountMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|CountMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             CountMethodTestClass::class,
             [$resource, $responseHandler]
@@ -125,12 +140,15 @@ class CountMethodTest extends KernelTestCase
         $testClass->countMethod($request);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatTraitCallsServiceMethods(): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var CountMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|CountMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             CountMethodTestClass::class,
             [$resource, $responseHandler]
@@ -156,32 +174,28 @@ class CountMethodTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): array
+    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
-        return [
-            ['HEAD'],
-            ['PATCH'],
-            ['POST'],
-            ['PUT'],
-            ['DELETE'],
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['foobar'],
-        ];
+        yield ['HEAD'];
+        yield ['PATCH'];
+        yield ['POST'];
+        yield ['PUT'];
+        yield ['DELETE'];
+        yield ['OPTIONS'];
+        yield ['CONNECT'];
+        yield ['foobar'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatTraitHandlesException(): array
+    public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        return [
-            [new HttpException(400), 0],
-            [new NoResultException(), 404],
-            [new NonUniqueResultException(), 500],
-            [new \Exception(), 400],
-        ];
+        yield [new HttpException(400), 0];
+        yield [new NoResultException(), 404];
+        yield [new NonUniqueResultException(), 500];
+        yield [new Exception(), 400];
     }
 }

@@ -8,16 +8,22 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
 use App\DTO\RestDtoInterface;
-use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
+use App\Rest\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\CreateMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\CreateMethodTestClass;
+use Exception;
+use Generator;
+use InvalidArgumentException;
+use LogicException;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormConfigInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 /**
  * Class CreateMethodTest
@@ -27,19 +33,22 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class CreateMethodTest extends KernelTestCase
 {
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @codingStandardsIgnoreStart
      *
-     * @expectedException \LogicException
+     * @expectedException LogicException
      * @expectedExceptionMessageRegExp /You cannot use '.*' controller class with REST traits if that does not implement 'App\\Rest\\ControllerInterface'/
      *
      * @codingStandardsIgnoreEnd
+     *
+     * @throws Throwable
      */
     public function testThatTraitThrowsAnException():void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock
-         * @var \PHPUnit_Framework_MockObject_MockObject|CreateMethodInvalidTestClass $testClass
+         * @var MockObject|CreateMethodInvalidTestClass $testClass
+         * @var MockObject|FormFactoryInterface         $formFactoryMock
          */
         $testClass = $this->getMockForAbstractClass(CreateMethodInvalidTestClass::class);
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
@@ -49,22 +58,25 @@ class CreateMethodTest extends KernelTestCase
         $testClass->createMethod($request, $formFactoryMock);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      *
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
      *
-     * @param   string  $httpMethod
+     * @param string $httpMethod
+     *
+     * @throws Throwable
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
+        /** @var MockObject|FormFactoryInterface $formFactoryMock */
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
 
-        /** @var CreateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|CreateMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             CreateMethodTestClass::class,
             [$resource, $responseHandler]
@@ -79,18 +91,20 @@ class CreateMethodTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
-     * @param   \Exception  $exception
-     * @param   int         $expectedCode
+     * @param Exception $exception
+     * @param int        $expectedCode
+     *
+     * @throws Throwable
      */
-    public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
+    public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock */
+        /** @var MockObject|FormFactoryInterface $formFactoryMock */
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
 
-        /** @var CreateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|CreateMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             CreateMethodTestClass::class,
             [$resource, $responseHandler]
@@ -110,7 +124,7 @@ class CreateMethodTest extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatTraitCallsServiceMethods(): void
     {
@@ -120,10 +134,10 @@ class CreateMethodTest extends KernelTestCase
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock
-         * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface        $formInterfaceMock
-         * @var \PHPUnit_Framework_MockObject_MockObject|RestDtoInterface     $dtoInterface
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request              $request
+         * @var MockObject|FormFactoryInterface $formFactoryMock
+         * @var MockObject|FormInterface        $formInterfaceMock
+         * @var MockObject|RestDtoInterface     $dtoInterface
+         * @var MockObject|Request              $request
          */
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
         $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
@@ -131,7 +145,7 @@ class CreateMethodTest extends KernelTestCase
         $dtoInterface = $this->createMock(RestDtoInterface::class);
         $request = $this->createMock(Request::class);
 
-        /** @var CreateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|CreateMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             CreateMethodTestClass::class,
             [$resource, $responseHandler]
@@ -181,24 +195,27 @@ class CreateMethodTest extends KernelTestCase
         $testClass->createMethod($request, $formFactoryMock);
     }
 
+    /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
+     *
+     * @throws Throwable
      */
     public function testThatTraitThrowsAnErrorIfFormIsInvalid(): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var CreateMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|CreateMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             CreateMethodTestClass::class,
             [$resource, $responseHandler]
         );
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface $formFactoryMock
-         * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface        $formInterfaceMock
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request              $request
+         * @var MockObject|FormFactoryInterface $formFactoryMock
+         * @var MockObject|FormInterface        $formInterfaceMock
+         * @var MockObject|Request              $request
          */
         $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
         $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
@@ -250,32 +267,28 @@ class CreateMethodTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): array
+    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
-        return [
-            ['HEAD'],
-            ['GET'],
-            ['PATCH'],
-            ['PUT'],
-            ['DELETE'],
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['foobar'],
-        ];
+        yield ['HEAD'];
+        yield ['GET'];
+        yield ['PATCH'];
+        yield ['PUT'];
+        yield ['DELETE'];
+        yield ['OPTIONS'];
+        yield ['CONNECT'];
+        yield ['foobar'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatTraitHandlesException(): array
+    public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        return [
-            [new HttpException(400), 0],
-            [new \LogicException(), 400],
-            [new \InvalidArgumentException(), 400],
-            [new \Exception(), 400],
-        ];
+        yield [new HttpException(400), 0];
+        yield [new LogicException(), 400];
+        yield [new InvalidArgumentException(), 400];
+        yield [new Exception(), 400];
     }
 }
