@@ -11,6 +11,8 @@ services:
             - 9000:9000
         volumes:
             - ./:/app:cached
+        environment:
+            PHP_IDE_CONFIG: "serverName=app.localhost"
 
     nginx:
         build:
