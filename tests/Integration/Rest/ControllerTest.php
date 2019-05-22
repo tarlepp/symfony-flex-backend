@@ -11,13 +11,14 @@ use App\DTO\RestDtoInterface;
 use App\Rest\ResponseHandler;
 use App\Rest\RestResourceInterface;
 use App\Tests\Integration\Rest\src\AbstractController as Controller;
-use function get_class;
 use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionProperty;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Serializer\Serializer;
 use Throwable;
+use function get_class;
 
 /**
  * Class ControllerTest
@@ -147,7 +148,7 @@ class ControllerTest extends KernelTestCase
         /** @var MockObject|Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
-        $reflection = new \ReflectionProperty(get_class($controller), 'dtoClasses');
+        $reflection = new ReflectionProperty(get_class($controller), 'dtoClasses');
         $reflection->setAccessible(true);
         $reflection->setValue(null, $dtoClasses);
 
@@ -193,7 +194,7 @@ class ControllerTest extends KernelTestCase
         /** @var MockObject|Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
-        $reflection = new \ReflectionProperty(get_class($controller), 'formTypes');
+        $reflection = new ReflectionProperty(get_class($controller), 'formTypes');
         $reflection->setAccessible(true);
         $reflection->setValue(null, $formTypes);
 

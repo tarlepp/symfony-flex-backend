@@ -7,9 +7,12 @@ declare(strict_types = 1);
  */
 namespace App\Tests\Integration\Rest;
 
-use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandler;
+use App\Rest\RestResourceInterface;
 use App\Utils\Tests\ContainerTestCase;
+use Exception;
+use Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
@@ -38,9 +41,9 @@ class ResponseHandlerTest extends ContainerTestCase
     /**
      * @dataProvider dataProviderTestThatCreateResponseReturnsExpected
      *
-     * @param   Request $request
-     * @param   mixed   $data
-     * @param   string  $expectedContent
+     * @param Request $request
+     * @param mixed   $data
+     * @param string  $expectedContent
      */
     public function testThatCreateResponseReturnsExpected(
         Request $request,
@@ -49,7 +52,7 @@ class ResponseHandlerTest extends ContainerTestCase
     ): void {
         $serializer = $this->getContainer()->get('serializer');
 
-        /** @var RestResourceInterface|\PHPUnit_Framework_MockObject_MockObject $stubResourceService */
+        /** @var MockObject|RestResourceInterface $stubResourceService */
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $httpResponse = (new ResponseHandler($serializer))->createResponse($request, $data, $stubResourceService, 200);
@@ -57,6 +60,7 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame($expectedContent, $httpResponse->getContent());
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
      * @expectedExceptionMessage Some exception
@@ -64,13 +68,13 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatCreateResponseThrowsAnExceptionIfSerializationFails(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $stubSerializer
+         * @var MockObject|SerializerInterface $stubSerializer
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
 
         $request = Request::create('');
 
-        $exception = new \Exception('Some exception');
+        $exception = new Exception('Some exception');
 
         $stubSerializer
             ->expects(static::once())
@@ -82,6 +86,7 @@ class ResponseHandlerTest extends ContainerTestCase
         $responseClass->createResponse($request, []);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @dataProvider dataProviderTestThatNonSupportedSerializerFormatThrowsHttpException
      *
@@ -96,7 +101,7 @@ class ResponseHandlerTest extends ContainerTestCase
         $request = Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => $format]);
         $serializer = $this->getContainer()->get('serializer');
 
-        /** @var RestResourceInterface|\PHPUnit_Framework_MockObject_MockObject $stubResourceService */
+        /** @var MockObject|RestResourceInterface $stubResourceService */
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         (new ResponseHandler($serializer))
@@ -106,10 +111,10 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextMethodCallsExpectedServiceMethods():void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
+         * @var MockObject|SerializerInterface   $stubSerializer
+         * @var MockObject|Request               $stubRequest
+         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
@@ -136,10 +141,10 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenNonAnyAssociations(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
+         * @var MockObject|SerializerInterface   $stubSerializer
+         * @var MockObject|Request               $stubRequest
+         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
@@ -166,10 +171,10 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenAssociations(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
+         * @var MockObject|SerializerInterface   $stubSerializer
+         * @var MockObject|Request               $stubRequest
+         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
@@ -201,10 +206,10 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenNonAssociations(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
+         * @var MockObject|SerializerInterface   $stubSerializer
+         * @var MockObject|Request               $stubRequest
+         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
@@ -231,10 +236,10 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityAssociations(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface   $stubSerializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|Request               $stubRequest
-         * @var \PHPUnit_Framework_MockObject_MockObject|ParameterBag          $stubParameterBag
-         * @var \PHPUnit_Framework_MockObject_MockObject|RestResourceInterface $stubResourceService
+         * @var MockObject|SerializerInterface   $stubSerializer
+         * @var MockObject|Request               $stubRequest
+         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
         $stubRequest = $this->createMock(Request::class);
@@ -264,6 +269,7 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['AnotherFakeEntity'], $context['groups']);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
      * @expectedExceptionMessage Field 'foo': test error
@@ -271,9 +277,9 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatHandleFormErrorThrowsExpectedExceptionWithProperty(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $serializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface       $formInterface
-         * @var \PHPUnit_Framework_MockObject_MockObject|FormError           $formError
+         * @var MockObject|SerializerInterface $serializer
+         * @var MockObject|FormInterface       $formInterface
+         * @var MockObject|FormError           $formError
          */
         $serializer = $this->createMock(SerializerInterface::class);
         $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
@@ -307,6 +313,7 @@ class ResponseHandlerTest extends ContainerTestCase
         $testClass->handleFormError($formInterface);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
      * @expectedExceptionMessage test error
@@ -314,9 +321,9 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatHandleFormErrorThrowsExpectedExceptionWithoutProperty(): void
     {
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|SerializerInterface $serializer
-         * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface       $formInterface
-         * @var \PHPUnit_Framework_MockObject_MockObject|FormError           $formError
+         * @var MockObject|SerializerInterface $serializer
+         * @var MockObject|FormInterface       $formInterface
+         * @var MockObject|FormError           $formError
          */
         $serializer = $this->createMock(SerializerInterface::class);
         $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
@@ -351,42 +358,44 @@ class ResponseHandlerTest extends ContainerTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatCreateResponseReturnsExpected(): array
+    public function dataProviderTestThatCreateResponseReturnsExpected(): Generator
     {
-        return [
-            [
-                Request::create(''),
-                ['foo' => 'bar'],
-                '{"foo":"bar"}'
-            ],
-            [
-                Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => 'Some weird content type']),
-                ['foo' => 'bar'],
-                '{"foo":"bar"}'
-            ],
-            [
-                Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => 'application/xml']),
-                ['foo' => 'bar'],
-                <<<DATA
+        yield [
+            Request::create(''),
+            ['foo' => 'bar'],
+            '{"foo":"bar"}'
+        ];
+
+        yield [
+            Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => 'Some weird content type']),
+            ['foo' => 'bar'],
+            '{"foo":"bar"}'
+        ];
+
+        yield [
+            Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => 'application/xml']),
+            ['foo' => 'bar'],
+            <<<DATA
 <?xml version="1.0"?>
 <response><foo>bar</foo></response>
 
 DATA
-            ],
         ];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatNonSupportedSerializerFormatThrowsHttpException(): array
+    public function dataProviderTestThatNonSupportedSerializerFormatThrowsHttpException(): Generator
     {
-        return [
-            ['not supported format'],
-            ['sjon'],
-            ['lmx'],
-        ];
+        yield ['not supported format'];
+
+        yield ['sjon'];
+
+        yield ['lmx'];
+
+        yield [''];
     }
 }

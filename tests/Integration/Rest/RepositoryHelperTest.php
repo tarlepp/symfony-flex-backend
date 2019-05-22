@@ -11,6 +11,7 @@ use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\RepositoryHelper;
 use Doctrine\Orm\Query\Parameter;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -168,392 +169,410 @@ class RepositoryHelperTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatProcessCriteriaWorksAsExpected(): array
+    public function dataProviderTestThatProcessCriteriaWorksAsExpected(): Generator
     {
-        return [
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1',
+            ['foo' => 'bar'],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE foo.bar = ?1',
+            ['foo.bar' => 'foobar'],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1 AND entity.bar = ?2',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1',
-                ['foo' => 'bar'],
+                'foo' => 'bar',
+                'bar' => 'foo',
             ],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE foo.bar = ?1',
-                ['foo.bar' => 'foobar'],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1 AND entity.bar = ?2',
-                [
-                    'foo' => 'bar',
-                    'bar' => 'foo',
+                'and' => [
+                    ['bar', 'eq', 'foo'],
                 ],
             ],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
-                [
-                    'and' => [
-                        ['bar', 'eq', 'foo'],
-                    ],
+                'or' => [
+                    ['bar', 'eq', 'foo'],
                 ],
             ],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 AND foo = ?2',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
-                [
-                    'or' => [
-                        ['bar', 'eq', 'foo'],
-                    ],
+                'and' => [
+                    ['bar', 'eq', 'foo'],
+                    ['foo', 'eq', 'bar'],
                 ],
             ],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 OR foo = ?2',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 AND foo = ?2',
-                [
-                    'and' => [
-                        ['bar', 'eq', 'foo'],
-                        ['foo', 'eq', 'bar'],
-                    ],
-                ],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 OR foo = ?2',
-                [
-                    'or' => [
-                        ['bar', 'eq', 'foo'],
-                        ['foo', 'eq', 'bar'],
-                    ],
+                'or' => [
+                    ['bar', 'eq', 'foo'],
+                    ['foo', 'eq', 'bar'],
                 ],
             ],
         ];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): array
+    public function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): Generator
     {
         // @codingStandardsIgnoreStart
-        return [
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4',
-                [
-                    'and' => ['foo'],
-                ],
+                'and' => ['foo'],
             ],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstname LIKE ?2 OR entity.surname LIKE ?3 OR entity.email LIKE ?4',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstname LIKE ?2 OR entity.surname LIKE ?3 OR entity.email LIKE ?4',
-                [
-                    'or' => ['foo'],
-                ],
+                'or' => ['foo'],
             ],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4 AND entity.username LIKE ?5 AND entity.firstname LIKE ?6 AND entity.surname LIKE ?7 AND entity.email LIKE ?8',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4 AND entity.username LIKE ?5 AND entity.firstname LIKE ?6 AND entity.surname LIKE ?7 AND entity.email LIKE ?8',
-                [
-                    'and' => ['foo', 'bar'],
-                ],
+                'and' => ['foo', 'bar'],
             ],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstname LIKE ?2 OR entity.surname LIKE ?3 OR entity.email LIKE ?4 OR entity.username LIKE ?5 OR entity.firstname LIKE ?6 OR entity.surname LIKE ?7 OR entity.email LIKE ?8',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstname LIKE ?2 OR entity.surname LIKE ?3 OR entity.email LIKE ?4 OR entity.username LIKE ?5 OR entity.firstname LIKE ?6 OR entity.surname LIKE ?7 OR entity.email LIKE ?8',
-                [
-                    'or' => ['foo', 'bar'],
-                ],
+                'or' => ['foo', 'bar'],
             ],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity WHERE (entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4) AND (entity.username LIKE ?5 OR entity.firstname LIKE ?6 OR entity.surname LIKE ?7 OR entity.email LIKE ?8)',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity WHERE (entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4) AND (entity.username LIKE ?5 OR entity.firstname LIKE ?6 OR entity.surname LIKE ?7 OR entity.email LIKE ?8)',
-                [
-                    'and' => ['foo'],
-                    'or'  => ['bar'],
-                ],
+                'and' => ['foo'],
+                'or' => ['bar'],
             ],
         ];
         // @codingStandardsIgnoreEnd
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatProcessOrderByWorksLikeExpected(): array
+    public function dataProviderTestThatProcessOrderByWorksLikeExpected(): Generator
     {
-        return [
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
+            ['foo' => 'asc'],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo DESC',
+            ['foo' => 'DESC'],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
+            ['entity.foo' => 'asc'],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity ORDER BY .foo asdf',
+            ['.foo' => 'asdf'],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity ORDER BY foo.bar asc',
+            ['foo.bar' => 'asc'],
+        ];
+
+        yield [
+            /** @lang text */
+            'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc, foo.bar desc',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
-                ['foo' => 'asc'],
+                'foo' => 'asc',
+                'foo.bar' => 'desc',
             ],
+        ];
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(): Generator
+    {
+        yield [
+            ['u.id', 'eq', 123],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id = ?1',
             [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo DESC',
-                ['foo' => 'DESC'],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
-                ['entity.foo' => 'asc'],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity ORDER BY .foo asdf',
-                ['.foo' => 'asdf'],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity ORDER BY foo.bar asc',
-                ['foo.bar' => 'asc'],
-            ],
-            [
-                /** @lang text */
-                'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc, foo.bar desc',
                 [
-                    'foo' => 'asc',
-                    'foo.bar' => 'desc',
+                    'name' => '1',
+                    'value' => 123,
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'neq', 123],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id <> ?1',
+            [
+                [
+                    'name' => '1',
+                    'value' => 123,
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'lt', 123],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id < ?1',
+            [
+                [
+                    'name' => '1',
+                    'value' => 123,
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'lte', 123],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id <= ?1',
+            [
+                [
+                    'name' => '1',
+                    'value' => 123,
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'gt', 123],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id > ?1',
+            [
+                [
+                    'name' => '1',
+                    'value' => 123,
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'gte', 123],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id >= ?1',
+            [
+                [
+                    'name' => '1',
+                    'value' => 123,
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'in', [1, 2]],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id IN(1, 2)',
+            [
+                [
+                    'name' => '1',
+                    'value' => 123,
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'notIn', [1, 2]],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id NOT IN(1, 2)',
+            [
+                [
+                    'name' => '1',
+                    'value' => 1,
+                ],
+                [
+                    'name' => '2',
+                    'value' => 2,
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'isNull', null],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id IS NULL',
+            [],
+        ];
+
+        yield [
+            ['u.id', 'isNotNull', null],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id IS NOT NULL',
+            [],
+        ];
+
+        yield [
+            ['u.id', 'like', 'abc'],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id LIKE ?1',
+            [
+                [
+                    'name' => '1',
+                    'value' => 'abc',
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'notLike', 'abc'],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id NOT LIKE ?1',
+            [
+                [
+                    'name' => '1',
+                    'value' => 'abc',
+                ],
+            ],
+        ];
+
+        yield [
+            ['u.id', 'between', [1, 6]],
+            /** @lang text */
+            'SELECT u FROM App\Entity\User u WHERE u.id BETWEEN ?1 AND ?2',
+            [
+                [
+                    'name' => '1',
+                    'value' => 1,
+                ],
+                [
+                    'name' => '2',
+                    'value' => 6,
                 ],
             ],
         ];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(): array
-    {
-        return [
-            [
-                ['u.id', 'eq', 123],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id = ?1',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 123,
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'neq', 123],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id <> ?1',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 123,
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'lt', 123],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id < ?1',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 123,
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'lte', 123],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id <= ?1',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 123,
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'gt', 123],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id > ?1',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 123,
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'gte', 123],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id >= ?1',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 123,
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'in', [1, 2]],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id IN(1, 2)',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 123,
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'notIn', [1, 2]],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id NOT IN(1, 2)',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 1,
-                    ],
-                    [
-                        'name' => '2',
-                        'value' => 2,
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'isNull', null],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id IS NULL',
-                [],
-            ],
-            [
-                ['u.id', 'isNotNull', null],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id IS NOT NULL',
-                [],
-            ],
-            [
-                ['u.id', 'like', 'abc'],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id LIKE ?1',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 'abc',
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'notLike', 'abc'],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id NOT LIKE ?1',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 'abc',
-                    ],
-                ],
-            ],
-            [
-                ['u.id', 'between', [1, 6]],
-                /** @lang text */
-                'SELECT u FROM App\Entity\User u WHERE u.id BETWEEN ?1 AND ?2',
-                [
-                    [
-                        'name' => '1',
-                        'value' => 1,
-                    ],
-                    [
-                        'name' => '2',
-                        'value' => 6,
-                    ],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(): array
+    public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(): Generator
     {
         // @codingStandardsIgnoreStart
-        return [
+        yield [
             [
-                [
-                    'and' => [
-                        ['u.firstname', 'eq', 'foo bar'],
-                        ['u.surname', 'neq', 'bar'],
-                    ],
-                    'or' => [
-                        ['u.firstname', 'eq', 'bar foo'],
-                        ['u.surname', 'neq', 'foo'],
-                    ],
+                'and' => [
+                    ['u.firstname', 'eq', 'foo bar'],
+                    ['u.surname', 'neq', 'bar'],
                 ],
-                /** @lang text */
-                <<<'DQL'
-SELECT u FROM App\Entity\User u WHERE (u.firstname = ?1 AND u.surname <> ?2) AND (u.firstname = ?3 OR u.surname <> ?4)
-DQL
-                ,
-                [
-                    [
-                        'name' => '1',
-                        'value' => 'foo bar',
-                    ],
-                    [
-                        'name' => '2',
-                        'value' => 'bar',
-                    ],
-                    [
-                        'name' => '3',
-                        'value' => 'bar foo',
-                    ],
-                    [
-                        'name' => '4',
-                        'value' => 'foo',
-                    ],
+                'or' => [
+                    ['u.firstname', 'eq', 'bar foo'],
+                    ['u.surname', 'neq', 'foo'],
                 ],
             ],
+            /** @lang text */
+            <<<'DQL'
+SELECT u FROM App\Entity\User u WHERE (u.firstname = ?1 AND u.surname <> ?2) AND (u.firstname = ?3 OR u.surname <> ?4)
+DQL
+            ,
             [
                 [
-                    'or' => [
-                        ['u.field1', 'like', '%field1Value%'],
-                        ['u.field2', 'like', '%field2Value%'],
-                    ],
-                    'and' => [
-                        ['u.field3', 'eq', 3],
-                        ['u.field4', 'eq', 'four'],
-                    ],
-                    ['u.field5', 'neq', 5],
-
+                    'name' => '1',
+                    'value' => 'foo bar',
                 ],
-                /** @lang text */
-                <<<'DQL'
+                [
+                    'name' => '2',
+                    'value' => 'bar',
+                ],
+                [
+                    'name' => '3',
+                    'value' => 'bar foo',
+                ],
+                [
+                    'name' => '4',
+                    'value' => 'foo',
+                ],
+            ],
+        ];
+
+        yield [
+            [
+                'or' => [
+                    ['u.field1', 'like', '%field1Value%'],
+                    ['u.field2', 'like', '%field2Value%'],
+                ],
+                'and' => [
+                    ['u.field3', 'eq', 3],
+                    ['u.field4', 'eq', 'four'],
+                ],
+                ['u.field5', 'neq', 5],
+
+            ],
+            /** @lang text */
+            <<<'DQL'
 SELECT u FROM App\Entity\User u WHERE (u.field1 LIKE ?1 OR u.field2 LIKE ?2) AND (u.field3 = ?3 AND u.field4 = ?4) AND u.field5 <> ?5
 DQL
-                ,
+            ,
+            [
                 [
-                    [
-                        'name' => '1',
-                        'value' => '%field1Value%',
-                    ],
-                    [
-                        'name' => '2',
-                        'value' => '%field2Value%',
-                    ],
-                    [
-                        'name' => '3',
-                        'value' => 3,
-                    ],
-                    [
-                        'name' => '4',
-                        'value' => 'four',
-                    ],
-                    [
-                        'name' => '5',
-                        'value' => 5,
-                    ],
+                    'name' => '1',
+                    'value' => '%field1Value%',
                 ],
-            ]
+                [
+                    'name' => '2',
+                    'value' => '%field2Value%',
+                ],
+                [
+                    'name' => '3',
+                    'value' => 3,
+                ],
+                [
+                    'name' => '4',
+                    'value' => 'four',
+                ],
+                [
+                    'name' => '5',
+                    'value' => 5,
+                ],
+            ],
         ];
         // @codingStandardsIgnoreEnd
     }
