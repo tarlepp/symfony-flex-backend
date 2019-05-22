@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Utils/Tests/PHPUnitUtilTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Unit\Utils\Tests;
 

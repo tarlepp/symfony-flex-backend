@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * /tests/E2E/Rest/src/Controller/ControllerForLifeCycleTests.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\E2E\Rest\src\Controller;
 

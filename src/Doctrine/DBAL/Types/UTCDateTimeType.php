@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Doctrine/DBAL/Types/UTCDateTimeType.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Doctrine\DBAL\Types;

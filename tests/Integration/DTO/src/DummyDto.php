@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * /tests/Integration/DTO/src/DummyDto.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Dto\src;
 

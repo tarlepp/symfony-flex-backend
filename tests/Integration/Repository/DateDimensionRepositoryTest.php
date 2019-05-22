@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * /tests/Integration/Integration/DateDimensionRepositoryTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Repository;
 

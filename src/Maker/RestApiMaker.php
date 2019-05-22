@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Maker/RestApiMaker.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Maker;

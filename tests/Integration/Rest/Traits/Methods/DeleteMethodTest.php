@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * /tests/Integration/Rest/Traits/Methods/DeleteMethodTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace Integration\Rest\Traits\Methods;
 

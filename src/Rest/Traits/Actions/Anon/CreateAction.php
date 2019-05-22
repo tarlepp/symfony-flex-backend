@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/Actions/Anon/CreateAction.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Rest\Traits\Actions\Anon;

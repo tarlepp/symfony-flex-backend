@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * /tests/Integration/Validator/Constraints/UniqueUsernameValidatorTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Validator\Constraints;
 

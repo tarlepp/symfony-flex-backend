@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * /tests/Functional/Repository/LogLoginFailureRepositoryTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Functional\Repository;
 

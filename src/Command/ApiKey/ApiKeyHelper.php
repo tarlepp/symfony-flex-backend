@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/ApiKeyHelper.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Command\ApiKey;

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * /tests/Integration/Form/Type/Console/UserTypeTest.php
  *
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 namespace App\Tests\Integration\Form\Type\Console;
 
