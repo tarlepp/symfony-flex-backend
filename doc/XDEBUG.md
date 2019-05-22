@@ -12,6 +12,8 @@ and [PhpStorm](https://www.jetbrains.com/phpstorm/) within this application.
       * [First connection](#first-connection)
       * [Configuring debugging server](#configuring-debugging-server)
    * [Mac users](#mac-users)
+   * [Debug CLI commands](#debug-cli-commands)
+   * [External links / resources](#external-links--resources)
    * [Closure](#closure)
 
 ## Configuration and usage
@@ -81,6 +83,17 @@ document, which will tell you how to speed your Mac environment quite lot.
 
 You just need to combine those both configurations to your local
 `docker-compose.override.yml` file
+
+## Debug CLI commands
+
+By default this application assumes that you're using `app.localhost` as your 
+PHP server that you've configured tp your IDE. If you need to change that, just
+override that in your local `docker-compose.override.yml` file
+
+## External links / resources
+
+* [Debugging PHP (web and cli) with Xdebug using Docker and PHPStorm](https://thecodingmachine.io/configuring-xdebug-phpstorm-docker)
+* [Debug your PHP in Docker with Intellij/PHPStorm and Xdebug](https://gist.github.com/jehaby/61a89b15571b4bceee2417106e80240d)
 
 ## Closure
 
