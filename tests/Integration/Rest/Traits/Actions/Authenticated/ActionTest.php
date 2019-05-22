@@ -13,6 +13,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
+use function array_map;
+use function call_user_func_array;
+use function lcfirst;
+use function str_replace;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Class ActionTest
@@ -29,6 +35,8 @@ class ActionTest extends KernelTestCase
      * @param string $method
      * @param string $traitMethod
      * @param array  $parameters
+     *
+     * @throws Throwable
      */
     public function testThatTraitCallsExpectedMethod(
         string $className,
@@ -51,7 +59,7 @@ class ActionTest extends KernelTestCase
             ->method($traitMethod)
             ->with(...$parameters);
 
-        $result = \call_user_func_array([$stub, $method], $parameters);
+        $result = call_user_func_array([$stub, $method], $parameters);
 
         static::assertInstanceOf(Response::class, $result);
     }
@@ -69,7 +77,7 @@ class ActionTest extends KernelTestCase
         $namespace = '\\App\\Rest\\Traits\\Actions\\Authenticated\\';
 
         $iterator = function (string $filename) use ($folder, $namespace): array {
-            $base = \str_replace([$folder, \DIRECTORY_SEPARATOR, '.php'], ['', '\\', ''], $filename);
+            $base = str_replace([$folder, DIRECTORY_SEPARATOR, '.php'], ['', '\\', ''], $filename);
             $class = $namespace . $base;
 
             $parameters = [
@@ -93,12 +101,12 @@ class ActionTest extends KernelTestCase
 
             return [
                 $class,
-                \lcfirst($base),
-                \str_replace('Action', 'Method', \lcfirst($base)),
+                lcfirst($base),
+                str_replace('Action', 'Method', lcfirst($base)),
                 $parameters,
             ];
         };
 
-        return \array_map($iterator, PhpUnitUtil::recursiveFileSearch($folder, $pattern));
+        return array_map($iterator, PhpUnitUtil::recursiveFileSearch($folder, $pattern));
     }
 }
