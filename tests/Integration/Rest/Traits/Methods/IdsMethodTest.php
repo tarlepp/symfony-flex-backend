@@ -7,14 +7,20 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
-use App\Rest\RestResourceInterface;
 use App\Rest\ResponseHandlerInterface;
+use App\Rest\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodTestClass;
+use Exception;
+use Generator;
+use InvalidArgumentException;
+use LogicException;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 /**
  * Class IdsMethodTest
@@ -24,17 +30,20 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 class IdsMethodTest extends KernelTestCase
 {
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @codingStandardsIgnoreStart
      *
-     * @expectedException \LogicException
+     * @expectedException LogicException
      * @expectedExceptionMessageRegExp /You cannot use '.*' controller class with REST traits if that does not implement 'App\\Rest\\ControllerInterface'/
      *
      * @codingStandardsIgnoreEnd
+     *
+     * @throws Throwable
      */
     public function testThatTraitThrowsAnException():void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IdsMethodInvalidTestClass $testClass */
+        /** @var MockObject|IdsMethodInvalidTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(IdsMethodInvalidTestClass::class);
 
         $request = Request::create('/');
@@ -42,19 +51,22 @@ class IdsMethodTest extends KernelTestCase
         $testClass->idsMethod($request);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      *
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
      *
-     * @param   string  $httpMethod
+     * @param string $httpMethod
+     *
+     * @throws Throwable
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|IdsMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             IdsMethodTestClass::class,
             [$resource, $responseHandler]
@@ -66,12 +78,15 @@ class IdsMethodTest extends KernelTestCase
         $testClass->idsMethod($request)->getContent();
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatTraitCallsProcessCriteriaIfItExists(): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|IdsMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             IdsMethodTestClass::class,
             [$resource, $responseHandler],
@@ -96,15 +111,17 @@ class IdsMethodTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
-     * @param   \Exception  $exception
-     * @param   int         $expectedCode
+     * @param Exception $exception
+     * @param int       $expectedCode
+     *
+     * @throws Throwable
      */
-    public function testThatTraitHandlesException(\Exception $exception, int $expectedCode): void
+    public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|IdsMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             IdsMethodTestClass::class,
             [$resource, $responseHandler]
@@ -123,12 +140,15 @@ class IdsMethodTest extends KernelTestCase
         $testClass->idsMethod($request);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatTraitCallsServiceMethods(): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var IdsMethodTestClass|\PHPUnit_Framework_MockObject_MockObject $testClass */
+        /** @var MockObject|IdsMethodTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(
             IdsMethodTestClass::class,
             [$resource, $responseHandler]
@@ -154,32 +174,28 @@ class IdsMethodTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): array
+    public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
-        return [
-            ['HEAD'],
-            ['PATCH'],
-            ['POST'],
-            ['PUT'],
-            ['DELETE'],
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['foobar'],
-        ];
+        yield ['HEAD'];
+        yield ['PATCH'];
+        yield ['POST'];
+        yield ['PUT'];
+        yield ['DELETE'];
+        yield ['OPTIONS'];
+        yield ['CONNECT'];
+        yield ['foobar'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatTraitHandlesException(): array
+    public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        return [
-            [new HttpException(400), 0],
-            [new \LogicException(), 400],
-            [new \InvalidArgumentException(), 400],
-            [new \Exception(), 400],
-        ];
+        yield [new HttpException(400), 0];
+        yield [new LogicException(), 400];
+        yield [new InvalidArgumentException(), 400];
+        yield [new Exception(), 400];
     }
 }
