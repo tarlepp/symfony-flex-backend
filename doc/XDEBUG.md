@@ -87,7 +87,7 @@ You just need to combine those both configurations to your local
 ## Debug CLI commands
 
 By default this application assumes that you're using `app.localhost` as your 
-PHP server that you've configured tp your IDE. If you need to change that, just
+PHP server that you've configured to your IDE. If you need to change that, just
 override that in your local `docker-compose.override.yml` file
 
 ## External links / resources
