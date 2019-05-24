@@ -11,6 +11,7 @@ use App\Tests\Integration\Helpers\src\LoggerAwareService;
 use App\Utils\Tests\PhpUnitUtil;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class LoggerAwareTraitTest
@@ -26,7 +27,7 @@ class LoggerAwareTraitTest extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatLoggerIsInstanceOfLoggerInterface(): void
     {
