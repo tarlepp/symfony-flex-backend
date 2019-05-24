@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Form\Type\Rest\User;
 use App\DTO\User as UserDto;
 use App\Form\Type\Rest\User\UserPatchType;
 use Symfony\Component\Form\Test\TypeTestCase;
+use function array_keys;
 
 /**
  * Class UserPatchTypeTest
@@ -32,12 +33,12 @@ class UserPatchTypeTest extends TypeTestCase
         $dto->setEmail('john.doe@test.com');
 
         // Specify used form data
-        $formData = array(
+        $formData = [
             'username'      => 'username',
             'firstname'     => 'John',
             'surname'       => 'Doe',
             'email'         => 'john.doe@test.com',
-        );
+        ];
 
         // submit the data to the form directly
         $form->submit($formData);
@@ -52,7 +53,7 @@ class UserPatchTypeTest extends TypeTestCase
         $view = $form->createView();
         $children = $view->children;
 
-        foreach (\array_keys($formData) as $key) {
+        foreach (array_keys($formData) as $key) {
             static::assertArrayHasKey($key, $children);
         }
 
