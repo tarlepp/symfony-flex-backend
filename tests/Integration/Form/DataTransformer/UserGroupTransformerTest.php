@@ -10,7 +10,10 @@ namespace App\Tests\Integration\Form\DataTransformer;
 use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Resource\UserGroupResource;
+use Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class UserGroupTransformerTest
@@ -21,7 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class UserGroupTransformerTest extends KernelTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|UserGroupResource
+     * @var MockObject|UserGroupResource
      */
     private $userGroupResource;
 
@@ -57,6 +60,7 @@ class UserGroupTransformerTest extends KernelTestCase
         unset($transformer, $entity1, $entity2);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
      * @expectedExceptionMessage User group with id "2" does not exist!
@@ -96,16 +100,17 @@ class UserGroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
+     *
+     * @throws Throwable
      */
-    public function dataProviderTestThatTransformReturnsExpected(): array
+    public function dataProviderTestThatTransformReturnsExpected(): Generator
     {
+        yield [[], null];
+
         $entity = new UserGroup();
 
-        return [
-            [[], null],
-            [[$entity->getId()], [$entity]],
-        ];
+        yield [[$entity->getId()], [$entity]];
     }
 
     protected function setUp(): void

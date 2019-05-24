@@ -10,6 +10,8 @@ namespace App\Tests\Integration\Form\DataTransformer;
 use App\Entity\Role;
 use App\Form\DataTransformer\RoleTransformer;
 use App\Resource\RoleResource;
+use Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -21,7 +23,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class RoleTransformerTest extends KernelTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RoleResource
+     * @var MockObject|RoleResource
      */
     private $roleResource;
 
@@ -45,29 +47,30 @@ class RoleTransformerTest extends KernelTestCase
         $this->roleResource
             ->expects(static::once())
             ->method('findOne')
-            ->with('rolename')
+            ->with('role_name')
             ->willReturn($entity);
 
         $transformer = new RoleTransformer($this->roleResource);
-        $transformer->reverseTransform('rolename');
+        $transformer->reverseTransform('role_name');
 
         unset($transformer, $entity);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Role with name "rolename" does not exist!
+     * @expectedExceptionMessage Role with name "role_name" does not exist!
      */
     public function testThatReverseTransformThrowsAnException(): void
     {
         $this->roleResource
             ->expects(static::once())
             ->method('findOne')
-            ->with('rolename')
+            ->with('role_name')
             ->willReturn(null);
 
         $transformer = new RoleTransformer($this->roleResource);
-        $transformer->reverseTransform('rolename');
+        $transformer->reverseTransform('role_name');
 
         unset($transformer);
     }
@@ -90,16 +93,15 @@ class RoleTransformerTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatTransformReturnsExpected(): array
+    public function dataProviderTestThatTransformReturnsExpected(): Generator
     {
+        yield ['', null];
+
         $entity = new Role();
 
-        return [
-            ['', null],
-            [$entity->getId(), $entity],
-        ];
+        yield [$entity->getId(), $entity];
     }
 
     protected function setUp(): void
