@@ -10,6 +10,8 @@ namespace App\Tests\Integration\Resource;
 use App\Entity\LogLoginFailure;
 use App\Repository\LogLoginFailureRepository;
 use App\Resource\LogLoginFailureResource;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\Security\Core\User\User;
 
 /**
  * Class LogLoginFailureResourceTest
@@ -22,4 +24,20 @@ class LogLoginFailureResourceTest extends ResourceTestCase
     protected $entityClass = LogLoginFailure::class;
     protected $repositoryClass = LogLoginFailureRepository::class;
     protected $resourceClass = LogLoginFailureResource::class;
+
+    public function testThatResetMethodCallsExpectedRepositoryMethod(): void
+    {
+        /** @var MockObject|LogLoginFailureRepository $repository */
+        $repository = $this->getMockBuilder($this->repositoryClass)->disableOriginalConstructor()->getMock();
+
+        $user = new User('username', 'password');
+
+        $repository
+            ->expects(static::once())
+            ->method('clear')
+            ->with($user)
+            ->willReturn(0);
+
+        (new LogLoginFailureResource($repository))->reset($user);
+    }
 }
