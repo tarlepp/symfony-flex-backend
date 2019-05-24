@@ -95,10 +95,10 @@ class UserGroupTypeTest extends TypeTestCase
     {
         gc_enable();
 
-        parent::setUp();
-
         $this->mockRoleService = $this->createMock(RolesService::class);
         $this->mockRoleResource = $this->createMock(RoleResource::class);
+
+        parent::setUp();
     }
 
     protected function tearDown(): void
