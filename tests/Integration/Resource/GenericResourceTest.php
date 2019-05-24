@@ -16,11 +16,14 @@ use App\Resource\UserResource;
 use App\Rest\RepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Generator;
 use PHPUnit\Framework\MockObject\MockBuilder;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Throwable;
+use function get_class;
 
 /**
  * Class GenericResourceTest
@@ -31,8 +34,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class GenericResourceTest extends KernelTestCase
 {
     private $dtoClass = UserDto::class;
-    private $entityClass = UserEntity::class;
     private $resourceClass = UserResource::class;
+    private $entityClass = UserEntity::class;
 
     /**
      * @var UserResource
@@ -47,6 +50,7 @@ class GenericResourceTest extends KernelTestCase
         return static::$container->get('doctrine')->getManager();
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessageRegExp /DTO class not specified for '.*' resource/
@@ -64,6 +68,7 @@ class GenericResourceTest extends KernelTestCase
         static::assertSame('foobar', $this->resource->getDtoClass());
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessageRegExp /FormType class not specified for '.*' resource/
@@ -83,7 +88,7 @@ class GenericResourceTest extends KernelTestCase
 
     public function testThatGetEntityNameCallsExpectedRepositoryMethod(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -97,11 +102,11 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
     public function testThatGetReferenceCallsExpectedRepositoryMethod(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -116,7 +121,7 @@ class GenericResourceTest extends KernelTestCase
 
     public function testThatGetAssociationsCallsExpectedRepositoryMethod(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -133,7 +138,7 @@ class GenericResourceTest extends KernelTestCase
     {
         $entity = $this->getEntityMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -142,7 +147,7 @@ class GenericResourceTest extends KernelTestCase
             ->with('some id')
             ->willReturn($entity);
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
+        /** @var MockObject|RestDtoInterface $dto */
         $dto = $this->getDtoMockBuilder()->getMock();
 
         $this->resource->setRepository($repository);
@@ -150,19 +155,20 @@ class GenericResourceTest extends KernelTestCase
         /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(
             RestDtoInterface::class,
-            $this->resource->getDtoForEntity('some id', \get_class($dto))
+            $this->resource->getDtoForEntity('some id', get_class($dto))
         );
 
         unset($dto, $repository, $entity);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @expectedExceptionMessage Not found
      */
     public function testThatGetDtoForEntityThrowsAnExceptionIfEntityWasNotFound(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -171,11 +177,11 @@ class GenericResourceTest extends KernelTestCase
             ->with('some id')
             ->willReturn(null);
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
+        /** @var MockObject|RestDtoInterface $dto */
         $dto = $this->getDtoMockBuilder()->getMock();
 
         $this->resource->setRepository($repository);
-        $this->resource->getDtoForEntity('some id', \get_class($dto));
+        $this->resource->getDtoForEntity('some id', get_class($dto));
 
         unset($repository);
     }
@@ -185,12 +191,14 @@ class GenericResourceTest extends KernelTestCase
      *
      * @param array $expectedArguments
      * @param array $arguments
+     *
+     * @throws Throwable
      */
     public function testThatFindCallsExpectedRepositoryMethodWithCorrectParameters(
         array $expectedArguments,
         array $arguments
     ): void {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -204,9 +212,12 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatFindOneCallsExpectedRepositoryMethod(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -220,13 +231,16 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @expectedExceptionMessage Not found
+     *
+     * @throws Throwable
      */
     public function testThatFindOneThrowsAnExceptionIfEntityWasNotFound(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -241,11 +255,14 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatFindOneWontThrowAnExceptionIfEntityWasFound(): void
     {
         $entity = $this->getEntityMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -266,12 +283,14 @@ class GenericResourceTest extends KernelTestCase
      *
      * @param array $expectedArguments
      * @param array $arguments
+     *
+     * @throws Throwable
      */
     public function testThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(
         array $expectedArguments,
         array $arguments
     ): void {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -285,13 +304,16 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @expectedExceptionMessage Not found
+     *
+     * @throws Throwable
      */
     public function testThatFindOneByThrowsAnExceptionIfEntityWasNotFound(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -306,11 +328,14 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatFindOneByWontThrowAnExceptionIfEntityWasFound(): void
     {
         $entity = $this->getEntityMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -332,13 +357,13 @@ class GenericResourceTest extends KernelTestCase
      * @param array $expectedArguments
      * @param array $arguments
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatCountCallsExpectedRepositoryMethodWithCorrectParameters(
         array $expectedArguments,
         array $arguments
     ): void {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -352,11 +377,14 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatSaveMethodCallsExpectedRepositoryMethod(): void
     {
         $entity = $this->getEntityInterfaceMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -371,12 +399,15 @@ class GenericResourceTest extends KernelTestCase
         unset($repository, $entity);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
+     *
+     * @throws Throwable
      */
     public function testThatCreateMethodThrowsAnErrorWithInvalidDto(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $dto = new $this->dtoClass();
@@ -387,9 +418,12 @@ class GenericResourceTest extends KernelTestCase
         unset($dto, $repository);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatCreateMethodCallsExpectedMethods(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository|RepositoryInterface $repository */
+        /** @var MockObject|UserRepository|RepositoryInterface $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -401,10 +435,10 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('save');
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|ValidatorInterface $validator */
+        /** @var MockObject|ValidatorInterface $validator */
         $validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository|ConstraintViolationListInterface $repository */
+        /** @var MockObject|UserRepository|ConstraintViolationListInterface $repository */
         $constraintViolationList = $this->getMockBuilder(ConstraintViolationListInterface::class)->getMock();
 
         $constraintViolationList
@@ -417,7 +451,7 @@ class GenericResourceTest extends KernelTestCase
             ->method('validate')
             ->willReturn($constraintViolationList);
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dto */
+        /** @var MockObject|RestDtoInterface $dto */
         $dto = $this->getDtoMockBuilder()->getMock();
 
         $dto
@@ -431,13 +465,16 @@ class GenericResourceTest extends KernelTestCase
         unset($dto, $validator, $repository);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      * @expectedExceptionMessage Not found
+     *
+     * @throws Throwable
      */
     public function testThatUpdateMethodThrowsAnExceptionIfEntityWasNotFound(): void
     {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -454,6 +491,9 @@ class GenericResourceTest extends KernelTestCase
         unset($dto, $repository);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatUpdateCallsExpectedRepositoryMethod(): void
     {
         $dto = new $this->dtoClass();
@@ -471,7 +511,7 @@ class GenericResourceTest extends KernelTestCase
             $entity->$method($value);
         }
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|UserRepository|RepositoryInterface $repository */
+        /** @var MockObject|UserRepository|RepositoryInterface $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -491,11 +531,14 @@ class GenericResourceTest extends KernelTestCase
         unset($repository, $entity, $dto);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatDeleteMethodCallsExpectedRepositoryMethod(): void
     {
         $entity = $this->getEntityMock();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -521,12 +564,14 @@ class GenericResourceTest extends KernelTestCase
      *
      * @param array $expectedArguments
      * @param array $arguments
+     *
+     * @throws Throwable
      */
     public function testThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(
         array $expectedArguments,
         array $arguments
     ): void {
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -540,14 +585,17 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
+     *
+     * @throws Throwable
      */
     public function testThatSaveMethodThrowsAnExceptionWithInvalidEntity(): void
     {
         $entity = new $this->entityClass();
 
-        /** @var PHPUnit_Framework_MockObject_MockObject|UserRepository $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -562,98 +610,101 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): array
+    public function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
-        return [
-            [
-                [[], []],
-                [null, null],
-            ],
-            [
-                [['foo'], []],
-                [['foo'], null],
-            ],
-            [
-                [['foo'], ['bar']],
-                [['foo'], ['bar']],
-            ],
+        yield [
+            [[], []],
+            [null, null],
+        ];
+
+        yield [
+            [['foo'], []],
+            [['foo'], null],
+        ];
+
+        yield [
+            [['foo'], ['bar']],
+            [['foo'], ['bar']],
         ];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): array
+    public function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
-        return [
-            [
-                [[], [], 0, 0, []],
-                [null, null, null, null, null],
-            ],
-            [
-                [['foo'], [], 0, 0, []],
-                [['foo'], null, null, null, null],
-            ],
-            [
-                [['foo'], ['foo'], 0, 0, []],
-                [['foo'], ['foo'], null, null, null],
-            ],
-            [
-                [['foo'], ['foo'], 1, 0, []],
-                [['foo'], ['foo'], 1, null, null],
-            ],
-            [
-                [['foo'], ['foo'], 1, 2, []],
-                [['foo'], ['foo'], 1, 2, null],
-            ],
-            [
-                [['foo'], ['foo'], 1, 2, ['foo']],
-                [['foo'], ['foo'], 1, 2, ['foo']],
-            ],
+        yield [
+            [[], [], 0, 0, []],
+            [null, null, null, null, null],
+        ];
+
+        yield [
+            [['foo'], [], 0, 0, []],
+            [['foo'], null, null, null, null],
+        ];
+
+        yield [
+            [['foo'], ['foo'], 0, 0, []],
+            [['foo'], ['foo'], null, null, null],
+        ];
+
+        yield [
+            [['foo'], ['foo'], 1, 0, []],
+            [['foo'], ['foo'], 1, null, null],
+        ];
+
+        yield [
+            [['foo'], ['foo'], 1, 2, []],
+            [['foo'], ['foo'], 1, 2, null],
+        ];
+
+        yield [
+            [['foo'], ['foo'], 1, 2, ['foo']],
+            [['foo'], ['foo'], 1, 2, ['foo']],
         ];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): array
+    public function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
-        return [
-            [
-                [[], []],
-                [[], null],
-            ],
-            [
-                [['foo'], []],
-                [['foo'], null],
-            ],
-            [
-                [['foo'], ['bar']],
-                [['foo'], ['bar']],
-            ],
+        yield [
+            [[], []],
+            [[], null],
+        ];
+
+        yield [
+            [['foo'], []],
+            [['foo'], null],
+        ];
+
+        yield [
+            [['foo'], ['bar']],
+            [['foo'], ['bar']],
         ];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): array
+    public function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
-        return [
-            [
-                [[], []],
-                [null, null],
-            ],
-            [
-                [['foo'], []],
-                [['foo'], null],
-            ],
-            [
-                [['foo'], ['bar']],
-                [['foo'], ['bar']],
-            ],
+        yield [
+            [[], []],
+            [null, null],
+        ];
+
+        yield [
+            [['foo'], []],
+            [['foo'], null],
+        ];
+
+        yield [
+            [['foo'], ['bar']],
+            [['foo'], ['bar']],
         ];
     }
 
@@ -688,9 +739,9 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|EntityInterface
+     * @return MockObject|EntityInterface
      */
-    private function getEntityInterfaceMock(): PHPUnit_Framework_MockObject_MockObject
+    private function getEntityInterfaceMock(): MockObject
     {
         return $this
             ->getMockBuilder(EntityInterface::class)
@@ -698,9 +749,9 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|UserEntity
+     * @return MockObject|UserEntity
      */
-    private function getEntityMock(): PHPUnit_Framework_MockObject_MockObject
+    private function getEntityMock(): MockObject
     {
         return $this->createMock($this->entityClass);
     }

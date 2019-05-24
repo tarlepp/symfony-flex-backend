@@ -24,10 +24,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class UserResourceTest extends ResourceTestCase
 {
     protected $entityClass = User::class;
-    protected $resourceClass = UserResource::class;
     protected $repositoryClass = UserRepository::class;
+    protected $resourceClass = UserResource::class;
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * @param RepositoryInterface $repository
      * @param ValidatorInterface  $validator

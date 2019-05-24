@@ -7,10 +7,9 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Resource;
 
-use App\Rest\RepositoryInterface;
 use App\Rest\RestResourceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use function sprintf;
 
 /**
  * Class ResourceTestCase
@@ -42,7 +41,7 @@ abstract class ResourceTestCase extends KernelTestCase
 
     public function testThatGetRepositoryReturnsExpected(): void
     {
-        $message = \sprintf(
+        $message = sprintf(
             'getRepository() method did not return expected repository \'%s\'.',
             $this->repositoryClass
         );
@@ -53,7 +52,7 @@ abstract class ResourceTestCase extends KernelTestCase
 
     public function testThatGetEntityNameReturnsExpected(): void
     {
-        $message = \sprintf(
+        $message = sprintf(
             'getEntityName() method did not return expected entity \'%s\'.',
             $this->entityClass
         );

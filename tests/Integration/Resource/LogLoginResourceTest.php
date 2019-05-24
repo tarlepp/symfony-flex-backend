@@ -20,6 +20,6 @@ use App\Resource\LogLoginResource;
 class LogLoginResourceTest extends ResourceTestCase
 {
     protected $entityClass = LogLogin::class;
-    protected $resourceClass = LogLoginResource::class;
     protected $repositoryClass = LogLoginRepository::class;
+    protected $resourceClass = LogLoginResource::class;
 }

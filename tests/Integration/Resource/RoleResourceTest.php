@@ -20,6 +20,6 @@ use App\Resource\RoleResource;
 class RoleResourceTest extends ResourceTestCase
 {
     protected $entityClass = Role::class;
-    protected $resourceClass = RoleResource::class;
     protected $repositoryClass = RoleRepository::class;
+    protected $resourceClass = RoleResource::class;
 }
