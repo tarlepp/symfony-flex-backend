@@ -13,8 +13,10 @@ use App\Form\DataTransformer\RoleTransformer;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
+use function array_keys;
 
 /**
  * Class UserGroupTypeTest
@@ -25,12 +27,12 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class UserGroupTypeTest extends TypeTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RolesService
+     * @var MockObject|RolesService
      */
     private $mockRoleService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RoleResource
+     * @var MockObject|RoleResource
      */
     private $mockRoleResource;
 
@@ -64,26 +66,26 @@ class UserGroupTypeTest extends TypeTestCase
         $dto->setRole($roleEntity);
 
         // Specify used form data
-        $formData = array(
+        $formData = [
             'name'  => 'ROLE_ADMIN',
             'role'  => 'ROLE_ADMIN',
-        );
+        ];
 
         // submit the data to the form directly
         $form->submit($formData);
 
         // Test that data transformers have not been failed
-        $this->assertTrue($form->isSynchronized());
+        static::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        $this->assertEquals($dto, $form->getData());
+        static::assertEquals($dto, $form->getData());
 
         // Check that form renders correctly
         $view = $form->createView();
         $children = $view->children;
 
-        foreach (\array_keys($formData) as $key) {
-            $this->assertArrayHasKey($key, $children);
+        foreach (array_keys($formData) as $key) {
+            static::assertArrayHasKey($key, $children);
         }
 
         unset($view, $dto, $form, $roleEntity);
@@ -93,10 +95,10 @@ class UserGroupTypeTest extends TypeTestCase
     {
         gc_enable();
 
+        parent::setUp();
+
         $this->mockRoleService = $this->createMock(RolesService::class);
         $this->mockRoleResource = $this->createMock(RoleResource::class);
-
-        parent::setUp();
     }
 
     protected function tearDown(): void

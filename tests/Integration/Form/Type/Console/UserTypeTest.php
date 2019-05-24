@@ -13,8 +13,10 @@ use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserGroupResource;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
+use function array_keys;
 
 /**
  * Class UserTypeTest
@@ -25,7 +27,7 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class UserTypeTest extends TypeTestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|UserGroupResource
+     * @var MockObject|UserGroupResource
      */
     private $mockUserGroupResource;
 
@@ -62,7 +64,7 @@ class UserTypeTest extends TypeTestCase
         $dto->setUserGroups([$userGroupEntity]);
 
         // Specify used form data
-        $formData = array(
+        $formData = [
             'username'      => 'username',
             'firstname'     => 'John',
             'surname'       => 'Doe',
@@ -72,23 +74,23 @@ class UserTypeTest extends TypeTestCase
                 'password2' => 'password',
             ],
             'userGroups'    => [$userGroupEntity->getId()],
-        );
+        ];
 
         // submit the data to the form directly
         $form->submit($formData);
 
         // Test that data transformers have not been failed
-        $this->assertTrue($form->isSynchronized());
+        static::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        $this->assertEquals($dto, $form->getData());
+        static::assertEquals($dto, $form->getData());
 
         // Check that form renders correctly
         $view = $form->createView();
         $children = $view->children;
 
-        foreach (\array_keys($formData) as $key) {
-            $this->assertArrayHasKey($key, $children);
+        foreach (array_keys($formData) as $key) {
+            static::assertArrayHasKey($key, $children);
         }
 
         unset($view, $dto, $form, $userGroupEntity, $roleEntity);
@@ -98,9 +100,9 @@ class UserTypeTest extends TypeTestCase
     {
         gc_enable();
 
-        $this->mockUserGroupResource = $this->createMock(UserGroupResource::class);
-
         parent::setUp();
+
+        $this->mockUserGroupResource = $this->createMock(UserGroupResource::class);
     }
 
     protected function tearDown(): void
