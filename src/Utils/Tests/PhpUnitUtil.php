@@ -39,12 +39,13 @@ use function substr_count;
  */
 class PhpUnitUtil
 {
-    private const TYPE_INTEGER = 'integer';
-    private const TYPE_STRING = 'string';
-    private const TYPE_ARRAY = 'array';
-    private const TYPE_BOOL = 'bool';
-    private const TYPE_BOOLEAN = 'boolean';
-    private const TYPE_CUSTOM_CLASS = 'CustomClass';
+    public const TYPE_INT = 'int';
+    public const TYPE_INTEGER = 'integer';
+    public const TYPE_STRING = 'string';
+    public const TYPE_ARRAY = 'array';
+    public const TYPE_BOOL = 'bool';
+    public const TYPE_BOOLEAN = 'boolean';
+    public const TYPE_CUSTOM_CLASS = 'CustomClass';
 
     /**
      * @codeCoverageIgnore
@@ -161,9 +162,10 @@ class PhpUnitUtil
     public static function getType($type): string
     {
         switch ($type) {
+            case self::TYPE_INT:
             case self::TYPE_INTEGER:
             case 'bigint':
-                $output = self::TYPE_INTEGER;
+                $output = self::TYPE_INT;
                 break;
             case 'time':
             case 'date':
@@ -180,7 +182,7 @@ class PhpUnitUtil
                 break;
             case self::TYPE_BOOL:
             case self::TYPE_BOOLEAN:
-                $output = self::TYPE_BOOLEAN;
+                $output = self::TYPE_BOOL;
                 break;
             default:
                 $message = sprintf(
@@ -244,6 +246,7 @@ class PhpUnitUtil
                 case self::TYPE_CUSTOM_CLASS:
                     $output = new $class();
                     break;
+                case self::TYPE_INT:
                 case self::TYPE_INTEGER:
                     $output = 666;
                     break;
