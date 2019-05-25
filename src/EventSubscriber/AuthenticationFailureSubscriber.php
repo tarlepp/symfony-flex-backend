@@ -65,8 +65,6 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @codeCoverageIgnore
-     *
      * @return mixed[] The event names to listen to
      */
     public static function getSubscribedEvents(): array
