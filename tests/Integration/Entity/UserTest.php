@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\User;
+use function serialize;
+use function ucfirst;
+use function unserialize;
 
 /**
  * Class UserTest
@@ -75,7 +78,7 @@ class UserTest extends EntityTestCase
         $this->entity->setPassword('str_rot13', 'password');
 
         /** @var User $entity */
-        $entity = \unserialize(\serialize($this->entity), ['allowed_classes' => true]);
+        $entity = unserialize(serialize($this->entity), ['allowed_classes' => true]);
 
         // Assert that unserialized object returns expected data
         static::assertSame('john', $entity->getUsername());
@@ -98,7 +101,7 @@ class UserTest extends EntityTestCase
         ];
 
         foreach ($expected as $key) {
-            $method = 'set' . \ucfirst($key);
+            $method = 'set' . ucfirst($key);
 
             $this->entity->{$method}($key);
         }

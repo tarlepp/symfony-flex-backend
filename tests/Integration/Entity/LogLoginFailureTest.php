@@ -10,7 +10,11 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
+use Throwable;
+use function array_key_exists;
 use function gc_enable;
+use function ucfirst;
 
 /**
  * Class LogLoginFailureTest
@@ -60,13 +64,15 @@ class LogLoginFailureTest extends EntityTestCase
      * @param string $field
      * @param string $type
      * @param array  $meta
+     *
+     * @throws Throwable
      */
     public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
     {
-        $getter = 'get' . \ucfirst($field);
+        $getter = 'get' . ucfirst($field);
 
         if ($type === 'boolean') {
-            $getter = 'is' . \ucfirst($field);
+            $getter = 'is' . ucfirst($field);
         }
 
 
@@ -74,7 +80,7 @@ class LogLoginFailureTest extends EntityTestCase
             new User()
         );
 
-        if (!(\array_key_exists('columnName', $meta) || \array_key_exists('joinColumns', $meta))) {
+        if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
             $type = ArrayCollection::class;
 
             static::assertInstanceOf($type, $logRequest->$getter());
@@ -82,14 +88,19 @@ class LogLoginFailureTest extends EntityTestCase
 
         try {
             if (static::isType($type)) {
-                static::assertInternalType($type, $logRequest->$getter());
+                $method = 'assertIs' . ucfirst($type);
+
+                static::$method($logRequest->$getter());
             }
-        } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (Exception $error) {
             static::assertInstanceOf($type, $logRequest->$getter());
         }
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @throws Throwable
+     */
     protected function setUp(): void
     {
         gc_enable();
@@ -98,6 +109,8 @@ class LogLoginFailureTest extends EntityTestCase
 
         // Store container and entity manager
         $this->testContainer = static::$kernel->getContainer();
+
+        /** @noinspection MissingService */
         $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
         // Create new entity object and set repository

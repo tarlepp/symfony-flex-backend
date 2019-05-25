@@ -125,16 +125,16 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function dataProviderTestThatGetTypeReturnExpected(): Generator
     {
-        yield ['integer', 'integer'];
-        yield ['integer', 'bigint'];
+        yield ['int', 'integer'];
+        yield ['int', 'bigint'];
         yield [DateTime::class, 'time'];
         yield [DateTime::class, 'date'];
         yield [DateTime::class, 'datetime'];
         yield ['string', 'string'];
         yield ['string', 'text'];
         yield ['array', 'array'];
-        yield ['boolean', 'boolean'];
-        yield ['boolean', 'bool'];
+        yield ['bool', 'boolean'];
+        yield ['bool', 'bool'];
     }
 
     /**
@@ -142,6 +142,7 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function dataProviderTestThatGetValidValueReturnsExpectedValue(): Generator
     {
+        yield [666, 'int', true];
         yield [666, 'integer', true];
         yield [666, 'bigint', true];
         yield [DateTime::class, 'time', false];

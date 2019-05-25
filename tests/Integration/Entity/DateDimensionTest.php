@@ -8,6 +8,13 @@ declare(strict_types=1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\DateDimension;
+use App\Utils\Tests\PhpUnitUtil;
+use DateTime;
+use Exception;
+use Throwable;
+use function floor;
+use function in_array;
+use function ucfirst;
 
 /**
  * Class DateDimensionTest
@@ -57,31 +64,38 @@ class DateDimensionTest extends EntityTestCase
      * @param string $field
      * @param string $type
      * @param array  $meta
+     *
+     * @throws Throwable
      */
     public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
     {
-        $getter = 'get' . \ucfirst($field);
+        $getter = 'get' . ucfirst($field);
 
-        if ($type === 'boolean') {
-            $getter = 'is' . \ucfirst($field);
+        if (in_array($type, [PhpUnitUtil::TYPE_BOOL, PhpUnitUtil::TYPE_BOOLEAN], true)) {
+            $getter = 'is' . ucfirst($field);
         }
 
-        $dateDimension = new DateDimension(new \DateTime());
+        $dateDimension = new DateDimension(new DateTime());
 
         try {
             if (static::isType($type)) {
-                static::assertInternalType($type, $dateDimension->$getter());
+                $method = 'assertIs' . ucfirst($type);
+
+                static::$method($dateDimension->$getter());
             }
-        } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (Exception $error) {
             static::assertInstanceOf($type, $dateDimension->$getter());
         }
 
         unset($dateDimension);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatConstructorCallsExpectedMethods(): void
     {
-        $dateTime = new \DateTime();
+        $dateTime = new DateTime();
 
         /** @var DateDimension $entity */
         $entity = new $this->entityName($dateTime);
@@ -90,7 +104,7 @@ class DateDimensionTest extends EntityTestCase
         static::assertSame((int)$dateTime->format('Y'), $entity->getYear());
         static::assertSame((int)$dateTime->format('n'), $entity->getMonth());
         static::assertSame((int)$dateTime->format('j'), $entity->getDay());
-        static::assertSame((int)\floor(((int)$dateTime->format('n') - 1) / 3) + 1, $entity->getQuarter());
+        static::assertSame((int)floor(((int)$dateTime->format('n') - 1) / 3) + 1, $entity->getQuarter());
         static::assertSame((int)$dateTime->format('W'), $entity->getWeekNumber());
         static::assertSame((int)$dateTime->format('N'), $entity->getDayNumberOfWeek());
         static::assertSame((int)$dateTime->format('z'), $entity->getDayNumberOfYear());

@@ -9,6 +9,9 @@ namespace App\Tests\Integration\Entity;
 
 use App\Entity\ApiKey;
 use App\Security\RolesService;
+use Generator;
+use function array_unique;
+use function strlen;
 
 /**
  * Class ApiKeyTest
@@ -27,7 +30,7 @@ class ApiKeyTest extends EntityTestCase
 
     public function testThatTokenIsGenerated(): void
     {
-        static::assertSame(40, \strlen($this->entity->getToken()));
+        static::assertSame(40, strlen($this->entity->getToken()));
     }
 
     public function testThatGetRolesContainsExpectedRole(): void
@@ -54,25 +57,21 @@ class ApiKeyTest extends EntityTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatApiKeyHasExpectedRoles(): array
+    public function dataProviderTestThatApiKeyHasExpectedRoles(): Generator
     {
         static::bootKernel();
 
         $rolesService = static::$container->get(RolesService::class);
 
-        $output = [];
-
         foreach ($rolesService->getRoles() as $role) {
-            $output[] = [
-                \array_unique([RolesService::ROLE_API, $role]),
+            yield [
+                array_unique([RolesService::ROLE_API, $role]),
                 [
                     'description' => 'ApiKey Description: ' . $rolesService->getShort($role),
                 ]
             ];
         }
-
-        return $output;
     }
 }

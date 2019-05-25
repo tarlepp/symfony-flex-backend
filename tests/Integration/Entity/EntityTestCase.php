@@ -89,7 +89,7 @@ abstract class EntityTestCase extends KernelTestCase
         $getter = 'get' . \ucfirst($field);
         $setter = 'set' . \ucfirst($field);
 
-        if ($type === 'boolean') {
+        if (\in_array($type, [PhpUnitUtil::TYPE_BOOL, PhpUnitUtil::TYPE_BOOLEAN], true)) {
             $getter = 'is' . \ucfirst($field);
         }
 

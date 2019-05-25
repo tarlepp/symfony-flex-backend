@@ -12,11 +12,18 @@ use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
+use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
+use function array_key_exists;
 use function get_class;
+use function in_array;
 use function is_array;
 use function is_object;
+use function sprintf;
+use function ucfirst;
 
 /**
  * Class LogRequestTest
@@ -65,14 +72,16 @@ class LogRequestTest extends EntityTestCase
      *
      * @param string $field
      * @param string $type
-     * @param array  $meta
+     * @param array $meta
+     *
+     * @throws Throwable
      */
     public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
     {
-        $getter = 'get' . \ucfirst($field);
+        $getter = 'get' . ucfirst($field);
 
-        if ($type === 'boolean') {
-            $getter = 'is' . \ucfirst($field);
+        if (in_array($type, [PhpUnitUtil::TYPE_BOOL, PhpUnitUtil::TYPE_BOOLEAN], true)) {
+            $getter = 'is' . ucfirst($field);
         }
 
         $logRequest = new LogRequest(
@@ -84,7 +93,7 @@ class LogRequestTest extends EntityTestCase
 
         $value = $logRequest->$getter();
 
-        if (!(\array_key_exists('columnName', $meta) || \array_key_exists('joinColumns', $meta))) {
+        if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
             $type = ArrayCollection::class;
 
             static::assertInstanceOf($type, $value);
@@ -100,9 +109,11 @@ class LogRequestTest extends EntityTestCase
 
         try {
             if (static::isType($type)) {
-                static::assertInternalType($type, $value, $message);
+                $method = 'assertIs' . ucfirst($type);
+
+                static::$method($value, $message);
             }
-        } /** @noinspection BadExceptionsProcessingInspection */ catch (\Exception $error) {
+        } /** @noinspection BadExceptionsProcessingInspection */ catch (Exception $error) {
             static::assertInstanceOf($type, $value, $message);
         }
 
@@ -114,6 +125,8 @@ class LogRequestTest extends EntityTestCase
      *
      * @param array $headers
      * @param array $expected
+     *
+     * @throws Throwable
      */
     public function testThatSensitiveDataIsCleanedFromHeaders(array $headers, array $expected): void
     {
@@ -132,6 +145,8 @@ class LogRequestTest extends EntityTestCase
      *
      * @param array $parameters
      * @param array $expected
+     *
+     * @throws Throwable
      */
     public function testThatSensitiveDataIsCleanedFromParameters(array $parameters, array $expected): void
     {
@@ -148,10 +163,10 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatDetermineParametersWorksLikeExpected
      *
-     * @param   string $content
-     * @param   array  $expected
+     * @param string $content
+     * @param array  $expected
      *
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatDetermineParametersWorksLikeExpected(string $content, array $expected): void
     {
@@ -165,48 +180,49 @@ class LogRequestTest extends EntityTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatSensitiveDataIsCleaned(): array
+    public function dataProviderTestThatSensitiveDataIsCleaned(): Generator
     {
-        return [
-            [
-                ['password' => 'password'],
-                ['password' => '*** REPLACED ***'],
-            ],
-            [
-                ['token' => 'secret token'],
-                ['token' => '*** REPLACED ***'],
-            ],
-            [
-                ['authorization' => 'authorization bearer'],
-                ['authorization' => '*** REPLACED ***'],
-            ],
-            [
-                ['cookie' => 'cookie'],
-                ['cookie' => '*** REPLACED ***'],
-            ],
+        yield [
+            ['password' => 'password'],
+            ['password' => '*** REPLACED ***'],
+        ];
+
+        yield [
+            ['token' => 'secret token'],
+            ['token' => '*** REPLACED ***'],
+        ];
+
+        yield [
+            ['authorization' => 'authorization bearer'],
+            ['authorization' => '*** REPLACED ***'],
+        ];
+
+        yield [
+            ['cookie' => 'cookie'],
+            ['cookie' => '*** REPLACED ***'],
         ];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatDetermineParametersWorksLikeExpected(): array
+    public function dataProviderTestThatDetermineParametersWorksLikeExpected(): Generator
     {
-        return [
-            [
-                '{"foo":"bar"}',
-                ['foo' => 'bar'],
-            ],
-            [
-                'foo=bar',
-                ['foo' => 'bar'],
-            ],
-            [
-                'false',
-                [false],
-            ]
+        yield [
+            '{"foo":"bar"}',
+            ['foo' => 'bar'],
+        ];
+
+        yield [
+            'foo=bar',
+            ['foo' => 'bar'],
+        ];
+
+        yield [
+            'false',
+            [false],
         ];
     }
 }
