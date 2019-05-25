@@ -14,11 +14,14 @@ use App\Resource\LogLoginFailureResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTAuthenticatedEvent;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Throwable;
+use function range;
 
 /**
  * Class LockedUserSubscriberTest
@@ -29,8 +32,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class LockedUserSubscriberTest extends KernelTestCase
 {
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethod(): void
     {
@@ -43,8 +45,8 @@ class LockedUserSubscriberTest extends KernelTestCase
         $authenticationException->setToken($token);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository          $userRepository
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogLoginFailureResource $logLoginFailureResource
+         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
@@ -65,8 +67,7 @@ class LockedUserSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
     public function testThatOnJWTAuthenticatedCallsExpectedServiceMethod(): void
     {
@@ -76,8 +77,8 @@ class LockedUserSubscriberTest extends KernelTestCase
         $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository          $userRepository
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogLoginFailureResource $logLoginFailureResource
+         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
@@ -94,8 +95,7 @@ class LockedUserSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
     public function testThatOnAuthenticationSuccessCallsExpectedServiceMethod(): void
     {
@@ -106,8 +106,8 @@ class LockedUserSubscriberTest extends KernelTestCase
         $event = new AuthenticationEvent($token);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository          $userRepository
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogLoginFailureResource $logLoginFailureResource
+         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
@@ -129,8 +129,7 @@ class LockedUserSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
     public function testThatOnJWTAuthenticatedDoesNotCallResetServiceMethodIfUserHasEnoughLoginFailures(): void
     {
@@ -138,8 +137,8 @@ class LockedUserSubscriberTest extends KernelTestCase
         $event = new JWTAuthenticatedEvent([], $token);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|UserRepository          $userRepository
-         * @var \PHPUnit_Framework_MockObject_MockObject|LogLoginFailureResource $logLoginFailureResource
+         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
@@ -160,7 +159,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $user
             ->expects(static::once())
             ->method('getLogsLoginFailure')
-            ->willReturn(new ArrayCollection(\range(0, 11)));
+            ->willReturn(new ArrayCollection(range(0, 11)));
 
         $subscriber = new LockedUserSubscriber($userRepository, $logLoginFailureResource);
         $subscriber->onJWTAuthenticated($event);

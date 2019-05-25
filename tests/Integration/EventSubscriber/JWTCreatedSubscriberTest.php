@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\EventSubscriber\JWTCreatedSubscriber;
 use App\Security\RolesService;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +44,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $requestStack->push($request);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService $roles
+         * @var MockObject|RolesService $roles
          */
         $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
@@ -77,8 +78,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $requestStack = new RequestStack();
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService    $roles
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
+         * @var MockObject|RolesService    $roles
+         * @var MockObject|LoggerInterface $logger
          */
         $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -116,8 +117,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $requestStack = new RequestStack();
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RolesService    $roles
-         * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger
+         * @var MockObject|RolesService    $roles
+         * @var MockObject|LoggerInterface $logger
          */
         $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();

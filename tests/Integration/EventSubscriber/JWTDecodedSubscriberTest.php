@@ -9,10 +9,14 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\JWTDecodedSubscriber;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use function array_values;
+use function hash;
+use function implode;
 
 /**
  * Class JWTDecodedSubscriberTest
@@ -65,7 +69,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
         // Create custom payload for JWTDecodedEvent - this one is expected one
         $payload = [
-            'checksum' => \hash('sha512', \implode('|', \array_values($server))),
+            'checksum' => hash('sha512', implode('|', array_values($server))),
         ];
 
         // Create event for subscriber
@@ -91,7 +95,7 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         // Create event for subscriber
         $event = new JWTDecodedEvent($payload);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface $logger */
+        /** @var MockObject|LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create subscriber and call actual process method

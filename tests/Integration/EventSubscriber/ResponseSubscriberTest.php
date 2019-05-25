@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Throwable;
+use function file_get_contents;
 
 /**
  * Class ResponseSubscriberTest
@@ -24,7 +26,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 class ResponseSubscriberTest extends KernelTestCase
 {
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatSubscriberAddsHeader(): void
     {
@@ -44,7 +46,7 @@ class ResponseSubscriberTest extends KernelTestCase
         $version = $response->headers->get('X-API-VERSION');
 
         static::assertNotNull($version);
-        static::assertSame(JSON::decode(\file_get_contents(__DIR__ . '/../../../composer.json'))->version, $version);
+        static::assertSame(JSON::decode(file_get_contents(__DIR__ . '/../../../composer.json'))->version, $version);
 
         unset($response, $subscriber, $event, $request);
     }

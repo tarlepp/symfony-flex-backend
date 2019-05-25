@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\EventSubscriber\RequestSubscriber;
 use App\Security\ApiKeyUser;
 use App\Utils\RequestLogger;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Throwable;
 
 /**
  * Class RequestSubscriberTest
@@ -29,7 +31,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class RequestSubscriberTest extends KernelTestCase
 {
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatMethodCallsExpectedLoggerMethods(): void
     {
@@ -41,8 +43,8 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogger $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|RequestLogger $logger
+         * @var MockObject|TokenStorageInterface $tokenStorage
          */
         $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
@@ -76,7 +78,7 @@ class RequestSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatSetUserIsCalled(): void
     {
@@ -88,8 +90,8 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogger $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|RequestLogger $logger
+         * @var MockObject|TokenStorageInterface $tokenStorage
          */
         $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
@@ -119,7 +121,7 @@ class RequestSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatSetApiKeyIsCalled(): void
     {
@@ -131,8 +133,8 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogger $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|RequestLogger $logger
+         * @var MockObject|TokenStorageInterface $tokenStorage
          */
         $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
@@ -169,7 +171,7 @@ class RequestSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatLoggerServiceIsNotCalledIfOptionsRequest(): void
     {
@@ -181,8 +183,8 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogger $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|RequestLogger $logger
+         * @var MockObject|TokenStorageInterface $tokenStorage
          */
         $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
@@ -200,7 +202,7 @@ class RequestSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatLoggerServiceIsNotCalledIfHealthzRequest(): void
     {
@@ -212,8 +214,8 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RequestLogger $logger
-         * @var \PHPUnit_Framework_MockObject_MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|RequestLogger $logger
+         * @var MockObject|TokenStorageInterface $tokenStorage
          */
         $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();

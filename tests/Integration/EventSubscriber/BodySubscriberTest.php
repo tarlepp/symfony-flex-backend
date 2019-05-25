@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\BodySubscriber;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -87,6 +88,7 @@ class BodySubscriberTest extends KernelTestCase
         static::assertSame($expectedRequestParameters, $request->request->all());
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \LogicException
      */
@@ -103,31 +105,32 @@ class BodySubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatJsonContentReplaceParametersAsExpected(): array
+    public function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
     {
-        return [
-            [
-                ['foo' => 'bar'],
-                '',
-                '{"foo": "bar"}',
-            ],
-            [
-                ['foo' => 'bar'],
-                'application/json',
-                '{"foo": "bar"}',
-            ],
-            [
-                ['foo' => 'bar'],
-                'application/x-json',
-                '{"foo": "bar"}',
-            ],
-            [
-                ['foo' => 'bar'],
-                'text/plain',
-                '{"foo": "bar"}',
-            ],
+        yield [
+            ['foo' => 'bar'],
+            '',
+            '{"foo": "bar"}',
+        ];
+
+        yield [
+            ['foo' => 'bar'],
+            'application/json',
+            '{"foo": "bar"}',
+        ];
+
+        yield [
+            ['foo' => 'bar'],
+            'application/x-json',
+            '{"foo": "bar"}',
+        ];
+
+        yield [
+            ['foo' => 'bar'],
+            'text/plain',
+            '{"foo": "bar"}',
         ];
     }
 }

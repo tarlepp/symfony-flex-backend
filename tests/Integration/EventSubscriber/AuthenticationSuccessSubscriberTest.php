@@ -11,8 +11,10 @@ use App\Entity\User;
 use App\EventSubscriber\AuthenticationSuccessSubscriber;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * Class AuthenticationSuccessSubscriberTest
@@ -23,14 +25,14 @@ use Symfony\Component\HttpFoundation\Response;
 class AuthenticationSuccessSubscriberTest extends KernelTestCase
 {
     /**
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatOnAuthenticationSuccessMethodCallsExpectedLoggerMethods(): void
     {
         $user = new User();
         $event = new AuthenticationSuccessEvent([], $user, new Response());
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|LoginLogger $loginLogger */
+        /** @var MockObject|LoginLogger $loginLogger */
         $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();
 
         $loginLogger
