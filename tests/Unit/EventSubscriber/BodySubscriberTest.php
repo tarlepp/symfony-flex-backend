@@ -7,7 +7,7 @@ declare(strict_types=1);
  */
 namespace App\Tests\Unit\EventSubscriber;
 
-use App\EventSubscriber\ExceptionSubscriber;
+use App\EventSubscriber\BodySubscriber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -21,12 +21,12 @@ class BodySubscriberTest extends KernelTestCase
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [
-            'kernel.exception' => [
-                'onKernelException',
-                -100,
+            'kernel.request' => [
+                'onKernelRequest',
+                10,
             ],
         ];
 
-        static::assertSame($expected, ExceptionSubscriber::getSubscribedEvents());
+        static::assertSame($expected, BodySubscriber::getSubscribedEvents());
     }
 }
