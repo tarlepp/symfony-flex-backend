@@ -7,7 +7,10 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\Entity;
 
+use App\Entity\Role;
 use App\Entity\User;
+use App\Entity\UserGroup;
+use App\Security\RolesService;
 use function serialize;
 use function ucfirst;
 use function unserialize;
@@ -139,6 +142,26 @@ class UserTest extends EntityTestCase
         static::assertSame($expected, $this->entity->isEqualTo($entity), $message);
 
         unset($entity);
+    }
+
+    public function testThatGetRolesReturnsExpectedWithoutRoleService(): void
+    {
+        $group = (new UserGroup())->setRole(new Role('ROLE_ROOT'));
+        $user = (new User())->addUserGroup($group);
+
+        static::assertSame(['ROLE_ROOT'], $user->getRoles());
+    }
+
+    public function testThatGetRolesReturnsExpectedWithRoleService(): void
+    {
+        static::bootKernel();
+
+        $rolesService = static::$container->get(RolesService::class);
+
+        $group = (new UserGroup())->setRole(new Role('ROLE_ROOT'));
+        $user = (new User())->addUserGroup($group)->setRolesService($rolesService);
+
+        static::assertSame(['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'], $user->getRoles());
     }
 
     /**
