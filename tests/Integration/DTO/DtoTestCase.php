@@ -9,8 +9,26 @@ namespace App\Tests\Integration\DTO;
 
 use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
+use DomainException;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\InvalidArgumentException;
+use ReflectionClass;
+use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
+use TypeError;
+use function array_filter;
+use function array_map;
+use function count;
+use function gettype;
+use function is_object;
+use function preg_match;
+use function preg_replace;
+use function preg_split;
+use function sprintf;
+use function strncmp;
+use function trim;
+use function ucfirst;
 
 /**
  * Class DtoTestCase
@@ -18,7 +36,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * @package App\Tests\Integration\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class DtoTestCase extends KernelTestCase
+abstract class DtoTestCase extends KernelTestCase
 {
     /**
      * @var string
@@ -26,11 +44,11 @@ class DtoTestCase extends KernelTestCase
     protected $dtoClass;
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatPropertiesHaveGetters(): void
     {
-        $dtoReflection = new \ReflectionClass($this->dtoClass);
+        $dtoReflection = new ReflectionClass($this->dtoClass);
 
         foreach ($dtoReflection->getProperties() as $reflectionProperty) {
             if ($reflectionProperty->isStatic()
@@ -39,9 +57,9 @@ class DtoTestCase extends KernelTestCase
                 continue;
             }
 
-            $method = 'get' . \ucfirst($reflectionProperty->getName());
+            $method = 'get' . ucfirst($reflectionProperty->getName());
 
-            $message = \sprintf(
+            $message = sprintf(
                 "REST DTO class '%s' does not have required getter method '%s' for property '%s'.",
                 $this->dtoClass,
                 $method,
@@ -55,11 +73,11 @@ class DtoTestCase extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatPropertiesHaveSetters(): void
     {
-        $dtoReflection = new \ReflectionClass($this->dtoClass);
+        $dtoReflection = new ReflectionClass($this->dtoClass);
 
         foreach ($dtoReflection->getProperties() as $reflectionProperty) {
             if ($reflectionProperty->isStatic()
@@ -68,9 +86,9 @@ class DtoTestCase extends KernelTestCase
                 continue;
             }
 
-            $method = 'set' . \ucfirst($reflectionProperty->getName());
+            $method = 'set' . ucfirst($reflectionProperty->getName());
 
-            $message = \sprintf(
+            $message = sprintf(
                 "REST DTO class '%s' does not have required setter method '%s' for property '%s'.",
                 $this->dtoClass,
                 $method,
@@ -84,38 +102,39 @@ class DtoTestCase extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatSetterCallsSetVisitedMethod(): void
     {
         $dtoClass = $this->dtoClass;
-        $dtoReflection = new \ReflectionClass($this->dtoClass);
+        $dtoReflection = new ReflectionClass($this->dtoClass);
 
-        $filter = function (\ReflectionProperty $reflectionProperty) use ($dtoClass) {
-            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName() && !$reflectionProperty->isStatic();
+        $filter = static function (ReflectionProperty $reflectionProperty) use ($dtoClass) {
+            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
+                && !$reflectionProperty->isStatic();
         };
 
-        $properties = \array_filter($dtoReflection->getProperties(), $filter);
+        $properties = array_filter($dtoReflection->getProperties(), $filter);
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $mock
+         * @var MockObject|RestDtoInterface $mock
          */
         $mock = $this->getMockBuilder($dtoClass)
             ->setMethods(['setVisited'])
             ->getMock();
 
-        $mock->expects(static::exactly(\count($properties)))
+        $mock->expects(static::exactly(count($properties)))
             ->method('setVisited');
 
         $expectedVisited = [];
 
-        /** @var \ReflectionProperty $reflectionProperty */
+        /** @var ReflectionProperty $reflectionProperty */
         foreach ($properties as $reflectionProperty) {
             // Get "valid" value for current property
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
 
             // Determine setter method for current property
-            $setter = 'set' . \ucfirst($reflectionProperty->getName());
+            $setter = 'set' . ucfirst($reflectionProperty->getName());
 
             // Call setter method
             $mock->$setter($value);
@@ -127,29 +146,30 @@ class DtoTestCase extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatGetterMethodReturnExpectedAfterSetter(): void
     {
         $dtoClass = $this->dtoClass;
-        $dtoReflection = new \ReflectionClass($this->dtoClass);
+        $dtoReflection = new ReflectionClass($this->dtoClass);
 
-        $filter = function (\ReflectionProperty $reflectionProperty) use ($dtoClass) {
-            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName() && !$reflectionProperty->isStatic();
+        $filter = static function (ReflectionProperty $reflectionProperty) use ($dtoClass) {
+            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
+                && !$reflectionProperty->isStatic();
         };
 
-        $properties = \array_filter($dtoReflection->getProperties(), $filter);
+        $properties = array_filter($dtoReflection->getProperties(), $filter);
 
         $dto = new $dtoClass();
 
-        /** @var \ReflectionProperty $reflectionProperty */
+        /** @var ReflectionProperty $reflectionProperty */
         foreach ($properties as $reflectionProperty) {
             // Get "valid" value for current property
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
 
             // Determine setter and getter methods for current property
-            $setter = 'set' . \ucfirst($reflectionProperty->getName());
-            $getter = 'get' . \ucfirst($reflectionProperty->getName());
+            $setter = 'set' . ucfirst($reflectionProperty->getName());
+            $getter = 'get' . ucfirst($reflectionProperty->getName());
 
             // Call setter method
             $dto->$setter($value);
@@ -165,23 +185,25 @@ class DtoTestCase extends KernelTestCase
      *
      * @param string $field
      * @param string $type
+     *
+     * @throws Throwable
      */
     public function testThatSetterOnlyAcceptSpecifiedType(string $field, string $type): void
     {
         // Get "valid" value for current property
         $value = PhpUnitUtil::getInvalidValueForType($type);
 
-        $this->expectException(\TypeError::class);
+        $this->expectException(TypeError::class);
 
-        $setter = 'set' . \ucfirst($field);
+        $setter = 'set' . ucfirst($field);
 
         $dto = new $this->dtoClass();
         $dto->$setter($value);
 
-        $message = \sprintf(
+        $message = sprintf(
             "Setter '%s' didn't fail with invalid value type '%s', maybe missing variable type?",
             $setter,
-            \is_object($value) ? \gettype($value) : '(' . \gettype($value) . ')' . $value
+            is_object($value) ? gettype($value) : '(' . gettype($value) . ')' . $value
         );
 
         static::fail($message);
@@ -190,76 +212,79 @@ class DtoTestCase extends KernelTestCase
     /**
      * @return array
      *
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function dataProviderTestThatSetterOnlyAcceptSpecifiedType(): array
     {
         $dtoClass = $this->dtoClass;
-        $dtoReflection = new \ReflectionClass($this->dtoClass);
+        $dtoReflection = new ReflectionClass($this->dtoClass);
 
-        $filter = function (\ReflectionProperty $reflectionProperty) use ($dtoClass) {
-            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName() && !$reflectionProperty->isStatic();
+        $filter = static function (ReflectionProperty $reflectionProperty) use ($dtoClass) {
+            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
+                && !$reflectionProperty->isStatic();
         };
 
-        $iterator = function (\ReflectionProperty $reflectionProperty) {
+        $iterator = function (ReflectionProperty $reflectionProperty) {
             return [
                 $reflectionProperty->getName(),
                 $this->parseType($reflectionProperty),
             ];
         };
 
-        return \array_map($iterator, \array_filter($dtoReflection->getProperties(), $filter));
+        return array_map($iterator, array_filter($dtoReflection->getProperties(), $filter));
     }
 
     /**
-     * @param \ReflectionClass    $dtoReflection
-     * @param \ReflectionProperty $reflectionProperty
+     * @param ReflectionClass    $dtoReflection
+     * @param ReflectionProperty $reflectionProperty
      *
      * @return float|int|string
+     *
+     * @throws Throwable
      */
-    private function getValueForProperty(\ReflectionClass $dtoReflection, \ReflectionProperty $reflectionProperty)
+    private function getValueForProperty(ReflectionClass $dtoReflection, ReflectionProperty $reflectionProperty)
     {
         $type = $this->parseType($reflectionProperty);
 
         if ($type === null) {
-            $message = \sprintf(
+            $message = sprintf(
                 "DTO class '%s' property '%s' does not have required '@var' annotation",
                 $dtoReflection->getName(),
                 $reflectionProperty->getName()
             );
 
-            throw new \DomainException($message);
+            throw new DomainException($message);
         }
 
         return PhpUnitUtil::getValidValueForType($type);
     }
 
     /**
-     * @param \ReflectionProperty $reflectionProperty
+     * @param ReflectionProperty $reflectionProperty
      *
      * @return null|string
      */
-    private function parseType(\ReflectionProperty $reflectionProperty): ?string
+    private function parseType(ReflectionProperty $reflectionProperty): ?string
     {
         $output = null;
 
-        foreach (\preg_split("/(\r?\n)/", $reflectionProperty->getDocComment()) as $line) {
+        foreach (preg_split("/(\r?\n)/", $reflectionProperty->getDocComment()) as $line) {
             // if starts with an asterisk
-            if (\preg_match('/^(?=\s+?\*[^\/])(.+)/', $line, $matches)) {
+            if (preg_match('/^(?=\s+?\*[^\/])(.+)/', $line, $matches)) {
                 $info = $matches[1];
 
                 // remove wrapping whitespace
-                $info = \trim($info);
+                $info = trim($info);
 
                 // remove leading asterisk
-                $info = \preg_replace('/^(\*\s+?)/', '', $info);
+                $info = preg_replace('/^(\*\s+?)/', '', $info);
 
-                if ($info[0] === '@') {
+                if (strncmp($info, '@', 1) === 0) {
                     // get the name of the param
-                    \preg_match('/@var (.*)/', $info, $matches);
+                    preg_match('/@var (.*)/', $info, $matches);
 
                     if (!$matches) {
-                        $message = \sprintf(
+                        $message = sprintf(
                             'Cannot determine parameter type for "%s"',
                             $info
                         );
@@ -268,7 +293,7 @@ class DtoTestCase extends KernelTestCase
                     }
 
                     if ($matches[1]) {
-                        $output = \trim($matches[1]);
+                        $output = trim($matches[1]);
 
                         break;
                     }
