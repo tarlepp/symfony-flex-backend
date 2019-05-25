@@ -15,6 +15,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Throwable;
 
 /**
  * Class UserEntityEventListenerTest
@@ -49,6 +50,7 @@ class UserEntityEventListenerTest extends KernelTestCase
      */
     protected $subscriber;
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \LengthException
      * @expectedExceptionMessage Too short password
@@ -65,6 +67,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         $this->subscriber->prePersist($event);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \LengthException
      * @expectedExceptionMessage Too short password
@@ -154,6 +157,8 @@ class UserEntityEventListenerTest extends KernelTestCase
 
         // Store container and entity manager
         $this->testContainer = static::$kernel->getContainer();
+
+        /** @noinspection MissingService */
         $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
         $this->encoder = $this->testContainer->get('security.password_encoder');
@@ -171,8 +176,7 @@ class UserEntityEventListenerTest extends KernelTestCase
 
 
     /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     public function tearDown(): void
     {
