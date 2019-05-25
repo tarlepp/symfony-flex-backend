@@ -12,6 +12,8 @@ use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;
+use PHPUnit\Framework\MockObject\MockObject;
+use function count;
 
 /**
  * Class ApiKeyTest
@@ -55,7 +57,7 @@ class ApiKeyTest extends DtoTestCase
             $this->getMockBuilder(UserGroupEntity::class)->getMock(),
         ];
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface $entity */
+        /** @var MockObject|EntityInterface $entity */
         $entity = $this->getMockBuilder(ApiKeyEntity::class)
             ->setMethods(['getId', 'setDescription', 'clearUserGroups', 'addUserGroup'])
             ->getMock();
@@ -70,7 +72,7 @@ class ApiKeyTest extends DtoTestCase
             ->method('clearUserGroups');
 
         $entity
-            ->expects(static::exactly(\count($userGroups)))
+            ->expects(static::exactly(count($userGroups)))
             ->method('addUserGroup')
             ->willReturn($entity);
 

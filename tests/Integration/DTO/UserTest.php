@@ -7,11 +7,13 @@ declare(strict_types=1);
  */
 namespace App\Tests\Integration\DTO;
 
-use App\DTO\User  as UserDto;
+use App\DTO\User as UserDto;
 use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\User as UserEntity;
 use App\Entity\UserGroup as UserGroupEntity;
+use PHPUnit\Framework\MockObject\MockObject;
+use function count;
 
 /**
  * Class UserTest
@@ -56,7 +58,7 @@ class UserTest extends DtoTestCase
 
     public function testThatUpdateMethodCallsExpectedEntityMethodIfPasswordIsVisited(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface $entity */
+        /** @var MockObject|EntityInterface $entity */
         $entity = $this->getMockBuilder(UserEntity::class)
             ->setMethods(['getId', 'setPlainPassword'])
             ->getMock();
@@ -81,7 +83,7 @@ class UserTest extends DtoTestCase
             $this->getMockBuilder(UserGroupEntity::class)->getMock(),
         ];
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface $entity */
+        /** @var MockObject|UserEntity $entity */
         $entity = $this->getMockBuilder(UserEntity::class)
             ->setMethods(['getId', 'clearUserGroups', 'addUserGroup'])
             ->getMock();
@@ -91,7 +93,7 @@ class UserTest extends DtoTestCase
             ->method('clearUserGroups');
 
         $entity
-            ->expects(static::exactly(\count($userGroups)))
+            ->expects(static::exactly(count($userGroups)))
             ->method('addUserGroup')
             ->willReturn($entity);
 

@@ -10,6 +10,7 @@ namespace App\Tests\Integration\DTO;
 use App\DTO\RestDtoInterface;
 use App\DTO\User;
 use App\Tests\Integration\Dto\src\DummyDto;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -20,12 +21,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class GenericDtoTest extends KernelTestCase
 {
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \BadMethodCallException
      */
     public function testThatPatchThrowsAnExceptionIfGetterMethodDoesNotExist(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|RestDtoInterface $dtoMock */
+        /** @var MockObject|RestDtoInterface $dtoMock */
         $dtoMock = $this->createMock(RestDtoInterface::class);
 
         $dtoMock
@@ -39,6 +41,7 @@ class GenericDtoTest extends KernelTestCase
         unset($dto, $dtoMock);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \LogicException
      * @expectedExceptionMessage Property 'foo' has multiple getter methods - this is insane!

@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace App\Tests\Integration\DTO;
 
 use App\DTO\UserGroup;
-use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class UserGroupTest
@@ -46,8 +46,8 @@ class UserGroupTest extends DtoTestCase
     {
         $roleEntity = new RoleEntity('test role');
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|EntityInterface|UserGroupEntity $userGroupEntity */
-        $userGroupEntity = $this->getMockBuilder(EntityInterface::class)
+        /** @var MockObject|UserGroupEntity $userGroupEntity */
+        $userGroupEntity = $this->getMockBuilder(UserGroupEntity::class)
             ->setMethods(['getId', 'setName', 'setRole'])
             ->getMock();
 
