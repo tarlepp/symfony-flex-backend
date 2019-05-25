@@ -1,6 +1,6 @@
 <?php
 /** @noinspection PhpFullyQualifiedNameUsageInspection */
-declare(strict_types=1);
+declare(strict_types = 1);
 /**
  * /tests/Functional/Security/SecurityUserFactoryTest.php
  *

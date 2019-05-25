@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 /**
  * /tests/Integration/Rest/Traits/Methods/CreateMethodTestClass.php
  *
