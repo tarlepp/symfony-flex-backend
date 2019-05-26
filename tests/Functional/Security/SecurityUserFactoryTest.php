@@ -1,5 +1,4 @@
 <?php
-/** @noinspection PhpFullyQualifiedNameUsageInspection */
 declare(strict_types = 1);
 /**
  * /tests/Functional/Security/SecurityUserFactoryTest.php
@@ -35,6 +34,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     private $userRepository;
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      *
@@ -61,6 +61,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         static::assertSame($roles, $domainUser->getRoles());
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      *
@@ -111,6 +112,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         unset($user);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      * @expectedExceptionMessage Invalid user class "Symfony\Component\Security\Core\User\User"

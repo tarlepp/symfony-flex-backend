@@ -12,6 +12,7 @@ use App\Security\UserProvider;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\User\User as CoreUser;
+use Throwable;
 
 /**
  * Class UserProviderTest
@@ -22,10 +23,11 @@ use Symfony\Component\Security\Core\User\User as CoreUser;
 class UserProviderTest extends KernelTestCase
 {
     /**
-     * @var UserProvider;
+     * @var UserProvider
      */
     private $userProvider;
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -34,11 +36,11 @@ class UserProviderTest extends KernelTestCase
         static::assertNull($this->userProvider->loadUserByUsername('foobar'));
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Doctrine\ORM\NoResultException
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
     {
@@ -51,8 +53,7 @@ class UserProviderTest extends KernelTestCase
     }
 
     /**
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatRefreshUserReturnsCorrectUser(): void
     {
@@ -68,12 +69,12 @@ class UserProviderTest extends KernelTestCase
         unset($user);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      * @expectedExceptionMessage Instance of "Symfony\Component\Security\Core\User\User" is not supported.
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserClassIsNotSupported(): void
     {

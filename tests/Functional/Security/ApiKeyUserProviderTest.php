@@ -12,8 +12,12 @@ use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
 use App\Security\ApiKeyUserProvider;
 use App\Security\RolesService;
+use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\User\User;
+use Throwable;
+use function array_map;
+use function str_pad;
 
 /**
  * Class ApiKeyUserProviderTest
@@ -35,7 +39,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatGetApiKeyReturnsExpected(string $shortRole): void
     {
-        $token = \str_pad($shortRole, 40, '_');
+        $token = str_pad($shortRole, 40, '_');
 
         $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
@@ -51,7 +55,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatGetApiKeyReturnsNullForInvalidToken(string $shortRole): void
     {
-        $token = \str_pad($shortRole, 40, '-');
+        $token = str_pad($shortRole, 40, '-');
 
         $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
@@ -60,9 +64,12 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($apiKey);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      * @expectedExceptionMessage API key is not valid
+     *
+     * @throws Throwable
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidGuid(): void
     {
@@ -73,7 +80,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
      * @dataProvider dataProviderTestThatLoadUserByUsernameWorksAsExpected
      *
      * @param string $token
-     * @param array  $roles
+     * @param array $roles
+     *
+     * @throws Throwable
      */
     public function testThatLoadUserByUsernameWorksAsExpected(string $token, array $roles): void
     {
@@ -85,9 +94,12 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($apiKeyUser);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      * @expectedExceptionMessage API key cannot refresh user
+     *
+     * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnException(): void
     {
@@ -118,11 +130,11 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $rolesService = static::$container->get(RolesService::class);
 
-        $iterator = function (string $role) use ($rolesService): array {
+        $iterator = static function (string $role) use ($rolesService): array {
             return [$rolesService->getShort($role)];
         };
 
-        return \array_map($iterator, $rolesService->getRoles());
+        return array_map($iterator, $rolesService->getRoles());
     }
 
     /**
@@ -138,25 +150,23 @@ class ApiKeyUserProviderTest extends KernelTestCase
         /** @var ApiKeyRepository $repository */
         $repository = new $repositoryClass($managerRegistry);
 
-        $iterator = function (ApiKey $apiKey): array {
+        $iterator = static function (ApiKey $apiKey): array {
             return [
                 $apiKey->getToken(),
                 $apiKey->getRoles(),
             ];
         };
 
-        return \array_map($iterator, $repository->findAll());
+        return array_map($iterator, $repository->findAll());
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatSupportsClassReturnsExpected(): array
+    public function dataProviderTestThatSupportsClassReturnsExpected(): Generator
     {
-        return [
-            [false, User::class],
-            [true, ApiKeyUser::class],
-        ];
+        yield [false, User::class];
+        yield [true, ApiKeyUser::class];
     }
 
     protected function setUp(): void
