@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Controller;
 
 use App\Controller\AuthController;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -15,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  * Class AuthControllerTest
  *
  * @package App\Tests\Integration\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AuthControllerTest extends KernelTestCase
 {
@@ -24,7 +25,7 @@ class AuthControllerTest extends KernelTestCase
         try {
             $controller = new AuthController();
             $controller->getTokenAction();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             static::assertInstanceOf(HttpException::class, $exception);
             static::assertSame(
                 'You need to send JSON body to obtain token eg. {"username":"username","password":"password"}',

@@ -18,10 +18,11 @@ use Symfony\Component\Security\Core\User\User;
  * Class ProfileControllerTest
  *
  * @package App\Tests\Integration\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ProfileControllerTest extends KernelTestCase
 {
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @expectedExceptionMessage Not supported user
@@ -45,6 +46,7 @@ class ProfileControllerTest extends KernelTestCase
         unset($controller, $tokenStorage, $user, $rolesService, $serializer);
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
      * @expectedExceptionMessage Not supported user

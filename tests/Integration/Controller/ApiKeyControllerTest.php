@@ -14,18 +14,11 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
 /**
  * Class ApiKeyControllerTest
  *
- * @package Integration\Controller
+ * @package App\Tests\Integration\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyControllerTest extends RestIntegrationControllerTestCase
 {
-    /**
-     * @var string
-     */
     protected $controllerClass = ApiKeyController::class;
-
-    /**
-     * @var string
-     */
     protected $resourceClass = ApiKeyResource::class;
 }

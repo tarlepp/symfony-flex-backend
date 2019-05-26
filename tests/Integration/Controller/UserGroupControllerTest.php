@@ -14,18 +14,11 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
 /**
  * Class UserGroupControllerTest
  *
- * @package Integration\Controller
+ * @package App\Tests\Integration\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroupControllerTest extends RestIntegrationControllerTestCase
 {
-    /**
-     * @var string
-     */
     protected $controllerClass = UserGroupController::class;
-
-    /**
-     * @var string
-     */
     protected $resourceClass = UserGroupResource::class;
 }
