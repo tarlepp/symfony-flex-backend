@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Tests\E2E;
 
 use App\Utils\Tests\WebTestCase;
+use Throwable;
 
 /**
  * Class DocumentationTest
@@ -18,7 +19,7 @@ use App\Utils\Tests\WebTestCase;
 class DocumentationTest extends WebTestCase
 {
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatDocumentationUiWorks(): void
     {
@@ -31,7 +32,7 @@ class DocumentationTest extends WebTestCase
     }
 
     /**
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatDocumentationJsonWorks(): void
     {

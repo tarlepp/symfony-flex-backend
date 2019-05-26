@@ -12,6 +12,8 @@ use App\Repository\RoleRepository;
 use App\Security\RolesService;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use App\Utils\Tests\WebTestCase;
+use Generator;
+use Throwable;
 
 /**
  * Class ResourceLifeCycleTest
@@ -31,7 +33,7 @@ class ResourceLifeCycleTest extends WebTestCase
      *
      * @param string $role
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function testThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(string $role): void
     {
@@ -51,17 +53,15 @@ class ResourceLifeCycleTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): array
+    public function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): Generator
     {
-        return [
-            [RolesService::ROLE_ADMIN],
-            [RolesService::ROLE_API],
-            [RolesService::ROLE_LOGGED],
-            [RolesService::ROLE_ROOT],
-            [RolesService::ROLE_USER],
-        ];
+        yield [RolesService::ROLE_ADMIN];
+        yield [RolesService::ROLE_API];
+        yield [RolesService::ROLE_LOGGED];
+        yield [RolesService::ROLE_ROOT];
+        yield [RolesService::ROLE_USER];
     }
 
     protected function setUp(): void
