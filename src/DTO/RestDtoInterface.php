@@ -39,14 +39,14 @@ interface RestDtoInterface
     /**
      * Method to patch current dto with another one.
      *
-     * @param RestDtoInterface $dto
+     * @param self|RestDtoInterface $dto
      *
      * @return RestDtoInterface
      *
      * @throws LogicException
      * @throws BadMethodCallException
      */
-    public function patch(RestDtoInterface $dto): self;
+    public function patch(self $dto): self;
 
     /**
      * Method to load DTO data from specified entity.
