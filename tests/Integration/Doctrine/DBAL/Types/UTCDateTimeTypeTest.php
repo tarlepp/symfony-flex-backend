@@ -9,10 +9,16 @@ namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\UTCDateTimeType;
 use App\Utils\Tests\PhpUnitUtil;
+use DateTime;
+use DateTimeZone;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\Type;
+use Generator;
+use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class UTCDateTimeTypeTest
@@ -28,17 +34,20 @@ class UTCDateTimeTypeTest extends KernelTestCase
     private $platform;
 
     /**
-     * @var \Doctrine\DBAL\Types\Type
+     * @var Type
      */
     private $type;
 
+    /**
+     * @throws Throwable
+     */
     public function testThatDateTimeConvertsToDatabaseValue(): void
     {
-        $dateInput = new \DateTime('1981-04-07 10:00:00', new \DateTimeZone('Europe/Helsinki'));
+        $dateInput = new DateTime('1981-04-07 10:00:00', new DateTimeZone('Europe/Helsinki'));
         $dateExpected = clone $dateInput;
 
         $expected = $dateExpected
-            ->setTimezone(new \DateTimeZone('UTC'))
+            ->setTimezone(new DateTimeZone('UTC'))
             ->format($this->platform->getDateTimeTzFormatString());
 
         $actual = $this->type->convertToDatabaseValue($dateInput, $this->platform);
@@ -49,7 +58,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
     }
 
     /**
-     * @throws \ReflectionException
+     * @throws Throwable
      */
     public function testThatConvertToDatabaseValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
@@ -57,14 +66,14 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         static::assertNull(PhpUnitUtil::getProperty('utc', $this->type));
 
-        $dateInput = new \DateTime('1981-04-07 10:00:00', new \DateTimeZone('Europe/Helsinki'));
+        $dateInput = new DateTime('1981-04-07 10:00:00', new DateTimeZone('Europe/Helsinki'));
 
         $this->type->convertToDatabaseValue($dateInput, $this->platform);
 
-        /** @var \DateTimeZone $property */
+        /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $this->type);
 
-        static::assertInstanceOf(\DateTimeZone::class, $property);
+        static::assertInstanceOf(DateTimeZone::class, $property);
         static::assertSame('UTC', $property->getName());
 
         unset($dateInput);
@@ -74,39 +83,18 @@ class UTCDateTimeTypeTest extends KernelTestCase
      * @dataProvider dataProviderTestDateTimeConvertsToPHPValue
      *
      * @param string           $expected
-     * @param string|\DateTime $value
+     * @param string|DateTime $value
      */
     public function testDateTimeConvertsToPHPValue(string $expected, $value): void
     {
         $date = $this->type->convertToPHPValue($value, $this->platform);
 
-        $this->assertInstanceOf('DateTime', $date);
-        $this->assertEquals($expected, $date->format('Y-m-d H:i:s'));
+        static::assertInstanceOf('DateTime', $date);
+        static::assertEquals($expected, $date->format('Y-m-d H:i:s'));
     }
 
     /**
-     * @return array
-     */
-    public function dataProviderTestDateTimeConvertsToPHPValue(): array
-    {
-        return [
-            [
-                '1981-04-07 10:00:00',
-                '1981-04-07 10:00:00',
-            ],
-            [
-                '1981-04-07 07:00:00',
-                new \DateTime('1981-04-07 10:00:00', new \DateTimeZone('Europe/Helsinki')),
-            ],
-            [
-                '1981-04-07 10:00:00',
-                new \DateTime('1981-04-07 10:00:00', new \DateTimeZone('UTC')),
-            ],
-        ];
-    }
-
-    /**
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function testThatConvertToPHPValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
@@ -116,13 +104,14 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         $this->type->convertToPHPValue('1981-04-07 10:00:00', $this->platform);
 
-        /** @var \DateTimeZone $property */
+        /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $this->type);
 
-        static::assertInstanceOf(\DateTimeZone::class, $property);
+        static::assertInstanceOf(DateTimeZone::class, $property);
         static::assertSame('UTC', $property->getName());
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \Doctrine\DBAL\Types\ConversionException
      */
@@ -131,8 +120,36 @@ class UTCDateTimeTypeTest extends KernelTestCase
         $this->type->convertToPHPValue('foobar', $this->platform);
     }
 
+    public function testThatRequiresSQLCommentHintReturnsExpected(): void
+    {
+        static::assertFalse($this->type->requiresSQLCommentHint($this->platform));
+    }
+
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * @return Generator
+     *
+     * @throws Throwable
+     */
+    public function dataProviderTestDateTimeConvertsToPHPValue(): Generator
+    {
+        yield [
+            '1981-04-07 10:00:00',
+            '1981-04-07 10:00:00',
+        ];
+
+        yield [
+            '1981-04-07 07:00:00',
+            new DateTime('1981-04-07 10:00:00', new DateTimeZone('Europe/Helsinki')),
+        ];
+
+        yield [
+            '1981-04-07 10:00:00',
+            new DateTime('1981-04-07 10:00:00', new DateTimeZone('UTC')),
+        ];
+    }
+
+    /**
+     * @throws DBALException
      */
     protected function setUp(): void
     {

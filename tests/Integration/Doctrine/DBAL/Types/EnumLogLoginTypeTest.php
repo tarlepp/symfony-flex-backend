@@ -8,9 +8,12 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\Type;
+use Generator;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -27,7 +30,7 @@ class EnumLogLoginTypeTest extends KernelTestCase
     private $platform;
 
     /**
-     * @var \Doctrine\DBAL\Types\Type
+     * @var Type
      */
     private $type;
 
@@ -46,6 +49,7 @@ class EnumLogLoginTypeTest extends KernelTestCase
         static::assertSame($value, $this->type->convertToDatabaseValue($value, $this->platform));
     }
 
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Invalid 'EnumLogLogin' value
@@ -59,35 +63,36 @@ class EnumLogLoginTypeTest extends KernelTestCase
         $this->type->convertToDatabaseValue($value, $this->platform);
     }
 
-    /**
-     * @return array
-     */
-    public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): array
+    public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        return [
-            ['failure'],
-            ['success'],
-        ];
+        static::assertTrue($this->type->requiresSQLCommentHint($this->platform));
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): array
+    public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
-        return [
-            [null],
-            [false],
-            [true],
-            [''],
-            [' '],
-            ['foobar'],
-            [new \stdClass()],
-        ];
+        yield ['failure'];
+        yield ['success'];
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * @return Generator
+     */
+    public function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
+    {
+        yield [null];
+        yield [false];
+        yield [true];
+        yield [''];
+        yield [' '];
+        yield ['foobar'];
+        yield [new stdClass()];
+    }
+
+    /**
+     * @throws DBALException
      */
     protected function setUp(): void
     {
