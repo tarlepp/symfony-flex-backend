@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "77c6ca2935492d62fd54055f031a39d9",
+    "content-hash": "9cff04103940384d71255a24615967d3",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2501,16 +2501,16 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.11.6",
+            "version": "3.11.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "96d35ccd3dacf973b9b24a52686018cc047d45ae"
+                "reference": "92fa41434af96b762e6c25a8d2287fa2a79567d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/96d35ccd3dacf973b9b24a52686018cc047d45ae",
-                "reference": "96d35ccd3dacf973b9b24a52686018cc047d45ae",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/92fa41434af96b762e6c25a8d2287fa2a79567d5",
+                "reference": "92fa41434af96b762e6c25a8d2287fa2a79567d5",
                 "shasum": ""
             },
             "require": {
@@ -2552,7 +2552,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2019-03-24T11:37:05+00:00"
+            "time": "2019-05-24T19:45:35+00:00"
         },
         {
             "name": "psr/cache",
@@ -4564,7 +4564,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -6349,12 +6349,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "89f6e0f30ef66bfb06008d6d6ae6e7cc66a2e0f5"
+                "reference": "4c0ba8a35f1f12dd9236452e9fae4346b0bf2a56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/89f6e0f30ef66bfb06008d6d6ae6e7cc66a2e0f5",
-                "reference": "89f6e0f30ef66bfb06008d6d6ae6e7cc66a2e0f5",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4c0ba8a35f1f12dd9236452e9fae4346b0bf2a56",
+                "reference": "4c0ba8a35f1f12dd9236452e9fae4346b0bf2a56",
                 "shasum": ""
             },
             "conflict": {
@@ -6552,7 +6552,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2019-05-22T09:34:58+00:00"
+            "time": "2019-05-23T20:42:12+00:00"
         },
         {
             "name": "symfony/browser-kit",
