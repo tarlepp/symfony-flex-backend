@@ -8,7 +8,6 @@ declare(strict_types = 1);
 namespace App\Tests\Functional\Repository;
 
 use App\Repository\RoleRepository;
-use App\Resource\RoleResource;
 use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
