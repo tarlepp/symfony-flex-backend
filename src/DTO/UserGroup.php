@@ -18,6 +18,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @package App\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method self patch(RestDtoInterface $dto): RestDtoInterface
+ * @method self update(EntityInterface $entity): EntityInterface
  */
 class UserGroup extends RestDto
 {

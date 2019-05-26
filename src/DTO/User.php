@@ -24,6 +24,9 @@ use function array_map;
  *
  * @package App\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method self patch(RestDtoInterface $dto): RestDtoInterface
+ * @method self update(EntityInterface $entity): EntityInterface
  */
 class User extends RestDto implements UserInterface
 {

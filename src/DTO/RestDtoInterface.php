@@ -46,7 +46,7 @@ interface RestDtoInterface
      * @throws LogicException
      * @throws BadMethodCallException
      */
-    public function patch(self $dto): self;
+    public function patch(RestDtoInterface $dto): self;
 
     /**
      * Method to load DTO data from specified entity.
