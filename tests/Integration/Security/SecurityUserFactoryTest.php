@@ -19,7 +19,7 @@ use Throwable;
 /**
  * Class SecurityUserFactoryTest
  *
- * @package App\Tests\Unit\Security
+ * @package App\Tests\Integration\Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class SecurityUserFactoryTest extends KernelTestCase
