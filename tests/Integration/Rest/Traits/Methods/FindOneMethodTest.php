@@ -26,7 +26,7 @@ use Throwable;
 /**
  * Class FindOneMethodTest
  *
- * @package Integration\Rest\Traits\Methods
+ * @package App\Tests\Integration\Rest\Traits\Methods
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class FindOneMethodTest extends KernelTestCase
