@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\DTO;
 
 use App\Entity\EntityInterface;
-use App\Entity\User as UserEntity;
+use App\Entity\User as Entity;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Entity\UserInterface;
 use App\Validator\Constraints as AppAssert;
@@ -25,8 +25,8 @@ use function array_map;
  * @package App\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method self patch(RestDtoInterface $dto): RestDtoInterface
- * @method self update(EntityInterface $entity): EntityInterface
+ * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
+ * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
  */
 class User extends RestDto implements UserInterface
 {
@@ -252,7 +252,7 @@ class User extends RestDto implements UserInterface
     /**
      * Method to load DTO data from specified entity.
      *
-     * @param EntityInterface|UserEntity $entity
+     * @param EntityInterface|Entity $entity
      *
      * @return RestDtoInterface|User
      */
@@ -269,7 +269,7 @@ class User extends RestDto implements UserInterface
             return $group->getId();
         };
 
-        if ($entity instanceof UserEntity) {
+        if ($entity instanceof Entity) {
             $this->id = $entity->getId();
             $this->username = $entity->getUsername();
             $this->firstname = $entity->getFirstname();
@@ -284,12 +284,12 @@ class User extends RestDto implements UserInterface
     /**
      * Method to update User entity password.
      *
-     * @param UserEntity $entity
+     * @param Entity $entity
      * @param string     $value
      *
      * @return User
      */
-    protected function updatePassword(UserEntity $entity, string $value): self
+    protected function updatePassword(Entity $entity, string $value): self
     {
         $entity->setPlainPassword($value);
 
@@ -299,12 +299,12 @@ class User extends RestDto implements UserInterface
     /**
      * Method to update User entity user groups.
      *
-     * @param UserEntity        $entity
+     * @param Entity        $entity
      * @param UserGroupEntity[] $value
      *
      * @return User
      */
-    protected function updateUserGroups(UserEntity $entity, array $value): self
+    protected function updateUserGroups(Entity $entity, array $value): self
     {
         $entity->clearUserGroups();
 

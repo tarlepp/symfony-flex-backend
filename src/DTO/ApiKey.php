@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\DTO;
 
-use App\Entity\ApiKey as ApiKeyEntity;
+use App\Entity\ApiKey as Entity;
 use App\Entity\EntityInterface;
 use App\Entity\UserGroup as UserGroupEntity;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,8 +20,8 @@ use function array_map;
  * @package App\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method self patch(RestDtoInterface $dto): RestDtoInterface
- * @method self update(EntityInterface $entity): EntityInterface
+ * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
+ * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
  */
 class ApiKey extends RestDto
 {
@@ -146,7 +146,7 @@ class ApiKey extends RestDto
     /**
      * Method to load DTO data from specified entity.
      *
-     * @param EntityInterface|ApiKeyEntity $entity
+     * @param EntityInterface|Entity $entity
      *
      * @return RestDtoInterface|ApiKey
      */
@@ -161,7 +161,7 @@ class ApiKey extends RestDto
             return $userGroup->getId();
         };
 
-        if ($entity instanceof ApiKeyEntity) {
+        if ($entity instanceof Entity) {
             $this->id = $entity->getId();
             $this->token = $entity->getToken();
             $this->description = $entity->getDescription();
@@ -174,12 +174,12 @@ class ApiKey extends RestDto
     /**
      * Method to update ApiKey entity user groups.
      *
-     * @param ApiKeyEntity      $entity
+     * @param Entity      $entity
      * @param UserGroupEntity[] $value
      *
      * @return ApiKey
      */
-    protected function updateUserGroups(ApiKeyEntity $entity, array $value): self
+    protected function updateUserGroups(Entity $entity, array $value): self
     {
         $entity->clearUserGroups();
 
