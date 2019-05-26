@@ -15,6 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
+use Throwable;
 
 /**
  * Class UniqueEmailValidatorTest
@@ -42,6 +43,8 @@ class UniqueEmailValidatorTest extends KernelTestCase
     /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @throws Throwable
      */
     public function testThatValidateCallsExpectedMethods(): void
     {
