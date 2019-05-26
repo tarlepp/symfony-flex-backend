@@ -61,6 +61,8 @@ class UserValueResolverTest extends KernelTestCase
      * @dataProvider dataProviderValidUsers
      *
      * @param string $username
+     *
+     * @throws Throwable
      */
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(string $username): void
     {
