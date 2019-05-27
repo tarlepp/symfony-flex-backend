@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a80090b0c23c924579fb95be8fccec6",
+    "content-hash": "bd2e9df7e758676bb985c3b36da1478e",
     "packages": [],
     "packages-dev": [
         {
@@ -944,19 +944,20 @@
         },
         {
             "name": "nunomaduro/phpinsights",
-            "version": "v1.2.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nunomaduro/phpinsights.git",
-                "reference": "bc68204b316ccd9c9520ada6adc7ddda99009c3a"
+                "reference": "141e28c130fc45b29971b1ef803f15927bcd3b15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nunomaduro/phpinsights/zipball/bc68204b316ccd9c9520ada6adc7ddda99009c3a",
-                "reference": "bc68204b316ccd9c9520ada6adc7ddda99009c3a",
+                "url": "https://api.github.com/repos/nunomaduro/phpinsights/zipball/141e28c130fc45b29971b1ef803f15927bcd3b15",
+                "reference": "141e28c130fc45b29971b1ef803f15927bcd3b15",
                 "shasum": ""
             },
             "require": {
+                "ext-iconv": "*",
                 "ext-json": "*",
                 "league/container": "^3.2",
                 "object-calisthenics/phpcs-calisthenics-rules": "^3.5",
@@ -1016,7 +1017,7 @@
                 "quality",
                 "source"
             ],
-            "time": "2019-05-16T21:35:16+00:00"
+            "time": "2019-05-20T18:18:10+00:00"
         },
         {
             "name": "object-calisthenics/phpcs-calisthenics-rules",
@@ -1502,12 +1503,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "89f6e0f30ef66bfb06008d6d6ae6e7cc66a2e0f5"
+                "reference": "4c0ba8a35f1f12dd9236452e9fae4346b0bf2a56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/89f6e0f30ef66bfb06008d6d6ae6e7cc66a2e0f5",
-                "reference": "89f6e0f30ef66bfb06008d6d6ae6e7cc66a2e0f5",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4c0ba8a35f1f12dd9236452e9fae4346b0bf2a56",
+                "reference": "4c0ba8a35f1f12dd9236452e9fae4346b0bf2a56",
                 "shasum": ""
             },
             "conflict": {
@@ -1705,7 +1706,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2019-05-22T09:34:58+00:00"
+            "time": "2019-05-23T20:42:12+00:00"
         },
         {
             "name": "sebastian/finder-facade",
