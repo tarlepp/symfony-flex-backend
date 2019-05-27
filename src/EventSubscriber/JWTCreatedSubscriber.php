@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
-use App\Entity\User;
 use App\Helpers\LoggerAwareTrait;
 use App\Security\RolesService;
 use DateTime;
@@ -17,7 +16,6 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use function array_merge;
 use function hash;
 use function implode;
 
@@ -45,12 +43,10 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     /**
      * JWTCreatedListener constructor.
      *
-     * @param RolesService $rolesService
      * @param RequestStack $requestStack
      */
-    public function __construct(RolesService $rolesService, RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->rolesService = $rolesService;
         $this->requestStack = $requestStack;
     }
 
@@ -99,17 +95,11 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
         // Add some extra security data to payload
         $this->setSecurityData($payload);
 
-        $user = $event->getUser();
-
-        // Add necessary user data to payload
-        if ($user instanceof User) {
-            $this->setUserData($payload, $user);
-        }
-
         // And set new payload for JWT
         $event->setData($payload);
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Method to set/modify JWT expiration date dynamically.
      *
@@ -118,6 +108,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     private function setExpiration(array &$payload): void
     {
         // Set new exp value for JWT
+        /** @noinspection PhpUnhandledExceptionInspection */
         $payload['exp'] = (new DateTime('+1 day', new DateTimeZone('UTC')))->getTimestamp();
     }
 
@@ -147,20 +138,5 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
 
         // Attach checksum to JWT payload
         $payload['checksum'] = hash('sha512', implode('|', $bits));
-    }
-
-    /**
-     * Method to add all necessary user information to JWT payload.
-     *
-     * @param mixed[] $payload
-     * @param User    $user
-     */
-    private function setUserData(array &$payload, User $user): void
-    {
-        // Set Roles service for User Entity
-        $user->setRolesService($this->rolesService);
-
-        // Merge login data to current payload
-        $payload = array_merge($payload, $user->getLoginData());
     }
 }

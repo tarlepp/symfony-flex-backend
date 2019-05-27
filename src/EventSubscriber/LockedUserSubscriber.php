@@ -12,6 +12,7 @@ use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
+use App\Security\SecurityUser;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTAuthenticatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
@@ -22,6 +23,7 @@ use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
 use function is_string;
+use Throwable;
 
 /**
  * Class LockedUserSubscriber
@@ -194,8 +196,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
     /**
      * @param User $user
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     private function onAuthenticationFailureEvent(User $user): void
     {
@@ -223,8 +224,10 @@ class LockedUserSubscriber implements EventSubscriberInterface
     {
         if (is_string($user)) {
             $user = $this->userRepository->loadUserByUsername($user);
+        } elseif ($user instanceof SecurityUser) {
+            $user = $this->userRepository->loadUserByUsername($user->getUsername());
         }
 
-        return $user instanceof User ? $user : null;
+        return $user ?? null;
     }
 }

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
+use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
 use BadMethodCallException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
@@ -27,16 +28,23 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
     /**
      * @var LoginLogger
      */
-    protected $loginLogger;
+    private $loginLogger;
+
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
     /**
      * AuthenticationSuccessListener constructor.
      *
-     * @param LoginLogger $loginLogger
+     * @param LoginLogger    $loginLogger
+     * @param UserRepository $userRepository
      */
-    public function __construct(LoginLogger $loginLogger)
+    public function __construct(LoginLogger $loginLogger, UserRepository $userRepository)
     {
         $this->loginLogger = $loginLogger;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -82,7 +90,7 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
      */
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
-        $this->loginLogger->setUser($event->getUser());
+        $this->loginLogger->setUser($this->userRepository->loadUserByUsername($event->getUser()->getUsername()));
         $this->loginLogger->process(EnumLogLoginType::TYPE_SUCCESS);
     }
 }
