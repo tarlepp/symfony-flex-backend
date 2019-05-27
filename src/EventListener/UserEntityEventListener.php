@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\EventListener;
 
 use App\Entity\User;
+use App\Security\SecurityUser;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use LengthException;
 use RuntimeException;
@@ -104,7 +105,7 @@ class UserEntityEventListener
 
             // Password hash callback
             $callback = function (string $plainPassword) use ($user): string {
-                return $this->userPasswordEncoder->encodePassword($user, $plainPassword);
+                return $this->userPasswordEncoder->encodePassword(new SecurityUser($user), $plainPassword);
             };
 
             // Set new password and encode it with user encoder
