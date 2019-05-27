@@ -11,14 +11,10 @@ namespace App\Entity;
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\UserRelations;
-use App\Entity\Traits\UserSerializer;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
-use Serializable;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
-use Symfony\Component\Security\Core\User\EquatableInterface;
-use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Throwable;
@@ -36,20 +32,17 @@ use Throwable;
  *          @ORM\UniqueConstraint(name="uq_email", columns={"email"}),
  *      },
  *  )
- * @ORM\Entity(
- *      repositoryClass="App\Security\UserProvider"
- *  )
+ * @ORM\Entity()
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class User implements CoreUserInterface, EquatableInterface, Serializable, EntityInterface, UserInterface
+class User implements EntityInterface, UserInterface
 {
     // Traits
     use Blameable;
     use Timestampable;
     use UserRelations;
-    use UserSerializer;
 
     /**
      * @var string
@@ -356,24 +349,5 @@ class User implements CoreUserInterface, EquatableInterface, Serializable, Entit
     public function eraseCredentials(): void
     {
         $this->plainPassword = '';
-    }
-
-    /**
-     * The equality comparison should neither be done by referential equality
-     * nor by comparing identities (i.e. getId() === getId()).
-     *
-     * However, you do not need to compare every attribute, but only those that
-     * are relevant for assessing whether re-authentication is required.
-     *
-     * Also implementation should consider that $user instance may implement
-     * the extended user interface `AdvancedUserInterface`.
-     *
-     * @param CoreUserInterface|User $user
-     *
-     * @return bool
-     */
-    public function isEqualTo(CoreUserInterface $user): bool
-    {
-        return $user instanceof self && $user->getId() === $this->getId();
     }
 }
