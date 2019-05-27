@@ -11,11 +11,10 @@ namespace App\EventSubscriber;
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
-use BadMethodCallException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use UnexpectedValueException;
+use Throwable;
 
 /**
  * Class AuthenticationSuccessSubscriber
@@ -81,16 +80,12 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
      *
      * @param AuthenticationSuccessEvent $event
      *
-     * @throws BadMethodCallException
-     * @throws UnexpectedValueException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
+     * @throws Throwable
      */
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
-        $this->loginLogger->setUser($this->userRepository->loadUserByUsername($event->getUser()->getUsername()));
-        $this->loginLogger->process(EnumLogLoginType::TYPE_SUCCESS);
+        $this->loginLogger
+            ->setUser($this->userRepository->loadUserByUsername($event->getUser()->getUsername()))
+            ->process(EnumLogLoginType::TYPE_SUCCESS);
     }
 }

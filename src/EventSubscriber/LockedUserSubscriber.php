@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
 use App\Security\SecurityUser;
+use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTAuthenticatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
@@ -22,8 +23,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\AuthenticationEvents;
 use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
-use function is_string;
 use Throwable;
+use function count;
+use function is_string;
 
 /**
  * Class LockedUserSubscriber
@@ -97,8 +99,8 @@ class LockedUserSubscriber implements EventSubscriberInterface
      *
      * @param AuthenticationFailureEvent $event
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
+     * @throws Throwable
      */
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
@@ -122,8 +124,8 @@ class LockedUserSubscriber implements EventSubscriberInterface
      *
      * @param JWTAuthenticatedEvent $event
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
+     * @throws Throwable
      */
     public function onJWTAuthenticated(JWTAuthenticatedEvent $event): void
     {
@@ -142,8 +144,8 @@ class LockedUserSubscriber implements EventSubscriberInterface
      *
      * @param AuthenticationEvent $event
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
+     * @throws Throwable
      */
     public function onAuthenticationSuccess(AuthenticationEvent $event): void
     {
@@ -158,10 +160,10 @@ class LockedUserSubscriber implements EventSubscriberInterface
      * @psalm-suppress MissingDependency
      * @psalm-suppress MismatchingDocblockParamType
      *
-     * @param User                                                                       $user
+     * @param User $user
      * @param Event|JWTAuthenticatedEvent|AuthenticationFailureEvent|AuthenticationEvent $event
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
     private function checkLockedAccount(User $user, Event $event): void
     {
@@ -186,7 +188,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     private function onJWTAuthenticatedEvent(User $user, JWTAuthenticatedEvent $event): void
     {
-        if (\count($user->getLogsLoginFailure()) > 10) {
+        if (count($user->getLogsLoginFailure()) > 10) {
             $event->getToken()->setAuthenticated(false);
 
             $this->reset = false;
@@ -218,7 +220,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
      *
      * @return User|null
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws ORMException
      */
     private function getUser($user): ?User
     {

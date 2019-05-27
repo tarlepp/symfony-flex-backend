@@ -54,8 +54,6 @@ class ResponseSubscriber implements EventSubscriberInterface
      * Subscriber method to log every response.
      *
      * @param FilterResponseEvent $event
-     *
-     * @throws \Exception
      */
     public function onKernelResponse(FilterResponseEvent $event): void
     {
@@ -69,8 +67,6 @@ class ResponseSubscriber implements EventSubscriberInterface
      * Method to get current version from composer.json file.
      *
      * @return string
-     *
-     * @throws \LogicException
      */
     private function getApiVersion(): string
     {
