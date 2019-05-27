@@ -8,11 +8,10 @@ declare(strict_types = 1);
 
 namespace App\Utils;
 
-use App\Repository\UserRepository;
+use App\Entity\User;
 use App\Resource\LogLoginResource;
-use BadMethodCallException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Throwable;
 
 /**
  * Interface LoginLogger
@@ -26,35 +25,25 @@ interface LoginLoggerInterface
      * LoginLogger constructor.
      *
      * @param LogLoginResource $logLoginFailureResource
-     * @param UserRepository   $userRepository
      * @param RequestStack     $requestStack
      */
-    public function __construct(
-        LogLoginResource $logLoginFailureResource,
-        UserRepository $userRepository,
-        RequestStack $requestStack
-    );
+    public function __construct(LogLoginResource $logLoginFailureResource, RequestStack $requestStack);
 
     /**
      * Setter for User object
      *
-     * @param UserInterface|null $user
+     * @param User|null $user
      *
      * @return LoginLoggerInterface
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function setUser(?UserInterface $user = null): self;
+    public function setUser(?User $user = null): self;
 
     /**
      * Method to handle login event.
      *
      * @param string $type
      *
-     * @throws BadMethodCallException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
+     * @throws Throwable
      */
     public function process(string $type): void;
 }

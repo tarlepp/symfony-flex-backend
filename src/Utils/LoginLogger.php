@@ -10,13 +10,12 @@ namespace App\Utils;
 
 use App\Entity\LogLogin;
 use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
 use BadMethodCallException;
 use DeviceDetector\DeviceDetector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Throwable;
 
 /**
  * Class LoginLogger
@@ -30,11 +29,6 @@ class LoginLogger implements LoginLoggerInterface
      * @var LogLoginResource
      */
     private $logLoginResource;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
 
     /**
      * @var RequestStack
@@ -55,37 +49,25 @@ class LoginLogger implements LoginLoggerInterface
      * LoginLogger constructor.
      *
      * @param LogLoginResource $logLoginFailureResource
-     * @param UserRepository   $userRepository
      * @param RequestStack     $requestStack
      */
-    public function __construct(
-        LogLoginResource $logLoginFailureResource,
-        UserRepository $userRepository,
-        RequestStack $requestStack
-    ) {
+    public function __construct(LogLoginResource $logLoginFailureResource, RequestStack $requestStack)
+    {
         // Store used services
         $this->logLoginResource = $logLoginFailureResource;
-        $this->userRepository = $userRepository;
         $this->requestStack = $requestStack;
     }
 
     /**
      * Setter for User object
      *
-     * @param UserInterface|User|null $user
+     * @param User|null $user
      *
      * @return LoginLoggerInterface
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function setUser(?UserInterface $user = null): LoginLoggerInterface
+    public function setUser(?User $user = null): LoginLoggerInterface
     {
-        if ($user !== null) {
-            // We need to make sure that User object is right one
-            $user = $user instanceof User ? $user : $this->userRepository->loadUserByUsername($user->getUsername());
-
-            $this->user = $user;
-        }
+        $this->user = $user;
 
         return $this;
     }
@@ -95,10 +77,7 @@ class LoginLogger implements LoginLoggerInterface
      *
      * @param string $type
      *
-     * @throws BadMethodCallException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
+     * @throws Throwable
      */
     public function process(string $type): void
     {
@@ -127,9 +106,7 @@ class LoginLogger implements LoginLoggerInterface
      * @param string  $type
      * @param Request $request
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException
+     * @throws Throwable
      */
     private function createEntry(string $type, Request $request): void
     {
