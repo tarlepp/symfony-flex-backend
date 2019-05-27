@@ -10,7 +10,6 @@ namespace App\Repository;
 
 use App\Entity\LogLoginFailure as Entity;
 use App\Entity\User;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /**
@@ -40,11 +39,11 @@ class LogLoginFailureRepository extends BaseRepository
     /**
      * Method to clear specified user login failures.
      *
-     * @param UserInterface|User $user
+     * @param User $user
      *
      * @return int
      */
-    public function clear(UserInterface $user): int
+    public function clear(User $user): int
     {
         // Create query builder and define delete query
         $queryBuilder = $this

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Repository\Traits;
 
 use App\Entity\User as Entity;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use function array_key_exists;
 use function getenv;
@@ -39,7 +40,7 @@ trait LoadUserByUserNameTrait
      *
      * @return Entity|null
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws ORMException
      */
     public function loadUserByUsername($username): ?Entity
     {
@@ -52,7 +53,7 @@ trait LoadUserByUserNameTrait
                 ->select('u, g, r')
                 ->leftJoin('u.userGroups', 'g')
                 ->leftJoin('g.role', 'r')
-                ->where('u.username = :username OR u.email = :email')
+                ->where('u.id = :username OR u.username = :username OR u.email = :email')
                 ->setParameter('username', $username)
                 ->setParameter('email', $username)
                 ->getQuery();
