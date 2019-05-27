@@ -1,15 +1,17 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Security/SecurityUserFactory.php
+ * /src/Security/Provider/SecurityUserFactory.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Security;
+namespace App\Security\Provider;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\RolesService;
+use App\Security\SecurityUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,7 +22,7 @@ use function get_class;
 /**
  * Class SecurityUserFactory
  *
- * @package App\Security
+ * @package App\Security\Provider
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class SecurityUserFactory implements UserProviderInterface

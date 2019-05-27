@@ -1,15 +1,19 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Security/ApiKeyUserProvider.php
+ * /src/Security/Provider/ApiKeyUserProvider.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Security;
+namespace App\Security\Provider;
 
 use App\Entity\ApiKey;
 use App\Repository\ApiKeyRepository;
+use App\Security\ApiKeyUser;
+use App\Security\ApiKeyUserInterface;
+use App\Security\ApiKeyUserProviderInterface;
+use App\Security\RolesService;
 use Exception;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
@@ -19,7 +23,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 /**
  * Class ApiKeyUserProvider
  *
- * @package App\Security
+ * @package App\Security\Provider
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInterface

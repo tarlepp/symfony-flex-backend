@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Entity\ApiKey;
+use App\Security\Provider\ApiKeyUserProvider;
 use Exception;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
