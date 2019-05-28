@@ -33,11 +33,4 @@ interface ApiKeyUserInterface extends UserInterface
      * @return ApiKey
      */
     public function getApiKey(): ApiKey;
-
-    /**
-     * Returns the roles granted to the api user.
-     *
-     * @return string[] The user roles
-     */
-    public function getRoles(): array;
 }
