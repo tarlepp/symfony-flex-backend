@@ -84,6 +84,7 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
      * @param AuthenticationFailureEvent $event
      *
      * @throws ORMException
+     * @throws Throwable
      */
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {

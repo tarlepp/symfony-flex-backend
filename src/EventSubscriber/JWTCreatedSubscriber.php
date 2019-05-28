@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Helpers\LoggerAwareTrait;
-use App\Security\RolesService;
 use DateTime;
 use DateTimeZone;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
@@ -29,11 +28,6 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
 {
     // Traits
     use LoggerAwareTrait;
-
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
 
     /**
      * @var RequestStack
