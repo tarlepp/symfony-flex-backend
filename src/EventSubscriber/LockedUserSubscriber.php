@@ -12,6 +12,7 @@ use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
+use App\Security\ApiKeyUser;
 use App\Security\SecurityUser;
 use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
@@ -224,7 +225,9 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     private function getUser($user): ?User
     {
-        if (is_string($user)) {
+        if ($user instanceof ApiKeyUser) {
+            $user = null;
+        } elseif (is_string($user)) {
             $user = $this->userRepository->loadUserByUsername($user);
         } elseif ($user instanceof SecurityUser) {
             $user = $this->userRepository->loadUserByUsername($user->getUsername());
