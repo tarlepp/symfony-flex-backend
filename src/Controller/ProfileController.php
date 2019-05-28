@@ -9,17 +9,13 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Security\ApiKeyUser;
 use App\Security\RolesService;
-use Doctrine\Common\Collections\Collection;
+use App\Utils\JSON;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use function array_merge;
@@ -79,31 +75,24 @@ class ProfileController
      *  )
      * @SWG\Tag(name="Profile")
      *
-     * @param TokenStorageInterface $tokenStorage
      * @param SerializerInterface   $serializer
      * @param RolesService          $rolesService
+     * @param User                  $user
      *
      * @return JsonResponse
-     *
-     * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
     public function profileAction(
-        TokenStorageInterface $tokenStorage,
         SerializerInterface $serializer,
-        RolesService $rolesService
+        RolesService $rolesService,
+        User $user
     ): JsonResponse {
-        /** @var TokenInterface $tokenInterface */
-        $tokenInterface = $tokenStorage->getToken();
-
-        /** @var User|ApiKeyUser $user */
-        $user = $tokenInterface->getUser();
-
         // Get serializer groups for current user instance
-        $groups = $this->getSerializationGroupsForProfile($rolesService, $user);
+        $groups = $this->getSerializationGroupsForUser();
 
-        // Create response
-        return new JsonResponse($serializer->serialize($user, 'json', ['groups' => $groups]), 200, [], true);
+        $output = JSON::decode($serializer->serialize($user, 'json', ['groups' => $groups]), true);
+        $output['roles'] = $rolesService->getInheritedRoles($output['roles']);
+
+        return new JsonResponse($output);
     }
 
     /**
@@ -145,22 +134,13 @@ class ProfileController
      *  )
      * @SWG\Tag(name="Profile")
      *
-     * @param TokenStorageInterface $tokenStorage
-     * @param RolesService          $rolesService
+     * @param UserInterface $user
      *
      * @return JsonResponse
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
      */
-    public function rolesAction(TokenStorageInterface $tokenStorage, RolesService $rolesService): JsonResponse
+    public function rolesAction(UserInterface $user): JsonResponse
     {
-        /** @var TokenInterface $tokenInterface */
-        $tokenInterface = $tokenStorage->getToken();
-
-        /** @var User|ApiKeyUser $user */
-        $user = $tokenInterface->getUser();
-
-        return new JsonResponse($rolesService->getInheritedRoles($user->getRoles()));
+        return new JsonResponse($user->getRoles());
     }
 
     /**
@@ -219,54 +199,18 @@ class ProfileController
      *  )
      * @SWG\Tag(name="Profile")
      *
-     * @param TokenStorageInterface $tokenStorage
-     * @param SerializerInterface   $serializer
+     * @param SerializerInterface $serializer
+     * @param User                $user
      *
      * @return JsonResponse
-     *
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
      */
-    public function groupsAction(TokenStorageInterface $tokenStorage, SerializerInterface $serializer): ?JsonResponse
+    public function groupsAction(SerializerInterface $serializer, User $user): JsonResponse
     {
-        $data = $this->getUserGroups($tokenStorage);
-
-        if ($data === null) {
-            throw new AccessDeniedException('Not supported user');
-        }
-
         $groups = [
             'groups' => $this->getUserGroupGroups(),
         ];
 
-        return new JsonResponse($serializer->serialize($data, 'json', $groups), 200, [], true);
-    }
-
-    /**
-     * @param RolesService  $rolesService
-     * @param UserInterface $user
-     *
-     * @return string[]
-     *
-     * @throws \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     */
-    private function getSerializationGroupsForProfile(RolesService $rolesService, UserInterface $user): array
-    {
-        $groups = null;
-
-        if ($user instanceof User) {
-            $groups = $this->getSerializationGroupsForUser();
-
-            // Set roles service to user entity, so we can get inherited roles
-            $user->setRolesService($rolesService);
-        } elseif ($user instanceof ApiKeyUser) {
-            $groups = $this->getSerializationGroupsForApiKey();
-        }
-
-        if ($groups === null) {
-            throw new AccessDeniedException('Not supported user');
-        }
-
-        return $groups;
+        return new JsonResponse($serializer->serialize($user->getUserGroups(), 'json', $groups), 200, [], true);
     }
 
     /**
@@ -287,53 +231,11 @@ class ProfileController
     /**
      * @return string[]
      */
-    private function getSerializationGroupsForApiKey(): array
-    {
-        return array_merge(
-            [
-                'ApiKeyUser',
-                'ApiKeyUser.apiKey',
-                'ApiKey.description',
-                'ApiKey.userGroups',
-            ],
-            $this->getUserGroupGroups()
-        );
-    }
-
-    /**
-     * @return string[]
-     */
     private function getUserGroupGroups(): array
     {
         return [
             'UserGroup',
             'UserGroup.role',
         ];
-    }
-
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     *
-     * @return Collection|null
-     */
-    private function getUserGroups(TokenStorageInterface $tokenStorage): ?Collection
-    {
-        /** @var TokenInterface $tokenInterface */
-        $tokenInterface = $tokenStorage->getToken();
-
-        /** @var User|ApiKeyUser $user */
-        /** @noinspection NullPointerExceptionInspection */
-        /** @psalm-suppress PossiblyNullReference */
-        $user = $tokenInterface->getUser();
-
-        $data = null;
-
-        if ($user instanceof User) {
-            $data = $user->getUserGroups();
-        } elseif ($user instanceof ApiKeyUser) {
-            $data = $user->getApiKey()->getUserGroups();
-        }
-
-        return $data;
     }
 }
