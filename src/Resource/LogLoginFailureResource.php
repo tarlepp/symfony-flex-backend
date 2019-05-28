@@ -11,9 +11,9 @@ namespace App\Resource;
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Entity\LogLoginFailure as Entity;
+use App\Entity\User;
 use App\Repository\LogLoginFailureRepository as Repository;
 use App\Rest\RestResource;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -49,9 +49,9 @@ class LogLoginFailureResource extends RestResource
     }
 
     /**
-     * @param UserInterface $user
+     * @param User $user
      */
-    public function reset(UserInterface $user): void
+    public function reset(User $user): void
     {
         /** @psalm-suppress UndefinedMethod */
         $this->getRepository()->clear($user);
