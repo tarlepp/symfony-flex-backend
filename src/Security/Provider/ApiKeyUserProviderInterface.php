@@ -1,20 +1,21 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Security/ApiKeyUserProviderInterface.php
+ * /src/Security/Provider/ApiKeyUserProviderInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Security;
+namespace App\Security\Provider;
 
 use App\Entity\ApiKey;
 use App\Repository\ApiKeyRepository;
+use App\Security\RolesService;
 
 /**
  * Interface ApiKeyUserProviderInterface
  *
- * @package App\Security
+ * @package App\Security\Provider
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface ApiKeyUserProviderInterface

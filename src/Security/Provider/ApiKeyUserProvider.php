@@ -12,7 +12,6 @@ use App\Entity\ApiKey;
 use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
 use App\Security\ApiKeyUserInterface;
-use App\Security\ApiKeyUserProviderInterface;
 use App\Security\RolesService;
 use Exception;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
