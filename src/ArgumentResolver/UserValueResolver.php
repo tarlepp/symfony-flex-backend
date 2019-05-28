@@ -11,14 +11,13 @@ namespace App\ArgumentResolver;
 use App\Entity\User;
 use App\Resource\UserResource;
 use App\Security\SecurityUser;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Throwable;
 
 /**
  * Class UserValueResolver
@@ -77,13 +76,12 @@ class UserValueResolver implements ArgumentValueResolverInterface
     /**
      * Returns the possible value(s).
      *
-     * @param Request          $request
+     * @param Request $request
      * @param ArgumentMetadata $argument
      *
      * @return Generator
      *
-     * @throws NoResultException
-     * @throws NonUniqueResultException
+     * @throws Throwable
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
