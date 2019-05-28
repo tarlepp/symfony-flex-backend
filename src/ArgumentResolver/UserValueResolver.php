@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Resource\UserResource;
 use App\Security\SecurityUser;
 use Generator;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -63,11 +64,12 @@ class UserValueResolver implements ArgumentValueResolverInterface
         $token = $this->tokenStorage->getToken();
 
         // only security user implementations are supported
-        if ($token instanceof TokenInterface
-            && $argument->getType() === User::class
-            && $token->getUser() instanceof SecurityUser
-        ) {
-            $output = true;
+        if ($token instanceof TokenInterface && $argument->getType() === User::class) {
+            if ($argument->isNullable() === false && !($token->getUser() instanceof SecurityUser)) {
+                throw new MissingTokenException('JWT Token not found');
+            }
+
+            $output = $token->getUser() instanceof SecurityUser;
         }
 
         return $output;
