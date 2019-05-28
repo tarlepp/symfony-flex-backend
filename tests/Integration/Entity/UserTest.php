@@ -11,6 +11,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Security\RolesService;
+use Generator;
 use function serialize;
 use function ucfirst;
 use function unserialize;
@@ -128,22 +129,6 @@ class UserTest extends EntityTestCase
         static::assertEmpty($this->entity->getPlainPassword());
     }
 
-    /**
-     * @dataProvider dataProviderTestThatIsEqualToMethodWorksAsExpected
-     *
-     * @param bool $expected
-     */
-    public function testThatIsEqualToMethodWorksAsExpected(bool $expected): void
-    {
-        $entity = $expected ? clone $this->entity : new $this->entityName();
-
-        $message = 'Failed to check if User entity is equal.';
-
-        static::assertSame($expected, $this->entity->isEqualTo($entity), $message);
-
-        unset($entity);
-    }
-
     public function testThatGetRolesReturnsExpectedWithoutRoleService(): void
     {
         $group = (new UserGroup())->setRole(new Role('ROLE_ROOT'));
@@ -167,24 +152,11 @@ class UserTest extends EntityTestCase
     /**
      * Data provider for testThatPasswordHashingIsWorkingAsExpected
      *
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatPasswordHashingIsWorkingAsExpected(): array
+    public function dataProviderTestThatPasswordHashingIsWorkingAsExpected(): Generator
     {
-        return [
-            ['str_rot13', 'password', 'cnffjbeq'],
-            ['base64_encode', 'password', 'cGFzc3dvcmQ='],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderTestThatIsEqualToMethodWorksAsExpected(): array
-    {
-        return [
-            [true],
-            [false],
-        ];
+        yield ['str_rot13', 'password', 'cnffjbeq'];
+        yield ['base64_encode', 'password', 'cGFzc3dvcmQ='];
     }
 }

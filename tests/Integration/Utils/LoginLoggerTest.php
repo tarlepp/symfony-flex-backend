@@ -7,14 +7,12 @@ declare(strict_types = 1);
  */
 namespace App\Tests\Integration\Utils;
 
-use App\Repository\UserRepository;
 use App\Resource\LogLoginResource;
 use App\Utils\LoginLogger;
 use BadMethodCallException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Security\Core\User\User;
 use Throwable;
 
 /**
@@ -26,30 +24,23 @@ use Throwable;
 class LoginLoggerTest extends KernelTestCase
 {
     /**
+     * @expectedException BadMethodCallException
+     * @expectedExceptionMessage Could not get request from current request stack
+     *
      * @throws Throwable
      */
     public function testThatSetUserCallsRepositoryMethodIfWrongUserProvided(): void
     {
         /**
          * @var MockObject|LogLoginResource $logLoginResource
-         * @var MockObject|UserRepository   $userRepository
          */
         $logLoginResource = $this->getMockBuilder(LogLoginResource::class)->disableOriginalConstructor()->getMock();
-        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $requestStack = new RequestStack();
 
-        $userRepository
-            ->expects(static::once())
-            ->method('loadUserByUsername')
-            ->with('username');
+        $loginLogger = new LoginLogger($logLoginResource, $requestStack);
+        $loginLogger->process('');
 
-        // Create core user object
-        $user = new User('username', 'password');
-
-        $loginLogger = new LoginLogger($logLoginResource, $userRepository, $requestStack);
-        $loginLogger->setUser($user);
-
-        unset($loginLogger, $user, $userRepository, $requestStack, $logLoginResource);
+        unset($loginLogger, $requestStack, $logLoginResource);
     }
 
     /**
@@ -62,13 +53,11 @@ class LoginLoggerTest extends KernelTestCase
     {
         /**
          * @var MockObject|LogLoginResource $logLoginResource
-         * @var MockObject|UserRepository   $userRepository
          */
         $logLoginResource = $this->getMockBuilder(LogLoginResource::class)->disableOriginalConstructor()->getMock();
-        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $requestStack = new RequestStack();
 
-        $loginLogger = new LoginLogger($logLoginResource, $userRepository, $requestStack);
+        $loginLogger = new LoginLogger($logLoginResource, $requestStack);
         $loginLogger->process('');
     }
 }

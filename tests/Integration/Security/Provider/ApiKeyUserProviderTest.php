@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Utils/ApiKeyUserProviderTest.php
+ * /tests/Integration/Security/Provider/ApiKeyUserProviderTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Security;
+namespace App\Tests\Integration\Security\Provider;
 
 use App\Entity\ApiKey;
 use App\Entity\User as UserEntity;
 use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
-use App\Security\ApiKeyUserProvider;
+use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -24,7 +24,7 @@ use Throwable;
 /**
  * Class ApiKeyUserProviderTest
  *
- * @package App\Tests\Integration\Security
+ * @package App\Tests\Integration\Security\Provider
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyUserProviderTest extends KernelTestCase

@@ -9,6 +9,8 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\Entity\User;
 use App\EventSubscriber\AuthenticationSuccessSubscriber;
+use App\Repository\UserRepository;
+use App\Security\SecurityUser;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,25 +31,36 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
      */
     public function testThatOnAuthenticationSuccessMethodCallsExpectedLoggerMethods(): void
     {
-        $user = new User();
-        $event = new AuthenticationSuccessEvent([], $user, new Response());
+        $userEntity = (new User())->setUsername('test_user');
+        $securityUser = new SecurityUser($userEntity);
+        $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
 
-        /** @var MockObject|LoginLogger $loginLogger */
+        /**
+         * @var MockObject|LoginLogger    $loginLogger
+         * @var MockObject|UserRepository $userRepository
+         */
         $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
         $loginLogger
             ->expects(static::once())
             ->method('setUser')
-            ->with($user)
+            ->with($userEntity)
             ->willReturn($loginLogger);
 
         $loginLogger
             ->expects(static::once())
             ->method('process');
 
-        $subscriber = new AuthenticationSuccessSubscriber($loginLogger);
+        $userRepository
+            ->expects(static::once())
+            ->method('loadUserByUsername')
+            ->with($userEntity->getId())
+            ->willReturn($userEntity);
+
+        $subscriber = new AuthenticationSuccessSubscriber($loginLogger, $userRepository);
         $subscriber->onAuthenticationSuccess($event);
 
-        unset($subscriber, $loginLogger, $event, $user);
+        unset($subscriber, $loginLogger, $userRepository, $event, $userEntity);
     }
 }

@@ -1,17 +1,17 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Security/SecurityUserFactoryTest.php
+ * /tests/Integration/Security/Provider/SecurityUserFactoryTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Integration\Security;
+namespace App\Tests\Integration\Security\Provider;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\RolesService;
 use App\Security\SecurityUser;
-use App\Security\SecurityUserFactory;
+use App\Security\Provider\SecurityUserFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -19,7 +19,7 @@ use Throwable;
 /**
  * Class SecurityUserFactoryTest
  *
- * @package App\Tests\Integration\Security
+ * @package App\Tests\Integration\Security\Provider
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class SecurityUserFactoryTest extends KernelTestCase

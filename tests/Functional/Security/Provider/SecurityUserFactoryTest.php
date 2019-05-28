@@ -1,16 +1,16 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Functional/Security/SecurityUserFactoryTest.php
+ * /tests/Functional/Security/Provider/SecurityUserFactoryTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Security;
+namespace App\Tests\Functional\Security\Provider;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\SecurityUser;
-use App\Security\SecurityUserFactory;
+use App\Security\Provider\SecurityUserFactory;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\User\User as CoreUser;

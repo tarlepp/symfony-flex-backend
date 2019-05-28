@@ -1,16 +1,16 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Functional/Security/ApiKeyUserProviderTest.php
+ * /tests/Functional/Security/Provider/ApiKeyUserProviderTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-namespace App\Tests\Functional\Security;
+namespace App\Tests\Functional\Security\Provider;
 
 use App\Entity\ApiKey;
 use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
-use App\Security\ApiKeyUserProvider;
+use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -22,7 +22,7 @@ use function str_pad;
 /**
  * Class ApiKeyUserProviderTest
  *
- * @package App\Tests\Functional\Security
+ * @package App\Tests\Functional\Security\Provider
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyUserProviderTest extends KernelTestCase

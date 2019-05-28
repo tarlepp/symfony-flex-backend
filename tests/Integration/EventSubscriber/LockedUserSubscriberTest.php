@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\EventSubscriber\LockedUserSubscriber;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
+use App\Security\SecurityUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTAuthenticatedEvent;
@@ -40,6 +41,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $user->setUsername('test-user');
 
         $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
+        $token->setUser(new SecurityUser($user));
 
         $authenticationException = new AuthenticationException();
         $authenticationException->setToken($token);
@@ -55,7 +57,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $userRepository
             ->expects(static::once())
             ->method('loadUserByUsername')
-            ->with('test-user')
+            ->with($user->getId())
             ->willReturn($user);
 
         $logLoginFailureResource

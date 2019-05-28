@@ -8,7 +8,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Security;
 
 use App\Security\ApiKeyAuthenticator;
-use App\Security\ApiKeyUserProvider;
+use App\Security\Provider\ApiKeyUserProvider;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

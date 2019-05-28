@@ -9,7 +9,7 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\Entity\User;
 use App\EventSubscriber\JWTCreatedSubscriber;
-use App\Security\RolesService;
+use App\Security\SecurityUser;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -31,10 +31,12 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $payload = [];
 
         // Create new user for JWT
-        $user = new User();
-        $user->setFirstname('firstname');
-        $user->setSurname('surname');
-        $user->setEmail('firstname.surname@test.com');
+        $user = (new User())
+            ->setFirstname('firstname')
+            ->setSurname('surname')
+            ->setEmail('firstname.surname@test.com');
+
+        $securityUser = new SecurityUser($user);
 
         // Create pure Request
         $request = new Request();
@@ -43,18 +45,13 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $requestStack = new RequestStack();
         $requestStack->push($request);
 
-        /**
-         * @var MockObject|RolesService $roles
-         */
-        $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
-
         // Create JWTCreatedEvent
-        $event = new JWTCreatedEvent($payload, $user);
+        $event = new JWTCreatedEvent($payload, $securityUser);
 
-        $subscriber = new JWTCreatedSubscriber($roles, $requestStack);
+        $subscriber = new JWTCreatedSubscriber($requestStack);
         $subscriber->onJWTCreated($event);
 
-        $keys = ['exp', 'checksum', 'id', 'firstname', 'surname', 'email', 'roles'];
+        $keys = ['exp', 'checksum'];
 
         foreach ($keys as $key) {
             static::assertArrayHasKey($key, $event->getData());
@@ -69,29 +66,29 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $payload = [];
 
         // Create new user for JWT
-        $user = new User();
-        $user->setFirstname('firstname');
-        $user->setSurname('surname');
-        $user->setEmail('firstname.surname@test.com');
+        $user = (new User())
+            ->setFirstname('firstname')
+            ->setSurname('surname')
+            ->setEmail('firstname.surname@test.com');
+
+        $securityUser = new SecurityUser($user);
 
         // Create RequestStack and push pure Request to it
         $requestStack = new RequestStack();
 
         /**
-         * @var MockObject|RolesService    $roles
          * @var MockObject|LoggerInterface $logger
          */
-        $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create JWTCreatedEvent
-        $event = new JWTCreatedEvent($payload, $user);
+        $event = new JWTCreatedEvent($payload, $securityUser);
 
-        $subscriber = new JWTCreatedSubscriber($roles, $requestStack);
+        $subscriber = new JWTCreatedSubscriber($requestStack);
         $subscriber->setLogger($logger);
         $subscriber->onJWTCreated($event);
 
-        $keys = ['exp', 'id', 'firstname', 'surname', 'email', 'roles'];
+        $keys = ['exp'];
 
         foreach ($keys as $key) {
             static::assertArrayHasKey($key, $event->getData());
@@ -108,19 +105,19 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         $payload = [];
 
         // Create new user for JWT
-        $user = new User();
-        $user->setFirstname('firstname');
-        $user->setSurname('surname');
-        $user->setEmail('firstname.surname@test.com');
+        $user = (new User())
+            ->setFirstname('firstname')
+            ->setSurname('surname')
+            ->setEmail('firstname.surname@test.com');
+
+        $securityUser = new SecurityUser($user);
 
         // Create RequestStack and push pure Request to it
         $requestStack = new RequestStack();
 
         /**
-         * @var MockObject|RolesService    $roles
          * @var MockObject|LoggerInterface $logger
          */
-        $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $logger
@@ -129,9 +126,9 @@ class JWTCreatedSubscriberTest extends KernelTestCase
             ->with('Request not available');
 
         // Create JWTCreatedEvent
-        $event = new JWTCreatedEvent($payload, $user);
+        $event = new JWTCreatedEvent($payload, $securityUser);
 
-        $subscriber = new JWTCreatedSubscriber($roles, $requestStack);
+        $subscriber = new JWTCreatedSubscriber($requestStack);
         $subscriber->setLogger($logger);
         $subscriber->onJWTCreated($event);
 

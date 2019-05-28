@@ -8,10 +8,10 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Resource;
 
 use App\Entity\LogLoginFailure;
+use App\Entity\User;
 use App\Repository\LogLoginFailureRepository;
 use App\Resource\LogLoginFailureResource;
 use PHPUnit\Framework\MockObject\MockObject;
-use Symfony\Component\Security\Core\User\User;
 
 /**
  * Class LogLoginFailureResourceTest
@@ -30,7 +30,7 @@ class LogLoginFailureResourceTest extends ResourceTestCase
         /** @var MockObject|LogLoginFailureRepository $repository */
         $repository = $this->getMockBuilder($this->repositoryClass)->disableOriginalConstructor()->getMock();
 
-        $user = new User('username', 'password');
+        $user = (new User())->setUsername('username');
 
         $repository
             ->expects(static::once())

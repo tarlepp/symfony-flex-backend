@@ -99,13 +99,13 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create subscriber and call actual process method
-        $subscriber = new JWTDecodedSubscriber($requestStack);
-        $subscriber->setLogger($logger);
-        $subscriber->onJWTDecoded($event);
+        (new JWTDecodedSubscriber($requestStack))
+            ->setLogger($logger)
+            ->onJWTDecoded($event);
 
         static::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
 
-        unset($subscriber, $logger, $event, $requestStack);
+        unset($logger, $event, $requestStack);
     }
 
     public function testThatEventIsNotTouchedIfItHasAlreadyBeenMarkedInvalid(): void
@@ -123,12 +123,11 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $expectedEvent = clone $event;
 
         // Create subscriber and call actual process method
-        $subscriber = new JWTDecodedSubscriber($requestStack);
-        $subscriber->onJWTDecoded($event);
+        (new JWTDecodedSubscriber($requestStack))->onJWTDecoded($event);
 
         static::assertSame($expectedEvent->getPayload(), $event->getPayload());
         static::assertFalse($event->isValid());
 
-        unset($subscriber, $expectedEvent, $event, $requestStack);
+        unset($expectedEvent, $event, $requestStack);
     }
 }

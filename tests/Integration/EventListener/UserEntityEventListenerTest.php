@@ -9,6 +9,7 @@ namespace App\Tests\Integration\EventListener;
 
 use App\Entity\User;
 use App\EventListener\UserEntityEventListener;
+use App\Security\SecurityUser;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
@@ -106,7 +107,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         static::assertNotSame($oldPassword, $this->entity->getPassword(), 'Password was not changed by the listener.');
 
         static::assertTrue(
-            $this->encoder->isPasswordValid($this->entity, 'test_test'),
+            $this->encoder->isPasswordValid(new SecurityUser($this->entity), 'test_test'),
             'Changed password is not valid.'
         );
     }
@@ -116,7 +117,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         $encoder = $this->encoder;
 
         $callable = function ($password) use ($encoder) {
-            return $encoder->encodePassword($this->entity, $password);
+            return $encoder->encodePassword(new SecurityUser($this->entity), $password);
         };
 
         // Create encrypted password manually for user
@@ -142,7 +143,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         static::assertNotSame($oldPassword, $this->entity->getPassword(), 'Password was not changed by the listener.');
 
         static::assertTrue(
-            $this->encoder->isPasswordValid($this->entity, 'test_test_test'),
+            $this->encoder->isPasswordValid(new SecurityUser($this->entity), 'test_test_test'),
             'Changed password is not valid.'
         );
     }
