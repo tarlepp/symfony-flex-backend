@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Throwable;
 
 /**
  * Class UserGroupController
@@ -129,8 +130,6 @@ class UserGroupController extends Controller
      *
      * @return Response
      *
-     * @throws \UnexpectedValueException
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
     public function getUserGroupUsersAction(
         Request $request,
@@ -235,8 +234,7 @@ class UserGroupController extends Controller
      *
      * @return JsonResponse
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     public function attachUserAction(
         UserGroup $userGroup,
@@ -244,6 +242,11 @@ class UserGroupController extends Controller
         SerializerInterface $serializer
     ): JsonResponse {
         $status = $userGroup->getUsers()->contains($user) ? 200 : 201;
+
+        /*
+        dump($userGroup);
+        dd($user);
+        */
 
         $this->getResource()->save($userGroup->addUser($user));
 
@@ -330,8 +333,7 @@ class UserGroupController extends Controller
      *
      * @return JsonResponse
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     public function detachUserAction(
         UserGroup $userGroup,
