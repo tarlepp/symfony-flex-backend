@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Entity\User;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class SecurityUser
@@ -17,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @package App\Security
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class SecurityUser implements UserInterface
+class SecurityUser implements SecurityUserInterface
 {
     /**
      * @var string|null
@@ -43,6 +42,14 @@ class SecurityUser implements UserInterface
     {
         $this->username = $user->getId();
         $this->password = $user->getPassword();
+    }
+
+    /**
+     * @return string
+     */
+    public function getUuid(): string
+    {
+        return $this->username;
     }
 
     /**
