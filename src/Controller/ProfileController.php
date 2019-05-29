@@ -16,7 +16,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use function array_merge;
 
@@ -134,13 +133,14 @@ class ProfileController
      *  )
      * @SWG\Tag(name="Profile")
      *
-     * @param UserInterface $user
+     * @param RolesService $rolesService
+     * @param User         $user
      *
      * @return JsonResponse
      */
-    public function rolesAction(UserInterface $user): JsonResponse
+    public function rolesAction(RolesService $rolesService, User $user): JsonResponse
     {
-        return new JsonResponse($user->getRoles());
+        return new JsonResponse($rolesService->getInheritedRoles($user->getRoles()));
     }
 
     /**

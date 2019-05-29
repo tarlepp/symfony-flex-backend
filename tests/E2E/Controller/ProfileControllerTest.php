@@ -10,13 +10,11 @@ namespace App\Tests\E2E\Controller;
 use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
+use Generator;
 use stdClass;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_map;
-use function array_merge;
-use function array_unique;
-use function sort;
 use function str_pad;
 
 /**
@@ -130,15 +128,22 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
-        static::assertObjectHasAttribute('username', $responseContent);
-        static::assertObjectHasAttribute('apiKey', $responseContent);
-        static::assertObjectHasAttribute('roles', $responseContent);
-        static::assertSame($token, $responseContent->username);
+        $info = "\nResponse:\n" . $response;
+
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame(
+            'JWT Token not found',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
 
         unset($responseContent, $response, $client);
     }
@@ -237,9 +242,8 @@ class ProfileControllerTest extends WebTestCase
      * @dataProvider dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey
      *
      * @param string $token
-     * @param array  $expected
      */
-    public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token, array $expected): void
+    public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token): void
     {
         $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl . '/roles');
@@ -249,18 +253,24 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        $actual = JSON::decode($response->getContent(), true);
+        $responseContent = JSON::decode($response->getContent());
 
-        sort($expected);
-        sort($actual);
+        $info = "\nResponse:\n" . $response;
 
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame($expected, $actual, $response->getContent());
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
 
-        unset($actual, $response, $client);
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame(
+            'JWT Token not found',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
+
+        unset($responseContent, $response, $client);
     }
 
     /**
@@ -367,9 +377,8 @@ class ProfileControllerTest extends WebTestCase
      * @dataProvider dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey
      *
      * @param string $token
-     * @param array  $expected
      */
-    public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token, array $expected): void
+    public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token): void
     {
         $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl . '/groups');
@@ -379,132 +388,116 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
-        if (empty($expected)) {
-            static::assertEmpty($responseContent);
-        } else {
-            $iterator = static function (stdClass $userGroup): string {
-                return $userGroup->role->id;
-            };
+        $info = "\nResponse:\n" . $response;
 
-            static::assertSame($expected, array_map($iterator, $responseContent));
-        }
+        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+
+        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        static::assertSame(
+            'JWT Token not found',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
 
         unset($responseContent, $response, $client);
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): array
+    public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
     {
-        return [
-            ['john',                     'password'],
-            ['john.doe@test.com',        'password'],
-            ['john-logged',              'password-logged'],
-            ['john.doe-logged@test.com', 'password-logged'],
-            ['john-user',                'password-user'],
-            ['john.doe-user@test.com',   'password-user'],
-            ['john-admin',               'password-admin'],
-            ['john.doe-admin@test.com',  'password-admin'],
-            ['john-root',                'password-root'],
-            ['john.doe-root@test.com',   'password-root'],
-        ];
+        yield ['john',                     'password'];
+        yield ['john.doe@test.com',        'password'];
+        yield ['john-logged',              'password-logged'];
+        yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john-user',                'password-user'];
+        yield ['john.doe-user@test.com',   'password-user'];
+        yield ['john-admin',               'password-admin'];
+        yield ['john.doe-admin@test.com',  'password-admin'];
+        yield ['john-root',                'password-root'];
+        yield ['john.doe-root@test.com',   'password-root'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatProfileActionReturnsExpected(): array
+    public function dataProviderTestThatProfileActionReturnsExpected(): Generator
     {
         static::bootKernel();
 
         $rolesService = static::$container->get(RolesService::class);
 
-        $iterator = static function (string $role) use ($rolesService): array {
-            return [str_pad($rolesService->getShort($role), 40, '_')];
-        };
-
-        return array_map($iterator, $rolesService->getRoles());
+        foreach ($rolesService->getRoles() as $role) {
+            yield [str_pad($rolesService->getShort($role), 40, '_')];
+        }
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatRolesActionReturnsExpected(): array
+    public function dataProviderTestThatRolesActionReturnsExpected(): Generator
     {
-        return [
-            ['john',                     'password',        []],
-            ['john.doe@test.com',        'password',        []],
-            ['john-logged',              'password-logged', ['ROLE_LOGGED']],
-            ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']],
-            ['john-user',                'password-user',   ['ROLE_USER', 'ROLE_LOGGED']],
-            ['john.doe-user@test.com',   'password-user',   ['ROLE_USER', 'ROLE_LOGGED']],
-            ['john-admin',               'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
-            ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
-            ['john-root',                'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
-            ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']],
-        ];
+        yield ['john',                     'password',        []];
+        yield ['john.doe@test.com',        'password',        []];
+        yield ['john-logged',              'password-logged', ['ROLE_LOGGED']];
+        yield ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']];
+        yield ['john-user',                'password-user',   ['ROLE_USER', 'ROLE_LOGGED']];
+        yield ['john.doe-user@test.com',   'password-user',   ['ROLE_USER', 'ROLE_LOGGED']];
+        yield ['john-admin',               'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
+        yield ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
+        yield ['john-root',                'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
+        yield ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): array
+    public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
     {
         static::bootKernel();
 
         $rolesService = static::$container->get(RolesService::class);
 
-        $iterator = static function (string $role) use ($rolesService): array {
-            return [
-                str_pad($rolesService->getShort($role), 40, '_'),
-                array_unique(array_merge([RolesService::ROLE_API], $rolesService->getInheritedRoles([$role]))),
-            ];
-        };
-
-        return array_map($iterator, $rolesService->getRoles());
+        foreach ($rolesService->getRoles() as $role) {
+            yield [str_pad($rolesService->getShort($role), 40, '_')];
+        }
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGroupsActionReturnExpected(): array
+    public function dataProviderTestThatGroupsActionReturnExpected(): Generator
     {
-        return [
-            ['john',                     'password',        []],
-            ['john.doe@test.com',        'password',        []],
-            ['john-logged',              'password-logged', ['ROLE_LOGGED']],
-            ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']],
-            ['john-user',                'password-user',   ['ROLE_USER']],
-            ['john.doe-user@test.com',   'password-user',   ['ROLE_USER']],
-            ['john-admin',               'password-admin',  ['ROLE_ADMIN']],
-            ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN']],
-            ['john-root',                'password-root',   ['ROLE_ROOT']],
-            ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT']],
-        ];
+        yield ['john',                     'password',        []];
+        yield ['john.doe@test.com',        'password',        []];
+        yield ['john-logged',              'password-logged', ['ROLE_LOGGED']];
+        yield ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']];
+        yield ['john-user',                'password-user',   ['ROLE_USER']];
+        yield ['john.doe-user@test.com',   'password-user',   ['ROLE_USER']];
+        yield ['john-admin',               'password-admin',  ['ROLE_ADMIN']];
+        yield ['john.doe-admin@test.com',  'password-admin',  ['ROLE_ADMIN']];
+        yield ['john-root',                'password-root',   ['ROLE_ROOT']];
+        yield ['john.doe-root@test.com',   'password-root',   ['ROLE_ROOT']];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): array
+    public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
     {
         static::bootKernel();
 
         $rolesService = static::$container->get(RolesService::class);
 
-        $iterator = static function (string $role) use ($rolesService): array {
-            return [
-                str_pad($rolesService->getShort($role), 40, '_'),
-                [$role],
-            ];
-        };
-
-        return array_map($iterator, $rolesService->getRoles());
+        foreach ($rolesService->getRoles() as $role) {
+            yield [str_pad($rolesService->getShort($role), 40, '_')];
+        }
     }
 }
