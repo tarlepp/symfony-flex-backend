@@ -11,6 +11,7 @@ use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
+use Generator;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function sprintf;
@@ -247,9 +248,11 @@ class UserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
+     *
+     * @throws Throwable
      */
-    public function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): array
+    public function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): Generator
     {
         static::bootKernel();
 
@@ -257,44 +260,38 @@ class UserGroupControllerTest extends WebTestCase
         $userGroupResource = static::$container->get(UserGroupResource::class);
 
         /** @noinspection NullPointerExceptionInspection */
-        return [
-            [1, $userGroupResource->findOneBy(['name' => 'Root users'])->getId()],
-            [2, $userGroupResource->findOneBy(['name' => 'Admin users'])->getId()],
-            [3, $userGroupResource->findOneBy(['name' => 'Normal users'])->getId()],
-            [1, $userGroupResource->findOneBy(['name' => 'Api users'])->getId()],
-            [5, $userGroupResource->findOneBy(['name' => 'Logged in users'])->getId()],
-        ];
+        yield [1, $userGroupResource->findOneBy(['name' => 'Root users'])->getId()];
+        yield [2, $userGroupResource->findOneBy(['name' => 'Admin users'])->getId()];
+        yield [3, $userGroupResource->findOneBy(['name' => 'Normal users'])->getId()];
+        yield [1, $userGroupResource->findOneBy(['name' => 'Api users'])->getId()];
+        yield [5, $userGroupResource->findOneBy(['name' => 'Logged in users'])->getId()];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): array
+    public function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): Generator
     {
-        return [
-            ['john',        'password'],
-            ['john-api',    'password-api'],
-            ['john-logged', 'password-logged'],
-            ['john-user',   'password-user'],
-            ['john-admin',  'password-admin'],
-        ];
+        yield ['john',        'password'];
+        yield ['john-api',    'password-api'];
+        yield ['john-logged', 'password-logged'];
+        yield ['john-user',   'password-user'];
+        yield ['john-admin',  'password-admin'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatAttachUserActionWorksAsExpected(): array
+    public function dataProviderTestThatAttachUserActionWorksAsExpected(): Generator
     {
-        return [
-            [201],
-            [200],
-        ];
+        yield [201];
+        yield [200];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatDetachUserActionReturns403ForInvalidUser(): array
+    public function dataProviderTestThatDetachUserActionReturns403ForInvalidUser(): Generator
     {
         return $this->dataProviderTestThatAttachUserActionReturns403ForInvalidUser();
     }
