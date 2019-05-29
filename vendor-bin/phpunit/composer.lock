@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e55186d961927ac42332d98110dadb6",
+    "content-hash": "7372ba22c8fa42ed88e2e8eefda5e81e",
     "packages": [],
     "packages-dev": [
         {
@@ -2266,7 +2266,7 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v4.2.8",
+            "version": "v4.2.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
