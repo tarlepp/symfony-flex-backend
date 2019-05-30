@@ -1,10 +1,6 @@
 security:
     # http://symfony.com/doc/current/cookbook/security/named_encoders.html
     encoders:
-        Symfony\Component\Security\Core\User\User:
-            algorithm: argon2i
-        App\Entity\User:
-            algorithm: argon2i
         App\Security\SecurityUser:
             algorithm: argon2i
 
@@ -12,14 +8,11 @@ security:
     providers:
         chain_provider:
             chain:
-                providers: [user_provider, api_key_user_provider, security_user_provider]
+                providers: [security_user_provider, api_key_user_provider]
         security_user_provider:
-            id: App\Security\SecurityUserFactory
+            id: App\Security\Provider\SecurityUserFactory
         api_key_user_provider:
-            id: App\Security\ApiKeyUserProvider
-        user_provider:
-            entity:
-                class: App\Entity\User
+            id: App\Security\Provider\ApiKeyUserProvider
 
     # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
     firewalls:
@@ -31,7 +24,7 @@ security:
             stateless: true
             anonymous: true
             json_login:
-                provider: user_provider
+                provider: security_user_provider
                 check_path: /auth/getToken
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
@@ -47,7 +40,7 @@ security:
                 provider: chain_provider
                 authenticator: App\Security\ApiKeyAuthenticator
             guard:
-                provider: user_provider
+                provider: security_user_provider
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
 
