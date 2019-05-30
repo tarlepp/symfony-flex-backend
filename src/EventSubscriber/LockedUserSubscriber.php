@@ -16,16 +16,14 @@ use App\Security\ApiKeyUser;
 use App\Security\SecurityUser;
 use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
-use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTAuthenticatedEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\Event as LexikBaseEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\AuthenticationEvents;
-use Symfony\Component\Security\Core\Event\AuthenticationEvent;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 use Throwable;
-use function count;
 use function is_string;
 
 /**
@@ -84,9 +82,8 @@ class LockedUserSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
+            Events::AUTHENTICATION_SUCCESS => 'onAuthenticationSuccess',
             Events::AUTHENTICATION_FAILURE => 'onAuthenticationFailure',
-            Events::JWT_AUTHENTICATED => 'onJWTAuthenticated',
-            AuthenticationEvents::AUTHENTICATION_SUCCESS => 'onAuthenticationSuccess',
         ];
     }
 
@@ -116,44 +113,26 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Method to check if current user account is in locked state or not.
-     *
-     * This method is called when '\Lexik\Bundle\JWTAuthenticationBundle\Events::JWTAuthenticatedEvent' event is
-     * broadcast.
-     *
-     * @psalm-suppress MissingDependency
-     *
-     * @param JWTAuthenticatedEvent $event
-     *
-     * @throws ORMException
-     * @throws Throwable
-     */
-    public function onJWTAuthenticated(JWTAuthenticatedEvent $event): void
-    {
-        $user = $this->getUser($event->getToken()->getUser());
-
-        if ($user instanceof User) {
-            $this->checkLockedAccount($user, $event);
-        }
-    }
-
-    /**
      * Method to reset login failures for current user.
      *
      * This method is called when '\Symfony\Component\Security\Core\Event\AuthenticationEvent::AUTHENTICATION_SUCCESS'
      * event is broadcast.
      *
-     * @param AuthenticationEvent $event
+     * @psalm-suppress MissingDependency
+     *
+     * @param Event $event
      *
      * @throws ORMException
      * @throws Throwable
      */
-    public function onAuthenticationSuccess(AuthenticationEvent $event): void
+    public function onAuthenticationSuccess(Event $event): void
     {
-        $user = $this->getUser($event->getAuthenticationToken()->getUser());
+        if ($event instanceof AuthenticationSuccessEvent) {
+            $user = $this->getUser($event->getUser());
 
-        if ($user instanceof User) {
-            $this->checkLockedAccount($user, $event);
+            if ($user instanceof User) {
+                $this->checkLockedAccount($user, $event);
+            }
         }
     }
 
@@ -161,38 +140,20 @@ class LockedUserSubscriber implements EventSubscriberInterface
      * @psalm-suppress MissingDependency
      * @psalm-suppress MismatchingDocblockParamType
      *
-     * @param User $user
-     * @param Event|JWTAuthenticatedEvent|AuthenticationFailureEvent|AuthenticationEvent $event
+     * @param User                                                                 $user
+     * @param LexikBaseEvent|AuthenticationFailureEvent|AuthenticationSuccessEvent $event
      *
      * @throws Throwable
      */
-    private function checkLockedAccount(User $user, Event $event): void
+    private function checkLockedAccount(User $user, LexikBaseEvent $event): void
     {
         switch (true) {
-            case $event instanceof JWTAuthenticatedEvent:
-                $this->onJWTAuthenticatedEvent($user, $event);
-                break;
             case $event instanceof AuthenticationFailureEvent:
                 $this->onAuthenticationFailureEvent($user);
                 break;
-            case $event instanceof AuthenticationEvent:
-                $this->onAuthenticationEvent($user);
+            case $event instanceof AuthenticationSuccessEvent:
+                $this->onAuthenticationSuccessEvent($user);
                 break;
-        }
-    }
-
-    /**
-     * @psalm-suppress MissingDependency
-     *
-     * @param User                  $user
-     * @param JWTAuthenticatedEvent $event
-     */
-    private function onJWTAuthenticatedEvent(User $user, JWTAuthenticatedEvent $event): void
-    {
-        if (count($user->getLogsLoginFailure()) > 10) {
-            $event->getToken()->setAuthenticated(false);
-
-            $this->reset = false;
         }
     }
 
@@ -209,7 +170,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
     /**
      * @param User $user
      */
-    private function onAuthenticationEvent(User $user): void
+    private function onAuthenticationSuccessEvent(User $user): void
     {
         if ($this->reset === true) {
             $this->logLoginFailureResource->reset($user);
