@@ -13,7 +13,6 @@ use App\Entity\Traits\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\Role\Role as BaseRole;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -30,7 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class Role extends BaseRole implements EntityInterface
+class Role implements EntityInterface
 {
     // Traits
     use Blameable;
@@ -89,11 +88,11 @@ class Role extends BaseRole implements EntityInterface
     /**
      * Constructor.
      *
-     * @param string $role The role name
+     * @param string|null $role The role name
      */
-    public function __construct(string $role = '')
+    public function __construct(?string $role = null)
     {
-        parent::__construct($role);
+        $role = $role ?? '';
 
         $this->id = $role;
         $this->userGroups = new ArrayCollection();
