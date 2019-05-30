@@ -19,7 +19,6 @@ use App\Rest\Controller;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
 use App\Security\RolesService;
-use LogicException;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -29,8 +28,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
@@ -101,27 +98,16 @@ class UserController extends Controller
      *
      * @RestApiDoc()
      *
-     * @param Request               $request
-     * @param User                  $requestUser
-     * @param TokenStorageInterface $tokenStorage
+     * @param Request $request
+     * @param User    $requestUser
+     * @param User    $currentUser
      *
      * @return Response
      *
-     * @throws LogicException
      * @throws Throwable
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
-    public function deleteAction(Request $request, User $requestUser, TokenStorageInterface $tokenStorage): Response
+    public function deleteAction(Request $request, User $requestUser, User $currentUser): Response
     {
-        /** @var TokenInterface $tokenInterface */
-        $tokenInterface = $tokenStorage->getToken();
-
-        /** @var User $currentUser */
-        /** @noinspection NullPointerExceptionInspection */
-        /** @psalm-suppress PossiblyNullReference */
-        $currentUser = $tokenInterface->getUser();
-
         if ($currentUser === $requestUser) {
             throw new HttpException(400, 'You cannot remove yourself...');
         }
@@ -382,8 +368,7 @@ class UserController extends Controller
      *
      * @return JsonResponse
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     public function attachUserGroupAction(
         User $user,
@@ -490,8 +475,7 @@ class UserController extends Controller
      *
      * @return JsonResponse
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     public function detachUserGroupAction(
         User $user,
