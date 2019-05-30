@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Utils\Tests;
 
 use Exception;
+use Generator;
 use Ramsey\Uuid\Uuid;
 use function array_merge;
 
@@ -33,14 +34,14 @@ abstract class RestTraitTestCase extends WebTestCase
     protected static $route;
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    abstract public function getValidUsers(): array;
+    abstract public function getValidUsers(): Generator;
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    abstract public function getInvalidUsers(): array;
+    abstract public function getInvalidUsers(): Generator;
 
     /** @noinspection PhpUndefinedNamespaceInspection */
     /**
@@ -350,29 +351,27 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods(): array
+    public function dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
             ['POST'],
-            /*
             ['HEAD'],
             ['PUT'],
             ['DELETE'],
             ['OPTIONS'],
             ['CONNECT'],
             ['foobar'],
-            */
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
     }
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function dataProviderTestThatCountRouteWorksWithAllowedHttpMethods(): array
+    public function dataProviderTestThatCountRouteWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
             ['GET'],
@@ -382,9 +381,9 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function dataProviderTestThatCountRouteDoesNotAllowInvalidUser(): array
+    public function dataProviderTestThatCountRouteDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
             ['GET'],
@@ -394,117 +393,111 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods(): array
+    public function dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
-            ['PUT'],
-            /*
-            ['DELETE'],
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['foobar'],
-            */
-        ];
-
-        return $this->createDataForTest($this->getValidUsers(), $methods);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function dataProviderTestThatRootRouteWorksWithAllowedHttpMethods(): array
-    {
-        $methods = [
-            ['GET'],
-            ['POST'],
-        ];
-
-        return $this->createDataForTest($this->getValidUsers(), $methods);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function dataProviderTestThatRootRouteDoesNotAllowInvalidUser(): array
-    {
-        $methods = [
-            ['GET'],
-            ['POST'],
-        ];
-
-        return $this->createDataForTest($this->getInvalidUsers(), $methods);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(): array
-    {
-        $methods = [
-            ['POST'],
-            /*
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['foobar'],
-            */
-        ];
-
-        return $this->createDataForTest($this->getValidUsers(), $methods);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods(): array
-    {
-        $methods = [
-            ['DELETE'],
-            ['GET'],
-            ['PUT'],
-        ];
-
-        return $this->createDataForTest($this->getValidUsers(), $methods);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser(): array
-    {
-        $methods = [
-            ['DELETE'],
-            ['GET'],
-            ['PUT'],
-        ];
-
-        return $this->createDataForTest($this->getInvalidUsers(), $methods);
-    }
-
-    /**
-     * @return mixed[]
-     */
-    public function dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods(): array
-    {
-        $methods = [
-            ['POST'],
-            /*
             ['PUT'],
             ['DELETE'],
             ['OPTIONS'],
             ['CONNECT'],
             ['foobar'],
-            */
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
     }
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods(): array
+    public function dataProviderTestThatRootRouteWorksWithAllowedHttpMethods(): Generator
+    {
+        $methods = [
+            ['GET'],
+            ['POST'],
+        ];
+
+        return $this->createDataForTest($this->getValidUsers(), $methods);
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatRootRouteDoesNotAllowInvalidUser(): Generator
+    {
+        $methods = [
+            ['GET'],
+            ['POST'],
+        ];
+
+        return $this->createDataForTest($this->getInvalidUsers(), $methods);
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(): Generator
+    {
+        $methods = [
+            ['POST'],
+            ['OPTIONS'],
+            ['CONNECT'],
+            ['foobar'],
+        ];
+
+        return $this->createDataForTest($this->getValidUsers(), $methods);
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods(): Generator
+    {
+        $methods = [
+            ['DELETE'],
+            ['GET'],
+            ['PUT'],
+        ];
+
+        return $this->createDataForTest($this->getValidUsers(), $methods);
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser(): Generator
+    {
+        $methods = [
+            ['DELETE'],
+            ['GET'],
+            ['PUT'],
+        ];
+
+        return $this->createDataForTest($this->getInvalidUsers(), $methods);
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods(): Generator
+    {
+        $methods = [
+            ['POST'],
+            ['PUT'],
+            ['DELETE'],
+            ['OPTIONS'],
+            ['CONNECT'],
+            ['foobar'],
+        ];
+
+        return $this->createDataForTest($this->getValidUsers(), $methods);
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
             ['GET'],
@@ -514,9 +507,9 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function dataProviderTestThatIdsRouteDoesNotAllowInvalidUser(): array
+    public function dataProviderTestThatIdsRouteDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
             ['GET'],
@@ -526,21 +519,17 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @param mixed[] $users
+     * @param Generator $users
      * @param mixed[] $methods
      *
-     * @return mixed[]
+     * @return Generator
      */
-    private function createDataForTest(array $users, array $methods): array
+    private function createDataForTest(Generator $users, array $methods): Generator
     {
-        $output = [];
-
         foreach ($users as $userData) {
             foreach ($methods as $method) {
-                $output[] = array_merge($userData, $method);
+                yield array_merge($userData, $method);
             }
         }
-
-        return $output;
     }
 }
