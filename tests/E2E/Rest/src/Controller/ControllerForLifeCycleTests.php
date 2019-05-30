@@ -9,10 +9,8 @@ namespace App\Tests\E2E\Rest\src\Controller;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
-use App\Rest\ResponseHandler;
 use App\Rest\Traits\Methods;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
-use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,12 +37,10 @@ class ControllerForLifeCycleTests extends Controller
      * ControllerForLifeCycleTests constructor.
      *
      * @param ResourceForLifeCycleTests $resource
-     * @param ResponseHandler           $responseHandler
      */
-    public function __construct(ResourceForLifeCycleTests $resource, ResponseHandler $responseHandler)
+    public function __construct(ResourceForLifeCycleTests $resource)
     {
         $this->resource = $resource;
-        $this->responseHandler = $responseHandler;
     }
 
     /**
@@ -61,10 +57,7 @@ class ControllerForLifeCycleTests extends Controller
      *
      * @return Response
      *
-     * @throws LogicException
      * @throws Throwable
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function findOneAction(Request $request, string $role): Response
     {

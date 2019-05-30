@@ -13,7 +13,7 @@ use App\Entity\Role as Entity;
 use App\Repository\RoleRepository as Repository;
 use App\Rest\RestResource;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Throwable;
 
 /** @noinspection PhpHierarchyChecksInspection */
 /** @noinspection PhpMissingParentCallCommonInspection */
@@ -41,13 +41,11 @@ class ResourceForLifeCycleTests extends RestResource
     /**
      * Class constructor.
      *
-     * @param Repository         $repository
-     * @param ValidatorInterface $validator
+     * @param Repository $repository
      */
-    public function __construct(Repository $repository, ValidatorInterface $validator)
+    public function __construct(Repository $repository)
     {
         $this->setRepository($repository);
-        $this->setValidator($validator);
     }
 
     /**
@@ -62,10 +60,12 @@ class ResourceForLifeCycleTests extends RestResource
      * @param string                      $id
      * @param null|EntityInterface|Entity $entity
      *
-     * @throws \Exception
+     * @throws Throwable
      */
     public function afterFindOne(string &$id, EntityInterface $entity = null): void
     {
+        parent::afterFindOne($id, $entity);
+
         if ($entity instanceof Entity) {
             $entity->setDescription('some description');
         }

@@ -43,7 +43,7 @@ class ResourceLifeCycleTest extends WebTestCase
         $response = $client->getResponse();
 
         /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(418, $response->getStatusCode());
+        static::assertSame(418, $response->getStatusCode(), $response->getContent());
 
         $entity = $this->repository->findOneBy(['id' => $role]);
 
