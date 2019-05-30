@@ -5,6 +5,7 @@ declare(strict_types = 1);
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
 namespace App\Tests\Integration\Helpers;
 
 use App\Tests\Integration\Helpers\src\LoggerAwareService;

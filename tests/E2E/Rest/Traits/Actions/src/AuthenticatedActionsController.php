@@ -5,6 +5,7 @@ declare(strict_types = 1);
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
 namespace App\Tests\E2E\Rest\Traits\Actions\src;
 
 use App\Annotation\RestApiDoc;

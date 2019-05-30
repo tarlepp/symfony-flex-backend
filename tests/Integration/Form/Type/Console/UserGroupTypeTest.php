@@ -5,6 +5,7 @@ declare(strict_types = 1);
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
 namespace App\Tests\Integration\Form\Type\Console;
 
 use App\DTO\UserGroup as UserGroupDto;
