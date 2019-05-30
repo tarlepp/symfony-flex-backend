@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Rest\Traits\Actions;
 
 use App\Utils\Tests\RestTraitTestCase;
+use Generator;
 
 /**
  * Class AdminActionsTest
@@ -23,26 +24,22 @@ class AdminActionsTest extends RestTraitTestCase
     protected static $route = '/test_admin_actions';
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function getValidUsers(): array
+    public function getValidUsers(): Generator
     {
-        return [
-            ['john-root',   'password-root'],
-            ['john-admin',  'password-admin'],
-        ];
+        yield ['john-root',   'password-root'];
+        yield ['john-admin',  'password-admin'];
     }
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function getInvalidUsers(): array
+    public function getInvalidUsers(): Generator
     {
-        return [
-            [null,          null],
-            ['john',        'password'],
-            ['john-logged', 'password-logged'],
-            ['john-user',   'password-user'],
-        ];
+        yield [null,          null];
+        yield ['john',        'password'];
+        yield ['john-logged', 'password-logged'];
+        yield ['john-user',   'password-user'];
     }
 }

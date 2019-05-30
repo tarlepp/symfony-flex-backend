@@ -8,6 +8,7 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Rest\Traits\Actions;
 
 use App\Utils\Tests\RestTraitTestCase;
+use Generator;
 
 /**
  * Class AnonActionsTest
@@ -23,25 +24,23 @@ class AnonActionsTest extends RestTraitTestCase
     protected static $route = '/test_anon_actions';
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function getValidUsers(): array
+    public function getValidUsers(): Generator
     {
-        return [
-            ['john-root',   'password-root'],
-            ['john-admin',  'password-admin'],
-            ['john-user',   'password-user'],
-            ['john-logged', 'password-logged'],
-            ['john',        'password'],
-            [null,          null],
-        ];
+        yield ['john-root',   'password-root'];
+        yield ['john-admin',  'password-admin'];
+        yield ['john-user',   'password-user'];
+        yield ['john-logged', 'password-logged'];
+        yield ['john',        'password'];
+        yield [null,          null];
     }
 
     /**
-     * @return mixed[]
+     * @return Generator
      */
-    public function getInvalidUsers(): array
+    public function getInvalidUsers(): Generator
     {
-        return [];
+        yield from [];
     }
 }
