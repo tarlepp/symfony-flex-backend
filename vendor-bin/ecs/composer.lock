@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06887d357020e0ccd445e461010e8309",
+    "content-hash": "de2c17ea8a972c219d0a27f6d8e3d864",
     "packages": [],
     "packages-dev": [
         {
@@ -182,73 +182,6 @@
             "time": "2019-03-25T19:12:02+00:00"
         },
         {
-            "name": "doctrine/inflector",
-            "version": "v1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/inflector.git",
-                "reference": "5527a48b7313d15261292c149e55e26eae771b0a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/inflector/zipball/5527a48b7313d15261292c149e55e26eae771b0a",
-                "reference": "5527a48b7313d15261292c149e55e26eae771b0a",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.2"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Doctrine\\Common\\Inflector\\": "lib/Doctrine/Common/Inflector"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Roman Borschel",
-                    "email": "roman@code-factory.org"
-                },
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Guilherme Blanco",
-                    "email": "guilhermeblanco@gmail.com"
-                },
-                {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com"
-                },
-                {
-                    "name": "Johannes Schmitt",
-                    "email": "schmittjoh@gmail.com"
-                }
-            ],
-            "description": "Common String Manipulations with regard to casing and singular/plural rules.",
-            "homepage": "http://www.doctrine-project.org",
-            "keywords": [
-                "inflection",
-                "pluralize",
-                "singularize",
-                "string"
-            ],
-            "time": "2018-01-09T20:05:19+00:00"
-        },
-        {
             "name": "doctrine/lexer",
             "version": "v1.0.1",
             "source": {
@@ -396,111 +329,6 @@
             "time": "2019-05-06T07:13:51+00:00"
         },
         {
-            "name": "illuminate/contracts",
-            "version": "v5.8.19",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/illuminate/contracts.git",
-                "reference": "8e2466437516edaa30201a8b5d4eaa56fa99eacd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/8e2466437516edaa30201a8b5d4eaa56fa99eacd",
-                "reference": "8e2466437516edaa30201a8b5d4eaa56fa99eacd",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3",
-                "psr/container": "^1.0",
-                "psr/simple-cache": "^1.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.8-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Illuminate\\Contracts\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
-                }
-            ],
-            "description": "The Illuminate Contracts package.",
-            "homepage": "https://laravel.com",
-            "time": "2019-05-15T00:29:13+00:00"
-        },
-        {
-            "name": "illuminate/support",
-            "version": "v5.8.19",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/illuminate/support.git",
-                "reference": "5283f273d0bc67964cc7f6373573273de7676c77"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/5283f273d0bc67964cc7f6373573273de7676c77",
-                "reference": "5283f273d0bc67964cc7f6373573273de7676c77",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/inflector": "^1.1",
-                "ext-json": "*",
-                "ext-mbstring": "*",
-                "illuminate/contracts": "5.8.*",
-                "nesbot/carbon": "^1.26.3 || ^2.0",
-                "php": "^7.1.3"
-            },
-            "conflict": {
-                "tightenco/collect": "<5.5.33"
-            },
-            "suggest": {
-                "illuminate/filesystem": "Required to use the composer class (5.8.*).",
-                "moontoast/math": "Required to use ordered UUIDs (^1.1).",
-                "ramsey/uuid": "Required to use Str::uuid() (^3.7).",
-                "symfony/process": "Required to use the composer class (^4.2).",
-                "symfony/var-dumper": "Required to use the dd function (^4.2).",
-                "vlucas/phpdotenv": "Required to use the env helper (^3.3)."
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.8-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Illuminate\\Support\\": ""
-                },
-                "files": [
-                    "helpers.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylor@laravel.com"
-                }
-            ],
-            "description": "The Illuminate Support package.",
-            "homepage": "https://laravel.com",
-            "time": "2019-05-27T17:33:34+00:00"
-        },
-        {
             "name": "jean85/pretty-package-versions",
             "version": "1.2",
             "source": {
@@ -550,66 +378,6 @@
                 "versions"
             ],
             "time": "2018-06-13T13:22:40+00:00"
-        },
-        {
-            "name": "nesbot/carbon",
-            "version": "2.18.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "8322b7bd1805be31867c13bf3cdaab948a0dd406"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/8322b7bd1805be31867c13bf3cdaab948a0dd406",
-                "reference": "8322b7bd1805be31867c13bf3cdaab948a0dd406",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": "^7.1.8 || ^8.0",
-                "symfony/translation": "^3.4 || ^4.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.14 || ^3.0",
-                "kylekatarnls/multi-tester": "^1.1",
-                "phpmd/phpmd": "^2.6",
-                "phpstan/phpstan": "^0.11",
-                "phpunit/phpunit": "^7.5 || ^8.0",
-                "squizlabs/php_codesniffer": "^3.4"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Carbon\\Laravel\\ServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Carbon\\": "src/Carbon/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Brian Nesbitt",
-                    "email": "brian@nesbot.com",
-                    "homepage": "http://nesbot.com"
-                }
-            ],
-            "description": "A simple API extension for DateTime.",
-            "homepage": "http://carbon.nesbot.com",
-            "keywords": [
-                "date",
-                "datetime",
-                "time"
-            ],
-            "time": "2019-05-16T18:44:35+00:00"
         },
         {
             "name": "nette/finder",
@@ -675,26 +443,23 @@
         },
         {
             "name": "nette/robot-loader",
-            "version": "v3.1.1",
+            "version": "v3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/robot-loader.git",
-                "reference": "3e8d75d6d976e191bdf46752ca40a286671219d2"
+                "reference": "0712a0e39ae7956d6a94c0ab6ad41aa842544b5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/robot-loader/zipball/3e8d75d6d976e191bdf46752ca40a286671219d2",
-                "reference": "3e8d75d6d976e191bdf46752ca40a286671219d2",
+                "url": "https://api.github.com/repos/nette/robot-loader/zipball/0712a0e39ae7956d6a94c0ab6ad41aa842544b5c",
+                "reference": "0712a0e39ae7956d6a94c0ab6ad41aa842544b5c",
                 "shasum": ""
             },
             "require": {
                 "ext-tokenizer": "*",
-                "nette/finder": "^2.3 || ^3.0",
-                "nette/utils": "^2.4 || ^3.0",
-                "php": ">=5.6.0"
-            },
-            "conflict": {
-                "nette/nette": "<2.2"
+                "nette/finder": "^2.5",
+                "nette/utils": "^3.0",
+                "php": ">=7.1"
             },
             "require-dev": {
                 "nette/tester": "^2.0",
@@ -703,7 +468,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.1-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -736,27 +501,24 @@
                 "nette",
                 "trait"
             ],
-            "time": "2019-03-01T20:23:02+00:00"
+            "time": "2019-03-08T21:57:24+00:00"
         },
         {
             "name": "nette/utils",
-            "version": "v2.5.3",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "17b9f76f2abd0c943adfb556e56f2165460b15ce"
+                "reference": "bd961f49b211997202bda1d0fbc410905be370d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/17b9f76f2abd0c943adfb556e56f2165460b15ce",
-                "reference": "17b9f76f2abd0c943adfb556e56f2165460b15ce",
+                "url": "https://api.github.com/repos/nette/utils/zipball/bd961f49b211997202bda1d0fbc410905be370d4",
+                "reference": "bd961f49b211997202bda1d0fbc410905be370d4",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.0"
-            },
-            "conflict": {
-                "nette/nette": "<2.2"
+                "php": ">=7.1"
             },
             "require-dev": {
                 "nette/tester": "~2.0",
@@ -765,7 +527,7 @@
             "suggest": {
                 "ext-gd": "to use Image",
                 "ext-iconv": "to use Strings::webalize() and toAscii()",
-                "ext-intl": "for script transliteration in Strings::webalize() and toAscii()",
+                "ext-intl": "to use Strings::webalize(), toAscii(), normalize() and compare()",
                 "ext-json": "to use Nette\\Utils\\Json",
                 "ext-mbstring": "to use Strings::lower() etc...",
                 "ext-xml": "to use Strings::length() etc. when mbstring is not available"
@@ -773,15 +535,12 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
                 "classmap": [
                     "src/"
-                ],
-                "files": [
-                    "src/loader.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -800,7 +559,7 @@
                     "homepage": "https://nette.org/contributors"
                 }
             ],
-            "description": "? Nette Utils: lightweight utilities for string & array manipulation, image handling, safe JSON encoding/decoding, validation, slug or strong password generating etc.",
+            "description": "🛠 Nette Utils: lightweight utilities for string & array manipulation, image handling, safe JSON encoding/decoding, validation, slug or strong password generating etc.",
             "homepage": "https://nette.org",
             "keywords": [
                 "array",
@@ -818,7 +577,7 @@
                 "utility",
                 "validation"
             ],
-            "time": "2018-09-18T10:22:16+00:00"
+            "time": "2019-03-22T01:00:30+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -1413,53 +1172,6 @@
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
             "time": "2019-05-23T20:42:12+00:00"
-        },
-        {
-            "name": "slam/php-cs-fixer-extensions",
-            "version": "v1.19.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Slamdunk/php-cs-fixer-extensions.git",
-                "reference": "ff457bef86539cb4ed7b7eb44eb85f3edddf53e1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Slamdunk/php-cs-fixer-extensions/zipball/ff457bef86539cb4ed7b7eb44eb85f3edddf53e1",
-                "reference": "ff457bef86539cb4ed7b7eb44eb85f3edddf53e1",
-                "shasum": ""
-            },
-            "require": {
-                "friendsofphp/php-cs-fixer": "^2.15",
-                "php": "^7.2"
-            },
-            "require-dev": {
-                "phpstan/phpstan": "^0.11",
-                "phpstan/phpstan-phpunit": "^0.11",
-                "phpunit/phpunit": "^7.5",
-                "roave/security-advisories": "dev-master",
-                "slam/php-debug-r": "^1.4",
-                "slam/phpstan-extensions": "^3.0",
-                "thecodingmachine/phpstan-strict-rules": "^0.11"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "SlamCsFixer\\": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Filippo Tessarotto",
-                    "email": "zoeslam@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Slam extension of friendsofphp/php-cs-fixer",
-            "time": "2019-05-28T14:18:12+00:00"
         },
         {
             "name": "slevomat/coding-standard",
@@ -2952,139 +2664,6 @@
             "time": "2019-05-27T08:16:38+00:00"
         },
         {
-            "name": "symfony/translation",
-            "version": "v4.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/translation.git",
-                "reference": "f7e90f0f90e354f99f20aa9ead95a1b201b126f9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/f7e90f0f90e354f99f20aa9ead95a1b201b126f9",
-                "reference": "f7e90f0f90e354f99f20aa9ead95a1b201b126f9",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3",
-                "symfony/polyfill-mbstring": "~1.0",
-                "symfony/translation-contracts": "^1.1.2"
-            },
-            "conflict": {
-                "symfony/config": "<3.4",
-                "symfony/dependency-injection": "<3.4",
-                "symfony/yaml": "<3.4"
-            },
-            "provide": {
-                "symfony/translation-implementation": "1.0"
-            },
-            "require-dev": {
-                "psr/log": "~1.0",
-                "symfony/config": "~3.4|~4.0",
-                "symfony/console": "~3.4|~4.0",
-                "symfony/dependency-injection": "~3.4|~4.0",
-                "symfony/finder": "~2.8|~3.0|~4.0",
-                "symfony/http-kernel": "~3.4|~4.0",
-                "symfony/intl": "~3.4|~4.0",
-                "symfony/service-contracts": "^1.1.2",
-                "symfony/var-dumper": "~3.4|~4.0",
-                "symfony/yaml": "~3.4|~4.0"
-            },
-            "suggest": {
-                "psr/log-implementation": "To use logging capability in translator",
-                "symfony/config": "",
-                "symfony/yaml": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Translation\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Translation Component",
-            "homepage": "https://symfony.com",
-            "time": "2019-05-28T09:09:27+00:00"
-        },
-        {
-            "name": "symfony/translation-contracts",
-            "version": "v1.1.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/translation-contracts.git",
-                "reference": "93597ce975d91c52ebfaca1253343cd9ccb7916d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/93597ce975d91c52ebfaca1253343cd9ccb7916d",
-                "reference": "93597ce975d91c52ebfaca1253343cd9ccb7916d",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3"
-            },
-            "suggest": {
-                "symfony/translation-implementation": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Contracts\\Translation\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Generic abstractions related to translation",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "abstractions",
-                "contracts",
-                "decoupling",
-                "interfaces",
-                "interoperability",
-                "standards"
-            ],
-            "time": "2019-05-27T08:16:38+00:00"
-        },
-        {
             "name": "symfony/var-exporter",
             "version": "v4.3.0",
             "source": {
@@ -3204,81 +2783,38 @@
             "time": "2019-04-06T14:04:46+00:00"
         },
         {
-            "name": "symplify/better-phpdoc-parser",
-            "version": "v5.4.16",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Symplify/BetterPhpDocParser.git",
-                "reference": "a730f69c4b19c741f13b4d05116da7bb64e3db26"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/BetterPhpDocParser/zipball/a730f69c4b19c741f13b4d05116da7bb64e3db26",
-                "reference": "a730f69c4b19c741f13b4d05116da7bb64e3db26",
-                "shasum": ""
-            },
-            "require": {
-                "nette/utils": "^2.5",
-                "php": "^7.1",
-                "phpstan/phpdoc-parser": "^0.3.1",
-                "symplify/package-builder": "^5.4.16"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7.5|^8.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.5-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symplify\\BetterPhpDocParser\\": "src",
-                    "Symplify\\BetterPhpDocParser\\Attributes\\": "packages/Attributes/src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Slim wrapper around phpstan/phpdoc-parser with format preserving printer",
-            "time": "2019-03-05T23:15:04+00:00"
-        },
-        {
             "name": "symplify/coding-standard",
-            "version": "v5.4.16",
+            "version": "v6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
-                "reference": "72a3b03f21be6c978a90ad567a29bd9261df0dfa"
+                "reference": "0bed4fb56fdd2af771b5bb2fcc432f35bbb04aea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/72a3b03f21be6c978a90ad567a29bd9261df0dfa",
-                "reference": "72a3b03f21be6c978a90ad567a29bd9261df0dfa",
+                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/0bed4fb56fdd2af771b5bb2fcc432f35bbb04aea",
+                "reference": "0bed4fb56fdd2af771b5bb2fcc432f35bbb04aea",
                 "shasum": ""
             },
             "require": {
-                "friendsofphp/php-cs-fixer": "^2.14",
+                "friendsofphp/php-cs-fixer": "^2.15",
                 "nette/finder": "^2.4",
-                "nette/utils": "^2.5",
+                "nette/utils": "^2.5|^3.0",
                 "php": "^7.1",
-                "slam/php-cs-fixer-extensions": "^1.17",
+                "phpstan/phpdoc-parser": "^0.3.4",
                 "squizlabs/php_codesniffer": "^3.4",
-                "symplify/better-phpdoc-parser": "^5.4.16",
-                "symplify/package-builder": "^5.4.16"
+                "symplify/package-builder": "^6.0.1"
             },
             "require-dev": {
-                "nette/application": "^2.4",
+                "nette/application": "^2.4|^3.0",
                 "phpunit/phpunit": "^7.5|^8.0",
-                "symplify/easy-coding-standard-tester": "^5.4.16",
-                "symplify/package-builder": "^5.4.16"
+                "symplify/easy-coding-standard-tester": "^6.0.1",
+                "symplify/package-builder": "^6.0.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.5-dev"
+                    "dev-master": "6.1-dev"
                 }
             },
             "autoload": {
@@ -3292,45 +2828,46 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2019-03-05T23:15:04+00:00"
+            "time": "2019-05-30T13:59:05+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v5.4.16",
+            "version": "v6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "66ed360e0b81881336c7339989dce3b0c14509e9"
+                "reference": "faaab285ffece6ee8ce4814acd3cd209b059acbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/66ed360e0b81881336c7339989dce3b0c14509e9",
-                "reference": "66ed360e0b81881336c7339989dce3b0c14509e9",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/faaab285ffece6ee8ce4814acd3cd209b059acbf",
+                "reference": "faaab285ffece6ee8ce4814acd3cd209b059acbf",
                 "shasum": ""
             },
             "require": {
                 "composer/xdebug-handler": "^1.3",
-                "friendsofphp/php-cs-fixer": "^2.14",
+                "friendsofphp/php-cs-fixer": "^2.15",
                 "jean85/pretty-package-versions": "^1.2",
                 "nette/robot-loader": "^3.1.0",
-                "nette/utils": "^2.5",
+                "nette/utils": "^2.5|^3.0",
                 "ocramius/package-versions": "^1.3",
                 "php": "^7.1",
+                "psr/simple-cache": "^1.0",
                 "slevomat/coding-standard": "^5.0.1",
                 "squizlabs/php_codesniffer": "^3.4",
-                "symfony/cache": "^3.4|^4.1",
-                "symfony/config": "^3.4|^4.1",
-                "symfony/console": "^3.4|^4.1",
-                "symfony/dependency-injection": "^3.4|^4.1",
-                "symfony/finder": "^3.4|^4.1",
-                "symfony/http-kernel": "^3.4|^4.1",
-                "symfony/yaml": "^3.4|^4.1",
-                "symplify/coding-standard": "^5.4.16",
-                "symplify/package-builder": "^5.4.16"
+                "symfony/cache": "^3.4|^4.2",
+                "symfony/config": "^3.4|^4.2",
+                "symfony/console": "^3.4|^4.2",
+                "symfony/dependency-injection": "^3.4.10|^4.2",
+                "symfony/finder": "^3.4|^4.2",
+                "symfony/http-kernel": "^3.4|^4.2",
+                "symfony/yaml": "^3.4|^4.2",
+                "symplify/coding-standard": "^6.0.1",
+                "symplify/package-builder": "^6.0.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.5|^8.0",
-                "symplify/easy-coding-standard-tester": "^5.4.16"
+                "symplify/easy-coding-standard-tester": "^6.0.1"
             },
             "bin": [
                 "bin/ecs"
@@ -3338,7 +2875,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.5-dev"
+                    "dev-master": "6.1-dev"
                 }
             },
             "autoload": {
@@ -3355,34 +2892,33 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2019-03-05T23:15:04+00:00"
+            "time": "2019-05-30T13:59:05+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v5.4.16",
+            "version": "v6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
-                "reference": "20e04ad9cd15a53527807a62c8b244d8a114f779"
+                "reference": "dc71a543fbc8dd7313fff20fba063fbf97cfc0ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/20e04ad9cd15a53527807a62c8b244d8a114f779",
-                "reference": "20e04ad9cd15a53527807a62c8b244d8a114f779",
+                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/dc71a543fbc8dd7313fff20fba063fbf97cfc0ee",
+                "reference": "dc71a543fbc8dd7313fff20fba063fbf97cfc0ee",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "^5.7",
                 "nette/finder": "^2.4",
-                "nette/utils": "^2.5",
+                "nette/utils": "^2.5|^3.0",
                 "php": "^7.1",
-                "symfony/config": "^3.4|^4.1",
-                "symfony/console": "^3.4|^4.1",
-                "symfony/debug": "^3.4|^4.1",
-                "symfony/dependency-injection": "^3.4|^4.1",
-                "symfony/finder": "^3.4|^4.1",
-                "symfony/http-kernel": "^3.4|^4.1",
-                "symfony/yaml": "^3.4|^4.1"
+                "symfony/config": "^3.4|^4.2",
+                "symfony/console": "^3.4|^4.2",
+                "symfony/debug": "^3.4|^4.2",
+                "symfony/dependency-injection": "^3.4.10|^4.2",
+                "symfony/finder": "^3.4|^4.2",
+                "symfony/http-kernel": "^3.4|^4.2",
+                "symfony/yaml": "^3.4|^4.2"
             },
             "require-dev": {
                 "phpunit/phpunit": "^7.5|^8.0"
@@ -3390,7 +2926,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.5-dev"
+                    "dev-master": "6.1-dev"
                 }
             },
             "autoload": {
@@ -3403,7 +2939,7 @@
                 "MIT"
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
-            "time": "2019-03-03T15:32:34+00:00"
+            "time": "2019-05-28T16:16:38+00:00"
         }
     ],
     "aliases": [],
