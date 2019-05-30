@@ -22,50 +22,5 @@ use Symfony\Component\Security\Core\User\User;
  */
 class ProfileControllerTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage Not supported user
-     */
-    public function testThatProfileActionThrowsAnExceptionIfTokenStorageContainsWrongUserInstance(): void
-    {
-        static::bootKernel();
-
-        $serializer = static::$container->get('serializer');
-        $rolesService = static::$container->get(RolesService::class);
-
-        $user = new User('test_user', 'test_password');
-        $token = new PreAuthenticatedToken($user, 'credentials', 'providerKey', [RolesService::ROLE_LOGGED]);
-
-        $tokenStorage = new TokenStorage();
-        $tokenStorage->setToken($token);
-
-        $controller = new ProfileController();
-        $controller->profileAction($tokenStorage, $serializer, $rolesService);
-
-        unset($controller, $tokenStorage, $user, $rolesService, $serializer);
-    }
-
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage Not supported user
-     */
-    public function testThatGroupsActionThrowsAnExceptionIfTokenStorageContainsWrongUserInstance(): void
-    {
-        static::bootKernel();
-
-        $serializer = static::$container->get('serializer');
-
-        $user = new User('test_user', 'test_password');
-        $token = new PreAuthenticatedToken($user, 'credentials', 'providerKey', [RolesService::ROLE_LOGGED]);
-
-        $tokenStorage = new TokenStorage();
-        $tokenStorage->setToken($token);
-
-        $controller = new ProfileController();
-        $controller->groupsAction($tokenStorage, $serializer);
-
-        unset($controller, $tokenStorage, $token, $user, $serializer);
-    }
+    // TODO: need to check what we can test here...
 }
