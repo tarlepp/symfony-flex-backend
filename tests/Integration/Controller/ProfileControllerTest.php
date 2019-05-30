@@ -23,5 +23,8 @@ use Symfony\Component\Security\Core\User\User;
  */
 class ProfileControllerTest extends KernelTestCase
 {
-    // TODO: need to check what we can test here...
+    public function testThatControllerWorks(): void
+    {
+        static::markTestIncomplete('TODO implemented tests for this controller.');
+    }
 }
