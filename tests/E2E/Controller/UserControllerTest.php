@@ -5,6 +5,7 @@ declare(strict_types = 1);
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
 namespace App\Tests\E2E\Controller;
 
 use App\Entity\User;
@@ -13,6 +14,7 @@ use App\Resource\UserResource;
 use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
+use Generator;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_filter;
@@ -898,81 +900,71 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderValidUsers(): array
+    public function dataProviderValidUsers(): Generator
     {
-        return [
-            ['john-admin',  'password-admin'],
-            ['john-root',   'password-root'],
-        ];
+        yield ['john-admin',  'password-admin'];
+        yield ['john-root',   'password-root'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderValidApiKeyUsers(): array
+    public function dataProviderValidApiKeyUsers(): Generator
     {
-        return [
-            ['admin'],
-            ['root'],
-        ];
+        yield ['admin'];
+        yield ['root'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderInvalidUsers(): array
+    public function dataProviderInvalidUsers(): Generator
     {
-        return [
-            ['john',        'password'],
-            ['john-api',    'password-api'],
-            ['john-logged', 'password-logged'],
-            ['john-user',   'password-user'],
-        ];
+        yield ['john',        'password'];
+        yield ['john-api',    'password-api'];
+        yield ['john-logged', 'password-logged'];
+        yield ['john-user',   'password-user'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderInvalidApiKeyUsers(): array
+    public function dataProviderInvalidApiKeyUsers(): Generator
     {
-        return [
-            ['api'],
-            ['logged'],
-            ['user'],
-        ];
+        yield ['api'];
+        yield ['logged'];
+        yield ['user'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatAttachUserGroupActionWorksAsExpected(): array
+    public function dataProviderTestThatAttachUserGroupActionWorksAsExpected(): Generator
     {
-        return [
-            [201],
-            [200],
-        ];
+        yield [201];
+        yield [200];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderInvalidUsersCreate(): array
+    public function dataProviderInvalidUsersCreate(): Generator
     {
-        return [
-            ['john',        'password'],
-            ['john-api',    'password-api'],
-            ['john-logged', 'password-logged'],
-            ['john-user',   'password-user'],
-            ['john-admin',  'password-admin'],
-        ];
+        yield ['john',        'password'];
+        yield ['john-api',    'password-api'];
+        yield ['john-logged', 'password-logged'];
+        yield ['john-user',   'password-user'];
+        yield ['john-admin',  'password-admin'];
     }
 
     /**
-     * @return array
+     * @return Generator
+     *
+     * @throws Throwable
      */
-    public function dataProviderTestThatGetRolesActionsReturns403ForInvalidUser(): array
+    public function dataProviderTestThatGetRolesActionsReturns403ForInvalidUser(): Generator
     {
         static::bootKernel();
 
@@ -981,7 +973,7 @@ class UserControllerTest extends WebTestCase
 
         $users = $userResource->find();
 
-        $iterator = static function (array $userData) use ($users): array {
+        foreach ($this->dataProviderInvalidUsersCreate() as $userData) {
             $ids = [];
 
             foreach ($users as $user) {
@@ -994,14 +986,14 @@ class UserControllerTest extends WebTestCase
 
             $userData[] = $ids;
 
-            return $userData;
-        };
-
-        return array_map($iterator, $this->dataProviderInvalidUsersCreate());
+            yield $userData;
+        }
     }
 
     /**
      * @return array
+     *
+     * @throws Throwable
      */
     public function dataProviderTestThatGetRolesActionsReturns200ForUserHimself(): array
     {
@@ -1048,6 +1040,8 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @return array
+     *
+     * @throws Throwable
      */
     public function dataProviderTestThatGetRolesActionReturns200ForRootRoleUser(): array
     {
@@ -1071,15 +1065,19 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
+     *
+     * @throws Throwable
      */
-    public function dataProviderTestThatGetUserGroupsActionsReturns403ForInvalidUser(): array
+    public function dataProviderTestThatGetUserGroupsActionsReturns403ForInvalidUser(): Generator
     {
         return $this->dataProviderTestThatGetRolesActionsReturns403ForInvalidUser();
     }
 
     /**
      * @return array
+     *
+     * @throws Throwable
      */
     public function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): array
     {
@@ -1119,21 +1117,19 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
+     *
+     * @throws Throwable
      */
-    public function dataProviderTestThatGetUserGroupsActionReturns200ForRootRoleUser(): array
+    public function dataProviderTestThatGetUserGroupsActionReturns200ForRootRoleUser(): Generator
     {
         static::bootKernel();
 
         /** @var UserResource $userResource */
         $userResource = static::$container->get(UserResource::class);
 
-        $output = [];
-
         foreach ($userResource->find() as $user) {
-            $output[] = [$user->getId(), count($user->getRoles()) ? $user->getRoles()[0] : null];
+            yield [$user->getId(), count($user->getRoles()) ? $user->getRoles()[0] : null];
         }
-
-        return $output;
     }
 }
