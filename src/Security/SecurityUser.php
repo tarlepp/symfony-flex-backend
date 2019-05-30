@@ -19,7 +19,7 @@ use App\Entity\User;
 class SecurityUser implements SecurityUserInterface
 {
     /**
-     * @var string|null
+     * @var string
      */
     private $username;
 
@@ -105,7 +105,7 @@ class SecurityUser implements SecurityUserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->username;
+        return $this->username;
     }
 
     /**
