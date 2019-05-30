@@ -2,7 +2,7 @@ security:
     # http://symfony.com/doc/current/cookbook/security/named_encoders.html
     encoders:
         App\Security\SecurityUser:
-            algorithm: argon2i
+            algorithm: auto
 
     # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
