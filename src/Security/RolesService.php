@@ -115,6 +115,8 @@ class RolesService implements RolesServiceInterface
     /**
      * Helper method to get inherited roles for given roles.
      *
+     * @psalm-suppress DeprecatedClass
+     *
      * @param string[] $roles
      *
      * @return string[]
