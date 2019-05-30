@@ -242,11 +242,6 @@ class UserGroupController extends Controller
     ): JsonResponse {
         $status = $userGroup->getUsers()->contains($user) ? 200 : 201;
 
-        /*
-        dump($userGroup);
-        dd($user);
-        */
-
         $this->getResource()->save($userGroup->addUser($user));
 
         return $this->getUserResponse($userGroup, $serializer, $status);
