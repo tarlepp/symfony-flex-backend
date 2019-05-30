@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e55186d961927ac42332d98110dadb6",
+    "content-hash": "e76089bae881273e6ca91bdd049b0b92",
     "packages": [],
     "packages-dev": [
         {
@@ -2281,20 +2281,20 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v4.2.8",
+            "version": "v4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "31f2e3c10bc9bd955ca1ae3e4da2bb489205714a"
+                "reference": "7bfc1b57d1ac9513703391498aa8da4764388bc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/31f2e3c10bc9bd955ca1ae3e4da2bb489205714a",
-                "reference": "31f2e3c10bc9bd955ca1ae3e4da2bb489205714a",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/7bfc1b57d1ac9513703391498aa8da4764388bc6",
+                "reference": "7bfc1b57d1ac9513703391498aa8da4764388bc6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.5.9"
             },
             "conflict": {
                 "phpunit/phpunit": "<4.8.35|<5.4.3,>=5.0"
@@ -2308,7 +2308,7 @@
             "type": "symfony-bridge",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.2-dev"
+                    "dev-master": "4.3-dev"
                 },
                 "thanks": {
                     "name": "phpunit/phpunit",
@@ -2342,7 +2342,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2019-04-23T14:37:24+00:00"
+            "time": "2019-05-08T13:47:25+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2389,7 +2389,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
