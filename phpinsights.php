@@ -27,8 +27,20 @@ return [
     |
     */
     'exclude' => [
-        'templates',
+        'bin',
+        'build',
+        'config',
+        'doc',
+        'docker',
+        'public',
+        'secrets',
         'src/Migrations',
+        'templates',
+        'tests',
+        'translations',
+        'var',
+        'vendor',
+        'vendor-bin',
     ],
     'add' => [
         //  ExampleMetric::class => [
