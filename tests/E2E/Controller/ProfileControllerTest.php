@@ -33,7 +33,7 @@ class ProfileControllerTest extends WebTestCase
      */
     public function testThatProfileActionReturns401WithoutToken(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -71,7 +71,7 @@ class ProfileControllerTest extends WebTestCase
      */
     public function testThatProfileActionReturnExpectedWithValidToken(string $username, string $password): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -154,7 +154,7 @@ class ProfileControllerTest extends WebTestCase
      */
     public function testThatRolesActionReturns401WithoutToken(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl . '/roles');
 
         $response = $client->getResponse();
@@ -223,7 +223,7 @@ class ProfileControllerTest extends WebTestCase
      */
     public function testThatRolesActionReturnsExpected(string $username, string $password, array $expected): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/roles');
 
         $response = $client->getResponse();
@@ -279,7 +279,7 @@ class ProfileControllerTest extends WebTestCase
      */
     public function testThatGroupsActionReturns401WithoutToken(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl . '/groups');
 
         $response = $client->getResponse();
@@ -348,7 +348,7 @@ class ProfileControllerTest extends WebTestCase
      */
     public function testThatGroupsActionReturnExpected(string $username, string $password, array $expected): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/groups');
 
         $response = $client->getResponse();

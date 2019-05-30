@@ -27,7 +27,7 @@ class DefaultControllerTest extends WebTestCase
      */
     public function testThatDefaultRouteReturns200(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', '/');
 
         $response = $client->getResponse();
@@ -43,7 +43,7 @@ class DefaultControllerTest extends WebTestCase
      */
     public function testThatHealthzRouteReturns200(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', '/healthz');
 
         $response = $client->getResponse();
@@ -66,7 +66,7 @@ class DefaultControllerTest extends WebTestCase
 
         $expectedLogCount = $resource->count();
 
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', '/healthz');
 
         static::assertSame($expectedLogCount, $resource->count());
@@ -79,7 +79,7 @@ class DefaultControllerTest extends WebTestCase
      */
     public function testThatVersionRouteReturns200(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', '/version');
 
         $response = $client->getResponse();
@@ -102,7 +102,7 @@ class DefaultControllerTest extends WebTestCase
 
         $expectedLogCount = $resource->count();
 
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', '/version');
 
         static::assertSame($expectedLogCount, $resource->count());
@@ -115,7 +115,7 @@ class DefaultControllerTest extends WebTestCase
      */
     public function testThatApiVersionIsAddedToResponseHeaders(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', '/version');
 
         $response = $client->getResponse();

@@ -8,8 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
+use Throwable;
 use function array_merge;
 use function gc_collect_cycles;
 use function gc_enable;
@@ -57,7 +58,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
         self::bootKernel();
 
-        /** @var \App\Utils\Tests\Auth $authService */
+        /** @var Auth $authService */
         $authService = self::$container->get('test.App\Utils\Tests\Auth');
 
         $this->authService = $authService;
@@ -71,16 +72,16 @@ abstract class WebTestCase extends BaseWebTestCase
      * @param mixed[]|null $options
      * @param mixed[]|null $server
      *
-     * @return Client
+     * @return KernelBrowser
      *
-     * @throws \Exception
+     * @throws Throwable
      */
-    public function getClient(
+    public function getTestClient(
         ?string $username = null,
         ?string $password = null,
         ?array $options = null,
         ?array $server = null
-    ): Client {
+    ): KernelBrowser {
         $options = $options ?? [];
         $server = $server ?? [];
 
@@ -104,9 +105,9 @@ abstract class WebTestCase extends BaseWebTestCase
      * @param mixed[]|null $options
      * @param mixed[]|null $server
      *
-     * @return Client
+     * @return KernelBrowser
      */
-    public function getApiKeyClient(?string $role = null, ?array $options = null, ?array $server = null): Client
+    public function getApiKeyClient(?string $role = null, ?array $options = null, ?array $server = null): KernelBrowser
     {
         $options = $options ?? [];
         $server = $server ?? [];

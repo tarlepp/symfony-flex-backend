@@ -27,7 +27,7 @@ class ApiKeyControllerTest extends WebTestCase
      */
     public function testThatGetBaseRouteReturn401(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -51,7 +51,7 @@ class ApiKeyControllerTest extends WebTestCase
      */
     public function testThatFindActionWorksAsExpected(string $username, string $password, int $expectedStatus): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();

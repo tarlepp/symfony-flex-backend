@@ -32,7 +32,7 @@ class UserGroupControllerTest extends WebTestCase
      */
     public function testThatGetBaseRouteReturn403(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -55,7 +55,7 @@ class UserGroupControllerTest extends WebTestCase
      */
     public function testThatGetUserGroupUsersActionReturnsExpected(int $userCount, string $userGroupId): void
     {
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userGroupId . '/users');
 
         $response = $client->getResponse();
@@ -98,7 +98,7 @@ class UserGroupControllerTest extends WebTestCase
             $user->getId()
         );
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('POST', $url);
 
         $response = $client->getResponse();
@@ -144,7 +144,7 @@ class UserGroupControllerTest extends WebTestCase
             $user->getId()
         );
 
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('POST', $url);
 
         $response = $client->getResponse();
@@ -183,7 +183,7 @@ class UserGroupControllerTest extends WebTestCase
             $user->getId()
         );
 
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('DELETE', $url);
 
         $response = $client->getResponse();
@@ -228,7 +228,7 @@ class UserGroupControllerTest extends WebTestCase
             $user->getId()
         );
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('DELETE', $url);
 
         $response = $client->getResponse();

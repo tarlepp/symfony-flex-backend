@@ -38,7 +38,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatGetBaseRouteReturn401(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -68,7 +68,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatCountActionReturnsExpected(string $username, string $password): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
@@ -117,7 +117,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
@@ -174,7 +174,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatFindActionReturnsExpected(string $username, string $password): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -200,7 +200,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -230,7 +230,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatIdsActionReturnExpected(string $username, string $password): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/ids');
 
         $response = $client->getResponse();
@@ -256,7 +256,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/ids');
 
         $response = $client->getResponse();
@@ -291,7 +291,7 @@ class UserControllerTest extends WebTestCase
             'password'  => 'some password',
         ];
 
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('POST', $this->baseUrl, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
@@ -332,7 +332,7 @@ class UserControllerTest extends WebTestCase
             'email'     => 'test-user@test.com',
         ];
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('POST', $this->baseUrl, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
@@ -370,7 +370,7 @@ class UserControllerTest extends WebTestCase
             'email'     => 'test-user@test.com',
         ];
 
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
@@ -414,7 +414,7 @@ class UserControllerTest extends WebTestCase
             'email'     => 'test-user@test.com',
         ];
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
@@ -451,7 +451,7 @@ class UserControllerTest extends WebTestCase
         string $password,
         string $userId
     ): void {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('DELETE', $this->baseUrl . '/' . $userId);
 
         $response = $client->getResponse();
@@ -480,7 +480,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatDeleteActionWorksLikeExpected(string $userId): void
     {
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('DELETE', $this->baseUrl . '/' . $userId);
 
         $response = $client->getResponse();
@@ -503,7 +503,7 @@ class UserControllerTest extends WebTestCase
 
         $user = $userResource->findOneBy(['username' => 'john-root'], null, true);
 
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
 
         /** @noinspection NullPointerExceptionInspection */
         $client->request('DELETE', $this->baseUrl . '/' . $user->getId());
@@ -538,7 +538,7 @@ class UserControllerTest extends WebTestCase
         string $password,
         array $userIds
     ): void {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
 
         foreach ($userIds as $userId) {
             $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
@@ -572,7 +572,7 @@ class UserControllerTest extends WebTestCase
         string $userId,
         string $expectedResponse
     ): void {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
         $response = $client->getResponse();
@@ -598,7 +598,7 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatGetUserRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
     {
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
         $response = $client->getResponse();
@@ -628,7 +628,7 @@ class UserControllerTest extends WebTestCase
         string $password,
         array $userIds
     ): void {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
 
         foreach ($userIds as $userId) {
             $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
@@ -662,7 +662,7 @@ class UserControllerTest extends WebTestCase
         string $expectedResponse,
         string $userId
     ): void {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
 
         $response = $client->getResponse();
@@ -711,7 +711,7 @@ class UserControllerTest extends WebTestCase
             $userGroup->getId()
         );
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('POST', $url);
 
         $response = $client->getResponse();
@@ -757,7 +757,7 @@ class UserControllerTest extends WebTestCase
             $userGroup->getId()
         );
 
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('POST', $url);
 
         $response = $client->getResponse();
@@ -797,7 +797,7 @@ class UserControllerTest extends WebTestCase
             $userGroup->getId()
         );
 
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('DELETE', $url);
 
         $response = $client->getResponse();
@@ -842,7 +842,7 @@ class UserControllerTest extends WebTestCase
             $userGroup->getId()
         );
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request('DELETE', $url);
 
         $response = $client->getResponse();
@@ -876,7 +876,7 @@ class UserControllerTest extends WebTestCase
         string $userId,
         string $expectedResponse = null
     ): void {
-        $client = $this->getClient('john-root', 'password-root');
+        $client = $this->getTestClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
 
         $response = $client->getResponse();

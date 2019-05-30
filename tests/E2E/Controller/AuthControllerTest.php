@@ -33,7 +33,7 @@ class AuthControllerTest extends WebTestCase
      */
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request($method, $this->baseUrl . '/getToken');
 
         $response = $client->getResponse();
@@ -58,7 +58,7 @@ class AuthControllerTest extends WebTestCase
     {
         $payload = json_encode(compact('username', 'password'));
 
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request(
             'POST',
             $this->baseUrl . '/getToken',
@@ -108,7 +108,7 @@ class AuthControllerTest extends WebTestCase
      */
     public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request(
             'POST',
             $this->baseUrl . '/getToken',

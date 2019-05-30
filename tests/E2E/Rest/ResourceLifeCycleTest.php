@@ -38,7 +38,7 @@ class ResourceLifeCycleTest extends WebTestCase
      */
     public function testThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(string $role): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', '/test_lifecycle_behaviour/' . $role);
 
         $response = $client->getResponse();

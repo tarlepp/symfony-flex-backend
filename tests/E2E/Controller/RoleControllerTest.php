@@ -30,7 +30,7 @@ class RoleControllerTest extends WebTestCase
      */
     public function testThatGetBaseRouteReturn403(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
@@ -53,7 +53,7 @@ class RoleControllerTest extends WebTestCase
      */
     public function testThatFindOneActionWorksAsExpected(string $username, string $password): void
     {
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
 
         $client->request('GET', $this->baseUrl . '/ROLE_ADMIN');
 
@@ -79,7 +79,7 @@ class RoleControllerTest extends WebTestCase
     {
         $roles = ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'];
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
 
         foreach ($roles as $role) {
             $offset = array_search($role, $roles, true);

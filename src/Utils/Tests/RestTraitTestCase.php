@@ -60,7 +60,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . self::END_POINT_COUNT);
 
         $response = $client->getResponse();
@@ -85,7 +85,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . self::END_POINT_COUNT);
 
         $response = $client->getResponse();
@@ -110,7 +110,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . self::END_POINT_COUNT);
 
         $response = $client->getResponse();
@@ -135,7 +135,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route);
 
         $response = $client->getResponse();
@@ -160,7 +160,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route);
 
         $response = $client->getResponse();
@@ -185,7 +185,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route);
 
         $response = $client->getResponse();
@@ -212,7 +212,7 @@ abstract class RestTraitTestCase extends WebTestCase
 
         $uuid = Uuid::uuid4()->toString();
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/' . $uuid);
 
         $response = $client->getResponse();
@@ -239,7 +239,7 @@ abstract class RestTraitTestCase extends WebTestCase
 
         $uuid = Uuid::uuid4()->toString();
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/' . $uuid);
 
         $response = $client->getResponse();
@@ -266,7 +266,7 @@ abstract class RestTraitTestCase extends WebTestCase
 
         $uuid = Uuid::uuid4()->toString();
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/' . $uuid);
 
         $response = $client->getResponse();
@@ -291,7 +291,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/ids');
 
         $response = $client->getResponse();
@@ -316,7 +316,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/ids');
 
         $response = $client->getResponse();
@@ -341,7 +341,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $client = $this->getClient($username, $password);
+        $client = $this->getTestClient($username, $password);
 
         $client->request($method, static::$route . '/ids');
 

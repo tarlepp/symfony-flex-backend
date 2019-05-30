@@ -24,7 +24,7 @@ class DocumentationTest extends WebTestCase
      */
     public function testThatDocumentationUiWorks(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', '/api/doc/');
 
         static::assertSame(200, $client->getResponse()->getStatusCode());
@@ -37,7 +37,7 @@ class DocumentationTest extends WebTestCase
      */
     public function testThatDocumentationJsonWorks(): void
     {
-        $client = $this->getClient();
+        $client = $this->getTestClient();
         $client->request('GET', '/api/doc.json');
 
         static::assertSame(200, $client->getResponse()->getStatusCode());
