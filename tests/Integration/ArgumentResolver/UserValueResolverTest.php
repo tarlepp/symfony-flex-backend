@@ -56,7 +56,12 @@ class UserValueResolverTest extends KernelTestCase
         static::assertFalse($resolver->supports(Request::create('/'), $metadata));
     }
 
-    public function testThatSupportsReturnFalseWithNoUser(): void
+    /** @noinspection PhpFullyQualifiedNameUsageInspection */
+    /**
+     * @expectedException \Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException
+     * @expectedExceptionMessage JWT Token not found
+     */
+    public function testThatSupportsThrowsAnExceptionWithNonSecurityUser(): void
     {
         /** @var MockObject|UserResource $userResource */
         $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
@@ -69,7 +74,7 @@ class UserValueResolverTest extends KernelTestCase
         $resolver = new UserValueResolver($tokenStorage, $userResource);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
-        static::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        $resolver->supports(Request::create('/'), $metadata);
     }
 
     public function testThatSupportsReturnsTrueWithProperUser(): void
