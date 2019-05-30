@@ -8,10 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Security;
 
-use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use function array_key_exists;
-use function array_map;
 use function array_unique;
 use function mb_strpos;
 use function mb_strtolower;
@@ -115,28 +113,12 @@ class RolesService implements RolesServiceInterface
     /**
      * Helper method to get inherited roles for given roles.
      *
-     * @psalm-suppress DeprecatedClass
-     *
      * @param string[] $roles
      *
      * @return string[]
      */
     public function getInheritedRoles(array $roles): array
     {
-        $hierarchy = new RoleHierarchy($this->rolesHierarchy);
-
-        return array_unique(
-            array_map(
-                static function (Role $role): string {
-                    return $role->getRole();
-                },
-                $hierarchy->getReachableRoles(array_map(
-                    static function (string $role): Role {
-                        return new Role($role);
-                    },
-                    $roles
-                ))
-            )
-        );
+        return array_unique((new RoleHierarchy($this->rolesHierarchy))->getReachableRoleNames($roles));
     }
 }
