@@ -129,7 +129,6 @@ class UserGroupController extends Controller
      * @param UserGroup    $userGroup
      *
      * @return Response
-     *
      */
     public function getUserGroupUsersAction(
         Request $request,
