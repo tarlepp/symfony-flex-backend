@@ -34,7 +34,7 @@ $databaseCacheFile = sprintf(
 );
 
 // Oh yeah, database is already created we don't want to do any lifting anymore \o/
-if (is_readable($databaseCacheFile) && (string)getenv('ENV_TEST_CHANNEL_READABLE')) {
+if (is_readable($databaseCacheFile) && (string)getenv('ENV_TEST_CHANNEL_READABLE') !== '') {
     return;
 }
 
