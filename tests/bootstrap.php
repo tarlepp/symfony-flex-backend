@@ -73,8 +73,8 @@ $createDatabaseDoctrineCommand = static function () use ($application) {
 // Add the doctrine:schema:update command to the application and run it
 $updateSchemaDoctrineCommand = static function () use ($application) {
     $input = new ArrayInput([
-        'command' => 'doctrine:schema:update',
-        '--force' => true,
+        'command'          => 'doctrine:migrations:migrate',
+        '--no-interaction' => true,
     ]);
 
     $input->setInteractive(false);
