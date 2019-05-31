@@ -130,7 +130,7 @@
   </component>
   <component name="PhpInterpreters">
     <interpreters>
-      <interpreter id="7377c17b-0802-4cb1-95f7-8eb151a88214" name="php" home="docker-compose://DATA" debugger_id="php.debugger.XDebug">
+      <interpreter id="7377c17b-0802-4cb1-95f7-8eb151a88214" name="Docker-PHP" home="docker-compose://DATA" debugger_id="php.debugger.XDebug">
         <remote_data DOCKER_ACCOUNT_NAME="Docker" DOCKER_COMPOSE_SERVICE_NAME="php" DOCKER_REMOTE_PROJECT_PATH="/opt/project" INTERPRETER_PATH="php" HELPERS_PATH="/opt/.phpstorm_helpers" INITIALIZED="false" VALID="true" RUN_AS_ROOT_VIA_SUDO="false">
           <dockerComposeConfigurationPaths>
             <item value="$PROJECT_DIR$/docker-compose.yml" />
@@ -143,7 +143,7 @@
   </component>
   <component name="PhpInterpretersPhpInfoCache">
     <phpInfoCache>
-      <interpreter name="php">
+      <interpreter name="Docker-PHP">
         <phpinfo binary_type="PHP" php_cli="/usr/local/bin/php" path_separator=":" version="7.2.13">
           <additional_php_ini>/usr/local/etc/php/conf.d/docker-php-ext-bcmath.ini, /usr/local/etc/php/conf.d/docker-php-ext-pdo_mysql.ini, /usr/local/etc/php/conf.d/docker-php-ext-sodium.ini, /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini, /usr/local/etc/php/conf.d/docker-php-ext-zip.ini, /usr/local/etc/php/conf.d/docker-php-memlimit.ini</additional_php_ini>
           <configuration_file />
@@ -199,6 +199,26 @@
     </phpInfoCache>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
+  <component name="PhpRuntimeConfiguration">
+    <extensions>
+      <extension name="FFI" enabled="true" />
+      <extension name="Parle" enabled="true" />
+      <extension name="SaxonC" enabled="true" />
+      <extension name="ZendCache" enabled="true" />
+      <extension name="event" enabled="true" />
+      <extension name="leveldb" enabled="true" />
+      <extension name="lua" enabled="true" />
+      <extension name="mapscript" enabled="true" />
+      <extension name="msgpack" enabled="true" />
+      <extension name="rdkafka" enabled="true" />
+      <extension name="solr" enabled="true" />
+      <extension name="sync" enabled="true" />
+      <extension name="uopz" enabled="true" />
+      <extension name="xcache" enabled="true" />
+      <extension name="yaf" enabled="true" />
+      <extension name="yar" enabled="true" />
+    </extensions>
+  </component>
   <component name="PhpUnit">
     <phpunit_settings>
       <phpunit_by_interpreter interpreter_id="7377c17b-0802-4cb1-95f7-8eb151a88214" load_method="CUSTOM_LOADER" configuration_file_path="/app/phpunit.xml.dist" custom_loader_path="/app/vendor-bin/phpunit/vendor/autoload.php" phpunit_phar_path="" use_configuration_file="true" />
