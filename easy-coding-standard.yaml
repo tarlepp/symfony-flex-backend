@@ -21,10 +21,12 @@ parameters:
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.Found: ~
         PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition:
             - '*src/Command/Traits/ExecuteMultipleCommandTrait.php'
+        SlevomatCodingStandard\Sniffs\TypeHints\NullableTypeForNullDefaultValueSniff.NullabilitySymbolRequired:
+            - '*src/Security/Authenticator/ApiKeyAuthenticator.php'
         SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
             - '*src/Entity/Traits/UserSerializer.php'
             - '*src/Repository/Traits/LoadUserByUserNameTrait.php'
-            - '*src/Security/ApiKeyAuthenticator.php'
+            - '*src/Security/Authenticator/ApiKeyAuthenticator.php'
             - '*src/Security/Provider/ApiKeyUserProvider.php'
             - '*src/Security/UserProvider.php'
             - '*src/Security/Provider/SecurityUserFactory.php'
