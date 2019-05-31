@@ -71,7 +71,6 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInt
      *
      * @return ApiKeyUserInterface
      *
-     * @throws Exception
      * @throws UsernameNotFoundException
      */
     public function loadUserByUsername($token): ApiKeyUserInterface
