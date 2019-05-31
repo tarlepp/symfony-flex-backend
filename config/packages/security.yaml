@@ -36,9 +36,6 @@ security:
             pattern: ^/
             stateless: true
             anonymous: true
-            simple_preauth:
-                provider: chain_provider
-                authenticator: App\Security\ApiKeyAuthenticator
             guard:
                 provider: security_user_provider
                 authenticators:
