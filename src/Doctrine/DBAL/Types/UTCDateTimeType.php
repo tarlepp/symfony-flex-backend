@@ -35,8 +35,8 @@ class UTCDateTimeType extends DateTimeType
      * Converts a value from its PHP representation to its database representation
      * of this type.
      *
-     * @param mixed                                     $value    The value to convert.
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform The currently used database platform.
+     * @param mixed            $value    The value to convert.
+     * @param AbstractPlatform $platform The currently used database platform.
      *
      * @return mixed The database representation of the value.
      *
@@ -55,12 +55,12 @@ class UTCDateTimeType extends DateTimeType
      * Converts a value from its database representation to its PHP representation
      * of this type.
      *
-     * @param mixed                                     $value    The value to convert.
-     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $platform The currently used database platform.
+     * @param mixed            $value    The value to convert.
+     * @param AbstractPlatform $platform The currently used database platform.
      *
      * @return mixed The PHP representation of the value.
      *
-     * @throws \Doctrine\DBAL\Types\ConversionException
+     * @throws ConversionException
      */
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
@@ -82,9 +82,19 @@ class UTCDateTimeType extends DateTimeType
     }
 
     /**
+     * @inheritDoc
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
+        parent::requiresSQLCommentHint($platform);
+
+        return true;
+    }
+
+    /**
      * Method to initialize DateTimeZone as in UTC.
      *
-     * @return \DateTimeZone
+     * @return DateTimeZone
      */
     private function getUtcDateTimeZone(): DateTimeZone
     {

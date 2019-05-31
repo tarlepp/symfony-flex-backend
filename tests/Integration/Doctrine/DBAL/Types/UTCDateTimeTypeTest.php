@@ -123,7 +123,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        static::assertFalse($this->type->requiresSQLCommentHint($this->platform));
+        static::assertTrue($this->type->requiresSQLCommentHint($this->platform));
     }
 
     /**
