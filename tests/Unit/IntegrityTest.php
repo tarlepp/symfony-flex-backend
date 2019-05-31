@@ -190,6 +190,23 @@ FORMAT;
     }
 
     /**
+     * @dataProvider dataProviderTestThatSecurityProvidersHaveIntegrationTest
+     *
+     * @param string $providerTestClass
+     * @param string $providerClass
+     */
+    public function testThatSecurityProvidersHaveIntegrationTest(string $providerTestClass, string $providerClass): void
+    {
+        $message = sprintf(
+            'Resource "%s" does not have required test class "%s".',
+            $providerClass,
+            $providerTestClass
+        );
+
+        static::assertTrue(class_exists($providerTestClass), $message);
+    }
+
+    /**
      * @dataProvider dataProviderTestThatDtoHaveIntegrationTest
      *
      * @param string $dtoTestClass
@@ -431,6 +448,21 @@ FORMAT;
 
         $namespace = '\\App\\Resource\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Resource\\';
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/Security/Provider/';
+
+        $namespace = '\\App\\Security\\Provider\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Security\\Provider\\';
 
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
