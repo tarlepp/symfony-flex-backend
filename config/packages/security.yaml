@@ -39,7 +39,9 @@ security:
             guard:
                 provider: security_user_provider
                 authenticators:
+                    - App\Security\Authenticator\ApiKeyAuthenticator
                     - lexik_jwt_authentication.jwt_token_authenticator
+                entry_point: lexik_jwt_authentication.jwt_token_authenticator
 
     role_hierarchy:
         ROLE_API:   [ROLE_LOGGED]
