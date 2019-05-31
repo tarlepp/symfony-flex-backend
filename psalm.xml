@@ -18,8 +18,5 @@
     <issueHandlers>
         <PropertyNotSetInConstructor errorLevel="suppress" />
         <InvalidStringClass errorLevel="suppress" />
-        <!-- Remove these after all deprecations are fixed -->
-        <DeprecatedInterface errorLevel="suppress" />
-        <!-- Remove these after all deprecations are fixed -->
     </issueHandlers>
 </psalm>
