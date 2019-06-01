@@ -156,7 +156,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?ApiKeyUserInterface
     {
-        $apiToken = $credentials['token'] ?? null;
+        $apiToken = is_array($credentials) ? $credentials['token'] ?? null : null;
 
         if ($apiToken === null) {
             return null;
