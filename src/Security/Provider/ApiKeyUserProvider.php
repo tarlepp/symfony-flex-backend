@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * @package App\Security\Provider
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ApiKeyUserProvider implements ApiKeyUserProviderInterface, UserProviderInterface
+class ApiKeyUserProvider implements ApiKeyUserProviderInterface
 {
     /**
      * @var ApiKeyRepository
