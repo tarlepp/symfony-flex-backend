@@ -19,6 +19,8 @@ use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Guard\AuthenticatorInterface;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use function array_filter;
 use function array_map;
@@ -187,6 +189,25 @@ FORMAT;
         );
 
         static::assertTrue(class_exists($resourceTestClass), $message);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest
+     *
+     * @param string $providerTestClass
+     * @param string $providerClass
+     */
+    public function testThatSecurityAuthenticatorHaveIntegrationTest(
+        string $providerTestClass,
+        string $providerClass
+    ): void {
+        $message = sprintf(
+            'Authenticator "%s" does not have required test class "%s".',
+            $providerClass,
+            $providerTestClass
+        );
+
+        static::assertTrue(class_exists($providerTestClass), $message);
     }
 
     /**
@@ -455,6 +476,27 @@ FORMAT;
     /**
      * @return array
      */
+    public function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/Security/Authenticator/';
+
+        $namespace = '\\App\\Security\\Authenticator\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Security\\Authenticator\\';
+
+        $filter = static function (ReflectionClass $reflectionClass) {
+            return !$reflectionClass->isAbstract()
+                && !$reflectionClass->isInterface()
+                && $reflectionClass->implementsInterface(AuthenticatorInterface::class);
+        };
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    /**
+     * @return array
+     */
     public function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -464,7 +506,13 @@ FORMAT;
         $namespace = '\\App\\Security\\Provider\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Provider\\';
 
-        return $this->getTestCases($folder, $namespace, $namespaceTest);
+        $filter = static function (ReflectionClass $reflectionClass) {
+            return !$reflectionClass->isAbstract()
+                && !$reflectionClass->isInterface()
+                && $reflectionClass->implementsInterface(UserProviderInterface::class);
+        };
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     /**
