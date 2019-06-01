@@ -8,11 +8,11 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Security\Authenticator;
 
-use App\Security\ApiKeyUserInterface;
 use App\Security\Authenticator\ApiKeyAuthenticator;
 use App\Security\Provider\ApiKeyUserProvider;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,10 +83,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetUserReturnsExpected
      *
-     * @param ApiKeyUserInterface|null $expected
-     * @param array                    $credentials
+     * @param mixed $credentials
      */
-    public function testThatGetUserReturnsExpected(?ApiKeyUserInterface $expected, array $credentials): void
+    public function testThatGetUserReturnsExpectedWhenCredentialsIsInvalid($credentials): void
     {
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
@@ -95,7 +94,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
 
-        static::assertSame($expected, $authenticator->getUser($credentials, $apiKeyUserProvider));
+        static::assertNull($authenticator->getUser($credentials, $apiKeyUserProvider));
     }
 
     /**
@@ -139,6 +138,13 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function dataProviderTestThatGetUserReturnsExpected(): Generator
     {
-        yield [null, []];
+        yield [null];
+        yield ['foobar'];
+        yield [123];
+        yield [new stdClass()];
+        yield [[]];
+        yield [['foobar']];
+        yield [['foobar' => 'barfoo']];
+        yield [['token' => null]];
     }
 }
