@@ -11,6 +11,7 @@ for this application _"correct"_ way.
       * [CLI Interpreter](#cli-interpreter)
       * [Server](#server)
       * [Test Frameworks](#test-frameworks)
+      * [Debugging](#debugging)
    * [External links / resources](#external-links--resources)
 
 ## Setup
@@ -47,6 +48,21 @@ as in image below.
 
 ![Path mappings](images/phpstorm_03.png)
 
+After this you need to add Run/Debug configuration for PHPUnit. In that prompt 
+you should see the same as image below.
+
+Note that if you see `Fix` button on bottom right corner just click that to fix
+all settings as those should be. Basically that will make PHPUnit to use all
+those earlier configured settings.
+
+![Path mappings](images/phpstorm_04.png)
+
+### Debugging
+
+Application supports using of XDebug for debugging tool, so just read [Using Xdebug](XDEBUG.md)
+documentation and you're ready to start debugging your application.
+
 ## External links / resources
 
 * [Configuring Remote PHP Interpreters](https://www.jetbrains.com/help/phpstorm/configuring-remote-interpreters.html)
+* [Test Frameworks](https://www.jetbrains.com/help/phpstorm/php-test-frameworks.html)
