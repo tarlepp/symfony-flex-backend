@@ -147,13 +147,10 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     private function checkLockedAccount(User $user, LexikBaseEvent $event): void
     {
-        switch (true) {
-            case $event instanceof AuthenticationFailureEvent:
-                $this->onAuthenticationFailureEvent($user);
-                break;
-            case $event instanceof AuthenticationSuccessEvent:
-                $this->onAuthenticationSuccessEvent($user);
-                break;
+        if ($event instanceof AuthenticationFailureEvent) {
+            $this->onAuthenticationFailureEvent($user);
+        } elseif ($event instanceof AuthenticationSuccessEvent) {
+            $this->onAuthenticationSuccessEvent($user);
         }
     }
 
