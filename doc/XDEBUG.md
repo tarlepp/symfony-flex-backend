@@ -3,6 +3,10 @@
 This document contains basic information how you can use [Xdebug](https://xdebug.org/) 
 and [PhpStorm](https://www.jetbrains.com/phpstorm/) within this application.
 
+And before you start with this section off documentation you really should read
+[PhpStorm configuration](PHPSTORM.md) documentation first - that way you will 
+have all basic configuration ready.
+
 ## Table of Contents
 
 * [What is this?](#what-is-this)
