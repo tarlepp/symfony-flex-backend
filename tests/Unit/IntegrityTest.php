@@ -194,20 +194,20 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest
      *
-     * @param string $providerTestClass
-     * @param string $providerClass
+     * @param string $authenticatorTestClass
+     * @param string $authenticatorClass
      */
     public function testThatSecurityAuthenticatorHaveIntegrationTest(
-        string $providerTestClass,
-        string $providerClass
+        string $authenticatorTestClass,
+        string $authenticatorClass
     ): void {
         $message = sprintf(
             'Authenticator "%s" does not have required test class "%s".',
-            $providerClass,
-            $providerTestClass
+            $authenticatorClass,
+            $authenticatorTestClass
         );
 
-        static::assertTrue(class_exists($providerTestClass), $message);
+        static::assertTrue(class_exists($authenticatorTestClass), $message);
     }
 
     /**
