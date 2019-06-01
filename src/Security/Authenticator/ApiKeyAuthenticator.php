@@ -11,7 +11,6 @@ namespace App\Security\Authenticator;
 use App\Entity\ApiKey;
 use App\Security\ApiKeyUserInterface;
 use App\Security\Provider\ApiKeyUserProvider;
-use function is_array;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +22,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use UnexpectedValueException;
 use function count;
+use function is_array;
 use function preg_match;
 
 /**
