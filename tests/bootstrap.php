@@ -8,12 +8,14 @@ declare(strict_types = 1);
  *  2) Boot kernel and create console application with that
  *  3) Drop test environment database
  *  4) Create empty database to test environment
- *  5) Update database schema
- *  6) Create user roles to database
+ *  5) Run migrations to test database
+ *  6) Load fixture date to database
+ *  7) Write cache files about database initialization
  *
  * @package App\Tests
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
