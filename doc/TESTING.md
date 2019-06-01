@@ -12,6 +12,7 @@ application.
       * [Parallel testing](#parallel-testing)
       * [Own environment for testing](#own-environment-for-testing)
    * [Metrics](#metrics)
+   * [PhpStorm](#phpstorm)
 
 ## Testing
 
@@ -71,3 +72,8 @@ make phpmetrics
 ```
 
 And after that open `build/phpmetrics/index.html` with your favorite browser.
+
+## PhpStorm
+
+Also note that you can run tests directly from your IDE (PhpStorm) - if you're
+using that you should read [PhpStorm](PHPSTORM.md) documentation.
