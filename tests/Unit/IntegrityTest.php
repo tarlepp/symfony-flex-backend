@@ -19,6 +19,7 @@ use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
@@ -225,6 +226,23 @@ FORMAT;
         );
 
         static::assertTrue(class_exists($providerTestClass), $message);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatSecurityVoterHaveIntegrationTest
+     *
+     * @param string $voterTestClass
+     * @param string $voterClass
+     */
+    public function testThatSecurityVoterHaveIntegrationTest(string $voterTestClass, string $voterClass): void
+    {
+        $message = sprintf(
+            'Resource "%s" does not have required test class "%s".',
+            $voterClass,
+            $voterTestClass
+        );
+
+        static::assertTrue(class_exists($voterTestClass), $message);
     }
 
     /**
@@ -510,6 +528,27 @@ FORMAT;
             return !$reflectionClass->isAbstract()
                 && !$reflectionClass->isInterface()
                 && $reflectionClass->implementsInterface(UserProviderInterface::class);
+        };
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/Security/Voter/';
+
+        $namespace = '\\App\\Security\\Voter\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Security\\Voter\\';
+
+        $filter = static function (ReflectionClass $reflectionClass) {
+            return !$reflectionClass->isAbstract()
+                && !$reflectionClass->isInterface()
+                && $reflectionClass->implementsInterface(VoterInterface::class);
         };
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
