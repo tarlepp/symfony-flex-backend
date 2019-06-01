@@ -23,7 +23,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use UnexpectedValueException;
 use function count;
 use function is_array;
-use function is_string;
 use function preg_match;
 
 /**
@@ -186,11 +185,11 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
     {
         $apiToken = is_array($credentials) ? $credentials['token'] ?? null : null;
 
-        if (!is_string($apiToken)) {
+        if ($apiToken === null) {
             throw new AuthenticationException('Invalid token');
         }
 
-        return $this->apiKeyUserProvider->getApiKeyForToken($apiToken) instanceof ApiKey;
+        return $this->apiKeyUserProvider->getApiKeyForToken((string)$apiToken) instanceof ApiKey;
     }
 
     /**
