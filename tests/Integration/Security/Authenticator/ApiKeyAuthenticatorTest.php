@@ -16,6 +16,10 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\User;
 use function json_encode;
 
 /**
@@ -97,6 +101,68 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         static::assertNull($authenticator->getUser($credentials, $apiKeyUserProvider));
     }
 
+    /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
+    /**
+     * @dataProvider dataProviderTestThatCheckCredentialsThrowsAnException
+     *
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedExceptionMessage Invalid token
+     *
+     * @param mixed $credentials
+     */
+    public function testThatCheckCredentialsThrowsAnException($credentials): void
+    {
+        /**
+         * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
+         */
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+
+        (new ApiKeyAuthenticator($apiKeyUserProvider))->checkCredentials($credentials, new User('user', 'password'));
+    }
+
+    public function testThatOnAuthenticationSuccessReturnsNull(): void
+    {
+        /**
+         * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
+         */
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+
+        $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
+
+        static::assertNull($authenticator->onAuthenticationSuccess(
+            new Request(),
+            new AnonymousToken('secret', 'user'),
+            'foobar'
+        ));
+    }
+
+    public function testThatOnAuthenticationFailureReturnsExpected(): void
+    {
+        /**
+         * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
+         */
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+
+        $output = (new ApiKeyAuthenticator($apiKeyUserProvider))
+            ->onAuthenticationFailure(new Request(), new AuthenticationException('foobar'));
+
+        static::assertSame(Response::HTTP_FORBIDDEN, $output->getStatusCode());
+        static::assertJsonStringEqualsJsonString(
+            json_encode(['message' => 'An authentication exception occurred.']),
+            $output->getContent()
+        );
+    }
+
+    public function testThatSupportsRememberMeReturnsFalse(): void
+    {
+        /**
+         * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
+         */
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+
+        static::assertFalse((new ApiKeyAuthenticator($apiKeyUserProvider))->supportsRememberMe());
+    }
+
     /**
      * @return Generator
      */
@@ -137,6 +203,21 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      * @return Generator
      */
     public function dataProviderTestThatGetUserReturnsExpected(): Generator
+    {
+        yield [null];
+        yield ['foobar'];
+        yield [123];
+        yield [new stdClass()];
+        yield [[]];
+        yield [['foobar']];
+        yield [['foobar' => 'barfoo']];
+        yield [['token' => null]];
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatCheckCredentialsThrowsAnException(): Generator
     {
         yield [null];
         yield ['foobar'];
