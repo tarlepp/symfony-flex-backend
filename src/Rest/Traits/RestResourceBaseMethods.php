@@ -121,10 +121,7 @@ trait RestResourceBaseMethods
         /** @var EntityInterface|null $entity */
         $entity = $this->getRepository()->findAdvanced($id);
 
-        // Entity not found
-        if ($throwExceptionIfNotFound && $entity === null) {
-            throw new NotFoundHttpException('Not found');
-        }
+        $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
 
         // After callback method call
         $this->afterFindOne($id, $entity);
@@ -158,10 +155,7 @@ trait RestResourceBaseMethods
         /** @var EntityInterface|null $entity */
         $entity = $this->getRepository()->findOneBy($criteria, $orderBy);
 
-        // Entity not found
-        if ($throwExceptionIfNotFound && $entity === null) {
-            throw new NotFoundHttpException('Not found');
-        }
+        $this->checkThatEntityExists($throwExceptionIfNotFound, $entity);
 
         // After callback method call
         $this->afterFindOneBy($criteria, $orderBy, $entity);
@@ -387,6 +381,8 @@ trait RestResourceBaseMethods
     }
 
     /**
+     * @psalm-suppress InvalidNullableReturnType
+     *
      * @param string $id
      *
      * @return EntityInterface
@@ -398,10 +394,7 @@ trait RestResourceBaseMethods
         /** @var EntityInterface|null $entity */
         $entity = $this->getRepository()->find($id);
 
-        // Entity not found
-        if ($entity === null) {
-            throw new NotFoundHttpException('Not found');
-        }
+        $this->checkThatEntityExists(true, $entity);
 
         return $entity;
     }
@@ -475,5 +468,19 @@ trait RestResourceBaseMethods
         }
 
         throw new ValidatorException(JSON::encode($output));
+    }
+
+    /**
+     * @param bool                 $throwExceptionIfNotFound
+     * @param EntityInterface|null $entity
+     *
+     * @throws NotFoundHttpException
+     */
+    private function checkThatEntityExists(bool $throwExceptionIfNotFound, ?EntityInterface $entity): void
+    {
+        // Entity not found
+        if ($throwExceptionIfNotFound && $entity === null) {
+            throw new NotFoundHttpException('Not found');
+        }
     }
 }
