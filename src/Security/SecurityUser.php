@@ -49,7 +49,7 @@ class SecurityUser implements SecurityUserInterface
      */
     public function getUuid(): string
     {
-        return $this->username;
+        return $this->getUsername();
     }
 
     /**
