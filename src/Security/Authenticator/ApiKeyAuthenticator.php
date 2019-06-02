@@ -33,6 +33,8 @@ use function preg_match;
  */
 class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 {
+    private const CREDENTIAL_KEY = 'token';
+
     /**
      * @var ApiKeyUserProvider
      */
@@ -132,7 +134,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 
         if (count($matches) > 0) {
             $output = [
-                'token' => $matches[1],
+                self::CREDENTIAL_KEY => $matches[1],
             ];
         }
 
@@ -156,7 +158,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?ApiKeyUserInterface
     {
-        $apiToken = is_array($credentials) ? $credentials['token'] ?? null : null;
+        $apiToken = is_array($credentials) ? $credentials[self::CREDENTIAL_KEY] ?? null : null;
 
         if ($apiToken === null) {
             return null;
@@ -183,7 +185,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        $apiToken = is_array($credentials) ? $credentials['token'] ?? null : null;
+        $apiToken = is_array($credentials) ? $credentials[self::CREDENTIAL_KEY] ?? null : null;
 
         if ($apiToken === null) {
             throw new AuthenticationException('Invalid token');
