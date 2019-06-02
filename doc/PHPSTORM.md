@@ -26,8 +26,8 @@ PhpStorm. Selection should be available on `Settings -> Languages & Frameworks -
 section.
 
 Just choose the `Docker-PHP` from dropdown, if that does not exist there you
-need to click that `...` and follow the instructions in [External links / resources](#external-links--resources)
-section.
+need to click that `...` and follow the instructions found in [External links / resources](#external-links--resources)
+section - Configuring Remote PHP Interpreters.
 
 ![Path mappings](images/phpstorm_01.png)
 
