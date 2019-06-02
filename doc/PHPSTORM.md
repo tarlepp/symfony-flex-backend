@@ -1,7 +1,10 @@
 # What is this?
 
 This document contains information how you can setup your [PhpStorm](https://www.jetbrains.com/phpstorm/)
-for this application _"correct"_ way.
+for this application _"correct"_ way. 
+
+For recommend plugins see [External links / resources](#external-links--resources)
+section of this documentation.
 
 ## Table of Contents
 
@@ -66,3 +69,8 @@ documentation and you're ready to start debugging your application.
 
 * [Configuring Remote PHP Interpreters](https://www.jetbrains.com/help/phpstorm/configuring-remote-interpreters.html)
 * [Test Frameworks](https://www.jetbrains.com/help/phpstorm/php-test-frameworks.html)
+* [Symfony Development using PhpStorm](http://blog.jetbrains.com/phpstorm/2014/08/symfony-development-using-phpstorm/)
+* [Symfony Plugin plugin for PhpStorm](https://plugins.jetbrains.com/plugin/7219-symfony-plugin)
+* [PHP Annotations plugin for PhpStorm](https://plugins.jetbrains.com/plugin/7320)
+* [Php Inspections (EA Extended) plugin for PhpStorm](https://plugins.jetbrains.com/idea/plugin/7622-php-inspections-ea-extended-)
+* [EditorConfig](https://plugins.jetbrains.com/plugin/7294-editorconfig)
