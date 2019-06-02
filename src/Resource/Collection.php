@@ -62,14 +62,14 @@ class Collection
      */
     public function get(string $resourceName): RestResourceInterface
     {
-        $resources = array_values(
+        $filteredResources = array_values(
             array_filter(
                 iterator_to_array($this->resources),
                 $this->resourceFilter($resourceName)
             )
         );
 
-        if (count($resources) !== 1) {
+        if (count($filteredResources) !== 1) {
             $message = sprintf(
                 'Resource \'%s\' does not exists',
                 $resourceName
@@ -78,7 +78,7 @@ class Collection
             throw new InvalidArgumentException($message);
         }
 
-        return $resources[0];
+        return $filteredResources[0];
     }
 
     /**
