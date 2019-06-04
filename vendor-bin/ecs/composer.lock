@@ -2779,16 +2779,16 @@
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v6.0.1",
+            "version": "v6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
-                "reference": "0bed4fb56fdd2af771b5bb2fcc432f35bbb04aea"
+                "reference": "c9bdf6fefbbc18638379a1233c97cd75b8a094b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/0bed4fb56fdd2af771b5bb2fcc432f35bbb04aea",
-                "reference": "0bed4fb56fdd2af771b5bb2fcc432f35bbb04aea",
+                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/c9bdf6fefbbc18638379a1233c97cd75b8a094b1",
+                "reference": "c9bdf6fefbbc18638379a1233c97cd75b8a094b1",
                 "shasum": ""
             },
             "require": {
@@ -2798,13 +2798,13 @@
                 "php": "^7.1",
                 "phpstan/phpdoc-parser": "^0.3.4",
                 "squizlabs/php_codesniffer": "^3.4",
-                "symplify/package-builder": "^6.0.1"
+                "symplify/package-builder": "^6.0.2"
             },
             "require-dev": {
                 "nette/application": "^2.4|^3.0",
                 "phpunit/phpunit": "^7.5|^8.0",
-                "symplify/easy-coding-standard-tester": "^6.0.1",
-                "symplify/package-builder": "^6.0.1"
+                "symplify/easy-coding-standard-tester": "^6.0.2",
+                "symplify/package-builder": "^6.0.2"
             },
             "type": "library",
             "extra": {
@@ -2823,7 +2823,7 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2019-05-30T13:59:05+00:00"
+            "time": "2019-06-04T10:53:05+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
@@ -2891,7 +2891,7 @@
         },
         {
             "name": "symplify/package-builder",
-            "version": "v6.0.1",
+            "version": "v6.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
