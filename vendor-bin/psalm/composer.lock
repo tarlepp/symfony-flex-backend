@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ebb10875bd71b9816b2da9437fd9172",
+    "content-hash": "c2db9b44fad1eec76695d56e94161a03",
     "packages": [],
     "packages-dev": [
         {
@@ -85,16 +85,16 @@
         },
         {
             "name": "amphp/byte-stream",
-            "version": "v1.5.1",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/byte-stream.git",
-                "reference": "6bbfcb6f47e92577e739586ba0c87e867be70a23"
+                "reference": "c75af3778b5511deb1d760e4709cade2dabc2295"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/byte-stream/zipball/6bbfcb6f47e92577e739586ba0c87e867be70a23",
-                "reference": "6bbfcb6f47e92577e739586ba0c87e867be70a23",
+                "url": "https://api.github.com/repos/amphp/byte-stream/zipball/c75af3778b5511deb1d760e4709cade2dabc2295",
+                "reference": "c75af3778b5511deb1d760e4709cade2dabc2295",
                 "shasum": ""
             },
             "require": {
@@ -140,7 +140,7 @@
                 "non-blocking",
                 "stream"
             ],
-            "time": "2018-12-27T18:08:06+00:00"
+            "time": "2019-06-03T21:45:17+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -1052,7 +1052,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -1242,16 +1242,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "3.3.2",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "201030928de5001941a59eddce77b9d326bc1880"
+                "reference": "99e6cd819f829babf50c5852d6f62d40b1fec9d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/201030928de5001941a59eddce77b9d326bc1880",
-                "reference": "201030928de5001941a59eddce77b9d326bc1880",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/99e6cd819f829babf50c5852d6f62d40b1fec9d9",
+                "reference": "99e6cd819f829babf50c5852d6f62d40b1fec9d9",
                 "shasum": ""
             },
             "require": {
@@ -1301,7 +1301,10 @@
                 "psr-4": {
                     "Psalm\\Plugin\\": "src/Psalm/Plugin",
                     "Psalm\\": "src/Psalm"
-                }
+                },
+                "files": [
+                    "src/functions.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1318,7 +1321,7 @@
                 "inspection",
                 "php"
             ],
-            "time": "2019-05-28T19:46:56+00:00"
+            "time": "2019-06-03T16:30:20+00:00"
         },
         {
             "name": "webmozart/assert",
