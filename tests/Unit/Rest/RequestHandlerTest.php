@@ -12,6 +12,7 @@ use App\Rest\RequestHandler;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use function json_encode;
 
 /**
@@ -22,13 +23,11 @@ use function json_encode;
  */
 class RequestHandlerTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     * @expectedExceptionMessage Current 'where' parameter is not valid JSON.
-     */
     public function testThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(): void
     {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
+
         $fakeRequest = Request::create('/', 'GET', ['where' => '{foo bar']);
 
         RequestHandler::getCriteria($fakeRequest);
@@ -157,13 +156,13 @@ class RequestHandlerTest extends KernelTestCase
         unset($fakeRequest);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     * @expectedExceptionMessage Given search parameter is not valid, within JSON provide 'and' and/or 'or' property.
-     */
     public function testThatGetSearchTermsThrowsAnExceptionWithInvalidJson(): void
     {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage(
+            'Given search parameter is not valid, within JSON provide \'and\' and/or \'or\' property.'
+        );
+
         $parameters = [
             'search' => '{"foo": "bar"}'
         ];
@@ -178,13 +177,13 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetSearchTermsReturnsExpectedValue
      *
-     * @param array  $expected
-     * @param string $search
+     * @param array       $expected
+     * @param string|bool $search
      */
-    public function testThatGetSearchTermsReturnsExpectedValue(array $expected, string $search): void
+    public function testThatGetSearchTermsReturnsExpectedValue(array $expected, $search): void
     {
         $parameters = [
-            'search' => $search,
+            'search' => (string)$search,
         ];
 
         $fakeRequest = Request::create('/', 'GET', $parameters);
