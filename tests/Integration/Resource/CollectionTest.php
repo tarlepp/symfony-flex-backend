@@ -19,6 +19,7 @@ use App\Resource\RoleResource;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use Generator;
+use InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\PropertyAccess\Tests\Fixtures\TraversableArrayObject;
 
@@ -30,13 +31,11 @@ use Symfony\Component\PropertyAccess\Tests\Fixtures\TraversableArrayObject;
  */
 class CollectionTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Resource 'FooBar' does not exists
-     */
     public function testThatGetMethodThrowsAnException(): void
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Resource \'FooBar\' does not exists');
+
         $collection = new Collection(new TraversableArrayObject());
         $collection->get('FooBar');
 

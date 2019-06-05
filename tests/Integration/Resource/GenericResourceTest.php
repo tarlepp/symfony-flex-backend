@@ -21,10 +21,13 @@ use Generator;
 use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use function get_class;
+use UnexpectedValueException;
 
 /**
  * Class GenericResourceTest
@@ -51,13 +54,11 @@ class GenericResourceTest extends KernelTestCase
         return static::$container->get('doctrine')->getManager();
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessageRegExp /DTO class not specified for '.*' resource/
-     */
     public function testThatGetDtoClassThrowsAnExceptionWithoutDto(): void
     {
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessageRegExp('/DTO class not specified for \'.*\' resource/');
+
         $this->resource->setDtoClass('');
         $this->resource->getDtoClass();
     }
@@ -69,13 +70,11 @@ class GenericResourceTest extends KernelTestCase
         static::assertSame('foobar', $this->resource->getDtoClass());
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessageRegExp /FormType class not specified for '.*' resource/
-     */
     public function testGetFormTypeClassThrowsAnExceptionWithoutFormType(): void
     {
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessageRegExp('/FormType class not specified for \'.*\' resource/');
+
         $this->resource->setFormTypeClass('');
         $this->resource->getFormTypeClass();
     }
@@ -87,6 +86,9 @@ class GenericResourceTest extends KernelTestCase
         static::assertSame('foobar', $this->resource->getFormTypeClass());
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetEntityNameCallsExpectedRepositoryMethod(): void
     {
         /** @var MockObject|UserRepository $repository */
@@ -120,6 +122,9 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetAssociationsCallsExpectedRepositoryMethod(): void
     {
         /** @var MockObject|UserRepository $repository */
@@ -135,6 +140,9 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetDtoForEntityCallsExpectedRepositoryMethod(): void
     {
         $entity = $this->getEntityMock();
@@ -162,13 +170,14 @@ class GenericResourceTest extends KernelTestCase
         unset($dto, $repository, $entity);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @expectedExceptionMessage Not found
+     * @throws Throwable
      */
     public function testThatGetDtoForEntityThrowsAnExceptionIfEntityWasNotFound(): void
     {
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('Not found');
+
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
@@ -232,15 +241,14 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @expectedExceptionMessage Not found
-     *
      * @throws Throwable
      */
     public function testThatFindOneThrowsAnExceptionIfEntityWasNotFound(): void
     {
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('Not found');
+
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
@@ -305,15 +313,15 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @expectedExceptionMessage Not found
      *
      * @throws Throwable
      */
     public function testThatFindOneByThrowsAnExceptionIfEntityWasNotFound(): void
     {
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('Not found');
+
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
@@ -400,14 +408,13 @@ class GenericResourceTest extends KernelTestCase
         unset($repository, $entity);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
-     *
      * @throws Throwable
      */
     public function testThatCreateMethodThrowsAnErrorWithInvalidDto(): void
     {
+        $this->expectException(ValidatorException::class);
+
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
@@ -466,15 +473,14 @@ class GenericResourceTest extends KernelTestCase
         unset($dto, $validator, $repository);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @expectedExceptionMessage Not found
-     *
      * @throws Throwable
      */
     public function testThatUpdateMethodThrowsAnExceptionIfEntityWasNotFound(): void
     {
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('Not found');
+
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
@@ -586,14 +592,13 @@ class GenericResourceTest extends KernelTestCase
         unset($repository);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
-     *
      * @throws Throwable
      */
     public function testThatSaveMethodThrowsAnExceptionWithInvalidEntity(): void
     {
+        $this->expectException(ValidatorException::class);
+
         $entity = new $this->entityClass();
 
         /** @var MockObject|UserRepository $repository */
@@ -741,6 +746,8 @@ class GenericResourceTest extends KernelTestCase
 
     /**
      * @return MockObject|EntityInterface
+     *
+     * @throws Throwable
      */
     private function getEntityInterfaceMock(): MockObject
     {
@@ -751,6 +758,8 @@ class GenericResourceTest extends KernelTestCase
 
     /**
      * @return MockObject|UserEntity
+     *
+     * @throws Throwable
      */
     private function getEntityMock(): MockObject
     {
