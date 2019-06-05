@@ -37,7 +37,7 @@
 		"piwik/device-detector": "3.11.7",
 		"ramsey/uuid": "3.8.0",
 		"sensio/framework-extra-bundle": "5.3.1",
-		"sensiolabs/security-checker": "5.0.3",
+		"sensiolabs/security-checker": "6.0.0",
 		"stof/doctrine-extensions-bundle": "1.3.0",
 		"symfony/asset": "*",
 		"symfony/console": "*",
