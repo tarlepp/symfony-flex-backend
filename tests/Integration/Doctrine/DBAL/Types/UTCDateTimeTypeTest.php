@@ -15,6 +15,7 @@ use DateTimeZone;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Generator;
 use ReflectionException;
@@ -112,12 +113,10 @@ class UTCDateTimeTypeTest extends KernelTestCase
         static::assertSame('UTC', $property->getName());
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \Doctrine\DBAL\Types\ConversionException
-     */
     public function testThatConvertToPHPValueThrowsAnExceptionWithInvalidValue(): void
     {
+        $this->expectException(ConversionException::class);
+
         $this->type->convertToPHPValue('foobar', $this->platform);
     }
 

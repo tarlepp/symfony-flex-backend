@@ -14,6 +14,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use Generator;
+use InvalidArgumentException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -50,17 +51,16 @@ class EnumLogLoginTypeTest extends KernelTestCase
         static::assertSame($value, $this->type->convertToDatabaseValue($value, $this->platform));
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid 'EnumLogLogin' value
-     *
      * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
      *
      * @param mixed $value
      */
     public function testThatConvertToDatabaseValueThrowsAnException($value): void
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid \'EnumLogLogin\' value');
+
         $this->type->convertToDatabaseValue($value, $this->platform);
     }
 
