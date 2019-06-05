@@ -10,6 +10,7 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\BodySubscriber;
 use Generator;
+use LogicException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -89,12 +90,10 @@ class BodySubscriberTest extends KernelTestCase
         static::assertSame($expectedRequestParameters, $request->request->all());
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \LogicException
-     */
     public function testThatInvalidJsonContentThrowsAnException(): void
     {
+        $this->expectException(LogicException::class);
+
         static::bootKernel();
 
         $request = new Request([], [], [], [], [], [], '{"Some": "not", "valid" JSON}');
