@@ -15,6 +15,7 @@ use App\Tests\Integration\Rest\Traits\Methods\src\PatchMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\PatchMethodTestClass;
 use Exception;
 use Generator;
+use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -23,6 +24,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -34,19 +36,19 @@ use Throwable;
  */
 class PatchMethodTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @codingStandardsIgnoreStart
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp /You cannot use '.*' controller class with REST traits if that does not implement 'App\\Rest\\ControllerInterface'/
-     *
-     * @codingStandardsIgnoreEnd
-     *
      * @throws Throwable
      */
     public function testThatTraitThrowsAnException():void
     {
+        $this->expectException(LogicException::class);
+
+        /** @codingStandardsIgnoreStart */
+        $this->expectExceptionMessageRegExp(
+            '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
+        );
+        /** @codingStandardsIgnoreEnd */
+
         /**
          * @var MockObject|FormFactoryInterface $formFactoryMock
          * @var MockObject|PatchMethodInvalidTestClass $testClass
@@ -61,10 +63,7 @@ class PatchMethodTest extends KernelTestCase
         $testClass->patchMethod($request, $formFactoryMock, 'some-id');
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     *
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
      *
      * @param string $httpMethod
@@ -73,6 +72,8 @@ class PatchMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
+        $this->expectException(MethodNotAllowedHttpException::class);
+
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
@@ -207,14 +208,13 @@ class PatchMethodTest extends KernelTestCase
         $testClass->patchMethod($request, $formFactoryMock, $uuid);
     }
 
-    /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     *
      * @throws Throwable
      */
     public function testThatTraitThrowsAnErrorIfFormIsInvalid(): void
     {
+        $this->expectException(HttpException::class);
+
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 

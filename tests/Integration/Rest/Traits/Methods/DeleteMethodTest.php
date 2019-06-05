@@ -15,12 +15,14 @@ use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodTestClass;
 use Exception;
 use Generator;
+use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
@@ -32,19 +34,19 @@ use Throwable;
  */
 class DeleteMethodTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @codingStandardsIgnoreStart
-     *
-     * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp /You cannot use '.*' controller class with REST traits if that does not implement 'App\\Rest\\ControllerInterface'/
-     *
-     * @codingStandardsIgnoreEnd
-     *
      * @throws Throwable
      */
     public function testThatTraitThrowsAnException():void
     {
+        $this->expectException(LogicException::class);
+
+        /** @codingStandardsIgnoreStart */
+        $this->expectExceptionMessageRegExp(
+            '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
+        );
+        /** @codingStandardsIgnoreEnd */
+
         /** @var MockObject|DeleteMethodInvalidTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(DeleteMethodInvalidTestClass::class);
 
@@ -55,10 +57,7 @@ class DeleteMethodTest extends KernelTestCase
         $testClass->deleteMethod($request, 'some-id');
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     *
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
      *
      * @param string $httpMethod
@@ -67,6 +66,8 @@ class DeleteMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
+        $this->expectException(MethodNotAllowedHttpException::class);
+
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 

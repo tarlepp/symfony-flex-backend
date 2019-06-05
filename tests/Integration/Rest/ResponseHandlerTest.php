@@ -19,7 +19,9 @@ use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\SerializerInterface;
+use Throwable;
 
 /**
  * Class ResponseTest
@@ -45,6 +47,8 @@ class ResponseHandlerTest extends ContainerTestCase
      * @param Request $request
      * @param mixed   $data
      * @param string  $expectedContent
+     *
+     * @throws Throwable
      */
     public function testThatCreateResponseReturnsExpected(
         Request $request,
@@ -61,13 +65,14 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame($expectedContent, $httpResponse->getContent());
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     * @expectedExceptionMessage Some exception
+     * @throws Throwable
      */
     public function testThatCreateResponseThrowsAnExceptionIfSerializationFails(): void
     {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('Some exception');
+
         /**
          * @var MockObject|SerializerInterface $stubSerializer
          */
@@ -87,18 +92,19 @@ class ResponseHandlerTest extends ContainerTestCase
         $responseClass->createResponse($request, []);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @dataProvider dataProviderTestThatNonSupportedSerializerFormatThrowsHttpException
      *
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     * @expectedExceptionCode 400
-     * @expectedExceptionMessageRegExp /Serialization for the format .* is not supported/
-     *
      * @param string $format
+     *
+     * @throws Throwable
      */
     public function testThatNonSupportedSerializerFormatThrowsHttpException(string $format): void
     {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionCode(400);
+        $this->expectExceptionMessageRegExp('/Serialization for the format .* is not supported/');
+
         $request = Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => $format]);
         $serializer = $this->getContainer()->get('serializer');
 
@@ -109,6 +115,9 @@ class ResponseHandlerTest extends ContainerTestCase
             ->createResponse($request, ['foo' => 'bar'], $stubResourceService, 200, $format);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetSerializeContextMethodCallsExpectedServiceMethods():void
     {
         /**
@@ -139,6 +148,9 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['FakeEntity'], $context['groups']);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenNonAnyAssociations(): void
     {
         /**
@@ -169,6 +181,9 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['FakeEntity'], $context['groups']);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenAssociations(): void
     {
         /**
@@ -204,6 +219,9 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['FakeEntity', 'FakeEntity.AnotherFakeEntity'], $context['groups']);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenNonAssociations(): void
     {
         /**
@@ -234,6 +252,9 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['FakeEntity'], $context['groups']);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityAssociations(): void
     {
         /**
@@ -270,13 +291,14 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['AnotherFakeEntity'], $context['groups']);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     * @expectedExceptionMessage Field 'foo': test error
+     * @throws Throwable
      */
     public function testThatHandleFormErrorThrowsExpectedExceptionWithProperty(): void
     {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('Field \'foo\': test error');
+
         /**
          * @var MockObject|SerializerInterface $serializer
          * @var MockObject|FormInterface       $formInterface
@@ -314,13 +336,14 @@ class ResponseHandlerTest extends ContainerTestCase
         $testClass->handleFormError($formInterface);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     * @expectedExceptionMessage test error
+     * @throws Throwable
      */
     public function testThatHandleFormErrorThrowsExpectedExceptionWithoutProperty(): void
     {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('test error');
+
         /**
          * @var MockObject|SerializerInterface $serializer
          * @var MockObject|FormInterface       $formInterface
