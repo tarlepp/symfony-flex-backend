@@ -14,6 +14,7 @@ use App\Resource\UserResource;
 use App\Security\SecurityUser;
 use Closure;
 use Generator;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,9 @@ use function iterator_to_array;
  */
 class UserValueResolverTest extends KernelTestCase
 {
+    /**
+     * @throws Throwable
+     */
     public function testThatSupportsReturnFalseWithWrongType(): void
     {
         /** @var MockObject|UserResource $userResource */
@@ -45,6 +49,9 @@ class UserValueResolverTest extends KernelTestCase
         static::assertFalse($resolver->supports(Request::create('/'), $metadata));
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatSupportsReturnFalseWithNoToken(): void
     {
         /** @var MockObject|UserResource $userResource */
@@ -57,13 +64,14 @@ class UserValueResolverTest extends KernelTestCase
         static::assertFalse($resolver->supports(Request::create('/'), $metadata));
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException
-     * @expectedExceptionMessage JWT Token not found
+     * @throws Throwable
      */
     public function testThatSupportsThrowsAnExceptionWithNonSecurityUser(): void
     {
+        $this->expectException(MissingTokenException::class);
+        $this->expectExceptionMessage('JWT Token not found');
+
         /** @var MockObject|UserResource $userResource */
         $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
 
@@ -78,6 +86,9 @@ class UserValueResolverTest extends KernelTestCase
         $resolver->supports(Request::create('/'), $metadata);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatSupportsReturnsTrueWithProperUser(): void
     {
         /** @var MockObject|UserResource $userResource */
@@ -147,6 +158,9 @@ class UserValueResolverTest extends KernelTestCase
         static::assertSame([$user], iterator_to_array($resolver->resolve(Request::create('/'), $metadata)));
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(): void
     {
         /** @var MockObject|UserResource $userResource */
@@ -178,6 +192,8 @@ class UserValueResolverTest extends KernelTestCase
      * @dataProvider dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet
      *
      * @param Closure $closure
+     *
+     * @throws Throwable
      */
     public function testThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(Closure $closure): void
     {
