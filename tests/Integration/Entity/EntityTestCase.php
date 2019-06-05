@@ -292,19 +292,19 @@ abstract class EntityTestCase extends KernelTestCase
      * @dataProvider dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected
      *
      * @param string|boolean $methodGetter
-     * @param string         $methodAdder
-     * @param string         $methodRemoval
-     * @param string         $methodClear
-     * @param string         $field
-     * @param mixed          $targetEntity
+     * @param string|boolean $methodAdder
+     * @param string|boolean $methodRemoval
+     * @param string|boolean $methodClear
+     * @param string|boolean $field
+     * @param string|boolean $targetEntity
      * @param array          $mappings
      */
     public function testThatManyToManyAssociationMethodsWorksAsExpected(
         $methodGetter,
-        string $methodAdder,
-        string $methodRemoval,
-        string $methodClear,
-        string $field,
+        $methodAdder,
+        $methodRemoval,
+        $methodClear,
+        $field,
         $targetEntity,
         array $mappings
     ): void {
@@ -396,15 +396,15 @@ abstract class EntityTestCase extends KernelTestCase
      * @dataProvider dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected
      *
      * @param string|boolean $methodSetter
-     * @param string         $methodGetter
-     * @param mixed          $targetEntity
-     * @param string         $field
+     * @param string|boolean $methodGetter
+     * @param string|boolean $targetEntity
+     * @param string|boolean $field
      */
     public function testThatManyToOneAssociationMethodsWorksAsExpected(
         $methodSetter,
-        string $methodGetter,
+        $methodGetter,
         $targetEntity,
-        string $field
+        $field
     ): void {
         if ($methodSetter === false) {
             static::markTestSkipped('Entity does not contain many-to-one relationships.');
@@ -436,9 +436,9 @@ abstract class EntityTestCase extends KernelTestCase
      * @dataProvider dataProviderTestThatOneToManyAssociationMethodsWorksAsExpected
      *
      * @param string|boolean $methodGetter
-     * @param string         $field
+     * @param string|boolean $field
      */
-    public function testThatOneToManyAssociationMethodsWorksAsExpected($methodGetter, string $field): void
+    public function testThatOneToManyAssociationMethodsWorksAsExpected($methodGetter, $field): void
     {
         if ($methodGetter === false) {
             static::markTestSkipped('Entity does not contain one-to-many relationships.');
