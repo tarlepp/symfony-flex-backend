@@ -10,11 +10,14 @@ namespace App\Tests\Integration\Security\Provider;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Security\Provider\SecurityUserFactory;
 use App\Security\RolesService;
 use App\Security\SecurityUser;
-use App\Security\Provider\SecurityUserFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\User as CoreUser;
 use Throwable;
 
 /**
@@ -25,15 +28,14 @@ use Throwable;
  */
 class SecurityUserFactoryTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     * @expectedExceptionMessage User not found for UUID:
-     *
      * @throws Throwable
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionIfUserNotFound(): void
     {
+        $this->expectException(UsernameNotFoundException::class);
+        $this->expectExceptionMessage('User not found for UUID:');
+
         /**
          * @var MockObject|UserRepository $userRepository
          * @var MockObject|RolesService   $rolesService
@@ -84,6 +86,9 @@ class SecurityUserFactoryTest extends KernelTestCase
         static::assertSame(['FOO', 'BAR'], $securityUser->getRoles());
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatSupportsMethodsReturnsFalseWithNotSupportedType(): void
     {
         /**
@@ -96,6 +101,9 @@ class SecurityUserFactoryTest extends KernelTestCase
         static::assertFalse((new SecurityUserFactory($userRepository, $rolesService))->supportsClass(null));
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatSupportsMethodsReturnsTrueWithSupportedType(): void
     {
         /**
@@ -110,15 +118,14 @@ class SecurityUserFactoryTest extends KernelTestCase
         );
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
-     * @expectedExceptionMessage Invalid user class "Symfony\Component\Security\Core\User\User"
-     *
      * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnExceptionWithNotSupportedUser(): void
     {
+        $this->expectException(UnsupportedUserException::class);
+        $this->expectExceptionMessage('Invalid user class "Symfony\Component\Security\Core\User\User"');
+
         /**
          * @var MockObject|UserRepository $userRepository
          * @var MockObject|RolesService   $rolesService
@@ -127,18 +134,17 @@ class SecurityUserFactoryTest extends KernelTestCase
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
         (new SecurityUserFactory($userRepository, $rolesService))
-            ->refreshUser(new \Symfony\Component\Security\Core\User\User('test_user', 'password'));
+            ->refreshUser(new CoreUser('test_user', 'password'));
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     * @expectedExceptionMessage User not found for UUID:
-     *
      * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserNotFound(): void
     {
+        $this->expectException(UsernameNotFoundException::class);
+        $this->expectExceptionMessage('User not found for UUID:');
+
         /**
          * @var MockObject|UserRepository $userRepository
          * @var MockObject|RolesService   $rolesService

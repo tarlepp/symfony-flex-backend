@@ -10,10 +10,12 @@ namespace App\Tests\Functional\Security\Provider;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Security\SecurityUser;
 use App\Security\Provider\SecurityUserFactory;
+use App\Security\SecurityUser;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User as CoreUser;
 use Throwable;
 
@@ -35,14 +37,13 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     private $userRepository;
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     *
      * @throws Throwable
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidUsername(): void
     {
+        $this->expectException(UsernameNotFoundException::class);
+
         static::assertNull($this->securityUserFactory->loadUserByUsername('foobar'));
     }
 
@@ -62,14 +63,13 @@ class SecurityUserFactoryTest extends KernelTestCase
         static::assertSame($roles, $domainUser->getRoles());
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     *
      * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
     {
+        $this->expectException(UsernameNotFoundException::class);
+
         $this->securityUserFactory->refreshUser(new SecurityUser(new User()));
 
         unset($user);
@@ -113,15 +113,14 @@ class SecurityUserFactoryTest extends KernelTestCase
         unset($user);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
-     * @expectedExceptionMessage Invalid user class "Symfony\Component\Security\Core\User\User"
-     *
      * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserClassIsNotSupported(): void
     {
+        $this->expectException(UnsupportedUserException::class);
+        $this->expectExceptionMessage('Invalid user class "Symfony\Component\Security\Core\User\User"');
+
         $user = new CoreUser('test', 'password');
 
         $this->securityUserFactory->refreshUser($user);

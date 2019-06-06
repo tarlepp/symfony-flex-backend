@@ -13,7 +13,9 @@ use App\DTO\User;
 use App\Entity\User as UserEntity;
 use App\Tests\Integration\Dto\src\DummyDto;
 use App\Utils\Tests\PhpUnitUtil;
+use BadMethodCallException;
 use Generator;
+use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -26,12 +28,13 @@ use Throwable;
  */
 class GenericDtoTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \BadMethodCallException
+     * @throws Throwable
      */
     public function testThatPatchThrowsAnExceptionIfGetterMethodDoesNotExist(): void
     {
+        $this->expectException(BadMethodCallException::class);
+
         /** @var MockObject|RestDtoInterface $dtoMock */
         $dtoMock = $this->createMock(RestDtoInterface::class);
 
@@ -63,13 +66,11 @@ class GenericDtoTest extends KernelTestCase
         static::assertSame($expected, PhpUnitUtil::callMethod($dto, 'determineGetterMethod', [$dto, $property]));
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Property 'foo' has multiple getter methods - this is insane!
-     */
     public function testThatPatchThrowsAnErrorIfMultipleGettersAreDefined(): void
     {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Property \'foo\' has multiple getter methods - this is insane!');
+
         require_once __DIR__ . '/src/DummyDto.php';
 
         $dtoMock = new DummyDto();
@@ -81,6 +82,9 @@ class GenericDtoTest extends KernelTestCase
         unset($dto, $dtoMock);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatPatchCallsExpectedMethods(): void
     {
         /** @var MockObject|User $dtoUser */
@@ -107,6 +111,9 @@ class GenericDtoTest extends KernelTestCase
         static::assertSame('email@com', $dto->getEmail());
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatUpdateMethodCallsExpectedMethods(): void
     {
         /** @var MockObject|UserEntity $userEntity */

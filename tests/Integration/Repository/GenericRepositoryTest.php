@@ -23,6 +23,7 @@ use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
+use UnexpectedValueException;
 
 /**
  * Class GenericRepositoryTest
@@ -71,15 +72,14 @@ class GenericRepositoryTest extends KernelTestCase
         static::assertInstanceOf(ClassMetadata::class, $repository->getClassMetaData());
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Cannot get entity manager for entity 'App\Entity\User'
-     *
      * @throws Throwable
      */
     public function testThatGetEntityManagerThrowsAnExceptionIfManagerIsNotValid(): void
     {
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Cannot get entity manager for entity \'App\Entity\User\'');
+
         $managerObject = $this->getMockForAbstractClass(
             AbstractManagerRegistry::class,
             [],
@@ -323,6 +323,9 @@ class GenericRepositoryTest extends KernelTestCase
         unset($repository, $queryBuilder);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatFindMethodCallsExpectedEntityManagerMethod(): void
     {
         /**
@@ -368,6 +371,9 @@ class GenericRepositoryTest extends KernelTestCase
         unset($repository, $managerObject, $entityManager);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatFindOneByMethodCallsExpectedEntityManagerMethod(): void
     {
         /**
@@ -418,6 +424,9 @@ class GenericRepositoryTest extends KernelTestCase
         unset($repository, $managerObject, $entityManager, $repositoryMock);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatFindByMethodCallsExpectedEntityManagerMethod(): void
     {
         /**
@@ -471,6 +480,9 @@ class GenericRepositoryTest extends KernelTestCase
         unset($repository, $managerObject, $entityManager, $repositoryMock);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatFindAllMethodCallsExpectedEntityManagerMethod(): void
     {
         /**

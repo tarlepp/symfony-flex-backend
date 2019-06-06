@@ -24,6 +24,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 /**
@@ -34,19 +35,19 @@ use Throwable;
  */
 class CreateMethodTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @codingStandardsIgnoreStart
-     *
-     * @expectedException LogicException
-     * @expectedExceptionMessageRegExp /You cannot use '.*' controller class with REST traits if that does not implement 'App\\Rest\\ControllerInterface'/
-     *
-     * @codingStandardsIgnoreEnd
-     *
      * @throws Throwable
      */
     public function testThatTraitThrowsAnException():void
     {
+        $this->expectException(LogicException::class);
+
+        /** @codingStandardsIgnoreStart */
+        $this->expectExceptionMessageRegExp(
+            '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
+        );
+        /** @codingStandardsIgnoreEnd */
+
         /**
          * @var MockObject|CreateMethodInvalidTestClass $testClass
          * @var MockObject|FormFactoryInterface         $formFactoryMock
@@ -59,10 +60,7 @@ class CreateMethodTest extends KernelTestCase
         $testClass->createMethod($request, $formFactoryMock);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     *
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
      *
      * @param string $httpMethod
@@ -71,6 +69,8 @@ class CreateMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
+        $this->expectException(MethodNotAllowedHttpException::class);
+
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
@@ -196,14 +196,13 @@ class CreateMethodTest extends KernelTestCase
         $testClass->createMethod($request, $formFactoryMock);
     }
 
-    /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
     /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\HttpException
-     *
      * @throws Throwable
      */
     public function testThatTraitThrowsAnErrorIfFormIsInvalid(): void
     {
+        $this->expectException(HttpException::class);
+
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 

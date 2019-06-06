@@ -14,6 +14,7 @@ use App\Security\SecurityUser;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use LengthException;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -52,13 +53,11 @@ class UserEntityEventListenerTest extends KernelTestCase
      */
     protected $subscriber;
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \LengthException
-     * @expectedExceptionMessage Too short password
-     */
     public function testThatTooShortPasswordThrowsAnExceptionWithPrePersist(): void
     {
+        $this->expectException(LengthException::class);
+        $this->expectExceptionMessage('Too short password');
+
         // Set plain password so that listener can make a real one
         $this->entity->setPlainPassword('test');
 
@@ -69,13 +68,11 @@ class UserEntityEventListenerTest extends KernelTestCase
         $this->subscriber->prePersist($event);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \LengthException
-     * @expectedExceptionMessage Too short password
-     */
     public function testThatTooShortPasswordThrowsAnExceptionWithPreUpdate(): void
     {
+        $this->expectException(LengthException::class);
+        $this->expectExceptionMessage('Too short password');
+
         // Set plain password so that listener can make a real one
         $this->entity->setPlainPassword('test');
 

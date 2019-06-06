@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Serializer\Serializer;
 use Throwable;
+use UnexpectedValueException;
 use function get_class;
 
 /**
@@ -29,15 +30,14 @@ use function get_class;
  */
 class ControllerTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Resource service not set
-     *
      * @throws Throwable
      */
     public function testThatGetResourceThrowsAnExceptionIfNotSet(): void
     {
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('Resource service not set');
+
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [], '', false);
         $controller->getResource();
@@ -58,15 +58,14 @@ class ControllerTest extends KernelTestCase
         static::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage ResponseHandler service not set
-     *
      * @throws Throwable
      */
     public function testThatGetResponseHandlerThrowsAnExceptionIfNotSet(): void
     {
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage('ResponseHandler service not set');
+
         /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [], '', false);
         $controller->getResponseHandler();
@@ -109,15 +108,16 @@ class ControllerTest extends KernelTestCase
         $controller->getDtoClass();
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Given DTO class 'stdClass' is not implementing 'App\DTO\RestDtoInterface' interface.
-     *
      * @throws Throwable
      */
     public function testThatGetDtoClassThrowsAnExceptionIfResourceDoesNotReturnExpectedClass(): void
     {
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage(
+            'Given DTO class \'stdClass\' is not implementing \'App\DTO\RestDtoInterface\' interface.'
+        );
+
         /** @var MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 

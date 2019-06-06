@@ -6,6 +6,7 @@ namespace App\Tests\Functional\Maker;
 use App\Maker\RestApiMaker;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\MakerBundle\Command\MakerCommand;
+use Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException;
 use Symfony\Bundle\MakerBundle\FileManager;
 use Symfony\Bundle\MakerBundle\Generator;
 use Symfony\Bundle\MakerBundle\Util\AutoloaderUtil;
@@ -39,20 +40,23 @@ class RestApiMakerTest extends KernelTestCase
 
         $tester = new CommandTester($command);
         $tester->setInputs($inputs);
-        $tester->execute(array());
+        $tester->execute([]);
 
-        static::assertContains('Success', $tester->getDisplay());
+        static::assertStringContainsString('Success', $tester->getDisplay());
 
         // Clean up files
         $this->fs->remove($maker->getCreatedFiles());
     }
 
-    /**
-     * @expectedException \Symfony\Bundle\MakerBundle\Exception\RuntimeCommandException
-     * @expectedExceptionMessage "App\Controller\123BookController" is not valid as a PHP class name (it must start with a letter or underscore, followed by any number of letters, numbers, or underscores)
-     */
     public function testThatCommandReturnsAnErrorWithInvalidInput(): void
     {
+        $this->expectException(RuntimeCommandException::class);
+
+        /** @codingStandardsIgnoreStart */
+        $this->expectExceptionMessage('"App\Controller\123BookController" is not valid as a PHP class name (it must start with a letter or underscore, followed by any number of letters, numbers, or underscores)');
+        /** @codingStandardsIgnoreEnd */
+
+
         $maker = new RestApiMaker();
         $inputs = [
             '123Book',

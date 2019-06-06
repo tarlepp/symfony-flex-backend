@@ -17,6 +17,7 @@ use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class RestResourceConverterTest
@@ -42,11 +43,10 @@ class RestResourceConverterTest extends KernelTestCase
         static::assertSame($expected, $this->converter->supports($configuration));
     }
 
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
     public function testThatApplyMethodThrowsAnException(): void
     {
+        $this->expectException(NotFoundHttpException::class);
+
         $request = new Request();
         $request->attributes->set('foo', 'bar');
 

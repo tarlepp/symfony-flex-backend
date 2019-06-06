@@ -8,9 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
-use Exception;
 use Generator;
 use Ramsey\Uuid\Uuid;
+use Throwable;
 use function array_merge;
 
 /**
@@ -51,7 +51,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatCountRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $username = null,
@@ -76,7 +76,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatCountRouteWorksWithAllowedHttpMethods(
         ?string $username = null,
@@ -101,7 +101,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatCountRouteDoesNotAllowInvalidUser(
         ?string $username = null,
@@ -126,7 +126,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatRootRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $username = null,
@@ -151,7 +151,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatRootRouteWorksWithAllowedHttpMethods(
         ?string $username = null,
@@ -176,7 +176,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatRootRouteDoesNotAllowInvalidUser(
         ?string $username = null,
@@ -201,7 +201,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
         ?string $username = null,
@@ -228,7 +228,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
         ?string $username = null,
@@ -255,7 +255,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatRootRouteWithIdDoesNotAllowInvalidUser(
         ?string $username = null,
@@ -282,7 +282,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatIdsRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $username = null,
@@ -307,7 +307,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatIdsRouteWorksWithAllowedHttpMethods(
         ?string $username = null,
@@ -332,7 +332,7 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $password
      * @param string|null $method
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function testThatIdsRouteDoesNotAllowInvalidUser(
         ?string $username = null,

@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Utils\Tests\PhpUnitUtil;
 use DateTime;
 use Generator;
+use LogicException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -24,13 +25,11 @@ use Throwable;
  */
 class PHPUnitUtilTest extends KernelTestCase
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Currently type '666' is not supported within type normalizer
-     */
     public function testThatGetTypeThrowsAnExceptionWithNotKnowType(): void
     {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Currently type \'666\' is not supported within type normalizer');
+
         PhpUnitUtil::getType('666');
     }
 
@@ -45,15 +44,14 @@ class PHPUnitUtilTest extends KernelTestCase
         static::assertSame($expected, PhpUnitUtil::getType($input));
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Cannot create valid value for type '666'.
-     *
      * @throws Throwable
      */
     public function testThatGetValidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Cannot create valid value for type \'666\'.');
+
         PhpUnitUtil::getValidValueForType('666');
     }
 
@@ -81,15 +79,14 @@ class PHPUnitUtilTest extends KernelTestCase
         static::assertInstanceOf(User::class, PhpUnitUtil::getValidValueForType(User::class));
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Cannot create invalid value for type '666'.
-     *
      * @throws Throwable
      */
     public function testThatGetInvalidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Cannot create invalid value for type \'666\'.');
+
         PhpUnitUtil::getInvalidValueForType('666');
     }
 

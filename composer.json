@@ -115,11 +115,11 @@
 		"symfony/debug": "<3.3"
 	},
 	"extra": {
+			"allow-contrib": "true",
 		"projectTitle": "Symfony Flex Backend",
 		"symfony": {
 			"id": "01BFA135DXTPRA5CR250NTJJJP",
-			"allow-contrib": "true",
-			"require": "4.3.0"
+			"require": "4.3.1"
 		}
 	}
 }

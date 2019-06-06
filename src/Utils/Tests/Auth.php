@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Utils\Tests;
 
 use App\Utils\JSON;
-use Symfony\Bundle\FrameworkBundle\Client;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -138,7 +138,7 @@ class Auth
         if (!array_key_exists($hash, $cache)) {
             // Get client
             /** @noinspection MissingService */
-            /** @var Client $client */
+            /** @var KernelBrowser $client */
             $client = $this->testContainer->get('test.client');
 
             // Create request to make login using given credentials

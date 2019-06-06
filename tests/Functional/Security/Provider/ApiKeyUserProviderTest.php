@@ -15,6 +15,8 @@ use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User;
 use Throwable;
 use function array_map;
@@ -65,15 +67,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($apiKey);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     * @expectedExceptionMessage API key is not valid
-     *
      * @throws Throwable
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidGuid(): void
     {
+        $this->expectException(UsernameNotFoundException::class);
+        $this->expectExceptionMessage('API key is not valid');
+
         $this->apiKeyUserProvider->loadUserByUsername((string)time());
     }
 
@@ -95,15 +96,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($apiKeyUser);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
-     * @expectedExceptionMessage API key cannot refresh user
-     *
      * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnException(): void
     {
+        $this->expectException(UnsupportedUserException::class);
+        $this->expectExceptionMessage('API key cannot refresh user');
+
         $user = new User('username', 'password');
 
         $this->apiKeyUserProvider->refreshUser($user);
