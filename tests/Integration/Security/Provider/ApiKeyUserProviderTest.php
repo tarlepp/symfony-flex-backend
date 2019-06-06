@@ -18,6 +18,8 @@ use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
@@ -35,6 +37,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
      *
      * @param bool   $expected
      * @param string $input
+     *
+     * @throws Throwable
      */
     public function testThatSupportClassReturnsExpected(bool $expected, string $input): void
     {
@@ -52,15 +56,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($provider, $rolesService, $apiKeyRepository);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
-     * @expectedExceptionMessage API key cannot refresh user
-     *
      * @throws Throwable
      */
     public function testThatRefreshUserThrowsAnException(): void
     {
+        $this->expectException(UnsupportedUserException::class);
+        $this->expectExceptionMessage('API key cannot refresh user');
+
         /**
          * @var MockObject|ApiKeyRepository $apiKeyRepository
          * @var MockObject|RolesService     $rolesService
@@ -76,15 +79,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($provider, $user, $rolesService, $apiKeyRepository);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     * @expectedExceptionMessage API key is not valid
-     *
      * @throws Throwable
      */
     public function testThatLoadUserByUsernameThrowsAnException(): void
     {
+        $this->expectException(UsernameNotFoundException::class);
+        $this->expectExceptionMessage('API key is not valid');
+
         /**
          * @var MockObject|ApiKeyRepository $apiKeyRepository
          * @var MockObject|RolesService     $rolesService
@@ -132,6 +134,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
         unset($user, $provider, $apiKeyRepository, $apiKey, $rolesService);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetApiKeyForTokenCallsExpectedRepositoryMethod(): void
     {
         /**

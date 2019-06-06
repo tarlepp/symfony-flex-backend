@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\User;
+use Throwable;
 use function json_encode;
 
 /**
@@ -35,6 +36,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      *
      * @param bool    $expected
      * @param Request $request
+     *
+     * @throws Throwable
      */
     public function testThatSupportReturnsExpected(bool $expected, Request $request): void
     {
@@ -48,6 +51,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         static::assertSame($expected, $authenticator->supports($request));
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatStartMethodReturnsExpected(): void
     {
         /**
@@ -71,6 +77,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      *
      * @param array|null $expected
      * @param Request    $request
+     *
+     * @throws Throwable
      */
     public function testThatGetCredentialsReturnsExpected(?array $expected, Request $request): void
     {
@@ -88,6 +96,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      * @dataProvider dataProviderTestThatGetUserReturnsExpected
      *
      * @param mixed $credentials
+     *
+     * @throws Throwable
      */
     public function testThatGetUserReturnsExpectedWhenCredentialsIsInvalid($credentials): void
     {
@@ -101,17 +111,18 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         static::assertNull($authenticator->getUser($credentials, $apiKeyUserProvider));
     }
 
-    /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
     /**
      * @dataProvider dataProviderTestThatCheckCredentialsThrowsAnException
      *
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     * @expectedExceptionMessage Invalid token
-     *
      * @param mixed $credentials
+     *
+     * @throws Throwable
      */
     public function testThatCheckCredentialsThrowsAnException($credentials): void
     {
+        $this->expectException(AuthenticationException::class);
+        $this->expectExceptionMessage('Invalid token');
+
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
          */
@@ -120,6 +131,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         (new ApiKeyAuthenticator($apiKeyUserProvider))->checkCredentials($credentials, new User('user', 'password'));
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatOnAuthenticationSuccessReturnsNull(): void
     {
         /**
@@ -136,6 +150,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         ));
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatOnAuthenticationFailureReturnsExpected(): void
     {
         /**
@@ -153,6 +170,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         );
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatSupportsRememberMeReturnsFalse(): void
     {
         /**
