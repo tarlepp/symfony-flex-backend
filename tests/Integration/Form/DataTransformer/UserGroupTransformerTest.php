@@ -14,6 +14,7 @@ use App\Resource\UserGroupResource;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
 
 /**
@@ -61,13 +62,11 @@ class UserGroupTransformerTest extends KernelTestCase
         unset($transformer, $entity1, $entity2);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage User group with id "2" does not exist!
-     */
     public function testThatReverseTransformThrowsAnException(): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('User group with id "2" does not exist!');
+
         $entity = new UserGroup();
 
         $this->userGroupResource
@@ -114,6 +113,9 @@ class UserGroupTransformerTest extends KernelTestCase
         yield [[$entity->getId()], [$entity]];
     }
 
+    /**
+     * @throws Throwable
+     */
     protected function setUp(): void
     {
         gc_enable();

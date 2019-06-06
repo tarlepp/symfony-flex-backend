@@ -14,6 +14,8 @@ use App\Resource\RoleResource;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
+use Throwable;
 
 /**
  * Class RoleTransformerTest
@@ -57,13 +59,11 @@ class RoleTransformerTest extends KernelTestCase
         unset($transformer, $entity);
     }
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
-    /**
-     * @expectedException \Symfony\Component\Form\Exception\TransformationFailedException
-     * @expectedExceptionMessage Role with name "role_name" does not exist!
-     */
     public function testThatReverseTransformThrowsAnException(): void
     {
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('Role with name "role_name" does not exist!');
+
         $this->roleResource
             ->expects(static::once())
             ->method('findOne')
@@ -105,6 +105,9 @@ class RoleTransformerTest extends KernelTestCase
         yield [$entity->getId(), $entity];
     }
 
+    /**
+     * @throws Throwable
+     */
     protected function setUp(): void
     {
         gc_enable();
