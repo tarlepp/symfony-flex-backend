@@ -25,13 +25,13 @@ use Throwable;
 class LoginLoggerTest extends KernelTestCase
 {
     /**
-     * @expectedException BadMethodCallException
-     * @expectedExceptionMessage Could not get request from current request stack
-     *
      * @throws Throwable
      */
     public function testThatSetUserCallsRepositoryMethodIfWrongUserProvided(): void
     {
+        $this->expectException(BadMethodCallException::class);
+        $this->expectExceptionMessage('Could not get request from current request stack');
+
         /**
          * @var MockObject|LogLoginResource $logLoginResource
          */
@@ -45,13 +45,13 @@ class LoginLoggerTest extends KernelTestCase
     }
 
     /**
-     * @expectedException BadMethodCallException
-     * @expectedExceptionMessage Could not get request from current request stack
-     *
      * @throws Throwable
      */
     public function testThatExceptionIsThrownIfRequestIsNotAvailable(): void
     {
+        $this->expectException(BadMethodCallException::class);
+        $this->expectExceptionMessage('Could not get request from current request stack');
+
         /**
          * @var MockObject|LogLoginResource $logLoginResource
          */
