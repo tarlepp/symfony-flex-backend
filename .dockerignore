@@ -32,3 +32,6 @@ infection.json
 
 ### Vendor bin dependencies
 /vendor-bin/*/vendor/
+
+### PHPUnit
+.phpunit.result.cache
