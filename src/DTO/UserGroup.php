@@ -11,6 +11,7 @@ namespace App\DTO;
 use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as Entity;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -83,6 +84,19 @@ class UserGroup extends RestDto
         $this->role = $role;
 
         return $this;
+    }
+
+    /**
+     * Method to create DTO from request object.
+     *
+     * @param Request $request
+     *
+     * @return RestDtoInterface
+     */
+    public function createFromRequest(Request $request): RestDtoInterface
+    {
+        // TODO
+        return new self();
     }
 
     /**
