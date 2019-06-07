@@ -106,8 +106,8 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
         // Create new entity
         $entity = new User();
         $entity->setUsername('john' . $suffix);
-        $entity->setFirstname('John');
-        $entity->setSurname('Doe');
+        $entity->setFirstName('John');
+        $entity->setLastName('Doe');
         $entity->setEmail('john.doe' . $suffix . '@test.com');
         $entity->setPlainPassword('password' . $suffix);
 

@@ -47,19 +47,19 @@ class UserType extends AbstractType
             ],
         ],
         [
-            'firstname',
+            'firstName',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL => 'Firstname',
+                FormTypeLabelInterface::LABEL => 'First name',
                 FormTypeLabelInterface::REQUIRED => true,
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
-            'surname',
+            'lastName',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL => 'Surname',
+                FormTypeLabelInterface::LABEL => 'Last name',
                 FormTypeLabelInterface::REQUIRED => true,
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],

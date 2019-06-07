@@ -40,18 +40,18 @@ abstract class UserType extends AbstractType
             ],
         ],
         [
-            'firstname',
+            'firstName',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL => 'Firstname',
+                FormTypeLabelInterface::LABEL => 'First name',
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
         [
-            'surname',
+            'lastName',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL => 'Surname',
+                FormTypeLabelInterface::LABEL => 'Last name',
                 FormTypeLabelInterface::EMPTY_DATA => '',
             ],
         ],
@@ -83,6 +83,8 @@ abstract class UserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        parent::buildForm($builder, $options);
+
         $this->addBasicFieldToForm($builder, self::$formFields);
     }
 }

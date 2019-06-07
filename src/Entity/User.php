@@ -88,7 +88,7 @@ class User implements EntityInterface, UserInterface
      *
      * @Groups({
      *      "User",
-     *      "User.firstname",
+     *      "User.firstName",
      *  })
      *
      * @Assert\NotBlank()
@@ -96,20 +96,20 @@ class User implements EntityInterface, UserInterface
      * @Assert\Length(min = 2, max = 255)
      *
      * @ORM\Column(
-     *      name="firstname",
+     *      name="first_name",
      *      type="string",
      *      length=255,
      *      nullable=false
      *  )
      */
-    private $firstname = '';
+    private $firstName = '';
 
     /**
      * @var string
      *
      * @Groups({
      *      "User",
-     *      "User.surname",
+     *      "User.lastName",
      *  })
      *
      * @Assert\NotBlank()
@@ -117,13 +117,13 @@ class User implements EntityInterface, UserInterface
      * @Assert\Length(min = 2, max = 255)
      *
      * @ORM\Column(
-     *      name="surname",
+     *      name="last_name",
      *      type="string",
      *      length=255,
      *      nullable=false
      *  )
      */
-    private $surname = '';
+    private $lastName = '';
 
     /**
      * @var string
@@ -211,19 +211,19 @@ class User implements EntityInterface, UserInterface
     /**
      * @return string
      */
-    public function getFirstname(): string
+    public function getFirstName(): string
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
     /**
-     * @param string $firstname
+     * @param string $firstName
      *
      * @return User
      */
-    public function setFirstname(string $firstname): self
+    public function setFirstName(string $firstName): self
     {
-        $this->firstname = $firstname;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -231,19 +231,19 @@ class User implements EntityInterface, UserInterface
     /**
      * @return string
      */
-    public function getSurname(): string
+    public function getLastName(): string
     {
-        return $this->surname;
+        return $this->lastName;
     }
 
     /**
-     * @param string $surname
+     * @param string $lastName
      *
      * @return User
      */
-    public function setSurname(string $surname): self
+    public function setLastName(string $lastName): self
     {
-        $this->surname = $surname;
+        $this->lastName = $lastName;
 
         return $this;
     }
@@ -333,8 +333,8 @@ class User implements EntityInterface, UserInterface
     {
         return [
             'id' => $this->getId(),
-            'firstname' => $this->getFirstname(),
-            'surname' => $this->getSurname(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
             'email' => $this->getEmail(),
             'roles' => $this->getRoles(),
         ];

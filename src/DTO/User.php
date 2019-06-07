@@ -59,7 +59,7 @@ class User extends RestDto implements UserInterface
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    protected $firstname = '';
+    protected $firstName = '';
 
     /**
      * @var string
@@ -68,7 +68,7 @@ class User extends RestDto implements UserInterface
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    protected $surname = '';
+    protected $lastName = '';
 
     /**
      * @var string
@@ -140,21 +140,21 @@ class User extends RestDto implements UserInterface
     /**
      * @return string
      */
-    public function getFirstname(): string
+    public function getFirstName(): string
     {
-        return $this->firstname;
+        return $this->firstName;
     }
 
     /**
-     * @param string $firstname
+     * @param string $firstName
      *
      * @return User
      */
-    public function setFirstname(string $firstname): self
+    public function setFirstName(string $firstName): self
     {
-        $this->setVisited('firstname');
+        $this->setVisited('firstName');
 
-        $this->firstname = $firstname;
+        $this->firstName = $firstName;
 
         return $this;
     }
@@ -162,21 +162,21 @@ class User extends RestDto implements UserInterface
     /**
      * @return string
      */
-    public function getSurname(): string
+    public function getLastName(): string
     {
-        return $this->surname;
+        return $this->lastName;
     }
 
     /**
-     * @param string $surname
+     * @param string $lastName
      *
      * @return User
      */
-    public function setSurname(string $surname): self
+    public function setLastName(string $lastName): self
     {
-        $this->setVisited('surname');
+        $this->setVisited('lastName');
 
-        $this->surname = $surname;
+        $this->lastName = $lastName;
 
         return $this;
     }
@@ -272,8 +272,8 @@ class User extends RestDto implements UserInterface
         if ($entity instanceof Entity) {
             $this->id = $entity->getId();
             $this->username = $entity->getUsername();
-            $this->firstname = $entity->getFirstname();
-            $this->surname = $entity->getSurname();
+            $this->firstName = $entity->getFirstName();
+            $this->lastName = $entity->getLastName();
             $this->email = $entity->getEmail();
             $this->userGroups = $entity->getUserGroups()->map($iterator)->toArray();
         }
@@ -285,7 +285,7 @@ class User extends RestDto implements UserInterface
      * Method to update User entity password.
      *
      * @param Entity $entity
-     * @param string     $value
+     * @param string $value
      *
      * @return User
      */

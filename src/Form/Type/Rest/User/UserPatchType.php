@@ -41,17 +41,17 @@ class UserPatchType extends AbstractType
             ],
         ],
         [
-            'firstname',
+            'firstName',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL => 'Firstname',
+                FormTypeLabelInterface::LABEL => 'First name',
             ],
         ],
         [
-            'surname',
+            'lastName',
             Type\TextType::class,
             [
-                FormTypeLabelInterface::LABEL => 'Surname',
+                FormTypeLabelInterface::LABEL => 'Last name',
             ],
         ],
         [
@@ -80,6 +80,8 @@ class UserPatchType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        parent::buildForm($builder, $options);
+
         $this->addBasicFieldToForm($builder, self::$formFields);
     }
 
@@ -92,6 +94,8 @@ class UserPatchType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
             'data_class' => UserDto::class,
         ]);
