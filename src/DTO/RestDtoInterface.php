@@ -11,6 +11,7 @@ namespace App\DTO;
 use App\Entity\EntityInterface;
 use BadMethodCallException;
 use LogicException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Interface RestDtoInterface
@@ -37,16 +38,13 @@ interface RestDtoInterface
     public function setVisited(string $property): self;
 
     /**
-     * Method to patch current dto with another one.
+     * Method to create DTO from request object.
      *
-     * @param self|RestDtoInterface $dto
+     * @param Request $request
      *
      * @return RestDtoInterface
-     *
-     * @throws LogicException
-     * @throws BadMethodCallException
      */
-    public function patch(self $dto): self;
+    public function createFromRequest(Request $request): self;
 
     /**
      * Method to load DTO data from specified entity.
@@ -65,4 +63,16 @@ interface RestDtoInterface
      * @return EntityInterface
      */
     public function update(EntityInterface $entity): EntityInterface;
+
+    /**
+     * Method to patch current dto with another one.
+     *
+     * @param self|RestDtoInterface $dto
+     *
+     * @return RestDtoInterface
+     *
+     * @throws LogicException
+     * @throws BadMethodCallException
+     */
+    public function patch(self $dto): self;
 }
