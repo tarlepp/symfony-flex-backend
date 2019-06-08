@@ -46,12 +46,12 @@ class CreateUserCommand extends Command
             self::PARAMETER_DESCRIPTION => 'Username',
         ],
         [
-            self::PARAMETER_NAME => 'firstname',
-            self::PARAMETER_DESCRIPTION => 'Firstname of the user',
+            self::PARAMETER_NAME => 'firstName',
+            self::PARAMETER_DESCRIPTION => 'First name of the user',
         ],
         [
-            self::PARAMETER_NAME => 'surname',
-            self::PARAMETER_DESCRIPTION => 'Surname of the user',
+            self::PARAMETER_NAME => 'lastName',
+            self::PARAMETER_DESCRIPTION => 'Last name of the user',
         ],
         [
             self::PARAMETER_NAME => 'email',
