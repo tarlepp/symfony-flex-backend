@@ -182,16 +182,16 @@ class RepositoryHelper
      * EXAMPLE INPUT ARRAY                                  GENERATED QUERY RESULT
      *  [
      *      'and' => [
-     *          ['u.firstname', 'eq',   'foo bar']
-     *          ['u.surname',   'neq',  'not this one']
+     *          ['u.firstName', 'eq',   'foo bar']
+     *          ['u.lastName',  'neq',  'not this one']
      *      ]
-     *  ]                                                   (u.firstname = ?1 AND u.surname <> ?2)
+     *  ]                                                   (u.firstName = ?1 AND u.lastName <> ?2)
      *  [
      *      'or' => [
-     *          ['u.firstname', 'eq',   'foo bar']
-     *          ['u.surname',   'neq',  'not this one']
+     *          ['u.firstName', 'eq',   'foo bar']
+     *          ['u.lastName',  'neq',  'not this one']
      *      ]
-     *  ]                                                   (u.firstname = ?1 OR u.surname <> ?2)
+     *  ]                                                   (u.firstName = ?1 OR u.lastName <> ?2)
      *
      * Also note that you can nest these criteria arrays as many levels as you need - only the sky is the limit...
      *
