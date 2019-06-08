@@ -43,7 +43,7 @@ class UserRepository extends BaseRepository
      *
      * @var string[]
      */
-    protected static $searchColumns = ['username', 'firstname', 'surname', 'email'];
+    protected static $searchColumns = ['username', 'firstName', 'lastName', 'email'];
 
     /**
      * Method to check if specified username is available or not.
