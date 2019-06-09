@@ -246,7 +246,7 @@ class RepositoryHelperTest extends KernelTestCase
         // @codingStandardsIgnoreStart
         yield [
             /** @lang text */
-            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4',
+            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstName LIKE ?2 AND entity.lastName LIKE ?3 AND entity.email LIKE ?4',
             [
                 'and' => ['foo'],
             ],
@@ -254,7 +254,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             /** @lang text */
-            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstname LIKE ?2 OR entity.surname LIKE ?3 OR entity.email LIKE ?4',
+            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstName LIKE ?2 OR entity.lastName LIKE ?3 OR entity.email LIKE ?4',
             [
                 'or' => ['foo'],
             ],
@@ -262,7 +262,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             /** @lang text */
-            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4 AND entity.username LIKE ?5 AND entity.firstname LIKE ?6 AND entity.surname LIKE ?7 AND entity.email LIKE ?8',
+            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstName LIKE ?2 AND entity.lastName LIKE ?3 AND entity.email LIKE ?4 AND entity.username LIKE ?5 AND entity.firstName LIKE ?6 AND entity.lastName LIKE ?7 AND entity.email LIKE ?8',
             [
                 'and' => ['foo', 'bar'],
             ],
@@ -270,7 +270,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             /** @lang text */
-            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstname LIKE ?2 OR entity.surname LIKE ?3 OR entity.email LIKE ?4 OR entity.username LIKE ?5 OR entity.firstname LIKE ?6 OR entity.surname LIKE ?7 OR entity.email LIKE ?8',
+            'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstName LIKE ?2 OR entity.lastName LIKE ?3 OR entity.email LIKE ?4 OR entity.username LIKE ?5 OR entity.firstName LIKE ?6 OR entity.lastName LIKE ?7 OR entity.email LIKE ?8',
             [
                 'or' => ['foo', 'bar'],
             ],
@@ -278,7 +278,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             /** @lang text */
-            'SELECT entity FROM App\Entity\User entity WHERE (entity.username LIKE ?1 AND entity.firstname LIKE ?2 AND entity.surname LIKE ?3 AND entity.email LIKE ?4) AND (entity.username LIKE ?5 OR entity.firstname LIKE ?6 OR entity.surname LIKE ?7 OR entity.email LIKE ?8)',
+            'SELECT entity FROM App\Entity\User entity WHERE (entity.username LIKE ?1 AND entity.firstName LIKE ?2 AND entity.lastName LIKE ?3 AND entity.email LIKE ?4) AND (entity.username LIKE ?5 OR entity.firstName LIKE ?6 OR entity.lastName LIKE ?7 OR entity.email LIKE ?8)',
             [
                 'and' => ['foo'],
                 'or' => ['bar'],
@@ -501,17 +501,17 @@ class RepositoryHelperTest extends KernelTestCase
         yield [
             [
                 'and' => [
-                    ['u.firstname', 'eq', 'foo bar'],
-                    ['u.surname', 'neq', 'bar'],
+                    ['u.firstName', 'eq', 'foo bar'],
+                    ['u.firstName', 'neq', 'bar'],
                 ],
                 'or' => [
-                    ['u.firstname', 'eq', 'bar foo'],
-                    ['u.surname', 'neq', 'foo'],
+                    ['u.firstName', 'eq', 'bar foo'],
+                    ['u.lastName', 'neq', 'foo'],
                 ],
             ],
             /** @lang text */
             <<<'DQL'
-SELECT u FROM App\Entity\User u WHERE (u.firstname = ?1 AND u.surname <> ?2) AND (u.firstname = ?3 OR u.surname <> ?4)
+SELECT u FROM App\Entity\User u WHERE (u.firstName = ?1 AND u.firstName <> ?2) AND (u.firstName = ?3 OR u.lastName <> ?4)
 DQL
             ,
             [
