@@ -100,8 +100,8 @@ class UserTest extends EntityTestCase
     public function testThatGetLoginDataMethodReturnsExpected(): void
     {
         $expected = [
-            'firstname',
-            'surname',
+            'firstName',
+            'lastName',
             'email',
         ];
 
