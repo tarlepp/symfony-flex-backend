@@ -22,6 +22,15 @@ abstract class Controller implements ControllerInterface
     // Traits
     use RestMethodHelper;
 
+    public const ACTION_COUNT = 'countAction';
+    public const ACTION_CREATE = 'createAction';
+    public const ACTION_DELETE = 'deleteAction';
+    public const ACTION_FIND = 'findAction';
+    public const ACTION_FIND_ONE = 'findOneAction';
+    public const ACTION_IDS = 'idsAction';
+    public const ACTION_PATCH = 'patchAction';
+    public const ACTION_UPDATE = 'updateAction';
+
     public const METHOD_COUNT = 'countMethod';
     public const METHOD_CREATE = 'createMethod';
     public const METHOD_DELETE = 'deleteMethod';
