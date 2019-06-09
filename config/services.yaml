@@ -48,6 +48,9 @@ services:
     App\Resource\Collection:
         arguments: [ !tagged app.rest.resource ]
 
+    App\Rest\ControllerCollection:
+        arguments: [ !tagged app.rest.controller ]
+
     App\Security\RolesService:
         arguments: [ '%security.role_hierarchy.roles%' ]
 
