@@ -169,8 +169,8 @@ class UserEntityEventListenerTest extends KernelTestCase
         $this->entity = new User();
         $this->entity->setUsername('john_doe_the_tester');
         $this->entity->setEmail('john.doe_the_tester@test.com');
-        $this->entity->setFirstname('John');
-        $this->entity->setSurname('Doe');
+        $this->entity->setFirstName('John');
+        $this->entity->setLastName('Doe');
     }
 
 
