@@ -116,8 +116,8 @@ class ListUserGroupsCommand extends Command
         return static function (User $user): string {
             return sprintf(
                 '%s %s <%s>',
-                $user->getFirstname(),
-                $user->getSurname(),
+                $user->getFirstName(),
+                $user->getLastName(),
                 $user->getEmail()
             );
         };

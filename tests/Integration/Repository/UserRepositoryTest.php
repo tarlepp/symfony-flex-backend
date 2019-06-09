@@ -57,8 +57,8 @@ class UserRepositoryTest extends RepositoryTestCase
      */
     protected $searchColumns = [
         'username',
-        'firstname',
-        'surname',
+        'firstName',
+        'lastName',
         'email',
     ];
 }

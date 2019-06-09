@@ -156,8 +156,8 @@ class UserHelper
             $message = sprintf(
                 '%s (%s %s <%s>)',
                 $user->getUsername(),
-                $user->getFirstname(),
-                $user->getSurname(),
+                $user->getFirstName(),
+                $user->getLastName(),
                 $user->getEmail()
             );
 
@@ -193,8 +193,8 @@ class UserHelper
             'Is this the correct  user [%s - %s (%s %s <%s>)]?',
             $userEntity->getId(),
             $userEntity->getUsername(),
-            $userEntity->getFirstname(),
-            $userEntity->getSurname(),
+            $userEntity->getFirstName(),
+            $userEntity->getLastName(),
             $userEntity->getEmail()
         );
 

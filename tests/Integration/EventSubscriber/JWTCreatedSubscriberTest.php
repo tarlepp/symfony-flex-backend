@@ -33,8 +33,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
 
         // Create new user for JWT
         $user = (new User())
-            ->setFirstname('firstname')
-            ->setSurname('surname')
+            ->setFirstName('first name')
+            ->setLastName('last name')
             ->setEmail('firstname.surname@test.com');
 
         $securityUser = new SecurityUser($user);
@@ -68,8 +68,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
 
         // Create new user for JWT
         $user = (new User())
-            ->setFirstname('firstname')
-            ->setSurname('surname')
+            ->setFirstName('first name')
+            ->setLastName('last name')
             ->setEmail('firstname.surname@test.com');
 
         $securityUser = new SecurityUser($user);
@@ -107,8 +107,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
 
         // Create new user for JWT
         $user = (new User())
-            ->setFirstname('firstname')
-            ->setSurname('surname')
+            ->setFirstName('first name')
+            ->setLastName('last name')
             ->setEmail('firstname.surname@test.com');
 
         $securityUser = new SecurityUser($user);

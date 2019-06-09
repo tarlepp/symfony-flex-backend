@@ -508,8 +508,8 @@ class GenericResourceTest extends KernelTestCase
 
         $methods = [
             'setUsername'   => 'username',
-            'setFirstname'  => 'firstname',
-            'setSurname'    => 'surname',
+            'setFirstName'  => 'first name',
+            'setLastName'   => 'last name',
             'setEmail'      => 'test@test.com',
         ];
 

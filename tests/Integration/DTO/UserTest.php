@@ -39,8 +39,8 @@ class UserTest extends DtoTestCase
         // Create User entity
         $userEntity = new UserEntity();
         $userEntity->setUsername('username');
-        $userEntity->setFirstname('firstname');
-        $userEntity->setSurname('surname');
+        $userEntity->setFirstName('first name');
+        $userEntity->setLastName('last name');
         $userEntity->setEmail('firstname.surname@test.com');
         $userEntity->addUserGroup($userGroupEntity);
 
@@ -49,8 +49,8 @@ class UserTest extends DtoTestCase
         $dto->load($userEntity);
 
         static::assertSame('username', $dto->getUsername());
-        static::assertSame('firstname', $dto->getFirstname());
-        static::assertSame('surname', $dto->getSurname());
+        static::assertSame('first name', $dto->getFirstName());
+        static::assertSame('last name', $dto->getLastName());
         static::assertSame('firstname.surname@test.com', $dto->getEmail());
         static::assertSame([$userGroupEntity->getId()], $dto->getUserGroups());
 

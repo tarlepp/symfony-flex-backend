@@ -110,7 +110,7 @@ class ListUsersCommand extends Command
                 $user->getId(),
                 $user->getUsername(),
                 $user->getEmail(),
-                $user->getFirstname() . ' ' . $user->getSurname(),
+                $user->getFirstName() . ' ' . $user->getLastName(),
                 implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
                 implode(",\n", $user->getUserGroups()->map($this->formatterUserGroup())->toArray()),
             ];

@@ -285,8 +285,8 @@ class UserControllerTest extends WebTestCase
     {
         $data = [
             'username'  => 'test-user',
-            'firstname' => 'test',
-            'surname'   => 'user',
+            'firstName' => 'test',
+            'lastName'  => 'user',
             'email'     => 'test-user@test.com',
             'password'  => 'some password',
         ];
@@ -327,8 +327,8 @@ class UserControllerTest extends WebTestCase
     {
         $data = [
             'username'  => 'test-user',
-            'firstname' => 'test',
-            'surname'   => 'user',
+            'firstName' => 'test',
+            'lastName'  => 'user',
             'email'     => 'test-user@test.com',
         ];
 
@@ -365,8 +365,8 @@ class UserControllerTest extends WebTestCase
     {
         $data = [
             'username'  => 'test-user',
-            'firstname' => 'test-1',
-            'surname'   => 'user-2',
+            'firstName' => 'test-1',
+            'lastName'  => 'user-2',
             'email'     => 'test-user@test.com',
         ];
 
@@ -409,8 +409,8 @@ class UserControllerTest extends WebTestCase
     ): string {
         $data = [
             'username'  => 'test-user',
-            'firstname' => 'test-1',
-            'surname'   => 'user-2',
+            'firstName' => 'test-1',
+            'lastName'  => 'user-2',
             'email'     => 'test-user@test.com',
         ];
 
