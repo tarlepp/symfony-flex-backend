@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Dto\src;
 use App\Dto\RestDto;
 use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DummyDto
@@ -61,6 +62,18 @@ class DummyDto extends RestDto
     public function hasFoo(): bool
     {
         return (bool)$this->foo;
+    }
+
+    /**
+     * Method to create DTO from request object.
+     *
+     * @param Request $request
+     *
+     * @return RestDtoInterface
+     */
+    public function createFromRequest(Request $request): RestDtoInterface
+    {
+        return new self();
     }
 
     /**
