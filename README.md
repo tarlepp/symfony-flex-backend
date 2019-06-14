@@ -90,7 +90,7 @@ And to eg. get shell access inside one of those containers you can run following
 command:
 
 ```bash
-docker-compose exec php /bin/bash
+docker-compose exec php bash
 ```
 
 Where that `php` is that actual container where this backend application is
