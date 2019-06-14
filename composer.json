@@ -27,7 +27,7 @@
 		"ext-iconv": "*",
 		"ext-json": "*",
 		"doctrine/annotations": "1.6.1",
-		"doctrine/doctrine-fixtures-bundle": "3.2.0",
+		"doctrine/doctrine-fixtures-bundle": "3.2.2",
 		"doctrine/doctrine-migrations-bundle": "2.0.0",
 		"easycorp/easy-log-handler": "1.0.7",
 		"lexik/jwt-authentication-bundle": "2.6.3",
