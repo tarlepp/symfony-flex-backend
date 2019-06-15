@@ -15,6 +15,7 @@ use LengthException;
 use Symfony\Component\HttpFoundation\Request;
 use function count;
 use function get_class;
+use function method_exists;
 use function sprintf;
 
 /**
