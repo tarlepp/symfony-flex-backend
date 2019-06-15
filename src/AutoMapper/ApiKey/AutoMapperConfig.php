@@ -6,9 +6,11 @@ declare(strict_types = 1);
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\AutoMapper;
+namespace App\AutoMapper\ApiKey;
 
-use App\DTO\ApiKey;
+use App\DTO\ApiKey\ApiKeyCreate;
+use App\DTO\ApiKey\ApiKeyPatch;
+use App\DTO\ApiKey\ApiKeyUpdate;
 use AutoMapperPlus\AutoMapperPlusBundle\AutoMapperConfiguratorInterface;
 use AutoMapperPlus\Configuration\AutoMapperConfigInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,19 +21,19 @@ use Symfony\Component\HttpFoundation\Request;
  * @package App\AutoMapper
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ApiKeyMapperConfiguration implements AutoMapperConfiguratorInterface
+class AutoMapperConfig implements AutoMapperConfiguratorInterface
 {
     /**
-     * @var ApiKeyRequestMapper
+     * @var RequestMapper
      */
     private $apiKeyRequestMapper;
 
     /**
      * ApiKeyMapperConfiguration constructor.
      *
-     * @param ApiKeyRequestMapper $apiKeyRequestMapper
+     * @param RequestMapper $apiKeyRequestMapper
      */
-    public function __construct(ApiKeyRequestMapper $apiKeyRequestMapper)
+    public function __construct(RequestMapper $apiKeyRequestMapper)
     {
         $this->apiKeyRequestMapper = $apiKeyRequestMapper;
     }
@@ -44,7 +46,15 @@ class ApiKeyMapperConfiguration implements AutoMapperConfiguratorInterface
     public function configure(AutoMapperConfigInterface $config): void
     {
         $config
-            ->registerMapping(Request::class, ApiKey::class)
+            ->registerMapping(Request::class, ApiKeyCreate::class)
+            ->useCustomMapper($this->apiKeyRequestMapper);
+
+        $config
+            ->registerMapping(Request::class, ApiKeyUpdate::class)
+            ->useCustomMapper($this->apiKeyRequestMapper);
+
+        $config
+            ->registerMapping(Request::class, ApiKeyPatch::class)
             ->useCustomMapper($this->apiKeyRequestMapper);
     }
 }
