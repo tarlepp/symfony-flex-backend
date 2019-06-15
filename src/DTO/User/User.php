@@ -1,17 +1,18 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/DTO/User.php
+ * /src/Rest/DTO/User/User.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\DTO;
+namespace App\DTO\User;
 
+use App\DTO\RestDto;
+use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Entity\User as Entity;
 use App\Entity\UserGroup as UserGroupEntity;
-use App\Entity\UserInterface;
 use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
@@ -22,13 +23,13 @@ use function array_map;
  * @AppAssert\UniqueEmail()
  * @AppAssert\UniqueUsername()
  *
- * @package App\DTO
+ * @package App\DTO\User
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
  * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
  */
-class User extends RestDto implements UserInterface
+abstract class User extends RestDto
 {
     /**
      * @var mixed[]
@@ -80,16 +81,14 @@ class User extends RestDto implements UserInterface
     protected $email = '';
 
     /**
-     * @var string[]|UserGroupEntity[]
+     * @var UserGroupEntity[]
      */
     protected $userGroups = [];
 
     /**
      * @var string
      *
-     * @Assert\NotBlank(groups={"Create"})
-     * @Assert\NotNull(groups={"Create"})
-     * @Assert\Length(groups={"Create"}, min = 2, max = 255)
+     * @Assert\Length(min = 8, max = 255)
      */
     protected $password = '';
 
@@ -204,7 +203,7 @@ class User extends RestDto implements UserInterface
     }
 
     /**
-     * @return string[]|UserGroupEntity[]
+     * @return UserGroupEntity[]
      */
     public function getUserGroups(): array
     {
@@ -212,7 +211,7 @@ class User extends RestDto implements UserInterface
     }
 
     /**
-     * @param string[]|UserGroupEntity[] $userGroups
+     * @param UserGroupEntity[] $userGroups
      *
      * @return User
      */
@@ -258,24 +257,13 @@ class User extends RestDto implements UserInterface
      */
     public function load(EntityInterface $entity): RestDtoInterface
     {
-        /**
-         * Lambda function to extract user group id
-         *
-         * @param UserGroupEntity $group
-         *
-         * @return string
-         */
-        $iterator = static function (UserGroupEntity $group): string {
-            return $group->getId();
-        };
-
         if ($entity instanceof Entity) {
             $this->id = $entity->getId();
             $this->username = $entity->getUsername();
             $this->firstName = $entity->getFirstName();
             $this->lastName = $entity->getLastName();
             $this->email = $entity->getEmail();
-            $this->userGroups = $entity->getUserGroups()->map($iterator)->toArray();
+            $this->userGroups = $entity->getUserGroups()->toArray();
         }
 
         return $this;
