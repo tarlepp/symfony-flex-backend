@@ -1,25 +1,26 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/AutoMapper/ApiKeyRequestMapper.php
+ * /src/AutoMapper/ApiKey/RequestMapper.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\AutoMapper;
+namespace App\AutoMapper\ApiKey;
 
+use App\AutoMapper\RestRequestMapper;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use Closure;
 use function array_map;
 
 /**
- * Class ApiKeyRequestMapper
+ * Class RequestMapper
  *
  * @package App\AutoMapper
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ApiKeyRequestMapper extends RestRequestMapper
+class RequestMapper extends RestRequestMapper
 {
     /**
      * Properties to map to destination object.
