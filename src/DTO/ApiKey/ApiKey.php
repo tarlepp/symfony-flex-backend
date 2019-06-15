@@ -1,13 +1,15 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/DTO/ApiKey.php
+ * /src/DTO/ApiKey/ApiKey.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\DTO;
+namespace App\DTO\ApiKey;
 
+use App\DTO\RestDto;
+use App\DTO\RestDtoInterface;
 use App\Entity\ApiKey as Entity;
 use App\Entity\EntityInterface;
 use App\Entity\UserGroup as UserGroupEntity;
@@ -23,7 +25,7 @@ use function array_map;
  * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
  * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
  */
-class ApiKey extends RestDto
+abstract class ApiKey extends RestDto
 {
     /**
      * @var mixed[]
