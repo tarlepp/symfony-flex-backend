@@ -10,6 +10,7 @@ namespace App\DTO\ApiKey;
 
 use App\Entity\ApiKey as Entity;
 use App\Entity\UserGroup as UserGroupEntity;
+use function array_map;
 
 /**
  * Class ApiKeyPatch
