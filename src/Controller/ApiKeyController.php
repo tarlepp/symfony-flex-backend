@@ -47,9 +47,9 @@ class ApiKeyController extends Controller
     use Actions\Root\UpdateAction;
 
     protected static $dtoClasses = [
-        Controller::METHOD_PATCH => ApiKeyPatch::class,
         Controller::METHOD_CREATE => ApiKeyCreate::class,
         Controller::METHOD_UPDATE => ApiKeyUpdate::class,
+        Controller::METHOD_PATCH => ApiKeyPatch::class,
     ];
 
     /**
