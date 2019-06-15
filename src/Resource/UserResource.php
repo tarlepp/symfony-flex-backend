@@ -16,6 +16,7 @@ use App\Entity\UserGroup;
 use App\Repository\UserRepository as Repository;
 use App\Rest\RestResource;
 use App\Security\RolesService;
+use Throwable;
 use function array_filter;
 use function array_values;
 use function in_array;
@@ -30,6 +31,7 @@ use function in_array;
  *
  * @codingStandardsIgnoreStart
  *
+ * @method Entity      getReference(string $id): Entity
  * @method Repository  getRepository(): Repository
  * @method Entity[]    find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null): array
  * @method Entity|null findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
@@ -69,6 +71,8 @@ class UserResource extends RestResource
      * @param UserGroup $userGroup
      *
      * @return Entity[]
+     *
+     * @throws Throwable
      */
     public function getUsersForGroup(UserGroup $userGroup): array
     {

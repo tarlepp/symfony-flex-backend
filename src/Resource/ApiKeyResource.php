@@ -24,6 +24,7 @@ use App\Rest\RestResource;
  *
  * @codingStandardsIgnoreStart
  *
+ * @method Entity      getReference(string $id): Entity
  * @method Repository  getRepository(): Repository
  * @method Entity[]    find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null): array
  * @method Entity|null findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
