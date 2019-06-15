@@ -1,17 +1,24 @@
 ###> symfony/framework-bundle ###
+/.env.local
+/.env.*.local
 /public/bundles/
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
 
+/secrets/application.*.json
+docker-compose.*.yml
+
 # User-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
+.idea/shelf
 
 ## File-based project format:
 *.iws
 
+.phpunit.result.cache
 phpunit.xml
 infection.json
 
@@ -32,6 +39,3 @@ infection.json
 
 ### Vendor bin dependencies
 /vendor-bin/*/vendor/
-
-### PHPUnit
-.phpunit.result.cache
