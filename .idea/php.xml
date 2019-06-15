@@ -127,6 +127,9 @@
       <path value="$PROJECT_DIR$/vendor/symfony/cache-contracts" />
       <path value="$PROJECT_DIR$/vendor/symfony/console" />
       <path value="$PROJECT_DIR$/vendor/symfony/debug-pack" />
+      <path value="$PROJECT_DIR$/vendor" />
+      <path value="$PROJECT_DIR$/vendor/mark-gerarts/auto-mapper-plus" />
+      <path value="$PROJECT_DIR$/vendor/mark-gerarts/automapper-plus-bundle" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
