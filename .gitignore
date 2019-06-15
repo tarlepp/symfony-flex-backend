@@ -13,11 +13,12 @@ docker-compose.*.yml
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
+.idea/shelf
 
 ## File-based project format:
 *.iws
 
-allowed_addresses_local.php
+.phpunit.result.cache
 phpunit.xml
 infection.json
 
@@ -36,5 +37,5 @@ infection.json
 /config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
 
-### PHPUnit
-.phpunit.result.cache
+### Vendor bin dependencies
+/vendor-bin/*/vendor/
