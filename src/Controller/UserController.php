@@ -9,11 +9,11 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Annotation\RestApiDoc;
+use App\DTO\User\UserCreate;
+use App\DTO\User\UserPatch;
+use App\DTO\User\UserUpdate;
 use App\Entity\User;
 use App\Entity\UserGroup;
-use App\Form\Type\Rest\User\UserCreateType;
-use App\Form\Type\Rest\User\UserPatchType;
-use App\Form\Type\Rest\User\UserUpdateType;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions;
@@ -59,15 +59,10 @@ class UserController extends Controller
     use Actions\Root\UpdateAction;
     use Methods\DeleteMethod;
 
-    /**
-     * Method + Form type class names (key + value)
-     *
-     * @var string[]
-     */
-    protected static $formTypes = [
-        Controller::METHOD_PATCH => UserPatchType::class,
-        Controller::METHOD_CREATE => UserCreateType::class,
-        Controller::METHOD_UPDATE => UserUpdateType::class,
+    protected static $dtoClasses = [
+        Controller::METHOD_CREATE => UserCreate::class,
+        Controller::METHOD_UPDATE => UserUpdate::class,
+        Controller::METHOD_PATCH => UserPatch::class,
     ];
 
     /**
