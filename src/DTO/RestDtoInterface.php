@@ -11,7 +11,6 @@ namespace App\DTO;
 use App\Entity\EntityInterface;
 use BadMethodCallException;
 use LogicException;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Interface RestDtoInterface
@@ -36,15 +35,6 @@ interface RestDtoInterface
      * @return RestDtoInterface
      */
     public function setVisited(string $property): self;
-
-    /**
-     * Method to create DTO from request object.
-     *
-     * @param Request $request
-     *
-     * @return RestDtoInterface
-     */
-    public function createFromRequest(Request $request): self;
 
     /**
      * Method to load DTO data from specified entity.

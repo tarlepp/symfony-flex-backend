@@ -13,7 +13,6 @@ use App\Entity\User as Entity;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Entity\UserInterface;
 use App\Validator\Constraints as AppAssert;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
 
@@ -248,19 +247,6 @@ class User extends RestDto implements UserInterface
         }
 
         return $this;
-    }
-
-    /**
-     * Method to create DTO from request object.
-     *
-     * @param Request $request
-     *
-     * @return RestDtoInterface
-     */
-    public function createFromRequest(Request $request): RestDtoInterface
-    {
-        // TODO
-        return new self();
     }
 
     /**

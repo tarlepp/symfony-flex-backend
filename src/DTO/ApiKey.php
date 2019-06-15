@@ -11,7 +11,6 @@ namespace App\DTO;
 use App\Entity\ApiKey as Entity;
 use App\Entity\EntityInterface;
 use App\Entity\UserGroup as UserGroupEntity;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
 
@@ -52,7 +51,7 @@ class ApiKey extends RestDto
     protected $token;
 
     /**
-     * @var string[]|UserGroupEntity[]
+     * @var UserGroupEntity[]
      */
     protected $userGroups = [];
 
@@ -123,7 +122,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * @return string[]|UserGroupEntity[]
+     * @return UserGroupEntity[]
      */
     public function getUserGroups(): array
     {
@@ -131,7 +130,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * @param string[]|UserGroupEntity[] $userGroups
+     * @param UserGroupEntity[] $userGroups
      *
      * @return ApiKey
      */
@@ -142,20 +141,6 @@ class ApiKey extends RestDto
         $this->userGroups = $userGroups;
 
         return $this;
-    }
-
-    /**
-     * Method to create DTO from request object.
-     *
-     * @param Request $request
-     *
-     * @return RestDtoInterface
-     */
-    public function createFromRequest(Request $request): RestDtoInterface
-    {
-        return (new self())
-            ->setDescription($request->get('description', ''))
-            ->setUserGroups($request->get('userGroups', []));
     }
 
     /**
