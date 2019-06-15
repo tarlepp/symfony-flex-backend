@@ -154,20 +154,11 @@ abstract class ApiKey extends RestDto
      */
     public function load(EntityInterface $entity): RestDtoInterface
     {
-        /**
-         * @param UserGroupEntity $userGroup
-         *
-         * @return string
-         */
-        $iterator = static function (UserGroupEntity $userGroup): string {
-            return $userGroup->getId();
-        };
-
         if ($entity instanceof Entity) {
             $this->id = $entity->getId();
             $this->token = $entity->getToken();
             $this->description = $entity->getDescription();
-            $this->userGroups = $entity->getUserGroups()->map($iterator)->toArray();
+            $this->userGroups = $entity->getUserGroups()->toArray();
         }
 
         return $this;
