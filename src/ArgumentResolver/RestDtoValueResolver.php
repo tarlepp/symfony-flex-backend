@@ -11,6 +11,8 @@ namespace App\ArgumentResolver;
 use App\DTO\RestDtoInterface;
 use App\Rest\Controller;
 use App\Rest\ControllerCollection;
+use AutoMapperPlus\AutoMapperInterface;
+use AutoMapperPlus\Exception\UnregisteredMappingException;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
@@ -50,13 +52,20 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
     private $controllerCollection;
 
     /**
+     * @var AutoMapperInterface
+     */
+    private $autoMapper;
+
+    /**
      * RestDtoValueResolver constructor.
      *
      * @param ControllerCollection $controllerCollection
+     * @param AutoMapperInterface  $autoMapper
      */
-    public function __construct(ControllerCollection $controllerCollection)
+    public function __construct(ControllerCollection $controllerCollection, AutoMapperInterface $autoMapper)
     {
         $this->controllerCollection = $controllerCollection;
+        $this->autoMapper = $autoMapper;
     }
 
     /**
@@ -83,6 +92,8 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
      * @param ArgumentMetadata $argument
      *
      * @return Generator
+     *
+     * @throws UnregisteredMappingException
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
@@ -90,9 +101,6 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
 
         $dtoClass = $this->controllerCollection->get($controllerName)->getDtoClass($this->actionMethodMap[$actionName]);
 
-        /** @var RestDtoInterface $restDto */
-        $restDto = new $dtoClass();
-
-        yield $restDto->createFromRequest($request);
+        yield $this->autoMapper->map($request, $dtoClass);
     }
 }
