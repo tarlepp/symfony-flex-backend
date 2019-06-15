@@ -29,7 +29,7 @@ class AutoMapperConfig implements AutoMapperConfiguratorInterface
     private $apiKeyRequestMapper;
 
     /**
-     * ApiKeyMapperConfiguration constructor.
+     * AutoMapperConfig constructor.
      *
      * @param RequestMapper $apiKeyRequestMapper
      */

@@ -38,7 +38,7 @@ class RequestMapper extends RestRequestMapper
     private $userGroupResource;
 
     /**
-     * ApiKeyRequestMapper constructor.
+     * RequestMapper constructor.
      *
      * @param UserGroupResource $userGroupResource
      */
