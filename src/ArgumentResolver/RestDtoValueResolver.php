@@ -17,6 +17,7 @@ use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use function count;
 use function explode;
 use function in_array;
 
@@ -78,6 +79,10 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
      */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
+        if (count(explode('::', $request->attributes->get('_controller'))) !== 2) {
+            return false;
+        }
+
         [$controllerName, $actionName] = explode('::', $request->attributes->get('_controller'));
 
         return $argument->getType() === RestDtoInterface::class
