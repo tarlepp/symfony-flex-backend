@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Controller;
 
 use App\Utils\Tests\WebTestCase;
+use Generator;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -63,17 +64,15 @@ class ApiKeyControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatFindActionWorksAsExpected(): array
+    public function dataProviderTestThatFindActionWorksAsExpected(): Generator
     {
-        return [
-            ['john',        'password',         403],
-            ['john-api',    'password-api',     403],
-            ['john-logged', 'password-logged',  403],
-            ['john-user',   'password-user',    403],
-            ['john-admin',  'password-admin',   403],
-            ['john-root',   'password-root',    200],
-        ];
+        yield ['john',        'password',         403];
+        yield ['john-api',    'password-api',     403];
+        yield ['john-logged', 'password-logged',  403];
+        yield ['john-user',   'password-user',    403];
+        yield ['john-admin',  'password-admin',   403];
+        yield ['john-root',   'password-root',    200];
     }
 }
