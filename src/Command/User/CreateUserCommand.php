@@ -11,7 +11,7 @@ namespace App\Command\User;
 use App\Command\HelperConfigure;
 use App\Command\Traits\ApiKeyUserManagementHelperTrait;
 use App\Command\Traits\SymfonyStyleTrait;
-use App\DTO\User as UserDto;
+use App\DTO\User\UserCreate as UserDto;
 use App\Form\Type\Console\UserType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
