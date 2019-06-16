@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Form\Type\Console;
 
-use App\DTO\ApiKey as ApiKeyDto;
+use App\DTO\ApiKey\ApiKey as ApiKeyDto;
 use App\Entity\Role;
 use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
@@ -18,6 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use function array_keys;
+use Throwable;
 
 /**
  * Class ApiKeyTypeTest
@@ -86,6 +87,9 @@ class ApiKeyTypeTest extends TypeTestCase
         unset($view, $dto, $form, $userGroupEntity, $roleEntity);
     }
 
+    /**
+     * @throws Throwable
+     */
     protected function setUp(): void
     {
         gc_enable();
