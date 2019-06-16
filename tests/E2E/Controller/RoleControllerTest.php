@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Controller;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
+use Generator;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_search;
@@ -81,7 +82,7 @@ class RoleControllerTest extends WebTestCase
 
         foreach ($roles as $role) {
             $offset = array_search($role, $roles, true);
-            $foo = array_slice($roles, $offset);
+            $expectedRoles = array_slice($roles, $offset);
 
             $client->request('GET', $this->baseUrl . '/' . $role . '/inherited');
 
@@ -90,7 +91,7 @@ class RoleControllerTest extends WebTestCase
 
             static::assertInstanceOf(Response::class, $response);
             static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-            static::assertJsonStringEqualsJsonString(JSON::encode($foo), $response->getContent());
+            static::assertJsonStringEqualsJsonString(JSON::encode($expectedRoles), $response->getContent());
 
             unset($response);
         }
@@ -99,27 +100,23 @@ class RoleControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatFindOneActionWorksAsExpected(): array
+    public function dataProviderTestThatFindOneActionWorksAsExpected(): Generator
     {
-        return [
-            ['john-admin',  'password-admin'],
-            ['john-root',   'password-root'],
-        ];
+        yield ['john-admin',  'password-admin'];
+        yield ['john-root',   'password-root'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): array
+    public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): Generator
     {
-        return [
-            ['john',        'password'],
-            ['john-logged', 'password-logged'],
-            ['john-user',   'password-user'],
-            ['john-admin',  'password-admin'],
-            ['john-root',   'password-root'],
-        ];
+        yield ['john',        'password'];
+        yield ['john-logged', 'password-logged'];
+        yield ['john-user',   'password-user'];
+        yield ['john-admin',  'password-admin'];
+        yield ['john-root',   'password-root'];
     }
 }
