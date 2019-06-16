@@ -1,19 +1,21 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/DTO/ApiKeyTest.php
+ * /tests/Integration/DTO/ApiKey/ApiKeyTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Tests\Integration\DTO;
+namespace App\Tests\Integration\DTO\ApiKey;
 
-use App\DTO\ApiKey as ApiKeyDto;
+use App\DTO\ApiKey\ApiKey as ApiKeyDto;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;
+use App\Tests\Integration\DTO\DtoTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Throwable;
 use function count;
 
 /**
@@ -46,11 +48,14 @@ class ApiKeyTest extends DtoTestCase
         $dto->load($apiKeyEntity);
 
         static::assertSame('Some description', $dto->getDescription());
-        static::assertSame([$userGroupEntity->getId()], $dto->getUserGroups());
+        static::assertSame([$userGroupEntity], $dto->getUserGroups());
 
         unset($dto, $apiKeyEntity, $userGroupEntity, $roleEntity);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatUpdateMethodCallsExpectedEntityMethodsIfUserGroupsIsVisited(): void
     {
         $userGroups = [
