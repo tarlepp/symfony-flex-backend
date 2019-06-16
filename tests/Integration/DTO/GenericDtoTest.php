@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\DTO;
 
 use App\DTO\RestDtoInterface;
-use App\DTO\User;
+use App\DTO\User\User;
 use App\Entity\User as UserEntity;
 use App\Tests\Integration\Dto\src\DummyDto;
 use App\Utils\Tests\PhpUnitUtil;
