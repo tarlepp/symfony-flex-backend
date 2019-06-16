@@ -24,7 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
  * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
  */
-abstract class UserGroup extends RestDto
+class UserGroup extends RestDto
 {
     /**
      * @var string
