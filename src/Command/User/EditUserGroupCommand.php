@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Command\User;
 
 use App\Command\Traits\SymfonyStyleTrait;
-use App\DTO\UserGroup as UserGroupDto;
+use App\DTO\UserGroup\UserGroupPatch as UserGroupDto;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\UserGroupResource;

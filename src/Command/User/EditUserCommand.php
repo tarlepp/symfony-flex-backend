@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Command\User;
 
 use App\Command\Traits\SymfonyStyleTrait;
-use App\DTO\User as UserDto;
+use App\DTO\User\UserPatch as UserDto;
 use App\Entity\User as UserEntity;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserResource;

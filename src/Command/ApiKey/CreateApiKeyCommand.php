@@ -10,7 +10,7 @@ namespace App\Command\ApiKey;
 
 use App\Command\HelperConfigure;
 use App\Command\Traits\ApiKeyUserManagementHelperTrait;
-use App\DTO\ApiKey;
+use App\DTO\ApiKey\ApiKeyCreate as ApiKey;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Form\Type\Console\ApiKeyType;
 use App\Repository\RoleRepository;
