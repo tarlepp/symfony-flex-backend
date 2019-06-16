@@ -77,10 +77,11 @@ class UserGroupControllerTest extends WebTestCase
      */
     public function testThatAttachUserActionReturns403ForInvalidUser(string $username, string $password): void
     {
-        /** @var UserGroupResource $userGroupResource */
+        /**
+         * @var UserGroupResource $userGroupResource
+         * @var UserResource      $userResource
+         */
         $userGroupResource = static::$container->get(UserGroupResource::class);
-
-        /** @var UserResource $userResource */
         $userResource = static::$container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
@@ -118,10 +119,11 @@ class UserGroupControllerTest extends WebTestCase
      */
     public function testThatAttachUserActionWorksAsExpected(int $expectedStatus): void
     {
-        /** @var UserGroupResource $userGroupResource */
+        /**
+         * @var UserGroupResource $userGroupResource
+         * @var UserResource      $userResource
+         */
         $userGroupResource = static::$container->get(UserGroupResource::class);
-
-        /** @var UserResource $userResource */
         $userResource = static::$container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
@@ -152,10 +154,11 @@ class UserGroupControllerTest extends WebTestCase
      */
     public function testThatDetachUserActionWorksAsExpected(): void
     {
-        /** @var UserGroupResource $userGroupResource */
+        /**
+         * @var UserGroupResource $userGroupResource
+         * @var UserResource      $userResource
+         */
         $userGroupResource = static::$container->get(UserGroupResource::class);
-
-        /** @var UserResource $userResource */
         $userResource = static::$container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => 'john']);
@@ -192,10 +195,11 @@ class UserGroupControllerTest extends WebTestCase
      */
     public function testThatDetachUserActionReturns403ForInvalidUser(string $username, string $password): void
     {
-        /** @var UserGroupResource $userGroupResource */
+        /**
+         * @var UserGroupResource $userGroupResource
+         * @var UserResource      $userResource
+         */
         $userGroupResource = static::$container->get(UserGroupResource::class);
-
-        /** @var UserResource $userResource */
         $userResource = static::$container->get(UserResource::class);
 
         $user = $userResource->findOneBy(['username' => $username]);
