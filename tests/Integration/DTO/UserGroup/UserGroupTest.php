@@ -1,16 +1,17 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/DTO/UserGroupTest.php
+ * /tests/Integration/DTO/UserGroup/UserGroupTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Tests\Integration\DTO;
+namespace App\Tests\Integration\DTO\UserGroup;
 
-use App\DTO\UserGroup;
+use App\DTO\UserGroup\UserGroup;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;
+use App\Tests\Integration\DTO\DtoTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -38,7 +39,7 @@ class UserGroupTest extends DtoTestCase
         $dto->load($userGroupEntity);
 
         static::assertSame('test user group', $dto->getName());
-        static::assertSame($roleEntity->getId(), $dto->getRole());
+        static::assertSame($roleEntity, $dto->getRole());
 
         unset($dto, $userGroupEntity, $roleEntity);
     }
