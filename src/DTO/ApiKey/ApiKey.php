@@ -25,7 +25,7 @@ use function array_map;
  * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
  * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
  */
-abstract class ApiKey extends RestDto
+class ApiKey extends RestDto
 {
     /**
      * @var mixed[]
