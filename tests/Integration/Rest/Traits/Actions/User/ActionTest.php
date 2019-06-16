@@ -8,18 +8,19 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest\Traits\Actions\User;
 
+use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
-use function array_map;
-use function call_user_func_array;
-use const DIRECTORY_SEPARATOR;
-use function lcfirst;
 use Ramsey\Uuid\Uuid;
-use function str_replace;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
+use function array_map;
+use function call_user_func_array;
+use function lcfirst;
+use function str_replace;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Class ActionTest
@@ -87,7 +88,7 @@ class ActionTest extends KernelTestCase
 
             switch ($base) {
                 case 'CreateAction':
-                    $parameters[] = $this->createMock(FormFactoryInterface::class);
+                    $parameters[] = $this->createMock(RestDtoInterface::class);
                     break;
                 case 'PatchAction':
                 case 'UpdateAction':
