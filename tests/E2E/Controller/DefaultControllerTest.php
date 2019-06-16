@@ -11,6 +11,7 @@ namespace App\Tests\E2E\Controller;
 use App\Resource\LogRequestResource;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function file_get_contents;
 
@@ -30,9 +31,9 @@ class DefaultControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
@@ -46,9 +47,9 @@ class DefaultControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/healthz');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
@@ -82,9 +83,9 @@ class DefaultControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/version');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
@@ -118,9 +119,9 @@ class DefaultControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/version');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
-        /** @noinspection NullPointerExceptionInspection */
         $version = $response->headers->get('X-API-VERSION');
 
         static::assertNotNull($version);

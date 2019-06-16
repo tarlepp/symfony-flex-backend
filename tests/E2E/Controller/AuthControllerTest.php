@@ -36,11 +36,10 @@ class AuthControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request($method, $this->baseUrl . '/getToken');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
 
         unset($response, $client);
@@ -71,19 +70,16 @@ class AuthControllerTest extends WebTestCase
             $payload
         );
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        // Check that HTTP status code is correct
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(
             200,
             $response->getStatusCode(),
             "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response
         );
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         // Attributes that should be present...
@@ -121,14 +117,12 @@ class AuthControllerTest extends WebTestCase
             json_encode(['username' => 'username', 'password' => 'password'])
         );
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode());
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse: \n" . $response;
