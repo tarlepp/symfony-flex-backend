@@ -1,13 +1,15 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/DTO/UserGroup.php
+ * /src/Rest/DTO/UserGroup/UserGroup.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\DTO;
+namespace App\DTO\UserGroup;
 
+use App\DTO\RestDto;
+use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as Entity;
@@ -16,13 +18,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class UserGroup
  *
- * @package App\DTO
+ * @package App\DTO\UserGroup
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
  * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
  */
-class UserGroup extends RestDto
+abstract class UserGroup extends RestDto
 {
     /**
      * @var string
@@ -33,11 +35,9 @@ class UserGroup extends RestDto
      */
     protected $name = '';
 
+    /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
     /**
-     * @var \App\Entity\Role|string
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
+     * @var \App\Entity\Role
      */
     protected $role;
 
@@ -96,7 +96,7 @@ class UserGroup extends RestDto
     {
         if ($entity instanceof Entity) {
             $this->name = $entity->getName();
-            $this->role = $entity->getRole()->getId();
+            $this->role = $entity->getRole();
         }
 
         return $this;
