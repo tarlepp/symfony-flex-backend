@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Resource;
 
 use App\DTO\RestDtoInterface;
-use App\DTO\User as UserDto;
+use App\DTO\User\User as UserDto;
 use App\Entity\EntityInterface;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
@@ -26,8 +26,8 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
-use function get_class;
 use UnexpectedValueException;
+use function get_class;
 
 /**
  * Class GenericResourceTest
