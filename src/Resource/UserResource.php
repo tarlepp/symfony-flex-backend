@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Resource;
 
 use App\DTO\RestDtoInterface;
-use App\DTO\User;
 use App\Entity\EntityInterface;
 use App\Entity\User as Entity;
 use App\Entity\UserGroup;
@@ -59,7 +58,6 @@ class UserResource extends RestResource
     public function __construct(Repository $repository, RolesService $rolesService)
     {
         $this->setRepository($repository);
-        $this->setDtoClass(User::class);
 
         $this->rolesService = $rolesService;
     }
