@@ -9,15 +9,13 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Actions\Logged;
 
 use App\Annotation\RestApiDoc;
+use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\CreateMethod;
-use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Trait CreateAction
@@ -44,20 +42,15 @@ trait CreateAction
      *
      * @RestApiDoc()
      *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
+     * @param Request          $request
+     * @param RestDtoInterface $restDto
      *
      * @return Response
      *
-     * @throws LogicException
      * @throws Throwable
-     * @throws UnexpectedValueException
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
-    public function createAction(Request $request, FormFactoryInterface $formFactory): Response
+    public function createAction(Request $request, RestDtoInterface $restDto): Response
     {
-        return $this->createMethod($request, $formFactory);
+        return $this->createMethod($request, $restDto);
     }
 }
