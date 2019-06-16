@@ -1,19 +1,21 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/DTO/UserTest.php
+ * /tests/Integration/DTO/User/UserTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Tests\Integration\DTO;
+namespace App\Tests\Integration\DTO\User;
 
-use App\DTO\User as UserDto;
+use App\DTO\User\User as UserDto;
 use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\User as UserEntity;
 use App\Entity\UserGroup as UserGroupEntity;
+use App\Tests\Integration\DTO\DtoTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use Throwable;
 use function count;
 
 /**
@@ -52,11 +54,12 @@ class UserTest extends DtoTestCase
         static::assertSame('first name', $dto->getFirstName());
         static::assertSame('last name', $dto->getLastName());
         static::assertSame('firstname.surname@test.com', $dto->getEmail());
-        static::assertSame([$userGroupEntity->getId()], $dto->getUserGroups());
-
-        unset($dto, $userEntity, $userGroupEntity, $roleEntity);
+        static::assertSame([$userGroupEntity], $dto->getUserGroups());
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatUpdateMethodCallsExpectedEntityMethodIfPasswordIsVisited(): void
     {
         /** @var MockObject|EntityInterface $entity */
@@ -73,10 +76,11 @@ class UserTest extends DtoTestCase
         $dto = new $this->dtoClass();
         $dto->setPassword('password');
         $dto->update($entity);
-
-        unset($dto, $entity);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatUpdateMethodCallsExpectedEntityMethodsIfUserGroupsIsVisited(): void
     {
         $userGroups = [
@@ -102,7 +106,5 @@ class UserTest extends DtoTestCase
         $dto = new $this->dtoClass();
         $dto->setUserGroups($userGroups);
         $dto->update($entity);
-
-        unset($dto, $entity, $userGroups);
     }
 }
