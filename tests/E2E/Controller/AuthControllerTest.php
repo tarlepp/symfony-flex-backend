@@ -10,6 +10,7 @@ namespace App\Tests\E2E\Controller;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
+use Generator;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function json_encode;
@@ -137,37 +138,33 @@ class AuthControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost(): array
+    public function dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost(): Generator
     {
-        return [
-            ['HEAD'],
-            ['PUT'],
-            ['DELETE'],
-            ['TRACE'],
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['PATCH'],
-        ];
+        yield ['HEAD'];
+        yield ['PUT'];
+        yield ['DELETE'];
+        yield ['TRACE'];
+        yield ['OPTIONS'];
+        yield ['CONNECT'];
+        yield ['PATCH'];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): array
+    public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
     {
-        return [
-            ['john',                     'password'],
-            ['john.doe@test.com',        'password'],
-            ['john-logged',              'password-logged'],
-            ['john.doe-logged@test.com', 'password-logged'],
-            ['john-user',                'password-user'],
-            ['john.doe-user@test.com',   'password-user'],
-            ['john-admin',               'password-admin'],
-            ['john.doe-admin@test.com',  'password-admin'],
-            ['john-root',                'password-root'],
-            ['john.doe-root@test.com',   'password-root'],
-        ];
+        yield ['john',                     'password'];
+        yield ['john.doe@test.com',        'password'];
+        yield ['john-logged',              'password-logged'];
+        yield ['john.doe-logged@test.com', 'password-logged'];
+        yield ['john-user',                'password-user'];
+        yield ['john.doe-user@test.com',   'password-user'];
+        yield ['john-admin',               'password-admin'];
+        yield ['john.doe-admin@test.com',  'password-admin'];
+        yield ['john-root',                'password-root'];
+        yield ['john.doe-root@test.com',   'password-root'];
     }
 }
