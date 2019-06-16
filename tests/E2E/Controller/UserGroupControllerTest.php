@@ -35,11 +35,10 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
@@ -58,14 +57,11 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userGroupId . '/users');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertCount($userCount, JSON::decode($response->getContent()));
 
         unset($response, $client);
@@ -89,8 +85,6 @@ class UserGroupControllerTest extends WebTestCase
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
-
-        /** @noinspection NullPointerExceptionInspection */
         $url = sprintf(
             '%s/%s/user/%s',
             $this->baseUrl,
@@ -101,14 +95,11 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('POST', $url);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent(),
@@ -135,8 +126,6 @@ class UserGroupControllerTest extends WebTestCase
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
-
-        /** @noinspection NullPointerExceptionInspection */
         $url = sprintf(
             '%s/%s/user/%s',
             $this->baseUrl,
@@ -147,14 +136,11 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('POST', $url);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertCount(2, JSON::decode($response->getContent()));
 
         unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
@@ -174,8 +160,6 @@ class UserGroupControllerTest extends WebTestCase
 
         $user = $userResource->findOneBy(['username' => 'john']);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
-
-        /** @noinspection NullPointerExceptionInspection */
         $url = sprintf(
             '%s/%s/user/%s',
             $this->baseUrl,
@@ -186,14 +170,11 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('DELETE', $url);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertCount(1, JSON::decode($response->getContent()));
 
         unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
@@ -219,8 +200,6 @@ class UserGroupControllerTest extends WebTestCase
 
         $user = $userResource->findOneBy(['username' => $username]);
         $userGroup = $userGroupResource->findOneBy(['name' => 'Root users']);
-
-        /** @noinspection NullPointerExceptionInspection */
         $url = sprintf(
             '%s/%s/user/%s',
             $this->baseUrl,
@@ -231,14 +210,11 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('DELETE', $url);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
             $response->getContent(),
@@ -260,7 +236,6 @@ class UserGroupControllerTest extends WebTestCase
         /** @var UserGroupResource $userGroupResource */
         $userGroupResource = static::$container->get(UserGroupResource::class);
 
-        /** @noinspection NullPointerExceptionInspection */
         yield [1, $userGroupResource->findOneBy(['name' => 'Root users'])->getId()];
         yield [2, $userGroupResource->findOneBy(['name' => 'Admin users'])->getId()];
         yield [3, $userGroupResource->findOneBy(['name' => 'Normal users'])->getId()];

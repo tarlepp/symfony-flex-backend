@@ -30,11 +30,10 @@ class ApiKeyControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
@@ -54,11 +53,10 @@ class ApiKeyControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);

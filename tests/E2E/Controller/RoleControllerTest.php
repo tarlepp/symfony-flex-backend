@@ -33,11 +33,10 @@ class RoleControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         unset($response, $client);
@@ -57,11 +56,10 @@ class RoleControllerTest extends WebTestCase
 
         $client->request('GET', $this->baseUrl . '/ROLE_ADMIN');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         unset($response, $client);
@@ -87,14 +85,11 @@ class RoleControllerTest extends WebTestCase
 
             $client->request('GET', $this->baseUrl . '/' . $role . '/inherited');
 
+            /** @var Response $response */
             $response = $client->getResponse();
 
             static::assertInstanceOf(Response::class, $response);
-
-            /** @noinspection NullPointerExceptionInspection */
             static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-
-            /** @noinspection NullPointerExceptionInspection */
             static::assertJsonStringEqualsJsonString(JSON::encode($foo), $response->getContent());
 
             unset($response);

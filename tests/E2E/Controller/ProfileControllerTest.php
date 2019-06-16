@@ -36,14 +36,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse:\n" . $response;
@@ -74,11 +72,10 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
         unset($response, $client);
@@ -89,14 +86,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient();
         $client->request('GET', $this->baseUrl);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse:\n" . $response;
@@ -124,14 +119,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse:\n" . $response;
@@ -157,14 +150,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl . '/roles');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse:\n" . $response;
@@ -187,14 +178,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient();
         $client->request('GET', $this->baseUrl . '/roles');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse:\n" . $response;
@@ -226,14 +215,11 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/roles');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($expected, JSON::decode($response->getContent(), true), $response->getContent());
 
         unset($response, $client);
@@ -249,14 +235,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl . '/roles');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse:\n" . $response;
@@ -282,14 +266,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl . '/groups');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse:\n" . $response;
@@ -312,14 +294,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient();
         $client->request('GET', $this->baseUrl . '/groups');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse:\n" . $response;
@@ -351,14 +331,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/groups');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         if (empty($expected)) {
@@ -384,14 +362,12 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl . '/groups');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        /** @noinspection NullPointerExceptionInspection */
         $responseContent = JSON::decode($response->getContent());
 
         $info = "\nResponse:\n" . $response;
