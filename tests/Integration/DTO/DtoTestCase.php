@@ -51,13 +51,7 @@ abstract class DtoTestCase extends KernelTestCase
     {
         $dtoReflection = new ReflectionClass($this->dtoClass);
 
-        foreach ($dtoReflection->getProperties() as $reflectionProperty) {
-            if ($reflectionProperty->isStatic()
-                || $this->dtoClass !== $reflectionProperty->getDeclaringClass()->getName()
-            ) {
-                continue;
-            }
-
+        foreach ($this->getDtoProperties() as $reflectionProperty) {
             $method = 'get' . ucfirst($reflectionProperty->getName());
 
             $message = sprintf(
@@ -69,8 +63,6 @@ abstract class DtoTestCase extends KernelTestCase
 
             static::assertTrue($dtoReflection->hasMethod($method), $message);
         }
-
-        unset($dtoReflection);
     }
 
     /**
@@ -80,13 +72,7 @@ abstract class DtoTestCase extends KernelTestCase
     {
         $dtoReflection = new ReflectionClass($this->dtoClass);
 
-        foreach ($dtoReflection->getProperties() as $reflectionProperty) {
-            if ($reflectionProperty->isStatic()
-                || $this->dtoClass !== $reflectionProperty->getDeclaringClass()->getName()
-            ) {
-                continue;
-            }
-
+        foreach ($this->getDtoProperties() as $reflectionProperty) {
             $method = 'set' . ucfirst($reflectionProperty->getName());
 
             $message = sprintf(
@@ -107,20 +93,13 @@ abstract class DtoTestCase extends KernelTestCase
      */
     public function testThatSetterCallsSetVisitedMethod(): void
     {
-        $dtoClass = $this->dtoClass;
         $dtoReflection = new ReflectionClass($this->dtoClass);
-
-        $filter = static function (ReflectionProperty $reflectionProperty) use ($dtoClass) {
-            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
-                && !$reflectionProperty->isStatic();
-        };
-
-        $properties = array_filter($dtoReflection->getProperties(), $filter);
+        $properties = $this->getDtoProperties();
 
         /**
          * @var MockObject|RestDtoInterface $mock
          */
-        $mock = $this->getMockBuilder($dtoClass)
+        $mock = $this->getMockBuilder($this->dtoClass)
             ->setMethods(['setVisited'])
             ->getMock();
 
@@ -142,8 +121,6 @@ abstract class DtoTestCase extends KernelTestCase
         }
 
         static::assertEquals($expectedVisited, $mock->getVisited());
-
-        unset($mock, $properties, $dtoReflection);
     }
 
     /**
@@ -151,20 +128,12 @@ abstract class DtoTestCase extends KernelTestCase
      */
     public function testThatGetterMethodReturnExpectedAfterSetter(): void
     {
-        $dtoClass = $this->dtoClass;
         $dtoReflection = new ReflectionClass($this->dtoClass);
 
-        $filter = static function (ReflectionProperty $reflectionProperty) use ($dtoClass) {
-            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
-                && !$reflectionProperty->isStatic();
-        };
-
-        $properties = array_filter($dtoReflection->getProperties(), $filter);
-
-        $dto = new $dtoClass();
+        $dto = new $this->dtoClass();
 
         /** @var ReflectionProperty $reflectionProperty */
-        foreach ($properties as $reflectionProperty) {
+        foreach ($this->getDtoProperties() as $reflectionProperty) {
             // Get "valid" value for current property
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
 
@@ -177,8 +146,6 @@ abstract class DtoTestCase extends KernelTestCase
 
             static::assertSame($value, $dto->$getter());
         }
-
-        unset($dto, $dtoReflection);
     }
 
     /**
@@ -217,14 +184,6 @@ abstract class DtoTestCase extends KernelTestCase
      */
     public function dataProviderTestThatSetterOnlyAcceptSpecifiedType(): array
     {
-        $dtoClass = $this->dtoClass;
-        $dtoReflection = new ReflectionClass($this->dtoClass);
-
-        $filter = static function (ReflectionProperty $reflectionProperty) use ($dtoClass) {
-            return $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
-                && !$reflectionProperty->isStatic();
-        };
-
         $iterator = function (ReflectionProperty $reflectionProperty) {
             return [
                 $reflectionProperty->getName(),
@@ -232,7 +191,7 @@ abstract class DtoTestCase extends KernelTestCase
             ];
         };
 
-        return array_map($iterator, array_filter($dtoReflection->getProperties(), $filter));
+        return array_map($iterator, $this->getDtoProperties());
     }
 
     /**
@@ -303,5 +262,28 @@ abstract class DtoTestCase extends KernelTestCase
         }
 
         return $output;
+    }
+
+    /**
+     * @return ReflectionProperty[]
+     *
+     * @throws Throwable
+     */
+    private function getDtoProperties(): array
+    {
+        $dtoClass = $this->dtoClass;
+        $dtoReflection = new ReflectionClass($dtoClass);
+        $dto = new $dtoClass();
+
+        $filter = static function (ReflectionProperty $reflectionProperty) use ($dto, $dtoClass) {
+            return !$reflectionProperty->isStatic()
+                && ($dtoClass === $reflectionProperty->getDeclaringClass()->getName()
+                    || $reflectionProperty->getDeclaringClass()->isInstance($dto));
+        };
+
+        /** @var ReflectionProperty[] $properties */
+        $properties = array_filter($dtoReflection->getProperties(), $filter);
+
+        return $properties;
     }
 }
