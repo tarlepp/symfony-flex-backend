@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6634605acab02c6c2ec25eb01d571450",
+    "content-hash": "e2e3c3fe3db1e0422af8942b468cb257",
     "packages": [],
     "packages-dev": [
         {
@@ -239,16 +239,16 @@
         },
         {
             "name": "phan/phan",
-            "version": "2.1.0",
+            "version": "2.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phan/phan.git",
-                "reference": "f5c8f8665f252161de3b39f32cb231eb6517dc70"
+                "reference": "d176c5f3ae43c61f9f04cfda6d561ca5781dd67f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phan/phan/zipball/f5c8f8665f252161de3b39f32cb231eb6517dc70",
-                "reference": "f5c8f8665f252161de3b39f32cb231eb6517dc70",
+                "url": "https://api.github.com/repos/phan/phan/zipball/d176c5f3ae43c61f9f04cfda6d561ca5781dd67f",
+                "reference": "d176c5f3ae43c61f9f04cfda6d561ca5781dd67f",
                 "shasum": ""
             },
             "require": {
@@ -304,7 +304,7 @@
                 "php",
                 "static"
             ],
-            "time": "2019-06-01T18:12:12+00:00"
+            "time": "2019-06-16T20:02:33+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -899,7 +899,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
