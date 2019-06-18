@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Actions\Root;
 
 use App\Annotation\RestApiDoc;
+use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
 use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -47,24 +48,16 @@ trait UpdateAction
      *
      * @RestApiDoc()
      *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
-     * @param string               $id
+     * @param Request          $request
+     * @param RestDtoInterface $restDto
+     * @param string           $id
      *
      * @return Response
      *
-     * @throws LogicException
-     * @throws UnexpectedValueException
      * @throws Throwable
-     * @throws \Symfony\Component\Form\Exception\LogicException
-     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
-    public function updateAction(Request $request, FormFactoryInterface $formFactory, string $id): Response
+    public function updateAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
-        return $this->updateMethod($request, $formFactory, $id);
+        return $this->updateMethod($request, $restDto, $id);
     }
 }
