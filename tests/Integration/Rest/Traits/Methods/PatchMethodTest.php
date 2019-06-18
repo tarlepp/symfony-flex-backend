@@ -19,9 +19,6 @@ use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Form\FormConfigInterface;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
@@ -50,17 +47,17 @@ class PatchMethodTest extends KernelTestCase
         /** @codingStandardsIgnoreEnd */
 
         /**
-         * @var MockObject|FormFactoryInterface $formFactoryMock
          * @var MockObject|PatchMethodInvalidTestClass $testClass
+         * @var MockObject|RestDtoInterface            $restDtoInterface
          */
         $testClass = $this->getMockForAbstractClass(PatchMethodInvalidTestClass::class);
-        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
+        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
 
         $uuid = Uuid::uuid4()->toString();
 
         $request = Request::create('/' . $uuid, 'PATCH');
 
-        $testClass->patchMethod($request, $formFactoryMock, 'some-id');
+        $testClass->patchMethod($request, $restDtoInterface, 'some-id');
     }
 
     /**
@@ -77,10 +74,11 @@ class PatchMethodTest extends KernelTestCase
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var MockObject|FormFactoryInterface $formFactoryMock */
-        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
-
-        /** @var MockObject|PatchMethodTestClass $testClass */
+        /**
+         * @var MockObject|RestDtoInterface     $restDtoInterface
+         * @var MockObject|PatchMethodTestClass $testClass
+         */
+        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
         $testClass = $this->getMockForAbstractClass(
             PatchMethodTestClass::class,
             [$resource, $responseHandler]
@@ -91,43 +89,7 @@ class PatchMethodTest extends KernelTestCase
         // Create request and response
         $request = Request::create('/' . $uuid, $httpMethod);
 
-        $testClass->patchMethod($request, $formFactoryMock, 'some-id')->getContent();
-    }
-
-    /**
-     * @dataProvider dataProviderTestThatTraitHandlesException
-     *
-     * @param Exception $exception
-     * @param integer   $expectedCode
-     *
-     * @throws Throwable
-     */
-    public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
-    {
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|FormFactoryInterface $formFactoryMock */
-        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
-
-        /** @var MockObject|PatchMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            PatchMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
-        $uuid = Uuid::uuid4()->toString();
-        $request = Request::create('/' . $uuid, 'PATCH');
-
-        $formFactoryMock
-            ->expects(static::once())
-            ->method('createNamed')
-            ->willThrowException($exception);
-
-        $this->expectException(HttpException::class);
-        $this->expectExceptionCode($expectedCode);
-
-        $testClass->patchMethod($request, $formFactoryMock, $uuid);
+        $testClass->patchMethod($request, $restDtoInterface, 'some-id')->getContent();
     }
 
     /**
@@ -138,153 +100,26 @@ class PatchMethodTest extends KernelTestCase
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
-        /** @var MockObject|PatchMethodTestClass $testClass */
+        /**
+         * @var MockObject|RestDtoInterface     $restDtoInterface
+         * @var MockObject|Request              $request
+         * @var MockObject|PatchMethodTestClass $testClass
+         */
+        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $request = $this->createMock(Request::class);
         $testClass = $this->getMockForAbstractClass(
             PatchMethodTestClass::class,
             [$resource, $responseHandler]
         );
 
-        /**
-         * @var MockObject|FormFactoryInterface $formFactoryMock
-         * @var MockObject|FormInterface        $formInterfaceMock
-         * @var MockObject|FormConfigInterface  $formConfigInterface
-         * @var MockObject|RestDtoInterface     $dtoInterface
-         * @var MockObject|Request              $request
-         */
-        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
-        $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
-        $formConfigInterface = $this->getMockBuilder(FormConfigInterface::class)->getMock();
-        $dtoInterface = $this->createMock(RestDtoInterface::class);
-        $request = $this->createMock(Request::class);
-
         $uuid = Uuid::uuid4()->toString();
 
         $request
-            ->expects(static::exactly(2))
+            ->expects(static::once())
             ->method('getMethod')
             ->willReturn('PATCH');
 
-        $formConfigInterface
-            ->expects(static::once())
-            ->method('getDataClass')
-            ->willReturn('foobar');
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('setData')
-            ->withAnyParameters();
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('handleRequest')
-            ->with($request);
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('getConfig')
-            ->willReturn($formConfigInterface);
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('isSubmitted')
-            ->willReturn(true);
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('isValid')
-            ->willReturn(true);
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('getData')
-            ->willReturn($dtoInterface);
-
-        $formFactoryMock
-            ->expects(static::once())
-            ->method('createNamed')
-            ->withAnyParameters()
-            ->willReturn($formInterfaceMock);
-
-        $testClass->patchMethod($request, $formFactoryMock, $uuid);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatTraitThrowsAnErrorIfFormIsInvalid(): void
-    {
-        $this->expectException(HttpException::class);
-
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|PatchMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            PatchMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
-        /**
-         * @var MockObject|FormFactoryInterface $formFactoryMock
-         * @var MockObject|FormInterface        $formInterfaceMock
-         * @var MockObject|FormConfigInterface  $formConfigInterface
-         * @var MockObject|RestDtoInterface     $dtoInterface
-         * @var MockObject|Request              $request
-         */
-        $formFactoryMock = $this->getMockBuilder(FormFactoryInterface::class)->getMock();
-        $formInterfaceMock = $this->getMockBuilder(FormInterface::class)->getMock();
-        $formConfigInterface = $this->getMockBuilder(FormConfigInterface::class)->getMock();
-        $request = $this->createMock(Request::class);
-
-        $uuid = Uuid::uuid4()->toString();
-
-        $request
-            ->expects(static::exactly(2))
-            ->method('getMethod')
-            ->willReturn('PATCH');
-
-        $formConfigInterface
-            ->expects(static::once())
-            ->method('getDataClass')
-            ->willReturn('foobar');
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('setData')
-            ->withAnyParameters();
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('handleRequest')
-            ->with($request);
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('getConfig')
-            ->willReturn($formConfigInterface);
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('isSubmitted')
-            ->willReturn(true);
-
-        $formInterfaceMock
-            ->expects(static::once())
-            ->method('isValid')
-            ->willReturn(false);
-
-        $formFactoryMock
-            ->expects(static::once())
-            ->method('createNamed')
-            ->withAnyParameters()
-            ->willReturn($formInterfaceMock);
-
-        $responseHandler
-            ->expects(static::once())
-            ->method('handleFormError')
-            ->willThrowException(new HttpException(400));
-
-        $testClass->patchMethod($request, $formFactoryMock, $uuid);
+        $testClass->patchMethod($request, $restDtoInterface, $uuid);
     }
 
     /**
