@@ -9,14 +9,12 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Actions\Anon;
 
 use App\Annotation\RestApiDoc;
+use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\PatchMethod;
-use LogicException;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Trait PatchAction
@@ -44,24 +42,16 @@ trait PatchAction
      *
      * @RestApiDoc()
      *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
-     * @param string               $id
+     * @param Request          $request
+     * @param RestDtoInterface $restDto
+     * @param string           $id
      *
      * @return Response
      *
-     * @throws LogicException
-     * @throws UnexpectedValueException
      * @throws Throwable
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     * @throws \Symfony\Component\Form\Exception\LogicException
-     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
      */
-    public function patchAction(Request $request, FormFactoryInterface $formFactory, string $id): Response
+    public function patchAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
-        return $this->patchMethod($request, $formFactory, $id);
+        return $this->patchMethod($request, $restDto, $id);
     }
 }
