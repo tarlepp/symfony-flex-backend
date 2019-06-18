@@ -8,8 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Methods;
 
-use LogicException;
-use Symfony\Component\Form\FormFactoryInterface;
+use App\DTO\RestDtoInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -29,21 +28,18 @@ trait PatchMethod
     /**
      * Generic 'patchMethod' method for REST resources.
      *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
-     * @param string               $id
-     * @param string[]|null        $allowedHttpMethods
+     * @param Request          $request
+     * @param RestDtoInterface $restDto
+     * @param string           $id
+     * @param string[]|null    $allowedHttpMethods
      *
      * @return Response
      *
-     * @throws LogicException
      * @throws Throwable
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function patchMethod(
         Request $request,
-        FormFactoryInterface $formFactory,
+        RestDtoInterface $restDto,
         string $id,
         ?array $allowedHttpMethods = null
     ): Response {
@@ -56,11 +52,7 @@ trait PatchMethod
         $resource = $this->getResource();
 
         try {
-            $data = $resource->update(
-                $id,
-                $this->processForm($request, $formFactory, __METHOD__, $id)->getData(),
-                true
-            );
+            $data = $resource->update($id, $restDto, true);
 
             return $this->getResponseHandler()->createResponse($request, $data, $resource);
         } catch (Throwable $exception) {
