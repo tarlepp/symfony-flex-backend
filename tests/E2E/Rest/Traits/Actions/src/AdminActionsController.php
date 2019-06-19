@@ -9,11 +9,13 @@ declare(strict_types = 1);
 namespace App\Tests\E2E\Rest\Traits\Actions\src;
 
 use App\Annotation\RestApiDoc;
+use App\DTO\User\UserCreate;
+use App\DTO\User\UserPatch;
+use App\DTO\User\UserUpdate;
 use App\Rest\Controller;
-use App\Rest\RestResourceInterface;
 use App\Rest\Traits\Actions\Admin as Actions;
-use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class AdminActionsController
@@ -39,8 +41,9 @@ class AdminActionsController extends Controller
     use Actions\IdsAction;
     use Actions\UpdateAction;
 
-    /** @noinspection PhpMissingParentConstructorInspection */
-    public function __construct()
-    {
-    }
+    protected static $dtoClasses = [
+        Controller::METHOD_CREATE => UserCreate::class,
+        Controller::METHOD_UPDATE => UserUpdate::class,
+        Controller::METHOD_PATCH => UserPatch::class,
+    ];
 }
