@@ -359,6 +359,37 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
+     * @depends testThatCreateActionWorksLikeExpected
+     *
+     * @param string $userId
+     *
+     * @return string
+     *
+     * @throws Throwable
+     */
+    public function testThatUpdateActionDoesNotWorkWithPartialData(string $userId): string
+    {
+        $data = [
+            'id'        => $userId,
+            'email'     => 'test-user@test.com',
+        ];
+
+        $client = $this->getTestClient('john-root', 'password-root');
+        $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
+
+        /** @var Response $response */
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(400, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+
+        unset($response, $client);
+
+        return $userId;
+    }
+
+
+    /**
      * @depends      testThatUpdateActionWorksLikeExpected
      * @dataProvider dataProviderInvalidUsersCreate
      *
@@ -1058,5 +1089,20 @@ class UserControllerTest extends WebTestCase
         foreach ($userResource->find() as $user) {
             yield [$user->getId(), count($user->getRoles()) ? $user->getRoles()[0] : null];
         }
+    }
+
+    /**
+     * @return Generator
+     *
+     * @throws Throwable
+     */
+    public function dataProviderTestThatUpdateActionDoesNotWorkWithTakenUsername(): Generator
+    {
+        static::bootKernel();
+
+        /** @var UserResource $userResource */
+        $userResource = static::$container->get(UserResource::class);
+
+        yield $userResource->findOneBy(['username' => 'john']);
     }
 }
