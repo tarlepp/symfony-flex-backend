@@ -42,7 +42,7 @@ class ControllerCollectionTest extends KernelTestCase
     {
         $collection = $this->getCollection();
 
-        static::assertCount(4, $collection->getAll());
+        static::assertCount(11, $collection->getAll());
     }
 
     /**
