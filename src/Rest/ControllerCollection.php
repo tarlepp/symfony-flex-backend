@@ -8,26 +8,26 @@ declare(strict_types = 1);
 
 namespace App\Rest;
 
+use App\Collection\CollectionTrait;
 use Closure;
 use InvalidArgumentException;
 use Traversable;
-use function array_filter;
-use function array_values;
-use function count;
-use function iterator_to_array;
 
 /**
  * Class ControllerCollection
  *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property Traversable|Traversable<ControllerInterface> $items
+ *
+ * @method ControllerInterface                          get(string $className)
+ * @method Traversable<array-key, ControllerInterface>  getAll(): Traversable
  */
 class ControllerCollection
 {
-    /**
-     * @var Traversable|Traversable<ControllerInterface>
-     */
-    private $controllers;
+    // Traits
+    use CollectionTrait;
 
     /**
      * Collection constructor.
@@ -36,75 +36,33 @@ class ControllerCollection
      */
     public function __construct(Traversable $controllers)
     {
-        $this->controllers = $controllers;
+        $this->items = $controllers;
     }
 
     /**
-     * Getter method to get _all_ REST controllers.
-     *
-     * @return Traversable|Traversable<ControllerInterface>
-     */
-    public function getAll(): Traversable
-    {
-        return $this->controllers;
-    }
-
-    /**
-     * Getter method for RestResource class.
-     *
-     * @param string $controllerName
-     *
-     * @return ControllerInterface
+     * @param string $className
      *
      * @throws InvalidArgumentException
      */
-    public function get(string $controllerName): ControllerInterface
+    public function error(string $className): void
     {
-        $filteredControllers = array_values(
-            array_filter(
-                iterator_to_array($this->controllers),
-                $this->controllerFilter($controllerName)
-            )
+        $message = sprintf(
+            'REST controller \'%s\' does not exists',
+            $className
         );
 
-        if (count($filteredControllers) !== 1) {
-            $message = sprintf(
-                'REST controller \'%s\' does not exists',
-                $controllerName
-            );
-
-            throw new InvalidArgumentException($message);
-        }
-
-        return $filteredControllers[0];
+        throw new InvalidArgumentException($message);
     }
 
     /**
-     * Method to check if specified resource exists or not in this Collection.
-     *
-     * @param string|null $controllerName
-     *
-     * @return bool
-     */
-    public function has(?string $controllerName = null): bool
-    {
-        return count(
-            array_filter(
-                iterator_to_array($this->controllers),
-                $this->controllerFilter($controllerName)
-            )
-        ) === 1;
-    }
-
-    /**
-     * @param string|null $controllerName
+     * @param string|null $className
      *
      * @return Closure
      */
-    private function controllerFilter(?string $controllerName): Closure
+    public function filter(?string $className): Closure
     {
-        return static function (ControllerInterface $restController) use ($controllerName): bool {
-            return $controllerName !== null && $restController instanceof $controllerName;
+        return static function (ControllerInterface $restController) use ($className): bool {
+            return $className !== null && $restController instanceof $className;
         };
     }
 }

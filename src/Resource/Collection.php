@@ -8,14 +8,11 @@ declare(strict_types = 1);
 
 namespace App\Resource;
 
+use App\Collection\CollectionTrait;
 use App\Rest\RestResourceInterface;
 use Closure;
 use InvalidArgumentException;
 use Traversable;
-use function array_filter;
-use function array_values;
-use function count;
-use function iterator_to_array;
 use function sprintf;
 
 /**
@@ -23,13 +20,16 @@ use function sprintf;
  *
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property Traversable|Traversable<RestResourceInterface> $items
+ *
+ * @method RestResourceInterface                         get(string $className)
+ * @method Traversable<array-key, RestResourceInterface> getAll(): Traversable
  */
 class Collection
 {
-    /**
-     * @var Traversable|Traversable<RestResourceInterface>
-     */
-    private $resources;
+    // Traits
+    use CollectionTrait;
 
     /**
      * Collection constructor.
@@ -38,70 +38,33 @@ class Collection
      */
     public function __construct(Traversable $resources)
     {
-        $this->resources = $resources;
+        $this->items = $resources;
     }
 
     /**
-     * Getter method to get _all_ resources.
-     *
-     * @return Traversable|Traversable<RestResourceInterface>
-     */
-    public function getAll(): Traversable
-    {
-        return $this->resources;
-    }
-
-    /**
-     * Getter method for RestResource class.
-     *
-     * @param string $resourceName
-     *
-     * @return RestResourceInterface
-     *
-     * @throws InvalidArgumentException
-     */
-    public function get(string $resourceName): RestResourceInterface
-    {
-        $filteredResources = array_values(
-            array_filter(
-                iterator_to_array($this->resources),
-                $this->resourceFilter($resourceName)
-            )
-        );
-
-        if (count($filteredResources) !== 1) {
-            $message = sprintf(
-                'Resource \'%s\' does not exists',
-                $resourceName
-            );
-
-            throw new InvalidArgumentException($message);
-        }
-
-        return $filteredResources[0];
-    }
-
-    /**
-     * Method to check if specified resource exists or not in this Collection.
-     *
-     * @param string|null $resourceName
-     *
-     * @return bool
-     */
-    public function has(?string $resourceName = null): bool
-    {
-        return count(array_filter(iterator_to_array($this->resources), $this->resourceFilter($resourceName))) === 1;
-    }
-
-    /**
-     * @param string|null $resourceName
+     * @param string|null $className
      *
      * @return Closure
      */
-    private function resourceFilter(?string $resourceName): Closure
+    public function filter(?string $className): Closure
     {
-        return static function (RestResourceInterface $restResource) use ($resourceName): bool {
-            return $resourceName !== null && $restResource instanceof $resourceName;
+        return static function (RestResourceInterface $restResource) use ($className): bool {
+            return $className !== null && $restResource instanceof $className;
         };
+    }
+
+    /**
+     * @param string $className
+     *
+     * @throws InvalidArgumentException
+     */
+    public function error(string $className): void
+    {
+        $message = sprintf(
+            'Resource \'%s\' does not exists',
+            $className
+        );
+
+        throw new InvalidArgumentException($message);
     }
 }
