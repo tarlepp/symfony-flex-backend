@@ -10,7 +10,6 @@ namespace App\AutoMapper;
 
 use App\DTO\RestDtoInterface;
 use AutoMapperPlus\CustomMapper\CustomMapper;
-use Generator;
 use InvalidArgumentException;
 use LengthException;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,11 +98,11 @@ abstract class RestRequestMapper extends CustomMapper
     /**
      * @param Request $request
      *
-     * @return Generator
+     * @return array
      */
-    private function getValidProperties(Request $request): Generator
+    private function getValidProperties(Request $request): array
     {
-        yield array_filter(static::$properties, static function ($property) use ($request) {
+        return array_filter(static::$properties, static function ($property) use ($request) {
             return $request->request->has($property);
         });
     }
