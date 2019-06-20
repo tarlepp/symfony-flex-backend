@@ -22,7 +22,6 @@ use Throwable;
 trait CreateMethod
 {
     // Traits
-    use AbstractFormMethods;
     use AbstractGenericMethods;
 
     /**

@@ -19,13 +19,11 @@ use Doctrine\ORM\UnitOfWork;
 use Error;
 use Exception;
 use LogicException;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 use TypeError;
 use UnexpectedValueException;
@@ -126,7 +124,7 @@ trait RestMethodHelper
      * @param string[] $allowedHttpMethods
      *
      * @throws LogicException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     * @throws MethodNotAllowedHttpException
      */
     public function validateRestMethod(Request $request, array $allowedHttpMethods): void
     {
@@ -154,7 +152,7 @@ trait RestMethodHelper
      *
      * @return Throwable
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws NotFoundHttpException
      */
     public function handleRestMethodException(Throwable $exception, ?string $id = null): Throwable
     {
@@ -177,50 +175,6 @@ trait RestMethodHelper
     }
 
     /**
-     * Method to process POST, PUT and PATCH action form within REST traits.
-     *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
-     * @param string               $method
-     * @param string|null          $id
-     *
-     * @return FormInterface
-     *
-     * @throws UnexpectedValueException
-     * @throws \Symfony\Component\HttpKernel\Exception\BadRequestHttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\Form\Exception\LogicException
-     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
-    public function processForm(
-        Request $request,
-        FormFactoryInterface $formFactory,
-        string $method,
-        ?string $id = null
-    ): FormInterface {
-        $formType = $this->getFormTypeClass($method);
-
-        // Create form, load possible entity data for form and handle request
-        $form = $formFactory->createNamed('', $formType, null, ['method' => $request->getMethod()]);
-
-        $this->setDtoToForm($form, $id);
-
-        $form->handleRequest($request);
-
-        if (!$form->isSubmitted()) {
-            throw new BadRequestHttpException('Bad request');
-        }
-
-        if (!$form->isValid()) {
-            $this->getResponseHandler()->handleFormError($form);
-        }
-
-        return $form;
-    }
-
-    /**
      * @param Throwable $exception
      *
      * @return int
@@ -235,7 +189,7 @@ trait RestMethodHelper
      *
      * @param string $id
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws NotFoundHttpException
      */
     private function detachEntityFromManager(string $id): void
     {
@@ -286,22 +240,5 @@ trait RestMethodHelper
         }
 
         return $output;
-    }
-
-    /**
-     * @param FormInterface $form
-     * @param string|null   $id
-     *
-     * @throws \Symfony\Component\Form\Exception\LogicException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
-     */
-    private function setDtoToForm(FormInterface $form, ?string $id): void
-    {
-        $dtoClass = $form->getConfig()->getDataClass();
-
-        if ($id !== null && $dtoClass !== null) {
-            $form->setData($this->getResource()->getDtoForEntity($id, $dtoClass));
-        }
     }
 }
