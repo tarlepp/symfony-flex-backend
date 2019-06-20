@@ -333,6 +333,7 @@ class UserControllerTest extends WebTestCase
     public function testThatUpdateActionWorksLikeExpected(string $userId): string
     {
         $data = [
+            'id'        => $userId,
             'username'  => 'test-user',
             'firstName' => 'test-1',
             'lastName'  => 'user-2',

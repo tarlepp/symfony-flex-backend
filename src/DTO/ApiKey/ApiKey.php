@@ -22,6 +22,7 @@ use function array_map;
  * @package App\DTO
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
+ * @method self|RestDtoInterface  get(string $id): RestDtoInterface
  * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
  * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
  */
@@ -33,11 +34,6 @@ class ApiKey extends RestDto
     protected static $mappings = [
         'userGroups' => 'updateUserGroups',
     ];
-
-    /**
-     * @var string|null
-     */
-    protected $id;
 
     /**
      * @var string
@@ -56,28 +52,6 @@ class ApiKey extends RestDto
      * @var UserGroupEntity[]
      */
     protected $userGroups = [];
-
-    /**
-     * @return string|null
-     */
-    public function getId(): ?string
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string|null $id
-     *
-     * @return ApiKey
-     */
-    public function setId(?string $id = null): self
-    {
-        $this->setVisited('id');
-
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * @return string

@@ -47,9 +47,10 @@ trait RestResourceBaseMethods
     /**
      * Getter method DTO class with loaded entity data.
      *
-     * @param string                $id
-     * @param string                $dtoClass
-     * @param RestDtoInterface|null $dto
+     * @param string           $id
+     * @param string           $dtoClass
+     * @param RestDtoInterface $dto
+     * @param bool|null        $patch
      *
      * @return RestDtoInterface
      *
@@ -58,7 +59,8 @@ trait RestResourceBaseMethods
     abstract public function getDtoForEntity(
         string $id,
         string $dtoClass,
-        ?RestDtoInterface $dto = null
+        RestDtoInterface $dto,
+        ?bool $patch = null
     ): RestDtoInterface;
 
     /**
@@ -265,6 +267,51 @@ trait RestResourceBaseMethods
 
         // After callback method call
         $this->afterUpdate($id, $restDto, $entity);
+
+        return $entity;
+    }
+
+    /**
+     * Generic method to patch specified entity with new partial data.
+     *
+     * @param string           $id
+     * @param RestDtoInterface $dto
+     * @param bool|null        $flush
+     * @param bool|null        $skipValidation
+     *
+     * @return EntityInterface
+     *
+     * @throws Throwable
+     */
+    public function patch(
+        string $id,
+        RestDtoInterface $dto,
+        ?bool $flush = null,
+        ?bool $skipValidation = null
+    ): EntityInterface {
+        $flush = $flush ?? true;
+        $skipValidation = $skipValidation ?? false;
+
+        // Fetch entity
+        $entity = $this->getEntity($id);
+
+        /**
+         * Determine used dto class and create new instance of that and load entity to that. And after that patch
+         * that dto with given partial OR whole dto class.
+         */
+        $restDto = $this->getDtoForEntity($id, get_class($dto), $dto, true);
+
+        // Validate DTO
+        $this->validateDto($restDto, $skipValidation);
+
+        // Before callback method call
+        $this->beforePatch($id, $restDto, $entity);
+
+        // Create or update entity
+        $this->persistEntity($entity, $restDto, $flush, $skipValidation);
+
+        // After callback method call
+        $this->afterPatch($id, $restDto, $entity);
 
         return $entity;
     }
