@@ -11,14 +11,11 @@ namespace App\Rest\Traits\Actions\Root;
 use App\Annotation\RestApiDoc;
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
-use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Trait UpdateAction
