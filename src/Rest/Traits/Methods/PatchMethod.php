@@ -22,7 +22,6 @@ use Throwable;
 trait PatchMethod
 {
     // Traits
-    use AbstractFormMethods;
     use AbstractGenericMethods;
 
     /**
