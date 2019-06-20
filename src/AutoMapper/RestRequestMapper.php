@@ -10,6 +10,7 @@ namespace App\AutoMapper;
 
 use App\DTO\RestDtoInterface;
 use AutoMapperPlus\CustomMapper\CustomMapper;
+use Generator;
 use InvalidArgumentException;
 use LengthException;
 use Symfony\Component\HttpFoundation\Request;
@@ -79,21 +80,31 @@ abstract class RestRequestMapper extends CustomMapper
      */
     private function getObject(Request $request, RestDtoInterface $restDto): RestDtoInterface
     {
-        foreach (static::$properties as $property) {
-            if ($request->request->has($property)) {
-                $setter = 'set' . ucfirst($property);
-                $transformer = 'transform' . ucfirst($property);
+        foreach ($this->getValidProperties($request) as $property) {
+            $setter = 'set' . ucfirst($property);
+            $transformer = 'transform' . ucfirst($property);
 
-                $value = $request->request->get($property);
+            $value = $request->request->get($property);
 
-                if (method_exists($this, $transformer)) {
-                    $value = $this->{$transformer}($value);
-                }
-
-                $restDto->{$setter}($value);
+            if (method_exists($this, $transformer)) {
+                $value = $this->{$transformer}($value);
             }
+
+            $restDto->{$setter}($value);
         }
 
         return $restDto;
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Generator
+     */
+    private function getValidProperties(Request $request): Generator
+    {
+        yield array_filter(static::$properties, static function ($property) use ($request) {
+            return $request->request->has($property);
+        });
     }
 }
