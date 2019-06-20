@@ -164,7 +164,7 @@ class GenericResourceTest extends KernelTestCase
         /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(
             RestDtoInterface::class,
-            $this->resource->getDtoForEntity('some id', get_class($dto))
+            $this->resource->getDtoForEntity('some id', get_class($dto), $dto)
         );
 
         unset($dto, $repository, $entity);
@@ -191,7 +191,7 @@ class GenericResourceTest extends KernelTestCase
         $dto = $this->getDtoMockBuilder()->getMock();
 
         $this->resource->setRepository($repository);
-        $this->resource->getDtoForEntity('some id', get_class($dto));
+        $this->resource->getDtoForEntity('some id', get_class($dto), $dto);
 
         unset($repository);
     }

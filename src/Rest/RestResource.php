@@ -10,10 +10,9 @@ namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
 use App\Repository\BaseRepositoryInterface;
-use BadMethodCallException;
 use Doctrine\Common\Proxy\Proxy;
-use LogicException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Throwable;
 use UnexpectedValueException;
 use function array_keys;
 use function sprintf;
@@ -210,29 +209,36 @@ abstract class RestResource implements RestResourceInterface
     /**
      * Getter method DTO class with loaded entity data.
      *
-     * @param string                $id
-     * @param string                $dtoClass
-     * @param RestDtoInterface|null $dto
+     * @param string           $id
+     * @param string           $dtoClass
+     * @param RestDtoInterface $dto
+     * @param bool|null        $patch
      *
      * @return RestDtoInterface
      *
-     * @throws LogicException
-     * @throws BadMethodCallException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws Throwable
      */
-    public function getDtoForEntity(string $id, string $dtoClass, ?RestDtoInterface $dto = null): RestDtoInterface
-    {
+    public function getDtoForEntity(
+        string $id,
+        string $dtoClass,
+        RestDtoInterface $dto,
+        ?bool $patch = null
+    ): RestDtoInterface {
+        $patch = $patch ?? false;
+
         // Fetch entity
         $entity = $this->getEntity($id);
 
         // Create new instance of DTO and load entity to that.
         /** @var RestDtoInterface $restDto */
         $restDto = new $dtoClass();
-        $restDto->load($entity);
+        $restDto->setId($id);
 
-        if ($dto !== null) {
-            $restDto->patch($dto);
+        if ($patch === true) {
+            $restDto->load($entity);
         }
+
+        $restDto->patch($dto);
 
         return $restDto;
     }

@@ -51,7 +51,7 @@ trait PatchMethod
         $resource = $this->getResource();
 
         try {
-            $data = $resource->update($id, $restDto, true);
+            $data = $resource->patch($id, $restDto, true);
 
             return $this->getResponseHandler()->createResponse($request, $data, $resource);
         } catch (Throwable $exception) {

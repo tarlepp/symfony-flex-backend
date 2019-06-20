@@ -24,6 +24,7 @@ trait RestResourceLifeCycles
     use RestResourceIds;
     use RestResourceCreate;
     use RestResourceUpdate;
+    use RestResourcePatch;
     use RestResourceDelete;
     use RestResourceSave;
 }

@@ -21,6 +21,13 @@ use LogicException;
 interface RestDtoInterface
 {
     /**
+     * @param string $id
+     *
+     * @return RestDtoInterface
+     */
+    public function setId(string $id): self;
+
+    /**
      * Getter method for visited setters. This is needed for dto patching.
      *
      * @return string[]
@@ -57,7 +64,7 @@ interface RestDtoInterface
     /**
      * Method to patch current dto with another one.
      *
-     * @param self|RestDtoInterface $dto
+     * @param RestDtoInterface $dto
      *
      * @return RestDtoInterface
      *
