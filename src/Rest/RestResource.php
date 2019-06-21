@@ -136,20 +136,6 @@ abstract class RestResource implements RestResourceInterface
     }
 
     /**
-     * Setter method for used default FormType class for this REST resource.
-     *
-     * @param string $formTypeClass
-     *
-     * @return RestResourceInterface
-     */
-    public function setFormTypeClass(string $formTypeClass): RestResourceInterface
-    {
-        $this->formTypeClass = $formTypeClass;
-
-        return $this;
-    }
-
-    /**
      * Getter method for current entity name.
      *
      * @return string
