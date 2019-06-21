@@ -388,7 +388,6 @@ class UserControllerTest extends WebTestCase
         return $userId;
     }
 
-
     /**
      * @depends      testThatUpdateActionWorksLikeExpected
      * @dataProvider dataProviderInvalidUsersCreate
@@ -426,6 +425,45 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
+
+        unset($response, $client);
+
+        return $userId;
+    }
+
+    /**
+     * @depends testThatCreateActionWorksLikeExpected
+     *
+     * @param string $userId
+     *
+     * @return string
+     *
+     * @throws Throwable
+     */
+    public function testThatPatchActionWorskWithPartialData(string $userId): string
+    {
+        $data = [
+            'id'        => $userId,
+            'email'     => 'test-user2@test.com',
+        ];
+
+        $expectedData = [
+            'id'        => $userId,
+            'username'  => 'test-user',
+            'firstName' => 'test-1',
+            'lastName'  => 'user-2',
+            'email'     => 'test-user2@test.com',
+        ];
+
+        $client = $this->getTestClient('john-root', 'password-root');
+        $client->request('PATCH', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
+
+        /** @var Response $response */
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertJsonStringEqualsJsonString(JSON::encode($expectedData), $response->getContent());
 
         unset($response, $client);
 
