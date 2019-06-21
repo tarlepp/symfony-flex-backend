@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Methods;
 
 use App\Rest\RequestHandler;
-use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
