@@ -28,11 +28,6 @@ plugins:
     enabled: true
     config:
       standard: "PSR1,PSR2"
-  sonar-php:
-    enabled: true
-    config:
-      tests_patterns:
-        - src/**
 checks:
   argument-count:
     config:
