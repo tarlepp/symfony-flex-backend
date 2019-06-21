@@ -72,7 +72,7 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
     /**
      * Whether this resolver can resolve the value for the given ArgumentMetadata.
      *
-     * @param Request $request
+     * @param Request          $request
      * @param ArgumentMetadata $argument
      *
      * @return bool
@@ -93,7 +93,7 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
     /**
      * Returns the possible value(s).
      *
-     * @param Request $request
+     * @param Request          $request
      * @param ArgumentMetadata $argument
      *
      * @return Generator
