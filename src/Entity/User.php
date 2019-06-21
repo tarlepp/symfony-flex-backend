@@ -37,7 +37,7 @@ use Throwable;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class User implements EntityInterface, UserInterface
+class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 {
     // Traits
     use Blameable;

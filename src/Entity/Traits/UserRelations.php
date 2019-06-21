@@ -13,6 +13,7 @@ use App\Entity\LogLoginFailure;
 use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Entity\UserGroupAwareInterface;
 use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -141,9 +142,9 @@ trait UserRelations
     /**
      * Getter for user groups collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
+     * @return Collection|ArrayCollection|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups()
+    public function getUserGroups(): Collection
     {
         return $this->userGroups;
     }
@@ -183,9 +184,9 @@ trait UserRelations
      *
      * @param UserGroup $userGroup
      *
-     * @return User
+     * @return User|UserGroupAwareInterface
      */
-    public function addUserGroup(UserGroup $userGroup): User
+    public function addUserGroup(UserGroup $userGroup): UserGroupAwareInterface
     {
         if (!$this->userGroups->contains($userGroup)) {
             $this->userGroups->add($userGroup);
@@ -202,9 +203,9 @@ trait UserRelations
      *
      * @param UserGroup $userGroup
      *
-     * @return User
+     * @return User|UserGroupAwareInterface
      */
-    public function removeUserGroup(UserGroup $userGroup): User
+    public function removeUserGroup(UserGroup $userGroup): UserGroupAwareInterface
     {
         if ($this->userGroups->removeElement($userGroup)) {
             /** @noinspection PhpParamsInspection */
@@ -218,9 +219,9 @@ trait UserRelations
     /**
      * Method to remove all many-to-many user group relations from current user.
      *
-     * @return User
+     * @return User|UserGroupAwareInterface
      */
-    public function clearUserGroups(): User
+    public function clearUserGroups(): UserGroupAwareInterface
     {
         $this->userGroups->clear();
 

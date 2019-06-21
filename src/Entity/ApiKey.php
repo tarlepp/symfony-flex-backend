@@ -41,7 +41,7 @@ use function random_int;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ApiKey implements EntityInterface
+class ApiKey implements EntityInterface, UserGroupAwareInterface
 {
     // Traits
     use Blameable;
@@ -267,9 +267,9 @@ class ApiKey implements EntityInterface
      *
      * @param UserGroup $userGroup
      *
-     * @return ApiKey
+     * @return ApiKey|UserGroupAwareInterface
      */
-    public function addUserGroup(UserGroup $userGroup): self
+    public function addUserGroup(UserGroup $userGroup): UserGroupAwareInterface
     {
         if (!$this->userGroups->contains($userGroup)) {
             $this->userGroups->add($userGroup);
@@ -284,9 +284,9 @@ class ApiKey implements EntityInterface
      *
      * @param UserGroup $userGroup
      *
-     * @return ApiKey
+     * @return ApiKey|UserGroupAwareInterface
      */
-    public function removeUserGroup(UserGroup $userGroup): self
+    public function removeUserGroup(UserGroup $userGroup): UserGroupAwareInterface
     {
         if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeApiKey($this);
@@ -298,9 +298,9 @@ class ApiKey implements EntityInterface
     /**
      * Method to remove all many-to-many userGroup relations from current api key.
      *
-     * @return ApiKey
+     * @return ApiKey|UserGroupAwareInterface
      */
-    public function clearUserGroups(): self
+    public function clearUserGroups(): UserGroupAwareInterface
     {
         $this->userGroups->clear();
 
