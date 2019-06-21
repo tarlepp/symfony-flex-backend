@@ -8,8 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest\Traits\Methods\src;
 
-use App\Rest\Traits\RestMethodHelper;
+use App\Rest\Traits\Actions\RestActionBase;
 use App\Rest\Traits\Methods\PatchMethod;
+use App\Rest\Traits\RestMethodHelper;
 
 /**
  * Class PatchMethodInvalidTestClass - just a dummy class so that we can actually test that trait.
@@ -20,5 +21,6 @@ use App\Rest\Traits\Methods\PatchMethod;
 abstract class PatchMethodInvalidTestClass
 {
     use PatchMethod;
+    use RestActionBase;
     use RestMethodHelper;
 }

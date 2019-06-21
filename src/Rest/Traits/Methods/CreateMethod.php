@@ -40,13 +40,7 @@ trait CreateMethod
         RestDtoInterface $restDto,
         ?array $allowedHttpMethods = null
     ): Response {
-        $allowedHttpMethods = $allowedHttpMethods ?? ['POST'];
-
-        // Make sure that we have everything we need to make this work
-        $this->validateRestMethod($request, $allowedHttpMethods);
-
-        // Get current resource service
-        $resource = $this->getResource();
+        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['POST']);
 
         try {
             $data = $resource->create($restDto, true);

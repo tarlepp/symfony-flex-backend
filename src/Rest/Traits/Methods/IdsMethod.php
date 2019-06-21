@@ -33,23 +33,14 @@ trait IdsMethod
      *
      * @return Response
      *
-     * @throws LogicException
      * @throws Throwable
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function idsMethod(Request $request, ?array $allowedHttpMethods = null): Response
     {
-        $allowedHttpMethods = $allowedHttpMethods ?? ['GET'];
-
-        // Make sure that we have everything we need to make this work
-        $this->validateRestMethod($request, $allowedHttpMethods);
+        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['GET']);
 
         // Determine used parameters
         $search = RequestHandler::getSearchTerms($request);
-
-        // Get current resource service
-        $resource = $this->getResource();
 
         try {
             $criteria = RequestHandler::getCriteria($request);

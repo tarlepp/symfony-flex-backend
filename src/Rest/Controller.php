@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Rest;
 
+use App\Rest\Traits\Actions\RestActionBase;
 use App\Rest\Traits\RestMethodHelper;
 use UnexpectedValueException;
 
@@ -20,6 +21,7 @@ use UnexpectedValueException;
 abstract class Controller implements ControllerInterface
 {
     // Traits
+    use RestActionBase;
     use RestMethodHelper;
 
     public const ACTION_COUNT = 'countAction';

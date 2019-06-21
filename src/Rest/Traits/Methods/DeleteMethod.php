@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Methods;
 
-use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -33,20 +32,11 @@ trait DeleteMethod
      *
      * @return Response
      *
-     * @throws LogicException
      * @throws Throwable
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function deleteMethod(Request $request, string $id, ?array $allowedHttpMethods = null): Response
     {
-        $allowedHttpMethods = $allowedHttpMethods ?? ['DELETE'];
-
-        // Make sure that we have everything we need to make this work
-        $this->validateRestMethod($request, $allowedHttpMethods);
-
-        // Get current resource service
-        $resource = $this->getResource();
+        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['DELETE']);
 
         try {
             // Fetch data from database
