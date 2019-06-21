@@ -8,9 +8,7 @@ declare(strict_types = 1);
 
 namespace App\DTO\User;
 
-use App\Entity\User as Entity;
-use App\Entity\UserGroup as UserGroupEntity;
-use function array_map;
+use App\DTO\Traits\PatchUserGroups;
 
 /**
  * Class UserPatch
@@ -20,19 +18,5 @@ use function array_map;
  */
 class UserPatch extends User
 {
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * Method to update User entity user groups.
-     *
-     * @param Entity        $entity
-     * @param UserGroupEntity[] $value
-     *
-     * @return User
-     */
-    protected function updateUserGroups(Entity $entity, array $value): User
-    {
-        array_map([$entity, 'addUserGroup'], $value);
-
-        return $this;
-    }
+    use PatchUserGroups;
 }

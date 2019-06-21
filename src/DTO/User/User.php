@@ -13,6 +13,7 @@ use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Entity\User as Entity;
 use App\Entity\UserGroup as UserGroupEntity;
+use App\Entity\UserGroupAwareInterface;
 use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
@@ -261,17 +262,13 @@ class User extends RestDto
     /**
      * Method to update User entity user groups.
      *
-     * @param Entity        $entity
-     * @param UserGroupEntity[] $value
-     *
-     * @return User
+     * @param UserGroupAwareInterface $entity
+     * @param UserGroupEntity[]       $value
      */
-    protected function updateUserGroups(Entity $entity, array $value): self
+    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): void
     {
         $entity->clearUserGroups();
 
         array_map([$entity, 'addUserGroup'], $value);
-
-        return $this;
     }
 }

@@ -13,6 +13,7 @@ use App\DTO\RestDtoInterface;
 use App\Entity\ApiKey as Entity;
 use App\Entity\EntityInterface;
 use App\Entity\UserGroup as UserGroupEntity;
+use App\Entity\UserGroupAwareInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
 
@@ -141,17 +142,13 @@ class ApiKey extends RestDto
     /**
      * Method to update ApiKey entity user groups.
      *
-     * @param Entity      $entity
-     * @param UserGroupEntity[] $value
-     *
-     * @return ApiKey
+     * @param UserGroupAwareInterface $entity
+     * @param UserGroupEntity[]       $value
      */
-    protected function updateUserGroups(Entity $entity, array $value): self
+    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): void
     {
         $entity->clearUserGroups();
 
         array_map([$entity, 'addUserGroup'], $value);
-
-        return $this;
     }
 }

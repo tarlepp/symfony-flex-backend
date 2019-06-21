@@ -8,9 +8,7 @@ declare(strict_types = 1);
 
 namespace App\DTO\ApiKey;
 
-use App\Entity\ApiKey as Entity;
-use App\Entity\UserGroup as UserGroupEntity;
-use function array_map;
+use App\DTO\Traits\PatchUserGroups;
 
 /**
  * Class ApiKeyPatch
@@ -20,19 +18,5 @@ use function array_map;
  */
 class ApiKeyPatch extends ApiKey
 {
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * Method to update ApiKey entity user groups.
-     *
-     * @param Entity            $entity
-     * @param UserGroupEntity[] $value
-     *
-     * @return ApiKey
-     */
-    protected function updateUserGroups(Entity $entity, array $value): ApiKey
-    {
-        array_map([$entity, 'addUserGroup'], $value);
-
-        return $this;
-    }
+    use PatchUserGroups;
 }
