@@ -30,8 +30,6 @@ use UnexpectedValueException;
 use function array_key_exists;
 use function class_implements;
 use function in_array;
-use function mb_strrpos;
-use function mb_substr;
 use function sprintf;
 
 /**
@@ -92,29 +90,6 @@ trait RestMethodHelper
         }
 
         return $dtoClass;
-    }
-
-    /**
-     * Getter method for used DTO class for current controller.
-     *
-     * @param string|null $method
-     *
-     * @return string
-     *
-     * @throws UnexpectedValueException
-     */
-    public function getFormTypeClass(?string $method = null): string
-    {
-        $method = $method ?? '';
-        $position = mb_strrpos($method, '::');
-
-        if ($position !== false) {
-            $method = mb_substr($method, $position + 2);
-        }
-
-        return array_key_exists($method, static::$formTypes)
-            ? static::$formTypes[$method]
-            : $this->getResource()->getFormTypeClass();
     }
 
     /**
@@ -218,11 +193,6 @@ trait RestMethodHelper
     private function determineOutputAndStatusCodeForRestMethodException($exception): Throwable
     {
         $code = $this->getExceptionCode($exception);
-
-        // Ensure that we have proper exception, otherwise REST resource isn't configured properly
-        if (!($exception instanceof Exception)) {
-            $exception = new Exception($exception->getMessage(), $code);
-        }
 
         /** @var Exception $exception */
         $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);

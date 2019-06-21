@@ -58,17 +58,6 @@ interface ControllerInterface
     public function getDtoClass(?string $method = null): string;
 
     /**
-     * Getter method for used DTO class for current controller.
-     *
-     * @param string|null $method
-     *
-     * @return string
-     *
-     * @throws UnexpectedValueException
-     */
-    public function getFormTypeClass(?string $method = null): string;
-
-    /**
      * Method to validate REST trait method.
      *
      * @param Request  $request

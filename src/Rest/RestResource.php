@@ -136,27 +136,6 @@ abstract class RestResource implements RestResourceInterface
     }
 
     /**
-     * Getter method for used default FormType class for this REST resource.
-     *
-     * @return string
-     *
-     * @throws UnexpectedValueException
-     */
-    public function getFormTypeClass(): string
-    {
-        if ($this->formTypeClass === '') {
-            $message = sprintf(
-                'FormType class not specified for \'%s\' resource',
-                static::class
-            );
-
-            throw new UnexpectedValueException($message);
-        }
-
-        return $this->formTypeClass;
-    }
-
-    /**
      * Setter method for used default FormType class for this REST resource.
      *
      * @param string $formTypeClass

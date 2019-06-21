@@ -75,13 +75,6 @@ interface RestResourceInterface
     public function setDtoClass(string $dtoClass): self;
 
     /**
-     * Getter method for used default FormType class for this REST resource.
-     *
-     * @return string
-     */
-    public function getFormTypeClass(): string;
-
-    /**
      * Setter method for used default FormType class for this REST resource.
      *
      * @param string $formTypeClass
