@@ -36,7 +36,7 @@ rm -rf /app/var
 mkdir -p /app/var
 
 # Step 3
-composer install
+php -d memory_limit=-1 /usr/bin/composer install
 
 # Step 4
 make generate-jwt-keys
