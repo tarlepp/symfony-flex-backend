@@ -45,7 +45,7 @@
 		"symfony/flex": "1.2.7",
 		"symfony/form": "*",
 		"symfony/framework-bundle": "*",
-		"symfony/monolog-bundle": "3.3.1",
+		"symfony/monolog-bundle": "3.4.0",
 		"symfony/orm-pack": "*",
 		"symfony/security-bundle": "*",
 		"symfony/serializer-pack": "*",
