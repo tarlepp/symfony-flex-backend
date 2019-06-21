@@ -86,8 +86,6 @@ trait RestResourceBaseMethods
     ): array {
         $criteria = $criteria ?? [];
         $orderBy = $orderBy ?? [];
-        $limit = $limit ?? 0;
-        $offset = $offset ?? 0;
         $search = $search ?? [];
 
         // Before callback method call
