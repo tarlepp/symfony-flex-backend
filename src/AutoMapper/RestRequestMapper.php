@@ -13,10 +13,12 @@ use AutoMapperPlus\CustomMapper\CustomMapper;
 use InvalidArgumentException;
 use LengthException;
 use Symfony\Component\HttpFoundation\Request;
+use function array_filter;
 use function count;
 use function get_class;
 use function method_exists;
 use function sprintf;
+use function ucfirst;
 
 /**
  * Class RestRequestMapper
