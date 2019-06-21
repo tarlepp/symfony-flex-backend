@@ -80,7 +80,9 @@ trait CollectionTrait
      */
     public function has(?string $className = null): bool
     {
-        return count(array_filter(iterator_to_array($this->items), $this->filter($className))) === 1;
+        return $className === null
+            ? false
+            : count(array_filter(iterator_to_array($this->items), $this->filter($className))) === 1;
     }
 
     /**
