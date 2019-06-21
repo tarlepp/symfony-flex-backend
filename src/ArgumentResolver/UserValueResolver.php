@@ -78,14 +78,14 @@ class UserValueResolver implements ArgumentValueResolverInterface
     /**
      * Returns the possible value(s).
      *
-     * @param Request $request
-     * @param ArgumentMetadata $argument
+     * @param Request          $request
+     * @param ArgumentMetadata $argumentMetadata
      *
      * @return Generator
      *
      * @throws Throwable
      */
-    public function resolve(Request $request, ArgumentMetadata $argument): Generator
+    public function resolve(Request $request, ArgumentMetadata $argumentMetadata): Generator
     {
         /** @noinspection NullPointerExceptionInspection */
         /**

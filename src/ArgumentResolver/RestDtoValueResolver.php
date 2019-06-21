@@ -94,13 +94,13 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
      * Returns the possible value(s).
      *
      * @param Request          $request
-     * @param ArgumentMetadata $argument
+     * @param ArgumentMetadata $argumentMetadata
      *
      * @return Generator
      *
      * @throws UnregisteredMappingException
      */
-    public function resolve(Request $request, ArgumentMetadata $argument): Generator
+    public function resolve(Request $request, ArgumentMetadata $argumentMetadata): Generator
     {
         [$controllerName, $actionName] = explode('::', $request->attributes->get('_controller'));
 
