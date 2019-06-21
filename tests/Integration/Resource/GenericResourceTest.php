@@ -70,22 +70,6 @@ class GenericResourceTest extends KernelTestCase
         static::assertSame('foobar', $this->resource->getDtoClass());
     }
 
-    public function testGetFormTypeClassThrowsAnExceptionWithoutFormType(): void
-    {
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessageRegExp('/FormType class not specified for \'.*\' resource/');
-
-        $this->resource->setFormTypeClass('');
-        $this->resource->getFormTypeClass();
-    }
-
-    public function testThatGetFormTypeClassReturnsExpectedDto(): void
-    {
-        $this->resource->setFormTypeClass('foobar');
-
-        static::assertSame('foobar', $this->resource->getFormTypeClass());
-    }
-
     /**
      * @throws Throwable
      */
