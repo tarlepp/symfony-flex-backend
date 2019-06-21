@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9d40334eca0fb7d5c3b6677c51438e0",
+    "content-hash": "e0579b644d3000572f7ae2113484dcf1",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1744,6 +1744,96 @@
                 "symfony"
             ],
             "time": "2019-04-17T13:54:49+00:00"
+        },
+        {
+            "name": "mark-gerarts/auto-mapper-plus",
+            "version": "1.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mark-gerarts/automapper-plus.git",
+                "reference": "fd62a849b7f0076cb8ae41313b2ad11223f932bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus/zipball/fd62a849b7f0076cb8ae41313b2ad11223f932bf",
+                "reference": "fd62a849b7f0076cb8ae41313b2ad11223f932bf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.1.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.4",
+                "symfony/debug": "^3.3",
+                "symfony/var-dumper": "^3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AutoMapperPlus\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Gerarts",
+                    "email": "mark.gerarts@gmail.com"
+                }
+            ],
+            "description": "An AutoMapper for PHP",
+            "keywords": [
+                "automapper",
+                "converter",
+                "object-to-object"
+            ],
+            "time": "2019-04-06T09:26:42+00:00"
+        },
+        {
+            "name": "mark-gerarts/automapper-plus-bundle",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mark-gerarts/automapper-plus-bundle.git",
+                "reference": "b4dfe0cce367535478be49a0a37c92f66af316aa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus-bundle/zipball/b4dfe0cce367535478be49a0a37c92f66af316aa",
+                "reference": "b4dfe0cce367535478be49a0a37c92f66af316aa",
+                "shasum": ""
+            },
+            "require": {
+                "mark-gerarts/auto-mapper-plus": "^1.0",
+                "php": ">=7.0.0",
+                "symfony/framework-bundle": "^3.3|^4.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "AutoMapperPlus\\AutoMapperPlusBundle\\": [
+                        ""
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mark Gerarts",
+                    "email": "mark.gerarts@gmail.com"
+                }
+            ],
+            "description": "A Symfony bundle for AutoMapper+",
+            "keywords": [
+                "automapper",
+                "bundle"
+            ],
+            "time": "2018-08-09T11:38:23+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -4712,7 +4802,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
