@@ -25,7 +25,7 @@ trait AbstractGenericMethods
 {
     /**
      * @param Request $request
-     * @param array|null $allowedHttpMethods
+     * @param array   $allowedHttpMethods
      *
      * @return RestResourceInterface
      *
@@ -33,7 +33,7 @@ trait AbstractGenericMethods
      */
     abstract public function validateRestMethodAndGetResource(
         Request $request,
-        ?array $allowedHttpMethods
+        array $allowedHttpMethods
     ): RestResourceInterface;
 
     /**

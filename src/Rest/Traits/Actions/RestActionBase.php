@@ -43,13 +43,13 @@ trait RestActionBase
 
     /**
      * @param Request $request
-     * @param array|null $allowedHttpMethods
+     * @param array   $allowedHttpMethods
      *
      * @return RestResourceInterface
      *
      * @throws Throwable
      */
-    protected function validateMethodAndGetResource(Request $request, ?array $allowedHttpMethods): RestResourceInterface
+    public function validateRestMethodAndGetResource(Request $request, array $allowedHttpMethods): RestResourceInterface
     {
         // Make sure that we have everything we need to make this work
         $this->validateRestMethod($request, $allowedHttpMethods);
