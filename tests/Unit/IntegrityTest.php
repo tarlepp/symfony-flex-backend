@@ -683,7 +683,7 @@ FORMAT;
         $pattern = '/^.+\.php$/i';
 
         $filter = $filter ?? $filter ?? $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isInterface() && !$reflectionClass->isAbstract();
+            return !$reflectionClass->isInterface() && !$reflectionClass->isAbstract() && !$reflectionClass->isTrait();
         };
 
         $formatter = $formatter ?? $this->getFormatterClosure($folder, $namespace, $namespaceTest);
