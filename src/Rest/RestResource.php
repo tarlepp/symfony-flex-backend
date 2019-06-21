@@ -10,7 +10,6 @@ namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
 use App\Repository\BaseRepositoryInterface;
-use Doctrine\Common\Proxy\Proxy;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -42,11 +41,6 @@ abstract class RestResource implements RestResourceInterface
      * @var string
      */
     private $dtoClass;
-
-    /**
-     * @var string
-     */
-    private $formTypeClass;
 
     /**
      * Getter method for entity repository.
@@ -152,7 +146,7 @@ abstract class RestResource implements RestResourceInterface
      *
      * @param string $id The entity identifier.
      *
-     * @return Proxy|object|null
+     * @return object|null
      *
      * @throws \Doctrine\ORM\ORMException
      */
