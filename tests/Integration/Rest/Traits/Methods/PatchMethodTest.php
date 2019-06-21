@@ -95,6 +95,44 @@ class PatchMethodTest extends KernelTestCase
     /**
      * @throws Throwable
      */
+    public function testThatHandleRestMethodExceptionIsCalled(): void
+    {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionMessage('some message');
+
+        /**
+         * @var MockObject|RestResourceInterface    $resource
+         * @var MockObject|ResponseHandlerInterface $responseHandler
+         * @var MockObject|RestDtoInterface         $restDtoInterface
+         */
+        $resource = $this->createMock(RestResourceInterface::class);
+        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
+        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+
+        $exception = new Exception('some message');
+        $uuid = Uuid::uuid4()->toString();
+
+        $resource
+            ->expects(static::once())
+            ->method('patch')
+            ->with($uuid, $restDtoInterface, true)
+            ->willThrowException($exception);
+
+        /** @var MockObject|PatchMethodTestClass $testClass */
+        $testClass = $this->getMockForAbstractClass(
+            PatchMethodTestClass::class,
+            [$resource, $responseHandler]
+        );
+
+        // Create request and response
+        $request = Request::create('/', 'PATCH');
+
+        $testClass->patchMethod($request, $restDtoInterface, $uuid)->getContent();
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function testThatTraitCallsServiceMethods(): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
