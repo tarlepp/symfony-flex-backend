@@ -202,3 +202,8 @@ check-vendor-dependencies: ## Checks if any vendor dependency can be updated
 	@echo "\033[32mChecking dependencies\033[39m"
 	@bin/console check-vendor-dependencies
 ###< clear vendor-bin ###
+
+###> update composer dependencies ###
+update: ## Update composer dependencies
+	@php -d memory_limit=-1 /usr/bin/composer update
+###< update composer dependencies ###
