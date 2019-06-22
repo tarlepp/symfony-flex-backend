@@ -10,6 +10,8 @@ namespace App\Tests\Integration\AutoMapper;
 
 use App\AutoMapper\RestRequestMapper;
 use App\DTO\RestDtoInterface;
+use App\Tests\Integration\AutoMapper\src\TestRestRequestMapper;
+use App\Tests\Integration\AutoMapper\src\TestRestRequestMapperDto;
 use InvalidArgumentException;
 use LengthException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -78,5 +80,20 @@ class GenericRestRequestMapperTest extends KernelTestCase
         $mockRestDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
 
         $mockRestRequestMapper->mapToObject(new Request(), $mockRestDtoInterface);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatMapToObjectWorksAsExpected(): void
+    {
+        $request = new Request([], ['someProperty' => 'someValue', 'someTransformProperty' => 'someTransformValue']);
+
+        /** @var TestRestRequestMapperDto $transformedObject */
+        $transformedObject = (new TestRestRequestMapper())->mapToObject($request, new TestRestRequestMapperDto());
+
+        static::assertInstanceOf(TestRestRequestMapperDto::class, $transformedObject);
+        static::assertSame('someValue', $transformedObject->getSomeProperty());
+        static::assertSame('fbzrGenafsbezInyhr', $transformedObject->getSomeTransformProperty());
     }
 }
