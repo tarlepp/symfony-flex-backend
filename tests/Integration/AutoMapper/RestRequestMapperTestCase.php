@@ -40,30 +40,6 @@ class RestRequestMapperTestCase extends KernelTestCase
     protected $restDtoClasses = [];
 
     /**
-     * @throws Throwable
-     */
-    public function testThatMapToObjectThrowsAnExceptionIfSourceIsNotRequest(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('RestRequestMapper expects that $source is Request object, "stdClass" provided');
-
-        $this->mapperObject->mapToObject(new stdClass(), new stdClass());
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatMapToObjectThrowsAnExceptionIfDestinationIsNotRestDtoInterface(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'RestRequestMapper expects that $destination is instance of RestDtoInterface object, "stdClass" provided'
-        );
-
-        $this->mapperObject->mapToObject(new Request(), new stdClass());
-    }
-
-    /**
      * @dataProvider dataProviderTestThatMapToObjectReturnsExpectedDtoObject
      *
      * @param string $expectedDto
