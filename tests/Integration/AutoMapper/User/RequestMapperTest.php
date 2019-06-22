@@ -11,9 +11,13 @@ namespace App\Tests\Integration\AutoMapper\User;
 use App\AutoMapper\RestRequestMapper;
 use App\AutoMapper\User\RequestMapper;
 use App\DTO\User as DTO;
+use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
+use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 /**
  * Class RequestMapperTest
@@ -46,16 +50,53 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @var MockObject|UserGroupResource
      */
-    protected $userGroupResource;
+    protected $mockUserGroupResource;
+
+    /**
+     * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod
+     *
+     * @param string $dtoClass
+     *
+     * @throws Throwable
+     */
+    public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
+    {
+        $userGroup = new UserGroup();
+
+        $this->mockUserGroupResource
+            ->expects(static::once())
+            ->method('getReference')
+            ->with($userGroup->getId())
+            ->willReturn($userGroup);
+
+        $request = new Request([], ['userGroups' => [$userGroup->getId()]]);
+
+        /**
+         * @var DTO\User $dto
+         */
+        $dto = $this->mapperObject->mapToObject($request, new $dtoClass());
+
+        static::assertSame([$userGroup], $dto->getUserGroups());
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
+    {
+        foreach ($this->restDtoClasses as $dtoClass) {
+            yield [$dtoClass];
+        }
+    }
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->userGroupResource = $this->getMockBuilder(UserGroupResource::class)
+        $this->mockUserGroupResource = $this->getMockBuilder(UserGroupResource::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->mapperObject = new RequestMapper($this->userGroupResource);
+        $this->mapperObject = new RequestMapper($this->mockUserGroupResource);
     }
 }
