@@ -1,9 +1,14 @@
 <?php
+declare(strict_types = 1);
+/**
+ * /tests/Integration/AutoMapper/RestRequestMapperTestCase.php
+ *
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
 
 namespace App\Tests\Integration\AutoMapper;
 
 use App\AutoMapper\RestRequestMapper;
-use App\AutoMapper\User\RequestMapper;
 use Generator;
 use InvalidArgumentException;
 use stdClass;
@@ -11,6 +16,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
+/**
+ * Class RestRequestMapperTestCase
+ *
+ * @package App\Tests\Integration\AutoMapper
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ */
 class RestRequestMapperTestCase extends KernelTestCase
 {
     /**
