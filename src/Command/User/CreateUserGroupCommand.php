@@ -10,7 +10,7 @@ namespace App\Command\User;
 
 use App\Command\HelperConfigure;
 use App\Command\Traits\SymfonyStyleTrait;
-use App\DTO\UserGroup as UserGroupDto;
+use App\DTO\UserGroup\UserGroupCreate as UserGroupDto;
 use App\Form\Type\Console\UserGroupType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;

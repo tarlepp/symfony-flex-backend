@@ -9,9 +9,9 @@ declare(strict_types = 1);
 namespace App\Rest;
 
 use LogicException;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 use UnexpectedValueException;
 
@@ -58,24 +58,13 @@ interface ControllerInterface
     public function getDtoClass(?string $method = null): string;
 
     /**
-     * Getter method for used DTO class for current controller.
-     *
-     * @param string|null $method
-     *
-     * @return string
-     *
-     * @throws UnexpectedValueException
-     */
-    public function getFormTypeClass(?string $method = null): string;
-
-    /**
      * Method to validate REST trait method.
      *
      * @param Request  $request
      * @param string[] $allowedHttpMethods
      *
      * @throws LogicException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
+     * @throws MethodNotAllowedHttpException
      */
     public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
 
@@ -86,7 +75,7 @@ interface ControllerInterface
      *
      * @return Throwable
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     public function handleRestMethodException(Throwable $exception): Throwable;
 
@@ -96,27 +85,4 @@ interface ControllerInterface
      * @param mixed[] $criteria
      */
     public function processCriteria(array &$criteria): void;
-
-    /**
-     * Method to process POST, PUT and PATCH action form within REST traits.
-     *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
-     * @param string               $method
-     * @param string|null          $id
-     *
-     * @return FormInterface
-     *
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\Form\Exception\LogicException
-     * @throws \Symfony\Component\Form\Exception\AlreadySubmittedException
-     * @throws \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
-    public function processForm(
-        Request $request,
-        FormFactoryInterface $formFactory,
-        string $method,
-        ?string $id = null
-    ): FormInterface;
 }

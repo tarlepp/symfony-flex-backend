@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest\Traits\Methods\src;
 
+use App\Rest\Traits\Actions\RestActionBase;
 use App\Rest\Traits\Methods\CreateMethod;
 use App\Rest\Traits\RestMethodHelper;
 
@@ -20,5 +21,6 @@ use App\Rest\Traits\RestMethodHelper;
 abstract class CreateMethodInvalidTestClass
 {
     use CreateMethod;
+    use RestActionBase;
     use RestMethodHelper;
 }

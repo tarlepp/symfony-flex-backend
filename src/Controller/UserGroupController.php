@@ -8,9 +8,11 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
+use App\DTO\UserGroup\UserGroupCreate;
+use App\DTO\UserGroup\UserGroupPatch;
+use App\DTO\UserGroup\UserGroupUpdate;
 use App\Entity\User;
 use App\Entity\UserGroup;
-use App\Form\Type\Rest\UserGroup\UserGroupType;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Rest\Controller;
@@ -53,15 +55,11 @@ class UserGroupController extends Controller
     use Actions\Root\DeleteAction;
     use Actions\Root\PatchAction;
     use Actions\Root\UpdateAction;
-    /**
-     * Method + Form type class names (key + value)
-     *
-     * @var string[]
-     */
-    protected static $formTypes = [
-        Controller::METHOD_PATCH => UserGroupType::class,
-        Controller::METHOD_CREATE => UserGroupType::class,
-        Controller::METHOD_UPDATE => UserGroupType::class,
+
+    protected static $dtoClasses = [
+        Controller::METHOD_CREATE => UserGroupCreate::class,
+        Controller::METHOD_UPDATE => UserGroupUpdate::class,
+        Controller::METHOD_PATCH => UserGroupPatch::class,
     ];
 
     /**
@@ -129,6 +127,8 @@ class UserGroupController extends Controller
      * @param UserGroup    $userGroup
      *
      * @return Response
+     *
+     * @throws Throwable
      */
     public function getUserGroupUsersAction(
         Request $request,

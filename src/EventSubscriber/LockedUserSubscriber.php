@@ -12,7 +12,6 @@ use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
-use App\Security\ApiKeyUser;
 use App\Security\SecurityUser;
 use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
@@ -20,7 +19,6 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\Event as LexikBaseEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 use Throwable;
@@ -102,13 +100,10 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
-        // Fetch user entity
-        if ($event->getException()->getToken() instanceof TokenInterface) {
-            $user = $this->getUser($event->getException()->getToken()->getUser());
+        $user = $this->getUser($event->getException()->getToken()->getUser());
 
-            if ($user instanceof User) {
-                $this->checkLockedAccount($user, $event);
-            }
+        if ($user instanceof User) {
+            $this->checkLockedAccount($user, $event);
         }
     }
 
@@ -183,14 +178,12 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     private function getUser($user): ?User
     {
-        if ($user instanceof ApiKeyUser) {
-            $user = null;
-        } elseif (is_string($user)) {
+        if (is_string($user)) {
             $user = $this->userRepository->loadUserByUsername($user);
         } elseif ($user instanceof SecurityUser) {
             $user = $this->userRepository->loadUserByUsername($user->getUsername());
         }
 
-        return $user ?? null;
+        return $user instanceof User ? $user : null;
     }
 }

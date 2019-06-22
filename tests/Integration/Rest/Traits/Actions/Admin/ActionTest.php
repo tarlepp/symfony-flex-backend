@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest\Traits\Actions\Admin;
 
+use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -87,11 +88,11 @@ class ActionTest extends KernelTestCase
 
             switch ($base) {
                 case 'CreateAction':
-                    $parameters[] = $this->createMock(FormFactoryInterface::class);
+                    $parameters[] = $this->createMock(RestDtoInterface::class);
                     break;
                 case 'PatchAction':
                 case 'UpdateAction':
-                    $parameters[] = $this->createMock(FormFactoryInterface::class);
+                    $parameters[] = $this->createMock(RestDtoInterface::class);
                     $parameters[] = Uuid::uuid4()->toString();
                     break;
                 case 'DeleteAction':

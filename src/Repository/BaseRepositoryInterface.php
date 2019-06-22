@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\EntityInterface;
-use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 
@@ -35,7 +34,7 @@ interface BaseRepositoryInterface
      *
      * @param string $id
      *
-     * @return Proxy|object|null
+     * @return object|null
      *
      * @throws \Doctrine\ORM\ORMException
      */

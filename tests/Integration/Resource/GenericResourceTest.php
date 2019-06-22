@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Resource;
 
 use App\DTO\RestDtoInterface;
-use App\DTO\User as UserDto;
+use App\DTO\User\User as UserDto;
 use App\Entity\EntityInterface;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
@@ -26,8 +26,8 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
-use function get_class;
 use UnexpectedValueException;
+use function get_class;
 
 /**
  * Class GenericResourceTest
@@ -68,22 +68,6 @@ class GenericResourceTest extends KernelTestCase
         $this->resource->setDtoClass('foobar');
 
         static::assertSame('foobar', $this->resource->getDtoClass());
-    }
-
-    public function testGetFormTypeClassThrowsAnExceptionWithoutFormType(): void
-    {
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessageRegExp('/FormType class not specified for \'.*\' resource/');
-
-        $this->resource->setFormTypeClass('');
-        $this->resource->getFormTypeClass();
-    }
-
-    public function testThatGetFormTypeClassReturnsExpectedDto(): void
-    {
-        $this->resource->setFormTypeClass('foobar');
-
-        static::assertSame('foobar', $this->resource->getFormTypeClass());
     }
 
     /**
@@ -164,7 +148,7 @@ class GenericResourceTest extends KernelTestCase
         /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(
             RestDtoInterface::class,
-            $this->resource->getDtoForEntity('some id', get_class($dto))
+            $this->resource->getDtoForEntity('some id', get_class($dto), $dto)
         );
 
         unset($dto, $repository, $entity);
@@ -191,7 +175,7 @@ class GenericResourceTest extends KernelTestCase
         $dto = $this->getDtoMockBuilder()->getMock();
 
         $this->resource->setRepository($repository);
-        $this->resource->getDtoForEntity('some id', get_class($dto));
+        $this->resource->getDtoForEntity('some id', get_class($dto), $dto);
 
         unset($repository);
     }

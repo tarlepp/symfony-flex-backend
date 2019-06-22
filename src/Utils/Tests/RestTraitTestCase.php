@@ -10,6 +10,7 @@ namespace App\Utils\Tests;
 
 use Generator;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_merge;
 
@@ -43,7 +44,6 @@ abstract class RestTraitTestCase extends WebTestCase
      */
     abstract public function getInvalidUsers(): Generator;
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods
      *
@@ -63,12 +63,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . self::END_POINT_COUNT);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatCountRouteWorksWithAllowedHttpMethods
      *
@@ -88,12 +88,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . self::END_POINT_COUNT);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatCountRouteDoesNotAllowInvalidUser
      *
@@ -113,12 +113,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . self::END_POINT_COUNT);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods
      *
@@ -138,12 +138,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWorksWithAllowedHttpMethods
      *
@@ -163,12 +163,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteDoesNotAllowInvalidUser
      *
@@ -188,12 +188,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods
      *
@@ -215,12 +215,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/' . $uuid);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods
      *
@@ -242,12 +242,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/' . $uuid);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser
      *
@@ -269,12 +269,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/' . $uuid);
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods
      *
@@ -294,12 +294,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/ids');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods
      *
@@ -319,12 +319,12 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/ids');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(500, $response->getStatusCode(), $response->getContent());
     }
 
-    /** @noinspection PhpUndefinedNamespaceInspection */
     /**
      * @dataProvider dataProviderTestThatIdsRouteDoesNotAllowInvalidUser
      *
@@ -342,9 +342,9 @@ abstract class RestTraitTestCase extends WebTestCase
         $method = $method ?? 'GET';
 
         $client = $this->getTestClient($username, $password);
-
         $client->request($method, static::$route . '/ids');
 
+        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());

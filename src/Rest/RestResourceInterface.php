@@ -75,22 +75,6 @@ interface RestResourceInterface
     public function setDtoClass(string $dtoClass): self;
 
     /**
-     * Getter method for used default FormType class for this REST resource.
-     *
-     * @return string
-     */
-    public function getFormTypeClass(): string;
-
-    /**
-     * Setter method for used default FormType class for this REST resource.
-     *
-     * @param string $formTypeClass
-     *
-     * @return RestResourceInterface
-     */
-    public function setFormTypeClass(string $formTypeClass): self;
-
-    /**
      * Getter method for current entity name.
      *
      * @return string
@@ -120,14 +104,21 @@ interface RestResourceInterface
     /**
      * Getter method DTO class with loaded entity data.
      *
-     * @param string $id
-     * @param string $dtoClass
+     * @param string           $id
+     * @param string           $dtoClass
+     * @param RestDtoInterface $dto
+     * @param bool|null        $patch
      *
      * @return RestDtoInterface
      *
      * @throws Throwable
      */
-    public function getDtoForEntity(string $id, string $dtoClass): RestDtoInterface;
+    public function getDtoForEntity(
+        string $id,
+        string $dtoClass,
+        RestDtoInterface $dto,
+        ?bool $patch = null
+    ): RestDtoInterface;
 
     /**
      * Generic find method to return an array of items from database. Return value is an array of specified repository
@@ -221,6 +212,25 @@ interface RestResourceInterface
      * @throws Throwable
      */
     public function update(
+        string $id,
+        RestDtoInterface $dto,
+        ?bool $flush = null,
+        ?bool $skipValidation = null
+    ): EntityInterface;
+
+    /**
+     * Generic method to patch specified entity with new data.
+     *
+     * @param string           $id
+     * @param RestDtoInterface $dto
+     * @param bool|null        $flush
+     * @param bool|null        $skipValidation
+     *
+     * @return EntityInterface
+     *
+     * @throws Throwable
+     */
+    public function patch(
         string $id,
         RestDtoInterface $dto,
         ?bool $flush = null,

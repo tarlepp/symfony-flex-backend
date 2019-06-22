@@ -8,8 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Methods;
 
-use LogicException;
-use Symfony\Component\Form\FormFactoryInterface;
+use App\DTO\RestDtoInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -23,38 +22,28 @@ use Throwable;
 trait CreateMethod
 {
     // Traits
-    use AbstractFormMethods;
     use AbstractGenericMethods;
 
     /**
      * Generic 'createMethod' method for REST resources.
      *
-     * @param Request              $request
-     * @param FormFactoryInterface $formFactory
-     * @param string[]|null        $allowedHttpMethods
+     * @param Request          $request
+     * @param RestDtoInterface $restDto
+     * @param string[]|null    $allowedHttpMethods
      *
      * @return Response
      *
-     * @throws LogicException
      * @throws Throwable
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function createMethod(
         Request $request,
-        FormFactoryInterface $formFactory,
+        RestDtoInterface $restDto,
         ?array $allowedHttpMethods = null
     ): Response {
-        $allowedHttpMethods = $allowedHttpMethods ?? ['POST'];
-
-        // Make sure that we have everything we need to make this work
-        $this->validateRestMethod($request, $allowedHttpMethods);
-
-        // Get current resource service
-        $resource = $this->getResource();
+        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['POST']);
 
         try {
-            $data = $resource->create($this->processForm($request, $formFactory, __METHOD__)->getData(), true);
+            $data = $resource->create($restDto, true);
 
             return $this
                 ->getResponseHandler()

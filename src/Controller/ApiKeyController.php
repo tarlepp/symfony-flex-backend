@@ -8,6 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
+use App\DTO\ApiKey\ApiKeyCreate;
+use App\DTO\ApiKey\ApiKeyPatch;
+use App\DTO\ApiKey\ApiKeyUpdate;
 use App\Resource\ApiKeyResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions;
@@ -42,6 +45,12 @@ class ApiKeyController extends Controller
     use Actions\Root\DeleteAction;
     use Actions\Root\PatchAction;
     use Actions\Root\UpdateAction;
+
+    protected static $dtoClasses = [
+        Controller::METHOD_CREATE => ApiKeyCreate::class,
+        Controller::METHOD_UPDATE => ApiKeyUpdate::class,
+        Controller::METHOD_PATCH => ApiKeyPatch::class,
+    ];
 
     /**
      * ApiKeyController constructor.

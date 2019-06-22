@@ -332,10 +332,6 @@ trait RepositoryMethodsTrait
         ?int $limit = null,
         ?int $offset = null
     ): QueryBuilder {
-        // Normalize inputs
-        $limit = $limit ?? 0;
-        $offset = $offset ?? 0;
-
         // Create new QueryBuilder for this instance
         $queryBuilder = $this->createQueryBuilder();
 
@@ -345,13 +341,8 @@ trait RepositoryMethodsTrait
         RepositoryHelper::processOrderBy($queryBuilder, $orderBy);
 
         // Process limit and offset
-        if ($limit !== 0) {
-            $queryBuilder->setMaxResults($limit);
-        }
-
-        if ($offset !== 0) {
-            $queryBuilder->setFirstResult($offset);
-        }
+        $queryBuilder->setMaxResults($limit);
+        $queryBuilder->setFirstResult($offset ?? 0);
 
         return $queryBuilder;
     }

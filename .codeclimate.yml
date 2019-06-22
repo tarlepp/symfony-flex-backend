@@ -7,6 +7,8 @@ plugins:
       languages:
         php:
           mass_threshold: 55
+  editorconfig:
+    enabled: true
   fixme:
     enabled: true
   phpmd:

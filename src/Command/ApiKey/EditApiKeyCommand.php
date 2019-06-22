@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Command\ApiKey;
 
 use App\Command\Traits\SymfonyStyleTrait;
-use App\DTO\ApiKey as ApiKeyDto;
+use App\DTO\ApiKey\ApiKey as ApiKeyDto;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Form\Type\Console\ApiKeyType;
 use App\Resource\ApiKeyResource;

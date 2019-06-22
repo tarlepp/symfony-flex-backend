@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Form\Type\Console;
 
-use App\DTO\User as UserDto;
+use App\DTO\User\User as UserDto;
 use App\Entity\Role;
 use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
@@ -18,6 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use function array_keys;
+use Throwable;
 
 /**
  * Class UserTypeTest
@@ -97,6 +98,9 @@ class UserTypeTest extends TypeTestCase
         unset($view, $dto, $form, $userGroupEntity, $roleEntity);
     }
 
+    /**
+     * @throws Throwable
+     */
     protected function setUp(): void
     {
         gc_enable();

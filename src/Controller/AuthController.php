@@ -74,8 +74,7 @@ class AuthController
      *  )
      * @SWG\Tag(name="Authentication")
      *
-     * @throws \LogicException
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     public function getTokenAction(): void
     {

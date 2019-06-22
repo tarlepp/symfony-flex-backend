@@ -15,8 +15,8 @@ use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Throwable;
+use function is_string;
 
 /**
  * Class AuthenticationFailureSubscriber
@@ -89,7 +89,7 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
         // Fetch user entity
-        if ($event->getException()->getToken() instanceof TokenInterface) {
+        if (is_string($event->getException()->getToken()->getUser())) {
             /** @var string $username */
             $username = $event->getException()->getToken()->getUser();
 

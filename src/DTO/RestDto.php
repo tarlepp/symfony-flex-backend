@@ -46,11 +46,38 @@ abstract class RestDto implements RestDtoInterface
     protected static $mappings = [];
 
     /**
+     * @var string|null
+     */
+    protected $id;
+
+    /**
      * An array of 'visited' setter properties of current dto.
      *
      * @var string[]
      */
     private $visited = [];
+
+    /**
+     * @param string $id
+     *
+     * @return RestDtoInterface
+     */
+    public function setId(string $id): RestDtoInterface
+    {
+        $this->setVisited('id');
+
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
 
     /**
      * Getter method for visited setters. This is needed for dto patching.
@@ -59,7 +86,9 @@ abstract class RestDto implements RestDtoInterface
      */
     public function getVisited(): array
     {
-        return $this->visited;
+        return array_filter($this->visited, function (string $property) {
+            return $property !== 'id';
+        });
     }
 
     /**

@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Unit;
 
+use App\AutoMapper\RestRequestMapper;
 use App\Entity\EntityInterface;
 use App\Rest\ControllerInterface;
 use App\Rest\RepositoryInterface;
@@ -337,6 +338,25 @@ FORMAT;
     }
 
     /**
+     * @dataProvider dataProviderTestThatRestRequestMapperHaveIntegrationTest
+     *
+     * @param string $restRequestMapperTestClass
+     * @param string $restRequestMapper
+     */
+    public function testThatRestRequestMapperHaveIntegrationTest(
+        string $restRequestMapperTestClass,
+        string $restRequestMapper
+    ): void {
+        $message = sprintf(
+            'REST request mapper "%s" does not have required test class "%s".',
+            $restRequestMapper,
+            $restRequestMapperTestClass
+        );
+
+        static::assertTrue(class_exists($restRequestMapperTestClass), $message);
+    }
+
+        /**
      * @return array
      */
     public function dataProviderTestThatControllerHasE2ETests(): array
@@ -665,6 +685,27 @@ FORMAT;
     }
 
     /**
+     * @return array
+     */
+    public function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/AutoMapper/';
+
+        $namespace = '\\App\\AutoMapper\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\AutoMapper\\';
+
+        $filter = static function (ReflectionClass $reflectionClass) {
+            return !$reflectionClass->isAbstract()
+                && !$reflectionClass->isTrait()
+                && $reflectionClass->isSubclassOf(RestRequestMapper::class);
+        };
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    /**
      * @param string       $folder
      * @param string       $namespace
      * @param string       $namespaceTest
@@ -683,7 +724,7 @@ FORMAT;
         $pattern = '/^.+\.php$/i';
 
         $filter = $filter ?? $filter ?? $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isInterface() && !$reflectionClass->isAbstract();
+            return !$reflectionClass->isInterface() && !$reflectionClass->isAbstract() && !$reflectionClass->isTrait();
         };
 
         $formatter = $formatter ?? $this->getFormatterClosure($folder, $namespace, $namespaceTest);

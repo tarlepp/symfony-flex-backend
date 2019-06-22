@@ -10,10 +10,8 @@ namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
 use App\Repository\BaseRepositoryInterface;
-use BadMethodCallException;
-use Doctrine\Common\Proxy\Proxy;
-use LogicException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Throwable;
 use UnexpectedValueException;
 use function array_keys;
 use function sprintf;
@@ -43,11 +41,6 @@ abstract class RestResource implements RestResourceInterface
      * @var string
      */
     private $dtoClass;
-
-    /**
-     * @var string
-     */
-    private $formTypeClass;
 
     /**
      * Getter method for entity repository.
@@ -137,41 +130,6 @@ abstract class RestResource implements RestResourceInterface
     }
 
     /**
-     * Getter method for used default FormType class for this REST resource.
-     *
-     * @return string
-     *
-     * @throws UnexpectedValueException
-     */
-    public function getFormTypeClass(): string
-    {
-        if ($this->formTypeClass === '') {
-            $message = sprintf(
-                'FormType class not specified for \'%s\' resource',
-                static::class
-            );
-
-            throw new UnexpectedValueException($message);
-        }
-
-        return $this->formTypeClass;
-    }
-
-    /**
-     * Setter method for used default FormType class for this REST resource.
-     *
-     * @param string $formTypeClass
-     *
-     * @return RestResourceInterface
-     */
-    public function setFormTypeClass(string $formTypeClass): RestResourceInterface
-    {
-        $this->formTypeClass = $formTypeClass;
-
-        return $this;
-    }
-
-    /**
      * Getter method for current entity name.
      *
      * @return string
@@ -188,7 +146,7 @@ abstract class RestResource implements RestResourceInterface
      *
      * @param string $id The entity identifier.
      *
-     * @return Proxy|object|null
+     * @return object|null
      *
      * @throws \Doctrine\ORM\ORMException
      */
@@ -210,29 +168,36 @@ abstract class RestResource implements RestResourceInterface
     /**
      * Getter method DTO class with loaded entity data.
      *
-     * @param string                $id
-     * @param string                $dtoClass
-     * @param RestDtoInterface|null $dto
+     * @param string           $id
+     * @param string           $dtoClass
+     * @param RestDtoInterface $dto
+     * @param bool|null        $patch
      *
      * @return RestDtoInterface
      *
-     * @throws LogicException
-     * @throws BadMethodCallException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws Throwable
      */
-    public function getDtoForEntity(string $id, string $dtoClass, ?RestDtoInterface $dto = null): RestDtoInterface
-    {
+    public function getDtoForEntity(
+        string $id,
+        string $dtoClass,
+        RestDtoInterface $dto,
+        ?bool $patch = null
+    ): RestDtoInterface {
+        $patch = $patch ?? false;
+
         // Fetch entity
         $entity = $this->getEntity($id);
 
         // Create new instance of DTO and load entity to that.
         /** @var RestDtoInterface $restDto */
         $restDto = new $dtoClass();
-        $restDto->load($entity);
+        $restDto->setId($id);
 
-        if ($dto !== null) {
-            $restDto->patch($dto);
+        if ($patch === true) {
+            $restDto->load($entity);
         }
+
+        $restDto->patch($dto);
 
         return $restDto;
     }

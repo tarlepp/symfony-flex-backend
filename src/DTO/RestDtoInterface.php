@@ -21,6 +21,13 @@ use LogicException;
 interface RestDtoInterface
 {
     /**
+     * @param string $id
+     *
+     * @return RestDtoInterface
+     */
+    public function setId(string $id): self;
+
+    /**
      * Getter method for visited setters. This is needed for dto patching.
      *
      * @return string[]
@@ -35,18 +42,6 @@ interface RestDtoInterface
      * @return RestDtoInterface
      */
     public function setVisited(string $property): self;
-
-    /**
-     * Method to patch current dto with another one.
-     *
-     * @param self|RestDtoInterface $dto
-     *
-     * @return RestDtoInterface
-     *
-     * @throws LogicException
-     * @throws BadMethodCallException
-     */
-    public function patch(self $dto): self;
 
     /**
      * Method to load DTO data from specified entity.
@@ -65,4 +60,16 @@ interface RestDtoInterface
      * @return EntityInterface
      */
     public function update(EntityInterface $entity): EntityInterface;
+
+    /**
+     * Method to patch current dto with another one.
+     *
+     * @param RestDtoInterface $dto
+     *
+     * @return RestDtoInterface
+     *
+     * @throws LogicException
+     * @throws BadMethodCallException
+     */
+    public function patch(self $dto): self;
 }

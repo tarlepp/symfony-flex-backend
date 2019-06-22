@@ -32,7 +32,6 @@ abstract class CreateMethodTestClass extends Controller
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
         $this->resource = $resource;
-
         $this->responseHandler = $responseHandler;
     }
 }

@@ -14,11 +14,15 @@ services:
 
     App\Tests\E2E\Rest\src\Controller\:
         resource: '../../../tests/E2E/Rest/src/Controller/*'
-        tags: [ 'controller.service_arguments' ]
+        tags:
+            - 'controller.service_arguments'
+            - 'app.rest.controller'
 
     App\Tests\E2E\Rest\Traits\Actions\src\:
         resource: '../../../tests/E2E/Rest/Traits/Actions/src/*'
-        tags: [ 'controller.service_arguments' ]
+        tags:
+            - 'controller.service_arguments'
+            - 'app.rest.controller'
 
     App\Tests\Integration\Helpers\src\:
         resource: '../../../tests/Integration/Helpers/src/*'
