@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Unit;
 
+use App\AutoMapper\RestRequestMapper;
 use App\Entity\EntityInterface;
 use App\Rest\ControllerInterface;
 use App\Rest\RepositoryInterface;
@@ -337,6 +338,25 @@ FORMAT;
     }
 
     /**
+     * @dataProvider dataProviderTestThatRestRequestMapperHaveIntegrationTest
+     *
+     * @param string $restRequestMapperTestClass
+     * @param string $restRequestMapper
+     */
+    public function testThatRestRequestMapperHaveIntegrationTest(
+        string $restRequestMapperTestClass,
+        string $restRequestMapper
+    ): void {
+        $message = sprintf(
+            'REST request mapper "%s" does not have required test class "%s".',
+            $restRequestMapper,
+            $restRequestMapperTestClass
+        );
+
+        static::assertTrue(class_exists($restRequestMapperTestClass), $message);
+    }
+
+        /**
      * @return array
      */
     public function dataProviderTestThatControllerHasE2ETests(): array
@@ -659,6 +679,27 @@ FORMAT;
 
         $filter = static function (ReflectionClass $reflectionClass) {
             return !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
+        };
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/AutoMapper/';
+
+        $namespace = '\\App\\AutoMapper\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\AutoMapper\\';
+
+        $filter = static function (ReflectionClass $reflectionClass) {
+            return !$reflectionClass->isAbstract()
+                && !$reflectionClass->isTrait()
+                && $reflectionClass->isSubclassOf(RestRequestMapper::class);
         };
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
