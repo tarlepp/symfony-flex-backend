@@ -27,3 +27,9 @@ services:
     App\Tests\Integration\Helpers\src\:
         resource: '../../../tests/Integration/Helpers/src/*'
 
+    # If you need to access services in a test, create an alias
+    # and then fetch that alias from the container. As a convention,
+    # aliases are prefixed with test. For example:
+    #
+    test.app.security.roles_service: '@App\Security\RolesService'
+    test.app.utils.tests.auth: '@App\Utils\Tests\Auth'
