@@ -115,8 +115,9 @@ class ApiKeyUser implements ApiKeyUserInterface
      *
      * @codeCoverageIgnore
      */
-    public function getSalt(): void
+    public function getSalt(): ?string
     {
+        return null;
     }
 
     /**

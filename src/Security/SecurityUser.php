@@ -93,9 +93,9 @@ class SecurityUser implements SecurityUserInterface
      *
      * This can return null if the password was not encoded using a salt.
      */
-    public function getSalt(): void
+    public function getSalt(): ?string
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**
