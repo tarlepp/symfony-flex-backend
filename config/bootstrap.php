@@ -5,6 +5,9 @@ use Symfony\Component\Dotenv\Dotenv;
 
 require dirname(__DIR__).'/vendor/autoload.php';
 
+// Ensure that current working directory is project root - this is needed to make relative paths to working properly
+chdir(dirname(__DIR__));
+
 // Load cached env vars if the .env.local.php file exists
 // Run "composer dump-env prod" to create it (requires symfony/flex >=1.2)
 /** @noinspection UsingInclusionReturnValueInspection */
