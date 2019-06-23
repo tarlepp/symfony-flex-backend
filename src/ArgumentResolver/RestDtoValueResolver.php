@@ -29,6 +29,8 @@ use function in_array;
  */
 class RestDtoValueResolver implements ArgumentValueResolverInterface
 {
+    private const CONTROLLER_KEY = '_controller';
+
     /**
      * @var array|string[]
      */
@@ -79,11 +81,11 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
      */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        if (count(explode('::', $request->attributes->get('_controller'))) !== 2) {
+        if (count(explode('::', $request->attributes->get(self::CONTROLLER_KEY))) !== 2) {
             return false;
         }
 
-        [$controllerName, $actionName] = explode('::', $request->attributes->get('_controller'));
+        [$controllerName, $actionName] = explode('::', $request->attributes->get(self::CONTROLLER_KEY));
 
         return $argument->getType() === RestDtoInterface::class
             && in_array($actionName, $this->supportedActions, true)
@@ -102,7 +104,7 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argumentMetadata): Generator
     {
-        [$controllerName, $actionName] = explode('::', $request->attributes->get('_controller'));
+        [$controllerName, $actionName] = explode('::', $request->attributes->get(self::CONTROLLER_KEY));
 
         $dtoClass = $this->controllerCollection->get($controllerName)->getDtoClass($this->actionMethodMap[$actionName]);
 
