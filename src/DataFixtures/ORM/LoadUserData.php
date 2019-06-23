@@ -11,12 +11,12 @@ namespace App\DataFixtures\ORM;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Security\RolesServiceInterface;
-use BadMethodCallException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Throwable;
 use function array_map;
 
 /**
@@ -59,18 +59,14 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
      *
      * @param ObjectManager $manager
      *
-     * @throws BadMethodCallException
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @throws Throwable
      */
     public function load(ObjectManager $manager): void
     {
-        /** @var RolesServiceInterface $roles */
-        $roles = $this->container->get('test.App\Security\RolesService');
+        /** @var RolesServiceInterface $rolesService */
+        $rolesService = $this->container->get('test.app.security.roles_service');
 
-        $this->roles = $roles;
+        $this->roles = $rolesService;
         $this->manager = $manager;
 
         // Create entities
@@ -97,7 +93,7 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
      *
      * @param string|null $role
      *
-     * @throws BadMethodCallException
+     * @throws Throwable
      */
     private function createUser(?string $role = null): void
     {

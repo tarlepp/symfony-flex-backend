@@ -59,7 +59,7 @@ abstract class WebTestCase extends BaseWebTestCase
         self::bootKernel();
 
         /** @var Auth $authService */
-        $authService = self::$container->get('test.App\Utils\Tests\Auth');
+        $authService = self::$container->get('test.app.utils.tests.auth');
 
         $this->authService = $authService;
     }

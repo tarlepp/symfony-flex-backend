@@ -57,19 +57,13 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface, Con
      * Load data fixtures with the passed EntityManager
      *
      * @param ObjectManager $manager
-     *
-     * @throws BadMethodCallException
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
     public function load(ObjectManager $manager): void
     {
-        /** @var RolesServiceInterface $roles */
-        $roles = $this->container->get('test.App\Security\RolesService');
+        /** @var RolesServiceInterface $rolesService */
+        $rolesService = $this->container->get('test.app.security.roles_service');
 
-        $this->roles = $roles;
+        $this->roles = $rolesService;
         $this->manager = $manager;
 
         $iterator = function (string $role): void {
