@@ -8,6 +8,7 @@ cache:
 
 git:
   depth: false
+  quiet: true
 
 services:
   - mysql
