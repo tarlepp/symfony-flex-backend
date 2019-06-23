@@ -65,6 +65,7 @@ exclude_patterns:
 - build/
 - config/
 - public/
+- src/Migrations/
 - src/Utils/Tests/
 - templates/
 - tests/
