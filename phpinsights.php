@@ -2,6 +2,7 @@
 /** @noinspection PhpUndefinedNamespaceInspection */
 /** @noinspection PhpUndefinedClassInspection */
 declare(strict_types = 1);
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -51,6 +52,7 @@ return [
         //  ExampleInsight::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits::class,
+        NunoMaduro\PhpInsights\Domain\Sniffs\ForbiddenSetterSniff::class,
         ObjectCalisthenics\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
         ObjectCalisthenics\Sniffs\NamingConventions\NoSetterSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousInterfaceNamingSniff::class,
