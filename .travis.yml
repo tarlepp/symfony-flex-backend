@@ -7,7 +7,7 @@ cache:
     - $HOME/.sonar/cache
 
 git:
-  depth: 1
+  depth: false
 
 services:
   - mysql
