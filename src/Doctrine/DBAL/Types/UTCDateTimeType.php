@@ -83,6 +83,8 @@ class UTCDateTimeType extends DateTimeType
 
     /**
      * @inheritDoc
+     *
+     * @param AbstractPlatform $platform
      */
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
