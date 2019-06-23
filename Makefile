@@ -207,3 +207,8 @@ check-vendor-dependencies: ## Checks if any vendor dependency can be updated
 update: ## Update composer dependencies
 	@php -d memory_limit=-1 /usr/bin/composer update
 ###< update composer dependencies ###
+
+###> get bach inside php container ###
+bash: ## Get bash inside PHP container
+	@docker-compose exec php bash
+###< get bach inside php container ###
