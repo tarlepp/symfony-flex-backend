@@ -33,6 +33,11 @@ class AutoMapperConfiguration extends RestAutoMapperConfiguration
     ];
 
     /**
+     * @var RequestMapper
+     */
+    protected $requestMapper;
+
+    /**
      * AutoMapperConfiguration constructor.
      *
      * @param RequestMapper $requestMapper
