@@ -86,12 +86,12 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      *
      *     return new Response('Auth header required', 401);
      *
-     * @param Request                 $request       The request that resulted in an AuthenticationException
-     * @param AuthenticationException $authException The exception that started the authentication process
+     * @param Request                      $request       The request that resulted in an AuthenticationException
+     * @param AuthenticationException|null $authException The exception that started the authentication process
      *
      * @return JsonResponse
      */
-    public function start(Request $request, AuthenticationException $authException = null): JsonResponse
+    public function start(Request $request, ?AuthenticationException $authException = null): JsonResponse
     {
         $data = [
             'message' => 'Authentication Required',
@@ -231,7 +231,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
     {
         $data = [
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData())
+            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
         ];
 
         return new JsonResponse($data, Response::HTTP_FORBIDDEN);
