@@ -86,7 +86,7 @@ abstract class RestDto implements RestDtoInterface
      */
     public function getVisited(): array
     {
-        return array_filter($this->visited, function (string $property) {
+        return array_filter($this->visited, static function (string $property) {
             return $property !== 'id';
         });
     }
