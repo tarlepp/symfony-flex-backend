@@ -21,7 +21,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -43,13 +43,13 @@ class ExceptionSubscriberTest extends KernelTestCase
     public function testThatOnKernelExceptionMethodCallsLogger(): void
     {
         /**
-         * @var MockObject|TokenStorageInterface        $stubTokenStorage
-         * @var MockObject|LoggerInterface              $stubLogger
-         * @var MockObject|GetResponseForExceptionEvent $stubEvent
+         * @var MockObject|TokenStorageInterface $stubTokenStorage
+         * @var MockObject|LoggerInterface       $stubLogger
+         * @var MockObject|ExceptionEvent        $stubEvent
          */
         $stubTokenStorage = $this->createMock(TokenStorageInterface::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
-        $stubEvent = $this->createMock(GetResponseForExceptionEvent::class);
+        $stubEvent = $this->createMock(ExceptionEvent::class);
 
         $exception = new Exception('test exception');
 
@@ -73,13 +73,13 @@ class ExceptionSubscriberTest extends KernelTestCase
     public function testThatOnKernelExceptionMethodSetResponse(): void
     {
         /**
-         * @var MockObject|TokenStorageInterface        $stubTokenStorage
-         * @var MockObject|LoggerInterface              $stubLogger
-         * @var MockObject|GetResponseForExceptionEvent $stubEvent
+         * @var MockObject|TokenStorageInterface $stubTokenStorage
+         * @var MockObject|LoggerInterface       $stubLogger
+         * @var MockObject|ExceptionEvent        $stubEvent
          */
         $stubTokenStorage = $this->createMock(TokenStorageInterface::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
-        $stubEvent = $this->createMock(GetResponseForExceptionEvent::class);
+        $stubEvent = $this->createMock(ExceptionEvent::class);
 
         $exception = new Exception('test exception');
 
@@ -119,7 +119,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         $stubRequest = $this->createMock(Request::class);
 
         // Create event
-        $event = new GetResponseForExceptionEvent(
+        $event = new ExceptionEvent(
             $stubHttpKernel,
             $stubRequest,
             HttpKernelInterface::MASTER_REQUEST,
@@ -157,7 +157,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         $stubRequest = $this->createMock(Request::class);
 
         // Create event
-        $event = new GetResponseForExceptionEvent(
+        $event = new ExceptionEvent(
             $stubHttpKernel,
             $stubRequest,
             HttpKernelInterface::MASTER_REQUEST,
