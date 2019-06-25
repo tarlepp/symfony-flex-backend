@@ -63,6 +63,7 @@ class UserGroup implements EntityInterface
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
+     * @Assert\Valid()
      *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\Role",

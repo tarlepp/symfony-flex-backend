@@ -100,4 +100,14 @@ class Healthz implements EntityInterface
 
         return $this;
     }
+
+    /**
+     * Returns createdAt.
+     *
+     * @return DateTime|null
+     */
+    public function getCreatedAt(): ?DateTime
+    {
+        return $this->timestamp;
+    }
 }

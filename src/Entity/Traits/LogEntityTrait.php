@@ -14,6 +14,7 @@ use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Throwable;
 
 /**
  * Trait LogEntityTrait
@@ -21,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @package App\Entity\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @property \App\Entity\User|null $user
+ * @property User|null $user
  */
 trait LogEntityTrait
 {
@@ -166,7 +167,19 @@ trait LogEntityTrait
     }
 
     /**
+     * Returns createdAt.
+     *
+     * @return DateTime|null
+     */
+    public function getCreatedAt(): ?DateTime
+    {
+        return $this->date;
+    }
+
+    /**
      * @ORM\PrePersist()
+     *
+     * @throws Throwable
      */
     protected function processTimeAndDate(): void
     {

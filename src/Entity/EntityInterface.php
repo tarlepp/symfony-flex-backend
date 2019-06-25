@@ -8,6 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use DateTime;
+
 /**
  * Interface EntityInterface
  *
@@ -20,4 +22,11 @@ interface EntityInterface
      * @return string
      */
     public function getId(): string;
+
+    /**
+     * Returns createdAt.
+     *
+     * @return DateTime|null
+     */
+    public function getCreatedAt(): ?DateTime;
 }

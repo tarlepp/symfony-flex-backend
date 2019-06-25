@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Entity;
 
 use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -377,5 +378,15 @@ class DateDimension implements EntityInterface
     public function getUnixTime(): int
     {
         return $this->unixTime;
+    }
+
+    /**
+     * Returns createdAt.
+     *
+     * @return DateTime
+     */
+    public function getCreatedAt(): DateTime
+    {
+        return DateTime::createFromFormat('U', (string)$this->getUnixTime(), new DateTimeZone('UTC'));
     }
 }
