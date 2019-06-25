@@ -9,12 +9,10 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\AutoMapper\UserGroup;
 
 use App\AutoMapper\RestRequestMapper;
-use App\AutoMapper\User\RequestMapper;
+use App\AutoMapper\UserGroup\RequestMapper;
 use App\DTO\UserGroup as DTO;
 use App\Entity\Role;
-use App\Entity\UserGroup;
 use App\Resource\RoleResource;
-use App\Resource\UserGroupResource;
 use App\Tests\Integration\AutoMapper\RestRequestMapperTestCase;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -50,7 +48,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     ];
 
     /**
-     * @var MockObject|UserGroupResource
+     * @var MockObject|RoleResource
      */
     protected $mockRoleResource;
 
@@ -78,7 +76,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
          */
         $dto = $this->mapperObject->mapToObject($request, new $dtoClass());
 
-        static::assertSame([$role], $dto->getRole());
+        static::assertSame($role, $dto->getRole());
     }
 
     /**
