@@ -16,7 +16,7 @@ use InvalidArgumentException;
 use LogicException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -27,7 +27,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
 use UnexpectedValueException;
 use function get_class;
-use function getenv;
 
 /**
  * Class ExceptionSubscriber
@@ -58,7 +57,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function __construct(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->environment = (string)getenv('APP_ENV');
+        $this->environment = (string)$_SERVER['APP_ENV'];
     }
 
     /**
@@ -92,13 +91,13 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * Method to handle kernel exception.
      *
-     * @param GetResponseForExceptionEvent $event
+     * @param ExceptionEvent $event
      *
      * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      * @throws LogicException
      */
-    public function onKernelException(GetResponseForExceptionEvent $event): void
+    public function onKernelException(ExceptionEvent $event): void
     {
         // Get exception from current event
         $exception = $event->getException();
