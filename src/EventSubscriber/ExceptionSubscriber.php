@@ -53,11 +53,12 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * ExceptionSubscriber constructor.
      *
      * @param TokenStorageInterface $tokenStorage
+     * @param string                $environment
      */
-    public function __construct(TokenStorageInterface $tokenStorage)
+    public function __construct(TokenStorageInterface $tokenStorage, string $environment)
     {
         $this->tokenStorage = $tokenStorage;
-        $this->environment = (string)$_SERVER['APP_ENV'];
+        $this->environment = $environment;
     }
 
     /**

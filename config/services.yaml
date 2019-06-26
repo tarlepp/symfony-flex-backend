@@ -20,6 +20,7 @@ services:
                             # The best practice is to be explicit about your dependencies anyway.
         bind:
             $projectDir: '%kernel.project_dir%'
+            $environment: '%kernel.environment%'
     _instanceof:
         App\Rest\ControllerInterface:
             tags: [ 'app.rest.controller' ]
