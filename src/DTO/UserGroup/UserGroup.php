@@ -13,6 +13,7 @@ use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as Entity;
+use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -38,6 +39,8 @@ class UserGroup extends RestDto
     /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
     /**
      * @var \App\Entity\Role
+     *
+     * @AppAssert\EntityReferenceExists()
      */
     protected $role;
 

@@ -14,6 +14,7 @@ use App\Entity\ApiKey as Entity;
 use App\Entity\EntityInterface;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Entity\UserGroupAwareInterface;
+use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
 
@@ -51,6 +52,8 @@ class ApiKey extends RestDto
 
     /**
      * @var UserGroupEntity[]
+     *
+     * @AppAssert\EntityReferenceExists()
      */
     protected $userGroups = [];
 
