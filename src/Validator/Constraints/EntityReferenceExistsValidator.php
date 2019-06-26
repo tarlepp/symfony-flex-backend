@@ -45,7 +45,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint): void
     {
         if (!$constraint instanceof EntityReferenceExists) {
-            throw new UnexpectedTypeException($constraint, __NAMESPACE__ . '\EntityExists');
+            throw new UnexpectedTypeException($constraint, __NAMESPACE__ . '\EntityReferenceExists');
         }
 
         $this->check($this->normalize($value));
