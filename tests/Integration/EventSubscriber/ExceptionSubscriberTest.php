@@ -40,7 +40,12 @@ use function array_keys;
  */
 class ExceptionSubscriberTest extends KernelTestCase
 {
-    public function testThatOnKernelExceptionMethodCallsLogger(): void
+    /**
+     * @dataProvider dataProviderEnvironment
+     *
+     * @param string $environment
+     */
+    public function testThatOnKernelExceptionMethodCallsLogger(string $environment): void
     {
         /**
          * @var MockObject|TokenStorageInterface $stubTokenStorage
@@ -63,14 +68,19 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->method('error')
             ->with((string)$exception);
 
-        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
         $subscriber->setLogger($stubLogger);
         $subscriber->onKernelException($stubEvent);
 
         unset($subscriber, $stubLogger, $stubEvent, $exception, $stubTokenStorage);
     }
 
-    public function testThatOnKernelExceptionMethodSetResponse(): void
+    /**
+     * @dataProvider dataProviderEnvironment
+     *
+     * @param string $environment
+     */
+    public function testThatOnKernelExceptionMethodSetResponse(string $environment): void
     {
         /**
          * @var MockObject|TokenStorageInterface $stubTokenStorage
@@ -92,7 +102,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->expects(static::once())
             ->method('setResponse');
 
-        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
         $subscriber->setLogger($stubLogger);
         $subscriber->onKernelException($stubEvent);
 
@@ -104,9 +114,13 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @param int       $expectedStatus
      * @param Exception $exception
+     * @param string    $environment
      */
-    public function testResponseHasExpectedStatusCode(int $expectedStatus, Exception $exception): void
-    {
+    public function testResponseHasExpectedStatusCode(
+        int $expectedStatus,
+        Exception $exception,
+        string $environment
+    ): void {
         /**
          * @var MockObject|TokenStorageInterface $stubTokenStorage
          * @var MockObject|LoggerInterface       $stubLogger
@@ -126,7 +140,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             $exception
         );
 
-        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
         $subscriber->setLogger($stubLogger);
         $subscriber->onKernelException($event);
 
@@ -165,10 +179,8 @@ class ExceptionSubscriberTest extends KernelTestCase
         );
 
         // Process event
-        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
         $subscriber->setLogger($stubLogger);
-
-        PhpUnitUtil::setProperty('environment', $environment, $subscriber);
 
         $subscriber->onKernelException($event);
 
@@ -185,13 +197,15 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @param int       $expectedStatusCode
      * @param Exception $exception
      * @param bool      $user
+     * @param string    $environment
      *
      * @throws Throwable
      */
     public function testThatGetStatusCodeReturnsExpected(
         int $expectedStatusCode,
         Exception $exception,
-        bool $user
+        bool $user,
+        string $environment
     ): void {
         /**
          * @var MockObject|TokenStorageInterface  $stubTokenStorage
@@ -207,7 +221,7 @@ class ExceptionSubscriberTest extends KernelTestCase
                 ->willReturn(true);
         }
 
-        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
         $subscriber->setLogger($stubLogger);
 
         static::assertSame(
@@ -240,10 +254,8 @@ class ExceptionSubscriberTest extends KernelTestCase
         $stubLogger = $this->createMock(LoggerInterface::class);
 
         // Create subscriber
-        $subscriber = new ExceptionSubscriber($stubTokenStorage);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
         $subscriber->setLogger($stubLogger);
-
-        PhpUnitUtil::setProperty('environment', $environment, $subscriber);
 
         static::assertSame(
             $expectedMessage,
@@ -256,36 +268,88 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @return Generator
      */
+    public function dataProviderEnvironment(): Generator
+    {
+        yield ['dev'];
+
+        yield ['prod'];
+    }
+
+    /**
+     * @return Generator
+     */
     public function dataProviderTestResponseHasExpectedStatusCode(): Generator
     {
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
             new Exception(Exception::class),
+            'dev',
+        ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new Exception(Exception::class),
+            'prod',
         ];
 
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
             new BadMethodCallException(BadMethodCallException::class),
+            'dev',
+        ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new BadMethodCallException(BadMethodCallException::class),
+            'prod',
         ];
 
         yield [
             Response::HTTP_UNAUTHORIZED,
             new AuthenticationException(AuthenticationException::class),
+            'dev',
+        ];
+
+        yield [
+            Response::HTTP_UNAUTHORIZED,
+            new AuthenticationException(AuthenticationException::class),
+            'prod',
         ];
 
         yield [
             Response::HTTP_UNAUTHORIZED,
             new AccessDeniedException(AccessDeniedException::class),
+            'dev',
+        ];
+
+        yield [
+            Response::HTTP_UNAUTHORIZED,
+            new AccessDeniedException(AccessDeniedException::class),
+            'prod',
         ];
 
         yield [
             Response::HTTP_BAD_REQUEST,
             new HttpException(Response::HTTP_BAD_REQUEST, HttpException::class),
+            'dev',
+        ];
+
+        yield [
+            Response::HTTP_BAD_REQUEST,
+            new HttpException(Response::HTTP_BAD_REQUEST, HttpException::class),
+            'prod',
         ];
 
         yield [
             Response::HTTP_I_AM_A_TEAPOT,
             new HttpException(Response::HTTP_I_AM_A_TEAPOT, HttpException::class),
+            'dev',
+        ];
+
+        yield [
+            Response::HTTP_I_AM_A_TEAPOT,
+            new HttpException(Response::HTTP_I_AM_A_TEAPOT, HttpException::class),
+            'prod',
         ];
     }
 
@@ -310,35 +374,25 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function dataProviderTestThatGetStatusCodeReturnsExpected(): Generator
     {
-        yield [
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            new Exception(),
-            false,
-        ];
+        yield [Response::HTTP_INTERNAL_SERVER_ERROR, new Exception(), false, 'dev'];
 
-        yield [
-            Response::HTTP_UNAUTHORIZED,
-            new AuthenticationException(),
-            false,
-        ];
+        yield [Response::HTTP_INTERNAL_SERVER_ERROR, new Exception(), false, 'prod'];
 
-        yield [
-            Response::HTTP_UNAUTHORIZED,
-            new AccessDeniedException(),
-            false,
-        ];
+        yield [Response::HTTP_UNAUTHORIZED, new AuthenticationException(), false, 'dev'];
 
-        yield [
-            Response::HTTP_FORBIDDEN,
-            new AccessDeniedException(),
-            true,
-        ];
+        yield [Response::HTTP_UNAUTHORIZED, new AuthenticationException(), false, 'prod'];
 
-        yield [
-            Response::HTTP_NOT_FOUND,
-            new NotFoundHttpException(),
-            false,
-        ];
+        yield [Response::HTTP_UNAUTHORIZED, new AccessDeniedException(), false, 'dev'];
+
+        yield [Response::HTTP_UNAUTHORIZED, new AccessDeniedException(), false, 'prod'];
+
+        yield [Response::HTTP_FORBIDDEN, new AccessDeniedException(), true, 'dev'];
+
+        yield [Response::HTTP_FORBIDDEN, new AccessDeniedException(), true, 'prod'];
+
+        yield [Response::HTTP_NOT_FOUND, new NotFoundHttpException(), false, 'dev'];
+
+        yield [Response::HTTP_NOT_FOUND, new NotFoundHttpException(), false, 'prod'];
     }
 
     /**
