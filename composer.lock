@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "670bea0e3a0af14a1e866233ba9ec803",
+    "content-hash": "8728c3bc28b34632950ed57dce363093",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -7517,16 +7517,16 @@
         },
         {
             "name": "symfony/requirements-checker",
-            "version": "v1.1.4",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/requirements-checker.git",
-                "reference": "8151a5deeec2725693b37a5f409a26b2a8a4d5f3"
+                "reference": "991978163f5a653a17e7b7592157c096c2afd2f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/requirements-checker/zipball/8151a5deeec2725693b37a5f409a26b2a8a4d5f3",
-                "reference": "8151a5deeec2725693b37a5f409a26b2a8a4d5f3",
+                "url": "https://api.github.com/repos/symfony/requirements-checker/zipball/991978163f5a653a17e7b7592157c096c2afd2f7",
+                "reference": "991978163f5a653a17e7b7592157c096c2afd2f7",
                 "shasum": ""
             },
             "require": {
@@ -7561,7 +7561,7 @@
                 "configuration",
                 "distribution"
             ],
-            "time": "2018-12-22T08:23:45+00:00"
+            "time": "2019-06-25T16:43:49+00:00"
         },
         {
             "name": "symfony/var-dumper",
