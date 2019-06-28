@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "670bea0e3a0af14a1e866233ba9ec803",
+    "content-hash": "951acdb65dc3d2a5ad25358abc5d4114",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3835,16 +3835,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.2.7",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "8618b243d44bac71e4006062f245d807d84f7a6c"
+                "reference": "56981bc96c3bfd52e55e0255be87f674e5baca33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/8618b243d44bac71e4006062f245d807d84f7a6c",
-                "reference": "8618b243d44bac71e4006062f245d807d84f7a6c",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/56981bc96c3bfd52e55e0255be87f674e5baca33",
+                "reference": "56981bc96c3bfd52e55e0255be87f674e5baca33",
                 "shasum": ""
             },
             "require": {
@@ -3860,7 +3860,7 @@
             "type": "composer-plugin",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "1.4-dev"
                 },
                 "class": "Symfony\\Flex\\Flex"
             },
@@ -3880,7 +3880,7 @@
                 }
             ],
             "description": "Composer plugin for Symfony",
-            "time": "2019-06-15T07:15:42+00:00"
+            "time": "2019-06-27T13:49:48+00:00"
         },
         {
             "name": "symfony/form",
