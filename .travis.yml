@@ -55,7 +55,7 @@ before_install:
 install:
   - pecl channel-update pecl.php.net
   - pecl install ast-0.1.6
-  - composer install
+  - php -d memory_limit=-1 /usr/bin/composer install
   - make generate-jwt-keys
 
 before_script:
