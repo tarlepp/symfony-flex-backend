@@ -36,17 +36,17 @@ rm -rf /app/var
 mkdir -p /app/var
 
 # Step 3
-php -d memory_limit=-1 /usr/bin/composer install
+COMPOSER_MEMORY_LIMIT=-1 composer install
 
 # Step 4
 make generate-jwt-keys
 chmod 644 /app/config/jwt/private.pem
 
 # Step 5
-php /app/bin/console doctrine:database:create --if-not-exists --no-interaction
+./bin/console doctrine:database:create --if-not-exists --no-interaction
 
 # Step 6
-php /app/bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
 # Step 7
 chmod -R o+s+w /app
