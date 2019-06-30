@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "088db732c5d0e0c5e09570749e7d6f22",
+    "content-hash": "a5f4cae4d9b8c995ddf6d2ab8a29d4ff",
     "packages": [],
     "packages-dev": [
         {
@@ -1060,16 +1060,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "8.2.2",
+            "version": "8.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "24b6cfcec34c1167ee1d90b7cb22bee324af319f"
+                "reference": "f67ca36860ebca7224d4573f107f79bd8ed0ba03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/24b6cfcec34c1167ee1d90b7cb22bee324af319f",
-                "reference": "24b6cfcec34c1167ee1d90b7cb22bee324af319f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/f67ca36860ebca7224d4573f107f79bd8ed0ba03",
+                "reference": "f67ca36860ebca7224d4573f107f79bd8ed0ba03",
                 "shasum": ""
             },
             "require": {
@@ -1139,7 +1139,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-06-15T07:25:54+00:00"
+            "time": "2019-06-19T12:03:56+00:00"
         },
         {
             "name": "psr/container",
@@ -2413,7 +2413,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
