@@ -19,7 +19,6 @@ use App\Entity\UserGroupAwareInterface;
  */
 trait PatchUserGroups
 {
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * Method to patch entity user groups.
      *

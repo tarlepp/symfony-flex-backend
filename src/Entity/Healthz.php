@@ -86,7 +86,7 @@ class Healthz implements EntityInterface
      */
     public function getTimestamp(): DateTime
     {
-        return $this->timestamp;
+        return $this->getCreatedAt();
     }
 
     /**
@@ -104,9 +104,9 @@ class Healthz implements EntityInterface
     /**
      * Returns createdAt.
      *
-     * @return DateTime|null
+     * @return DateTime
      */
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime
     {
         return $this->timestamp;
     }

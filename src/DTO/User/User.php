@@ -79,6 +79,8 @@ class User extends RestDto
 
     /**
      * @var UserGroupEntity[]
+     *
+     * @AppAssert\EntityReferenceExists()
      */
     protected $userGroups = [];
 
