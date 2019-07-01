@@ -9,7 +9,9 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\User as Entity;
-use App\Repository\Traits\LoadUserByUserNameTrait;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\ORMException;
+use function array_key_exists;
 
 /**
  * Class UserRepository
@@ -30,9 +32,6 @@ use App\Repository\Traits\LoadUserByUserNameTrait;
  */
 class UserRepository extends BaseRepository
 {
-    // Traits
-    use LoadUserByUserNameTrait;
-
     /**
      * @var string
      */
@@ -46,6 +45,25 @@ class UserRepository extends BaseRepository
     protected static $searchColumns = ['username', 'firstName', 'lastName', 'email'];
 
     /**
+     * @var string
+     */
+    private $environment = 'dev';
+
+    /**
+     * @required
+     *
+     * @param string $environment
+     *
+     * @return UserRepository
+     */
+    public function setEnvironment(string $environment): self
+    {
+        $this->environment = $environment;
+
+        return $this;
+    }
+
+    /**
      * Method to check if specified username is available or not.
      *
      * @param string      $username
@@ -53,7 +71,7 @@ class UserRepository extends BaseRepository
      *
      * @return bool
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function isUsernameAvailable(string $username, ?string $id = null): bool
     {
@@ -68,11 +86,51 @@ class UserRepository extends BaseRepository
      *
      * @return bool
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function isEmailAvailable(string $email, ?string $id = null): bool
     {
         return $this->isUnique('email', $email, $id);
+    }
+
+    /**
+     * Loads the user for the given username.
+     *
+     * This method must throw UsernameNotFoundException if the user is not found.
+     *
+     * Method is override for performance reasons see link below.
+     *
+     * @link http://symfony2-document.readthedocs.org/en/latest/cookbook/security/entity_provider.html
+     *       #managing-roles-in-the-database
+     *
+     * @psalm-suppress ImplementedReturnTypeMismatch
+     *
+     * @param string $username The username
+     *
+     * @return Entity|null
+     *
+     * @throws ORMException
+     */
+    public function loadUserByUsername($username): ?Entity
+    {
+        static $cache = [];
+
+        if (!array_key_exists($username, $cache) || $this->environment === 'test') {
+            // Build query
+            $query = $this
+                ->createQueryBuilder('u')
+                ->select('u, g, r')
+                ->leftJoin('u.userGroups', 'g')
+                ->leftJoin('g.role', 'r')
+                ->where('u.id = :username OR u.username = :username OR u.email = :email')
+                ->setParameter('username', $username)
+                ->setParameter('email', $username)
+                ->getQuery();
+
+            $cache[$username] = $query->getOneOrNullResult() ?? false;
+        }
+
+        return $cache[$username] instanceof Entity ? $cache[$username] : null;
     }
 
     /**
@@ -82,7 +140,7 @@ class UserRepository extends BaseRepository
      *
      * @return bool
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     private function isUnique(string $column, string $value, ?string $id = null): bool
     {

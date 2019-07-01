@@ -88,10 +88,12 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
      */
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
+        $token = $event->getException()->getToken();
+
         // Fetch user entity
-        if (is_string($event->getException()->getToken()->getUser())) {
+        if ($token !== null && is_string($token->getUser())) {
             /** @var string $username */
-            $username = $event->getException()->getToken()->getUser();
+            $username = $token->getUser();
 
             $this->loginLogger->setUser($this->userRepository->loadUserByUsername($username));
         }

@@ -100,7 +100,13 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
-        $user = $this->getUser($event->getException()->getToken()->getUser());
+        $token = $event->getException()->getToken();
+
+        if ($token === null) {
+            return;
+        }
+
+        $user = $this->getUser($token->getUser());
 
         if ($user instanceof User) {
             $this->checkLockedAccount($user, $event);

@@ -20,6 +20,15 @@ application during development stage.
 Note that all of these commands are intended to be executed either inside
 docker container or your local/dedicated server.
 
+There is also exception for this;
+
+```bash
+make bash
+```
+
+That command is shortcut for `docker-compose exec php bash` command and you
+can use that command within your host machine.
+
 ### Makefile
 
 Symfony Flex comes with `Makefile` configuration so that you can easily run
@@ -48,6 +57,7 @@ run-tests-phpdbg           # Runs all tests via phpunit (phpdbg)
 run-tests-php              # Runs all tests via phpunit (pure PHP)
 run-tests                  # Runs all tests via phpunit (Uses phpdbg if that is installed)
 serve                      # Runs a local web server
+update                     # Update composer dependencies
 
 ```
 
