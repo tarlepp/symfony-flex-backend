@@ -123,16 +123,16 @@ class LogLoginFailure implements EntityInterface
      */
     public function getTimestamp(): DateTime
     {
-        return $this->timestamp;
+        return $this->getCreatedAt();
     }
 
     /**
      * Returns createdAt.
      *
-     * @return DateTime|null
+     * @return DateTime
      */
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime
     {
-        return $this->getTimestamp();
+        return $this->timestamp;
     }
 }
