@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e39ad85b48fb79aa282513a2ad43fbe5",
+    "content-hash": "22e55b61f3139282ddc93a83286ea94e",
     "packages": [],
     "packages-dev": [
         {
@@ -109,16 +109,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.13.2",
+            "version": "0.13.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "f521704d69ca1a6ea9c945e3843c6be16f43b3bf"
+                "reference": "f0f8327f5e60d1a7d8ab4ea01074c6250ab96f57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/f521704d69ca1a6ea9c945e3843c6be16f43b3bf",
-                "reference": "f521704d69ca1a6ea9c945e3843c6be16f43b3bf",
+                "url": "https://api.github.com/repos/infection/infection/zipball/f0f8327f5e60d1a7d8ab4ea01074c6250ab96f57",
+                "reference": "f0f8327f5e60d1a7d8ab4ea01074c6250ab96f57",
                 "shasum": ""
             },
             "require": {
@@ -195,7 +195,7 @@
                 "testing",
                 "unit testing"
             ],
-            "time": "2019-06-10T19:27:47+00:00"
+            "time": "2019-07-01T18:01:41+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -1121,7 +1121,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
