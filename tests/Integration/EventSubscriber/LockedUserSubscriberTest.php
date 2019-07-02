@@ -5,14 +5,14 @@ declare(strict_types = 1);
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-
 namespace App\Tests\Integration\EventSubscriber;
 
-use App\Entity\User;
+use App\Entity\User as UserEntity;
 use App\EventSubscriber\LockedUserSubscriber;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
 use App\Security\SecurityUser;
+use Doctrine\Common\Collections\ArrayCollection;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,7 +20,11 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\LockedException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\User as CoreUser;
 use Throwable;
+use function range;
 
 /**
  * Class LockedUserSubscriberTest
@@ -33,16 +37,10 @@ class LockedUserSubscriberTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatOnAuthenticationFailureCallsExpectedServiceMethod(): void
+    public function testThatOnAuthenticationSuccessThrowsUserNotFoundException(): void
     {
-        $user = new User();
-        $user->setUsername('test-user');
-
-        $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
-        $token->setUser(new SecurityUser($user));
-
-        $authenticationException = new AuthenticationException();
-        $authenticationException->setToken($token);
+        $this->expectException(UnsupportedUserException::class);
+        $this->expectExceptionMessage('Unsupported user.');
 
         /**
          * @var MockObject|UserRepository          $userRepository
@@ -51,6 +49,29 @@ class LockedUserSubscriberTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()->getMock();
+
+        $event = new AuthenticationSuccessEvent([], new CoreUser('username', 'password'), new Response());
+
+        (new LockedUserSubscriber($userRepository, $logLoginFailureResource))->onAuthenticationSuccess($event);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatOnAuthenticationSuccessThrowsLockedException(): void
+    {
+        $this->expectException(LockedException::class);
+        $this->expectExceptionMessage('Locked account.');
+
+        /**
+         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
+         * @var MockObject|UserEntity              $user
+         */
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
+            ->disableOriginalConstructor()->getMock();
+        $user = $this->getMockBuilder(UserEntity::class)->getMock();
 
         $userRepository
             ->expects(static::once())
@@ -58,25 +79,22 @@ class LockedUserSubscriberTest extends KernelTestCase
             ->with($user->getId())
             ->willReturn($user);
 
-        $logLoginFailureResource
+        $user
             ->expects(static::once())
-            ->method('save');
+            ->method('getLogsLoginFailure')
+            ->willReturn(new ArrayCollection(range(0, 11)));
 
-        $subscriber = new LockedUserSubscriber($userRepository, $logLoginFailureResource);
-        $subscriber->onAuthenticationFailure(new AuthenticationFailureEvent($authenticationException, new Response()));
+        $securityUser = new SecurityUser($user);
+        $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
+
+        (new LockedUserSubscriber($userRepository, $logLoginFailureResource))->onAuthenticationSuccess($event);
     }
 
     /**
      * @throws Throwable
      */
-    public function testThatOnAuthenticationSuccessCallsExpectedServiceMethod(): void
+    public function testThatOnAuthenticationSuccessResourceResetMethodIsCalled(): void
     {
-        $user = new User();
-        $user->setUsername('test-user');
-
-        $securityUser = new SecurityUser($user);
-        $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
-
         /**
          * @var MockObject|UserRepository          $userRepository
          * @var MockObject|LogLoginFailureResource $logLoginFailureResource
@@ -84,6 +102,8 @@ class LockedUserSubscriberTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()->getMock();
+
+        $user = new UserEntity();
 
         $userRepository
             ->expects(static::once())
@@ -96,7 +116,101 @@ class LockedUserSubscriberTest extends KernelTestCase
             ->method('reset')
             ->with($user);
 
-        $subscriber = new LockedUserSubscriber($userRepository, $logLoginFailureResource);
-        $subscriber->onAuthenticationSuccess($event);
+        $securityUser = new SecurityUser($user);
+        $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
+
+        (new LockedUserSubscriber($userRepository, $logLoginFailureResource))->onAuthenticationSuccess($event);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatOnAuthenticationFailureRepositoryAndResourceMethodsAreNotCalledWhenTokenIsNull(): void
+    {
+        /**
+         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
+         */
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $userRepository
+            ->expects(static::never())
+            ->method(static::anything());
+
+        $logLoginFailureResource
+            ->expects(static::never())
+            ->method(static::anything());
+
+        $event = new AuthenticationFailureEvent(new AuthenticationException(), new Response());
+
+        (new LockedUserSubscriber($userRepository, $logLoginFailureResource))->onAuthenticationFailure($event);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatOnAuthenticationFailureTestThatResourceMethodsAreNotCalledWhenWrongUser(): void
+    {
+        /**
+         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
+         */
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
+
+        $exception = new AuthenticationException();
+        $exception->setToken($token);
+
+        $userRepository
+            ->expects(static::once())
+            ->method('loadUserByUsername')
+            ->with('test-user')
+            ->willReturn(null);
+
+        $logLoginFailureResource
+            ->expects(static::never())
+            ->method(static::anything());
+
+        $event = new AuthenticationFailureEvent($exception, new Response());
+
+        (new LockedUserSubscriber($userRepository, $logLoginFailureResource))->onAuthenticationFailure($event);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatOnAuthenticationFailureTestThatResourceSaveMethodIsCalled(): void
+    {
+        /**
+         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
+         */
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
+            ->disableOriginalConstructor()->getMock();
+
+        $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
+
+        $exception = new AuthenticationException();
+        $exception->setToken($token);
+
+        $userRepository
+            ->expects(static::once())
+            ->method('loadUserByUsername')
+            ->with('test-user')
+            ->willReturn(new UserEntity());
+
+        $logLoginFailureResource
+            ->expects(static::once())
+            ->method('save');
+
+        $event = new AuthenticationFailureEvent($exception, new Response());
+
+        (new LockedUserSubscriber($userRepository, $logLoginFailureResource))->onAuthenticationFailure($event);
     }
 }
