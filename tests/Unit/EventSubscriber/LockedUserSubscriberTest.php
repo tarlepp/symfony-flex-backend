@@ -22,7 +22,10 @@ class LockedUserSubscriberTest extends KernelTestCase
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [
-            'lexik_jwt_authentication.on_authentication_success' => 'onAuthenticationSuccess',
+            'lexik_jwt_authentication.on_authentication_success' => [
+                'onAuthenticationSuccess',
+                128,
+            ],
             'lexik_jwt_authentication.on_authentication_failure' => 'onAuthenticationFailure',
         ];
 

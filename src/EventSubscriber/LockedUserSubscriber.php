@@ -16,12 +16,12 @@ use App\Security\SecurityUser;
 use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use Lexik\Bundle\JWTAuthenticationBundle\Event\Event as LexikBaseEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Component\Security\Core\Exception\LockedException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Throwable;
+use function count;
 use function is_string;
 
 /**
@@ -41,11 +41,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
      * @var LogLoginFailureResource
      */
     private $logLoginFailureResource;
-
-    /**
-     * @var bool
-     */
-    private $reset = true;
 
     /**
      * LockedUserSubscriber constructor.
@@ -80,103 +75,56 @@ class LockedUserSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            Events::AUTHENTICATION_SUCCESS => 'onAuthenticationSuccess',
+            Events::AUTHENTICATION_SUCCESS => [
+                'onAuthenticationSuccess',
+                128,
+            ],
             Events::AUTHENTICATION_FAILURE => 'onAuthenticationFailure',
         ];
     }
 
     /**
-     * Method to increase
-     *
-     * This method is called when '\Lexik\Bundle\JWTAuthenticationBundle\Events::AUTHENTICATION_FAILURE'
-     * event is broadcast.
-     *
-     * @psalm-suppress MissingDependency
-     *
-     * @param AuthenticationFailureEvent $event
+     * @param AuthenticationSuccessEvent $event
      *
      * @throws ORMException
+     */
+    public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
+    {
+        $user = $this->getUser($event->getUser());
+
+        if ($user === null) {
+            throw new UnsupportedUserException('Unsupported user.');
+        }
+
+        if (count($user->getLogsLoginFailure()) > 10) {
+            throw new LockedException('Locked account.');
+        }
+
+        $this->logLoginFailureResource->reset($user);
+    }
+
+    /**
+     * @param AuthenticationFailureEvent $event
+     *
      * @throws Throwable
      */
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
     {
         $token = $event->getException()->getToken();
 
-        if ($token === null) {
-            return;
-        }
+        if ($token !== null) {
+            $user = $this->getUser($token->getUser());
 
-        $user = $this->getUser($token->getUser());
-
-        if ($user instanceof User) {
-            $this->checkLockedAccount($user, $event);
-        }
-    }
-
-    /**
-     * Method to reset login failures for current user.
-     *
-     * This method is called when '\Symfony\Component\Security\Core\Event\AuthenticationEvent::AUTHENTICATION_SUCCESS'
-     * event is broadcast.
-     *
-     * @psalm-suppress MissingDependency
-     *
-     * @param Event $event
-     *
-     * @throws ORMException
-     * @throws Throwable
-     */
-    public function onAuthenticationSuccess(Event $event): void
-    {
-        if ($event instanceof AuthenticationSuccessEvent) {
-            $user = $this->getUser($event->getUser());
-
-            if ($user instanceof User) {
-                $this->checkLockedAccount($user, $event);
+            if ($user !== null) {
+                $this->logLoginFailureResource->save(new LogLoginFailure($user), true);
             }
+
+            $token->setAuthenticated(false);
         }
     }
 
     /**
-     * @psalm-suppress MissingDependency
-     * @psalm-suppress MismatchingDocblockParamType
-     *
-     * @param User                                                                 $user
-     * @param LexikBaseEvent|AuthenticationFailureEvent|AuthenticationSuccessEvent $event
-     *
-     * @throws Throwable
-     */
-    private function checkLockedAccount(User $user, LexikBaseEvent $event): void
-    {
-        if ($event instanceof AuthenticationFailureEvent) {
-            $this->onAuthenticationFailureEvent($user);
-        } elseif ($event instanceof AuthenticationSuccessEvent) {
-            $this->onAuthenticationSuccessEvent($user);
-        }
-    }
-
-    /**
-     * @param User $user
-     *
-     * @throws Throwable
-     */
-    private function onAuthenticationFailureEvent(User $user): void
-    {
-        $this->logLoginFailureResource->save(new LogLoginFailure($user));
-    }
-
-    /**
-     * @param User $user
-     */
-    private function onAuthenticationSuccessEvent(User $user): void
-    {
-        if ($this->reset === true) {
-            $this->logLoginFailureResource->reset($user);
-        }
-    }
-
-    /**
-     * @param string|UserInterface|mixed $user
+     * @param string|object $user
      *
      * @return User|null
      *
@@ -184,12 +132,14 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     private function getUser($user): ?User
     {
+        $output = null;
+
         if (is_string($user)) {
-            $user = $this->userRepository->loadUserByUsername($user);
+            $output = $this->userRepository->loadUserByUsername($user);
         } elseif ($user instanceof SecurityUser) {
-            $user = $this->userRepository->loadUserByUsername($user->getUsername());
+            $output = $this->userRepository->loadUserByUsername($user->getUsername());
         }
 
-        return $user instanceof User ? $user : null;
+        return $output;
     }
 }
