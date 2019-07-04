@@ -18,7 +18,7 @@
         <env name="SHELL_VERBOSITY" value="-1" />
         <env name="APP_ENV" value="test" force="true" />
         <env name="APP_DEBUG" value="0" />
-        <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb"/>
+        <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb" />
 
         <!--
             To make sure that application has no "direct" deprecations we use `max[direct]=0` as a default one
