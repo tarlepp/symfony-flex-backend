@@ -19,7 +19,7 @@ $readableChannel = (string)\getenv('ENV_TEST_CHANNEL_READABLE');
 // Application is started against 'fastest' library, so we need to override database name manually
 if (\strlen($readableChannel) > 0) {
     // Parse current '.env.test' file
-    $variables = (new Dotenv())->parse(\file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $environmentFile));
+    $variables = (new Dotenv(false))->parse(\file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . $environmentFile));
 
     $applicationConfig = JSON::decode(file_get_contents($variables['APPLICATION_CONFIG']), true);
 
