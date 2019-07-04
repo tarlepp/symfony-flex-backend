@@ -99,6 +99,7 @@ endif
 run-tests-php: ## Runs all tests via phpunit (pure PHP)
 	@echo "\033[32mRunning test with PhpUnit in single thread (pure PHP)\033[39m"
 	@php ./vendor/bin/phpunit --version
+	@rm -rf build/logs
 	@mkdir -p build/logs
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
@@ -107,6 +108,7 @@ run-tests-php: ## Runs all tests via phpunit (pure PHP)
 run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
 	@echo "\033[32mRunning test with PhpUnit in single thread (phpdbg)\033[39m"
 	@php ./vendor/bin/phpunit --version
+	@rm -rf build/logs
 	@mkdir -p build/logs
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
@@ -114,6 +116,7 @@ run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
 
 run-tests-fastest-php: ## Runs all test via fastest (pure PHP)
 	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads (pure PHP)\033[39m"
+	@rm -rf build/fastest
 	@mkdir -p build/fastest
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
@@ -121,17 +124,17 @@ run-tests-fastest-php: ## Runs all test via fastest (pure PHP)
 
 run-tests-fastest-phpdbg: ## Runs all test via fastest (phpdbg)
 	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads (phpdbg)\033[39m"
+	@rm -rf build/fastest
 	@mkdir -p build/fastest
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
 	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -o -b "php ./tests/bootstrap_fastest.php" "phpdbg -qrr -d memory_limit=4096M ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
 
-merge-clover: ## Creates clover from fastest run
+report-fastest: ## Creates clover and JUnit xml from fastest run
+	@rm -rf build/logs
+	@mkdir -p build/logs
 	@./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml --html ./build/report/
-
-merge-junit: ## Creates JUnit xml from fastest run
 	@php merge-phpunit-xml.php ./build/fastest/ ./build/logs/junit.xml
-###< phpunit ###
 
 ###> infection ###
 infection: ## Runs Infection to codebase
