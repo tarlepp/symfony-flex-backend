@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\AutoMapper;
 
 use App\DTO\RestDtoInterface;
-use AutoMapperPlus\CustomMapper\CustomMapper;
+use AutoMapperPlus\MapperInterface;
 use InvalidArgumentException;
 use LengthException;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,7 +26,7 @@ use function ucfirst;
  * @package App\AutoMapper
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class RestRequestMapper extends CustomMapper
+abstract class RestRequestMapper implements MapperInterface
 {
     /**
      * Properties to map to destination object.
@@ -38,10 +38,29 @@ abstract class RestRequestMapper extends CustomMapper
     /**
      * @inheritdoc
      *
+     * @param Request|object $source
+     * @param string         $targetClass
+     * @param array          $context
+     *
+     * @return RestDtoInterface
+     */
+    public function map($source, string $targetClass, array $context = []): RestDtoInterface
+    {
+        $destination = new $targetClass();
+
+        return $this->mapToObject($source, $destination, $context);
+    }
+
+    /**
+     * @inheritdoc
+     *
      * @param Request|object          $source
      * @param RestDtoInterface|object $destination
+     * @param array                   $context
+     *
+     * @return RestDtoInterface
      */
-    public function mapToObject($source, $destination)
+    public function mapToObject($source, $destination, array $context = []): RestDtoInterface
     {
         if (!$source instanceof Request) {
             throw new InvalidArgumentException(
