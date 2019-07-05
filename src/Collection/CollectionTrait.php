@@ -64,7 +64,8 @@ trait CollectionTrait
 
     /**
      * @return Traversable
-     * @psalm-return Traversable<array-key, mixed>
+     *
+     * @psalm-return Traversable<int, mixed>
      */
     public function getAll(): Traversable
     {
