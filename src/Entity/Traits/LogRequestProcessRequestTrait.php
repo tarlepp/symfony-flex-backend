@@ -542,7 +542,7 @@ trait LogRequestProcessRequestTrait
 
         // Replace current value
         if (array_key_exists($key, $replacements)) {
-            $value = $this->cleanContent($replacements[$key]);
+            $value = $this->cleanContent((string)$replacements[$key]);
         }
 
         // Recursive call
@@ -570,7 +570,11 @@ trait LogRequestProcessRequestTrait
     private function cleanContent(string $inputContent): string
     {
         $iterator = static function (string $search) use (&$inputContent): void {
-            $inputContent = preg_replace('/(' . $search . '":)\s*"(.*)"/', '$1"*** REPLACED ***"', $inputContent);
+            $inputContent = preg_replace(
+                '/(' . $search . '":)\s*"(.*)"/',
+                '$1"*** REPLACED ***"',
+                (string)$inputContent
+            );
         };
 
         static $replacements = [
@@ -582,6 +586,6 @@ trait LogRequestProcessRequestTrait
 
         array_map($iterator, $replacements);
 
-        return $inputContent;
+        return (string)$inputContent;
     }
 }
