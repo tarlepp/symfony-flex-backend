@@ -384,9 +384,13 @@ class DateDimension implements EntityInterface
      * Returns createdAt.
      *
      * @return DateTime
+     *
+     * @throws Throwable
      */
     public function getCreatedAt(): DateTime
     {
-        return DateTime::createFromFormat('U', (string)$this->getUnixTime(), new DateTimeZone('UTC'));
+        $output = DateTime::createFromFormat('U', (string)$this->getUnixTime(), new DateTimeZone('UTC'));
+
+        return $output === false ? new DateTime('now', new DateTimeZone('UTC')) : $output;
     }
 }
