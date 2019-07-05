@@ -21,10 +21,10 @@ use function sprintf;
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @property Traversable|Traversable<RestResourceInterface> $items
+ * @property Traversable|Traversable<int, RestResourceInterface> $items
  *
- * @method RestResourceInterface                         get(string $className)
- * @method Traversable<array-key, RestResourceInterface> getAll(): Traversable
+ * @method RestResourceInterface                   get(string $className)
+ * @method Traversable<int, RestResourceInterface> getAll(): Traversable
  */
 class Collection
 {
