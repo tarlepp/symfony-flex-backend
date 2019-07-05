@@ -1,0 +1,5 @@
+parameters:
+    excludes_analyse:
+        - %currentWorkingDirectory%/src/Migrations/*
+    symfony:
+        container_xml_path: '%currentWorkingDirectory%/var/cache/dev/srcApp_KernelDevDebugContainer.xml'
