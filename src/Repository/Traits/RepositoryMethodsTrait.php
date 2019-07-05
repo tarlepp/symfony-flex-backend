@@ -97,7 +97,7 @@ trait RepositoryMethodsTrait
      * @param mixed[]      $criteria
      * @param mixed[]|null $orderBy
      *
-     * @return EntityInterface|mixed|null
+     * @return EntityInterface|object|null
      */
     public function findOneBy(array $criteria, ?array $orderBy = null)
     {
@@ -109,12 +109,12 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @param mixed[]       $criteria
-     * @param string[]|null $orderBy
-     * @param int|null      $limit
-     * @param int|null      $offset
+     * @param mixed[]      $criteria
+     * @param mixed[]|null $orderBy
+     * @param int|null     $limit
+     * @param int|null     $offset
      *
-     * @return array<EntityInterface>|EntityInterface[]
+     * @return array<int, EntityInterface>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
@@ -135,7 +135,7 @@ trait RepositoryMethodsTrait
      * @param int|null     $offset
      * @param mixed[]|null $search
      *
-     * @return array<EntityInterface>|EntityInterface[]
+     * @return array<int, EntityInterface>
      *
      * @throws InvalidArgumentException
      */
@@ -167,7 +167,7 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @return array<EntityInterface>|EntityInterface[]
+     * @return array<int, EntityInterface>
      */
     public function findAll(): array
     {
@@ -184,7 +184,7 @@ trait RepositoryMethodsTrait
      * @param mixed[]|null $criteria
      * @param mixed[]|null $search
      *
-     * @return string[]
+     * @return array<int, string>
      *
      * @throws InvalidArgumentException
      */

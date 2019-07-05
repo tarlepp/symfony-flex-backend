@@ -10,7 +10,11 @@ namespace App\Repository;
 
 use App\Entity\EntityInterface;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
+use InvalidArgumentException;
 
 /**
  * Interface BaseRepositoryInterface
@@ -36,7 +40,7 @@ interface BaseRepositoryInterface
      *
      * @return object|null
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function getReference(string $id);
 
@@ -72,46 +76,6 @@ interface BaseRepositoryInterface
     public function createQueryBuilder(?string $alias = null, ?string $indexBy = null): QueryBuilder;
 
     /**
-     * Helper method to persist specified entity to database.
-     *
-     * @param EntityInterface $entity
-     * @param bool|null       $flush
-     *
-     * @return BaseRepositoryInterface
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function save(EntityInterface $entity, ?bool $flush = null): self;
-
-    /**
-     * Helper method to remove specified entity from database.
-     *
-     * @param EntityInterface $entity
-     * @param bool|null       $flush
-     *
-     * @return BaseRepositoryInterface
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
-    public function remove(EntityInterface $entity, ?bool $flush = null): self;
-
-    /**
-     * Generic count method to determine count of entities for specified criteria and search term(s).
-     *
-     * @param mixed[]|null $criteria
-     * @param mixed[]|null $search
-     *
-     * @return int
-     *
-     * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function countAdvanced(?array $criteria = null, ?array $search = null): int;
-
-    /** @noinspection GenericObjectTypeUsageInspection */
-    /**
      * Wrapper for default Doctrine repository find method.
      *
      * @param string   $id
@@ -122,7 +86,6 @@ interface BaseRepositoryInterface
      */
     public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null);
 
-    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Advanced version of find method, with this you can process query as you like, eg. add joins and callbacks to
      * modify / optimize current query.
@@ -130,33 +93,31 @@ interface BaseRepositoryInterface
      * @param string     $id
      * @param string|int $hydrationMode
      *
-     * @return EntityInterface|array|array<EntityInterface>mixed|null
+     * @return array<int|string, mixed>|EntityInterface
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findAdvanced(string $id, $hydrationMode = null);
 
-    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Wrapper for default Doctrine repository findOneBy method.
      *
      * @param mixed[]      $criteria
      * @param mixed[]|null $orderBy
      *
-     * @return EntityInterface|mixed|null
+     * @return EntityInterface|object|null
      */
     public function findOneBy(array $criteria, ?array $orderBy = null);
 
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @param mixed[]       $criteria
-     * @param string[]|null $orderBy
-     * @param int|null      $limit
-     * @param int|null      $offset
+     * @param mixed[]      $criteria
+     * @param mixed[]|null $orderBy
+     * @param int|null     $limit
+     * @param int|null     $offset
      *
-     * @return array<EntityInterface>|EntityInterface[]
+     * @return array<int, EntityInterface>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array;
 
@@ -169,7 +130,9 @@ interface BaseRepositoryInterface
      * @param int|null     $offset
      * @param mixed[]|null $search
      *
-     * @return array<EntityInterface>|EntityInterface[]
+     * @return array<int, EntityInterface>
+     *
+     * @throws InvalidArgumentException
      */
     public function findByAdvanced(
         array $criteria,
@@ -192,9 +155,24 @@ interface BaseRepositoryInterface
      * @param mixed[]|null $criteria
      * @param mixed[]|null $search
      *
-     * @return string[]
+     * @return array<int, string>
+     *
+     * @throws InvalidArgumentException
      */
     public function findIds(?array $criteria = null, ?array $search = null): array;
+
+    /**
+     * Generic count method to determine count of entities for specified criteria and search term(s).
+     *
+     * @param mixed[]|null $criteria
+     * @param mixed[]|null $search
+     *
+     * @return int
+     *
+     * @throws InvalidArgumentException
+     * @throws NonUniqueResultException
+     */
+    public function countAdvanced(?array $criteria = null, ?array $search = null): int;
 
     /**
      * Helper method to 'reset' repository entity table - in other words delete all records - so be carefully with
@@ -203,6 +181,32 @@ interface BaseRepositoryInterface
      * @return int
      */
     public function reset(): int;
+
+    /**
+     * Helper method to persist specified entity to database.
+     *
+     * @param EntityInterface $entity
+     * @param bool|null       $flush
+     *
+     * @return BaseRepositoryInterface
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save(EntityInterface $entity, ?bool $flush = null): self;
+
+    /**
+     * Helper method to remove specified entity from database.
+     *
+     * @param EntityInterface $entity
+     * @param bool|null       $flush
+     *
+     * @return BaseRepositoryInterface
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function remove(EntityInterface $entity, ?bool $flush = null): self;
 
     /**
      * With this method you can attach some custom functions for generic REST API find / count queries.
@@ -216,13 +220,13 @@ interface BaseRepositoryInterface
      *
      * @note Requires processJoins() to be run
      *
-     * @see QueryBuilder::leftJoin() for parameters
-     *
      * @param mixed[] $parameters
      *
      * @return BaseRepositoryInterface
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
+     * @see QueryBuilder::leftJoin() for parameters
      */
     public function addLeftJoin(array $parameters): self;
 
@@ -231,13 +235,13 @@ interface BaseRepositoryInterface
      *
      * @note Requires processJoins() to be run
      *
-     * @see QueryBuilder::innerJoin() for parameters
-     *
      * @param mixed[] $parameters
      *
      * @return BaseRepositoryInterface
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
+     *
+     * @see QueryBuilder::innerJoin() for parameters
      */
     public function addInnerJoin(array $parameters): self;
 
