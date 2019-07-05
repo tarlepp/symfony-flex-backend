@@ -182,7 +182,7 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @return array<EntityInterface>|EntityInterface[]
+     * @return array<int, EntityInterface>
      */
     public function findAll(): array;
 
