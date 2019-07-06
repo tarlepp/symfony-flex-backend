@@ -24,12 +24,14 @@ services:
     _instanceof:
         App\Rest\ControllerInterface:
             tags: [ 'app.rest.controller' ]
+        App\Rest\RestResourceInterface:
+            tags: [ 'app.rest.resource' ]
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests,Kernel.php,EventListener,Migrations,Security/ApiKeyUser.php,Security/UserRepository.php}'
+        exclude: '../src/{Entity,EventListener,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -40,11 +42,6 @@ services:
     App\DataFixtures\:
         resource: '../src/DataFixtures/*'
         tags: [ 'doctrine.fixture.orm' ]
-
-    App\Resource\:
-        resource: '../src/Resource/*'
-        exclude: '../src/Resource/Collection.php'
-        tags: [ 'app.rest.resource' ]
 
     App\Resource\Collection:
         arguments: [ !tagged app.rest.resource ]

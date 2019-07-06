@@ -19,10 +19,10 @@ use Traversable;
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @property Traversable|Traversable<ControllerInterface> $items
+ * @property Traversable|Traversable<int, ControllerInterface> $items
  *
- * @method ControllerInterface                          get(string $className)
- * @method Traversable<array-key, ControllerInterface>  getAll(): Traversable
+ * @method ControllerInterface                   get(string $className)
+ * @method Traversable<int, ControllerInterface> getAll(): Traversable
  */
 class ControllerCollection
 {

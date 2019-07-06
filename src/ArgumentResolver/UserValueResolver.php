@@ -87,12 +87,14 @@ class UserValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argumentMetadata): Generator
     {
-        /** @noinspection NullPointerExceptionInspection */
-        /**
-         * @var SecurityUser
-         * @psalm-suppress PossiblyNullReference
-         */
-        $securityUser = $this->tokenStorage->getToken()->getUser();
+        $token = $this->tokenStorage->getToken();
+
+        if ($token === null) {
+            throw new MissingTokenException('JWT Token not found');
+        }
+
+        /** @var SecurityUser $securityUser */
+        $securityUser = $token->getUser();
 
         yield $this->userResource->findOne($securityUser->getUsername());
     }

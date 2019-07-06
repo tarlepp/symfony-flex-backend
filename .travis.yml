@@ -53,8 +53,6 @@ before_install:
   - if [ -n "$GH_TOKEN" ]; then composer config github-oauth.github.com ${GH_TOKEN}; fi;
 
 install:
-  - pecl channel-update pecl.php.net
-  - pecl install ast-0.1.6
   - COMPOSER_MEMORY_LIMIT=-1 composer install
   - make generate-jwt-keys
 
@@ -74,7 +72,7 @@ script:
   - make phpcs
   - make ecs
   - make psalm
-#  - make phpstan
+  - make phpstan
   - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
   - make run-tests-fastest-php
 #  - make run-tests-fastest

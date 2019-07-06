@@ -13,8 +13,14 @@ use App\Repository\BaseRepositoryInterface;
 use App\Rest\RepositoryHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\ORM\TransactionRequiredException;
+use InvalidArgumentException;
 use function array_map;
 use function array_values;
 
@@ -41,10 +47,10 @@ trait RepositoryMethodsTrait
      *
      * @return EntityInterface|mixed|null
      *
-     * @throws \Doctrine\ORM\TransactionRequiredException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws TransactionRequiredException
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
+     * @throws ORMException
      */
     public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
     {
@@ -57,15 +63,12 @@ trait RepositoryMethodsTrait
      * Advanced version of find method, with this you can process query as you like, eg. add joins and callbacks to
      * modify / optimize current query.
      *
-     * @psalm-suppress LessSpecificImplementedReturnType
-     *
      * @param string     $id
      * @param string|int $hydrationMode
      *
-     * @return mixed|EntityInterface
+     * @return array<int|string, mixed>|EntityInterface
      *
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function findAdvanced(string $id, $hydrationMode = null)
     {
@@ -94,7 +97,7 @@ trait RepositoryMethodsTrait
      * @param mixed[]      $criteria
      * @param mixed[]|null $orderBy
      *
-     * @return EntityInterface|mixed|null
+     * @return EntityInterface|object|null
      */
     public function findOneBy(array $criteria, ?array $orderBy = null)
     {
@@ -106,12 +109,12 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @param mixed[]       $criteria
-     * @param string[]|null $orderBy
-     * @param int|null      $limit
-     * @param int|null      $offset
+     * @param mixed[]      $criteria
+     * @param mixed[]|null $orderBy
+     * @param int|null     $limit
+     * @param int|null     $offset
      *
-     * @return array<EntityInterface>|EntityInterface[]
+     * @return array<int, EntityInterface|object>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
@@ -132,9 +135,9 @@ trait RepositoryMethodsTrait
      * @param int|null     $offset
      * @param mixed[]|null $search
      *
-     * @return array<EntityInterface>|EntityInterface[]
+     * @return array<int, EntityInterface>
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function findByAdvanced(
         array $criteria,
@@ -164,7 +167,7 @@ trait RepositoryMethodsTrait
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @return array<EntityInterface>|EntityInterface[]
+     * @return array<int, EntityInterface|object>
      */
     public function findAll(): array
     {
@@ -181,9 +184,9 @@ trait RepositoryMethodsTrait
      * @param mixed[]|null $criteria
      * @param mixed[]|null $search
      *
-     * @return string[]
+     * @return array<int, string>
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function findIds(?array $criteria = null, ?array $search = null): array
     {
@@ -217,8 +220,8 @@ trait RepositoryMethodsTrait
      *
      * @return int
      *
-     * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws InvalidArgumentException
+     * @throws NonUniqueResultException
      */
     public function countAdvanced(?array $criteria = null, ?array $search = null): int
     {
@@ -268,8 +271,8 @@ trait RepositoryMethodsTrait
      *
      * @return BaseRepositoryInterface
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function save(EntityInterface $entity, ?bool $flush = null): BaseRepositoryInterface
     {
@@ -294,8 +297,8 @@ trait RepositoryMethodsTrait
      *
      * @return BaseRepositoryInterface
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      */
     public function remove(EntityInterface $entity, ?bool $flush = null): BaseRepositoryInterface
     {
@@ -323,7 +326,7 @@ trait RepositoryMethodsTrait
      *
      * @return QueryBuilder
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function getQueryBuilder(
         ?array $criteria = null,

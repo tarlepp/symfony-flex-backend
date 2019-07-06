@@ -436,7 +436,6 @@ trait RestResourceBaseMethods
      */
     protected function getEntity(string $id): EntityInterface
     {
-        /** @var EntityInterface|null $entity */
         $entity = $this->getRepository()->find($id);
 
         $this->checkThatEntityExists(true, $entity);

@@ -43,10 +43,10 @@ make generate-jwt-keys
 chmod 644 /app/config/jwt/private.pem
 
 # Step 5
-./bin/console doctrine:database:create --if-not-exists --no-interaction
+./bin/console doctrine:database:create --no-interaction --if-not-exists
 
 # Step 6
-./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --all-or-nothing
 
 # Step 7
 chmod -R o+s+w /app

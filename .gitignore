@@ -22,6 +22,7 @@ docker-compose.*.yml
 .phpunit.result.cache
 phpunit.xml
 infection.json
+phpstan.neon
 
 /build/
 
