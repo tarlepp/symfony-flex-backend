@@ -157,7 +157,7 @@ class CheckVendorDependencies extends Command
      *
      * @param string[] $directories
      *
-     * @return string[]
+     * @return array<int, array<int, mixed>|string>
      *
      * @throws RuntimeException
      * @throws \Symfony\Component\Process\Exception\RuntimeException
@@ -185,7 +185,7 @@ class CheckVendorDependencies extends Command
                 if ($row === 0) {
                     // We want to add table separator between different libraries
                     if (count($rows) > 0) {
-                        $rows[] = new TableSeparator();
+                        $rows[] = (string)new TableSeparator();
                     }
 
                     $title = basename($directory);
