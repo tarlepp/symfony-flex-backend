@@ -117,7 +117,7 @@ interface BaseRepositoryInterface
      * @param int|null     $limit
      * @param int|null     $offset
      *
-     * @return array<int, EntityInterface>
+     * @return array<int, EntityInterface|object>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array;
 
@@ -145,7 +145,7 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @return array<int, EntityInterface>
+     * @return array<int, EntityInterface|object>
      */
     public function findAll(): array;
 
