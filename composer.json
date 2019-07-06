@@ -100,12 +100,12 @@
 			"cache:warmup": "symfony-cmd"
 		},
 		"post-install-cmd": [
-			"@composer bin all install --ansi",
+			"if test -d vendor/bamarni/composer-bin-plugin; then composer bin all install; fi",
 			"@auto-scripts",
 			"@composer dump-autoload"
 		],
 		"post-update-cmd": [
-			"@composer bin all update --ansi",
+			"if test -d vendor/bamarni/composer-bin-plugin; then composer bin all update; fi",
 			"@auto-scripts",
 			"@composer dump-autoload"
 		]
