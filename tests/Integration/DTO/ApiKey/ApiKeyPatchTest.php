@@ -31,7 +31,7 @@ class ApiKeyPatchTest extends DtoTestCase
             ->setRole(new Role('Role 1'));
 
         $userGroup2 = (new UserGroup())
-            ->setName('Group 1')
+            ->setName('Group 2')
             ->setRole(new Role('Role 2'));
 
         $user = (new ApiKey())
