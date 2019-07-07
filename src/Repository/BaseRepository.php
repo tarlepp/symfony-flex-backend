@@ -58,7 +58,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
      *
-     * @var mixed[]
+     * @var array<string, array<int, string>>
      */
     private static $joins = [
         self::INNER_JOIN => [],
@@ -66,7 +66,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     ];
 
     /**
-     * @var mixed[]
+     * @var array<string, array<int, string>>
      */
     private static $processedJoins = [
         self::INNER_JOIN => [],
@@ -74,12 +74,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
     ];
 
     /**
-     * @var mixed[]
+     * @var array<string, array<int, string>>
      */
     private static $callbacks = [];
 
     /**
-     * @var mixed[]
+     * @var array<string, array<int, string>>
      */
     private static $processedCallbacks = [];
 
@@ -135,7 +135,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @see QueryBuilder::leftJoin() for parameters
      *
-     * @param mixed[] $parameters
+     * @param array<int, string> $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -157,7 +157,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @see QueryBuilder::innerJoin() for parameters
      *
-     * @param mixed[] $parameters
+     * @param array<int, string> $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -182,7 +182,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * Note that every callback will get 'QueryBuilder' as in first parameter.
      *
      * @param callable     $callable
-     * @param mixed[]|null $args
+     * @param array<int, string>|null $args
      *
      * @return BaseRepositoryInterface
      */
@@ -207,8 +207,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected function processJoins(QueryBuilder $queryBuilder): void
     {
         /**
-         * @var string
-         * @var mixed[] $joins
+         * @var string                         $joinType
+         * @var array<int, array<int, string>> $joins
          */
         foreach (self::$joins as $joinType => $joins) {
             foreach ($joins as $joinParameters) {
