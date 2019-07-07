@@ -17,7 +17,6 @@ use function array_values;
 use function count;
 use function explode;
 use function is_array;
-use function mb_strlen;
 use function strpos;
 use function trim;
 
@@ -171,7 +170,7 @@ final class SearchTerm implements SearchTermInterface
     private static function getColumns($column): array
     {
         $filter = static function (string $value): bool {
-            return mb_strlen(trim($value)) > 0;
+            return trim($value) !== '';
         };
 
         // Normalize column and search parameters
@@ -191,7 +190,7 @@ final class SearchTerm implements SearchTermInterface
     private static function getSearchTerms($search): array
     {
         $filter = static function (string $value): bool {
-            return mb_strlen(trim($value)) > 0;
+            return trim($value) !== '';
         };
 
         return array_unique(
