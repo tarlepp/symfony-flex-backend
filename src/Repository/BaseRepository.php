@@ -135,7 +135,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @see QueryBuilder::leftJoin() for parameters
      *
-     * @param array<int, string> $parameters
+     * @param array<int, mixed> $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -157,7 +157,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @see QueryBuilder::innerJoin() for parameters
      *
-     * @param array<int, string> $parameters
+     * @param array<int, mixed> $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -181,8 +181,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * Note that every callback will get 'QueryBuilder' as in first parameter.
      *
-     * @param callable     $callable
-     * @param array<int, string>|null $args
+     * @param callable               $callable
+     * @param array<int, mixed>|null $args
      *
      * @return BaseRepositoryInterface
      */
