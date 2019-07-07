@@ -26,21 +26,21 @@ interface RolesServiceInterface
     /**
      * RolesHelper constructor.
      *
-     * @param mixed[] $rolesHierarchy This is a 'security.role_hierarchy.roles' parameter value
+     * @param array<string, array<int, string>> $rolesHierarchy
      */
     public function __construct(array $rolesHierarchy);
 
     /**
      * Getter for role hierarchy.
      *
-     * @return mixed[]
+     * @return array<string, array<int, string>>
      */
     public function getHierarchy(): array;
 
     /**
      * Getter method to return all roles in single dimensional array.
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getRoles(): array;
 
@@ -63,9 +63,9 @@ interface RolesServiceInterface
     public function getShort(string $role): string;
 
     /**
-     * @param string[] $roles
+     * @param array<int, string> $roles
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getInheritedRoles(array $roles): array;
 }
