@@ -207,7 +207,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected function processJoins(QueryBuilder $queryBuilder): void
     {
         /**
-         * @var string                         $joinType
+         * @var string
          * @var array<int, array<int, string>> $joins
          */
         foreach (self::$joins as $joinType => $joins) {
