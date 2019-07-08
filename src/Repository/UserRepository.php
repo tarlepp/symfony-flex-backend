@@ -103,8 +103,6 @@ class UserRepository extends BaseRepository
      * @link http://symfony2-document.readthedocs.org/en/latest/cookbook/security/entity_provider.html
      *       #managing-roles-in-the-database
      *
-     * @psalm-suppress ImplementedReturnTypeMismatch
-     *
      * @param string $username The username
      *
      * @return Entity|null
@@ -113,6 +111,7 @@ class UserRepository extends BaseRepository
      */
     public function loadUserByUsername($username): ?Entity
     {
+        /** @var array<string, Entity|null> $cache */
         static $cache = [];
 
         if (!array_key_exists($username, $cache) || $this->environment === 'test') {
@@ -127,7 +126,12 @@ class UserRepository extends BaseRepository
                 ->setParameter('email', $username)
                 ->getQuery();
 
-            $cache[$username] = $query->getOneOrNullResult() ?? false;
+            // phpcs:disable
+            /** @var Entity|null $result */
+            $result = $query->getOneOrNullResult();
+
+            $cache[$username] = $result;
+            // phpcs:enable
         }
 
         return $cache[$username] instanceof Entity ? $cache[$username] : null;

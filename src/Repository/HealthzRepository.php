@@ -56,10 +56,8 @@ class HealthzRepository extends BaseRepository
             ->setMaxResults(1)
             ->getQuery();
 
-        /** @var Entity|null $result */
-        $result = $query->getOneOrNullResult();
-
-        return $result;
+        /** @var Entity|null */
+        return $query->getOneOrNullResult();
     }
 
     /**
