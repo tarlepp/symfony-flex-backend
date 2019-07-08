@@ -57,13 +57,13 @@ abstract class EnumType extends Type
      * @param mixed            $value
      * @param AbstractPlatform $platform
      *
-     * @return mixed
+     * @return string
      *
      * @throws InvalidArgumentException
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
-        $value = parent::convertToDatabaseValue($value, $platform);
+        $value = (string)parent::convertToDatabaseValue($value, $platform);
 
         if (!in_array($value, static::$values, true)) {
             $message = sprintf(
