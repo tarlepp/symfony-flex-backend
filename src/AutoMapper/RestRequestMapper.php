@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use function array_filter;
 use function count;
 use function get_class;
+use function gettype;
+use function is_object;
 use function method_exists;
 use function sprintf;
 use function ucfirst;
@@ -38,6 +40,8 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * @inheritdoc
      *
+     * @param array|object            $source
+     * @param string                  $targetClass
      * @param array|array<int, mixed> $context
      *
      * @return RestDtoInterface
@@ -52,12 +56,23 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * @inheritdoc
      *
+     * @param array|object            $source
+     * @param object                  $destination
      * @param array|array<int, mixed> $context
      *
      * @return RestDtoInterface
      */
     public function mapToObject($source, $destination, array $context = []): RestDtoInterface
     {
+        if (!is_object($source)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'RestRequestMapper expects that $source is Request object, "%s" provided',
+                    gettype($source)
+                )
+            );
+        }
+
         if (!$source instanceof Request) {
             throw new InvalidArgumentException(
                 sprintf(
