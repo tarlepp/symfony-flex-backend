@@ -14,6 +14,7 @@ use InvalidArgumentException;
 use function array_map;
 use function implode;
 use function in_array;
+use function is_string;
 use function sprintf;
 
 /**
@@ -63,7 +64,7 @@ abstract class EnumType extends Type
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
-        $value = (string)parent::convertToDatabaseValue($value, $platform);
+        $value = (string)parent::convertToDatabaseValue(is_string($value) ? $value : '', $platform);
 
         if (!in_array($value, static::$values, true)) {
             $message = sprintf(
