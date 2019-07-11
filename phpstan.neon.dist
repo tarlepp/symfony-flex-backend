@@ -1,4 +1,5 @@
 parameters:
+    inferPrivatePropertyTypeFromConstructor: true
     excludes_analyse:
         - %currentWorkingDirectory%/src/Migrations/*
     symfony:
