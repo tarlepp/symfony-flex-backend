@@ -31,7 +31,7 @@ use function array_map;
 class ApiKey extends RestDto
 {
     /**
-     * @var mixed[]
+     * @var array<string, string>
      */
     protected static $mappings = [
         'userGroups' => 'updateUserGroups',
@@ -51,7 +51,7 @@ class ApiKey extends RestDto
     protected $token;
 
     /**
-     * @var UserGroupEntity[]
+     * @var array<int, UserGroupEntity>
      *
      * @AppAssert\EntityReferenceExists()
      */
@@ -110,7 +110,7 @@ class ApiKey extends RestDto
     }
 
     /**
-     * @param UserGroupEntity[] $userGroups
+     * @param array<int, UserGroupEntity> $userGroups
      *
      * @return ApiKey
      */
@@ -136,7 +136,11 @@ class ApiKey extends RestDto
             $this->id = $entity->getId();
             $this->token = $entity->getToken();
             $this->description = $entity->getDescription();
-            $this->userGroups = $entity->getUserGroups()->toArray();
+
+            /** @var array<int, UserGroupEntity> $userGroups */
+            $userGroups = $entity->getUserGroups()->toArray();
+
+            $this->userGroups = $userGroups;
         }
 
         return $this;
