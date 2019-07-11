@@ -78,7 +78,7 @@ class User extends RestDto
     protected $email = '';
 
     /**
-     * @var array<int, UserGroupEntity>
+     * @var UserGroupEntity[]|array<int, UserGroupEntity>
      *
      * @AppAssert\EntityReferenceExists()
      */

@@ -51,7 +51,7 @@ class ApiKey extends RestDto
     protected $token;
 
     /**
-     * @var array<int, UserGroupEntity>
+     * @var UserGroupEntity[]|array<int, UserGroupEntity>
      *
      * @AppAssert\EntityReferenceExists()
      */
