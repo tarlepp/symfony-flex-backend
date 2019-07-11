@@ -88,8 +88,13 @@ class ProfileController
         // Get serializer groups for current user instance
         $groups = $this->getSerializationGroupsForUser();
 
+        /** @var array<string, string|array> $output */
         $output = JSON::decode($serializer->serialize($user, 'json', ['groups' => $groups]), true);
-        $output['roles'] = $rolesService->getInheritedRoles($output['roles']);
+
+        /** @var array<int, string> $roles */
+        $roles = $output['roles'];
+
+        $output['roles'] = $rolesService->getInheritedRoles($roles);
 
         return new JsonResponse($output);
     }

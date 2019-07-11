@@ -498,7 +498,7 @@ class UserController extends Controller
     ): JsonResponse {
         $status = $status ?? 200;
 
-        static $groups = [
+        $groups = [
             'groups' => [
                 'UserGroup',
                 'UserGroup.role',
