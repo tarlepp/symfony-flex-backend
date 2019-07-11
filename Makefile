@@ -183,7 +183,7 @@ phpinsights: ## Runs PHP Insights
 psalm: ## Runs Psalm static analysis tool
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json
+	@php ./vendor/bin/psalm --no-cache --shepherd --stats --report=./build/psalm.json
 ###< psalm ###
 
 ###> phpstan ###

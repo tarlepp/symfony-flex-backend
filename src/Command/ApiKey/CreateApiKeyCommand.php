@@ -17,10 +17,13 @@ use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
 use App\Resource\UserGroupResource;
 use App\Security\RolesService;
+use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
 /**
  * Class CreateApiKeyCommand
@@ -34,7 +37,7 @@ class CreateApiKeyCommand extends Command
     use ApiKeyUserManagementHelperTrait;
 
     /**
-     * @var mixed[]
+     * @var array<int, array<string, int|string>>
      */
     private static $commandParameters = [
         [
@@ -82,7 +85,7 @@ class CreateApiKeyCommand extends Command
      * @param RolesService      $rolesService
      * @param RoleRepository    $roleRepository
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(
         ApiKeyHelper $apiKeyHelper,
@@ -119,6 +122,8 @@ class CreateApiKeyCommand extends Command
      */
     protected function configure(): void
     {
+        parent::configure();
+
         HelperConfigure::configure($this, self::$commandParameters);
     }
 
@@ -131,12 +136,7 @@ class CreateApiKeyCommand extends Command
      *
      * @return int|null null or 0 if everything went fine, or an error code
      *
-     * @throws \Exception
-     * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -146,8 +146,11 @@ class CreateApiKeyCommand extends Command
         // Check that user group(s) exists
         $this->checkUserGroups($output, $input->isInteractive());
 
+        /** @var FormHelper $helper */
+        $helper = $this->getHelper('form');
+
         /** @var ApiKey $dto */
-        $dto = $this->getHelper('form')->interactUsingForm(ApiKeyType::class, $input, $output);
+        $dto = $helper->interactUsingForm(ApiKeyType::class, $input, $output);
 
         // Create new API key
         /** @var ApiKeyEntity $apiKey */
@@ -171,10 +174,7 @@ class CreateApiKeyCommand extends Command
      * @param OutputInterface $output
      * @param bool            $interactive
      *
-     * @throws \Exception
-     * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
+     * @throws Throwable
      */
     private function checkUserGroups(OutputInterface $output, bool $interactive): void
     {

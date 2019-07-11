@@ -25,8 +25,8 @@ use function array_map;
 class HelperConfigure
 {
     /**
-     * @param Command                   $command
-     * @param array<string, int|string> $parameters
+     * @param Command                               $command
+     * @param array<int, array<string, int|string>> $parameters
      *
      * @throws InvalidArgumentException
      */

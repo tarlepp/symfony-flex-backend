@@ -13,9 +13,12 @@ use App\DTO\ApiKey\ApiKey as ApiKeyDto;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Form\Type\Console\ApiKeyType;
 use App\Resource\ApiKeyResource;
+use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Class EditApiKeyCommand
@@ -44,7 +47,7 @@ class EditApiKeyCommand extends Command
      * @param ApiKeyResource $apiKeyResource
      * @param ApiKeyHelper   $apiKeyHelper
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
@@ -65,10 +68,7 @@ class EditApiKeyCommand extends Command
      *
      * @return int|null
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Component\Console\Exception\LogicException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -76,6 +76,7 @@ class EditApiKeyCommand extends Command
 
         // Get API key entity
         $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to edit?');
+        $message = null;
 
         if ($apiKey instanceof ApiKeyEntity) {
             $message = $this->updateApiKey($input, $output, $apiKey);
@@ -97,10 +98,7 @@ class EditApiKeyCommand extends Command
      *
      * @return mixed[]
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Component\Console\Exception\LogicException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws Throwable
      */
     private function updateApiKey(InputInterface $input, OutputInterface $output, ApiKeyEntity $apiKey): array
     {
@@ -108,13 +106,11 @@ class EditApiKeyCommand extends Command
         $dtoLoaded = new ApiKeyDto();
         $dtoLoaded->load($apiKey);
 
+        /** @var FormHelper $helper */
+        $helper = $this->getHelper('form');
+
         /** @var ApiKeyDto $dtoEdit */
-        $dtoEdit = $this->getHelper('form')->interactUsingForm(
-            ApiKeyType::class,
-            $input,
-            $output,
-            ['data' => $dtoLoaded]
-        );
+        $dtoEdit = $helper->interactUsingForm(ApiKeyType::class, $input, $output, ['data' => $dtoLoaded]);
 
         // Update API key
         $this->apiKeyResource->update($apiKey->getId(), $dtoEdit);
