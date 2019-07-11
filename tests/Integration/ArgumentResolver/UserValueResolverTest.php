@@ -109,6 +109,24 @@ class UserValueResolverTest extends KernelTestCase
     /**
      * @throws Throwable
      */
+    public function testThatResolveThrowsAnExceptionIfTokenIsNotPresent(): void
+    {
+        $this->expectException(MissingTokenException::class);
+        $this->expectExceptionMessage('JWT Token not found');
+
+        /**
+         * @var MockObject|UserResource $userResource
+         */
+        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+
+        (new UserValueResolver(new TokenStorage(), $userResource))
+            ->resolve(new Request(), new ArgumentMetadata('foo', null, false, false, null))
+            ->current();
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function testThatResolveCallsExpectedResourceMethod(): void
     {
         /** @var MockObject|UserResource $userResource */
