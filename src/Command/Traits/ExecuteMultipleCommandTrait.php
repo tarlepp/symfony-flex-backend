@@ -29,7 +29,7 @@ use function array_values;
 trait ExecuteMultipleCommandTrait
 {
     /**
-     * @var array<int, string>
+     * @var array<int|string, string>
      */
     private $choices = [];
 
@@ -41,7 +41,7 @@ trait ExecuteMultipleCommandTrait
     /**
      * Setter method for choices to use.
      *
-     * @param array<int, string> $choices
+     * @param array<int|string, string> $choices
      */
     protected function setChoices(array $choices): void
     {
