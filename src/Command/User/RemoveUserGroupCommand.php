@@ -11,8 +11,6 @@ namespace App\Command\User;
 use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
