@@ -110,11 +110,13 @@ trait UserRelations
     /**
      * Getter for roles.
      *
+     * @psalm-return array<int, string>
+     *
      * @Groups({
      *      "User.roles",
      *  })
      *
-     * @return array<int, string>
+     * @return string[]
      */
     public function getRoles(): array
     {
