@@ -14,8 +14,10 @@ use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use Closure;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use function array_map;
 use function implode;
 use function sprintf;
@@ -41,7 +43,7 @@ class ListUserGroupsCommand extends Command
      *
      * @param UserGroupResource $userGroupResource
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(UserGroupResource $userGroupResource)
     {
@@ -60,12 +62,14 @@ class ListUserGroupsCommand extends Command
      * @param OutputInterface $output
      *
      * @return int|null
+     *
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
-        static $headers = [
+        $headers = [
             'Id',
             'Name',
             'Role',
@@ -82,6 +86,8 @@ class ListUserGroupsCommand extends Command
      * Getter method for formatted user group rows for console table.
      *
      * @return mixed[]
+     *
+     * @throws Throwable
      */
     private function getRows(): array
     {
@@ -96,30 +102,22 @@ class ListUserGroupsCommand extends Command
      */
     private function getFormatterUserGroup(): Closure
     {
-        return function (UserGroup $userGroup): array {
-            return [
-                $userGroup->getId(),
-                $userGroup->getName(),
-                $userGroup->getRole()->getId(),
-                implode(",\n", $userGroup->getUsers()->map($this->getFormatterUser())->toArray()),
-            ];
-        };
-    }
-
-    /**
-     * Getter method for user formatter closure. This closure will format single User entity for console table.
-     *
-     * @return Closure
-     */
-    private function getFormatterUser(): Closure
-    {
-        return static function (User $user): string {
+        $userFormatter = static function (User $user): string {
             return sprintf(
                 '%s %s <%s>',
                 $user->getFirstName(),
                 $user->getLastName(),
                 $user->getEmail()
             );
+        };
+
+        return static function (UserGroup $userGroup) use ($userFormatter): array {
+            return [
+                $userGroup->getId(),
+                $userGroup->getName(),
+                $userGroup->getRole()->getId(),
+                implode(",\n", $userGroup->getUsers()->map($userFormatter)->toArray()),
+            ];
         };
     }
 }

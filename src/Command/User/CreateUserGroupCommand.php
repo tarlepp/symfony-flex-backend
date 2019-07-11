@@ -14,11 +14,15 @@ use App\DTO\UserGroup\UserGroupCreate as UserGroupDto;
 use App\Form\Type\Console\UserGroupType;
 use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
+use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 
 /**
  * Class CreateUserGroupCommand
@@ -32,7 +36,7 @@ class CreateUserGroupCommand extends Command
     use SymfonyStyleTrait;
 
     /**
-     * @var mixed[]
+     * @var array<int, array<string, int|string>>
      */
     private static $commandParameters = [
         [
@@ -61,7 +65,7 @@ class CreateUserGroupCommand extends Command
      * @param UserGroupResource $userGroupResource
      * @param RoleRepository    $roleRepository
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(UserGroupResource $userGroupResource, RoleRepository $roleRepository)
     {
@@ -76,10 +80,12 @@ class CreateUserGroupCommand extends Command
     /**
      * Configures the current command.
      *
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     protected function configure(): void
     {
+        parent::configure();
+
         HelperConfigure::configure($this, self::$commandParameters);
     }
 
@@ -87,17 +93,12 @@ class CreateUserGroupCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface  $input  An InputInterface instance
+     * @param InputInterface $input An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
      * @return int|null null or 0 if everything went fine, or an error code
      *
-     * @throws \Exception
-     * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -106,8 +107,11 @@ class CreateUserGroupCommand extends Command
         // Check that roles exists
         $this->checkRoles($output, $input->isInteractive(), $io);
 
+        /** @var FormHelper $helper */
+        $helper = $this->getHelper('form');
+
         /** @var UserGroupDto $dto */
-        $dto = $this->getHelper('form')->interactUsingForm(UserGroupType::class, $input, $output);
+        $dto = $helper->interactUsingForm(UserGroupType::class, $input, $output);
 
         // Create new user group
         $this->userGroupResource->create($dto);
@@ -127,10 +131,7 @@ class CreateUserGroupCommand extends Command
      * @param bool            $interactive
      * @param SymfonyStyle    $io
      *
-     * @throws \Exception
-     * @throws \InvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
+     * @throws Throwable
      */
     private function checkRoles(OutputInterface $output, bool $interactive, SymfonyStyle $io): void
     {

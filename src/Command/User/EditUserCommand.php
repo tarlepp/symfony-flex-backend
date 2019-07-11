@@ -13,9 +13,12 @@ use App\DTO\User\UserPatch as UserDto;
 use App\Entity\User as UserEntity;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserResource;
+use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Class EditUserCommand
@@ -44,7 +47,7 @@ class EditUserCommand extends Command
      * @param UserResource $userResource
      * @param UserHelper   $userHelper
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(UserResource $userResource, UserHelper $userHelper)
     {
@@ -65,10 +68,7 @@ class EditUserCommand extends Command
      *
      * @return int|null
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Symfony\Component\Console\Exception\LogicException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -76,6 +76,7 @@ class EditUserCommand extends Command
 
         // Get user entity
         $user = $this->userHelper->getUser($io, 'Which user you want to edit?');
+        $message = null;
 
         if ($user instanceof UserEntity) {
             $message = $this->updateUser($input, $output, $user);
@@ -91,16 +92,13 @@ class EditUserCommand extends Command
     /**
      * Method to update specified user entity via specified form.
      *
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
-     * @param UserEntity      $user
+     * @param UserEntity $user
      *
      * @return string
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     private function updateUser(InputInterface $input, OutputInterface $output, UserEntity $user): string
     {
@@ -108,13 +106,11 @@ class EditUserCommand extends Command
         $dtoLoaded = new UserDto();
         $dtoLoaded->load($user);
 
+        /** @var FormHelper $helper */
+        $helper = $this->getHelper('form');
+
         /** @var UserDto $dtoEdit */
-        $dtoEdit = $this->getHelper('form')->interactUsingForm(
-            UserType::class,
-            $input,
-            $output,
-            ['data' => $dtoLoaded]
-        );
+        $dtoEdit = $helper->interactUsingForm(UserType::class, $input, $output, ['data' => $dtoLoaded]);
 
         // Update user
         $this->userResource->update($user->getId(), $dtoEdit);
