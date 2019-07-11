@@ -69,7 +69,7 @@ class UTCDateTimeType extends DateTimeType
         } elseif ($value !== null) {
             $converted = DateTime::createFromFormat(
                 $platform->getDateTimeFormatString(),
-                $value,
+                (string)$value,
                 $this->getUtcDateTimeZone()
             );
 
