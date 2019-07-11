@@ -236,7 +236,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      "ApiKey.roles",
      *  })
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getRoles(): array
     {
