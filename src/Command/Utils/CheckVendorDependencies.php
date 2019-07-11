@@ -28,6 +28,7 @@ use function array_unshift;
 use function basename;
 use function count;
 use function implode;
+use function is_array;
 use function iterator_to_array;
 use function sort;
 use function sprintf;
@@ -184,7 +185,7 @@ class CheckVendorDependencies extends Command
                 // First row of current library
                 if ($row === 0) {
                     // We want to add table separator between different libraries
-                    if (count($rows) > 0) {
+                    if (count((array)$rows) > 0) {
                         $rows[] = new TableSeparator();
                     }
 
@@ -245,7 +246,13 @@ class CheckVendorDependencies extends Command
             throw new RuntimeException($message);
         }
 
-        return json_decode($process->getOutput(), false)->installed ?? [];
+        /** @var stdClass $decoded */
+        $decoded = json_decode($process->getOutput(), false);
+
+        /** @var array<int, stdClass>|string|null $installed */
+        $installed = $decoded->installed;
+
+        return is_array($installed) ? $installed : [];
     }
 
     /**
