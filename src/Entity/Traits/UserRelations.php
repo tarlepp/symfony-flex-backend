@@ -20,6 +20,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use function array_unique;
+use function array_values;
 
 /**
  * Class UserRelations
@@ -113,7 +114,7 @@ trait UserRelations
      *      "User.roles",
      *  })
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getRoles(): array
     {
@@ -136,7 +137,7 @@ trait UserRelations
             $output = $this->rolesService->getInheritedRoles($output);
         }
 
-        return array_map('\strval', array_unique($output));
+        return array_values(array_map('\strval', array_unique($output)));
     }
 
     /**

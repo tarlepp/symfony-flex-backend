@@ -22,6 +22,7 @@ use Throwable;
 use function array_map;
 use function array_merge;
 use function array_unique;
+use function array_values;
 use function mb_strlen;
 use function random_int;
 
@@ -251,12 +252,14 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
             return $userGroup->getRole()->getId();
         };
 
-        return array_map(
-            '\strval',
-            array_unique(
-                array_merge(
-                    [RolesService::ROLE_API],
-                    $this->userGroups->map($iterator)->toArray()
+        return array_values(
+            array_map(
+                '\strval',
+                array_unique(
+                    array_merge(
+                        [RolesService::ROLE_API],
+                        $this->userGroups->map($iterator)->toArray()
+                    )
                 )
             )
         );
