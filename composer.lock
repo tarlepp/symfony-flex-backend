@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a21f62a4d839d71aaf93e6a3eac8934e",
+    "content-hash": "e74a25444789d45f3fb8d42d655f7cf1",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3835,16 +3835,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.4.1",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "a388cacccf6e3c5e5a395e020c5aa05849ea4ccc"
+                "reference": "c949d59794cbbc21e6f886597a5e29c7a7864f00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/a388cacccf6e3c5e5a395e020c5aa05849ea4ccc",
-                "reference": "a388cacccf6e3c5e5a395e020c5aa05849ea4ccc",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/c949d59794cbbc21e6f886597a5e29c7a7864f00",
+                "reference": "c949d59794cbbc21e6f886597a5e29c7a7864f00",
                 "shasum": ""
             },
             "require": {
@@ -3880,7 +3880,7 @@
                 }
             ],
             "description": "Composer plugin for Symfony",
-            "time": "2019-06-28T18:01:09+00:00"
+            "time": "2019-07-11T14:56:17+00:00"
         },
         {
             "name": "symfony/form",
