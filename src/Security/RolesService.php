@@ -11,6 +11,7 @@ namespace App\Security;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use function array_key_exists;
 use function array_unique;
+use function array_values;
 use function mb_strpos;
 use function mb_strtolower;
 use function mb_substr;
@@ -119,6 +120,6 @@ class RolesService implements RolesServiceInterface
      */
     public function getInheritedRoles(array $roles): array
     {
-        return array_unique((new RoleHierarchy($this->rolesHierarchy))->getReachableRoleNames($roles));
+        return array_values(array_unique((new RoleHierarchy($this->rolesHierarchy))->getReachableRoleNames($roles)));
     }
 }
