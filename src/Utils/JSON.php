@@ -103,6 +103,10 @@ class JSON
         $depth = $depth ?? 512;
         $options = $options ?? 0;
 
+        /**
+         * @psalm-suppress MixedAssignment
+         * @psalm-var stdClass|bool|int|float|string|array<mixed, mixed> $output
+         */
         $output = json_decode($json, $assoc, $depth, $options);
 
         self::handleError();

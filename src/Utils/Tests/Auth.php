@@ -129,6 +129,7 @@ class Auth
         );
 
         // Read current cache
+        /** @var array<string, string> $cache */
         $cache = (array)JSON::decode((string)file_get_contents($filename), true);
 
         // Create hash for username + password
@@ -170,7 +171,10 @@ class Auth
                 );
             }
 
-            $cache[$hash] = JSON::decode($response->getContent())->token;
+            /** @var object $payload */
+            $payload = JSON::decode($response->getContent());
+
+            $cache[$hash] = property_exists($payload, 'token') ? (string)$payload->token  : '';
         }
 
         // And finally store cache for later usage
