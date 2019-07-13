@@ -52,11 +52,13 @@ trait RepositoryMethodsTrait
      * @throws ORMInvalidArgumentException
      * @throws ORMException
      */
-    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->getEntityManager()
+        /** @var EntityInterface|null $output */
+        $output = $this->getEntityManager()
             ->find($this->getEntityName(), $id, $lockMode, $lockVersion);
+
+        return $output;
     }
 
     /**

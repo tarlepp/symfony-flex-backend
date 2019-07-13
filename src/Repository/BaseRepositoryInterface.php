@@ -84,7 +84,7 @@ interface BaseRepositoryInterface
      *
      * @return EntityInterface|null
      */
-    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null);
+    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface;
 
     /**
      * Advanced version of find method, with this you can process query as you like, eg. add joins and callbacks to
