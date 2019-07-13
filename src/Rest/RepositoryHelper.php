@@ -80,8 +80,8 @@ class RepositoryHelper
      * @see \App\Rest\Repository::getExpression
      * @see \App\Controller\Rest::processCriteria
      *
-     * @param QueryBuilder $queryBuilder
-     * @param mixed[]|null $criteria
+     * @param QueryBuilder                               $queryBuilder
+     * @param array|array<int|string, string|array>|null $criteria
      *
      * @throws InvalidArgumentException
      */
@@ -298,7 +298,7 @@ class RepositoryHelper
      * @param string $column
      * @param mixed  $value
      *
-     * @return mixed[]
+     * @return array|array<int, string|array>
      */
     private static function createCriteria(string $column, $value): array
     {
@@ -374,7 +374,7 @@ class RepositoryHelper
     }
 
     /**
-     * @param mixed[] $condition
+     * @param array|array<int|string, string|array> $condition
      *
      * @return Closure
      */
@@ -383,15 +383,15 @@ class RepositoryHelper
         /**
          * @psalm-suppress MissingClosureParamType
          *
-         * @param string|array|mixed $value
-         * @param string|int         $column
+         * @param string|array $value
+         * @param string       $column
          */
-        return static function ($value, $column) use (&$condition): void {
+        return static function ($value, string $column) use (&$condition): void {
             // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
             if (strcmp($column, 'and') === 0 || strcmp($column, 'or') === 0) {
                 $condition[$column] = $value;
             } else { // Add condition
-                $condition[] = self::createCriteria(is_numeric($column) ? (int)$column : $column, $value);
+                $condition[] = self::createCriteria($column, $value);
             }
         };
     }
