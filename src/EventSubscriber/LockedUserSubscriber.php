@@ -90,6 +90,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
+        /** @var User|null $user */
         $user = $this->getUser($event->getUser());
 
         if ($user === null) {

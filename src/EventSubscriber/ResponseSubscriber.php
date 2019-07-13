@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Utils\JSON;
+use stdClass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -70,6 +71,9 @@ class ResponseSubscriber implements EventSubscriberInterface
      */
     private function getApiVersion(): string
     {
-        return JSON::decode((string)file_get_contents(__DIR__ . '/../../composer.json'))->version ?? 'unknown';
+        /** @var stdClass $data */
+        $data = JSON::decode((string)file_get_contents(__DIR__ . '/../../composer.json'));
+
+        return property_exists($data, 'version') ? (string)$data->version : 'unknown';
     }
 }

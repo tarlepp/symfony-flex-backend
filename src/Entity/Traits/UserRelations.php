@@ -148,7 +148,7 @@ trait UserRelations
     /**
      * Getter for user request log collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
+     * @return Collection|ArrayCollection|Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
     public function getLogsRequest()
     {
@@ -158,7 +158,7 @@ trait UserRelations
     /**
      * Getter for user login log collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
+     * @return Collection|ArrayCollection|Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
      */
     public function getLogsLogin()
     {
@@ -168,7 +168,7 @@ trait UserRelations
     /**
      * Getter for user login failure log collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
+     * @return Collection|ArrayCollection|Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
      */
     public function getLogsLoginFailure()
     {
