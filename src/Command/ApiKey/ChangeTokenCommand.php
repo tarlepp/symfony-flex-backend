@@ -12,10 +12,10 @@ use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Class ChangeTokenCommand
@@ -65,10 +65,7 @@ class ChangeTokenCommand extends Command
      *
      * @return int|null
      *
-     * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -76,6 +73,7 @@ class ChangeTokenCommand extends Command
 
         // Get API key entity
         $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key token you want to change?');
+        $message = null;
 
         if ($apiKey instanceof ApiKeyEntity) {
             $message = $this->changeApiKeyToken($apiKey);
@@ -95,8 +93,7 @@ class ChangeTokenCommand extends Command
      *
      * @return mixed[]
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     private function changeApiKeyToken(ApiKeyEntity $apiKey): array
     {

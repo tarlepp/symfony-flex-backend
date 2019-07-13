@@ -58,7 +58,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
      *
-     * @var mixed[]
+     * @var array<string, array<int, mixed>>
      */
     private static $joins = [
         self::INNER_JOIN => [],
@@ -66,7 +66,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     ];
 
     /**
-     * @var mixed[]
+     * @var array<string, array<int, mixed>>
      */
     private static $processedJoins = [
         self::INNER_JOIN => [],
@@ -74,12 +74,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
     ];
 
     /**
-     * @var mixed[]
+     * @var array<int, array<int, mixed|callable>>
      */
     private static $callbacks = [];
 
     /**
-     * @var mixed[]
+     * @var array<int, string>
      */
     private static $processedCallbacks = [];
 
@@ -135,7 +135,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @see QueryBuilder::leftJoin() for parameters
      *
-     * @param mixed[] $parameters
+     * @param array<int, mixed> $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -157,7 +157,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * @see QueryBuilder::innerJoin() for parameters
      *
-     * @param mixed[] $parameters
+     * @param array<int, mixed> $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -181,8 +181,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
      *
      * Note that every callback will get 'QueryBuilder' as in first parameter.
      *
-     * @param callable     $callable
-     * @param mixed[]|null $args
+     * @param callable               $callable
+     * @param array<int, mixed>|null $args
      *
      * @return BaseRepositoryInterface
      */
@@ -192,7 +192,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
         $hash = sha1(serialize(array_merge([spl_object_hash((object)$callable)], $args)));
 
         if (!in_array($hash, self::$processedCallbacks, true)) {
-            self::$callbacks[$hash] = [$callable, $args];
+            self::$callbacks[] = [$callable, $args];
             self::$processedCallbacks[] = $hash;
         }
 
@@ -208,7 +208,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         /**
          * @var string
-         * @var mixed[] $joins
+         * @var array<int, array<int, mixed>> $joins
          */
         foreach (self::$joins as $joinType => $joins) {
             foreach ($joins as $joinParameters) {

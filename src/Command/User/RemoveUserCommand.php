@@ -12,8 +12,10 @@ use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\User;
 use App\Resource\UserResource;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Class RemoveUserCommand
@@ -42,7 +44,7 @@ class RemoveUserCommand extends Command
      * @param UserResource $userResource
      * @param UserHelper   $userHelper
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(UserResource $userResource, UserHelper $userHelper)
     {
@@ -63,8 +65,7 @@ class RemoveUserCommand extends Command
      *
      * @return int|null
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -72,6 +73,7 @@ class RemoveUserCommand extends Command
 
         // Get user entity
         $user = $this->userHelper->getUser($io, 'Which user you want to remove?');
+        $message = null;
 
         if ($user instanceof User) {
             // Delete user

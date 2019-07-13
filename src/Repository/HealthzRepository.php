@@ -12,6 +12,9 @@ use App\Entity\Healthz as Entity;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
+use Doctrine\ORM\NonUniqueResultException;
+use Exception;
+use Throwable;
 
 /**
  * Class HealthzRepository
@@ -42,7 +45,7 @@ class HealthzRepository extends BaseRepository
      *
      * @return Entity|null
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function read(): ?Entity
     {
@@ -53,6 +56,7 @@ class HealthzRepository extends BaseRepository
             ->setMaxResults(1)
             ->getQuery();
 
+        /** @var Entity|null */
         return $query->getOneOrNullResult();
     }
 
@@ -61,9 +65,7 @@ class HealthzRepository extends BaseRepository
      *
      * @return Entity
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws Throwable
      */
     public function create(): Entity
     {
@@ -81,7 +83,7 @@ class HealthzRepository extends BaseRepository
      *
      * @return int
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function cleanup(): int
     {

@@ -14,6 +14,7 @@ use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Class RemoveApiKeyCommand
@@ -58,13 +59,12 @@ class RemoveApiKeyCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int|null
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -72,6 +72,7 @@ class RemoveApiKeyCommand extends Command
 
         // Get API key entity
         $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to remove?');
+        $message = null;
 
         if ($apiKey instanceof ApiKeyEntity) {
             // Delete API key

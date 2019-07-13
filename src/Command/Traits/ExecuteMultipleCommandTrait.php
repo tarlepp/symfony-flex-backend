@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 use function array_flip;
 use function array_search;
 use function array_values;
@@ -28,7 +29,7 @@ use function array_values;
 trait ExecuteMultipleCommandTrait
 {
     /**
-     * @var mixed[]
+     * @var array<int|string, string>
      */
     private $choices = [];
 
@@ -40,7 +41,7 @@ trait ExecuteMultipleCommandTrait
     /**
      * Setter method for choices to use.
      *
-     * @param mixed[] $choices
+     * @param array<int|string, string> $choices
      */
     protected function setChoices(array $choices): void
     {
@@ -56,8 +57,7 @@ trait ExecuteMultipleCommandTrait
      *
      * @return int|null
      *
-     * @throws \Exception
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
@@ -95,6 +95,8 @@ trait ExecuteMultipleCommandTrait
             true
         );
 
-        return array_values(array_flip($this->choices))[(int)$index];
+        $choice = (string)array_values(array_flip($this->choices))[(int)$index];
+
+        return $choice === '0' ? false : $choice;
     }
 }

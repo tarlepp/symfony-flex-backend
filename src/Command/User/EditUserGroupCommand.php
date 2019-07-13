@@ -13,9 +13,12 @@ use App\DTO\UserGroup\UserGroupPatch as UserGroupDto;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Form\Type\Console\UserGroupType;
 use App\Resource\UserGroupResource;
+use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Class EditUserGroupCommand
@@ -44,7 +47,7 @@ class EditUserGroupCommand extends Command
      * @param UserGroupResource $userGroupResource
      * @param UserHelper        $userHelper
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(UserGroupResource $userGroupResource, UserHelper $userHelper)
     {
@@ -65,16 +68,14 @@ class EditUserGroupCommand extends Command
      *
      * @return int|null
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Component\Console\Exception\LogicException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
         $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to edit?');
+        $message = null;
 
         if ($userGroup instanceof UserGroupEntity) {
             $message = $this->updateUserGroup($input, $output, $userGroup);
@@ -96,10 +97,7 @@ class EditUserGroupCommand extends Command
      *
      * @return string
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Symfony\Component\Console\Exception\LogicException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
+     * @throws Throwable
      */
     protected function updateUserGroup(
         InputInterface $input,
@@ -110,13 +108,11 @@ class EditUserGroupCommand extends Command
         $dtoLoaded = new UserGroupDto();
         $dtoLoaded->load($userGroup);
 
-        /** @var UserGroupDto $dtoLoaded */
-        $dtoEdit = $this->getHelper('form')->interactUsingForm(
-            UserGroupType::class,
-            $input,
-            $output,
-            ['data' => $dtoLoaded]
-        );
+        /** @var FormHelper $helper */
+        $helper = $this->getHelper('form');
+
+        /** @var UserGroupDto $dtoEdit */
+        $dtoEdit = $helper->interactUsingForm(UserGroupType::class, $input, $output, ['data' => $dtoLoaded]);
 
         // Update user group
         $this->userGroupResource->update($userGroup->getId(), $dtoEdit);

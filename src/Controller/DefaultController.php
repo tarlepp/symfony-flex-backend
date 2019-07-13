@@ -11,6 +11,7 @@ namespace App\Controller;
 use App\Rest\ResponseHandler;
 use App\Utils\HealthzService;
 use App\Utils\JSON;
+use stdClass;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -119,6 +120,7 @@ class DefaultController
      */
     public function versionAction(): JsonResponse
     {
+        /** @var stdClass $composerData */
         $composerData = JSON::decode((string)file_get_contents(__DIR__ . '/../../composer.json'));
 
         $data = [

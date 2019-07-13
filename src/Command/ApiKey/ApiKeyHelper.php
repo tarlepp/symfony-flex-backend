@@ -9,11 +9,11 @@ declare(strict_types = 1);
 namespace App\Command\ApiKey;
 
 use App\Entity\ApiKey as ApiKeyEntity;
-use App\Entity\EntityInterface;
 use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
 use Closure;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 use function array_map;
 use function implode;
 use function sprintf;
@@ -53,13 +53,16 @@ class ApiKeyHelper
      * changes to API keys.
      *
      * @param SymfonyStyle $io
-     * @param string       $question
+     * @param string $question
      *
      * @return ApiKeyEntity|null
+     *
+     * @throws Throwable
      */
     public function getApiKey(SymfonyStyle $io, string $question): ?ApiKeyEntity
     {
         $apiKeyFound = false;
+        $apiKeyEntity = null;
 
         while ($apiKeyFound !== true) {
             /** @var ApiKeyEntity|null $apiKeyEntity */
@@ -92,7 +95,7 @@ class ApiKeyHelper
      * @param string       $message
      * @param ApiKeyEntity $apiKey
      *
-     * @return mixed[]
+     * @return array<int, string>
      */
     public function getApiKeyMessage(string $message, ApiKeyEntity $apiKey): array
     {
@@ -110,11 +113,13 @@ class ApiKeyHelper
      * Method to list ApiKeys where user can select desired one.
      *
      * @param SymfonyStyle $io
-     * @param string       $question
+     * @param string $question
      *
-     * @return ApiKeyEntity|EntityInterface|null
+     * @return ApiKeyEntity|null
+     *
+     * @throws Throwable
      */
-    private function getApiKeyEntity(SymfonyStyle $io, string $question): ?EntityInterface
+    private function getApiKeyEntity(SymfonyStyle $io, string $question): ?ApiKeyEntity
     {
         $choices = [];
         $iterator = $this->getApiKeyIterator($choices);
@@ -123,7 +128,7 @@ class ApiKeyHelper
 
         $choices['Exit'] = 'Exit command';
 
-        return $this->apiKeyResource->findOne($io->choice($question, $choices));
+        return $this->apiKeyResource->findOne((string)$io->choice($question, $choices));
     }
 
     /**

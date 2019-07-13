@@ -1,9 +1,6 @@
 parameters:
+    inferPrivatePropertyTypeFromConstructor: true
     excludes_analyse:
         - %currentWorkingDirectory%/src/Migrations/*
     symfony:
         container_xml_path: '%currentWorkingDirectory%/var/cache/dev/srcApp_KernelDevDebugContainer.xml'
-    ignoreErrors:
-        -
-            message: '/Parameter #2 \$orderBy */'
-            path: %currentWorkingDirectory%/src/Repository/Traits/RepositoryMethodsTrait.php

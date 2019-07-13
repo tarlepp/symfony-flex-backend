@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use function array_filter;
 use function count;
 use function get_class;
+use function gettype;
+use function is_object;
 use function method_exists;
 use function sprintf;
 use function ucfirst;
@@ -31,14 +33,16 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * Properties to map to destination object.
      *
-     * @var string[]
+     * @var array<int, string>
      */
     protected static $properties = [];
 
     /**
      * @inheritdoc
      *
-     * @param array $context
+     * @param array|object            $source
+     * @param string                  $targetClass
+     * @param array|array<int, mixed> $context
      *
      * @return RestDtoInterface
      */
@@ -52,12 +56,23 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * @inheritdoc
      *
-     * @param array $context
+     * @param array|object            $source
+     * @param object                  $destination
+     * @param array|array<int, mixed> $context
      *
      * @return RestDtoInterface
      */
     public function mapToObject($source, $destination, array $context = []): RestDtoInterface
     {
+        if (!is_object($source)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'RestRequestMapper expects that $source is Request object, "%s" provided',
+                    gettype($source)
+                )
+            );
+        }
+
         if (!$source instanceof Request) {
             throw new InvalidArgumentException(
                 sprintf(
@@ -100,9 +115,11 @@ abstract class RestRequestMapper implements MapperInterface
             $setter = 'set' . ucfirst($property);
             $transformer = 'transform' . ucfirst($property);
 
+            /** @var int|string|array|null $value */
             $value = $request->request->get($property);
 
             if (method_exists($this, $transformer)) {
+                /** @var int|string|object|array|null $value */
                 $value = $this->{$transformer}($value);
             }
 
@@ -115,7 +132,7 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * @param Request $request
      *
-     * @return array
+     * @return array<int, string>
      */
     private function getValidProperties(Request $request): array
     {

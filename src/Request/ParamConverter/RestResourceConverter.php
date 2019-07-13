@@ -12,6 +12,7 @@ use App\Resource\Collection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Throwable;
 
 /** @noinspection AnnotationMissingUseInspection */
 /** @noinspection PhpUndefinedClassInspection */
@@ -69,8 +70,7 @@ class RestResourceConverter implements ParamConverterInterface
      *
      * @return bool True if the object has been successfully set, else false
      *
-     * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws Throwable
      */
     public function apply(Request $request, ParamConverter $configuration): bool
     {

@@ -220,7 +220,7 @@ interface BaseRepositoryInterface
      *
      * @note Requires processJoins() to be run
      *
-     * @param mixed[] $parameters
+     * @param array<int, mixed> $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -235,7 +235,7 @@ interface BaseRepositoryInterface
      *
      * @note Requires processJoins() to be run
      *
-     * @param mixed[] $parameters
+     * @param array<int, mixed> $parameters
      *
      * @return BaseRepositoryInterface
      *
@@ -254,8 +254,8 @@ interface BaseRepositoryInterface
      *
      * Note that every callback will get 'QueryBuilder' as in first parameter.
      *
-     * @param callable     $callable
-     * @param mixed[]|null $args
+     * @param callable               $callable
+     * @param array<int, mixed>|null $args
      *
      * @return BaseRepositoryInterface
      */

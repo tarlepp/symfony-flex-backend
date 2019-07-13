@@ -34,7 +34,7 @@ use function array_map;
 class User extends RestDto
 {
     /**
-     * @var mixed[]
+     * @var array<string, string>
      */
     protected static $mappings = [
         'password' => 'updatePassword',
@@ -78,7 +78,7 @@ class User extends RestDto
     protected $email = '';
 
     /**
-     * @var UserGroupEntity[]
+     * @var UserGroupEntity[]|array<int, UserGroupEntity>
      *
      * @AppAssert\EntityReferenceExists()
      */
@@ -188,7 +188,7 @@ class User extends RestDto
     }
 
     /**
-     * @param UserGroupEntity[] $userGroups
+     * @param array<int, UserGroupEntity> $userGroups
      *
      * @return User
      */
@@ -240,7 +240,11 @@ class User extends RestDto
             $this->firstName = $entity->getFirstName();
             $this->lastName = $entity->getLastName();
             $this->email = $entity->getEmail();
-            $this->userGroups = $entity->getUserGroups()->toArray();
+
+            /** @var array<int, UserGroupEntity> $userGroups */
+            $userGroups = $entity->getUserGroups()->toArray();
+
+            $this->userGroups = $userGroups;
         }
 
         return $this;

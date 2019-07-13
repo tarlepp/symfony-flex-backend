@@ -14,9 +14,11 @@ use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
 use Closure;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 use function array_map;
 use function implode;
 use function sprintf;
@@ -50,7 +52,7 @@ class ListApiKeysCommand extends Command
      * @param ApiKeyResource $apiKeyResource
      * @param RolesService   $rolesService
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
     {
@@ -66,17 +68,19 @@ class ListApiKeysCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int|null
+     *
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->io->write("\033\143");
 
-        static $headers = [
+        $headers = [
             'Id',
             'Token',
             'Description',
@@ -94,6 +98,8 @@ class ListApiKeysCommand extends Command
      * Getter method for formatted API key rows for console table.
      *
      * @return mixed[]
+     *
+     * @throws Throwable
      */
     private function getRows(): array
     {
@@ -108,31 +114,22 @@ class ListApiKeysCommand extends Command
      */
     private function getFormatterApiKey(): Closure
     {
-        return function (ApiKey $apiToken): array {
-            return [
-                $apiToken->getId(),
-                $apiToken->getToken(),
-                $apiToken->getDescription(),
-                implode(",\n", $apiToken->getUserGroups()->map($this->getFormatterUserGroup())->toArray()),
-                implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
-            ];
-        };
-    }
-
-    /**
-     * Getter method for user group formatter closure. This closure will format single UserGroup entity for console
-     * table.
-     *
-     * @return Closure
-     */
-    private function getFormatterUserGroup(): Closure
-    {
-        return static function (UserGroup $userGroup): string {
+        $userGroupFormatter = static function (UserGroup $userGroup): string {
             return sprintf(
                 '%s (%s)',
                 $userGroup->getName(),
                 $userGroup->getRole()->getId()
             );
+        };
+
+        return function (ApiKey $apiToken) use ($userGroupFormatter): array {
+            return [
+                $apiToken->getId(),
+                $apiToken->getToken(),
+                $apiToken->getDescription(),
+                implode(",\n", $apiToken->getUserGroups()->map($userGroupFormatter)->toArray()),
+                implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
+            ];
         };
     }
 }

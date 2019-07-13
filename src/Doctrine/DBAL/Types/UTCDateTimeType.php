@@ -38,17 +38,17 @@ class UTCDateTimeType extends DateTimeType
      * @param mixed            $value    The value to convert.
      * @param AbstractPlatform $platform The currently used database platform.
      *
-     * @return mixed The database representation of the value.
+     * @return string The database representation of the value.
      *
      * @throws ConversionException
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
         if ($value instanceof DateTime) {
             $value->setTimezone($this->getUtcDateTimeZone());
         }
 
-        return parent::convertToDatabaseValue($value, $platform);
+        return (string)parent::convertToDatabaseValue($value, $platform);
     }
 
     /**
@@ -69,13 +69,11 @@ class UTCDateTimeType extends DateTimeType
         } elseif ($value !== null) {
             $converted = DateTime::createFromFormat(
                 $platform->getDateTimeFormatString(),
-                $value,
+                (string)$value,
                 $this->getUtcDateTimeZone()
             );
 
-            $this->checkConvertedValue($value, $platform, $converted);
-
-            $value = $converted;
+            $value = $this->checkConvertedValue((string)$value, $platform, $converted);
         }
 
         return parent::convertToPHPValue($value, $platform);
@@ -110,16 +108,18 @@ class UTCDateTimeType extends DateTimeType
     /**
      * Method to check if conversion was successfully or not.
      *
-     * @param mixed            $value
+     * @param string           $value
      * @param AbstractPlatform $platform
      * @param DateTime|bool    $converted
      *
+     * @return DateTime
+     *
      * @throws ConversionException
      */
-    private function checkConvertedValue($value, AbstractPlatform $platform, $converted): void
+    private function checkConvertedValue(string $value, AbstractPlatform $platform, $converted): DateTime
     {
         if ($converted instanceof DateTime) {
-            return;
+            return $converted;
         }
 
         throw ConversionException::conversionFailedFormat(

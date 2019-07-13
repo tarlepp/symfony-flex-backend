@@ -11,6 +11,7 @@ namespace App\Security;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use function array_key_exists;
 use function array_unique;
+use function array_values;
 use function mb_strpos;
 use function mb_strtolower;
 use function mb_substr;
@@ -26,12 +27,12 @@ class RolesService implements RolesServiceInterface
     /**
      * Roles hierarchy.
      *
-     * @var mixed[]
+     * @var array<string, array<int, string>>
      */
     private $rolesHierarchy;
 
     /**
-     * @var mixed[]
+     * @var array<string, string>
      */
     private static $roleNames = [
         self::ROLE_LOGGED => 'Logged in users',
@@ -44,7 +45,7 @@ class RolesService implements RolesServiceInterface
     /**
      * RolesHelper constructor.
      *
-     * @param mixed[] $rolesHierarchy This is a 'security.role_hierarchy.roles' parameter value
+     * @param array<string, array<int, string>> $rolesHierarchy
      */
     public function __construct(array $rolesHierarchy)
     {
@@ -54,7 +55,7 @@ class RolesService implements RolesServiceInterface
     /**
      * Getter for role hierarchy.
      *
-     * @return mixed[]
+     * @return array<string, array<int, string>>
      */
     public function getHierarchy(): array
     {
@@ -64,7 +65,7 @@ class RolesService implements RolesServiceInterface
     /**
      * Getter method to return all roles in single dimensional array.
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getRoles(): array
     {
@@ -113,12 +114,12 @@ class RolesService implements RolesServiceInterface
     /**
      * Helper method to get inherited roles for given roles.
      *
-     * @param string[] $roles
+     * @param array<int, string> $roles
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getInheritedRoles(array $roles): array
     {
-        return array_unique((new RoleHierarchy($this->rolesHierarchy))->getReachableRoleNames($roles));
+        return array_values(array_unique((new RoleHierarchy($this->rolesHierarchy))->getReachableRoleNames($roles)));
     }
 }

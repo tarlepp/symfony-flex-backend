@@ -12,8 +12,10 @@ use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Class RemoveUserGroupCommand
@@ -42,7 +44,7 @@ class RemoveUserGroupCommand extends Command
      * @param UserGroupResource $userGroupResource
      * @param UserHelper        $userHelper
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(UserGroupResource $userGroupResource, UserHelper $userHelper)
     {
@@ -63,14 +65,14 @@ class RemoveUserGroupCommand extends Command
      *
      * @return int|null
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
         $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to remove?');
+        $message = null;
 
         if ($userGroup instanceof UserGroup) {
             // Delete user group

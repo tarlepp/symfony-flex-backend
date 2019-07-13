@@ -37,7 +37,7 @@ final class ResponseHandler implements ResponseHandlerInterface
     /**
      * Content types for supported response output formats.
      *
-     * @var mixed[]
+     * @var array<string, string>
      */
     private $contentTypes = [
         self::FORMAT_JSON => 'application/json',
@@ -126,7 +126,7 @@ final class ResponseHandler implements ResponseHandlerInterface
      *
      * @return Response
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     public function createResponse(
         Request $request,
@@ -154,7 +154,7 @@ final class ResponseHandler implements ResponseHandlerInterface
      *
      * @param FormInterface $form
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     public function handleFormError(FormInterface $form): void
     {
@@ -227,7 +227,7 @@ final class ResponseHandler implements ResponseHandlerInterface
      *
      * @return Response
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     private function getResponse($data, int $httpStatus, string $format, array $context): Response
     {

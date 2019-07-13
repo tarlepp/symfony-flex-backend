@@ -17,6 +17,7 @@ use Closure;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use function array_map;
 use function sprintf;
+use Throwable;
 
 /**
  * Class UserHelper
@@ -53,13 +54,16 @@ class UserHelper
      * changes to users.
      *
      * @param SymfonyStyle $io
-     * @param string       $question
+     * @param string $question
      *
      * @return UserEntity|null
+     *
+     * @throws Throwable
      */
     public function getUser(SymfonyStyle $io, string $question): ?UserEntity
     {
         $userFound = false;
+        $userEntity = null;
 
         while ($userFound !== true) {
             /** @var UserEntity|null $userEntity */
@@ -80,13 +84,16 @@ class UserHelper
      * changes to user groups.
      *
      * @param SymfonyStyle $io
-     * @param string       $question
+     * @param string $question
      *
      * @return UserGroupEntity|null
+     *
+     * @throws Throwable
      */
     public function getUserGroup(SymfonyStyle $io, string $question): ?UserGroupEntity
     {
         $userGroupFound = false;
+        $userGroupEntity = null;
 
         while ($userGroupFound !== true) {
             /** @var UserGroupEntity|null $userGroupEntity */
@@ -106,9 +113,11 @@ class UserHelper
      * Method to get User entity. Within this user will be asked which User entity he/she wants to process with.
      *
      * @param SymfonyStyle $io
-     * @param string       $question
+     * @param string $question
      *
      * @return UserEntity|EntityInterface|null
+     *
+     * @throws Throwable
      */
     private function getUserEntity(SymfonyStyle $io, string $question): ?EntityInterface
     {
@@ -119,7 +128,7 @@ class UserHelper
 
         $choices['Exit'] = 'Exit command';
 
-        return $this->userResource->findOne($io->choice($question, $choices));
+        return $this->userResource->findOne((string)$io->choice($question, $choices));
     }
 
     /**
@@ -127,9 +136,11 @@ class UserHelper
      * with.
      *
      * @param SymfonyStyle $io
-     * @param string       $question
+     * @param string $question
      *
      * @return UserGroupEntity|EntityInterface|null
+     *
+     * @throws Throwable
      */
     private function getUserGroupEntity(SymfonyStyle $io, string $question): ?EntityInterface
     {
@@ -140,13 +151,13 @@ class UserHelper
 
         $choices['Exit'] = 'Exit command';
 
-        return $this->userGroupResource->findOne($io->choice($question, $choices));
+        return $this->userGroupResource->findOne((string)$io->choice($question, $choices));
     }
 
     /**
      * Getter method for user formatter closure. This closure will format single User entity for choice list.
      *
-     * @param mixed[] $choices
+     * @param array<int, string> $choices
      *
      * @return Closure
      */

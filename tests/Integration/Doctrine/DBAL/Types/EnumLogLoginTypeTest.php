@@ -89,6 +89,7 @@ class EnumLogLoginTypeTest extends KernelTestCase
         yield [''];
         yield [' '];
         yield ['foobar'];
+        yield [[]];
         yield [new stdClass()];
     }
 
