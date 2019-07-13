@@ -45,7 +45,7 @@ trait RepositoryMethodsTrait
      * @param int|null $lockMode
      * @param int|null $lockVersion
      *
-     * @return EntityInterface|mixed|null
+     * @return EntityInterface|null
      *
      * @throws TransactionRequiredException
      * @throws OptimisticLockException
