@@ -120,18 +120,11 @@ trait UserRelations
      */
     public function getRoles(): array
     {
-        /**
-         * Lambda iterator to get user group role information.
-         *
-         * @param UserGroup $userGroup
-         *
-         * @return string
-         */
         $iterator = static function (UserGroup $userGroup): string {
             return $userGroup->getRole()->getId();
         };
 
-        // Determine base roles
+        /** @var array<int, string> $output */
         $output = $this->userGroups->map($iterator)->toArray();
 
         // And if we have roles service present we can fetch all inherited roles

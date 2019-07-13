@@ -470,7 +470,7 @@ trait LogRequestProcessRequestTrait
         $this->path = $request->getPathInfo();
         $this->queryString = $request->getRequestUri();
         $this->uri = $request->getUri();
-        $this->controller = $request->get('_controller', '');
+        $this->controller = (string)$request->get('_controller', '');
         $this->contentType = strval($request->getMimeType($request->getContentType() ?? ''));
         $this->contentTypeShort = (string)$request->getContentType();
         $this->xmlHttpRequest = $request->isXmlHttpRequest();
@@ -483,7 +483,7 @@ trait LogRequestProcessRequestTrait
      */
     private function determineAction(Request $request): string
     {
-        $rawAction = $request->get('_controller', '');
+        $rawAction = (string)$request->get('_controller', '');
         $rawAction = explode(strpos($rawAction, '::') ? '::' : ':', $rawAction);
 
         return $rawAction[1] ?? '';
@@ -509,6 +509,7 @@ trait LogRequestProcessRequestTrait
         if ($rawContent) {
             // First try to convert content to array from JSON
             try {
+                /** @var array<string, mixed> $output */
                 $output = JSON::decode($rawContent, true);
             } /** @noinspection BadExceptionsProcessingInspection */ catch (LogicException $error) {
                 // Oh noes content isn't JSON so just parse it
@@ -573,11 +574,11 @@ trait LogRequestProcessRequestTrait
             $inputContent = (string)preg_replace(
                 '/(' . $search . '":)\s*"(.*)"/',
                 '$1"*** REPLACED ***"',
-                $inputContent
+                (string)$inputContent
             );
         };
 
-        static $replacements = [
+        $replacements = [
             'password',
             'token',
             'authorization',
