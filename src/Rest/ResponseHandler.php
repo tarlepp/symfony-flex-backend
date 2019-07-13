@@ -79,7 +79,11 @@ final class ResponseHandler implements ResponseHandlerInterface
      */
     public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array
     {
-        // Specify used populate settings
+        /**
+         * Specify used populate settings
+         *
+         * @var array<int, string> $populate
+         */
         $populate = (array)$request->get('populate', []);
 
         $groups = array_merge(['default', $populate]);
