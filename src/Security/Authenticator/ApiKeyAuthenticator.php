@@ -158,13 +158,10 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider): ?ApiKeyUserInterface
     {
+        /** @var string|null $apiToken */
         $apiToken = is_array($credentials) ? $credentials[self::CREDENTIAL_KEY] ?? null : null;
 
-        if ($apiToken === null) {
-            return null;
-        }
-
-        return $this->apiKeyUserProvider->loadUserByUsername($apiToken);
+        return $apiToken === null ? null : $this->apiKeyUserProvider->loadUserByUsername($apiToken);
     }
 
     /**
@@ -185,13 +182,14 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user): bool
     {
+        /** @var string|null $apiToken */
         $apiToken = is_array($credentials) ? $credentials[self::CREDENTIAL_KEY] ?? null : null;
 
         if ($apiToken === null) {
             throw new AuthenticationException('Invalid token');
         }
 
-        return $this->apiKeyUserProvider->getApiKeyForToken((string)$apiToken) instanceof ApiKey;
+        return $this->apiKeyUserProvider->getApiKeyForToken($apiToken) instanceof ApiKey;
     }
 
     /**
