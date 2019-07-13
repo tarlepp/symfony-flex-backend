@@ -39,8 +39,8 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param EntityInterface|mixed  $value      The value that should be validated
-     * @param Constraint|UniqueEmail $constraint The constraint for the validation
+     * @param EntityInterface|Proxy|array<int, EntityInterface|Proxy>|mixed $value The value that should be validated
+     * @param Constraint $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint): void
     {
@@ -48,18 +48,24 @@ class EntityReferenceExistsValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, __NAMESPACE__ . '\EntityReferenceExists');
         }
 
-        $this->check($this->normalize($value));
+        /** @var array<int, EntityInterface|Proxy> $values */
+        $values = $this->normalize($value);
+
+        $this->check($values);
     }
 
     /**
-     * @param EntityInterface|mixed $input
+     * Checks if the passed value is valid.
      *
-     * @return array
+     * @param EntityInterface|Proxy|array<int, EntityInterface|Proxy>|mixed $input The value that should be validated
+     *
+     * @return array<mixed, mixed>
      */
     private function normalize($input): array
     {
         $values = is_array($input) ? $input : [$input];
 
+        /** @var Proxy|EntityInterface $value */
         foreach ($values as $value) {
             if (!$value instanceof Proxy) {
                 throw new UnexpectedValueException($value, Proxy::class);
@@ -74,7 +80,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     }
 
     /**
-     * @param array $entities
+     * @param array<int, EntityInterface|Proxy> $entities
      */
     private function check(array $entities): void
     {
@@ -86,10 +92,13 @@ class EntityReferenceExistsValidator extends ConstraintValidator
                 : EntityReferenceExists::MESSAGE_MULTIPLE;
             $entity = get_class($entities[0]);
 
+            $parameterEntity = str_replace('Proxies\\__CG__\\', '', $entity);
+            $parameterId = count($invalidIds) > 1 ? implode('", "', $invalidIds) : (string)$invalidIds[0];
+
             $this->context
                 ->buildViolation($message)
-                ->setParameter('{{ entity }}', str_replace('Proxies\\__CG__\\', '', $entity))
-                ->setParameter('{{ id }}', count($invalidIds) > 1 ? implode('", "', $invalidIds) : $invalidIds[0])
+                ->setParameter('{{ entity }}', $parameterEntity)
+                ->setParameter('{{ id }}', $parameterId)
                 ->setCode(EntityReferenceExists::ENTITY_REFERENCE_EXISTS_ERROR)
                 ->addViolation();
         }
