@@ -63,13 +63,17 @@ final class SearchTerm implements SearchTermInterface
      * @param string   $operand
      * @param int      $mode
      *
-     * @return mixed[]|null
+     * @return array<string, array<string, array>>|null
      */
     private static function createCriteria(array $columns, array $searchTerms, string $operand, int $mode): ?array
     {
         $iteratorTerm = self::getTermIterator($columns, $mode);
 
-        // Get criteria
+        /**
+         * Get criteria
+         *
+         * @var array<string, array<string, array>> $criteria
+         */
         $criteria = array_filter(array_map($iteratorTerm, $searchTerms));
 
         // Initialize output
