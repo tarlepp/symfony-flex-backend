@@ -42,8 +42,8 @@ trait RestActionBase
     abstract public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
 
     /**
-     * @param Request $request
-     * @param array   $allowedHttpMethods
+     * @param Request                  $request
+     * @param array|array<int, string> $allowedHttpMethods
      *
      * @return RestResourceInterface
      *
