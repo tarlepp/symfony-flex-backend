@@ -36,7 +36,7 @@ class UserType extends AbstractType
     /**
      * Base form fields
      *
-     * @var mixed[]
+     * @var array<int, array<int, mixed>>
      */
     private static $formFields = [
         [
