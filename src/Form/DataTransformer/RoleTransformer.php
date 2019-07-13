@@ -12,6 +12,7 @@ use App\Entity\Role;
 use App\Resource\RoleResource;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Throwable;
 
 /**
  * Class RoleTransformer
@@ -56,20 +57,23 @@ class RoleTransformer implements DataTransformerInterface
      * @return Role|null
      *
      * @throws TransformationFailedException if object (issue) is not found.
+     * @throws Throwable
      */
     public function reverseTransform($roleName): ?Role
     {
+        $role = null;
+
         if ($roleName !== null) {
-            $role = $this->resource->findOne($roleName);
+            $role = $this->resource->findOne((string)$roleName, false);
 
             if ($role === null) {
                 throw new TransformationFailedException(\sprintf(
                     'Role with name "%s" does not exist!',
-                    $roleName
+                    (string)$roleName
                 ));
             }
         }
 
-        return $role ?? null;
+        return $role;
     }
 }
