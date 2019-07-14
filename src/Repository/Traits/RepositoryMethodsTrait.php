@@ -54,9 +54,10 @@ trait RepositoryMethodsTrait
      */
     public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
-        /** @var EntityInterface|null */
-        return $this->getEntityManager()
+        $output = $this->getEntityManager()
             ->find($this->getEntityName(), $id, $lockMode, $lockVersion);
+
+        return $output instanceof EntityInterface ? $output : null;
     }
 
     /**
