@@ -438,7 +438,9 @@ trait RestResourceBaseMethods
     {
         $entity = $this->getRepository()->find($id);
 
-        $this->checkThatEntityExists(true, $entity);
+        if ($entity === null) {
+            throw new NotFoundHttpException('Not found');
+        }
 
         return $entity;
     }

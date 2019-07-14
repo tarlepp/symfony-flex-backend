@@ -49,7 +49,9 @@ class UniqueUsernameValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!$this->repository->isUsernameAvailable($value->getUsername(), $value->getId())) {
+        if ($value instanceof UserInterface
+            && !$this->repository->isUsernameAvailable($value->getUsername(), $value->getId())
+        ) {
             $this->context
                 ->buildViolation(UniqueUsername::MESSAGE)
                 ->setCode(UniqueUsername::IS_UNIQUE_USERNAME_ERROR)

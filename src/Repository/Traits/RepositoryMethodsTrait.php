@@ -45,18 +45,19 @@ trait RepositoryMethodsTrait
      * @param int|null $lockMode
      * @param int|null $lockVersion
      *
-     * @return EntityInterface|mixed|null
+     * @return EntityInterface|null
      *
      * @throws TransactionRequiredException
      * @throws OptimisticLockException
      * @throws ORMInvalidArgumentException
      * @throws ORMException
      */
-    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->getEntityManager()
+        $output = $this->getEntityManager()
             ->find($this->getEntityName(), $id, $lockMode, $lockVersion);
+
+        return $output instanceof EntityInterface ? $output : null;
     }
 
     /**

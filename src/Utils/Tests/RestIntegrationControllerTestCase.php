@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
-use App\Rest\ControllerInterface;
+use App\Rest\Controller;
 use ReflectionClass;
 use ReflectionException;
 use function gc_collect_cycles;
@@ -25,17 +25,19 @@ use function sprintf;
 abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 {
     /**
-     * @var ControllerInterface|mixed
+     * @var Controller
      */
     protected $controller;
 
     /**
      * @var string
+     * @psalm-var class-string
      */
     protected $controllerClass;
 
     /**
      * @var string
+     * @psalm-var class-string
      */
     protected $resourceClass;
 
@@ -48,7 +50,10 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 
         parent::setUp();
 
-        $this->controller = $this->getContainer()->get($this->controllerClass);
+        /** @var Controller $controller */
+        $controller = $this->getContainer()->get($this->controllerClass);
+
+        $this->controller = $controller;
     }
 
     /**

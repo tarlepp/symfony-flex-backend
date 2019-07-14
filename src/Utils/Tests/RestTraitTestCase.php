@@ -519,13 +519,16 @@ abstract class RestTraitTestCase extends WebTestCase
     }
 
     /**
-     * @param Generator $users
-     * @param mixed[] $methods
+     * @param Generator                      $users
+     * @param array<int, array<int, string>> $methods
      *
      * @return Generator
      */
     private function createDataForTest(Generator $users, array $methods): Generator
     {
+        /**
+         * @var array<int, string>
+         */
         foreach ($users as $userData) {
             foreach ($methods as $method) {
                 yield array_merge($userData, $method);

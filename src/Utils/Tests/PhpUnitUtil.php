@@ -83,6 +83,7 @@ class PhpUnitUtil
         $dir = new RecursiveDirectoryIterator($folder);
         $ite = new RecursiveIteratorIterator($dir);
 
+        /** @var array<int, string> $files */
         $files = new RegexIterator($ite, $pattern, RegexIterator::GET_MATCH);
         $fileList = [];
 
@@ -96,7 +97,7 @@ class PhpUnitUtil
     /**
      * Method to call specified 'protected' or 'private' method on given class.
      *
-     * @param mixed   $object The instantiated instance of your class
+     * @param object  $object The instantiated instance of your class
      * @param string  $name   The name of your private/protected method
      * @param mixed[] $args   Method arguments
      *
@@ -116,7 +117,7 @@ class PhpUnitUtil
      *      $foo = PHPUnitUtil::getPrivateMethod($cls, 'foo');
      *      $foo->invoke($cls, $...);
      *
-     * @param mixed  $object The instantiated instance of your class
+     * @param object $object The instantiated instance of your class
      * @param string $name   The name of your private/protected method
      *
      * @return ReflectionMethod The method you asked for
@@ -137,7 +138,7 @@ class PhpUnitUtil
      * Helper method to get any property value from given class.
      *
      * @param string $property
-     * @param mixed  $object
+     * @param object $object
      *
      * @return mixed
      *
@@ -201,7 +202,7 @@ class PhpUnitUtil
      *
      * @param string $property
      * @param mixed  $value
-     * @param mixed  $object
+     * @param object $object
      *
      * @throws ReflectionException
      */
@@ -221,7 +222,7 @@ class PhpUnitUtil
      * @param string       $type
      * @param mixed[]|null $meta
      *
-     * @return mixed
+     * @return array<mixed, object|mixed>|int|string|object|true
      *
      * @throws Throwable
      */
@@ -232,6 +233,7 @@ class PhpUnitUtil
         $class = stdClass::class;
 
         if (substr_count($type, '\\') > 1 && strpos($type, '|') === false) {
+            /** @var class-string $class */
             $class = count($meta) ? $meta['targetEntity'] : $type;
 
             $type = self::TYPE_CUSTOM_CLASS;
@@ -240,10 +242,12 @@ class PhpUnitUtil
         if (strpos($type, '|') !== false) {
             $output = self::getValidValueForType(explode('|', $type)[0], $meta);
         } elseif (strpos($type, '[]') !== false) {
+            /** @var array<mixed, object> $output */
             $output = self::getValidValueForType(self::TYPE_ARRAY, $meta);
         } else {
             switch ($type) {
                 case self::TYPE_CUSTOM_CLASS:
+                    /** @psalm-suppress MixedMethodCall */
                     $output = new $class();
                     break;
                 case self::TYPE_INT:
@@ -282,7 +286,7 @@ class PhpUnitUtil
      *
      * @param string $type
      *
-     * @return mixed
+     * @return stdClass|DateTime|string
      *
      * @throws Throwable
      */

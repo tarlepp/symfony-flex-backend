@@ -37,16 +37,21 @@ class CollectionNormalizer implements NormalizerInterface
         $this->normalizer = $normalizer;
     }
 
-    /** @noinspection ParameterDefaultValueIsNotNullInspection */
     /**
      * @inheritdoc
      *
      * @param Collection|ArrayCollection|mixed $collection
+     * @param string|null $format
+     * @param array $context
      */
     public function normalize($collection, $format = null, array $context = [])
     {
         $output = [];
 
+        /**
+         * @psalm-var Collection|ArrayCollection $collection
+         * @psalm-var object                     $value
+         */
         foreach ($collection as $value) {
             $output[] = $this->normalizer->normalize($value, $format, $context);
         }

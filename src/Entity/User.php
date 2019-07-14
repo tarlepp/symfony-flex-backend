@@ -284,7 +284,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      */
     public function setPassword(callable $encoder, string $plainPassword): self
     {
-        $this->password = $encoder($plainPassword);
+        $this->password = (string)$encoder($plainPassword);
 
         return $this;
     }

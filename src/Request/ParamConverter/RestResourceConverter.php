@@ -75,10 +75,10 @@ class RestResourceConverter implements ParamConverterInterface
     public function apply(Request $request, ParamConverter $configuration): bool
     {
         $name = $configuration->getName();
-        $identifier = $request->attributes->get($name, false);
+        $identifier = (string)$request->attributes->get($name, '');
         $resource = $this->collection->get($configuration->getClass());
 
-        if ($identifier !== false) {
+        if ($identifier !== '') {
             $request->attributes->set($name, $resource->findOne($identifier, true));
         }
 

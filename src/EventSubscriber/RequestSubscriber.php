@@ -116,6 +116,7 @@ class RequestSubscriber implements EventSubscriberInterface
         $this->logger->setRequest($request);
         $this->logger->setResponse($event->getResponse());
 
+        /** @var ApplicationUser|ApiKeyUser|null $user */
         $user = $this->getUser();
 
         if ($user instanceof ApplicationUser) {

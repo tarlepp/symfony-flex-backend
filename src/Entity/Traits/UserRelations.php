@@ -120,18 +120,11 @@ trait UserRelations
      */
     public function getRoles(): array
     {
-        /**
-         * Lambda iterator to get user group role information.
-         *
-         * @param UserGroup $userGroup
-         *
-         * @return string
-         */
         $iterator = static function (UserGroup $userGroup): string {
             return $userGroup->getRole()->getId();
         };
 
-        // Determine base roles
+        /** @var array<int, string> $output */
         $output = $this->userGroups->map($iterator)->toArray();
 
         // And if we have roles service present we can fetch all inherited roles
@@ -155,7 +148,7 @@ trait UserRelations
     /**
      * Getter for user request log collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
+     * @return Collection|ArrayCollection|Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
     public function getLogsRequest()
     {
@@ -165,7 +158,7 @@ trait UserRelations
     /**
      * Getter for user login log collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
+     * @return Collection|ArrayCollection|Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
      */
     public function getLogsLogin()
     {
@@ -175,7 +168,7 @@ trait UserRelations
     /**
      * Getter for user login failure log collection.
      *
-     * @return Collection|ArrayCollection|mixed|Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
+     * @return Collection|ArrayCollection|Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
      */
     public function getLogsLoginFailure()
     {

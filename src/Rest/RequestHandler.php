@@ -54,7 +54,7 @@ final class RequestHandler
      *
      * @param HttpFoundationRequest $request
      *
-     * @return mixed[]
+     * @return array|array<string, string|array<string|int, string|int>>
      *
      * @throws HttpException
      */
@@ -62,7 +62,7 @@ final class RequestHandler
     {
         try {
             $where = array_filter(
-                JSON::decode($request->get('where', '{}'), true),
+                (array)JSON::decode((string)$request->get('where', '{}'), true),
                 /**
                  * @psalm-suppress MissingClosureParamType
                  *
@@ -136,7 +136,7 @@ final class RequestHandler
     {
         $limit = $request->get('limit');
 
-        return $limit === null ? null : (int)abs($limit);
+        return $limit !== null ? (int)abs($limit) : null;
     }
 
     /**
@@ -153,7 +153,7 @@ final class RequestHandler
     {
         $offset = $request->get('offset');
 
-        return $offset === null ? null : (int)abs($offset);
+        return $offset !== null ? (int)abs($offset) : null;
     }
 
     /**

@@ -97,7 +97,7 @@ interface RestResourceInterface
     /**
      * Getter method for all associations that current entity contains.
      *
-     * @return string[]
+     * @return array|array<int, string>
      */
     public function getAssociations(): array;
 

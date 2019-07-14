@@ -47,7 +47,7 @@ interface BaseRepositoryInterface
     /**
      * Gets all association mappings of the class.
      *
-     * @return string[]
+     * @return array|array<int, string>
      */
     public function getAssociations(): array;
 
@@ -82,9 +82,9 @@ interface BaseRepositoryInterface
      * @param int|null $lockMode
      * @param int|null $lockVersion
      *
-     * @return EntityInterface|mixed|null
+     * @return EntityInterface|null
      */
-    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null);
+    public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface;
 
     /**
      * Advanced version of find method, with this you can process query as you like, eg. add joins and callbacks to
