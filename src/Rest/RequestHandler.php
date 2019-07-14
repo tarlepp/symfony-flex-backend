@@ -134,9 +134,9 @@ final class RequestHandler
      */
     public static function getLimit(HttpFoundationRequest $request): ?int
     {
-        $limit = (int)$request->get('limit');
+        $limit = $request->get('limit');
 
-        return $limit !== 0 ? (int)abs($limit) : null;
+        return $limit !== null ? (int)abs($limit) : null;
     }
 
     /**
@@ -151,9 +151,9 @@ final class RequestHandler
      */
     public static function getOffset(HttpFoundationRequest $request): ?int
     {
-        $offset = (int)$request->get('offset');
+        $offset = $request->get('offset');
 
-        return $offset !== 0 ? (int)abs($offset) : null;
+        return $offset !== null ? (int)abs($offset) : null;
     }
 
     /**
