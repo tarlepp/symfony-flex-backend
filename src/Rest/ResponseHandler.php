@@ -82,7 +82,7 @@ final class ResponseHandler implements ResponseHandlerInterface
         /**
          * Specify used populate settings
          *
-         * @var array<int, string> $populate
+         * @var array<int, string>
          */
         $populate = (array)$request->get('populate', []);
 

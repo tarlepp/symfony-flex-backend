@@ -174,7 +174,7 @@ class Auth
             /** @var object $payload */
             $payload = JSON::decode($response->getContent());
 
-            $cache[$hash] = property_exists($payload, 'token') ? (string)$payload->token  : '';
+            $cache[$hash] = property_exists($payload, 'token') ? (string)$payload->token : '';
         }
 
         // And finally store cache for later usage

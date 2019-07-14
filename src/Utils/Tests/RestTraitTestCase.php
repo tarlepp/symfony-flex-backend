@@ -527,7 +527,7 @@ abstract class RestTraitTestCase extends WebTestCase
     private function createDataForTest(Generator $users, array $methods): Generator
     {
         /**
-         * @var array<int, string> $userData
+         * @var array<int, string>
          */
         foreach ($users as $userData) {
             foreach ($methods as $method) {

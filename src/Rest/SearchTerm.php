@@ -72,7 +72,7 @@ final class SearchTerm implements SearchTermInterface
         /**
          * Get criteria
          *
-         * @var array<string, array<string, array>> $criteria
+         * @var array<string, array<string, array>>
          */
         $criteria = array_filter(array_map($iteratorTerm, $searchTerms));
 
