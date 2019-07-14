@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "effad416c1e6612dfddb93647d6dc19f",
+    "content-hash": "5a9e7915bcc0b96013ab5da4ac3741b2",
     "packages": [],
     "packages-dev": [
         {
@@ -1296,16 +1296,16 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "3.4.7",
+            "version": "3.4.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "caf7737bbe5a5e9cbdfcc1ada83ea576ca07c9ff"
+                "reference": "aa0efcf026e353ce2a4b66c4d3d81caebbf0966a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/caf7737bbe5a5e9cbdfcc1ada83ea576ca07c9ff",
-                "reference": "caf7737bbe5a5e9cbdfcc1ada83ea576ca07c9ff",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/aa0efcf026e353ce2a4b66c4d3d81caebbf0966a",
+                "reference": "aa0efcf026e353ce2a4b66c4d3d81caebbf0966a",
                 "shasum": ""
             },
             "require": {
@@ -1313,7 +1313,7 @@
                 "amphp/byte-stream": "^1.5",
                 "composer/xdebug-handler": "^1.1",
                 "felixfbecker/advanced-json-rpc": "^3.0.3",
-                "felixfbecker/language-server-protocol": "^1.3",
+                "felixfbecker/language-server-protocol": "^1.4",
                 "netresearch/jsonmapper": "^1.0",
                 "nikic/php-parser": "^4.2",
                 "ocramius/package-versions": "^1.2",
@@ -1329,6 +1329,7 @@
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.2",
+                "friendsofphp/php-cs-fixer": "^2.15",
                 "phpmyadmin/sql-parser": "^5.0",
                 "phpunit/phpunit": "^7.5 || ^8.0",
                 "psalm/plugin-phpunit": "^0.6",
@@ -1378,7 +1379,7 @@
                 "inspection",
                 "php"
             ],
-            "time": "2019-06-28T15:25:29+00:00"
+            "time": "2019-07-09T11:39:03+00:00"
         },
         {
             "name": "webmozart/assert",
