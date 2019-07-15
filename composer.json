@@ -81,14 +81,14 @@
 	"autoload-dev": {
 		"psr-4": {
 			"App\\Tests\\": "tests/",
-			"PHPUnit\\": "vendor-bin/phpunit/vendor/phpunit/phpunit/src/",
-			"PHPUnit\\Framework\\MockObject\\": "vendor-bin/phpunit/vendor/phpunit/phpunit/src/Framework/MockObject/ForwardCompatibility",
-			"SebastianBergmann\\FinderFacade\\": "vendor-bin/phpunit/vendor/sebastian/finder-facade/src",
-			"Symfony\\Component\\BrowserKit\\": "vendor-bin/phpunit/vendor/symfony/browser-kit",
-			"Symfony\\Component\\DomCrawler\\": "vendor-bin/phpunit/vendor/symfony/dom-crawler",
-			"Symfony\\Bridge\\PhpUnit\\": "vendor-bin/phpunit/vendor/symfony/phpunit-bridge",
-			"TheSeer\\fDOM\\": "vendor-bin/phpunit/vendor/theseer/fdomdocument/src",
-			"Liuggio\\Fastest\\": ["vendor-bin/phpunit/vendor/liuggio/fastest/src", "vendor-bin/phpunit/vendor/liuggio/fastest/adapters"]
+			"PHPUnit\\": "tools/phpunit/vendor/phpunit/phpunit/src/",
+			"PHPUnit\\Framework\\MockObject\\": "tools/phpunit/vendor/phpunit/phpunit/src/Framework/MockObject/ForwardCompatibility",
+			"SebastianBergmann\\FinderFacade\\": "tools/phpunit/vendor/sebastian/finder-facade/src",
+			"Symfony\\Component\\BrowserKit\\": "tools/phpunit/vendor/symfony/browser-kit",
+			"Symfony\\Component\\DomCrawler\\": "tools/phpunit/vendor/symfony/dom-crawler",
+			"Symfony\\Bridge\\PhpUnit\\": "tools/phpunit/vendor/symfony/phpunit-bridge",
+			"TheSeer\\fDOM\\": "tools/phpunit/vendor/theseer/fdomdocument/src",
+			"Liuggio\\Fastest\\": ["tools/phpunit/vendor/liuggio/fastest/src", "tools/phpunit/vendor/liuggio/fastest/adapters"]
 		}
 	},
 	"scripts": {
@@ -116,8 +116,11 @@
 		"symfony/debug": "<3.3"
 	},
 	"extra": {
-			"allow-contrib": "true",
+		"allow-contrib": "true",
 		"projectTitle": "Symfony Flex Backend",
+		"bamarni-bin": {
+			"target-directory": "tools"
+		},
 		"symfony": {
 			"id": "01BFA135DXTPRA5CR250NTJJJP",
 			"require": "4.3.2"

@@ -193,18 +193,18 @@ phpstan: ## Runs PHPStan static analysis tool
 	@./vendor/bin/phpstan analyze --level 7 src
 ###< phpstan ###
 
-###> clear vendor-bin ###
-clear-vendor-bin: ## Runs PHPStan static analysis tool
-	@echo "\033[32mClearing vendor-bin dependencies\033[39m"
-	@find -type d -name vendor | grep vendor-bin | xargs rm -rf
-	@echo "\033[32mremember to run 'composer update' command after this\033[39m"
-###< clear vendor-bin ###
+###> clear tools ###
+clear-tools: ## Clears all tools depedencies
+	@echo "\033[32mClearing tools dependencies\033[39m"
+	@find -type d -name vendor | grep tools | xargs rm -rf
+	@echo "\033[32mremember to run 'make update' command after this\033[39m"
+###< clear tools ###
 
-###> check vendor-bin ###
-check-vendor-dependencies: ## Checks if any vendor dependency can be updated
-	@echo "\033[32mChecking dependencies\033[39m"
-	@bin/console check-vendor-dependencies
-###< clear vendor-bin ###
+###> check tools ###
+check-tools: ## Checks if any vendor dependency can be updated
+	@echo "\033[32mChecking tools dependencies\033[39m"
+	@bin/console check-tools
+###< check tools ###
 
 ###> update composer dependencies ###
 update: ## Update composer dependencies

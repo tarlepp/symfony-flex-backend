@@ -40,7 +40,7 @@ with just running `make` command:
 cache-clear                # Clears the cache
 cache-warmup               # Warms up an empty cache
 check-vendor-dependencies  # Checks if any vendor dependency can be updated
-clear-vendor-bin           # Runs PHPStan static analysis tool
+clear-tools                # Clears are tool vendor dependencies
 ecs                        # Runs The Easiest Way to Use Any Coding Standard
 generate-jwt-keys          # Generates JWT auth keys
 merge-clover               # Creates clover from fastest run

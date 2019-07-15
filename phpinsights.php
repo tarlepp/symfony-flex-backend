@@ -41,7 +41,7 @@ return [
         'translations',
         'var',
         'vendor',
-        'vendor-bin',
+        'tools',
     ],
     'add' => [
         //  ExampleMetric::class => [
