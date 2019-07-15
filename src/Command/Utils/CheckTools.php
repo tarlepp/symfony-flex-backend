@@ -41,7 +41,7 @@ use function wordwrap;
  * @package App\Command\Utils
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class CheckVendorDependencies extends Command
+class CheckTools extends Command
 {
     // Traits
     use SymfonyStyleTrait;
@@ -65,7 +65,7 @@ class CheckVendorDependencies extends Command
      */
     public function __construct(string $projectDir)
     {
-        parent::__construct('check-vendor-dependencies');
+        parent::__construct('check-tools');
 
         $this->setDescription('Console command to check vendor dependencies for bin');
 
@@ -115,7 +115,7 @@ class CheckVendorDependencies extends Command
     }
 
     /**
-     * Method to determine all namespace directories under 'vendor-bin' directory.
+     * Method to determine all namespace directories under 'tools' directory.
      *
      * @return string[]
      *
@@ -124,12 +124,12 @@ class CheckVendorDependencies extends Command
      */
     private function getNamespaceDirectories(): array
     {
-        // Find all main namespace directories under 'vendor-bin' directory
+        // Find all main namespace directories under 'tools' directory
         $finder = (new Finder())
             ->depth(1)
             ->ignoreDotFiles(true)
             ->directories()
-            ->in($this->projectDir . DIRECTORY_SEPARATOR . 'vendor-bin/');
+            ->in($this->projectDir . DIRECTORY_SEPARATOR . 'tools/');
 
         /**
          * Closure to return pure path from current SplFileInfo object.
@@ -212,7 +212,7 @@ class CheckVendorDependencies extends Command
     }
 
     /**
-     * Method to process namespace inside 'vendor-bin' directory.
+     * Method to process namespace inside 'tools' directory.
      *
      * @param string $path
      *
