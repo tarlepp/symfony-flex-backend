@@ -39,4 +39,4 @@ infection.json
 ###< lexik/jwt-authentication-bundle ###
 
 ### Vendor bin dependencies
-/vendor-bin/*/vendor/
+/tools/*/vendor/
