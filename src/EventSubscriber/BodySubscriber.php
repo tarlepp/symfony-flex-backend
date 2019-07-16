@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use function fstat;
 use function in_array;
+use function is_array;
 use function is_resource;
 use function is_string;
 
@@ -103,9 +104,10 @@ class BodySubscriber implements EventSubscriberInterface
         /** @var string $content */
         $content = $request->getContent();
 
-        /** @var array $data */
         $data = JSON::decode($content, true);
 
-        $request->request->replace($data);
+        if (is_array($data)) {
+            $request->request->replace($data);
+        }
     }
 }
