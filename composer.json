@@ -42,6 +42,7 @@
 		"stof/doctrine-extensions-bundle": "1.3.0",
 		"symfony/asset": "*",
 		"symfony/console": "*",
+		"symfony/dotenv": "*",
 		"symfony/expression-language": "*",
 		"symfony/flex": "1.4.4",
 		"symfony/form": "*",
@@ -60,7 +61,6 @@
 		"roave/security-advisories": "dev-master",
 		"symfony/browser-kit": "*",
 		"symfony/debug-pack": "1.0.7",
-		"symfony/dotenv": "*",
 		"symfony/maker-bundle": "1.12.0",
 		"symfony/requirements-checker": "1.1.5",
 		"symfony/web-server-bundle": "*"
@@ -93,18 +93,20 @@
 	},
 	"scripts": {
 		"auto-scripts": {
-			"requirements-checker": "script",
-			"security-checker security:check": "script",
 			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
 			"cache:clear": "symfony-cmd",
 			"cache:warmup": "symfony-cmd"
 		},
 		"post-install-cmd": [
+			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",
+			"if test -d vendor/sensiolabs/security-checker; then ./vendor/bin/security-checker security:check; fi",
 			"if test -d vendor/bamarni/composer-bin-plugin; then composer bin all install; fi",
 			"@auto-scripts",
 			"@composer dump-autoload"
 		],
 		"post-update-cmd": [
+			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",
+			"if test -d vendor/sensiolabs/security-checker; then ./vendor/bin/security-checker security:check; fi",
 			"if test -d vendor/bamarni/composer-bin-plugin; then composer bin all update; fi",
 			"@auto-scripts",
 			"@composer dump-autoload"
