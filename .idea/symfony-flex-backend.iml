@@ -2,20 +2,21 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/liuggio/fastest/adapters" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
+      <sourceFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/liuggio/fastest/adapters" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/dom-crawler" isTestSource="true" packagePrefix="Symfony\Component\DomCrawler\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/browser-kit" isTestSource="true" packagePrefix="Symfony\Component\BrowserKit\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/phpunit/phpunit/src" isTestSource="true" packagePrefix="PHPUnit\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/phpunit-bridge" isTestSource="true" packagePrefix="Symfony\Bridge\PhpUnit\" />
+      <sourceFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/dom-crawler" isTestSource="true" packagePrefix="Symfony\Component\DomCrawler\" />
+      <sourceFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/browser-kit" isTestSource="true" packagePrefix="Symfony\Component\BrowserKit\" />
+      <sourceFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/phpunit/phpunit/src" isTestSource="true" packagePrefix="PHPUnit\" />
+      <sourceFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/phpunit-bridge" isTestSource="true" packagePrefix="Symfony\Bridge\PhpUnit\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/liuggio/fastest/src" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
+      <sourceFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/liuggio/fastest/src" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/tools/infection" />
       <excludeFolder url="file://$MODULE_DIR$/tools/php-coveralls" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpinsights" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpmetrics" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpstan" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/2bj" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/codedungeon" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/doctrine" />
@@ -25,13 +26,16 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/phar-io" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/phpdocumentor" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/phpspec" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/phpunit" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/psr" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/sebastian" />
-      <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/console" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/finder" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/polyfill-php73" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/service-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/stopwatch" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/yaml" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/theseer" />
@@ -39,7 +43,33 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/psalm" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/ecs" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/infection" />
       <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phan" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/php-coveralls" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpinsights" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpmetrics" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpstan" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/codedungeon" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/doctrine" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/hassankhan" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/liuggio" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/myclabs" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/phar-io" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/phpdocumentor" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/phpspec" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/sebastian" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/console" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/finder" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/polyfill-ctype" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/polyfill-mbstring" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/process" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/stopwatch" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/symfony/yaml" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/theseer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/phpunit/vendor/webmozart" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor-bin/psalm" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/bamarni/composer-bin-plugin" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/behat/transliterator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
