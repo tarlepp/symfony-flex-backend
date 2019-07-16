@@ -49,6 +49,7 @@ RUN chmod +x /app/bin/console \
 
 # Allow to use more memory + add necessary stuff to bash autocomplete
 RUN echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini \
+    && echo 'expose_php=off' >> /usr/local/etc/php/conf.d/docker-expose-php.ini \
     && echo 'source /usr/share/bash-completion/bash_completion' >> /etc/bash.bashrc \
     && echo 'eval "$(symfony-autocomplete --shell bash)"' >> /etc/bash.bashrc
 
