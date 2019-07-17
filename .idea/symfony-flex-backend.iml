@@ -26,9 +26,7 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/phar-io" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/phpdocumentor" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/phpspec" />
-      <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/phpunit" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/psr" />
-      <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/sebastian" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/console" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/finder" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/symfony/polyfill-ctype" />
