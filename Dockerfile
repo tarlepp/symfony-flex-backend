@@ -1,8 +1,8 @@
 FROM composer:1.8.6 AS composer
-FROM php:7.2.19-fpm
+FROM php:7.3.7-fpm
 
 RUN apt-get update && apt-get install -y \
-    zlib1g-dev libxml2-dev nano vim git unzip jq \
+    zlib1g-dev libzip-dev libxml2-dev nano vim git unzip jq bash-completion iproute2 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install -j$(nproc) bcmath \
