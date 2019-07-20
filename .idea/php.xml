@@ -224,7 +224,7 @@
   </component>
   <component name="PhpUnit">
     <phpunit_settings>
-      <phpunit_by_interpreter interpreter_id="7377c17b-0802-4cb1-95f7-8eb151a88214" load_method="CUSTOM_LOADER" configuration_file_path="/app/phpunit.xml.dist" custom_loader_path="/app/vendor-bin/phpunit/vendor/autoload.php" phpunit_phar_path="" use_configuration_file="true" />
+      <phpunit_by_interpreter interpreter_id="7377c17b-0802-4cb1-95f7-8eb151a88214" load_method="CUSTOM_LOADER" configuration_file_path="/app/phpunit.xml.dist" custom_loader_path="/app/tools/phpunit/vendor/autoload.php" phpunit_phar_path="" use_configuration_file="true" />
     </phpunit_settings>
   </component>
 </project>
