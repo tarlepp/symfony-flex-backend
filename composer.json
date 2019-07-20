@@ -42,7 +42,7 @@
 		"symfony/console": "*",
 		"symfony/dotenv": "*",
 		"symfony/expression-language": "*",
-		"symfony/flex": "1.4.4",
+		"symfony/flex": "1.4.5",
 		"symfony/form": "*",
 		"symfony/framework-bundle": "*",
 		"symfony/monolog-bundle": "3.4.0",
