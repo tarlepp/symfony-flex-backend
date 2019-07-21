@@ -11,7 +11,9 @@ namespace App\Tests\Integration\EventSubscriber;
 use App\EventSubscriber\BodySubscriber;
 use Generator;
 use LogicException;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -97,6 +99,34 @@ class BodySubscriberTest extends KernelTestCase
         static::bootKernel();
 
         $request = new Request([], [], [], [], [], [], '{"Some": "not", "valid" JSON}');
+
+        $event = new GetResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $subscriber = new BodySubscriber();
+        $subscriber->onKernelRequest($event);
+    }
+
+    public function testThatWithNullBodyReplaceIsNotCalled(): void
+    {
+        static::bootKernel();
+
+        /**
+         * @var MockObject|Request      $request
+         * @var MockObject|ParameterBag $paramegerBag
+         */
+        $request = $this->getMockBuilder(Request::class)->getMock();
+        $paramegerBag = $this->getMockBuilder(ParameterBag::class)->getMock();
+
+        $request->request = $paramegerBag;
+
+        $request
+            ->expects(static::exactly(2))
+            ->method('getContent')
+            ->willReturn(null);
+
+        $paramegerBag
+            ->expects(static::never())
+            ->method('replace');
 
         $event = new GetResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 

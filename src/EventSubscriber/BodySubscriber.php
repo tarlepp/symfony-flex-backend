@@ -101,10 +101,12 @@ class BodySubscriber implements EventSubscriberInterface
      */
     private function transformJsonBody(Request $request): void
     {
-        /** @var string $content */
+        $data = null;
         $content = $request->getContent();
 
-        $data = JSON::decode($content, true);
+        if (is_string($content)) {
+            $data = JSON::decode($content, true);
+        }
 
         if (is_array($data)) {
             $request->request->replace($data);
