@@ -39,7 +39,7 @@ with just running `make` command:
 ```bash
 cache-clear                # Clears the cache
 cache-warmup               # Warms up an empty cache
-check-vendor-dependencies  # Checks if any vendor dependency can be updated
+check-tools                # Checks if any tool dependency can be updated
 clear-tools                # Clears are tool vendor dependencies
 ecs                        # Runs The Easiest Way to Use Any Coding Standard
 generate-jwt-keys          # Generates JWT auth keys
