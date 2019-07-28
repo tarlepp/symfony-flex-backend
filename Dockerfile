@@ -10,6 +10,7 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
+    && docker-php-ext-install opcache \
     && docker-php-ext-install zip
 
 # copy the Composer PHAR from the Composer image into the PHP image
