@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-c"]
 
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
-    zlib1g-dev libzip-dev libxml2-dev nano vim git unzip jq bash-completion iproute2 \
+    zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Enable all necessary PHP packages
@@ -14,11 +14,16 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install pdo \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install zip \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl \
     && pecl install xdebug-2.7.1 \
     && docker-php-ext-enable xdebug
 
-# copy the Composer PHAR from the Composer image into the PHP image
+# Copy the Composer PHAR from the Composer image into the PHP image
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+# Copy use php.ini to container
+COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
 
 # Allow use of composer as a root and add composer bin to path
 ENV COMPOSER_ALLOW_SUPERUSER 1
