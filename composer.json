@@ -125,7 +125,7 @@
 		},
 		"symfony": {
 			"id": "01BFA135DXTPRA5CR250NTJJJP",
-			"require": "4.3.2"
+			"require": "4.3.3"
 		}
 	}
 }
