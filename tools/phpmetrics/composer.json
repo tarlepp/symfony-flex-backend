@@ -5,6 +5,9 @@
 		"roave/security-advisories": "dev-master"
 	},
 	"config": {
+		"platform": {
+			"php": "7.2.0"
+		},
 		"preferred-install": {
 			"*": "dist"
 		},
