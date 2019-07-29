@@ -13,7 +13,6 @@ use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Helpers\LoggerAwareTrait;
 use App\Resource\LogRequestResource;
-use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -157,17 +156,15 @@ class RequestLogger implements RequestLoggerInterface
     }
 
     /**
-     * Store request log and  clean history
+     * Store request log.
      *
-     * @throws LogicException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws Throwable
      */
     private function createRequestLogEntry(): void
     {
         // Create new request log entity
         $entity = new LogRequest($this->request, $this->response, $this->user, $this->apiKey, $this->masterRequest);
 
-        $this->resource->save($entity, true);
+        $this->resource->save($entity, true, true);
     }
 }
