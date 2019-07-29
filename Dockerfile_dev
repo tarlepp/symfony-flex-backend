@@ -45,24 +45,13 @@ ADD . .
 # Install bamarni/symfony-console-autocomplete as a global one to get autocomplete working
 RUN composer global require bamarni/symfony-console-autocomplete
 
-RUN echo "xdebug.idekey = PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
-    && echo "xdebug.default_enable = 0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
-    && echo "xdebug.remote_enable = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
-    && echo "xdebug.remote_autostart = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
-    && echo "xdebug.remote_connect_back = 0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
-    && echo "xdebug.profiler_enable = 0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  \
-    && echo "xdebug.remote_host = 127.0.0.1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_port = 9009" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
 # Ensure that all required files has execute rights
 RUN chmod +x /app/bin/console \
     && chmod +x /app/docker-entrypoint-dev.sh \
     && chmod +x /usr/bin/composer
 
-# Allow to use more memory + add necessary stuff to bash autocomplete
-RUN echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini \
-    && echo 'expose_php=off' >> /usr/local/etc/php/conf.d/docker-expose-php.ini \
-    && echo 'source /usr/share/bash-completion/bash_completion' >> /etc/bash.bashrc \
+# Add necessary stuff to bash autocomplete
+RUN echo 'source /usr/share/bash-completion/bash_completion' >> /etc/bash.bashrc \
     && echo 'eval "$(symfony-autocomplete --shell bash)"' >> /etc/bash.bashrc
 
 EXPOSE 9000

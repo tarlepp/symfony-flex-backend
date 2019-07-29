@@ -27,7 +27,7 @@ else
   HOST="docker.for.mac.localhost"
 fi
 
-sed -i "s/xdebug\.remote_host \=.*/xdebug\.remote_host\=$HOST/g" /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+sed -i "s/xdebug\.remote_host \=.*/xdebug\.remote_host\=$HOST/g" /usr/local/etc/php/php.ini
 
 export DOCKER_IP=`/sbin/ip route|awk '/default/ { print $3 }'`
 
