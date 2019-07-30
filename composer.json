@@ -29,7 +29,7 @@
 		"doctrine/annotations": "1.6.1",
 		"doctrine/doctrine-migrations-bundle": "2.0.0",
 		"easycorp/easy-log-handler": "1.0.7",
-		"lexik/jwt-authentication-bundle": "2.6.3",
+		"lexik/jwt-authentication-bundle": "2.6.4",
 		"mark-gerarts/automapper-plus-bundle": "1.1.0",
 		"matthiasnoback/symfony-console-form": "3.6.0",
 		"nelmio/api-doc-bundle": "3.4.0",
