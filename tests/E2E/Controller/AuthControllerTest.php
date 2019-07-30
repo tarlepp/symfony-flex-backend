@@ -132,7 +132,7 @@ class AuthControllerTest extends WebTestCase
         static::assertSame(401, $responseContent->code, 'Response code was not expected'. $info);
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
-        static::assertSame('Bad credentials', $responseContent->message, 'Response message was not expected' . $info);
+        static::assertSame('Bad credentials.', $responseContent->message, 'Response message was not expected' . $info);
 
         unset($response, $client);
     }
