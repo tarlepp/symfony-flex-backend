@@ -5,10 +5,15 @@ declare(strict_types = 1);
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-
 namespace App\Tests\Integration\Repository;
 
+use App\Repository\BaseRepository;
+use App\Rest\RestResource;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use function array_keys;
+use function gc_collect_cycles;
+use function gc_enable;
+use function sort;
 
 /**
  * Class RepositoryTestCase
@@ -19,12 +24,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class RepositoryTestCase extends KernelTestCase
 {
     /**
-     * @var \App\Rest\RestResource
+     * @var RestResource
      */
     protected $resource;
 
     /**
-     * @var \App\Repository\BaseRepository
+     * @var BaseRepository
      */
     protected $repository;
 
@@ -60,24 +65,26 @@ class RepositoryTestCase extends KernelTestCase
 
     public function testThatGetAssociationsReturnsExpected(): void
     {
+        $expected = $this->associations;
+        $actual = array_keys($this->repository->getAssociations());
         $message = 'Repository did not return expected associations for entity.';
 
-        static::assertSame(
-            $this->associations,
-            \array_keys($this->repository->getAssociations()),
-            $message
-        );
+        sort($expected);
+        sort($actual);
+
+        static::assertSame($expected, $actual, $message);
     }
 
     public function testThatGetSearchColumnsReturnsExpected(): void
     {
+        $expected = $this->searchColumns;
+        $actual = $this->repository->getSearchColumns();
         $message = 'Repository did not return expected search columns.';
 
-        static::assertSame(
-            $this->searchColumns,
-            $this->repository->getSearchColumns(),
-            $message
-        );
+        sort($expected);
+        sort($actual);
+
+        static::assertSame($expected, $actual, $message);
     }
 
     protected function setUp(): void
@@ -86,9 +93,9 @@ class RepositoryTestCase extends KernelTestCase
 
         parent::setUp();
 
-        static::bootKernel();
+        self::bootKernel();
 
-        $this->resource = static::$container->get($this->resourceName);
+        $this->resource = self::$container->get($this->resourceName);
         $this->repository = $this->resource->getRepository();
     }
 
