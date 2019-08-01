@@ -5,6 +5,16 @@
       <option name="SPACES_WITHIN_IMPORTS" value="true" />
       <option name="USE_CHAINED_CALLS_GROUP_INDENTS" value="true" />
     </JSCodeStyleSettings>
+    <PHPCodeStyleSettings>
+      <option name="ALIGN_PHPDOC_PARAM_NAMES" value="true" />
+      <option name="ALIGN_PHPDOC_COMMENTS" value="true" />
+      <option name="COMMA_AFTER_LAST_ARRAY_ELEMENT" value="true" />
+      <option name="PHPDOC_BLANK_LINE_BEFORE_TAGS" value="true" />
+      <option name="PHPDOC_BLANK_LINES_AROUND_PARAMETERS" value="true" />
+      <option name="PHPDOC_WRAP_LONG_LINES" value="true" />
+      <option name="FORCE_SHORT_DECLARATION_ARRAY_STYLE" value="true" />
+      <option name="PHPDOC_USE_FQCN" value="true" />
+    </PHPCodeStyleSettings>
     <TypeScriptCodeStyleSettings version="0">
       <option name="USE_DOUBLE_QUOTES" value="false" />
       <option name="SPACES_WITHIN_IMPORTS" value="true" />
