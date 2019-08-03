@@ -67,7 +67,7 @@ class CheckDependencies extends Command
     {
         parent::__construct('check-dependencies');
 
-        $this->setDescription('Console command to check vendor dependencies for bin');
+        $this->setDescription('Console command to check which vendor dependencies has updates');
 
         $this->projectDir = $projectDir;
     }
