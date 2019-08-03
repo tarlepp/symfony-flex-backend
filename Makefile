@@ -200,11 +200,11 @@ clear-tools: ## Clears all tools depedencies
 	@echo "\033[32mremember to run 'make update' command after this\033[39m"
 ###< clear tools ###
 
-###> check tools ###
-check-tools: ## Checks if any vendor dependency can be updated
-	@echo "\033[32mChecking tools dependencies\033[39m"
-	@bin/console check-tools
-###< check tools ###
+###> check dependencies ###
+check-dependencies: ## Checks if any vendor dependency can be updated
+	@echo "\033[32mChecking vendor dependencies\033[39m"
+	@bin/console check-dependencies
+###< check dependencies ###
 
 ###> update composer dependencies ###
 update: ## Update composer dependencies

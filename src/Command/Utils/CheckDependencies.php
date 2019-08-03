@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Command/Utils/CheckVendorDependencies.php
+ * /src/Command/Utils/CheckDependencies.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -36,12 +36,12 @@ use function str_replace;
 use function wordwrap;
 
 /**
- * Class CheckVendorDependencies
+ * Class CheckDependencies
  *
  * @package App\Command\Utils
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class CheckTools extends Command
+class CheckDependencies extends Command
 {
     // Traits
     use SymfonyStyleTrait;
@@ -65,7 +65,7 @@ class CheckTools extends Command
      */
     public function __construct(string $projectDir)
     {
-        parent::__construct('check-tools');
+        parent::__construct('check-dependencies');
 
         $this->setDescription('Console command to check vendor dependencies for bin');
 
