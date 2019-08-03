@@ -37,28 +37,29 @@ supported (main commands) make commands, note that you can get this same list
 with just running `make` command:
 
 ```bash
-cache-clear                # Clears the cache
-cache-warmup               # Warms up an empty cache
-check-tools                # Checks if any tool dependency can be updated
-clear-tools                # Clears are tool vendor dependencies
-ecs                        # Runs The Easiest Way to Use Any Coding Standard
-generate-jwt-keys          # Generates JWT auth keys
-merge-clover               # Creates clover from fastest run
-merge-junit                # Creates JUnit xml from fastest run
-phpcs                      # Runs PHP CodeSniffer
-phpinsights                # Runs PHP Insights
-phpmetrics                 # Generates PhpMetrics static analysis
-phpstan                    # Runs PHPStan static analysis tool
-psalm                      # Runs Psalm static analysis tool
-run-tests-fastest-phpdbg   # Runs all test via fastest (phpdbg)
-run-tests-fastest-php      # Runs all test via fastest (pure PHP)
-run-tests-fastest          # Runs all test via fastest (Uses phpdbg if that is installed)
-run-tests-phpdbg           # Runs all tests via phpunit (phpdbg)
-run-tests-php              # Runs all tests via phpunit (pure PHP)
-run-tests                  # Runs all tests via phpunit (Uses phpdbg if that is installed)
-serve                      # Runs a local web server
-update                     # Update composer dependencies
-
+bash                        # Get bash inside PHP container
+cache-clear                 # Clears the cache
+cache-warmup                # Warms up an empty cache
+check-dependencies          # Checks if any vendor dependency can be updated
+clear-tools                 # Clears all tools depedencies
+ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard to fix issues
+ecs                         # Runs The Easiest Way to Use Any Coding Standard
+generate-jwt-keys           # Generates JWT auth keys
+infection                   # Runs Infection to codebase
+phpcs                       # Runs PHP CodeSniffer
+phpinsights                 # Runs PHP Insights
+phpmetrics                  # Generates PhpMetrics static analysis
+phpstan                     # Runs PHPStan static analysis tool
+psalm                       # Runs Psalm static analysis tool
+report-fastest              # Creates clover and JUnit xml from fastest run
+run-tests-fastest-php       # Runs all test via fastest (pure PHP)
+run-tests-fastest-phpdbg    # Runs all test via fastest (phpdbg)
+run-tests-fastest           # Runs all test via fastest (Uses phpdbg if that is installed)
+run-tests-php               # Runs all tests via phpunit (pure PHP)
+run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
+run-tests                   # Runs all tests via phpunit (Uses phpdbg if that is installed)
+serve                       # Runs a local web server
+update                      # Update composer dependencies
 ```
 
 ### Symfony console
