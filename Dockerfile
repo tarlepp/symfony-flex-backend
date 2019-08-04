@@ -1,5 +1,5 @@
 FROM composer:1.8.6 AS composer
-FROM php:7.3.7-fpm
+FROM php:7.3.8-fpm
 
 RUN apt-get update && apt-get install -y \
     zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 \
@@ -21,6 +21,9 @@ RUN pecl install apcu \
 
 # copy the Composer PHAR from the Composer image into the PHP image
 COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+# Update composer to latest version
+RUN composer self-update
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 ENV APP_ENV prod
