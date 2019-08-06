@@ -114,17 +114,19 @@ class DefaultController
      *      ),
      *  )
      *
+     * @param string $projectDir
+     *
      * @return JsonResponse
      *
      * @throws Throwable
      */
-    public function versionAction(): JsonResponse
+    public function versionAction(string $projectDir): JsonResponse
     {
         /** @var stdClass $composerData */
-        $composerData = JSON::decode((string)file_get_contents(__DIR__ . '/../../composer.json'));
+        $composerData = JSON::decode((string)file_get_contents($projectDir . '/composer.json'));
 
         $data = [
-            'version' => $composerData->version,
+            'version' => $composerData->version ?? '0.0.0',
         ];
 
         return new JsonResponse($data);
