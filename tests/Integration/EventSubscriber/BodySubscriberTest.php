@@ -15,7 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
@@ -32,7 +32,7 @@ class BodySubscriberTest extends KernelTestCase
 
         $request = new Request();
 
-        $event = new GetResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -58,7 +58,7 @@ class BodySubscriberTest extends KernelTestCase
         $request = new Request($inputQuery, $inputRequest, [], [], [], [], 'Some content');
         $request->headers->set('Content-Type', 'text/xml');
 
-        $event = new GetResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -84,7 +84,7 @@ class BodySubscriberTest extends KernelTestCase
         $request = new Request([], ['foobar' => 'foobar'], [], [], [], [], $content);
         $request->headers->set('Content-Type', $contentType);
 
-        $event = new GetResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -100,7 +100,7 @@ class BodySubscriberTest extends KernelTestCase
 
         $request = new Request([], [], [], [], [], [], '{"Some": "not", "valid" JSON}');
 
-        $event = new GetResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -112,23 +112,23 @@ class BodySubscriberTest extends KernelTestCase
 
         /**
          * @var MockObject|Request      $request
-         * @var MockObject|ParameterBag $paramegerBag
+         * @var MockObject|ParameterBag $parameterBag
          */
         $request = $this->getMockBuilder(Request::class)->getMock();
-        $paramegerBag = $this->getMockBuilder(ParameterBag::class)->getMock();
+        $parameterBag = $this->getMockBuilder(ParameterBag::class)->getMock();
 
-        $request->request = $paramegerBag;
+        $request->request = $parameterBag;
 
         $request
             ->expects(static::exactly(2))
             ->method('getContent')
             ->willReturn(null);
 
-        $paramegerBag
+        $parameterBag
             ->expects(static::never())
             ->method('replace');
 
-        $event = new GetResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
