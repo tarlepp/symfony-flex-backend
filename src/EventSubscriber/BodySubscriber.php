@@ -12,7 +12,7 @@ use App\Utils\JSON;
 use LogicException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use function fstat;
 use function in_array;
 use function is_array;
@@ -59,11 +59,11 @@ class BodySubscriber implements EventSubscriberInterface
      * Implementation of BodySubscriber event. Purpose of this is to convert JSON request data to proper request
      * parameters.
      *
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      *
      * @throws LogicException
      */
-    public function onKernelRequest(GetResponseEvent $event): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         // Get current request
         $request = $event->getRequest();
