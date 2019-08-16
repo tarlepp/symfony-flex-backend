@@ -18,10 +18,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use function array_map;
 use function implode;
 use function sprintf;
-use Throwable;
 
 /**
  * Class ListUsersCommand

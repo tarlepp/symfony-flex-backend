@@ -15,9 +15,9 @@ use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use Closure;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 use function array_map;
 use function sprintf;
-use Throwable;
 
 /**
  * Class UserHelper
