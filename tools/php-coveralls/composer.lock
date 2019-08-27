@@ -1044,16 +1044,16 @@
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v1.1.5",
+            "version": "v1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/service-contracts.git",
-                "reference": "f391a00de78ec7ec8cf5cdcdae59ec7b883edb8d"
+                "reference": "ea7263d6b6d5f798b56a45a5b8d686725f2719a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/f391a00de78ec7ec8cf5cdcdae59ec7b883edb8d",
-                "reference": "f391a00de78ec7ec8cf5cdcdae59ec7b883edb8d",
+                "url": "https://api.github.com/repos/symfony/service-contracts/zipball/ea7263d6b6d5f798b56a45a5b8d686725f2719a3",
+                "reference": "ea7263d6b6d5f798b56a45a5b8d686725f2719a3",
                 "shasum": ""
             },
             "require": {
@@ -1098,7 +1098,7 @@
                 "interoperability",
                 "standards"
             ],
-            "time": "2019-06-13T11:15:36+00:00"
+            "time": "2019-08-20T14:44:19+00:00"
         },
         {
             "name": "symfony/stopwatch",
