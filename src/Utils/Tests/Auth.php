@@ -172,7 +172,7 @@ class Auth
             }
 
             /** @var object $payload */
-            $payload = JSON::decode($response->getContent());
+            $payload = JSON::decode((string)$response->getContent());
 
             $cache[$hash] = property_exists($payload, 'token') ? (string)$payload->token : '';
         }
