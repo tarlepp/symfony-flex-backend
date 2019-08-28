@@ -66,7 +66,7 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -91,7 +91,7 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -116,7 +116,11 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        static::assertSame(
+            $username === null ? 401 : 403,
+            $response->getStatusCode(),
+            (string)$response->getContent()
+        );
     }
 
     /**
@@ -141,7 +145,7 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -166,7 +170,7 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -191,7 +195,11 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        static::assertSame(
+            $username === null ? 401 : 403,
+            $response->getStatusCode(),
+            (string)$response->getContent()
+        );
     }
 
     /**
@@ -218,7 +226,7 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -245,7 +253,7 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -272,7 +280,11 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        static::assertSame(
+            $username === null ? 401 : 403,
+            $response->getStatusCode(),
+            (string)$response->getContent()
+        );
     }
 
     /**
@@ -297,7 +309,7 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -322,7 +334,7 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame(500, $response->getStatusCode(), $response->getContent());
+        static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -347,7 +359,11 @@ abstract class RestTraitTestCase extends WebTestCase
         /** @var Response $response */
         $response = $client->getResponse();
 
-        static::assertSame($username === null ? 401 : 403, $response->getStatusCode(), $response->getContent());
+        static::assertSame(
+            $username === null ? 401 : 403,
+            $response->getStatusCode(),
+            (string)$response->getContent()
+        );
     }
 
     /**
