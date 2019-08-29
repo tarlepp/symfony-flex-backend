@@ -166,7 +166,8 @@ final class ResponseHandler implements ResponseHandlerInterface
 
         /** @var FormError $error */
         foreach ($form->getErrors(true) as $error) {
-            $name = $error->getOrigin()->getName();
+            $origin = $error->getOrigin();
+            $name = $origin !== null ? $origin->getName() : '';
 
             $errors[] = sprintf(
                 'Field \'%s\': %s',
