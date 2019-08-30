@@ -233,7 +233,9 @@ class LogRequest implements EntityInterface
      */
     private function processResponse(Response $response): void
     {
+        $content = $response->getContent();
+
         $this->statusCode = $response->getStatusCode();
-        $this->responseContentLength = mb_strlen($response->getContent());
+        $this->responseContentLength = $content === false ? 0 : mb_strlen($content);
     }
 }
