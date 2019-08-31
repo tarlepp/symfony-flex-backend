@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use App\Entity\EntityInterface;
-use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 trait Timestampable
 {
     /**
-     * @var DateTime|null
+     * @var DateTimeImmutable|null
      *
      * @Gedmo\Timestampable(on="create")
      *
@@ -35,14 +35,14 @@ trait Timestampable
      *
      * @ORM\Column(
      *      name="created_at",
-     *      type="datetime",
+     *      type="datetime_immutable",
      *      nullable=true,
      *  )
      */
     protected $createdAt;
 
     /**
-     * @var DateTime|null
+     * @var DateTimeImmutable|null
      *
      * @Gedmo\Timestampable(on="update")
      *
@@ -54,7 +54,7 @@ trait Timestampable
      *
      * @ORM\Column(
      *      name="updated_at",
-     *      type="datetime",
+     *      type="datetime_immutable",
      *      nullable=true,
      *  )
      */
@@ -63,11 +63,11 @@ trait Timestampable
     /**
      * Sets createdAt.
      *
-     * @param DateTime $createdAt
+     * @param DateTimeImmutable $createdAt
      *
      * @return EntityInterface|$this
      */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setCreatedAt(DateTimeImmutable $createdAt)
     {
         $this->createdAt = $createdAt;
 
@@ -77,9 +77,9 @@ trait Timestampable
     /**
      * Returns createdAt.
      *
-     * @return DateTime|null
+     * @return DateTimeImmutable|null
      */
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -87,11 +87,11 @@ trait Timestampable
     /**
      * Sets updatedAt.
      *
-     * @param DateTime $updatedAt
+     * @param DateTimeImmutable $updatedAt
      *
      * @return EntityInterface|$this
      */
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setUpdatedAt(DateTimeImmutable $updatedAt)
     {
         $this->updatedAt = $updatedAt;
 
@@ -101,9 +101,9 @@ trait Timestampable
     /**
      * Returns updatedAt.
      *
-     * @return DateTime|null
+     * @return DateTimeImmutable|null
      */
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
     }
