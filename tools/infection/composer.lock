@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "792cab6c567c207e49fea969131d82f5",
+    "content-hash": "541d475c7a916df90dd90bfd03bdffe2",
     "packages": [],
     "packages-dev": [
         {
             "name": "composer/ca-bundle",
-            "version": "1.2.3",
+            "version": "1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/ca-bundle.git",
-                "reference": "f26a67e397be0e5c00d7c52ec7b5010098e15ce5"
+                "reference": "10bb96592168a0f8e8f6dcde3532d9fa50b0b527"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/f26a67e397be0e5c00d7c52ec7b5010098e15ce5",
-                "reference": "f26a67e397be0e5c00d7c52ec7b5010098e15ce5",
+                "url": "https://api.github.com/repos/composer/ca-bundle/zipball/10bb96592168a0f8e8f6dcde3532d9fa50b0b527",
+                "reference": "10bb96592168a0f8e8f6dcde3532d9fa50b0b527",
                 "shasum": ""
             },
             "require": {
@@ -61,7 +61,7 @@
                 "ssl",
                 "tls"
             ],
-            "time": "2019-08-02T09:05:43+00:00"
+            "time": "2019-08-30T08:44:50+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -109,16 +109,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.13.4",
+            "version": "0.13.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "f0f8327f5e60d1a7d8ab4ea01074c6250ab96f57"
+                "reference": "09b4d371d203f7f22dcf1741a3f6c657404fb61e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/f0f8327f5e60d1a7d8ab4ea01074c6250ab96f57",
-                "reference": "f0f8327f5e60d1a7d8ab4ea01074c6250ab96f57",
+                "url": "https://api.github.com/repos/infection/infection/zipball/09b4d371d203f7f22dcf1741a3f6c657404fb61e",
+                "reference": "09b4d371d203f7f22dcf1741a3f6c657404fb61e",
                 "shasum": ""
             },
             "require": {
@@ -168,6 +168,10 @@
                     "homepage": "https://twitter.com/maks_rafalko"
                 },
                 {
+                    "name": "Oleg Zhulnev",
+                    "homepage": "https://github.com/sidz"
+                },
+                {
                     "name": "Gert de Pagter",
                     "homepage": "https://github.com/BackEndTea"
                 },
@@ -175,10 +179,6 @@
                     "name": "Théo FIDRY",
                     "email": "theo.fidry@gmail.com",
                     "homepage": "https://twitter.com/tfidry"
-                },
-                {
-                    "name": "Oleg Zhulnev",
-                    "homepage": "https://github.com/sidz"
                 },
                 {
                     "name": "Alexey Kopytko",
@@ -195,7 +195,7 @@
                 "testing",
                 "unit testing"
             ],
-            "time": "2019-07-01T18:01:41+00:00"
+            "time": "2019-08-29T19:22:44+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
