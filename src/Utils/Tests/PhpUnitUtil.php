@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Utils\Tests;
 
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 use LogicException;
@@ -173,6 +174,11 @@ class PhpUnitUtil
             case 'datetime':
                 $output = DateTime::class;
                 break;
+            case 'time_immutable':
+            case 'date_immutable':
+            case 'datetime_immutable':
+                $output = DateTimeImmutable::class;
+                break;
             case 'text':
             case self::TYPE_STRING:
             case 'EnumLogLogin':
@@ -255,8 +261,10 @@ class PhpUnitUtil
                     $output = 666;
                     break;
                 case DateTime::class:
-                    /** @noinspection PhpUnhandledExceptionInspection */
                     $output = new DateTime();
+                    break;
+                case DateTimeImmutable::class:
+                    $output = new DateTimeImmutable();
                     break;
                 case self::TYPE_STRING:
                     $output = 'Some text here';
@@ -303,6 +311,7 @@ class PhpUnitUtil
         } else {
             switch ($type) {
                 case stdClass::class:
+                case DateTimeImmutable::class:
                     $output = new DateTime();
                     break;
                 case self::TYPE_CUSTOM_CLASS:
