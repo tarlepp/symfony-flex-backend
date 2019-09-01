@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
-use DateTime;
+use DateTimeImmutable;
 
 /**
  * Interface EntityInterface
@@ -26,7 +26,7 @@ interface EntityInterface
     /**
      * Returns createdAt.
      *
-     * @return DateTime|null
+     * @return DateTimeImmutable|null
      */
-    public function getCreatedAt(): ?DateTime;
+    public function getCreatedAt(): ?DateTimeImmutable;
 }
