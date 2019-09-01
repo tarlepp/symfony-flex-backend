@@ -665,6 +665,7 @@ abstract class EntityTestCase extends KernelTestCase
             ];
 
             switch ($mapping['type']) {
+                case ClassMetadataInfo::ONE_TO_MANY:
                 case ClassMetadataInfo::ONE_TO_ONE:
                     break;
                 case ClassMetadataInfo::MANY_TO_ONE:
@@ -676,8 +677,6 @@ abstract class EntityTestCase extends KernelTestCase
                             $this->entityName
                         ];
                     }
-                    break;
-                case ClassMetadataInfo::ONE_TO_MANY:
                     break;
                 case ClassMetadataInfo::MANY_TO_MANY:
                     $singular = $mapping['fieldName'][mb_strlen($mapping['fieldName']) - 1] === 's' ?
