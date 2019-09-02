@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Entity;
 
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -383,14 +384,14 @@ class DateDimension implements EntityInterface
     /**
      * Returns createdAt.
      *
-     * @return DateTime
+     * @return DateTimeImmutable
      *
      * @throws Throwable
      */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): DateTimeImmutable
     {
-        $output = DateTime::createFromFormat('U', (string)$this->getUnixTime(), new DateTimeZone('UTC'));
+        $output = DateTimeImmutable::createFromFormat('U', (string)$this->getUnixTime(), new DateTimeZone('UTC'));
 
-        return $output === false ? new DateTime('now', new DateTimeZone('UTC')) : $output;
+        return $output === false ? new DateTimeImmutable('now', new DateTimeZone('UTC')) : $output;
     }
 }
