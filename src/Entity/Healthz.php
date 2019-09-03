@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
-use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -46,7 +46,7 @@ class Healthz implements EntityInterface
     private $id;
 
     /**
-     * @var DateTime
+     * @var DateTimeImmutable
      *
      * @Groups({
      *      "Healthz",
@@ -55,7 +55,7 @@ class Healthz implements EntityInterface
      *
      * @ORM\Column(
      *      name="timestamp",
-     *      type="datetime",
+     *      type="datetime_immutable",
      *      nullable=false,
      *  )
      */
@@ -70,7 +70,7 @@ class Healthz implements EntityInterface
     {
         $this->id = Uuid::uuid4()->toString();
 
-        $this->setTimestamp(new DateTime('NOW', new DateTimeZone('UTC')));
+        $this->setTimestamp(new DateTimeImmutable('NOW', new DateTimeZone('UTC')));
     }
 
     /**
@@ -82,19 +82,19 @@ class Healthz implements EntityInterface
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeImmutable
      */
-    public function getTimestamp(): DateTime
+    public function getTimestamp(): DateTimeImmutable
     {
         return $this->getCreatedAt();
     }
 
     /**
-     * @param DateTime $timestamp
+     * @param DateTimeImmutable $timestamp
      *
      * @return Healthz
      */
-    public function setTimestamp(DateTime $timestamp): self
+    public function setTimestamp(DateTimeImmutable $timestamp): self
     {
         $this->timestamp = $timestamp;
 
@@ -104,9 +104,9 @@ class Healthz implements EntityInterface
     /**
      * Returns createdAt.
      *
-     * @return DateTime
+     * @return DateTimeImmutable
      */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->timestamp;
     }
