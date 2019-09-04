@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
-use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -73,7 +73,7 @@ class LogLoginFailure implements EntityInterface
     private $user;
 
     /**
-     * @var DateTime
+     * @var DateTimeImmutable
      *
      * @Groups({
      *      "LogLoginFailure",
@@ -82,7 +82,7 @@ class LogLoginFailure implements EntityInterface
      *
      * @ORM\Column(
      *      name="timestamp",
-     *      type="datetime",
+     *      type="datetime_immutable",
      *      nullable=false,
      *  )
      */
@@ -99,7 +99,7 @@ class LogLoginFailure implements EntityInterface
     {
         $this->id = Uuid::uuid4()->toString();
         $this->user = $user;
-        $this->timestamp = new DateTime('NOW', new DateTimeZone('UTC'));
+        $this->timestamp = new DateTimeImmutable('NOW', new DateTimeZone('UTC'));
     }
 
     /**
@@ -119,9 +119,9 @@ class LogLoginFailure implements EntityInterface
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeImmutable
      */
-    public function getTimestamp(): DateTime
+    public function getTimestamp(): DateTimeImmutable
     {
         return $this->getCreatedAt();
     }
@@ -129,9 +129,9 @@ class LogLoginFailure implements EntityInterface
     /**
      * Returns createdAt.
      *
-     * @return DateTime
+     * @return DateTimeImmutable
      */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->timestamp;
     }
