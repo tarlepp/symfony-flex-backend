@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use App\Entity\User;
-use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +27,7 @@ use Throwable;
 trait LogEntityTrait
 {
     /**
-     * @var DateTime
+     * @var DateTimeImmutable
      *
      * @Groups({
      *      "LogLogin",
@@ -38,14 +38,14 @@ trait LogEntityTrait
      *
      * @ORM\Column(
      *      name="time",
-     *      type="datetime",
+     *      type="datetime_immutable",
      *      nullable=false,
      *  )
      */
     protected $time;
 
     /**
-     * @var DateTime
+     * @var DateTimeImmutable
      *
      * @Groups({
      *      "LogLogin",
@@ -56,7 +56,7 @@ trait LogEntityTrait
      *
      * @ORM\Column(
      *      name="`date`",
-     *      type="date",
+     *      type="date_immutable",
      *      nullable=false,
      *  )
      */
@@ -119,17 +119,17 @@ trait LogEntityTrait
     private $clientIp;
 
     /**
-     * @return DateTime
+     * @return DateTimeImmutable
      */
-    public function getTime(): DateTime
+    public function getTime(): DateTimeImmutable
     {
         return $this->time;
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeImmutable
      */
-    public function getDate(): DateTime
+    public function getDate(): DateTimeImmutable
     {
         return $this->date;
     }
@@ -169,9 +169,9 @@ trait LogEntityTrait
     /**
      * Returns createdAt.
      *
-     * @return DateTime|null
+     * @return DateTimeImmutable
      */
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->date;
     }
@@ -183,10 +183,10 @@ trait LogEntityTrait
      */
     protected function processTimeAndDate(): void
     {
-        $now = new DateTime('NOW', new DateTimeZone('UTC'));
+        $now = new DateTimeImmutable('NOW', new DateTimeZone('UTC'));
 
-        $this->time = $this->time ?? $now;
-        $this->date = $this->time ?? $now;
+        $this->time = $now;
+        $this->date = $now;
     }
 
     /**
