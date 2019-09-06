@@ -1,7 +1,7 @@
 <?php
+declare(strict_types = 1);
 /** @noinspection PhpUndefinedNamespaceInspection */
 /** @noinspection PhpUndefinedClassInspection */
-declare(strict_types = 1);
 
 return [
     /*
