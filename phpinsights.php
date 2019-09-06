@@ -50,6 +50,7 @@ return [
     ],
     'remove' => [
         //  ExampleInsight::class,
+        NunoMaduro\PhpInsights\Domain\Insights\Composer\ComposerMustBeValid::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses::class,
         NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits::class,
         NunoMaduro\PhpInsights\Domain\Sniffs\ForbiddenSetterSniff::class,
