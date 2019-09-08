@@ -9,20 +9,21 @@ declare(strict_types = 1);
 namespace App\Command\Traits;
 
 use App\Security\RolesService;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 
 /**
  * Trait ApiKeyUserManagementHelperTrait
  *
  * @package App\Command\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @method Application getApplication()
  */
 trait ApiKeyUserManagementHelperTrait
 {
+    // Traits
+    use GetApplicationTrait;
+
     /**
      * @return RolesService
      */
@@ -33,8 +34,7 @@ trait ApiKeyUserManagementHelperTrait
      *
      * @param OutputInterface $output
      *
-     * @throws \Exception
-     * @throws \Symfony\Component\Console\Exception\CommandNotFoundException
+     * @throws Throwable
      */
     protected function createUserGroups(OutputInterface $output): void
     {
