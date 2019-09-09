@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Command\Traits;
 
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,11 +22,12 @@ use function array_values;
  *
  * @package App\Command\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @method Application getApplication()
  */
 trait ExecuteMultipleCommandTrait
 {
+    // Traits
+    use GetApplicationTrait;
+
     /**
      * @var array<int|string, string>
      */
