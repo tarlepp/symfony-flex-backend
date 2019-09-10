@@ -11,7 +11,7 @@ namespace App\EventSubscriber;
 use App\Utils\JSON;
 use stdClass;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use function file_get_contents;
 
@@ -54,9 +54,9 @@ class ResponseSubscriber implements EventSubscriberInterface
     /**
      * Subscriber method to log every response.
      *
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      */
-    public function onKernelResponse(FilterResponseEvent $event): void
+    public function onKernelResponse(ResponseEvent $event): void
     {
         $response = $event->getResponse();
 
