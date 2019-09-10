@@ -13,7 +13,7 @@ use App\Security\ApiKeyUser;
 use App\Utils\RequestLogger;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -81,11 +81,11 @@ class RequestSubscriber implements EventSubscriberInterface
     /**
      * Subscriber method to log every request / response.
      *
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      *
      * @throws Exception
      */
-    public function onKernelResponse(FilterResponseEvent $event): void
+    public function onKernelResponse(ResponseEvent $event): void
     {
         $request = $event->getRequest();
         $path = $request->getPathInfo();
@@ -104,11 +104,11 @@ class RequestSubscriber implements EventSubscriberInterface
     /**
      * Method to process current request event.
      *
-     * @param FilterResponseEvent $event
+     * @param ResponseEvent $event
      *
      * @throws Exception
      */
-    private function process(FilterResponseEvent $event): void
+    private function process(ResponseEvent $event): void
     {
         $request = $event->getRequest();
 
