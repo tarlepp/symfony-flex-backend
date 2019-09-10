@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Command\User;
 
 use App\Command\HelperConfigure;
+use App\Command\Traits\GetApplicationTrait;
 use App\Command\Traits\SymfonyStyleTrait;
 use App\DTO\UserGroup\UserGroupCreate as UserGroupDto;
 use App\Form\Type\Console\UserGroupType;
@@ -33,6 +34,7 @@ use Throwable;
 class CreateUserGroupCommand extends Command
 {
     // Traits
+    use GetApplicationTrait;
     use SymfonyStyleTrait;
 
     /**
