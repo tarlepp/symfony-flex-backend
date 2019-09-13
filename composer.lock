@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e7ddd214b86965e8d3b0efe7200229e",
+    "content-hash": "85b3e52ffc9a32f724539c3e60b1acb7",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1671,16 +1671,16 @@
         },
         {
             "name": "mark-gerarts/automapper-plus-bundle",
-            "version": "1.1.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mark-gerarts/automapper-plus-bundle.git",
-                "reference": "b4dfe0cce367535478be49a0a37c92f66af316aa"
+                "reference": "5babeb8786270aa9f620dc7af6f7c5a5945bb619"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus-bundle/zipball/b4dfe0cce367535478be49a0a37c92f66af316aa",
-                "reference": "b4dfe0cce367535478be49a0a37c92f66af316aa",
+                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus-bundle/zipball/5babeb8786270aa9f620dc7af6f7c5a5945bb619",
+                "reference": "5babeb8786270aa9f620dc7af6f7c5a5945bb619",
                 "shasum": ""
             },
             "require": {
@@ -1711,7 +1711,7 @@
                 "automapper",
                 "bundle"
             ],
-            "time": "2018-08-09T11:38:23+00:00"
+            "time": "2019-07-13T18:17:46+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -6988,8 +6988,8 @@
             "authors": [
                 {
                     "name": "Marco Pivetta",
-                    "email": "ocramius@gmail.com",
-                    "role": "maintainer"
+                    "role": "maintainer",
+                    "email": "ocramius@gmail.com"
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
