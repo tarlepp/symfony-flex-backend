@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Resource;
 
 use App\DTO\RestDtoInterface;
 use App\DTO\User\User as UserDto;
-use App\Entity\EntityInterface;
+use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
@@ -375,7 +375,7 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatSaveMethodCallsExpectedRepositoryMethod(): void
     {
-        $entity = $this->getEntityInterfaceMock();
+        $entity = new ApiKeyEntity();
 
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
@@ -726,18 +726,6 @@ class GenericResourceTest extends KernelTestCase
         return $this
             ->getMockBuilder(UserRepository::class)
             ->setConstructorArgs([static::getEntityManager(), new ClassMetadata($this->entityClass)]);
-    }
-
-    /**
-     * @return MockObject|EntityInterface
-     *
-     * @throws Throwable
-     */
-    private function getEntityInterfaceMock(): MockObject
-    {
-        return $this
-            ->getMockBuilder(EntityInterface::class)
-            ->getMock();
     }
 
     /**
