@@ -38,6 +38,8 @@ interface RepositoryInterface
      * @return Proxy|null
      *
      * @throws \Doctrine\ORM\ORMException
+     *
+     * @psalm-suppress DeprecatedClass
      */
     public function getReference(string $id): ?Proxy;
 
