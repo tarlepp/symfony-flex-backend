@@ -4,3 +4,7 @@ framework:
         storage_id: session.storage.mock_file
     profiler:
         collect: false
+    cache:
+        pools:
+            app.version.cache:
+                adapter: cache.adapter.filesystem
