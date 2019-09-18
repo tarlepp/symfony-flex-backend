@@ -8,3 +8,7 @@ framework:
         log: true
     router:
         strict_requirements: null
+    cache:
+        pools:
+            app.version.cache:
+                adapter: cache.adapter.apcu
