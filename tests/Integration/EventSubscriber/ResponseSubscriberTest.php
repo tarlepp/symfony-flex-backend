@@ -9,14 +9,15 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\ResponseSubscriber;
-use App\Utils\JSON;
+use App\Service\Version;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 use Throwable;
-use function file_get_contents;
 
 /**
  * Class ResponseSubscriberTest
@@ -33,12 +34,23 @@ class ResponseSubscriberTest extends KernelTestCase
     {
         static::bootKernel();
 
+        /**
+         * @var MockObject|CacheInterface $cacheStub
+         */
+        $cacheStub = $this->createMock(CacheInterface::class);
+
+        $cacheStub
+            ->expects(static::once())
+            ->method('get')
+            ->willReturn('1.2.3');
+
         $request = new Request();
         $response = new Response();
 
-        $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+        $version = new Version(static::$kernel->getProjectDir(), $cacheStub);
 
-        $subscriber = new ResponseSubscriber();
+        $subscriber = new ResponseSubscriber($version);
         $subscriber->onKernelResponse($event);
 
         $response = $event->getResponse();
@@ -47,7 +59,7 @@ class ResponseSubscriberTest extends KernelTestCase
         $version = $response->headers->get('X-API-VERSION');
 
         static::assertNotNull($version);
-        static::assertSame(JSON::decode(file_get_contents(__DIR__ . '/../../../composer.json'))->version, $version);
+        static::assertSame('1.2.3', $version);
 
         unset($response, $subscriber, $event, $request);
     }
