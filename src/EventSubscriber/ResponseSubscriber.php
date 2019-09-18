@@ -8,12 +8,10 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
-use App\Utils\JSON;
-use stdClass;
+use App\Service\Version;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use function file_get_contents;
 
 /**
  * Class ResponseSubscriber
@@ -23,6 +21,21 @@ use function file_get_contents;
  */
 class ResponseSubscriber implements EventSubscriberInterface
 {
+    /**
+     * @var Version
+     */
+    private $version;
+
+    /**
+     * ResponseSubscriber constructor.
+     *
+     * @param Version $version
+     */
+    public function __construct(Version $version)
+    {
+        $this->version = $version;
+    }
+
     /**
      * Returns an array of event names this subscriber wants to listen to.
      *
@@ -52,28 +65,13 @@ class ResponseSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Subscriber method to log every response.
+     * Subscriber method to attach API version to every response.
      *
      * @param ResponseEvent $event
      */
     public function onKernelResponse(ResponseEvent $event): void
     {
-        $response = $event->getResponse();
-
         // Attach new header
-        $response->headers->add(['X-API-VERSION' => $this->getApiVersion()]);
-    }
-
-    /**
-     * Method to get current version from composer.json file.
-     *
-     * @return string
-     */
-    private function getApiVersion(): string
-    {
-        /** @var stdClass $data */
-        $data = JSON::decode((string)file_get_contents(__DIR__ . '/../../composer.json'));
-
-        return property_exists($data, 'version') ? (string)$data->version : 'unknown';
+        $event->getResponse()->headers->add(['X-API-VERSION' => $this->version->get()]);
     }
 }
