@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -41,7 +41,7 @@ class RequestSubscriberTest extends KernelTestCase
         $request = new Request();
         $response = new Response();
 
-        $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
          * @var MockObject|RequestLogger $logger
@@ -88,7 +88,7 @@ class RequestSubscriberTest extends KernelTestCase
         $request = new Request();
         $response = new Response();
 
-        $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
          * @var MockObject|RequestLogger $logger
@@ -131,7 +131,7 @@ class RequestSubscriberTest extends KernelTestCase
         $request = new Request();
         $response = new Response();
 
-        $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
          * @var MockObject|RequestLogger $logger
@@ -181,7 +181,7 @@ class RequestSubscriberTest extends KernelTestCase
         $request = new Request([], [], [], [], [], ['REQUEST_METHOD' => 'OPTIONS']);
         $response = new Response();
 
-        $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
          * @var MockObject|RequestLogger $logger
@@ -212,7 +212,7 @@ class RequestSubscriberTest extends KernelTestCase
         $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/healthz']);
         $response = new Response();
 
-        $event = new FilterResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
          * @var MockObject|RequestLogger $logger
