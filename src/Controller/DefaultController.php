@@ -9,16 +9,14 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Rest\ResponseHandler;
+use App\Service\Version;
 use App\Utils\HealthzService;
-use App\Utils\JSON;
-use stdClass;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
-use function file_get_contents;
 
 /**
  * Class DefaultController
@@ -43,7 +41,7 @@ class DefaultController
      *
      * @throws Throwable
      */
-    public function indexAction(): Response
+    public function index(): Response
     {
         return new Response('', Response::HTTP_OK);
     }
@@ -77,7 +75,7 @@ class DefaultController
      *
      * @throws Throwable
      */
-    public function healthzAction(
+    public function healthz(
         Request $request,
         ResponseHandler $responseHandler,
         HealthzService $healthzService
@@ -114,19 +112,14 @@ class DefaultController
      *      ),
      *  )
      *
-     * @param string $projectDir
+     * @param Version $version
      *
      * @return JsonResponse
-     *
-     * @throws Throwable
      */
-    public function versionAction(string $projectDir): JsonResponse
+    public function version(Version $version): JsonResponse
     {
-        /** @var stdClass $composerData */
-        $composerData = JSON::decode((string)file_get_contents($projectDir . '/composer.json'));
-
         $data = [
-            'version' => $composerData->version ?? '0.0.0',
+            'version' => $version->get(),
         ];
 
         return new JsonResponse($data);
