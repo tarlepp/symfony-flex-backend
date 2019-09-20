@@ -37,6 +37,11 @@ class EntityReferenceExists extends Constraint
     public const MESSAGE_MULTIPLE = 'Invalid id values "{{ id }}" given for entity "{{ entity }}".';
 
     /**
+     * @var string
+     */
+    public $entityClass = '';
+
+    /**
      * Error names configuration
      *
      * @var mixed[]

@@ -12,7 +12,6 @@ use App\Entity\EntityInterface;
 use App\Helpers\LoggerAwareTrait;
 use Closure;
 use Doctrine\ORM\EntityNotFoundException;
-use Doctrine\ORM\Proxy\Proxy;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -39,8 +38,8 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param EntityInterface|Proxy|array<int, EntityInterface|Proxy>|mixed $value The value that should be validated
-     * @param Constraint $constraint The constraint for the validation
+     * @param EntityInterface|array<int, EntityInterface>|mixed $value The value that should be validated
+     * @param Constraint                                        $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint): void
     {
@@ -48,8 +47,8 @@ class EntityReferenceExistsValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, __NAMESPACE__ . '\EntityReferenceExists');
         }
 
-        /** @var array<int, EntityInterface|Proxy> $values */
-        $values = $this->normalize($value);
+        /** @var array<int, EntityInterface> $values */
+        $values = $this->normalize($constraint->entityClass, $value);
 
         $this->check($values);
     }
@@ -57,18 +56,18 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param EntityInterface|Proxy|array<int, EntityInterface|Proxy>|mixed $input The value that should be validated
+     * @param string                                            $target Target class to check
+     * @param EntityInterface|array<int, EntityInterface>|mixed $input  The value that should be validated
      *
      * @return array<mixed, mixed>
      */
-    private function normalize($input): array
+    private function normalize(string $target, $input): array
     {
         $values = is_array($input) ? $input : [$input];
 
-        /** @var Proxy|EntityInterface $value */
         foreach ($values as $value) {
-            if (!$value instanceof Proxy) {
-                throw new UnexpectedValueException($value, Proxy::class);
+            if (!$value instanceof $target) {
+                throw new UnexpectedValueException($value, $target);
             }
 
             if (!$value instanceof EntityInterface) {
@@ -80,7 +79,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     }
 
     /**
-     * @param array<int, EntityInterface|Proxy> $entities
+     * @param array<int, EntityInterface> $entities
      */
     private function check(array $entities): void
     {
