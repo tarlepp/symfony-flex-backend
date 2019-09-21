@@ -11,6 +11,7 @@ namespace App\Tests\Unit\Utils\Tests;
 use App\Entity\User;
 use App\Utils\Tests\PhpUnitUtil;
 use DateTime;
+use DateTimeImmutable;
 use Generator;
 use LogicException;
 use stdClass;
@@ -109,6 +110,7 @@ class PHPUnitUtilTest extends KernelTestCase
     public function dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue(): Generator
     {
         yield [DateTime::class, stdClass::class];
+        yield [DateTime::class, DateTimeImmutable::class];
         yield [stdClass::class, User::class];
         yield [stdClass::class, 'integer'];
         yield [stdClass::class, DateTime::class];
@@ -128,6 +130,9 @@ class PHPUnitUtilTest extends KernelTestCase
         yield [DateTime::class, 'time'];
         yield [DateTime::class, 'date'];
         yield [DateTime::class, 'datetime'];
+        yield [DateTimeImmutable::class, 'time_immutable'];
+        yield [DateTimeImmutable::class, 'date_immutable'];
+        yield [DateTimeImmutable::class, 'datetime_immutable'];
         yield ['string', 'string'];
         yield ['string', 'text'];
         yield ['array', 'array'];
@@ -146,6 +151,9 @@ class PHPUnitUtilTest extends KernelTestCase
         yield [DateTime::class, 'time', false];
         yield [DateTime::class, 'date', false];
         yield [DateTime::class, 'datetime', false];
+        yield [DateTimeImmutable::class, 'time_immutable', false];
+        yield [DateTimeImmutable::class, 'date_immutable', false];
+        yield [DateTimeImmutable::class, 'datetime_immutable', false];
         yield ['Some text here', 'string', true];
         yield [['some', 'array', 'here'], 'array', true];
         yield [true, 'boolean', true];
