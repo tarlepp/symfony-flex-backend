@@ -40,7 +40,7 @@ class UserGroup extends RestDto
     /**
      * @var \App\Entity\Role
      *
-     * @AppAssert\EntityReferenceExists()
+     * @AppAssert\EntityReferenceExists(entityClass=RoleEntity::class)
      */
     protected $role;
 
