@@ -49,16 +49,21 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
      * @dataProvider dataProviderTestThatValidateMethodThrowsUnexpectedValueException
      *
      * @param mixed  $value
+     * @param mixed  $entityClass
      * @param string $expectedMessage
      */
     public function testThatValidateMethodThrowsUnexpectedValueException(
         $value,
+        $entityClass,
         string $expectedMessage
     ): void {
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage($expectedMessage);
 
-        (new EntityReferenceExistsValidator())->validate($value, new EntityReferenceExists());
+        $constraint = new EntityReferenceExists();
+        $constraint->entityClass = $entityClass;
+
+        (new EntityReferenceExistsValidator())->validate($value, $constraint);
     }
 
     public function testThatContextAndLoggerMethodsAreNotCalledWithinHappyPath(): void
@@ -70,7 +75,7 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
          */
         $context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $value = $this->getMockForAbstractClass(EntityReference::class);
+        $value = $this->getMockForAbstractClass(EntityReference::class, [], 'TestClass');
 
         $context
             ->expects(static::never())
@@ -85,11 +90,14 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
             ->method('getCreatedAt')
             ->willReturn(null);
 
+        $constraint = new EntityReferenceExists();
+        $constraint->entityClass = 'TestClass';
+
         // Run validator
         $validator = new EntityReferenceExistsValidator();
         $validator->initialize($context);
         $validator->setLogger($logger);
-        $validator->validate($value, new EntityReferenceExists());
+        $validator->validate($value, $constraint);
     }
 
     public function testThatContextAndLoggerMethodsAreCalledIfEntityReferenceIsNotValidEntity(): void
@@ -138,11 +146,14 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
             ->method('getCreatedAt')
             ->willThrowException($exception);
 
+        $constraint = new EntityReferenceExists();
+        $constraint->entityClass = EntityReference::class;
+
         // Run validator
         $validator = new EntityReferenceExistsValidator();
         $validator->initialize($context);
         $validator->setLogger($logger);
-        $validator->validate($value, new EntityReferenceExists());
+        $validator->validate($value, $constraint);
     }
 
     /**
@@ -150,21 +161,35 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
      */
     public function dataProviderTestThatValidateMethodThrowsUnexpectedValueException(): Generator
     {
-        yield ['', 'Expected argument of type "Doctrine\ORM\Proxy\Proxy", "string" given'];
+        yield ['', stdClass::class, 'Expected argument of type "stdClass", "string" given'];
 
-        yield [new stdClass(), 'Expected argument of type "Doctrine\ORM\Proxy\Proxy", "stdClass" given'];
+        yield [
+            new stdClass(),
+            EntityInterface::class,
+            'Expected argument of type "App\Entity\EntityInterface", "stdClass" given'
+        ];
 
-        yield [[''], 'Expected argument of type "Doctrine\ORM\Proxy\Proxy", "string" given'];
+        yield [
+            [''],
+            EntityInterface::class,
+            'Expected argument of type "App\Entity\EntityInterface", "string" given'
+        ];
 
-        yield [[new stdClass()], 'Expected argument of type "Doctrine\ORM\Proxy\Proxy", "stdClass" given'];
+        yield [
+            [new stdClass()],
+            EntityInterface::class,
+            'Expected argument of type "App\Entity\EntityInterface", "stdClass" given'
+        ];
 
         yield [
             $this->getMockForAbstractClass(Proxy::class, [], 'ProxyClass'),
+            Proxy::class,
             'Expected argument of type "App\Entity\EntityInterface", "ProxyClass" given',
         ];
 
         yield [
             [$this->getMockForAbstractClass(Proxy::class, [], 'ProxyClass')],
+            Proxy::class,
             'Expected argument of type "App\Entity\EntityInterface", "ProxyClass" given',
         ];
     }
