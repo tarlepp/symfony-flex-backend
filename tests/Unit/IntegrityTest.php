@@ -356,7 +356,26 @@ FORMAT;
         static::assertTrue(class_exists($restRequestMapperTestClass), $message);
     }
 
-        /**
+    /**
+     * @dataProvider dataProviderTestThatGenericServiceHaveIntegrationTests
+     *
+     * @param string $serviceTestClass
+     * @param string $serviceClass
+     */
+    public function testThatGenericServiceHaveIntegrationTests(
+        string $serviceTestClass,
+        string $serviceClass
+    ): void {
+        $message = sprintf(
+            'Service "%s" does not have required test class "%s".',
+            $serviceClass,
+            $serviceTestClass
+        );
+
+        static::assertTrue(class_exists($serviceTestClass), $message);
+    }
+
+    /**
      * @return array
      */
     public function dataProviderTestThatControllerHasE2ETests(): array
@@ -703,6 +722,21 @@ FORMAT;
         };
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/Service/';
+
+        $namespace = '\\App\\Service\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Service\\';
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
     /**
