@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Entity;
 
 use DateTimeImmutable;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Interface EntityInterface
@@ -19,9 +20,9 @@ use DateTimeImmutable;
 interface EntityInterface
 {
     /**
-     * @return string
+     * @return UuidInterface
      */
-    public function getId(): string;
+    public function getId(): UuidInterface;
 
     /**
      * Returns createdAt.

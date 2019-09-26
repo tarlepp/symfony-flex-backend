@@ -29,7 +29,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class Role implements EntityInterface
+class Role
 {
     // Traits
     use Blameable;
@@ -47,7 +47,8 @@ class Role implements EntityInterface
      * @ORM\Column(
      *      name="role",
      *      type="string",
-     *      nullable=false
+     *      unique=true,
+     *      nullable=false,
      *  )
      * @ORM\Id()
      */

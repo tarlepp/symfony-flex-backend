@@ -10,8 +10,9 @@ namespace App\Entity;
 
 use App\Entity\Traits\LogEntityTrait;
 use App\Entity\Traits\LogRequestProcessRequestTrait;
+use App\Entity\Traits\Uuid;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -42,6 +43,7 @@ class LogRequest implements EntityInterface
     // Traits
     use LogEntityTrait;
     use LogRequestProcessRequestTrait;
+    use Uuid;
 
     /**
      * @var User|null
@@ -76,7 +78,8 @@ class LogRequest implements EntityInterface
      *
      * @ORM\Column(
      *      name="id",
-     *      type="guid",
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
      *      nullable=false,
      *  )
      * @ORM\Id()
@@ -171,7 +174,7 @@ class LogRequest implements EntityInterface
         ?ApiKey $apiKey = null,
         ?bool $masterRequest = null
     ) {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = $this->getUuid();
         $this->user = $user;
         $this->apiKey = $apiKey;
         $this->masterRequest = $masterRequest ?? true;
@@ -189,9 +192,9 @@ class LogRequest implements EntityInterface
     }
 
     /**
-     * @return string
+     * @return UuidInterface
      */
-    public function getId(): string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

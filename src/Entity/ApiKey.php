@@ -10,11 +10,12 @@ namespace App\Entity;
 
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
+use App\Entity\Traits\Uuid;
 use App\Security\RolesService;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -47,9 +48,10 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     // Traits
     use Blameable;
     use Timestampable;
+    use Uuid;
 
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "ApiKey",
@@ -58,7 +60,8 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @ORM\Column(
      *      name="id",
-     *      type="guid",
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
      *      nullable=false,
      *  )
      * @ORM\Id()
@@ -135,11 +138,11 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     /**
      * ApiKey constructor.
      *
-     * * @throws Throwable
+     * @throws Throwable
      */
     public function __construct()
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = $this->getUuid();
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
 
@@ -147,9 +150,9 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     }
 
     /**
-     * @return string
+     * @return UuidInterface
      */
-    public function getId(): string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }

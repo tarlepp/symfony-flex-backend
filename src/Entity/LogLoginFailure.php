@@ -8,10 +8,11 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\Uuid;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
 
@@ -33,6 +34,9 @@ use Throwable;
  */
 class LogLoginFailure implements EntityInterface
 {
+    // Traits
+    use Uuid;
+
     /**
      * @var string
      *
@@ -43,8 +47,9 @@ class LogLoginFailure implements EntityInterface
      *
      * @ORM\Column(
      *      name="id",
-     *      type="guid",
-     *      nullable=false
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
+     *      nullable=false,
      *  )
      * @ORM\Id()
      */
@@ -97,15 +102,15 @@ class LogLoginFailure implements EntityInterface
      */
     public function __construct(User $user)
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = $this->getUuid();
         $this->user = $user;
         $this->timestamp = new DateTimeImmutable('NOW', new DateTimeZone('UTC'));
     }
 
     /**
-     * @return string
+     * @return UuidInterface
      */
-    public function getId(): string
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
