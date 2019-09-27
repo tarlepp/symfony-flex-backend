@@ -74,8 +74,8 @@ class UserGroup implements EntityInterface
      *  )
      * @ORM\JoinColumns({
      *      @ORM\JoinColumn(
-     *          name="role",
-     *          referencedColumnName="role",
+     *          name="role_id",
+     *          referencedColumnName="id",
      *          onDelete="CASCADE",
      *      ),
      *  })

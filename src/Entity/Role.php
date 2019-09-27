@@ -10,10 +10,13 @@ namespace App\Entity;
 
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
+use App\Entity\Traits\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Throwable;
 
 /**
  * Class Role
@@ -29,11 +32,31 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class Role
+class Role implements EntityInterface
 {
     // Traits
     use Blameable;
     use Timestampable;
+    use Uuid;
+
+    /**
+     * @var UuidInterface
+     *
+     * @Groups({
+     *      "Role",
+     *      "Role.id",
+     *      "UserGroup.role",
+     *  })
+     *
+     * @ORM\Column(
+     *      name="id",
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
+     *      nullable=false,
+     *  )
+     * @ORM\Id()
+     */
+    private $id;
 
     /**
      * @var string
@@ -50,9 +73,8 @@ class Role
      *      unique=true,
      *      nullable=false,
      *  )
-     * @ORM\Id()
      */
-    private $id;
+    private $role;
 
     /**
      * @var string
@@ -90,21 +112,32 @@ class Role
      * Constructor.
      *
      * @param string|null $role The role name
+     *
+     * @throws Throwable
      */
     public function __construct(?string $role = null)
     {
+        $this->id = $this->getUuid();
         $role = $role ?? '';
 
-        $this->id = $role;
+        $this->role = $role;
         $this->userGroups = new ArrayCollection();
+    }
+
+    /**
+     * @return UuidInterface
+     */
+    public function getId(): UuidInterface
+    {
+        return $this->id;
     }
 
     /**
      * @return string
      */
-    public function getId(): string
+    public function getRole(): string
     {
-        return $this->id;
+        return $this->role;
     }
 
     /**
