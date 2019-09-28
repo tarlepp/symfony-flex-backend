@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity\Traits;
 
-use Ramsey\Uuid\Codec\OrderedTimeCodec;
+use App\Rest\UuidHelper;
 use Ramsey\Uuid\UuidInterface;
 use Throwable;
 
@@ -27,11 +27,6 @@ trait Uuid
      */
     protected function getUuid(): UuidInterface
     {
-        $factory = clone \Ramsey\Uuid\Uuid::getFactory();
-        $codec = new OrderedTimeCodec($factory->getUuidBuilder());
-
-        $factory->setCodec($codec);
-
-        return $factory->uuid1();
+        return UuidHelper::getFactory()->uuid1();
     }
 }
