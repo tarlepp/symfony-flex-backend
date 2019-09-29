@@ -13,6 +13,7 @@ use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\Query\Expr\Literal;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
+use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use stdClass;
 use function array_combine;
 use function array_key_exists;
@@ -358,13 +359,18 @@ class RepositoryHelper
         // Operator is between, so we need to add third parameter for Expr method
         if ($lowercaseOperator === 'between') {
             $parameters[] = '?' . self::$parameterCount;
-            $queryBuilder->setParameter(self::$parameterCount, $value[0]);
+            $queryBuilder->setParameter(self::$parameterCount, $value[0], UuidHelper::getType($value[0]));
 
             self::$parameterCount++;
 
             $parameters[] = '?' . self::$parameterCount;
-            $queryBuilder->setParameter(self::$parameterCount, $value[1]);
+            $queryBuilder->setParameter(self::$parameterCount, $value[1], UuidHelper::getType($value[1]));
         } else { // Otherwise this must be IN or NOT IN expression
+            try {
+                $value = array_map([UuidHelper::class, 'getBytes'], $value);
+            } /** @noinspection BadExceptionsProcessingInspection */ catch (InvalidUuidStringException $exception) {
+            }
+
             $parameters[] = array_map(static function (string $value) use ($queryBuilder): Literal {
                 return $queryBuilder->expr()->literal(is_numeric($value) ? (int)$value : $value);
             }, $value);
@@ -417,7 +423,11 @@ class RepositoryHelper
         } else {
             $parameters[] = '?' . self::$parameterCount;
 
-            $queryBuilder->setParameter(self::$parameterCount, $comparison->value);
+            $queryBuilder->setParameter(
+                self::$parameterCount,
+                $comparison->value,
+                UuidHelper::getType($comparison->value)
+            );
         }
 
         return $parameters;
