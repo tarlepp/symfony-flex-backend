@@ -12,6 +12,7 @@ use App\AutoMapper\RestRequestMapper;
 use App\Entity\Role;
 use App\Resource\RoleResource;
 use Doctrine\ORM\ORMException;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class RequestMapper
@@ -42,14 +43,14 @@ class RequestMapper extends RestRequestMapper
     }
 
     /**
-     * @param string $role
+     * @param UuidInterface $role
      *
      * @return Role
      *
      * @throws ORMException
      */
-    protected function transformRole(string $role): Role
+    protected function transformRole(UuidInterface $role): Role
     {
-        return $this->roleResource->getReference($role);
+        return $this->roleResource->getReference($role->toString());
     }
 }
