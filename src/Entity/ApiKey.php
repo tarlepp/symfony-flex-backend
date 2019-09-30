@@ -252,7 +252,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
          * @return string
          */
         $iterator = static function (UserGroup $userGroup): string {
-            return $userGroup->getRole()->getId();
+            return $userGroup->getRole()->getRole();
         };
 
         return array_values(
