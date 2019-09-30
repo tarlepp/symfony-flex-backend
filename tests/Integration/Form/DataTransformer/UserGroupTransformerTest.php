@@ -110,7 +110,7 @@ class UserGroupTransformerTest extends KernelTestCase
 
         $entity = new UserGroup();
 
-        yield [[$entity->getId()], [$entity]];
+        yield [[$entity->getId()->toString()], [$entity]];
     }
 
     /**

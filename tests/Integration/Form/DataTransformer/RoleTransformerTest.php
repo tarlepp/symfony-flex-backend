@@ -50,11 +50,11 @@ class RoleTransformerTest extends KernelTestCase
         $this->roleResource
             ->expects(static::once())
             ->method('findOne')
-            ->with('role_name')
+            ->with($entity->getId()->toString())
             ->willReturn($entity);
 
         $transformer = new RoleTransformer($this->roleResource);
-        $transformer->reverseTransform('role_name');
+        $transformer->reverseTransform($entity->getId()->toString());
 
         unset($transformer, $entity);
     }
@@ -62,7 +62,7 @@ class RoleTransformerTest extends KernelTestCase
     public function testThatReverseTransformThrowsAnException(): void
     {
         $this->expectException(TransformationFailedException::class);
-        $this->expectExceptionMessage('Role with name "role_name" does not exist!');
+        $this->expectExceptionMessage('Role with id "role_name" does not exist!');
 
         $this->roleResource
             ->expects(static::once())
@@ -102,7 +102,7 @@ class RoleTransformerTest extends KernelTestCase
 
         $entity = new Role();
 
-        yield [$entity->getId(), $entity];
+        yield [$entity->getId()->toString(), $entity];
     }
 
     /**
