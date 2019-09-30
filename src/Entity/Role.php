@@ -118,9 +118,7 @@ class Role implements EntityInterface
     public function __construct(?string $role = null)
     {
         $this->id = $this->getUuid();
-        $role = $role ?? '';
-
-        $this->role = $role;
+        $this->setRole($role ?? '');
         $this->userGroups = new ArrayCollection();
     }
 
@@ -138,6 +136,18 @@ class Role implements EntityInterface
     public function getRole(): string
     {
         return $this->role;
+    }
+
+    /**
+     * @param string $role
+     *
+     * @return Role
+     */
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
     }
 
     /**
