@@ -11,6 +11,7 @@ use App\Entity\User as UserEntity;
 use App\EventSubscriber\LockedUserSubscriber;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
+use App\Rest\UuidHelper;
 use App\Security\SecurityUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
@@ -73,16 +74,23 @@ class LockedUserSubscriberTest extends KernelTestCase
             ->disableOriginalConstructor()->getMock();
         $user = $this->getMockBuilder(UserEntity::class)->getMock();
 
-        $userRepository
-            ->expects(static::once())
-            ->method('loadUserByUsername')
-            ->with($user->getId())
-            ->willReturn($user);
+        $uuid = UuidHelper::getFactory()->uuid1();
+
+        $user
+            ->expects(static::exactly(2))
+            ->method('getId')
+            ->willReturn($uuid);
 
         $user
             ->expects(static::once())
             ->method('getLogsLoginFailure')
             ->willReturn(new ArrayCollection(range(0, 11)));
+
+        $userRepository
+            ->expects(static::once())
+            ->method('loadUserByUsername')
+            ->with($user->getId()->toString())
+            ->willReturn($user);
 
         $securityUser = new SecurityUser($user);
         $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
@@ -108,7 +116,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $userRepository
             ->expects(static::once())
             ->method('loadUserByUsername')
-            ->with($user->getId())
+            ->with($user->getId()->toString())
             ->willReturn($user);
 
         $logLoginFailureResource
