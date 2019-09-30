@@ -43,6 +43,9 @@ class RoleTransformerTest extends KernelTestCase
         static::assertSame($expected, $transformer->transform($input));
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatReverseTransformCallsExpectedObjectManagerMethods(): void
     {
         $entity = new Role();
@@ -59,6 +62,9 @@ class RoleTransformerTest extends KernelTestCase
         unset($transformer, $entity);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatReverseTransformThrowsAnException(): void
     {
         $this->expectException(TransformationFailedException::class);
@@ -76,6 +82,9 @@ class RoleTransformerTest extends KernelTestCase
         unset($transformer);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatReverseTransformReturnsExpected(): void
     {
         $entity = new Role();
@@ -95,6 +104,8 @@ class RoleTransformerTest extends KernelTestCase
 
     /**
      * @return Generator
+     *
+     * @throws Throwable
      */
     public function dataProviderTestThatTransformReturnsExpected(): Generator
     {
