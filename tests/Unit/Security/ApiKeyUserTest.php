@@ -14,6 +14,7 @@ use App\Security\ApiKeyUser;
 use App\Security\RolesService;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 
 /**
  * Class ApiKeyUserTest
@@ -37,11 +38,13 @@ class ApiKeyUserTest extends KernelTestCase
 
         $apiKeyUser = new ApiKeyUser($apiKey, $rolesService);
 
-        static::assertSame($expectedRoles, $apiKeyUser->getRoles());
+        static::assertEqualsCanonicalizing($expectedRoles, $apiKeyUser->getRoles());
     }
 
     /**
      * @return Generator
+     *
+     * @throws Throwable
      */
     public function dataProviderTestThatGetRolesReturnsExpected(): Generator
     {
