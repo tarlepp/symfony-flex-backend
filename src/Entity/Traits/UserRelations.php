@@ -121,7 +121,7 @@ trait UserRelations
     public function getRoles(): array
     {
         $iterator = static function (UserGroup $userGroup): string {
-            return $userGroup->getRole()->getRole();
+            return $userGroup->getRole()->getId();
         };
 
         /** @var array<int, string> $output */
