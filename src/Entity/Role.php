@@ -14,7 +14,6 @@ use App\Entity\Traits\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
 
@@ -37,26 +36,6 @@ class Role implements EntityInterface
     // Traits
     use Blameable;
     use Timestampable;
-    use Uuid;
-
-    /**
-     * @var UuidInterface
-     *
-     * @Groups({
-     *      "Role",
-     *      "Role.id",
-     *      "UserGroup.role",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="id",
-     *      type="uuid_binary_ordered_time",
-     *      unique=true,
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     */
-    private $id;
 
     /**
      * @var string
@@ -73,8 +52,9 @@ class Role implements EntityInterface
      *      unique=true,
      *      nullable=false,
      *  )
+     * @ORM\Id()
      */
-    private $role;
+    private $id;
 
     /**
      * @var string
@@ -117,37 +97,18 @@ class Role implements EntityInterface
      */
     public function __construct(?string $role = null)
     {
-        $this->id = $this->getUuid();
-        $this->setRole($role ?? '');
-        $this->userGroups = new ArrayCollection();
-    }
+        $role = $role ?? '';
 
-    /**
-     * @return UuidInterface
-     */
-    public function getId(): UuidInterface
-    {
-        return $this->id;
+        $this->id = $role;
+        $this->userGroups = new ArrayCollection();
     }
 
     /**
      * @return string
      */
-    public function getRole(): string
+    public function getId(): string
     {
-        return $this->role;
-    }
-
-    /**
-     * @param string $role
-     *
-     * @return Role
-     */
-    public function setRole(string $role): self
-    {
-        $this->role = $role;
-
-        return $this;
+        return $this->id;
     }
 
     /**

@@ -8,8 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
-use Ramsey\Uuid\UuidInterface;
-
 /**
  * Interface UserInterface
  *
@@ -19,9 +17,9 @@ use Ramsey\Uuid\UuidInterface;
 interface UserInterface
 {
     /**
-     * @return UuidInterface
+     * @return string
      */
-    public function getId(): UuidInterface;
+    public function getId(): string;
 
     /**
      * @return string

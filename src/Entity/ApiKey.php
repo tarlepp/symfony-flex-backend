@@ -150,11 +150,11 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     }
 
     /**
-     * @return UuidInterface
+     * @return string
      */
-    public function getId(): UuidInterface
+    public function getId(): string
     {
-        return $this->id;
+        return $this->id->toString();
     }
 
     /**
@@ -252,7 +252,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
          * @return string
          */
         $iterator = static function (UserGroup $userGroup): string {
-            return $userGroup->getRole()->getRole();
+            return $userGroup->getRole()->getId();
         };
 
         return array_values(

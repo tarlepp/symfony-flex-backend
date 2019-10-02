@@ -20,9 +20,9 @@ use Ramsey\Uuid\UuidInterface;
 interface EntityInterface
 {
     /**
-     * @return UuidInterface
+     * @return string
      */
-    public function getId(): UuidInterface;
+    public function getId(): string;
 
     /**
      * Returns createdAt.
