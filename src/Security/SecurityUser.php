@@ -40,7 +40,7 @@ class SecurityUser implements SecurityUserInterface
      */
     public function __construct(User $user)
     {
-        $this->username = $user->getId()->toString();
+        $this->username = $user->getId();
         $this->password = $user->getPassword();
     }
 
