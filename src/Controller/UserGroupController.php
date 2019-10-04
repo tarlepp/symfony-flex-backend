@@ -78,7 +78,7 @@ class UserGroupController extends Controller
      * @Route(
      *      "/{userGroup}/users",
      *      requirements={
-     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "userGroup" = "%app.uuid_regex%",
      *      },
      *      methods={"GET"},
      *  )
@@ -146,8 +146,8 @@ class UserGroupController extends Controller
      * @Route(
      *      "/{userGroup}/user/{user}",
      *      requirements={
-     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *          "user" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "userGroup" = "%app.uuid_regex%",
+     *          "user" = "%app.uuid_regex%",
      *      },
      *      methods={"POST"},
      *  )
@@ -253,8 +253,8 @@ class UserGroupController extends Controller
      * @Route(
      *      "/{userGroup}/user/{user}",
      *      requirements={
-     *          "userGroupId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *          "userId" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "userGroupId" = "%app.uuid_regex%",
+     *          "userId" = "%app.uuid_regex%",
      *      },
      *      methods={"DELETE"},
      *  )
