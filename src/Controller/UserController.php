@@ -38,7 +38,7 @@ use Throwable;
  *     path="/user",
  *  )
  *
- * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ * Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
  * @SWG\Tag(name="User Management")
  *
@@ -52,7 +52,7 @@ class UserController extends Controller
     // Traits for REST actions
     use Actions\Admin\CountAction;
     use Actions\Admin\FindAction;
-    use Actions\Admin\FindOneAction;
+    use Actions\Anon\FindOneAction;
     use Actions\Admin\IdsAction;
     use Actions\Root\CreateAction;
     use Actions\Root\PatchAction;
@@ -79,7 +79,7 @@ class UserController extends Controller
      * @Route(
      *      "/{requestUser}",
      *      requirements={
-     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "requestUser" = "%app.uuid_regex%",
      *      },
      *      methods={"DELETE"},
      *  )
@@ -116,7 +116,7 @@ class UserController extends Controller
      * @Route(
      *      "/{requestUser}/roles",
      *      requirements={
-     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "requestUser" = "%app.uuid_regex%",
      *      },
      *      methods={"GET"},
      *  )
@@ -187,7 +187,7 @@ class UserController extends Controller
      * @Route(
      *      "/{requestUser}/groups",
      *      requirements={
-     *          "requestUser" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "requestUser" = "%app.uuid_regex%",
      *      },
      *      methods={"GET"},
      *  )
@@ -263,8 +263,8 @@ class UserController extends Controller
      * @Route(
      *      "/{user}/group/{userGroup}",
      *      requirements={
-     *          "user" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "user" = "%app.uuid_regex%",
+     *          "userGroup" = "%app.uuid_regex%",
      *      },
      *      methods={"POST"},
      *  )
@@ -383,8 +383,8 @@ class UserController extends Controller
      * @Route(
      *      "/{user}/group/{userGroup}",
      *      requirements={
-     *          "user" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
-     *          "userGroup" = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+     *          "user" = "%app.uuid_regex%",
+     *          "userGroup" = "%app.uuid_regex%",
      *      },
      *      methods={"DELETE"},
      *  )
