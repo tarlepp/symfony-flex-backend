@@ -38,7 +38,7 @@ use Throwable;
  *     path="/user",
  *  )
  *
- * Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
  * @SWG\Tag(name="User Management")
  *
@@ -52,7 +52,7 @@ class UserController extends Controller
     // Traits for REST actions
     use Actions\Admin\CountAction;
     use Actions\Admin\FindAction;
-    use Actions\Anon\FindOneAction;
+    use Actions\Admin\FindOneAction;
     use Actions\Admin\IdsAction;
     use Actions\Root\CreateAction;
     use Actions\Root\PatchAction;
