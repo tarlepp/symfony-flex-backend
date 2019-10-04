@@ -59,4 +59,6 @@ RUN echo 'source /usr/share/bash-completion/bash_completion' >> /etc/bash.bashrc
 
 EXPOSE 9000
 
+RUN ln -s /app/vendor/bin/phpunit /usr/local/bin/phpunit
+
 ENTRYPOINT ["/app/docker-entrypoint-dev.sh"]
