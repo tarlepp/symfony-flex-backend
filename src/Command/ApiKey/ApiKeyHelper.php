@@ -124,7 +124,7 @@ class ApiKeyHelper
         $choices = [];
         $iterator = $this->getApiKeyIterator($choices);
 
-        array_map($iterator, $this->apiKeyResource->find([], ['token' => 'ASC']));
+        array_map($iterator, $this->apiKeyResource->find(null, ['token' => 'ASC']));
 
         $choices['Exit'] = 'Exit command';
 
