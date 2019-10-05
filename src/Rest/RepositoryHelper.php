@@ -359,12 +359,12 @@ class RepositoryHelper
         // Operator is between, so we need to add third parameter for Expr method
         if ($lowercaseOperator === 'between') {
             $parameters[] = '?' . self::$parameterCount;
-            $queryBuilder->setParameter(self::$parameterCount, $value[0], UuidHelper::getType($value[0]));
+            $queryBuilder->setParameter(self::$parameterCount, $value[0], UuidHelper::getType((string)$value[0]));
 
             self::$parameterCount++;
 
             $parameters[] = '?' . self::$parameterCount;
-            $queryBuilder->setParameter(self::$parameterCount, $value[1], UuidHelper::getType($value[1]));
+            $queryBuilder->setParameter(self::$parameterCount, $value[1], UuidHelper::getType((string)$value[1]));
         } else { // Otherwise this must be IN or NOT IN expression
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
@@ -426,7 +426,7 @@ class RepositoryHelper
             $queryBuilder->setParameter(
                 self::$parameterCount,
                 $comparison->value,
-                UuidHelper::getType($comparison->value)
+                UuidHelper::getType((string)$comparison->value)
             );
         }
 
