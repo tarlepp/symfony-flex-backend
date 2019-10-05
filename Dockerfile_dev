@@ -1,5 +1,5 @@
 FROM composer:1.9.0 AS composer
-FROM php:7.3.9-fpm
+FROM php:7.3.10-fpm
 
 # Let's use bash as a default shell
 SHELL ["/bin/bash", "-c"]
@@ -58,5 +58,7 @@ RUN echo 'source /usr/share/bash-completion/bash_completion' >> /etc/bash.bashrc
     && echo 'eval "$(symfony-autocomplete --shell bash)"' >> /etc/bash.bashrc
 
 EXPOSE 9000
+
+RUN ln -s /app/vendor/bin/phpunit /usr/local/bin/phpunit
 
 ENTRYPOINT ["/app/docker-entrypoint-dev.sh"]
