@@ -129,6 +129,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/serializer" />
       <path value="$PROJECT_DIR$/vendor/symfony/event-dispatcher" />
       <path value="$PROJECT_DIR$/vendor/symfony/var-exporter" />
+      <path value="$PROJECT_DIR$/vendor/ramsey/uuid-doctrine" />
     </include_path>
   </component>
   <component name="PhpInterpreters">

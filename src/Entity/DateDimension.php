@@ -8,11 +8,12 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\Uuid;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
 use function floor;
@@ -35,8 +36,11 @@ use function floor;
  */
 class DateDimension implements EntityInterface
 {
+    // Traits
+    use Uuid;
+
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "DateDimension",
@@ -45,7 +49,8 @@ class DateDimension implements EntityInterface
      *
      * @ORM\Column(
      *      name="id",
-     *      type="guid",
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
      *      nullable=false,
      *  )
      * @ORM\Id()
@@ -268,7 +273,7 @@ class DateDimension implements EntityInterface
      */
     public function __construct(?DateTime $dateTime = null)
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = $this->getUuid();
 
         if ($dateTime !== null) {
             $this->date = $dateTime;
@@ -290,7 +295,7 @@ class DateDimension implements EntityInterface
      */
     public function getId(): string
     {
-        return $this->id;
+        return $this->id->toString();
     }
 
     /**

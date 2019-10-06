@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
+use App\Rest\UuidHelper;
 use Generator;
-use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_merge;
@@ -218,7 +218,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $uuid = Uuid::uuid4()->toString();
+        $uuid = UuidHelper::getFactory()->uuid1()->toString();
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/' . $uuid);
@@ -245,7 +245,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $uuid = Uuid::uuid4()->toString();
+        $uuid = UuidHelper::getFactory()->uuid1()->toString();
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/' . $uuid);
@@ -272,7 +272,7 @@ abstract class RestTraitTestCase extends WebTestCase
     ): void {
         $method = $method ?? 'GET';
 
-        $uuid = Uuid::uuid4()->toString();
+        $uuid = UuidHelper::getFactory()->uuid1()->toString();
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/' . $uuid);

@@ -11,9 +11,10 @@ namespace App\Entity;
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\UserRelations;
+use App\Entity\Traits\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -43,9 +44,10 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     use Blameable;
     use Timestampable;
     use UserRelations;
+    use Uuid;
 
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "User",
@@ -55,8 +57,9 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *
      * @ORM\Column(
      *      name="id",
-     *      type="guid",
-     *      nullable=false
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
+     *      nullable=false,
      *  )
      * @ORM\Id()
      */
@@ -172,7 +175,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      */
     public function __construct()
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = $this->getUuid();
 
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
@@ -185,7 +188,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      */
     public function getId(): string
     {
-        return $this->id;
+        return $this->id->toString();
     }
 
     /**

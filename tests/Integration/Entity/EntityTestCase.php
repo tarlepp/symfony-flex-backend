@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\EntityInterface;
+use App\Rest\UuidHelper;
 use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
@@ -82,16 +83,16 @@ abstract class EntityTestCase extends KernelTestCase
     }
 
     /**
-     * Generic method to test that getId method returns a string and it is UUID V4 format
+     * Generic method to test that getId method return expected UUID.
      */
-    public function testThatGetIdReturnsUuidString(): void
+    public function testThatGetIdReturnsCorrectUuid(): void
     {
-        // Get entity UUID
-        $uuid = $this->entity->getId();
+        // Get entity UUID/ID
+        $id = $this->entity->getId();
 
-        // Asserts
-        static::assertIsString($uuid);
-        static::assertRegExp('#^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$#', $uuid);
+        $factory = UuidHelper::getFactory();
+
+        static::assertSame($id, $factory->fromString($id)->toString());
     }
 
     /**

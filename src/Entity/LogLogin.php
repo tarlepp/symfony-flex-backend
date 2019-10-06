@@ -9,9 +9,10 @@ declare(strict_types = 1);
 namespace App\Entity;
 
 use App\Entity\Traits\LogEntityTrait;
+use App\Entity\Traits\Uuid;
 use DeviceDetector\DeviceDetector;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
@@ -40,6 +41,7 @@ class LogLogin implements EntityInterface
 {
     // Traits
     use LogEntityTrait;
+    use Uuid;
 
     /**
      * @var User|null
@@ -65,7 +67,7 @@ class LogLogin implements EntityInterface
     protected $user;
 
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "LogLogin",
@@ -74,7 +76,8 @@ class LogLogin implements EntityInterface
      *
      * @ORM\Column(
      *      name="id",
-     *      type="guid",
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
      *      nullable=false,
      *  )
      * @ORM\Id()
@@ -318,7 +321,7 @@ class LogLogin implements EntityInterface
      */
     public function __construct(string $type, Request $request, DeviceDetector $deviceDetector, ?User $user = null)
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = $this->getUuid();
 
         $this->type = $type;
         $this->deviceDetector = $deviceDetector;
@@ -334,7 +337,7 @@ class LogLogin implements EntityInterface
      */
     public function getId(): string
     {
-        return $this->id;
+        return $this->id->toString();
     }
 
     /**

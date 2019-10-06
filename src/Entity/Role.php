@@ -14,6 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Throwable;
 
 /**
  * Class Role
@@ -47,7 +48,8 @@ class Role implements EntityInterface
      * @ORM\Column(
      *      name="role",
      *      type="string",
-     *      nullable=false
+     *      unique=true,
+     *      nullable=false,
      *  )
      * @ORM\Id()
      */
@@ -89,6 +91,8 @@ class Role implements EntityInterface
      * Constructor.
      *
      * @param string|null $role The role name
+     *
+     * @throws Throwable
      */
     public function __construct(?string $role = null)
     {

@@ -8,10 +8,11 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Entity\Traits\Uuid;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
 
@@ -28,8 +29,11 @@ use Throwable;
  */
 class Healthz implements EntityInterface
 {
+    // Traits
+    use Uuid;
+
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "Healthz",
@@ -38,8 +42,9 @@ class Healthz implements EntityInterface
      *
      * @ORM\Column(
      *      name="id",
-     *      type="guid",
-     *      nullable=false
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
+     *      nullable=false,
      *  )
      * @ORM\Id()
      */
@@ -68,7 +73,7 @@ class Healthz implements EntityInterface
      */
     public function __construct()
     {
-        $this->id = Uuid::uuid4()->toString();
+        $this->id = $this->getUuid();
 
         $this->setTimestamp(new DateTimeImmutable('NOW', new DateTimeZone('UTC')));
     }
@@ -78,7 +83,7 @@ class Healthz implements EntityInterface
      */
     public function getId(): string
     {
-        return $this->id;
+        return $this->id->toString();
     }
 
     /**

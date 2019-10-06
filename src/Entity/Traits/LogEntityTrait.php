@@ -169,9 +169,9 @@ trait LogEntityTrait
     /**
      * Returns createdAt.
      *
-     * @return DateTimeImmutable
+     * @return DateTimeImmutable|null
      */
-    public function getCreatedAt(): DateTimeImmutable
+    public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->date;
     }

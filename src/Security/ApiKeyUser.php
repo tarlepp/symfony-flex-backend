@@ -59,18 +59,19 @@ class ApiKeyUser implements ApiKeyUserInterface
     public function __construct(ApiKey $apiKey, RolesService $rolesService)
     {
         $this->apiKey = $apiKey;
-
         $this->username = $this->apiKey->getToken();
 
-        // Attach base 'ROLE_API' for API user
-        $roles = [RolesService::ROLE_API];
+        $iterator = static function (UserGroup $userGroup): string {
+            return $userGroup->getRole()->getId();
+        };
 
         // Iterate API key user groups and attach those roles for API user
-        $this->apiKey->getUserGroups()->map(static function (UserGroup $userGroup) use (&$roles): void {
-            $roles[] = $userGroup->getRole()->getId();
-        });
+        $roles = $this->apiKey->getUserGroups()->map($iterator);
 
-        $this->roles = array_unique($rolesService->getInheritedRoles($roles));
+        // Attach base 'ROLE_API' for API user
+        $roles->add(RolesService::ROLE_API);
+
+        $this->roles = array_unique($rolesService->getInheritedRoles($roles->toArray()));
     }
 
     /**
