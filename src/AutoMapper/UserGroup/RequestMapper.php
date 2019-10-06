@@ -12,7 +12,6 @@ use App\AutoMapper\RestRequestMapper;
 use App\Entity\Role;
 use App\Resource\RoleResource;
 use Doctrine\ORM\ORMException;
-use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class RequestMapper

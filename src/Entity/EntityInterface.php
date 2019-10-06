@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Entity;
 
 use DateTimeImmutable;
-use Ramsey\Uuid\UuidInterface;
 
 /**
  * Interface EntityInterface
