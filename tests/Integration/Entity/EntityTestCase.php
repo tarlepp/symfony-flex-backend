@@ -87,12 +87,12 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public function testThatGetIdReturnsCorrectUuid(): void
     {
-        // Get entity UUID
-        $uuid = $this->entity->getId();
+        // Get entity UUID/ID
+        $id = $this->entity->getId();
 
         $factory = UuidHelper::getFactory();
 
-        static::assertSame($uuid->toString(), $factory->fromString($uuid->toString())->toString());
+        static::assertSame($id, $factory->fromString($id)->toString());
     }
 
     /**

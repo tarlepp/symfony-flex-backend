@@ -27,7 +27,7 @@ class RoleTest extends EntityTestCase
     /**
      * Generic method to test that getId method returns a string and it is UUID V4 format
      */
-    public function testThatGetIdReturnsUuidString(): void
+    public function testThatGetIdReturnsCorrectUuid(): void
     {
         static::markTestSkipped();
     }
