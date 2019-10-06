@@ -43,14 +43,14 @@ class RequestMapper extends RestRequestMapper
     }
 
     /**
-     * @param UuidInterface $role
+     * @param string $role
      *
      * @return Role
      *
      * @throws ORMException
      */
-    protected function transformRole(UuidInterface $role): Role
+    protected function transformRole(string $role): Role
     {
-        return $this->roleResource->getReference($role->toString());
+        return $this->roleResource->getReference($role);
     }
 }
