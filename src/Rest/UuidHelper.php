@@ -12,7 +12,7 @@ use Ramsey\Uuid\Codec\OrderedTimeCodec;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidFactoryInterface;
+use Ramsey\Uuid\UuidFactory;
 
 /**
  * Class UuidHelper
@@ -23,13 +23,14 @@ use Ramsey\Uuid\UuidFactoryInterface;
 class UuidHelper
 {
     /**
-     * @return UuidFactoryInterface
+     * @return UuidFactory
      */
-    public static function getFactory(): UuidFactoryInterface
+    public static function getFactory(): UuidFactory
     {
         static $cache = null;
 
         if ($cache === null) {
+            /** @var UuidFactory $factory */
             $factory = clone Uuid::getFactory();
             $codec = new OrderedTimeCodec($factory->getUuidBuilder());
             $factory->setCodec($codec);
