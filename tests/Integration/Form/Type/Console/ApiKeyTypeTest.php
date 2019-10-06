@@ -41,6 +41,7 @@ class ApiKeyTypeTest extends TypeTestCase
         // Create new apiKey group entity
         $userGroupEntity = new UserGroup();
         $userGroupEntity->setRole($roleEntity);
+        $userGroupEntity->setName('Some name');
 
         $this->mockUserGroupResource
             ->expects(static::once())
