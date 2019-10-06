@@ -47,7 +47,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     use Uuid;
 
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "User",

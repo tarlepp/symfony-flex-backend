@@ -67,7 +67,7 @@ class LogLogin implements EntityInterface
     protected $user;
 
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "LogLogin",

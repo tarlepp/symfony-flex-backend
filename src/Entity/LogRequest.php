@@ -68,7 +68,7 @@ class LogRequest implements EntityInterface
     protected $user;
 
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "LogRequest",

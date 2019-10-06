@@ -33,7 +33,7 @@ class Healthz implements EntityInterface
     use Uuid;
 
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "Healthz",

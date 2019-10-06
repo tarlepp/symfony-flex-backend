@@ -38,7 +38,7 @@ class UserGroup implements EntityInterface
     use Uuid;
 
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "UserGroup",

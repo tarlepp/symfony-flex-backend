@@ -40,7 +40,7 @@ class DateDimension implements EntityInterface
     use Uuid;
 
     /**
-     * @var string
+     * @var UuidInterface
      *
      * @Groups({
      *      "DateDimension",
