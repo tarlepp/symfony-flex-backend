@@ -79,7 +79,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $user
             ->expects(static::exactly(2))
             ->method('getId')
-            ->willReturn($uuid);
+            ->willReturn($uuid->toString());
 
         $user
             ->expects(static::once())
@@ -89,7 +89,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $userRepository
             ->expects(static::once())
             ->method('loadUserByUsername')
-            ->with($user->getId()->toString())
+            ->with($user->getId())
             ->willReturn($user);
 
         $securityUser = new SecurityUser($user);
@@ -116,7 +116,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $userRepository
             ->expects(static::once())
             ->method('loadUserByUsername')
-            ->with($user->getId()->toString())
+            ->with($user->getId())
             ->willReturn($user);
 
         $logLoginFailureResource
