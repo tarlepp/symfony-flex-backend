@@ -49,7 +49,7 @@ class SecurityUserTest extends KernelTestCase
     {
         $user = new User();
 
-        static::assertSame($user->getId()->toString(), (new SecurityUser($user))->getUsername());
+        static::assertSame($user->getId(), (new SecurityUser($user))->getUsername());
     }
 
     public function testThatPasswordIsNotPresentAfterEraseCredential(): void
