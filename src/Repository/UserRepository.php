@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\User as Entity;
+use App\Rest\UuidHelper;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 use function array_key_exists;
@@ -121,7 +122,8 @@ class UserRepository extends BaseRepository
                 ->select('u, g, r')
                 ->leftJoin('u.userGroups', 'g')
                 ->leftJoin('g.role', 'r')
-                ->where('u.id = :username OR u.username = :username OR u.email = :email')
+                ->where('u.id = :uuid OR u.username = :username OR u.email = :email')
+                ->setParameter('uuid', $username, UuidHelper::getType($username))
                 ->setParameter('username', $username)
                 ->setParameter('email', $username)
                 ->getQuery();
@@ -158,7 +160,7 @@ class UserRepository extends BaseRepository
         if ($id !== null) {
             $query
                 ->andWhere('u.id <> :id')
-                ->setParameter('id', $id);
+                ->setParameter('id', $id, UuidHelper::getType($id));
         }
 
         return $query->getQuery()->getOneOrNullResult() === null;
