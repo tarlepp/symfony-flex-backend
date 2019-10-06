@@ -9,7 +9,7 @@ parameters:
     env(JWT_PUBLIC_KEY_PATH): '%env(string:key:JWT_PUBLIC_KEY:json:file:APPLICATION_CONFIG)%'
     env(CORS_ALLOW_ORIGIN): '%env(string:key:CORS_ALLOW_ORIGIN:json:file:APPLICATION_CONFIG)%'
     locale: 'en'
-    app.uuid_regex: '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+    app.uuid_regex: '^[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-1[0-9a-fA-F]{3}\-[89ab][0-9a-f]{3}\-[0-9a-fA-F]{12}$'
 
 services:
     # default configuration for services in *this* file
