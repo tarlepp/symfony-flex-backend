@@ -11,6 +11,7 @@ namespace App\Repository\Traits;
 use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
 use App\Rest\RepositoryHelper;
+use App\Rest\UuidHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -81,7 +82,7 @@ trait RepositoryMethodsTrait
 
         $queryBuilder
             ->where('entity.id = :id')
-            ->setParameter('id', $id);
+            ->setParameter('id', $id, UuidHelper::getType($id));
 
         /**
          * This is just to help debug queries
