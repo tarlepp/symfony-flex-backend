@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="PhpCSFixer">
+    <phpcsfixer_settings>
+      <PhpCSFixerConfiguration standards="PSR1;PSR2;Symfony;DoctrineAnnotation;PHP70Migration;PHP71Migration" tool_path="$PROJECT_DIR$/vendor/bin/php-cs-fixer" />
+    </phpcsfixer_settings>
+  </component>
   <component name="PhpCodeSniffer">
     <phpcs_settings>
-      <PhpCSConfiguration standards="MySource;PEAR;PSR1;PSR2;Squiz;Zend" tool_path="$PROJECT_DIR$/vendor/bin/phpcs" />
+      <PhpCSConfiguration beautifier_path="$PROJECT_DIR$/vendor/bin/phpcbf" standards="MySource;PEAR;PSR1;PSR2;Squiz;Zend" tool_path="$PROJECT_DIR$/vendor/bin/phpcs" />
     </phpcs_settings>
   </component>
   <component name="PhpIncludePathManager">
@@ -209,22 +214,95 @@
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2" />
   <component name="PhpRuntimeConfiguration">
     <extensions>
-      <extension name="FFI" enabled="true" />
-      <extension name="Parle" enabled="true" />
-      <extension name="SaxonC" enabled="true" />
-      <extension name="ZendCache" enabled="true" />
-      <extension name="event" enabled="true" />
-      <extension name="leveldb" enabled="true" />
-      <extension name="lua" enabled="true" />
-      <extension name="mapscript" enabled="true" />
-      <extension name="msgpack" enabled="true" />
-      <extension name="rdkafka" enabled="true" />
-      <extension name="solr" enabled="true" />
-      <extension name="sync" enabled="true" />
-      <extension name="uopz" enabled="true" />
-      <extension name="xcache" enabled="true" />
-      <extension name="yaf" enabled="true" />
-      <extension name="yar" enabled="true" />
+      <extension name="Ev" enabled="false" />
+      <extension name="SQLite" enabled="false" />
+      <extension name="SplType" enabled="false" />
+      <extension name="ZendDebugger" enabled="false" />
+      <extension name="ZendUtils" enabled="false" />
+      <extension name="amqp" enabled="false" />
+      <extension name="apache" enabled="false" />
+      <extension name="bz2" enabled="false" />
+      <extension name="calendar" enabled="false" />
+      <extension name="cassandra" enabled="false" />
+      <extension name="couchbase" enabled="false" />
+      <extension name="cubrid" enabled="false" />
+      <extension name="dba" enabled="false" />
+      <extension name="enchant" enabled="false" />
+      <extension name="exif" enabled="false" />
+      <extension name="fann" enabled="false" />
+      <extension name="ffmpeg" enabled="false" />
+      <extension name="gd" enabled="false" />
+      <extension name="gearman" enabled="false" />
+      <extension name="geoip" enabled="false" />
+      <extension name="geos" enabled="false" />
+      <extension name="gettext" enabled="false" />
+      <extension name="gmagick" enabled="false" />
+      <extension name="gmp" enabled="false" />
+      <extension name="gnupg" enabled="false" />
+      <extension name="grpc" enabled="false" />
+      <extension name="http" enabled="false" />
+      <extension name="ibm_db2" enabled="false" />
+      <extension name="igbinary" enabled="false" />
+      <extension name="imagick" enabled="false" />
+      <extension name="imap" enabled="false" />
+      <extension name="inotify" enabled="false" />
+      <extension name="interbase" enabled="false" />
+      <extension name="judy" enabled="false" />
+      <extension name="ldap" enabled="false" />
+      <extension name="libevent" enabled="false" />
+      <extension name="libsodium" enabled="false" />
+      <extension name="mailparse" enabled="false" />
+      <extension name="mcrypt" enabled="false" />
+      <extension name="memcache" enabled="false" />
+      <extension name="memcached" enabled="false" />
+      <extension name="ming" enabled="false" />
+      <extension name="mongo" enabled="false" />
+      <extension name="mongodb" enabled="false" />
+      <extension name="mqseries" enabled="false" />
+      <extension name="mssql" enabled="false" />
+      <extension name="mysql" enabled="false" />
+      <extension name="mysql_xdevapi" enabled="false" />
+      <extension name="mysqli" enabled="false" />
+      <extension name="ncurses" enabled="false" />
+      <extension name="newrelic" enabled="false" />
+      <extension name="oauth" enabled="false" />
+      <extension name="oci8" enabled="false" />
+      <extension name="odbc" enabled="false" />
+      <extension name="pcntl" enabled="false" />
+      <extension name="pdflib" enabled="false" />
+      <extension name="pdo_ibm" enabled="false" />
+      <extension name="pdo_pgsql" enabled="false" />
+      <extension name="pgsql" enabled="false" />
+      <extension name="pspell" enabled="false" />
+      <extension name="pthreads" enabled="false" />
+      <extension name="radius" enabled="false" />
+      <extension name="rar" enabled="false" />
+      <extension name="recode" enabled="false" />
+      <extension name="redis" enabled="false" />
+      <extension name="rrd" enabled="false" />
+      <extension name="shmop" enabled="false" />
+      <extension name="snmp" enabled="false" />
+      <extension name="soap" enabled="false" />
+      <extension name="sockets" enabled="false" />
+      <extension name="sqlsrv" enabled="false" />
+      <extension name="ssh2" enabled="false" />
+      <extension name="suhosin" enabled="false" />
+      <extension name="svn" enabled="false" />
+      <extension name="sybase" enabled="false" />
+      <extension name="sysvmsg" enabled="false" />
+      <extension name="sysvsem" enabled="false" />
+      <extension name="sysvshm" enabled="false" />
+      <extension name="tidy" enabled="false" />
+      <extension name="v8js" enabled="false" />
+      <extension name="wddx" enabled="false" />
+      <extension name="win32service" enabled="false" />
+      <extension name="wincache" enabled="false" />
+      <extension name="xhprof" enabled="false" />
+      <extension name="xmlrpc" enabled="false" />
+      <extension name="xsl" enabled="false" />
+      <extension name="yaml" enabled="false" />
+      <extension name="zend" enabled="false" />
+      <extension name="zmq" enabled="false" />
     </extensions>
   </component>
   <component name="PhpUnit">
