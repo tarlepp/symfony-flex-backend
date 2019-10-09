@@ -37,7 +37,7 @@ COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
 
 # Allow use of composer as a root and add composer bin to path
 ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV PATH "$PATH:/root/.composer/vendor/bin"
+ENV PATH "$PATH:/root/.composer/vendor/bin:/app/vendor/bin"
 
 # Define used work directory
 WORKDIR /app
@@ -58,7 +58,5 @@ RUN echo 'source /usr/share/bash-completion/bash_completion' >> /etc/bash.bashrc
     && echo 'eval "$(symfony-autocomplete --shell bash)"' >> /etc/bash.bashrc
 
 EXPOSE 9000
-
-RUN ln -s /app/vendor/bin/phpunit /usr/local/bin/phpunit
 
 ENTRYPOINT ["/app/docker-entrypoint-dev.sh"]
