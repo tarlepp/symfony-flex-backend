@@ -49,7 +49,7 @@
 		"symfony/orm-pack": "1.0.6",
 		"symfony/security-bundle": "4.3.4",
 		"symfony/serializer-pack": "1.0.2",
-		"symfony/translation": "4.3.4",
+		"symfony/translation": "4.3.5",
 		"symfony/twig-bundle": "4.3.4",
 		"symfony/validator": "4.3.4",
 		"symfony/yaml": "4.3.4"
