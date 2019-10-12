@@ -11,6 +11,7 @@ namespace App\Resource;
 use App\Collection\CollectionTrait;
 use App\Rest\RestResourceInterface;
 use Closure;
+use Countable;
 use InvalidArgumentException;
 use Traversable;
 use function sprintf;
@@ -26,7 +27,7 @@ use function sprintf;
  * @method RestResourceInterface                   get(string $className)
  * @method Traversable<int, RestResourceInterface> getAll(): Traversable
  */
-class Collection
+class Collection implements Countable
 {
     // Traits
     use CollectionTrait;

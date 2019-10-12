@@ -13,6 +13,7 @@ use InvalidArgumentException;
 use Traversable;
 use function array_filter;
 use function count;
+use function iterator_count;
 use function iterator_to_array;
 
 /**
@@ -88,6 +89,16 @@ trait CollectionTrait
         }
 
         return $output;
+    }
+
+    /**
+     * Count elements of an object.
+     *
+     * @return int
+     */
+    public function count(): int
+    {
+        return iterator_count($this->items);
     }
 
     /**

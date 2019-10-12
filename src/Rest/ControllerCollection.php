@@ -10,6 +10,7 @@ namespace App\Rest;
 
 use App\Collection\CollectionTrait;
 use Closure;
+use Countable;
 use InvalidArgumentException;
 use Traversable;
 
@@ -24,7 +25,7 @@ use Traversable;
  * @method ControllerInterface                   get(string $className)
  * @method Traversable<int, ControllerInterface> getAll(): Traversable
  */
-class ControllerCollection
+class ControllerCollection implements Countable
 {
     // Traits
     use CollectionTrait;
