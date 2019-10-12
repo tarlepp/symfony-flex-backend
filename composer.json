@@ -63,7 +63,7 @@
 		"symfony/debug-pack": "1.0.7",
 		"symfony/maker-bundle": "1.13.0",
 		"symfony/requirements-checker": "1.1.5",
-		"symfony/web-server-bundle": "4.3.4"
+		"symfony/web-server-bundle": "4.3.5"
 	},
 	"config": {
 		"platform": {
