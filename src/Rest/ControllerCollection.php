@@ -12,7 +12,7 @@ use App\Collection\CollectionTrait;
 use Closure;
 use Countable;
 use InvalidArgumentException;
-use Traversable;
+use IteratorAggregate;
 
 /**
  * Class ControllerCollection
@@ -20,10 +20,10 @@ use Traversable;
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @property Traversable|Traversable<int, ControllerInterface> $items
+ * @property IteratorAggregate|IteratorAggregate<int, ControllerInterface> $items
  *
- * @method ControllerInterface                   get(string $className)
- * @method Traversable<int, ControllerInterface> getAll(): Traversable
+ * @method ControllerInterface                         get(string $className)
+ * @method IteratorAggregate<int, ControllerInterface> getAll(): IteratorAggregate
  */
 class ControllerCollection implements Countable
 {
@@ -33,9 +33,9 @@ class ControllerCollection implements Countable
     /**
      * Collection constructor.
      *
-     * @param Traversable|Traversable<ControllerInterface> $controllers
+     * @param IteratorAggregate|IteratorAggregate<int, ControllerInterface> $controllers
      */
-    public function __construct(Traversable $controllers)
+    public function __construct(IteratorAggregate $controllers)
     {
         $this->items = $controllers;
     }

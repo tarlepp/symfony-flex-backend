@@ -11,8 +11,8 @@ namespace App\Collection;
 use CallbackFilterIterator;
 use Closure;
 use InvalidArgumentException;
-use Iterator;
-use Traversable;
+use IteratorAggregate;
+use IteratorIterator;
 use function iterator_count;
 
 /**
@@ -20,13 +20,11 @@ use function iterator_count;
  *
  * @package App\Collection
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @method __construct(Traversable $items)
  */
 trait CollectionTrait
 {
     /**
-     * @var Traversable
+     * @var IteratorAggregate
      */
     private $items;
 
@@ -55,11 +53,7 @@ trait CollectionTrait
      */
     public function get(string $className)
     {
-        /** @var Iterator $items */
-        $items = $this->getFilteredIterator($className)->getAll();
-        $items->rewind();
-
-        $current = $items->current();
+        $current = $this->getFilteredItem($className);
 
         if ($current === null) {
             $this->error($className);
@@ -69,9 +63,9 @@ trait CollectionTrait
     }
 
     /**
-     * @return Traversable
+     * @return IteratorAggregate
      */
-    public function getAll(): Traversable
+    public function getAll(): IteratorAggregate
     {
         return $this->items;
     }
@@ -85,7 +79,7 @@ trait CollectionTrait
      */
     public function has(?string $className = null): bool
     {
-        return $this->getFilteredIterator((string)$className)->count() === 1;
+        return $this->getFilteredItem((string)$className) !== null;
     }
 
     /**
@@ -101,11 +95,16 @@ trait CollectionTrait
     /**
      * @param string $className
      *
-     * @return $this
+     * @return null|mixed
      */
-    private function getFilteredIterator(string $className): self
+    private function getFilteredItem(string $className)
     {
-        /** @psalm-suppress UndefinedInterfaceMethod */
-        return new self(new CallbackFilterIterator($this->items->getIterator(), $this->filter($className)));
+        $filteredIterator = new CallbackFilterIterator(
+            new IteratorIterator($this->items->getIterator()),
+            $this->filter($className)
+        );
+        $filteredIterator->next();
+
+        return $filteredIterator->current();
     }
 }

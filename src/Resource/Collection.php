@@ -13,7 +13,7 @@ use App\Rest\RestResourceInterface;
 use Closure;
 use Countable;
 use InvalidArgumentException;
-use Traversable;
+use IteratorAggregate;
 use function sprintf;
 
 /**
@@ -22,10 +22,10 @@ use function sprintf;
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @property Traversable|Traversable<int, RestResourceInterface> $items
+ * @property IteratorAggregate|IteratorAggregate<int, RestResourceInterface> $items
  *
- * @method RestResourceInterface                   get(string $className)
- * @method Traversable<int, RestResourceInterface> getAll(): Traversable
+ * @method RestResourceInterface                         get(string $className)
+ * @method IteratorAggregate<int, RestResourceInterface> getAll(): IteratorAggregate
  */
 class Collection implements Countable
 {
@@ -35,9 +35,9 @@ class Collection implements Countable
     /**
      * Collection constructor.
      *
-     * @param Traversable|Traversable<RestResourceInterface> $resources
+     * @param IteratorAggregate|IteratorAggregate<int, RestResourceInterface> $resources
      */
-    public function __construct(Traversable $resources)
+    public function __construct(IteratorAggregate $resources)
     {
         $this->items = $resources;
     }
