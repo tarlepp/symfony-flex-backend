@@ -8,19 +8,20 @@ declare(strict_types = 1);
 
 namespace App\Collection;
 
+use CallbackFilterIterator;
 use Closure;
 use InvalidArgumentException;
+use Iterator;
 use Traversable;
-use function array_filter;
-use function count;
 use function iterator_count;
-use function iterator_to_array;
 
 /**
  * Trait CollectionTrait
  *
  * @package App\Collection
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method __construct(Traversable $items)
  */
 trait CollectionTrait
 {
@@ -54,19 +55,21 @@ trait CollectionTrait
      */
     public function get(string $className)
     {
-        $filteredResources = $this->getFilteredItems($className);
+        /** @var Iterator $items */
+        $items = $this->getFilteredIterator($className)->getAll();
+        $items->rewind();
 
-        if (count($filteredResources) !== 1) {
+        $current = $items->current();
+
+        if ($current === null) {
             $this->error($className);
         }
 
-        return $filteredResources[0];
+        return $current;
     }
 
     /**
      * @return Traversable
-     *
-     * @psalm-return Traversable<int, mixed>
      */
     public function getAll(): Traversable
     {
@@ -82,13 +85,7 @@ trait CollectionTrait
      */
     public function has(?string $className = null): bool
     {
-        $output = false;
-
-        if ($className !== null) {
-            $output = count(array_filter(iterator_to_array($this->items), $this->filter($className))) === 1;
-        }
-
-        return $output;
+        return $this->getFilteredIterator((string)$className)->count() === 1;
     }
 
     /**
@@ -104,15 +101,11 @@ trait CollectionTrait
     /**
      * @param string $className
      *
-     * @return array
+     * @return $this
      */
-    private function getFilteredItems(string $className): array
+    private function getFilteredIterator(string $className): self
     {
-        return array_values(
-            array_filter(
-                iterator_to_array($this->items),
-                $this->filter($className)
-            )
-        );
+        /** @psalm-suppress UndefinedInterfaceMethod */
+        return new self(new CallbackFilterIterator($this->items->getIterator(), $this->filter($className)));
     }
 }
