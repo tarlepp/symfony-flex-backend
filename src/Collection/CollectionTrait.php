@@ -95,7 +95,7 @@ trait CollectionTrait
     /**
      * @param string $className
      *
-     * @return null|mixed
+     * @return mixed|null
      */
     private function getFilteredItem(string $className)
     {
