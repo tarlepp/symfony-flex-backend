@@ -35,9 +35,9 @@ RUN composer self-update
 # Copy use php.ini to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
 
-# Allow use of composer as a root and add composer bin to path
+# Allow use of composer as a root, add necessary directories to `$PATH`
 ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV PATH "$PATH:/root/.composer/vendor/bin:/app/vendor/bin"
+ENV PATH "$PATH:/root/.composer/vendor/bin:/app/vendor/bin:/app/bin"
 
 # Define used work directory
 WORKDIR /app
