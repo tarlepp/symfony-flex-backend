@@ -103,7 +103,7 @@ trait CollectionTrait
             new IteratorIterator($this->items->getIterator()),
             $this->filter($className)
         );
-        $filteredIterator->next();
+        $filteredIterator->rewind();
 
         return $filteredIterator->current();
     }
