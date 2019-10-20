@@ -1,11 +1,12 @@
 imports:
-    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/set/psr2.yaml' }
+    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/set/psr12.yaml' }
     - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/set/php71.yaml' }
     - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/set/clean-code.yaml' }
     - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/set/common.yaml' }
 
 parameters:
     skip:
+        PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer: ~
         PhpCsFixer\Fixer\ArrayNotation\TrailingCommaInMultilineArrayFixer: ~
         PhpCsFixer\Fixer\CastNotation\CastSpacesFixer: ~
         PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
