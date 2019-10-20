@@ -1,6 +1,9 @@
 doctrine:
     dbal:
-        url: '%env(DATABASE_URL)%'
+        url: '%env(resolve:DATABASE_URL)%'
+        default_table_options:
+            charset: utf8mb4
+            collate: utf8mb4_unicode_ci
         mapping_types:
             enum: string
         types:
@@ -8,7 +11,7 @@ doctrine:
             datetimetz: App\Doctrine\DBAL\Types\UTCDateTimeType
             EnumLogLogin: App\Doctrine\DBAL\Types\EnumLogLoginType
     orm:
-        auto_generate_proxy_classes: '%kernel.debug%'
+        auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
         mappings:
@@ -16,5 +19,5 @@ doctrine:
                 is_bundle: false
                 type: annotation
                 dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity\'
+                prefix: 'App\Entity'
                 alias: App

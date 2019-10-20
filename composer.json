@@ -96,9 +96,10 @@
 	},
 	"scripts": {
 		"auto-scripts": {
-			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
 			"cache:clear": "symfony-cmd",
-			"cache:warmup": "symfony-cmd"
+			"cache:warmup": "symfony-cmd",
+			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
+			"security-checker security:check": "script"
 		},
 		"post-install-cmd": [
 			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",

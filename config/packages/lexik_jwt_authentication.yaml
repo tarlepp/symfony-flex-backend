@@ -1,6 +1,6 @@
 lexik_jwt_authentication:
-    secret_key: '%kernel.project_dir%/%env(JWT_PRIVATE_KEY_PATH)%'
-    public_key: '%kernel.project_dir%/%env(JWT_PUBLIC_KEY_PATH)%'
+    secret_key: '%kernel.project_dir%/%env(resolve:JWT_PRIVATE_KEY_PATH)%'
+    public_key: '%kernel.project_dir%/%env(resolve:JWT_PUBLIC_KEY_PATH)%'
     pass_phrase: '%env(JWT_PASSPHRASE)%'
 
     # token extraction settings
