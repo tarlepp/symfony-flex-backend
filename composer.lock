@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72991a25e13a9b9e7f3dc4c75d69f4ee",
+    "content-hash": "ea027c27769b8c5c2a7660011ca04481",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1672,22 +1672,26 @@
         },
         {
             "name": "mark-gerarts/automapper-plus-bundle",
-            "version": "1.1.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mark-gerarts/automapper-plus-bundle.git",
-                "reference": "5babeb8786270aa9f620dc7af6f7c5a5945bb619"
+                "reference": "128d934d506addcdcbf14960b01e9f4c7f095751"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus-bundle/zipball/5babeb8786270aa9f620dc7af6f7c5a5945bb619",
-                "reference": "5babeb8786270aa9f620dc7af6f7c5a5945bb619",
+                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus-bundle/zipball/128d934d506addcdcbf14960b01e9f4c7f095751",
+                "reference": "128d934d506addcdcbf14960b01e9f4c7f095751",
                 "shasum": ""
             },
             "require": {
-                "mark-gerarts/auto-mapper-plus": "^1.0",
-                "php": ">=7.0.0",
+                "mark-gerarts/auto-mapper-plus": "^1.1",
+                "php": ">=7.1.0",
                 "symfony/framework-bundle": "^3.3|^4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.5|^8.0",
+                "symfony/phpunit-bridge": "^3.4|^4.0"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -1712,7 +1716,7 @@
                 "automapper",
                 "bundle"
             ],
-            "time": "2019-07-13T18:17:46+00:00"
+            "time": "2019-10-16T15:32:14+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
