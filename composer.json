@@ -46,7 +46,7 @@
 		"symfony/form": "4.3.5",
 		"symfony/framework-bundle": "4.3.5",
 		"symfony/monolog-bundle": "3.4.0",
-		"symfony/orm-pack": "1.0.6",
+		"symfony/orm-pack": "1.0.7",
 		"symfony/security-bundle": "4.3.5",
 		"symfony/serializer-pack": "1.0.2",
 		"symfony/translation": "4.3.5",
