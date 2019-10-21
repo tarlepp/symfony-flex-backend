@@ -43,7 +43,7 @@ ENV PATH "$PATH:/root/.composer/vendor/bin:/app/vendor/bin:/app/bin"
 WORKDIR /app
 
 # Add everything inside docker image
-ADD . .
+COPY . .
 
 # Install bamarni/symfony-console-autocomplete as a global one to get autocomplete working
 RUN composer global require bamarni/symfony-console-autocomplete
