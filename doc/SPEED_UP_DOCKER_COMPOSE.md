@@ -11,11 +11,11 @@ usage in development stage.
    * [Environments with problems](#environments-with-problems)
       * [Windows](#windows)
       * [Mac](#mac)
-         * [Installation](#installation)
-         * [Configuration](#configuration)
-         * [Startup](#startup)
-         * [Notes](#notes)
       * [Linux](#linux)
+   * [Installation of docker-sync](#installation-of-docker-sync)
+      * [Configuration](#configuration)
+      * [Startup](#startup)
+   * [Notes](#notes)
 
 ## Reasons?
 
@@ -34,18 +34,28 @@ The "most" clean solution to solve this atm is to run eg. Ubuntu desktop within
 machines. And this means that you actually run your favorite IDE inside that
 virtual machine.
 
+Another way is to use [docker-sync](http://docker-sync.io/). Application itself 
+already contains necessary [docker-sync.yml](../docker-sync.yml) configuration 
+file to help with this.
+
 ### Mac 
 
-With Mac you should use [docker-sync](http://docker-sync.io/). Application
-itself already contains necessary [docker-sync.yml](../docker-sync.yml) 
-configuration file to help with this.
+With Mac there is a bit speed difference versus pure _*inux_ installation, but
+you could try to speed that up by using [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
 
-#### Installation
+Some benchmark about `Docker for Mac` versus `Docker for Mac Edge`
+[here](https://medium.com/@somwhatparanoid/tweaking-docker-for-mac-performance-for-php-and-symfony-b63f3395a1da)
+
+### Linux
+
+No need to do anything `¯\_(ツ)_/¯`
+
+## Installation of docker-sync
 
 Follow install instructions from [docker-sync](http://docker-sync.io/)
 website.
 
-#### Configuration
+### Configuration
 
 Create a `docker-compose.override.yml` file with following content:
 
@@ -67,15 +77,11 @@ volumes:
         external: true
 ```
 
-#### Startup
+### Startup
 
 To start application you just need to use command `docker-sync-stack start`
 
-#### Notes
+## Notes
 
 If / when you want to use Xdebug, you should read this document: 
 [Using Xdebug](XDEBUG.md)
-
-### Linux
-
-No need to do anything `¯\_(ツ)_/¯`
