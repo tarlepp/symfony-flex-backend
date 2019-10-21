@@ -61,8 +61,7 @@ Create a `docker-compose.override.yml` file with following content:
 
 ```yaml
 #
-# For osx users, see http://docker-sync.io/
-# this file should NOT be added to your VCS, only purpose of this is to override those volumes with docker-sync.yml config
+# This file should NOT be added to your VCS, only purpose of this is to override those volumes with docker-sync.yml config
 #
 version: '3'
 services:
