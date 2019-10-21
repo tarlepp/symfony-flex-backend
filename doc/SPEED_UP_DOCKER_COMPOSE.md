@@ -68,9 +68,11 @@ services:
     php:
         volumes:
             - backend-code:/app:cached
+            - /app/var/
     nginx:
         volumes:
             - backend-code:/app:cached
+            - /app/var/
 volumes:
     backend-code:
         external: true
