@@ -34,9 +34,9 @@ The "most" clean solution to solve this atm is to run eg. Ubuntu desktop within
 machines. And this means that you actually run your favorite IDE inside that
 virtual machine.
 
-Another way is to use [docker-sync](http://docker-sync.io/). Application itself 
-already contains necessary [docker-sync.yml](../docker-sync.yml) configuration 
-file to help with this.
+Another way is to use [docker-sync](#installation-of-docker-sync). Application 
+itself already contains necessary [docker-sync.yml](../docker-sync.yml) 
+configuration  file to help with this.
 
 ### Mac 
 
@@ -45,6 +45,10 @@ you could try to speed that up by using [Docker for Mac Edge](https://docs.docke
 
 Some benchmark about `Docker for Mac` versus `Docker for Mac Edge`
 [here](https://medium.com/@somwhatparanoid/tweaking-docker-for-mac-performance-for-php-and-symfony-b63f3395a1da)
+
+And if that [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
+isn't fast enough for you, you could also setup that [docker-sync](#installation-of-docker-sync)
+for your environment.
 
 ### Linux
 
