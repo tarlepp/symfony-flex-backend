@@ -226,10 +226,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     protected function processCallbacks(QueryBuilder $queryBuilder): void
     {
-        /**
-         * @var callable
-         * @var mixed[]  $args
-         */
         foreach (self::$callbacks as [$callback, $args]) {
             array_unshift($args, $queryBuilder);
 
