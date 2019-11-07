@@ -61,7 +61,7 @@
 		"sensiolabs/security-checker": "6.0.3",
 		"symfony/browser-kit": "4.3.6",
 		"symfony/debug-pack": "1.0.7",
-		"symfony/maker-bundle": "1.14.1",
+		"symfony/maker-bundle": "1.14.3",
 		"symfony/requirements-checker": "1.1.5",
 		"symfony/web-server-bundle": "4.3.6"
 	},
