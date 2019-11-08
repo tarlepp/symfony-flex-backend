@@ -50,6 +50,9 @@ class Version
 
     /** @noinspection PhpDocMissingThrowsInspection */
     /**
+     * Method to get application version from cache or create new entry to cache with version value from
+     * composer.json file.
+     *
      * @return string
      *
      * @psalm-suppress InvalidThrow

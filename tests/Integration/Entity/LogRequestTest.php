@@ -114,8 +114,8 @@ class LogRequestTest extends EntityTestCase
 
                 static::$method($value, $message);
             }
-        } /** @noinspection BadExceptionsProcessingInspection */ catch (Exception $error) {
-            static::assertInstanceOf($type, $value, $message);
+        } catch (Exception $error) {
+            static::assertInstanceOf($type, $value, $message . ' - ' . $error->getMessage());
         }
 
         unset($logRequest);

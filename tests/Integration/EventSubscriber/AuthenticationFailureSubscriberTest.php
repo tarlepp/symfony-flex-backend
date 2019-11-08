@@ -115,7 +115,9 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
         try {
             $subscriber->onAuthenticationFailure($event);
-        } /** @noinspection BadExceptionsProcessingInspection */ catch (Throwable $exception) {
+        } catch (Throwable $exception) {
+            (static function ($exception): void {
+            })($exception);
         }
 
         unset($subscriber, $loginLogger, $userRepository, $event, $response, $authenticationException, $token, $user);

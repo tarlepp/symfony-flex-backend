@@ -14,6 +14,7 @@ use LogicException;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 use function abs;
 use function array_filter;
 use function array_key_exists;
@@ -221,8 +222,10 @@ final class RequestHandler
             $searchTerms = JSON::decode($search, true);
 
             self::checkSearchTerms($searchTerms);
-        } /** @noinspection BadExceptionsProcessingInspection */ catch (LogicException $error) {
-            // Parameter was not JSON so just use parameter values as search strings
+        } catch (LogicException $error) {
+            (static function (Throwable $error): void {
+            })($error);
+
             $searchTerms = null;
         }
 

@@ -84,8 +84,8 @@ class DateDimensionTest extends EntityTestCase
 
                 static::$method($dateDimension->$getter());
             }
-        } /** @noinspection BadExceptionsProcessingInspection */ catch (Exception $error) {
-            static::assertInstanceOf($type, $dateDimension->$getter());
+        } catch (Exception $error) {
+            static::assertInstanceOf($type, $dateDimension->$getter(), $error->getMessage());
         }
 
         unset($dateDimension);

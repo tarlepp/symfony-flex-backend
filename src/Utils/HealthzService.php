@@ -10,6 +10,7 @@ namespace App\Utils;
 
 use App\Entity\Healthz;
 use App\Repository\HealthzRepository;
+use Throwable;
 
 /**
  * Class HealthzService
@@ -35,13 +36,16 @@ final class HealthzService
     }
 
     /**
+     * Method to check that "all" is ok within our application. This will try to do following:
+     *  1) Remove data from database
+     *  2) Create data to database
+     *  3) Read data from database
+     *
+     * These steps should make sure that at least application database is working as expected.
+     *
      * @return Healthz|null
      *
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Exception
+     * @throws Throwable
      */
     public function check(): ?Healthz
     {

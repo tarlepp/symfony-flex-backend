@@ -93,8 +93,8 @@ class LogLoginFailureTest extends EntityTestCase
 
                 static::$method($logRequest->$getter());
             }
-        } /** @noinspection BadExceptionsProcessingInspection */ catch (Exception $error) {
-            static::assertInstanceOf($type, $logRequest->$getter());
+        } catch (Exception $error) {
+            static::assertInstanceOf($type, $logRequest->$getter(), $error->getMessage());
         }
     }
 

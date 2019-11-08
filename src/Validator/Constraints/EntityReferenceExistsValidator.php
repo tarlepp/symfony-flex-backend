@@ -104,9 +104,9 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     }
 
     /**
-     * @param array $entities
+     * @param array|array<int, EntityInterface> $entities
      *
-     * @return array
+     * @return array|array<int, string>
      */
     private function getInvalidValues(array $entities): array
     {
@@ -118,6 +118,8 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     }
 
     /**
+     * Method to return used filter closure.
+     *
      * @return Closure
      */
     private function getFilterClosure(): Closure

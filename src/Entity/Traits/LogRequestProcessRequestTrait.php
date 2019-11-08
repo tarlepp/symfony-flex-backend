@@ -12,6 +12,7 @@ use App\Utils\JSON;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Throwable;
 use function array_key_exists;
 use function array_map;
 use function array_walk;
@@ -511,7 +512,10 @@ trait LogRequestProcessRequestTrait
             try {
                 /** @var array<string, mixed> $output */
                 $output = JSON::decode($rawContent, true);
-            } /** @noinspection BadExceptionsProcessingInspection */ catch (LogicException $error) {
+            } catch (LogicException $error) {
+                (static function (Throwable $error): void {
+                })($error);
+
                 // Oh noes content isn't JSON so just parse it
                 $output = [];
 

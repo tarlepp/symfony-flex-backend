@@ -15,6 +15,7 @@ use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use stdClass;
+use Throwable;
 use function array_combine;
 use function array_key_exists;
 use function array_map;
@@ -368,7 +369,9 @@ class RepositoryHelper
         } else { // Otherwise this must be IN or NOT IN expression
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
-            } /** @noinspection BadExceptionsProcessingInspection */ catch (InvalidUuidStringException $exception) {
+            } catch (InvalidUuidStringException $exception) {
+                (static function (Throwable $exception): void {
+                })($exception);
             }
 
             $parameters[] = array_map(static function (string $value) use ($queryBuilder): Literal {

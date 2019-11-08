@@ -251,8 +251,8 @@ abstract class EntityTestCase extends KernelTestCase
 
                 static::$method($this->entity->$getter());
             }
-        } /** @noinspection BadExceptionsProcessingInspection */ catch (Exception $error) {
-            static::assertInstanceOf($type, call_user_func([$this->entity, $getter]));
+        } catch (Exception $error) {
+            static::assertInstanceOf($type, call_user_func([$this->entity, $getter]), $error->getMessage());
         }
     }
 
