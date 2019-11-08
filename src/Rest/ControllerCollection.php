@@ -56,14 +56,14 @@ class ControllerCollection implements Countable
     }
 
     /**
-     * @param string|null $className
+     * @param string $className
      *
      * @return Closure
      */
-    public function filter(?string $className): Closure
+    public function filter(string $className): Closure
     {
         return static function (ControllerInterface $restController) use ($className): bool {
-            return $className !== null && $restController instanceof $className;
+            return $restController instanceof $className;
         };
     }
 }

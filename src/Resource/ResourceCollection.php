@@ -66,24 +66,24 @@ class ResourceCollection implements Countable
     }
 
     /**
-     * @param string $className
+     * @param string|null $className
      *
      * @return bool
      */
-    public function hasEntityResource(?string $className): bool
+    public function hasEntityResource(?string $className = null): bool
     {
-        return $this->getFilteredItemByEntity((string)$className) !== null;
+        return $className === null ? false : $this->getFilteredItemByEntity($className) !== null;
     }
 
     /**
-     * @param string|null $className
+     * @param string $className
      *
      * @return Closure
      */
-    public function filter(?string $className): Closure
+    public function filter(string $className): Closure
     {
         return static function (RestResourceInterface $restResource) use ($className): bool {
-            return $className !== null && $restResource instanceof $className;
+            return $restResource instanceof $className;
         };
     }
 
