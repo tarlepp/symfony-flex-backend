@@ -49,7 +49,7 @@ services:
         resource: '../src/DataFixtures/*'
         tags: [ 'doctrine.fixture.orm' ]
 
-    App\Resource\Collection:
+    App\Resource\ResourceCollection:
         arguments: [ !tagged app.rest.resource ]
 
     App\Rest\ControllerCollection:

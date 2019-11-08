@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Resource/CollectionTest.php
+ * /tests/Integration/Resource/ResourceCollectionTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -18,7 +18,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Resource\ApiKeyResource;
-use App\Resource\Collection;
+use App\Resource\ResourceCollection;
 use App\Resource\DateDimensionResource;
 use App\Resource\HealthzResource;
 use App\Resource\LogLoginFailureResource;
@@ -34,19 +34,19 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\PropertyAccess\Tests\Fixtures\TraversableArrayObject;
 
 /**
- * Class CollectionTest
+ * Class ResourceCollectionTest
  *
  * @package App\Tests\Integration\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class CollectionTest extends KernelTestCase
+class ResourceCollectionTest extends KernelTestCase
 {
     public function testThatGetMethodThrowsAnException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource \'FooBar\' does not exists');
 
-        $collection = new Collection(new TraversableArrayObject());
+        $collection = new ResourceCollection(new TraversableArrayObject());
         $collection->get('FooBar');
 
         unset($collection);
@@ -57,7 +57,7 @@ class CollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource class does not exists for entity \'FooBar\'');
 
-        $collection = new Collection(new TraversableArrayObject());
+        $collection = new ResourceCollection(new TraversableArrayObject());
         $collection->getEntityResource('FooBar');
 
         unset($collection);
@@ -187,12 +187,12 @@ class CollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Collection
+     * @return ResourceCollection
      */
-    private function getCollection(): Collection
+    private function getCollection(): ResourceCollection
     {
         static::bootKernel();
 
-        return static::$container->get(Collection::class);
+        return static::$container->get(ResourceCollection::class);
     }
 }

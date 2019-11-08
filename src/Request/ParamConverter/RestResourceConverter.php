@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Request\ParamConverter;
 
-use App\Resource\Collection;
+use App\Resource\ResourceCollection;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,16 +48,16 @@ use Throwable;
 class RestResourceConverter implements ParamConverterInterface
 {
     /**
-     * @var Collection
+     * @var ResourceCollection
      */
     private $collection;
 
     /**
      * RestResourceConverter constructor.
      *
-     * @param Collection $collection
+     * @param ResourceCollection $collection
      */
-    public function __construct(Collection $collection)
+    public function __construct(ResourceCollection $collection)
     {
         $this->collection = $collection;
     }

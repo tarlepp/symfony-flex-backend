@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Request\ParamConverter;
 
 use App\Entity\Role;
 use App\Request\ParamConverter\RestResourceConverter;
-use App\Resource\Collection;
+use App\Resource\ResourceCollection;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
 use Psr\Log\LoggerInterface;
@@ -129,7 +129,7 @@ class RestResourceConverterTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->converter = new RestResourceConverter(static::$container->get(Collection::class));
+        $this->converter = new RestResourceConverter(static::$container->get(ResourceCollection::class));
     }
 
     protected function tearDown(): void

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Resource/Collection.php
+ * /src/Resource/ResourceCollection.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -19,7 +19,7 @@ use IteratorIterator;
 use function sprintf;
 
 /**
- * Class Collection
+ * Class ResourceCollection
  *
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -29,7 +29,7 @@ use function sprintf;
  * @method RestResourceInterface                         get(string $className)
  * @method IteratorAggregate<int, RestResourceInterface> getAll(): IteratorAggregate
  */
-class Collection implements Countable
+class ResourceCollection implements Countable
 {
     // Traits
     use CollectionTrait;
