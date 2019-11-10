@@ -47,9 +47,9 @@ class ResourceCollection implements Countable
     /**
      * @param string $className
      *
-     * @return RestResourceInterface|null
+     * @return RestResourceInterface
      */
-    public function getEntityResource(string $className): ?RestResourceInterface
+    public function getEntityResource(string $className): RestResourceInterface
     {
         $current = $this->getFilteredItemByEntity($className);
 
