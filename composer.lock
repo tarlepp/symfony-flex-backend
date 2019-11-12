@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7455de0fc452c7efdb27655f5388306",
+    "content-hash": "b5a8953b51fb9d8a1e80a5dcc39fe783",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -7122,7 +7122,7 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v4.3.6",
+            "version": "v4.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
@@ -7277,7 +7277,7 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v4.3.6",
+            "version": "v4.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
