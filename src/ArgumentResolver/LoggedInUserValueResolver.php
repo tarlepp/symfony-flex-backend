@@ -24,7 +24,6 @@ use Throwable;
  * Class LoggedInUserValueResolver
  *
  * Example how to use this within your controller;
- *
  *  /**
  *   * @Symfony\Component\Routing\Annotation\Route(path="some_path_to_your_route")
  *   * @Sensio\Bundle\FrameworkExtraBundle\Configuration\Security("is_granted('IS_AUTHENTICATED_FULLY')")
