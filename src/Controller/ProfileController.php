@@ -76,20 +76,20 @@ class ProfileController
      *
      * @param SerializerInterface   $serializer
      * @param RolesService          $rolesService
-     * @param User                  $user
+     * @param User                  $loggedInUser
      *
      * @return JsonResponse
      */
     public function profileAction(
         SerializerInterface $serializer,
         RolesService $rolesService,
-        User $user
+        User $loggedInUser
     ): JsonResponse {
         // Get serializer groups for current user instance
         $groups = $this->getSerializationGroupsForUser();
 
         /** @var array<string, string|array> $output */
-        $output = JSON::decode($serializer->serialize($user, 'json', ['groups' => $groups]), true);
+        $output = JSON::decode($serializer->serialize($loggedInUser, 'json', ['groups' => $groups]), true);
 
         /** @var array<int, string> $roles */
         $roles = $output['roles'];
@@ -139,13 +139,13 @@ class ProfileController
      * @SWG\Tag(name="Profile")
      *
      * @param RolesService $rolesService
-     * @param User         $user
+     * @param User         $loggedInUser
      *
      * @return JsonResponse
      */
-    public function rolesAction(RolesService $rolesService, User $user): JsonResponse
+    public function rolesAction(RolesService $rolesService, User $loggedInUser): JsonResponse
     {
-        return new JsonResponse($rolesService->getInheritedRoles($user->getRoles()));
+        return new JsonResponse($rolesService->getInheritedRoles($loggedInUser->getRoles()));
     }
 
     /**
@@ -205,17 +205,17 @@ class ProfileController
      * @SWG\Tag(name="Profile")
      *
      * @param SerializerInterface $serializer
-     * @param User                $user
+     * @param User                $loggedInUser
      *
      * @return JsonResponse
      */
-    public function groupsAction(SerializerInterface $serializer, User $user): JsonResponse
+    public function groupsAction(SerializerInterface $serializer, User $loggedInUser): JsonResponse
     {
         $groups = [
             'groups' => $this->getUserGroupGroups(),
         ];
 
-        return new JsonResponse($serializer->serialize($user->getUserGroups(), 'json', $groups), 200, [], true);
+        return new JsonResponse($serializer->serialize($loggedInUser->getUserGroups(), 'json', $groups), 200, [], true);
     }
 
     /**

@@ -95,15 +95,15 @@ class UserController extends Controller
      *
      * @param Request $request
      * @param User    $requestUser
-     * @param User    $currentUser
+     * @param User    $loggedInUser
      *
      * @return Response
      *
      * @throws Throwable
      */
-    public function deleteAction(Request $request, User $requestUser, User $currentUser): Response
+    public function deleteAction(Request $request, User $requestUser, User $loggedInUser): Response
     {
-        if ($currentUser === $requestUser) {
+        if ($loggedInUser === $requestUser) {
             throw new HttpException(400, 'You cannot remove yourself...');
         }
 

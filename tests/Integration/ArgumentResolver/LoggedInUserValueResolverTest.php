@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/ArgumentResolver/UserValueResolverTest.php
+ * /tests/Integration/ArgumentResolver/LoggedInUserValueResolverTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 namespace App\Tests\Integration\ArgumentResolver;
 
-use App\ArgumentResolver\UserValueResolver;
+use App\ArgumentResolver\LoggedInUserValueResolver;
 use App\Entity\User;
 use App\Resource\UserResource;
 use App\Security\SecurityUser;
@@ -27,12 +27,12 @@ use Throwable;
 use function iterator_to_array;
 
 /**
- * Class UserValueResolverTest
+ * Class LoggedInUserValueResolverTest
  *
  * @package App\Tests\Integration\ArgumentResolver
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserValueResolverTest extends KernelTestCase
+class LoggedInUserValueResolverTest extends KernelTestCase
 {
     /**
      * @throws Throwable
@@ -43,7 +43,7 @@ class UserValueResolverTest extends KernelTestCase
         $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
 
         $tokenStorage = new TokenStorage();
-        $resolver = new UserValueResolver($tokenStorage, $userResource);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
         $metadata = new ArgumentMetadata('foo', null, false, false, null);
 
         static::assertFalse($resolver->supports(Request::create('/'), $metadata));
@@ -58,7 +58,7 @@ class UserValueResolverTest extends KernelTestCase
         $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
 
         $tokenStorage = new TokenStorage();
-        $resolver = new UserValueResolver($tokenStorage, $userResource);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
         static::assertFalse($resolver->supports(Request::create('/'), $metadata));
@@ -80,8 +80,8 @@ class UserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new UserValueResolver($tokenStorage, $userResource);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
+        $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         $resolver->supports(Request::create('/'), $metadata);
     }
@@ -100,8 +100,8 @@ class UserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new UserValueResolver($tokenStorage, $userResource);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
+        $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         static::assertTrue($resolver->supports(Request::create('/'), $metadata));
     }
@@ -119,8 +119,8 @@ class UserValueResolverTest extends KernelTestCase
          */
         $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
 
-        (new UserValueResolver(new TokenStorage(), $userResource))
-            ->resolve(new Request(), new ArgumentMetadata('foo', null, false, false, null))
+        (new LoggedInUserValueResolver(new TokenStorage(), $userResource))
+            ->resolve(new Request(), new ArgumentMetadata('loggedInUser', null, false, false, null))
             ->current();
     }
 
@@ -142,7 +142,7 @@ class UserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new UserValueResolver($tokenStorage, $userResource);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
         // Note that we need to actually get current value here
@@ -170,7 +170,7 @@ class UserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new UserValueResolver($tokenStorage, $userResource);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
         static::assertSame([$user], iterator_to_array($resolver->resolve(Request::create('/'), $metadata)));
@@ -197,9 +197,9 @@ class UserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $argumentResolver = new ArgumentResolver(null, [new UserValueResolver($tokenStorage, $userResource)]);
+        $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($tokenStorage, $userResource)]);
 
-        $closure = function (User $user) {
+        $closure = static function (User $loggedInUser) {
             // Do nothing
         };
 
@@ -221,7 +221,7 @@ class UserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $argumentResolver = new ArgumentResolver(
             null,
-            [new UserValueResolver($tokenStorage, $userResource), new DefaultValueResolver()]
+            [new LoggedInUserValueResolver($tokenStorage, $userResource), new DefaultValueResolver()]
         );
 
         static::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));
@@ -232,15 +232,15 @@ class UserValueResolverTest extends KernelTestCase
      */
     public function dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(): Generator
     {
-        yield [function (User $user = null) {
+        yield [static function (User $loggedInUser = null) {
             // Do nothing
         }];
 
-        yield [function (?User $user = null) {
+        yield [static function (?User $loggedInUser = null) {
             // Do nothing
         }];
 
-        yield [function (?User $user) {
+        yield [static function (?User $loggedInUser) {
             // Do nothing
         }];
     }

@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Functional\ArgumentResolver;
 
-use App\ArgumentResolver\UserValueResolver;
+use App\ArgumentResolver\LoggedInUserValueResolver;
 use App\Entity\User;
 use App\Resource\UserResource;
 use App\Security\SecurityUser;
@@ -28,7 +28,7 @@ use function iterator_to_array;
  * @package App\Tests\Functional\ArgumentResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserValueResolverTest extends KernelTestCase
+class LoggedInUserValueResolverTest extends KernelTestCase
 {
     /**
      * @dataProvider dataProviderValidUsers
@@ -52,8 +52,8 @@ class UserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new UserValueResolver($tokenStorage, $resource);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $resource);
+        $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         static::assertSame([$user], iterator_to_array($resolver->resolve(Request::create('/'), $metadata)));
     }
@@ -80,9 +80,9 @@ class UserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $argumentResolver = new ArgumentResolver(null, [new UserValueResolver($tokenStorage, $resource)]);
+        $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($tokenStorage, $resource)]);
 
-        $closure = function (User $user) {
+        $closure = static function (User $loggedInUser) {
             // Do nothing
         };
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/ArgumentResolver/UserValueResolver.php
+ * /src/ArgumentResolver/LoggedInUserValueResolver.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -21,12 +21,26 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Throwable;
 
 /**
- * Class UserValueResolver
+ * Class LoggedInUserValueResolver
+ *
+ * Example how to use this within your controller;
+ *
+ *  /**
+ *   * @Symfony\Component\Routing\Annotation\Route(path="some_path_to_your_route")
+ *   * @Sensio\Bundle\FrameworkExtraBundle\Configuration\Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ *   *\/
+ *  public function someMethod(\App\Entity\User $loggedInUser): Response
+ *  {
+ *      ...
+ *  }
+ *
+ * This will automatically convert your security user to actual User entity that
+ * you can use within your controller as you like.
  *
  * @package App\ArgumentResolver
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class UserValueResolver implements ArgumentValueResolverInterface
+class LoggedInUserValueResolver implements ArgumentValueResolverInterface
 {
     /**
      * @var TokenStorageInterface
@@ -39,7 +53,7 @@ class UserValueResolver implements ArgumentValueResolverInterface
     private $userResource;
 
     /**
-     * UserValueResolver constructor.
+     * LoggedInUserValueResolver constructor.
      *
      * @param TokenStorageInterface $tokenStorage
      * @param UserResource          $userResource
@@ -64,7 +78,10 @@ class UserValueResolver implements ArgumentValueResolverInterface
         $token = $this->tokenStorage->getToken();
 
         // only security user implementations are supported
-        if ($token instanceof TokenInterface && $argument->getType() === User::class) {
+        if ($token instanceof TokenInterface
+            && $argument->getName() === 'loggedInUser'
+            && $argument->getType() === User::class
+        ) {
             if ($argument->isNullable() === false && !($token->getUser() instanceof SecurityUser)) {
                 throw new MissingTokenException('JWT Token not found');
             }
