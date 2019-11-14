@@ -33,9 +33,13 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        parent::tearDownAfterClass();
+        static::bootKernel();
 
         PhpUnitUtil::loadFixtures(static::$kernel);
+
+        static::$kernel->shutdown();
+
+        parent::tearDownAfterClass();
     }
 
     /**
