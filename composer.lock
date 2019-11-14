@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7455de0fc452c7efdb27655f5388306",
+    "content-hash": "b425c69a88d3cdb11cc34309157e785d",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6296,7 +6296,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.3.6",
+            "version": "v4.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
