@@ -810,13 +810,9 @@ abstract class EntityTestCase extends KernelTestCase
 
     protected function tearDown(): void
     {
-        parent::tearDown();
-
         $this->entityManager->close();
         $this->entityManager = null; // avoid memory leaks
 
-        static::$kernel->shutdown();
-
-        unset($this->repository, $this->entity, $this->entityManager, $this->testContainer);
+        parent::tearDown();
     }
 }
