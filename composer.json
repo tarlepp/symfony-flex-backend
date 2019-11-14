@@ -51,7 +51,7 @@
 		"symfony/serializer-pack": "1.0.2",
 		"symfony/translation": "4.3.6",
 		"symfony/twig-bundle": "4.3.6",
-		"symfony/validator": "4.3.6",
+		"symfony/validator": "4.3.8",
 		"symfony/yaml": "4.3.6"
 	},
 	"require-dev": {
