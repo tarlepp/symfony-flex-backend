@@ -65,13 +65,11 @@ class ApiKeyUser implements ApiKeyUserInterface
             return $userGroup->getRole()->getId();
         };
 
-        // Iterate API key user groups and attach those roles for API user
-        $roles = $this->apiKey->getUserGroups()->map($iterator);
+        // Iterate API key user groups and extract roles from those and attach base 'ROLE_API'
+        $roles = $this->apiKey->getUserGroups()->map($iterator)->toArray();
+        $roles[] = RolesService::ROLE_API;
 
-        // Attach base 'ROLE_API' for API user
-        $roles->add(RolesService::ROLE_API);
-
-        $this->roles = array_unique($rolesService->getInheritedRoles($roles->toArray()));
+        $this->roles = array_unique($rolesService->getInheritedRoles($roles));
     }
 
     /**
