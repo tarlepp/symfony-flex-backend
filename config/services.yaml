@@ -49,6 +49,10 @@ services:
         resource: '../src/DataFixtures/*'
         tags: [ 'doctrine.fixture.orm' ]
 
+    App\ArgumentResolver\EntityValueResolver:
+        tags:
+            - { name: controller.argument_value_resolver, priority: 150 }
+
     App\Resource\ResourceCollection:
         arguments: [ !tagged app.rest.resource ]
 
