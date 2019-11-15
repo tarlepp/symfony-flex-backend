@@ -1,6 +1,7 @@
 sensio_framework_extra:
     request:
         converters: true
+        auto_convert: false
         disable: ['doctrine.orm']
     router:
         annotations: false
