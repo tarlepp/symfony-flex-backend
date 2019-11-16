@@ -69,6 +69,7 @@ before_script:
   - if [[ $COVERAGE == true ]]; then ./cc-test-reporter before-build; fi
 
 script:
+  - make lint-yaml
   - make phpcs
   - make ecs
   - make psalm
