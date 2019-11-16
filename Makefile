@@ -194,6 +194,12 @@ phpstan: ## Runs PHPStan static analysis tool
 	@./vendor/bin/phpstan analyze --level 7 src
 ###< phpstan ###
 
+###> lint yaml ###
+lint-yaml: ## Lint config YAML files
+	@echo "\033[32mLinting YAML config files\033[39m"
+	@@bin/console lint:yaml config --parse-tags
+###< lint yaml ###
+
 ###> clear tools ###
 clear-tools: ## Clears all tools depedencies
 	@echo "\033[32mClearing tools dependencies\033[39m"
