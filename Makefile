@@ -224,8 +224,9 @@ update: ## Update composer dependencies
 ###< update composer dependencies ###
 
 ###> update composer bin dependencies ###
+COMPOSER_BIN := $(shell which composer)
 update-bin: ## Update composer dependencies
-	@php -d memory_limit=-1 /usr/bin/composer bin all install
+	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install
 ###< update composer bin dependencies ###
 
 ###> get bach inside php container ###
