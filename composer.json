@@ -104,7 +104,7 @@
 		"post-install-cmd": [
 			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",
 			"if test -d vendor/sensiolabs/security-checker; then ./vendor/bin/security-checker security:check; fi",
-			"if test -d vendor/bamarni/composer-bin-plugin; then composer bin all install; fi",
+			"if test -d vendor/bamarni/composer-bin-plugin; then make update-bin; fi",
 			"@auto-scripts",
 			"@composer dump-autoload"
 		],
