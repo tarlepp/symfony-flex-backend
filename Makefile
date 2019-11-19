@@ -225,11 +225,11 @@ update: ## Update composer dependencies
 
 ###> update composer bin dependencies ###
 COMPOSER_BIN := $(shell which composer)
-update-bin: ## Update composer dependencies
+update-bin: ## Update composer bin dependencies
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install
 ###< update composer bin dependencies ###
 
-###> get bach inside php container ###
+###> get bash inside php container ###
 bash: ## Get bash inside PHP container
 	@docker-compose exec php bash
-###< get bach inside php container ###
+###< get bash inside php container ###
