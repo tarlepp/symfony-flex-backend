@@ -3,6 +3,7 @@ set -e
 
 #
 # If we're starting web-server we need to do following:
+#   0) Basic linting of current JSON configuration file
 #   1) Modify docker-php-ext-xdebug.ini file to contain correct remote host value, note that for mac we need to use
 #      another value within this. Also we want to export host IP so that we can use that within `check.php` to check
 #      that current environment is compatible with Symfony.
@@ -16,6 +17,9 @@ set -e
 # below:
 #   https://jtreminio.com/blog/running-docker-containers-as-current-host-user/
 #
+
+# Step 0
+make lint-configuration
 
 # Step 1
 if [[ -z "${DOCKER_WITH_MAC}" ]]; then

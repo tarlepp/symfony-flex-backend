@@ -3,6 +3,7 @@ set -e
 
 #
 # If we're starting web-server we need to do following:
+#   0) Basic linting of current JSON configuration file
 #   1) Ensure that /app/var directory exists
 #   2) Generate JWT encryption keys + allow web server to read this file
 #   3) Clear and warmup caches on current environments
@@ -16,7 +17,10 @@ set -e
 # docker context won't be passed to php process.
 #
 
-if [ "$1" = 'php-fpm' ]; then
+if [[ "$1" = 'php-fpm' ]]; then
+    # Step 0
+    make lint-configuration
+
     # Step 1
     mkdir -p /app/var
 
