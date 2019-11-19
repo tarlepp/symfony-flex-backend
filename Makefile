@@ -194,6 +194,11 @@ phpstan: ## Runs PHPStan static analysis tool
 	@./vendor/bin/phpstan analyze --level 7 src
 ###< phpstan ###
 
+###> lint configuration ###
+lint-configuration: ## Lint current defined `application.json` that it contains valid JSON
+	@php -r "if (!json_decode(file_get_contents('${APPLICATION_CONFIG}'))) { echo \"\033[31mInvalid JSON in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; exit(1);}"
+###< lint configuration ###
+
 ###> lint yaml ###
 lint-yaml: ## Lint config YAML files
 	@echo "\033[32mLinting YAML config files\033[39m"
