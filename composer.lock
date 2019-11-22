@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6fa54eb19cc056c28ae461ceca99af2",
+    "content-hash": "d6eb7c65bf2e263adbd6c6c911e1fedc",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -3475,28 +3475,28 @@
         },
         {
             "name": "symfony/dotenv",
-            "version": "v4.3.8",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dotenv.git",
-                "reference": "62d93bf07edd0d76f033d65a7fd1c1ce50d28b50"
+                "reference": "1a9cad0daa3d0726124d7bec2419591ed0f03bc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dotenv/zipball/62d93bf07edd0d76f033d65a7fd1c1ce50d28b50",
-                "reference": "62d93bf07edd0d76f033d65a7fd1c1ce50d28b50",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/1a9cad0daa3d0726124d7bec2419591ed0f03bc3",
+                "reference": "1a9cad0daa3d0726124d7bec2419591ed0f03bc3",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1.3"
             },
             "require-dev": {
-                "symfony/process": "^3.4.2|^4.0"
+                "symfony/process": "^3.4.2|^4.0|^5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.3-dev"
+                    "dev-master": "4.4-dev"
                 }
             },
             "autoload": {
@@ -3528,7 +3528,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2019-10-18T11:23:15+00:00"
+            "time": "2019-11-12T14:51:11+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -6881,12 +6881,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "261562a9c048aa10932e5e1d596da6c761cf95bb"
+                "reference": "40fb2c205dd261ab6bb42ec29545934f0db7026f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/261562a9c048aa10932e5e1d596da6c761cf95bb",
-                "reference": "261562a9c048aa10932e5e1d596da6c761cf95bb",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/40fb2c205dd261ab6bb42ec29545934f0db7026f",
+                "reference": "40fb2c205dd261ab6bb42ec29545934f0db7026f",
                 "shasum": ""
             },
             "conflict": {
@@ -6954,7 +6954,7 @@
                 "league/commonmark": "<0.18.3",
                 "magento/magento1ce": "<1.9.4.3",
                 "magento/magento1ee": ">=1,<1.14.4.3",
-                "magento/product-community-edition": ">=2,<2.2.10|>=2.3,<2.3.3",
+                "magento/product-community-edition": ">=2,<2.2.10|>=2.3,<2.3.2",
                 "monolog/monolog": ">=1.8,<1.12",
                 "namshi/jose": "<2.2",
                 "onelogin/php-saml": "<2.10.4",
@@ -7091,7 +7091,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2019-11-15T09:15:43+00:00"
+            "time": "2019-11-19T14:18:57+00:00"
         },
         {
             "name": "sensiolabs/security-checker",
