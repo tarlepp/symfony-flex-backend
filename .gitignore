@@ -25,11 +25,6 @@ infection.json
 phpstan.neon
 
 /build/
-
-###> symfony/web-server-bundle ###
-.web-server-pid
-###< symfony/web-server-bundle ###
-
 ###> friendsofphp/php-cs-fixer ###
 .php_cs
 .php_cs.cache
