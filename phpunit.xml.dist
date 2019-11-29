@@ -5,8 +5,11 @@
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.4/phpunit.xsd"
          backupGlobals="false"
          colors="true"
+         testdox="true"
+         beStrictAboutTodoAnnotatedTests="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutOutputDuringTests="true"
          bootstrap="tests/bootstrap.php"
-         printerClass="Codedungeon\PHPUnitPrettyResultPrinter\Printer"
 >
     <php>
         <ini name="error_reporting" value="-1" />
@@ -29,7 +32,7 @@
 
             https://symfony.com/doc/current/components/phpunit_bridge.html#direct-and-indirect-deprecations
         -->
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=200" />
     </php>
 
     <listeners>
@@ -52,8 +55,8 @@
     </testsuites>
 
     <filter>
-        <whitelist>
-            <directory>./src</directory>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
             <exclude>
                 <directory>./src/Command</directory>
                 <directory>./src/DataFixtures</directory>
@@ -66,7 +69,7 @@
     <logging>
         <log type="coverage-html" target="build/report" lowUpperBound="55" highLowerBound="90" />
         <log type="coverage-clover" target="build/logs/clover.xml" />
-        <log type="coverage-text" target="php://stdout" />
+        <log type="coverage-text" target="php://stdout" showOnlySummary="true" />
         <log type="junit" target="build/logs/junit.xml" />
     </logging>
 </phpunit>
