@@ -1,7 +1,6 @@
 {
 	"require": {},
 	"require-dev": {
-		"codedungeon/phpunit-result-printer": "0.26.2",
 		"liuggio/fastest": "1.6.1",
 		"phpunit/phpunit": "8.4.3",
 		"phpunit/phpcov": "6.0.0",
@@ -19,5 +18,10 @@
 			"*": "dist"
 		},
 		"sort-packages": true
+	},
+	"extra": {
+		"symfony": {
+			"require": "4.3.8"
+		}
 	}
 }
