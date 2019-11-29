@@ -432,7 +432,7 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @depends testThatCreateActionWorksLikeExpected
+     * @depends testThatUpdateActionWorksLikeExpected
      *
      * @param string $userId
      *
