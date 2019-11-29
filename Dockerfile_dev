@@ -1,5 +1,5 @@
 FROM composer:1.9.1 AS composer
-FROM php:7.3.11-fpm
+FROM php:7.4.0-fpm
 
 # Let's use bash as a default shell
 SHELL ["/bin/bash", "-c"]
@@ -17,7 +17,7 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install intl \
     && docker-php-ext-install opcache \
     && docker-php-ext-install zip \
-    && pecl install xdebug-2.7.2 \
+    && pecl install xdebug-2.8.0 \
     && docker-php-ext-enable xdebug
 
 # Install APCu and APC backward compatibility
