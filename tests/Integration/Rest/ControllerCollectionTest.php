@@ -14,10 +14,11 @@ use App\Controller\RoleController;
 use App\Controller\UserController;
 use App\Controller\UserGroupController;
 use App\Rest\ControllerCollection;
+use ArrayObject;
 use Generator;
 use InvalidArgumentException;
+use IteratorAggregate;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\PropertyAccess\Tests\Fixtures\TraversableArrayObject;
 
 /**
  * Class ControllerCollectionTest
@@ -32,7 +33,29 @@ class ControllerCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('REST controller \'FooBar\' does not exists');
 
-        $collection = new ControllerCollection(new TraversableArrayObject());
+        $iteratorAggregate = new class([]) implements IteratorAggregate {
+            private ArrayObject $iterator;
+
+            /**
+             * Constructor  of the class.
+             *
+             * @param $input
+             */
+            public function __construct($input)
+            {
+                $this->iterator = new ArrayObject($input);
+            }
+
+            /**
+             * @inheritDoc
+             */
+            public function getIterator(): ArrayObject
+            {
+                return $this->iterator;
+            }
+        };
+
+        $collection = new ControllerCollection($iteratorAggregate);
         $collection->get('FooBar');
 
         unset($collection);
@@ -54,7 +77,6 @@ class ControllerCollectionTest extends KernelTestCase
     {
         $collection = $this->getCollection();
 
-        /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf($controllerName, $collection->get($controllerName));
     }
 

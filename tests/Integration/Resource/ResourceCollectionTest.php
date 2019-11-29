@@ -18,20 +18,21 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\UserGroup;
 use App\Resource\ApiKeyResource;
-use App\Resource\ResourceCollection;
 use App\Resource\DateDimensionResource;
 use App\Resource\HealthzResource;
 use App\Resource\LogLoginFailureResource;
 use App\Resource\LogLoginResource;
 use App\Resource\LogRequestResource;
+use App\Resource\ResourceCollection;
 use App\Resource\RoleResource;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
+use ArrayObject;
 use Generator;
 use InvalidArgumentException;
+use IteratorAggregate;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\PropertyAccess\Tests\Fixtures\TraversableArrayObject;
 
 /**
  * Class ResourceCollectionTest
@@ -46,7 +47,29 @@ class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource \'FooBar\' does not exists');
 
-        $collection = new ResourceCollection(new TraversableArrayObject());
+        $iteratorAggregate = new class([]) implements IteratorAggregate {
+            private ArrayObject $iterator;
+
+            /**
+             * Constructor  of the class.
+             *
+             * @param $input
+             */
+            public function __construct($input)
+            {
+                $this->iterator = new ArrayObject($input);
+            }
+
+            /**
+             * @inheritDoc
+             */
+            public function getIterator(): ArrayObject
+            {
+                return $this->iterator;
+            }
+        };
+
+        $collection = new ResourceCollection($iteratorAggregate);
         $collection->get('FooBar');
 
         unset($collection);
@@ -57,7 +80,29 @@ class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource class does not exists for entity \'FooBar\'');
 
-        $collection = new ResourceCollection(new TraversableArrayObject());
+        $iteratorAggregate = new class([]) implements IteratorAggregate {
+            private ArrayObject $iterator;
+
+            /**
+             * Constructor  of the class.
+             *
+             * @param $input
+             */
+            public function __construct($input)
+            {
+                $this->iterator = new ArrayObject($input);
+            }
+
+            /**
+             * @inheritDoc
+             */
+            public function getIterator(): ArrayObject
+            {
+                return $this->iterator;
+            }
+        };
+
+        $collection = new ResourceCollection($iteratorAggregate);
         $collection->getEntityResource('FooBar');
 
         unset($collection);
