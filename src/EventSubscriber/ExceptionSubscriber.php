@@ -101,7 +101,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public function onKernelException(ExceptionEvent $event): void
     {
         // Get exception from current event
-        $exception = $event->getException();
+        $exception = $event->getThrowable();
 
         // Log  error
         $this->logger->error((string)$exception);

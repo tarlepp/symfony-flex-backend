@@ -60,7 +60,7 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         $stubEvent
             ->expects(static::once())
-            ->method('getException')
+            ->method('getThrowable')
             ->willReturn($exception);
 
         $stubLogger
@@ -95,7 +95,7 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         $stubEvent
             ->expects(static::once())
-            ->method('getException')
+            ->method('getThrowable')
             ->willReturn($exception);
 
         $stubEvent
