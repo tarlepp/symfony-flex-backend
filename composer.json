@@ -41,7 +41,7 @@
 		"symfony/asset": "4.3.8",
 		"symfony/console": "4.3.8",
 		"symfony/dotenv": "4.3.8",
-		"symfony/expression-language": "4.3.8",
+		"symfony/expression-language": "5.0.0",
 		"symfony/flex": "1.4.8",
 		"symfony/form": "4.3.8",
 		"symfony/framework-bundle": "4.3.8",
