@@ -12,6 +12,7 @@ use App\DTO\RestDtoInterface;
 use App\Rest\ControllerInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\RestResourceInterface;
+use Doctrine\Common\Persistence\Mapping\MappingException;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -165,6 +166,7 @@ trait RestMethodHelper
      * @param string $id
      *
      * @throws NotFoundHttpException
+     * @throws MappingException
      */
     private function detachEntityFromManager(string $id): void
     {
@@ -181,7 +183,7 @@ trait RestMethodHelper
             /** @scrutinizer ignore-call */
             && $entityManager->getUnitOfWork()->getEntityState($entity) === UnitOfWork::STATE_MANAGED
         ) {
-            $entityManager->detach($entity);
+            $entityManager->clear();
         }
     }
 
