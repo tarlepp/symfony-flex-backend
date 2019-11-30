@@ -36,9 +36,9 @@ class JSON
     private const JSON_UNKNOWN_ERROR = 'Unknown error.';
 
     /**
-     * @var array<string>
+     * @var array<int, string>
      */
-    private static $errorReference = [
+    private static array $errorReference = [
         JSON_ERROR_NONE => 'No error has occurred.',
         JSON_ERROR_DEPTH => 'The maximum stack depth has been exceeded.',
         JSON_ERROR_STATE_MISMATCH => 'Invalid or malformed JSON.',
@@ -69,8 +69,8 @@ class JSON
      */
     public static function encode($input, ?int $options = null, ?int $depth = null): string
     {
-        $options = $options ?? 0;
-        $depth = $depth ?? 512;
+        $options ??= 0;
+        $depth ??= 512;
 
         $output = json_encode($input, $options, $depth);
 
@@ -99,9 +99,9 @@ class JSON
      */
     public static function decode(string $json, ?bool $assoc = null, ?int $depth = null, ?int $options = null)
     {
-        $assoc = $assoc ?? false;
-        $depth = $depth ?? 512;
-        $options = $options ?? 0;
+        $assoc ??= false;
+        $depth ??= 512;
+        $options ??= 0;
 
         /**
          * @psalm-suppress MixedAssignment
