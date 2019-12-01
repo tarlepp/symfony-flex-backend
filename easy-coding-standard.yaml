@@ -6,6 +6,7 @@ imports:
 
 parameters:
     skip:
+        PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer: ~
         PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer: ~
         PhpCsFixer\Fixer\ArrayNotation\TrailingCommaInMultilineArrayFixer: ~
         PhpCsFixer\Fixer\CastNotation\CastSpacesFixer: ~
