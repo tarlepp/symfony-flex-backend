@@ -15,6 +15,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/theseer/fdomdocument/src" isTestSource="true" packagePrefix="TheSeer\fDOM\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/phpunit/vendor/sebastian/finder-facade/src" isTestSource="true" packagePrefix="SebastianBergmann\FinderFacade\" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/ecs" />
       <excludeFolder url="file://$MODULE_DIR$/tools/infection" />
       <excludeFolder url="file://$MODULE_DIR$/tools/php-coveralls" />
       <excludeFolder url="file://$MODULE_DIR$/tools/phpinsights" />
