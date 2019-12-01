@@ -11,7 +11,7 @@ namespace App\Tests\Unit\Utils;
 
 use App\Utils\JSON;
 use Generator;
-use LogicException;
+use JsonException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function is_array;
@@ -29,6 +29,8 @@ class JSONTest extends KernelTestCase
      *
      * @param mixed $value
      * @param mixed $expected
+     *
+     * @throws JsonException
      */
     public function testThatEncodeWorksLikeExpected($value, $expected): void
     {
@@ -40,6 +42,8 @@ class JSONTest extends KernelTestCase
      *
      * @param array $parameters
      * @param mixed $expected
+     *
+     * @throws JsonException
      */
     public function testThatDecodeWorksLikeExpected(array $parameters, $expected): void
     {
@@ -53,10 +57,12 @@ class JSONTest extends KernelTestCase
      * @dataProvider dataProviderTestThatEncodeThrowsAnExceptionOnMaximumDepth
      *
      * @param array $arguments
+     *
+     * @throws JsonException
      */
     public function testThatEncodeThrowsAnExceptionOnMaximumDepth(array $arguments): void
     {
-        $this->expectException(LogicException::class);
+        $this->expectException(JsonException::class);
         $this->expectExceptionMessage('Maximum stack depth exceeded');
 
         JSON::encode(...$arguments);
@@ -66,10 +72,12 @@ class JSONTest extends KernelTestCase
      * @dataProvider dataProviderTestThatDecodeThrowsAnExceptionOnMaximumDepth
      *
      * @param array $arguments
+     *
+     * @throws JsonException
      */
     public function testThatDecodeThrowsAnExceptionOnMaximumDepth(array $arguments): void
     {
-        $this->expectException(LogicException::class);
+        $this->expectException(JsonException::class);
         $this->expectExceptionMessage('Maximum stack depth exceeded');
 
         JSON::decode(...$arguments);
@@ -79,11 +87,15 @@ class JSONTest extends KernelTestCase
      * @dataProvider dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson
      *
      * @param string $json
+     *
+     * @throws JsonException
+     *
+     * @testdox Test that JSON::decode throws an exception with malformed JSON: '$json'
      */
     public function testThatDecodeThrowsAnExceptionOnMalformedJson(string $json): void
     {
-        $this->expectException(LogicException::class);
-        $this->expectExceptionMessage('Syntax error, malformed JSON');
+        $this->expectException(JsonException::class);
+        $this->expectExceptionMessage('Syntax error');
 
         JSON::decode($json);
     }
@@ -92,10 +104,14 @@ class JSONTest extends KernelTestCase
      * @dataProvider dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters
      *
      * @param string $input
+     *
+     * @throws JsonException
+     *
+     * @testdox Test that JSON::decode throws an exception with invalid UTF characters in JSON: '$input'
      */
     public function testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(string $input): void
     {
-        $this->expectException(LogicException::class);
+        $this->expectException(JsonException::class);
         $this->expectExceptionMessage('Malformed UTF-8 characters, possibly incorrectly encoded');
 
         JSON::encode($input);
