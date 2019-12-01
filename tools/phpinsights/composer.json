@@ -1,7 +1,7 @@
 {
 	"require": {},
 	"require-dev": {
-		"nunomaduro/phpinsights": "1.9.0",
+		"nunomaduro/phpinsights": "1.11.0",
 		"roave/security-advisories": "dev-master"
 	},
 	"config": {
