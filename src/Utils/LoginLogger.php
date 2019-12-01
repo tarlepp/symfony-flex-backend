@@ -25,25 +25,10 @@ use Throwable;
  */
 class LoginLogger implements LoginLoggerInterface
 {
-    /**
-     * @var LogLoginResource
-     */
-    private $logLoginResource;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
-     * @var User|null
-     */
-    private $user;
-
-    /**
-     * @var DeviceDetector
-     */
-    private $deviceDetector;
+    private LogLoginResource $logLoginResource;
+    private RequestStack $requestStack;
+    private ?User $user;
+    private DeviceDetector $deviceDetector;
 
     /**
      * LoginLogger constructor.
@@ -88,12 +73,8 @@ class LoginLogger implements LoginLoggerInterface
             throw new BadMethodCallException('Could not get request from current request stack');
         }
 
-        // Specify user agent
-        /** @var string $agent */
-        $agent = $request->headers->get('User-Agent');
-
         // Parse user agent data with device detector
-        $this->deviceDetector = new DeviceDetector($agent);
+        $this->deviceDetector = new DeviceDetector((string)$request->headers->get('User-Agent', ''));
         $this->deviceDetector->parse();
 
         // Create entry
