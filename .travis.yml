@@ -14,8 +14,7 @@ services:
   - mysql
 
 php:
-  - "7.2"
-  - "7.3"
+  - "7.4"
   - master
   - nightly
 
@@ -25,7 +24,7 @@ matrix:
     - php: master
     - php: nightly
   include:
-    - php: "7.3"
+    - php: "7.4"
       env:
         - COVERAGE=true
 
