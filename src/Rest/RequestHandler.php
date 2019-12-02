@@ -10,6 +10,7 @@ namespace App\Rest;
 
 use App\Utils\JSON;
 use Closure;
+use JsonException;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
@@ -75,7 +76,7 @@ final class RequestHandler
                     return $value !== null;
                 }
             );
-        } catch (LogicException $error) {
+        } catch (JsonException $error) {
             throw new HttpException(
                 HttpFoundationResponse::HTTP_BAD_REQUEST,
                 'Current \'where\' parameter is not valid JSON.',
@@ -222,7 +223,7 @@ final class RequestHandler
             $searchTerms = JSON::decode($search, true);
 
             self::checkSearchTerms($searchTerms);
-        } catch (LogicException $error) {
+        } catch (JsonException | LogicException $error) {
             (static function (Throwable $error): void {
             })($error);
 
