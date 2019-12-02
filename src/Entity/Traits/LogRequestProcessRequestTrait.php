@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use App\Utils\JSON;
+use JsonException;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -512,7 +513,7 @@ trait LogRequestProcessRequestTrait
             try {
                 /** @var array<string, mixed> $output */
                 $output = JSON::decode($rawContent, true);
-            } catch (LogicException $error) {
+            } catch (JsonException $error) {
                 (static function (Throwable $error): void {
                 })($error);
 
