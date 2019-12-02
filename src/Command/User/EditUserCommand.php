@@ -31,15 +31,8 @@ class EditUserCommand extends Command
     // Traits
     use SymfonyStyleTrait;
 
-    /**
-     * @var UserResource
-     */
-    private $userResource;
-
-    /**
-     * @var UserHelper
-     */
-    private $userHelper;
+    private UserResource $userResource;
+    private UserHelper $userHelper;
 
     /**
      * EditUserCommand constructor.
@@ -66,11 +59,11 @@ class EditUserCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return int|null
+     * @return int
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
@@ -83,10 +76,12 @@ class EditUserCommand extends Command
         }
 
         if ($input->isInteractive()) {
-            $io->success($message ?? 'Nothing changed - have a nice day');
+            $message ??= 'Nothing changed - have a nice day';
+
+            $io->success($message);
         }
 
-        return null;
+        return 0;
     }
 
     /**

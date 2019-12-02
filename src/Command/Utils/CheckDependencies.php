@@ -46,15 +46,8 @@ class CheckDependencies extends Command
     // Traits
     use SymfonyStyleTrait;
 
-    /**
-     * @var string
-     */
-    private $projectDir;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $io;
+    private string $projectDir;
+    private SymfonyStyle $io;
 
     /**
      * CheckVendorDependencies constructor.
@@ -79,7 +72,7 @@ class CheckDependencies extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return int|null
+     * @return int
      *
      * @throws InvalidArgumentException
      * @throws LogicException
@@ -88,7 +81,7 @@ class CheckDependencies extends Command
      * @throws \Symfony\Component\Process\Exception\RuntimeException
      * @throws \Symfony\Component\Process\Exception\LogicException
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = $this->getSymfonyStyle($input, $output);
 
@@ -111,7 +104,7 @@ class CheckDependencies extends Command
             ? $this->io->table($headers, $rows)
             : $this->io->success('Good news, there is not any vendor dependency to update at this time!');
 
-        return null;
+        return 0;
     }
 
     /**

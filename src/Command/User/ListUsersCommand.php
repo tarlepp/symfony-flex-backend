@@ -34,15 +34,8 @@ class ListUsersCommand extends Command
     // Traits
     use SymfonyStyleTrait;
 
-    /**
-     * @var UserResource
-     */
-    private $userResource;
-
-    /**
-     * @var RolesService
-     */
-    private $roles;
+    private UserResource $userResource;
+    private RolesService $roles;
 
     /**
      * ListUsersCommand constructor.
@@ -69,11 +62,11 @@ class ListUsersCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null
+     * @return int
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
@@ -89,7 +82,7 @@ class ListUsersCommand extends Command
         $io->title('Current users');
         $io->table($headers, $this->getRows());
 
-        return null;
+        return 0;
     }
 
     /**

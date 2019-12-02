@@ -31,20 +31,9 @@ use function sprintf;
  */
 class ListApiKeysCommand extends Command
 {
-    /**
-     * @var ApiKeyResource
-     */
-    private $apiKeyResource;
-
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $io;
+    private ApiKeyResource $apiKeyResource;
+    private RolesService $rolesService;
+    private SymfonyStyle $io;
 
     /**
      * ListUsersCommand constructor.
@@ -71,11 +60,11 @@ class ListApiKeysCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return int|null
+     * @return int 0 if everything went fine, or an exit code
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->io->write("\033\143");
@@ -91,7 +80,7 @@ class ListApiKeysCommand extends Command
         $this->io->title('Current API keys');
         $this->io->table($headers, $this->getRows());
 
-        return null;
+        return 0;
     }
 
     /**

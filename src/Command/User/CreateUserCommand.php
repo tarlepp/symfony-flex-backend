@@ -44,7 +44,7 @@ class CreateUserCommand extends Command
     /**
      * @var array<int, array<string, int|string>>
      */
-    private static $commandParameters = [
+    private static array $commandParameters = [
         [
             self::PARAMETER_NAME => 'username',
             self::PARAMETER_DESCRIPTION => 'Username',
@@ -71,25 +71,10 @@ class CreateUserCommand extends Command
         ],
     ];
 
-    /**
-     * @var UserResource
-     */
-    private $userResource;
-
-    /**
-     * @var UserGroupResource
-     */
-    private $userGroupResource;
-
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
-
-    /**
-     * @var RoleRepository
-     */
-    private $roleRepository;
+    private UserResource $userResource;
+    private UserGroupResource $userGroupResource;
+    private RolesService $rolesService;
+    private RoleRepository $roleRepository;
 
     /**
      * CreateUserCommand constructor.
@@ -146,11 +131,11 @@ class CreateUserCommand extends Command
      * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
-     * @return int|null null or 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
@@ -170,7 +155,7 @@ class CreateUserCommand extends Command
             $io->success('User created - have a nice day');
         }
 
-        return null;
+        return 0;
     }
 
     /**

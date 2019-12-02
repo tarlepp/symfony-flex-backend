@@ -33,10 +33,7 @@ class ListUserGroupsCommand extends Command
     // Traits
     use SymfonyStyleTrait;
 
-    /**
-     * @var UserGroupResource
-     */
-    private $userGroupResource;
+    private UserGroupResource $userGroupResource;
 
     /**
      * ListUserGroupsCommand constructor.
@@ -61,11 +58,11 @@ class ListUserGroupsCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null
+     * @return int
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
@@ -79,7 +76,7 @@ class ListUserGroupsCommand extends Command
         $io->title('Current user groups');
         $io->table($headers, $this->getRows());
 
-        return null;
+        return 0;
     }
 
     /**

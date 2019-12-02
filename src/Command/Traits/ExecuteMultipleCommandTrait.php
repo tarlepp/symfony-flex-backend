@@ -28,15 +28,8 @@ trait ExecuteMultipleCommandTrait
     // Traits
     use GetApplicationTrait;
 
-    /**
-     * @var array<int|string, string>
-     */
-    private $choices = [];
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $io;
+    private array $choices = [];
+    private SymfonyStyle $io;
 
     /**
      * Setter method for choices to use.
@@ -48,22 +41,22 @@ trait ExecuteMultipleCommandTrait
         $this->choices = $choices;
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * Executes the current command.
      *
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null
+     * @return int 0 if everything went fine, or an exit code
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->io->write("\033\143");
 
+        /** @noinspection PhpAssignmentInConditionInspection */
         while ($command = $this->ask()) {
             $arguments = [
                 'command' => $command,
@@ -79,7 +72,7 @@ trait ExecuteMultipleCommandTrait
             $this->io->success('Have a nice day');
         }
 
-        return null;
+        return 0;
     }
 
     /**

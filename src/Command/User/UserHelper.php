@@ -27,15 +27,8 @@ use function sprintf;
  */
 class UserHelper
 {
-    /**
-     * @var UserResource
-     */
-    private $userResource;
-
-    /**
-     * @var UserGroupResource
-     */
-    private $userGroupResource;
+    private UserResource $userResource;
+    private UserGroupResource $userGroupResource;
 
     /**
      * UserHelper constructor.

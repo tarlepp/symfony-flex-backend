@@ -28,15 +28,8 @@ class RemoveUserGroupCommand extends Command
     // Traits
     use SymfonyStyleTrait;
 
-    /**
-     * @var UserGroupResource
-     */
-    private $userGroupResource;
-
-    /**
-     * @var UserHelper
-     */
-    private $userHelper;
+    private UserGroupResource $userGroupResource;
+    private UserHelper $userHelper;
 
     /**
      * RemoveUserGroupCommand constructor.
@@ -63,11 +56,11 @@ class RemoveUserGroupCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null
+     * @return int
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
@@ -82,9 +75,11 @@ class RemoveUserGroupCommand extends Command
         }
 
         if ($input->isInteractive()) {
-            $io->success($message ?? 'Nothing changed - have a nice day');
+            $message ??= 'Nothing changed - have a nice day';
+
+            $io->success($message);
         }
 
-        return null;
+        return 0;
     }
 }

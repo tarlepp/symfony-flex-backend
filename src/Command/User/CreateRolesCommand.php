@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use function array_map;
 use function array_sum;
 use function sprintf;
@@ -31,20 +32,9 @@ class CreateRolesCommand extends Command
     // Traits
     use SymfonyStyleTrait;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
-     * @var RoleRepository
-     */
-    private $roleRepository;
-
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
+    private EntityManagerInterface $entityManager;
+    private RoleRepository $roleRepository;
+    private RolesService $rolesService;
 
     /**
      * CreateRolesCommand constructor.
@@ -76,9 +66,9 @@ class CreateRolesCommand extends Command
      * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
-     * @return int|null null or 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
@@ -106,7 +96,7 @@ class CreateRolesCommand extends Command
             $io->success($message);
         }
 
-        return null;
+        return 0;
     }
 
     /**
@@ -116,9 +106,7 @@ class CreateRolesCommand extends Command
      *
      * @return int
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws Throwable
      */
     private function createRole(string $role): int
     {

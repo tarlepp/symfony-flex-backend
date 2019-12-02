@@ -28,15 +28,8 @@ class ChangeTokenCommand extends Command
     // Traits
     use SymfonyStyleTrait;
 
-    /**
-     * @var ApiKeyResource
-     */
-    private $apiKeyResource;
-
-    /**
-     * @var ApiKeyHelper
-     */
-    private $apiKeyHelper;
+    private ApiKeyResource $apiKeyResource;
+    private ApiKeyHelper $apiKeyHelper;
 
     /**
      * ChangeTokenCommand constructor.
@@ -63,11 +56,11 @@ class ChangeTokenCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null
+     * @return int 0 if everything went fine, or an exit code
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
@@ -80,10 +73,12 @@ class ChangeTokenCommand extends Command
         }
 
         if ($input->isInteractive()) {
-            $io->success($message ?? 'Nothing changed - have a nice day');
+            $message ??= 'Nothing changed - have a nice day';
+
+            $io->success($message);
         }
 
-        return null;
+        return 0;
     }
 
     /**

@@ -40,42 +40,19 @@ class CreateApiKeyCommand extends Command
     /**
      * @var array<int, array<string, int|string>>
      */
-    private static $commandParameters = [
+    private static array $commandParameters = [
         [
             'name' => 'description',
             'description' => 'Description',
         ],
     ];
 
-    /**
-     * @var ApiKeyHelper
-     */
-    private $apiKeyHelper;
-
-    /**
-     * @var ApiKeyResource
-     */
-    private $apiKeyResource;
-
-    /**
-     * @var UserGroupResource
-     */
-    private $userGroupResource;
-
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
-
-    /**
-     * @var RoleRepository
-     */
-    private $roleRepository;
-
-    /**
-     * @var SymfonyStyle
-     */
-    private $io;
+    private ApiKeyHelper $apiKeyHelper;
+    private ApiKeyResource $apiKeyResource;
+    private UserGroupResource $userGroupResource;
+    private RolesService $rolesService;
+    private RoleRepository $roleRepository;
+    private SymfonyStyle $io;
 
     /**
      * CreateApiKeyCommand constructor.
@@ -135,11 +112,11 @@ class CreateApiKeyCommand extends Command
      * @param InputInterface  $input  An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
-     * @return int|null null or 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an exit code
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->io->write("\033\143");
@@ -161,7 +138,7 @@ class CreateApiKeyCommand extends Command
             $this->io->success($this->apiKeyHelper->getApiKeyMessage('API key created - have a nice day', $apiKey));
         }
 
-        return null;
+        return 0;
     }
 
     /**

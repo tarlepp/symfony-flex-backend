@@ -14,8 +14,6 @@ use Closure;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
-use Doctrine\ORM\ORMInvalidArgumentException;
-use Exception;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
@@ -23,6 +21,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Throwable;
 use function sprintf;
 
 /**
@@ -36,15 +35,8 @@ class CreateDateDimensionEntitiesCommand extends Command
     private const YEAR_MIN = 1970;
     private const YEAR_MAX = 2047; // This should be the year when I'm officially retired
 
-    /**
-     * @var SymfonyStyle
-     */
-    private $io;
-
-    /**
-     * @var DateDimensionRepository
-     */
-    private $repository;
+    private SymfonyStyle $io;
+    private DateDimensionRepository $repository;
 
     /**
      * PopulateDateDimensionCommand constructor.
@@ -69,13 +61,11 @@ class CreateDateDimensionEntitiesCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      *
-     * @return int|null null or 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      *
-     * @throws Exception
-     * @throws InvalidArgumentException
-     * @throws ORMInvalidArgumentException
+     * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Create output decorator helpers for the Symfony Style Guide.
         $this->io = new SymfonyStyle($input, $output);
@@ -92,7 +82,7 @@ class CreateDateDimensionEntitiesCommand extends Command
 
         $this->io->success('All done - have a nice day!');
 
-        return null;
+        return 0;
     }
 
     /**
@@ -131,8 +121,7 @@ class CreateDateDimensionEntitiesCommand extends Command
      * @param int $yearStart
      * @param int $yearEnd
      *
-     * @throws ORMInvalidArgumentException
-     * @throws Exception
+     * @throws Throwable
      */
     private function process(int $yearStart, int $yearEnd): void
     {
@@ -178,12 +167,11 @@ class CreateDateDimensionEntitiesCommand extends Command
     }
 
     /**
-     * @param int           $yearEnd
-     * @param DateTime     $dateStart
-     * @param ProgressBar   $progress
+     * @param int         $yearEnd
+     * @param DateTime    $dateStart
+     * @param ProgressBar $progress
      *
-     * @throws Exception
-     * @throws ORMInvalidArgumentException
+     * @throws Throwable
      */
     private function createEntities(int $yearEnd, DateTime $dateStart, ProgressBar $progress): void
     {

@@ -40,7 +40,7 @@ class CreateUserGroupCommand extends Command
     /**
      * @var array<int, array<string, int|string>>
      */
-    private static $commandParameters = [
+    private static array $commandParameters = [
         [
             'name' => 'name',
             'description' => 'Name of the user group',
@@ -51,15 +51,8 @@ class CreateUserGroupCommand extends Command
         ],
     ];
 
-    /**
-     * @var UserGroupResource
-     */
-    private $userGroupResource;
-
-    /**
-     * @var RoleRepository
-     */
-    private $roleRepository;
+    private UserGroupResource $userGroupResource;
+    private RoleRepository $roleRepository;
 
     /**
      * CreateUserGroupCommand constructor.
@@ -98,11 +91,11 @@ class CreateUserGroupCommand extends Command
      * @param InputInterface $input An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
-     * @return int|null null or 0 if everything went fine, or an error code
+     * @return int 0 if everything went fine, or an error code
      *
      * @throws Throwable
      */
-    protected function execute(InputInterface $input, OutputInterface $output): ?int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
 
@@ -122,7 +115,7 @@ class CreateUserGroupCommand extends Command
             $io->success('User group created - have a nice day');
         }
 
-        return null;
+        return 0;
     }
 
     /**
