@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "003ecd4a3c3524a99fdc0b1003bd47ed",
+    "content-hash": "6927574c06ec64683beb0c43415ca6b9",
     "packages": [],
     "packages-dev": [
         {
@@ -807,16 +807,16 @@
         },
         {
             "name": "phpunit/phpcov",
-            "version": "6.0.0",
+            "version": "6.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpcov.git",
-                "reference": "20c0628afab1e042892d371a7159f68bce4b411b"
+                "reference": "63c32ed2a7dd18e5bd07f58aed1982d2ec9f1960"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpcov/zipball/20c0628afab1e042892d371a7159f68bce4b411b",
-                "reference": "20c0628afab1e042892d371a7159f68bce4b411b",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpcov/zipball/63c32ed2a7dd18e5bd07f58aed1982d2ec9f1960",
+                "reference": "63c32ed2a7dd18e5bd07f58aed1982d2ec9f1960",
                 "shasum": ""
             },
             "require": {
@@ -855,7 +855,7 @@
             ],
             "description": "CLI frontend for php-code-coverage",
             "homepage": "https://github.com/sebastianbergmann/phpcov",
-            "time": "2019-02-20T07:20:38+00:00"
+            "time": "2019-11-18T13:38:50+00:00"
         },
         {
             "name": "phpunit/phpunit",
