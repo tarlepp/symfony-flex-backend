@@ -28,7 +28,11 @@ trait ExecuteMultipleCommandTrait
     // Traits
     use GetApplicationTrait;
 
-    private array $choices = [];
+    /**
+     * @var array<int|string, string>
+     */
+    private $choices = [];
+
     private SymfonyStyle $io;
 
     /**

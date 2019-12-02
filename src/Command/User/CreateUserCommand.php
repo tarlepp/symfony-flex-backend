@@ -44,7 +44,7 @@ class CreateUserCommand extends Command
     /**
      * @var array<int, array<string, int|string>>
      */
-    private static array $commandParameters = [
+    private static $commandParameters = [
         [
             self::PARAMETER_NAME => 'username',
             self::PARAMETER_DESCRIPTION => 'Username',

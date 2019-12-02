@@ -40,7 +40,7 @@ class CreateUserGroupCommand extends Command
     /**
      * @var array<int, array<string, int|string>>
      */
-    private static array $commandParameters = [
+    private static $commandParameters = [
         [
             'name' => 'name',
             'description' => 'Name of the user group',

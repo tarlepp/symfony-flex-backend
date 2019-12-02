@@ -40,7 +40,7 @@ class CreateApiKeyCommand extends Command
     /**
      * @var array<int, array<string, int|string>>
      */
-    private static array $commandParameters = [
+    private static $commandParameters = [
         [
             'name' => 'description',
             'description' => 'Description',
