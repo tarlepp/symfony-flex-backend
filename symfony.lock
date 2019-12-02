@@ -173,6 +173,9 @@
     "paragonie/random_compat": {
         "version": "v9.99.99"
     },
+    "php": {
+        "version": "7.4.0"
+    },
     "phpdocumentor/reflection-common": {
         "version": "2.0.0"
     },
@@ -298,7 +301,7 @@
         "version": "v4.3.5"
     },
     "symfony/error-handler": {
-        "version": "v4.4.0"
+        "version": "v4.4.1"
     },
     "symfony/event-dispatcher": {
         "version": "v4.3.5"
