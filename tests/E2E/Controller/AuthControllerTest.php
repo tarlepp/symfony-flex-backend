@@ -23,7 +23,7 @@ use function json_encode;
  */
 class AuthControllerTest extends WebTestCase
 {
-    private $baseUrl = '/auth';
+    private string $baseUrl = '/auth';
 
     /**
      * @dataProvider dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost
@@ -56,7 +56,7 @@ class AuthControllerTest extends WebTestCase
      */
     public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $username, string $password): void
     {
-        $payload = json_encode(compact('username', 'password'));
+        $payload = json_encode(compact('username', 'password'), JSON_THROW_ON_ERROR);
 
         $client = $this->getTestClient();
         $client->request(
@@ -115,7 +115,7 @@ class AuthControllerTest extends WebTestCase
                 'CONTENT_TYPE'          => 'application/json',
                 'HTTP_X-Requested-With' => 'XMLHttpRequest'
             ],
-            json_encode(['username' => 'username', 'password' => 'password'])
+            json_encode(['username' => 'username', 'password' => 'password'], JSON_THROW_ON_ERROR)
         );
 
         /** @var Response $response */
@@ -132,7 +132,11 @@ class AuthControllerTest extends WebTestCase
         static::assertSame(401, $responseContent->code, 'Response code was not expected'. $info);
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
-        static::assertSame('Bad credentials.', $responseContent->message, 'Response message was not expected' . $info);
+        static::assertSame(
+            'Invalid credentials.',
+            $responseContent->message,
+            'Response message was not expected' . $info
+        );
 
         unset($response, $client);
     }
