@@ -10,7 +10,7 @@ namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\BodySubscriber;
 use Generator;
-use LogicException;
+use JsonException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -94,7 +94,7 @@ class BodySubscriberTest extends KernelTestCase
 
     public function testThatInvalidJsonContentThrowsAnException(): void
     {
-        $this->expectException(LogicException::class);
+        $this->expectException(JsonException::class);
 
         static::bootKernel();
 
