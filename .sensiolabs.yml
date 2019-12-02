@@ -1,5 +1,7 @@
 working_directory: src
 
+php_version: 7.4
+
 global_exclude_dirs:
     - bin
     - build
