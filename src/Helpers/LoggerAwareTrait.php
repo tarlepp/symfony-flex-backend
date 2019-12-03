@@ -18,10 +18,7 @@ use Psr\Log\LoggerInterface;
  */
 trait LoggerAwareTrait
 {
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     /**
      * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters

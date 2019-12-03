@@ -8,11 +8,13 @@ declare(strict_types = 1);
 
 namespace App\Collection;
 
+use App\Helpers\LoggerAwareTrait;
 use CallbackFilterIterator;
 use Closure;
 use InvalidArgumentException;
 use IteratorAggregate;
 use IteratorIterator;
+use Throwable;
 use function iterator_count;
 
 /**
@@ -23,10 +25,10 @@ use function iterator_count;
  */
 trait CollectionTrait
 {
-    /**
-     * @var IteratorAggregate
-     */
-    private $items;
+    // Traits
+    use LoggerAwareTrait;
+
+    private IteratorAggregate $items;
 
     /**
      * @param string $className
@@ -99,10 +101,15 @@ trait CollectionTrait
      */
     private function getFilteredItem(string $className)
     {
-        $filteredIterator = new CallbackFilterIterator(
-            new IteratorIterator($this->items->getIterator()),
-            $this->filter($className)
-        );
+        try {
+            $iterator = $this->items->getIterator();
+        } catch (Throwable $throwable) {
+            $this->logger->error($throwable->getMessage());
+
+            return null;
+        }
+
+        $filteredIterator = new CallbackFilterIterator(new IteratorIterator($iterator), $this->filter($className));
         $filteredIterator->rewind();
 
         return $filteredIterator->current();
