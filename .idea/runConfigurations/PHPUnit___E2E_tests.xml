@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="PHPUnit - E2E tests" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+    <TestRunner configuration_file="/app/phpunit.xml.dist" scope="XML" options="--testsuite E2E" />
+    <method v="2" />
+  </configuration>
+</component>

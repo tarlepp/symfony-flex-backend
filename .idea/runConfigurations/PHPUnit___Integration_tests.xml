@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="PHPUnit - Integration tests" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+    <TestRunner configuration_file="/app/phpunit.xml.dist" scope="XML" options="--testsuite Integration" />
+    <method v="2" />
+  </configuration>
+</component>
