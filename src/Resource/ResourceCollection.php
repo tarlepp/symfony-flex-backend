@@ -83,7 +83,7 @@ class ResourceCollection implements Countable
      */
     public function filter(string $className): Closure
     {
-        return static fn(RestResourceInterface $restResource): bool => $restResource instanceof $className;
+        return static fn (RestResourceInterface $restResource): bool => $restResource instanceof $className;
     }
 
     /**
@@ -116,11 +116,16 @@ class ResourceCollection implements Countable
             return null;
         }
 
-        $callback = fn(RestResourceInterface $restResource): bool => $restResource->getEntityName() === $entityName;
+        $callback = fn (RestResourceInterface $restResource): bool => $restResource->getEntityName() === $entityName;
 
         $filteredIterator = new CallbackFilterIterator(new IteratorIterator($iterator), $callback);
         $filteredIterator->rewind();
 
         return $filteredIterator->current();
+    }
+
+    protected function Adf(): void
+    {
+        return null;
     }
 }
