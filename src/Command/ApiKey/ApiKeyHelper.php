@@ -26,15 +26,8 @@ use function sprintf;
  */
 class ApiKeyHelper
 {
-    /**
-     * @var ApiKeyResource
-     */
-    private $apiKeyResource;
-
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
+    private ApiKeyResource $apiKeyResource;
+    private RolesService $rolesService;
 
     /**
      * ApiKeyHelper constructor.
