@@ -123,9 +123,4 @@ class ResourceCollection implements Countable
 
         return $filteredIterator->current();
     }
-
-    protected function Adf(): void
-    {
-        return null;
-    }
 }
