@@ -16,6 +16,7 @@ use Countable;
 use InvalidArgumentException;
 use IteratorAggregate;
 use IteratorIterator;
+use Throwable;
 use function sprintf;
 
 /**
@@ -82,9 +83,7 @@ class ResourceCollection implements Countable
      */
     public function filter(string $className): Closure
     {
-        return static function (RestResourceInterface $restResource) use ($className): bool {
-            return $restResource instanceof $className;
-        };
+        return static fn(RestResourceInterface $restResource): bool => $restResource instanceof $className;
     }
 
     /**
@@ -109,12 +108,17 @@ class ResourceCollection implements Countable
      */
     private function getFilteredItemByEntity(string $entityName): ?RestResourceInterface
     {
-        $filteredIterator = new CallbackFilterIterator(
-            new IteratorIterator($this->items->getIterator()),
-            static function (RestResourceInterface $restResource) use ($entityName): bool {
-                return $restResource->getEntityName() === $entityName;
-            }
-        );
+        try {
+            $iterator = $this->items->getIterator();
+        } catch (Throwable $throwable) {
+            $this->logger->error($throwable->getMessage());
+
+            return null;
+        }
+
+        $callback = fn(RestResourceInterface $restResource): bool => $restResource->getEntityName() === $entityName;
+
+        $filteredIterator = new CallbackFilterIterator(new IteratorIterator($iterator), $callback);
         $filteredIterator->rewind();
 
         return $filteredIterator->current();

@@ -31,6 +31,9 @@ use ArrayObject;
 use Generator;
 use InvalidArgumentException;
 use IteratorAggregate;
+use LogicException;
+use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -75,6 +78,33 @@ class ResourceCollectionTest extends KernelTestCase
         unset($collection);
     }
 
+    public function testThatLoggerIsCalledIfGetMethodGetIteratorThrowsAnException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Resource \'FooBar\' does not exists');
+
+        /** @var MockObject|LoggerInterface $logger */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
+        $logger
+            ->expects(static::once())
+            ->method('error');
+
+        $iteratorAggregate = new class() implements IteratorAggregate {
+            /**
+             * @inheritDoc
+             */
+            public function getIterator(): ArrayObject
+            {
+                throw new LogicException('Exception with getIterator');
+            }
+        };
+
+        $collection = new ResourceCollection($iteratorAggregate);
+        $collection->setLogger($logger);
+        $collection->get('FooBar');
+    }
+
     public function testThatGetEntityResourceMethodThrowsAnException(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -106,6 +136,33 @@ class ResourceCollectionTest extends KernelTestCase
         $collection->getEntityResource('FooBar');
 
         unset($collection);
+    }
+
+    public function testThatLoggerIsCalledIfGetEntityResourceMethodGetIteratorThrowsAnException(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Resource class does not exists for entity \'FooBar\'');
+
+        /** @var MockObject|LoggerInterface $logger */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
+        $logger
+            ->expects(static::once())
+            ->method('error');
+
+        $iteratorAggregate = new class() implements IteratorAggregate {
+            /**
+             * @inheritDoc
+             */
+            public function getIterator(): ArrayObject
+            {
+                throw new LogicException('Exception with getIterator');
+            }
+        };
+
+        $collection = new ResourceCollection($iteratorAggregate);
+        $collection->setLogger($logger);
+        $collection->getEntityResource('FooBar');
     }
 
     public function testThatGetAllReturnsCorrectCountOfResources(): void
