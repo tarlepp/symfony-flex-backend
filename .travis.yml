@@ -56,6 +56,7 @@ install:
   - make generate-jwt-keys
 
 before_script:
+  - pwd
   - if [[ ${COVERAGE} != true ]]; then phpenv config-rm xdebug.ini; fi
   - mysql --version
   - php --version
@@ -73,6 +74,7 @@ script:
   - make ecs
   - make psalm
   - make phpstan
+  - ls -la var/cache/test/
   - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
   - make run-tests-fastest-php
 #  - make run-tests-fastest
