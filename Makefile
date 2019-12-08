@@ -190,8 +190,9 @@ psalm: ## Runs Psalm static analysis tool
 ###> phpstan ###
 phpstan: ## Runs PHPStan static analysis tool
 	@echo "\033[32mRunning PHPStan - PHP Static Analysis Tool\033[39m"
+	@@bin/console cache:clear --env=test
 	@./vendor/bin/phpstan --version
-	@./vendor/bin/phpstan analyze --level 7 src
+	@./vendor/bin/phpstan analyze src
 ###< phpstan ###
 
 ###> lint configuration ###
