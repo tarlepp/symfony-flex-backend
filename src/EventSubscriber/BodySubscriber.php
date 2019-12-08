@@ -13,10 +13,8 @@ use LogicException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use function fstat;
 use function in_array;
 use function is_array;
-use function is_resource;
 use function is_string;
 
 /**
@@ -70,7 +68,7 @@ class BodySubscriber implements EventSubscriberInterface
         $content = $request->getContent();
 
         // Request content is empty so assume that it's ok - probably DELETE or OPTION request
-        if ((is_string($content) && $content === '') || (is_resource($content) && fstat($content)['size'] === 0)) {
+        if (is_string($content) && $content === '') {
             return;
         }
 
