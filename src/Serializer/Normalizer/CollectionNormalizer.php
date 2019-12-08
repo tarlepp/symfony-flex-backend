@@ -22,10 +22,7 @@ use function is_object;
  */
 class CollectionNormalizer implements NormalizerInterface
 {
-    /**
-     * @var ObjectNormalizer
-     */
-    private $normalizer;
+    private ObjectNormalizer $normalizer;
 
     /**
      * CollectionNormalizer constructor.
@@ -41,17 +38,13 @@ class CollectionNormalizer implements NormalizerInterface
      * @inheritdoc
      *
      * @param Collection|ArrayCollection|mixed $collection
-     * @param string|null $format
-     * @param array $context
+     * @param string|null                      $format
+     * @param array                            $context
      */
     public function normalize($collection, $format = null, array $context = [])
     {
         $output = [];
 
-        /**
-         * @psalm-var Collection|ArrayCollection $collection
-         * @psalm-var object                     $value
-         */
         foreach ($collection as $value) {
             $output[] = $this->normalizer->normalize($value, $format, $context);
         }
