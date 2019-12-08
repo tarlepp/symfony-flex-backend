@@ -22,7 +22,7 @@ class AdminActionsTest extends RestTraitTestCase
     /**
      * @var string
      */
-    protected static $route = '/test_admin_actions';
+    protected static string $route = '/test_admin_actions';
 
     /**
      * @return Generator

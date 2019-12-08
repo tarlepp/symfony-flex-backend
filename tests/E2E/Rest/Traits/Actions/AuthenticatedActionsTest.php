@@ -22,7 +22,7 @@ class AuthenticatedActionsTest extends RestTraitTestCase
     /**
      * @var string
      */
-    protected static $route = '/test_authenticated_actions';
+    protected static string $route = '/test_authenticated_actions';
 
     /**
      * @return Generator

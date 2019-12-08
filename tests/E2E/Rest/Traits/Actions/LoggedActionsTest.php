@@ -22,7 +22,7 @@ class LoggedActionsTest extends RestTraitTestCase
     /**
      * @var string
      */
-    protected static $route = '/test_logged_actions';
+    protected static string $route = '/test_logged_actions';
 
     /**
      * @return Generator

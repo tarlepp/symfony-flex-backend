@@ -22,7 +22,7 @@ class AnonActionsTest extends RestTraitTestCase
     /**
      * @var string
      */
-    protected static $route = '/test_anon_actions';
+    protected static string $route = '/test_anon_actions';
 
     /**
      * @return Generator
