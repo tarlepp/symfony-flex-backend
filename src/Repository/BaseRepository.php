@@ -188,7 +188,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     public function addCallback(callable $callable, ?array $args = null): BaseRepositoryInterface
     {
-        $args = $args ?? [];
+        $args ??= [];
         $hash = sha1(serialize(array_merge([spl_object_hash((object)$callable)], $args)));
 
         if (!in_array($hash, self::$processedCallbacks, true)) {
@@ -207,7 +207,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected function processJoins(QueryBuilder $queryBuilder): void
     {
         /**
-         * @var string
+         * @var string                        $joinType
          * @var array<int, array<int, mixed>> $joins
          */
         foreach (self::$joins as $joinType => $joins) {

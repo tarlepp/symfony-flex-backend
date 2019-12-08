@@ -12,6 +12,7 @@ use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
 use App\Rest\RepositoryHelper;
 use App\Rest\UuidHelper;
+use ArrayIterator;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -22,6 +23,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\TransactionRequiredException;
 use InvalidArgumentException;
+use Throwable;
 use function array_map;
 use function array_values;
 
@@ -139,7 +141,7 @@ trait RepositoryMethodsTrait
      *
      * @return array<int, EntityInterface>
      *
-     * @throws InvalidArgumentException
+     * @throws Throwable
      */
     public function findByAdvanced(
         array $criteria,
@@ -162,8 +164,9 @@ trait RepositoryMethodsTrait
 
         RepositoryHelper::resetParameterCount();
 
-        /** @psalm-suppress UndefinedMethod */
-        return (new Paginator($queryBuilder, true))->getIterator()->getArrayCopy();
+        $iterator = (new Paginator($queryBuilder, true))->getIterator();
+
+        return $iterator instanceof ArrayIterator ? $iterator->getArrayCopy() : iterator_to_array($iterator);
     }
 
     /**
