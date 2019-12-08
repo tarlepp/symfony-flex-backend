@@ -21,7 +21,7 @@
 	},
 	"extra": {
 		"symfony": {
-			"require": "4.3.8"
+			"require": "4.4.1"
 		}
 	}
 }
