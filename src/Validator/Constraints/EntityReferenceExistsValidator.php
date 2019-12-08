@@ -104,9 +104,9 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     }
 
     /**
-     * @param array|array<int, EntityInterface> $entities
+     * @param array<int, EntityInterface> $entities
      *
-     * @return array|array<int, string>
+     * @return array<int, string>
      */
     private function getInvalidValues(array $entities): array
     {
