@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0f044a463c2dc9f64ddd33422ee9457b",
+    "content-hash": "2b6c7fa25d18c72ff58151dc2fb3e51a",
     "packages": [],
     "packages-dev": [
         {
@@ -105,16 +105,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.1",
+            "version": "0.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c33f6f7c83377510b4c134d66869a7c55453c41d"
+                "reference": "15a2c2b7d4195aa712506e14763ef7646ac6a08c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c33f6f7c83377510b4c134d66869a7c55453c41d",
-                "reference": "c33f6f7c83377510b4c134d66869a7c55453c41d",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/15a2c2b7d4195aa712506e14763ef7646ac6a08c",
+                "reference": "15a2c2b7d4195aa712506e14763ef7646ac6a08c",
                 "shasum": ""
             },
             "require": {
@@ -141,7 +141,7 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "time": "2019-12-08T15:07:52+00:00"
+            "time": "2019-12-09T09:13:49+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
