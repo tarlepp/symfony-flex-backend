@@ -35,13 +35,15 @@ class CollectionNormalizer implements NormalizerInterface
     }
 
     /**
-     * @inheritdoc
-     *
      * @param Collection|ArrayCollection|mixed $collection
      * @param string|null                      $format
-     * @param array                            $context
+     * @param array<array-key, mixed>          $context
+     *
+     * @return array<\ArrayObject<int, T>|array|bool|float|int|string|null>
+     *
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
      */
-    public function normalize($collection, $format = null, array $context = [])
+    public function normalize($collection, $format = null, array $context = []): array
     {
         $output = [];
 
