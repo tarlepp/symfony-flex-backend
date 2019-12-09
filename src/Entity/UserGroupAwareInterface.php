@@ -20,7 +20,7 @@ use Doctrine\Common\Collections\Collection;
 interface UserGroupAwareInterface extends EntityInterface
 {
     /**
-     * @return Collection|ArrayCollection|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
+     * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
     public function getUserGroups(): Collection;
 

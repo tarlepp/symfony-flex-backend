@@ -74,7 +74,7 @@ class Role implements EntityInterface
     /**
      * User groups that belongs to this role.
      *
-     * @var Collection|ArrayCollection|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
+     * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      *
      * @Groups({
      *      "Role.userGroups",
@@ -131,7 +131,7 @@ class Role implements EntityInterface
     }
 
     /**
-     * @return Collection|ArrayCollection|Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
+     * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
     public function getUserGroups(): Collection
     {
