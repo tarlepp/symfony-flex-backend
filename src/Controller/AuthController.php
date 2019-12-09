@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Utils\JSON;
+use JsonException;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -75,6 +76,7 @@ class AuthController
      * @SWG\Tag(name="Authentication")
      *
      * @throws HttpException
+     * @throws JsonException
      */
     public function getTokenAction(): void
     {

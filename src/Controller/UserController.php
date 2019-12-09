@@ -59,6 +59,9 @@ class UserController extends Controller
     use Actions\Root\UpdateAction;
     use Methods\DeleteMethod;
 
+    /**
+     * @var array<string, string>
+     */
     protected static $dtoClasses = [
         Controller::METHOD_CREATE => UserCreate::class,
         Controller::METHOD_UPDATE => UserUpdate::class,
@@ -496,7 +499,7 @@ class UserController extends Controller
         SerializerInterface $serializer,
         ?int $status = null
     ): JsonResponse {
-        $status = $status ?? 200;
+        $status ??= 200;
 
         $groups = [
             'groups' => [

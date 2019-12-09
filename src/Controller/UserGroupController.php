@@ -56,6 +56,9 @@ class UserGroupController extends Controller
     use Actions\Root\PatchAction;
     use Actions\Root\UpdateAction;
 
+    /**
+     * @var array<string, string>
+     */
     protected static $dtoClasses = [
         Controller::METHOD_CREATE => UserGroupCreate::class,
         Controller::METHOD_UPDATE => UserGroupUpdate::class,
@@ -353,7 +356,7 @@ class UserGroupController extends Controller
         SerializerInterface $serializer,
         ?int $status = null
     ): JsonResponse {
-        $status = $status ?? 200;
+        $status ??= 200;
 
         $groups = [
             'groups' => [

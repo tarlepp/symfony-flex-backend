@@ -11,6 +11,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Security\RolesService;
 use App\Utils\JSON;
+use JsonException;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
@@ -74,11 +75,13 @@ class ProfileController
      *  )
      * @SWG\Tag(name="Profile")
      *
-     * @param SerializerInterface   $serializer
-     * @param RolesService          $rolesService
-     * @param User                  $loggedInUser
+     * @param SerializerInterface $serializer
+     * @param RolesService        $rolesService
+     * @param User                $loggedInUser
      *
      * @return JsonResponse
+     *
+     * @throws JsonException
      */
     public function profileAction(
         SerializerInterface $serializer,
