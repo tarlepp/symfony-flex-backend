@@ -26,20 +26,9 @@ use function array_map;
  */
 final class LoadRoleData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
-
-    /**
-     * @var ObjectManager
-     */
-    private $manager;
-
-    /**
-     * @var RolesServiceInterface
-     */
-    private $roles;
+    private ContainerInterface $container;
+    private ObjectManager $manager;
+    private RolesServiceInterface $roles;
 
     /**
      * Setter for container.
