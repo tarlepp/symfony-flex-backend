@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bebf2e066911f334fd391ae3b48a0973",
+    "content-hash": "f3b632de3fac0bcd4dad891cb7b37bad",
     "packages": [],
     "packages-dev": [
         {
@@ -4468,29 +4468,29 @@
         },
         {
             "name": "symplify/easy-coding-standard-tester",
-            "version": "v7.0.2",
+            "version": "v7.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandardTester.git",
-                "reference": "64605b82d5e3dfe409e866eac8a7f7f08e50ce9a"
+                "reference": "85555b9ae53f4eeba3dfd5d83df3747e4dc92b33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandardTester/zipball/64605b82d5e3dfe409e866eac8a7f7f08e50ce9a",
-                "reference": "64605b82d5e3dfe409e866eac8a7f7f08e50ce9a",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandardTester/zipball/85555b9ae53f4eeba3dfd5d83df3747e4dc92b33",
+                "reference": "85555b9ae53f4eeba3dfd5d83df3747e4dc92b33",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2",
                 "phpunit/phpunit": "^8.4",
-                "symplify/easy-coding-standard": "^7.0.2",
-                "symplify/package-builder": "^7.0.2",
-                "symplify/smart-file-system": "^7.0.2"
+                "symplify/easy-coding-standard": "^7.1",
+                "symplify/package-builder": "^7.1",
+                "symplify/smart-file-system": "^7.1"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.1-dev"
+                    "dev-master": "7.2-dev"
                 }
             },
             "autoload": {
@@ -4503,7 +4503,7 @@
                 "MIT"
             ],
             "description": "The Best Way to Test Sniffs and Fixers",
-            "time": "2019-11-23T22:19:45+00:00"
+            "time": "2019-12-09T11:18:48+00:00"
         },
         {
             "name": "symplify/package-builder",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b6c7fa25d18c72ff58151dc2fb3e51a",
+    "content-hash": "8445ae4526afe9b2130939c5678ee861",
     "packages": [],
     "packages-dev": [
         {
@@ -145,16 +145,16 @@
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "0.12.1",
+            "version": "0.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-doctrine.git",
-                "reference": "cab43df5287c3c142210704dbc3f1ea62d6dfd06"
+                "reference": "8151e1a258897809dd73806f2070ea0def787c39"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/cab43df5287c3c142210704dbc3f1ea62d6dfd06",
-                "reference": "cab43df5287c3c142210704dbc3f1ea62d6dfd06",
+                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/8151e1a258897809dd73806f2070ea0def787c39",
+                "reference": "8151e1a258897809dd73806f2070ea0def787c39",
                 "shasum": ""
             },
             "require": {
@@ -205,7 +205,7 @@
                 "MIT"
             ],
             "description": "Doctrine extensions for PHPStan",
-            "time": "2019-12-07T20:33:11+00:00"
+            "time": "2019-12-10T14:51:21+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -265,16 +265,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "0.12.0",
+            "version": "0.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "8cdb0a66ac87f50a56a15b509ef6a2e2b62be049"
+                "reference": "548bd9cddbfc374ba2fa66ca915307398ba52c4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/8cdb0a66ac87f50a56a15b509ef6a2e2b62be049",
-                "reference": "8cdb0a66ac87f50a56a15b509ef6a2e2b62be049",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/548bd9cddbfc374ba2fa66ca915307398ba52c4c",
+                "reference": "548bd9cddbfc374ba2fa66ca915307398ba52c4c",
                 "shasum": ""
             },
             "require": {
@@ -331,7 +331,7 @@
                 }
             ],
             "description": "Symfony Framework extensions and rules for PHPStan",
-            "time": "2019-12-02T18:38:39+00:00"
+            "time": "2019-12-10T10:36:24+00:00"
         },
         {
             "name": "roave/security-advisories",
