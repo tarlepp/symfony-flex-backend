@@ -24,12 +24,7 @@ use Doctrine\DBAL\Types\DateTimeType;
  */
 class UTCDateTimeType extends DateTimeType
 {
-    /**
-     * UTC date time zone object.
-     *
-     * @var DateTimeZone|null
-     */
-    private static $utc;
+    private static ?DateTimeZone $utc;
 
     /**
      * Converts a value from its PHP representation to its database representation
@@ -73,7 +68,7 @@ class UTCDateTimeType extends DateTimeType
                 $this->getUtcDateTimeZone()
             );
 
-            $value = $this->checkConvertedValue((string)$value, $platform, $converted);
+            $value = $this->checkConvertedValue((string)$value, $platform, $converted !== false ? $converted : null);
         }
 
         return parent::convertToPHPValue($value, $platform);
@@ -98,11 +93,7 @@ class UTCDateTimeType extends DateTimeType
      */
     private function getUtcDateTimeZone(): DateTimeZone
     {
-        if (self::$utc === null) {
-            self::$utc = new DateTimeZone('UTC');
-        }
-
-        return self::$utc;
+        return self::$utc ??= new DateTimeZone('UTC');
     }
 
     /**
@@ -110,13 +101,13 @@ class UTCDateTimeType extends DateTimeType
      *
      * @param string           $value
      * @param AbstractPlatform $platform
-     * @param DateTime|bool    $converted
+     * @param DateTime|null    $converted
      *
      * @return DateTime
      *
      * @throws ConversionException
      */
-    private function checkConvertedValue(string $value, AbstractPlatform $platform, $converted): DateTime
+    private function checkConvertedValue(string $value, AbstractPlatform $platform, ?DateTime $converted): DateTime
     {
         if ($converted instanceof DateTime) {
             return $converted;

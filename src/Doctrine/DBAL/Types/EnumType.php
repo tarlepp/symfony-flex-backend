@@ -25,15 +25,8 @@ use function sprintf;
  */
 abstract class EnumType extends Type
 {
-    /**
-     * @var string
-     */
-    protected static $name;
-
-    /**
-     * @var string[]
-     */
-    protected static $values = [];
+    protected static string $name;
+    protected static array $values = [];
 
     /**
      * Gets the SQL declaration snippet for a field of this type.
@@ -47,9 +40,7 @@ abstract class EnumType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
-        $iterator = static function (string $value): string {
-            return "'" . $value . "'";
-        };
+        $iterator = fn (string $value): string => "'" . $value . "'";
 
         return 'ENUM(' . implode(', ', array_map($iterator, static::$values)) . ')';
     }
