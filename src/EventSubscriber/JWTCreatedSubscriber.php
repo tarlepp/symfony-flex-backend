@@ -29,10 +29,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     // Traits
     use LoggerAwareTrait;
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * JWTCreatedListener constructor.
@@ -60,7 +57,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return mixed[] The event names to listen to
+     * @return array<string, string> The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -73,8 +70,6 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
      * Subscriber method to attach some custom data to current JWT payload.
      *
      * This method is called when 'lexik_jwt_authentication.on_jwt_created' event is broadcast.
-     *
-     * @psalm-suppress MissingDependency
      *
      * @param JWTCreatedEvent $event
      */
@@ -97,7 +92,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     /**
      * Method to set/modify JWT expiration date dynamically.
      *
-     * @param mixed[] $payload
+     * @param array<string, string|int> $payload
      */
     private function setExpiration(array &$payload): void
     {
@@ -111,7 +106,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
      *
      * @see JWTDecodedListener
      *
-     * @param mixed[] $payload
+     * @param array<string, string|int> $payload
      */
     private function setSecurityData(array &$payload): void
     {

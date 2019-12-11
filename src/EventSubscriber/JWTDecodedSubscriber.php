@@ -29,10 +29,7 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
     // Traits
     use LoggerAwareTrait;
 
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * JWTDecodedSubscriber constructor.
@@ -60,7 +57,7 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return mixed[] The event names to listen to
+     * @return array<string, string> The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -73,8 +70,6 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
      * Subscriber method to make some custom JWT payload checks.
      *
      * This method is called when 'lexik_jwt_authentication.on_jwt_decoded' event is broadcast.
-     *
-     * @psalm-suppress MissingDependency
      *
      * @param JWTDecodedEvent $event
      */
@@ -99,12 +94,10 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
     /**
      * Method to check payload data.
      *
-     * @psalm-suppress MissingDependency
-     *
      * @param JWTDecodedEvent $event
      * @param Request|null    $request
      */
-    private function checkPayload(JWTDecodedEvent $event, ?Request $request = null): void
+    private function checkPayload(JWTDecodedEvent $event, ?Request $request): void
     {
         if ($request === null) {
             return;
