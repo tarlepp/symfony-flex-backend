@@ -25,5 +25,5 @@ class UserCreate extends User
      * @Assert\NotNull()
      * @Assert\Length(min = 8, max = 255)
      */
-    protected $password = '';
+    protected string $password = '';
 }

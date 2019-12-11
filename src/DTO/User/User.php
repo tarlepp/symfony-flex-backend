@@ -36,7 +36,7 @@ class User extends RestDto
     /**
      * @var array<string, string>
      */
-    protected static $mappings = [
+    protected static array $mappings = [
         'password' => 'updatePassword',
         'userGroups' => 'updateUserGroups',
     ];
@@ -48,7 +48,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    protected $username = '';
+    protected string $username = '';
 
     /**
      * @var string
@@ -57,7 +57,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    protected $firstName = '';
+    protected string $firstName = '';
 
     /**
      * @var string
@@ -66,7 +66,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @Assert\Length(min = 2, max = 255)
      */
-    protected $lastName = '';
+    protected string $lastName = '';
 
     /**
      * @var string
@@ -75,21 +75,21 @@ class User extends RestDto
      * @Assert\NotNull()
      * @Assert\Email()
      */
-    protected $email = '';
+    protected string $email = '';
 
     /**
      * @var UserGroupEntity[]|array<int, UserGroupEntity>
      *
      * @AppAssert\EntityReferenceExists(entityClass=UserGroupEntity::class)
      */
-    protected $userGroups = [];
+    protected array $userGroups = [];
 
     /**
      * @var string
      *
      * @Assert\Length(min = 8, max = 255)
      */
-    protected $password = '';
+    protected string $password = '';
 
     /**
      * @return string

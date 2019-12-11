@@ -43,7 +43,7 @@ abstract class RestDto implements RestDtoInterface
      *
      * @var mixed[]
      */
-    protected static $mappings = [];
+    protected static array $mappings = [];
 
     /**
      * @var string|null

@@ -34,15 +34,14 @@ class UserGroup extends RestDto
      * @Assert\NotNull()
      * @Assert\Length(min = 4, max = 255)
      */
-    protected $name = '';
+    protected string $name = '';
 
-    /** @noinspection PhpUnnecessaryFullyQualifiedNameInspection */
     /**
      * @var \App\Entity\Role
      *
      * @AppAssert\EntityReferenceExists(entityClass=RoleEntity::class)
      */
-    protected $role;
+    protected ?RoleEntity $role = null;
 
     /**
      * @return string

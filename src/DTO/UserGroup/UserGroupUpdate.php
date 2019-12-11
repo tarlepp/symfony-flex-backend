@@ -8,6 +8,8 @@ declare(strict_types = 1);
 
 namespace App\DTO\UserGroup;
 
+use App\Entity\Role;
+
 /**
  * Class UserGroupUpdate
  *
@@ -23,5 +25,5 @@ class UserGroupUpdate extends UserGroup
      * @Assert\NotBlank()
      * @Assert\NotNull()
      */
-    protected $role;
+    protected ?Role $role;
 }

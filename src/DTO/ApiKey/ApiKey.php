@@ -33,7 +33,7 @@ class ApiKey extends RestDto
     /**
      * @var array<string, string>
      */
-    protected static $mappings = [
+    protected static array $mappings = [
         'userGroups' => 'updateUserGroups',
     ];
 
@@ -43,19 +43,19 @@ class ApiKey extends RestDto
      * @Assert\NotBlank()
      * @Assert\NotNull()
      */
-    protected $description;
+    protected string $description = '';
 
     /**
      * @var string
      */
-    protected $token;
+    protected string $token = '';
 
     /**
      * @var UserGroupEntity[]|array<int, UserGroupEntity>
      *
      * @AppAssert\EntityReferenceExists(entityClass=UserGroupEntity::class)
      */
-    protected $userGroups = [];
+    protected array $userGroups = [];
 
     /**
      * @return string
