@@ -12,7 +12,6 @@ use App\Entity\User;
 use App\Security\SecurityUser;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use LengthException;
-use RuntimeException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use function strlen;
 
@@ -24,15 +23,10 @@ use function strlen;
  */
 class UserEntityEventListener
 {
-    /**
-     * Used password encoder
-     *
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
+    private UserPasswordEncoderInterface $userPasswordEncoder;
 
     /**
-     * Constructor
+     * Constructor of the class.
      *
      * @param UserPasswordEncoderInterface $userPasswordEncoder
      */
@@ -47,7 +41,6 @@ class UserEntityEventListener
      * @param LifecycleEventArgs $event
      *
      * @throws LengthException
-     * @throws RuntimeException
      */
     public function prePersist(LifecycleEventArgs $event): void
     {
@@ -60,7 +53,6 @@ class UserEntityEventListener
      * @param LifecycleEventArgs $event
      *
      * @throws LengthException
-     * @throws RuntimeException
      */
     public function preUpdate(LifecycleEventArgs $event): void
     {
@@ -70,7 +62,6 @@ class UserEntityEventListener
     /**
      * @param LifecycleEventArgs $event
      *
-     * @throws RuntimeException
      * @throws LengthException
      */
     private function process(LifecycleEventArgs $event): void
@@ -90,7 +81,6 @@ class UserEntityEventListener
      * @param User $user
      *
      * @throws LengthException
-     * @throws RuntimeException
      */
     private function changePassword(User $user): void
     {
@@ -104,9 +94,8 @@ class UserEntityEventListener
             }
 
             // Password hash callback
-            $callback = function (string $plainPassword) use ($user): string {
-                return $this->userPasswordEncoder->encodePassword(new SecurityUser($user), $plainPassword);
-            };
+            $callback = fn (string $plainPassword): string
+                => $this->userPasswordEncoder->encodePassword(new SecurityUser($user), $plainPassword);
 
             // Set new password and encode it with user encoder
             $user->setPassword($callback, $plainPassword);
