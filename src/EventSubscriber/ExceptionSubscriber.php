@@ -12,8 +12,7 @@ use App\Helpers\LoggerAwareTrait;
 use App\Utils\JSON;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
-use InvalidArgumentException;
-use LogicException;
+use JsonException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -25,7 +24,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
-use UnexpectedValueException;
 use function get_class;
 
 /**
@@ -39,15 +37,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
     // Traits
     use LoggerAwareTrait;
 
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var string
-     */
-    private $environment;
+    private TokenStorageInterface $tokenStorage;
+    private string $environment;
 
     /**
      * ExceptionSubscriber constructor.
@@ -77,7 +68,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return mixed[] The event names to listen to
+     * @return array<string, array<int, string|int>> The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -94,9 +85,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
      *
      * @param ExceptionEvent $event
      *
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
-     * @throws LogicException
+     * @throws JsonException
      */
     public function onKernelException(ExceptionEvent $event): void
     {

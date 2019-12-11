@@ -9,10 +9,11 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Utils\JSON;
-use LogicException;
+use JsonException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 use function in_array;
 use function is_array;
 use function is_string;
@@ -41,12 +42,12 @@ class BodySubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return mixed[] The event names to listen to
+     * @return array<string, array<int, string|int>> The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
         return [
-            'kernel.request' => [
+            KernelEvents::REQUEST => [
                 'onKernelRequest',
                 10,
             ],
@@ -59,7 +60,7 @@ class BodySubscriber implements EventSubscriberInterface
      *
      * @param RequestEvent $event
      *
-     * @throws LogicException
+     * @throws JsonException
      */
     public function onKernelRequest(RequestEvent $event): void
     {
@@ -95,7 +96,7 @@ class BodySubscriber implements EventSubscriberInterface
      *
      * @param Request $request
      *
-     * @throws LogicException
+     * @throws JsonException
      */
     private function transformJsonBody(Request $request): void
     {

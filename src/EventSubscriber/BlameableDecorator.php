@@ -21,10 +21,7 @@ use Throwable;
  */
 class BlameableDecorator extends BlameableListener
 {
-    /**
-     * @var UserResource
-     */
-    private $userResource;
+    private UserResource $userResource;
 
     /**
      * @param UserResource $userResource
