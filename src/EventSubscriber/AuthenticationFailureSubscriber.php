@@ -26,15 +26,8 @@ use function is_string;
  */
 class AuthenticationFailureSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var LoginLogger
-     */
-    protected $loginLogger;
-
-    /**
-     * @var UserRepository
-     */
-    protected $userRepository;
+    private LoginLogger $loginLogger;
+    private UserRepository $userRepository;
 
     /**
      * AuthenticationFailureSubscriber constructor.
@@ -64,7 +57,7 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return mixed[] The event names to listen to
+     * @return array<string, string> The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -78,8 +71,6 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
      *
      * This method is called when '\Lexik\Bundle\JWTAuthenticationBundle\Events::AUTHENTICATION_FAILURE'
      * event is broadcast.
-     *
-     * @psalm-suppress MissingDependency
      *
      * @param AuthenticationFailureEvent $event
      *

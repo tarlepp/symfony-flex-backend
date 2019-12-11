@@ -24,15 +24,8 @@ use Throwable;
  */
 class AuthenticationSuccessSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var LoginLogger
-     */
-    private $loginLogger;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private LoginLogger $loginLogger;
+    private UserRepository $userRepository;
 
     /**
      * AuthenticationSuccessListener constructor.
@@ -62,7 +55,7 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return mixed[] The event names to listen to
+     * @return array<string, string> The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -75,8 +68,6 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
      * Method to log user successfully login to database.
      *
      * This method is called when 'lexik_jwt_authentication.on_authentication_success' event is broadcast.
-     *
-     * @psalm-suppress MissingDependency
      *
      * @param AuthenticationSuccessEvent $event
      *
