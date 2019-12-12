@@ -10,6 +10,7 @@ namespace App\Form\Type\Traits;
 
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
+use Throwable;
 use function array_map;
 
 /**
@@ -20,15 +21,14 @@ use function array_map;
  */
 trait UserGroupChoices
 {
-    /**
-     * @var UserGroupResource
-     */
-    protected $userGroupResource;
+    protected UserGroupResource $userGroupResource;
 
     /**
      * Method to create choices array for user groups.
      *
      * @return mixed[]
+     *
+     * @throws Throwable
      */
     protected function getUserGroupChoices(): array
     {
@@ -46,7 +46,6 @@ trait UserGroupChoices
             $choices[$name] = $userGroup->getId();
         };
 
-        /** @var UserGroup[] $userGroups */
         $userGroups = $this->userGroupResource->find();
 
         array_map($iterator, $userGroups);

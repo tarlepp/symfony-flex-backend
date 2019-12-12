@@ -23,7 +23,6 @@ use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
 
-/** @noinspection EmptyClassInspection */
 /**
  * Class UserGroupType
  *
@@ -40,7 +39,7 @@ class UserGroupType extends AbstractType
      *
      * @var array<int, array<int, mixed>>
      */
-    private static $formFields = [
+    private static array $formFields = [
         [
             'name',
             Type\TextType::class,
@@ -52,20 +51,9 @@ class UserGroupType extends AbstractType
         ],
     ];
 
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
-
-    /**
-     * @var RoleResource
-     */
-    private $roleResource;
-
-    /**
-     * @var RoleTransformer
-     */
-    private $roleTransformer;
+    private RolesService $rolesService;
+    private RoleResource $roleResource;
+    private RoleTransformer $roleTransformer;
 
     /**
      * UserGroupType constructor.
@@ -85,8 +73,6 @@ class UserGroupType extends AbstractType
     }
 
     /**
-     * @SuppressWarnings("unused")
-     *
      * @param FormBuilderInterface $builder
      * @param mixed[]              $options
      *
@@ -132,7 +118,7 @@ class UserGroupType extends AbstractType
     /**
      * Method to  choices array for user groups.
      *
-     * @return mixed[]
+     * @return array<string, string>
      *
      * @throws Throwable
      */
@@ -147,7 +133,6 @@ class UserGroupType extends AbstractType
             $choices[$name] = $role->getId();
         };
 
-        /** @var RoleEntity[] $roles */
         $roles = $this->roleResource->find();
 
         array_map($iterator, $roles);

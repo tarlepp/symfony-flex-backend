@@ -15,11 +15,11 @@ use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Throwable;
 
 /**
  * Class UserType
@@ -38,7 +38,7 @@ class UserType extends AbstractType
      *
      * @var array<int, array<int, mixed>>
      */
-    private static $formFields = [
+    private static array $formFields = [
         [
             'username',
             Type\TextType::class,
@@ -93,10 +93,7 @@ class UserType extends AbstractType
         ],
     ];
 
-    /**
-     * @var UserGroupTransformer
-     */
-    private $userGroupTransformer;
+    private UserGroupTransformer $userGroupTransformer;
 
     /**
      * UserType constructor.
@@ -111,12 +108,10 @@ class UserType extends AbstractType
     }
 
     /**
-     * @SuppressWarnings("unused")
-     *
      * @param FormBuilderInterface $builder
      * @param mixed[]              $options
      *
-     * @throws InvalidArgumentException
+     * @throws Throwable
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
