@@ -15,7 +15,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 use function array_map;
 use function array_values;
 use function is_array;
-use function is_string;
+use function sprintf;
 
 /**
  * Class UserGroupTransformer
@@ -25,10 +25,7 @@ use function is_string;
  */
 class UserGroupTransformer implements DataTransformerInterface
 {
-    /**
-     * @var UserGroupResource
-     */
-    private $resource;
+    private UserGroupResource $resource;
 
     /**
      * UserGroupTransformer constructor.
@@ -53,14 +50,12 @@ class UserGroupTransformer implements DataTransformerInterface
 
         if (is_array($userGroups)) {
             $iterator =
-            /**
-             * @param string|UserGroup $userGroup
-             *
-             * @return string
-             */
-            static function ($userGroup): string {
-                return is_string($userGroup) ? $userGroup : $userGroup->getId();
-            };
+                /**
+                 * @param string|UserGroup $userGroup
+                 *
+                 * @return string
+                 */
+                fn ($userGroup): string => $userGroup instanceof UserGroup ? $userGroup->getId() : $userGroup;
 
             $output = array_values(array_map('\strval', array_map($iterator, $userGroups)));
         }
@@ -87,7 +82,7 @@ class UserGroupTransformer implements DataTransformerInterface
                 $group = $this->resource->findOne($groupId);
 
                 if ($group === null) {
-                    throw new TransformationFailedException(\sprintf(
+                    throw new TransformationFailedException(sprintf(
                         'User group with id "%s" does not exist!',
                         $groupId
                     ));
