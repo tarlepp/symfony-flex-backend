@@ -27,15 +27,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class RequestSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var RequestLogger
-     */
-    private $logger;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
+    private RequestLogger $requestLogger;
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * RequestSubscriber constructor.
@@ -46,7 +39,7 @@ class RequestSubscriber implements EventSubscriberInterface
     public function __construct(RequestLogger $requestLogger, TokenStorageInterface $tokenStorage)
     {
         // Store logger service
-        $this->logger = $requestLogger;
+        $this->requestLogger = $requestLogger;
         $this->tokenStorage = $tokenStorage;
     }
 
@@ -66,7 +59,7 @@ class RequestSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return mixed[] The event names to listen to
+     * @return array<string, array<int, string|int>> The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -113,20 +106,20 @@ class RequestSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // Set needed data to logger and handle actual log
-        $this->logger->setRequest($request);
-        $this->logger->setResponse($event->getResponse());
+        $this->requestLogger->setRequest($request);
+        $this->requestLogger->setResponse($event->getResponse());
 
         /** @var ApplicationUser|ApiKeyUser|null $user */
         $user = $this->getUser();
 
         if ($user instanceof ApplicationUser) {
-            $this->logger->setUser($user);
+            $this->requestLogger->setUser($user);
         } elseif ($user instanceof ApiKeyUser) {
-            $this->logger->setApiKey($user->getApiKey());
+            $this->requestLogger->setApiKey($user->getApiKey());
         }
 
-        $this->logger->setMasterRequest($event->isMasterRequest());
-        $this->logger->handle();
+        $this->requestLogger->setMasterRequest($event->isMasterRequest());
+        $this->requestLogger->handle();
     }
 
     /**

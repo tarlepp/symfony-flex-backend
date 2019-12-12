@@ -21,10 +21,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class ResponseSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var Version
-     */
-    private $version;
+    private Version $version;
 
     /**
      * ResponseSubscriber constructor.
@@ -52,7 +49,7 @@ class ResponseSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return mixed[] The event names to listen to
+     * @return array<string, array<int, string|int>> The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {

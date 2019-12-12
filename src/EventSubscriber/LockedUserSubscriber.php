@@ -32,15 +32,8 @@ use function is_string;
  */
 class LockedUserSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * @var LogLoginFailureResource
-     */
-    private $logLoginFailureResource;
+    private UserRepository $userRepository;
+    private LogLoginFailureResource $logLoginFailureResource;
 
     /**
      * LockedUserSubscriber constructor.
@@ -70,7 +63,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
      *  * array('eventName' => array('methodName', $priority))
      *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
      *
-     * @return mixed[] The event names to listen to
+     * @return array<string, string|array<int, string|int>> The event names to listen to
      */
     public static function getSubscribedEvents(): array
     {
@@ -86,11 +79,10 @@ class LockedUserSubscriber implements EventSubscriberInterface
     /**
      * @param AuthenticationSuccessEvent $event
      *
-     * @throws ORMException
+     * @throws Throwable
      */
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
-        /** @var User|null $user */
         $user = $this->getUser($event->getUser());
 
         if ($user === null) {
