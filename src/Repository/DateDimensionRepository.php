@@ -29,8 +29,5 @@ use App\Entity\DateDimension as Entity;
  */
 class DateDimensionRepository extends BaseRepository
 {
-    /**
-     * @var string
-     */
-    protected static $entityName = Entity::class;
+    protected static string $entityName = Entity::class;
 }

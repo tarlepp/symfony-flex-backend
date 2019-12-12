@@ -8,10 +8,13 @@ declare(strict_types = 1);
 
 namespace App\Repository;
 
+use App\Entity\EntityInterface;
 use App\Repository\Traits\RepositoryMethodsTrait;
 use App\Repository\Traits\RepositoryWrappersTrait;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 use function array_merge;
@@ -38,29 +41,16 @@ abstract class BaseRepository implements BaseRepositoryInterface
     private const INNER_JOIN = 'innerJoin';
     private const LEFT_JOIN = 'leftJoin';
 
-    /**
-     * Names of search columns.
-     *
-     * @var string[]
-     */
-    protected static $searchColumns = [];
-
-    /**
-     * @var string
-     */
-    protected static $entityName;
-
-    /**
-     * @var EntityManager
-     */
-    protected static $entityManager;
+    protected static array $searchColumns = [];
+    protected static string $entityName;
+    protected static EntityManager $entityManager;
 
     /**
      * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
      *
      * @var array<string, array<int, mixed>>
      */
-    private static $joins = [
+    private static array $joins = [
         self::INNER_JOIN => [],
         self::LEFT_JOIN => [],
     ];
@@ -68,7 +58,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * @var array<string, array<int, mixed>>
      */
-    private static $processedJoins = [
+    private static array $processedJoins = [
         self::INNER_JOIN => [],
         self::LEFT_JOIN => [],
     ];
@@ -76,12 +66,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * @var array<int, array<int, mixed|callable>>
      */
-    private static $callbacks = [];
+    private static array $callbacks = [];
 
     /**
      * @var array<int, string>
      */
-    private static $processedCallbacks = [];
+    private static array $processedCallbacks = [];
 
     /**
      * BaseRepository constructor.
@@ -111,6 +101,56 @@ abstract class BaseRepository implements BaseRepositoryInterface
     public function getSearchColumns(): array
     {
         return static::$searchColumns;
+    }
+
+    /**
+     * Helper method to persist specified entity to database.
+     *
+     * @param EntityInterface $entity
+     * @param bool|null       $flush
+     *
+     * @return BaseRepositoryInterface
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function save(EntityInterface $entity, ?bool $flush = null): BaseRepositoryInterface
+    {
+        $flush ??= true;
+
+        // Persist on database
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+
+        return $this;
+    }
+
+    /**
+     * Helper method to remove specified entity from database.
+     *
+     * @param EntityInterface $entity
+     * @param bool|null       $flush
+     *
+     * @return BaseRepositoryInterface
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function remove(EntityInterface $entity, ?bool $flush = null): BaseRepositoryInterface
+    {
+        $flush ??= true;
+
+        // Remove from database
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+
+        return $this;
     }
 
     /**

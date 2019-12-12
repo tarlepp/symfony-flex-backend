@@ -12,6 +12,7 @@ use App\Entity\LogRequest as Entity;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
+use Exception;
 
 /**
  * Class LogRequestRepository
@@ -32,17 +33,14 @@ use DateTimeZone;
  */
 class LogRequestRepository extends BaseRepository
 {
-    /**
-     * @var string
-     */
-    protected static $entityName = Entity::class;
+    protected static string $entityName = Entity::class;
 
     /**
      * Helper method to clean history data from request_log table.
      *
      * @return int
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function cleanHistory(): int
     {

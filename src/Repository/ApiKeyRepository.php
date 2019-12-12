@@ -29,8 +29,5 @@ use App\Entity\ApiKey as Entity;
  */
 class ApiKeyRepository extends BaseRepository
 {
-    /**
-     * @var string
-     */
-    protected static $entityName = Entity::class;
+    protected static string $entityName = Entity::class;
 }

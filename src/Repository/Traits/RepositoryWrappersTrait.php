@@ -12,6 +12,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use UnexpectedValueException;
 
@@ -25,12 +26,8 @@ use UnexpectedValueException;
  */
 trait RepositoryWrappersTrait
 {
-    /**
-     * @var ManagerRegistry
-     */
-    protected $managerRegistry;
+    protected ManagerRegistry $managerRegistry;
 
-    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Gets a reference to the entity identified by the given type and identifier without actually loading it,
      * if the entity is not yet loaded.
@@ -39,7 +36,7 @@ trait RepositoryWrappersTrait
      *
      * @return Proxy|object|null
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function getReference(string $id)
     {
@@ -49,7 +46,7 @@ trait RepositoryWrappersTrait
     /**
      * Gets all association mappings of the class.
      *
-     * @return array|array<int, string>
+     * @return array<int, string>
      */
     public function getAssociations(): array
     {
@@ -98,7 +95,7 @@ trait RepositoryWrappersTrait
      */
     public function createQueryBuilder(?string $alias = null, ?string $indexBy = null): QueryBuilder
     {
-        $alias = $alias ?? 'entity';
+        $alias ??= 'entity';
 
         // Create new query builder
         return $this

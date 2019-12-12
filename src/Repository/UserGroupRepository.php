@@ -29,15 +29,6 @@ use App\Entity\UserGroup as Entity;
  */
 class UserGroupRepository extends BaseRepository
 {
-    /**
-     * @var string
-     */
-    protected static $entityName = Entity::class;
-
-    /**
-     * Names of search columns.
-     *
-     * @var string[]
-     */
-    protected static $searchColumns = ['role', 'name'];
+    protected static string $entityName = Entity::class;
+    protected static array $searchColumns = ['role', 'name'];
 }

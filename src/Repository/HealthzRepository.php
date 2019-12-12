@@ -35,10 +35,7 @@ use Throwable;
  */
 class HealthzRepository extends BaseRepository
 {
-    /**
-     * @var string
-     */
-    protected static $entityName = Entity::class;
+    protected static string $entityName = Entity::class;
 
     /**
      * Method to read value from database

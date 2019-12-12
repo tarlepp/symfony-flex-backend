@@ -29,8 +29,5 @@ use App\Entity\Role as Entity;
  */
 class RoleRepository extends BaseRepository
 {
-    /**
-     * @var string
-     */
-    protected static $entityName = Entity::class;
+    protected static string $entityName = Entity::class;
 }

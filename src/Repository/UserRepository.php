@@ -10,6 +10,7 @@ namespace App\Repository;
 
 use App\Entity\User as Entity;
 use App\Rest\UuidHelper;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 use function array_key_exists;
@@ -33,35 +34,22 @@ use function array_key_exists;
  */
 class UserRepository extends BaseRepository
 {
-    /**
-     * @var string
-     */
-    protected static $entityName = Entity::class;
+    protected static string $entityName = Entity::class;
+    protected static array $searchColumns = ['username', 'firstName', 'lastName', 'email'];
+
+    private string $environment;
 
     /**
-     * Names of search columns.
+     * UserRepository constructor.
      *
-     * @var string[]
+     * @param ManagerRegistry $managerRegistry
+     * @param string          $environment
      */
-    protected static $searchColumns = ['username', 'firstName', 'lastName', 'email'];
-
-    /**
-     * @var string
-     */
-    private $environment = 'dev';
-
-    /**
-     * @required
-     *
-     * @param string $environment
-     *
-     * @return UserRepository
-     */
-    public function setEnvironment(string $environment): self
+    public function __construct(ManagerRegistry $managerRegistry, string $environment)
     {
-        $this->environment = $environment;
+        parent::__construct($managerRegistry);
 
-        return $this;
+        $this->environment = $environment;
     }
 
     /**

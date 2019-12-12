@@ -30,10 +30,7 @@ use App\Entity\User;
  */
 class LogLoginFailureRepository extends BaseRepository
 {
-    /**
-     * @var string
-     */
-    protected static $entityName = Entity::class;
+    protected static string $entityName = Entity::class;
 
     /**
      * Method to clear specified user login failures.
