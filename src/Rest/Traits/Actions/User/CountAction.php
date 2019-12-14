@@ -10,7 +10,6 @@ namespace App\Rest\Traits\Actions\User;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CountMethod;
-use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,10 +45,7 @@ trait CountAction
      *
      * @return Response
      *
-     * @throws LogicException
      * @throws Throwable
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function countAction(Request $request): Response
     {

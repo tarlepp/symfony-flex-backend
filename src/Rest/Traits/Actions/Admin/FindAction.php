@@ -10,7 +10,6 @@ namespace App\Rest\Traits\Actions\Admin;
 
 use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\FindMethod;
-use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,10 +45,7 @@ trait FindAction
      *
      * @return Response
      *
-     * @throws LogicException
      * @throws Throwable
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      */
     public function findAction(Request $request): Response
     {
