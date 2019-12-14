@@ -9,10 +9,10 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Repository;
 
 use App\Entity\EntityInterface;
-use App\Entity\User as UserEntity;
+use App\Entity\ApiKey as UserEntity;
 use App\Repository\BaseRepositoryInterface;
-use App\Repository\UserRepository;
-use App\Resource\UserResource;
+use App\Repository\ApiKeyRepository;
+use App\Resource\ApiKeyResource;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
@@ -33,9 +33,9 @@ use UnexpectedValueException;
  */
 class GenericRepositoryTest extends KernelTestCase
 {
-    private $entityClass = UserEntity::class;
-    private $repositoryClass = UserRepository::class;
-    private $resourceClass = UserResource::class;
+    private string $entityClass = UserEntity::class;
+    private string $repositoryClass = ApiKeyRepository::class;
+    private string $resourceClass = ApiKeyResource::class;
 
     /**
      * @throws Throwable
@@ -55,18 +55,18 @@ class GenericRepositoryTest extends KernelTestCase
 
     public function testThatGetAssociationsReturnsExpected(): void
     {
-        /** @var UserRepository $repository */
+        /** @var ApiKeyRepository $repository */
         $repository = static::$container->get($this->resourceClass)->getRepository();
 
         static::assertSame(
-            ['createdBy', 'updatedBy', 'userGroups', 'logsRequest', 'logsLogin', 'logsLoginFailure'],
+            ['userGroups', 'logsRequest', 'createdBy', 'updatedBy'],
             array_keys($repository->getAssociations())
         );
     }
 
     public function testThatGetClassMetaDataReturnsExpected(): void
     {
-        /** @var UserRepository $repository */
+        /** @var ApiKeyRepository $repository */
         $repository = static::$container->get($this->resourceClass)->getRepository();
 
         static::assertInstanceOf(ClassMetadata::class, $repository->getClassMetaData());
@@ -78,7 +78,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatGetEntityManagerThrowsAnExceptionIfManagerIsNotValid(): void
     {
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Cannot get entity manager for entity \'App\Entity\User\'');
+        $this->expectExceptionMessage('Cannot get entity manager for entity \'App\Entity\ApiKey\'');
 
         $managerObject = $this->getMockForAbstractClass(
             AbstractManagerRegistry::class,
@@ -95,7 +95,7 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getManagerForClass')
             ->willReturn(null);
 
-        /** @var UserRepository $repository */
+        /** @var ApiKeyRepository $repository */
         $repository = new $this->repositoryClass($managerObject);
         $repository->getEntityManager();
     }
@@ -129,7 +129,7 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
-        /** @var UserRepository $repository */
+        /** @var ApiKeyRepository $repository */
         $repository = new $this->repositoryClass($managerObject);
 
         static::assertSame($entityManager, $repository->getEntityManager());
@@ -170,7 +170,7 @@ class GenericRepositoryTest extends KernelTestCase
             ->expects(static::once())
             ->method('resetManager');
 
-        /** @var UserRepository $repository */
+        /** @var ApiKeyRepository $repository */
         $repository = new $this->repositoryClass($managerObject);
 
         $actualEntityManager = $repository->getEntityManager();
@@ -181,6 +181,8 @@ class GenericRepositoryTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatAddLeftJoinWorksAsExpected
+     *
+     * @testdox Test that add left join works as expected, using $parameters and expecting '$expected'
      *
      * @param string $expected
      * @param array  $parameters
@@ -205,6 +207,8 @@ class GenericRepositoryTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatAddInnerJoinWorksAsExpected
      *
+     * @testdox Test that add inner join works as expected, using $parameters and expecting '$expected'
+     *
      * @param string $expected
      * @param array  $parameters
      */
@@ -227,6 +231,8 @@ class GenericRepositoryTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatAddLeftJoinWorksAsExpected
+     *
+     * @testdox Test that add left join adds same join just once, using $parameters and expecting '$expected'
      *
      * @param string $expected
      * @param array  $parameters
@@ -252,6 +258,8 @@ class GenericRepositoryTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatAddInnerJoinWorksAsExpected
+     *
+     * @testdox Test that add inner join adds same join just once, using $parameters and expecting '$expected'
      *
      * @param string $expected
      * @param array  $parameters
@@ -334,7 +342,7 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->onlyMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -383,7 +391,7 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->onlyMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -436,7 +444,7 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->onlyMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -492,7 +500,7 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
+            ->onlyMethods(['getManagerForClass', 'getService', 'resetService', 'getAliasNamespace'])
             ->getMock();
 
         $entityManager = $this->getMockBuilder(EntityManager::class)
@@ -537,17 +545,17 @@ class GenericRepositoryTest extends KernelTestCase
         return [
             [
                 /** @lang text */
-                'SELECT entity FROM App\\Entity\\User entity',
+                'SELECT entity FROM App\\Entity\\ApiKey entity',
                 [],
             ],
             [
                 /** @lang text */
-                'SELECT entity FROM App\\Entity\\User entity LEFT JOIN entity.someProperty someAlias',
+                'SELECT entity FROM App\\Entity\\ApiKey entity LEFT JOIN entity.someProperty someAlias',
                 ['entity.someProperty', 'someAlias'],
             ],
             [
                 /** @lang text */
-                'SELECT entity FROM App\\Entity\\User entity LEFT JOIN entity.someProperty someAlias WITH someAlias.someAnotherProperty = 1',
+                'SELECT entity FROM App\\Entity\\ApiKey entity LEFT JOIN entity.someProperty someAlias WITH someAlias.someAnotherProperty = 1',
                 ['entity.someProperty', 'someAlias', Expr\Join::WITH, 'someAlias.someAnotherProperty = 1'],
             ],
         ];
@@ -563,17 +571,17 @@ class GenericRepositoryTest extends KernelTestCase
         return [
             [
                 /** @lang text */
-                'SELECT entity FROM App\\Entity\\User entity',
+                'SELECT entity FROM App\\Entity\\ApiKey entity',
                 [],
             ],
             [
                 /** @lang text */
-                'SELECT entity FROM App\\Entity\\User entity INNER JOIN entity.someProperty someAlias',
+                'SELECT entity FROM App\\Entity\\ApiKey entity INNER JOIN entity.someProperty someAlias',
                 ['entity.someProperty', 'someAlias'],
             ],
             [
                 /** @lang text */
-                'SELECT entity FROM App\\Entity\\User entity INNER JOIN entity.someProperty someAlias WITH someAlias.someAnotherProperty = 1',
+                'SELECT entity FROM App\\Entity\\ApiKey entity INNER JOIN entity.someProperty someAlias WITH someAlias.someAnotherProperty = 1',
                 ['entity.someProperty', 'someAlias', Expr\Join::WITH, 'someAlias.someAnotherProperty = 1'],
             ],
         ];
