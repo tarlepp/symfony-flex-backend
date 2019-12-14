@@ -47,10 +47,7 @@ use Throwable;
  */
 class RestResourceConverter implements ParamConverterInterface
 {
-    /**
-     * @var ResourceCollection
-     */
-    private $collection;
+    private ResourceCollection $collection;
 
     /**
      * RestResourceConverter constructor.
