@@ -15,8 +15,6 @@ use App\Entity\User;
 use App\Repository\LogLoginFailureRepository as Repository;
 use App\Rest\RestResource;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class LogLoginFailureResource
  *

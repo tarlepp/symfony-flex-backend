@@ -14,8 +14,6 @@ use App\Entity\EntityInterface;
 use App\Repository\ApiKeyRepository as Repository;
 use App\Rest\RestResource;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class ApiKeyResource
  *

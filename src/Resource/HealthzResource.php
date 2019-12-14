@@ -14,8 +14,6 @@ use App\Entity\Healthz as Entity;
 use App\Repository\HealthzRepository as Repository;
 use App\Rest\RestResource;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class HealthzResource
  *

@@ -14,8 +14,6 @@ use App\Entity\LogRequest as Entity;
 use App\Repository\LogRequestRepository as Repository;
 use App\Rest\RestResource;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class LogRequestResource
  *

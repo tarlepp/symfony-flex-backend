@@ -20,8 +20,6 @@ use function array_filter;
 use function array_values;
 use function in_array;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class UserResource
  *
@@ -45,10 +43,7 @@ use function in_array;
  */
 class UserResource extends RestResource
 {
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
+    private RolesService $rolesService;
 
     /**
      * Class constructor.
