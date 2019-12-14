@@ -24,7 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 use TypeError;
 use UnexpectedValueException;
@@ -44,16 +43,9 @@ trait RestMethodHelper
     /**
      * Method + DTO class names (key + value)
      *
-     * @var string[]
+     * @var array<string, string>
      */
-    protected static $dtoClasses = [];
-
-    /**
-     * Method + Form type class names (key + value)
-     *
-     * @var string[]
-     */
-    protected static $formTypes = [];
+    protected static array $dtoClasses = [];
 
     /**
      * @return RestResourceInterface
@@ -128,7 +120,7 @@ trait RestMethodHelper
      *
      * @return Throwable
      *
-     * @throws NotFoundHttpException
+     * @throws Throwable
      */
     public function handleRestMethodException(Throwable $exception, ?string $id = null): Throwable
     {
@@ -165,7 +157,6 @@ trait RestMethodHelper
      *
      * @param string $id
      *
-     * @throws NotFoundHttpException
      * @throws MappingException
      */
     private function detachEntityFromManager(string $id): void

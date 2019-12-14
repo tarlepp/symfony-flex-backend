@@ -84,9 +84,9 @@ trait RestResourceBaseMethods
         ?int $offset = null,
         ?array $search = null
     ): array {
-        $criteria = $criteria ?? [];
-        $orderBy = $orderBy ?? [];
-        $search = $search ?? [];
+        $criteria ??= [];
+        $orderBy ??= [];
+        $search ??= [];
 
         // Before callback method call
         $this->beforeFind($criteria, $orderBy, $limit, $offset, $search);
@@ -113,7 +113,7 @@ trait RestResourceBaseMethods
      */
     public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
     {
-        $throwExceptionIfNotFound = $throwExceptionIfNotFound ?? false;
+        $throwExceptionIfNotFound ??= false;
 
         // Before callback method call
         $this->beforeFindOne($id);
@@ -146,8 +146,8 @@ trait RestResourceBaseMethods
         ?array $orderBy = null,
         ?bool $throwExceptionIfNotFound = null
     ): ?EntityInterface {
-        $orderBy = $orderBy ?? [];
-        $throwExceptionIfNotFound = $throwExceptionIfNotFound ?? false;
+        $orderBy ??= [];
+        $throwExceptionIfNotFound ??= false;
 
         // Before callback method call
         $this->beforeFindOneBy($criteria, $orderBy);
@@ -175,8 +175,8 @@ trait RestResourceBaseMethods
      */
     public function count(?array $criteria = null, ?array $search = null): int
     {
-        $criteria = $criteria ?? [];
-        $search = $search ?? [];
+        $criteria ??= [];
+        $search ??= [];
 
         // Before callback method call
         $this->beforeCount($criteria, $search);
@@ -203,8 +203,8 @@ trait RestResourceBaseMethods
      */
     public function create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
     {
-        $flush = $flush ?? true;
-        $skipValidation = $skipValidation ?? false;
+        $flush ??= true;
+        $skipValidation ??= false;
 
         // Validate DTO
         $this->validateDto($dto, $skipValidation);
@@ -242,8 +242,8 @@ trait RestResourceBaseMethods
         ?bool $flush = null,
         ?bool $skipValidation = null
     ): EntityInterface {
-        $flush = $flush ?? true;
-        $skipValidation = $skipValidation ?? false;
+        $flush ??= true;
+        $skipValidation ??= false;
 
         // Fetch entity
         $entity = $this->getEntity($id);
@@ -287,8 +287,8 @@ trait RestResourceBaseMethods
         ?bool $flush = null,
         ?bool $skipValidation = null
     ): EntityInterface {
-        $flush = $flush ?? true;
-        $skipValidation = $skipValidation ?? false;
+        $flush ??= true;
+        $skipValidation ??= false;
 
         // Fetch entity
         $entity = $this->getEntity($id);
@@ -326,7 +326,7 @@ trait RestResourceBaseMethods
      */
     public function delete(string $id, ?bool $flush = null): EntityInterface
     {
-        $flush = $flush ?? true;
+        $flush ??= true;
 
         // Fetch entity
         $entity = $this->getEntity($id);
@@ -356,8 +356,8 @@ trait RestResourceBaseMethods
      */
     public function getIds(?array $criteria = null, ?array $search = null): array
     {
-        $criteria = $criteria ?? [];
-        $search = $search ?? [];
+        $criteria ??= [];
+        $search ??= [];
 
         // Before callback method call
         $this->beforeIds($criteria, $search);
@@ -384,8 +384,8 @@ trait RestResourceBaseMethods
      */
     public function save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
     {
-        $flush = $flush ?? true;
-        $skipValidation = $skipValidation ?? false;
+        $flush ??= true;
+        $skipValidation ??= false;
 
         // Before callback method call
         $this->beforeSave($entity);
