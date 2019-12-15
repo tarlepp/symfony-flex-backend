@@ -59,7 +59,7 @@ class UserGroupController extends Controller
     /**
      * @var array<string, string>
      */
-    protected static $dtoClasses = [
+    protected static array $dtoClasses = [
         Controller::METHOD_CREATE => UserGroupCreate::class,
         Controller::METHOD_UPDATE => UserGroupUpdate::class,
         Controller::METHOD_PATCH => UserGroupPatch::class,

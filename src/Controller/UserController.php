@@ -62,7 +62,7 @@ class UserController extends Controller
     /**
      * @var array<string, string>
      */
-    protected static $dtoClasses = [
+    protected static array $dtoClasses = [
         Controller::METHOD_CREATE => UserCreate::class,
         Controller::METHOD_UPDATE => UserUpdate::class,
         Controller::METHOD_PATCH => UserPatch::class,

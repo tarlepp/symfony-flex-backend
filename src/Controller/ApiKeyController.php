@@ -49,7 +49,7 @@ class ApiKeyController extends Controller
     /**
      * @var array<string, string>
      */
-    protected static $dtoClasses = [
+    protected static array $dtoClasses = [
         Controller::METHOD_CREATE => ApiKeyCreate::class,
         Controller::METHOD_UPDATE => ApiKeyUpdate::class,
         Controller::METHOD_PATCH => ApiKeyPatch::class,
