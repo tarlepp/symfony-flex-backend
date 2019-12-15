@@ -38,10 +38,8 @@ class RepositoryHelper
 {
     /**
      * Parameter count in current query, this is used to track parameters which are bind to current query.
-     *
-     * @var int
      */
-    public static $parameterCount = 0;
+    public static int $parameterCount = 0;
 
     /**
      * Method to reset current parameter count value
@@ -89,7 +87,7 @@ class RepositoryHelper
      */
     public static function processCriteria(QueryBuilder $queryBuilder, ?array $criteria = null): void
     {
-        $criteria = $criteria ?? [];
+        $criteria ??= [];
 
         if (count($criteria) === 0) {
             return;
@@ -119,7 +117,7 @@ class RepositoryHelper
      */
     public static function processSearchTerms(QueryBuilder $queryBuilder, array $columns, ?array $terms = null): void
     {
-        $terms = $terms ?? [];
+        $terms ??= [];
 
         if (count($columns) === 0) {
             return;
@@ -143,7 +141,7 @@ class RepositoryHelper
      */
     public static function processOrderBy(QueryBuilder $queryBuilder, ?array $orderBy = null): void
     {
-        $orderBy = $orderBy ?? [];
+        $orderBy ??= [];
 
         foreach ($orderBy as $column => $order) {
             if (strpos($column, '.') === false) {
