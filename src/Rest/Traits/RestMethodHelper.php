@@ -13,7 +13,6 @@ use App\Rest\ControllerInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\RestResourceInterface;
 use Doctrine\Common\Persistence\Mapping\MappingException;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnitOfWork;
@@ -162,8 +161,6 @@ trait RestMethodHelper
     private function detachEntityFromManager(string $id): void
     {
         $currentResource = $this->getResource();
-
-        /** @var EntityManager $entityManager */
         $entityManager = $currentResource->getRepository()->getEntityManager();
 
         // Fetch entity

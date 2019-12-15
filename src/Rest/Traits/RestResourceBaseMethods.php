@@ -426,8 +426,6 @@ trait RestResourceBaseMethods
     }
 
     /**
-     * @psalm-suppress InvalidNullableReturnType
-     *
      * @param string $id
      *
      * @return EntityInterface
@@ -474,7 +472,6 @@ trait RestResourceBaseMethods
      */
     private function validateEntity(EntityInterface $entity, bool $skipValidation): void
     {
-        /** @var ConstraintViolationListInterface|null $errors */
         $errors = !$skipValidation ? $this->getValidator()->validate($entity) : null;
 
         // Oh noes, we have some errors
