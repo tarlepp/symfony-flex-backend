@@ -38,7 +38,7 @@ class AuthenticatedActionsController extends Controller
     use Actions\IdsAction;
     use Actions\UpdateAction;
 
-    protected static $dtoClasses = [
+    protected static array $dtoClasses = [
         Controller::METHOD_CREATE => UserCreate::class,
         Controller::METHOD_UPDATE => UserUpdate::class,
         Controller::METHOD_PATCH => UserPatch::class,
