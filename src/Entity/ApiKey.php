@@ -81,7 +81,11 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Length(min = 40, max = 40)
+     * @Assert\Length(
+     *      min = 40,
+     *      max = 40,
+     *      allowEmptyString="false",
+     *  )
      *
      * @ORM\Column(
      *      name="token",

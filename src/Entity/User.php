@@ -78,13 +78,17 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Length(min = 2, max = 255)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      allowEmptyString="false",
+     *  )
      *
      * @ORM\Column(
      *      name="username",
      *      type="string",
      *      length=255,
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private $username = '';
@@ -99,13 +103,17 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Length(min = 2, max = 255)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      allowEmptyString="false",
+     *  )
      *
      * @ORM\Column(
      *      name="first_name",
      *      type="string",
      *      length=255,
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private $firstName = '';
@@ -120,13 +128,17 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Length(min = 2, max = 255)
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      allowEmptyString="false",
+     *  )
      *
      * @ORM\Column(
      *      name="last_name",
      *      type="string",
      *      length=255,
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private $lastName = '';
