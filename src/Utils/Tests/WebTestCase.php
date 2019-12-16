@@ -82,8 +82,8 @@ abstract class WebTestCase extends BaseWebTestCase
         ?array $options = null,
         ?array $server = null
     ): KernelBrowser {
-        $options = $options ?? [];
-        $server = $server ?? [];
+        $options ??= [];
+        $server ??= [];
 
         // Merge authorization headers
         $server = array_merge(
@@ -94,6 +94,8 @@ abstract class WebTestCase extends BaseWebTestCase
             $this->authService->getJwtHeaders(),
             $server
         );
+
+        self::ensureKernelShutdown();
 
         return static::createClient(array_merge($options, ['debug' => false]), $server);
     }
@@ -109,8 +111,8 @@ abstract class WebTestCase extends BaseWebTestCase
      */
     public function getApiKeyClient(?string $role = null, ?array $options = null, ?array $server = null): KernelBrowser
     {
-        $options = $options ?? [];
-        $server = $server ?? [];
+        $options ??= [];
+        $server ??= [];
 
         // Merge authorization headers
         $server = array_merge(
@@ -119,6 +121,8 @@ abstract class WebTestCase extends BaseWebTestCase
             $this->authService->getJwtHeaders(),
             $server
         );
+
+        self::ensureKernelShutdown();
 
         return static::createClient($options, $server);
     }
