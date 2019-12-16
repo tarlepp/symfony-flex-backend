@@ -39,15 +39,12 @@ final class ResponseHandler implements ResponseHandlerInterface
      *
      * @var array<string, string>
      */
-    private $contentTypes = [
+    private array $contentTypes = [
         self::FORMAT_JSON => 'application/json',
         self::FORMAT_XML => 'application/xml',
     ];
 
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+    private SerializerInterface $serializer;
 
     /**
      * ResponseHandler constructor.
@@ -101,10 +98,7 @@ final class ResponseHandler implements ResponseHandlerInterface
             );
 
             $groups = array_merge([$entityName], $populate);
-
-            $filter = static function (string $groupName): bool {
-                return strncmp($groupName, 'Set.', 4) === 0;
-            };
+            $filter = fn (string $groupName): bool => strncmp($groupName, 'Set.', 4) === 0;
 
             if (array_key_exists('populateOnly', $request->query->all())
                 || count(array_filter($groups, $filter)) > 0
@@ -140,8 +134,8 @@ final class ResponseHandler implements ResponseHandlerInterface
         ?string $format = null,
         ?array $context = null
     ): Response {
-        $httpStatus = $httpStatus ?? 200;
-        $context = $context ?? $this->getSerializeContext($request, $restResource);
+        $httpStatus ??= 200;
+        $context ??= $this->getSerializeContext($request, $restResource);
         $format = $this->getFormat($request, $format);
 
         // Get response
@@ -172,7 +166,7 @@ final class ResponseHandler implements ResponseHandlerInterface
             $errors[] = sprintf(
                 'Field \'%s\': %s',
                 $name,
-                $error->/** @scrutinizer ignore-call */getMessage()
+                $error->getMessage()
             );
 
             if ($name === '') {

@@ -42,8 +42,8 @@ abstract class Controller implements ControllerInterface
     public const METHOD_PATCH = 'patchMethod';
     public const METHOD_UPDATE = 'updateMethod';
 
-    protected ?RestResourceInterface $resource;
-    protected ?ResponseHandlerInterface $responseHandler;
+    protected ?RestResourceInterface $resource = null;
+    protected ?ResponseHandlerInterface $responseHandler = null;
 
     /**
      * @return RestResourceInterface

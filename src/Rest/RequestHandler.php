@@ -65,16 +65,7 @@ final class RequestHandler
         try {
             $where = array_filter(
                 (array)JSON::decode((string)$request->get('where', '{}'), true),
-                /**
-                 * @psalm-suppress MissingClosureParamType
-                 *
-                 * @param mixed $value
-                 *
-                 * @return bool
-                 */
-                static function ($value): bool {
-                    return $value !== null;
-                }
+                fn ($value): bool => $value !== null
             );
         } catch (JsonException $error) {
             throw new HttpException(
@@ -224,8 +215,7 @@ final class RequestHandler
 
             self::checkSearchTerms($searchTerms);
         } catch (JsonException | LogicException $error) {
-            (static function (Throwable $error): void {
-            })($error);
+            (fn (Throwable $error) => null)($error);
 
             $searchTerms = null;
         }
