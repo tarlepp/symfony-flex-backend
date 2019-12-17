@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectPlainTextFileTypeManager">
-    <file url="file://$PROJECT_DIR$/vendor/paragonie/random_compat/lib/error_polyfill.php" />
-    <file url="file://$PROJECT_DIR$/vendor/squizlabs/php_codesniffer/tests/bootstrap.php" />
     <file url="file://$PROJECT_DIR$/vendor/symfony/polyfill-mbstring/Mbstring.php" />
-    <file url="file://$PROJECT_DIR$/vendor/vimeo/psalm/tests/stubs/logicexception.php" />
-    <file url="file://$PROJECT_DIR$/vendor/vimeo/psalm/tests/stubs/logicexception.php" />
-    <file url="file://$PROJECT_DIR$/vendor/vimeo/psalm/tests/stubs/logicexception.php" />
+    <file url="file://$PROJECT_DIR$/vendor/symfony/polyfill-php73/Resources/stubs/JsonException.php" />
   </component>
 </project>
