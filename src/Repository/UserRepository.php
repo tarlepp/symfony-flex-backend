@@ -12,7 +12,7 @@ use App\Entity\User as Entity;
 use App\Rest\UuidHelper;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use function array_key_exists;
 
 /**
