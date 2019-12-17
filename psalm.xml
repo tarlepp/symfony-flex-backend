@@ -19,5 +19,6 @@
     <issueHandlers>
         <PropertyNotSetInConstructor errorLevel="suppress" />
         <InvalidStringClass errorLevel="suppress" />
+        <DeprecatedClass errorLevel="suppress" />
     </issueHandlers>
 </psalm>
