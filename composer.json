@@ -44,7 +44,7 @@
 		"symfony/asset": "4.4.1",
 		"symfony/config": "4.4.1",
 		"symfony/console": "4.4.1",
-		"symfony/dotenv": "4.4.1",
+		"symfony/dotenv": "5.0.1",
 		"symfony/expression-language": "4.4.1",
 		"symfony/flex": "1.6.0",
 		"symfony/form": "4.4.1",
