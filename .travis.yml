@@ -71,7 +71,7 @@ script:
   - make lint-yaml
   - make phpcs
   - make ecs
-  - make psalm
+  - make psalm-shepherd
   - make phpstan
   - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
   - make run-tests-fastest-php
