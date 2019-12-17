@@ -8,12 +8,12 @@ declare(strict_types = 1);
 
 namespace App\Repository\Traits;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use UnexpectedValueException;
 
 /**
