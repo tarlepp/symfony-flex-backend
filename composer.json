@@ -41,7 +41,7 @@
 		"piwik/device-detector": "3.12.1",
 		"ramsey/uuid-doctrine": "1.5.0",
 		"sensio/framework-extra-bundle": "5.5.2",
-		"symfony/asset": "4.4.1",
+		"symfony/asset": "5.0.1",
 		"symfony/config": "4.4.1",
 		"symfony/console": "4.4.1",
 		"symfony/dotenv": "4.4.1",
