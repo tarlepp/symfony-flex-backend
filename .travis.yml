@@ -14,7 +14,7 @@ services:
   - mysql
 
 php:
-  - 7.4snapshot
+  - 7.4
   - master
   - nightly
 
