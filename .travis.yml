@@ -24,7 +24,7 @@ matrix:
     - php: master
     - php: nightly
   include:
-    - php: 7.4snapshot
+    - php: 7.4
       env:
         - COVERAGE=true
 
