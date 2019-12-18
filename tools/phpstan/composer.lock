@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4ee8de46d6f1f862c1ffe2b69520408",
+    "content-hash": "e9b77789edbc485d94f1794b9fe235b1",
     "packages": [],
     "packages-dev": [
         {
@@ -145,22 +145,22 @@
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "0.12.3",
+            "version": "0.12.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-doctrine.git",
-                "reference": "a497a383bd970117b0680557ae12444d72d09095"
+                "reference": "b868d393eae14ac22e1b00e13aca2e521ba3274f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/a497a383bd970117b0680557ae12444d72d09095",
-                "reference": "a497a383bd970117b0680557ae12444d72d09095",
+                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/b868d393eae14ac22e1b00e13aca2e521ba3274f",
+                "reference": "b868d393eae14ac22e1b00e13aca2e521ba3274f",
                 "shasum": ""
             },
             "require": {
                 "nikic/php-parser": "^4.0",
                 "php": "~7.1",
-                "phpstan/phpstan": "^0.12"
+                "phpstan/phpstan": "^0.12.3"
             },
             "conflict": {
                 "doctrine/collections": "<1.0",
@@ -205,20 +205,20 @@
                 "MIT"
             ],
             "description": "Doctrine extensions for PHPStan",
-            "time": "2019-12-13T18:24:11+00:00"
+            "time": "2019-12-17T20:48:26+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "0.12.1",
+            "version": "0.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
-                "reference": "cc14b74ba437bb08ce189aada455946890a8414b"
+                "reference": "cf003faa81fb7773d0fc321ac6cbe4dd7f4a5865"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/cc14b74ba437bb08ce189aada455946890a8414b",
-                "reference": "cc14b74ba437bb08ce189aada455946890a8414b",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/cf003faa81fb7773d0fc321ac6cbe4dd7f4a5865",
+                "reference": "cf003faa81fb7773d0fc321ac6cbe4dd7f4a5865",
                 "shasum": ""
             },
             "require": {
@@ -261,7 +261,7 @@
                 "MIT"
             ],
             "description": "PHPUnit extensions and rules for PHPStan",
-            "time": "2019-12-07T20:34:22+00:00"
+            "time": "2019-12-17T20:41:59+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",

@@ -520,20 +520,21 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.0.2",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "f96fac225563f5b3b4eeb2f80eb982b7f56484d8"
+                "reference": "651107e96680f8c600ea54f6389bf907a9f558f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/f96fac225563f5b3b4eeb2f80eb982b7f56484d8",
-                "reference": "f96fac225563f5b3b4eeb2f80eb982b7f56484d8",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/651107e96680f8c600ea54f6389bf907a9f558f0",
+                "reference": "651107e96680f8c600ea54f6389bf907a9f558f0",
                 "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "^2.9.0",
+                "doctrine/persistence": "^1.3.3",
                 "jdorn/sql-formatter": "^1.2.16",
                 "php": "^7.1",
                 "symfony/cache": "^4.3.3|^5.0",
@@ -541,7 +542,8 @@
                 "symfony/console": "^3.4.30|^4.3.3|^5.0",
                 "symfony/dependency-injection": "^4.3.3|^5.0",
                 "symfony/doctrine-bridge": "^4.3.7|^5.0",
-                "symfony/framework-bundle": "^3.4.30|^4.3.3|^5.0"
+                "symfony/framework-bundle": "^3.4.30|^4.3.3|^5.0",
+                "symfony/service-contracts": "^1.1.1|^2.0"
             },
             "conflict": {
                 "doctrine/orm": "<2.6",
@@ -604,7 +606,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2019-11-28T08:38:10+00:00"
+            "time": "2019-12-18T14:10:47+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",

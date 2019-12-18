@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3b632de3fac0bcd4dad891cb7b37bad",
+    "content-hash": "b4b936acc8b03bb590f36b7933f9a98c",
     "packages": [],
     "packages-dev": [
         {
@@ -2604,16 +2604,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "6.0.3",
+            "version": "6.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "3cb058711ddd65444aa2a5991eb387ca868fc2cf"
+                "reference": "34ec0a4de94fd16e53f3f8e21d88fec5dbe3d713"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/3cb058711ddd65444aa2a5991eb387ca868fc2cf",
-                "reference": "3cb058711ddd65444aa2a5991eb387ca868fc2cf",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/34ec0a4de94fd16e53f3f8e21d88fec5dbe3d713",
+                "reference": "34ec0a4de94fd16e53f3f8e21d88fec5dbe3d713",
                 "shasum": ""
             },
             "require": {
@@ -2641,7 +2641,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2019-12-13T07:23:38+00:00"
+            "time": "2019-12-17T20:07:25+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -2970,62 +2970,6 @@
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
             "time": "2019-12-01T10:51:15+00:00"
-        },
-        {
-            "name": "symfony/debug",
-            "version": "v4.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/debug.git",
-                "reference": "b8600a1d7d20b0e80906398bb1f50612fa074a8e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/b8600a1d7d20b0e80906398bb1f50612fa074a8e",
-                "reference": "b8600a1d7d20b0e80906398bb1f50612fa074a8e",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.1.3",
-                "psr/log": "~1.0"
-            },
-            "conflict": {
-                "symfony/http-kernel": "<3.4"
-            },
-            "require-dev": {
-                "symfony/http-kernel": "^3.4|^4.0|^5.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Debug\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Debug Component",
-            "homepage": "https://symfony.com",
-            "time": "2019-11-28T13:33:56+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -4353,16 +4297,16 @@
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v7.1.0",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
-                "reference": "40759478eaf64f038a92f48cb6d3b6c672ca57e9"
+                "reference": "3f3d9de2b06229fe7cc0f91befeec186ef5b2886"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/40759478eaf64f038a92f48cb6d3b6c672ca57e9",
-                "reference": "40759478eaf64f038a92f48cb6d3b6c672ca57e9",
+                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/3f3d9de2b06229fe7cc0f91befeec186ef5b2886",
+                "reference": "3f3d9de2b06229fe7cc0f91befeec186ef5b2886",
                 "shasum": ""
             },
             "require": {
@@ -4372,14 +4316,14 @@
                 "php": "^7.2",
                 "phpstan/phpdoc-parser": "^0.4",
                 "squizlabs/php_codesniffer": "^3.5",
-                "symplify/package-builder": "^7.1",
-                "symplify/smart-file-system": "^7.1"
+                "symplify/package-builder": "^7.1.1",
+                "symplify/smart-file-system": "^7.1.1"
             },
             "require-dev": {
                 "nette/application": "^3.0",
                 "phpunit/phpunit": "^8.4",
-                "symplify/easy-coding-standard-tester": "^7.1",
-                "symplify/package-builder": "^7.1"
+                "symplify/easy-coding-standard-tester": "^7.1.1",
+                "symplify/package-builder": "^7.1.1"
             },
             "type": "library",
             "extra": {
@@ -4398,20 +4342,20 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2019-12-09T11:18:48+00:00"
+            "time": "2019-12-18T09:13:00+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v7.1.0",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "75d18dd51f356cf7b1cf160a85b8a50e820ab832"
+                "reference": "1bbfb9e45ba8610446d3e6aba819b1a579b72cd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/75d18dd51f356cf7b1cf160a85b8a50e820ab832",
-                "reference": "75d18dd51f356cf7b1cf160a85b8a50e820ab832",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/1bbfb9e45ba8610446d3e6aba819b1a579b72cd9",
+                "reference": "1bbfb9e45ba8610446d3e6aba819b1a579b72cd9",
                 "shasum": ""
             },
             "require": {
@@ -4432,14 +4376,14 @@
                 "symfony/finder": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
                 "symfony/yaml": "^4.4|^5.0",
-                "symplify/coding-standard": "^7.1",
-                "symplify/package-builder": "^7.1",
-                "symplify/set-config-resolver": "^7.1",
-                "symplify/smart-file-system": "^7.1"
+                "symplify/coding-standard": "^7.1.1",
+                "symplify/package-builder": "^7.1.1",
+                "symplify/set-config-resolver": "^7.1.1",
+                "symplify/smart-file-system": "^7.1.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.4",
-                "symplify/easy-coding-standard-tester": "^7.1"
+                "symplify/easy-coding-standard-tester": "^7.1.1"
             },
             "bin": [
                 "bin/ecs"
@@ -4464,28 +4408,28 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2019-12-09T11:18:48+00:00"
+            "time": "2019-12-18T09:13:00+00:00"
         },
         {
             "name": "symplify/easy-coding-standard-tester",
-            "version": "v7.1.0",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandardTester.git",
-                "reference": "85555b9ae53f4eeba3dfd5d83df3747e4dc92b33"
+                "reference": "8a61778f7408249406db4606ea025fc20dc702a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandardTester/zipball/85555b9ae53f4eeba3dfd5d83df3747e4dc92b33",
-                "reference": "85555b9ae53f4eeba3dfd5d83df3747e4dc92b33",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandardTester/zipball/8a61778f7408249406db4606ea025fc20dc702a4",
+                "reference": "8a61778f7408249406db4606ea025fc20dc702a4",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2",
                 "phpunit/phpunit": "^8.4",
-                "symplify/easy-coding-standard": "^7.1",
-                "symplify/package-builder": "^7.1",
-                "symplify/smart-file-system": "^7.1"
+                "symplify/easy-coding-standard": "^7.1.1",
+                "symplify/package-builder": "^7.1.1",
+                "symplify/smart-file-system": "^7.1.1"
             },
             "type": "library",
             "extra": {
@@ -4503,20 +4447,20 @@
                 "MIT"
             ],
             "description": "The Best Way to Test Sniffs and Fixers",
-            "time": "2019-12-09T11:18:48+00:00"
+            "time": "2019-12-18T09:13:00+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v7.1.0",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
-                "reference": "212836b8b8716794539e289219e4cadaece7ba60"
+                "reference": "6d328c576472bbbb54f8fa50d127cf627e1680d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/212836b8b8716794539e289219e4cadaece7ba60",
-                "reference": "212836b8b8716794539e289219e4cadaece7ba60",
+                "url": "https://api.github.com/repos/Symplify/PackageBuilder/zipball/6d328c576472bbbb54f8fa50d127cf627e1680d5",
+                "reference": "6d328c576472bbbb54f8fa50d127cf627e1680d5",
                 "shasum": ""
             },
             "require": {
@@ -4525,7 +4469,6 @@
                 "php": "^7.2",
                 "symfony/config": "^4.4|^5.0",
                 "symfony/console": "^4.4|^5.0",
-                "symfony/debug": "^4.4|^5.0",
                 "symfony/dependency-injection": "^4.4|^5.0",
                 "symfony/finder": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
@@ -4550,20 +4493,20 @@
                 "MIT"
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
-            "time": "2019-12-09T11:09:25+00:00"
+            "time": "2019-12-15T11:32:54+00:00"
         },
         {
             "name": "symplify/set-config-resolver",
-            "version": "v7.1.0",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/SetConfigResolver.git",
-                "reference": "ef6134da64a7abf7fc8d9d2ee765c6000b682111"
+                "reference": "4d2a035d55d9b52d59fb5fc5195b36a63cc703f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/SetConfigResolver/zipball/ef6134da64a7abf7fc8d9d2ee765c6000b682111",
-                "reference": "ef6134da64a7abf7fc8d9d2ee765c6000b682111",
+                "url": "https://api.github.com/repos/Symplify/SetConfigResolver/zipball/4d2a035d55d9b52d59fb5fc5195b36a63cc703f8",
+                "reference": "4d2a035d55d9b52d59fb5fc5195b36a63cc703f8",
                 "shasum": ""
             },
             "require": {
@@ -4572,7 +4515,7 @@
                 "symfony/console": "^4.4|^5.0",
                 "symfony/filesystem": "^4.3|^5.0",
                 "symfony/finder": "^4.4|^5.0",
-                "symplify/smart-file-system": "^7.1"
+                "symplify/smart-file-system": "^7.1.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.4"
@@ -4593,11 +4536,11 @@
                 "MIT"
             ],
             "description": "Resolve config and sets from configs and cli opptions for CLI applications",
-            "time": "2019-12-09T11:18:48+00:00"
+            "time": "2019-12-18T09:13:00+00:00"
         },
         {
             "name": "symplify/smart-file-system",
-            "version": "v7.1.0",
+            "version": "v7.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/SmartFileSystem.git",

@@ -1,7 +1,7 @@
 {
 	"require": {},
 	"require-dev": {
-		"phpmetrics/phpmetrics": "2.4.1",
+		"phpmetrics/phpmetrics": "2.5.0",
 		"roave/security-advisories": "dev-master"
 	},
 	"config": {
