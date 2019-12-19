@@ -12,6 +12,7 @@ use App\DTO\RestDtoInterface;
 use App\Entity\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
 use Doctrine\Common\Proxy\Proxy;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -81,7 +82,6 @@ interface RestResourceInterface
      */
     public function getEntityName(): string;
 
-    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Gets a reference to the entity identified by the given type and identifier without actually loading it,
      * if the entity is not yet loaded.
@@ -90,7 +90,7 @@ interface RestResourceInterface
      *
      * @return Proxy|object|null
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function getReference(string $id);
 

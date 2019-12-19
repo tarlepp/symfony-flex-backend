@@ -10,6 +10,7 @@ namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
 use App\Repository\BaseRepositoryInterface;
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -27,20 +28,9 @@ abstract class RestResource implements RestResourceInterface
     // Traits
     use Traits\RestResourceBaseMethods;
 
-    /**
-     * @var BaseRepositoryInterface
-     */
-    private $repository;
-
-    /**
-     * @var ValidatorInterface
-     */
-    private $validator;
-
-    /**
-     * @var string
-     */
-    private $dtoClass;
+    private BaseRepositoryInterface $repository;
+    private ValidatorInterface $validator;
+    private string $dtoClass = '';
 
     /**
      * Getter method for entity repository.
@@ -139,7 +129,6 @@ abstract class RestResource implements RestResourceInterface
         return $this->getRepository()->getEntityName();
     }
 
-    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Gets a reference to the entity identified by the given type and identifier without actually loading it,
      * if the entity is not yet loaded.
@@ -148,7 +137,7 @@ abstract class RestResource implements RestResourceInterface
      *
      * @return object|null
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function getReference(string $id)
     {
@@ -183,7 +172,7 @@ abstract class RestResource implements RestResourceInterface
         RestDtoInterface $dto,
         ?bool $patch = null
     ): RestDtoInterface {
-        $patch = $patch ?? false;
+        $patch ??= false;
 
         // Fetch entity
         $entity = $this->getEntity($id);
