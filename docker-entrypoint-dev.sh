@@ -35,7 +35,7 @@ sed -i "s/xdebug\.remote_host \=.*/xdebug\.remote_host\=$HOST/g" /usr/local/etc/
 export DOCKER_IP=`/sbin/ip route|awk '/default/ { print $3 }'`
 
 # Step 2
-COMPOSER_MEMORY_LIMIT=-1 composer install
+COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader
 
 # Step 3
 make generate-jwt-keys
