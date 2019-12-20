@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4b936acc8b03bb590f36b7933f9a98c",
+    "content-hash": "da06f4aa1631872e22ff85f47b253a2f",
     "packages": [],
     "packages-dev": [
         {
@@ -1152,16 +1152,16 @@
         },
         {
             "name": "phpstan/phpdoc-parser",
-            "version": "0.4.1",
+            "version": "0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpdoc-parser.git",
-                "reference": "0331e880c0a1eb8e10d1af2fcab90fa1dd6a07ee"
+                "reference": "a6d13524641bb780efc821d9e0a1e1bfb23cbd0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/0331e880c0a1eb8e10d1af2fcab90fa1dd6a07ee",
-                "reference": "0331e880c0a1eb8e10d1af2fcab90fa1dd6a07ee",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/a6d13524641bb780efc821d9e0a1e1bfb23cbd0e",
+                "reference": "a6d13524641bb780efc821d9e0a1e1bfb23cbd0e",
                 "shasum": ""
             },
             "require": {
@@ -1196,7 +1196,7 @@
                 "MIT"
             ],
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
-            "time": "2019-12-05T20:43:52+00:00"
+            "time": "2019-12-13T12:03:22+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2604,21 +2604,21 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "6.0.4",
+            "version": "6.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "34ec0a4de94fd16e53f3f8e21d88fec5dbe3d713"
+                "reference": "eaa0c35c6b88d146e7dfd3580c4d5fa9c49c7a23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/34ec0a4de94fd16e53f3f8e21d88fec5dbe3d713",
-                "reference": "34ec0a4de94fd16e53f3f8e21d88fec5dbe3d713",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/eaa0c35c6b88d146e7dfd3580c4d5fa9c49c7a23",
+                "reference": "eaa0c35c6b88d146e7dfd3580c4d5fa9c49c7a23",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1",
-                "phpstan/phpdoc-parser": "0.3.5 - 0.4.1",
+                "phpstan/phpdoc-parser": "0.3.5 - 0.4.2",
                 "squizlabs/php_codesniffer": "^3.5.3"
             },
             "require-dev": {
@@ -2641,7 +2641,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2019-12-17T20:07:25+00:00"
+            "time": "2019-12-19T16:04:26+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -4297,16 +4297,16 @@
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v7.1.1",
+            "version": "v7.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/CodingStandard.git",
-                "reference": "3f3d9de2b06229fe7cc0f91befeec186ef5b2886"
+                "reference": "864af829cd9007f3c11d778485082ef0056a1486"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/3f3d9de2b06229fe7cc0f91befeec186ef5b2886",
-                "reference": "3f3d9de2b06229fe7cc0f91befeec186ef5b2886",
+                "url": "https://api.github.com/repos/Symplify/CodingStandard/zipball/864af829cd9007f3c11d778485082ef0056a1486",
+                "reference": "864af829cd9007f3c11d778485082ef0056a1486",
                 "shasum": ""
             },
             "require": {
@@ -4316,14 +4316,14 @@
                 "php": "^7.2",
                 "phpstan/phpdoc-parser": "^0.4",
                 "squizlabs/php_codesniffer": "^3.5",
-                "symplify/package-builder": "^7.1.1",
-                "symplify/smart-file-system": "^7.1.1"
+                "symplify/package-builder": "^7.1.3",
+                "symplify/smart-file-system": "^7.1.3"
             },
             "require-dev": {
                 "nette/application": "^3.0",
                 "phpunit/phpunit": "^8.4",
-                "symplify/easy-coding-standard-tester": "^7.1.1",
-                "symplify/package-builder": "^7.1.1"
+                "symplify/easy-coding-standard-tester": "^7.1.3",
+                "symplify/package-builder": "^7.1.3"
             },
             "type": "library",
             "extra": {
@@ -4342,20 +4342,20 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2019-12-18T09:13:00+00:00"
+            "time": "2019-12-18T20:34:38+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v7.1.1",
+            "version": "v7.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandard.git",
-                "reference": "1bbfb9e45ba8610446d3e6aba819b1a579b72cd9"
+                "reference": "d9f483bb42f9c8c169bedd67b5a57663d163163a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/1bbfb9e45ba8610446d3e6aba819b1a579b72cd9",
-                "reference": "1bbfb9e45ba8610446d3e6aba819b1a579b72cd9",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandard/zipball/d9f483bb42f9c8c169bedd67b5a57663d163163a",
+                "reference": "d9f483bb42f9c8c169bedd67b5a57663d163163a",
                 "shasum": ""
             },
             "require": {
@@ -4376,14 +4376,14 @@
                 "symfony/finder": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
                 "symfony/yaml": "^4.4|^5.0",
-                "symplify/coding-standard": "^7.1.1",
-                "symplify/package-builder": "^7.1.1",
-                "symplify/set-config-resolver": "^7.1.1",
-                "symplify/smart-file-system": "^7.1.1"
+                "symplify/coding-standard": "^7.1.3",
+                "symplify/package-builder": "^7.1.3",
+                "symplify/set-config-resolver": "^7.1.3",
+                "symplify/smart-file-system": "^7.1.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.4",
-                "symplify/easy-coding-standard-tester": "^7.1.1"
+                "symplify/easy-coding-standard-tester": "^7.1.3"
             },
             "bin": [
                 "bin/ecs"
@@ -4408,28 +4408,28 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2019-12-18T09:13:00+00:00"
+            "time": "2019-12-18T20:34:38+00:00"
         },
         {
             "name": "symplify/easy-coding-standard-tester",
-            "version": "v7.1.1",
+            "version": "v7.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/EasyCodingStandardTester.git",
-                "reference": "8a61778f7408249406db4606ea025fc20dc702a4"
+                "reference": "2f64807d4a20b4e70e171957bff18286d4c33325"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/EasyCodingStandardTester/zipball/8a61778f7408249406db4606ea025fc20dc702a4",
-                "reference": "8a61778f7408249406db4606ea025fc20dc702a4",
+                "url": "https://api.github.com/repos/Symplify/EasyCodingStandardTester/zipball/2f64807d4a20b4e70e171957bff18286d4c33325",
+                "reference": "2f64807d4a20b4e70e171957bff18286d4c33325",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2",
                 "phpunit/phpunit": "^8.4",
-                "symplify/easy-coding-standard": "^7.1.1",
-                "symplify/package-builder": "^7.1.1",
-                "symplify/smart-file-system": "^7.1.1"
+                "symplify/easy-coding-standard": "^7.1.3",
+                "symplify/package-builder": "^7.1.3",
+                "symplify/smart-file-system": "^7.1.3"
             },
             "type": "library",
             "extra": {
@@ -4447,11 +4447,11 @@
                 "MIT"
             ],
             "description": "The Best Way to Test Sniffs and Fixers",
-            "time": "2019-12-18T09:13:00+00:00"
+            "time": "2019-12-18T20:34:38+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v7.1.1",
+            "version": "v7.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/PackageBuilder.git",
@@ -4497,16 +4497,16 @@
         },
         {
             "name": "symplify/set-config-resolver",
-            "version": "v7.1.1",
+            "version": "v7.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/SetConfigResolver.git",
-                "reference": "4d2a035d55d9b52d59fb5fc5195b36a63cc703f8"
+                "reference": "bf63e985dcf88d7651026d062edd314280715da9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/SetConfigResolver/zipball/4d2a035d55d9b52d59fb5fc5195b36a63cc703f8",
-                "reference": "4d2a035d55d9b52d59fb5fc5195b36a63cc703f8",
+                "url": "https://api.github.com/repos/Symplify/SetConfigResolver/zipball/bf63e985dcf88d7651026d062edd314280715da9",
+                "reference": "bf63e985dcf88d7651026d062edd314280715da9",
                 "shasum": ""
             },
             "require": {
@@ -4515,7 +4515,7 @@
                 "symfony/console": "^4.4|^5.0",
                 "symfony/filesystem": "^4.3|^5.0",
                 "symfony/finder": "^4.4|^5.0",
-                "symplify/smart-file-system": "^7.1.1"
+                "symplify/smart-file-system": "^7.1.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.4"
@@ -4536,11 +4536,11 @@
                 "MIT"
             ],
             "description": "Resolve config and sets from configs and cli opptions for CLI applications",
-            "time": "2019-12-18T09:13:00+00:00"
+            "time": "2019-12-18T20:34:38+00:00"
         },
         {
             "name": "symplify/smart-file-system",
-            "version": "v7.1.1",
+            "version": "v7.1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/SmartFileSystem.git",
