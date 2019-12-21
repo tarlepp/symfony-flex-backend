@@ -37,9 +37,9 @@ use function get_class;
  */
 class GenericResourceTest extends KernelTestCase
 {
-    private $dtoClass = UserDto::class;
-    private $resourceClass = UserResource::class;
-    private $entityClass = UserEntity::class;
+    private string $dtoClass = UserDto::class;
+    private string $resourceClass = UserResource::class;
+    private string $entityClass = UserEntity::class;
 
     /**
      * @var UserResource
@@ -57,7 +57,7 @@ class GenericResourceTest extends KernelTestCase
     public function testThatGetDtoClassThrowsAnExceptionWithoutDto(): void
     {
         $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessageRegExp('/DTO class not specified for \'.*\' resource/');
+        $this->expectExceptionMessageMatches('/DTO class not specified for \'.*\' resource/');
 
         $this->resource->setDtoClass('');
         $this->resource->getDtoClass();
