@@ -26,15 +26,8 @@ class Version
     // Traits
     use LoggerAwareTrait;
 
-    /**
-     * @var string
-     */
-    private $projectDir;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
+    private string $projectDir;
+    private CacheInterface $cache;
 
     /**
      * Version constructor.
