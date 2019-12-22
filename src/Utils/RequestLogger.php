@@ -28,35 +28,12 @@ class RequestLogger implements RequestLoggerInterface
     // Traits
     use LoggerAwareTrait;
 
-    /**
-     * @var Response|null
-     */
-    private $response;
-
-    /**
-     * @var Request|null
-     */
-    private $request;
-
-    /**
-     * @var LogRequestResource
-     */
-    private $resource;
-
-    /**
-     * @var User|null
-     */
-    private $user;
-
-    /**
-     * @var ApiKey|null
-     */
-    private $apiKey;
-
-    /**
-     * @var bool
-     */
-    private $masterRequest;
+    private LogRequestResource $resource;
+    private ?Response $response = null;
+    private ?Request $request = null;
+    private ?User $user = null;
+    private ?ApiKey $apiKey = null;
+    private bool $masterRequest = false;
 
     /**
      * ResponseLogger constructor.

@@ -20,10 +20,7 @@ use Throwable;
  */
 final class HealthzService
 {
-    /**
-     * @var HealthzRepository
-     */
-    private $repository;
+    private HealthzRepository $repository;
 
     /**
      * HealthzService constructor.
