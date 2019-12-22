@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4e92aef3aae921b71d79c114cf4c7ab",
+    "content-hash": "28aa0d29ff64c77127b3a2f51f77c43d",
     "packages": [],
     "packages-dev": [
         {
@@ -145,16 +145,16 @@
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "0.12.5",
+            "version": "0.12.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-doctrine.git",
-                "reference": "24ce35192c74097454b3dfb6364406f48c69cec1"
+                "reference": "c1bf25ed5d90f7ee83bcead0ca84c28b0f9fe259"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/24ce35192c74097454b3dfb6364406f48c69cec1",
-                "reference": "24ce35192c74097454b3dfb6364406f48c69cec1",
+                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/c1bf25ed5d90f7ee83bcead0ca84c28b0f9fe259",
+                "reference": "c1bf25ed5d90f7ee83bcead0ca84c28b0f9fe259",
                 "shasum": ""
             },
             "require": {
@@ -175,6 +175,7 @@
                 "doctrine/common": "^2.7",
                 "doctrine/mongodb-odm": "^1.2",
                 "doctrine/orm": "^2.5",
+                "ergebnis/composer-normalize": "^2.0.2",
                 "jakub-onderka/php-parallel-lint": "^1.0",
                 "phing/phing": "^2.16.0",
                 "phpstan/phpstan-phpunit": "^0.12",
@@ -205,20 +206,20 @@
                 "MIT"
             ],
             "description": "Doctrine extensions for PHPStan",
-            "time": "2019-12-18T15:58:52+00:00"
+            "time": "2019-12-21T18:55:30+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "0.12.2",
+            "version": "0.12.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-phpunit.git",
-                "reference": "cf003faa81fb7773d0fc321ac6cbe4dd7f4a5865"
+                "reference": "46a447bc1b88ba809d9c34056c9ea2ca940d6dec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/cf003faa81fb7773d0fc321ac6cbe4dd7f4a5865",
-                "reference": "cf003faa81fb7773d0fc321ac6cbe4dd7f4a5865",
+                "url": "https://api.github.com/repos/phpstan/phpstan-phpunit/zipball/46a447bc1b88ba809d9c34056c9ea2ca940d6dec",
+                "reference": "46a447bc1b88ba809d9c34056c9ea2ca940d6dec",
                 "shasum": ""
             },
             "require": {
@@ -232,6 +233,7 @@
             "require-dev": {
                 "consistence/coding-standard": "^3.5",
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+                "ergebnis/composer-normalize": "^2.0.2",
                 "jakub-onderka/php-parallel-lint": "^1.0",
                 "phing/phing": "^2.16.0",
                 "phpstan/phpstan-strict-rules": "^0.12",
@@ -261,7 +263,7 @@
                 "MIT"
             ],
             "description": "PHPUnit extensions and rules for PHPStan",
-            "time": "2019-12-17T20:41:59+00:00"
+            "time": "2019-12-20T13:23:24+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
