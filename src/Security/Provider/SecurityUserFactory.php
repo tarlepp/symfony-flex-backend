@@ -27,15 +27,8 @@ use function get_class;
  */
 class SecurityUserFactory implements UserProviderInterface
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
+    private UserRepository $userRepository;
+    private RolesService $rolesService;
 
     /**
      * SecurityUserFactory constructor.

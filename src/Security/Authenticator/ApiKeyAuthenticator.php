@@ -35,10 +35,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 {
     private const CREDENTIAL_KEY = 'token';
 
-    /**
-     * @var ApiKeyUserProvider
-     */
-    private $apiKeyUserProvider;
+    private ApiKeyUserProvider $apiKeyUserProvider;
 
     /**
      * ApiKeyAuthenticator constructor.

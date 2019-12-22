@@ -26,15 +26,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class ApiKeyUserProvider implements ApiKeyUserProviderInterface
 {
-    /**
-     * @var ApiKeyRepository
-     */
-    private $apiKeyRepository;
-
-    /**
-     * @var RolesService
-     */
-    private $rolesService;
+    private ApiKeyRepository $apiKeyRepository;
+    private RolesService $rolesService;
 
     /**
      * ApiKeyUserProvider constructor.
@@ -74,8 +67,7 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface
      */
     public function loadUserByUsername($token): ApiKeyUserInterface
     {
-        /** @var ApiKey|null $apiKey */
-        $apiKey = $this->apiKeyRepository->findOneBy(['token' => $token]);
+        $apiKey = $this->getApiKeyForToken($token);
 
         if ($apiKey === null) {
             throw new UsernameNotFoundException('API key is not valid');
