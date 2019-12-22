@@ -29,7 +29,7 @@ class ApiKeyUser implements ApiKeyUserInterface
      *      "ApiKeyUser.apiKey",
      *  })
      */
-    private $username;
+    private string $username;
 
     /**
      * @var ApiKey
@@ -38,7 +38,7 @@ class ApiKeyUser implements ApiKeyUserInterface
      *      "ApiKeyUser.apiKey",
      *  })
      */
-    private $apiKey;
+    private ApiKey $apiKey;
 
     /**
      * @var string[]
@@ -48,7 +48,7 @@ class ApiKeyUser implements ApiKeyUserInterface
      *      "ApiKeyUser.roles",
      *  })
      */
-    private $roles;
+    private array $roles;
 
     /**
      * ApiKeyUser constructor.
@@ -61,12 +61,10 @@ class ApiKeyUser implements ApiKeyUserInterface
         $this->apiKey = $apiKey;
         $this->username = $this->apiKey->getToken();
 
-        $iterator = static function (UserGroup $userGroup): string {
-            return $userGroup->getRole()->getId();
-        };
-
         // Iterate API key user groups and extract roles from those and attach base 'ROLE_API'
-        $roles = $this->apiKey->getUserGroups()->map($iterator)->toArray();
+        $roles = $this->apiKey
+            ->getUserGroups()
+            ->map(fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())->toArray();
         $roles[] = RolesService::ROLE_API;
 
         $this->roles = array_unique($rolesService->getInheritedRoles($roles));

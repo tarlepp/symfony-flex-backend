@@ -18,20 +18,13 @@ use App\Entity\User;
  */
 class SecurityUser implements SecurityUserInterface
 {
-    /**
-     * @var string
-     */
-    private $username;
-
-    /**
-     * @var string|null
-     */
-    private $password;
+    private string $username;
+    private string $password;
 
     /**
      * @var string[]
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * SecurityUser constructor.
@@ -86,8 +79,7 @@ class SecurityUser implements SecurityUserInterface
      */
     public function getPassword(): string
     {
-        /** @noinspection UnnecessaryCastingInspection */
-        return (string)($this->password ?? '');
+        return $this->password;
     }
 
     /**
@@ -118,6 +110,6 @@ class SecurityUser implements SecurityUserInterface
      */
     public function eraseCredentials(): void
     {
-        unset($this->password);
+        $this->password = '';
     }
 }

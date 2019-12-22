@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Interface SecurityUserInterface
  *
  * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface SecurityUserInterface extends UserInterface
 {

@@ -29,12 +29,12 @@ class RolesService implements RolesServiceInterface
      *
      * @var array<string, array<int, string>>
      */
-    private $rolesHierarchy;
+    private array $rolesHierarchy;
 
     /**
      * @var array<string, string>
      */
-    private static $roleNames = [
+    private static array $roleNames = [
         self::ROLE_LOGGED => 'Logged in users',
         self::ROLE_USER => 'Normal users',
         self::ROLE_ADMIN => 'Admin users',
