@@ -40,8 +40,6 @@ class SecurityUserTest extends KernelTestCase
 
     public function testThatGetSaltReturnNothing(): void
     {
-        /** @noinspection UnnecessaryAssertionInspection */
-        /** @noinspection PhpVoidFunctionResultUsedInspection */
         static::assertNull((new SecurityUser(new User()))->getSalt());
     }
 
