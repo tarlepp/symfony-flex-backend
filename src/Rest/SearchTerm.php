@@ -41,8 +41,8 @@ final class SearchTerm implements SearchTermInterface
      */
     public static function getCriteria($column, $search, ?string $operand = null, ?int $mode = null): ?array
     {
-        $operand = $operand ?? self::OPERAND_OR;
-        $mode = $mode ?? self::MODE_FULL;
+        $operand ??= self::OPERAND_OR;
+        $mode ??= self::MODE_FULL;
 
         $columns = self::getColumns($column);
         $searchTerms = self::getSearchTerms($search);
@@ -80,7 +80,7 @@ final class SearchTerm implements SearchTermInterface
         $output = null;
 
         // We have some generated criteria
-        if (count($criteria)) {
+        if (count($criteria) > 0) {
             // Create used criteria array
             $output = [
                 'and' => [
@@ -102,16 +102,8 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getTermIterator(array $columns, int $mode): Closure
     {
-        /**
-         * Lambda function to process each search term to specified search columns.
-         *
-         * @param string $term
-         *
-         * @return array
-         */
-        return static function (string $term) use ($columns, $mode): ?array {
-            return count($columns) ? array_map(self::getColumnIterator($term, $mode), $columns) : null;
-        };
+        return fn (string $term): ?array =>
+            count($columns) ? array_map(self::getColumnIterator($term, $mode), $columns) : null;
     }
 
     /**
@@ -173,14 +165,10 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getColumns($column): array
     {
-        $filter = static function (string $value): bool {
-            return trim($value) !== '';
-        };
-
         // Normalize column and search parameters
         return array_filter(
             array_map('trim', (is_array($column) ? $column : (array)$column)),
-            $filter
+            fn (string $value): bool => trim($value) !== ''
         );
     }
 
@@ -193,14 +181,10 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getSearchTerms($search): array
     {
-        $filter = static function (string $value): bool {
-            return trim($value) !== '';
-        };
-
         return array_unique(
             array_filter(
                 array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
-                $filter
+                fn (string $value): bool => trim($value) !== ''
             )
         );
     }
