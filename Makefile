@@ -242,3 +242,11 @@ update-bin: ## Update composer bin dependencies
 bash: ## Get bash inside PHP container
 	@docker-compose exec php bash
 ###< get bash inside php container ###
+
+###> Create local configuration ###
+local-configuration:
+	@cp /app/.env /app/.env.local
+	@cp /app/secrets/application.json /app/secrets/application.local.json
+	@sed -i "s/application\.json/application\.local\.json/g" .env.local
+	@echo "\033[32mLocal configuration created, just edit your new \`secrets/application.local.json\` file for your needs\033[39m"
+###< Create local configuration ###
