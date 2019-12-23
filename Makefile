@@ -244,7 +244,7 @@ bash: ## Get bash inside PHP container
 ###< get bash inside php container ###
 
 ###> Create local configuration ###
-local-configuration:
+local-configuration: ## Create local configuration files
 	@cp /app/.env /app/.env.local
 	@cp /app/secrets/application.json /app/secrets/application.local.json
 	@sed -i "s/application\.json/application\.local\.json/g" .env.local
