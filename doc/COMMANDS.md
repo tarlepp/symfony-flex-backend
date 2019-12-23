@@ -46,10 +46,14 @@ ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard to
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
 generate-jwt-keys           # Generates JWT auth keys
 infection                   # Runs Infection to codebase
+lint-configuration          # Lint current defined `application.json` that it contains valid JSON
+lint-yaml                   # Lint config YAML files
+local-configuration         # Create local configuration files
 phpcs                       # Runs PHP CodeSniffer
 phpinsights                 # Runs PHP Insights
 phpmetrics                  # Generates PhpMetrics static analysis
-phpstan                     # Runs PHPStan static analysis tool
+phpstan                     # Runs PHPStan static analysis tool    
+psalm-shepherd              # Runs Psalm static analysis tool + report results to shepherd
 psalm                       # Runs Psalm static analysis tool
 report-fastest              # Creates clover and JUnit xml from fastest run
 run-tests-fastest-php       # Runs all test via fastest (pure PHP)
@@ -58,7 +62,8 @@ run-tests-fastest           # Runs all test via fastest (Uses phpdbg if that is 
 run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
 run-tests                   # Runs all tests via phpunit (Uses phpdbg if that is installed)
-serve                       # Runs a local web server
+serve                       # Runs a local web server    
+update-bin                  # Update composer bin dependencies
 update                      # Update composer dependencies
 ```
 
