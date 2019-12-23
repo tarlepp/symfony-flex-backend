@@ -35,12 +35,19 @@ cp /app/secrets/application.json /app/secrets/application.local.json
 sed -i "s/application\.json/application\.local\.json/g" .env.local
 ```
 
+OR
+
+```bash
+make local-configuration
+```
+
 With these commands you created _your own_ configuration that application
 will use on next start up. So all that you need to do is to make necessary 
 changes to those newly created files.
 
-Necessary changes to those files should be quite self explanatory - just
-take a look what those files contains.
+Making necessary changes to those files should be quite self explanatory 
+- just take a look what those files contains. And most likely you only need
+to make changes to that `secrets/application.local.json` file.
 
 ## Detailed configuration
 
