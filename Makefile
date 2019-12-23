@@ -188,7 +188,7 @@ psalm: ## Runs Psalm static analysis tool
 ###< psalm ###
 
 ###> psalm with shepherd ###
-psalm-shepherd: ## Runs Psalm static analysis tool
+psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
 	@php ./vendor/bin/psalm --version
