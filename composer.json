@@ -43,7 +43,7 @@
 		"sensio/framework-extra-bundle": "5.5.2",
 		"symfony/asset": "4.4.1",
 		"symfony/config": "4.4.1",
-		"symfony/console": "4.4.1",
+		"symfony/console": "4.4.2",
 		"symfony/dotenv": "4.4.1",
 		"symfony/expression-language": "4.4.1",
 		"symfony/flex": "1.6.0",
