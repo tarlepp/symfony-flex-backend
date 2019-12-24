@@ -48,7 +48,7 @@
 		"symfony/expression-language": "4.4.1",
 		"symfony/flex": "1.6.0",
 		"symfony/form": "4.4.1",
-		"symfony/framework-bundle": "4.4.1",
+		"symfony/framework-bundle": "4.4.2",
 		"symfony/monolog-bundle": "3.5.0",
 		"symfony/orm-pack": "1.0.7",
 		"symfony/process": "4.4.1",
