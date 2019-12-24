@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe4d2ee61e26c710fc17d771d68031db",
+    "content-hash": "31737c974e14cc58044e22649292c08e",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -2442,16 +2442,16 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.12.1",
+            "version": "3.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "72630c0cc012da96fe9fb842e7af480ffa740b76"
+                "reference": "c352144e2ab1aff81e659aa38224be987b87855b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/72630c0cc012da96fe9fb842e7af480ffa740b76",
-                "reference": "72630c0cc012da96fe9fb842e7af480ffa740b76",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/c352144e2ab1aff81e659aa38224be987b87855b",
+                "reference": "c352144e2ab1aff81e659aa38224be987b87855b",
                 "shasum": ""
             },
             "require": {
@@ -2493,7 +2493,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2019-10-24T15:38:52+00:00"
+            "time": "2019-12-22T21:23:31+00:00"
         },
         {
             "name": "psr/cache",
