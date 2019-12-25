@@ -32,32 +32,25 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
     private const CONTROLLER_KEY = '_controller';
 
     /**
-     * @var array|string[]
+     * @var array<int, string>
      */
-    private $supportedActions = [
+    private array $supportedActions = [
         Controller::ACTION_CREATE,
         Controller::ACTION_UPDATE,
         Controller::ACTION_PATCH,
     ];
 
     /**
-     * @var array|array<string, string>
+     * @var array<string, string>
      */
-    private $actionMethodMap = [
+    private array $actionMethodMap = [
         Controller::ACTION_CREATE => Controller::METHOD_CREATE,
         Controller::ACTION_UPDATE => Controller::METHOD_UPDATE,
         Controller::ACTION_PATCH => Controller::METHOD_PATCH,
     ];
 
-    /**
-     * @var ControllerCollection
-     */
-    private $controllerCollection;
-
-    /**
-     * @var AutoMapperInterface
-     */
-    private $autoMapper;
+    private ControllerCollection $controllerCollection;
+    private AutoMapperInterface $autoMapper;
 
     /**
      * RestDtoValueResolver constructor.

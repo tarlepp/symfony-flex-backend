@@ -42,10 +42,7 @@ use function is_subclass_of;
  */
 class EntityValueResolver implements ArgumentValueResolverInterface
 {
-    /**
-     * @var ResourceCollection
-     */
-    private $resourceCollection;
+    private ResourceCollection $resourceCollection;
 
     /**
      * EntityValueResolver constructor.

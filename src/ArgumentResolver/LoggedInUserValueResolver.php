@@ -41,15 +41,8 @@ use Throwable;
  */
 class LoggedInUserValueResolver implements ArgumentValueResolverInterface
 {
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @var UserResource
-     */
-    private $userResource;
+    private TokenStorageInterface $tokenStorage;
+    private UserResource $userResource;
 
     /**
      * LoggedInUserValueResolver constructor.
