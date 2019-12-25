@@ -15,8 +15,8 @@
 
 JSON REST API which is build on top of [Symfony](https://symfony.com/) framework.
 
-Note that this project is build with [Symfony 4](https://symfony.com/4) and
-[Symfony Flex](https://github.com/symfony/flex).
+This application is mean to use as an `API` that some frontend application(s) or
+different backend application(s) uses as they like.
 
 ## Table of Contents
 
