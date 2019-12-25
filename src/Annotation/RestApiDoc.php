@@ -21,8 +21,5 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class RestApiDoc
 {
-    /**
-     * @var bool
-     */
-    public $disabled = false;
+    public bool $disabled = false;
 }
