@@ -2,7 +2,7 @@
 	"require": {},
 	"require-dev": {
 		"liuggio/fastest": "1.6.1",
-		"phpunit/phpunit": "8.5.0",
+		"phpunit/phpunit": "8.5.1",
 		"phpunit/phpcov": "6.0.1",
 		"roave/security-advisories": "dev-master",
 		"sebastian/finder-facade": "1.2.2",
