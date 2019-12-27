@@ -1,13 +1,9 @@
 parameters:
-    level: 5
+    level: max
     excludes_analyse:
         - %currentWorkingDirectory%/src/Migrations/*
 
     symfony:
         container_xml_path: '%currentWorkingDirectory%/var/cache/test/srcApp_KernelTestDebugContainer.xml'
 
-    doctrine:
-        repositoryClass: App\Repository\BaseRepository
-
-    inferPrivatePropertyTypeFromConstructor: true
     checkMissingIterableValueType: false
