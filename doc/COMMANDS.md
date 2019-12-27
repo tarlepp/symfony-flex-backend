@@ -75,6 +75,12 @@ You can list all Symfony console commands via following command:
 ./bin/console
 ```
 
+or 
+
+```bash
+console
+```
+
 ### Custom commands
 
 Project contains following custom console commands to help eg. user management:
@@ -116,4 +122,5 @@ This command is just a wrapper for following commands:
 
 #### utils:create-date-dimension-entities
 
-Command to create `DateDimension` entities that can be used with date/time related report queries.
+Command to create `DateDimension` entities that can be used with date/time 
+related report queries.
