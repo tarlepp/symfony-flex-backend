@@ -20,15 +20,8 @@ use App\Entity\EntityInterface;
  */
 class TestRestRequestMapperDto extends RestDto
 {
-    /**
-     * @var string
-     */
-    protected $someProperty = '';
-
-    /**
-     * @var string
-     */
-    protected $someTransformProperty = '';
+    protected string $someProperty = '';
+    protected string $someTransformProperty = '';
 
     /**
      * Method to load DTO data from specified entity.

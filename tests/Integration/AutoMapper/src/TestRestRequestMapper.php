@@ -24,7 +24,7 @@ class TestRestRequestMapper extends RestRequestMapper
      *
      * @var array
      */
-    protected static $properties = [
+    protected static array $properties = [
         'someProperty',
         'someTransformProperty',
     ];
