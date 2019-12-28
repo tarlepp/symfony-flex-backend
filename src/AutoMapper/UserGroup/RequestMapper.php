@@ -21,15 +21,15 @@ use Doctrine\ORM\ORMException;
  */
 class RequestMapper extends RestRequestMapper
 {
-    protected static $properties = [
+    /**
+     * @var array<int, string>
+     */
+    protected static array $properties = [
         'name',
         'role',
     ];
 
-    /**
-     * @var RoleResource
-     */
-    private $roleResource;
+    private RoleResource $roleResource;
 
     /**
      * RequestMapper constructor.

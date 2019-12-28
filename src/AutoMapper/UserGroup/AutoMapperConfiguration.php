@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\AutoMapper\UserGroup;
 
 use App\AutoMapper\RestAutoMapperConfiguration;
+use App\AutoMapper\RestRequestMapper;
 use App\DTO\UserGroup\UserGroupCreate;
 use App\DTO\UserGroup\UserGroupPatch;
 use App\DTO\UserGroup\UserGroupUpdate;
@@ -24,18 +25,15 @@ class AutoMapperConfiguration extends RestAutoMapperConfiguration
     /**
      * Classes to use specified request mapper.
      *
-     * @var string[]
+     * @var array<int, string>
      */
-    protected static $requestMapperClasses = [
+    protected static array $requestMapperClasses = [
         UserGroupCreate::class,
         UserGroupUpdate::class,
         UserGroupPatch::class,
     ];
 
-    /**
-     * @var RequestMapper
-     */
-    protected $requestMapper;
+    protected RestRequestMapper $requestMapper;
 
     /**
      * AutoMapperConfiguration constructor.

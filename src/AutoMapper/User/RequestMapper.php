@@ -11,7 +11,6 @@ namespace App\AutoMapper\User;
 use App\AutoMapper\RestRequestMapper;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
-use Closure;
 use function array_map;
 
 /**
@@ -22,7 +21,10 @@ use function array_map;
  */
 class RequestMapper extends RestRequestMapper
 {
-    protected static $properties = [
+    /**
+     * @var array<int, string>
+     */
+    protected static array $properties = [
         'username',
         'firstName',
         'lastName',
@@ -31,10 +33,7 @@ class RequestMapper extends RestRequestMapper
         'password',
     ];
 
-    /**
-     * @var UserGroupResource
-     */
-    private $userGroupResource;
+    private UserGroupResource $userGroupResource;
 
     /**
      * RequestMapper constructor.
@@ -53,16 +52,9 @@ class RequestMapper extends RestRequestMapper
      */
     protected function transformUserGroups(array $userGroups): array
     {
-        return array_map($this->getUserGroupReference(), $userGroups);
-    }
-
-    /**
-     * @return Closure
-     */
-    private function getUserGroupReference(): Closure
-    {
-        return function (string $userGroupUuid): UserGroup {
-            return $this->userGroupResource->getReference($userGroupUuid);
-        };
+        return array_map(
+            fn (string $userGroupUuid): UserGroup => $this->userGroupResource->getReference($userGroupUuid),
+            $userGroups
+        );
     }
 }

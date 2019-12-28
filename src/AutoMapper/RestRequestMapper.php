@@ -35,7 +35,7 @@ abstract class RestRequestMapper implements MapperInterface
      *
      * @var array<int, string>
      */
-    protected static $properties = [];
+    protected static array $properties = [];
 
     /**
      * @inheritdoc
@@ -136,8 +136,6 @@ abstract class RestRequestMapper implements MapperInterface
      */
     private function getValidProperties(Request $request): array
     {
-        return array_filter(static::$properties, static function ($property) use ($request) {
-            return $request->request->has($property);
-        });
+        return array_filter(static::$properties, fn ($property) => $request->request->has($property));
     }
 }

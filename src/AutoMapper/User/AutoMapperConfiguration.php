@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\AutoMapper\User;
 
 use App\AutoMapper\RestAutoMapperConfiguration;
+use App\AutoMapper\RestRequestMapper;
 use App\DTO\User\UserCreate;
 use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
@@ -24,18 +25,15 @@ class AutoMapperConfiguration extends RestAutoMapperConfiguration
     /**
      * Classes to use specified request mapper.
      *
-     * @var string[]
+     * @var array<int, string>
      */
-    protected static $requestMapperClasses = [
+    protected static array $requestMapperClasses = [
         UserCreate::class,
         UserUpdate::class,
         UserPatch::class,
     ];
 
-    /**
-     * @var RequestMapper
-     */
-    protected $requestMapper;
+    protected RestRequestMapper $requestMapper;
 
     /**
      * AutoMapperConfiguration constructor.

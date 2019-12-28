@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\AutoMapper\ApiKey;
 
 use App\AutoMapper\RestAutoMapperConfiguration;
+use App\AutoMapper\RestRequestMapper;
 use App\DTO\ApiKey\ApiKeyCreate;
 use App\DTO\ApiKey\ApiKeyPatch;
 use App\DTO\ApiKey\ApiKeyUpdate;
@@ -24,18 +25,15 @@ class AutoMapperConfiguration extends RestAutoMapperConfiguration
     /**
      * Classes to use specified request mapper.
      *
-     * @var string[]
+     * @var array<int, string>
      */
-    protected static $requestMapperClasses = [
+    protected static array $requestMapperClasses = [
         ApiKeyCreate::class,
         ApiKeyUpdate::class,
         ApiKeyPatch::class,
     ];
 
-    /**
-     * @var RequestMapper
-     */
-    protected $requestMapper;
+    protected RestRequestMapper $requestMapper;
 
     /**
      * AutoMapperConfiguration constructor.
