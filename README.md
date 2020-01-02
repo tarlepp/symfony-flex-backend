@@ -139,4 +139,4 @@ docker-compose up --build
 
 [The MIT License (MIT)](LICENSE)
 
-Copyright © 2019 Tarmo Leppänen
+Copyright © 2020 Tarmo Leppänen
