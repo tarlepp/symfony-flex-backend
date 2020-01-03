@@ -119,6 +119,7 @@ docker-compose up --build
 * [Application commands](doc/COMMANDS.md)
 * [Development guide](doc/DEVELOPMENT.md)
 * [Testing guide](doc/TESTING.md)
+* [Concepts and features](doc/CONCEPTS_AND_FEATURES.md)
 * [Speed problems with docker-compose?](doc/SPEED_UP_DOCKER_COMPOSE.md)
 * [PhpStorm configuration](doc/PHPSTORM.md)
 * [Using Xdebug](doc/XDEBUG.md)
