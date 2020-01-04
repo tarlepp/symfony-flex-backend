@@ -23,6 +23,7 @@ different backend application(s) uses as they like.
 * [What is this](#what-is-this)
    * [Table of Contents](#table-of-contents)
    * [Requirements](#requirements)
+      * [Recommendations](#recommendations)
    * [Installation](#installation)
       * [1. Clone repository](#1-clone-repository)
       * [2. Start containers](#2-start-containers)
@@ -38,6 +39,11 @@ different backend application(s) uses as they like.
 
 * [docker-compose](https://docs.docker.com/compose/install/)
 * If you are not using docker / docker-compose then follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md)
+
+### Recommendations
+
+* `*nix platform` - not really requirement, but recommend to use to get 
+  `Makefile` support
 
 ## Installation
 
@@ -56,6 +62,12 @@ git clone https://github.com/tarlepp/symfony-flex-backend.git
 For this just run following command:
 
 ```bash
+make start
+```
+
+or without `Makefile` support:
+
+```bash
 docker-compose up
 ```
 
@@ -67,8 +79,8 @@ Those containers are following:
  
 ### 3. Using application
 
-By default `docker-compose up` command starts those three containers and 
-exposes following ports on `localhost`:
+By default `make start` / `docker-compose up` command starts those three 
+containers and exposes following ports on `localhost`:
  * 8000 (nginx + php-fpm)
  * 3310 (mysql)
  
@@ -84,21 +96,21 @@ password: password
 
 ### 4. Getting shell to container
 
-After you've run `docker-compose up` command you can list all running containers
-with `docker ps` command.
+After you've run `make start` / `docker-compose up` command you can list all 
+running containers with `docker ps` command.
 
 And to eg. get shell access inside one of those containers you can run following
 command:
 
 ```bash
-docker-compose exec php bash
-```
-
-or if your system has support for `Makefile` run following command:
-
-```bash
 make bash
 ```
+
+or without `Makefile` support:
+
+```bash
+docker-compose exec php bash
+``` 
 
 Where that `php` is that actual container where this backend application is
 running.
@@ -108,6 +120,12 @@ running.
 For time to time you probably need to build containers again. This is something
 that you should do everytime if you have some problems to get containers up and
 running. This you can do with following command:
+
+```bash
+make start-build
+```
+
+or without `Makefile` support:
 
 ```bash
 docker-compose up --build 

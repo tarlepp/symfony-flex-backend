@@ -62,7 +62,9 @@ run-tests-fastest           # Runs all test via fastest (Uses phpdbg if that is 
 run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
 run-tests                   # Runs all tests via phpunit (Uses phpdbg if that is installed)
-serve                       # Runs a local web server    
+serve                       # Runs a local web server
+start-build                 # Start application in development mode and build containers
+start                       # Start application in development mode    
 update-bin                  # Update composer bin dependencies
 update                      # Update composer dependencies
 ```

@@ -243,6 +243,16 @@ bash: ## Get bash inside PHP container
 	@docker-compose exec php bash
 ###< get bash inside php container ###
 
+###> Start application in development mode ###
+start: ## Start application in development mode
+	@docker-compose up
+###< Start application in development mode ###
+
+###> Start application in development mode and build containers ###
+start-build: ## Start application in development mode and build containers
+	@docker-compose up --build
+###< Start application in development mode and build containers ###
+
 ###> Create local configuration ###
 local-configuration: ## Create local configuration files
 	@cp /app/.env /app/.env.local
