@@ -13,10 +13,11 @@
 [![Sonarcloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
 [![SymfonyInsight](https://insight.symfony.com/projects/e59c1ed3-b870-457a-971e-570a27a04784/mini.svg)](https://insight.symfony.com/projects/e59c1ed3-b870-457a-971e-570a27a04784)
 
-JSON REST API which is build on top of [Symfony](https://symfony.com/) framework.
+JSON REST API which is build on top of [Symfony](https://symfony.com/) 
+framework.
 
-This application is mean to use as an `API` that some frontend application(s) or
-different backend application(s) uses as they like.
+This application is mean to use as an `API` that some frontend application(s) 
+or different backend application(s) uses as they like.
 
 ## Table of Contents
 
@@ -30,6 +31,7 @@ different backend application(s) uses as they like.
       * [3. Using application](#3-using-application)
       * [4. Getting shell to container](#4-getting-shell-to-container)
       * [5. Building containers](#5-building-containers)
+   * [Frontend?](#frontend)
    * [Resources](#resources)
    * [External links / resources](#external-links--resources)
    * [Authors](#authors)
@@ -51,7 +53,8 @@ This installation guide expects that you're using docker-compose.
 
 ### 1. Clone repository
 
-Use your favorite IDE and get checkout from GitHub or just use following command
+Use your favorite IDE and get checkout from GitHub or just use following 
+command
 
 ```bash
 git clone https://github.com/tarlepp/symfony-flex-backend.git
@@ -130,6 +133,17 @@ or without `Makefile` support:
 ```bash
 docker-compose up --build 
 ```
+
+## Frontend?
+
+So this is an API backend what about frontend then? No worries I've made simple
+Angular NgRx powered template frontend which work with this backend just out of
+the box.
+
+[Angular NgRx powered frontend template for Symfony backend](https://github.com/tarlepp/angular-ngrx-frontend)
+
+With these two _template_ applications it should be quite easy to start to 
+build _your_ own application - right?
 
 ## Resources
 
