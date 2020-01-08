@@ -16,8 +16,8 @@
 JSON REST API which is build on top of [Symfony](https://symfony.com/) 
 framework.
 
-This application is mean to use as an `API` that some frontend application(s) 
-or different backend application(s) uses as they like.
+This application is mean to use as an `API` that some [frontend](#frontend) 
+application(s) or different backend application(s) uses as they like.
 
 ## Table of Contents
 
