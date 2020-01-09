@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Validator\Constraints\src;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use Doctrine\ORM\Proxy\Proxy;
 
 /**

@@ -10,7 +10,7 @@ namespace App\Tests\Integration\AutoMapper\src;
 
 use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 
 /**
  * Class TestRestRequestMapperDto

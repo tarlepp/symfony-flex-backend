@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 
 /**
  * Trait RestResourceFind
@@ -27,7 +27,7 @@ trait RestResourceFind
      * @param mixed[]  $orderBy
      * @param int|null $limit
      * @param int|null $offset
-     * @param mixed[] $search
+     * @param mixed[]  $search
      */
     public function beforeFind(array &$criteria, array &$orderBy, ?int &$limit, ?int &$offset, array &$search): void
     {

@@ -10,7 +10,7 @@ namespace App\Resource;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\ApiKey as Entity;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Repository\ApiKeyRepository as Repository;
 use App\Rest\RestResource;
 

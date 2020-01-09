@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Repository;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;

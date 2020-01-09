@@ -97,30 +97,6 @@ class UserTest extends EntityTestCase
         static::assertNull($this->entity->getSalt());
     }
 
-    public function testThatGetLoginDataMethodReturnsExpected(): void
-    {
-        $expected = [
-            'firstName',
-            'lastName',
-            'email',
-        ];
-
-        foreach ($expected as $key) {
-            $method = 'set' . ucfirst($key);
-
-            $this->entity->{$method}($key);
-        }
-
-        $data = $this->entity->getLoginData();
-
-        foreach ($expected as $key) {
-            static::assertArrayHasKey($key, $data);
-            static::assertSame($key, $data[$key]);
-        }
-
-        unset($data);
-    }
-
     public function testThatEraseCredentialsMethodWorksAsExpected(): void
     {
         $this->entity->setPlainPassword('password');

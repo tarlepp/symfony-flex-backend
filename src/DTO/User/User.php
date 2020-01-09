@@ -10,10 +10,10 @@ namespace App\DTO\User;
 
 use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\User as Entity;
 use App\Entity\UserGroup as UserGroupEntity;
-use App\Entity\UserGroupAwareInterface;
+use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;

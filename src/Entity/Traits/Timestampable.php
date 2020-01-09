@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity\Traits;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

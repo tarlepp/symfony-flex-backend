@@ -8,6 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\EntityInterface;
+use App\Entity\Interfaces\UserGroupAwareInterface;
+use App\Entity\Interfaces\UserInterface;
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\UserRelations;
@@ -340,22 +343,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     public function getSalt(): ?string
     {
         return null;
-    }
-
-    /**
-     * Method to get login data for JWT token.
-     *
-     * @return mixed[]
-     */
-    public function getLoginData(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'firstName' => $this->getFirstName(),
-            'lastName' => $this->getLastName(),
-            'email' => $this->getEmail(),
-            'roles' => $this->getRoles(),
-        ];
     }
 
     /**

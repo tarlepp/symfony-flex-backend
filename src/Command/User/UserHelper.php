@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Command\User;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\User as UserEntity;
 use App\Entity\UserGroup as UserGroupEntity;
 use App\Resource\UserGroupResource;

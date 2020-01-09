@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\ArgumentResolver;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Resource\ResourceCollection;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;

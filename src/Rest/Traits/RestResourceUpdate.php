@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest\Traits;
 
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 
 /**
  * Trait RestResourceUpdate
@@ -25,10 +25,10 @@ trait RestResourceUpdate
      * Before lifecycle method for update method.
      *
      * @param string           $id
-     * @param RestDtoInterface $dto
+     * @param RestDtoInterface $restDto
      * @param EntityInterface  $entity
      */
-    public function beforeUpdate(string &$id, RestDtoInterface $dto, EntityInterface $entity): void
+    public function beforeUpdate(string &$id, RestDtoInterface $restDto, EntityInterface $entity): void
     {
     }
 
@@ -42,10 +42,10 @@ trait RestResourceUpdate
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
      *
      * @param string           $id
-     * @param RestDtoInterface $dto
+     * @param RestDtoInterface $restDto
      * @param EntityInterface  $entity
      */
-    public function afterUpdate(string &$id, RestDtoInterface $dto, EntityInterface $entity): void
+    public function afterUpdate(string &$id, RestDtoInterface $restDto, EntityInterface $entity): void
     {
     }
 }

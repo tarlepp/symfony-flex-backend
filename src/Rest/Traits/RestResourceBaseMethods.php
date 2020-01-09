@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest\Traits;
 
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
 use App\Utils\JSON;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

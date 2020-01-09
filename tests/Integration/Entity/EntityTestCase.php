@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Entity;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Rest\UuidHelper;
 use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;

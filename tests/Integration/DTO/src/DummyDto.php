@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Dto\src;
 
 use App\Dto\RestDto;
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Repository\BaseRepositoryInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\ORMException;

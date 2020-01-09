@@ -8,12 +8,12 @@ declare(strict_types = 1);
 
 namespace App\Entity\Traits;
 
+use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\LogLogin;
 use App\Entity\LogLoginFailure;
 use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Entity\UserGroup;
-use App\Entity\UserGroupAwareInterface;
 use App\Security\RolesService;
 use App\Security\RolesServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;

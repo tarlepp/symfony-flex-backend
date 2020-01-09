@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Rest\ResponseHandlerInterface;
 use App\Rest\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindOneMethodInvalidTestClass;

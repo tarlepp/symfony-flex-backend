@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Rest;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;

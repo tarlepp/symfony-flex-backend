@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Resource;
 
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Healthz as Entity;
 use App\Repository\HealthzRepository as Repository;
 use App\Rest\RestResource;

@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Repository;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\ApiKey as UserEntity;
 use App\Repository\BaseRepositoryInterface;
 use App\Repository\ApiKeyRepository;

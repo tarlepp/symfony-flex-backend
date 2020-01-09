@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Repository\Traits;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Rest\RepositoryHelper;
 use App\Rest\UuidHelper;
 use ArrayIterator;

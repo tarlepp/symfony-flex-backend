@@ -1,13 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Entity/UserGroupAwareInterface.php
+ * /src/Entity/Interfaces/UserGroupAwareInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Entity;
+namespace App\Entity\Interfaces;
 
+use App\Entity\UserGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 

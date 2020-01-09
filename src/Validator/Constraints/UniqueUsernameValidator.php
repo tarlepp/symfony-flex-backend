@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Validator\Constraints;
 
-use App\Entity\UserInterface;
+use App\Entity\Interfaces\UserInterface;
 use App\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Component\Validator\Constraint;

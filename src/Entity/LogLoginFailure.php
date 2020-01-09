@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Traits\Uuid;
 use DateTimeImmutable;
 use DateTimeZone;

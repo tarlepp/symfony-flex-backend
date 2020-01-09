@@ -10,7 +10,7 @@ namespace App\Resource;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\DateDimension as Entity;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Repository\DateDimensionRepository as Repository;
 use App\Rest\RestResource;
 

@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Validator\Constraints;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Helpers\LoggerAwareTrait;
 use Closure;
 use Doctrine\ORM\EntityNotFoundException;

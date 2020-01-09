@@ -10,7 +10,7 @@ namespace App\DTO\UserGroup;
 
 use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as Entity;
 use App\Validator\Constraints as AppAssert;

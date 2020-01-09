@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Resource;
 
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\User as Entity;
 use App\Entity\UserGroup;
 use App\Repository\UserRepository as Repository;

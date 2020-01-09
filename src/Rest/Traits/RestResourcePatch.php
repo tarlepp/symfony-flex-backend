@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest\Traits;
 
 use App\DTO\RestDtoInterface;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 
 /**
  * Trait RestResourcePatch
@@ -25,10 +25,10 @@ trait RestResourcePatch
      * Before lifecycle method for patch method.
      *
      * @param string           $id
-     * @param RestDtoInterface $dto
+     * @param RestDtoInterface $restDto
      * @param EntityInterface  $entity
      */
-    public function beforePatch(string &$id, RestDtoInterface $dto, EntityInterface $entity): void
+    public function beforePatch(string &$id, RestDtoInterface $restDto, EntityInterface $entity): void
     {
     }
 

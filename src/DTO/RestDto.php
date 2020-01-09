@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\DTO;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use BadMethodCallException;
 use LogicException;
 use function array_filter;

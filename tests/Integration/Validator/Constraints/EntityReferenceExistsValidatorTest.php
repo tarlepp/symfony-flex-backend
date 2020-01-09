@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Validator\Constraints;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Tests\Integration\Validator\Constraints\src\EntityReference;
 use App\Validator\Constraints\EntityReferenceExists;
 use App\Validator\Constraints\EntityReferenceExistsValidator;
@@ -166,31 +166,31 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         yield [
             new stdClass(),
             EntityInterface::class,
-            'Expected argument of type "App\Entity\EntityInterface", "stdClass" given'
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given'
         ];
 
         yield [
             [''],
             EntityInterface::class,
-            'Expected argument of type "App\Entity\EntityInterface", "string" given'
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "string" given'
         ];
 
         yield [
             [new stdClass()],
             EntityInterface::class,
-            'Expected argument of type "App\Entity\EntityInterface", "stdClass" given'
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given'
         ];
 
         yield [
             $this->getMockForAbstractClass(Proxy::class, [], 'ProxyClass'),
             Proxy::class,
-            'Expected argument of type "App\Entity\EntityInterface", "ProxyClass" given',
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "ProxyClass" given',
         ];
 
         yield [
             [$this->getMockForAbstractClass(Proxy::class, [], 'ProxyClass')],
             Proxy::class,
-            'Expected argument of type "App\Entity\EntityInterface", "ProxyClass" given',
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "ProxyClass" given',
         ];
     }
 }

@@ -1,20 +1,22 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Entity/UserInterface.php
+ * /src/Entity/Interfaces/EntityInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Entity;
+namespace App\Entity\Interfaces;
+
+use DateTimeImmutable;
 
 /**
- * Interface UserInterface
+ * Interface EntityInterface
  *
  * @package App\Entity
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-interface UserInterface
+interface EntityInterface
 {
     /**
      * @return string
@@ -22,12 +24,9 @@ interface UserInterface
     public function getId(): string;
 
     /**
-     * @return string
+     * Returns createdAt.
+     *
+     * @return DateTimeImmutable|null
      */
-    public function getUsername(): string;
-
-    /**
-     * @return string
-     */
-    public function getEmail(): string;
+    public function getCreatedAt(): ?DateTimeImmutable;
 }

@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits;
 
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 
 /**
  * Trait RestResourceSave

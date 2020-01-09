@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit;
 
 use App\AutoMapper\RestRequestMapper;
-use App\Entity\EntityInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Rest\ControllerInterface;
 use App\Rest\RepositoryInterface;
 use App\Utils\Tests\PhpUnitUtil;
