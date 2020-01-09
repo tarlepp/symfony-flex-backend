@@ -253,24 +253,15 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      */
     public function getRoles(): array
     {
-        /**
-         * Lambda iterator to get user group role information.
-         *
-         * @param UserGroup $userGroup
-         *
-         * @return string
-         */
-        $iterator = static function (UserGroup $userGroup): string {
-            return $userGroup->getRole()->getId();
-        };
-
         return array_values(
             array_map(
                 '\strval',
                 array_unique(
                     array_merge(
                         [RolesService::ROLE_API],
-                        $this->userGroups->map($iterator)->toArray()
+                        $this->userGroups
+                            ->map(fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
+                            ->toArray()
                     )
                 )
             )

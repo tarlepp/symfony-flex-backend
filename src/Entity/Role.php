@@ -97,7 +97,7 @@ class Role implements EntityInterface
      */
     public function __construct(?string $role = null)
     {
-        $role = $role ?? '';
+        $role ??= '';
 
         $this->id = $role;
         $this->userGroups = new ArrayCollection();
