@@ -248,6 +248,11 @@ start: ## Start application in development mode
 	@docker-compose up
 ###< Start application in development mode ###
 
+###> Stop application containers ###
+stop: ## Stop application containers
+	@docker-compose down
+###< Stop application containers ###
+
 ###> Start application in development mode and build containers ###
 start-build: ## Start application in development mode and build containers
 	@docker-compose up --build

@@ -65,6 +65,7 @@ run-tests                   # Runs all tests via phpunit (Uses phpdbg if that is
 serve                       # Runs a local web server
 start-build                 # Start application in development mode and build containers
 start                       # Start application in development mode    
+stop                        # Stop application containers
 update-bin                  # Update composer bin dependencies
 update                      # Update composer dependencies
 ```
