@@ -48,7 +48,6 @@ class IsUserHimselfVoter extends Voter
      */
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
-        /** @var User $subject */
         $user = $token->getUser();
 
         return $token->isAuthenticated()
