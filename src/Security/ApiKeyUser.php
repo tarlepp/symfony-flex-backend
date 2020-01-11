@@ -10,6 +10,7 @@ namespace App\Security;
 
 use App\Entity\ApiKey;
 use App\Entity\UserGroup;
+use App\Security\Interfaces\ApiKeyUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use function array_unique;
 

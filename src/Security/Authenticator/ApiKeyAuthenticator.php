@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Security\Authenticator;
 
 use App\Entity\ApiKey;
-use App\Security\ApiKeyUserInterface;
+use App\Security\Interfaces\ApiKeyUserInterface;
 use App\Security\Provider\ApiKeyUserProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

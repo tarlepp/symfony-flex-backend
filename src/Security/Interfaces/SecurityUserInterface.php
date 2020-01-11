@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Security/SecurityUserInterface.php
+ * /src/Security/Interfaces/SecurityUserInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Security;
+namespace App\Security\Interfaces;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 

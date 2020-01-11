@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
-use App\Security\RolesServiceInterface;
+use App\Security\Interfaces\RolesServiceInterface;
 use BadMethodCallException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;

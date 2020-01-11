@@ -1,14 +1,15 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Security/ApiKeyUser.php
+ * /src/Security/Interfaces/ApiKeyUser.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Security;
+namespace App\Security\Interfaces;
 
 use App\Entity\ApiKey;
+use App\Security\RolesService;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
