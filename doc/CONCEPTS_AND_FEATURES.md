@@ -16,6 +16,10 @@ new developers - so this document is trying to solve that issue.
      * [REST traits](#rest-traits)
      * [How to make new REST API?](#how-to-make-new-rest-api)
      * [Alternatives](#alternatives)
+   * [Authentication and authorization](#authentication-and-authorization)
+     * [Authentication](#authentication)
+       * [Normal users](#normal-users)
+       * [ApiKey "users"](#apikey-users)
    * [Controllers](#controllers)
    * [Resources](#resources)
      * [Lifecycle callbacks](#lifecycle-callbacks)
@@ -105,6 +109,38 @@ application;
 
 And that those all has bind together, you should see clear example of this
 structure if you look how `ApiKey` endpoint has been built to this application.
+
+## Authentication and authorization
+
+### Authentication
+
+By default this application is providing a "normal" user and "apikey" 
+authentication implementations. Another quite _big_ difference to traditional 
+Symfony  applications is that this application does not bind `Entities` to 
+`Symfony\Component\Security\Core\User\UserInterface` - this application uses 
+separated DTO's for that.
+
+#### Normal users
+
+These users are authenticated via `Json Web Token (JWT)`, each JWT is created
+using private/public keys and those keys are always re-generated when 
+environment is started. This will ensure that eg. each application update
+users needs to make new login - this can be changed if needed but imho this is
+most _safest_ way to handle token invalidation on application updates.
+
+Also note that if/when you want to use something else as user provider than
+your application database, you just need to change `SecurityUserFactory`
+implementation and/or create your own one. 
+
+#### ApiKey "users"
+
+This authentication is used within `server-to-server` communication between
+"trusted" parties. These "ApiKey" users are authenticated via special HTTP
+request header;
+
+```
+Authorization: ApiKey _APIKEY_TOKEN_HERE_
+```
 
 ## Controllers
 
