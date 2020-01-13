@@ -45,8 +45,12 @@ WORKDIR /app
 # Add everything inside docker image
 COPY . .
 
-# Install bamarni/symfony-console-autocomplete as a global one to get autocomplete working
-RUN composer --no-cache global require bamarni/symfony-console-autocomplete
+# Install following common tools;
+#   - bamarni/symfony-console-autocomplete, to get application commands and composer autocomplete working
+#   - ergebnis/composer-normalize, to "normalize" composer.json contents
+RUN composer --no-cache global require \
+    bamarni/symfony-console-autocomplete \
+    ergebnis/composer-normalize
 
 # Ensure that all required files has execute rights
 RUN chmod +x /app/bin/console \

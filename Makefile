@@ -265,3 +265,8 @@ local-configuration: ## Create local configuration files
 	@sed -i "s/application\.json/application\.local\.json/g" .env.local
 	@echo "\033[32mLocal configuration created, just edit your new \`secrets/application.local.json\` file for your needs\033[39m"
 ###< Create local configuration ###
+
+###> Normalizes `composer.json` content ###
+normalize-composer: ## Normalizes `composer.json` content
+	@composer normalize
+###< Normalizes `composer.json` content ###

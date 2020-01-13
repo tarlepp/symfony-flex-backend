@@ -49,6 +49,7 @@ infection                   # Runs Infection to codebase
 lint-configuration          # Lint current defined `application.json` that it contains valid JSON
 lint-yaml                   # Lint config YAML files
 local-configuration         # Create local configuration files
+normalize-composer          # Normalizes `composer.json` content
 phpcs                       # Runs PHP CodeSniffer
 phpinsights                 # Runs PHP Insights
 phpmetrics                  # Generates PhpMetrics static analysis
