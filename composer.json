@@ -1,14 +1,14 @@
 {
 	"name": "tarlepp/symfony-flex-backend",
-	"description": "JSON REST API which is build on top of Symfony framework.",
-	"version": "0.2.1",
 	"type": "project",
+	"description": "JSON REST API which is build on top of Symfony framework.",
 	"keywords": [
 		"Symfony",
 		"Flex",
 		"API"
 	],
 	"homepage": "https://github.com/tarlepp/symfony-flex-backend",
+	"version": "0.2.1",
 	"license": "MIT",
 	"authors": [
 		{
@@ -18,10 +18,6 @@
 			"role": "Developer"
 		}
 	],
-	"support": {
-		"issues": "https://github.com/tarlepp/symfony-flex-backend/issues"
-	},
-	"prefer-stable": true,
 	"require": {
 		"php": "^7.4.0",
 		"ext-iconv": "*",
@@ -60,6 +56,11 @@
 		"symfony/validator": "4.4.2",
 		"symfony/yaml": "4.4.2"
 	},
+	"conflict": {
+		"symfony/debug": "<3.3",
+		"symfony/symfony": "*",
+		"symfony/twig-bundle": "<3.3"
+	},
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "1.3.0",
 		"doctrine/doctrine-fixtures-bundle": "3.3.0",
@@ -79,6 +80,18 @@
 		},
 		"sort-packages": true
 	},
+	"extra": {
+		"allow-contrib": "true",
+		"bamarni-bin": {
+			"target-directory": "tools"
+		},
+		"projectTitle": "Symfony Flex Backend",
+		"symfony": {
+			"id": "01BFA135DXTPRA5CR250NTJJJP",
+			"require": "4.4.2",
+			"allow-contrib": true
+		}
+	},
 	"autoload": {
 		"psr-4": {
 			"App\\": "src/"
@@ -96,16 +109,14 @@
 			"Symfony\\Component\\DomCrawler\\": "tools/phpunit/vendor/symfony/dom-crawler",
 			"Symfony\\Bridge\\PhpUnit\\": "tools/phpunit/vendor/symfony/phpunit-bridge",
 			"TheSeer\\fDOM\\": "tools/phpunit/vendor/theseer/fdomdocument/src",
-			"Liuggio\\Fastest\\": ["tools/phpunit/vendor/liuggio/fastest/src", "tools/phpunit/vendor/liuggio/fastest/adapters"]
+			"Liuggio\\Fastest\\": [
+				"tools/phpunit/vendor/liuggio/fastest/src",
+				"tools/phpunit/vendor/liuggio/fastest/adapters"
+			]
 		}
 	},
+	"prefer-stable": true,
 	"scripts": {
-		"auto-scripts": {
-			"cache:clear": "symfony-cmd",
-			"cache:warmup": "symfony-cmd",
-			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
-			"security-checker security:check": "script"
-		},
 		"post-install-cmd": [
 			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",
 			"if test -d vendor/sensiolabs/security-checker; then ./vendor/bin/security-checker security:check; fi",
@@ -119,23 +130,15 @@
 			"if test -d vendor/bamarni/composer-bin-plugin; then composer bin all update; fi",
 			"@auto-scripts",
 			"@composer dump-autoload"
-		]
-	},
-	"conflict": {
-		"symfony/symfony": "*",
-		"symfony/twig-bundle": "<3.3",
-		"symfony/debug": "<3.3"
-	},
-	"extra": {
-		"allow-contrib": "true",
-		"projectTitle": "Symfony Flex Backend",
-		"bamarni-bin": {
-			"target-directory": "tools"
-		},
-		"symfony": {
-			"id": "01BFA135DXTPRA5CR250NTJJJP",
-			"require": "4.4.2",
-			"allow-contrib": true
+		],
+		"auto-scripts": {
+			"cache:clear": "symfony-cmd",
+			"cache:warmup": "symfony-cmd",
+			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
+			"security-checker security:check": "script"
 		}
+	},
+	"support": {
+		"issues": "https://github.com/tarlepp/symfony-flex-backend/issues"
 	}
 }
