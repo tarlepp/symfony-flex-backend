@@ -16,6 +16,7 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
 use Exception;
 use Generator;
+use JsonException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -44,6 +45,10 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @dataProvider dataProviderEnvironment
      *
      * @param string $environment
+     *
+     * @throws JsonException
+     *
+     * @testdox Test that `onKernelException` method calls logger with environment: '$environment'
      */
     public function testThatOnKernelExceptionMethodCallsLogger(string $environment): void
     {
@@ -68,17 +73,17 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->method('error')
             ->with((string)$exception);
 
-        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
-        $subscriber->setLogger($stubLogger);
-        $subscriber->onKernelException($stubEvent);
-
-        unset($subscriber, $stubLogger, $stubEvent, $exception, $stubTokenStorage);
+        (new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment))->onKernelException($stubEvent);
     }
 
     /**
      * @dataProvider dataProviderEnvironment
      *
      * @param string $environment
+     *
+     * @throws JsonException
+     *
+     * @testdox Test that `ExceptionEvent::setResponse` method is called with environment: '$environment'
      */
     public function testThatOnKernelExceptionMethodSetResponse(string $environment): void
     {
@@ -102,24 +107,26 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->expects(static::once())
             ->method('setResponse');
 
-        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
-        $subscriber->setLogger($stubLogger);
-        $subscriber->onKernelException($stubEvent);
-
-        unset($subscriber, $stubEvent, $exception, $stubLogger, $stubTokenStorage);
+        (new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment))->onKernelException($stubEvent);
     }
 
     /**
      * @dataProvider dataProviderTestResponseHasExpectedStatusCode
      *
-     * @param int       $expectedStatus
+     * @param int       $status
      * @param Exception $exception
      * @param string    $environment
+     * @param string    $message
+     *
+     * @throws JsonException
+     *
+     * @testdox Test that `Response` has status code `$status` and message `$message` with environment: '$environment'
      */
     public function testResponseHasExpectedStatusCode(
-        int $expectedStatus,
+        int $status,
         Exception $exception,
-        string $environment
+        string $environment,
+        string $message
     ): void {
         /**
          * @var MockObject|TokenStorageInterface $stubTokenStorage
@@ -140,13 +147,10 @@ class ExceptionSubscriberTest extends KernelTestCase
             $exception
         );
 
-        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
-        $subscriber->setLogger($stubLogger);
-        $subscriber->onKernelException($event);
+        (new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment))->onKernelException($event);
 
-        static::assertSame($expectedStatus, $event->getResponse()->getStatusCode());
-
-        unset($subscriber, $event, $stubRequest, $stubHttpKernel, $stubLogger, $stubTokenStorage);
+        static::assertSame($status, $event->getResponse()->getStatusCode());
+        static::assertSame($message, JSON::decode($event->getResponse()->getContent())->message);
     }
 
     /**
@@ -156,6 +160,8 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @param string $environment
      *
      * @throws Throwable
+     *
+     * @testdox Test that `Response` has expected keys in JSON response with environment: '$environment'
      */
     public function testThatResponseHasExpectedKeys(array $expectedKeys, string $environment): void
     {
@@ -178,17 +184,11 @@ class ExceptionSubscriberTest extends KernelTestCase
             new Exception('error')
         );
 
-        // Process event
-        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
-        $subscriber->setLogger($stubLogger);
-
-        $subscriber->onKernelException($event);
+        (new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment))->onKernelException($event);
 
         $result = JSON::decode($event->getResponse()->getContent(), true);
 
         static::assertSame($expectedKeys, array_keys($result));
-
-        unset($result, $subscriber, $event, $stubRequest, $stubHttpKernel, $stubLogger, $stubTokenStorage);
     }
 
     /**
@@ -200,6 +200,8 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @param string    $environment
      *
      * @throws Throwable
+     *
+     * @testdox Test that `getStatusCode` returns `$expectedStatusCode` with environment: '$environment'
      */
     public function testThatGetStatusCodeReturnsExpected(
         int $expectedStatusCode,
@@ -221,15 +223,12 @@ class ExceptionSubscriberTest extends KernelTestCase
                 ->willReturn(true);
         }
 
-        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
-        $subscriber->setLogger($stubLogger);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment);
 
         static::assertSame(
             $expectedStatusCode,
             PhpUnitUtil::callMethod($subscriber, 'getStatusCode', [$exception])
         );
-
-        unset($subscriber, $stubLogger, $stubTokenStorage);
     }
 
     /**
@@ -254,15 +253,12 @@ class ExceptionSubscriberTest extends KernelTestCase
         $stubLogger = $this->createMock(LoggerInterface::class);
 
         // Create subscriber
-        $subscriber = new ExceptionSubscriber($stubTokenStorage, $environment);
-        $subscriber->setLogger($stubLogger);
+        $subscriber = new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment);
 
         static::assertSame(
             $expectedMessage,
             PhpUnitUtil::callMethod($subscriber, 'getExceptionMessage', [$exception])
         );
-
-        unset($subscriber, $stubLogger, $stubTokenStorage);
     }
 
     /**
@@ -271,6 +267,8 @@ class ExceptionSubscriberTest extends KernelTestCase
     public function dataProviderEnvironment(): Generator
     {
         yield ['dev'];
+
+        yield ['test'];
 
         yield ['prod'];
     }
@@ -284,72 +282,98 @@ class ExceptionSubscriberTest extends KernelTestCase
             Response::HTTP_INTERNAL_SERVER_ERROR,
             new Exception(Exception::class),
             'dev',
+            Exception::class,
         ];
 
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
             new Exception(Exception::class),
             'prod',
+            Exception::class,
         ];
 
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
             new BadMethodCallException(BadMethodCallException::class),
             'dev',
+            BadMethodCallException::class,
         ];
 
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
             new BadMethodCallException(BadMethodCallException::class),
             'prod',
+            BadMethodCallException::class,
         ];
 
         yield [
             Response::HTTP_UNAUTHORIZED,
             new AuthenticationException(AuthenticationException::class),
             'dev',
+            AuthenticationException::class,
         ];
 
         yield [
             Response::HTTP_UNAUTHORIZED,
             new AuthenticationException(AuthenticationException::class),
             'prod',
+            AuthenticationException::class,
         ];
 
         yield [
             Response::HTTP_UNAUTHORIZED,
             new AccessDeniedException(AccessDeniedException::class),
             'dev',
+            AccessDeniedException::class,
         ];
 
         yield [
             Response::HTTP_UNAUTHORIZED,
             new AccessDeniedException(AccessDeniedException::class),
             'prod',
+            'Access denied.',
         ];
 
         yield [
             Response::HTTP_BAD_REQUEST,
             new HttpException(Response::HTTP_BAD_REQUEST, HttpException::class),
             'dev',
+            HttpException::class,
         ];
 
         yield [
             Response::HTTP_BAD_REQUEST,
             new HttpException(Response::HTTP_BAD_REQUEST, HttpException::class),
             'prod',
+            HttpException::class,
         ];
 
         yield [
             Response::HTTP_I_AM_A_TEAPOT,
             new HttpException(Response::HTTP_I_AM_A_TEAPOT, HttpException::class),
             'dev',
+            HttpException::class,
         ];
 
         yield [
             Response::HTTP_I_AM_A_TEAPOT,
             new HttpException(Response::HTTP_I_AM_A_TEAPOT, HttpException::class),
             'prod',
+            HttpException::class,
+        ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new DBALException('Error message', Response::HTTP_INTERNAL_SERVER_ERROR),
+            'dev',
+            'Error message',
+        ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new DBALException('Error message', Response::HTTP_INTERNAL_SERVER_ERROR),
+            'prod',
+            'Database error.',
         ];
     }
 
@@ -361,6 +385,11 @@ class ExceptionSubscriberTest extends KernelTestCase
         yield [
             ['message', 'code', 'status'],
             'prod',
+        ];
+
+        yield [
+            ['message', 'code', 'status'],
+            'test',
         ];
 
         yield [

@@ -8,11 +8,11 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
-use App\Helpers\LoggerAwareTrait;
 use App\Utils\JSON;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
 use JsonException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -34,21 +34,21 @@ use function get_class;
  */
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    // Traits
-    use LoggerAwareTrait;
-
     private TokenStorageInterface $tokenStorage;
+    private LoggerInterface $logger;
     private string $environment;
 
     /**
      * ExceptionSubscriber constructor.
      *
      * @param TokenStorageInterface $tokenStorage
+     * @param LoggerInterface       $logger
      * @param string                $environment
      */
-    public function __construct(TokenStorageInterface $tokenStorage, string $environment)
+    public function __construct(TokenStorageInterface $tokenStorage, LoggerInterface $logger, string $environment)
     {
         $this->tokenStorage = $tokenStorage;
+        $this->logger = $logger;
         $this->environment = $environment;
     }
 
