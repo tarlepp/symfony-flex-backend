@@ -35,6 +35,11 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
 {
     public function testThatValidateMethodThrowsUnexpectedTypeException(): void
     {
+        /**
+         * @var MockObject|LoggerInterface $logger
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
         $this->expectException(UnexpectedTypeException::class);
         $this->expectExceptionMessage(
             'Expected argument of type "App\Validator\Constraints\EntityReferenceExists", "SomeConstraint" given'
@@ -42,7 +47,7 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
 
         $constraint = $this->getMockForAbstractClass(Constraint::class, [], 'SomeConstraint');
 
-        (new EntityReferenceExistsValidator())->validate('', $constraint);
+        (new EntityReferenceExistsValidator($logger))->validate('', $constraint);
     }
 
     /**
@@ -57,13 +62,18 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $entityClass,
         string $expectedMessage
     ): void {
+        /**
+         * @var MockObject|LoggerInterface $logger
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage($expectedMessage);
 
         $constraint = new EntityReferenceExists();
         $constraint->entityClass = $entityClass;
 
-        (new EntityReferenceExistsValidator())->validate($value, $constraint);
+        (new EntityReferenceExistsValidator($logger))->validate($value, $constraint);
     }
 
     public function testThatContextAndLoggerMethodsAreNotCalledWithinHappyPath(): void
@@ -94,9 +104,8 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint->entityClass = 'TestClass';
 
         // Run validator
-        $validator = new EntityReferenceExistsValidator();
+        $validator = new EntityReferenceExistsValidator($logger);
         $validator->initialize($context);
-        $validator->setLogger($logger);
         $validator->validate($value, $constraint);
     }
 
@@ -150,9 +159,8 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint->entityClass = EntityReference::class;
 
         // Run validator
-        $validator = new EntityReferenceExistsValidator();
+        $validator = new EntityReferenceExistsValidator($logger);
         $validator->initialize($context);
-        $validator->setLogger($logger);
         $validator->validate($value, $constraint);
     }
 
