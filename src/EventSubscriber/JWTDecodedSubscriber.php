@@ -8,9 +8,9 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
-use App\Helpers\LoggerAwareTrait;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,19 +26,19 @@ use function implode;
  */
 class JWTDecodedSubscriber implements EventSubscriberInterface
 {
-    // Traits
-    use LoggerAwareTrait;
-
     private RequestStack $requestStack;
+    private LoggerInterface $logger;
 
     /**
      * JWTDecodedSubscriber constructor.
      *
-     * @param RequestStack $requestStack
+     * @param RequestStack    $requestStack
+     * @param LoggerInterface $logger
      */
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, LoggerInterface $logger)
     {
         $this->requestStack = $requestStack;
+        $this->logger = $logger;
     }
 
     /**
