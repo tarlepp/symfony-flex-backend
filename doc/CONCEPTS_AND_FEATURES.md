@@ -376,9 +376,8 @@ This application has builtin common helper traits that you can easily to use
 everywhere in your application.
 
 _**Note** that you should use these only to help you to debug your application 
-quickly - these are not mentioned to be use as in your production code!!!_
-
-_eg. if you need `LoggerInterface` in your service, just use DI to inject that
+quickly - these helpers are not mentioned to be use in your production code!!!
+eg. if you need `LoggerInterface` in your service, just use DI to inject that
 to your service._ 
 
 ### LoggerAwareTrait
