@@ -28,8 +28,10 @@ class JWTCreatedSubscriberTest extends KernelTestCase
 {
     public function testThatPayloadContainsExpectedDataWhenRequestIsPresent(): void
     {
-        // Create empty JWT payload
-        $payload = [];
+        /**
+         * @var MockObject|LoggerInterface $logger
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create new user for JWT
         $user = (new User())
@@ -37,34 +39,28 @@ class JWTCreatedSubscriberTest extends KernelTestCase
             ->setLastName('last name')
             ->setEmail('firstname.surname@test.com');
 
-        $securityUser = new SecurityUser($user);
-
-        // Create pure Request
-        $request = new Request();
-
         // Create RequestStack and push pure Request to it
         $requestStack = new RequestStack();
-        $requestStack->push($request);
+        $requestStack->push(new Request());
 
         // Create JWTCreatedEvent
-        $event = new JWTCreatedEvent($payload, $securityUser);
+        $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        $subscriber = new JWTCreatedSubscriber($requestStack);
-        $subscriber->onJWTCreated($event);
+        (new JWTCreatedSubscriber($requestStack, $logger))->onJWTCreated($event);
 
         $keys = ['exp', 'checksum'];
 
         foreach ($keys as $key) {
             static::assertArrayHasKey($key, $event->getData());
         }
-
-        unset($subscriber, $event, $roles, $requestStack, $request, $user);
     }
 
     public function testThatPayloadContainsExpectedDataWhenRequestIsNotPresent(): void
     {
-        // Create empty JWT payload
-        $payload = [];
+        /**
+         * @var MockObject|LoggerInterface $logger
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create new user for JWT
         $user = (new User())
@@ -72,22 +68,10 @@ class JWTCreatedSubscriberTest extends KernelTestCase
             ->setLastName('last name')
             ->setEmail('firstname.surname@test.com');
 
-        $securityUser = new SecurityUser($user);
-
-        // Create RequestStack and push pure Request to it
-        $requestStack = new RequestStack();
-
-        /**
-         * @var MockObject|LoggerInterface $logger
-         */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-
         // Create JWTCreatedEvent
-        $event = new JWTCreatedEvent($payload, $securityUser);
+        $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        $subscriber = new JWTCreatedSubscriber($requestStack);
-        $subscriber->setLogger($logger);
-        $subscriber->onJWTCreated($event);
+        (new JWTCreatedSubscriber(new RequestStack(), $logger))->onJWTCreated($event);
 
         $keys = ['exp'];
 
@@ -96,26 +80,10 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         }
 
         static::assertArrayNotHasKey('checksum', $event->getData());
-
-        unset($subscriber, $event, $logger, $roles, $requestStack, $user);
     }
 
     public function testThatLoggerAlertIsCalledIfRequestDoesNotExist(): void
     {
-        // Create empty JWT payload
-        $payload = [];
-
-        // Create new user for JWT
-        $user = (new User())
-            ->setFirstName('first name')
-            ->setLastName('last name')
-            ->setEmail('firstname.surname@test.com');
-
-        $securityUser = new SecurityUser($user);
-
-        // Create RequestStack and push pure Request to it
-        $requestStack = new RequestStack();
-
         /**
          * @var MockObject|LoggerInterface $logger
          */
@@ -126,13 +94,15 @@ class JWTCreatedSubscriberTest extends KernelTestCase
             ->method('alert')
             ->with('Request not available');
 
+        // Create new user for JWT
+        $user = (new User())
+            ->setFirstName('first name')
+            ->setLastName('last name')
+            ->setEmail('firstname.surname@test.com');
+
         // Create JWTCreatedEvent
-        $event = new JWTCreatedEvent($payload, $securityUser);
+        $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        $subscriber = new JWTCreatedSubscriber($requestStack);
-        $subscriber->setLogger($logger);
-        $subscriber->onJWTCreated($event);
-
-        unset($subscriber, $event, $logger, $roles, $requestStack, $user);
+        (new JWTCreatedSubscriber(new RequestStack(), $logger))->onJWTCreated($event);
     }
 }
