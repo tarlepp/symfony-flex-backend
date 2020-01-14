@@ -11,6 +11,7 @@ namespace App\Utils;
 use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Resource\LogRequestResource;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,8 +27,9 @@ interface RequestLoggerInterface
      * ResponseLogger constructor.
      *
      * @param LogRequestResource $resource
+     * @param LoggerInterface    $logger
      */
-    public function __construct(LogRequestResource $resource);
+    public function __construct(LogRequestResource $resource, LoggerInterface $logger);
 
     /**
      * Setter for response object.

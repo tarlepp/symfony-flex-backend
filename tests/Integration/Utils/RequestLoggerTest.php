@@ -33,18 +33,18 @@ class RequestLoggerTest extends KernelTestCase
     {
         /**
          * @var MockObject|LogRequestResource $resource
+         * @var MockObject|LoggerInterface    $logger
          */
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $resource
             ->expects(static::never())
             ->method('save');
 
-        (new RequestLogger($resource))
+        (new RequestLogger($resource, $logger))
             ->setResponse(new Response())
             ->handle();
-
-        unset($resource);
     }
 
     /**
@@ -54,18 +54,18 @@ class RequestLoggerTest extends KernelTestCase
     {
         /**
          * @var MockObject|LogRequestResource $resource
+         * @var MockObject|LoggerInterface    $logger
          */
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $resource
             ->expects(static::never())
             ->method('save');
 
-        (new RequestLogger($resource))
+        (new RequestLogger($resource, $logger))
             ->setRequest(new Request())
             ->handle();
-
-        unset($resource);
     }
 
     /**
@@ -75,8 +75,10 @@ class RequestLoggerTest extends KernelTestCase
     {
         /**
          * @var MockObject|LogRequestResource $resource
+         * @var MockObject|LoggerInterface    $logger
          */
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $request = new Request();
         $response = new Response();
@@ -85,7 +87,7 @@ class RequestLoggerTest extends KernelTestCase
             ->expects(static::once())
             ->method('save');
 
-        (new RequestLogger($resource))
+        (new RequestLogger($resource, $logger))
             ->setRequest($request)
             ->setResponse($response)
             ->setMasterRequest(true)
@@ -122,15 +124,12 @@ class RequestLoggerTest extends KernelTestCase
             ->method('error')
             ->with('test exception');
 
-        (new RequestLogger($resource))
-            ->setLogger($logger)
+        (new RequestLogger($resource, $logger))
             ->setRequest($request)
             ->setResponse($response)
             ->setMasterRequest(true)
             ->setUser()
             ->setApiKey()
             ->handle();
-
-        unset($logger, $resource, $exception, $response, $request, $logger);
     }
 }
