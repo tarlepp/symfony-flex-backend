@@ -18,6 +18,7 @@ use ArrayObject;
 use Generator;
 use InvalidArgumentException;
 use IteratorAggregate;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -30,6 +31,8 @@ class ControllerCollectionTest extends KernelTestCase
 {
     public function testThatGetMethodThrowsAnException(): void
     {
+        $stubLogger = $this->createMock(LoggerInterface::class);
+
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('REST controller \'FooBar\' does not exists');
 
@@ -55,7 +58,7 @@ class ControllerCollectionTest extends KernelTestCase
             }
         };
 
-        $collection = new ControllerCollection($iteratorAggregate);
+        $collection = new ControllerCollection($iteratorAggregate, $stubLogger);
         $collection->get('FooBar');
 
         unset($collection);

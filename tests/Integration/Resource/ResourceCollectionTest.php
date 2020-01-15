@@ -47,35 +47,13 @@ class ResourceCollectionTest extends KernelTestCase
 {
     public function testThatGetMethodThrowsAnException(): void
     {
+        /** @var MockObject|LoggerInterface $logger */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource \'FooBar\' does not exists');
 
-        $iteratorAggregate = new class([]) implements IteratorAggregate {
-            private ArrayObject $iterator;
-
-            /**
-             * Constructor  of the class.
-             *
-             * @param $input
-             */
-            public function __construct($input)
-            {
-                $this->iterator = new ArrayObject($input);
-            }
-
-            /**
-             * @inheritDoc
-             */
-            public function getIterator(): ArrayObject
-            {
-                return $this->iterator;
-            }
-        };
-
-        $collection = new ResourceCollection($iteratorAggregate);
-        $collection->get('FooBar');
-
-        unset($collection);
+        (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))->get('FooBar');
     }
 
     public function testThatLoggerIsCalledIfGetMethodGetIteratorThrowsAnException(): void
@@ -90,52 +68,18 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects(static::once())
             ->method('error');
 
-        $iteratorAggregate = new class() implements IteratorAggregate {
-            /**
-             * @inheritDoc
-             */
-            public function getIterator(): ArrayObject
-            {
-                throw new LogicException('Exception with getIterator');
-            }
-        };
-
-        $collection = new ResourceCollection($iteratorAggregate);
-        $collection->setLogger($logger);
-        $collection->get('FooBar');
+        (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))->get('FooBar');
     }
 
     public function testThatGetEntityResourceMethodThrowsAnException(): void
     {
+        /** @var MockObject|LoggerInterface $logger */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource class does not exists for entity \'FooBar\'');
 
-        $iteratorAggregate = new class([]) implements IteratorAggregate {
-            private ArrayObject $iterator;
-
-            /**
-             * Constructor  of the class.
-             *
-             * @param $input
-             */
-            public function __construct($input)
-            {
-                $this->iterator = new ArrayObject($input);
-            }
-
-            /**
-             * @inheritDoc
-             */
-            public function getIterator(): ArrayObject
-            {
-                return $this->iterator;
-            }
-        };
-
-        $collection = new ResourceCollection($iteratorAggregate);
-        $collection->getEntityResource('FooBar');
-
-        unset($collection);
+        (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))->getEntityResource('FooBar');
     }
 
     public function testThatLoggerIsCalledIfGetEntityResourceMethodGetIteratorThrowsAnException(): void
@@ -150,19 +94,8 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects(static::once())
             ->method('error');
 
-        $iteratorAggregate = new class() implements IteratorAggregate {
-            /**
-             * @inheritDoc
-             */
-            public function getIterator(): ArrayObject
-            {
-                throw new LogicException('Exception with getIterator');
-            }
-        };
-
-        $collection = new ResourceCollection($iteratorAggregate);
-        $collection->setLogger($logger);
-        $collection->getEntityResource('FooBar');
+        (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
+            ->getEntityResource('FooBar');
     }
 
     public function testThatGetAllReturnsCorrectCountOfResources(): void
@@ -183,17 +116,6 @@ class ResourceCollectionTest extends KernelTestCase
     public function testThatGetReturnsExpectedResource(string $resourceClass): void
     {
         static::assertInstanceOf($resourceClass, $this->getCollection()->get($resourceClass));
-    }
-
-    /**
-     * @dataProvider dataProviderTestThatGetEntityResourceReturnsExpectedResource
-     *
-     * @param string $entityClass
-     * @param string $resourceClass
-     */
-    public function testThatGetEntityResourceReturnsExpectedResource(string $entityClass, string $resourceClass): void
-    {
-        static::assertInstanceOf($resourceClass, $this->getCollection()->getEntityResource($entityClass));
     }
 
     /**
@@ -296,5 +218,49 @@ class ResourceCollectionTest extends KernelTestCase
         static::bootKernel();
 
         return static::$container->get(ResourceCollection::class);
+    }
+
+    /**
+     * @return IteratorAggregate
+     */
+    private function getEmptyIteratorAggregate(): IteratorAggregate
+    {
+        return new class([]) implements IteratorAggregate {
+            private ArrayObject $iterator;
+
+            /**
+             * Constructor  of the class.
+             *
+             * @param $input
+             */
+            public function __construct($input)
+            {
+                $this->iterator = new ArrayObject($input);
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            public function getIterator(): ArrayObject
+            {
+                return $this->iterator;
+            }
+        };
+    }
+
+    /**
+     * @return IteratorAggregate
+     */
+    private function getIteratorAggregateThatThrowsAnException(): IteratorAggregate
+    {
+        return new class() implements IteratorAggregate {
+            /**
+             * {@inheritDoc}
+             */
+            public function getIterator(): ArrayObject
+            {
+                throw new LogicException('Exception with getIterator');
+            }
+        };
     }
 }

@@ -8,12 +8,12 @@ declare(strict_types = 1);
 
 namespace App\Collection;
 
-use App\Helpers\LoggerAwareTrait;
 use CallbackFilterIterator;
 use Closure;
 use InvalidArgumentException;
 use IteratorAggregate;
 use IteratorIterator;
+use Psr\Log\LoggerInterface;
 use Throwable;
 use function iterator_count;
 
@@ -25,10 +25,8 @@ use function iterator_count;
  */
 trait CollectionTrait
 {
-    // Traits
-    use LoggerAwareTrait;
-
     private IteratorAggregate $items;
+    private LoggerInterface $logger;
 
     /**
      * @param string $className

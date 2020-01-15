@@ -13,6 +13,7 @@ use Closure;
 use Countable;
 use InvalidArgumentException;
 use IteratorAggregate;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ControllerCollection
@@ -34,10 +35,12 @@ class ControllerCollection implements Countable
      * Collection constructor.
      *
      * @param IteratorAggregate|IteratorAggregate<int, ControllerInterface> $controllers
+     * @param LoggerInterface                                               $logger
      */
-    public function __construct(IteratorAggregate $controllers)
+    public function __construct(IteratorAggregate $controllers, LoggerInterface $logger)
     {
         $this->items = $controllers;
+        $this->logger = $logger;
     }
 
     /**
