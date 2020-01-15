@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Utils/RequestLoggerInterface.php
+ * /src/Utils/Interfaces/RequestLoggerInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Utils;
+namespace App\Utils\Interfaces;
 
 use App\Entity\ApiKey;
 use App\Entity\User;

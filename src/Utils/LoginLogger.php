@@ -11,6 +11,7 @@ namespace App\Utils;
 use App\Entity\LogLogin;
 use App\Entity\User;
 use App\Resource\LogLoginResource;
+use App\Utils\Interfaces\LoginLoggerInterface;
 use BadMethodCallException;
 use DeviceDetector\DeviceDetector;
 use Symfony\Component\HttpFoundation\Request;

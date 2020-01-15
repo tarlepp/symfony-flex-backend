@@ -12,6 +12,7 @@ use App\Entity\ApiKey;
 use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Resource\LogRequestResource;
+use App\Utils\Interfaces\RequestLoggerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
