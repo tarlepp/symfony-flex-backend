@@ -2842,16 +2842,16 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "6.0.7",
+            "version": "6.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "2731353bf098f8a7b3552efa14c8d0614076859e"
+                "reference": "dd399a5ba9b112cb2d0ac1541875ee64d0cbf4a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/2731353bf098f8a7b3552efa14c8d0614076859e",
-                "reference": "2731353bf098f8a7b3552efa14c8d0614076859e",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/dd399a5ba9b112cb2d0ac1541875ee64d0cbf4a1",
+                "reference": "dd399a5ba9b112cb2d0ac1541875ee64d0cbf4a1",
                 "shasum": ""
             },
             "require": {
@@ -2879,7 +2879,7 @@
                 "MIT"
             ],
             "description": "Slevomat Coding Standard for PHP_CodeSniffer complements Consistence Coding Standard by providing sniffs with additional checks.",
-            "time": "2020-01-12T20:32:20+00:00"
+            "time": "2020-01-14T08:39:00+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -4813,12 +4813,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Symplify/SmartFileSystem.git",
-                "reference": "e443fa0f8d8392adc1b1afb45db7f9446f639ef6"
+                "reference": "7b681e056c0557f421373c81aa53a05fb63a95e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Symplify/SmartFileSystem/zipball/e443fa0f8d8392adc1b1afb45db7f9446f639ef6",
-                "reference": "e443fa0f8d8392adc1b1afb45db7f9446f639ef6",
+                "url": "https://api.github.com/repos/Symplify/SmartFileSystem/zipball/7b681e056c0557f421373c81aa53a05fb63a95e0",
+                "reference": "7b681e056c0557f421373c81aa53a05fb63a95e0",
                 "shasum": ""
             },
             "require": {
