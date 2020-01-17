@@ -10,7 +10,7 @@ namespace App\Rest\Interfaces;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
-use App\Repository\BaseRepositoryInterface;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

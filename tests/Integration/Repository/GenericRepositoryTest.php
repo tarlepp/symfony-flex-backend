@@ -10,7 +10,7 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\ApiKey as UserEntity;
-use App\Repository\BaseRepositoryInterface;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\ApiKeyRepository;
 use App\Resource\ApiKeyResource;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;

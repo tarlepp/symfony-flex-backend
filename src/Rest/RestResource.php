@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest;
 
 use App\DTO\RestDtoInterface;
-use App\Repository\BaseRepositoryInterface;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

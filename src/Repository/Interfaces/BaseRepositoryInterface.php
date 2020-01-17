@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Repository/BaseRepositoryInterface.php
+ * /src/Repository/Interfaces/BaseRepositoryInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Repository;
+namespace App\Repository\Interfaces;
 
 use App\Entity\Interfaces\EntityInterface;
 use Doctrine\ORM\EntityManager;

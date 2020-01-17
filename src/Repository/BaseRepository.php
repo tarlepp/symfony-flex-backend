@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\Interfaces\EntityInterface;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\Traits\RepositoryMethodsTrait;
 use App\Repository\Traits\RepositoryWrappersTrait;
 use Doctrine\ORM\EntityManager;

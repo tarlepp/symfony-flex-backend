@@ -10,7 +10,7 @@ namespace App\Rest\Traits;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
-use App\Repository\BaseRepositoryInterface;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Utils\JSON;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
