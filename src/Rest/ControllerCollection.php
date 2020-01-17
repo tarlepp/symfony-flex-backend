@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest;
 
 use App\Collection\CollectionTrait;
+use App\Rest\Interfaces\ControllerInterface;
 use Closure;
 use Countable;
 use InvalidArgumentException;

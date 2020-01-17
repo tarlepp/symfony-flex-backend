@@ -14,7 +14,7 @@ use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
-use App\Rest\RepositoryInterface;
+use App\Rest\Interfaces\RepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;

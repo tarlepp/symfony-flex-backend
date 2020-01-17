@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
-use App\Rest\ResponseHandlerInterface;
-use App\Rest\RestResourceInterface;
+use App\Rest\Interfaces\ResponseHandlerInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\CountMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\CountMethodTestClass;
 use Doctrine\ORM\NonUniqueResultException;

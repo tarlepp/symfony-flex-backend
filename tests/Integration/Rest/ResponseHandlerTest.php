@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Rest;
 
 use App\Rest\ResponseHandler;
-use App\Rest\RestResourceInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use App\Utils\Tests\ContainerTestCase;
 use Exception;
 use Generator;

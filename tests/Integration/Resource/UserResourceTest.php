@@ -11,8 +11,8 @@ namespace App\Tests\Integration\Resource;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
-use App\Rest\RepositoryInterface;
-use App\Rest\RestResourceInterface;
+use App\Rest\Interfaces\RepositoryInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use App\Security\RolesService;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

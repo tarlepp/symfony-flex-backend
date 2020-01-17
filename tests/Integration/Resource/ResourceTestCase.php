@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Resource;
 
-use App\Rest\RestResourceInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function sprintf;
 

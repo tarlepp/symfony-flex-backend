@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions;
 
-use App\Rest\RestResourceInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;

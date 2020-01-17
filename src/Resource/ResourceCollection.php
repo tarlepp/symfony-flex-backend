@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Resource;
 
 use App\Collection\CollectionTrait;
-use App\Rest\RestResourceInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use CallbackFilterIterator;
 use Closure;
 use Countable;

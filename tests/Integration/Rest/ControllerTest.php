@@ -9,14 +9,13 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Rest;
 
 use App\DTO\RestDtoInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\ResponseHandler;
-use App\Rest\RestResourceInterface;
 use App\Tests\Integration\Rest\src\AbstractController as Controller;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionProperty;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Serializer\Serializer;
 use Throwable;
 use UnexpectedValueException;

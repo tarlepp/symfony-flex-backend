@@ -1,13 +1,15 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/ControllerInterface.php
+ * /src/Rest/Interfaces/ControllerInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Rest;
+namespace App\Rest\Interfaces;
 
+use App\Rest\Controller;
+use App\Rest\ResponseHandler;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;

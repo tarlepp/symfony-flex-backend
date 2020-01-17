@@ -9,8 +9,8 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
 use App\DTO\RestDtoInterface;
-use App\Rest\ResponseHandlerInterface;
-use App\Rest\RestResourceInterface;
+use App\Rest\Interfaces\ResponseHandlerInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\PatchMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\PatchMethodTestClass;
 use Exception;

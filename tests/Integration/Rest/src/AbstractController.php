@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Rest\src;
 
 use App\Rest\Controller;
-use App\Rest\RestResourceInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 
 abstract class AbstractController extends Controller
 {

@@ -10,8 +10,8 @@ namespace App\Tests\Unit;
 
 use App\AutoMapper\RestRequestMapper;
 use App\Entity\Interfaces\EntityInterface;
-use App\Rest\ControllerInterface;
-use App\Rest\RepositoryInterface;
+use App\Rest\Interfaces\ControllerInterface;
+use App\Rest\Interfaces\RepositoryInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use Closure;
 use Doctrine\DBAL\Types\Type;

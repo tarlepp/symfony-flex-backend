@@ -8,6 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Rest;
 
+use App\Rest\Interfaces\ResponseHandlerInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;

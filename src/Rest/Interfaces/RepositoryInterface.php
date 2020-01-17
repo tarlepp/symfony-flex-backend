@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/RepositoryInterface.php
+ * /src/Rest/Interfaces/RepositoryInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Rest;
+namespace App\Rest\Interfaces;
 
 use App\Entity\Interfaces\EntityInterface;
 use Doctrine\Common\Proxy\Proxy;

@@ -26,9 +26,9 @@ services:
             $projectDir: '%kernel.project_dir%'
             $environment: '%kernel.environment%'
     _instanceof:
-        App\Rest\ControllerInterface:
+        App\Rest\Interfaces\ControllerInterface:
             tags: [ 'app.rest.controller' ]
-        App\Rest\RestResourceInterface:
+        App\Rest\Interfaces\RestResourceInterface:
             tags: [ 'app.rest.resource' ]
 
     # makes classes in src/ available to be used as services

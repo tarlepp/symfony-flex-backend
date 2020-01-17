@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Rest;
 
+use App\Rest\Interfaces\SearchTermInterface;
 use Closure;
 use function array_filter;
 use function array_map;

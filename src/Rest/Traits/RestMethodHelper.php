@@ -9,9 +9,9 @@ declare(strict_types = 1);
 namespace App\Rest\Traits;
 
 use App\DTO\RestDtoInterface;
-use App\Rest\ControllerInterface;
-use App\Rest\ResponseHandlerInterface;
-use App\Rest\RestResourceInterface;
+use App\Rest\Interfaces\ControllerInterface;
+use App\Rest\Interfaces\ResponseHandlerInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnitOfWork;

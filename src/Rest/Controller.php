@@ -8,6 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Rest;
 
+use App\Rest\Interfaces\ControllerInterface;
+use App\Rest\Interfaces\ResponseHandlerInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\Traits\Actions\RestActionBase;
 use App\Rest\Traits\RestMethodHelper;
 use UnexpectedValueException;

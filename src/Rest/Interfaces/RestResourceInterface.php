@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/RestResourceInterfaces.php
+ * /src/Rest/Interfaces/RestResourceInterfaces.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Rest;
+namespace App\Rest\Interfaces;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
