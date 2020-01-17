@@ -15,6 +15,7 @@ use Countable;
 use InvalidArgumentException;
 use IteratorAggregate;
 use Psr\Log\LoggerInterface;
+use function sprintf;
 
 /**
  * Class ControllerCollection
@@ -66,8 +67,6 @@ class ControllerCollection implements Countable
      */
     public function filter(string $className): Closure
     {
-        return static function (ControllerInterface $restController) use ($className): bool {
-            return $restController instanceof $className;
-        };
+        return static fn (ControllerInterface $restController): bool => $restController instanceof $className;
     }
 }
