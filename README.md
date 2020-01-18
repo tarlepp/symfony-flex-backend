@@ -156,6 +156,7 @@ build _your_ own application - right?
 * [PhpStorm configuration](doc/PHPSTORM.md)
 * [Using Xdebug](doc/XDEBUG.md)
 * [Custom configuration](doc/CUSTOM_CONFIGURATION.md)
+* [Usage checklist](doc/USAGE_CHECKLIST.md)
 
 ## External links / resources
 
