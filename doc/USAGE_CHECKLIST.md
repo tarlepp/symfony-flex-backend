@@ -19,7 +19,7 @@ started to use this template.
 * [ ] Check that [README.md](../README.md) contains only things related to your
       application. 
 * [ ] Update [composer.json](../composer.json) to match with your application.
-      Below you see the points that you should check/update;
+      Below you see the parts that you should check/update;
     * [ ] Common properties; `name`, `description`, `keywords`, `homapage`, 
           `version`, `license`, `authors`, `support.issues` and
           `extra.projectTitle`
