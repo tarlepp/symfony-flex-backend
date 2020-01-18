@@ -11,7 +11,7 @@ use this template as in base of your own application.
 
 ## Checklist
 
-Below you have _basic_ checklist that _you need to go through_ after you have
+Below you have _basic_ checklist that **_you need to go through_** after you have
 started to use this template.
 
 * [ ] Check that [LICENSE](../LICENSE) matches to your needs and change it if
