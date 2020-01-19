@@ -35,8 +35,6 @@ class DefaultControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -51,8 +49,6 @@ class DefaultControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -71,8 +67,6 @@ class DefaultControllerTest extends WebTestCase
         $client->request('GET', '/healthz');
 
         static::assertSame($expectedLogCount, $resource->count());
-
-        unset($client, $resource);
     }
 
     /**
@@ -87,8 +81,6 @@ class DefaultControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -107,8 +99,6 @@ class DefaultControllerTest extends WebTestCase
         $client->request('GET', '/version');
 
         static::assertSame($expectedLogCount, $resource->count());
-
-        unset($client, $resource);
     }
 
     /**
@@ -126,7 +116,5 @@ class DefaultControllerTest extends WebTestCase
 
         static::assertNotNull($version);
         static::assertSame(JSON::decode(file_get_contents(__DIR__ . '/../../../composer.json'))->version, $version);
-
-        unset($response, $client);
     }
 }

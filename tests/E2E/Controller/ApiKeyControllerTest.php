@@ -21,7 +21,7 @@ use Throwable;
  */
 class ApiKeyControllerTest extends WebTestCase
 {
-    private $baseUrl = '/api_key';
+    private string $baseUrl = '/api_key';
 
     /**
      * @throws Throwable
@@ -36,8 +36,6 @@ class ApiKeyControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -48,6 +46,8 @@ class ApiKeyControllerTest extends WebTestCase
      * @param int    $expectedStatus
      *
      * @throws Throwable
+     *
+     * @testdox Test that find action returns $expectedStatus with $username + $password
      */
     public function testThatFindActionWorksAsExpected(string $username, string $password, int $expectedStatus): void
     {
@@ -59,8 +59,6 @@ class ApiKeyControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**

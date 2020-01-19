@@ -24,7 +24,7 @@ use function array_slice;
  */
 class RoleControllerTest extends WebTestCase
 {
-    private $baseUrl = '/role';
+    private string $baseUrl = '/role';
 
     /**
      * @throws Throwable
@@ -39,8 +39,6 @@ class RoleControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -50,6 +48,8 @@ class RoleControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `findOne` action returns HTTP 200 with $username + $password
      */
     public function testThatFindOneActionWorksAsExpected(string $username, string $password): void
     {
@@ -62,8 +62,6 @@ class RoleControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -73,6 +71,8 @@ class RoleControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that inherited roles are expected with $username + $password
      */
     public function testThatGetInheritedRolesActionWorksAsExpected(string $username, string $password): void
     {
@@ -95,8 +95,6 @@ class RoleControllerTest extends WebTestCase
 
             unset($response);
         }
-
-        unset($client);
     }
 
     /**

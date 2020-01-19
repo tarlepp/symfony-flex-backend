@@ -31,6 +31,8 @@ class AuthControllerTest extends WebTestCase
      * @param string $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `getToken` action returns 405 with $method method
      */
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
@@ -42,8 +44,6 @@ class AuthControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(405, $response->getStatusCode(), $response->getContent());
-
-        unset($response, $client);
     }
 
     /**
@@ -52,7 +52,9 @@ class AuthControllerTest extends WebTestCase
      * @param string $username
      * @param string $password
      *
-     * @throws Throwable'
+     * @throws Throwable
+     *
+     * @testdox Test that `getToken` action returns proper JWT with $username + $password
      */
     public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $username, string $password): void
     {
@@ -96,8 +98,6 @@ class AuthControllerTest extends WebTestCase
             static::assertObjectHasAttribute($attribute, $responseContent, $messageNotPresent);
             static::assertNotEmpty($responseContent->{$attribute}, $messageEmpty);
         }
-
-        unset($responseContent, $response, $client);
     }
 
     /**
@@ -137,8 +137,6 @@ class AuthControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($response, $client);
     }
 
     /**

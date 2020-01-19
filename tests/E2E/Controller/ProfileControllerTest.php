@@ -12,6 +12,7 @@ use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
+use JsonException;
 use stdClass;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -26,7 +27,7 @@ use function str_pad;
  */
 class ProfileControllerTest extends WebTestCase
 {
-    private $baseUrl = '/profile';
+    private string $baseUrl = '/profile';
 
     /**
      * @throws Throwable
@@ -55,8 +56,6 @@ class ProfileControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($responseContent, $response, $client);
     }
 
     /**
@@ -66,6 +65,8 @@ class ProfileControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `profile` action returns HTTP 200 with $username + $password
      */
     public function testThatProfileActionReturnExpectedWithValidToken(string $username, string $password): void
     {
@@ -77,10 +78,11 @@ class ProfileControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-
-        unset($response, $client);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function testThatProfileActionReturns401WithInvalidApiKey(): void
     {
         $client = $this->getApiKeyClient();
@@ -105,14 +107,16 @@ class ProfileControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($response, $client);
     }
 
     /**
      * @dataProvider dataProviderTestThatProfileActionReturnsExpected
      *
      * @param string $token
+     *
+     * @throws JsonException
+     *
+     * @testdox Test that `profile` action returns expected with invalid $token token.
      */
     public function testThatProfileActionReturnsExpected(string $token): void
     {
@@ -138,8 +142,6 @@ class ProfileControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($responseContent, $response, $client);
     }
 
     /**
@@ -169,10 +171,11 @@ class ProfileControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($responseContent, $response, $client);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function testThatRolesActionReturns401WithInvalidApiKey(): void
     {
         $client = $this->getApiKeyClient();
@@ -197,8 +200,6 @@ class ProfileControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($responseContent, $response, $client);
     }
 
     /**
@@ -209,6 +210,8 @@ class ProfileControllerTest extends WebTestCase
      * @param array  $expected
      *
      * @throws Throwable
+     *
+     * @testdox Test that `roles` action returns expected roles with $username + $password
      */
     public function testThatRolesActionReturnsExpected(string $username, string $password, array $expected): void
     {
@@ -221,14 +224,16 @@ class ProfileControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
         static::assertSame($expected, JSON::decode($response->getContent(), true), $response->getContent());
-
-        unset($response, $client);
     }
 
     /**
      * @dataProvider dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey
      *
      * @param string $token
+     *
+     * @throws JsonException
+     *
+     * @testdox Test that `roles` action returns expected with invalid $token token.
      */
     public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token): void
     {
@@ -254,8 +259,6 @@ class ProfileControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($responseContent, $response, $client);
     }
 
     /**
@@ -285,10 +288,11 @@ class ProfileControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($responseContent, $response, $client);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function testThatGroupsActionReturns401WithInvalidApiKey(): void
     {
         $client = $this->getApiKeyClient();
@@ -313,8 +317,6 @@ class ProfileControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($responseContent, $response, $client);
     }
 
     /**
@@ -325,6 +327,8 @@ class ProfileControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     *  @testdox Test that `groups` action returns expected groups with $username + $password
      */
     public function testThatGroupsActionReturnExpected(string $username, string $password, array $expected): void
     {
@@ -348,14 +352,16 @@ class ProfileControllerTest extends WebTestCase
 
             static::assertSame($expected, array_map($iterator, $responseContent));
         }
-
-        unset($responseContent, $response, $client);
     }
 
     /**
      * @dataProvider dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey
      *
      * @param string $token
+     *
+     * @throws JsonException
+     *
+     * @testdox Test that `groups` action returns expected with invalid $token token.
      */
     public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token): void
     {
@@ -381,8 +387,6 @@ class ProfileControllerTest extends WebTestCase
             $responseContent->message,
             'Response message was not expected' . $info
         );
-
-        unset($responseContent, $response, $client);
     }
 
     /**
