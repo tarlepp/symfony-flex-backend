@@ -25,7 +25,7 @@ use function sprintf;
  */
 class UserGroupControllerTest extends WebTestCase
 {
-    private $baseUrl = '/user_group';
+    private string $baseUrl = '/user_group';
 
     /**
      * @throws Throwable
@@ -40,8 +40,6 @@ class UserGroupControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -51,6 +49,8 @@ class UserGroupControllerTest extends WebTestCase
      * @param string $userGroupId
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /user_group/$userGroupId/users` returns expected count $userCount of users
      */
     public function testThatGetUserGroupUsersActionReturnsExpected(int $userCount, string $userGroupId): void
     {
@@ -63,8 +63,6 @@ class UserGroupControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
         static::assertCount($userCount, JSON::decode($response->getContent()));
-
-        unset($response, $client);
     }
 
     /**
@@ -74,6 +72,8 @@ class UserGroupControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that invalid user $username + $password cannot attach user to existing user group.
      */
     public function testThatAttachUserActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -106,8 +106,6 @@ class UserGroupControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
     }
 
     /**
@@ -116,6 +114,8 @@ class UserGroupControllerTest extends WebTestCase
      * @param int $expectedStatus
      *
      * @throws Throwable
+     *
+     * @testdox Test that `POST /user_group/_ug_id_/user/_u_id_` returns HTTP status $expectedStatus
      */
     public function testThatAttachUserActionWorksAsExpected(int $expectedStatus): void
     {
@@ -144,8 +144,6 @@ class UserGroupControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
         static::assertCount(2, JSON::decode($response->getContent()));
-
-        unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
     }
 
     /**
@@ -179,8 +177,6 @@ class UserGroupControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
         static::assertCount(1, JSON::decode($response->getContent()));
-
-        unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
     }
 
     /**
@@ -192,6 +188,8 @@ class UserGroupControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `DELETE /user_group/_ug_id_/user/_u_id_` with $username + password returns HTTP status 403
      */
     public function testThatDetachUserActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -224,8 +222,6 @@ class UserGroupControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client, $userGroup, $user, $userResource, $userGroupResource);
     }
 
     /**
