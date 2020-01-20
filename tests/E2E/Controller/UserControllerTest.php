@@ -31,7 +31,7 @@ use function sprintf;
  */
 class UserControllerTest extends WebTestCase
 {
-    private $baseUrl = '/user';
+    private string $baseUrl = '/user';
 
     /**
      * @throws Throwable
@@ -52,8 +52,6 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client);
     }
 
     /**
@@ -63,6 +61,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /count` returns expected response with $username + $password
      */
     public function testThatCountActionReturnsExpected(string $username, string $password): void
     {
@@ -75,14 +75,14 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent(), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
      * @dataProvider dataProviderValidApiKeyUsers
      *
      * @param string $role
+     *
+     * @testdox Test that `GET /count` returns expected response with $role `ApiKey` token
      */
     public function testThatCountActionReturnsExpectedForApiKeyUser(string $role): void
     {
@@ -95,8 +95,6 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent(), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -106,6 +104,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /count` returns HTTP 403 with $username + $password
      */
     public function testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -122,14 +122,14 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client);
     }
 
     /**
      * @dataProvider dataProviderInvalidApiKeyUsers
      *
      * @param string $role
+     *
+     * @testdox Test that `GET /count` returns HTTP 403 with $role `ApiKey` token
      */
     public function testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
     {
@@ -146,8 +146,6 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client);
     }
 
     /**
@@ -157,6 +155,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `Find` action returns expected with $username + $password
      */
     public function testThatFindActionReturnsExpected(string $username, string $password): void
     {
@@ -169,8 +169,6 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
         static::assertCount(6, JSON::decode($response->getContent()), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -180,6 +178,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `find` action returns HTTP 403 for invalid user $username + $password
      */
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -196,8 +196,6 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client);
     }
 
     /**
@@ -207,6 +205,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /user/ids` returns expected with $username + $password
      */
     public function testThatIdsActionReturnExpected(string $username, string $password): void
     {
@@ -219,8 +219,6 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
         static::assertCount(6, JSON::decode($response->getContent()), "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -230,6 +228,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /user/ids` returns HTTP status 403 with invalid user $username + $password
      */
     public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -246,8 +246,6 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client);
     }
 
     /**
@@ -282,8 +280,6 @@ class UserControllerTest extends WebTestCase
 
         static::assertJsonStringEqualsJsonString(JSON::encode($data), $responseData);
 
-        unset($responseData, $response, $client);
-
         return $data['id'];
     }
 
@@ -294,6 +290,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `POST /user` returns HTTP status code 403 with invalid user $username + $password
      */
     public function testThatCreateActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -317,8 +315,6 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client);
     }
 
     /**
@@ -329,6 +325,8 @@ class UserControllerTest extends WebTestCase
      * @return string
      *
      * @throws Throwable
+     *
+     * @testdox Test that `PUT /user/_userId_` returns expected
      */
     public function testThatUpdateActionWorksLikeExpected(string $userId): string
     {
@@ -353,8 +351,6 @@ class UserControllerTest extends WebTestCase
 
         static::assertJsonStringEqualsJsonString(JSON::encode($data), $response->getContent());
 
-        unset($response, $client);
-
         return $userId;
     }
 
@@ -366,6 +362,8 @@ class UserControllerTest extends WebTestCase
      * @return string
      *
      * @throws Throwable
+     *
+     * @testdox Test that `PUT /user/_userId_` returns HTTP status 400 with partial data
      */
     public function testThatUpdateActionDoesNotWorkWithPartialData(string $userId): string
     {
@@ -383,8 +381,6 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(400, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
 
-        unset($response, $client);
-
         return $userId;
     }
 
@@ -399,6 +395,8 @@ class UserControllerTest extends WebTestCase
      * @return string
      *
      * @throws Throwable
+     *
+     * @testdox Test that `PUT /user/_userId_` returns HTTP status 403 with invalid user $username + $password
      */
     public function testThatUpdateActionReturns403ForInvalidUser(
         string $username,
@@ -426,8 +424,6 @@ class UserControllerTest extends WebTestCase
             "Response:\n" . $response
         );
 
-        unset($response, $client);
-
         return $userId;
     }
 
@@ -439,8 +435,10 @@ class UserControllerTest extends WebTestCase
      * @return string
      *
      * @throws Throwable
+     *
+     * @testdox Test that `PATCH /user/_userId_` returns expected data
      */
-    public function testThatPatchActionWorskWithPartialData(string $userId): string
+    public function testThatPatchActionWorksWithPartialData(string $userId): string
     {
         $data = [
             'id'        => $userId,
@@ -465,8 +463,6 @@ class UserControllerTest extends WebTestCase
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
         static::assertJsonStringEqualsJsonString(JSON::encode($expectedData), $response->getContent());
 
-        unset($response, $client);
-
         return $userId;
     }
 
@@ -479,6 +475,8 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      *
      * @throws Throwable
+     *
+     * @testdox Test that `DELETE /user/_userId_` returns HTTP status 403 with invalid user $username + $password
      */
     public function testThatDeleteActionReturns403ForInvalidUser(
         string $username,
@@ -498,8 +496,6 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client);
     }
 
     /**
@@ -508,6 +504,8 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      *
      * @throws Throwable
+     *
+     * @testdox Test that `DELETE /user/_userId_` returns HTTP 200 with valid user
      */
     public function testThatDeleteActionWorksLikeExpected(string $userId): void
     {
@@ -519,8 +517,6 @@ class UserControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "Response:\n" . $response);
-
-        unset($response, $client);
     }
 
     /**
@@ -545,8 +541,6 @@ class UserControllerTest extends WebTestCase
             '{"message":"You cannot remove yourself...","code":0,"status":400}',
             $response->getContent()
         );
-
-        unset($response, $client, $user, $userResource);
     }
 
     /**
@@ -554,30 +548,25 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
-     * @param array  $userIds
+     * @param string $userId
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /user/$userId/roles` returns 403 with invalid user $username + $password
      */
     public function testThatGetUserRolesActionsReturns403ForInvalidUser(
         string $username,
         string $password,
-        array $userIds
+        string $userId
     ): void {
         $client = $this->getTestClient($username, $password);
+        $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
-        foreach ($userIds as $userId) {
-            $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
+        /** @var Response $response */
+        $response = $client->getResponse();
 
-            /** @var Response $response */
-            $response = $client->getResponse();
-
-            static::assertInstanceOf(Response::class, $response);
-            static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-
-            unset($response);
-        }
-
-        unset($client);
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
     }
 
     /**
@@ -589,6 +578,8 @@ class UserControllerTest extends WebTestCase
      * @param string $expectedResponse
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /user/$userId/roles` returns expected for user him/herself with $username + $password
      */
     public function testThatGetUserRolesActionsReturns200ForUserHimself(
         string $username,
@@ -605,8 +596,6 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
         static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
-
-        unset($response, $client);
     }
 
     /**
@@ -616,6 +605,8 @@ class UserControllerTest extends WebTestCase
      * @param string $expectedResponse
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /user/$userId/roles` returns expected `$expectedResponse` for user who has `ROLE_ROOT`
      */
     public function testThatGetUserRolesActionReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
     {
@@ -628,8 +619,6 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
         static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
-
-        unset($response, $client);
     }
 
     /**
@@ -637,30 +626,25 @@ class UserControllerTest extends WebTestCase
      *
      * @param string $username
      * @param string $password
-     * @param array  $userIds
+     * @param string $userId
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /user/$userId/groups` returns HTTP status 403 with invalid user $username + $password
      */
     public function testThatGetUserGroupsActionsReturns403ForInvalidUser(
         string $username,
         string $password,
-        array $userIds
+        string $userId
     ): void {
         $client = $this->getTestClient($username, $password);
+        $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
 
-        foreach ($userIds as $userId) {
-            $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
+        /** @var Response $response */
+        $response = $client->getResponse();
 
-            /** @var Response $response */
-            $response = $client->getResponse();
-
-            static::assertInstanceOf(Response::class, $response);
-            static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-
-            unset($response);
-        }
-
-        unset($client);
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
     }
 
     /**
@@ -672,6 +656,8 @@ class UserControllerTest extends WebTestCase
      * @param string $userId
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /user/$userId/groups` returns expected with user him/herself $username + $password
      */
     public function testThatGetUserGroupsActionsReturns200ForUserHimself(
         string $username,
@@ -695,8 +681,6 @@ class UserControllerTest extends WebTestCase
         } else {
             static::assertSame($expectedResponse, $data[0]->role->id);
         }
-
-        unset($data, $response, $client);
     }
 
     /**
@@ -706,6 +690,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `POST /user/_u_id_/groups/_ug_id_` returns HTTP 403 with invalid user $username + $password
      */
     public function testThatAttachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -738,8 +724,6 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
     }
 
     /**
@@ -748,6 +732,8 @@ class UserControllerTest extends WebTestCase
      * @param int $expectedStatus
      *
      * @throws Throwable
+     *
+     * @testdox Test that `POST /user/_u_id_/groups/_ug_id_` returns HTTP status $expectedStatus
      */
     public function testThatAttachUserGroupActionWorksAsExpected(int $expectedStatus): void
     {
@@ -776,8 +762,6 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
         static::assertCount(1, JSON::decode($response->getContent()));
-
-        unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
     }
 
     /**
@@ -812,8 +796,6 @@ class UserControllerTest extends WebTestCase
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
         static::assertCount(0, JSON::decode($response->getContent()));
-
-        unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
     }
 
     /**
@@ -825,6 +807,8 @@ class UserControllerTest extends WebTestCase
      * @param string $password
      *
      * @throws Throwable
+     *
+     * @testdox Test that `DELETE /user/_u_id_/groups/_ug_id_` returns HTTP 403 with invalid user $username + $password
      */
     public function testThatDetachUserGroupActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -857,8 +841,6 @@ class UserControllerTest extends WebTestCase
             $response->getContent(),
             "Response:\n" . $response
         );
-
-        unset($response, $client, $userGroup, $user, $userGroupResource, $userResource);
     }
 
     /**
@@ -870,6 +852,8 @@ class UserControllerTest extends WebTestCase
      * @param string $expectedResponse
      *
      * @throws Throwable
+     *
+     * @testdox Test that `GET /user/$userId/groups` request returns expected response `$expectedResponse`
      */
     public function testThatGetUserGroupsActionReturns200ForRootRoleUser(
         string $userId,
@@ -891,8 +875,6 @@ class UserControllerTest extends WebTestCase
         } else {
             static::assertSame($expectedResponse, $data[0]->role->id, $response->getContent());
         }
-
-        unset($data, $response, $client);
     }
 
     /**
@@ -970,19 +952,13 @@ class UserControllerTest extends WebTestCase
         $users = $userResource->find();
 
         foreach ($this->dataProviderInvalidUsersCreate() as $userData) {
-            $ids = [];
-
             foreach ($users as $user) {
                 if ($user->getUsername() === $userData[0]) {
                     continue;
                 }
 
-                $ids[] = $user->getId();
+                yield array_merge($userData, [$user->getId()]);
             }
-
-            $userData[] = $ids;
-
-            yield $userData;
         }
     }
 
