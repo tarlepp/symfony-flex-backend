@@ -28,8 +28,6 @@ class DocumentationTest extends WebTestCase
         $client->request('GET', '/api/doc/');
 
         static::assertSame(200, $client->getResponse()->getStatusCode());
-
-        unset($client);
     }
 
     /**
@@ -41,7 +39,5 @@ class DocumentationTest extends WebTestCase
         $client->request('GET', '/api/doc.json');
 
         static::assertSame(200, $client->getResponse()->getStatusCode());
-
-        unset($client);
     }
 }

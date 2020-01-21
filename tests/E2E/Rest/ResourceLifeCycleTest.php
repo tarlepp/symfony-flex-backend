@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Rest;
 
-use App\Entity\Role;
 use App\Repository\RoleRepository;
 use App\Security\RolesService;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
@@ -24,10 +23,7 @@ use Throwable;
  */
 class ResourceLifeCycleTest extends WebTestCase
 {
-    /**
-     * @var RoleRepository
-     */
-    private $repository;
+    private RoleRepository $repository;
 
     /**
      * @dataProvider dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException
@@ -35,6 +31,8 @@ class ResourceLifeCycleTest extends WebTestCase
      * @param string $role
      *
      * @throws Throwable
+     *
+     * @testdox Test that modified entity ($role) is not flushed if life cycle method throws exception
      */
     public function testThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(string $role): void
     {
@@ -42,15 +40,10 @@ class ResourceLifeCycleTest extends WebTestCase
         $client->request('GET', '/test_lifecycle_behaviour/' . $role);
 
         $response = $client->getResponse();
-
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame(418, $response->getStatusCode(), $response->getContent());
-
         $entity = $this->repository->findOneBy(['id' => $role]);
 
-        if ($entity instanceof Role) {
-            static::assertSame('Description - ' . $role, $entity->getDescription());
-        }
+        static::assertSame(418, $response->getStatusCode(), $response->getContent());
+        static::assertSame('Description - ' . $role, $entity->getDescription());
     }
 
     /**

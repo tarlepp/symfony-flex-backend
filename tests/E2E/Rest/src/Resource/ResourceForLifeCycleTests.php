@@ -16,8 +16,6 @@ use App\Rest\RestResource;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
-/** @noinspection PhpHierarchyChecksInspection */
-/** @noinspection PhpMissingParentCallCommonInspection */
 /**
  * Class ResourceForLifeCycleTests
  *
@@ -67,9 +65,7 @@ class ResourceForLifeCycleTests extends RestResource
     {
         parent::afterFindOne($id, $entity);
 
-        if ($entity instanceof Entity) {
-            $entity->setDescription('some description');
-        }
+        $entity->setDescription('some description');
 
         throw new HttpException(418, 'this should not trigger entity flush to database');
     }
