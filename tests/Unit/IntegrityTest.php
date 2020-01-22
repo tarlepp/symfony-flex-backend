@@ -27,6 +27,7 @@ use Symfony\Component\Validator\ConstraintValidatorInterface;
 use function array_filter;
 use function array_map;
 use function class_exists;
+use function count;
 use function implode;
 use function sprintf;
 use function str_replace;
@@ -45,6 +46,8 @@ class IntegrityTest extends KernelTestCase
      *
      * @param string $controllerTestClass
      * @param string $controllerClass
+     *
+     * @testdox Test that controller $controllerClass has E2E test class $controllerTestClass
      */
     public function testThatControllerHasE2ETests(string $controllerTestClass, string $controllerClass): void
     {
@@ -62,6 +65,8 @@ class IntegrityTest extends KernelTestCase
      *
      * @param string $controllerTestClass
      * @param string $controllerClass
+     *
+     * @testdox Test that REST controller $controllerClass has integration test class $controllerTestClass
      */
     public function testThatRestControllerHaveIntegrationTests(
         string $controllerTestClass,
@@ -82,6 +87,8 @@ class IntegrityTest extends KernelTestCase
      * @param string $repositoryTestClass
      * @param string $repositoryClass
      * @param array  $methods
+     *
+     * @testdox Test that repository $repositoryClass has functional test class $repositoryTestClass
      */
     public function testThatRepositoryHaveFunctionalTests(
         string $repositoryTestClass,
@@ -107,6 +114,8 @@ FORMAT;
      *
      * @param string $repositoryTestClass
      * @param string $repositoryClass
+     *
+     * @testdox Test that repository $repositoryClass has integration test class $repositoryTestClass
      */
     public function testThatRestRepositoryHaveIntegrationTests(
         string $repositoryTestClass,
@@ -126,6 +135,8 @@ FORMAT;
      *
      * @param string $entityTestClass
      * @param string $entityClass
+     *
+     * @testdox Test that entity $entityClass has integration test class $entityTestClass
      */
     public function testThatEntityHaveIntegrationTests(string $entityTestClass, string $entityClass): void
     {
@@ -143,6 +154,8 @@ FORMAT;
      *
      * @param string $eventSubscriberTestClass
      * @param string $eventSubscriberClass
+     *
+     * @testdox Test that event subscriber $eventSubscriberClass has integration test class $eventSubscriberTestClass
      */
     public function testThatEventSubscriberHaveIntegrationTest(
         string $eventSubscriberTestClass,
@@ -162,6 +175,8 @@ FORMAT;
      *
      * @param string $eventListenerTestClass
      * @param string $eventListenerClass
+     *
+     * @testdox Test that event listener $eventListenerClass has integration test class $eventListenerTestClass
      */
     public function testThatEventListenerHaveIntegrationTest(
         string $eventListenerTestClass,
@@ -181,6 +196,8 @@ FORMAT;
      *
      * @param string $resourceTestClass
      * @param string $resourceClass
+     *
+     * @testdox Test that resource $resourceClass has integration test class $resourceTestClass
      */
     public function testThatResourceHaveIntegrationTest(string $resourceTestClass, string $resourceClass): void
     {
@@ -198,6 +215,8 @@ FORMAT;
      *
      * @param string $authenticatorTestClass
      * @param string $authenticatorClass
+     *
+     * @testdox Test that authenticator $authenticatorClass has integration test class $authenticatorTestClass
      */
     public function testThatSecurityAuthenticatorHaveIntegrationTest(
         string $authenticatorTestClass,
@@ -217,11 +236,13 @@ FORMAT;
      *
      * @param string $providerTestClass
      * @param string $providerClass
+     *
+     * @testdox Test that security provider $providerClass has integration test class $providerTestClass
      */
     public function testThatSecurityProvidersHaveIntegrationTest(string $providerTestClass, string $providerClass): void
     {
         $message = sprintf(
-            'Resource "%s" does not have required test class "%s".',
+            'Security provider "%s" does not have required test class "%s".',
             $providerClass,
             $providerTestClass
         );
@@ -234,11 +255,13 @@ FORMAT;
      *
      * @param string $voterTestClass
      * @param string $voterClass
+     *
+     * @testdox Test that security voter $voterClass has integration test class $voterTestClass
      */
     public function testThatSecurityVoterHaveIntegrationTest(string $voterTestClass, string $voterClass): void
     {
         $message = sprintf(
-            'Resource "%s" does not have required test class "%s".',
+            'Security voter "%s" does not have required test class "%s".',
             $voterClass,
             $voterTestClass
         );
@@ -251,6 +274,8 @@ FORMAT;
      *
      * @param string $dtoTestClass
      * @param string $dtoClass
+     *
+     * @testdox Test that REST DTO $dtoClass has integration test class $dtoTestClass
      */
     public function testThatDtoHaveIntegrationTest(string $dtoTestClass, string $dtoClass): void
     {
@@ -268,6 +293,8 @@ FORMAT;
      *
      * @param string $formTypeTestClass
      * @param string $formTypeClass
+     *
+     * @testdox Test that form type $formTypeClass has integration test class $formTypeTestClass
      */
     public function testThatFormTypeHaveIntegrationTest(string $formTypeTestClass, string $formTypeClass): void
     {
@@ -285,6 +312,8 @@ FORMAT;
      *
      * @param string $dataTransformerTestClass
      * @param string $dataTransformerClass
+     *
+     * @testdox Test that data transformer $dataTransformerClass has integration test class $dataTransformerTestClass
      */
     public function testThatDataTransformerHaveIntegrationTest(
         string $dataTransformerTestClass,
@@ -304,6 +333,8 @@ FORMAT;
      *
      * @param string $validatorTestClass
      * @param string $validatorClass
+     *
+     * @testdox Test that validator $validatorClass has integration test class $validatorTestClass
      */
     public function testThatValidatorConstraintsHaveIntegrationTest(
         string $validatorTestClass,
@@ -323,6 +354,8 @@ FORMAT;
      *
      * @param string $dbalTypeTestClass
      * @param string $dbalTypeClass
+     *
+     * @testdox Test that DBAL type $dbalTypeClass has integration test class $dbalTypeTestClass
      */
     public function testThatCustomDBALTypeHaveIntegrationTest(
         string $dbalTypeTestClass,
@@ -342,6 +375,8 @@ FORMAT;
      *
      * @param string $restRequestMapperTestClass
      * @param string $restRequestMapper
+     *
+     * @testdox Test that REST request mapper $restRequestMapper has integration test class $restRequestMapperTestClass
      */
     public function testThatRestRequestMapperHaveIntegrationTest(
         string $restRequestMapperTestClass,
@@ -361,6 +396,8 @@ FORMAT;
      *
      * @param string $serviceTestClass
      * @param string $serviceClass
+     *
+     * @testdox Test that generic service $serviceClass has integration test class $serviceTestClass
      */
     public function testThatGenericServiceHaveIntegrationTests(
         string $serviceTestClass,
@@ -404,16 +441,11 @@ FORMAT;
 
         $repositoryMethods = [];
 
-        $filter = static function (ReflectionClass $reflectionClass) use (&$repositoryMethods) {
-            $filter = static function (ReflectionMethod $method) use ($reflectionClass) {
-                return $method->class === $reflectionClass->getName();
-            };
+        $filter = static function (ReflectionClass $reflectionClass) use (&$repositoryMethods): bool {
+            $filter = fn (ReflectionMethod $method): bool => $method->class === $reflectionClass->getName();
+            $formatter = fn (ReflectionMethod $method): string => $method->getName();
 
             $methods = array_filter($reflectionClass->getMethods(), $filter);
-
-            $formatter = static function (ReflectionMethod $method) {
-                return $method->getName();
-            };
 
             $repositoryMethods[$reflectionClass->getName()] = array_map($formatter, $methods);
 
@@ -421,7 +453,7 @@ FORMAT;
                 $reflectionClass->isAbstract() ||
                 $reflectionClass->isInterface() ||
                 $reflectionClass->isTrait() ||
-                empty($methods)
+                count($methods) === 0
             );
         };
 
@@ -430,7 +462,7 @@ FORMAT;
             $folder,
             $namespace,
             $namespaceTest
-        ) {
+        ): array {
             $file = $reflectionClass->getFileName();
 
             $base = str_replace([$folder, DIRECTORY_SEPARATOR], ['', '\\'], $file);
@@ -459,9 +491,7 @@ FORMAT;
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return $reflectionClass->implementsInterface(RepositoryInterface::class);
-        };
+        $filter = $this->getInterfaceFilter(RepositoryInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -478,9 +508,7 @@ FORMAT;
         $namespace = '\\App\\Entity\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Entity\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isInterface() && $reflectionClass->implementsInterface(EntityInterface::class);
-        };
+        $filter = $this->getInterfaceFilter(EntityInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -542,11 +570,10 @@ FORMAT;
         $namespace = '\\App\\Security\\Authenticator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Authenticator\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isAbstract()
-                && !$reflectionClass->isInterface()
-                && $reflectionClass->implementsInterface(AuthenticatorInterface::class);
-        };
+        $filter = fn (ReflectionClass $reflectionClass): bool =>
+            !$reflectionClass->isAbstract()
+            && !$reflectionClass->isInterface()
+            && $reflectionClass->implementsInterface(AuthenticatorInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -563,11 +590,7 @@ FORMAT;
         $namespace = '\\App\\Security\\Provider\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Provider\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isAbstract()
-                && !$reflectionClass->isInterface()
-                && $reflectionClass->implementsInterface(UserProviderInterface::class);
-        };
+        $filter = $this->getInterfaceFilter(UserProviderInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -584,11 +607,7 @@ FORMAT;
         $namespace = '\\App\\Security\\Voter\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Voter\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isAbstract()
-                && !$reflectionClass->isInterface()
-                && $reflectionClass->implementsInterface(VoterInterface::class);
-        };
+        $filter = $this->getInterfaceFilter(VoterInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -620,9 +639,7 @@ FORMAT;
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isAbstract() && $reflectionClass->implementsInterface(FormTypeInterface::class);
-        };
+        $filter = $this->getInterfaceFilter(FormTypeInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -639,9 +656,7 @@ FORMAT;
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return $reflectionClass->implementsInterface(DataTransformerInterface::class);
-        };
+        $filter = $this->getInterfaceFilter(DataTransformerInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -658,9 +673,7 @@ FORMAT;
         $namespace = '\\App\\Controller\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Controller\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return $reflectionClass->implementsInterface(ControllerInterface::class);
-        };
+        $filter = $this->getInterfaceFilter(ControllerInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -677,9 +690,7 @@ FORMAT;
         $namespace = '\\App\\Validator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Validator\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return $reflectionClass->implementsInterface(ConstraintValidatorInterface::class);
-        };
+        $filter = $this->getInterfaceFilter(ConstraintValidatorInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -696,9 +707,8 @@ FORMAT;
         $namespace = '\\App\\Doctrine\\DBAL\\Types\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Doctrine\\DBAL\\Types\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
-        };
+        $filter = fn (ReflectionClass $reflectionClass): bool =>
+            !$reflectionClass->isAbstract() && $reflectionClass->isSubclassOf(Type::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -715,11 +725,10 @@ FORMAT;
         $namespace = '\\App\\AutoMapper\\';
         $namespaceTest = '\\App\\Tests\\Integration\\AutoMapper\\';
 
-        $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isAbstract()
-                && !$reflectionClass->isTrait()
-                && $reflectionClass->isSubclassOf(RestRequestMapper::class);
-        };
+        $filter = fn (ReflectionClass $reflectionClass): bool =>
+            !$reflectionClass->isAbstract()
+            && !$reflectionClass->isTrait()
+            && $reflectionClass->isSubclassOf(RestRequestMapper::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
@@ -757,11 +766,10 @@ FORMAT;
     ): array {
         $pattern = '/^.+\.php$/i';
 
-        $filter = $filter ?? $filter ?? $filter = static function (ReflectionClass $reflectionClass) {
-            return !$reflectionClass->isInterface() && !$reflectionClass->isAbstract() && !$reflectionClass->isTrait();
-        };
+        $filter ??= $filter ?? $filter = fn (ReflectionClass $reflectionClass): bool =>
+            !$reflectionClass->isInterface() && !$reflectionClass->isAbstract() && !$reflectionClass->isTrait();
 
-        $formatter = $formatter ?? $this->getFormatterClosure($folder, $namespace, $namespaceTest);
+        $formatter ??= $this->getFormatterClosure($folder, $namespace, $namespaceTest);
         $iterator = $this->getReflectionClass($folder, $namespace);
 
         return array_map(
@@ -784,11 +792,10 @@ FORMAT;
      */
     private function getReflectionClass(string $folder, string $namespace): Closure
     {
-        return static function (string $file) use ($folder, $namespace) {
-            $class = $namespace . str_replace([$folder, '.php', DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
-
-            return new ReflectionClass($class);
-        };
+        return fn (string $file): ReflectionClass =>
+            new ReflectionClass(
+                $namespace . str_replace([$folder, '.php', DIRECTORY_SEPARATOR], ['', '', '\\'], $file)
+            );
     }
 
     /**
@@ -802,7 +809,7 @@ FORMAT;
      */
     private function getFormatterClosure(string $folder, string $namespace, string $namespaceTest): Closure
     {
-        return static function (ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest) {
+        return static function (ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest): array {
             $file = $reflectionClass->getFileName();
 
             $base = str_replace([$folder, DIRECTORY_SEPARATOR], ['', '\\'], $file);
@@ -828,5 +835,18 @@ FORMAT;
 
             $cache = true;
         }
+    }
+
+    /**
+     * @param string $interface
+     *
+     * @return Closure
+     */
+    private function getInterfaceFilter(string $interface): Closure
+    {
+        return fn (ReflectionClass $reflectionClass): bool  =>
+            !$reflectionClass->isInterface()
+            && !$reflectionClass->isAbstract()
+            && $reflectionClass->implementsInterface($interface);
     }
 }
