@@ -31,6 +31,8 @@ class JSONTest extends KernelTestCase
      * @param mixed $expected
      *
      * @throws JsonException
+     *
+     * @testdox Test that encode returns `$expected` when using `$value` as input
      */
     public function testThatEncodeWorksLikeExpected($value, $expected): void
     {
@@ -166,12 +168,10 @@ class JSONTest extends KernelTestCase
      */
     public function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {
-        $iterator = static function ($data) {
-            return [
-                [$data[1], is_array($data[0]) ? true : false],
-                $data[0],
-            ];
-        };
+        $iterator = fn (array $data): array => [
+            [$data[1], is_array($data[0]) ? true : false],
+            $data[0],
+        ];
 
         foreach ($this->dataProviderTestThatEncodeWorksLikeExpected() as $data) {
             yield $iterator($data);
