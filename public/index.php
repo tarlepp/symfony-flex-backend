@@ -1,40 +1,15 @@
 <?php
 declare(strict_types = 1);
-/**
- * /public/index.php
- *
- * @package App
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- */
+
 use App\Kernel;
-use Liuggio\Fastest\Environment\FastestEnvironment;
-use Symfony\Component\Debug\Debug;
+use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\HttpFoundation\Request;
 
-require __DIR__ . '/../vendor/autoload.php';
-
-// Set fastest environment
-if (class_exists(FastestEnvironment::class)) {
-    FastestEnvironment::setFromRequest();
-}
-
-$bootstrapFile = dirname(__DIR__) . '/config/bootstrap.php';
-
-// The check is to ensure we don't use .env in production
-if (!getenv('APP_ENV')) {
-    // Specify used environment file
-    putenv('ENVIRONMENT_FILE=.env');
-
-    $bootstrapFile = __DIR__ . '/../bootstrap.php';
-}
-
-/** @noinspection PhpIncludeInspection */
-require $bootstrapFile;
+require dirname(__DIR__) . '/config/bootstrap.php';
 
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 
-    /** @noinspection ForgottenDebugOutputInspection */
     Debug::enable();
 }
 

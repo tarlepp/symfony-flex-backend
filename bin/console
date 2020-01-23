@@ -5,7 +5,7 @@ declare(strict_types = 1);
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
-use Symfony\Component\Debug\Debug;
+use Symfony\Component\ErrorHandler\Debug;
 
 set_time_limit(0);
 
@@ -20,15 +20,10 @@ if (!class_exists(Application::class)) {
 }
 
 $input = new ArgvInput();
-$environment = $input->getParameterOption(['--env', '-e'], null, true);
+$env = $input->getParameterOption(['--env', '-e'], null, true);
 
-if ($environment !== null) {
-    $_ENV['APP_ENV'] = $environment;
-
-    putenv('APP_ENV=' . $_ENV['APP_ENV']);
-
-    // force loading .env files when --env is defined
-    $_SERVER['APP_ENV'] = null;
+if ($env) {
+    putenv('APP_ENV=' . $_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = $env);
 }
 
 if ($input->hasParameterOption('--no-debug', true)) {
@@ -41,7 +36,6 @@ if ($_SERVER['APP_DEBUG']) {
     umask(0000);
 
     if (class_exists(Debug::class)) {
-        /** @noinspection ForgottenDebugOutputInspection */
         Debug::enable();
     }
 }

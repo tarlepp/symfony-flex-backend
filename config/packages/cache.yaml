@@ -4,7 +4,8 @@ framework:
         # is used to compute stable namespaces for cache keys.
         prefix_seed: tarlepp/symfony-flex-backend
 
-        # The app cache caches to the filesystem by default.
+        # The "app" cache stores to the filesystem by default.
+        # The data in this cache should persist between deploys.
         # Other options include:
 
         # Redis
