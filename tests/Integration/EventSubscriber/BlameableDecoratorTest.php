@@ -39,7 +39,7 @@ class BlameableDecoratorTest extends KernelTestCase
 
         $resource
             ->expects(static::once())
-            ->method('findOne')
+            ->method('getReference')
             ->with($user->getId())
             ->willReturn($user);
 

@@ -11,9 +11,12 @@ namespace App\Tests\Integration\EventSubscriber;
 use App\Entity\ApiKey;
 use App\Entity\User;
 use App\EventSubscriber\RequestSubscriber;
+use App\Repository\UserRepository;
 use App\Security\ApiKeyUser;
+use App\Security\SecurityUser;
 use App\Utils\RequestLogger;
 use PHPUnit\Framework\MockObject\MockObject;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,38 +47,40 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var MockObject|RequestLogger $logger
+         * @var MockObject|RequestLogger         $requestLogger
          * @var MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|UserRepository        $userRepository
+         * @var MockObject|LoggerInterface       $logger
          */
-        $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
+        $requestLogger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
-        $logger
+        $requestLogger
             ->expects(static::once())
             ->method('setRequest')
             ->with($request)
-            ->willReturn($logger);
+            ->willReturn($requestLogger);
 
-        $logger
+        $requestLogger
             ->expects(static::once())
             ->method('setResponse')
             ->with($event->getResponse())
-            ->willReturn($logger);
+            ->willReturn($requestLogger);
 
-        $logger
+        $requestLogger
             ->expects(static::once())
             ->method('setMasterRequest')
             ->with($event->isMasterRequest())
-            ->willReturn($logger);
+            ->willReturn($requestLogger);
 
-        $logger
+        $requestLogger
             ->expects(static::once())
             ->method('handle');
 
-        $subscriber = new RequestSubscriber($logger, $tokenStorage);
+        $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
         $subscriber->onKernelResponse($event);
-
-        unset($subscriber, $logger, $tokenStorage, $logger, $event, $response, $request);
     }
 
     /**
@@ -91,34 +96,45 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var MockObject|RequestLogger $logger
+         * @var MockObject|RequestLogger         $requestLogger
          * @var MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|UserRepository        $userRepository
+         * @var MockObject|LoggerInterface       $logger
          */
-        $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
+        $requestLogger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
-        $user = new User();
+
+        $user = (new User())->setUsername('test user');
+
+        $securityUser = new SecurityUser($user);
+
+        $userRepository
+            ->expects(static::once())
+            ->method('getReference')
+            ->with($user->getId())
+            ->willReturn($user);
 
         $token
             ->expects(static::once())
             ->method('getUser')
-            ->willReturn($user);
+            ->willReturn($securityUser);
 
         $tokenStorage
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
-        $logger
+        $requestLogger
             ->expects(static::once())
             ->method('setUser')
             ->with($user)
-            ->willReturn($logger);
+            ->willReturn($requestLogger);
 
-        $subscriber = new RequestSubscriber($logger, $tokenStorage);
+        $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
         $subscriber->onKernelResponse($event);
-
-        unset($subscriber, $logger, $tokenStorage, $token, $user, $event, $response, $request);
     }
 
     /**
@@ -134,11 +150,15 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var MockObject|RequestLogger $logger
+         * @var MockObject|RequestLogger         $requestLogger
          * @var MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|UserRepository        $userRepository
+         * @var MockObject|LoggerInterface       $logger
          */
-        $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
+        $requestLogger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();
         $user = $this->getMockBuilder(ApiKeyUser::class)->disableOriginalConstructor()->getMock();
 
@@ -159,16 +179,16 @@ class RequestSubscriberTest extends KernelTestCase
             ->method('getToken')
             ->willReturn($token);
 
-        $logger
+        $requestLogger
             ->expects(static::once())
             ->method('setApiKey')
             ->with($apiKey)
-            ->willReturn($logger);
+            ->willReturn($requestLogger);
 
-        $subscriber = new RequestSubscriber($logger, $tokenStorage);
+        $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
         $subscriber->onKernelResponse($event);
 
-        unset($subscriber, $logger, $tokenStorage, $token, $user, $apiKey, $event, $response, $request);
+        unset($subscriber, $requestLogger, $tokenStorage, $token, $user, $apiKey, $event, $response, $request);
     }
 
     /**
@@ -184,22 +204,26 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var MockObject|RequestLogger $logger
+         * @var MockObject|RequestLogger         $requestLogger
          * @var MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|UserRepository        $userRepository
+         * @var MockObject|LoggerInterface       $logger
          */
-        $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
+        $requestLogger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
-        $logger
+        $requestLogger
             ->expects(static::never())
             ->method('setRequest')
             ->with($request)
-            ->willReturn($logger);
+            ->willReturn($requestLogger);
 
-        $subscriber = new RequestSubscriber($logger, $tokenStorage);
+        $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
         $subscriber->onKernelResponse($event);
 
-        unset($subscriber, $logger, $tokenStorage, $event, $response, $request);
+        unset($subscriber, $requestLogger, $tokenStorage, $event, $response, $request);
     }
 
     /**
@@ -215,21 +239,25 @@ class RequestSubscriberTest extends KernelTestCase
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
 
         /**
-         * @var MockObject|RequestLogger $logger
+         * @var MockObject|RequestLogger         $requestLogger
          * @var MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|UserRepository        $userRepository
+         * @var MockObject|LoggerInterface       $logger
          */
-        $logger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
+        $requestLogger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
         $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
-        $logger
+        $requestLogger
             ->expects(static::never())
             ->method('setRequest')
             ->with($request)
-            ->willReturn($logger);
+            ->willReturn($requestLogger);
 
-        $subscriber = new RequestSubscriber($logger, $tokenStorage);
+        $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
         $subscriber->onKernelResponse($event);
 
-        unset($subscriber, $logger, $tokenStorage, $event, $response, $request);
+        unset($subscriber, $requestLogger, $tokenStorage, $event, $response, $request);
     }
 }

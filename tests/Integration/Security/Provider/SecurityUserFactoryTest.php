@@ -49,7 +49,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->with('test_user')
             ->willReturn(null);
 
-        $factory = new SecurityUserFactory($userRepository, $rolesService);
+        $factory = new SecurityUserFactory($userRepository, $rolesService, '');
 
         $factory->loadUserByUsername('test_user');
     }
@@ -80,7 +80,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->with($user->getRoles())
             ->willReturn(['FOO', 'BAR']);
 
-        $securityUser = (new SecurityUserFactory($userRepository, $rolesService))->loadUserByUsername('test_user');
+        $securityUser = (new SecurityUserFactory($userRepository, $rolesService, ''))->loadUserByUsername('test_user');
 
         static::assertSame($user->getId(), $securityUser->getUsername());
         static::assertSame(['FOO', 'BAR'], $securityUser->getRoles());
@@ -98,7 +98,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
-        static::assertFalse((new SecurityUserFactory($userRepository, $rolesService))->supportsClass(null));
+        static::assertFalse((new SecurityUserFactory($userRepository, $rolesService, ''))->supportsClass(null));
     }
 
     /**
@@ -114,7 +114,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
         static::assertTrue(
-            (new SecurityUserFactory($userRepository, $rolesService))->supportsClass(SecurityUser::class)
+            (new SecurityUserFactory($userRepository, $rolesService, ''))->supportsClass(SecurityUser::class)
         );
     }
 
@@ -133,7 +133,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
-        (new SecurityUserFactory($userRepository, $rolesService))
+        (new SecurityUserFactory($userRepository, $rolesService, ''))
             ->refreshUser(new CoreUser('test_user', 'password'));
     }
 
@@ -152,7 +152,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
-        (new SecurityUserFactory($userRepository, $rolesService))
+        (new SecurityUserFactory($userRepository, $rolesService, ''))
             ->refreshUser(new SecurityUser(new User()));
     }
 
@@ -183,7 +183,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->with($user->getRoles())
             ->willReturn(['FOO', 'BAR']);
 
-        $newSecurityUser = (new SecurityUserFactory($userRepository, $rolesService))
+        $newSecurityUser = (new SecurityUserFactory($userRepository, $rolesService, ''))
             ->refreshUser($securityUser);
 
         static::assertNotSame($securityUser, $newSecurityUser);
