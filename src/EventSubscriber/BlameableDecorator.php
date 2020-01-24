@@ -43,7 +43,7 @@ class BlameableDecorator extends BlameableListener
     public function setUserValue($user): void
     {
         if ($user instanceof SecurityUser) {
-            $user = $this->userResource->findOne($user->getUuid());
+            $user = $this->userResource->getReference($user->getUuid());
         }
 
         parent::setUserValue($user);
