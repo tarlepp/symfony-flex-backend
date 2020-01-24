@@ -9,9 +9,12 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Entity\User as ApplicationUser;
+use App\Repository\UserRepository;
 use App\Security\ApiKeyUser;
+use App\Security\SecurityUser;
 use App\Utils\RequestLogger;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -28,19 +31,28 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class RequestSubscriber implements EventSubscriberInterface
 {
     private RequestLogger $requestLogger;
+    private UserRepository $userRepository;
     private TokenStorageInterface $tokenStorage;
+    private LoggerInterface $logger;
 
     /**
      * RequestSubscriber constructor.
      *
      * @param RequestLogger         $requestLogger
+     * @param UserRepository        $userRepository
      * @param TokenStorageInterface $tokenStorage
+     * @param LoggerInterface       $logger
      */
-    public function __construct(RequestLogger $requestLogger, TokenStorageInterface $tokenStorage)
-    {
-        // Store logger service
+    public function __construct(
+        RequestLogger $requestLogger,
+        UserRepository $userRepository,
+        TokenStorageInterface $tokenStorage,
+        LoggerInterface $logger
+    ) {
         $this->requestLogger = $requestLogger;
+        $this->userRepository = $userRepository;
         $this->tokenStorage = $tokenStorage;
+        $this->logger = $logger;
     }
 
     /**
@@ -83,9 +95,10 @@ class RequestSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $path = $request->getPathInfo();
 
-        // We don't want to log /healthz , /version and OPTIONS requests
+        // We don't want to log /healthz , /version , /_profiler* and OPTIONS requests
         if ($path === '/healthz'
             || $path === '/version'
+            || strpos($path, '/_profiler') !== false
             || $request->getRealMethod() === 'OPTIONS'
         ) {
             return;
@@ -109,11 +122,20 @@ class RequestSubscriber implements EventSubscriberInterface
         $this->requestLogger->setRequest($request);
         $this->requestLogger->setResponse($event->getResponse());
 
-        /** @var ApplicationUser|ApiKeyUser|null $user */
+        /** @var SecurityUser|ApiKeyUser|null $user */
         $user = $this->getUser();
 
-        if ($user instanceof ApplicationUser) {
-            $this->requestLogger->setUser($user);
+        if ($user instanceof SecurityUser) {
+            $userEntity = $this->userRepository->getReference($user->getUsername());
+
+            if ($userEntity instanceof ApplicationUser) {
+                $this->requestLogger->setUser($userEntity);
+            } else {
+                $this->logger->error(
+                    sprintf('User not found for UUID: "%s".', $user->getUsername()),
+                    self::getSubscribedEvents()
+                );
+            }
         } elseif ($user instanceof ApiKeyUser) {
             $this->requestLogger->setApiKey($user->getApiKey());
         }

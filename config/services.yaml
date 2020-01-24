@@ -25,6 +25,7 @@ services:
         bind:
             $projectDir: '%kernel.project_dir%'
             $environment: '%kernel.environment%'
+            $uuidRegex: '%app.uuid_regex%'
     _instanceof:
         App\Rest\Interfaces\ControllerInterface:
             tags: [ 'app.rest.controller' ]
