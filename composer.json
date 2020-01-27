@@ -54,7 +54,7 @@
 		"symfony/translation": "4.4.3",
 		"symfony/twig-bundle": "4.4.3",
 		"symfony/validator": "4.4.3",
-		"symfony/yaml": "4.4.3"
+		"symfony/yaml": "5.0.3"
 	},
 	"conflict": {
 		"symfony/debug": "<3.3",
