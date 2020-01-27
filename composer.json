@@ -41,7 +41,7 @@
 		"symfony/config": "4.4.3",
 		"symfony/console": "4.4.3",
 		"symfony/dotenv": "4.4.3",
-		"symfony/expression-language": "4.4.3",
+		"symfony/expression-language": "5.0.3",
 		"symfony/flex": "1.6.0",
 		"symfony/form": "4.4.3",
 		"symfony/framework-bundle": "4.4.3",
