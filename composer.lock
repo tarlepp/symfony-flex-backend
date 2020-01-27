@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f985db27d14f28ff130b088a6bd3852",
+    "content-hash": "579fcd13a2bb537c724b7894ddcf4fb1",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -3585,28 +3585,28 @@
         },
         {
             "name": "symfony/dotenv",
-            "version": "v4.4.3",
+            "version": "v5.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dotenv.git",
-                "reference": "b74a1638f53e3c65e4bbfc2a03c23fdc400fd243"
+                "reference": "8331da80cc35fe903db0ff142376d518804ff1b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dotenv/zipball/b74a1638f53e3c65e4bbfc2a03c23fdc400fd243",
-                "reference": "b74a1638f53e3c65e4bbfc2a03c23fdc400fd243",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/8331da80cc35fe903db0ff142376d518804ff1b1",
+                "reference": "8331da80cc35fe903db0ff142376d518804ff1b1",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1.3"
+                "php": "^7.2.5"
             },
             "require-dev": {
-                "symfony/process": "^3.4.2|^4.0|^5.0"
+                "symfony/process": "^4.4|^5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.4-dev"
+                    "dev-master": "5.0-dev"
                 }
             },
             "autoload": {
@@ -3638,7 +3638,7 @@
                 "env",
                 "environment"
             ],
-            "time": "2020-01-08T17:29:02+00:00"
+            "time": "2020-01-08T17:33:29+00:00"
         },
         {
             "name": "symfony/error-handler",
