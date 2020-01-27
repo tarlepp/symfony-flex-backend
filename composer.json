@@ -35,7 +35,7 @@
 		"nelmio/api-doc-bundle": "3.5.0",
 		"nelmio/cors-bundle": "2.0.1",
 		"piwik/device-detector": "3.12.3",
-		"ramsey/uuid-doctrine": "1.5.0",
+		"ramsey/uuid-doctrine": "1.6.0",
 		"sensio/framework-extra-bundle": "5.5.3",
 		"symfony/asset": "4.4.3",
 		"symfony/config": "4.4.3",
