@@ -18,8 +18,17 @@ jobs:
       env:
         APPLICATION_CONFIG: ./secrets/application_test.json
 
+  psalm:
+    needs: build
+    steps:
     - name: Psalm
       run: make psalm
+
+  phpstan:
+    needs: build
+    steps:
+    - name: PhpStan
+      run: make phpstan
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
