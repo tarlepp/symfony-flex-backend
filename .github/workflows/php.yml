@@ -40,7 +40,7 @@ jobs:
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                   restore-keys: ${{ runner.os }}-composer-
             - name: Configure
-                run: |
+              run: |
                   cp .env.gh.actions .env
                   cp .env.gh.actions .env.test
             - name: Install Composer dependencies
