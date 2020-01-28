@@ -28,7 +28,7 @@ jobs:
               key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
               restore-keys: ${{ runner.os }}-composer-
 
-        - name: Configure application
+        - name: Configure application for CI run
           run: |
               cp .env.gh-actions .env
               cp .env.gh-actions .env.test
@@ -50,8 +50,7 @@ jobs:
               composer --version
 
         - name: Check that environment is configured correctly
-          run: |
-              php ./vendor/bin/requirements-checker
+          run: php ./vendor/bin/requirements-checker
 
         - name: Lint YAML configurations
           run: make lint-yaml
@@ -107,7 +106,7 @@ jobs:
               key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
               restore-keys: ${{ runner.os }}-composer-
 
-        - name: Configure application
+        - name: Configure application for CI run
           run: |
               cp .env.gh-actions .env
               cp .env.gh-actions .env.test
