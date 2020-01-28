@@ -4,7 +4,6 @@ jobs:
     static:
         name: Static analyzers / checks (PHP ${{ matrix.php-versions }})
         runs-on: ubuntu-latest
-        needs: build
         strategy:
             fail-fast: false
             matrix:
