@@ -2,42 +2,81 @@
 name: CI
 on: [push, pull_request]
 jobs:
-    static-check:
-        name: Static analyzers / checks (PHP ${{ matrix.php-versions }})
+    build:
+        name: Build application
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
             matrix:
                 php-versions: ['7.4']
         steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Setup PHP, with composer and extensions
-          uses: shivammathur/setup-php@v1 #https://github.com/shivammathur/setup-php
-          with:
-              php-version: ${{ matrix.php-versions }}
-        - name: Get composer cache directory
-          id: composer-cache
-          run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-        - name: Cache composer dependencies
-          uses: actions/cache@v1
-          with:
-              path: ${{ steps.composer-cache.outputs.dir }}
-              # Use composer.json for key, if composer.lock is not committed.
-              # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-              key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-              restore-keys: ${{ runner.os }}-composer-
-        - name: Configure application
-          run: |
-              cp .env.gh-actions .env
-              cp .env.gh-actions .env.test
-              make generate-jwt-keys
-              chmod 644 ./config/jwt/private.pem
-        - name: Validate composer.json and composer.lock
-          run: composer validate
-        - name: Install Composer dependencies
-          run: |
-              composer install --no-progress --no-suggest --optimize-autoloader
+        -   name: Checkout
+            uses: actions/checkout@v2
+        -   name: Setup PHP, with composer and extensions
+            uses: shivammathur/setup-php@v1 #https://github.com/shivammathur/setup-php
+            with:
+                php-version: ${{ matrix.php-versions }}
+        -   name: Get composer cache directory
+            id: composer-cache
+            run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        -   name: Cache composer dependencies
+            uses: actions/cache@v1
+            with:
+                path: ${{ steps.composer-cache.outputs.dir }}
+                # Use composer.json for key, if composer.lock is not committed.
+                # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                restore-keys: ${{ runner.os }}-composer-
+        -   name: Configure application
+            run: |
+                cp .env.gh-actions .env
+                cp .env.gh-actions .env.test
+                make generate-jwt-keys
+                chmod 644 ./config/jwt/private.pem
+        -   name: Validate composer.json and composer.lock
+            run: composer validate
+        -   name: Install Composer dependencies
+            run: |
+                composer install --no-progress --no-suggest --optimize-autoloader
+
+
+    static-check:
+        name: Static analyzers / checks (PHP ${{ matrix.php-versions }})
+        runs-on: ubuntu-latest
+        needs: build
+        strategy:
+            fail-fast: false
+            matrix:
+                php-versions: ['7.4']
+        steps:
+#        - name: Checkout
+#          uses: actions/checkout@v2
+#        - name: Setup PHP, with composer and extensions
+#          uses: shivammathur/setup-php@v1 #https://github.com/shivammathur/setup-php
+#          with:
+#              php-version: ${{ matrix.php-versions }}
+#        - name: Get composer cache directory
+#          id: composer-cache
+#          run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+#        - name: Cache composer dependencies
+#          uses: actions/cache@v1
+#          with:
+#              path: ${{ steps.composer-cache.outputs.dir }}
+#              # Use composer.json for key, if composer.lock is not committed.
+#              # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+#              key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#              restore-keys: ${{ runner.os }}-composer-
+#        - name: Configure application
+#          run: |
+#              cp .env.gh-actions .env
+#              cp .env.gh-actions .env.test
+#              make generate-jwt-keys
+#              chmod 644 ./config/jwt/private.pem
+#        - name: Validate composer.json and composer.lock
+#          run: composer validate
+#        - name: Install Composer dependencies
+#          run: |
+#              composer install --no-progress --no-suggest --optimize-autoloader
         - name: Lint YAML configurations
           run: make lint-yaml
         - name: Run PHP CodeSniffer
@@ -48,59 +87,58 @@ jobs:
           run: make psalm-shepherd
         - name: Run PHPStan static analysis tool
           run: make phpstan
-    phpunit:
-        name: Phpunit tests (PHP ${{ matrix.php-versions }})
-        runs-on: ubuntu-latest
-        services:
-            mysql:
-                image: mysql:5.7
-                env:
-                    MYSQL_ALLOW_EMPTY_PASSWORD: false
-                    MYSQL_ROOT_PASSWORD: symfony
-                    MYSQL_DATABASE: symfony
-                ports:
-                    - 3306/tcp
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-        strategy:
-            fail-fast: false
-            matrix:
-                php-versions: ['7.4']
-        steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-        - name: Setup PHP, with composer and extensions
-          uses: shivammathur/setup-php@v1 #https://github.com/shivammathur/setup-php
-          with:
-              php-version: ${{ matrix.php-versions }}
-              extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysql
-              coverage: xdebug #optional
-        - name: Get composer cache directory
-          id: composer-cache
-          run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-        - name: Cache composer dependencies
-          uses: actions/cache@v1
-          with:
-              path: ${{ steps.composer-cache.outputs.dir }}
-              # Use composer.json for key, if composer.lock is not committed.
-              # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-              key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-              restore-keys: ${{ runner.os }}-composer-
-        - name: Configure application
-          run: |
-              cp .env.gh-actions .env
-              cp .env.gh-actions .env.test
-              make generate-jwt-keys
-              chmod 644 ./config/jwt/private.pem
-        - name: Install Composer dependencies
-          run: |
-              composer install --no-progress --no-suggest --optimize-autoloader
-          #env:
-          #    APPLICATION_CONFIG: ./secrets/application_test.json
-        - name: Run Tests
-          run: make run-tests-fastest-php
-          env:
-              #APPLICATION_CONFIG: ./secrets/application_test.json
-              DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
+
+#    phpunit:
+#        name: Phpunit tests (PHP ${{ matrix.php-versions }})
+#        runs-on: ubuntu-latest
+#        services:
+#            mysql:
+#                image: mysql:5.7
+#                env:
+#                    MYSQL_ALLOW_EMPTY_PASSWORD: false
+#                    MYSQL_ROOT_PASSWORD: symfony
+#                    MYSQL_DATABASE: symfony
+#                ports:
+#                    - 3306/tcp
+#                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+#        strategy:
+#            fail-fast: false
+#            matrix:
+#                php-versions: ['7.4']
+#        steps:
+#        - name: Checkout
+#          uses: actions/checkout@v2
+#        - name: Setup PHP, with composer and extensions
+#          uses: shivammathur/setup-php@v1 #https://github.com/shivammathur/setup-php
+#          with:
+#              php-version: ${{ matrix.php-versions }}
+#              extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, mysql
+#              coverage: xdebug #optional
+#        - name: Get composer cache directory
+#          id: composer-cache
+#          run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+#        - name: Cache composer dependencies
+#          uses: actions/cache@v1
+#          with:
+#              path: ${{ steps.composer-cache.outputs.dir }}
+#              # Use composer.json for key, if composer.lock is not committed.
+#              # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+#              key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#              restore-keys: ${{ runner.os }}-composer-
+#        - name: Configure application
+#          run: |
+#              cp .env.gh-actions .env
+#              cp .env.gh-actions .env.test
+#              make generate-jwt-keys
+#              chmod 644 ./config/jwt/private.pem
+#        - name: Install Composer dependencies
+#          run: |
+#              composer install --no-progress --no-suggest --optimize-autoloader
+#        - name: Run Tests
+#          run: make run-tests-php
+#          env:
+#              #APPLICATION_CONFIG: ./secrets/application_test.json
+#              DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
 
 #name: PHP Composer
 #
