@@ -4,9 +4,7 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
 
@@ -20,15 +18,27 @@ jobs:
 
   psalm:
     runs-on: ubuntu-latest
-    needs: build
     steps:
+    - uses: actions/checkout@v1
+
+    - name: Install dependencies
+      run: composer install --no-progress
+      env:
+        APPLICATION_CONFIG: ./secrets/application_test.json
+
     - name: Psalm
       run: make psalm
 
   phpstan:
     runs-on: ubuntu-latest
-    needs: build
     steps:
+    - uses: actions/checkout@v1
+
+    - name: Install dependencies
+      run: composer install --no-progress
+      env:
+        APPLICATION_CONFIG: ./secrets/application_test.json
+
     - name: PhpStan
       run: make phpstan
 
