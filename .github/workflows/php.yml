@@ -45,10 +45,10 @@ jobs:
               env:
                   APPLICATION_CONFIG: ./secrets/application_test.json
             - name: Run Tests
-              run: run-tests-php
+              run: make run-tests-php
               env:
                   APPLICATION_CONFIG: ./secrets/application_test.json
-                  #DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
+                  DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
 
 #name: PHP Composer
 #
