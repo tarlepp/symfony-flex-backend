@@ -41,8 +41,8 @@ jobs:
                   restore-keys: ${{ runner.os }}-composer-
             - name: Configure
               run: |
-                  cp .env.gh.actions .env
-                  cp .env.gh.actions .env.test
+                  cp .env.gh-actions .env
+                  cp .env.gh-actions .env.test
             - name: Install Composer dependencies
               run: |
                   composer install --no-progress --no-suggest --optimize-autoloader
