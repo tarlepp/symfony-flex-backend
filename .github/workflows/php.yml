@@ -19,12 +19,14 @@ jobs:
         APPLICATION_CONFIG: ./secrets/application_test.json
 
   psalm:
+    runs-on: ubuntu-latest
     needs: build
     steps:
     - name: Psalm
       run: make psalm
 
   phpstan:
+    runs-on: ubuntu-latest
     needs: build
     steps:
     - name: PhpStan
