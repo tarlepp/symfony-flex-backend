@@ -43,6 +43,8 @@ jobs:
               run: |
                   cp .env.gh-actions .env
                   cp .env.gh-actions .env.test
+                  make generate-jwt-keys
+                  chmod 644 ./config/jwt/private.pem
             - name: Install Composer dependencies
               run: |
                   composer install --no-progress --no-suggest --optimize-autoloader
