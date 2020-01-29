@@ -119,7 +119,7 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --optimize-autoloader
 
-      - name: Prepare Code Climate
+      - name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
@@ -127,12 +127,17 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
-      - name: Run Tests
+      - name: Run application test suites with PHPUnit
         run: make run-tests-php
         env:
           DATABASE_URL: mysql://root:symfony@127.0.0.1:${{ job.services.mysql.ports['3306'] }}/symfony
 
-      - name: Report Code Climate
+      - name: Report results to Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
         run: GIT_BRANCH=$GITHUB_REF GIT_COMMIT_SHA=$GITHUB_SHA ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
+
+      - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
+        run: |
+          wget https://scrutinizer-ci.com/ocular.phar
+          php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml
