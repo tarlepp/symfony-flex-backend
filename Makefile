@@ -235,7 +235,7 @@ update: ## Update composer dependencies
 ###> update composer bin dependencies ###
 COMPOSER_BIN := $(shell which composer)
 update-bin: ## Update composer bin dependencies
-	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install
+	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --no-suggest --optimize-autoloader
 ###< update composer bin dependencies ###
 
 ###> get bash inside php container ###
