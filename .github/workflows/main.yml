@@ -2,7 +2,15 @@
 # https://help.github.com/en/articles/about-github-actions
 # https://help.github.com/en/articles/workflow-syntax-for-github-actions
 name: CI
-on: [push, pull_request]
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 jobs:
   static:
     name: Static analyzers / checks (PHP ${{ matrix.php-versions }})
@@ -144,3 +152,5 @@ jobs:
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
         run: php ./vendor/bin/php-coveralls -v
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
