@@ -141,3 +141,6 @@ jobs:
         run: |
           wget https://scrutinizer-ci.com/ocular.phar
           php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml
+
+      - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
+        run: php ./vendor/bin/php-coveralls -v
