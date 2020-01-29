@@ -149,7 +149,8 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
       - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
-        run: wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload --format=php-clover ./build/logs/clover.xml
+        run: |
+          wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload -vv --format=php-clover ./build/logs/clover.xml
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
         run: php ./vendor/bin/php-coveralls -v
