@@ -150,8 +150,7 @@ jobs:
 
       - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
         run: |
-          cat ./build/logs/clover.xml
-          wget https://scrutinizer-ci.com/ocular.phar && php ocular.phar code-coverage:upload -vvv --format=php-clover ./build/logs/clover.xml
+          wget https://scrutinizer-ci.com/ocular.phar && sleep 10 && php ocular.phar code-coverage:upload -vvv --format=php-clover ./build/logs/clover.xml
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
         run: php ./vendor/bin/php-coveralls -v
