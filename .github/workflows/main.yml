@@ -75,6 +75,9 @@ jobs:
       - name: Run Psalm static analysis tool and report statistics to https://shepherd.dev/
         run: make psalm-shepherd
 
+      #- name: Run Psalm static analysis tool
+      #  run: make psalm
+
       - name: Run PHPStan static analysis tool
         run: make phpstan
 
