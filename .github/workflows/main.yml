@@ -167,3 +167,14 @@ jobs:
       #  env:
       #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # https://github.com/SonarSource/sonarcloud-github-action#secrets
+
+      - name: foo
+        run: |
+          ls -la ./build
+          ls -la ./build/logs
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage-report
+          path: ./build/logs/clover.xml
