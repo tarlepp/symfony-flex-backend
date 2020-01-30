@@ -32,17 +32,18 @@ started to use this template.
     * [ ] [.env](../.env) Change `APP_SECRET` value with new one, you can use
           eg. [this](http://nux.net/secret) tool for that. Also remember to
           change that `APP_SECRET` value in [.env.test](../.env.test) and
-          [.env.travis](../.env.travis) configuration files.
     * [ ] [application.json](../secrets/application.json) Change file contents
           to match your application configuration - specially you need to
           generate new `JWT_PASSPHRASE` value. Also remember to do those
           changes to [application_test.json](../secrets/application_test.json)
-          and [application_travis.json](../secrets/application_travis.json)
           files.
 * [ ] 3rd party services that you might not need _or_ you need to change those
       to work with _your_ application - if you don't need to use those services
       just delete those files and all is done.
     * [ ] [.codeclimate.yml](../.codeclimate.yml) - [https://codeclimate.com/](https://codeclimate.com/)
     * [ ] [.sensiolabs.yml](../.sensiolabs.yml) - [https://insight.symfony.com/](https://insight.symfony.com/)
-    * [ ] [.travis.yml](../.travis.yml) - [https://travis-ci.org/](https://travis-ci.org/)
     * [ ] [sonar-project.properties](../sonar-project.properties) - [https://sonarcloud.io/](https://sonarcloud.io/)
+* [ ] Github Actions - This application is using GitHub Actions to run multiple
+      jobs to check application code.
+    * [ ] [main.yml](../.github/workflows/main.yml) - Check file contents and
+          modify it for your needs.
