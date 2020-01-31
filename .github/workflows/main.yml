@@ -172,9 +172,16 @@ jobs:
         run: |
           ls -la ./build
           ls -la ./build/logs
+          ls -la ./build/report
 
-      - name: Archive code coverage results
+      - name: Archive code coverage results (clover.xml)
         uses: actions/upload-artifact@v1
         with:
-          name: code-coverage-report
+          name: clover.xml
           path: ./build/logs/clover.xml
+
+      - name: Archive code coverage results (junit.xml)
+          uses: actions/upload-artifact@v1
+          with:
+            name: clover.xml
+            path: ./build/logs/junit.xml
