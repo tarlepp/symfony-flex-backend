@@ -13,5 +13,5 @@ insert_final_newline = true
 [{composer.json,Makefile}]
 indent_style = tab
 
-[{.codeclimate.yml,,main.yml}]
+[{.codeclimate.yml,main.yml,*.md}]
 indent_size = 2
