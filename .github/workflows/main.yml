@@ -183,5 +183,11 @@ jobs:
       - name: Archive code coverage results (junit.xml)
         uses: actions/upload-artifact@v1
         with:
-          name: clover.xml
+          name: junit.xml
           path: ./build/logs/junit.xml
+
+      - name: Archive PhpMetrics results
+        uses: actions/upload-artifact@v1
+        with:
+          name: PhpMetrics
+          path: ./build/logs/report
