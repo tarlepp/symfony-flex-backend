@@ -181,7 +181,7 @@ jobs:
           path: ./build/logs/clover.xml
 
       - name: Archive code coverage results (junit.xml)
-          uses: actions/upload-artifact@v1
-          with:
-            name: clover.xml
-            path: ./build/logs/junit.xml
+        uses: actions/upload-artifact@v1
+        with:
+          name: clover.xml
+          path: ./build/logs/junit.xml
