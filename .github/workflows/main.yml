@@ -190,4 +190,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: PhpMetrics
-          path: ./build/logs/report
+          path: ./build/report
