@@ -119,6 +119,17 @@ class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatGetEntityResourceReturnsExpectedResource
+     *
+     * @param string $resourceClass
+     * @param string $entityClass
+     */
+    public function testThatGetEntityResourceReturnsExpectedResource(string $resourceClass, string $entityClass): void
+    {
+        static::assertInstanceOf($resourceClass, $this->getCollection()->getEntityResource($entityClass));
+    }
+
+    /**
      * @dataProvider dataProviderTestThatHasReturnsExpected
      *
      * @param bool        $expected
@@ -161,15 +172,15 @@ class ResourceCollectionTest extends KernelTestCase
      */
     public function dataProviderTestThatGetEntityResourceReturnsExpectedResource(): Generator
     {
-        yield [ApiKey::class, ApiKeyResource::class];
-        yield [DateDimension::class, DateDimensionResource::class];
-        yield [Healthz::class, HealthzResource::class];
-        yield [LogLoginFailure::class, LogLoginFailureResource::class];
-        yield [LogLogin::class, LogLoginResource::class];
-        yield [LogRequest::class, LogRequestResource::class];
-        yield [Role::class, RoleResource::class];
-        yield [UserGroup::class, UserGroupResource::class];
-        yield [User::class, UserResource::class];
+        yield [ApiKeyResource::class, ApiKey::class];
+        yield [DateDimensionResource::class, DateDimension::class];
+        yield [HealthzResource::class, Healthz::class];
+        yield [LogLoginFailureResource::class, LogLoginFailure::class];
+        yield [LogLoginResource::class, LogLogin::class];
+        yield [LogRequestResource::class, LogRequest::class];
+        yield [RoleResource::class, Role::class];
+        yield [UserGroupResource::class, UserGroup::class];
+        yield [UserResource::class, User::class];
     }
 
     /**
