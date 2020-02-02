@@ -72,7 +72,7 @@ Project also contains [PhpMetrics](https://github.com/phpmetrics/phpmetrics)
 to make some analyze of your code. Note that you need run tests before this
 command. You can run this by following command:
 
-```
+```bash
 make phpmetrics
 ```
 
