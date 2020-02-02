@@ -1,6 +1,6 @@
 # What is this?
 
-This document contains information about main concepts and features how this 
+This document contains information about main concepts and features how this
 application is built and how you can use it.
 
 This template application has quite lot features that aren't so clear for
@@ -9,30 +9,30 @@ new developers - so this document is trying to solve that issue.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [REST API wtf?](#rest-api-wtf)
-     * [Explanation](#explanation)
-     * [Base workflow](#base-workflow)
-     * [REST traits](#rest-traits)
-     * [How to make new REST API?](#how-to-make-new-rest-api)
-     * [Alternatives](#alternatives)
-   * [Authentication and authorization](#authentication-and-authorization)
-     * [Authentication](#authentication)
-       * [Normal users](#normal-users)
-       * [ApiKey "users"](#apikey-users)
-   * [Controllers](#controllers)
-   * [Resources](#resources)
-     * [Lifecycle callbacks](#lifecycle-callbacks)
-   * [Repositories](#repositories)
-     * [Parameter handling](#parameter-handling)
-     * [Query builder callbacks and joins](#query-builder-callbacks-and-joins)
-   * [Argument value resolvers](#argument-value-resolvers)
-     * [Entity value resolver](#entity-value-resolver)
-     * [Logged in user value resolver](#logged-in-user-value-resolver)
-     * [REST DTO value resolver](#rest-dto-value-resolver)
-   * [Common helpers](#common-helpers)
-     * [LoggerAwareTrait](#loggerawaretrait)
-     * [StopwatchAwareTrait](#stopwatchawaretrait)
+  * [Table of Contents](#table-of-contents)
+  * [REST API wtf?](#rest-api-wtf)
+    * [Explanation](#explanation)
+    * [Base workflow](#base-workflow)
+    * [REST traits](#rest-traits)
+    * [How to make new REST API?](#how-to-make-new-rest-api)
+    * [Alternatives](#alternatives)
+  * [Authentication and authorization](#authentication-and-authorization)
+    * [Authentication](#authentication)
+      * [Normal users](#normal-users)
+      * [ApiKey "users"](#apikey-users)
+  * [Controllers](#controllers)
+  * [Resources](#resources)
+    * [Lifecycle callbacks](#lifecycle-callbacks)
+  * [Repositories](#repositories)
+    * [Parameter handling](#parameter-handling)
+    * [Query builder callbacks and joins](#query-builder-callbacks-and-joins)
+  * [Argument value resolvers](#argument-value-resolvers)
+    * [Entity value resolver](#entity-value-resolver)
+    * [Logged in user value resolver](#logged-in-user-value-resolver)
+    * [REST DTO value resolver](#rest-dto-value-resolver)
+  * [Common helpers](#common-helpers)
+    * [LoggerAwareTrait](#loggerawaretrait)
+    * [StopwatchAwareTrait](#stopwatchawaretrait)
 
 ## REST API wtf?
 
@@ -43,7 +43,7 @@ might be asking question - why, isn't there a ton of those already?
 
 When I started with this "project" I first tried `FOSRestBundle` and after that
 `API Platform` and neither of those wasn't "good" enough for my needs for REST
-API - note that specially `API Platform` has evolved since that a lot. 
+API - note that specially `API Platform` has evolved since that a lot.
 
 How I have make this application to work, differs quite lot from both of those.
 The main points to make this from scratch are following things;
@@ -63,13 +63,13 @@ The main points to make this from scratch are following things;
 * Role based REST actions - this will cover like 99% use cases in real world
 * DTO usage
 * Automatic API documentation _(work in progress...)_
-* Total control how your database queries are executed (avoiding `n+1` problem, 
+* Total control how your database queries are executed (avoiding `n+1` problem,
   etc.)
 * And the main thing - to learn how to use Symfony
 
 ### Base workflow
 
-Within this application the base workflow is following, when we're talking 
+Within this application the base workflow is following, when we're talking
 about "big" sections at time;
 
 `Controller/Command <--> Resource <--> Repository`
@@ -114,23 +114,23 @@ structure if you look how `ApiKey` endpoint has been built to this application.
 
 ### Authentication
 
-By default this application is providing a "normal" user and "apikey" 
-authentication implementations. Another quite _big_ difference to traditional 
-Symfony  applications is that this application does not bind `Entities` to 
-`Symfony\Component\Security\Core\User\UserInterface` - this application uses 
+By default this application is providing a "normal" user and "apikey"
+authentication implementations. Another quite _big_ difference to traditional
+Symfony  applications is that this application does not bind `Entities` to
+`Symfony\Component\Security\Core\User\UserInterface` - this application uses
 separated DTO's for that.
 
 #### Normal users
 
 These users are authenticated via `Json Web Token (JWT)`, each JWT is created
-using private/public keys and those keys are always re-generated when 
+using private/public keys and those keys are always re-generated when
 environment is started. This will ensure that eg. each application update
 users needs to make new login - this can be changed if needed but imho this is
 most _safest_ way to handle token invalidation on application updates.
 
 Also note that if/when you want to use something else as user provider than
 your application database, you just need to change `SecurityUserFactory`
-implementation and/or create your own one. 
+implementation and/or create your own one.
 
 #### ApiKey "users"
 
@@ -138,7 +138,7 @@ This authentication is used within `server-to-server` communication between
 "trusted" parties. These "ApiKey" users are authenticated via special HTTP
 request header;
 
-```
+```text
 Authorization: ApiKey _APIKEY_TOKEN_HERE_
 ```
 
@@ -214,17 +214,24 @@ that you can easily use within your application;
 
 * getRepository(): BaseRepositoryInterface;
 * getValidator(): ValidatorInterface;
-* getDtoForEntity(string $id, string $dtoClass, RestDtoInterface $dto, ?bool $patch = null): RestDtoInterface;
-* find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null): array
+* getDtoForEntity(string $id, string $dtoClass, RestDtoInterface $dto, ?bool
+  $patch = null): RestDtoInterface;
+* find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null,
+  ?int $offset = null, ?array $search = null): array
 * findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
-* findOneBy(array $criteria, ?array $orderBy = null, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
+* findOneBy(array $criteria, ?array $orderBy = null, ?bool
+  $throwExceptionIfNotFound = null): ?EntityInterface
 * count(?array $criteria = null, ?array $search = null): int
-* create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
-* update(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
-* patch(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
+* create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation =
+  null): EntityInterface
+* update(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool
+  $skipValidation = null): EntityInterface
+* patch(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool
+  $skipValidation = null): EntityInterface
 * delete(string $id, ?bool $flush = null): EntityInterface
 * getIds(?array $criteria = null, ?array $search = null): array
-* save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
+* save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation
+  = null): EntityInterface
 
 Methods itself should be quite self-explanatory, but you can read detailed 
 information about those from 
