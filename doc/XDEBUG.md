@@ -1,25 +1,25 @@
 # What is this?
 
-This document contains basic information how you can use [Xdebug](https://xdebug.org/) 
+This document contains basic information how you can use [Xdebug](https://xdebug.org/)
 and [PhpStorm](https://www.jetbrains.com/phpstorm/) within this application.
 
 And before you start with this section off documentation you really should read
-[PhpStorm configuration](PHPSTORM.md) documentation first - that way you will 
+[PhpStorm configuration](PHPSTORM.md) documentation first - that way you will
 have all basic configuration ready.
 
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [Configuration and usage](#configuration-and-usage)
-      * [PhpStorm basic configuration](#phpstorm-basic-configuration)
-      * [First connection](#first-connection)
-      * [Configuring debugging server](#configuring-debugging-server)
-   * [Mac users](#mac-users)
-   * [Debug CLI commands](#debug-cli-commands)
-   * [Debug Postman requests](#debug-postman-requests)
-   * [External links / resources](#external-links--resources)
-   * [Closure](#closure)
+  * [Table of Contents](#table-of-contents)
+  * [Configuration and usage](#configuration-and-usage)
+    * [PhpStorm basic configuration](#phpstorm-basic-configuration)
+    * [First connection](#first-connection)
+    * [Configuring debugging server](#configuring-debugging-server)
+  * [Mac users](#mac-users)
+  * [Debug CLI commands](#debug-cli-commands)
+  * [Debug Postman requests](#debug-postman-requests)
+  * [External links / resources](#external-links--resources)
+  * [Closure](#closure)
 
 ## Configuration and usage
 
@@ -27,7 +27,7 @@ These instructions relies heavily to screenshots, so you might need to use
 your own brains for some parts of these instructions - but I bet you can get
 this working in couple of minutes.
 
-Note that if you're using Mac, read [Mac users](#mac-users) section first. 
+Note that if you're using Mac, read [Mac users](#mac-users) section first.
 
 ### PhpStorm basic configuration
 
@@ -35,7 +35,7 @@ Note that if you're using Mac, read [Mac users](#mac-users) section first.
 2) Validate debugger configuration
 3) Install needed browser extensions
 
-You can check all those within screen as below: 
+You can check all those within screen as below:
 
 ![Basic settings](images/xdebug_01.png)
 
@@ -78,9 +78,9 @@ content:
 ```yaml
 version: '3'
 services:
-    php:
-        environment:
-            - DOCKER_WITH_MAC=1
+  php:
+    environment:
+      - DOCKER_WITH_MAC=1
 ```
 
 And if you're reading this you might want to read [Speed problems with docker-compose?](SPEED_UP_DOCKER_COMPOSE.md)
@@ -91,7 +91,7 @@ You just need to combine those both configurations to your local
 
 ## Debug CLI commands
 
-By default this application assumes that you're using `app.localhost` as your 
+By default this application assumes that you're using `app.localhost` as your
 PHP server that you've configured to your IDE. If you need to change that, just
 override that in your local `docker-compose.override.yml` file.
 
