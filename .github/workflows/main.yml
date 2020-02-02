@@ -81,11 +81,20 @@ jobs:
       - name: Run PHPStan static analysis tool
         run: make phpstan
 
+      - name: Run `phploc` to collect LOC stats
+        run: make phploc
+
       - name: Archive Psalm results (psalm.json)
         uses: actions/upload-artifact@v1
         with:
           name: psalm.json
           path: ./build/psalm.json
+
+      - name: Archive `phploc` results (phploc.json)
+        uses: actions/upload-artifact@v1
+        with:
+          name: phploc.json
+          path: ./build/phploc.json
 
   test:
     name: PHPUnit tests (PHP ${{ matrix.php-versions }})

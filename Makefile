@@ -270,3 +270,8 @@ local-configuration: ## Create local configuration files
 normalize-composer: ## Normalizes `composer.json` content
 	@composer normalize
 ###< Normalizes `composer.json` content ###
+
+###> Runs `phploc` and create json output ###
+phploc: ## Runs `phploc` and create json output
+	@php ./vendor/bin/phploc --log-json=./build/phploc.json ./src
+###< Runs `phploc` and create json output ###

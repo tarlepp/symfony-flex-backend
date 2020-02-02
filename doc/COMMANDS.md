@@ -54,6 +54,7 @@ local-configuration         # Create local configuration files
 normalize-composer          # Normalizes `composer.json` content
 phpcs                       # Runs PHP CodeSniffer
 phpinsights                 # Runs PHP Insights
+phploc                      # Runs `phploc` and create json output
 phpmetrics                  # Generates PhpMetrics static analysis
 phpstan                     # Runs PHPStan static analysis tool
 psalm-shepherd              # Runs Psalm static analysis tool + report results
