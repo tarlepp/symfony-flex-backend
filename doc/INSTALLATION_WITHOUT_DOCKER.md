@@ -6,19 +6,19 @@ or dedicated server - without using docker.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [Requirements](#requirements)
-   * [Installation](#installation)
-      * [1. Clone repository](#1-clone-repository)
-      * [2. Configuration](#2-configuration)
-      * [3. File permissions](#3-file-permissions)
-      * [4. Dependencies installation](#4-dependencies-installation)
-      * [5. Create JWT auth keys](#5-create-jwt-auth-keys)
-      * [6. Environment checks](#6-environment-checks)
-         * [CLI environment](#cli-environment)
-         * [Web-server environment](#web-server-environment)
-            * [Apache](#apache)
-      * [7. Database](#7-database)
+  * [Table of Contents](#table-of-contents)
+  * [Requirements](#requirements)
+  * [Installation](#installation)
+    * [1. Clone repository](#1-clone-repository)
+    * [2. Configuration](#2-configuration)
+    * [3. File permissions](#3-file-permissions)
+    * [4. Dependencies installation](#4-dependencies-installation)
+    * [5. Create JWT auth keys](#5-create-jwt-auth-keys)
+    * [6. Environment checks](#6-environment-checks)
+      * [CLI environment](#cli-environment)
+      * [Web-server environment](#web-server-environment)
+        * [Apache](#apache)
+    * [7. Database](#7-database)
 
 ## Requirements
 
@@ -41,14 +41,14 @@ git clone https://github.com/tarlepp/symfony-flex-backend.git
 By default application will use `.env` file for configuration. You can add your
 own local file as in `.env.local` and override necessary values there.
 
-Secrets and related settings are by default in `./secrets` directory. By 
+Secrets and related settings are by default in `./secrets` directory. By
 default application will use `./secrets/application.json` configuration file.
 
 You can override this by adding `./secrets/application._identifier_.json` and
 after that creating a `.env.local` file and use that file in there.
 
 _Note_ that this same works also if you're using [Docker](../README.md#2-start-containers)
-environment for dev. 
+environment for dev.
 
 ### 3. File permissions
 
@@ -62,7 +62,9 @@ You can make necessary permission changes with following commands:
 
 ```bash
 mkdir var
-HTTPDUSER=`ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+HTTPDUSER=`ps axo user,comm | \
+    grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | \
+    grep -v root | head -1 | cut -d\  -f1`
 setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var
 setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var
 ```

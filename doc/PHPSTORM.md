@@ -1,7 +1,7 @@
 # What is this?
 
 This document contains information how you can setup your [PhpStorm](https://www.jetbrains.com/phpstorm/)
-for this application _"correct"_ way. 
+for this application _"correct"_ way.
 
 For recommend plugins see [External links / resources](#external-links--resources)
 section of this documentation.
@@ -9,20 +9,21 @@ section of this documentation.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [Setup](#setup)
-      * [CLI Interpreter](#cli-interpreter)
-      * [Server](#server)
-      * [Test Frameworks](#test-frameworks)
-      * [Debugging](#debugging)
-   * [External links / resources](#external-links--resources)
+  * [Table of Contents](#table-of-contents)
+  * [Setup](#setup)
+    * [CLI Interpreter](#cli-interpreter)
+    * [Server](#server)
+    * [Test Frameworks](#test-frameworks)
+    * [Debugging](#debugging)
+  * [External links / resources](#external-links--resources)
 
 ## Setup
 
 ### CLI Interpreter
 
-First thing that you need to do is select correct CLI interpreter for your 
-PhpStorm. Selection should be available on `Settings -> Languages & Frameworks -> PHP`
+First thing that you need to do is select correct CLI interpreter for your
+PhpStorm. Selection should be available on `Settings -> Languages & Frameworks
+-> PHP`
 section.
 
 Just choose the `Docker-PHP` from dropdown, if that does not exist there you
@@ -44,14 +45,15 @@ docker container.
 
 Application itself contains quite lot of tests as you know from that [testing](TESTING.md)
 documentation. To get support to run tests directly from your IDE you need to
-do following configuration in `Settings -> Languages & Frameworks -> PHP -> Test Frameworks`.
+do following configuration in `Settings -> Languages & Frameworks -> PHP ->
+Test Frameworks`.
 
 By default settings should be set correctly but just ensure that  those are set
 as in image below.
 
 ![Path mappings](images/phpstorm_03.png)
 
-After this you need to add Run/Debug configuration for PHPUnit. In that prompt 
+After this you need to add Run/Debug configuration for PHPUnit. In that prompt
 you should see the same as image below.
 
 Note that if you see `Fix` button on bottom right corner just click that to fix

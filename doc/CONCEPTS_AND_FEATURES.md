@@ -1,6 +1,6 @@
 # What is this?
 
-This document contains information about main concepts and features how this 
+This document contains information about main concepts and features how this
 application is built and how you can use it.
 
 This template application has quite lot features that aren't so clear for
@@ -9,30 +9,30 @@ new developers - so this document is trying to solve that issue.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [REST API wtf?](#rest-api-wtf)
-     * [Explanation](#explanation)
-     * [Base workflow](#base-workflow)
-     * [REST traits](#rest-traits)
-     * [How to make new REST API?](#how-to-make-new-rest-api)
-     * [Alternatives](#alternatives)
-   * [Authentication and authorization](#authentication-and-authorization)
-     * [Authentication](#authentication)
-       * [Normal users](#normal-users)
-       * [ApiKey "users"](#apikey-users)
-   * [Controllers](#controllers)
-   * [Resources](#resources)
-     * [Lifecycle callbacks](#lifecycle-callbacks)
-   * [Repositories](#repositories)
-     * [Parameter handling](#parameter-handling)
-     * [Query builder callbacks and joins](#query-builder-callbacks-and-joins)
-   * [Argument value resolvers](#argument-value-resolvers)
-     * [Entity value resolver](#entity-value-resolver)
-     * [Logged in user value resolver](#logged-in-user-value-resolver)
-     * [REST DTO value resolver](#rest-dto-value-resolver)
-   * [Common helpers](#common-helpers)
-     * [LoggerAwareTrait](#loggerawaretrait)
-     * [StopwatchAwareTrait](#stopwatchawaretrait)
+  * [Table of Contents](#table-of-contents)
+  * [REST API wtf?](#rest-api-wtf)
+    * [Explanation](#explanation)
+    * [Base workflow](#base-workflow)
+    * [REST traits](#rest-traits)
+    * [How to make new REST API?](#how-to-make-new-rest-api)
+    * [Alternatives](#alternatives)
+  * [Authentication and authorization](#authentication-and-authorization)
+    * [Authentication](#authentication)
+      * [Normal users](#normal-users)
+      * [ApiKey "users"](#apikey-users)
+  * [Controllers](#controllers)
+  * [Resources](#resources)
+    * [Lifecycle callbacks](#lifecycle-callbacks)
+  * [Repositories](#repositories)
+    * [Parameter handling](#parameter-handling)
+    * [Query builder callbacks and joins](#query-builder-callbacks-and-joins)
+  * [Argument value resolvers](#argument-value-resolvers)
+    * [Entity value resolver](#entity-value-resolver)
+    * [Logged in user value resolver](#logged-in-user-value-resolver)
+    * [REST DTO value resolver](#rest-dto-value-resolver)
+  * [Common helpers](#common-helpers)
+    * [LoggerAwareTrait](#loggerawaretrait)
+    * [StopwatchAwareTrait](#stopwatchawaretrait)
 
 ## REST API wtf?
 
@@ -43,7 +43,7 @@ might be asking question - why, isn't there a ton of those already?
 
 When I started with this "project" I first tried `FOSRestBundle` and after that
 `API Platform` and neither of those wasn't "good" enough for my needs for REST
-API - note that specially `API Platform` has evolved since that a lot. 
+API - note that specially `API Platform` has evolved since that a lot.
 
 How I have make this application to work, differs quite lot from both of those.
 The main points to make this from scratch are following things;
@@ -63,13 +63,13 @@ The main points to make this from scratch are following things;
 * Role based REST actions - this will cover like 99% use cases in real world
 * DTO usage
 * Automatic API documentation _(work in progress...)_
-* Total control how your database queries are executed (avoiding `n+1` problem, 
+* Total control how your database queries are executed (avoiding `n+1` problem,
   etc.)
 * And the main thing - to learn how to use Symfony
 
 ### Base workflow
 
-Within this application the base workflow is following, when we're talking 
+Within this application the base workflow is following, when we're talking
 about "big" sections at time;
 
 `Controller/Command <--> Resource <--> Repository`
@@ -114,23 +114,23 @@ structure if you look how `ApiKey` endpoint has been built to this application.
 
 ### Authentication
 
-By default this application is providing a "normal" user and "apikey" 
-authentication implementations. Another quite _big_ difference to traditional 
-Symfony  applications is that this application does not bind `Entities` to 
-`Symfony\Component\Security\Core\User\UserInterface` - this application uses 
+By default this application is providing a "normal" user and "apikey"
+authentication implementations. Another quite _big_ difference to traditional
+Symfony  applications is that this application does not bind `Entities` to
+`Symfony\Component\Security\Core\User\UserInterface` - this application uses
 separated DTO's for that.
 
 #### Normal users
 
 These users are authenticated via `Json Web Token (JWT)`, each JWT is created
-using private/public keys and those keys are always re-generated when 
+using private/public keys and those keys are always re-generated when
 environment is started. This will ensure that eg. each application update
 users needs to make new login - this can be changed if needed but imho this is
 most _safest_ way to handle token invalidation on application updates.
 
 Also note that if/when you want to use something else as user provider than
 your application database, you just need to change `SecurityUserFactory`
-implementation and/or create your own one. 
+implementation and/or create your own one.
 
 #### ApiKey "users"
 
@@ -138,7 +138,7 @@ This authentication is used within `server-to-server` communication between
 "trusted" parties. These "ApiKey" users are authenticated via special HTTP
 request header;
 
-```
+```text
 Authorization: ApiKey _APIKEY_TOKEN_HERE_
 ```
 
@@ -214,28 +214,35 @@ that you can easily use within your application;
 
 * getRepository(): BaseRepositoryInterface;
 * getValidator(): ValidatorInterface;
-* getDtoForEntity(string $id, string $dtoClass, RestDtoInterface $dto, ?bool $patch = null): RestDtoInterface;
-* find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null): array
+* getDtoForEntity(string $id, string $dtoClass, RestDtoInterface $dto, ?bool
+  $patch = null): RestDtoInterface;
+* find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null,
+  ?int $offset = null, ?array $search = null): array
 * findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
-* findOneBy(array $criteria, ?array $orderBy = null, ?bool $throwExceptionIfNotFound = null): ?EntityInterface
+* findOneBy(array $criteria, ?array $orderBy = null, ?bool
+  $throwExceptionIfNotFound = null): ?EntityInterface
 * count(?array $criteria = null, ?array $search = null): int
-* create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
-* update(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
-* patch(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
+* create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation =
+  null): EntityInterface
+* update(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool
+  $skipValidation = null): EntityInterface
+* patch(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool
+  $skipValidation = null): EntityInterface
 * delete(string $id, ?bool $flush = null): EntityInterface
 * getIds(?array $criteria = null, ?array $search = null): array
-* save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null): EntityInterface
+* save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation
+  = null): EntityInterface
 
-Methods itself should be quite self-explanatory, but you can read detailed 
-information about those from 
+Methods itself should be quite self-explanatory, but you can read detailed
+information about those from
 [this interface](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RestResourceInterface.php).
 
 These resource services are the main backbone of your application.
 
 ### Lifecycle callbacks
 
-Using resource services give you ability to use `lifecycle callbacks` that 
-give you extra layer to control how your requests are handled within your 
+Using resource services give you ability to use `lifecycle callbacks` that
+give you extra layer to control how your requests are handled within your
 application. These lifecycle callbacks are basically just middleware that are
 attached to following resource methods;
 
@@ -263,15 +270,15 @@ itself provides by default, but there is couple of extra features within those;
 
 This application has builtin generic parameter handling to help you with
 generic REST queries. Handling of following generic parameters has been
-attached to _all_ Advanced `find/findBy/count/ids` methods (some of these 
+attached to _all_ Advanced `find/findBy/count/ids` methods (some of these
 are replacements for what doctrine itself is providing)
 
 * Handling for `where` parameter, within this you can easily create quite
-  complex custom queries - see 
+  complex custom queries - see
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L63)
   for examples.
-* Handling for `order` parameter, which you can use to order results 
-  easily - see 
+* Handling for `order` parameter, which you can use to order results
+  easily - see
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L104)
   for examples.
 * Handling for `limit/offset` parameters, which you can use for paginator
@@ -285,7 +292,7 @@ are replacements for what doctrine itself is providing)
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L169)
   for examples.
 * Handling for `populate` parameter, which you can use to change the context
-  of serialization groups. 
+  of serialization groups.
 
 Note that within base REST CRUD actions these parameters have been passed
 through from `resource` service to repository level.
@@ -294,7 +301,7 @@ through from `resource` service to repository level.
 
 Usually common use case for generic REST API is to add custom callbacks to
 specified query that is going to be executed and this application provides you
-necessary tools to do that and within these custom callbacks you usually need 
+necessary tools to do that and within these custom callbacks you usually need
 some joins attached to query itself.
 
 These are usually attached to via [lifecycle callbacks](#lifecycle-callbacks)
@@ -318,7 +325,7 @@ $this->getRepository()
     ->addLeftJoin(['bar.foobar', 'foobar']);
 ```
 
-So eg. in this use case code above is executed via `beforeFind` and 
+So eg. in this use case code above is executed via `beforeFind` and
 `beforeFindOne` lifecycle callbacks. And what is happening there is that on
 those queries we're _automatically_ attaching three (3) joins to query and
 adding selects to three (3) another entities so that there isn't Doctrine
@@ -338,7 +345,7 @@ your own application.
 
 This is basically replacement for [SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle)
 `@ParamConverter` annotation, so that you can easily inject _any_ entity to
-your controller action method which will use specified `resource` method to 
+your controller action method which will use specified `resource` method to
 resolve that entity value.
 
 And because this is using specified `resource` service you can easily use
@@ -348,7 +355,7 @@ those [lifecycle callbacks](#lifecycle-callbacks) as you like.
 
 ### Logged in user value resolver
 
-Because this application has separated user `entity` totally from actual 
+Because this application has separated user `entity` totally from actual
 firewall user - you can use this resolver to inject actual logged in user
 entity to your controller.
 
@@ -375,10 +382,10 @@ to make actual mapping from request to corresponding DTO object.
 This application has builtin common helper traits that you can easily to use
 everywhere in your application.
 
-_**Note** that you should use these only to help you to debug your application 
+_**Note** that you should use these only to help you to debug your application
 quickly - these helpers are not mentioned to be use in your production code!!!
 eg. if you need `LoggerInterface` in your service, just use DI to inject that
-to your service._ 
+to your service._
 
 ### LoggerAwareTrait
 
@@ -423,4 +430,4 @@ class SomeService
 ```
 
 With this example you can see how much your custom code will take time to
-process and you can see this easily from your profiler. 
+process and you can see this easily from your profiler.
