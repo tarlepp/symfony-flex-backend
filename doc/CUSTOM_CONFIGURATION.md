@@ -15,14 +15,14 @@ configuration for this application.
 ## Prologue
 
 This application is using [Dotenv](https://symfony.com/doc/current/components/dotenv.html)
-component parses `.env` files to make environment variables stored in them 
+component parses `.env` files to make environment variables stored in them
 accessible via `$_ENV` or `$_SERVER`.
 
 To get basic knowledge how this works you should see [External links / resources](#external-links--resources)
 section of this document.
 
 Within this application we define _all_ environment specified settings to
-separate `application.json` file that we can easily use with Symfony 
+separate `application.json` file that we can easily use with Symfony
 configuration part.
 
 ## Creating custom files
@@ -46,8 +46,8 @@ With these commands you created _your own_ configuration that application
 will use on next start up. So all that you need to do is to make necessary
 changes to those newly created files.
 
-Making necessary changes to those files should be quite self explanatory
-- just take a look what those files contains. And most likely you only need
+Making necessary changes to those files should be quite self explanatory -
+just take a look what those files contains. And most likely you only need
 to make changes to that `secrets/application.local.json` file.
 
 ## Detailed configuration
