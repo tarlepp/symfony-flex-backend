@@ -233,16 +233,16 @@ that you can easily use within your application;
 * save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation
   = null): EntityInterface
 
-Methods itself should be quite self-explanatory, but you can read detailed 
-information about those from 
+Methods itself should be quite self-explanatory, but you can read detailed
+information about those from
 [this interface](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RestResourceInterface.php).
 
 These resource services are the main backbone of your application.
 
 ### Lifecycle callbacks
 
-Using resource services give you ability to use `lifecycle callbacks` that 
-give you extra layer to control how your requests are handled within your 
+Using resource services give you ability to use `lifecycle callbacks` that
+give you extra layer to control how your requests are handled within your
 application. These lifecycle callbacks are basically just middleware that are
 attached to following resource methods;
 
@@ -270,15 +270,15 @@ itself provides by default, but there is couple of extra features within those;
 
 This application has builtin generic parameter handling to help you with
 generic REST queries. Handling of following generic parameters has been
-attached to _all_ Advanced `find/findBy/count/ids` methods (some of these 
+attached to _all_ Advanced `find/findBy/count/ids` methods (some of these
 are replacements for what doctrine itself is providing)
 
 * Handling for `where` parameter, within this you can easily create quite
-  complex custom queries - see 
+  complex custom queries - see
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L63)
   for examples.
-* Handling for `order` parameter, which you can use to order results 
-  easily - see 
+* Handling for `order` parameter, which you can use to order results
+  easily - see
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L104)
   for examples.
 * Handling for `limit/offset` parameters, which you can use for paginator
@@ -292,7 +292,7 @@ are replacements for what doctrine itself is providing)
   [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/RequestHandler.php#L169)
   for examples.
 * Handling for `populate` parameter, which you can use to change the context
-  of serialization groups. 
+  of serialization groups.
 
 Note that within base REST CRUD actions these parameters have been passed
 through from `resource` service to repository level.
@@ -325,7 +325,7 @@ $this->getRepository()
     ->addLeftJoin(['bar.foobar', 'foobar']);
 ```
 
-So eg. in this use case code above is executed via `beforeFind` and 
+So eg. in this use case code above is executed via `beforeFind` and
 `beforeFindOne` lifecycle callbacks. And what is happening there is that on
 those queries we're _automatically_ attaching three (3) joins to query and
 adding selects to three (3) another entities so that there isn't Doctrine
@@ -345,7 +345,7 @@ your own application.
 
 This is basically replacement for [SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle)
 `@ParamConverter` annotation, so that you can easily inject _any_ entity to
-your controller action method which will use specified `resource` method to 
+your controller action method which will use specified `resource` method to
 resolve that entity value.
 
 And because this is using specified `resource` service you can easily use
@@ -355,7 +355,7 @@ those [lifecycle callbacks](#lifecycle-callbacks) as you like.
 
 ### Logged in user value resolver
 
-Because this application has separated user `entity` totally from actual 
+Because this application has separated user `entity` totally from actual
 firewall user - you can use this resolver to inject actual logged in user
 entity to your controller.
 
@@ -382,10 +382,10 @@ to make actual mapping from request to corresponding DTO object.
 This application has builtin common helper traits that you can easily to use
 everywhere in your application.
 
-_**Note** that you should use these only to help you to debug your application 
+_**Note** that you should use these only to help you to debug your application
 quickly - these helpers are not mentioned to be use in your production code!!!
 eg. if you need `LoggerInterface` in your service, just use DI to inject that
-to your service._ 
+to your service._
 
 ### LoggerAwareTrait
 
@@ -430,4 +430,4 @@ class SomeService
 ```
 
 With this example you can see how much your custom code will take time to
-process and you can see this easily from your profiler. 
+process and you can see this easily from your profiler.
