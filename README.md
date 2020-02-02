@@ -13,29 +13,29 @@
 [![Sonarcloud Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=github.com.tarlepp.symfony-flex-backend&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
 [![SymfonyInsight](https://insight.symfony.com/projects/e59c1ed3-b870-457a-971e-570a27a04784/mini.svg)](https://insight.symfony.com/projects/e59c1ed3-b870-457a-971e-570a27a04784)
 
-JSON REST API which is build on top of [Symfony](https://symfony.com/) 
+JSON REST API which is build on top of [Symfony](https://symfony.com/)
 framework.
 
-This application is mean to use as an `API` that some [frontend](#frontend) 
+This application is mean to use as an `API` that some [frontend](#frontend)
 application(s) or different backend application(s) uses as they like.
 
 ## Table of Contents
 
 * [What is this](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [Requirements](#requirements)
-      * [Recommendations](#recommendations)
-   * [Installation](#installation)
-      * [1. Clone repository](#1-clone-repository)
-      * [2. Start containers](#2-start-containers)
-      * [3. Using application](#3-using-application)
-      * [4. Getting shell to container](#4-getting-shell-to-container)
-      * [5. Building containers](#5-building-containers)
-   * [Frontend?](#frontend)
-   * [Resources](#resources)
-   * [External links / resources](#external-links--resources)
-   * [Authors](#authors)
-   * [License](#license)
+  * [Table of Contents](#table-of-contents)
+  * [Requirements](#requirements)
+    * [Recommendations](#recommendations)
+  * [Installation](#installation)
+    * [1. Clone repository](#1-clone-repository)
+    * [2. Start containers](#2-start-containers)
+    * [3. Using application](#3-using-application)
+    * [4. Getting shell to container](#4-getting-shell-to-container)
+    * [5. Building containers](#5-building-containers)
+  * [Frontend?](#frontend)
+  * [Resources](#resources)
+  * [External links / resources](#external-links--resources)
+  * [Authors](#authors)
+  * [License](#license)
 
 ## Requirements
 
@@ -44,7 +44,7 @@ application(s) or different backend application(s) uses as they like.
 
 ### Recommendations
 
-* `*nix platform` - not really requirement, but recommend to use to get 
+* `*nix platform` - not really requirement, but recommend to use to get
   `Makefile` support
 
 ## Installation
@@ -53,7 +53,7 @@ This installation guide expects that you're using docker-compose.
 
 ### 1. Clone repository
 
-Use your favorite IDE and get checkout from GitHub or just use following 
+Use your favorite IDE and get checkout from GitHub or just use following
 command
 
 ```bash
@@ -82,7 +82,7 @@ Those containers are following:
  
 ### 3. Using application
 
-By default `make start` / `docker-compose up` command starts those three 
+By default `make start` / `docker-compose up` command starts those three
 containers and exposes following ports on `localhost`:
  * 8000 (nginx + php-fpm)
  * 3310 (mysql)
@@ -99,7 +99,7 @@ password: password
 
 ### 4. Getting shell to container
 
-After you've run `make start` / `docker-compose up` command you can list all 
+After you've run `make start` / `docker-compose up` command you can list all
 running containers with `docker ps` command.
 
 And to eg. get shell access inside one of those containers you can run following
