@@ -6,17 +6,17 @@ application.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [Testing](#testing)
-      * [Commands to run tests](#commands-to-run-tests)
-      * [Parallel testing](#parallel-testing)
-      * [Own environment for testing](#own-environment-for-testing)
-   * [Metrics](#metrics)
-   * [PhpStorm](#phpstorm)
+  * [Table of Contents](#table-of-contents)
+  * [Testing](#testing)
+    * [Commands to run tests](#commands-to-run-tests)
+    * [Parallel testing](#parallel-testing)
+    * [Own environment for testing](#own-environment-for-testing)
+  * [Metrics](#metrics)
+  * [PhpStorm](#phpstorm)
 
 ## Testing
 
-Project contains bunch of tests _(E2E, Functional, Integration, Unit)_ tests 
+Project contains bunch of tests _(E2E, Functional, Integration, Unit)_ tests
 itself relies to PHPUnit library.
 
 * [PHPUnit](https://phpunit.de/)
@@ -29,10 +29,12 @@ So don't try to run `./bin/phpunit` command, because that does not exists.
 You can run tests by simply by following command(s):
 
 ```bash
-make run-tests                # Runs all tests via phpunit (Uses phpdbg if that is installed)
+make run-tests                # Runs all tests via phpunit (Uses phpdbg if that
+                              # is installed)
 make run-tests-php            # Runs all tests via phpunit (pure PHP)
 make run-tests-phpdbg         # Runs all tests via phpunit (phpdbg)
-make run-tests-fastest        # Runs all test via fastest (Uses phpdbg if that is installed)
+make run-tests-fastest        # Runs all test via fastest (Uses phpdbg if that
+                              # is installed)
 make run-tests-fastest-php    # Runs all test via fastest (pure PHP)
 make run-tests-fastest-phpdbg # Runs all test via fastest (phpdbg)
 ```
@@ -44,8 +46,11 @@ If you just want to run single test or all tests in specified directory you
 could use following command:
 
 ```bash
-./vendor/bin/phpunit ./tests/Integration/Controller/ProfileControllerTest.php # Just this single test class
-./vendor/bin/phpunit ./tests/Integration/Controller/                          # All tests in this directory
+# Just this single test class
+./vendor/bin/phpunit ./tests/Integration/Controller/ProfileControllerTest.php
+
+# All tests in this directory
+./vendor/bin/phpunit ./tests/Integration/Controller/
 ```
 
 ### Parallel testing
@@ -56,9 +61,9 @@ library.
 
 ### Own environment for testing
 
-If you need to use your own environment for testing, eg. change database or 
+If you need to use your own environment for testing, eg. change database or
 another stuff you need to create `.env.local.test` file to define your testing
-environment - if needed. This file has the same content as the main `.env.test` 
+environment - if needed. This file has the same content as the main `.env.test`
 file, just change database and others to match your testing environment.
 
 ## Metrics

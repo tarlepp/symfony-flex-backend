@@ -21,7 +21,7 @@ usage in development stage.
 
 Symfony generates quite lot of cache files, because it's using compiled
 container to make things happen. This means a quite lot of IO traffic and that
-causes slowness problems within certain environments. 
+causes slowness problems within certain environments.
 
 ## Environments with problems
 
@@ -35,10 +35,10 @@ machines. And this means that you actually run your favorite IDE inside that
 virtual machine.
 
 Another way is to use [docker-sync](#installation-of-docker-sync). Application
-itself already contains necessary [docker-sync.yml](../docker-sync.yml) 
+itself already contains necessary [docker-sync.yml](../docker-sync.yml)
 configuration  file to help with this.
 
-### Mac 
+### Mac
 
 With Mac there is a bit speed difference versus pure _*inux_ installation, but
 you could try to speed that up by using [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
