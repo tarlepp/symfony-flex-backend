@@ -6,19 +6,19 @@ or dedicated server - without using docker.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [Requirements](#requirements)
-   * [Installation](#installation)
-      * [1. Clone repository](#1-clone-repository)
-      * [2. Configuration](#2-configuration)
-      * [3. File permissions](#3-file-permissions)
-      * [4. Dependencies installation](#4-dependencies-installation)
-      * [5. Create JWT auth keys](#5-create-jwt-auth-keys)
-      * [6. Environment checks](#6-environment-checks)
-         * [CLI environment](#cli-environment)
-         * [Web-server environment](#web-server-environment)
-            * [Apache](#apache)
-      * [7. Database](#7-database)
+  * [Table of Contents](#table-of-contents)
+  * [Requirements](#requirements)
+  * [Installation](#installation)
+    * [1. Clone repository](#1-clone-repository)
+    * [2. Configuration](#2-configuration)
+    * [3. File permissions](#3-file-permissions)
+    * [4. Dependencies installation](#4-dependencies-installation)
+    * [5. Create JWT auth keys](#5-create-jwt-auth-keys)
+    * [6. Environment checks](#6-environment-checks)
+      * [CLI environment](#cli-environment)
+      * [Web-server environment](#web-server-environment)
+        * [Apache](#apache)
+    * [7. Database](#7-database)
 
 ## Requirements
 
