@@ -228,28 +228,28 @@ jobs:
           args: './doc/CONCEPTS_AND_FEATURES.md'
 
       - name: Lint `doc/CUSTOM_CONFIGURATION.md`
-          uses: avto-dev/markdown-lint@v1
-          with:
-            config: './markdown-lint.yml'
-            args: './doc/CUSTOM_CONFIGURATION.md'
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: './markdown-lint.yml'
+          args: './doc/CUSTOM_CONFIGURATION.md'
 
       - name: Lint `doc/DEVELOPMENT.md`
-          uses: avto-dev/markdown-lint@v1
-          with:
-            config: './markdown-lint.yml'
-            args: './doc/DEVELOPMENT.md'
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: './markdown-lint.yml'
+          args: './doc/DEVELOPMENT.md'
 
       - name: Lint `doc/INSTALLATION_WITHOUT_DOCKER.md`
-          uses: avto-dev/markdown-lint@v1
-          with:
-            config: './markdown-lint.yml'
-            args: './doc/INSTALLATION_WITHOUT_DOCKER.md'
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: './markdown-lint.yml'
+          args: './doc/INSTALLATION_WITHOUT_DOCKER.md'
 
       - name: Lint `doc/PHPSTORM.md`
-          uses: avto-dev/markdown-lint@v1
-          with:
-            config: './markdown-lint.yml'
-            args: './doc/PHPSTORM.md'
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: './markdown-lint.yml'
+          args: './doc/PHPSTORM.md'
 
       - name: Lint `doc/SPEED_UP_DOCKER_COMPOSE.md`
         uses: avto-dev/markdown-lint@v1
@@ -258,10 +258,10 @@ jobs:
           args: './doc/SPEED_UP_DOCKER_COMPOSE.md'
 
       - name: Lint `doc/TESTING.md`
-          uses: avto-dev/markdown-lint@v1
-          with:
-            config: './markdown-lint.yml'
-            args: './doc/TESTING.md'
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: './markdown-lint.yml'
+          args: './doc/TESTING.md'
 
       - name: Lint `doc/USAGE_CHECKLIST.md`
         uses: avto-dev/markdown-lint@v1
@@ -270,7 +270,7 @@ jobs:
           args: './doc/USAGE_CHECKLIST.md'
 
       - name: Lint `doc/XDEBUG.md`
-          uses: avto-dev/markdown-lint@v1
-          with:
-            config: './markdown-lint.yml'
-            args: './doc/XDEBUG.md'
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: './markdown-lint.yml'
+          args: './doc/XDEBUG.md'
