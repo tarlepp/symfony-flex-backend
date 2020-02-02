@@ -72,7 +72,7 @@ local paths. See the image below:
 
 ## Mac users
 
-Mac users need to create a `docker-compose.override.yml` file with following 
+Mac users need to create a `docker-compose.override.yml` file with following
 content:
 
 ```yaml
