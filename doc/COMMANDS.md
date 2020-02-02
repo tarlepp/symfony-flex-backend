@@ -42,30 +42,36 @@ cache-clear                 # Clears the cache
 cache-warmup                # Warms up an empty cache
 check-dependencies          # Checks if any vendor dependency can be updated
 clear-tools                 # Clears all tools dependencies
-ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard to fix issues
+ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard 
+                            # to fix issues
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
 generate-jwt-keys           # Generates JWT auth keys
 infection                   # Runs Infection to codebase
-lint-configuration          # Lint current defined `application.json` that it contains valid JSON
+lint-configuration          # Lint current defined `application.json` that it
+                            # contains valid JSON
 lint-yaml                   # Lint config YAML files
 local-configuration         # Create local configuration files
 normalize-composer          # Normalizes `composer.json` content
 phpcs                       # Runs PHP CodeSniffer
 phpinsights                 # Runs PHP Insights
 phpmetrics                  # Generates PhpMetrics static analysis
-phpstan                     # Runs PHPStan static analysis tool    
-psalm-shepherd              # Runs Psalm static analysis tool + report results to shepherd
+phpstan                     # Runs PHPStan static analysis tool
+psalm-shepherd              # Runs Psalm static analysis tool + report results
+                            # to shepherd
 psalm                       # Runs Psalm static analysis tool
 report-fastest              # Creates clover and JUnit xml from fastest run
 run-tests-fastest-php       # Runs all test via fastest (pure PHP)
 run-tests-fastest-phpdbg    # Runs all test via fastest (phpdbg)
-run-tests-fastest           # Runs all test via fastest (Uses phpdbg if that is installed)
+run-tests-fastest           # Runs all test via fastest (Uses phpdbg if that is
+                            # installed)
 run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
-run-tests                   # Runs all tests via phpunit (Uses phpdbg if that is installed)
+run-tests                   # Runs all tests via phpunit (Uses phpdbg if that
+                            # is installed)
 serve                       # Runs a local web server
-start-build                 # Start application in development mode and build containers
-start                       # Start application in development mode    
+start-build                 # Start application in development mode and build
+                            # containers
+start                       # Start application in development mode
 stop                        # Stop application containers
 update-bin                  # Update composer bin dependencies
 update                      # Update composer dependencies
