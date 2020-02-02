@@ -81,6 +81,12 @@ jobs:
       - name: Run PHPStan static analysis tool
         run: make phpstan
 
+      - name: Archive Psalm results (psalm.json)
+        uses: actions/upload-artifact@v1
+        with:
+          name: psalm.json
+          path: ./build/psalm.json
+
   test:
     name: PHPUnit tests (PHP ${{ matrix.php-versions }})
     runs-on: ubuntu-latest
@@ -168,11 +174,8 @@ jobs:
       #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # https://github.com/SonarSource/sonarcloud-github-action#secrets
 
-      - name: foo
-        run: |
-          ls -la ./build
-          ls -la ./build/logs
-          ls -la ./build/report
+      - name: Create PhpMetrics report
+        run: make phpmetrics
 
       - name: Archive code coverage results (clover.xml)
         uses: actions/upload-artifact@v1
@@ -186,8 +189,14 @@ jobs:
           name: junit.xml
           path: ./build/logs/junit.xml
 
-      - name: Archive PhpMetrics results
+      - name: Archive Code Coverage
         uses: actions/upload-artifact@v1
         with:
           name: PhpMetrics
           path: ./build/report
+
+      - name: Archive PhpMetrics results
+        uses: actions/upload-artifact@v1
+        with:
+          name: PhpMetrics
+          path: ./build/phpmetrics
