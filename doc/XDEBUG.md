@@ -50,14 +50,14 @@ Create Run/Debug Configuration like in image below:
 ### First connection
 
 After you have make sure that all basic things are configured properly you can
-start to listen incoming PHP debug connections. After this you need to do 
+start to listen incoming PHP debug connections. After this you need to do
 following:
 
 1) Add breakpoint to your code
 2) Enable Xdebug in your browser
 3) Reload browser page
 
-After that you should see following: 
+After that you should see following:
 
 ![Incoming connection from Xdebug](images/xdebug_04.png)
 
@@ -66,7 +66,7 @@ And in this screen select the correct `index.php` file.
 ### Configuring debugging server
 
 Last step is to configure used paths on debugging server to match with your
-local paths. See the image below: 
+local paths. See the image below:
 
 ![Path mappings](images/xdebug_05.png)
 
