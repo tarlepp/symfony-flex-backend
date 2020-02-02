@@ -42,7 +42,7 @@ cache-clear                 # Clears the cache
 cache-warmup                # Warms up an empty cache
 check-dependencies          # Checks if any vendor dependency can be updated
 clear-tools                 # Clears all tools dependencies
-ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard 
+ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard
                             # to fix issues
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
 generate-jwt-keys           # Generates JWT auth keys
@@ -85,7 +85,7 @@ You can list all Symfony console commands via following command:
 ./bin/console
 ```
 
-or 
+or
 
 ```bash
 console
@@ -96,10 +96,14 @@ console
 Project contains following custom console commands to help eg. user management:
 
 ```bash
-./bin/console user:management                       # To manage your users and user groups
+./bin/console user:management                       # To manage your users and
+                                                    # user groups
 ./bin/console api-key:management                    # To manage your API keys
-./bin/console make:rest-api                         # To create skeleton classes for new REST resource
-./bin/console utils:create-date-dimension-entities  # Console command to create 'DateDimension' entities.
+./bin/console make:rest-api                         # To create skeleton
+                                                    # classes for new REST
+                                                    # resource
+./bin/console utils:create-date-dimension-entities  # Console command to create
+                                                    # 'DateDimension' entities.
 ```
 
 #### user:management
