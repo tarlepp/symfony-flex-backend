@@ -277,3 +277,15 @@ jobs:
         with:
           config: './markdown-lint.yml'
           args: './doc/XDEBUG.md'
+
+      - name: Lint `docker/README.md`
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: './markdown-lint.yml'
+          args: './docker/README.md'
+
+      - name: Lint `secrets/README.md`
+        uses: avto-dev/markdown-lint@v1
+        with:
+          config: './markdown-lint.yml'
+          args: './secrets/README.md'
