@@ -1,19 +1,19 @@
 # What is this?
 
-This document contains all custom commands that you can use within this 
+This document contains all custom commands that you can use within this
 application during development stage.
 
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-    * [Table of Contents](#table-of-contents)
-    * [Commands](#commands)
-        * [Makefile](#makefile)
-        * [Symfony console](#symfony-console)
-        * [Custom commands](#custom-commands)
-            * [user:management](#usermanagement)
-            * [api-key:management](#api-keymanagement)
-            * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities)
+  * [Table of Contents](#table-of-contents)
+  * [Commands](#commands)
+    * [Makefile](#makefile)
+    * [Symfony console](#symfony-console)
+    * [Custom commands](#custom-commands)
+      * [user:management](#usermanagement)
+      * [api-key:management](#api-keymanagement)
+      * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities)
 
 ## Commands
 
@@ -41,7 +41,7 @@ bash                        # Get bash inside PHP container
 cache-clear                 # Clears the cache
 cache-warmup                # Warms up an empty cache
 check-dependencies          # Checks if any vendor dependency can be updated
-clear-tools                 # Clears all tools depedencies
+clear-tools                 # Clears all tools dependencies
 ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard to fix issues
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
 generate-jwt-keys           # Generates JWT auth keys
@@ -126,5 +126,5 @@ This command is just a wrapper for following commands:
 
 #### utils:create-date-dimension-entities
 
-Command to create `DateDimension` entities that can be used with date/time 
+Command to create `DateDimension` entities that can be used with date/time
 related report queries.

@@ -80,7 +80,7 @@ Those containers are following:
 * php (this is for actual application)
 * nginx (this will serve application)
 * mysql (MySQL 5.7 which will store all the data of application)
- 
+
 ### 3. Using application
 
 By default `make start` / `docker-compose up` command starts those three
@@ -88,7 +88,7 @@ containers and exposes following ports on `localhost`:
 
 * 8000 (nginx + php-fpm)
 * 3310 (mysql)
- 
+
 And this application is usable within your browser on `http://localhost:8000`
 address.
 
@@ -144,7 +144,7 @@ the box.
 
 [Angular NgRx powered frontend template for Symfony backend](https://github.com/tarlepp/angular-ngrx-frontend)
 
-With these two _template_ applications it should be quite easy to start to 
+With these two _template_ applications it should be quite easy to start to
 build _your_ own application - right?
 
 ## Resources
