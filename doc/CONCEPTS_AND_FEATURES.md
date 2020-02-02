@@ -301,7 +301,7 @@ through from `resource` service to repository level.
 
 Usually common use case for generic REST API is to add custom callbacks to
 specified query that is going to be executed and this application provides you
-necessary tools to do that and within these custom callbacks you usually need 
+necessary tools to do that and within these custom callbacks you usually need
 some joins attached to query itself.
 
 These are usually attached to via [lifecycle callbacks](#lifecycle-callbacks)
