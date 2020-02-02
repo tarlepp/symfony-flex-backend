@@ -1,6 +1,6 @@
 # What is this?
 
-This folder contains _default_ configuration for this application for 
+This folder contains _default_ configuration for this application for
 development environments.
 
 ## application.json
