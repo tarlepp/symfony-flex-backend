@@ -1,7 +1,7 @@
 # What is this?
 
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-![CI](https://github.com/tarlepp/symfony-flex-backend/workflows/CI/badge.svg)
+[![CI](https://github.com/tarlepp/symfony-flex-backend/workflows/CI/badge.svg)](https://github.com/tarlepp/symfony-flex-backend/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/tarlepp/symfony-flex-backend/badge.svg?branch=master)](https://coveralls.io/github/tarlepp/symfony-flex-backend?branch=master)
 [![Psalm coverage](https://shepherd.dev/github/tarlepp/symfony-flex-backend/coverage.svg)](https://shepherd.dev/github/tarlepp/symfony-flex-backend)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/?branch=master)
@@ -44,8 +44,10 @@ application(s) or different backend application(s) uses as they like.
 
 ### Recommendations
 
-* `*nix platform` - not really requirement, but recommend to use to get
-  `Makefile` support
+* `*nix platform` - most likely you're going to host your application on *nix
+  platform - so I would recommend to do development also on that platform.
+* `Makefile` support - if you don't have this you need to look `Makefile` file
+  to see what each `make` command is doing.
 
 ## Installation
 
@@ -66,12 +68,6 @@ For this just run following command:
 
 ```bash
 make start
-```
-
-or without `Makefile` support:
-
-```bash
-docker-compose up
 ```
 
 This command will create three (3) containers to run this backend application.
@@ -111,12 +107,6 @@ command:
 make bash
 ```
 
-or without `Makefile` support:
-
-```bash
-docker-compose exec php bash
-```
-
 Where that `php` is that actual container where this backend application is
 running.
 
@@ -128,12 +118,6 @@ running. This you can do with following command:
 
 ```bash
 make start-build
-```
-
-or without `Makefile` support:
-
-```bash
-docker-compose up --build
 ```
 
 ## Frontend?
