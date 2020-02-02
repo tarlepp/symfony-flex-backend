@@ -1,7 +1,7 @@
 # What is this?
 
 This document contains information how you can setup your [PhpStorm](https://www.jetbrains.com/phpstorm/)
-for this application _"correct"_ way. 
+for this application _"correct"_ way.
 
 For recommend plugins see [External links / resources](#external-links--resources)
 section of this documentation.
@@ -9,19 +9,19 @@ section of this documentation.
 ## Table of Contents
 
 * [What is this?](#what-is-this)
-   * [Table of Contents](#table-of-contents)
-   * [Setup](#setup)
-      * [CLI Interpreter](#cli-interpreter)
-      * [Server](#server)
-      * [Test Frameworks](#test-frameworks)
-      * [Debugging](#debugging)
-   * [External links / resources](#external-links--resources)
+  * [Table of Contents](#table-of-contents)
+  * [Setup](#setup)
+    * [CLI Interpreter](#cli-interpreter)
+    * [Server](#server)
+    * [Test Frameworks](#test-frameworks)
+    * [Debugging](#debugging)
+  * [External links / resources](#external-links--resources)
 
 ## Setup
 
 ### CLI Interpreter
 
-First thing that you need to do is select correct CLI interpreter for your 
+First thing that you need to do is select correct CLI interpreter for your
 PhpStorm. Selection should be available on `Settings -> Languages & Frameworks -> PHP`
 section.
 
@@ -51,7 +51,7 @@ as in image below.
 
 ![Path mappings](images/phpstorm_03.png)
 
-After this you need to add Run/Debug configuration for PHPUnit. In that prompt 
+After this you need to add Run/Debug configuration for PHPUnit. In that prompt
 you should see the same as image below.
 
 Note that if you see `Fix` button on bottom right corner just click that to fix
