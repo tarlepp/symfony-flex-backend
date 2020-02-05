@@ -94,8 +94,6 @@ class RequestLoggerTest extends KernelTestCase
             ->setUser()
             ->setApiKey()
             ->handle();
-
-        unset($resource, $response, $request);
     }
 
     /**

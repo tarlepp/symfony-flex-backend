@@ -40,8 +40,6 @@ class LoginLoggerTest extends KernelTestCase
 
         $loginLogger = new LoginLogger($logLoginResource, $requestStack);
         $loginLogger->process('');
-
-        unset($loginLogger, $requestStack, $logLoginResource);
     }
 
     /**
