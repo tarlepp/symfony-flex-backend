@@ -28,7 +28,7 @@ class SchemaTest extends KernelTestCase
     /**
      * @var SchemaValidator
      */
-    private $validator;
+    private SchemaValidator $validator;
 
     public function testThatMappingsAreValid(): void
     {
@@ -36,15 +36,13 @@ class SchemaTest extends KernelTestCase
 
         $messages = [];
 
-        $formatter = static function ($errors, $className) use (&$messages) {
+        $formatter = static function ($errors, $className) use (&$messages): void {
             $messages[] = $className . ': ' . implode(', ', $errors);
         };
 
         array_walk($errors, $formatter);
 
         static::assertEmpty($errors, implode("\n", $messages));
-
-        unset($errors, $messages);
     }
 
     public function testThatSchemaInSyncWithMetadata(): void
@@ -62,8 +60,6 @@ class SchemaTest extends KernelTestCase
     {
         parent::setUp();
 
-        gc_enable();
-
         static::bootKernel();
 
         if (!Type::hasType('EnumLogLogin')) {
@@ -76,17 +72,5 @@ class SchemaTest extends KernelTestCase
             ->getManager();
 
         $this->validator = new SchemaValidator($em);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->validator);
-
-        gc_collect_cycles();
     }
 }

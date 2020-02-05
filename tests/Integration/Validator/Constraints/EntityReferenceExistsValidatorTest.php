@@ -56,6 +56,8 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
      * @param mixed  $value
      * @param mixed  $entityClass
      * @param string $expectedMessage
+     *
+     * @testdox Test that `validate` method throws `$expectedMessage` with `$value` using entity class `$entityClass`
      */
     public function testThatValidateMethodThrowsUnexpectedValueException(
         $value,

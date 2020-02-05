@@ -29,7 +29,7 @@ class UniqueEmailValidatorTest extends KernelTestCase
     /**
      * @var UniqueEmail
      */
-    private $constraint;
+    private UniqueEmail $constraint;
 
     /**
      * @var MockObject|ExecutionContext
@@ -41,7 +41,6 @@ class UniqueEmailValidatorTest extends KernelTestCase
      */
     private $builder;
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
@@ -84,8 +83,6 @@ class UniqueEmailValidatorTest extends KernelTestCase
         $validator = new UniqueEmailValidator($repository);
         $validator->initialize($this->context);
         $validator->validate($user, $this->constraint);
-
-        unset($validator, $repository, $user);
     }
 
     /**
@@ -98,12 +95,5 @@ class UniqueEmailValidatorTest extends KernelTestCase
         $this->constraint = new UniqueEmail();
         $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
         $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->constraint, $this->context, $this->builder);
     }
 }
