@@ -14,6 +14,7 @@ use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
+use DateTime;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
@@ -35,12 +36,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSupportClassReturnsExpected
      *
-     * @param bool   $expected
-     * @param string $input
+     * @param bool  $expected
+     * @param mixed $input
      *
      * @throws Throwable
+     *
+     * @testdox Test that `supportsClass` method returns `$expected` with `$input` input.
      */
-    public function testThatSupportClassReturnsExpected(bool $expected, string $input): void
+    public function testThatSupportClassReturnsExpected(bool $expected, $input): void
     {
         /**
          * @var MockObject|ApiKeyRepository $apiKeyRepository
@@ -52,8 +55,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $provider = new ApiKeyUserProvider($apiKeyRepository, $rolesService);
 
         static::assertSame($expected, $provider->supportsClass($input));
-
-        unset($provider, $rolesService, $apiKeyRepository);
     }
 
     /**
@@ -160,9 +161,15 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
     /**
      * @return Generator
+     *
+     * @throws Throwable
      */
     public function dataProviderTestThatSupportClassReturnsExpected(): Generator
     {
+        yield [false, true];
+        yield [false, 'foobar'];
+        yield [false, 123];
+        yield [false, new DateTime()];
         yield [false, stdClass::class];
         yield [false, UserInterface::class];
         yield [false, UserEntity::class];
