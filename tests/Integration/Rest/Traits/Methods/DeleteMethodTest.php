@@ -15,6 +15,7 @@ use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodTestClass;
 use Exception;
 use Generator;
+use InvalidArgumentException;
 use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ramsey\Uuid\Uuid;
@@ -42,7 +43,7 @@ class DeleteMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
 
         /** @codingStandardsIgnoreStart */
-        $this->expectExceptionMessageRegExp(
+        $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
         /** @codingStandardsIgnoreEnd */
@@ -63,6 +64,8 @@ class DeleteMethodTest extends KernelTestCase
      * @param string $httpMethod
      *
      * @throws Throwable
+     *
+     * @testdox Test that `App\Rest\Traits\Methods\DeleteMethod` throws an exception with `$httpMethod` HTTP method.
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
@@ -92,6 +95,8 @@ class DeleteMethodTest extends KernelTestCase
      * @param integer    $expectedCode
      *
      * @throws Throwable
+     *
+     * @testdox Test that `App\Rest\Traits\Methods\DeleteMethod` uses `$expectedCode` code on HttpException.
      */
     public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
     {
@@ -182,5 +187,7 @@ class DeleteMethodTest extends KernelTestCase
         yield [new HttpException(400), 0];
         yield [new NotFoundHttpException(), 0];
         yield [new Exception(), 400];
+        yield [new LogicException(), 400];
+        yield [new InvalidArgumentException(), 400];
     }
 }

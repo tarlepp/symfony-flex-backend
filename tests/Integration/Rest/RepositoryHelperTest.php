@@ -23,16 +23,15 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class RepositoryHelperTest extends KernelTestCase
 {
-    /**
-     * @var UserRepository
-     */
-    protected $repository;
+    protected UserRepository $repository;
 
     /**
      * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
      *
      * @param string $expected
      * @param array  $input
+     *
+     * @testdox Test that `processCriteria` method returns `$expected`.
      */
     public function testThatProcessCriteriaWorksAsExpected(string $expected, array $input): void
     {
@@ -76,6 +75,8 @@ class RepositoryHelperTest extends KernelTestCase
      *
      * @param string $expected
      * @param array  $terms
+     *
+     * @testdox Test that `processSearchTerms` method returns `$expected`.
      */
     public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $terms):  void
     {
@@ -93,6 +94,8 @@ class RepositoryHelperTest extends KernelTestCase
      *
      * @param string $expected
      * @param array  $input
+     *
+     * @testdox Test that `processOrderBy` method returns `$expected`.
      */
     public function testThatProcessOrderByWorksLikeExpected(string $expected, array $input): void
     {
@@ -123,6 +126,8 @@ class RepositoryHelperTest extends KernelTestCase
      * @param array  $criteria
      * @param string $expectedDQL
      * @param array  $expectedParameters
+     *
+     * @testdox Test that `getExpression` method returns `$expectedDQL` with simple criteria.
      */
     public function testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
         array $criteria,
@@ -149,6 +154,8 @@ class RepositoryHelperTest extends KernelTestCase
      * @param array  $criteria
      * @param string $expectedDQL
      * @param array  $expectedParameters
+     *
+     * @testdox Test that `getExpression` method returns `$expectedDQL` with complex criteria.
      */
     public function testThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(
         array $criteria,

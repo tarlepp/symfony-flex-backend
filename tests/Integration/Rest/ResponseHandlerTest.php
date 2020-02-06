@@ -33,7 +33,6 @@ class ResponseHandlerTest extends ContainerTestCase
 {
     public function testThatGetSerializerReturnsExpected(): void
     {
-
         $serializer = $this->getContainer()->get('serializer');
 
         $responseClass = new ResponseHandler($serializer);
@@ -49,6 +48,8 @@ class ResponseHandlerTest extends ContainerTestCase
      * @param string  $expectedContent
      *
      * @throws Throwable
+     *
+     * @testdox Test that response is `$expectedContent` when using `$request` request with `$data` data.
      */
     public function testThatCreateResponseReturnsExpected(
         Request $request,
@@ -98,12 +99,14 @@ class ResponseHandlerTest extends ContainerTestCase
      * @param string $format
      *
      * @throws Throwable
+     *
+     * @testdox Test that non supported serializer format `$format` throws an exception.
      */
     public function testThatNonSupportedSerializerFormatThrowsHttpException(string $format): void
     {
         $this->expectException(HttpException::class);
         $this->expectExceptionCode(400);
-        $this->expectExceptionMessageRegExp('/Serialization for the format .* is not supported/');
+        $this->expectExceptionMessageMatches('/Serialization for the format .* is not supported/');
 
         $request = Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => $format]);
         $serializer = $this->getContainer()->get('serializer');

@@ -82,7 +82,6 @@ class ControllerTest extends KernelTestCase
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
         $controller->setResponseHandler(new ResponseHandler(new Serializer()));
 
-        /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
     }
 

@@ -40,7 +40,7 @@ class FindMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
 
         /** @codingStandardsIgnoreStart */
-        $this->expectExceptionMessageRegExp(
+        $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
         /** @codingStandardsIgnoreEnd */
@@ -59,6 +59,8 @@ class FindMethodTest extends KernelTestCase
      * @param string $httpMethod
      *
      * @throws Throwable
+     *
+     * @testdox Test that `App\Rest\Traits\Methods\FindMethod` throws an exception with `$httpMethod` HTTP method.
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
@@ -116,6 +118,8 @@ class FindMethodTest extends KernelTestCase
      * @param int       $expectedCode
      *
      * @throws Throwable
+     *
+     * @testdox Test that `App\Rest\Traits\Methods\FindMethod` uses `$expectedCode` code on HttpException.
      */
     public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
     {

@@ -41,7 +41,7 @@ class PatchMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
 
         /** @codingStandardsIgnoreStart */
-        $this->expectExceptionMessageRegExp(
+        $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
         /** @codingStandardsIgnoreEnd */
@@ -66,6 +66,8 @@ class PatchMethodTest extends KernelTestCase
      * @param string $httpMethod
      *
      * @throws Throwable
+     *
+     * @testdox Test that `App\Rest\Traits\Methods\PatchMethod` throws an exception with `$httpMethod` HTTP method.
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {

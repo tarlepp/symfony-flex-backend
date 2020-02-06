@@ -39,6 +39,8 @@ class ActionTest extends KernelTestCase
      * @param array  $parameters
      *
      * @throws Throwable
+     *
+     * @testdox Test that `$method` method call trigger `$traitMethod` method call in `$className` trait.
      */
     public function testThatTraitCallsExpectedMethod(
         string $className,
