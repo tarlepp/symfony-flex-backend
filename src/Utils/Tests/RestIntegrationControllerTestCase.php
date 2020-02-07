@@ -26,6 +26,10 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 {
     protected Controller $controller;
     protected string $controllerClass;
+
+    /**
+     * @psalm-var class-string
+     */
     protected string $resourceClass;
 
     /**
