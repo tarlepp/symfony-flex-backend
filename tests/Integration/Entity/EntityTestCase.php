@@ -18,7 +18,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Throwable;
 use TypeError;
 use function array_filter;
@@ -43,25 +43,10 @@ use function ucfirst;
  */
 abstract class EntityTestCase extends KernelTestCase
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
-     * @var Container
-     */
-    protected $testContainer;
-
-    /**
-     * @var EntityInterface
-     */
-    protected $entity;
-
-    /**
-     * @var string
-     */
-    protected $entityName;
+    protected EntityInterface $entity;
+    protected string $entityName;
+    protected EntityManager $entityManager;
+    protected ContainerInterface $testContainer;
 
     /**
      * @var EntityRepository
@@ -519,15 +504,11 @@ abstract class EntityTestCase extends KernelTestCase
         $assocFields = [];
 
         foreach ($meta->getAssociationMappings() as $mapping) {
-            /** @noinspection OffsetOperationsInspection */
             if (in_array($mapping['fieldName'], ['createdBy', 'updatedBy', 'deletedBy'], true)) {
                 continue;
             }
 
-            /** @noinspection OffsetOperationsInspection */
             $field = $mapping['fieldName'];
-
-            /** @noinspection OffsetOperationsInspection */
             $type = $mapping['targetEntity'];
 
             $assocFields[] = [$field, $type, $mapping, $meta->isReadOnly];
@@ -790,8 +771,6 @@ abstract class EntityTestCase extends KernelTestCase
      */
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         static::bootKernel();
@@ -804,15 +783,6 @@ abstract class EntityTestCase extends KernelTestCase
 
         // Create new entity object
         $this->entity = new $this->entityName();
-
         $this->repository = $this->entityManager->getRepository($this->entityName);
-    }
-
-    protected function tearDown(): void
-    {
-        $this->entityManager->close();
-        $this->entityManager = null; // avoid memory leaks
-
-        parent::tearDown();
     }
 }

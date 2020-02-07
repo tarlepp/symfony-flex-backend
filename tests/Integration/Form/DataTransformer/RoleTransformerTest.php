@@ -28,7 +28,7 @@ class RoleTransformerTest extends KernelTestCase
     /**
      * @var MockObject|RoleResource
      */
-    private $roleResource;
+    private MockObject $roleResource;
 
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
@@ -121,22 +121,11 @@ class RoleTransformerTest extends KernelTestCase
      */
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         $this->roleResource = $this
             ->getMockBuilder(RoleResource::class)
             ->disableOriginalConstructor()
             ->getMock();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->roleResource);
-
-        gc_collect_cycles();
     }
 }

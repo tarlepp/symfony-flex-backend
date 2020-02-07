@@ -20,7 +20,7 @@ use App\Resource\LogRequestResource;
  */
 class LogRequestResourceTest extends ResourceTestCase
 {
-    protected $entityClass = LogRequest::class;
-    protected $repositoryClass = LogRequestRepository::class;
-    protected $resourceClass = LogRequestResource::class;
+    protected string $entityClass = LogRequest::class;
+    protected string $repositoryClass = LogRequestRepository::class;
+    protected string $resourceClass = LogRequestResource::class;
 }

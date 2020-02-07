@@ -39,10 +39,7 @@ use function ucfirst;
  */
 abstract class DtoTestCase extends KernelTestCase
 {
-    /**
-     * @var string
-     */
-    protected $dtoClass;
+    protected string $dtoClass;
 
     /**
      * @throws Throwable

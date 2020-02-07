@@ -30,15 +30,8 @@ use Throwable;
  */
 class UTCDateTimeTypeTest extends KernelTestCase
 {
-    /**
-     * @var AbstractPlatform
-     */
-    private $platform;
-
-    /**
-     * @var Type
-     */
-    private $type;
+    private AbstractPlatform $platform;
+    private Type $type;
 
     /**
      * @throws Throwable
@@ -164,12 +157,5 @@ class UTCDateTimeTypeTest extends KernelTestCase
         }
 
         $this->type = Type::getType('datetime');
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->type, $this->platform);
     }
 }

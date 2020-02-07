@@ -24,22 +24,9 @@ use function sprintf;
  */
 abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 {
-    /**
-     * @var Controller
-     */
-    protected $controller;
-
-    /**
-     * @var string
-     * @psalm-var class-string
-     */
-    protected $controllerClass;
-
-    /**
-     * @var string
-     * @psalm-var class-string
-     */
-    protected $resourceClass;
+    protected Controller $controller;
+    protected string $controllerClass;
+    protected string $resourceClass;
 
     /**
      * @inheritdoc

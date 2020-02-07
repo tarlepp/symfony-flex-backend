@@ -40,11 +40,7 @@ class GenericResourceTest extends KernelTestCase
     private string $dtoClass = UserDto::class;
     private string $resourceClass = UserResource::class;
     private string $entityClass = UserEntity::class;
-
-    /**
-     * @var UserResource
-     */
-    private $resource;
+    private UserResource $resource;
 
     /**
      * @return EntityManagerInterface|Object

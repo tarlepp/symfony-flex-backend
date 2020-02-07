@@ -31,7 +31,7 @@ class UserTypeTest extends TypeTestCase
     /**
      * @var MockObject|UserGroupResource
      */
-    private $mockUserGroupResource;
+    private MockObject $mockUserGroupResource;
 
     public function testSubmitValidData(): void
     {
@@ -103,20 +103,9 @@ class UserTypeTest extends TypeTestCase
      */
     protected function setUp(): void
     {
-        gc_enable();
-
         $this->mockUserGroupResource = $this->createMock(UserGroupResource::class);
 
         parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->mockUserGroupResource);
-
-        gc_collect_cycles();
     }
 
     /**

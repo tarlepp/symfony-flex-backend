@@ -18,6 +18,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *
  * @package App\Tests\Integration\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property AuthController $controller
  */
 class AuthControllerTest extends KernelTestCase
 {

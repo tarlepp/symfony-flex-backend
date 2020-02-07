@@ -20,30 +20,11 @@ use App\Resource\LogRequestResource;
  */
 class LogRequestRepositoryTest extends RepositoryTestCase
 {
-    /**
-     * @var LogRequestRepository
-     */
-    protected $repository;
-
-    /**
-     * @var string
-     */
-    protected $entityName = LogRequest::class;
-
-    /**
-     * @var string
-     */
-    protected $repositoryName = LogRequestRepository::class;
-
-    /**
-     * @var string
-     */
-    protected $resourceName = LogRequestResource::class;
-
-    /**
-     * @var array
-     */
-    protected $associations = [
+    protected LogRequestRepository $repository;
+    protected string $entityName = LogRequest::class;
+    protected string $repositoryName = LogRequestRepository::class;
+    protected string $resourceName = LogRequestResource::class;
+    protected array $associations = [
         'user',
         'apiKey',
     ];

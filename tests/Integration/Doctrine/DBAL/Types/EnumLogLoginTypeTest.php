@@ -26,15 +26,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class EnumLogLoginTypeTest extends KernelTestCase
 {
-    /**
-     * @var AbstractPlatform
-     */
-    private $platform;
-
-    /**
-     * @var Type
-     */
-    private $type;
+    private AbstractPlatform $platform;
+    private Type $type;
 
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
@@ -111,14 +104,5 @@ class EnumLogLoginTypeTest extends KernelTestCase
         }
 
         $this->type = Type::getType('EnumLogLogin');
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->type, $this->platform);
-
-        gc_collect_cycles();
     }
 }

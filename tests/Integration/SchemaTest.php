@@ -25,9 +25,6 @@ use function implode;
  */
 class SchemaTest extends KernelTestCase
 {
-    /**
-     * @var SchemaValidator
-     */
     private SchemaValidator $validator;
 
     public function testThatMappingsAreValid(): void

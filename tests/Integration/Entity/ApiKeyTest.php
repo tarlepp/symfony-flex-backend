@@ -24,10 +24,7 @@ use function strlen;
  */
 class ApiKeyTest extends EntityTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = ApiKey::class;
+    protected string $entityName = ApiKey::class;
 
     public function testThatTokenIsGenerated(): void
     {

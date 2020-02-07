@@ -22,7 +22,7 @@ use App\Tests\Integration\DTO\DtoTestCase;
  */
 class UserUpdateTest extends DtoTestCase
 {
-    protected $dtoClass = UserUpdate::class;
+    protected string $dtoClass = UserUpdate::class;
 
     public function testThatUserGroupsAreExpected(): void
     {

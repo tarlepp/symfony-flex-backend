@@ -19,5 +19,5 @@ use App\Tests\Integration\DTO\DtoTestCase;
  */
 class UserCreateTest extends DtoTestCase
 {
-    protected $dtoClass = UserCreate::class;
+    protected string $dtoClass = UserCreate::class;
 }

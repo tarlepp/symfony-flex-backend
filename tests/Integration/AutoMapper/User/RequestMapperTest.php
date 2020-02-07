@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\AutoMapper\User;
 
-use App\AutoMapper\RestRequestMapper;
 use App\AutoMapper\User\RequestMapper;
 use App\DTO\User as DTO;
 use App\Entity\UserGroup;
@@ -27,20 +26,9 @@ use Throwable;
  */
 class RequestMapperTest extends RestRequestMapperTestCase
 {
-    /**
-     * @var string
-     */
-    protected $mapperClass = RequestMapper::class;
-
-    /**
-     * @var RestRequestMapper|RequestMapper
-     */
-    protected $mapperObject;
-
-    /**
-     * @var string[]
-     */
-    protected $restDtoClasses = [
+    protected RequestMapper $mapperObject;
+    protected string $mapperClass = RequestMapper::class;
+    protected array $restDtoClasses = [
         DTO\User::class,
         DTO\UserCreate::class,
         DTO\UserUpdate::class,
@@ -50,7 +38,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @var MockObject|UserGroupResource
      */
-    protected $mockUserGroupResource;
+    private MockObject $mockUserGroupResource;
 
     /**
      * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod

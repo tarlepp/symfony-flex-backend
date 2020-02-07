@@ -25,10 +25,7 @@ use function ucfirst;
  */
 class DateDimensionTest extends EntityTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = DateDimension::class;
+    protected string $entityName = DateDimension::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**

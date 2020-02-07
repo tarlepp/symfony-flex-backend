@@ -20,7 +20,7 @@ use App\Resource\ApiKeyResource;
  */
 class ApiKeyResourceTest extends ResourceTestCase
 {
-    protected $entityClass = ApiKey::class;
-    protected $resourceClass = ApiKeyResource::class;
-    protected $repositoryClass = ApiKeyRepository::class;
+    protected string $entityClass = ApiKey::class;
+    protected string $resourceClass = ApiKeyResource::class;
+    protected string $repositoryClass = ApiKeyRepository::class;
 }

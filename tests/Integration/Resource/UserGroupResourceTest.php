@@ -20,7 +20,7 @@ use App\Resource\UserGroupResource;
  */
 class UserGroupResourceTest extends ResourceTestCase
 {
-    protected $entityClass = UserGroup::class;
-    protected $repositoryClass = UserGroupRepository::class;
-    protected $resourceClass = UserGroupResource::class;
+    protected string $entityClass = UserGroup::class;
+    protected string $repositoryClass = UserGroupRepository::class;
+    protected string $resourceClass = UserGroupResource::class;
 }

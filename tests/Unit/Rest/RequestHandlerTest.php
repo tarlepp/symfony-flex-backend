@@ -41,7 +41,7 @@ class RequestHandlerTest extends KernelTestCase
      */
     public function testThatGetCriteriaMethodsReturnsExpectedGenerator(array $expected, array $where): void
     {
-        $fakeRequest = Request::create('/', 'GET', ['where' => json_encode($where)]);
+        $fakeRequest = Request::create('/', 'GET', ['where' => json_encode($where, JSON_THROW_ON_ERROR)]);
 
         static::assertSame($expected, RequestHandler::getCriteria($fakeRequest));
 

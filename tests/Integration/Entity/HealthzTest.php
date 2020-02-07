@@ -18,8 +18,5 @@ use App\Entity\Healthz;
  */
 class HealthzTest extends EntityTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = Healthz::class;
+    protected string $entityName = Healthz::class;
 }

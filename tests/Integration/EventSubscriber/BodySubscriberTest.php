@@ -26,6 +26,9 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 class BodySubscriberTest extends KernelTestCase
 {
+    /**
+     * @throws JsonException
+     */
     public function testThatEmptyBodyWorksLikeExpected(): void
     {
         static::bootKernel();
@@ -43,6 +46,9 @@ class BodySubscriberTest extends KernelTestCase
         unset($subscriber, $event, $request);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function testThatNonJsonContentTypeWorksLikeExpected(): void
     {
         static::bootKernel();
@@ -73,6 +79,8 @@ class BodySubscriberTest extends KernelTestCase
      * @param array  $expectedRequestParameters
      * @param string $contentType
      * @param string $content
+     *
+     * @throws JsonException
      */
     public function testThatJsonContentReplaceParametersAsExpected(
         array $expectedRequestParameters,
@@ -92,6 +100,9 @@ class BodySubscriberTest extends KernelTestCase
         static::assertSame($expectedRequestParameters, $request->request->all());
     }
 
+    /**
+     * @throws JsonException
+     */
     public function testThatInvalidJsonContentThrowsAnException(): void
     {
         $this->expectException(JsonException::class);
@@ -106,6 +117,9 @@ class BodySubscriberTest extends KernelTestCase
         $subscriber->onKernelRequest($event);
     }
 
+    /**
+     * @throws JsonException
+     */
     public function testThatWithNullBodyReplaceIsNotCalled(): void
     {
         static::bootKernel();

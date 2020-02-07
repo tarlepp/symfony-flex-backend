@@ -20,30 +20,11 @@ use App\Resource\UserResource;
  */
 class UserRepositoryTest extends RepositoryTestCase
 {
-    /**
-     * @var UserRepository
-     */
-    protected $repository;
-
-    /**
-     * @var string
-     */
-    protected $entityName = User::class;
-
-    /**
-     * @var string
-     */
-    protected $repositoryName = UserRepository::class;
-
-    /**
-     * @var string
-     */
-    protected $resourceName = UserResource::class;
-
-    /**
-     * @var array
-     */
-    protected $associations = [
+    protected UserRepository $repository;
+    protected string $entityName = User::class;
+    protected string $repositoryName = UserRepository::class;
+    protected string $resourceName = UserResource::class;
+    protected array $associations = [
         'createdBy',
         'updatedBy',
         'userGroups',
@@ -51,11 +32,7 @@ class UserRepositoryTest extends RepositoryTestCase
         'logsLogin',
         'logsLoginFailure',
     ];
-
-    /**
-     * @var array
-     */
-    protected $searchColumns = [
+    protected array $searchColumns = [
         'username',
         'firstName',
         'lastName',

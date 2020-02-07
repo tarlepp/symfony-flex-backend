@@ -34,10 +34,7 @@ use function ucfirst;
  */
 class LogRequestTest extends EntityTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = LogRequest::class;
+    protected string $entityName = LogRequest::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
@@ -100,12 +97,20 @@ class LogRequestTest extends EntityTestCase
             static::assertInstanceOf($type, $value);
         }
 
+        $returnValue = $value;
+
+        if (is_object($value)) {
+            $returnValue = get_class($value);
+        } elseif (is_array($value)) {
+            $returnValue = 'array';
+        }
+
         $message = sprintf(
             'Getter \'%s\' for field \'%s\' did not return expected type \'%s\' return value was \'%s\'',
             $getter,
             $field,
             $type,
-            is_object($value) ? get_class($value) : (is_array($value) ? 'array' : $value)
+            $returnValue
         );
 
         try {

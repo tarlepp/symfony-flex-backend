@@ -18,10 +18,7 @@ use App\Entity\Role;
  */
 class RoleTest extends EntityTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = Role::class;
+    protected string $entityName = Role::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**

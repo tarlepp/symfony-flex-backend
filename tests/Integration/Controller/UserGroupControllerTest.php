@@ -17,9 +17,11 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
  *
  * @package App\Tests\Integration\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property UserGroupController $controller
  */
 class UserGroupControllerTest extends RestIntegrationControllerTestCase
 {
-    protected $controllerClass = UserGroupController::class;
-    protected $resourceClass = UserGroupResource::class;
+    protected string $controllerClass = UserGroupController::class;
+    protected string $resourceClass = UserGroupResource::class;
 }

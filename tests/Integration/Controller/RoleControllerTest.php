@@ -17,9 +17,11 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
  *
  * @package App\Tests\Integration\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property RoleController $controller
  */
 class RoleControllerTest extends RestIntegrationControllerTestCase
 {
-    protected $controllerClass = RoleController::class;
-    protected $resourceClass = RoleResource::class;
+    protected string $controllerClass = RoleController::class;
+    protected string $resourceClass = RoleResource::class;
 }
