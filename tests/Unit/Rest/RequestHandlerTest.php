@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Rest;
 
 use App\Rest\RequestHandler;
+use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,14 +37,22 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator
      *
-     * @param array $expected
-     * @param array $where
+     * @param StringableArrayObject $expected
+     * @param StringableArrayObject $where
+     *
+     * @testdox Test that `getCriteria` returns `$expected` when using `$where` as `?where` parameter.
      */
-    public function testThatGetCriteriaMethodsReturnsExpectedGenerator(array $expected, array $where): void
-    {
-        $fakeRequest = Request::create('/', 'GET', ['where' => json_encode($where, JSON_THROW_ON_ERROR)]);
+    public function testThatGetCriteriaMethodsReturnsExpectedGenerator(
+        StringableArrayObject $expected,
+        StringableArrayObject $where
+    ): void {
+        $fakeRequest = Request::create(
+            '/',
+            'GET',
+            ['where' => json_encode($where->getArrayCopy(), JSON_THROW_ON_ERROR)]
+        );
 
-        static::assertSame($expected, RequestHandler::getCriteria($fakeRequest));
+        static::assertSame($expected->getArrayCopy(), RequestHandler::getCriteria($fakeRequest));
 
         unset($fakeRequest);
     }
@@ -51,15 +60,19 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetOrderByReturnsExpectedValue
      *
-     * @param array $parameters
-     * @param array $expected
+     * @param StringableArrayObject $parameters
+     * @param StringableArrayObject $expected
+     *
+     * @testdox Test that `getOrderBy` returns `$expected` when using `$parameters`.
      */
-    public function testThatGetOrderByReturnsExpectedValue(array $parameters, array $expected): void
-    {
-        $fakeRequest = Request::create('/', 'GET', $parameters);
+    public function testThatGetOrderByReturnsExpectedValue(
+        StringableArrayObject $parameters,
+        StringableArrayObject $expected
+    ): void {
+        $fakeRequest = Request::create('/', 'GET', $parameters->getArrayCopy());
 
         static::assertSame(
-            $expected,
+            $expected->getArrayCopy(),
             RequestHandler::getOrderBy($fakeRequest),
             'getOrderBy method did not return expected value'
         );
@@ -82,12 +95,14 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetLimitReturnsExpectedValue
      *
-     * @param array   $parameters
-     * @param integer $expected
+     * @param StringableArrayObject $parameters
+     * @param int                   $expected
+     *
+     * @testdox Test that `getLimit` method returns `$expected` when using `$parameters`.
      */
-    public function testThatGetLimitReturnsExpectedValue(array $parameters, int $expected): void
+    public function testThatGetLimitReturnsExpectedValue(StringableArrayObject $parameters, int $expected): void
     {
-        $fakeRequest = Request::create('/', 'GET', $parameters);
+        $fakeRequest = Request::create('/', 'GET', $parameters->getArrayCopy());
 
         $actual = RequestHandler::getLimit($fakeRequest);
 
@@ -120,12 +135,14 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetOffsetReturnsExpectedValue
      *
-     * @param array   $parameters
-     * @param integer $expected
+     * @param StringableArrayObject $parameters
+     * @param integer               $expected
+     *
+     * @testdox Test that `getOffset` method returns `$expected` when using `$parameters`
      */
-    public function testThatGetOffsetReturnsExpectedValue(array $parameters, int $expected): void
+    public function testThatGetOffsetReturnsExpectedValue(StringableArrayObject $parameters, int $expected): void
     {
-        $fakeRequest = Request::create('/', 'GET', $parameters);
+        $fakeRequest = Request::create('/', 'GET', $parameters->getArrayCopy());
 
         $actual = RequestHandler::getOffset($fakeRequest);
 
@@ -177,10 +194,12 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetSearchTermsReturnsExpectedValue
      *
-     * @param array       $expected
-     * @param string|bool $search
+     * @param StringableArrayObject $expected
+     * @param string|bool           $search
+     *
+     * @testdox Test that `getSearchTerms` returns `$expected` when using `$search` as `?search` parameter.
      */
-    public function testThatGetSearchTermsReturnsExpectedValue(array $expected, $search): void
+    public function testThatGetSearchTermsReturnsExpectedValue(StringableArrayObject $expected, $search): void
     {
         $parameters = [
             'search' => (string)$search,
@@ -189,7 +208,7 @@ class RequestHandlerTest extends KernelTestCase
         $fakeRequest = Request::create('/', 'GET', $parameters);
 
         static::assertSame(
-            $expected,
+            $expected->getArrayCopy(),
             RequestHandler::getSearchTerms($fakeRequest),
             'getSearchTerms method did not return expected value'
         );
@@ -203,76 +222,50 @@ class RequestHandlerTest extends KernelTestCase
     public function dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator(): Generator
     {
         yield [
-            [
-                'foo' => 'bar',
-            ],
-            [
-                'foo' => 'bar',
-            ],
+            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject(['foo' => 'bar']),
         ];
 
         yield [
-            [
-                'foo' => '',
-            ],
-            [
-                'foo' => '',
-            ],
+            new StringableArrayObject(['foo' => '']),
+            new StringableArrayObject(['foo' => '']),
         ];
 
         yield [
-            [
-                'foo' => '0',
-            ],
-            [
-                'foo' => '0',
-            ],
+            new StringableArrayObject(['foo' => '0']),
+            new StringableArrayObject(['foo' => '0']),
         ];
 
         yield [
-            [
-                'foo' => 0,
-            ],
-            [
-                'foo' => 0,
-            ],
+            new StringableArrayObject(['foo' => 0]),
+            new StringableArrayObject(['foo' => 0]),
         ];
 
         yield [
-            [
-                'foo' => true,
-            ],
-            [
-                'foo' => true,
-            ],
+            new StringableArrayObject(['foo' => true]),
+            new StringableArrayObject(['foo' => true]),
         ];
 
         yield [
-            [
-                'foo' => false,
-            ],
-            [
-                'foo' => false,
-            ],
+            new StringableArrayObject(['foo' => false]),
+            new StringableArrayObject(['foo' => false]),
         ];
 
         yield [
-            [],
-            [
-                'foo' => null,
-            ],
+            new StringableArrayObject([]),
+            new StringableArrayObject(['foo' => null]),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'foo1' => 'bar',
                 'foo2' => '',
                 'foo3' => '0',
                 'foo4' => 0,
                 'foo5' => true,
                 'foo6' => false,
-            ],
-            [
+            ]),
+            new StringableArrayObject([
                 'foo1' => 'bar',
                 'foo11' => null,
                 'foo2' => '',
@@ -285,7 +278,7 @@ class RequestHandlerTest extends KernelTestCase
                 'foo51' => null,
                 'foo6' => false,
                 'foo61' => null,
-            ],
+            ]),
         ];
     }
 
@@ -297,129 +290,129 @@ class RequestHandlerTest extends KernelTestCase
     public function dataProviderTestThatGetOrderByReturnsExpectedValue(): Generator
     {
         yield [
-            ['order' => 'column1'],
-            ['column1' => 'ASC'],
+            new StringableArrayObject(['order' => 'column1']),
+            new StringableArrayObject(['column1' => 'ASC']),
         ];
 
         yield [
-            ['order' => '-column1'],
-            ['column1' => 'DESC'],
+            new StringableArrayObject(['order' => '-column1']),
+            new StringableArrayObject(['column1' => 'DESC']),
         ];
 
         yield [
-            ['order' => 't.column1'],
-            ['t.column1' => 'ASC'],
+            new StringableArrayObject(['order' => 't.column1']),
+            new StringableArrayObject(['t.column1' => 'ASC']),
         ];
 
         yield [
-            ['order' => '-t.column1'],
-            ['t.column1' => 'DESC'],
+            new StringableArrayObject(['order' => '-t.column1']),
+            new StringableArrayObject(['t.column1' => 'DESC']),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     'column1' => 'ASC',
                 ],
-            ],
-            ['column1' => 'ASC'],
+            ]),
+            new StringableArrayObject(['column1' => 'ASC']),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     'column1' => 'DESC',
                 ],
-            ],
-            ['column1' => 'DESC'],
+            ]),
+            new StringableArrayObject(['column1' => 'DESC']),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     'column1' => 'foobar',
                 ],
-            ],
-            ['column1' => 'ASC'],
+            ]),
+            new StringableArrayObject(['column1' => 'ASC']),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     't.column1' => 'ASC',
                 ],
-            ],
-            ['t.column1' => 'ASC'],
+            ]),
+            new StringableArrayObject(['t.column1' => 'ASC']),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     't.column1' => 'DESC',
                 ],
-            ],
-            ['t.column1' => 'DESC'],
+            ]),
+            new StringableArrayObject(['t.column1' => 'DESC']),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     't.column1' => 'foobar',
                 ],
-            ],
-            ['t.column1' => 'ASC'],
+            ]),
+            new StringableArrayObject(['t.column1' => 'ASC']),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     'column1' => 'ASC',
                     'column2' => 'DESC',
                 ],
-            ],
-            [
+            ]),
+            new StringableArrayObject([
                 'column1' => 'ASC',
                 'column2' => 'DESC',
-            ],
+            ]),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     't.column1' => 'ASC',
                     't.column2' => 'DESC',
                 ],
-            ],
-            [
+            ]),
+            new StringableArrayObject([
                 't.column1' => 'ASC',
                 't.column2' => 'DESC',
-            ],
+            ]),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     't.column1' => 'ASC',
                     'column2' => 'ASC',
                 ],
-            ],
-            [
+            ]),
+            new StringableArrayObject([
                 't.column1' => 'ASC',
                 'column2' => 'ASC',
-            ],
+            ]),
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'order' => [
                     'column1' => 'ASC',
                     'column2' => 'foobar',
                 ],
-            ],
-            [
+            ]),
+            new StringableArrayObject([
                 'column1' => 'ASC',
                 'column2' => 'ASC',
-            ],
+            ]),
         ];
     }
 
@@ -431,22 +424,22 @@ class RequestHandlerTest extends KernelTestCase
     public function dataProviderTestThatGetLimitReturnsExpectedValue(): Generator
     {
         yield [
-            ['limit' => 10],
+            new StringableArrayObject(['limit' => 10]),
             10,
         ];
 
         yield [
-            ['limit' => 'ddd'],
+            new StringableArrayObject(['limit' => 'ddd']),
             0,
         ];
 
         yield [
-            ['limit' => 'E10'],
+            new StringableArrayObject(['limit' => 'E10']),
             0,
         ];
 
         yield [
-            ['limit' => -10],
+            new StringableArrayObject(['limit' => -10]),
             10,
         ];
     }
@@ -459,22 +452,22 @@ class RequestHandlerTest extends KernelTestCase
     public function dataProviderTestThatGetOffsetReturnsExpectedValue(): Generator
     {
         yield [
-            ['offset' => 10],
+            new StringableArrayObject(['offset' => 10]),
             10,
         ];
 
         yield [
-            ['offset' => 'ddd'],
+            new StringableArrayObject(['offset' => 'ddd']),
             0,
         ];
 
         yield [
-            ['offset' => 'E10'],
+            new StringableArrayObject(['offset' => 'E10']),
             0,
         ];
 
         yield [
-            ['offset' => -10],
+            new StringableArrayObject(['offset' => -10]),
             10,
         ];
     }
@@ -487,84 +480,84 @@ class RequestHandlerTest extends KernelTestCase
     public function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
     {
         yield [
-            [
+            new StringableArrayObject([
                 'or' => [
                     '1',
                 ],
-            ],
+            ]),
             true,
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'or' => [
                     'bar',
                 ],
-            ],
+            ]),
             'bar',
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'or' => [
                     'bar',
                     'foo',
                 ],
-            ],
+            ]),
             'bar foo',
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'or' => [
                     'bar',
                     'f',
                     'oo',
                 ],
-            ],
+            ]),
             'bar  f    oo ',
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'and' => [
                     'foo',
                 ],
-            ],
+            ]),
             '{"and": ["foo"]}'
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'or' => [
                     'bar',
                 ],
-            ],
+            ]),
             '{"or": ["bar"]}'
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'and' => [
                     'foo',
                     'bar',
                 ],
-            ],
+            ]),
             '{"and": ["foo", "bar"]}'
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'or' => [
                     'bar',
                     'foo',
                 ],
-            ],
+            ]),
             '{"or": ["bar", "foo"]}'
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'or' => [
                     'bar',
                     'foo',
@@ -573,18 +566,18 @@ class RequestHandlerTest extends KernelTestCase
                     'foo',
                     'bar',
                 ],
-            ],
+            ]),
             '{"or": ["bar", "foo"], "and": ["foo", "bar"]}'
         ];
 
         yield [
-            [
+            new StringableArrayObject([
                 'or' => [
                     '{"or":',
                     '["bar",',
                     '"foo"],',
                 ],
-            ],
+            ]),
             '{"or": ["bar", "foo"], ', // With invalid JSON input it should fallback to string handling
         ];
     }

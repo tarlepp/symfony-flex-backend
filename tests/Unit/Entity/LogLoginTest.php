@@ -34,6 +34,8 @@ class LogLoginTest extends KernelTestCase
      * @param DeviceDetector $deviceDetector
      *
      * @throws Throwable
+     *
+     * @testdox Test that `getCreatedAt` method returns expected with `$type` type.
      */
     public function testThatGetCreatedAtReturnsExpected(
         string $type,

@@ -11,6 +11,7 @@ namespace App\Controller;
 use App\Rest\ResponseHandler;
 use App\Service\Version;
 use App\Utils\HealthzService;
+use Doctrine\Common\Collections\ArrayCollection;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

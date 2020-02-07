@@ -39,6 +39,8 @@ class PHPUnitUtilTest extends KernelTestCase
      *
      * @param string $expected
      * @param string $input
+     *
+     * @testdox Test that `getType` method returns `$expected` with `$input` input.
      */
     public function testThatGetTypeReturnExpected(string $expected, string $input): void
     {
@@ -64,6 +66,8 @@ class PHPUnitUtilTest extends KernelTestCase
      * @param bool   $strict
      *
      * @throws Throwable
+     *
+     * @testdox Test that `getValidValueForType` method returns `$expected` with `$input` and strict mode `$strict`.
      */
     public function testThatGetValidValueReturnsExpectedValue($expected, string $input, bool $strict): void
     {
@@ -98,6 +102,8 @@ class PHPUnitUtilTest extends KernelTestCase
      * @param string $input
      *
      * @throws Throwable
+     *
+     * @testdox Test that `getInvalidValueForType` method returns `$expected` with `$input` input.
      */
     public function testThatGetInvalidValueForTypeReturnsExpectedValue($expected, string $input): void
     {
