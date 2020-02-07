@@ -14,7 +14,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use Throwable;
 use function array_key_exists;
-use function gc_enable;
 use function ucfirst;
 
 /**
@@ -25,10 +24,7 @@ use function ucfirst;
  */
 class LogLoginFailureTest extends EntityTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = LogLoginFailure::class;
+    protected string $entityName = LogLoginFailure::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
@@ -104,8 +100,6 @@ class LogLoginFailureTest extends EntityTestCase
      */
     protected function setUp(): void
     {
-        gc_enable();
-
         static::bootKernel();
 
         // Store container and entity manager

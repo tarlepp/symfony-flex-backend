@@ -50,6 +50,13 @@ class SecurityUserTest extends KernelTestCase
         static::assertSame($user->getId(), (new SecurityUser($user))->getUsername());
     }
 
+    public function testThatGetUuidReturnsExpected(): void
+    {
+        $user = new User();
+
+        static::assertSame($user->getId(), (new SecurityUser($user))->getUuid());
+    }
+
     public function testThatPasswordIsNotPresentAfterEraseCredential(): void
     {
         $encoder = static function (string $password) {

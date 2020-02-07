@@ -22,9 +22,9 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class LogLoginFailureResourceTest extends ResourceTestCase
 {
-    protected $entityClass = LogLoginFailure::class;
-    protected $repositoryClass = LogLoginFailureRepository::class;
-    protected $resourceClass = LogLoginFailureResource::class;
+    protected string $entityClass = LogLoginFailure::class;
+    protected string $repositoryClass = LogLoginFailureRepository::class;
+    protected string $resourceClass = LogLoginFailureResource::class;
 
     public function testThatResetMethodCallsExpectedRepositoryMethod(): void
     {

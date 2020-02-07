@@ -22,7 +22,7 @@ use App\Tests\Integration\DTO\DtoTestCase;
  */
 class UserPatchTest extends DtoTestCase
 {
-    protected $dtoClass = UserPatch::class;
+    protected string $dtoClass = UserPatch::class;
 
     public function testThatUserGroupsAreExpected(): void
     {

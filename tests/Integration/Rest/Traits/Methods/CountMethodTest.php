@@ -41,7 +41,7 @@ class CountMethodTest extends KernelTestCase
         $this->expectException(LogicException::class);
 
         /** @codingStandardsIgnoreStart */
-        $this->expectExceptionMessageRegExp(
+        $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
         /** @codingStandardsIgnoreEnd */
@@ -60,6 +60,8 @@ class CountMethodTest extends KernelTestCase
      * @param string $httpMethod
      *
      * @throws Throwable
+     *
+     * @testdox Test that `App\Rest\Traits\Methods\CountMethod` throws an exception with `$httpMethod` HTTP method.
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
@@ -114,9 +116,11 @@ class CountMethodTest extends KernelTestCase
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
      * @param Exception $exception
-     * @param int        $expectedCode
+     * @param int       $expectedCode
      *
      * @throws Throwable
+     *
+     * @testdox Test that `App\Rest\Traits\Methods\CountMethod` uses `$expectedCode` code on HttpException.
      */
     public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
     {

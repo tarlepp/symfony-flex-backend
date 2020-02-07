@@ -17,9 +17,11 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
  *
  * @package App\Tests\Integration\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property UserController $controller
  */
 class UserControllerTest extends RestIntegrationControllerTestCase
 {
-    protected $controllerClass = UserController::class;
-    protected $resourceClass = UserResource::class;
+    protected string $controllerClass = UserController::class;
+    protected string $resourceClass = UserResource::class;
 }

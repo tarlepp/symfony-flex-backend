@@ -29,7 +29,7 @@ class UniqueUsernameValidatorTest extends KernelTestCase
     /**
      * @var UniqueUsername
      */
-    private $constraint;
+    private UniqueUsername $constraint;
 
     /**
      * @var MockObject|ExecutionContext
@@ -41,7 +41,6 @@ class UniqueUsernameValidatorTest extends KernelTestCase
      */
     private $builder;
 
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @throws \Doctrine\ORM\NonUniqueResultException
      *
@@ -84,8 +83,6 @@ class UniqueUsernameValidatorTest extends KernelTestCase
         $validator = new UniqueUsernameValidator($repository);
         $validator->initialize($this->context);
         $validator->validate($user, $this->constraint);
-
-        unset($validator, $repository, $user);
     }
 
     /**
@@ -98,12 +95,5 @@ class UniqueUsernameValidatorTest extends KernelTestCase
         $this->constraint = new UniqueUsername();
         $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
         $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->constraint, $this->context, $this->builder);
     }
 }

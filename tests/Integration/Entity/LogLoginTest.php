@@ -28,10 +28,7 @@ use function ucfirst;
  */
 class LogLoginTest extends EntityTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = LogLogin::class;
+    protected string $entityName = LogLogin::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
@@ -115,8 +112,6 @@ class LogLoginTest extends EntityTestCase
      */
     protected function setUp(): void
     {
-        gc_enable();
-
         static::bootKernel();
 
         // Store container and entity manager

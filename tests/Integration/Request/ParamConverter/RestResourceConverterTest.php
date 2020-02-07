@@ -18,6 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 /**
  * Class RestResourceConverterTest
@@ -27,10 +28,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class RestResourceConverterTest extends KernelTestCase
 {
-    /**
-     * @var RestResourceConverter
-     */
-    private $converter;
+    private RestResourceConverter $converter;
 
     /**
      * @dataProvider dataProviderTestThatSupportMethodReturnsExpected
@@ -43,6 +41,9 @@ class RestResourceConverterTest extends KernelTestCase
         static::assertSame($expected, $this->converter->supports($configuration));
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatApplyMethodThrowsAnException(): void
     {
         $this->expectException(NotFoundHttpException::class);
@@ -64,6 +65,8 @@ class RestResourceConverterTest extends KernelTestCase
      * @dataProvider dataProviderTestThatApplyMethodReturnsExpected
      *
      * @param string $role
+     *
+     * @throws Throwable
      */
     public function testThatApplyMethodReturnsExpected(string $role): void
     {

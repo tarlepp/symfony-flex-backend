@@ -20,7 +20,7 @@ use App\Resource\HealthzResource;
  */
 class HealthzResourceTest extends ResourceTestCase
 {
-    protected $entityClass = Healthz::class;
-    protected $repositoryClass = HealthzRepository::class;
-    protected $resourceClass = HealthzResource::class;
+    protected string $entityClass = Healthz::class;
+    protected string $repositoryClass = HealthzRepository::class;
+    protected string $resourceClass = HealthzResource::class;
 }

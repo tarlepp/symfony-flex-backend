@@ -14,7 +14,6 @@ use App\Entity\UserGroup;
 use App\Security\RolesService;
 use Generator;
 use function serialize;
-use function ucfirst;
 use function unserialize;
 
 /**
@@ -25,15 +24,7 @@ use function unserialize;
  */
 class UserTest extends EntityTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = User::class;
-
-    /**
-     * @var User
-     */
-    protected $entity;
+    protected string $entityName = User::class;
 
     /**
      * @dataProvider dataProviderTestThatPasswordHashingIsWorkingAsExpected

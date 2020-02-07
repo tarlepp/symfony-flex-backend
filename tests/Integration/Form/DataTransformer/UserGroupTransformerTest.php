@@ -28,7 +28,7 @@ class UserGroupTransformerTest extends KernelTestCase
     /**
      * @var MockObject|UserGroupResource
      */
-    private $userGroupResource;
+    private MockObject $userGroupResource;
 
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
@@ -118,22 +118,11 @@ class UserGroupTransformerTest extends KernelTestCase
      */
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         $this->userGroupResource = $this
             ->getMockBuilder(UserGroupResource::class)
             ->disableOriginalConstructor()
             ->getMock();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->userGroupResource);
-
-        gc_collect_cycles();
     }
 }

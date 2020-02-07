@@ -31,7 +31,7 @@ class UserGroupTypeTest extends TypeTestCase
     /**
      * @var MockObject|RolesService
      */
-    private $mockRoleService;
+    private MockObject $mockRoleService;
 
     /**
      * @var MockObject|RoleResource
@@ -98,21 +98,10 @@ class UserGroupTypeTest extends TypeTestCase
      */
     protected function setUp(): void
     {
-        gc_enable();
-
         $this->mockRoleService = $this->createMock(RolesService::class);
         $this->mockRoleResource = $this->createMock(RoleResource::class);
 
         parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->mockRoleService, $this->mockRoleResource);
-
-        gc_collect_cycles();
     }
 
     /**

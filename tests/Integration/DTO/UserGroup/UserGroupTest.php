@@ -22,7 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class UserGroupTest extends DtoTestCase
 {
-    protected $dtoClass = UserGroup::class;
+    protected string $dtoClass = UserGroup::class;
 
     public function testThatLoadCallsExpectedEntityMethods(): void
     {
@@ -50,7 +50,6 @@ class UserGroupTest extends DtoTestCase
 
         /** @var MockObject|UserGroupEntity $userGroupEntity */
         $userGroupEntity = $this->getMockBuilder(UserGroupEntity::class)
-            ->setMethods(['getId', 'setName', 'setRole'])
             ->getMock();
 
         $userGroupEntity

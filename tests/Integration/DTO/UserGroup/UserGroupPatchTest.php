@@ -19,5 +19,5 @@ use App\Tests\Integration\DTO\DtoTestCase;
  */
 class UserGroupPatchTest extends DtoTestCase
 {
-    protected $dtoClass = UserGroupPatch::class;
+    protected string $dtoClass = UserGroupPatch::class;
 }

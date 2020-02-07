@@ -20,36 +20,17 @@ use App\Resource\UserGroupResource;
  */
 class UserGroupRepositoryTest extends RepositoryTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = UserGroup::class;
-
-    /**
-     * @var string
-     */
-    protected $repositoryName = UserGroupRepository::class;
-
-    /**
-     * @var string
-     */
-    protected $resourceName = UserGroupResource::class;
-
-    /**
-     * @var array
-     */
-    protected $associations = [
+    protected string $entityName = UserGroup::class;
+    protected string $repositoryName = UserGroupRepository::class;
+    protected string $resourceName = UserGroupResource::class;
+    protected array $associations = [
         'role',
         'users',
         'apiKeys',
         'createdBy',
         'updatedBy',
     ];
-
-    /**
-     * @var array
-     */
-    protected $searchColumns = [
+    protected array $searchColumns = [
         'role',
         'name',
     ];

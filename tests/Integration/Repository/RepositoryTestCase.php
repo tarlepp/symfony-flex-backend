@@ -20,43 +20,17 @@ use function sort;
  *
  * @package App\Tests\Integration\Repository
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property BaseRepository $repository
  */
 class RepositoryTestCase extends KernelTestCase
 {
-    /**
-     * @var RestResource
-     */
-    protected $resource;
-
-    /**
-     * @var BaseRepository
-     */
-    protected $repository;
-
-    /**
-     * @var string
-     */
-    protected $entityName;
-
-    /**
-     * @var string
-     */
-    protected $repositoryName;
-
-    /**
-     * @var string
-     */
-    protected $resourceName;
-
-    /**
-     * @var array
-     */
-    protected $associations = [];
-
-    /**
-     * @var array
-     */
-    protected $searchColumns = [];
+    protected string $entityName;
+    protected string $repositoryName;
+    protected string $resourceName;
+    protected array $associations = [];
+    protected array $searchColumns = [];
+    protected RestResource $resource;
 
     public function testThatGetEntityNameReturnsExpected(): void
     {

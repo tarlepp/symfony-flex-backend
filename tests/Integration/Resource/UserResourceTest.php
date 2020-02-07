@@ -24,9 +24,9 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class UserResourceTest extends ResourceTestCase
 {
-    protected $entityClass = User::class;
-    protected $repositoryClass = UserRepository::class;
-    protected $resourceClass = UserResource::class;
+    protected string $entityClass = User::class;
+    protected string $repositoryClass = UserRepository::class;
+    protected string $resourceClass = UserResource::class;
 
     /**
      * @param RepositoryInterface $repository

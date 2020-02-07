@@ -10,8 +10,6 @@ namespace App\Tests\Integration\AutoMapper;
 
 use App\AutoMapper\RestRequestMapper;
 use Generator;
-use InvalidArgumentException;
-use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
@@ -21,23 +19,13 @@ use Throwable;
  *
  * @package App\Tests\Integration\AutoMapper
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @property RestRequestMapper $mapperObject
  */
 class RestRequestMapperTestCase extends KernelTestCase
 {
-    /**
-     * @var string
-     */
-    protected $mapperClass;
-
-    /**
-     * @var RestRequestMapper
-     */
-    protected $mapperObject;
-
-    /**
-     * @var string[]
-     */
-    protected $restDtoClasses = [];
+    protected string $mapperClass;
+    protected array $restDtoClasses = [];
 
     /**
      * @dataProvider dataProviderTestThatMapToObjectReturnsExpectedDtoObject

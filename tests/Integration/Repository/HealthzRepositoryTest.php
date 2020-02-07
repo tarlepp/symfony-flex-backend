@@ -20,18 +20,7 @@ use App\Resource\HealthzResource;
  */
 class HealthzRepositoryTest extends RepositoryTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = Healthz::class;
-
-    /**
-     * @var string
-     */
-    protected $repositoryName = HealthzRepository::class;
-
-    /**
-     * @var string
-     */
-    protected $resourceName = HealthzResource::class;
+    protected string $entityName = Healthz::class;
+    protected string $repositoryName = HealthzRepository::class;
+    protected string $resourceName = HealthzResource::class;
 }

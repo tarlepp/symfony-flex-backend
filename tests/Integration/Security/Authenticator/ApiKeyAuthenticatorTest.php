@@ -14,7 +14,7 @@ use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -38,6 +38,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      * @param Request $request
      *
      * @throws Throwable
+     *
+     * @testdox Test that `supports` method returns `$expected` for request `$request`
      */
     public function testThatSupportReturnsExpected(bool $expected, Request $request): void
     {
@@ -67,7 +69,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         static::assertSame(401, $output->getStatusCode());
         static::assertJsonStringEqualsJsonString(
-            json_encode(['message' =>  'Authentication Required']),
+            json_encode(['message' => 'Authentication Required'], JSON_THROW_ON_ERROR),
             $output->getContent()
         );
     }
@@ -79,6 +81,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      * @param Request    $request
      *
      * @throws Throwable
+     *
+     * @testdox Test that `getCredentials` method returns `$expected` with `$request` request.
      */
     public function testThatGetCredentialsReturnsExpected(?array $expected, Request $request): void
     {
@@ -98,6 +102,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      * @param mixed $credentials
      *
      * @throws Throwable
+     *
+     * @testdox Test that `getUser` returns null with `$credentials` credentials.
      */
     public function testThatGetUserReturnsExpectedWhenCredentialsIsInvalid($credentials): void
     {
@@ -117,6 +123,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      * @param mixed $credentials
      *
      * @throws Throwable
+     *
+     * @testdox Test that `checkCredentials` method throws `Invalid token` exception with `$credentials`  credentials.
      */
     public function testThatCheckCredentialsThrowsAnException($credentials): void
     {
@@ -165,7 +173,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         static::assertSame(Response::HTTP_FORBIDDEN, $output->getStatusCode());
         static::assertJsonStringEqualsJsonString(
-            json_encode(['message' => 'An authentication exception occurred.']),
+            json_encode(['message' => 'An authentication exception occurred.'], JSON_THROW_ON_ERROR),
             $output->getContent()
         );
     }
@@ -191,12 +199,12 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [false, new Request()];
 
         $request = new Request();
-        $request->headers = new ParameterBag(['Authorization' => 'ApiKey']);
+        $request->headers = new HeaderBag(['Authorization' => 'ApiKey']);
 
         yield [false, $request];
 
         $request = new Request();
-        $request->headers = new ParameterBag(['Authorization' => 'ApiKey somekey']);
+        $request->headers = new HeaderBag(['Authorization' => 'ApiKey somekey']);
 
         yield [true, $request];
     }
@@ -209,12 +217,12 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [null, new Request()];
 
         $request = new Request();
-        $request->headers = new ParameterBag(['Authorization' => 'ApiKey']);
+        $request->headers = new HeaderBag(['Authorization' => 'ApiKey']);
 
         yield [null, $request];
 
         $request = new Request();
-        $request->headers = new ParameterBag(['Authorization' => 'ApiKey somekey']);
+        $request->headers = new HeaderBag(['Authorization' => 'ApiKey somekey']);
 
         yield [['token' => 'somekey'], $request];
     }

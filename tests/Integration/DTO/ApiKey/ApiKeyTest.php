@@ -26,7 +26,7 @@ use function count;
  */
 class ApiKeyTest extends DtoTestCase
 {
-    protected $dtoClass = ApiKeyDto::class;
+    protected string $dtoClass = ApiKeyDto::class;
 
     public function testThatLoadMethodWorks(): void
     {
@@ -65,7 +65,6 @@ class ApiKeyTest extends DtoTestCase
 
         /** @var MockObject|EntityInterface $entity */
         $entity = $this->getMockBuilder(ApiKeyEntity::class)
-            ->setMethods(['getId', 'setDescription', 'clearUserGroups', 'addUserGroup'])
             ->getMock();
 
         $entity

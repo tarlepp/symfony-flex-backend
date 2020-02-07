@@ -20,7 +20,7 @@ use App\Resource\DateDimensionResource;
  */
 class DateDimensionResourceTest extends ResourceTestCase
 {
-    protected $entityClass = DateDimension::class;
-    protected $resourceClass = DateDimensionResource::class;
-    protected $repositoryClass = DateDimensionRepository::class;
+    protected string $entityClass = DateDimension::class;
+    protected string $resourceClass = DateDimensionResource::class;
+    protected string $repositoryClass = DateDimensionRepository::class;
 }

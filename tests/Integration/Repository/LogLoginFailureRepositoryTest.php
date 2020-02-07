@@ -20,25 +20,10 @@ use App\Resource\LogLoginFailureResource;
  */
 class LogLoginFailureRepositoryTest extends RepositoryTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = LogLoginFailure::class;
-
-    /**
-     * @var string
-     */
-    protected $repositoryName = LogLoginFailureRepository::class;
-
-    /**
-     * @var string
-     */
-    protected $resourceName = LogLoginFailureResource::class;
-
-    /**
-     * @var array
-     */
-    protected $associations = [
+    protected string $entityName = LogLoginFailure::class;
+    protected string $repositoryName = LogLoginFailureRepository::class;
+    protected string $resourceName = LogLoginFailureResource::class;
+    protected array $associations = [
         'user',
     ];
 }

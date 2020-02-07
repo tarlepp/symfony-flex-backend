@@ -28,30 +28,11 @@ use Throwable;
  */
 class UserEntityEventListenerTest extends KernelTestCase
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-
-    /**
-     * @var ContainerInterface
-     */
-    private $testContainer;
-
-    /**
-     * @var User
-     */
-    protected $entity;
-
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    protected $encoder;
-
-    /**
-     * @var UserEntityEventListener
-     */
-    protected $subscriber;
+    private EntityManager $entityManager;
+    private ContainerInterface $testContainer;
+    private User $entity;
+    private UserPasswordEncoderInterface $encoder;
+    private UserEntityEventListener $subscriber;
 
     public function testThatTooShortPasswordThrowsAnExceptionWithPrePersist(): void
     {
@@ -148,8 +129,6 @@ class UserEntityEventListenerTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         static::bootKernel();
@@ -185,14 +164,9 @@ class UserEntityEventListenerTest extends KernelTestCase
         }
 
         $this->entityManager->close();
-        $this->entityManager = null; // avoid memory leaks
 
         static::$kernel->shutdown();
 
         parent::tearDown();
-
-        unset($this->entity, $this->subscriber, $this->encoder, $this->entityManager, $this->testContainer);
-
-        gc_collect_cycles();
     }
 }

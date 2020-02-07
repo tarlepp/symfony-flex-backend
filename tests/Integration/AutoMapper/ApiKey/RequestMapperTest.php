@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\AutoMapper\ApiKey;
 
 use App\AutoMapper\ApiKey\RequestMapper;
-use App\AutoMapper\RestRequestMapper;
 use App\DTO\ApiKey as DTO;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
@@ -27,20 +26,9 @@ use Throwable;
  */
 class RequestMapperTest extends RestRequestMapperTestCase
 {
-    /**
-     * @var string
-     */
-    protected $mapperClass = RequestMapper::class;
-
-    /**
-     * @var RestRequestMapper|RequestMapper
-     */
-    protected $mapperObject;
-
-    /**
-     * @var string[]
-     */
-    protected $restDtoClasses = [
+    protected RequestMapper $mapperObject;
+    protected string $mapperClass = RequestMapper::class;
+    protected array $restDtoClasses = [
         DTO\ApiKey::class,
         DTO\ApiKeyCreate::class,
         DTO\ApiKeyUpdate::class,
@@ -50,7 +38,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @var MockObject|UserGroupResource
      */
-    protected $mockUserGroupResource;
+    private MockObject $mockUserGroupResource;
 
     /**
      * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod

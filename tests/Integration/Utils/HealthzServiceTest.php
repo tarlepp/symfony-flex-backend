@@ -46,7 +46,5 @@ class HealthzServiceTest extends KernelTestCase
 
         $healthzService = new HealthzService($mockRepository);
         $healthzService->check();
-
-        unset($healthzService, $mockRepository);
     }
 }

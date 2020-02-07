@@ -19,5 +19,5 @@ use App\Tests\Integration\DTO\DtoTestCase;
  */
 class ApiKeyCreateTest extends DtoTestCase
 {
-    protected $dtoClass = ApiKeyCreate::class;
+    protected string $dtoClass = ApiKeyCreate::class;
 }

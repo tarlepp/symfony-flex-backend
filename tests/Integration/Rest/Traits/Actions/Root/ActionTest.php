@@ -12,7 +12,6 @@ use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -39,6 +38,8 @@ class ActionTest extends KernelTestCase
      * @param array  $parameters
      *
      * @throws Throwable
+     *
+     * @testdox Test that `$method` method call trigger `$traitMethod` method call in `$className` trait.
      */
     public function testThatTraitCallsExpectedMethod(
         string $className,

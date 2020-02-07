@@ -22,7 +22,7 @@ use App\Tests\Integration\DTO\DtoTestCase;
  */
 class ApiKeyPatchTest extends DtoTestCase
 {
-    protected $dtoClass = ApiKeyPatch::class;
+    protected string $dtoClass = ApiKeyPatch::class;
 
     public function testThatUserGroupsAreExpected(): void
     {

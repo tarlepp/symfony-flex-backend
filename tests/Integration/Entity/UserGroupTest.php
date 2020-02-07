@@ -18,8 +18,5 @@ use App\Entity\UserGroup;
  */
 class UserGroupTest extends EntityTestCase
 {
-    /**
-     * @var string
-     */
-    protected $entityName = UserGroup::class;
+    protected string $entityName = UserGroup::class;
 }

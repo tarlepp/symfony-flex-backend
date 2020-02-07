@@ -26,7 +26,7 @@ use function count;
  */
 class UserTest extends DtoTestCase
 {
-    protected $dtoClass = UserDto::class;
+    protected string $dtoClass = UserDto::class;
 
     public function testThatLoadMethodWorks(): void
     {
@@ -34,17 +34,17 @@ class UserTest extends DtoTestCase
         $roleEntity = new RoleEntity('test role');
 
         // Create UserGroup entity
-        $userGroupEntity = new UserGroupEntity();
-        $userGroupEntity->setName('test user group');
-        $userGroupEntity->setRole($roleEntity);
+        $userGroupEntity = (new UserGroupEntity())
+            ->setName('test user group')
+            ->setRole($roleEntity);
 
         // Create User entity
-        $userEntity = new UserEntity();
-        $userEntity->setUsername('username');
-        $userEntity->setFirstName('first name');
-        $userEntity->setLastName('last name');
-        $userEntity->setEmail('firstname.surname@test.com');
-        $userEntity->addUserGroup($userGroupEntity);
+        $userEntity = (new UserEntity())
+            ->setUsername('username')
+            ->setFirstName('first name')
+            ->setLastName('last name')
+            ->setEmail('firstname.surname@test.com')
+            ->addUserGroup($userGroupEntity);
 
         /** @var UserDto $dto */
         $dto = new $this->dtoClass();
@@ -64,7 +64,6 @@ class UserTest extends DtoTestCase
     {
         /** @var MockObject|EntityInterface $entity */
         $entity = $this->getMockBuilder(UserEntity::class)
-            ->setMethods(['getId', 'setPlainPassword'])
             ->getMock();
 
         $entity
@@ -90,7 +89,6 @@ class UserTest extends DtoTestCase
 
         /** @var MockObject|UserEntity $entity */
         $entity = $this->getMockBuilder(UserEntity::class)
-            ->setMethods(['getId', 'clearUserGroups', 'addUserGroup'])
             ->getMock();
 
         $entity

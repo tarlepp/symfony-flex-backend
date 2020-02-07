@@ -20,25 +20,10 @@ use function sprintf;
  */
 abstract class ResourceTestCase extends KernelTestCase
 {
-    /**
-     * @var string
-     */
-    protected $resourceClass;
-
-    /**
-     * @var string
-     */
-    protected $repositoryClass;
-
-    /**
-     * @var string
-     */
-    protected $entityClass;
-
-    /**
-     * @var RestResourceInterface
-     */
-    protected $resource;
+    protected string $resourceClass;
+    protected string $repositoryClass;
+    protected string $entityClass;
+    protected RestResourceInterface $resource;
 
     public function testThatGetRepositoryReturnsExpected(): void
     {
@@ -63,21 +48,10 @@ abstract class ResourceTestCase extends KernelTestCase
 
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         static::bootKernel();
 
         $this->resource = static::$container->get($this->resourceClass);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->resource);
-
-        gc_collect_cycles();
     }
 }
