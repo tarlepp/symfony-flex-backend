@@ -61,7 +61,5 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
 
         $subscriber = new AuthenticationSuccessSubscriber($loginLogger, $userRepository);
         $subscriber->onAuthenticationSuccess($event);
-
-        unset($subscriber, $loginLogger, $userRepository, $event, $userEntity);
     }
 }

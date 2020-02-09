@@ -70,8 +70,6 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
         $subscriber = new AuthenticationFailureSubscriber($loginLogger, $userRepository);
         $subscriber->onAuthenticationFailure($event);
-
-        unset($subscriber, $loginLogger, $userRepository, $event, $response, $authenticationException, $token, $user);
     }
 
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserNotPresent(): void
@@ -119,7 +117,5 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
             (static function ($exception): void {
             })($exception);
         }
-
-        unset($subscriber, $loginLogger, $userRepository, $event, $response, $authenticationException, $token, $user);
     }
 }
