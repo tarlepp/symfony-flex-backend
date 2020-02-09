@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Entity;
 
 use App\Entity\ApiKey;
 use App\Security\RolesService;
+use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use function array_unique;
 use function strlen;
@@ -39,17 +40,19 @@ class ApiKeyTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatApiKeyHasExpectedRoles
      *
-     * @param array $expectedRoles
-     * @param array $criteria
+     * @param StringableArrayObject $expectedRoles
+     * @param StringableArrayObject $criteria
+     *
+     * @testdox Test that `ApiKey` has expected roles `$expectedRoles` with criteria `$criteria`.
      */
-    public function testThatApiKeyHasExpectedRoles(array $expectedRoles, array $criteria): void
-    {
-        $apiKey = $this->repository->findOneBy($criteria);
+    public function testThatApiKeyHasExpectedRoles(
+        StringableArrayObject $expectedRoles,
+        StringableArrayObject $criteria
+    ): void {
+        $apiKey = $this->repository->findOneBy($criteria->getArrayCopy());
 
         static::assertInstanceOf(ApiKey::class, $apiKey);
-
-        /** @noinspection NullPointerExceptionInspection */
-        static::assertSame($expectedRoles, $apiKey->getRoles());
+        static::assertSame($expectedRoles->getArrayCopy(), $apiKey->getRoles());
 
         unset($apiKey);
     }
@@ -65,10 +68,10 @@ class ApiKeyTest extends EntityTestCase
 
         foreach ($rolesService->getRoles() as $role) {
             yield [
-                array_unique([RolesService::ROLE_API, $role]),
-                [
+                new StringableArrayObject(array_unique([RolesService::ROLE_API, $role])),
+                new StringableArrayObject([
                     'description' => 'ApiKey Description: ' . $rolesService->getShort($role),
-                ]
+                ]),
             ];
         }
     }

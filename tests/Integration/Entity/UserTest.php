@@ -32,6 +32,8 @@ class UserTest extends EntityTestCase
      * @param callable $callable
      * @param string   $password
      * @param string   $expected
+     *
+     * @testdox Test that password hashing is working with `$callable` callable.
      */
     public function testThatPasswordHashingIsWorkingAsExpected(
         callable $callable,

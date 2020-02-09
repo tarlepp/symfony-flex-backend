@@ -43,8 +43,8 @@ use function ucfirst;
  */
 abstract class EntityTestCase extends KernelTestCase
 {
-    protected EntityInterface $entity;
     protected string $entityName;
+    protected EntityInterface $entity;
     protected EntityManager $entityManager;
     protected ContainerInterface $testContainer;
 
@@ -87,6 +87,8 @@ abstract class EntityTestCase extends KernelTestCase
      * @param string $type
      * @param array  $meta
      * @param bool   $readOnly
+     *
+     * @testdox Test that `getter` and `setter` methods exists for `$field` field.
      */
     public function testThatGetterAndSetterExists(string $field, string $type, array $meta, bool $readOnly): void
     {
@@ -128,6 +130,8 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array $meta
      *
      * @throws Throwable
+     *
+     * @testdox Test that `setter` method for `$field` field only accepts `$type` parameter.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
         string $field,
@@ -163,6 +167,8 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array $meta
      *
      * @throws Throwable
+     *
+     * @testdox Test that `setter` method for `$field` field is fluent.
      */
     public function testThatSetterReturnsInstanceOfEntity(
         string $field,
@@ -195,6 +201,8 @@ abstract class EntityTestCase extends KernelTestCase
      * @param array $meta
      *
      * @throws Throwable
+     *
+     * @testdox Test that `getter` method for `$field` field returns value of type `$type`.
      */
     public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
     {
@@ -247,13 +255,15 @@ abstract class EntityTestCase extends KernelTestCase
      * @param string         $method
      * @param string         $field
      * @param mixed          $input
-     * @param boolean|string $expectedOutput
+     * @param boolean|string $output
+     *
+     * @testdox Test that association method `$method` exist for `$field` and it returns `$output` when using `$input`.
      */
     public function testThatAssociationMethodsExistsAndThoseReturnsCorrectValue(
         string $method,
         string $field,
         $input,
-        $expectedOutput
+        $output
     ): void {
         if ($method === '') {
             static::markTestSkipped("Entity doesn't have associations, so cannot test those...");
@@ -269,8 +279,8 @@ abstract class EntityTestCase extends KernelTestCase
             )
         );
 
-        if ($expectedOutput) {
-            static::assertInstanceOf($expectedOutput, call_user_func([$this->entity, $method], $input));
+        if ($output) {
+            static::assertInstanceOf($output, call_user_func([$this->entity, $method], $input));
         }
     }
 
@@ -284,6 +294,8 @@ abstract class EntityTestCase extends KernelTestCase
      * @param string|boolean $field
      * @param string|boolean $targetEntity
      * @param array          $mappings
+     *
+     * @testdox Test that `many-to-many` assoc methods `$methodGetter, $methodAdder, $methodRemoval, $methodClear` works for `$field + $targetEntity`.
      */
     public function testThatManyToManyAssociationMethodsWorksAsExpected(
         $methodGetter,
@@ -381,37 +393,39 @@ abstract class EntityTestCase extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected
      *
-     * @param string|boolean $methodSetter
-     * @param string|boolean $methodGetter
+     * @param string|boolean $setter
+     * @param string|boolean $getter
      * @param string|boolean $targetEntity
      * @param string|boolean $field
+     *
+     * @testdox Test that `ManyToOne` assoc methods `$getter` and `$setter` works for `$field + $targetEntity`.
      */
     public function testThatManyToOneAssociationMethodsWorksAsExpected(
-        $methodSetter,
-        $methodGetter,
+        $setter,
+        $getter,
         $targetEntity,
         $field
     ): void {
-        if ($methodSetter === false) {
+        if ($setter === false) {
             static::markTestSkipped('Entity does not contain many-to-one relationships.');
         }
 
         static::assertInstanceOf(
             get_class($this->entity),
-            call_user_func([$this->entity, $methodSetter], $targetEntity),
+            call_user_func([$this->entity, $setter], $targetEntity),
             sprintf(
                 "Setter method '%s()' for property '%s' did not return instance of the entity itself",
-                $methodSetter,
+                $setter,
                 $field
             )
         );
 
         static::assertInstanceOf(
             get_class($targetEntity),
-            call_user_func([$this->entity, $methodGetter]),
+            call_user_func([$this->entity, $getter]),
             sprintf(
                 "Getter method '%s()' for property '%s' did not return expected object '%s'.",
-                $methodGetter,
+                $getter,
                 $field,
                 get_class($targetEntity)
             )
@@ -423,6 +437,8 @@ abstract class EntityTestCase extends KernelTestCase
      *
      * @param string|boolean $methodGetter
      * @param string|boolean $field
+     *
+     * @testdox Test that `$methodGetter` method works as expected for `$field` field.
      */
     public function testThatOneToManyAssociationMethodsWorksAsExpected($methodGetter, $field): void
     {
@@ -473,14 +489,12 @@ abstract class EntityTestCase extends KernelTestCase
          *
          * @throws Throwable
          */
-        $iterator = static function (string $field) use ($meta): array {
-            return [
-                $field,
-                PhpUnitUtil::getType($meta->getTypeOfField($field)),
-                $meta->getFieldMapping($field),
-                $meta->isReadOnly
-            ];
-        };
+        $iterator = fn (string $field): array => [
+            $field,
+            PhpUnitUtil::getType($meta->getTypeOfField($field)),
+            $meta->getFieldMapping($field),
+            $meta->isReadOnly,
+        ];
 
         $fieldsToOmit = array_merge(
             $meta->getIdentifierFieldNames(),
@@ -494,9 +508,7 @@ abstract class EntityTestCase extends KernelTestCase
          *
          * @return bool
          */
-        $filter = static function (string $field) use ($fieldsToOmit): bool {
-            return !in_array($field, $fieldsToOmit, true);
-        };
+        $filter = fn (string $field): bool => !in_array($field, $fieldsToOmit, true);
 
         $entityManager->close();
         $entityManager = null; // avoid memory leaks

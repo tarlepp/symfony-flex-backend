@@ -10,6 +10,7 @@ namespace App\Tests\Unit\Utils\Tests;
 
 use App\Entity\User;
 use App\Utils\Tests\PhpUnitUtil;
+use App\Utils\Tests\StringableArrayObject;
 use DateTime;
 use DateTimeImmutable;
 use Generator;
@@ -72,6 +73,8 @@ class PHPUnitUtilTest extends KernelTestCase
     public function testThatGetValidValueReturnsExpectedValue($expected, string $input, bool $strict): void
     {
         $value = PhpUnitUtil::getValidValueForType(PhpUnitUtil::getType($input));
+
+        $expected = $expected instanceof StringableArrayObject ? $expected->getArrayCopy() : $expected;
 
         $strict ? static::assertSame($expected, $value) : static::assertInstanceOf($expected, $value);
     }
@@ -161,7 +164,7 @@ class PHPUnitUtilTest extends KernelTestCase
         yield [DateTimeImmutable::class, 'date_immutable', false];
         yield [DateTimeImmutable::class, 'datetime_immutable', false];
         yield ['Some text here', 'string', true];
-        yield [['some', 'array', 'here'], 'array', true];
+        yield [new StringableArrayObject(['some', 'array', 'here']), 'array', true];
         yield [true, 'boolean', true];
         yield [true, 'bool', true];
     }

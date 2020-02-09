@@ -97,7 +97,6 @@ abstract class DtoTestCase extends KernelTestCase
          * @var MockObject|RestDtoInterface $mock
          */
         $mock = $this->getMockBuilder($this->dtoClass)
-            ->setMethods(['setVisited'])
             ->getMock();
 
         $mock->expects(static::exactly(count($properties)))
@@ -152,6 +151,8 @@ abstract class DtoTestCase extends KernelTestCase
      * @param string $type
      *
      * @throws Throwable
+     *
+     * @testdox Test that `setter` method for `$field` will fail if parameter is not `$type` type.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(string $field, string $type): void
     {

@@ -79,6 +79,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
      *
      * @param string           $expected
      * @param string|DateTime $value
+     *
+     * @testdox Test that `convertToPHPValue` method converts `$value` to `$expected`.
      */
     public function testDateTimeConvertsToPHPValue(string $expected, $value): void
     {

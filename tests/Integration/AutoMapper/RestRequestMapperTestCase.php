@@ -33,6 +33,8 @@ class RestRequestMapperTestCase extends KernelTestCase
      * @param string $expectedDto
      *
      * @throws Throwable
+     *
+     * @testdox Test that `mapToObject` method returns `$expectedDto`.
      */
     public function testThatMapToObjectReturnsExpectedDtoObject(string $expectedDto):  void
     {
