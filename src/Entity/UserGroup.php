@@ -157,6 +157,14 @@ class UserGroup implements EntityInterface
     /**
      * @return string
      */
+    public function __toString(): string
+    {
+        return __CLASS__;
+    }
+
+    /**
+     * @return string
+     */
     public function getId(): string
     {
         return $this->id->toString();

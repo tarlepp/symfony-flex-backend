@@ -10,6 +10,7 @@ namespace App\Utils\Tests;
 use App\Utils\JSON;
 use ArrayObject;
 use JsonException;
+use function is_object;
 
 /**
  * Class StringableArrayObject
@@ -26,6 +27,8 @@ class StringableArrayObject extends ArrayObject
      */
     public function __toString(): string
     {
-        return JSON::encode($this->getArrayCopy());
+        $iterator = fn ($input) => is_object($input) ? (string)$input : $input;
+
+        return JSON::encode(array_map($iterator, $this->getArrayCopy()));
     }
 }
