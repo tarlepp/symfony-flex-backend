@@ -75,6 +75,8 @@ class ControllerCollectionTest extends KernelTestCase
      * @dataProvider dataProviderTestThatGetReturnsExpectedController
      *
      * @param string $controllerName
+     *
+     * @testdox Test that `get` method with `$controllerName` input returns instance of that controller.
      */
     public function testThatGetReturnsExpectedController(string $controllerName): void
     {
@@ -87,13 +89,15 @@ class ControllerCollectionTest extends KernelTestCase
      * @dataProvider dataProviderTestThatHasReturnsExpected
      *
      * @param bool        $expected
-     * @param string|null $resource
+     * @param string|null $controller
+     *
+     * @testdox Test that `has` method returns `$expected` with `$controller` input.
      */
-    public function testThatHasReturnsExpected(bool $expected, ?string $resource): void
+    public function testThatHasReturnsExpected(bool $expected, ?string $controller): void
     {
         $collection = $this->getCollection();
 
-        static::assertSame($expected, $collection->has($resource));
+        static::assertSame($expected, $collection->has($controller));
     }
 
     /**

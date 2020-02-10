@@ -15,6 +15,7 @@ use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\Interfaces\RepositoryInterface;
+use App\Utils\Tests\StringableArrayObject;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;
@@ -179,14 +180,16 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @param array $expectedArguments
-     * @param array $arguments
+     * @param StringableArrayObject $expectedArguments
+     * @param StringableArrayObject $arguments
      *
      * @throws Throwable
+     *
+     * @testdox Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments.
      */
     public function testThatFindCallsExpectedRepositoryMethodWithCorrectParameters(
-        array $expectedArguments,
-        array $arguments
+        StringableArrayObject $expectedArguments,
+        StringableArrayObject $arguments
     ): void {
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
@@ -194,10 +197,10 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findByAdvanced')
-            ->with(...$expectedArguments);
+            ->with(...$expectedArguments->getArrayCopy());
 
         $this->resource->setRepository($repository);
-        $this->resource->find(...$arguments);
+        $this->resource->find(...$arguments->getArrayCopy());
 
         unset($repository);
     }
@@ -270,14 +273,16 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @param array $expectedArguments
-     * @param array $arguments
+     * @param StringableArrayObject $expectedArguments
+     * @param StringableArrayObject $arguments
      *
      * @throws Throwable
+     *
+     * @testdox Test that `findOneBy` method is called with `$expectedArguments` when using `$arguments` arguments.
      */
     public function testThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(
-        array $expectedArguments,
-        array $arguments
+        StringableArrayObject $expectedArguments,
+        StringableArrayObject $arguments
     ): void {
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
@@ -285,10 +290,10 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findOneBy')
-            ->with(...$expectedArguments);
+            ->with(...$expectedArguments->getArrayCopy());
 
         $this->resource->setRepository($repository);
-        $this->resource->findOneBy(...$arguments);
+        $this->resource->findOneBy(...$arguments->getArrayCopy());
 
         unset($repository);
     }
@@ -343,14 +348,16 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @param array $expectedArguments
-     * @param array $arguments
+     * @param StringableArrayObject $expectedArguments
+     * @param StringableArrayObject $arguments
      *
      * @throws Throwable
+     *
+     * @testdox Test that `countAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments.
      */
     public function testThatCountCallsExpectedRepositoryMethodWithCorrectParameters(
-        array $expectedArguments,
-        array $arguments
+        StringableArrayObject $expectedArguments,
+        StringableArrayObject $arguments
     ): void {
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
@@ -358,10 +365,10 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('countAdvanced')
-            ->with(...$expectedArguments);
+            ->with(...$expectedArguments->getArrayCopy());
 
         $this->resource->setRepository($repository);
-        $this->resource->count(...$arguments);
+        $this->resource->count(...$arguments->getArrayCopy());
 
         unset($repository);
     }
@@ -549,14 +556,16 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @param array $expectedArguments
-     * @param array $arguments
+     * @param StringableArrayObject $expectedArguments
+     * @param StringableArrayObject $arguments
      *
      * @throws Throwable
+     *
+     * @testdox Test that `findIds` method is called with `$expectedArguments` when using `$arguments` arguments.
      */
     public function testThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(
-        array $expectedArguments,
-        array $arguments
+        StringableArrayObject $expectedArguments,
+        StringableArrayObject $arguments
     ): void {
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
@@ -564,10 +573,10 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findIds')
-            ->with(...$expectedArguments);
+            ->with(...$expectedArguments->getArrayCopy());
 
         $this->resource->setRepository($repository);
-        $this->resource->getIds(...$arguments);
+        $this->resource->getIds(...$arguments->getArrayCopy());
 
         unset($repository);
     }
@@ -601,18 +610,18 @@ class GenericResourceTest extends KernelTestCase
     public function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
-            [[], []],
-            [null, null],
+            new StringableArrayObject([[], []]),
+            new StringableArrayObject([null, null]),
         ];
 
         yield [
-            [['foo'], []],
-            [['foo'], null],
+            new StringableArrayObject([['foo'], []]),
+            new StringableArrayObject([['foo'], null]),
         ];
 
         yield [
-            [['foo'], ['bar']],
-            [['foo'], ['bar']],
+            new StringableArrayObject([['foo'], ['bar']]),
+            new StringableArrayObject([['foo'], ['bar']]),
         ];
     }
 
@@ -622,33 +631,33 @@ class GenericResourceTest extends KernelTestCase
     public function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
-            [[], [], 0, 0, []],
-            [null, null, null, null, null],
+            new StringableArrayObject([[], [], 0, 0, []]),
+            new StringableArrayObject([null, null, null, null, null]),
         ];
 
         yield [
-            [['foo'], [], 0, 0, []],
-            [['foo'], null, null, null, null],
+            new StringableArrayObject([['foo'], [], 0, 0, []]),
+            new StringableArrayObject([['foo'], null, null, null, null]),
         ];
 
         yield [
-            [['foo'], ['foo'], 0, 0, []],
-            [['foo'], ['foo'], null, null, null],
+            new StringableArrayObject([['foo'], ['foo'], 0, 0, []]),
+            new StringableArrayObject([['foo'], ['foo'], null, null, null]),
         ];
 
         yield [
-            [['foo'], ['foo'], 1, 0, []],
-            [['foo'], ['foo'], 1, null, null],
+            new StringableArrayObject([['foo'], ['foo'], 1, 0, []]),
+            new StringableArrayObject([['foo'], ['foo'], 1, null, null]),
         ];
 
         yield [
-            [['foo'], ['foo'], 1, 2, []],
-            [['foo'], ['foo'], 1, 2, null],
+            new StringableArrayObject([['foo'], ['foo'], 1, 2, []]),
+            new StringableArrayObject([['foo'], ['foo'], 1, 2, null]),
         ];
 
         yield [
-            [['foo'], ['foo'], 1, 2, ['foo']],
-            [['foo'], ['foo'], 1, 2, ['foo']],
+            new StringableArrayObject([['foo'], ['foo'], 1, 2, ['foo']]),
+            new StringableArrayObject([['foo'], ['foo'], 1, 2, ['foo']]),
         ];
     }
 
@@ -658,18 +667,18 @@ class GenericResourceTest extends KernelTestCase
     public function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
-            [[], []],
-            [[], null],
+            new StringableArrayObject([[], []]),
+            new StringableArrayObject([[], null]),
         ];
 
         yield [
-            [['foo'], []],
-            [['foo'], null],
+            new StringableArrayObject([['foo'], []]),
+            new StringableArrayObject([['foo'], null]),
         ];
 
         yield [
-            [['foo'], ['bar']],
-            [['foo'], ['bar']],
+            new StringableArrayObject([['foo'], ['bar']]),
+            new StringableArrayObject([['foo'], ['bar']]),
         ];
     }
 
@@ -679,39 +688,28 @@ class GenericResourceTest extends KernelTestCase
     public function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
-            [[], []],
-            [null, null],
+            new StringableArrayObject([[], []]),
+            new StringableArrayObject([null, null]),
         ];
 
         yield [
-            [['foo'], []],
-            [['foo'], null],
+            new StringableArrayObject([['foo'], []]),
+            new StringableArrayObject([['foo'], null]),
         ];
 
         yield [
-            [['foo'], ['bar']],
-            [['foo'], ['bar']],
+            new StringableArrayObject([['foo'], ['bar']]),
+            new StringableArrayObject([['foo'], ['bar']]),
         ];
     }
 
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         static::bootKernel();
 
         $this->resource = static::$container->get($this->resourceClass);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->resource);
-
-        gc_collect_cycles();
     }
 
     /**

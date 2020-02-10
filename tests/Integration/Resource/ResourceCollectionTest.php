@@ -112,6 +112,8 @@ class ResourceCollectionTest extends KernelTestCase
      * @dataProvider dataProviderTestThatGetReturnsExpectedResource
      *
      * @param string $resourceClass
+     *
+     * @testdox Test that `get` method with `$resourceClass` input returns instance of that resource class.
      */
     public function testThatGetReturnsExpectedResource(string $resourceClass): void
     {
@@ -123,6 +125,8 @@ class ResourceCollectionTest extends KernelTestCase
      *
      * @param string $resourceClass
      * @param string $entityClass
+     *
+     * @testdox Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class.
      */
     public function testThatGetEntityResourceReturnsExpectedResource(string $resourceClass, string $entityClass): void
     {
@@ -134,6 +138,8 @@ class ResourceCollectionTest extends KernelTestCase
      *
      * @param bool        $expected
      * @param string|null $resource
+     *
+     * @testdox Test that `has` method returns `$expected` with `$resource` input.
      */
     public function testThatHasReturnsExpected(bool $expected, ?string $resource): void
     {
@@ -144,11 +150,13 @@ class ResourceCollectionTest extends KernelTestCase
      * @dataProvider dataProviderTestThatHasEntityResourceReturnsExpected
      *
      * @param bool        $expected
-     * @param string|null $resource
+     * @param string|null $entity
+     *
+     * @testdox Test that `hasEntityResource` method returns `$expected` with `$entity` input.
      */
-    public function testThatHasEntityResourceReturnsExpected(bool $expected, ?string $resource): void
+    public function testThatHasEntityResourceReturnsExpected(bool $expected, ?string $entity): void
     {
-        static::assertSame($expected, $this->getCollection()->hasEntityResource($resource));
+        static::assertSame($expected, $this->getCollection()->hasEntityResource($entity));
     }
 
     /**
