@@ -12,6 +12,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\Provider\SecurityUserFactory;
 use App\Security\SecurityUser;
+use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -27,15 +28,8 @@ use Throwable;
  */
 class SecurityUserFactoryTest extends KernelTestCase
 {
-    /**
-     * @var SecurityUserFactory;
-     */
-    private $securityUserFactory;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private SecurityUserFactory $securityUserFactory;
+    private UserRepository $userRepository;
 
     /**
      * @throws Throwable
@@ -50,17 +44,21 @@ class SecurityUserFactoryTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance
      *
-     * @param string $username
-     * @param array  $roles
+     * @param string                $username
+     * @param StringableArrayObject $roles
      *
      * @throws Throwable
+     *
+     * @testdox Test that `loadUserByUsername` method with `$username` input returns `SecurityUser` with `$roles` roles.
      */
-    public function testThatLoadUserByUsernameReturnsExpectedUserInstance(string $username, array $roles): void
-    {
+    public function testThatLoadUserByUsernameReturnsExpectedUserInstance(
+        string $username,
+        StringableArrayObject $roles
+    ): void {
         $domainUser = $this->securityUserFactory->loadUserByUsername($username);
 
         static::assertInstanceOf(SecurityUser::class, $domainUser);
-        static::assertSame($roles, $domainUser->getRoles());
+        static::assertSame($roles->getArrayCopy(), $domainUser->getRoles());
     }
 
     /**
@@ -88,7 +86,6 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         $securityUser = new SecurityUser($user);
 
-        /** @noinspection NullPointerExceptionInspection */
         static::assertSame($user->getId(), $this->securityUserFactory->refreshUser($securityUser)->getUsername());
 
         unset($user);
@@ -107,7 +104,6 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         $securityUser = new SecurityUser($user);
 
-        /** @noinspection NullPointerExceptionInspection */
         static::assertNotSame($securityUser, $this->securityUserFactory->refreshUser($securityUser));
 
         unset($user);
@@ -133,12 +129,12 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance(): Generator
     {
-        yield ['john', []];
-        yield ['john-api', ['ROLE_API', 'ROLE_LOGGED']];
-        yield ['john-logged', ['ROLE_LOGGED']];
-        yield ['john-user', ['ROLE_USER', 'ROLE_LOGGED']];
-        yield ['john-admin', ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
-        yield ['john-root', ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
+        yield ['john', new StringableArrayObject([])];
+        yield ['john-api', new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];
+        yield ['john-logged', new StringableArrayObject(['ROLE_LOGGED'])];
+        yield ['john-user', new StringableArrayObject(['ROLE_USER', 'ROLE_LOGGED'])];
+        yield ['john-admin', new StringableArrayObject(['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'])];
+        yield ['john-root', new StringableArrayObject(['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'])];
     }
 
     protected function setUp(): void
@@ -149,12 +145,5 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
         $this->userRepository = static::$container->get(UserRepository::class);
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->securityUserFactory, $this->userRepository);
     }
 }
