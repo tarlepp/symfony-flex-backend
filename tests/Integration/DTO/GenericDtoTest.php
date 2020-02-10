@@ -57,6 +57,8 @@ class GenericDtoTest extends KernelTestCase
      * @param RestDtoInterface $dto
      *
      * @throws Throwable
+     *
+     * @testdox Test that `determineGetterMethod` method returns `$expected` when using `$dto::$$property` property.
      */
     public function testThatDetermineGetterMethodReturnsExpected(
         string $expected,

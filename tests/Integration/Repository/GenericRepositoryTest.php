@@ -13,6 +13,7 @@ use App\Entity\ApiKey as UserEntity;
 use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\ApiKeyRepository;
 use App\Resource\ApiKeyResource;
+use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
@@ -182,19 +183,19 @@ class GenericRepositoryTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatAddLeftJoinWorksAsExpected
      *
-     * @testdox Test that add left join works as expected, using $parameters and expecting '$expected'
+     * @param string                $expected
+     * @param StringableArrayObject $parameters
      *
-     * @param string $expected
-     * @param array  $parameters
+     * @testdox Test that add left join works as expected, using $parameters and expecting '$expected'
      */
-    public function testThatAddLeftJoinWorksAsExpected(string $expected, array $parameters): void
+    public function testThatAddLeftJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         /** @var BaseRepositoryInterface $repository */
         $repository = static::$container->get($this->resourceClass)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
-        $repository->addLeftJoin($parameters);
+        $repository->addLeftJoin($parameters->getArrayCopy());
         $repository->processQueryBuilder($queryBuilder);
 
         $message = 'addLeftJoin method did not return expected';
@@ -207,19 +208,19 @@ class GenericRepositoryTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatAddInnerJoinWorksAsExpected
      *
-     * @testdox Test that add inner join works as expected, using $parameters and expecting '$expected'
+     * @param string                $expected
+     * @param StringableArrayObject $parameters
      *
-     * @param string $expected
-     * @param array  $parameters
+     * @testdox Test that add inner join works as expected, using $parameters and expecting '$expected'
      */
-    public function testThatAddInnerJoinWorksAsExpected(string $expected, array $parameters): void
+    public function testThatAddInnerJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         /** @var BaseRepositoryInterface $repository */
         $repository = static::$container->get($this->resourceClass)->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
-        $repository->addInnerJoin($parameters);
+        $repository->addInnerJoin($parameters->getArrayCopy());
         $repository->processQueryBuilder($queryBuilder);
 
         $message = 'addLeftJoin method did not return expected';
@@ -232,12 +233,12 @@ class GenericRepositoryTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatAddLeftJoinWorksAsExpected
      *
-     * @testdox Test that add left join adds same join just once, using $parameters and expecting '$expected'
+     * @param string                $expected
+     * @param StringableArrayObject $parameters
      *
-     * @param string $expected
-     * @param array  $parameters
+     * @testdox Test that add left join adds same join just once, using $parameters and expecting '$expected'
      */
-    public function testThatAddLeftJoinAddsJoinJustOnce(string $expected, array $parameters): void
+    public function testThatAddLeftJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         /** @var BaseRepositoryInterface $repository */
         $repository = static::$container->get($this->resourceClass)->getRepository();
@@ -245,8 +246,8 @@ class GenericRepositoryTest extends KernelTestCase
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         // Add same join twice to query
-        $repository->addLeftJoin($parameters);
-        $repository->addLeftJoin($parameters);
+        $repository->addLeftJoin($parameters->getArrayCopy());
+        $repository->addLeftJoin($parameters->getArrayCopy());
         $repository->processQueryBuilder($queryBuilder);
 
         $message = 'addLeftJoin method did not return expected';
@@ -261,10 +262,10 @@ class GenericRepositoryTest extends KernelTestCase
      *
      * @testdox Test that add inner join adds same join just once, using $parameters and expecting '$expected'
      *
-     * @param string $expected
-     * @param array  $parameters
+     * @param string                $expected
+     * @param StringableArrayObject $parameters
      */
-    public function testThatAddInnerJoinAddsJoinJustOnce(string $expected, array $parameters): void
+    public function testThatAddInnerJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         /** @var BaseRepositoryInterface $repository */
         $repository = static::$container->get($this->resourceClass)->getRepository();
@@ -272,8 +273,8 @@ class GenericRepositoryTest extends KernelTestCase
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         // Add same join twice to query
-        $repository->addInnerJoin($parameters);
-        $repository->addInnerJoin($parameters);
+        $repository->addInnerJoin($parameters->getArrayCopy());
+        $repository->addInnerJoin($parameters->getArrayCopy());
         $repository->processQueryBuilder($queryBuilder);
 
         $message = 'addLeftJoin method did not return expected';
@@ -546,17 +547,17 @@ class GenericRepositoryTest extends KernelTestCase
             [
                 /** @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity',
-                [],
+                new StringableArrayObject([]),
             ],
             [
                 /** @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity LEFT JOIN entity.someProperty someAlias',
-                ['entity.someProperty', 'someAlias'],
+                new StringableArrayObject(['entity.someProperty', 'someAlias']),
             ],
             [
                 /** @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity LEFT JOIN entity.someProperty someAlias WITH someAlias.someAnotherProperty = 1',
-                ['entity.someProperty', 'someAlias', Expr\Join::WITH, 'someAlias.someAnotherProperty = 1'],
+                new StringableArrayObject(['entity.someProperty', 'someAlias', Expr\Join::WITH, 'someAlias.someAnotherProperty = 1']),
             ],
         ];
         // @codingStandardsIgnoreEnd
@@ -572,17 +573,17 @@ class GenericRepositoryTest extends KernelTestCase
             [
                 /** @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity',
-                [],
+                new StringableArrayObject([]),
             ],
             [
                 /** @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity INNER JOIN entity.someProperty someAlias',
-                ['entity.someProperty', 'someAlias'],
+                new StringableArrayObject(['entity.someProperty', 'someAlias']),
             ],
             [
                 /** @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity INNER JOIN entity.someProperty someAlias WITH someAlias.someAnotherProperty = 1',
-                ['entity.someProperty', 'someAlias', Expr\Join::WITH, 'someAlias.someAnotherProperty = 1'],
+                new StringableArrayObject(['entity.someProperty', 'someAlias', Expr\Join::WITH, 'someAlias.someAnotherProperty = 1']),
             ],
         ];
         // @codingStandardsIgnoreEnd
@@ -590,17 +591,8 @@ class GenericRepositoryTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         static::bootKernel();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        gc_collect_cycles();
     }
 }

@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Form\DataTransformer;
 use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Resource\UserGroupResource;
+use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -33,16 +34,21 @@ class UserGroupTransformerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
-     * @param mixed $expected
-     * @param mixed $input
+     * @param StringableArrayObject      $expected
+     * @param StringableArrayObject|null $input
+     *
+     * @testdox Test that `transform` method returns `$expected` when using `$input` input.
      */
-    public function testThatTransformReturnsExpected($expected, $input): void
-    {
+    public function testThatTransformReturnsExpected(
+        StringableArrayObject $expected,
+        ?StringableArrayObject $input
+    ): void {
         $transformer = new UserGroupTransformer($this->userGroupResource);
 
-        static::assertSame($expected, $transformer->transform($input));
-
-        unset($transformer);
+        static::assertSame(
+            $expected->getArrayCopy(),
+            $transformer->transform($input == null ? null : $input->getArrayCopy())
+        );
     }
 
     public function testThatReverseTransformCallsExpectedObjectManagerMethods(): void
@@ -58,8 +64,6 @@ class UserGroupTransformerTest extends KernelTestCase
 
         $transformer = new UserGroupTransformer($this->userGroupResource);
         $transformer->reverseTransform(['1', '2']);
-
-        unset($transformer, $entity1, $entity2);
     }
 
     public function testThatReverseTransformThrowsAnException(): void
@@ -77,8 +81,6 @@ class UserGroupTransformerTest extends KernelTestCase
 
         $transformer = new UserGroupTransformer($this->userGroupResource);
         $transformer->reverseTransform(['1', '2']);
-
-        unset($transformer, $entity);
     }
 
     public function testThatReverseTransformReturnsExpected(): void
@@ -95,8 +97,6 @@ class UserGroupTransformerTest extends KernelTestCase
         $transformer = new UserGroupTransformer($this->userGroupResource);
 
         static::assertSame([$entity1, $entity2], $transformer->reverseTransform(['1', '2']));
-
-        unset($transformer, $entity1, $entity2);
     }
 
     /**
@@ -106,11 +106,11 @@ class UserGroupTransformerTest extends KernelTestCase
      */
     public function dataProviderTestThatTransformReturnsExpected(): Generator
     {
-        yield [[], null];
+        yield [new StringableArrayObject([]), null];
 
         $entity = new UserGroup();
 
-        yield [[$entity->getId()], [$entity]];
+        yield [new StringableArrayObject([$entity->getId()]), new StringableArrayObject([$entity])];
     }
 
     /**

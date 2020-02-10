@@ -97,6 +97,7 @@ abstract class DtoTestCase extends KernelTestCase
          * @var MockObject|RestDtoInterface $mock
          */
         $mock = $this->getMockBuilder($this->dtoClass)
+            ->onlyMethods(['setVisited'])
             ->getMock();
 
         $mock->expects(static::exactly(count($properties)))
