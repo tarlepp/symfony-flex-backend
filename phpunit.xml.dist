@@ -9,6 +9,7 @@
          beStrictAboutTodoAnnotatedTests="true"
          beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutOutputDuringTests="true"
+         stopOnFailure="true"
          bootstrap="tests/bootstrap.php"
 >
     <php>
@@ -40,17 +41,17 @@
     </listeners>
 
     <testsuites>
+        <testsuite name="Unit">
+            <directory>./tests/Unit/</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>./tests/Integration/</directory>
+        </testsuite>
         <testsuite name="E2E">
             <directory>./tests/E2E/</directory>
         </testsuite>
         <testsuite name="Functional">
             <directory>./tests/Functional/</directory>
-        </testsuite>
-        <testsuite name="Integration">
-            <directory>./tests/Integration/</directory>
-        </testsuite>
-        <testsuite name="Unit">
-            <directory>./tests/Unit/</directory>
         </testsuite>
     </testsuites>
 
