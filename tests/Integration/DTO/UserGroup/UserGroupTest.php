@@ -40,8 +40,6 @@ class UserGroupTest extends DtoTestCase
 
         static::assertSame('test user group', $dto->getName());
         static::assertSame($roleEntity, $dto->getRole());
-
-        unset($dto, $userGroupEntity, $roleEntity);
     }
 
     public function testThatUpdateMethodCallsExpectedEntityMethods(): void
@@ -69,7 +67,5 @@ class UserGroupTest extends DtoTestCase
         $dto->setName('test name');
         $dto->setRole($roleEntity);
         $dto->update($userGroupEntity);
-
-        unset($dto, $userGroupEntity, $roleEntity);
     }
 }

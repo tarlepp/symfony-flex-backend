@@ -92,8 +92,6 @@ class RoleControllerTest extends WebTestCase
             static::assertInstanceOf(Response::class, $response);
             static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
             static::assertJsonStringEqualsJsonString(JSON::encode($expectedRoles), $response->getContent());
-
-            unset($response);
         }
     }
 

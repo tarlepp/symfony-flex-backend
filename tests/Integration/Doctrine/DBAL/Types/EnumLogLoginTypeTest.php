@@ -95,8 +95,6 @@ class EnumLogLoginTypeTest extends KernelTestCase
      */
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         $this->platform = new MySqlPlatform();

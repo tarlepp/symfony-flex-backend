@@ -45,8 +45,6 @@ class GenericDtoTest extends KernelTestCase
 
         $dto = new User();
         $dto->patch($dtoMock);
-
-        unset($dto, $dtoMock);
     }
 
     /**
@@ -80,8 +78,6 @@ class GenericDtoTest extends KernelTestCase
 
         $dto = new User();
         $dto->patch($dtoMock);
-
-        unset($dto, $dtoMock);
     }
 
     /**

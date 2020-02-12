@@ -63,8 +63,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
         static::assertNull($apiKey);
-
-        unset($apiKey);
     }
 
     /**
@@ -94,8 +92,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         static::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
         static::assertSame($roles->getArrayCopy(), $apiKeyUser->getApiKey()->getRoles());
-
-        unset($apiKeyUser);
     }
 
     /**
@@ -109,8 +105,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $user = new User('username', 'password');
 
         $this->apiKeyUserProvider->refreshUser($user);
-
-        unset($user);
     }
 
     /**

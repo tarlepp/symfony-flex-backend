@@ -386,8 +386,6 @@ abstract class EntityTestCase extends KernelTestCase
         $collection = call_user_func([$this->entity, $methodGetter]);
 
         static::assertTrue($collection->isEmpty());
-
-        unset($collection);
     }
 
     /**

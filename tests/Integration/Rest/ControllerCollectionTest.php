@@ -60,8 +60,6 @@ class ControllerCollectionTest extends KernelTestCase
 
         $collection = new ControllerCollection($iteratorAggregate, $stubLogger);
         $collection->get('FooBar');
-
-        unset($collection);
     }
 
     public function testThatGetAllReturnsCorrectCountOfRestControllers(): void

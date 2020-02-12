@@ -39,7 +39,5 @@ class LoggerAwareTraitTest extends KernelTestCase
         $logger = PhpUnitUtil::getProperty('logger', $service);
 
         static::assertInstanceOf(LoggerInterface::class, $logger);
-
-        unset($service, $logger);
     }
 }

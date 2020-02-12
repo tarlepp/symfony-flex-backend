@@ -39,7 +39,5 @@ class StopwatchAwareTraitTest extends KernelTestCase
         $stopwatch = PhpUnitUtil::getProperty('stopwatch', $service);
 
         static::assertInstanceOf(Stopwatch::class, $stopwatch);
-
-        unset($service, $stopwatch);
     }
 }

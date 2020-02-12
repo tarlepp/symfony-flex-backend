@@ -129,8 +129,6 @@ class LogRequestTest extends EntityTestCase
         } catch (Exception $error) {
             static::assertInstanceOf($type, $value, $message . ' - ' . $error->getMessage());
         }
-
-        unset($logRequest);
     }
 
     /**
@@ -197,8 +195,6 @@ class LogRequestTest extends EntityTestCase
             $expected->getArrayCopy(),
             PhpUnitUtil::callMethod($logRequest, 'determineParameters', [$request])
         );
-
-        unset($request, $logRequest);
     }
 
     /**

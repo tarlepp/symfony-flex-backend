@@ -69,8 +69,6 @@ class SecurityUserFactoryTest extends KernelTestCase
         $this->expectException(UsernameNotFoundException::class);
 
         $this->securityUserFactory->refreshUser(new SecurityUser(new User()));
-
-        unset($user);
     }
 
     /**
@@ -87,8 +85,6 @@ class SecurityUserFactoryTest extends KernelTestCase
         $securityUser = new SecurityUser($user);
 
         static::assertSame($user->getId(), $this->securityUserFactory->refreshUser($securityUser)->getUsername());
-
-        unset($user);
     }
 
     /**
@@ -105,8 +101,6 @@ class SecurityUserFactoryTest extends KernelTestCase
         $securityUser = new SecurityUser($user);
 
         static::assertNotSame($securityUser, $this->securityUserFactory->refreshUser($securityUser));
-
-        unset($user);
     }
 
     /**
@@ -120,8 +114,6 @@ class SecurityUserFactoryTest extends KernelTestCase
         $user = new CoreUser('test', 'password');
 
         $this->securityUserFactory->refreshUser($user);
-
-        unset($user);
     }
 
     /**

@@ -81,8 +81,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->getEntityName();
-
-        unset($repository);
     }
 
     /**
@@ -99,8 +97,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->getReference('some id');
-
-        unset($repository);
     }
 
     /**
@@ -117,8 +113,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->getAssociations();
-
-        unset($repository);
     }
 
     /**
@@ -147,8 +141,6 @@ class GenericResourceTest extends KernelTestCase
             RestDtoInterface::class,
             $this->resource->getDtoForEntity('some id', get_class($dto), $dto)
         );
-
-        unset($dto, $repository, $entity);
     }
 
     /**
@@ -173,8 +165,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->getDtoForEntity('some id', get_class($dto), $dto);
-
-        unset($repository);
     }
 
     /**
@@ -201,8 +191,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->find(...$arguments->getArrayCopy());
-
-        unset($repository);
     }
 
     /**
@@ -220,8 +208,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->findOne('some id');
-
-        unset($repository);
     }
 
     /**
@@ -243,8 +229,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->findOne('some id', true);
-
-        unset($repository);
     }
 
     /**
@@ -266,8 +250,6 @@ class GenericResourceTest extends KernelTestCase
         $this->resource->setRepository($repository);
 
         static::assertSame($entity, $this->resource->findOne('some id', true));
-
-        unset($repository, $entity);
     }
 
     /**
@@ -294,8 +276,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->findOneBy(...$arguments->getArrayCopy());
-
-        unset($repository);
     }
 
     /**
@@ -318,8 +298,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->findOneBy([], null, true);
-
-        unset($repository);
     }
 
     /**
@@ -341,8 +319,6 @@ class GenericResourceTest extends KernelTestCase
         $this->resource->setRepository($repository);
 
         static::assertSame($entity, $this->resource->findOneBy([], null, true));
-
-        unset($repository, $entity);
     }
 
     /**
@@ -369,8 +345,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->count(...$arguments->getArrayCopy());
-
-        unset($repository);
     }
 
     /**
@@ -391,8 +365,6 @@ class GenericResourceTest extends KernelTestCase
         $this->resource->setRepository($repository);
 
         static::assertSame($entity, $this->resource->save($entity));
-
-        unset($repository, $entity);
     }
 
     /**
@@ -409,8 +381,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->create($dto);
-
-        unset($dto, $repository);
     }
 
     /**
@@ -456,8 +426,6 @@ class GenericResourceTest extends KernelTestCase
         $this->resource->setRepository($repository);
         $this->resource->setValidator($validator);
         $this->resource->create($dto);
-
-        unset($dto, $validator, $repository);
     }
 
     /**
@@ -481,8 +449,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->update('some id', $dto);
-
-        unset($dto, $repository);
     }
 
     /**
@@ -521,8 +487,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->update('some id', $dto);
-
-        unset($repository, $entity, $dto);
     }
 
     /**
@@ -549,8 +513,6 @@ class GenericResourceTest extends KernelTestCase
         $this->resource->setRepository($repository);
 
         static::assertSame($entity, $this->resource->delete('some id'));
-
-        unset($repository, $entity);
     }
 
     /**
@@ -577,8 +539,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->getIds(...$arguments->getArrayCopy());
-
-        unset($repository);
     }
 
     /**
@@ -600,8 +560,6 @@ class GenericResourceTest extends KernelTestCase
 
         $this->resource->setRepository($repository);
         $this->resource->save($entity);
-
-        unset($repository, $entity);
     }
 
     /**

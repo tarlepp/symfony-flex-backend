@@ -127,21 +127,10 @@ class RestResourceConverterTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         static::bootKernel();
 
         $this->converter = new RestResourceConverter(static::$container->get(ResourceCollection::class));
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->converter);
-
-        gc_collect_cycles();
     }
 }

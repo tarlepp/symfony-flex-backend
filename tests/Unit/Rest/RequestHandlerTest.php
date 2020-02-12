@@ -53,8 +53,6 @@ class RequestHandlerTest extends KernelTestCase
         );
 
         static::assertSame($expected->getArrayCopy(), RequestHandler::getCriteria($fakeRequest));
-
-        unset($fakeRequest);
     }
 
     /**
@@ -76,8 +74,6 @@ class RequestHandlerTest extends KernelTestCase
             RequestHandler::getOrderBy($fakeRequest),
             'getOrderBy method did not return expected value'
         );
-
-        unset($fakeRequest);
     }
 
     public function testThatGetLimitReturnsNullWithoutParameter(): void
@@ -88,8 +84,6 @@ class RequestHandlerTest extends KernelTestCase
             RequestHandler::getLimit($fakeRequest),
             'getLimit method did not return NULL as it should without any parameters'
         );
-
-        unset($fakeRequest);
     }
 
     /**
@@ -116,8 +110,6 @@ class RequestHandlerTest extends KernelTestCase
             $actual,
             'getLimit method did not return expected value'
         );
-
-        unset($actual, $fakeRequest);
     }
 
     public function testThatGetOffsetReturnsNullWithoutParameter(): void
@@ -128,8 +120,6 @@ class RequestHandlerTest extends KernelTestCase
             RequestHandler::getOffset($fakeRequest),
             'getOffset method did not return NULL as it should without any parameters'
         );
-
-        unset($fakeRequest);
     }
 
     /**
@@ -156,8 +146,6 @@ class RequestHandlerTest extends KernelTestCase
             $actual,
             'getOffset method did not return expected value'
         );
-
-        unset($actual, $fakeRequest);
     }
 
     public function testThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(): void
@@ -169,8 +157,6 @@ class RequestHandlerTest extends KernelTestCase
             RequestHandler::getSearchTerms($fakeRequest),
             'getSearchTerms method did not return empty array ([]) as it should without any parameters'
         );
-
-        unset($fakeRequest);
     }
 
     public function testThatGetSearchTermsThrowsAnExceptionWithInvalidJson(): void
@@ -187,8 +173,6 @@ class RequestHandlerTest extends KernelTestCase
         $fakeRequest = Request::create('/', 'GET', $parameters);
 
         RequestHandler::getSearchTerms($fakeRequest);
-
-        unset($fakeRequest);
     }
 
     /**
@@ -212,8 +196,6 @@ class RequestHandlerTest extends KernelTestCase
             RequestHandler::getSearchTerms($fakeRequest),
             'getSearchTerms method did not return expected value'
         );
-
-        unset($fakeRequest);
     }
 
     /**

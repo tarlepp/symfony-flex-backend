@@ -53,8 +53,6 @@ class ApiKeyTest extends EntityTestCase
 
         static::assertInstanceOf(ApiKey::class, $apiKey);
         static::assertSame($expectedRoles->getArrayCopy(), $apiKey->getRoles());
-
-        unset($apiKey);
     }
 
     /**

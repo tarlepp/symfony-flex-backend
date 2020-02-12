@@ -81,8 +81,6 @@ class UserTest extends EntityTestCase
         // Assert that unserialized object returns expected data
         static::assertSame('john', $entity->getUsername());
         static::assertSame('cnffjbeq', $entity->getPassword());
-
-        unset($entity);
     }
 
     public function testThatGetSaltMethodReturnsNull(): void

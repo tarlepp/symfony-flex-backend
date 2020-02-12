@@ -136,7 +136,5 @@ class LogLoginTest extends EntityTestCase
         $this->entity = new $this->entityName('', $request, $deviceDetector, new User());
 
         $this->repository = $this->entityManager->getRepository($this->entityName);
-
-        unset($deviceDetector);
     }
 }

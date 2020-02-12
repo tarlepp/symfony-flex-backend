@@ -50,8 +50,6 @@ class GenericRepositoryTest extends KernelTestCase
         $repository = static::$container->get($this->resourceClass)->getRepository();
 
         static::assertInstanceOf(Proxy::class, $repository->getReference($entity->getId()));
-
-        unset($repository, $entity);
     }
 
     public function testThatGetAssociationsReturnsExpected(): void
@@ -201,8 +199,6 @@ class GenericRepositoryTest extends KernelTestCase
         $message = 'addLeftJoin method did not return expected';
 
         static::assertSame($expected, $queryBuilder->getDQL(), $message);
-
-        unset($repository, $queryBuilder);
     }
 
     /**
@@ -226,8 +222,6 @@ class GenericRepositoryTest extends KernelTestCase
         $message = 'addLeftJoin method did not return expected';
 
         static::assertSame($expected, $queryBuilder->getDQL(), $message);
-
-        unset($repository, $queryBuilder);
     }
 
     /**
@@ -253,8 +247,6 @@ class GenericRepositoryTest extends KernelTestCase
         $message = 'addLeftJoin method did not return expected';
 
         static::assertSame($expected, $queryBuilder->getDQL(), $message);
-
-        unset($repository, $queryBuilder);
     }
 
     /**
@@ -280,8 +272,6 @@ class GenericRepositoryTest extends KernelTestCase
         $message = 'addLeftJoin method did not return expected';
 
         static::assertSame($expected, $queryBuilder->getDQL(), $message);
-
-        unset($repository, $queryBuilder);
     }
 
     public function testThatAddCallbackWorks(): void
@@ -299,8 +289,6 @@ class GenericRepositoryTest extends KernelTestCase
 
         $repository->addCallback($callable, [1, 'string']);
         $repository->processQueryBuilder($queryBuilder);
-
-        unset($repository, $queryBuilder);
     }
 
     public function testThatAddCallbackCallsCallbackJustOnce(): void
@@ -328,8 +316,6 @@ class GenericRepositoryTest extends KernelTestCase
         $repository->processQueryBuilder($queryBuilder);
 
         static::assertSame(1, $count);
-
-        unset($repository, $queryBuilder);
     }
 
     /**
@@ -376,8 +362,6 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $repository = new $this->repositoryClass($managerObject);
         $repository->find(...$arguments);
-
-        unset($repository, $managerObject, $entityManager);
     }
 
     /**
@@ -429,8 +413,6 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $repository = new $this->repositoryClass($managerObject);
         $repository->findOneBy(...$arguments);
-
-        unset($repository, $managerObject, $entityManager, $repositoryMock);
     }
 
     /**
@@ -485,8 +467,6 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $repository = new $this->repositoryClass($managerObject);
         $repository->findBy(...$arguments);
-
-        unset($repository, $managerObject, $entityManager, $repositoryMock);
     }
 
     /**
@@ -533,8 +513,6 @@ class GenericRepositoryTest extends KernelTestCase
          */
         $repository = new $this->repositoryClass($managerObject);
         $repository->findAll();
-
-        unset($repository, $managerObject, $entityManager, $repositoryMock);
     }
 
     /**

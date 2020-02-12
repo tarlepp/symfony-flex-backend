@@ -81,8 +81,6 @@ abstract class DtoTestCase extends KernelTestCase
 
             static::assertTrue($dtoReflection->hasMethod($method), $message);
         }
-
-        unset($dtoReflection);
     }
 
     /**
