@@ -100,7 +100,7 @@ abstract class DtoTestCase extends KernelTestCase
             ->onlyMethods(['setVisited'])
             ->getMock();
 
-        $mock->expects(static::exactly(count($properties)))
+        $mock->expects(static::atLeast(count($properties)))
             ->method('setVisited');
 
         $expectedVisited = [];
@@ -274,11 +274,13 @@ abstract class DtoTestCase extends KernelTestCase
         $dtoReflection = new ReflectionClass($dtoClass);
         $dto = new $dtoClass();
 
-        $filter = static function (ReflectionProperty $reflectionProperty) use ($dto, $dtoClass) {
-            return !$reflectionProperty->isStatic()
-                && ($dtoClass === $reflectionProperty->getDeclaringClass()->getName()
-                    || $reflectionProperty->getDeclaringClass()->isInstance($dto));
-        };
+        $filter = fn (ReflectionProperty $reflectionProperty) =>
+            !$reflectionProperty->isStatic()
+            && !$reflectionProperty->isPrivate()
+            && (
+                $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
+                || $reflectionProperty->getDeclaringClass()->isInstance($dto)
+            );
 
         /** @var ReflectionProperty[] $properties */
         $properties = array_filter($dtoReflection->getProperties(), $filter);

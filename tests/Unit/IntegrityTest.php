@@ -10,9 +10,11 @@ namespace App\Tests\Unit;
 
 use App\AutoMapper\RestRequestMapper;
 use App\Entity\Interfaces\EntityInterface;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Rest\Interfaces\ControllerInterface;
 use App\Rest\Interfaces\RepositoryInterface;
 use App\Utils\Tests\PhpUnitUtil;
+use App\Utils\Tests\StringableArrayObject;
 use Closure;
 use Doctrine\DBAL\Types\Type;
 use ReflectionClass;
@@ -82,18 +84,40 @@ class IntegrityTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatRepositoryClassHasIntegrationTests
+     *
+     * @param string $testClass
+     * @param string $repository
+     *
+     * @testdox Test that repository `$repository` has integration test class `$testClass`.
+     */
+    public function testThatRepositoryClassHasIntegrationTests(string $testClass, string $repository): void {
+        $format = <<<FORMAT
+Repository '%s' doesn't have required test class '%s'.
+FORMAT;
+
+        $message = sprintf(
+            $format,
+            $repository,
+            $testClass
+        );
+
+        static::assertTrue(class_exists($testClass), $message);
+    }
+
+    /**
      * @dataProvider dataProviderTestThatRepositoryHaveFunctionalTests
      *
-     * @param string $repositoryTestClass
-     * @param string $repositoryClass
-     * @param array  $methods
+     * @param string                $testClass
+     * @param string                $repository
+     * @param StringableArrayObject $methods
      *
-     * @testdox Test that repository $repositoryClass has functional test class $repositoryTestClass
+     * @testdox Test that repository `$repository` has functional test class `$testClass` for `$methods` methods.
      */
     public function testThatRepositoryHaveFunctionalTests(
-        string $repositoryTestClass,
-        string $repositoryClass,
-        array $methods
+        string $testClass,
+        string $repository,
+        StringableArrayObject $methods
     ): void {
         $format = <<<FORMAT
 Repository '%s' doesn't have required test class '%s', repository has following methods that needs to be tested: '%s'.
@@ -101,12 +125,12 @@ FORMAT;
 
         $message = sprintf(
             $format,
-            $repositoryClass,
-            $repositoryTestClass,
-            implode('", "', $methods)
+            $repository,
+            $testClass,
+            implode('", "', $methods->getArrayCopy())
         );
 
-        static::assertTrue(class_exists($repositoryTestClass), $message);
+        static::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -430,6 +454,22 @@ FORMAT;
     /**
      * @return array
      */
+    public function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/Repository/';
+        $namespace = '\\App\\Repository\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
+
+        $filter = $this->getInterfaceFilter(BaseRepositoryInterface::class);
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    /**
+     * @return array
+     */
     public function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {
         $this->bootKernelCached();
@@ -442,10 +482,11 @@ FORMAT;
         $repositoryMethods = [];
 
         $filter = static function (ReflectionClass $reflectionClass) use (&$repositoryMethods): bool {
-            $filter = fn (ReflectionMethod $method): bool => $method->class === $reflectionClass->getName();
+            $filter = fn (ReflectionMethod $method): bool =>
+                $method->class === $reflectionClass->getName() && !$method->isConstructor();
             $formatter = fn (ReflectionMethod $method): string => $method->getName();
 
-            $methods = array_filter($reflectionClass->getMethods(), $filter);
+            $methods = array_values(array_filter($reflectionClass->getMethods(), $filter));
 
             $repositoryMethods[$reflectionClass->getName()] = array_map($formatter, $methods);
 
@@ -472,7 +513,7 @@ FORMAT;
             return [
                 $classTest,
                 $class,
-                $repositoryMethods[$reflectionClass->getName()],
+                new StringableArrayObject($repositoryMethods[$reflectionClass->getName()]),
             ];
         };
 
