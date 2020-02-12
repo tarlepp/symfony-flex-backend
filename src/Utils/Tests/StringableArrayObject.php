@@ -27,6 +27,15 @@ class StringableArrayObject extends ArrayObject
      */
     public function __toString(): string
     {
+        /**
+         * @psalm-suppress MissingClosureReturnType
+         * @psalm-suppress MissingParamType
+         * @psalm-suppress InvalidCast
+         *
+         * @param mixed $input
+         *
+         * @return mixed
+         */
         $iterator = fn ($input) => is_object($input) ? (string)$input : $input;
 
         return JSON::encode(array_map($iterator, $this->getArrayCopy()));
