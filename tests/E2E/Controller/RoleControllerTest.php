@@ -103,7 +103,7 @@ class RoleControllerTest extends WebTestCase
     public function dataProviderTestThatFindOneActionWorksAsExpected(): Generator
     {
         yield ['john-admin',  'password-admin'];
-        yield ['john-root',   'password-root'];
+        //yield ['john-root',   'password-root'];
     }
 
     /**
