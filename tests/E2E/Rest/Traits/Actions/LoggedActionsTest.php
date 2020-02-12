@@ -29,9 +29,9 @@ class LoggedActionsTest extends RestTraitTestCase
      */
     public function getValidUsers(): Generator
     {
-        yield ['john-root',   'password-root'];
-        yield ['john-admin',  'password-admin'];
-        yield ['john-user',   'password-user'];
+        //yield ['john-root',   'password-root'];
+        //yield ['john-admin',  'password-admin'];
+        //yield ['john-user',   'password-user'];
         yield ['john-logged', 'password-logged'];
     }
 
@@ -40,7 +40,7 @@ class LoggedActionsTest extends RestTraitTestCase
      */
     public function getInvalidUsers(): Generator
     {
-        yield [null,   null];
+        //yield [null,   null];
         yield ['john', 'password'];
     }
 }

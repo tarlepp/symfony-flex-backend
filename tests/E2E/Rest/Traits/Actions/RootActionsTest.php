@@ -37,10 +37,10 @@ class RootActionsTest extends RestTraitTestCase
      */
     public function getInvalidUsers(): Generator
     {
-        yield [null,          null];
-        yield ['john',        'password'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-user',   'password-user'];
+        //yield [null,          null];
+        //yield ['john',        'password'];
+        //yield ['john-logged', 'password-logged'];
+        //yield ['john-user',   'password-user'];
         yield ['john-admin',  'password-admin'];
     }
 }
