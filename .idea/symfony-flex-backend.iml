@@ -15,6 +15,7 @@
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/sebastian/finder-facade/src" isTestSource="true" packagePrefix="SebastianBergmann\FinderFacade\" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/composer" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/myclabs" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/phar-io" />
