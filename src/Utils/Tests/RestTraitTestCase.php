@@ -24,14 +24,8 @@ use function array_merge;
  */
 abstract class RestTraitTestCase extends WebTestCase
 {
-    /**
-     * @var string;
-     */
     private const END_POINT_COUNT = '/count';
 
-    /**
-     * @var string
-     */
     protected static string $route;
 
     /**
@@ -52,6 +46,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/count` route doesn't allow `$method` method with `$username + $password`.
      */
     public function testThatCountRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $username = null,
@@ -77,6 +73,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/count` route works as expected when using `$method` method with `$username + $password`.
      */
     public function testThatCountRouteWorksWithAllowedHttpMethods(
         ?string $username = null,
@@ -102,6 +100,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/count` route doesn't allow invalid user `$username + $password` when using `$method` method.
      */
     public function testThatCountRouteDoesNotAllowInvalidUser(
         ?string $username = null,
@@ -131,6 +131,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/` route doesn't allow `$method` method with `$username + $password`.
      */
     public function testThatRootRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $username = null,
@@ -156,6 +158,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/` route works as expected when using `$method` method with `$username + $password`.
      */
     public function testThatRootRouteWorksWithAllowedHttpMethods(
         ?string $username = null,
@@ -181,6 +185,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/` route doesn't allow invalid user `$username + $password` when using `$method` method.
      */
     public function testThatRootRouteDoesNotAllowInvalidUser(
         ?string $username = null,
@@ -210,6 +216,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/{id}` route doesn't allow `$method` method with `$username + $password`.
      */
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
         ?string $username = null,
@@ -237,6 +245,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/{id}` route works as expected when using `$method` method with `$username + $password`.
      */
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
         ?string $username = null,
@@ -264,6 +274,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/{id}` route doesn't allow invalid user `$username + $password` when using `$method` method.
      */
     public function testThatRootRouteWithIdDoesNotAllowInvalidUser(
         ?string $username = null,
@@ -295,6 +307,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/ids` route doesn't allow `$method` method with `$username + $password`.
      */
     public function testThatIdsRouteDoesNotAllowNotSupportedHttpMethods(
         ?string $username = null,
@@ -320,6 +334,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/ids` route works as expected when using `$method` method with `$username + $password`.
      */
     public function testThatIdsRouteWorksWithAllowedHttpMethods(
         ?string $username = null,
@@ -345,6 +361,8 @@ abstract class RestTraitTestCase extends WebTestCase
      * @param string|null $method
      *
      * @throws Throwable
+     *
+     * @testdox Test that `/ids` route doesn't allow invalid user `$username + $password` when using `$method` method.
      */
     public function testThatIdsRouteDoesNotAllowInvalidUser(
         ?string $username = null,
