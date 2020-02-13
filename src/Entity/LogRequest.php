@@ -67,7 +67,7 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
-    protected ?User $user;
+    protected $user;
 
     /**
      * @var UuidInterface
@@ -88,7 +88,7 @@ class LogRequest implements EntityInterface
      *
      * @SWG\Property(type="string", format="uuid")
      */
-    private UuidInterface $id;
+    private $id;
 
     /**
      * @var ApiKey|null
@@ -110,7 +110,7 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
-    private ?ApiKey $apiKey;
+    private $apiKey;
 
     /**
      * @var int
@@ -126,7 +126,7 @@ class LogRequest implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private int $statusCode;
+    private $statusCode;
 
     /**
      * @var int
@@ -142,7 +142,7 @@ class LogRequest implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private int $responseContentLength;
+    private $responseContentLength;
 
     /**
      * @var bool
@@ -158,14 +158,11 @@ class LogRequest implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private bool $masterRequest;
-
-    private array $sensitiveProperties;
+    private $masterRequest;
 
     /**
      * LogRequest constructor.
      *
-     * @param array         $sensitiveProperties
      * @param Request|null  $request
      * @param Response|null $response
      * @param User|null     $user
@@ -175,14 +172,12 @@ class LogRequest implements EntityInterface
      * @throws Throwable
      */
     public function __construct(
-        array $sensitiveProperties,
         ?Request $request = null,
         ?Response $response = null,
         ?User $user = null,
         ?ApiKey $apiKey = null,
         ?bool $masterRequest = null
     ) {
-        $this->sensitiveProperties = $sensitiveProperties;
         $this->id = $this->getUuid();
         $this->user = $user;
         $this->apiKey = $apiKey;

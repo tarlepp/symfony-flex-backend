@@ -90,7 +90,6 @@ class LogRequestTest extends EntityTestCase
         }
 
         $logRequest = new LogRequest(
-            [],
             Request::create(''),
             Response::create('abcdefgh'),
             new User(),
@@ -135,23 +134,21 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
      *
-     * @param StringableArrayObject $properties
      * @param StringableArrayObject $headers
      * @param StringableArrayObject $expected
      *
      * @throws Throwable
      *
-     * @testdox Test that sensitive data `$properties` from `$headers` is cleaned and output is expected `$expected`.
+     * @testdox Test that sensitive data from `$headers` is cleaned and output is expected `$expected`.
      */
     public function testThatSensitiveDataIsCleanedFromHeaders(
-        StringableArrayObject $properties,
         StringableArrayObject $headers,
         StringableArrayObject $expected
     ): void {
         $request = Request::create('');
         $request->headers->replace($headers->getArrayCopy());
 
-        $logRequest = new LogRequest($properties->getArrayCopy(), $request, Response::create());
+        $logRequest = new LogRequest($request, Response::create());
 
         static::assertSame($expected->getArrayCopy(), $logRequest->getHeaders());
     }
@@ -159,23 +156,21 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
      *
-     * @param StringableArrayObject $properties
      * @param StringableArrayObject $parameters
      * @param StringableArrayObject $expected
      *
      * @throws Throwable
      *
-     * @testdox Test that sensitive data `$properties` from `parameters` is cleaned and output is expected `$expected`.
+     * @testdox Test that sensitive data from `parameters` is cleaned and output is expected `$expected`.
      */
     public function testThatSensitiveDataIsCleanedFromParameters(
-        StringableArrayObject $properties,
         StringableArrayObject $parameters,
         StringableArrayObject $expected
     ): void {
         $request = Request::create('', 'POST');
         $request->request->replace($parameters->getArrayCopy());
 
-        $logRequest = new LogRequest($properties->getArrayCopy(), $request, Response::create());
+        $logRequest = new LogRequest($request, Response::create());
 
         static::assertSame($expected->getArrayCopy(), $logRequest->getParameters());
     }
@@ -192,7 +187,7 @@ class LogRequestTest extends EntityTestCase
      */
     public function testThatDetermineParametersWorksLikeExpected(string $content, StringableArrayObject $expected): void
     {
-        $logRequest = new LogRequest([], Request::create(''), Response::create());
+        $logRequest = new LogRequest(Request::create(''), Response::create());
 
         $request = Request::create('', 'GET', [], [], [], [], $content);
 
@@ -208,48 +203,23 @@ class LogRequestTest extends EntityTestCase
     public function dataProviderTestThatSensitiveDataIsCleaned(): Generator
     {
         yield [
-            new StringableArrayObject(['password']),
             new StringableArrayObject(['password' => 'password']),
             new StringableArrayObject(['password' => '*** REPLACED ***']),
         ];
 
         yield [
-            new StringableArrayObject(['token']),
             new StringableArrayObject(['token' => 'secret token']),
             new StringableArrayObject(['token' => '*** REPLACED ***']),
         ];
 
         yield [
-            new StringableArrayObject(['authorization']),
             new StringableArrayObject(['authorization' => 'authorization bearer']),
             new StringableArrayObject(['authorization' => '*** REPLACED ***']),
         ];
 
         yield [
-            new StringableArrayObject(['cookie']),
             new StringableArrayObject(['cookie' => 'cookie']),
             new StringableArrayObject(['cookie' => '*** REPLACED ***']),
-        ];
-
-        yield [
-            new StringableArrayObject([
-                'password',
-                'token',
-                'authorization',
-                'cookie'
-            ]),
-            new StringableArrayObject([
-                'password' => 'password',
-                'token' => 'secret token',
-                'authorization' => 'authorization bearer',
-                'cookie' => 'cookie',
-            ]),
-            new StringableArrayObject([
-                'password' => '*** REPLACED ***',
-                'token' => '*** REPLACED ***',
-                'authorization' => '*** REPLACED ***',
-                'cookie' => '*** REPLACED ***',
-            ]),
         ];
     }
 
@@ -272,25 +242,5 @@ class LogRequestTest extends EntityTestCase
             'false',
             new StringableArrayObject([false]),
         ];
-    }
-
-    /**
-     * @throws Throwable
-     *
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    protected function setUp(): void
-    {
-        static::bootKernel();
-
-        // Store container and entity manager
-        $this->testContainer = static::$kernel->getContainer();
-
-        /** @noinspection MissingService */
-        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
-
-        // Create new entity object
-        $this->entity = new $this->entityName([]);
-        $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 }

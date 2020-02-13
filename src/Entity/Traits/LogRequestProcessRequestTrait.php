@@ -31,12 +31,13 @@ use function strval;
  *
  * @package App\Entity\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @property array $sensitiveProperties
  */
 trait LogRequestProcessRequestTrait
 {
-    private string $replaceValue = '*** REPLACED ***';
+    /**
+     * @var string
+     */
+    private $replaceValue = '*** REPLACED ***';
 
     /**
      * @var mixed[]
@@ -535,7 +536,12 @@ trait LogRequestProcessRequestTrait
     private function cleanParameters(&$value, string $key): void
     {
         // What keys we should replace so that any sensitive data is not logged
-        $replacements = array_fill_keys($this->sensitiveProperties, $this->replaceValue);
+        $replacements = [
+            'password' => $this->replaceValue,
+            'token' => $this->replaceValue,
+            'authorization' => $this->replaceValue,
+            'cookie' => $this->replaceValue,
+        ];
 
         // Normalize current key
         $key = mb_strtolower($key);
@@ -577,7 +583,14 @@ trait LogRequestProcessRequestTrait
             );
         };
 
-        array_map($iterator, $this->sensitiveProperties);
+        $replacements = [
+            'password',
+            'token',
+            'authorization',
+            'cookie',
+        ];
+
+        array_map($iterator, $replacements);
 
         return $inputContent;
     }
