@@ -32,7 +32,7 @@ use function strval;
  * @package App\Entity\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @property array $sensitiveProperties
+ * @method array getSensitiveProperties();
  */
 trait LogRequestProcessRequestTrait
 {
@@ -577,7 +577,7 @@ trait LogRequestProcessRequestTrait
             );
         };
 
-        array_map($iterator, $this->sensitiveProperties);
+        array_map($iterator, $this->getSensitiveProperties());
 
         return $inputContent;
     }
