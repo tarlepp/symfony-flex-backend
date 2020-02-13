@@ -42,7 +42,7 @@ class RequestLoggerTest extends KernelTestCase
             ->expects(static::never())
             ->method('save');
 
-        (new RequestLogger($resource, $logger))
+        (new RequestLogger($resource, $logger, []))
             ->setResponse(new Response())
             ->handle();
     }
@@ -63,7 +63,7 @@ class RequestLoggerTest extends KernelTestCase
             ->expects(static::never())
             ->method('save');
 
-        (new RequestLogger($resource, $logger))
+        (new RequestLogger($resource, $logger, []))
             ->setRequest(new Request())
             ->handle();
     }
@@ -87,7 +87,7 @@ class RequestLoggerTest extends KernelTestCase
             ->expects(static::once())
             ->method('save');
 
-        (new RequestLogger($resource, $logger))
+        (new RequestLogger($resource, $logger, []))
             ->setRequest($request)
             ->setResponse($response)
             ->setMasterRequest(true)
@@ -122,7 +122,7 @@ class RequestLoggerTest extends KernelTestCase
             ->method('error')
             ->with('test exception');
 
-        (new RequestLogger($resource, $logger))
+        (new RequestLogger($resource, $logger, []))
             ->setRequest($request)
             ->setResponse($response)
             ->setMasterRequest(true)

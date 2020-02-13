@@ -54,6 +54,10 @@ services:
         tags:
             - { name: controller.argument_value_resolver, priority: 150 }
 
+    App\Utils\RequestLogger:
+        arguments:
+            $sensitiveProperties: '%env(key:REQUEST_LOG_SENSITIVE_PROPERTIES:json:file:APPLICATION_CONFIG)%'
+
     App\Resource\ResourceCollection:
         arguments: [ !tagged app.rest.resource ]
 
