@@ -28,6 +28,7 @@ class RequestLogger implements RequestLoggerInterface
 {
     private LogRequestResource $resource;
     private LoggerInterface $logger;
+    private array $sensitiveProperties;
     private ?Response $response = null;
     private ?Request $request = null;
     private ?User $user = null;
@@ -39,11 +40,13 @@ class RequestLogger implements RequestLoggerInterface
      *
      * @param LogRequestResource $resource
      * @param LoggerInterface    $logger
+     * @param array              $sensitiveProperties
      */
-    public function __construct(LogRequestResource $resource, LoggerInterface $logger)
+    public function __construct(LogRequestResource $resource, LoggerInterface $logger, array $sensitiveProperties)
     {
         $this->resource = $resource;
         $this->logger = $logger;
+        $this->sensitiveProperties = $sensitiveProperties;
     }
 
     /**
@@ -141,7 +144,14 @@ class RequestLogger implements RequestLoggerInterface
     private function createRequestLogEntry(): void
     {
         // Create new request log entity
-        $entity = new LogRequest($this->request, $this->response, $this->user, $this->apiKey, $this->masterRequest);
+        $entity = new LogRequest(
+            $this->sensitiveProperties,
+            $this->request,
+            $this->response,
+            $this->user,
+            $this->apiKey,
+            $this->masterRequest
+        );
 
         $this->resource->save($entity, true, true);
     }

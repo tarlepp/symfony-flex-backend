@@ -27,7 +27,7 @@ class LogRequestTest extends KernelTestCase
      */
     public function testThatGetCreatedAtReturnsExpected(): void
     {
-        $entity = new LogRequest();
+        $entity = new LogRequest([]);
 
         static::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
     }
