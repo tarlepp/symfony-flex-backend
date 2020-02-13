@@ -36,6 +36,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      * @param string $username
      *
      * @throws Throwable
+     *
+     * @testdox Test that `resolve` method with `$username` input returns expected `User` object.
      */
     public function testThatResolveReturnsExpectedUserObject(string $username): void
     {
@@ -64,6 +66,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      * @param string $username
      *
      * @throws Throwable
+     *
+     * @testdox Test that integration with argument resolver with `$username` returns expected `User` object.
      */
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(string $username): void
     {

@@ -35,6 +35,8 @@ class RoleTransformerTest extends KernelTestCase
      *
      * @param mixed $expected
      * @param mixed $input
+     *
+     * @testdox Test that `transform` method returns `$expected` when using `$input` input.
      */
     public function testThatTransformReturnsExpected($expected, $input): void
     {
@@ -58,8 +60,6 @@ class RoleTransformerTest extends KernelTestCase
 
         $transformer = new RoleTransformer($this->roleResource);
         $transformer->reverseTransform($entity->getId());
-
-        unset($transformer, $entity);
     }
 
     /**
@@ -78,8 +78,6 @@ class RoleTransformerTest extends KernelTestCase
 
         $transformer = new RoleTransformer($this->roleResource);
         $transformer->reverseTransform('role_name');
-
-        unset($transformer);
     }
 
     /**
@@ -98,8 +96,6 @@ class RoleTransformerTest extends KernelTestCase
         $transformer = new RoleTransformer($this->roleResource);
 
         static::assertSame($entity, $transformer->reverseTransform('rolename'));
-
-        unset($transformer, $entity);
     }
 
     /**
@@ -111,7 +107,7 @@ class RoleTransformerTest extends KernelTestCase
     {
         yield ['', null];
 
-        $entity = new Role();
+        $entity = new Role('some role');
 
         yield [$entity->getId(), $entity];
     }

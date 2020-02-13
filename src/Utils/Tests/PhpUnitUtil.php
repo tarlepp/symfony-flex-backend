@@ -315,6 +315,7 @@ class PhpUnitUtil
                     $output = new DateTime();
                     break;
                 case self::TYPE_CUSTOM_CLASS:
+                case self::TYPE_INT:
                 case self::TYPE_INTEGER:
                 case DateTime::class:
                 case self::TYPE_STRING:

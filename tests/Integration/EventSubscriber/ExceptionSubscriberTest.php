@@ -48,7 +48,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `onKernelException` method calls logger with environment: '$environment'
+     * @testdox Test that `onKernelException` method calls logger with environment: '$environment'.
      */
     public function testThatOnKernelExceptionMethodCallsLogger(string $environment): void
     {
@@ -83,7 +83,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `ExceptionEvent::setResponse` method is called with environment: '$environment'
+     * @testdox Test that `ExceptionEvent::setResponse` method is called with environment: '$environment'.
      */
     public function testThatOnKernelExceptionMethodSetResponse(string $environment): void
     {
@@ -120,7 +120,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `Response` has status code `$status` and message `$message` with environment: '$environment'
+     * @testdox Test that `Response` has status code `$status` and message `$message` with environment: '$environment'.
      */
     public function testResponseHasExpectedStatusCode(
         int $status,
@@ -161,7 +161,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `Response` has expected keys in JSON response with environment: '$environment'
+     * @testdox Test that `Response` has expected keys in JSON response with environment: '$environment'.
      */
     public function testThatResponseHasExpectedKeys(array $expectedKeys, string $environment): void
     {
@@ -201,7 +201,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `getStatusCode` returns `$expectedStatusCode` with environment: '$environment'
+     * @testdox Test that `getStatusCode` returns `$expectedStatusCode` with environment: '$environment'.
      */
     public function testThatGetStatusCodeReturnsExpected(
         int $expectedStatusCode,
@@ -239,6 +239,8 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @param string    $environment
      *
      * @throws Throwable
+     *
+     * @testdox Test that `$environment` environment exception message is `$expectedMessage`.
      */
     public function testThatGetExceptionMessageReturnsExpected(
         string $expectedMessage,

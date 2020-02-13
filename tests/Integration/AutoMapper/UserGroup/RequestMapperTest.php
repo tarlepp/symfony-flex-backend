@@ -46,6 +46,8 @@ class RequestMapperTest extends RestRequestMapperTestCase
      * @param string $dtoClass
      *
      * @throws Throwable
+     *
+     * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass`.
      */
     public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
     {

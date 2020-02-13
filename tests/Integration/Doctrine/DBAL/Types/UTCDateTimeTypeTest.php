@@ -48,8 +48,6 @@ class UTCDateTimeTypeTest extends KernelTestCase
         $actual = $this->type->convertToDatabaseValue($dateInput, $this->platform);
 
         static::assertSame($expected, $actual);
-
-        unset($actual, $expected, $dateExpected, $dateInput);
     }
 
     /**
@@ -70,8 +68,6 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         static::assertInstanceOf(DateTimeZone::class, $property);
         static::assertSame('UTC', $property->getName());
-
-        unset($dateInput);
     }
 
     /**
@@ -79,6 +75,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
      *
      * @param string           $expected
      * @param string|DateTime $value
+     *
+     * @testdox Test that `convertToPHPValue` method converts `$value` to `$expected`.
      */
     public function testDateTimeConvertsToPHPValue(string $expected, $value): void
     {

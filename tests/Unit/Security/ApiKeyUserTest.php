@@ -12,6 +12,8 @@ use App\Entity\ApiKey;
 use App\Resource\UserGroupResource;
 use App\Security\ApiKeyUser;
 use App\Security\RolesService;
+use App\Utils\Tests\StringableArrayObject;
+use ArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -27,10 +29,12 @@ class ApiKeyUserTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetRolesReturnsExpected
      *
-     * @param ApiKey $apiKey
-     * @param array  $expectedRoles
+     * @param ApiKey                $apiKey
+     * @param StringableArrayObject $expectedRoles
+     *
+     * @testdox Test that `$apiKey` has expected roles `$expectedRoles`.
      */
-    public function testThatGetRolesReturnsExpected(ApiKey $apiKey, array $expectedRoles): void
+    public function testThatGetRolesReturnsExpected(ApiKey $apiKey, StringableArrayObject $expectedRoles): void
     {
         static::bootKernel();
 
@@ -38,7 +42,7 @@ class ApiKeyUserTest extends KernelTestCase
 
         $apiKeyUser = new ApiKeyUser($apiKey, $rolesService);
 
-        static::assertEqualsCanonicalizing($expectedRoles, $apiKeyUser->getRoles());
+        static::assertEqualsCanonicalizing($expectedRoles->getArrayCopy(), $apiKeyUser->getRoles());
     }
 
     /**
@@ -53,21 +57,21 @@ class ApiKeyUserTest extends KernelTestCase
         /** @var UserGroupResource $userGroupResource */
         $userGroupResource = static::$container->get(UserGroupResource::class);
 
-        yield [new ApiKey(), ['ROLE_API', 'ROLE_LOGGED']];
+        yield [new ApiKey(), new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];
 
         yield [
             (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Normal users'])),
-            ['ROLE_API', 'ROLE_USER', 'ROLE_LOGGED'],
+            new StringableArrayObject(['ROLE_API', 'ROLE_USER', 'ROLE_LOGGED']),
         ];
 
         yield [
             (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Admin users'])),
-            ['ROLE_API', 'ROLE_ADMIN', 'ROLE_LOGGED', 'ROLE_USER'],
+            new StringableArrayObject(['ROLE_API', 'ROLE_ADMIN', 'ROLE_LOGGED', 'ROLE_USER']),
         ];
 
         yield [
             (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Root users'])),
-            ['ROLE_API', 'ROLE_ROOT', 'ROLE_LOGGED', 'ROLE_ADMIN', 'ROLE_USER'],
+            new StringableArrayObject(['ROLE_API', 'ROLE_ROOT', 'ROLE_LOGGED', 'ROLE_ADMIN', 'ROLE_USER']),
         ];
     }
 }

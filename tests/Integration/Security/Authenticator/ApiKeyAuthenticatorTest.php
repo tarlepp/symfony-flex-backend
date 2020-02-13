@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Security\Authenticator;
 
 use App\Security\Authenticator\ApiKeyAuthenticator;
 use App\Security\Provider\ApiKeyUserProvider;
+use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
@@ -77,14 +78,14 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetCredentialsReturnsExpected
      *
-     * @param array|null $expected
-     * @param Request    $request
+     * @param StringableArrayObject|null $expected
+     * @param Request                    $request
      *
      * @throws Throwable
      *
      * @testdox Test that `getCredentials` method returns `$expected` with `$request` request.
      */
-    public function testThatGetCredentialsReturnsExpected(?array $expected, Request $request): void
+    public function testThatGetCredentialsReturnsExpected(?StringableArrayObject $expected, Request $request): void
     {
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
@@ -93,7 +94,10 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
 
-        static::assertSame($expected, $authenticator->getCredentials($request));
+        static::assertSame(
+            $expected === null ? null : $expected->getArrayCopy(),
+            $authenticator->getCredentials($request)
+        );
     }
 
     /**
@@ -114,7 +118,12 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
 
-        static::assertNull($authenticator->getUser($credentials, $apiKeyUserProvider));
+        static::assertNull(
+            $authenticator->getUser(
+                $credentials instanceof StringableArrayObject ? $credentials->getArrayCopy() : $credentials,
+                $apiKeyUserProvider
+            )
+        );
     }
 
     /**
@@ -124,7 +133,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `checkCredentials` method throws `Invalid token` exception with `$credentials`  credentials.
+     * @testdox Test that `checkCredentials` method throws `Invalid token` exception with `$credentials` credentials.
      */
     public function testThatCheckCredentialsThrowsAnException($credentials): void
     {
@@ -136,7 +145,10 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
          */
         $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
 
-        (new ApiKeyAuthenticator($apiKeyUserProvider))->checkCredentials($credentials, new User('user', 'password'));
+        (new ApiKeyAuthenticator($apiKeyUserProvider))->checkCredentials(
+            $credentials instanceof StringableArrayObject ? $credentials->getArrayCopy() : $credentials,
+            new User('user', 'password')
+        );
     }
 
     /**
@@ -217,14 +229,24 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [null, new Request()];
 
         $request = new Request();
+        $request->headers = new HeaderBag(['Authorization' => 'FooBar']);
+
+        yield [null, $request];
+
+        $request = new Request();
         $request->headers = new HeaderBag(['Authorization' => 'ApiKey']);
+
+        yield [null, $request];
+
+        $request = new Request();
+        $request->headers = new HeaderBag(['Authorization' => 'ApiKey    ']);
 
         yield [null, $request];
 
         $request = new Request();
         $request->headers = new HeaderBag(['Authorization' => 'ApiKey somekey']);
 
-        yield [['token' => 'somekey'], $request];
+        yield [new StringableArrayObject(['token' => 'somekey']), $request];
     }
 
     /**
@@ -236,10 +258,10 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield ['foobar'];
         yield [123];
         yield [new stdClass()];
-        yield [[]];
-        yield [['foobar']];
-        yield [['foobar' => 'barfoo']];
-        yield [['token' => null]];
+        yield [new StringableArrayObject([])];
+        yield [new StringableArrayObject(['foobar'])];
+        yield [new StringableArrayObject(['foobar' => 'barfoo'])];
+        yield [new StringableArrayObject(['token' => null])];
     }
 
     /**
@@ -251,9 +273,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield ['foobar'];
         yield [123];
         yield [new stdClass()];
-        yield [[]];
-        yield [['foobar']];
-        yield [['foobar' => 'barfoo']];
-        yield [['token' => null]];
+        yield [new StringableArrayObject([])];
+        yield [new StringableArrayObject(['foobar'])];
+        yield [new StringableArrayObject(['foobar' => 'barfoo'])];
+        yield [new StringableArrayObject(['token' => null])];
     }
 }

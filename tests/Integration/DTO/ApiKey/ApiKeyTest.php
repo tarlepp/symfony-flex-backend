@@ -49,8 +49,6 @@ class ApiKeyTest extends DtoTestCase
 
         static::assertSame('Some description', $dto->getDescription());
         static::assertSame([$userGroupEntity], $dto->getUserGroups());
-
-        unset($dto, $apiKeyEntity, $userGroupEntity, $roleEntity);
     }
 
     /**
@@ -86,7 +84,5 @@ class ApiKeyTest extends DtoTestCase
         $dto->setDescription('some description');
         $dto->setUserGroups($userGroups);
         $dto->update($entity);
-
-        unset($dto, $entity, $userGroups);
     }
 }

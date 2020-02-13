@@ -35,6 +35,8 @@ class LogLoginTest extends EntityTestCase
      * @param string $field
      * @param string $type
      * @param array  $meta
+     *
+     * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
         string $field = null,
@@ -49,6 +51,8 @@ class LogLoginTest extends EntityTestCase
      * @param string $field
      * @param string $type
      * @param array  $meta
+     *
+     * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterReturnsInstanceOfEntity(
         string $field = null,
@@ -67,6 +71,8 @@ class LogLoginTest extends EntityTestCase
      * @param array  $meta
      *
      * @throws Throwable
+     *
+     * @testdox Test that getter method for `$field` with `$type` returns expected.
      */
     public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
     {
@@ -130,7 +136,5 @@ class LogLoginTest extends EntityTestCase
         $this->entity = new $this->entityName('', $request, $deviceDetector, new User());
 
         $this->repository = $this->entityManager->getRepository($this->entityName);
-
-        unset($deviceDetector);
     }
 }

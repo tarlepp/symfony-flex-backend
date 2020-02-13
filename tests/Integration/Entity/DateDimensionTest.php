@@ -32,6 +32,8 @@ class DateDimensionTest extends EntityTestCase
      * @param string $field
      * @param string $type
      * @param array  $meta
+     *
+     * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
         string $field = null,
@@ -46,6 +48,8 @@ class DateDimensionTest extends EntityTestCase
      * @param string $field
      * @param string $type
      * @param array  $meta
+     *
+     * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterReturnsInstanceOfEntity(
         string $field = null,
@@ -64,6 +68,8 @@ class DateDimensionTest extends EntityTestCase
      * @param array  $meta
      *
      * @throws Throwable
+     *
+     * @testdox Test that getter method for `$field` with `$type` returns expected.
      */
     public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
     {
@@ -84,8 +90,6 @@ class DateDimensionTest extends EntityTestCase
         } catch (Exception $error) {
             static::assertInstanceOf($type, $dateDimension->$getter(), $error->getMessage());
         }
-
-        unset($dateDimension);
     }
 
     /**
@@ -109,7 +113,5 @@ class DateDimensionTest extends EntityTestCase
         static::assertSame((bool)$dateTime->format('L'), $entity->isLeapYear());
         static::assertSame((int)$dateTime->format('o'), $entity->getWeekNumberingYear());
         static::assertSame((int)$dateTime->format('U'), $entity->getUnixTime());
-
-        unset($entity, $dateTime);
     }
 }

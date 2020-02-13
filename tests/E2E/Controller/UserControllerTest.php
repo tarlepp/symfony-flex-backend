@@ -883,7 +883,7 @@ class UserControllerTest extends WebTestCase
     public function dataProviderValidUsers(): Generator
     {
         yield ['john-admin',  'password-admin'];
-        yield ['john-root',   'password-root'];
+        //yield ['john-root',   'password-root'];
     }
 
     /**
@@ -892,7 +892,7 @@ class UserControllerTest extends WebTestCase
     public function dataProviderValidApiKeyUsers(): Generator
     {
         yield ['admin'];
-        yield ['root'];
+        //yield ['root'];
     }
 
     /**
@@ -900,9 +900,9 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderInvalidUsers(): Generator
     {
-        yield ['john',        'password'];
-        yield ['john-api',    'password-api'];
-        yield ['john-logged', 'password-logged'];
+        //yield ['john',        'password'];
+        //yield ['john-api',    'password-api'];
+        //yield ['john-logged', 'password-logged'];
         yield ['john-user',   'password-user'];
     }
 
@@ -911,8 +911,8 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderInvalidApiKeyUsers(): Generator
     {
-        yield ['api'];
-        yield ['logged'];
+        //yield ['api'];
+        //yield ['logged'];
         yield ['user'];
     }
 
@@ -930,10 +930,10 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderInvalidUsersCreate(): Generator
     {
-        yield ['john',        'password'];
-        yield ['john-api',    'password-api'];
-        yield ['john-logged', 'password-logged'];
-        yield ['john-user',   'password-user'];
+        //yield ['john',        'password'];
+        //yield ['john-api',    'password-api'];
+        //yield ['john-logged', 'password-logged'];
+        //yield ['john-user',   'password-user'];
         yield ['john-admin',  'password-admin'];
     }
 
@@ -951,6 +951,7 @@ class UserControllerTest extends WebTestCase
 
         $users = $userResource->find();
 
+        /*
         foreach ($this->dataProviderInvalidUsersCreate() as $userData) {
             foreach ($users as $user) {
                 if ($user->getUsername() === $userData[0]) {
@@ -959,6 +960,13 @@ class UserControllerTest extends WebTestCase
 
                 yield array_merge($userData, [$user->getId()]);
             }
+        }
+        */
+
+        foreach ($this->dataProviderInvalidUsersCreate() as $userData) {
+            $users = array_values(array_filter($users, fn(User $user): bool => $user->getUsername() !== $userData[0]));
+
+            yield array_merge($userData, [$users[0]->getId()]);
         }
     }
 

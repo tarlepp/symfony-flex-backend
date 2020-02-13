@@ -11,8 +11,6 @@ use App\Repository\BaseRepository;
 use App\Rest\RestResource;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use function array_keys;
-use function gc_collect_cycles;
-use function gc_enable;
 use function sort;
 
 /**
@@ -63,22 +61,14 @@ class RepositoryTestCase extends KernelTestCase
 
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         self::bootKernel();
 
-        $this->resource = self::$container->get($this->resourceName);
+        /** @var RestResource $resource */
+        $resource = self::$container->get($this->resourceName);
+
+        $this->resource = $resource;
         $this->repository = $this->resource->getRepository();
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->resource, $this->repository);
-
-        gc_collect_cycles();
     }
 }

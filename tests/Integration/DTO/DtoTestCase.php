@@ -81,8 +81,6 @@ abstract class DtoTestCase extends KernelTestCase
 
             static::assertTrue($dtoReflection->hasMethod($method), $message);
         }
-
-        unset($dtoReflection);
     }
 
     /**
@@ -97,10 +95,10 @@ abstract class DtoTestCase extends KernelTestCase
          * @var MockObject|RestDtoInterface $mock
          */
         $mock = $this->getMockBuilder($this->dtoClass)
-            ->setMethods(['setVisited'])
+            ->onlyMethods(['setVisited'])
             ->getMock();
 
-        $mock->expects(static::exactly(count($properties)))
+        $mock->expects(static::atLeast(count($properties)))
             ->method('setVisited');
 
         $expectedVisited = [];
@@ -152,6 +150,8 @@ abstract class DtoTestCase extends KernelTestCase
      * @param string $type
      *
      * @throws Throwable
+     *
+     * @testdox Test that `setter` method for `$field` will fail if parameter is not `$type` type.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(string $field, string $type): void
     {
@@ -272,11 +272,13 @@ abstract class DtoTestCase extends KernelTestCase
         $dtoReflection = new ReflectionClass($dtoClass);
         $dto = new $dtoClass();
 
-        $filter = static function (ReflectionProperty $reflectionProperty) use ($dto, $dtoClass) {
-            return !$reflectionProperty->isStatic()
-                && ($dtoClass === $reflectionProperty->getDeclaringClass()->getName()
-                    || $reflectionProperty->getDeclaringClass()->isInstance($dto));
-        };
+        $filter = fn (ReflectionProperty $reflectionProperty) =>
+            !$reflectionProperty->isStatic()
+            && !$reflectionProperty->isPrivate()
+            && (
+                $dtoClass === $reflectionProperty->getDeclaringClass()->getName()
+                || $reflectionProperty->getDeclaringClass()->isInstance($dto)
+            );
 
         /** @var ReflectionProperty[] $properties */
         $properties = array_filter($dtoReflection->getProperties(), $filter);

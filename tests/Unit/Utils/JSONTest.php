@@ -46,6 +46,8 @@ class JSONTest extends KernelTestCase
      * @param mixed $expected
      *
      * @throws JsonException
+     *
+     * @testdox Test that `decode` method returns `$expected`.
      */
     public function testThatDecodeWorksLikeExpected(array $parameters, $expected): void
     {
@@ -56,31 +58,35 @@ class JSONTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatEncodeThrowsAnExceptionOnMaximumDepth
-     *
-     * @param array $arguments
-     *
      * @throws JsonException
      */
-    public function testThatEncodeThrowsAnExceptionOnMaximumDepth(array $arguments): void
+    public function testThatEncodeThrowsAnExceptionOnMaximumDepth(): void
     {
         $this->expectException(JsonException::class);
         $this->expectExceptionMessage('Maximum stack depth exceeded');
+
+        $arguments = [
+            ['foo' => ['bar' => ['foo' => ['bar' => 'foo']]]],
+            0,
+            3,
+        ];
 
         JSON::encode(...$arguments);
     }
 
     /**
-     * @dataProvider dataProviderTestThatDecodeThrowsAnExceptionOnMaximumDepth
-     *
-     * @param array $arguments
-     *
      * @throws JsonException
      */
-    public function testThatDecodeThrowsAnExceptionOnMaximumDepth(array $arguments): void
+    public function testThatDecodeThrowsAnExceptionOnMaximumDepth(): void
     {
         $this->expectException(JsonException::class);
         $this->expectExceptionMessage('Maximum stack depth exceeded');
+
+        $arguments = [
+            '{"bar":"foo","foo":{"a":"foobar","b":{"c":2}}}',
+            false,
+            3,
+        ];
 
         JSON::decode(...$arguments);
     }
@@ -176,38 +182,6 @@ class JSONTest extends KernelTestCase
         foreach ($this->dataProviderTestThatEncodeWorksLikeExpected() as $data) {
             yield $iterator($data);
         }
-    }
-
-    /**
-     * Date provider for 'testThatEncodeThrowsAnExceptionOnMaximumDepth'.
-     *
-     * @return Generator
-     */
-    public function dataProviderTestThatEncodeThrowsAnExceptionOnMaximumDepth(): Generator
-    {
-        yield [
-            [
-                ['foo' => ['bar' => ['foo' => ['bar' => 'foo']]]],
-                0,
-                3,
-            ],
-        ];
-    }
-
-    /**
-     * Data provider for 'testThatDecodeThrowsAnExceptionOnMaximumDepth'.
-     *
-     * @return Generator
-     */
-    public function dataProviderTestThatDecodeThrowsAnExceptionOnMaximumDepth(): Generator
-    {
-        yield [
-            [
-                '{"bar":"foo","foo":{"a":"foobar","b":{"c":2}}}',
-                false,
-                3,
-            ],
-        ];
     }
 
     /**

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\BodySubscriber;
+use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use JsonException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -42,8 +43,6 @@ class BodySubscriberTest extends KernelTestCase
 
         static::assertEmpty($request->query->all());
         static::assertEmpty($request->request->all());
-
-        unset($subscriber, $event, $request);
     }
 
     /**
@@ -76,14 +75,16 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatJsonContentReplaceParametersAsExpected
      *
-     * @param array  $expectedRequestParameters
-     * @param string $contentType
-     * @param string $content
+     * @param StringableArrayObject $expectedParameters
+     * @param string                $contentType
+     * @param string                $content
      *
      * @throws JsonException
+     *
+     * @testdox Test that subscriber converts `$content` content with `$contentType` type to `$expectedParameters`.
      */
     public function testThatJsonContentReplaceParametersAsExpected(
-        array $expectedRequestParameters,
+        StringableArrayObject $expectedParameters,
         string $contentType,
         string $content
     ): void {
@@ -97,7 +98,7 @@ class BodySubscriberTest extends KernelTestCase
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
 
-        static::assertSame($expectedRequestParameters, $request->request->all());
+        static::assertSame($expectedParameters->getArrayCopy(), $request->request->all());
     }
 
     /**
@@ -154,25 +155,25 @@ class BodySubscriberTest extends KernelTestCase
     public function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
     {
         yield [
-            ['foo' => 'bar'],
+            new StringableArrayObject(['foo' => 'bar']),
             '',
             '{"foo": "bar"}',
         ];
 
         yield [
-            ['foo' => 'bar'],
+            new StringableArrayObject(['foo' => 'bar']),
             'application/json',
             '{"foo": "bar"}',
         ];
 
         yield [
-            ['foo' => 'bar'],
+            new StringableArrayObject(['foo' => 'bar']),
             'application/x-json',
             '{"foo": "bar"}',
         ];
 
         yield [
-            ['foo' => 'bar'],
+            new StringableArrayObject(['foo' => 'bar']),
             'text/plain',
             '{"foo": "bar"}',
         ];

@@ -13,6 +13,7 @@ use App\Repository\ApiKeyRepository;
 use App\Security\ApiKeyUser;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
+use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -30,15 +31,14 @@ use function str_pad;
  */
 class ApiKeyUserProviderTest extends KernelTestCase
 {
-    /**
-     * @var ApiKeyUserProvider
-     */
-    private $apiKeyUserProvider;
+    private ApiKeyUserProvider $apiKeyUserProvider;
 
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsExpected
      *
      * @param string $shortRole
+     *
+     * @testdox Test that `getApiKeyForToken` method returns expected when using `$shortRole` as token base.
      */
     public function testThatGetApiKeyReturnsExpected(string $shortRole): void
     {
@@ -47,14 +47,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
         static::assertInstanceOf(ApiKey::class, $apiKey);
-
-        unset($apiKey);
     }
 
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsExpected
      *
      * @param string $shortRole
+     *
+     * @testdox Test that `getApiKeyForToken` method returns null when using `$shortRole` as an invalid token base.
      */
     public function testThatGetApiKeyReturnsNullForInvalidToken(string $shortRole): void
     {
@@ -63,8 +63,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
         static::assertNull($apiKey);
-
-        unset($apiKey);
     }
 
     /**
@@ -81,19 +79,19 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatLoadUserByUsernameWorksAsExpected
      *
-     * @param string $token
-     * @param array $roles
+     * @param string                $token
+     * @param StringableArrayObject $roles
      *
      * @throws Throwable
+     *
+     * @testdox Test that `loadUserByUsername` returns `ApiKeyUser` with `$roles` roles when using `$token` as an input.
      */
-    public function testThatLoadUserByUsernameWorksAsExpected(string $token, array $roles): void
+    public function testThatLoadUserByUsernameWorksAsExpected(string $token, StringableArrayObject $roles): void
     {
         $apiKeyUser = $this->apiKeyUserProvider->loadUserByUsername($token);
 
         static::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
-        static::assertSame($roles, $apiKeyUser->getApiKey()->getRoles());
-
-        unset($apiKeyUser);
+        static::assertSame($roles->getArrayCopy(), $apiKeyUser->getApiKey()->getRoles());
     }
 
     /**
@@ -107,8 +105,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $user = new User('username', 'password');
 
         $this->apiKeyUserProvider->refreshUser($user);
-
-        unset($user);
     }
 
     /**
@@ -116,6 +112,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
      *
      * @param bool   $expected
      * @param string $class
+     *
+     * @testdox Test that `supportsClass` returns `$expected` when using `$class` as an input.
      */
     public function testThatSupportsClassReturnsExpected(bool $expected, string $class): void
     {
@@ -154,7 +152,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $iterator = static function (ApiKey $apiKey): array {
             return [
                 $apiKey->getToken(),
-                $apiKey->getRoles(),
+                new StringableArrayObject($apiKey->getRoles()),
             ];
         };
 
@@ -172,8 +170,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         static::bootKernel();
@@ -186,12 +182,5 @@ class ApiKeyUserProviderTest extends KernelTestCase
             new $repository($managerRegistry),
             static::$container->get(RolesService::class)
         );
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->apiKeyUserProvider);
     }
 }

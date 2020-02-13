@@ -89,8 +89,6 @@ class UserGroupTypeTest extends TypeTestCase
         foreach (array_keys($formData) as $key) {
             static::assertArrayHasKey($key, $children);
         }
-
-        unset($view, $dto, $form, $roleEntity);
     }
 
     /**

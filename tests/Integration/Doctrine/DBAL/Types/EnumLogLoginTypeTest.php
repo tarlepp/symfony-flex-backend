@@ -38,6 +38,8 @@ class EnumLogLoginTypeTest extends KernelTestCase
      * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
      *
      * @param string $value
+     *
+     * @testdox Test that `convertToDatabaseValue` method returns `$value`.
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
@@ -48,6 +50,8 @@ class EnumLogLoginTypeTest extends KernelTestCase
      * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
      *
      * @param mixed $value
+     *
+     * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input.
      */
     public function testThatConvertToDatabaseValueThrowsAnException($value): void
     {
@@ -91,8 +95,6 @@ class EnumLogLoginTypeTest extends KernelTestCase
      */
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         $this->platform = new MySqlPlatform();

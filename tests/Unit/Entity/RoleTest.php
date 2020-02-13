@@ -29,7 +29,5 @@ class RoleTest extends KernelTestCase
         $role->getUserGroups()->add($userGroup);
 
         static::assertTrue($role->getUserGroups()->contains($userGroup));
-
-        unset($userGroup, $role);
     }
 }

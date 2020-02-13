@@ -187,8 +187,6 @@ class RequestSubscriberTest extends KernelTestCase
 
         $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
         $subscriber->onKernelResponse($event);
-
-        unset($subscriber, $requestLogger, $tokenStorage, $token, $user, $apiKey, $event, $response, $request);
     }
 
     /**
@@ -222,8 +220,6 @@ class RequestSubscriberTest extends KernelTestCase
 
         $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
         $subscriber->onKernelResponse($event);
-
-        unset($subscriber, $requestLogger, $tokenStorage, $event, $response, $request);
     }
 
     /**
@@ -257,7 +253,5 @@ class RequestSubscriberTest extends KernelTestCase
 
         $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
         $subscriber->onKernelResponse($event);
-
-        unset($subscriber, $requestLogger, $tokenStorage, $event, $response, $request);
     }
 }

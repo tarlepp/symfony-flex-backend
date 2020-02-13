@@ -12,6 +12,7 @@ use App\Entity\ApiKey;
 use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Utils\Tests\PhpUnitUtil;
+use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 use Generator;
@@ -41,7 +42,9 @@ class LogRequestTest extends EntityTestCase
      * @param string $field
      * @param string $type
      * @param array  $meta
-    */
+     *
+     * @testdox No setter for `$field` field in read only entity - so cannot test this.
+     */
     public function testThatSetterOnlyAcceptSpecifiedType(
         string $field = null,
         string $type = null,
@@ -55,6 +58,8 @@ class LogRequestTest extends EntityTestCase
      * @param string $field
      * @param string $type
      * @param array  $meta
+     *
+     * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterReturnsInstanceOfEntity(
         string $field = null,
@@ -73,6 +78,8 @@ class LogRequestTest extends EntityTestCase
      * @param array $meta
      *
      * @throws Throwable
+     *
+     * @testdox Test that getter method for `$field` with `$type` returns expected.
      */
     public function testThatGetterReturnsExpectedValue(string $field, string $type, array $meta): void
     {
@@ -122,67 +129,72 @@ class LogRequestTest extends EntityTestCase
         } catch (Exception $error) {
             static::assertInstanceOf($type, $value, $message . ' - ' . $error->getMessage());
         }
-
-        unset($logRequest);
     }
 
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
      *
-     * @param array $headers
-     * @param array $expected
+     * @param StringableArrayObject $headers
+     * @param StringableArrayObject $expected
      *
      * @throws Throwable
+     *
+     * @testdox Test that sensitive data from `$headers` is cleaned and output is expected `$expected`.
      */
-    public function testThatSensitiveDataIsCleanedFromHeaders(array $headers, array $expected): void
-    {
+    public function testThatSensitiveDataIsCleanedFromHeaders(
+        StringableArrayObject $headers,
+        StringableArrayObject $expected
+    ): void {
         $request = Request::create('');
-        $request->headers->replace($headers);
+        $request->headers->replace($headers->getArrayCopy());
 
         $logRequest = new LogRequest($request, Response::create());
 
-        static::assertSame($expected, $logRequest->getHeaders());
-
-        unset($logRequest, $request);
+        static::assertSame($expected->getArrayCopy(), $logRequest->getHeaders());
     }
 
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
      *
-     * @param array $parameters
-     * @param array $expected
+     * @param StringableArrayObject $parameters
+     * @param StringableArrayObject $expected
      *
      * @throws Throwable
+     *
+     * @testdox Test that sensitive data from `parameters` is cleaned and output is expected `$expected`.
      */
-    public function testThatSensitiveDataIsCleanedFromParameters(array $parameters, array $expected): void
-    {
+    public function testThatSensitiveDataIsCleanedFromParameters(
+        StringableArrayObject $parameters,
+        StringableArrayObject $expected
+    ): void {
         $request = Request::create('', 'POST');
-        $request->request->replace($parameters);
+        $request->request->replace($parameters->getArrayCopy());
 
         $logRequest = new LogRequest($request, Response::create());
 
-        static::assertSame($expected, $logRequest->getParameters());
-
-        unset($logRequest, $request);
+        static::assertSame($expected->getArrayCopy(), $logRequest->getParameters());
     }
 
     /**
      * @dataProvider dataProviderTestThatDetermineParametersWorksLikeExpected
      *
-     * @param string $content
-     * @param array  $expected
+     * @param string                $content
+     * @param StringableArrayObject $expected
      *
      * @throws Throwable
+     *
+     * @testdox Test that `determineParameter` method returns `$expected` when using `$content` as input.
      */
-    public function testThatDetermineParametersWorksLikeExpected(string $content, array $expected): void
+    public function testThatDetermineParametersWorksLikeExpected(string $content, StringableArrayObject $expected): void
     {
         $logRequest = new LogRequest(Request::create(''), Response::create());
 
         $request = Request::create('', 'GET', [], [], [], [], $content);
 
-        static::assertSame($expected, PhpUnitUtil::callMethod($logRequest, 'determineParameters', [$request]));
-
-        unset($request, $logRequest);
+        static::assertSame(
+            $expected->getArrayCopy(),
+            PhpUnitUtil::callMethod($logRequest, 'determineParameters', [$request])
+        );
     }
 
     /**
@@ -191,23 +203,23 @@ class LogRequestTest extends EntityTestCase
     public function dataProviderTestThatSensitiveDataIsCleaned(): Generator
     {
         yield [
-            ['password' => 'password'],
-            ['password' => '*** REPLACED ***'],
+            new StringableArrayObject(['password' => 'password']),
+            new StringableArrayObject(['password' => '*** REPLACED ***']),
         ];
 
         yield [
-            ['token' => 'secret token'],
-            ['token' => '*** REPLACED ***'],
+            new StringableArrayObject(['token' => 'secret token']),
+            new StringableArrayObject(['token' => '*** REPLACED ***']),
         ];
 
         yield [
-            ['authorization' => 'authorization bearer'],
-            ['authorization' => '*** REPLACED ***'],
+            new StringableArrayObject(['authorization' => 'authorization bearer']),
+            new StringableArrayObject(['authorization' => '*** REPLACED ***']),
         ];
 
         yield [
-            ['cookie' => 'cookie'],
-            ['cookie' => '*** REPLACED ***'],
+            new StringableArrayObject(['cookie' => 'cookie']),
+            new StringableArrayObject(['cookie' => '*** REPLACED ***']),
         ];
     }
 
@@ -218,17 +230,17 @@ class LogRequestTest extends EntityTestCase
     {
         yield [
             '{"foo":"bar"}',
-            ['foo' => 'bar'],
+            new StringableArrayObject(['foo' => 'bar']),
         ];
 
         yield [
             'foo=bar',
-            ['foo' => 'bar'],
+            new StringableArrayObject(['foo' => 'bar']),
         ];
 
         yield [
             'false',
-            [false],
+            new StringableArrayObject([false]),
         ];
     }
 }

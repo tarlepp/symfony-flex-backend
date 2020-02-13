@@ -32,6 +32,8 @@ class UserTest extends EntityTestCase
      * @param callable $callable
      * @param string   $password
      * @param string   $expected
+     *
+     * @testdox Test that password hashing is working with `$callable` callable.
      */
     public function testThatPasswordHashingIsWorkingAsExpected(
         callable $callable,
@@ -79,8 +81,6 @@ class UserTest extends EntityTestCase
         // Assert that unserialized object returns expected data
         static::assertSame('john', $entity->getUsername());
         static::assertSame('cnffjbeq', $entity->getPassword());
-
-        unset($entity);
     }
 
     public function testThatGetSaltMethodReturnsNull(): void

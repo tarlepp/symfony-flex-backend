@@ -13,6 +13,7 @@ use App\Request\ParamConverter\RestResourceConverter;
 use App\Resource\ResourceCollection;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
+use App\Utils\Tests\StringableArrayObject;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -33,12 +34,14 @@ class RestResourceConverterTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSupportMethodReturnsExpected
      *
-     * @param bool           $expected
-     * @param ParamConverter $configuration
+     * @param bool                  $expected
+     * @param StringableArrayObject $configuration
+     *
+     * @testdox Test `supports` method returns `$expected` when using `$configuration` as ParamConverter input.
      */
-    public function testThatSupportMethodReturnsExpected(bool $expected, ParamConverter $configuration): void
+    public function testThatSupportMethodReturnsExpected(bool $expected, StringableArrayObject $configuration): void
     {
-        static::assertSame($expected, $this->converter->supports($configuration));
+        static::assertSame($expected, $this->converter->supports(new ParamConverter($configuration->getArrayCopy())));
     }
 
     /**
@@ -57,8 +60,6 @@ class RestResourceConverterTest extends KernelTestCase
         ]);
 
         $this->converter->apply($request, $paramConverter);
-
-        unset($paramConverter, $request);
     }
 
     /**
@@ -67,6 +68,8 @@ class RestResourceConverterTest extends KernelTestCase
      * @param string $role
      *
      * @throws Throwable
+     *
+     * @testdox Test that `apply` method works as expected when using `$role` as a request attribute.
      */
     public function testThatApplyMethodReturnsExpected(string $role): void
     {
@@ -81,8 +84,6 @@ class RestResourceConverterTest extends KernelTestCase
         static::assertTrue($this->converter->apply($request, $paramConverter));
         static::assertInstanceOf(Role::class, $request->attributes->get('role'));
         static::assertSame('Description - ' . $role, $request->attributes->get('role')->getDescription());
-
-        unset($paramConverter, $request);
     }
 
     /**
@@ -93,19 +94,19 @@ class RestResourceConverterTest extends KernelTestCase
         return [
             [
                 false,
-                new ParamConverter(['class' => 'FooBar']),
+                new StringableArrayObject(['class' => 'FooBar']),
             ],
             [
                 false,
-                new ParamConverter(['class' => LoggerInterface::class]),
+                new StringableArrayObject(['class' => LoggerInterface::class]),
             ],
             [
                 false,
-                new ParamConverter(['class' => Role::class]),
+                new StringableArrayObject(['class' => Role::class]),
             ],
             [
                 true,
-                new ParamConverter(['class' => RoleResource::class]),
+                new StringableArrayObject(['class' => RoleResource::class]),
             ],
         ];
     }
@@ -126,21 +127,10 @@ class RestResourceConverterTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        gc_enable();
-
         parent::setUp();
 
         static::bootKernel();
 
         $this->converter = new RestResourceConverter(static::$container->get(ResourceCollection::class));
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        unset($this->converter);
-
-        gc_collect_cycles();
     }
 }
