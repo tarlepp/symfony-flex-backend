@@ -998,10 +998,8 @@ class UserControllerTest extends WebTestCase
                 )
             )[0];
 
-            $user->setRolesService($rolesService);
-
             $userData[] = $user->getId();
-            $userData[] = JSON::encode($user->getRoles());
+            $userData[] = JSON::encode($rolesService->getInheritedRoles($user->getRoles()));
 
             return $userData;
         };
@@ -1033,15 +1031,11 @@ class UserControllerTest extends WebTestCase
         /** @var RolesService $rolesService */
         $rolesService = static::$container->get(RolesService::class);
 
-        $output = [];
-
-        foreach ($userResource->find() as $user) {
-            $user->setRolesService($rolesService);
-
-            $output[] = [$user->getId(), JSON::encode($user->getRoles())];
-        }
-
-        return $output;
+        return array_map(
+            fn (User $user): array =>
+                [$user->getId(), JSON::encode($rolesService->getInheritedRoles($user->getRoles()))],
+            $userResource->find()
+        );
     }
 
     /**
@@ -1069,17 +1063,9 @@ class UserControllerTest extends WebTestCase
         $users = $userResource->find();
 
         $iterator = static function (array $userData) use ($users): array {
-            /** @var User $user */
-            $user = array_values(
-                array_filter(
-                    $users,
-                    static function (User $user) use ($userData) {
-                        return $userData[0] === $user->getUsername();
-                    }
-                )
-            )[0];
+            $users = array_values(array_filter($users, fn (User $user): bool =>$userData[0] === $user->getUsername()));
 
-            $userData[] = $user->getId();
+            $userData[] = $users[0]->getId();
 
             return $userData;
         };
