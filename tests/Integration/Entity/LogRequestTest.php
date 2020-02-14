@@ -183,21 +183,21 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatDetermineParametersWorksLikeExpected
      *
-     * @param string                $content
-     * @param StringableArrayObject $expected
+     * @param string                     $content
+     * @param StringableArrayObject|bool $expected
      *
      * @throws Throwable
      *
-     * @testdox Test that `determineParameter` method returns `$expected` when using `$content` as input.
+     * @testdox Test that `determineParameters` method returns `$expected` when using `$content` as input.
      */
-    public function testThatDetermineParametersWorksLikeExpected(string $content, StringableArrayObject $expected): void
+    public function testThatDetermineParametersWorksLikeExpected(string $content, $expected): void
     {
         $logRequest = new LogRequest([], Request::create(''), Response::create());
 
         $request = Request::create('', 'GET', [], [], [], [], $content);
 
         static::assertSame(
-            $expected->getArrayCopy(),
+            $expected instanceof StringableArrayObject ? $expected->getArrayCopy() : $expected,
             PhpUnitUtil::callMethod($logRequest, 'determineParameters', [$request])
         );
     }
@@ -270,7 +270,7 @@ class LogRequestTest extends EntityTestCase
 
         yield [
             'false',
-            new StringableArrayObject([false]),
+            false,
         ];
     }
 

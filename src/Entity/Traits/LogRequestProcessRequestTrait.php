@@ -24,7 +24,6 @@ use function mb_strtolower;
 use function parse_str;
 use function preg_replace;
 use function strpos;
-use function strval;
 
 /**
  * Trait LogRequestProcessRequestTrait
@@ -51,7 +50,7 @@ trait LogRequestProcessRequestTrait
      *      type="array",
      *  )
      */
-    private $headers;
+    private array $headers;
 
     /**
      * @var string
@@ -68,7 +67,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $method;
+    private string $method;
 
     /**
      * @var string
@@ -85,7 +84,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $scheme;
+    private string $scheme;
 
     /**
      * @var string
@@ -102,7 +101,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $basePath;
+    private string $basePath;
 
     /**
      * @var string
@@ -119,7 +118,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $script;
+    private string $script;
 
     /**
      * @var string
@@ -136,7 +135,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $path;
+    private string $path;
 
     /**
      * @var string
@@ -152,7 +151,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $queryString;
+    private string $queryString;
 
     /**
      * @var string
@@ -168,7 +167,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $uri;
+    private string $uri;
 
     /**
      * @var string
@@ -185,7 +184,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $controller;
+    private string $controller;
 
     /**
      * @var string
@@ -202,7 +201,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $contentType;
+    private string $contentType;
 
     /**
      * @var string
@@ -219,7 +218,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $contentTypeShort;
+    private string $contentTypeShort;
 
     /**
      * @var bool
@@ -235,7 +234,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $xmlHttpRequest;
+    private bool $xmlHttpRequest;
 
     /**
      * @var string
@@ -252,7 +251,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $action;
+    private string $action;
 
     /**
      * @var string
@@ -268,7 +267,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $content;
+    private string $content;
 
     /**
      * @var mixed[]
@@ -283,7 +282,7 @@ trait LogRequestProcessRequestTrait
      *      type="array",
      *  )
      */
-    private $parameters;
+    private array $parameters;
 
     /**
      * @return string
@@ -472,7 +471,7 @@ trait LogRequestProcessRequestTrait
         $this->queryString = $request->getRequestUri();
         $this->uri = $request->getUri();
         $this->controller = (string)$request->get('_controller', '');
-        $this->contentType = strval($request->getMimeType($request->getContentType() ?? ''));
+        $this->contentType = (string)$request->getMimeType($request->getContentType() ?? '');
         $this->contentTypeShort = (string)$request->getContentType();
         $this->xmlHttpRequest = $request->isXmlHttpRequest();
     }
@@ -523,7 +522,7 @@ trait LogRequestProcessRequestTrait
             }
         }
 
-        return (array)$output;
+        return $output;
     }
 
     /**
@@ -573,7 +572,7 @@ trait LogRequestProcessRequestTrait
             $inputContent = (string)preg_replace(
                 '/(' . $search . '":)\s*"(.*)"/',
                 '$1"*** REPLACED ***"',
-                (string)$inputContent
+                $inputContent
             );
         };
 
