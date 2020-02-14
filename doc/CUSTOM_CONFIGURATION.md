@@ -61,10 +61,10 @@ DATABASE_URL                     = Self explanatory
 JWT_SECRET_KEY                   = Where private JWT key is stored
 JWT_PUBLIC_KEY                   = Where public JWT key is stored
 JWT_PASSPHRASE                   = Used passphrase for that private key
-CORS_ALLOW_ORIGIN                = Which IP addresses are allowed to make CORS 
+CORS_ALLOW_ORIGIN                = Which IP addresses are allowed to make CORS
                                    requests
-REQUEST_LOG_SENSITIVE_PROPERTIES = Which request parameters are "sensitive" 
-                                   ones, this prevent writing those to request 
+REQUEST_LOG_SENSITIVE_PROPERTIES = Which request parameters are "sensitive"
+                                   ones, this prevent writing those to request
                                    log
 ```
 
