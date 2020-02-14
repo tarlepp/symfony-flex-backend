@@ -77,7 +77,7 @@ class UserResource extends RestResource
          *
          * @return bool
          */
-        $filter = fn (Entity $user): bool => in_array(
+        $filter = fn(Entity $user): bool => in_array(
             $userGroup->getRole()->getId(),
             $this->rolesService->getInheritedRoles($user->getRoles()),
             true

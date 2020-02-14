@@ -104,7 +104,7 @@ trait UserRelations
      */
     public function getRoles(): array
     {
-        return $this->userGroups->map(fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())->toArray();
+        return $this->userGroups->map(fn(UserGroup $userGroup): string => $userGroup->getRole()->getId())->toArray();
     }
 
     /**
