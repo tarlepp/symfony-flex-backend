@@ -67,7 +67,7 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
-    protected $user;
+    protected ?User $user;
 
     /**
      * @var UuidInterface
@@ -88,7 +88,7 @@ class LogRequest implements EntityInterface
      *
      * @SWG\Property(type="string", format="uuid")
      */
-    private $id;
+    private UuidInterface $id;
 
     /**
      * @var ApiKey|null
@@ -110,7 +110,7 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
-    private $apiKey;
+    private ?ApiKey $apiKey;
 
     /**
      * @var int
@@ -126,7 +126,7 @@ class LogRequest implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private $statusCode;
+    private int $statusCode;
 
     /**
      * @var int
@@ -142,7 +142,7 @@ class LogRequest implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private $responseContentLength;
+    private int $responseContentLength;
 
     /**
      * @var bool
@@ -158,11 +158,14 @@ class LogRequest implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private $masterRequest;
+    private bool $masterRequest;
+
+    private array $sensitiveProperties;
 
     /**
      * LogRequest constructor.
      *
+     * @param array         $sensitiveProperties
      * @param Request|null  $request
      * @param Response|null $response
      * @param User|null     $user
@@ -172,12 +175,14 @@ class LogRequest implements EntityInterface
      * @throws Throwable
      */
     public function __construct(
+        array $sensitiveProperties,
         ?Request $request = null,
         ?Response $response = null,
         ?User $user = null,
         ?ApiKey $apiKey = null,
         ?bool $masterRequest = null
     ) {
+        $this->sensitiveProperties = $sensitiveProperties;
         $this->id = $this->getUuid();
         $this->user = $user;
         $this->apiKey = $apiKey;
@@ -233,6 +238,14 @@ class LogRequest implements EntityInterface
     public function isMasterRequest(): bool
     {
         return $this->masterRequest;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSensitiveProperties(): array
+    {
+        return $this->sensitiveProperties;
     }
 
     /**

@@ -24,20 +24,18 @@ use function mb_strtolower;
 use function parse_str;
 use function preg_replace;
 use function strpos;
-use function strval;
 
 /**
  * Trait LogRequestProcessRequestTrait
  *
  * @package App\Entity\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method array getSensitiveProperties();
  */
 trait LogRequestProcessRequestTrait
 {
-    /**
-     * @var string
-     */
-    private $replaceValue = '*** REPLACED ***';
+    private string $replaceValue = '*** REPLACED ***';
 
     /**
      * @var mixed[]
@@ -52,7 +50,7 @@ trait LogRequestProcessRequestTrait
      *      type="array",
      *  )
      */
-    private $headers;
+    private array $headers;
 
     /**
      * @var string
@@ -69,7 +67,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $method;
+    private string $method;
 
     /**
      * @var string
@@ -86,7 +84,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $scheme;
+    private string $scheme;
 
     /**
      * @var string
@@ -103,7 +101,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $basePath;
+    private string $basePath;
 
     /**
      * @var string
@@ -120,7 +118,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $script;
+    private string $script;
 
     /**
      * @var string
@@ -137,7 +135,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $path;
+    private string $path;
 
     /**
      * @var string
@@ -153,7 +151,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $queryString;
+    private string $queryString;
 
     /**
      * @var string
@@ -169,7 +167,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $uri;
+    private string $uri;
 
     /**
      * @var string
@@ -186,7 +184,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $controller;
+    private string $controller;
 
     /**
      * @var string
@@ -203,7 +201,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $contentType;
+    private string $contentType;
 
     /**
      * @var string
@@ -220,7 +218,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $contentTypeShort;
+    private string $contentTypeShort;
 
     /**
      * @var bool
@@ -236,7 +234,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private $xmlHttpRequest;
+    private bool $xmlHttpRequest;
 
     /**
      * @var string
@@ -253,7 +251,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $action;
+    private string $action;
 
     /**
      * @var string
@@ -269,7 +267,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private $content;
+    private string $content;
 
     /**
      * @var mixed[]
@@ -284,7 +282,7 @@ trait LogRequestProcessRequestTrait
      *      type="array",
      *  )
      */
-    private $parameters;
+    private array $parameters;
 
     /**
      * @return string
@@ -473,7 +471,7 @@ trait LogRequestProcessRequestTrait
         $this->queryString = $request->getRequestUri();
         $this->uri = $request->getUri();
         $this->controller = (string)$request->get('_controller', '');
-        $this->contentType = strval($request->getMimeType($request->getContentType() ?? ''));
+        $this->contentType = (string)$request->getMimeType($request->getContentType() ?? '');
         $this->contentTypeShort = (string)$request->getContentType();
         $this->xmlHttpRequest = $request->isXmlHttpRequest();
     }
@@ -536,12 +534,7 @@ trait LogRequestProcessRequestTrait
     private function cleanParameters(&$value, string $key): void
     {
         // What keys we should replace so that any sensitive data is not logged
-        $replacements = [
-            'password' => $this->replaceValue,
-            'token' => $this->replaceValue,
-            'authorization' => $this->replaceValue,
-            'cookie' => $this->replaceValue,
-        ];
+        $replacements = array_fill_keys($this->sensitiveProperties, $this->replaceValue);
 
         // Normalize current key
         $key = mb_strtolower($key);
@@ -579,18 +572,11 @@ trait LogRequestProcessRequestTrait
             $inputContent = (string)preg_replace(
                 '/(' . $search . '":)\s*"(.*)"/',
                 '$1"*** REPLACED ***"',
-                (string)$inputContent
+                $inputContent
             );
         };
 
-        $replacements = [
-            'password',
-            'token',
-            'authorization',
-            'cookie',
-        ];
-
-        array_map($iterator, $replacements);
+        array_map($iterator, $this->getSensitiveProperties());
 
         return $inputContent;
     }
