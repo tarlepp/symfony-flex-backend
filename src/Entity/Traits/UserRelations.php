@@ -14,13 +14,9 @@ use App\Entity\LogLoginFailure;
 use App\Entity\LogRequest;
 use App\Entity\User;
 use App\Entity\UserGroup;
-use App\Security\RolesService;
-use App\Security\Interfaces\RolesServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Serializer\Annotation\Groups;
-use function array_unique;
-use function array_values;
 
 /**
  * Class UserRelations
