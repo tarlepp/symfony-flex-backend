@@ -109,8 +109,8 @@ class EditUserGroupCommand extends Command
         /** @var UserGroupDto $dtoEdit */
         $dtoEdit = $helper->interactUsingForm(UserGroupType::class, $input, $output, ['data' => $dtoLoaded]);
 
-        // Update user group
-        $this->userGroupResource->update($userGroup->getId(), $dtoEdit);
+        // Patch user group
+        $this->userGroupResource->patch($userGroup->getId(), $dtoEdit);
 
         return 'User group updated - have a nice day';
     }
