@@ -124,13 +124,9 @@ final class SearchTerm implements SearchTermInterface
          *
          * @return string[]
          */
-        return static function (string $column) use ($term, $mode): array {
-            if (strpos($column, '.') === false) {
-                $column = 'entity.' . $column;
-            }
-
-            return [$column, 'like', self::getTerm($mode, $term)];
-        };
+        return fn (string $column): array => [
+            strpos($column, '.') === false ? 'entity.' . $column : $column, 'like', self::getTerm($mode, $term)
+        ];
     }
 
     /**

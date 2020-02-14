@@ -61,8 +61,7 @@ class UuidHelper
             $output = UuidBinaryOrderedTimeType::NAME;
         } catch (InvalidUuidStringException $exception) {
             // ok, so now we know that value isn't uuid
-            (static function (Throwable $exception): void {
-            })($exception);
+            (fn (Throwable $exception): Throwable => $exception)($exception);
         }
 
         return $output;
