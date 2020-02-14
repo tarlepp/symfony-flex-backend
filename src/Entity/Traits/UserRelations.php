@@ -45,7 +45,7 @@ trait UserRelations
      *      name="user_has_user_group"
      *  )
      */
-    protected $userGroups;
+    protected Collection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
@@ -59,7 +59,7 @@ trait UserRelations
      *      mappedBy="user",
      *  )
      */
-    protected $logsRequest;
+    protected Collection $logsRequest;
 
     /**
      * @var Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
@@ -73,7 +73,7 @@ trait UserRelations
      *      mappedBy="user",
      *  )
      */
-    protected $logsLogin;
+    protected Collection $logsLogin;
 
     /**
      * @var Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
@@ -87,7 +87,7 @@ trait UserRelations
      *      mappedBy="user",
      *  )
      */
-    protected $logsLoginFailure;
+    protected Collection $logsLoginFailure;
 
     /**
      * @var RolesServiceInterface

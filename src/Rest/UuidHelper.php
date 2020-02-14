@@ -13,6 +13,7 @@ use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
+use Ramsey\Uuid\UuidInterface;
 use Throwable;
 
 /**
@@ -68,6 +69,16 @@ class UuidHelper
     }
 
     /**
+     * @param string $value
+     *
+     * @return UuidInterface
+     */
+    public static function fromString(string $value): UuidInterface
+    {
+        return self::getFactory()->fromString($value);
+    }
+
+    /**
      * Method to get bytes value for specified UuidBinaryOrderedTimeType value.
      *
      * @param string $value
@@ -76,6 +87,6 @@ class UuidHelper
      */
     public static function getBytes(string $value): string
     {
-        return self::getFactory()->fromString($value)->getBytes();
+        return self::fromString($value)->getBytes();
     }
 }
