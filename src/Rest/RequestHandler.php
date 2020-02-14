@@ -253,17 +253,8 @@ final class RequestHandler
      */
     private static function normalizeSearchTerms(array $searchTerms): array
     {
-        /**
-         * Lambda function to normalize JSON search terms.
-         *
-         * @param string|array $terms
-         */
-        $iterator = static function (array &$terms): void {
-            $terms = array_unique(array_values(array_filter($terms)));
-        };
-
         // Normalize user input, note that this support array and string formats on value
-        array_walk($searchTerms, $iterator);
+        array_walk($searchTerms, fn (array $terms): array => array_unique(array_values(array_filter($terms))));
 
         return $searchTerms;
     }

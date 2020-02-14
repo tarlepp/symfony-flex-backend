@@ -198,12 +198,7 @@ final class ResponseHandler implements ResponseHandlerInterface
         // Set all associations to be populated
         if ($populateAll && count($populate) === 0) {
             $associations = $restResource->getAssociations();
-
-            $iterator = static function (string $assocName) use ($entityName): string {
-                return $entityName . '.' . $assocName;
-            };
-
-            $populate = array_map($iterator, $associations);
+            $populate = array_map(fn (string $assocName): string => $entityName . '.' . $assocName, $associations);
         }
 
         return $populate;

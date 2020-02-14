@@ -86,9 +86,7 @@ abstract class RestDto implements RestDtoInterface
      */
     public function getVisited(): array
     {
-        return array_filter($this->visited, static function (string $property) {
-            return $property !== 'id';
-        });
+        return array_filter($this->visited, fn (string $property): bool => $property !== 'id');
     }
 
     /**
@@ -201,11 +199,7 @@ abstract class RestDto implements RestDtoInterface
             'has' . ucfirst($property),
         ];
 
-        $filter = static function (string $method) use ($dto): bool {
-            return method_exists($dto, $method);
-        };
-
-        $getterMethods = array_filter($getters, $filter);
+        $getterMethods = array_filter($getters, fn (string $method): bool => method_exists($dto, $method));
 
         return $this->validateGetterMethod($property, $getterMethods);
     }

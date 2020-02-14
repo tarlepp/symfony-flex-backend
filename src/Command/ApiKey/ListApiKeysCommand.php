@@ -103,13 +103,11 @@ class ListApiKeysCommand extends Command
      */
     private function getFormatterApiKey(): Closure
     {
-        $userGroupFormatter = static function (UserGroup $userGroup): string {
-            return sprintf(
-                '%s (%s)',
-                $userGroup->getName(),
-                $userGroup->getRole()->getId()
-            );
-        };
+        $userGroupFormatter = fn (UserGroup $userGroup): string => sprintf(
+            '%s (%s)',
+            $userGroup->getName(),
+            $userGroup->getRole()->getId()
+        );
 
         return function (ApiKey $apiToken) use ($userGroupFormatter): array {
             return [
