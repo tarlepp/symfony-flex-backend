@@ -109,14 +109,12 @@ class ListApiKeysCommand extends Command
             $userGroup->getRole()->getId()
         );
 
-        return function (ApiKey $apiToken) use ($userGroupFormatter): array {
-            return [
-                $apiToken->getId(),
-                $apiToken->getToken(),
-                $apiToken->getDescription(),
-                implode(",\n", $apiToken->getUserGroups()->map($userGroupFormatter)->toArray()),
-                implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
-            ];
-        };
+        return fn (ApiKey $apiToken): array => [
+            $apiToken->getId(),
+            $apiToken->getToken(),
+            $apiToken->getDescription(),
+            implode(",\n", $apiToken->getUserGroups()->map($userGroupFormatter)->toArray()),
+            implode(",\n", $this->rolesService->getInheritedRoles($apiToken->getRoles())),
+        ];
     }
 }

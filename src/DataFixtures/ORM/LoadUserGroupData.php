@@ -58,12 +58,8 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
         $this->roles = $rolesService;
         $this->manager = $manager;
 
-        $iterator = function (string $role): void {
-            $this->createUserGroup($role);
-        };
-
         // Create entities
-        array_map($iterator, $this->roles->getRoles());
+        array_map(fn (string $role): bool => $this->createUserGroup($role), $this->roles->getRoles());
 
         // Flush database changes
         $this->manager->flush();
@@ -84,9 +80,11 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
      *
      * @param string $role
      *
+     * @return bool
+     *
      * @throws Throwable
      */
-    private function createUserGroup(string $role): void
+    private function createUserGroup(string $role): bool
     {
         /** @var Role $roleReference */
         $roleReference = $this->getReference('Role-' . $this->roles->getShort($role));
@@ -101,5 +99,7 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
 
         // Create reference for later usage
         $this->addReference('UserGroup-' . $this->roles->getShort($role), $entity);
+
+        return true;
     }
 }
