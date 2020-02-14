@@ -90,25 +90,13 @@ trait UserRelations
     protected Collection $logsLoginFailure;
 
     /**
-     * @var RolesServiceInterface
-     */
-    private $rolesService;
-
-    /**
-     * @param RolesServiceInterface $rolesService
-     *
-     * @return User
-     */
-    public function setRolesService(RolesServiceInterface $rolesService): User
-    {
-        $this->rolesService = $rolesService;
-
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this;
-    }
-
-    /**
      * Getter for roles.
+     *
+     * Note that this will only return _direct_ roles that user has and
+     * not the inherited ones!
+     *
+     * If you want to get user inherited roles you need to implement that
+     * logic by yourself OR use eg. `/user/{uuid}/roles` API endpoint.
      *
      * @psalm-return array<int, string>
      *
@@ -120,19 +108,9 @@ trait UserRelations
      */
     public function getRoles(): array
     {
-        $iterator = static function (UserGroup $userGroup): string {
-            return $userGroup->getRole()->getId();
-        };
+        $iterator = fn (UserGroup $userGroup): string => $userGroup->getRole()->getId();
 
-        /** @var array<int, string> $output */
-        $output = $this->userGroups->map($iterator)->toArray();
-
-        // And if we have roles service present we can fetch all inherited roles
-        if ($this->rolesService instanceof RolesService) {
-            $output = $this->rolesService->getInheritedRoles($output);
-        }
-
-        return array_values(array_map('\strval', array_unique($output)));
+        return $this->userGroups->map($iterator)->toArray();
     }
 
     /**
