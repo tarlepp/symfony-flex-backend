@@ -14,6 +14,7 @@ use App\Repository\RoleRepository;
 use App\Security\RolesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -43,7 +44,7 @@ class CreateRolesCommand extends Command
      * @param RoleRepository         $roleRepository
      * @param RolesService           $rolesService
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -72,15 +73,12 @@ class CreateRolesCommand extends Command
     {
         $io = $this->getSymfonyStyle($input, $output);
 
-        /**
-         * @param string $role
-         * @return int
-         */
-        $iterator = function (string $role): int {
-            return $this->createRole($role);
-        };
-
-        $created = array_sum(array_map($iterator, $this->rolesService->getRoles()));
+        $created = array_sum(
+            array_map(
+                fn (string $role): int => $this->createRole($role),
+                $this->rolesService->getRoles()
+            )
+        );
 
         $this->entityManager->flush();
 
