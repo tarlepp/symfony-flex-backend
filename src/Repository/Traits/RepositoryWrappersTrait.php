@@ -43,13 +43,12 @@ trait RepositoryWrappersTrait
      */
     public function getReference(string $id)
     {
-        $referenceId = $id;
-
         try {
             $referenceId = UuidHelper::fromString($id);
         } catch (InvalidUuidStringException $exception) {
-            (static function (Throwable $exception): void {
-            })($exception);
+            (fn (Throwable $exception): bool => true)($exception);
+
+            $referenceId = $id;
         }
 
         return $this->getEntityManager()->getReference($this->getEntityName(), $referenceId);
