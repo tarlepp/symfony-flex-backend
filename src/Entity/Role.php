@@ -54,7 +54,7 @@ class Role implements EntityInterface
      *  )
      * @ORM\Id()
      */
-    private $id;
+    private string $id;
 
     /**
      * @var string
@@ -70,7 +70,7 @@ class Role implements EntityInterface
      *      nullable=false
      *  )
      */
-    private $description = '';
+    private string $description = '';
 
     /**
      * User groups that belongs to this role.
@@ -86,7 +86,7 @@ class Role implements EntityInterface
      *      mappedBy="role",
      *  )
      */
-    private $userGroups;
+    private Collection $userGroups;
 
     /**
      * Constructor.

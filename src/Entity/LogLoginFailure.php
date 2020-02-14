@@ -79,7 +79,7 @@ class LogLoginFailure implements EntityInterface
      *      ),
      *  })
      */
-    private $user;
+    private User $user;
 
     /**
      * @var DateTimeImmutable
@@ -95,7 +95,7 @@ class LogLoginFailure implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private $timestamp;
+    private DateTimeImmutable $timestamp;
 
     /**
      * LogLoginFailure constructor.

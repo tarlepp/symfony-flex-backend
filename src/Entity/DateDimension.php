@@ -75,7 +75,7 @@ class DateDimension implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private $date;
+    private DateTime $date;
 
     /**
      * @var int
@@ -94,7 +94,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $year;
+    private int $year;
 
     /**
      * @var int
@@ -113,7 +113,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $month;
+    private int $month;
 
     /**
      * @var int
@@ -132,7 +132,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $day;
+    private int $day;
 
     /**
      * @var int
@@ -151,7 +151,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $quarter;
+    private int $quarter;
 
     /**
      * @var int
@@ -170,7 +170,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $weekNumber;
+    private int $weekNumber;
 
     /**
      * @var int
@@ -189,7 +189,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $dayNumberOfWeek;
+    private int $dayNumberOfWeek;
 
     /**
      * @var int
@@ -208,7 +208,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $dayNumberOfYear;
+    private int $dayNumberOfYear;
 
     /**
      * @var bool
@@ -227,7 +227,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $leapYear;
+    private bool $leapYear;
 
     /**
      * @var int
@@ -246,7 +246,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $weekNumberingYear;
+    private int $weekNumberingYear;
 
     /**
      * @var int
@@ -266,7 +266,7 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
-    private $unixTime;
+    private int $unixTime;
 
     /**
      * DateDimension constructor.
