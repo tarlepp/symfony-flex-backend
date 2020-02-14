@@ -39,7 +39,7 @@ trait Timestampable
      *      nullable=true,
      *  )
      */
-    protected $createdAt;
+    protected ?DateTimeImmutable $createdAt;
 
     /**
      * @var DateTimeImmutable|null
@@ -58,7 +58,7 @@ trait Timestampable
      *      nullable=true,
      *  )
      */
-    protected $updatedAt;
+    protected ?DateTimeImmutable $updatedAt;
 
     /**
      * Sets createdAt.

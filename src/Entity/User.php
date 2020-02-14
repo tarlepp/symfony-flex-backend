@@ -69,7 +69,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *
      * @SWG\Property(type="string", format="uuid")
      */
-    private $id;
+    private UuidInterface $id;
 
     /**
      * @var string
@@ -94,7 +94,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *  )
      */
-    private $username = '';
+    private string $username = '';
 
     /**
      * @var string
@@ -119,7 +119,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *  )
      */
-    private $firstName = '';
+    private string $firstName = '';
 
     /**
      * @var string
@@ -144,7 +144,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *  )
      */
-    private $lastName = '';
+    private string $lastName = '';
 
     /**
      * @var string
@@ -165,7 +165,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false
      *  )
      */
-    private $email = '';
+    private string $email = '';
 
     /**
      * @var string
@@ -177,14 +177,14 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false
      *  )
      */
-    private $password = '';
+    private string $password = '';
 
     /**
      * Plain password. Used for model validation. Must not be persisted.
      *
      * @var  string
      */
-    private $plainPassword = '';
+    private string $plainPassword = '';
 
     /**
      * User constructor.

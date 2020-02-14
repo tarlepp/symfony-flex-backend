@@ -84,7 +84,7 @@ class UserGroup implements EntityInterface
      *      ),
      *  })
      */
-    private $role;
+    private Role $role;
 
     /**
      * @var string
@@ -105,7 +105,7 @@ class UserGroup implements EntityInterface
      *      nullable=false
      *  )
      */
-    private $name = '';
+    private string $name = '';
 
     /**
      * @var Collection<int, User>|ArrayCollection<int, User>
@@ -122,7 +122,7 @@ class UserGroup implements EntityInterface
      *      name="user_has_user_group"
      *  )
      */
-    private $users;
+    private Collection $users;
 
     /**
      * @var Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
@@ -139,7 +139,7 @@ class UserGroup implements EntityInterface
      *      name="api_key_has_user_group"
      *  )
      */
-    private $apiKeys;
+    private Collection $apiKeys;
 
     /**
      * UserGroup constructor.

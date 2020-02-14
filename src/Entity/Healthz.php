@@ -68,7 +68,7 @@ class Healthz implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private $timestamp;
+    private DateTimeImmutable $timestamp;
 
     /**
      * Healthz constructor.
