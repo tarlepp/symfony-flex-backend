@@ -522,7 +522,7 @@ trait LogRequestProcessRequestTrait
             }
         }
 
-        return is_array($output) ? $output : (array)$output;
+        return (array)$output;
     }
 
     /**
