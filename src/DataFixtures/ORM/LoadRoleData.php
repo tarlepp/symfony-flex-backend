@@ -10,12 +10,12 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
 use App\Security\Interfaces\RolesServiceInterface;
-use BadMethodCallException;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Throwable;
 use function array_map;
 
 /**
@@ -55,12 +55,8 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface, Con
         $this->roles = $rolesService;
         $this->manager = $manager;
 
-        $iterator = function (string $role): void {
-            $this->createRole($role);
-        };
-
         // Create entities
-        array_map($iterator, $this->roles->getRoles());
+        array_map(fn (string $role): bool => $this->createRole($role), $this->roles->getRoles());
 
         // Flush database changes
         $this->manager->flush();
@@ -81,9 +77,11 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface, Con
      *
      * @param string $role
      *
-     * @throws BadMethodCallException
+     * @return bool
+     *
+     * @throws Throwable
      */
-    private function createRole(string $role): void
+    private function createRole(string $role): bool
     {
         // Create new Role entity
         $entity = new Role($role);
@@ -94,5 +92,7 @@ final class LoadRoleData extends Fixture implements OrderedFixtureInterface, Con
 
         // Create reference for later usage
         $this->addReference('Role-' . $this->roles->getShort($role), $entity);
+
+        return true;
     }
 }

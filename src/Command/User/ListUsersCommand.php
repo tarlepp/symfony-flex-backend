@@ -104,23 +104,19 @@ class ListUsersCommand extends Command
      */
     private function getFormatterUser(): Closure
     {
-        $userGroupFormatter = static function (UserGroup $userGroup): string {
-            return sprintf(
-                '%s (%s)',
-                $userGroup->getName(),
-                $userGroup->getRole()->getId()
-            );
-        };
+        $userGroupFormatter = fn (UserGroup $userGroup): string => sprintf(
+            '%s (%s)',
+            $userGroup->getName(),
+            $userGroup->getRole()->getId()
+        );
 
-        return function (User $user) use ($userGroupFormatter): array {
-            return [
-                $user->getId(),
-                $user->getUsername(),
-                $user->getEmail(),
-                $user->getFirstName() . ' ' . $user->getLastName(),
-                implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
-                implode(",\n", $user->getUserGroups()->map($userGroupFormatter)->toArray()),
-            ];
-        };
+        return fn (User $user): array => [
+            $user->getId(),
+            $user->getUsername(),
+            $user->getEmail(),
+            $user->getFirstName() . ' ' . $user->getLastName(),
+            implode(",\n", $this->roles->getInheritedRoles($user->getRoles())),
+            implode(",\n", $user->getUserGroups()->map($userGroupFormatter)->toArray()),
+        ];
     }
 }

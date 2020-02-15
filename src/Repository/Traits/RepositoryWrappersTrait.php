@@ -8,12 +8,15 @@ declare(strict_types = 1);
 
 namespace App\Repository\Traits;
 
+use App\Rest\UuidHelper;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Ramsey\Uuid\Exception\InvalidUuidStringException;
+use Throwable;
 use UnexpectedValueException;
 
 /**
@@ -40,7 +43,15 @@ trait RepositoryWrappersTrait
      */
     public function getReference(string $id)
     {
-        return $this->getEntityManager()->getReference($this->getEntityName(), $id);
+        try {
+            $referenceId = UuidHelper::fromString($id);
+        } catch (InvalidUuidStringException $exception) {
+            (fn (Throwable $exception): bool => true)($exception);
+
+            $referenceId = $id;
+        }
+
+        return $this->getEntityManager()->getReference($this->getEntityName(), $referenceId);
     }
 
     /**

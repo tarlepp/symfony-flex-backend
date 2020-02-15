@@ -13,6 +13,7 @@ use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
+use Ramsey\Uuid\UuidInterface;
 use Throwable;
 
 /**
@@ -60,11 +61,20 @@ class UuidHelper
             $output = UuidBinaryOrderedTimeType::NAME;
         } catch (InvalidUuidStringException $exception) {
             // ok, so now we know that value isn't uuid
-            (static function (Throwable $exception): void {
-            })($exception);
+            (fn (Throwable $exception): Throwable => $exception)($exception);
         }
 
         return $output;
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return UuidInterface
+     */
+    public static function fromString(string $value): UuidInterface
+    {
+        return self::getFactory()->fromString($value);
     }
 
     /**
@@ -76,6 +86,6 @@ class UuidHelper
      */
     public static function getBytes(string $value): string
     {
-        return self::getFactory()->fromString($value)->getBytes();
+        return self::fromString($value)->getBytes();
     }
 }

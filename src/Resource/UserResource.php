@@ -77,13 +77,12 @@ class UserResource extends RestResource
          *
          * @return bool
          */
-        $filter = function (Entity $user) use ($userGroup): bool {
-            $user->setRolesService($this->rolesService);
+        $filter = fn (Entity $user): bool => in_array(
+            $userGroup->getRole()->getId(),
+            $this->rolesService->getInheritedRoles($user->getRoles()),
+            true
+        );
 
-            return in_array($userGroup->getRole()->getId(), $user->getRoles(), true);
-        };
-
-        /** @var Entity[] $users */
         $users = $this->find();
 
         return array_values(array_filter($users, $filter));

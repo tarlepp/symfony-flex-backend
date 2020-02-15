@@ -107,8 +107,8 @@ class EditApiKeyCommand extends Command
         /** @var ApiKeyDto $dtoEdit */
         $dtoEdit = $helper->interactUsingForm(ApiKeyType::class, $input, $output, ['data' => $dtoLoaded]);
 
-        // Update API key
-        $this->apiKeyResource->update($apiKey->getId(), $dtoEdit);
+        // Patch API key
+        $this->apiKeyResource->patch($apiKey->getId(), $dtoEdit);
 
         return $this->apiKeyHelper->getApiKeyMessage('API key updated - have a nice day', $apiKey);
     }

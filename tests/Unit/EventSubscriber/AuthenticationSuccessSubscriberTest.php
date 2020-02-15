@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\EventSubscriber;
 
 use App\EventSubscriber\AuthenticationSuccessSubscriber;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -22,7 +23,7 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [
-            'lexik_jwt_authentication.on_authentication_success' => 'onAuthenticationSuccess',
+            AuthenticationSuccessEvent::class => 'onAuthenticationSuccess',
         ];
 
         static::assertSame($expected, AuthenticationSuccessSubscriber::getSubscribedEvents());

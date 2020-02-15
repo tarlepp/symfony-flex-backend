@@ -42,7 +42,7 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
-    protected $time;
+    protected DateTimeImmutable $time;
 
     /**
      * @var DateTimeImmutable
@@ -60,7 +60,7 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
-    protected $date;
+    protected DateTimeImmutable $date;
 
     /**
      * @var string
@@ -78,7 +78,7 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
-    protected $agent;
+    protected string $agent;
 
     /**
      * @var string
@@ -97,7 +97,7 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
-    protected $httpHost;
+    protected string $httpHost;
 
     /**
      * @var string
@@ -116,7 +116,7 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
-    private $clientIp;
+    private string $clientIp;
 
     /**
      * @return DateTimeImmutable

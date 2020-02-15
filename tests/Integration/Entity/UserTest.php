@@ -105,18 +105,6 @@ class UserTest extends EntityTestCase
         static::assertSame(['ROLE_ROOT'], $user->getRoles());
     }
 
-    public function testThatGetRolesReturnsExpectedWithRoleService(): void
-    {
-        static::bootKernel();
-
-        $rolesService = static::$container->get(RolesService::class);
-
-        $group = (new UserGroup())->setRole(new Role('ROLE_ROOT'));
-        $user = (new User())->addUserGroup($group)->setRolesService($rolesService);
-
-        static::assertSame(['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'], $user->getRoles());
-    }
-
     /**
      * Data provider for testThatPasswordHashingIsWorkingAsExpected
      *

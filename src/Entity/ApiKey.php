@@ -59,6 +59,8 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      * @Groups({
      *      "ApiKey",
      *      "ApiKey.id",
+     *
+     *      "LogRequest.apiKey"
      *  })
      *
      * @ORM\Column(
@@ -71,7 +73,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @SWG\Property(type="string", format="uuid")
      */
-    private $id;
+    private UuidInterface $id;
 
     /**
      * @var string
@@ -96,7 +98,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      nullable=false
      *  )
      */
-    private $token = '';
+    private string $token = '';
 
     /**
      * @var string
@@ -111,7 +113,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      type="text",
      *  )
      */
-    private $description = '';
+    private string $description = '';
 
     /**
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
@@ -128,7 +130,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      name="api_key_has_user_group"
      *  )
      */
-    private $userGroups;
+    private Collection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
@@ -142,7 +144,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      mappedBy="apiKey",
      *  )
      */
-    private $logsRequest;
+    private Collection $logsRequest;
 
     /**
      * ApiKey constructor.
@@ -151,7 +153,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      */
     public function __construct()
     {
-        $this->id = $this->getUuid();
+        $this->id = $this->createUuid();
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
 

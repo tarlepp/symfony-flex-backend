@@ -3,19 +3,12 @@
 	"require-dev": {
 		"liuggio/fastest": "1.6.1",
 		"phpunit/phpcov": "7.0.1",
-		"phpunit/phpunit": "9.0.0",
+		"phpunit/phpunit": "9.0.1",
 		"roave/security-advisories": "dev-master",
 		"sebastian/finder-facade": "2.0.0",
 		"symfony/browser-kit": "4.4.4",
 		"symfony/phpunit-bridge": "4.4.4",
 		"theseer/fdomdocument": "1.6.6"
-	},
-	"scripts": {
-		"post-install-cmd": [
-		],
-		"post-update-cmd": [
-			"php -r \"echo 'testing.......................................................................';\""
-		]
 	},
 	"config": {
 		"platform": {

@@ -24,10 +24,10 @@ plugins:
   #  enabled: true
   #  config:
   #    minimum-severity: 5
-  phpcodesniffer:
-    enabled: true
-    config:
-      standard: "PSR1,PSR2"
+  #phpcodesniffer:
+  #  enabled: true
+  #  config:
+  #    standard: "PSR1,PSR2,Symfony2"
 checks:
   argument-count:
     config:

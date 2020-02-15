@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Command\User;
 
 use App\Command\Traits\SymfonyStyleTrait;
-use App\DTO\User\UserPatch as UserDto;
+use App\DTO\User\UserUpdate as UserDto;
 use App\Entity\User as UserEntity;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserResource;
@@ -107,8 +107,8 @@ class EditUserCommand extends Command
         /** @var UserDto $dtoEdit */
         $dtoEdit = $helper->interactUsingForm(UserType::class, $input, $output, ['data' => $dtoLoaded]);
 
-        // Update user
-        $this->userResource->update($user->getId(), $dtoEdit);
+        // Patch user
+        $this->userResource->patch($user->getId(), $dtoEdit);
 
         return 'User updated - have a nice day';
     }

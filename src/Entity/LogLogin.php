@@ -46,6 +46,26 @@ class LogLogin implements EntityInterface
     use Uuid;
 
     /**
+     * @var UuidInterface
+     *
+     * @Groups({
+     *      "LogLogin",
+     *      "LogLogin.id",
+     *  })
+     *
+     * @ORM\Column(
+     *      name="id",
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
+     *      nullable=false,
+     *  )
+     * @ORM\Id()
+     *
+     * @SWG\Property(type="string", format="uuid")
+     */
+    private UuidInterface $id;
+
+    /**
      * @var User|null
      *
      * @Groups({
@@ -66,34 +86,14 @@ class LogLogin implements EntityInterface
      *      ),
      *  })
      */
-    protected $user;
-
-    /**
-     * @var UuidInterface
-     *
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.id",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="id",
-     *      type="uuid_binary_ordered_time",
-     *      unique=true,
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     *
-     * @SWG\Property(type="string", format="uuid")
-     */
-    private $id;
+    private ?User $user;
 
     /**
      * @var string
      *
      * @Groups({
      *      "LogLogin",
-     *      "LogLogin.id",
+     *      "LogLogin.type",
      *  })
      *
      * @ORM\Column(
@@ -102,7 +102,7 @@ class LogLogin implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private $type;
+    private string $type;
 
     /**
      * @var string|null
@@ -119,7 +119,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $clientType;
+    private ?string $clientType = null;
 
     /**
      * @var string|null
@@ -136,7 +136,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $clientName;
+    private ?string $clientName = null;
 
     /**
      * @var string|null
@@ -153,7 +153,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $clientShortName;
+    private ?string $clientShortName = null;
 
     /**
      * @var string|null
@@ -170,7 +170,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $clientVersion;
+    private ?string $clientVersion = null;
 
     /**
      * @var string|null
@@ -187,7 +187,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $clientEngine;
+    private ?string $clientEngine = null;
 
     /**
      * @var string|null
@@ -204,7 +204,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $osName;
+    private ?string $osName = null;
 
     /**
      * @var string|null
@@ -221,7 +221,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $osShortName;
+    private ?string $osShortName = null;
 
     /**
      * @var string|null
@@ -238,7 +238,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $osVersion;
+    private ?string $osVersion = null;
 
     /**
      * @var string|null
@@ -255,7 +255,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $osPlatform;
+    private ?string $osPlatform = null;
 
     /**
      * @var string|null
@@ -272,7 +272,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $deviceName;
+    private ?string $deviceName = null;
 
     /**
      * @var string|null
@@ -289,7 +289,7 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $brandName;
+    private ?string $brandName = null;
 
     /**
      * @var string|null
@@ -306,12 +306,9 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
-    private $model;
+    private ?string $model = null;
 
-    /**
-     * @var DeviceDetector
-     */
-    private $deviceDetector;
+    private DeviceDetector $deviceDetector;
 
     /**
      * LogLogin constructor.
@@ -325,7 +322,7 @@ class LogLogin implements EntityInterface
      */
     public function __construct(string $type, Request $request, DeviceDetector $deviceDetector, ?User $user = null)
     {
-        $this->id = $this->getUuid();
+        $this->id = $this->createUuid();
 
         $this->type = $type;
         $this->deviceDetector = $deviceDetector;
@@ -342,6 +339,14 @@ class LogLogin implements EntityInterface
     public function getId(): string
     {
         return $this->id->toString();
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
     }
 
     /**

@@ -28,9 +28,10 @@ trait Timestampable
      * @Gedmo\Timestampable(on="create")
      *
      * @Groups({
-     *     "Role.createdAt",
-     *     "User.createdAt",
-     *     "UserGroup.createdAt",
+     *      "ApiKey.createdAt",
+     *      "Role.createdAt",
+     *      "User.createdAt",
+     *      "UserGroup.createdAt",
      *  })
      *
      * @ORM\Column(
@@ -39,7 +40,7 @@ trait Timestampable
      *      nullable=true,
      *  )
      */
-    protected $createdAt;
+    protected ?DateTimeImmutable $createdAt;
 
     /**
      * @var DateTimeImmutable|null
@@ -47,9 +48,10 @@ trait Timestampable
      * @Gedmo\Timestampable(on="update")
      *
      * @Groups({
-     *     "Role.updatedAt",
-     *     "User.updatedAt",
-     *     "UserGroup.updatedAt",
+     *      "ApiKey.updatedAt",
+     *      "Role.updatedAt",
+     *      "User.updatedAt",
+     *      "UserGroup.updatedAt",
      *  })
      *
      * @ORM\Column(
@@ -58,7 +60,7 @@ trait Timestampable
      *      nullable=true,
      *  )
      */
-    protected $updatedAt;
+    protected ?DateTimeImmutable $updatedAt;
 
     /**
      * Sets createdAt.

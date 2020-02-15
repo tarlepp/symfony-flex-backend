@@ -42,6 +42,7 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/07_phpinsights" />
       <excludeFolder url="file://$MODULE_DIR$/tools/08_phpmetrics" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/bin" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-ctype" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-icu" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-idn" />
