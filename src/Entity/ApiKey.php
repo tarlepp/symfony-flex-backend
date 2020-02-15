@@ -59,6 +59,8 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      * @Groups({
      *      "ApiKey",
      *      "ApiKey.id",
+     *
+     *      "LogRequest.apiKey"
      *  })
      *
      * @ORM\Column(
@@ -71,7 +73,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @SWG\Property(type="string", format="uuid")
      */
-    private $id;
+    private UuidInterface $id;
 
     /**
      * @var string
@@ -151,7 +153,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      */
     public function __construct()
     {
-        $this->id = $this->getUuid();
+        $this->id = $this->createUuid();
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
 

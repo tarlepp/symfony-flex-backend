@@ -59,7 +59,7 @@ class DateDimension implements EntityInterface
      *
      * @SWG\Property(type="string", format="uuid")
      */
-    private $id;
+    private UuidInterface $id;
 
     /**
      * @var DateTime
@@ -277,7 +277,7 @@ class DateDimension implements EntityInterface
      */
     public function __construct(?DateTime $dateTime = null)
     {
-        $this->id = $this->getUuid();
+        $this->id = $this->createUuid();
 
         if ($dateTime !== null) {
             $this->date = $dateTime;
