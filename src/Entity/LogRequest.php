@@ -48,6 +48,29 @@ class LogRequest implements EntityInterface
     use Uuid;
 
     /**
+     * @var UuidInterface
+     *
+     * @Groups({
+     *      "LogRequest",
+     *      "LogRequest.id",
+     *
+     *      "ApiKey.logsRequest",
+     *      "User.logRequest",
+     *  })
+     *
+     * @ORM\Column(
+     *      name="id",
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
+     *      nullable=false,
+     *  )
+     * @ORM\Id()
+     *
+     * @SWG\Property(type="string", format="uuid")
+     */
+    private UuidInterface $id;
+
+    /**
      * @var User|null
      *
      * @Groups({
@@ -67,28 +90,7 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
-    protected ?User $user;
-
-    /**
-     * @var UuidInterface
-     *
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.id",
-     *      "User.logRequest",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="id",
-     *      type="uuid_binary_ordered_time",
-     *      unique=true,
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     *
-     * @SWG\Property(type="string", format="uuid")
-     */
-    private UuidInterface $id;
+    private ?User $user = null;
 
     /**
      * @var ApiKey|null
@@ -183,7 +185,7 @@ class LogRequest implements EntityInterface
         ?bool $masterRequest = null
     ) {
         $this->sensitiveProperties = $sensitiveProperties;
-        $this->id = $this->getUuid();
+        $this->id = $this->createUuid();
         $this->user = $user;
         $this->apiKey = $apiKey;
         $this->masterRequest = $masterRequest ?? true;

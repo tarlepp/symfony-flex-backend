@@ -43,6 +43,7 @@ class Role implements EntityInterface
      * @Groups({
      *      "Role",
      *      "Role.role",
+     *
      *      "UserGroup.role",
      *  })
      *

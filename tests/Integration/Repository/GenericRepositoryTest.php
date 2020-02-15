@@ -8,14 +8,13 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Repository;
 
-use App\Entity\Interfaces\EntityInterface;
 use App\Entity\ApiKey as UserEntity;
-use App\Repository\Interfaces\BaseRepositoryInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Repository\ApiKeyRepository;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Resource\ApiKeyResource;
 use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
-use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -49,7 +48,7 @@ class GenericRepositoryTest extends KernelTestCase
         /** @var BaseRepositoryInterface $repository */
         $repository = static::$container->get($this->resourceClass)->getRepository();
 
-        static::assertInstanceOf(Proxy::class, $repository->getReference($entity->getId()));
+        static::assertInstanceOf(UserEntity::class, $repository->getReference($entity->getId()));
     }
 
     public function testThatGetAssociationsReturnsExpected(): void
