@@ -13,7 +13,6 @@ use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
 use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
-use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Throwable;
 use function is_string;
@@ -62,7 +61,7 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            Events::AUTHENTICATION_FAILURE => 'onAuthenticationFailure',
+            AuthenticationFailureEvent::class => 'onAuthenticationFailure',
         ];
     }
 

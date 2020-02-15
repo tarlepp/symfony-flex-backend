@@ -10,6 +10,7 @@ namespace App\Tests\Unit\EventSubscriber;
 
 use App\EventSubscriber\ResponseSubscriber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
  * Class RequestSubscriberTest
@@ -22,7 +23,7 @@ class ResponseSubscriberTest extends KernelTestCase
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [
-            'kernel.response' => [
+            ResponseEvent::class => [
                 'onKernelResponse',
                 10,
             ],
