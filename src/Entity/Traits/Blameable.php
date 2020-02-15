@@ -27,17 +27,18 @@ trait Blameable
      * @Gedmo\Blameable(on="create")
      *
      * @Groups({
-     *     "Role.createdBy",
-     *     "User.createdBy",
-     *     "UserGroup.createdBy",
+     *      "ApiKey.createdBy",
+     *      "Role.createdBy",
+     *      "User.createdBy",
+     *      "UserGroup.createdBy",
      *  })
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(
-     *     name="created_by_id",
-     *     referencedColumnName="id",
-     *     nullable=true,
-     *     onDelete="SET NULL",
+     *      name="created_by_id",
+     *      referencedColumnName="id",
+     *      nullable=true,
+     *      onDelete="SET NULL",
      *  )
      */
     protected ?User $createdBy;
@@ -48,9 +49,10 @@ trait Blameable
      * @Gedmo\Blameable(on="update")
      *
      * @Groups({
-     *     "Role.updatedBy",
-     *     "User.updatedBy",
-     *     "UserGroup.updatedBy",
+     *      "ApiKey.updatedBy",
+     *      "Role.updatedBy",
+     *      "User.updatedBy",
+     *      "UserGroup.updatedBy",
      *  })
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User")

@@ -56,6 +56,11 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Groups({
      *      "User",
      *      "User.id",
+     *
+     *      "LogLogin.user",
+     *      "LogLoginFailure.user",
+     *      "LogRequest.user",
+     *
      *      "UserGroup.users",
      *  })
      *
@@ -193,7 +198,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      */
     public function __construct()
     {
-        $this->id = $this->getUuid();
+        $this->id = $this->createUuid();
 
         $this->userGroups = new ArrayCollection();
         $this->logsRequest = new ArrayCollection();
