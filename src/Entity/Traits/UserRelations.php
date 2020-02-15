@@ -34,7 +34,7 @@ trait UserRelations
      *  })
      *
      * @ORM\ManyToMany(
-     *      targetEntity="UserGroup",
+     *      targetEntity="App\Entity\UserGroup",
      *      inversedBy="users",
      *  )
      * @ORM\JoinTable(
@@ -158,6 +158,7 @@ trait UserRelations
     {
         if (!$this->userGroups->contains($userGroup)) {
             $this->userGroups->add($userGroup);
+
             /** @noinspection PhpParamsInspection */
             $userGroup->addUser($this);
         }
