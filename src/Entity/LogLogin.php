@@ -86,7 +86,7 @@ class LogLogin implements EntityInterface
      *      ),
      *  })
      */
-    private ?User $user = null;
+    private ?User $user;
 
     /**
      * @var string
@@ -339,6 +339,14 @@ class LogLogin implements EntityInterface
     public function getId(): string
     {
         return $this->id->toString();
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
     }
 
     /**
