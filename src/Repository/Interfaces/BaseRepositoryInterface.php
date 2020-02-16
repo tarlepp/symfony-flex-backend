@@ -31,7 +31,6 @@ interface BaseRepositoryInterface
      */
     public function getEntityName(): string;
 
-    /** @noinspection GenericObjectTypeUsageInspection */
     /**
      * Gets a reference to the entity identified by the given type and identifier without actually loading it,
      * if the entity is not yet loaded.
