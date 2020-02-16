@@ -57,7 +57,7 @@ class LogLoginFailure implements EntityInterface
      *
      * @SWG\Property(type="string", format="uuid")
      */
-    private $id;
+    private UuidInterface $id;
 
     /**
      * @var User
@@ -106,7 +106,7 @@ class LogLoginFailure implements EntityInterface
      */
     public function __construct(User $user)
     {
-        $this->id = $this->getUuid();
+        $this->id = $this->createUuid();
         $this->user = $user;
         $this->timestamp = new DateTimeImmutable('NOW', new DateTimeZone('UTC'));
     }

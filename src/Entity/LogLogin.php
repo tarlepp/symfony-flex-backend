@@ -46,6 +46,26 @@ class LogLogin implements EntityInterface
     use Uuid;
 
     /**
+     * @var UuidInterface
+     *
+     * @Groups({
+     *      "LogLogin",
+     *      "LogLogin.id",
+     *  })
+     *
+     * @ORM\Column(
+     *      name="id",
+     *      type="uuid_binary_ordered_time",
+     *      unique=true,
+     *      nullable=false,
+     *  )
+     * @ORM\Id()
+     *
+     * @SWG\Property(type="string", format="uuid")
+     */
+    private UuidInterface $id;
+
+    /**
      * @var User|null
      *
      * @Groups({
@@ -66,34 +86,14 @@ class LogLogin implements EntityInterface
      *      ),
      *  })
      */
-    protected ?User $user;
-
-    /**
-     * @var UuidInterface
-     *
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.id",
-     *  })
-     *
-     * @ORM\Column(
-     *      name="id",
-     *      type="uuid_binary_ordered_time",
-     *      unique=true,
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     *
-     * @SWG\Property(type="string", format="uuid")
-     */
-    private $id;
+    private ?User $user;
 
     /**
      * @var string
      *
      * @Groups({
      *      "LogLogin",
-     *      "LogLogin.id",
+     *      "LogLogin.type",
      *  })
      *
      * @ORM\Column(
@@ -322,7 +322,7 @@ class LogLogin implements EntityInterface
      */
     public function __construct(string $type, Request $request, DeviceDetector $deviceDetector, ?User $user = null)
     {
-        $this->id = $this->getUuid();
+        $this->id = $this->createUuid();
 
         $this->type = $type;
         $this->deviceDetector = $deviceDetector;
@@ -339,6 +339,14 @@ class LogLogin implements EntityInterface
     public function getId(): string
     {
         return $this->id->toString();
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
     }
 
     /**

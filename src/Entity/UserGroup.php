@@ -45,6 +45,8 @@ class UserGroup implements EntityInterface
      * @Groups({
      *      "UserGroup",
      *      "UserGroup.id",
+     *
+     *      "ApiKey.userGroups",
      *      "User.userGroups",
      *      "Role.userGroups",
      *  })
@@ -59,7 +61,7 @@ class UserGroup implements EntityInterface
      *
      * @SWG\Property(type="string", format="uuid")
      */
-    private $id;
+    private UuidInterface $id;
 
     /**
      * @var Role
@@ -148,7 +150,7 @@ class UserGroup implements EntityInterface
      */
     public function __construct()
     {
-        $this->id = $this->getUuid();
+        $this->id = $this->createUuid();
 
         $this->users = new ArrayCollection();
         $this->apiKeys = new ArrayCollection();

@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\EventSubscriber;
 
 use App\EventSubscriber\JWTCreatedSubscriber;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -22,7 +23,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [
-            'lexik_jwt_authentication.on_jwt_created' => 'onJWTCreated',
+            JWTCreatedEvent::class => 'onJWTCreated',
         ];
 
         static::assertSame($expected, JWTCreatedSubscriber::getSubscribedEvents());
