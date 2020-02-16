@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Validator\Constraints\src;
 
 use App\Entity\Interfaces\EntityInterface;
-use Doctrine\ORM\Proxy\Proxy;
 
 /**
  * Class EntityReference
@@ -17,6 +16,6 @@ use Doctrine\ORM\Proxy\Proxy;
  * @package App\Tests\Integration\Validator\Constraints\src
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-abstract class EntityReference implements Proxy, EntityInterface
+abstract class EntityReference implements EntityInterface
 {
 }

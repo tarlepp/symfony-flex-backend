@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Rest\Interfaces;
 
 use App\Entity\Interfaces\EntityInterface;
-use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
@@ -39,13 +38,13 @@ interface RepositoryInterface
      *
      * @param string $id
      *
-     * @return Proxy|null
+     * @return object|null
      *
      * @throws ORMException
      *
      * @psalm-suppress DeprecatedClass
      */
-    public function getReference(string $id): ?Proxy;
+    public function getReference(string $id);
 
     /**
      * Gets all association mappings of the class.

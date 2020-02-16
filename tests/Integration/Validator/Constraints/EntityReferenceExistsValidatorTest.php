@@ -13,7 +13,6 @@ use App\Tests\Integration\Validator\Constraints\src\EntityReference;
 use App\Validator\Constraints\EntityReferenceExists;
 use App\Validator\Constraints\EntityReferenceExistsValidator;
 use Doctrine\ORM\EntityNotFoundException;
-use Doctrine\ORM\Proxy\Proxy;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -189,18 +188,6 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
             [new stdClass()],
             EntityInterface::class,
             'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given'
-        ];
-
-        yield [
-            $this->getMockForAbstractClass(Proxy::class, [], 'ProxyClass'),
-            Proxy::class,
-            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "ProxyClass" given',
-        ];
-
-        yield [
-            [$this->getMockForAbstractClass(Proxy::class, [], 'ProxyClass')],
-            Proxy::class,
-            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "ProxyClass" given',
         ];
     }
 }
