@@ -11,7 +11,6 @@ namespace App\EventSubscriber;
 use App\Service\Version;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Class ResponseSubscriber
@@ -54,7 +53,7 @@ class ResponseSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::RESPONSE => [
+            ResponseEvent::class => [
                 'onKernelResponse',
                 10,
             ],

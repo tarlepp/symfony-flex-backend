@@ -10,6 +10,7 @@ namespace App\Tests\Unit\EventSubscriber;
 
 use App\EventSubscriber\ExceptionSubscriber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
  * Class BodySubscriberTest
@@ -22,7 +23,7 @@ class ExceptionSubscriberTest extends KernelTestCase
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [
-            'kernel.exception' => [
+            ExceptionEvent::class => [
                 'onKernelException',
                 -100,
             ],

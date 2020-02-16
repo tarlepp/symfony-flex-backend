@@ -48,14 +48,14 @@ abstract class RestDto implements RestDtoInterface
     /**
      * @var string|null
      */
-    protected $id;
+    protected ?string $id;
 
     /**
      * An array of 'visited' setter properties of current dto.
      *
      * @var string[]
      */
-    private $visited = [];
+    private array $visited = [];
 
     /**
      * @param string $id

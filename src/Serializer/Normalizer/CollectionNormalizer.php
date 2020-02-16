@@ -10,6 +10,7 @@ namespace App\Serializer\Normalizer;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use function is_object;
@@ -43,7 +44,7 @@ class CollectionNormalizer implements NormalizerInterface
      *
      * @return array<\ArrayObject<int, T>|array|bool|float|int|string|null>
      *
-     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @throws ExceptionInterface
      */
     public function normalize($collection, $format = null, array $context = []): array
     {

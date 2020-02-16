@@ -11,6 +11,10 @@ namespace App\Rest\Interfaces;
 use App\Entity\Interfaces\EntityInterface;
 use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 
@@ -37,7 +41,7 @@ interface RepositoryInterface
      *
      * @return Proxy|null
      *
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      *
      * @psalm-suppress DeprecatedClass
      */
@@ -69,9 +73,9 @@ interface RepositoryInterface
      *
      * @return RepositoryInterface
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
+     * @throws ORMException
      */
     public function save(EntityInterface $entity): self;
 
@@ -82,9 +86,9 @@ interface RepositoryInterface
      *
      * @return RepositoryInterface
      *
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
-     * @throws \Doctrine\ORM\ORMException
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
+     * @throws ORMException
      */
     public function remove(EntityInterface $entity): self;
 
@@ -97,7 +101,7 @@ interface RepositoryInterface
      * @return int
      *
      * @throws InvalidArgumentException
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function countAdvanced(?array $criteria = null, ?array $search = null): int;
 

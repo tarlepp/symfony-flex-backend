@@ -18,12 +18,13 @@ use App\Entity\Role;
  */
 class UserGroupUpdate extends UserGroup
 {
-    /** @noinspection PhpFullyQualifiedNameUsageInspection */
     /**
      * @var \App\Entity\Role
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
+     *
+     * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
      */
     protected ?Role $role;
 }

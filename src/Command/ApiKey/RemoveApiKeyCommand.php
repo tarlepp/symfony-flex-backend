@@ -12,6 +12,7 @@ use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -36,7 +37,7 @@ class RemoveApiKeyCommand extends Command
      * @param ApiKeyResource $apiKeyResource
      * @param ApiKeyHelper   $apiKeyHelper
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
