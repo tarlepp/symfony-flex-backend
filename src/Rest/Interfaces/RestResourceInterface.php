@@ -11,7 +11,6 @@ namespace App\Rest\Interfaces;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
-use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
@@ -88,7 +87,7 @@ interface RestResourceInterface
      *
      * @param string $id The entity identifier.
      *
-     * @return Proxy|object|null
+     * @return object|null
      *
      * @throws ORMException
      */

@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Repository\Traits;
 
 use App\Rest\UuidHelper;
-use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\ORMException;
@@ -37,7 +36,7 @@ trait RepositoryWrappersTrait
      *
      * @param string $id
      *
-     * @return Proxy|object|null
+     * @return object|null
      *
      * @throws ORMException
      */
