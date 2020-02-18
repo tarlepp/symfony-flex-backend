@@ -20,6 +20,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function in_array;
 
 /**
  * Class RequestSubscriber
@@ -94,11 +95,12 @@ class RequestSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $path = $request->getPathInfo();
 
-        // We don't want to log /healthz , /version , /_profiler* and OPTIONS requests
-        if ($path === '/healthz'
-            || $path === '/version'
-            || strpos($path, '/_profiler') !== false
-            || $request->getRealMethod() === 'OPTIONS'
+        static $ignorePaths = ['', '/', '/healthz', '/version'];
+
+        // We don't want to log ignored paths, /_profiler* -path and OPTIONS requests
+        if (in_array($path, $ignorePaths, true)
+            || (strpos($path, '/_profiler') !== false)
+            || ($request->getRealMethod() === 'OPTIONS')
         ) {
             return;
         }
