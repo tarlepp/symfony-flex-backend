@@ -141,6 +141,66 @@ class RequestSubscriberTest extends KernelTestCase
     /**
      * @throws Throwable
      */
+    public function testThatLoggerIsCalledIfUserIsNotFoundByRepository(): void
+    {
+        static::bootKernel();
+
+        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
+        $response = new Response();
+
+        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+
+        /**
+         * @var MockObject|RequestLogger         $requestLogger
+         * @var MockObject|TokenStorageInterface $tokenStorage
+         * @var MockObject|UserRepository        $userRepository
+         * @var MockObject|LoggerInterface       $logger
+         */
+        $requestLogger = $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock();
+        $tokenStorage = $this->getMockBuilder(TokenStorageInterface::class)->getMock();
+        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $token = $this->getMockBuilder(TokenInterface::class)->getMock();
+
+        $user = (new User())->setUsername('test user');
+
+        $securityUser = new SecurityUser($user);
+
+        $userRepository
+            ->expects(static::once())
+            ->method('getReference')
+            ->with($user->getId())
+            ->willReturn(null);
+
+        $token
+            ->expects(static::once())
+            ->method('getUser')
+            ->willReturn($securityUser);
+
+        $tokenStorage
+            ->expects(static::once())
+            ->method('getToken')
+            ->willReturn($token);
+
+        $requestLogger
+            ->expects(static::never())
+            ->method('setUser');
+
+        $logger
+            ->expects(static::once())
+            ->method('error')
+            ->with(
+                sprintf('User not found for UUID: "%s".', $user->getId()),
+                RequestSubscriber::getSubscribedEvents()
+            );
+
+        $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
+        $subscriber->onKernelResponse($event);
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function testThatSetApiKeyIsCalled(): void
     {
         static::bootKernel();
