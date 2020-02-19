@@ -211,6 +211,14 @@ class LogRequest implements EntityInterface
     }
 
     /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
      * @return int
      */
     public function getStatusCode(): int

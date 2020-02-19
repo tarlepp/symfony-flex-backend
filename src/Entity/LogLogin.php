@@ -342,6 +342,14 @@ class LogLogin implements EntityInterface
     }
 
     /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
      * @return string
      */
     public function getType(): string
