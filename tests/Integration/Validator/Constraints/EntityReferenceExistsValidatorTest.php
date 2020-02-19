@@ -77,6 +77,24 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         (new EntityReferenceExistsValidator($logger))->validate($value, $constraint);
     }
 
+    public function testThatValidateMethodThrowsUnexpectedValueExceptionWhenValueIsNotEntityInterface(): void
+    {
+        /**
+         * @var MockObject|LoggerInterface $logger
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage(
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given'
+        );
+
+        $constraint = new EntityReferenceExists();
+        $constraint->entityClass = stdClass::class;
+
+        (new EntityReferenceExistsValidator($logger))->validate(new stdClass(), $constraint);
+    }
+
     public function testThatContextAndLoggerMethodsAreNotCalledWithinHappyPath(): void
     {
         /**
