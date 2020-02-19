@@ -36,7 +36,7 @@ trait FindMethod
      */
     public function findMethod(Request $request, ?array $allowedHttpMethods = null): Response
     {
-        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['GET']);
+        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['GET']);
 
         // Determine used parameters
         $orderBy = RequestHandler::getOrderBy($request);

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Rest/UuidHelperTest.php
+ * /tests/Unit/Rest/UuidHelperTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Tests\Integration\Rest;
+namespace App\Tests\Unit\Rest;
 
 use App\Rest\UuidHelper;
 use Generator;
@@ -18,7 +18,7 @@ use Throwable;
 /**
  * Class UuidHelperTest
  *
- * @package App\Tests\Integration\Rest
+ * @package App\Tests\Unit\Rest
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UuidHelperTest extends KernelTestCase
@@ -27,6 +27,8 @@ class UuidHelperTest extends KernelTestCase
     {
         $factory = UuidHelper::getFactory();
 
+        self::assertSame($factory, UuidHelper::getFactory());
+        self::assertSame($factory, UuidHelper::getFactory());
         self::assertSame($factory, UuidHelper::getFactory());
     }
 

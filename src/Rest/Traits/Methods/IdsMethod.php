@@ -36,7 +36,7 @@ trait IdsMethod
      */
     public function idsMethod(Request $request, ?array $allowedHttpMethods = null): Response
     {
-        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['GET']);
+        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['GET']);
 
         // Determine used parameters
         $search = RequestHandler::getSearchTerms($request);

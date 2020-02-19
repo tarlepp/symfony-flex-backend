@@ -36,7 +36,7 @@ trait DeleteMethod
      */
     public function deleteMethod(Request $request, string $id, ?array $allowedHttpMethods = null): Response
     {
-        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['DELETE']);
+        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['DELETE']);
 
         try {
             // Fetch data from database

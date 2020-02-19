@@ -42,7 +42,7 @@ trait PatchMethod
         string $id,
         ?array $allowedHttpMethods = null
     ): Response {
-        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['PATCH']);
+        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['PATCH']);
 
         try {
             $data = $resource->patch($id, $restDto, true);
