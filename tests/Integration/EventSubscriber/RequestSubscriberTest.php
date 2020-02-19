@@ -15,6 +15,7 @@ use App\Repository\UserRepository;
 use App\Security\ApiKeyUser;
 use App\Security\SecurityUser;
 use App\Utils\RequestLogger;
+use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -41,7 +42,7 @@ class RequestSubscriberTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $request = new Request();
+        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
         $response = new Response();
 
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
@@ -90,7 +91,7 @@ class RequestSubscriberTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $request = new Request();
+        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
         $response = new Response();
 
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
@@ -144,7 +145,7 @@ class RequestSubscriberTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $request = new Request();
+        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
         $response = new Response();
 
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
@@ -196,7 +197,7 @@ class RequestSubscriberTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $request = new Request([], [], [], [], [], ['REQUEST_METHOD' => 'OPTIONS']);
+        $request = new Request([], [], [], [], [], ['REQUEST_METHOD' => 'OPTIONS', 'REQUEST_URI' => '/foobar']);
         $response = new Response();
 
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
@@ -223,13 +224,19 @@ class RequestSubscriberTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedUrl
+     *
+     * @param string $url
+     *
+     * @testdox Test that `Logger` service is not called when making request to `$url` url.
+     *
      * @throws Throwable
      */
-    public function testThatLoggerServiceIsNotCalledIfHealthzRequest(): void
+    public function testThatLoggerServiceIsNotCalledWhenUsingWhitelistedUrl(string $url): void
     {
         static::bootKernel();
 
-        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/healthz']);
+        $request = new Request([], [], [], [], [], ['REQUEST_URI' => $url]);
         $response = new Response();
 
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
@@ -253,5 +260,16 @@ class RequestSubscriberTest extends KernelTestCase
 
         $subscriber = new RequestSubscriber($requestLogger, $userRepository, $tokenStorage, $logger);
         $subscriber->onKernelResponse($event);
+    }
+
+    /**
+     * @return Generator
+     */
+    public function dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedUrl(): Generator
+    {
+        yield [''];
+        yield ['/'];
+        yield ['/healthz'];
+        yield ['/version'];
     }
 }
