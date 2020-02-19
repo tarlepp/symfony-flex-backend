@@ -31,10 +31,7 @@ trait AbstractGenericMethods
      *
      * @throws Throwable
      */
-    abstract public function validateRestMethodAndGetResource(
-        Request $request,
-        array $allowedHttpMethods
-    ): RestResourceInterface;
+    abstract public function getResourceForMethod(Request $request, array $allowedHttpMethods): RestResourceInterface;
 
     /**
      * @return ResponseHandlerInterface

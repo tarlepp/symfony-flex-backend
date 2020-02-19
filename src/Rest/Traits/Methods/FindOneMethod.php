@@ -36,7 +36,7 @@ trait FindOneMethod
      */
     public function findOneMethod(Request $request, string $id, ?array $allowedHttpMethods = null): Response
     {
-        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['GET']);
+        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['GET']);
 
         try {
             // Fetch data from database
