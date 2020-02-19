@@ -109,9 +109,10 @@ final class ResponseHandler implements ResponseHandlerInterface
             }
         }
 
-        return [
-            'groups' => $groups,
-        ];
+        return array_merge(
+            ['groups' => $groups],
+            $restResource !== null ? $restResource->getSerializerContext() : [],
+        );
     }
 
     /**

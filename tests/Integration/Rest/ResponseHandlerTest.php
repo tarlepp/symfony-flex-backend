@@ -294,6 +294,54 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['AnotherFakeEntity'], $context['groups']);
     }
 
+    public function testThatGetSerializeContextReturnsExpectedWhenResourceHasGetSerializerContextMethod(): void
+    {
+        /**
+         * @var MockObject|SerializerInterface   $stubSerializer
+         * @var MockObject|Request               $stubRequest
+         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|RestResourceInterface $stubResourceService
+         */
+        $stubSerializer = $this->createMock(SerializerInterface::class);
+        $stubRequest = $this->createMock(Request::class);
+        $stubParameterBag = $this->createMock(ParameterBag::class);
+        $stubResourceService = $this->createMock(RestResourceInterface::class);
+
+        $expected = [
+            'groups' => 'foo',
+            'some' => 'bar',
+            'another' => 'foobar'
+        ];
+
+        $stubParameterBag
+            ->expects(static::exactly(2))
+            ->method('all')
+            ->willReturn(['populateOnly' => '']);
+
+        $stubResourceService
+            ->expects(static::once())
+            ->method('getEntityName')
+            ->willReturn('FakeEntity');
+
+        $stubResourceService
+            ->expects(static::once())
+            ->method('getSerializerContext')
+            ->willReturn($expected);
+
+        $stubRequest
+            ->expects(static::once())
+            ->method('get')
+            ->with('populate')
+            ->willReturn(['AnotherFakeEntity']);
+
+        $stubRequest->query = $stubParameterBag;
+
+        static::assertSame(
+            $expected,
+            (new ResponseHandler($stubSerializer))->getSerializeContext($stubRequest, $stubResourceService)
+        );
+    }
+
     /**
      * @throws Throwable
      */

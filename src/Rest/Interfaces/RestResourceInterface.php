@@ -25,6 +25,13 @@ use UnexpectedValueException;
 interface RestResourceInterface
 {
     /**
+     * Getter method for serializer context.
+     *
+     * @return array
+     */
+    public function getSerializerContext(): array;
+
+    /**
      * Getter method for entity repository.
      *
      * @return BaseRepositoryInterface

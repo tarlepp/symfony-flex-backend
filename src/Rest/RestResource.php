@@ -34,6 +34,16 @@ abstract class RestResource implements RestResourceInterface
     private string $dtoClass = '';
 
     /**
+     * Getter method for serializer context.
+     *
+     * @return array
+     */
+    public function getSerializerContext(): array
+    {
+        return [];
+    }
+
+    /**
      * Getter method for entity repository.
      *
      * @return BaseRepositoryInterface
