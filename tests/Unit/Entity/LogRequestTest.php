@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\Entity;
 
 use App\Entity\LogRequest;
+use App\Entity\User;
 use DateTime;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -30,5 +31,26 @@ class LogRequestTest extends KernelTestCase
         $entity = new LogRequest([]);
 
         static::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatGetUserReturnsNullIfUserNotGiven(): void
+    {
+        $entity = new LogRequest([]);
+
+        static::assertNull($entity->getUser());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatGetUserReturnsExpectedUser(): void
+    {
+        $user = new User();
+        $entity = new LogRequest([], null, null, $user);
+
+        static::assertSame($user, $entity->getUser());
     }
 }

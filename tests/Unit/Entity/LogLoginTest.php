@@ -10,6 +10,7 @@ namespace App\Tests\Unit\Entity;
 
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Entity\LogLogin;
+use App\Entity\User;
 use DateTime;
 use DateTimeZone;
 use DeviceDetector\DeviceDetector;
@@ -45,6 +46,27 @@ class LogLoginTest extends KernelTestCase
         $entity = new LogLogin($type, $request, $deviceDetector);
 
         static::assertEqualsWithDelta(new DateTime('now', new DateTimeZone('utc')), $entity->getCreatedAt(), 0.1);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatGetUserReturnsNullIfUserNotGiven(): void
+    {
+        $entity = new LogLogin(EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector(''));
+
+        static::assertNull($entity->getUser());
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatGetUserReturnsExpectedUser(): void
+    {
+        $user = new User();
+        $entity = new LogLogin(EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector(''), $user);
+
+        static::assertSame($user, $entity->getUser());
     }
 
     /**
