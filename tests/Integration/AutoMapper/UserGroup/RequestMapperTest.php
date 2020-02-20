@@ -51,7 +51,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
      */
     public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
     {
-        $role = new Role();
+        $role = new Role('Some Role');
 
         $this->mockRoleResource
             ->expects(static::once())

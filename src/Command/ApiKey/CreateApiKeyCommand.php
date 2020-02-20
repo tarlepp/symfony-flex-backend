@@ -40,7 +40,7 @@ class CreateApiKeyCommand extends Command
     /**
      * @var array<int, array<string, int|string>>
      */
-    private static $commandParameters = [
+    private static array $commandParameters = [
         [
             'name' => 'description',
             'description' => 'Description',
@@ -52,6 +52,10 @@ class CreateApiKeyCommand extends Command
     private UserGroupResource $userGroupResource;
     private RolesService $rolesService;
     private RoleRepository $roleRepository;
+
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private SymfonyStyle $io;
 
     /**

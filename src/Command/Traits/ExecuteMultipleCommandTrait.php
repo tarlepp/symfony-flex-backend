@@ -31,8 +31,11 @@ trait ExecuteMultipleCommandTrait
     /**
      * @var array<int|string, string>
      */
-    private $choices = [];
+    private array $choices = [];
 
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private SymfonyStyle $io;
 
     /**

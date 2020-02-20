@@ -33,6 +33,10 @@ class ListApiKeysCommand extends Command
 {
     private ApiKeyResource $apiKeyResource;
     private RolesService $rolesService;
+
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private SymfonyStyle $io;
 
     /**

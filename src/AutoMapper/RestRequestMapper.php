@@ -48,6 +48,7 @@ abstract class RestRequestMapper implements MapperInterface
      */
     public function map($source, string $targetClass, array $context = []): RestDtoInterface
     {
+        /** @var class-string $targetClass */
         $destination = new $targetClass();
 
         return $this->mapToObject($source, $destination, $context);

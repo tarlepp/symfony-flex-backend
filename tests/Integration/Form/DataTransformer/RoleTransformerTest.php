@@ -50,7 +50,7 @@ class RoleTransformerTest extends KernelTestCase
      */
     public function testThatReverseTransformCallsExpectedObjectManagerMethods(): void
     {
-        $entity = new Role();
+        $entity = new Role('Some Role');
 
         $this->roleResource
             ->expects(static::once())
@@ -85,17 +85,17 @@ class RoleTransformerTest extends KernelTestCase
      */
     public function testThatReverseTransformReturnsExpected(): void
     {
-        $entity = new Role();
+        $entity = new Role('Some Role');
 
         $this->roleResource
             ->expects(static::once())
             ->method('findOne')
-            ->with('rolename')
+            ->with('Some Role')
             ->willReturn($entity);
 
         $transformer = new RoleTransformer($this->roleResource);
 
-        static::assertSame($entity, $transformer->reverseTransform('rolename'));
+        static::assertSame($entity, $transformer->reverseTransform('Some Role'));
     }
 
     /**

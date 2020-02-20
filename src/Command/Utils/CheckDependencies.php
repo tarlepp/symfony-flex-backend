@@ -46,8 +46,12 @@ class CheckDependencies extends Command
     // Traits
     use SymfonyStyleTrait;
 
-    private string $projectDir;
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private SymfonyStyle $io;
+    private string $projectDir;
+
 
     /**
      * CheckVendorDependencies constructor.

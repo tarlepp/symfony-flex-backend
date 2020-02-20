@@ -112,7 +112,7 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
-    private ?ApiKey $apiKey;
+    private ?ApiKey $apiKey = null;
 
     /**
      * @var int
@@ -128,7 +128,7 @@ class LogRequest implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private int $statusCode;
+    private int $statusCode = 0;
 
     /**
      * @var int
@@ -144,7 +144,7 @@ class LogRequest implements EntityInterface
      *      nullable=false,
      *  )
      */
-    private int $responseContentLength;
+    private int $responseContentLength = 0;
 
     /**
      * @var bool
