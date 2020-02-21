@@ -8,7 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Entity;
 
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Role;
+use Exception;
 
 /**
  * Class RoleTest
@@ -27,5 +29,17 @@ class RoleTest extends EntityTestCase
     public function testThatGetIdReturnsCorrectUuid(): void
     {
         static::markTestSkipped();
+    }
+
+    /**
+     * @return EntityInterface
+     *
+     * @noinspection PhpMissingParentCallCommonInspection
+     *
+     * @throws Exception
+     */
+    protected function getEntity(): EntityInterface
+    {
+        return new $this->entityName('Some role');
     }
 }

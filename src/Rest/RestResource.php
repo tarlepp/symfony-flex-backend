@@ -190,6 +190,7 @@ abstract class RestResource implements RestResourceInterface
 
         // Create new instance of DTO and load entity to that.
         /** @var RestDtoInterface $restDto */
+        /** @var class-string<RestDtoInterface> $dtoClass */
         $restDto = new $dtoClass();
         $restDto->setId($id);
 

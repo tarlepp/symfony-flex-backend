@@ -27,8 +27,19 @@ use function array_map;
  */
 final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private ContainerInterface $container;
+
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private ObjectManager $manager;
+
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private RolesServiceInterface $roles;
 
     /**

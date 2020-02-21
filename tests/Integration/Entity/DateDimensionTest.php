@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\DateDimension;
+use App\Entity\Interfaces\EntityInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use DateTime;
 use Exception;
@@ -113,5 +114,17 @@ class DateDimensionTest extends EntityTestCase
         static::assertSame((bool)$dateTime->format('L'), $entity->isLeapYear());
         static::assertSame((int)$dateTime->format('o'), $entity->getWeekNumberingYear());
         static::assertSame((int)$dateTime->format('U'), $entity->getUnixTime());
+    }
+
+    /**
+     * @return EntityInterface
+     *
+     * @noinspection PhpMissingParentCallCommonInspection
+     *
+     * @throws Exception
+     */
+    protected function getEntity(): EntityInterface
+    {
+        return new $this->entityName(new DateTime());
     }
 }

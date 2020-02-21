@@ -70,7 +70,3 @@ services:
     App\EventSubscriber\BlameableDecorator:
         class: App\EventSubscriber\BlameableDecorator
         decorates: stof_doctrine_extensions.listener.blameable
-        calls:
-            - method: setUserResource
-              arguments:
-                  - '@App\Resource\UserResource'

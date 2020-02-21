@@ -92,14 +92,12 @@ class Role implements EntityInterface
     /**
      * Constructor.
      *
-     * @param string|null $role The role name
+     * @param string $role The role name
      *
      * @throws Throwable
      */
-    public function __construct(?string $role = null)
+    public function __construct(string $role)
     {
-        $role ??= '';
-
         $this->id = $role;
         $this->userGroups = new ArrayCollection();
     }

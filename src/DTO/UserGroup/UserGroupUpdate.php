@@ -26,5 +26,5 @@ class UserGroupUpdate extends UserGroup
      *
      * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
      */
-    protected ?Role $role;
+    protected ?Role $role = null;
 }

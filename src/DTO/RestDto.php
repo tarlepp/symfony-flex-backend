@@ -48,7 +48,7 @@ abstract class RestDto implements RestDtoInterface
     /**
      * @var string|null
      */
-    protected ?string $id;
+    protected ?string $id = null;
 
     /**
      * An array of 'visited' setter properties of current dto.

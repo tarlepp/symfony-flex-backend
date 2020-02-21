@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
+use App\Entity\Role;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Type;
@@ -234,15 +235,22 @@ class PhpUnitUtil
      */
     public static function getValidValueForType(string $type, ?array $meta = null)
     {
-        $meta = $meta ?? [];
+        $meta ??= [];
 
         $class = stdClass::class;
+        $params = [null];
 
         if (substr_count($type, '\\') > 1 && strpos($type, '|') === false) {
             /** @var class-string $class */
             $class = count($meta) ? $meta['targetEntity'] : $type;
 
             $type = self::TYPE_CUSTOM_CLASS;
+
+            $cleanClass = $class[0] === '\\' ? ltrim($class, '\\') : $class;
+
+            if ($cleanClass === Role::class) {
+                $params = ['Some Role'];
+            }
         }
 
         if (strpos($type, '|') !== false) {
@@ -253,8 +261,7 @@ class PhpUnitUtil
         } else {
             switch ($type) {
                 case self::TYPE_CUSTOM_CLASS:
-                    /** @psalm-suppress MixedMethodCall */
-                    $output = new $class();
+                    $output = new $class(...$params);
                     break;
                 case self::TYPE_INT:
                 case self::TYPE_INTEGER:

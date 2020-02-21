@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\Interfaces\EntityInterface;
+use App\Entity\Role;
 use App\Rest\UuidHelper;
 use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -609,7 +610,13 @@ abstract class EntityTestCase extends KernelTestCase
         $meta = $entityManager->getClassMetadata($this->entityName);
 
         $iterator = static function (array $mapping) use ($meta): array {
-            $targetEntity = new $mapping['targetEntity']();
+            $params = [null];
+
+            if ($mapping['targetEntity'] === Role::class) {
+                $params = ['Some Role'];
+            }
+
+            $targetEntity = new $mapping['targetEntity'](...$params);
 
             return [
                 [
@@ -801,7 +808,15 @@ abstract class EntityTestCase extends KernelTestCase
         $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
         // Create new entity object
-        $this->entity = new $this->entityName();
+        $this->entity = $this->getEntity();
         $this->repository = $this->entityManager->getRepository($this->entityName);
+    }
+
+    /**
+     * @return EntityInterface
+     */
+    protected function getEntity(): EntityInterface
+    {
+        return new $this->entityName();
     }
 }

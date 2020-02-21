@@ -28,7 +28,7 @@ class LoginLogger implements LoginLoggerInterface
 {
     private LogLoginResource $logLoginResource;
     private RequestStack $requestStack;
-    private ?User $user;
+    private ?User $user = null;
     private DeviceDetector $deviceDetector;
 
     /**
@@ -42,6 +42,8 @@ class LoginLogger implements LoginLoggerInterface
         // Store used services
         $this->logLoginResource = $logLoginFailureResource;
         $this->requestStack = $requestStack;
+
+        $this->deviceDetector = new DeviceDetector();
     }
 
     /**
