@@ -12,6 +12,7 @@ use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Utils\JSON;
+use JsonException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use function get_class;
+use function str_replace;
 
 /**
  * Trait RestResourceBaseMethods
@@ -458,7 +460,7 @@ trait RestResourceBaseMethods
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {
-            $this->createValidatorException($errors);
+            $this->createValidatorException($errors, get_class($dto));
         }
     }
 
@@ -476,7 +478,7 @@ trait RestResourceBaseMethods
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {
-            $this->createValidatorException($errors);
+            $this->createValidatorException($errors, get_class($entity));
         }
     }
 
@@ -495,10 +497,11 @@ trait RestResourceBaseMethods
 
     /**
      * @param ConstraintViolationListInterface $errors
+     * @param string                           $target
      *
-     * @throws Throwable
+     * @throws JsonException
      */
-    private function createValidatorException(ConstraintViolationListInterface $errors): void
+    private function createValidatorException(ConstraintViolationListInterface $errors, string $target): void
     {
         $output = [];
 
@@ -507,6 +510,7 @@ trait RestResourceBaseMethods
             $output[] = [
                 'message' => $error->getMessage(),
                 'propertyPath' => $error->getPropertyPath(),
+                'target' => str_replace('\\', '.', $target),
                 'code' => $error->getCode(),
             ];
         }

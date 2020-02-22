@@ -27,7 +27,7 @@ security:
                 provider: security_user_provider
                 check_path: /auth/getToken
                 success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                failure_handler: App\Security\Handler\TranslatedAuthenticationFailureHandler
         root:
             pattern: ^/$
             stateless: true
