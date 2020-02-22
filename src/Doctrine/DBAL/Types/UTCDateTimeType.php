@@ -75,7 +75,7 @@ class UTCDateTimeType extends DateTimeType
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @param AbstractPlatform $platform
      */

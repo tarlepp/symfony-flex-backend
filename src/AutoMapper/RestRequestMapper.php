@@ -38,7 +38,7 @@ abstract class RestRequestMapper implements MapperInterface
     protected static array $properties = [];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param array|object            $source
      * @param string                  $targetClass
@@ -55,7 +55,7 @@ abstract class RestRequestMapper implements MapperInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param array|object            $source
      * @param object                  $destination

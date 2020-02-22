@@ -41,7 +41,7 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @param Request                 $request
      * @param AuthenticationException $exception
