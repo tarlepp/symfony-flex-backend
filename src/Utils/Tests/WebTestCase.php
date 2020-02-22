@@ -24,10 +24,7 @@ use function getenv;
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
-    /**
-     * @var Auth
-     */
-    private $authService;
+    private Auth $authService;
 
     /**
      * @codeCoverageIgnore
@@ -128,7 +125,7 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, string>
      */
     public function getJsonHeaders(): array
     {
@@ -141,7 +138,7 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * @codeCoverageIgnore
      *
-     * @return mixed[]
+     * @return array<string, string>
      */
     public function getFastestHeaders(): array
     {
@@ -149,7 +146,7 @@ abstract class WebTestCase extends BaseWebTestCase
 
         if (getenv('ENV_TEST_CHANNEL_READABLE')) {
             $output = [
-                'X-FASTEST-ENV-TEST-CHANNEL-READABLE' => getenv('ENV_TEST_CHANNEL_READABLE'),
+                'X-FASTEST-ENV-TEST-CHANNEL-READABLE' => (string)getenv('ENV_TEST_CHANNEL_READABLE'),
             ];
         }
 
