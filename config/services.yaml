@@ -26,6 +26,7 @@ services:
             $projectDir: '%kernel.project_dir%'
             $environment: '%kernel.environment%'
             $uuidRegex: '%app.uuid_regex%'
+            $locale: '%locale%'
     _instanceof:
         App\Rest\Interfaces\ControllerInterface:
             tags: [ 'app.rest.controller' ]

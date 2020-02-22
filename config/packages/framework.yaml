@@ -4,6 +4,10 @@ framework:
     csrf_protection: false
     #http_method_override: true
 
+    default_locale: '%locale%'
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+
     serializer:
         enable_annotations: true
 
