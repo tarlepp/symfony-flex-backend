@@ -33,7 +33,7 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
     protected string $resourceClass;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function setUp(): void
     {
@@ -48,7 +48,7 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function tearDown(): void
     {

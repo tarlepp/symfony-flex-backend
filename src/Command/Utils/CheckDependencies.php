@@ -52,7 +52,6 @@ class CheckDependencies extends Command
     private SymfonyStyle $io;
     private string $projectDir;
 
-
     /**
      * CheckVendorDependencies constructor.
      *

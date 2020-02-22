@@ -258,7 +258,7 @@ class ResourceCollectionTest extends KernelTestCase
             }
 
             /**
-             * {@inheritDoc}
+             * {@inheritdoc}
              */
             public function getIterator(): ArrayObject
             {

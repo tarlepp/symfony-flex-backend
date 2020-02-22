@@ -58,7 +58,7 @@ class CollectionNormalizer implements NormalizerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function supportsNormalization($data, $format = null): bool
     {

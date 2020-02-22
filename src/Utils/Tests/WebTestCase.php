@@ -47,7 +47,7 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function setUp(): void
     {
