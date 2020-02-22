@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Utils\Tests;
 
 use App\Utils\JSON;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,8 +18,12 @@ use UnexpectedValueException;
 use function array_key_exists;
 use function array_merge;
 use function compact;
+use function file_get_contents;
+use function file_put_contents;
 use function getenv;
+use function property_exists;
 use function sha1;
+use function sprintf;
 use function str_pad;
 use function sys_get_temp_dir;
 
@@ -30,10 +35,7 @@ use function sys_get_temp_dir;
  */
 class Auth
 {
-    /**
-     * @var ContainerInterface
-     */
-    private $testContainer;
+    private ContainerInterface $testContainer;
 
     /**
      * Auth constructor.
@@ -51,7 +53,7 @@ class Auth
      * @param string $username
      * @param string $password
      *
-     * @return mixed[]
+     * @return array<string, string>
      *
      * @throws Throwable
      */
@@ -66,7 +68,7 @@ class Auth
      *
      * @param string $role
      *
-     * @return mixed[]
+     * @return array<string, string>
      */
     public function getAuthorizationHeadersForApiKey(string $role): array
     {
@@ -83,7 +85,7 @@ class Auth
      *
      * @param string $token
      *
-     * @return mixed[]
+     * @return array<string, string>
      */
     public function getAuthorizationHeaders(string $token): array
     {
@@ -96,7 +98,7 @@ class Auth
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, string>
      */
     public function getJwtHeaders(): array
     {
@@ -117,6 +119,7 @@ class Auth
      * @return string
      *
      * @throws UnexpectedValueException
+     * @throws JsonException
      */
     private function getToken(string $username, string $password): string
     {
@@ -138,7 +141,6 @@ class Auth
         // User + password doesn't exists on cache - so we need to make real login
         if (!array_key_exists($hash, $cache)) {
             // Get client
-            /** @noinspection MissingService */
             /** @var KernelBrowser $client */
             $client = $this->testContainer->get('test.client');
 
@@ -184,7 +186,7 @@ class Auth
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, string>
      */
     private function getContentTypeHeader(): array
     {
