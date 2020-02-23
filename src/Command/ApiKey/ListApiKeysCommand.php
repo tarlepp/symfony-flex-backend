@@ -107,7 +107,7 @@ class ListApiKeysCommand extends Command
      */
     private function getFormatterApiKey(): Closure
     {
-        $userGroupFormatter = fn (UserGroup $userGroup): string => sprintf(
+        $userGroupFormatter = static fn (UserGroup $userGroup): string => sprintf(
             '%s (%s)',
             $userGroup->getName(),
             $userGroup->getRole()->getId()

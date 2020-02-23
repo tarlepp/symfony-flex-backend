@@ -100,7 +100,7 @@ final class ResponseHandler implements ResponseHandlerInterface
             );
 
             $groups = array_merge([$entityName], $populate);
-            $filter = fn (string $groupName): bool => strncmp($groupName, 'Set.', 4) === 0;
+            $filter = static fn (string $groupName): bool => strncmp($groupName, 'Set.', 4) === 0;
 
             if (array_key_exists('populateOnly', $request->query->all())
                 || count(array_filter($groups, $filter)) > 0
@@ -199,13 +199,20 @@ final class ResponseHandler implements ResponseHandlerInterface
         // Set all associations to be populated
         if ($populateAll && count($populate) === 0) {
             $associations = $restResource->getAssociations();
-            $populate = array_map(fn (string $assocName): string => $entityName . '.' . $assocName, $associations);
+            $populate = array_map(
+                static fn (string $assocName): string => $entityName . '.' . $assocName,
+                $associations
+            );
         }
 
         return $populate;
     }
 
     /**
+     * Getter method response format with fallback to default formats;
+     *  - XML
+     *  - JSON
+     *
      * @param Request     $request
      * @param string|null $format
      *

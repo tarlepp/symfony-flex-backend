@@ -189,6 +189,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * Method to determine status code for specified exception.
+     *
      * @param Throwable $exception
      * @param bool      $isUser
      *

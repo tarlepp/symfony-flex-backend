@@ -27,6 +27,8 @@ class UuidHelper
     private static ?UuidFactory $cache = null;
 
     /**
+     * Getter method for UUID factory.
+     *
      * @return UuidFactory
      */
     public static function getFactory(): UuidFactory
@@ -52,13 +54,15 @@ class UuidHelper
             $output = UuidBinaryOrderedTimeType::NAME;
         } catch (InvalidUuidStringException $exception) {
             // ok, so now we know that value isn't uuid
-            (fn (Throwable $exception): Throwable => $exception)($exception);
+            (static fn (Throwable $exception): Throwable => $exception)($exception);
         }
 
         return $output;
     }
 
     /**
+     * Creates a UUID from the string standard representation
+     *
      * @param string $value
      *
      * @return UuidInterface
@@ -81,6 +85,8 @@ class UuidHelper
     }
 
     /**
+     * Method to init UUID factory cache.
+     *
      * @codeCoverageIgnore
      *
      * @return UuidFactory

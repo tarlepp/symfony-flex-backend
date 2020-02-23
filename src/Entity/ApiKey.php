@@ -262,7 +262,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
                     array_merge(
                         [RolesService::ROLE_API],
                         $this->userGroups
-                            ->map(fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
+                            ->map(static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
                             ->toArray()
                     )
                 )
