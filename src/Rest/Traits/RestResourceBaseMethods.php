@@ -33,16 +33,12 @@ trait RestResourceBaseMethods
     use RestResourceLifeCycles;
 
     /**
-     * Getter method for entity repository.
-     *
-     * @return BaseRepositoryInterface
+     * {@inheritdoc}
      */
     abstract public function getRepository(): BaseRepositoryInterface;
 
     /**
-     * Getter for used validator.
-     *
-     * @return ValidatorInterface
+     * {@inheritdoc}
      */
     abstract public function getValidator(): ValidatorInterface;
 
