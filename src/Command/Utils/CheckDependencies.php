@@ -125,7 +125,7 @@ class CheckDependencies extends Command
          *
          * @return string
          */
-        $closure = fn (SplFileInfo $fileInfo): string => $fileInfo->getPath();
+        $closure = static fn (SplFileInfo $fileInfo): string => $fileInfo->getPath();
 
         /** @var Traversable $iterator */
         $iterator = $finder->getIterator();

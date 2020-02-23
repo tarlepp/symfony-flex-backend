@@ -49,6 +49,8 @@ class LogLoginFailureResource extends RestResource
     }
 
     /**
+     * Method to reset specified user log login failures.
+     *
      * @param User $user
      */
     public function reset(User $user): void

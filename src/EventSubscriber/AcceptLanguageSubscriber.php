@@ -24,9 +24,6 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
     public const LOCALE_EN = 'en';
     public const LOCALE_FI = 'fi';
 
-    /**
-     * @var array<int, string>
-     */
     public const SUPPORTED_LOCALES = [
         self::LOCALE_EN,
         self::LOCALE_FI,

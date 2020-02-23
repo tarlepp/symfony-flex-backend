@@ -137,6 +137,6 @@ abstract class RestRequestMapper implements MapperInterface
      */
     private function getValidProperties(Request $request): array
     {
-        return array_filter(static::$properties, fn ($property) => $request->request->has($property));
+        return array_filter(static::$properties, static fn ($property) => $request->request->has($property));
     }
 }

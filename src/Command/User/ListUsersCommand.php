@@ -104,7 +104,7 @@ class ListUsersCommand extends Command
      */
     private function getFormatterUser(): Closure
     {
-        $userGroupFormatter = fn (UserGroup $userGroup): string => sprintf(
+        $userGroupFormatter = static fn (UserGroup $userGroup): string => sprintf(
             '%s (%s)',
             $userGroup->getName(),
             $userGroup->getRole()->getId()

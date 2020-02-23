@@ -55,7 +55,7 @@ class UserGroupTransformer implements DataTransformerInterface
                  *
                  * @return string
                  */
-                fn ($userGroup): string => $userGroup instanceof UserGroup ? $userGroup->getId() : $userGroup;
+                static fn ($userGroup): string => $userGroup instanceof UserGroup ? $userGroup->getId() : $userGroup;
 
             $output = array_values(array_map('\strval', array_map($iterator, $userGroups)));
         }

@@ -1812,22 +1812,23 @@
         },
         {
             "name": "mark-gerarts/auto-mapper-plus",
-            "version": "1.3.7",
+            "version": "1.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mark-gerarts/automapper-plus.git",
-                "reference": "88145c341c95277918636d21707626ab4f299230"
+                "reference": "94a286338cbfaa9bd9c7305121a19594fa529642"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus/zipball/88145c341c95277918636d21707626ab4f299230",
-                "reference": "88145c341c95277918636d21707626ab4f299230",
+                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus/zipball/94a286338cbfaa9bd9c7305121a19594fa529642",
+                "reference": "94a286338cbfaa9bd9c7305121a19594fa529642",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1.0"
             },
             "require-dev": {
+                "mark-gerarts/phpstan-automapper-plus": "^0.1.0",
                 "phpunit/phpunit": "^6.4",
                 "symfony/debug": "^3.3",
                 "symfony/var-dumper": "^3.3"
@@ -1854,7 +1855,7 @@
                 "converter",
                 "object-to-object"
             ],
-            "time": "2019-08-05T15:30:26+00:00"
+            "time": "2020-02-22T15:17:39+00:00"
         },
         {
             "name": "mark-gerarts/automapper-plus-bundle",
@@ -2817,16 +2818,16 @@
         },
         {
             "name": "ramsey/uuid",
-            "version": "3.9.2",
+            "version": "3.9.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ramsey/uuid.git",
-                "reference": "7779489a47d443f845271badbdcedfe4df8e06fb"
+                "reference": "7e1633a6964b48589b142d60542f9ed31bd37a92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ramsey/uuid/zipball/7779489a47d443f845271badbdcedfe4df8e06fb",
-                "reference": "7779489a47d443f845271badbdcedfe4df8e06fb",
+                "url": "https://api.github.com/repos/ramsey/uuid/zipball/7e1633a6964b48589b142d60542f9ed31bd37a92",
+                "reference": "7e1633a6964b48589b142d60542f9ed31bd37a92",
                 "shasum": ""
             },
             "require": {
@@ -2900,7 +2901,7 @@
                 "identifier",
                 "uuid"
             ],
-            "time": "2019-12-17T08:18:51+00:00"
+            "time": "2020-02-21T04:36:14+00:00"
         },
         {
             "name": "ramsey/uuid-doctrine",
