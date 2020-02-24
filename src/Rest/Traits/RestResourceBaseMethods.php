@@ -10,17 +10,13 @@ namespace App\Rest\Traits;
 
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
+use App\Exception\ValidatorException;
 use App\Repository\Interfaces\BaseRepositoryInterface;
-use App\Utils\JSON;
-use JsonException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use function get_class;
-use function str_replace;
 
 /**
  * Trait RestResourceBaseMethods
@@ -456,7 +452,7 @@ trait RestResourceBaseMethods
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {
-            $this->createValidatorException($errors, get_class($dto));
+            throw new ValidatorException(get_class($dto), $errors);
         }
     }
 
@@ -474,7 +470,7 @@ trait RestResourceBaseMethods
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {
-            $this->createValidatorException($errors, get_class($entity));
+            throw new ValidatorException(get_class($entity), $errors);
         }
     }
 
@@ -489,29 +485,6 @@ trait RestResourceBaseMethods
         $entityClass = $this->getRepository()->getEntityName();
 
         return new $entityClass();
-    }
-
-    /**
-     * @param ConstraintViolationListInterface $errors
-     * @param string                           $target
-     *
-     * @throws JsonException
-     */
-    private function createValidatorException(ConstraintViolationListInterface $errors, string $target): void
-    {
-        $output = [];
-
-        /** @var ConstraintViolationInterface $error */
-        foreach ($errors as $error) {
-            $output[] = [
-                'message' => $error->getMessage(),
-                'propertyPath' => $error->getPropertyPath(),
-                'target' => str_replace('\\', '.', $target),
-                'code' => $error->getCode(),
-            ];
-        }
-
-        throw new ValidatorException(JSON::encode($output));
     }
 
     /**

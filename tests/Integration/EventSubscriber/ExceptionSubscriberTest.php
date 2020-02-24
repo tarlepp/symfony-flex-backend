@@ -8,7 +8,9 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\EventSubscriber;
 
+use App\Entity\User;
 use App\EventSubscriber\ExceptionSubscriber;
+use App\Exception\ValidatorException;
 use App\Utils\JSON;
 use App\Utils\Tests\PhpUnitUtil;
 use BadMethodCallException;
@@ -30,6 +32,8 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Throwable;
 use function array_keys;
 
@@ -277,6 +281,7 @@ class ExceptionSubscriberTest extends KernelTestCase
 
     /**
      * @return Generator
+     * @throws JsonException
      */
     public function dataProviderTestResponseHasExpectedStatusCode(): Generator
     {
@@ -376,6 +381,28 @@ class ExceptionSubscriberTest extends KernelTestCase
             new DBALException('Error message', Response::HTTP_INTERNAL_SERVER_ERROR),
             'prod',
             'Database error.',
+        ];
+
+        $violation = new ConstraintViolation('some message', null, [], '', 'property', '', null, 'error-code');
+
+        yield [
+            Response::HTTP_BAD_REQUEST,
+            new ValidatorException(
+                User::class,
+                new ConstraintViolationList([$violation])
+            ),
+            'dev',
+            '[{"message":"some message","propertyPath":"property","target":"App.Entity.User","code":"error-code"}]',
+        ];
+
+        yield [
+            Response::HTTP_BAD_REQUEST,
+            new ValidatorException(
+                User::class,
+                new ConstraintViolationList([$violation])
+            ),
+            'prod',
+            '[{"message":"some message","propertyPath":"property","target":"App.Entity.User","code":"error-code"}]',
         ];
     }
 
