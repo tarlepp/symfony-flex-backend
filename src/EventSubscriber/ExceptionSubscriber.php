@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
+use App\Exception\ValidatorException;
 use App\Utils\JSON;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
@@ -208,6 +209,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $statusCode = $isUser ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
         } elseif ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();
+        } elseif ($exception instanceof ValidatorException) {
+            $statusCode = Response::HTTP_BAD_REQUEST;
         }
 
         return $statusCode;
