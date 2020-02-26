@@ -194,7 +194,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $message = 'Access denied.';
         } elseif ($exception instanceof DBALException || $exception instanceof ORMException) { // Database errors
             $message = 'Database error.';
-        } elseif ($this->isInternalException($exception)) {
+        } elseif (!$this->isClientExceptions($exception)) {
             $message = 'Internal server error.';
         }
 
@@ -223,7 +223,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $statusCode = $exception->getStatusCode();
         }
 
-        if ($statusCode === 0 && !$this->isInternalException($exception)) {
+        if ($statusCode === 0 && $this->isClientExceptions($exception)) {
             $statusCode = (int)$exception->getCode();
 
             if (method_exists($exception, 'getStatusCode')) {
@@ -241,7 +241,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
      *
      * @return bool
      */
-    private function isInternalException(Throwable $exception): bool
+    private function isClientExceptions(Throwable $exception): bool
     {
         $cacheKey = spl_object_hash($exception);
 
@@ -254,7 +254,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
                         ClientErrorInterface::class,
                     ]
                 )
-            ) === 0;
+            ) !== 0;
         }
 
         return self::$cache[$cacheKey];
