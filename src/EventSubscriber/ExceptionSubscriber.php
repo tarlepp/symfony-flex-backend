@@ -227,7 +227,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             }
         }
 
-        return $statusCode;
+        return $statusCode === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $statusCode;
     }
 
     /**
