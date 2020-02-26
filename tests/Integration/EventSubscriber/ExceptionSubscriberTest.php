@@ -406,6 +406,20 @@ class ExceptionSubscriberTest extends KernelTestCase
             'prod',
             'Internal server error.',
         ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new HttpException(0, 'message'),
+            'dev',
+            'message',
+        ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new HttpException(0, 'message'),
+            'prod',
+            'message',
+        ];
     }
 
     /**
@@ -477,6 +491,20 @@ class ExceptionSubscriberTest extends KernelTestCase
             new BaseValidatorException('', 400),
             false,
             'prod'
+        ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new HttpException(0, 'message'),
+            false,
+            'dev',
+        ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new HttpException(0, 'message'),
+            false,
+            'prod',
         ];
     }
 
@@ -583,6 +611,18 @@ class ExceptionSubscriberTest extends KernelTestCase
             'Internal server error.',
             new BaseValidatorException(User::class, 400),
             'prod',
+        ];
+
+        yield [
+            'message',
+            new HttpException(0, 'message'),
+            'prod',
+        ];
+
+        yield [
+            'message',
+            new HttpException(0, 'message'),
+            'dev',
         ];
     }
 }
