@@ -255,14 +255,4 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         return self::$cache[$cacheKey];
     }
-
-    /**
-     * @param Throwable $exception
-     *
-     * @return bool
-     */
-    private function isHttpExceptionInterface(Throwable $exception): bool
-    {
-        return count(array_intersect(class_implements($exception), [HttpExceptionInterface::class])) === 0;
-    }
 }
