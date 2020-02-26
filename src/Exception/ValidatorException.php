@@ -46,6 +46,14 @@ class ValidatorException extends BaseValidatorException implements ClientErrorIn
             ];
         }
 
-        parent::__construct(JSON::encode($output), 400);
+        parent::__construct(JSON::encode($output));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusCode(): int
+    {
+        return 400;
     }
 }
