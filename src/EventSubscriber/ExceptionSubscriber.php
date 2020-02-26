@@ -221,7 +221,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
         } elseif (!$this->isInternalException($exception)) {
             $statusCode = $exception instanceof HttpExceptionInterface
                 ? $exception->getStatusCode()
-                : $exception->getCode();
+                // Returns int but possibly as other type in descendants (for example as string in PDOException
+                : (int)$exception->getCode();
         }
 
         return $statusCode;
