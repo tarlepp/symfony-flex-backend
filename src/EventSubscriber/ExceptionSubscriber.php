@@ -28,6 +28,7 @@ use function class_implements;
 use function count;
 use function get_class;
 use function in_array;
+use function method_exists;
 
 /**
  * Class ExceptionSubscriber
@@ -219,10 +220,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
         } elseif ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();
         } elseif (!$this->isInternalException($exception)) {
-            $statusCode = $exception instanceof HttpExceptionInterface
-                ? $exception->getStatusCode()
-                // Returns int but possibly as other type in descendants (for example as string in PDOException
-                : (int)$exception->getCode();
+            $statusCode = (int)$exception->getCode();
+
+            if (method_exists($exception, 'getStatusCode')) {
+                $statusCode = $exception->getStatusCode();
+            }
         }
 
         return $statusCode;
@@ -252,5 +254,15 @@ class ExceptionSubscriber implements EventSubscriberInterface
         }
 
         return self::$cache[$cacheKey];
+    }
+
+    /**
+     * @param Throwable $exception
+     *
+     * @return bool
+     */
+    private function isHttpExceptionInterface(Throwable $exception): bool
+    {
+        return count(array_intersect(class_implements($exception), [HttpExceptionInterface::class])) === 0;
     }
 }
