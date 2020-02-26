@@ -485,6 +485,12 @@ class ExceptionSubscriberTest extends KernelTestCase
         ];
 
         yield [
+            'Internal server error.',
+            new Exception('test', 433),
+            'prod',
+        ];
+
+        yield [
             'test',
             new Exception('test'),
             'dev',
