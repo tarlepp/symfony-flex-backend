@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Exception\interfaces\ClientErrorInterface;
-use App\Exception\ValidatorException;
 use App\Utils\JSON;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
@@ -28,6 +27,7 @@ use Throwable;
 use function class_implements;
 use function count;
 use function get_class;
+use function in_array;
 
 /**
  * Class ExceptionSubscriber
@@ -40,6 +40,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private TokenStorageInterface $tokenStorage;
     private LoggerInterface $logger;
     private string $environment;
+    private static array $cache = [];
 
     /**
      * ExceptionSubscriber constructor.
@@ -182,14 +183,6 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $message = $exception->getMessage();
 
-        $allowedExceptions = array_intersect(
-            class_implements($exception),
-            [
-                HttpExceptionInterface::class,
-                ClientErrorInterface::class,
-            ]
-        );
-
         // Within AccessDeniedHttpException we need to hide actual real message from users
         if ($exception instanceof AccessDeniedHttpException
             || $exception instanceof AccessDeniedException
@@ -198,7 +191,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $message = 'Access denied.';
         } elseif ($exception instanceof DBALException || $exception instanceof ORMException) { // Database errors
             $message = 'Database error.';
-        } elseif (count($allowedExceptions) === 0) {
+        } elseif ($this->isInternalException($exception)) {
             $message = 'Internal server error.';
         }
 
@@ -225,10 +218,38 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $statusCode = $isUser ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
         } elseif ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();
-        } elseif ($exception instanceof ValidatorException) {
-            $statusCode = Response::HTTP_BAD_REQUEST;
+        } elseif (!$this->isInternalException($exception)) {
+            $statusCode = $exception instanceof HttpExceptionInterface
+                ? $exception->getStatusCode()
+                : $exception->getCode();
         }
 
         return $statusCode;
+    }
+
+    /**
+     * Method to check if exception is internal one.
+     *
+     * @param Throwable $exception
+     *
+     * @return bool
+     */
+    private function isInternalException(Throwable $exception): bool
+    {
+        $cacheKey = spl_object_hash($exception);
+
+        if (!in_array($cacheKey, self::$cache, true)) {
+            self::$cache[$cacheKey] = count(
+                array_intersect(
+                    class_implements($exception),
+                    [
+                        HttpExceptionInterface::class,
+                        ClientErrorInterface::class,
+                    ]
+                )
+            ) === 0;
+        }
+
+        return self::$cache[$cacheKey];
     }
 }

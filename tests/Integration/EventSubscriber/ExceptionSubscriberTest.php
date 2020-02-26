@@ -35,6 +35,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Throwable;
+use Symfony\Component\Validator\Exception\ValidatorException as BaseValidatorException;
 use function array_keys;
 
 /**
@@ -126,7 +127,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      *
      * @testdox Test that `Response` has status code `$status` and message `$message` with environment: '$environment'.
      */
-    public function testResponseHasExpectedStatusCode(
+    public function testThatResponseHasExpectedStatusCode(
         int $status,
         Exception $exception,
         string $environment,
@@ -387,22 +388,23 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         yield [
             Response::HTTP_BAD_REQUEST,
-            new ValidatorException(
-                User::class,
-                new ConstraintViolationList([$violation])
-            ),
+            new ValidatorException(User::class, new ConstraintViolationList([$violation])),
             'dev',
             '[{"message":"some message","propertyPath":"property","target":"App.Entity.User","code":"error-code"}]',
         ];
 
         yield [
             Response::HTTP_BAD_REQUEST,
-            new ValidatorException(
-                User::class,
-                new ConstraintViolationList([$violation])
-            ),
+            new ValidatorException(User::class, new ConstraintViolationList([$violation])),
             'prod',
             '[{"message":"some message","propertyPath":"property","target":"App.Entity.User","code":"error-code"}]',
+        ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new BaseValidatorException(User::class, 400),
+            'prod',
+            'Internal server error.',
         ];
     }
 
@@ -466,6 +468,13 @@ class ExceptionSubscriberTest extends KernelTestCase
         yield [
             Response::HTTP_BAD_REQUEST,
             new ValidatorException('', new ConstraintViolationList([$violation])),
+            false,
+            'prod'
+        ];
+
+        yield [
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            new BaseValidatorException('', 400),
             false,
             'prod'
         ];
@@ -560,19 +569,19 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         yield [
             '[{"message":"some message","propertyPath":"property","target":"App.Entity.User","code":"error-code"}]',
-            new ValidatorException(
-                User::class,
-                new ConstraintViolationList([$violation])
-            ),
+            new ValidatorException(User::class, new ConstraintViolationList([$violation])),
             'dev',
         ];
 
         yield [
             '[{"message":"some message","propertyPath":"property","target":"App.Entity.User","code":"error-code"}]',
-            new ValidatorException(
-                User::class,
-                new ConstraintViolationList([$violation])
-            ),
+            new ValidatorException(User::class, new ConstraintViolationList([$violation])),
+            'prod',
+        ];
+
+        yield [
+            'Internal server error.',
+            new BaseValidatorException(User::class, 400),
             'prod',
         ];
     }
