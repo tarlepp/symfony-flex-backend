@@ -184,11 +184,13 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $message = $exception->getMessage();
 
-        // Within AccessDeniedHttpException we need to hide actual real message from users
-        if ($exception instanceof AccessDeniedHttpException
-            || $exception instanceof AccessDeniedException
-            || $exception instanceof AuthenticationException
-        ) {
+        $accessDeniedClasses = [
+            AccessDeniedHttpException::class,
+            AccessDeniedException::class,
+            AuthenticationException::class,
+        ];
+
+        if (in_array(get_class($exception), $accessDeniedClasses, true)) {
             $message = 'Access denied.';
         } elseif ($exception instanceof DBALException || $exception instanceof ORMException) { // Database errors
             $message = 'Database error.';
@@ -210,7 +212,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private function determineStatusCode(Throwable $exception, bool $isUser): int
     {
         // Default status code is always 500
-        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+        $statusCode = 0;
 
         // HttpExceptionInterface is a special type of exception that holds status code and header details
         if ($exception instanceof AuthenticationException) {
@@ -219,7 +221,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $statusCode = $isUser ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
         } elseif ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();
-        } elseif (!$this->isInternalException($exception)) {
+        }
+
+        if ($statusCode === 0 && !$this->isInternalException($exception)) {
             $statusCode = (int)$exception->getCode();
 
             if (method_exists($exception, 'getStatusCode')) {
