@@ -18,6 +18,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -25,6 +26,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
 use function get_class;
+use function in_array;
 
 /**
  * Class ExceptionSubscriber
@@ -179,11 +181,18 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $message = $exception->getMessage();
 
+        $code = $exception instanceof HttpException ? $exception->getStatusCode() : $exception->getCode();
+
         // Within AccessDeniedHttpException we need to hide actual real message from users
-        if ($exception instanceof AccessDeniedHttpException || $exception instanceof AccessDeniedException) {
+        if ($exception instanceof AccessDeniedHttpException
+            || $exception instanceof AccessDeniedException
+            || $exception instanceof AuthenticationException
+        ) {
             $message = 'Access denied.';
         } elseif ($exception instanceof DBALException || $exception instanceof ORMException) { // Database errors
             $message = 'Database error.';
+        } elseif (!in_array($code, range(400, 499), true)) {
+            $message = 'Internal server error.';
         }
 
         return $message;

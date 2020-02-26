@@ -296,7 +296,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             Response::HTTP_INTERNAL_SERVER_ERROR,
             new Exception(Exception::class),
             'prod',
-            Exception::class,
+            'Internal server error.',
         ];
 
         yield [
@@ -310,7 +310,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             Response::HTTP_INTERNAL_SERVER_ERROR,
             new BadMethodCallException(BadMethodCallException::class),
             'prod',
-            BadMethodCallException::class,
+            'Internal server error.',
         ];
 
         yield [
@@ -324,7 +324,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             Response::HTTP_UNAUTHORIZED,
             new AuthenticationException(AuthenticationException::class),
             'prod',
-            AuthenticationException::class,
+            'Access denied.',
         ];
 
         yield [
@@ -429,6 +429,8 @@ class ExceptionSubscriberTest extends KernelTestCase
 
     /**
      * @return Generator
+     *
+     * @throws JsonException
      */
     public function dataProviderTestThatGetStatusCodeReturnsExpected(): Generator
     {
@@ -451,15 +453,33 @@ class ExceptionSubscriberTest extends KernelTestCase
         yield [Response::HTTP_NOT_FOUND, new NotFoundHttpException(), false, 'dev'];
 
         yield [Response::HTTP_NOT_FOUND, new NotFoundHttpException(), false, 'prod'];
+
+        $violation = new ConstraintViolation('some message', null, [], '', 'property', '', null, 'error-code');
+
+        yield [
+            Response::HTTP_BAD_REQUEST,
+            new ValidatorException('', new ConstraintViolationList([$violation])),
+            false,
+            'dev'
+        ];
+
+        yield [
+            Response::HTTP_BAD_REQUEST,
+            new ValidatorException('', new ConstraintViolationList([$violation])),
+            false,
+            'prod'
+        ];
     }
 
     /**
      * @return Generator
+     *
+     * @throws JsonException
      */
     public function dataProviderTestThatGetExceptionMessageReturnsExpected(): Generator
     {
         yield [
-            'test',
+            'Internal server error.',
             new Exception('test'),
             'prod',
         ];
@@ -516,6 +536,38 @@ class ExceptionSubscriberTest extends KernelTestCase
             'some message',
             new ORMException('some message'),
             'dev',
+        ];
+
+        yield [
+            'some message',
+            new NotFoundHttpException('some message'),
+            'prod',
+        ];
+
+        yield [
+            'some message',
+            new NotFoundHttpException('some message'),
+            'dev',
+        ];
+
+        $violation = new ConstraintViolation('some message', null, [], '', 'property', '', null, 'error-code');
+
+        yield [
+            '[{"message":"some message","propertyPath":"property","target":"App.Entity.User","code":"error-code"}]',
+            new ValidatorException(
+                User::class,
+                new ConstraintViolationList([$violation])
+            ),
+            'dev',
+        ];
+
+        yield [
+            '[{"message":"some message","propertyPath":"property","target":"App.Entity.User","code":"error-code"}]',
+            new ValidatorException(
+                User::class,
+                new ConstraintViolationList([$violation])
+            ),
+            'prod',
         ];
     }
 }

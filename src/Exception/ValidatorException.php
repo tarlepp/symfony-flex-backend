@@ -45,6 +45,6 @@ class ValidatorException extends BaseValidatorException
             ];
         }
 
-        parent::__construct(JSON::encode($output));
+        parent::__construct(JSON::encode($output), 400);
     }
 }
