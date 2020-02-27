@@ -17,7 +17,7 @@ namespace App\Doctrine\DBAL\Types;
 class EnumLocaleType extends EnumType
 {
     public const LOCALE_EN = 'en';
-    public const LOCALE_FI  = 'fi';
+    public const LOCALE_FI = 'fi';
 
     protected static string $name = 'EnumLocale';
     protected static array $values = [

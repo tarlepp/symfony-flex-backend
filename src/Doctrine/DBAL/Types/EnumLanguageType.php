@@ -17,7 +17,7 @@ namespace App\Doctrine\DBAL\Types;
 class EnumLanguageType extends EnumType
 {
     public const LANGUAGE_EN = 'en';
-    public const LANGUAGE_FI  = 'fi';
+    public const LANGUAGE_FI = 'fi';
 
     protected static string $name = 'EnumLanguage';
     protected static array $values = [
