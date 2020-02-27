@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Exception;
 
+use App\Exception\interfaces\ClientErrorInterface;
 use App\Utils\JSON;
 use JsonException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
@@ -21,7 +22,7 @@ use function str_replace;
  * @package App\Exception
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ValidatorException extends BaseValidatorException
+class ValidatorException extends BaseValidatorException implements ClientErrorInterface
 {
     /**
      * ValidatorException constructor.
@@ -46,5 +47,13 @@ class ValidatorException extends BaseValidatorException
         }
 
         parent::__construct(JSON::encode($output));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStatusCode(): int
+    {
+        return 400;
     }
 }
