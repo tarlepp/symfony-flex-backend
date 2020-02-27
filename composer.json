@@ -46,7 +46,7 @@
 		"symfony/form": "4.4.4",
 		"symfony/framework-bundle": "4.4.4",
 		"symfony/monolog-bundle": "3.5.0",
-		"symfony/orm-pack": "1.0.7",
+		"symfony/orm-pack": "1.0.8",
 		"symfony/process": "4.4.4",
 		"symfony/routing": "4.4.4",
 		"symfony/security-bundle": "4.4.4",
