@@ -18,6 +18,7 @@ use Throwable;
  *
  * @Route(
  *     path="/localization/timezone",
+ *     methods={"GET"}
  *  )
  *
  * @package App\Controller\Localization

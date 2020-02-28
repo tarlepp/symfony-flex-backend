@@ -17,6 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route(
  *     path="/localization/language",
+ *     methods={"GET"}
  *  )
  *
  * @package App\Controller\Localization
