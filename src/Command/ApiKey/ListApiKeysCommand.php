@@ -33,6 +33,10 @@ class ListApiKeysCommand extends Command
 {
     private ApiKeyResource $apiKeyResource;
     private RolesService $rolesService;
+
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private SymfonyStyle $io;
 
     /**
@@ -103,7 +107,7 @@ class ListApiKeysCommand extends Command
      */
     private function getFormatterApiKey(): Closure
     {
-        $userGroupFormatter = fn (UserGroup $userGroup): string => sprintf(
+        $userGroupFormatter = static fn (UserGroup $userGroup): string => sprintf(
             '%s (%s)',
             $userGroup->getName(),
             $userGroup->getRole()->getId()

@@ -13,7 +13,6 @@ use App\Tests\Integration\Validator\Constraints\src\EntityReference;
 use App\Validator\Constraints\EntityReferenceExists;
 use App\Validator\Constraints\EntityReferenceExistsValidator;
 use Doctrine\ORM\EntityNotFoundException;
-use Doctrine\ORM\Proxy\Proxy;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -76,6 +75,24 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $constraint->entityClass = $entityClass;
 
         (new EntityReferenceExistsValidator($logger))->validate($value, $constraint);
+    }
+
+    public function testThatValidateMethodThrowsUnexpectedValueExceptionWhenValueIsNotEntityInterface(): void
+    {
+        /**
+         * @var MockObject|LoggerInterface $logger
+         */
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+
+        $this->expectException(UnexpectedValueException::class);
+        $this->expectExceptionMessage(
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given'
+        );
+
+        $constraint = new EntityReferenceExists();
+        $constraint->entityClass = stdClass::class;
+
+        (new EntityReferenceExistsValidator($logger))->validate(new stdClass(), $constraint);
     }
 
     public function testThatContextAndLoggerMethodsAreNotCalledWithinHappyPath(): void
@@ -189,18 +206,6 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
             [new stdClass()],
             EntityInterface::class,
             'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given'
-        ];
-
-        yield [
-            $this->getMockForAbstractClass(Proxy::class, [], 'ProxyClass'),
-            Proxy::class,
-            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "ProxyClass" given',
-        ];
-
-        yield [
-            [$this->getMockForAbstractClass(Proxy::class, [], 'ProxyClass')],
-            Proxy::class,
-            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "ProxyClass" given',
         ];
     }
 }

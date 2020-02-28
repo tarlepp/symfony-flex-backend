@@ -78,7 +78,7 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
-    protected string $agent;
+    protected string $agent = '';
 
     /**
      * @var string
@@ -97,7 +97,7 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
-    protected string $httpHost;
+    protected string $httpHost = '';
 
     /**
      * @var string
@@ -116,7 +116,7 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
-    private string $clientIp;
+    private string $clientIp = '';
 
     /**
      * @return DateTimeImmutable
@@ -132,14 +132,6 @@ trait LogEntityTrait
     public function getDate(): DateTimeImmutable
     {
         return $this->date;
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getUser(): ?User
-    {
-        return $this->user;
     }
 
     /**

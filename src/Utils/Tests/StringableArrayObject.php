@@ -21,6 +21,8 @@ use function is_object;
 class StringableArrayObject extends ArrayObject
 {
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      *
      * @throws JsonException
@@ -36,7 +38,7 @@ class StringableArrayObject extends ArrayObject
          *
          * @return mixed
          */
-        $iterator = fn ($input) => is_object($input) ? (string)$input : $input;
+        $iterator = static fn ($input) => is_object($input) ? (string)$input : $input;
 
         return JSON::encode(array_map($iterator, $this->getArrayCopy()));
     }

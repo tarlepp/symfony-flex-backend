@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
+use App\Exception\interfaces\ClientErrorInterface;
 use App\Utils\JSON;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
@@ -23,7 +24,11 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
+use function class_implements;
+use function count;
 use function get_class;
+use function in_array;
+use function method_exists;
 
 /**
  * Class ExceptionSubscriber
@@ -36,6 +41,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private TokenStorageInterface $tokenStorage;
     private LoggerInterface $logger;
     private string $environment;
+    private static array $cache = [];
 
     /**
      * ExceptionSubscriber constructor.
@@ -178,17 +184,26 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $message = $exception->getMessage();
 
-        // Within AccessDeniedHttpException we need to hide actual real message from users
-        if ($exception instanceof AccessDeniedHttpException || $exception instanceof AccessDeniedException) {
+        $accessDeniedClasses = [
+            AccessDeniedHttpException::class,
+            AccessDeniedException::class,
+            AuthenticationException::class,
+        ];
+
+        if (in_array(get_class($exception), $accessDeniedClasses, true)) {
             $message = 'Access denied.';
         } elseif ($exception instanceof DBALException || $exception instanceof ORMException) { // Database errors
             $message = 'Database error.';
+        } elseif (!$this->isClientExceptions($exception)) {
+            $message = 'Internal server error.';
         }
 
         return $message;
     }
 
     /**
+     * Method to determine status code for specified exception.
+     *
      * @param Throwable $exception
      * @param bool      $isUser
      *
@@ -197,7 +212,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private function determineStatusCode(Throwable $exception, bool $isUser): int
     {
         // Default status code is always 500
-        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
+        $statusCode = 0;
 
         // HttpExceptionInterface is a special type of exception that holds status code and header details
         if ($exception instanceof AuthenticationException) {
@@ -208,6 +223,40 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $statusCode = $exception->getStatusCode();
         }
 
-        return $statusCode;
+        if ($statusCode === 0 && $this->isClientExceptions($exception)) {
+            $statusCode = (int)$exception->getCode();
+
+            if (method_exists($exception, 'getStatusCode')) {
+                $statusCode = $exception->getStatusCode();
+            }
+        }
+
+        return $statusCode === 0 ? Response::HTTP_INTERNAL_SERVER_ERROR : $statusCode;
+    }
+
+    /**
+     * Method to check if exception is internal one.
+     *
+     * @param Throwable $exception
+     *
+     * @return bool
+     */
+    private function isClientExceptions(Throwable $exception): bool
+    {
+        $cacheKey = spl_object_hash($exception);
+
+        if (!in_array($cacheKey, self::$cache, true)) {
+            self::$cache[$cacheKey] = count(
+                array_intersect(
+                    class_implements($exception),
+                    [
+                        HttpExceptionInterface::class,
+                        ClientErrorInterface::class,
+                    ]
+                )
+            ) !== 0;
+        }
+
+        return self::$cache[$cacheKey];
     }
 }

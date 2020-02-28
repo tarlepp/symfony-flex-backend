@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\DTO\Traits;
 
-use App\Entity\UserGroup as UserGroupEntity;
 use App\Entity\Interfaces\UserGroupAwareInterface;
+use App\Entity\UserGroup as UserGroupEntity;
 
 /**
  * Trait PatchUserGroups

@@ -50,7 +50,7 @@ class ControllerCollectionTest extends KernelTestCase
             }
 
             /**
-             * @inheritDoc
+             * {@inheritdoc}
              */
             public function getIterator(): ArrayObject
             {

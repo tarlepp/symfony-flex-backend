@@ -38,7 +38,7 @@ abstract class RestRequestMapper implements MapperInterface
     protected static array $properties = [];
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param array|object            $source
      * @param string                  $targetClass
@@ -48,13 +48,14 @@ abstract class RestRequestMapper implements MapperInterface
      */
     public function map($source, string $targetClass, array $context = []): RestDtoInterface
     {
+        /** @var class-string $targetClass */
         $destination = new $targetClass();
 
         return $this->mapToObject($source, $destination, $context);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param array|object            $source
      * @param object                  $destination
@@ -136,6 +137,6 @@ abstract class RestRequestMapper implements MapperInterface
      */
     private function getValidProperties(Request $request): array
     {
-        return array_filter(static::$properties, fn ($property) => $request->request->has($property));
+        return array_filter(static::$properties, static fn ($property) => $request->request->has($property));
     }
 }

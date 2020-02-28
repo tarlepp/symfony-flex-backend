@@ -31,7 +31,7 @@ class Kernel extends BaseKernel
     private const CONFIG_EXTS = '.{php,xml,yaml,yml}';
 
     /**
-     * @return iterable
+     * {@inheritdoc}
      */
     public function registerBundles(): iterable
     {
@@ -48,7 +48,7 @@ class Kernel extends BaseKernel
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getProjectDir(): string
     {
@@ -56,8 +56,7 @@ class Kernel extends BaseKernel
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param LoaderInterface  $loader
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -75,7 +74,7 @@ class Kernel extends BaseKernel
     }
 
     /**
-     * @param RouteCollectionBuilder $routes
+     * {@inheritdoc}
      *
      * @throws Throwable
      */

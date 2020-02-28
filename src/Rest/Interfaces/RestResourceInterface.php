@@ -11,7 +11,6 @@ namespace App\Rest\Interfaces;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
-use Doctrine\Common\Proxy\Proxy;
 use Doctrine\ORM\ORMException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
@@ -25,6 +24,13 @@ use UnexpectedValueException;
  */
 interface RestResourceInterface
 {
+    /**
+     * Getter method for serializer context.
+     *
+     * @return array
+     */
+    public function getSerializerContext(): array;
+
     /**
      * Getter method for entity repository.
      *
@@ -50,6 +56,10 @@ interface RestResourceInterface
 
     /**
      * Setter for used validator.
+     *
+     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
+     *
+     * @required
      *
      * @param ValidatorInterface $validator
      *
@@ -88,7 +98,7 @@ interface RestResourceInterface
      *
      * @param string $id The entity identifier.
      *
-     * @return Proxy|object|null
+     * @return object|null
      *
      * @throws ORMException
      */

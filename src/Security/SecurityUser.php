@@ -49,7 +49,7 @@ class SecurityUser implements SecurityUserInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      *
      * @return string[]
      */

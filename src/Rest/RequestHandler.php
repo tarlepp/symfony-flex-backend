@@ -65,7 +65,7 @@ final class RequestHandler
         try {
             $where = array_filter(
                 (array)JSON::decode((string)$request->get('where', '{}'), true),
-                fn ($value): bool => $value !== null
+                static fn ($value): bool => $value !== null
             );
         } catch (JsonException $error) {
             throw new HttpException(
@@ -214,8 +214,8 @@ final class RequestHandler
             $searchTerms = JSON::decode($search, true);
 
             self::checkSearchTerms($searchTerms);
-        } catch (JsonException | LogicException $error) {
-            (fn (Throwable $error) => null)($error);
+        } catch (JsonException | LogicException $exception) {
+            (static fn (Throwable $exception): string => (string)$exception)($exception);
 
             $searchTerms = null;
         }
@@ -254,7 +254,7 @@ final class RequestHandler
     private static function normalizeSearchTerms(array $searchTerms): array
     {
         // Normalize user input, note that this support array and string formats on value
-        array_walk($searchTerms, fn (array $terms): array => array_unique(array_values(array_filter($terms))));
+        array_walk($searchTerms, static fn (array $terms): array => array_unique(array_values(array_filter($terms))));
 
         return $searchTerms;
     }

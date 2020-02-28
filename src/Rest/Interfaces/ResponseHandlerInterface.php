@@ -11,6 +11,7 @@ namespace App\Rest\Interfaces;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -63,7 +64,7 @@ interface ResponseHandlerInterface
      *
      * @return Response
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     public function createResponse(
         Request $request,
@@ -79,7 +80,7 @@ interface ResponseHandlerInterface
      *
      * @param FormInterface $form
      *
-     * @throws \Symfony\Component\HttpKernel\Exception\HttpException
+     * @throws HttpException
      */
     public function handleFormError(FormInterface $form): void;
 }

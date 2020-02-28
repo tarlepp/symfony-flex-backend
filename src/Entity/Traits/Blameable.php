@@ -41,7 +41,7 @@ trait Blameable
      *      onDelete="SET NULL",
      *  )
      */
-    protected ?User $createdBy;
+    protected ?User $createdBy = null;
 
     /**
      * @var User|null
@@ -63,7 +63,7 @@ trait Blameable
      *      onDelete="SET NULL",
      *  )
      */
-    protected ?User $updatedBy;
+    protected ?User $updatedBy = null;
 
     /**
      * @return User|null

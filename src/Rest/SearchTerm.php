@@ -103,8 +103,9 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getTermIterator(array $columns, int $mode): Closure
     {
-        return fn (string $term): ?array =>
-            count($columns) ? array_map(self::getColumnIterator($term, $mode), $columns) : null;
+        return static fn (string $term): ?array => count($columns) > 0
+            ? array_map(self::getColumnIterator($term, $mode), $columns)
+            : null;
     }
 
     /**
@@ -124,8 +125,8 @@ final class SearchTerm implements SearchTermInterface
          *
          * @return string[]
          */
-        return fn (string $column): array => [
-            strpos($column, '.') === false ? 'entity.' . $column : $column, 'like', self::getTerm($mode, $term)
+        return static fn (string $column): array => [
+            strpos($column, '.') === false ? 'entity.' . $column : $column, 'like', self::getTerm($mode, $term),
         ];
     }
 
@@ -165,7 +166,7 @@ final class SearchTerm implements SearchTermInterface
         // Normalize column and search parameters
         return array_filter(
             array_map('trim', (is_array($column) ? $column : (array)$column)),
-            fn (string $value): bool => trim($value) !== ''
+            static fn (string $value): bool => trim($value) !== ''
         );
     }
 
@@ -181,7 +182,7 @@ final class SearchTerm implements SearchTermInterface
         return array_unique(
             array_filter(
                 array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
-                fn (string $value): bool => trim($value) !== ''
+                static fn (string $value): bool => trim($value) !== ''
             )
         );
     }

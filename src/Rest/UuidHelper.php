@@ -24,23 +24,16 @@ use Throwable;
  */
 class UuidHelper
 {
+    private static ?UuidFactory $cache = null;
+
     /**
+     * Getter method for UUID factory.
+     *
      * @return UuidFactory
      */
     public static function getFactory(): UuidFactory
     {
-        static $cache = null;
-
-        if ($cache === null) {
-            /** @var UuidFactory $factory */
-            $factory = clone Uuid::getFactory();
-            $codec = new OrderedTimeCodec($factory->getUuidBuilder());
-            $factory->setCodec($codec);
-
-            $cache = $factory;
-        }
-
-        return $cache;
+        return self::$cache ??= self::initCache();
     }
 
     /**
@@ -61,13 +54,15 @@ class UuidHelper
             $output = UuidBinaryOrderedTimeType::NAME;
         } catch (InvalidUuidStringException $exception) {
             // ok, so now we know that value isn't uuid
-            (fn (Throwable $exception): Throwable => $exception)($exception);
+            (static fn (Throwable $exception): Throwable => $exception)($exception);
         }
 
         return $output;
     }
 
     /**
+     * Creates a UUID from the string standard representation
+     *
      * @param string $value
      *
      * @return UuidInterface
@@ -87,5 +82,22 @@ class UuidHelper
     public static function getBytes(string $value): string
     {
         return self::fromString($value)->getBytes();
+    }
+
+    /**
+     * Method to init UUID factory cache.
+     *
+     * @codeCoverageIgnore
+     *
+     * @return UuidFactory
+     */
+    private static function initCache(): UuidFactory
+    {
+        /** @var UuidFactory $factory */
+        $factory = clone Uuid::getFactory();
+        $codec = new OrderedTimeCodec($factory->getUuidBuilder());
+        $factory->setCodec($codec);
+
+        return $factory;
     }
 }

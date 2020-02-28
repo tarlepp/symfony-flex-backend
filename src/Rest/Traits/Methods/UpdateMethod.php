@@ -42,7 +42,7 @@ trait UpdateMethod
         string $id,
         ?array $allowedHttpMethods = null
     ): Response {
-        $resource = $this->validateRestMethodAndGetResource($request, $allowedHttpMethods ?? ['PUT']);
+        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['PUT']);
 
         try {
             $data = $resource->update($id, $restDto, true);

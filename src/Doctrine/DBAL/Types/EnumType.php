@@ -40,7 +40,7 @@ abstract class EnumType extends Type
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
-        $iterator = fn (string $value): string => "'" . $value . "'";
+        $iterator = static fn (string $value): string => "'" . $value . "'";
 
         return 'ENUM(' . implode(', ', array_map($iterator, static::$values)) . ')';
     }

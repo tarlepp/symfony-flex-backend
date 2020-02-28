@@ -12,7 +12,6 @@ use App\Rest\Controller;
 use App\Rest\ResponseHandler;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 use UnexpectedValueException;
@@ -26,6 +25,10 @@ use UnexpectedValueException;
 interface ControllerInterface
 {
     /**
+     * Setter method for `ResponseHandler` service, this is called by Symfony DI.
+     *
+     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
+     *
      * @required
      *
      * @param ResponseHandler $responseHandler
@@ -35,6 +38,8 @@ interface ControllerInterface
     public function setResponseHandler(ResponseHandler $responseHandler);
 
     /**
+     * Getter method for `resource` service.
+     *
      * @return RestResourceInterface
      *
      * @throws UnexpectedValueException
@@ -42,6 +47,8 @@ interface ControllerInterface
     public function getResource(): RestResourceInterface;
 
     /**
+     * Getter method for `ResponseHandler` service.
+     *
      * @return ResponseHandlerInterface
      *
      * @throws UnexpectedValueException
@@ -73,13 +80,14 @@ interface ControllerInterface
     /**
      * Method to handle possible REST method trait exception.
      *
-     * @param Throwable $exception
+     * @param Throwable   $exception
+     * @param string|null $id
      *
      * @return Throwable
      *
-     * @throws HttpException
+     * @throws Throwable
      */
-    public function handleRestMethodException(Throwable $exception): Throwable;
+    public function handleRestMethodException(Throwable $exception, ?string $id = null): Throwable;
 
     /**
      * Method to process current criteria array.

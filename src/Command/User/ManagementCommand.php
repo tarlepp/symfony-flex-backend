@@ -10,6 +10,7 @@ namespace App\Command\User;
 
 use App\Command\Traits\ExecuteMultipleCommandTrait;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 
 /**
  * Class ManagementCommand
@@ -25,7 +26,7 @@ class ManagementCommand extends Command
     /**
      * ManagementCommand constructor.
      *
-     * @throws \Symfony\Component\Console\Exception\LogicException
+     * @throws LogicException
      */
     public function __construct()
     {

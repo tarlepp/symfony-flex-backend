@@ -46,9 +46,7 @@ class ControllerCollection implements Countable
     }
 
     /**
-     * @param string $className
-     *
-     * @throws InvalidArgumentException
+     * {@inheritdoc}
      */
     public function error(string $className): void
     {
@@ -61,9 +59,7 @@ class ControllerCollection implements Countable
     }
 
     /**
-     * @param string $className
-     *
-     * @return Closure
+     * {@inheritdoc}
      */
     public function filter(string $className): Closure
     {

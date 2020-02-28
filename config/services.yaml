@@ -26,6 +26,7 @@ services:
             $projectDir: '%kernel.project_dir%'
             $environment: '%kernel.environment%'
             $uuidRegex: '%app.uuid_regex%'
+            $locale: '%locale%'
     _instanceof:
         App\Rest\Interfaces\ControllerInterface:
             tags: [ 'app.rest.controller' ]
@@ -70,7 +71,3 @@ services:
     App\EventSubscriber\BlameableDecorator:
         class: App\EventSubscriber\BlameableDecorator
         decorates: stof_doctrine_extensions.listener.blameable
-        calls:
-            - method: setUserResource
-              arguments:
-                  - '@App\Resource\UserResource'

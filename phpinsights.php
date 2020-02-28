@@ -56,11 +56,18 @@ return [
         NunoMaduro\PhpInsights\Domain\Sniffs\ForbiddenSetterSniff::class,
         ObjectCalisthenics\Sniffs\Classes\ForbiddenPublicPropertySniff::class,
         ObjectCalisthenics\Sniffs\NamingConventions\NoSetterSniff::class,
+        SlevomatCodingStandard\Sniffs\Classes\SuperfluousExceptionNamingSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousInterfaceNamingSniff::class,
         SlevomatCodingStandard\Sniffs\Classes\SuperfluousTraitNamingSniff::class,
         SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff::class,
+        SlevomatCodingStandard\Sniffs\Commenting\InlineDocCommentDeclarationSniff::class,
+        SlevomatCodingStandard\Sniffs\Commenting\UselessInheritDocCommentSniff ::class,
+        SlevomatCodingStandard\Sniffs\Commenting\UselessFunctionDocCommentSniff::class,
         SlevomatCodingStandard\Sniffs\TypeHints\DisallowMixedTypeHintSniff::class,
         SlevomatCodingStandard\Sniffs\TypeHints\DisallowArrayTypeHintSyntaxSniff::class,
+        SlevomatCodingStandard\Sniffs\TypeHints\ParameterTypeHintSniff::class,
+        SlevomatCodingStandard\Sniffs\TypeHints\PropertyTypeHintSniff::class,
+        SlevomatCodingStandard\Sniffs\TypeHints\ReturnTypeHintSniff::class,
     ],
     'config' => [
         //  ExampleInsight::class => [
@@ -94,6 +101,41 @@ return [
         ],
         PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff::class => [
             'spacing' => 0,
+        ],
+        PhpCsFixer\Fixer\CastNotation\CastSpacesFixer::class => [
+            'space' => 'none', // possible values ['single', 'none'],
+        ],
+        PhpCsFixer\Fixer\Import\OrderedImportsFixer::class => [
+            'imports_order' => ['class', 'function', 'const'],
+            'sort_algorithm' => 'alpha', // possible values ['alpha', 'length', 'none']
+        ],
+        PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer::class => [
+            'space' => 'single', // possible values ['none', 'single']
+        ],
+        SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff::class => [
+            'exclude' => [
+                'src/ArgumentResolver/LoggedInUserValueResolver.php',
+                'src/ArgumentResolver/RestDtoValueResolver.php',
+                'src/AutoMapper/RestRequestMapper.php',
+                'src/Doctrine/DBAL/Types/EnumType.php',
+                'src/Rest/Traits/Methods/RestMethodProcessCriteria.php',
+                'src/Rest/Traits/RestResourceCount.php',
+                'src/Rest/Traits/RestResourceCreate.php',
+                'src/Rest/Traits/RestResourceDelete.php',
+                'src/Rest/Traits/RestResourceFind.php',
+                'src/Rest/Traits/RestResourceFindOne.php',
+                'src/Rest/Traits/RestResourceFindOneBy.php',
+                'src/Rest/Traits/RestResourceIds.php',
+                'src/Rest/Traits/RestResourcePatch.php',
+                'src/Rest/Traits/RestResourceSave.php',
+                'src/Rest/Traits/RestResourceUpdate.php',
+                'src/Security/Authenticator/ApiKeyAuthenticator.php',
+                'src/Security/Handler/TranslatedAuthenticationFailureHandler.php',
+                'src/Security/Provider/ApiKeyUserProvider.php',
+                'src/Security/Voter/IsUserHimselfVoter.php',
+                'src/Validator/Constraints/UniqueEmailValidator.php',
+                'src/Validator/Constraints/UniqueUsernameValidator.php',
+            ],
         ],
         SlevomatCodingStandard\Sniffs\Namespaces\UnusedUsesSniff::class => [
             'searchAnnotations' => true,

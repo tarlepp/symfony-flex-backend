@@ -2,6 +2,7 @@
 <psalm
     totallyTyped="false"
     allowPhpStormGenerics="true"
+    resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config file://./tools/psalm/vendor/vimeo/psalm/config.xsd"
@@ -17,8 +18,11 @@
     </projectFiles>
 
     <issueHandlers>
-        <PropertyNotSetInConstructor errorLevel="suppress" />
-        <InvalidStringClass errorLevel="suppress" />
-        <DeprecatedClass errorLevel="suppress" />
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <referencedProperty name="App\Entity\UserGroup::$role" />
+                <referencedProperty name="Symfony\Component\Validator\ConstraintValidator::$context" />
+            </errorLevel>
+        </PropertyNotSetInConstructor>
     </issueHandlers>
 </psalm>

@@ -1,4 +1,22 @@
 nelmio_api_doc:
+    documentation:
+        info:
+            title:
+            description:
+        securityDefinitions:
+            Bearer:
+                type: apiKey
+                description: 'Value: Bearer {JSON Web Token (JWT)}'
+                name: Authorization
+                in: header
+        security:
+            - Bearer: []
     areas:
-        path_patterns: # an array of regexps
-        - ^/[a-z]
+        default:
+            path_patterns:
+                - ^/api/doc
+                - ^/api/doc.json
+                - ^/(auth|healthz|version|profile|$)
+        internal:
+            path_patterns: # an array of regexps
+                - ^/[a-z]

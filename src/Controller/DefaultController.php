@@ -34,7 +34,8 @@ class DefaultController
      * Default application response when requested root.
      *
      * @Route(
-     *     path="",
+     *      path="",
+     *      methods={"GET"}
      *  )
      *
      * @return Response

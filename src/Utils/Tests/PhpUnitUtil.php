@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
+use App\Entity\Role;
 use DateTime;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Type;
@@ -25,6 +26,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
+use function array_key_exists;
 use function count;
 use function explode;
 use function get_class;
@@ -47,6 +49,16 @@ class PhpUnitUtil
     public const TYPE_BOOL = 'bool';
     public const TYPE_BOOLEAN = 'boolean';
     public const TYPE_CUSTOM_CLASS = 'CustomClass';
+
+    /**
+     * @var array<string, mixed>
+     */
+    private static array $validValueCache = [];
+
+    /**
+     * @var array<string, mixed>
+     */
+    private static array $invalidValueCache = [];
 
     /**
      * @codeCoverageIgnore
@@ -149,7 +161,6 @@ class PhpUnitUtil
     {
         $clazz = new ReflectionClass(get_class($object));
 
-        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $property = $clazz->getProperty($property);
         $property->setAccessible(true);
 
@@ -216,7 +227,6 @@ class PhpUnitUtil
     {
         $clazz = new ReflectionClass(get_class($object));
 
-        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $property = $clazz->getProperty($property);
         $property->setAccessible(true);
         $property->setValue($object, $value);
@@ -234,59 +244,71 @@ class PhpUnitUtil
      */
     public static function getValidValueForType(string $type, ?array $meta = null)
     {
-        $meta = $meta ?? [];
+        $cacheKey = $type . serialize($meta);
 
-        $class = stdClass::class;
+        if (!array_key_exists($cacheKey, self::$validValueCache)) {
+            $meta ??= [];
 
-        if (substr_count($type, '\\') > 1 && strpos($type, '|') === false) {
-            /** @var class-string $class */
-            $class = count($meta) ? $meta['targetEntity'] : $type;
+            $class = stdClass::class;
+            $params = [null];
 
-            $type = self::TYPE_CUSTOM_CLASS;
-        }
+            if (substr_count($type, '\\') > 1 && strpos($type, '|') === false) {
+                /** @var class-string $class */
+                $class = count($meta) ? $meta['targetEntity'] : $type;
 
-        if (strpos($type, '|') !== false) {
-            $output = self::getValidValueForType(explode('|', $type)[0], $meta);
-        } elseif (strpos($type, '[]') !== false) {
-            /** @var array<mixed, object> $output */
-            $output = self::getValidValueForType(self::TYPE_ARRAY, $meta);
-        } else {
-            switch ($type) {
-                case self::TYPE_CUSTOM_CLASS:
-                    /** @psalm-suppress MixedMethodCall */
-                    $output = new $class();
-                    break;
-                case self::TYPE_INT:
-                case self::TYPE_INTEGER:
-                    $output = 666;
-                    break;
-                case DateTime::class:
-                    $output = new DateTime();
-                    break;
-                case DateTimeImmutable::class:
-                    $output = new DateTimeImmutable();
-                    break;
-                case self::TYPE_STRING:
-                    $output = 'Some text here';
-                    break;
-                case self::TYPE_ARRAY:
-                    $output = ['some', self::TYPE_ARRAY, 'here'];
-                    break;
-                case self::TYPE_BOOL:
-                case self::TYPE_BOOLEAN:
-                    $output = true;
-                    break;
-                default:
-                    $message = sprintf(
-                        "Cannot create valid value for type '%s'.",
-                        $type
-                    );
+                $type = self::TYPE_CUSTOM_CLASS;
 
-                    throw new LogicException($message);
+                $cleanClass = $class[0] === '\\' ? ltrim($class, '\\') : $class;
+
+                if ($cleanClass === Role::class) {
+                    $params = ['Some Role'];
+                }
             }
+
+            if (strpos($type, '|') !== false) {
+                $output = self::getValidValueForType(explode('|', $type)[0], $meta);
+            } elseif (strpos($type, '[]') !== false) {
+                /** @var array<mixed, object> $output */
+                $output = self::getValidValueForType(self::TYPE_ARRAY, $meta);
+            } else {
+                switch ($type) {
+                    case self::TYPE_CUSTOM_CLASS:
+                        $output = new $class(...$params);
+                        break;
+                    case self::TYPE_INT:
+                    case self::TYPE_INTEGER:
+                        $output = 666;
+                        break;
+                    case DateTime::class:
+                        $output = new DateTime();
+                        break;
+                    case DateTimeImmutable::class:
+                        $output = new DateTimeImmutable();
+                        break;
+                    case self::TYPE_STRING:
+                        $output = 'Some text here';
+                        break;
+                    case self::TYPE_ARRAY:
+                        $output = ['some', self::TYPE_ARRAY, 'here'];
+                        break;
+                    case self::TYPE_BOOL:
+                    case self::TYPE_BOOLEAN:
+                        $output = true;
+                        break;
+                    default:
+                        $message = sprintf(
+                            "Cannot create valid value for type '%s'.",
+                            $type
+                        );
+
+                        throw new LogicException($message);
+                }
+            }
+
+            self::$validValueCache[$cacheKey] = $output;
         }
 
-        return $output;
+        return self::$validValueCache[$cacheKey];
     }
 
     /**
@@ -304,37 +326,41 @@ class PhpUnitUtil
             $type = self::TYPE_CUSTOM_CLASS;
         }
 
-        if (strpos($type, '|') !== false) {
-            $output = self::getInvalidValueForType(explode('|', $type)[0]);
-        } elseif (strpos($type, '[]') !== false) {
-            $output = self::getInvalidValueForType(self::TYPE_ARRAY);
-        } else {
-            switch ($type) {
-                case stdClass::class:
-                case DateTimeImmutable::class:
-                    $output = new DateTime();
-                    break;
-                case self::TYPE_CUSTOM_CLASS:
-                case self::TYPE_INT:
-                case self::TYPE_INTEGER:
-                case DateTime::class:
-                case self::TYPE_STRING:
-                case self::TYPE_ARRAY:
-                case self::TYPE_BOOL:
-                case self::TYPE_BOOLEAN:
-                case 'enumLogLogin':
-                    $output = new stdClass();
-                    break;
-                default:
-                    $message = sprintf(
-                        "Cannot create invalid value for type '%s'.",
-                        $type
-                    );
+        if (!array_key_exists($type, self::$invalidValueCache)) {
+            if (strpos($type, '|') !== false) {
+                $output = self::getInvalidValueForType(explode('|', $type)[0]);
+            } elseif (strpos($type, '[]') !== false) {
+                $output = self::getInvalidValueForType(self::TYPE_ARRAY);
+            } else {
+                switch ($type) {
+                    case stdClass::class:
+                    case DateTimeImmutable::class:
+                        $output = new DateTime();
+                        break;
+                    case self::TYPE_CUSTOM_CLASS:
+                    case self::TYPE_INT:
+                    case self::TYPE_INTEGER:
+                    case DateTime::class:
+                    case self::TYPE_STRING:
+                    case self::TYPE_ARRAY:
+                    case self::TYPE_BOOL:
+                    case self::TYPE_BOOLEAN:
+                    case 'enumLogLogin':
+                        $output = new stdClass();
+                        break;
+                    default:
+                        $message = sprintf(
+                            "Cannot create invalid value for type '%s'.",
+                            $type
+                        );
 
-                    throw new LogicException($message);
+                        throw new LogicException($message);
+                }
             }
+
+            self::$invalidValueCache[$type] = $output;
         }
 
-        return $output;
+        return self::$invalidValueCache[$type];
     }
 }

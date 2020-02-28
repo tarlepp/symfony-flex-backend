@@ -35,6 +35,9 @@ class CreateDateDimensionEntitiesCommand extends Command
     private const YEAR_MIN = 1970;
     private const YEAR_MAX = 2047; // This should be the year when I'm officially retired
 
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private SymfonyStyle $io;
     private DateDimensionRepository $repository;
 

@@ -120,7 +120,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     private function getInvalidValues(array $entities): array
     {
         return array_map(
-            fn (EntityInterface $entity): string => $entity->getId(),
+            static fn (EntityInterface $entity): string => $entity->getId(),
             array_filter($entities, $this->getFilterClosure())
         );
     }

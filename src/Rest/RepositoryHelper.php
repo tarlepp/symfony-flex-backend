@@ -368,12 +368,13 @@ class RepositoryHelper
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
             } catch (InvalidUuidStringException $exception) {
-                (fn (Throwable $exception): Throwable => $exception)($exception);
+                (static fn (Throwable $exception): Throwable => $exception)($exception);
             }
 
             $parameters[] = array_map(
-                fn (string $value): Literal =>
-                    $queryBuilder->expr()->literal(is_numeric($value) ? (int)$value : $value),
+                static fn (string $value): Literal => $queryBuilder->expr()->literal(is_numeric($value)
+                    ? (int)$value
+                    : $value),
                 $value
             );
         }

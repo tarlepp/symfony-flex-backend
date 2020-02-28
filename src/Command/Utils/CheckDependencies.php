@@ -46,15 +46,16 @@ class CheckDependencies extends Command
     // Traits
     use SymfonyStyleTrait;
 
-    private string $projectDir;
+    /**
+     * @psalm-suppress PropertyNotSetInConstructor
+     */
     private SymfonyStyle $io;
+    private string $projectDir;
 
     /**
      * CheckVendorDependencies constructor.
      *
      * @param string $projectDir
-     *
-     * @throws \Symfony\Component\Console\Exception\LogicException
      */
     public function __construct(string $projectDir)
     {
@@ -73,13 +74,6 @@ class CheckDependencies extends Command
      * @param OutputInterface $output
      *
      * @return int
-     *
-     * @throws InvalidArgumentException
-     * @throws LogicException
-     * @throws RuntimeException
-     * @throws \Symfony\Component\Console\Exception\InvalidArgumentException
-     * @throws \Symfony\Component\Process\Exception\RuntimeException
-     * @throws \Symfony\Component\Process\Exception\LogicException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -131,7 +125,7 @@ class CheckDependencies extends Command
          *
          * @return string
          */
-        $closure = fn (SplFileInfo $fileInfo): string => $fileInfo->getPath();
+        $closure = static fn (SplFileInfo $fileInfo): string => $fileInfo->getPath();
 
         /** @var Traversable $iterator */
         $iterator = $finder->getIterator();
@@ -150,10 +144,6 @@ class CheckDependencies extends Command
      * @param string[] $directories
      *
      * @return array<int, array<int, string>|TableSeparator>
-     *
-     * @throws RuntimeException
-     * @throws \Symfony\Component\Process\Exception\RuntimeException
-     * @throws \Symfony\Component\Process\Exception\LogicException
      */
     private function determineTableRows(array $directories): array
     {
@@ -208,10 +198,6 @@ class CheckDependencies extends Command
      * @param string $path
      *
      * @return stdClass[]
-     *
-     * @throws RuntimeException
-     * @throws \Symfony\Component\Process\Exception\LogicException
-     * @throws \Symfony\Component\Process\Exception\RuntimeException
      */
     private function processNamespacePath(string $path): array
     {
@@ -238,7 +224,7 @@ class CheckDependencies extends Command
         }
 
         /** @var stdClass $decoded */
-        $decoded = json_decode($process->getOutput(), false);
+        $decoded = json_decode($process->getOutput(), false, 512, JSON_THROW_ON_ERROR);
 
         /** @var array<int, stdClass>|string|null $installed */
         $installed = $decoded->installed;

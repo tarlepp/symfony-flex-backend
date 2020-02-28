@@ -50,7 +50,7 @@ trait LogRequestProcessRequestTrait
      *      type="array",
      *  )
      */
-    private array $headers;
+    private array $headers = [];
 
     /**
      * @var string
@@ -67,7 +67,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private string $method;
+    private string $method = '';
 
     /**
      * @var string
@@ -84,7 +84,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private string $scheme;
+    private string $scheme = '';
 
     /**
      * @var string
@@ -101,7 +101,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private string $basePath;
+    private string $basePath = '';
 
     /**
      * @var string
@@ -118,7 +118,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private string $script;
+    private string $script = '';
 
     /**
      * @var string
@@ -135,7 +135,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private string $path;
+    private string $path = '';
 
     /**
      * @var string
@@ -151,7 +151,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private string $queryString;
+    private string $queryString = '';
 
     /**
      * @var string
@@ -167,7 +167,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private string $uri;
+    private string $uri = '';
 
     /**
      * @var string
@@ -184,7 +184,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private string $controller;
+    private string $controller = '';
 
     /**
      * @var string
@@ -201,7 +201,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private string $contentType;
+    private string $contentType = '';
 
     /**
      * @var string
@@ -218,7 +218,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private string $contentTypeShort;
+    private string $contentTypeShort = '';
 
     /**
      * @var bool
@@ -234,7 +234,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=false,
      *  )
      */
-    private bool $xmlHttpRequest;
+    private bool $xmlHttpRequest = false;
 
     /**
      * @var string
@@ -251,7 +251,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private string $action;
+    private string $action = '';
 
     /**
      * @var string
@@ -267,7 +267,7 @@ trait LogRequestProcessRequestTrait
      *      nullable=true,
      *  )
      */
-    private string $content;
+    private string $content = '';
 
     /**
      * @var mixed[]
@@ -282,7 +282,7 @@ trait LogRequestProcessRequestTrait
      *      type="array",
      *  )
      */
-    private array $parameters;
+    private array $parameters = [];
 
     /**
      * @return string
@@ -512,7 +512,7 @@ trait LogRequestProcessRequestTrait
                 /** @var array<string, mixed> $output */
                 $output = JSON::decode($rawContent, true);
             } catch (JsonException $error) {
-                (fn (Throwable $error): Throwable => $error)($error);
+                (static fn (Throwable $error): Throwable => $error)($error);
 
                 // Oh noes content isn't JSON so just parse it
                 $output = [];
