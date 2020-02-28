@@ -57,8 +57,7 @@ class TimeZoneController
      *                  property="timezone",
      *                  type="string",
      *                  example="Europe",
-     *                  description="
-One of: Africa, America, Antarctica, Arctic, Asia, Atlantic, Australia, Europe, Indian, Pacific or UTC."
+     *                  description="Africa, America, Antarctica, Arctic, Asia, Atlantic, Australia, Europe, Indian, Pacific or UTC."
      *              ),
      *              @SWG\Property(
      *                  property="identier",
