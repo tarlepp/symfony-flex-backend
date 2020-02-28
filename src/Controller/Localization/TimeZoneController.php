@@ -53,7 +53,6 @@ class TimeZoneController
      *          type="array",
      *          @SWG\Items(
      *              type="object",
-     *
      *              @SWG\Property(
      *                  property="timezone",
      *                  type="string",
