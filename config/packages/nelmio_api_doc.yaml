@@ -1,8 +1,8 @@
 nelmio_api_doc:
     documentation:
         info:
-            title:
-            description:
+            title: Symfony Flex Backend
+            description: API documentation of this application.
         securityDefinitions:
             Bearer:
                 type: apiKey
@@ -16,7 +16,7 @@ nelmio_api_doc:
             path_patterns:
                 - ^/api/doc
                 - ^/api/doc.json
-                - ^/(auth|healthz|version|profile|$)
+                - ^/(auth|healthz|version|profile|localization)
         internal:
             path_patterns: # an array of regexps
                 - ^/[a-z]
