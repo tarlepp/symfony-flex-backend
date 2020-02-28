@@ -21,6 +21,8 @@ use function is_object;
 class StringableArrayObject extends ArrayObject
 {
     /**
+     * @codeCoverageIgnore
+     *
      * @return string
      *
      * @throws JsonException
