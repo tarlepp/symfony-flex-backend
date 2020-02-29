@@ -22,7 +22,7 @@ itself relies to PHPUnit library.
 * [PHPUnit](https://phpunit.de/)
 
 Note that this project does not use simple phpunit as does Symfony by default.
-So don't try to run `./bin/phpunit` command, because that does not exists.
+So don't try to run `./bin/phpunit` command, because that does not exist.
 
 ### Commands to run tests
 

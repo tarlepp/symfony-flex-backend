@@ -51,7 +51,7 @@ class ControllerCollection implements Countable
     public function error(string $className): void
     {
         $message = sprintf(
-            'REST controller \'%s\' does not exists',
+            'REST controller \'%s\' does not exist',
             $className
         );
 

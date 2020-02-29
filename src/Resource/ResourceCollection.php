@@ -61,7 +61,7 @@ class ResourceCollection implements Countable
 
         if ($current === null) {
             $message = sprintf(
-                'Resource class does not exists for entity \'%s\'',
+                'Resource class does not exist for entity \'%s\'',
                 $className
             );
 
@@ -97,7 +97,7 @@ class ResourceCollection implements Countable
     public function error(string $className): void
     {
         $message = sprintf(
-            'Resource \'%s\' does not exists',
+            'Resource \'%s\' does not exist',
             $className
         );
 
