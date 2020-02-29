@@ -19,5 +19,5 @@ framework:
         #pools:
             #my.dedicated.cache: null
         pools:
-            app.version.cache:
+            app.cache.apcu:
                 adapter: cache.adapter.apcu
