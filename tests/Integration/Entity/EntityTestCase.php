@@ -71,7 +71,7 @@ abstract class EntityTestCase extends KernelTestCase
     public function testThatGetUuidMethodReturnsExpected(): void
     {
         if (!method_exists($this->entity, 'getUuid')) {
-            static::markTestSkipped('Cannot test because `getUuid` method does not exists.');
+            static::markTestSkipped('Cannot test because `getUuid` method does not exist.');
         }
 
         static::assertSame($this->entity->getUuid()->toString(), $this->entity->getId());

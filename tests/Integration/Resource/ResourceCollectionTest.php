@@ -51,7 +51,7 @@ class ResourceCollectionTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Resource \'FooBar\' does not exists');
+        $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
 
         (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))->get('FooBar');
     }
@@ -59,7 +59,7 @@ class ResourceCollectionTest extends KernelTestCase
     public function testThatLoggerIsCalledIfGetMethodGetIteratorThrowsAnException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Resource \'FooBar\' does not exists');
+        $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
 
         /** @var MockObject|LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -77,7 +77,7 @@ class ResourceCollectionTest extends KernelTestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Resource class does not exists for entity \'FooBar\'');
+        $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
 
         (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))->getEntityResource('FooBar');
     }
@@ -85,7 +85,7 @@ class ResourceCollectionTest extends KernelTestCase
     public function testThatLoggerIsCalledIfGetEntityResourceMethodGetIteratorThrowsAnException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Resource class does not exists for entity \'FooBar\'');
+        $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
 
         /** @var MockObject|LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
