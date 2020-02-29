@@ -28,18 +28,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LocaleController
 {
-    private Localization $localization;
-
-    /**
-     * TimezoneController constructor.
-     *
-     * @param Localization $localization
-     */
-    public function __construct(Localization $localization)
-    {
-        $this->localization = $localization;
-    }
-
     /**
      * Endpoint action to get supported locales. This is for use to choose what
      * locale your frontend application can use within its number, time, date,
@@ -59,6 +47,6 @@ class LocaleController
      */
     public function __invoke(): JsonResponse
     {
-        return new JsonResponse($this->localization->getLocales());
+        return new JsonResponse(Localization::getLocales());
     }
 }

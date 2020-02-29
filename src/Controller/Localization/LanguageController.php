@@ -28,18 +28,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class LanguageController
 {
-    private Localization $localization;
-
-    /**
-     * TimezoneController constructor.
-     *
-     * @param Localization $localization
-     */
-    public function __construct(Localization $localization)
-    {
-        $this->localization = $localization;
-    }
-
     /**
      * Endpoint action to get supported languages. This is for use to choose
      * what language your frontend application can use within its translations.
@@ -58,6 +46,6 @@ class LanguageController
      */
     public function __invoke(): JsonResponse
     {
-        return new JsonResponse($this->localization->getLanguages());
+        return new JsonResponse(Localization::getLanguages());
     }
 }

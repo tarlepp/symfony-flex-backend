@@ -29,18 +29,6 @@ use Throwable;
  */
 class TimeZoneController
 {
-    private Localization $localization;
-
-    /**
-     * TimezoneController constructor.
-     *
-     * @param Localization $localization
-     */
-    public function __construct(Localization $localization)
-    {
-        $this->localization = $localization;
-    }
-
     /**
      * Endpoint action to get list of supported timezones. This is for use to
      * choose what timezone your frontend application can use within its date,
@@ -87,6 +75,6 @@ class TimeZoneController
      */
     public function __invoke(): JsonResponse
     {
-        return new JsonResponse($this->localization->getTimeZones());
+        return new JsonResponse(Localization::getTimeZones());
     }
 }
