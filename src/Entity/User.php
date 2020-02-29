@@ -182,6 +182,10 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User.language",
      *  })
      *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Choice(callback={"App\Service\Localization", "getLanguages"})
+     *
      * @ORM\Column(
      *      name="language",
      *      type="EnumLanguage",
@@ -201,6 +205,10 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User.locale",
      *  })
      *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Choice(callback={"App\Service\Localization", "getLocales"})
+     *
      * @ORM\Column(
      *      name="locale",
      *      type="EnumLocale",
@@ -219,6 +227,10 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User",
      *      "User.locale",
      *  })
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Choice(callback={"App\Service\Localization", "getTimeZoneIdentifiers"})
      *
      * @ORM\Column(
      *      name="timezone",
