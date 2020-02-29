@@ -47,7 +47,7 @@
 		"symfony/framework-bundle": "4.4.5",
 		"symfony/monolog-bundle": "3.5.0",
 		"symfony/orm-pack": "1.0.8",
-		"symfony/process": "4.4.5",
+		"symfony/process": "5.0.5",
 		"symfony/routing": "4.4.5",
 		"symfony/security-bundle": "4.4.5",
 		"symfony/serializer-pack": "1.0.2",
