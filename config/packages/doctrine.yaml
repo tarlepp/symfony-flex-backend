@@ -9,6 +9,8 @@ doctrine:
         types:
             datetime: App\Doctrine\DBAL\Types\UTCDateTimeType
             datetimetz: App\Doctrine\DBAL\Types\UTCDateTimeType
+            EnumLanguage: App\Doctrine\DBAL\Types\EnumLanguageType
+            EnumLocale: App\Doctrine\DBAL\Types\EnumLocaleType
             EnumLogLogin: App\Doctrine\DBAL\Types\EnumLogLoginType
     orm:
         auto_generate_proxy_classes: true

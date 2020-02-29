@@ -31,13 +31,13 @@ class Version
      * Version constructor.
      *
      * @param string          $projectDir
-     * @param CacheInterface  $appVersionCache
+     * @param CacheInterface  $appCacheApcu
      * @param LoggerInterface $logger
      */
-    public function __construct(string $projectDir, CacheInterface $appVersionCache, LoggerInterface $logger)
+    public function __construct(string $projectDir, CacheInterface $appCacheApcu, LoggerInterface $logger)
     {
         $this->projectDir = $projectDir;
-        $this->cache = $appVersionCache;
+        $this->cache = $appCacheApcu;
         $this->logger = $logger;
     }
 
