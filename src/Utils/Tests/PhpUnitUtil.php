@@ -192,6 +192,8 @@ class PhpUnitUtil
                 break;
             case 'text':
             case self::TYPE_STRING:
+            case 'EnumLanguage':
+            case 'EnumLocale':
             case 'EnumLogLogin':
                 $output = self::TYPE_STRING;
                 break;
@@ -345,6 +347,8 @@ class PhpUnitUtil
                     case self::TYPE_ARRAY:
                     case self::TYPE_BOOL:
                     case self::TYPE_BOOLEAN:
+                    case 'enumLanguage':
+                    case 'enumLocale':
                     case 'enumLogLogin':
                         $output = new stdClass();
                         break;
