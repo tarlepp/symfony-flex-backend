@@ -31,7 +31,7 @@ class LanguageController
     private Localization $localization;
 
     /**
-     * TimezoneController constructor.
+     * LanguageController constructor.
      *
      * @param Localization $localization
      */

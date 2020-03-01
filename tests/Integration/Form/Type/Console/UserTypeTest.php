@@ -14,6 +14,7 @@ use App\Entity\UserGroup;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserGroupResource;
+use App\Service\Localization;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
@@ -32,6 +33,11 @@ class UserTypeTest extends TypeTestCase
      * @var MockObject|UserGroupResource
      */
     private MockObject $mockUserGroupResource;
+
+    /**
+     * @var MockObject|Localization
+     */
+    private MockObject $mockLocalization;
 
     public function testSubmitValidData(): void
     {
@@ -53,17 +59,48 @@ class UserTypeTest extends TypeTestCase
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);
 
+        $this->mockLocalization
+            ->expects(static::once())
+            ->method('getLanguages')
+            ->willReturn(['en', 'fi']);
+
+        $this->mockLocalization
+            ->expects(static::once())
+            ->method('getLocales')
+            ->willReturn(['en', 'fi']);
+
+        $this->mockLocalization
+            ->expects(static::once())
+            ->method('getFormattedTimezones')
+            ->willReturn([
+                [
+                    'timezone' => 'Europe',
+                    'identifier' => 'Europe/Helsinki',
+                    'offset' => 'GMT+2:00',
+                    'value' => 'Europe/Helsinki'
+                ],
+                [
+                    'timezone' => 'Europe',
+                    'identifier' => 'Europe/Stockholm',
+                    'offset' => 'GMT+1:00',
+                    'value' => 'Europe/Stockholm'
+                ],
+            ]);
+
         // Create form
         $form = $this->factory->create(UserType::class);
 
         // Create new DTO object
-        $dto = new UserDto();
-        $dto->setUsername('username');
-        $dto->setFirstName('John');
-        $dto->setLastName('Doe');
-        $dto->setEmail('john.doe@test.com');
-        $dto->setPassword('password');
-        $dto->setUserGroups([$userGroupEntity]);
+        $dto = (new UserDto())
+            ->setUsername('username')
+            ->setFirstName('John')
+            ->setLastName('Doe')
+            ->setEmail('john.doe@test.com')
+            ->setPassword('password')
+            ->setLanguage('fi')
+            ->setLocale('fi')
+            ->setTimezone('Europe/Stockholm')
+            ->setUserGroups([$userGroupEntity]);
 
         // Specify used form data
         $formData = [
@@ -75,6 +112,9 @@ class UserTypeTest extends TypeTestCase
                 'password1' => 'password',
                 'password2' => 'password',
             ],
+            'language'      => 'fi',
+            'locale'        => 'fi',
+            'timezone'      => 'Europe/Stockholm',
             'userGroups'    => [$userGroupEntity->getId()],
         ];
 
@@ -102,6 +142,7 @@ class UserTypeTest extends TypeTestCase
     protected function setUp(): void
     {
         $this->mockUserGroupResource = $this->createMock(UserGroupResource::class);
+        $this->mockLocalization = $this->createMock(Localization::class);
 
         parent::setUp();
     }
@@ -114,7 +155,11 @@ class UserTypeTest extends TypeTestCase
         parent::getExtensions();
 
         // create a type instance with the mocked dependencies
-        $type = new UserType($this->mockUserGroupResource, new UserGroupTransformer($this->mockUserGroupResource));
+        $type = new UserType(
+            $this->mockUserGroupResource,
+            new UserGroupTransformer($this->mockUserGroupResource),
+            $this->mockLocalization
+        );
 
         return [
             // register the type instances with the PreloadedExtension

@@ -32,7 +32,7 @@ class TimeZoneController
     private Localization $localization;
 
     /**
-     * TimezoneController constructor.
+     * LanguageController constructor.
      *
      * @param Localization $localization
      */
@@ -87,6 +87,6 @@ class TimeZoneController
      */
     public function __invoke(): JsonResponse
     {
-        return new JsonResponse($this->localization->getTimeZones());
+        return new JsonResponse($this->localization->getTimezones());
     }
 }

@@ -14,12 +14,15 @@ use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
+use App\Service\Localization;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
+use function array_combine;
+use function array_map;
 
 /**
  * Class UserType
@@ -94,17 +97,23 @@ class UserType extends AbstractType
     ];
 
     private UserGroupTransformer $userGroupTransformer;
+    private Localization $localization;
 
     /**
      * UserType constructor.
      *
      * @param UserGroupResource    $userGroupResource
      * @param UserGroupTransformer $userGroupTransformer
+     * @param Localization         $localization
      */
-    public function __construct(UserGroupResource $userGroupResource, UserGroupTransformer $userGroupTransformer)
-    {
+    public function __construct(
+        UserGroupResource $userGroupResource,
+        UserGroupTransformer $userGroupTransformer,
+        Localization $localization
+    ) {
         $this->userGroupTransformer = $userGroupTransformer;
         $this->userGroupResource = $userGroupResource;
+        $this->localization = $localization;
     }
 
     /**
@@ -118,16 +127,17 @@ class UserType extends AbstractType
         parent::buildForm($builder, $options);
 
         $this->addBasicFieldToForm($builder, self::$formFields);
+        $this->addLocalizationFieldsToForm($builder);
 
         $builder
             ->add(
                 'userGroups',
                 Type\ChoiceType::class,
                 [
-                    'choices' => $this->getUserGroupChoices(),
-                    'multiple' => true,
+                    FormTypeLabelInterface::CHOICES => $this->getUserGroupChoices(),
                     FormTypeLabelInterface::REQUIRED => true,
                     FormTypeLabelInterface::EMPTY_DATA => '',
+                    'multiple' => true,
                 ]
             );
 
@@ -148,5 +158,67 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => UserDto::class,
         ]);
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function addLocalizationFieldsToForm(FormBuilderInterface $builder): void
+    {
+        $languages = $this->localization->getLanguages();
+        $locales = $this->localization->getLocales();
+
+        $builder
+            ->add(
+                'language',
+                Type\ChoiceType::class,
+                [
+                    FormTypeLabelInterface::LABEL => 'Language',
+                    FormTypeLabelInterface::REQUIRED => true,
+                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_LANGUAGE,
+                    FormTypeLabelInterface::CHOICES => array_combine($languages, $languages),
+                ],
+            );
+
+        $builder
+            ->add(
+                'locale',
+                Type\ChoiceType::class,
+                [
+                    FormTypeLabelInterface::LABEL => 'Locale',
+                    FormTypeLabelInterface::REQUIRED => true,
+                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_LOCALE,
+                    FormTypeLabelInterface::CHOICES => array_combine($locales, $locales),
+                ],
+            );
+
+        $builder
+            ->add(
+                'timezone',
+                Type\ChoiceType::class,
+                [
+                    FormTypeLabelInterface::LABEL => 'Timezone',
+                    FormTypeLabelInterface::REQUIRED => true,
+                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_TIMEZONE,
+                    FormTypeLabelInterface::CHOICES => $this->getTimeZoneChoices(),
+                ],
+            );
+    }
+
+    /**
+     * @return array
+     */
+    private function getTimeZoneChoices(): array
+    {
+        // Initialize output
+        $choices = [];
+
+        $iterator = static function (array $timezone) use (&$choices): void {
+            $choices[$timezone['value'] . ' (' . $timezone['offset'] . ')'] = $timezone['identifier'];
+        };
+
+        array_map($iterator, $this->localization->getFormattedTimezones());
+
+        return $choices;
     }
 }

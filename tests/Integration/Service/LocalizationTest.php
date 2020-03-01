@@ -43,6 +43,6 @@ class LocalizationTest extends KernelTestCase
             ->method('error')
             ->with($exception->getMessage(), $exception->getTrace());
 
-        (new Localization($cache, $logger))->getTimeZones();
+        (new Localization($cache, $logger))->getTimezones();
     }
 }

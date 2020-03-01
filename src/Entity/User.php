@@ -15,6 +15,8 @@ use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\UserRelations;
 use App\Entity\Traits\Uuid;
+use App\Service\Localization;
+use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
@@ -167,10 +169,81 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      name="email",
      *      type="string",
      *      length=255,
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private string $email = '';
+
+    /**
+     * @var string
+     *
+     * @Groups({
+     *      "User",
+     *      "User.language",
+     *  })
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @AppAssert\Language()
+     *
+     * @ORM\Column(
+     *      name="language",
+     *      type="EnumLanguage",
+     *      nullable=false,
+     *      options={
+     *          "comment": "User language for translations",
+     *      }
+     *  )
+     */
+    private string $language = Localization::DEFAULT_LANGUAGE;
+
+    /**
+     * @var string
+     *
+     * @Groups({
+     *      "User",
+     *      "User.locale",
+     *  })
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @AppAssert\Locale()
+     *
+     * @ORM\Column(
+     *      name="locale",
+     *      type="EnumLocale",
+     *      nullable=false,
+     *      options={
+     *          "comment": "User locale for number, time, date, etc. formatting.",
+     *      }
+     *  )
+     */
+    private string $locale = Localization::DEFAULT_LOCALE;
+
+    /**
+     * @var string
+     *
+     * * @Groups({
+     *      "User",
+     *      "User.locale",
+     *  })
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @AppAssert\Timezone()
+     *
+     * @ORM\Column(
+     *      name="timezone",
+     *      type="string",
+     *      length=255,
+     *      nullable=false,
+     *      options={
+     *          "comment": "User timezone which should be used to display time, date, etc.",
+     *          "default": "Europe/Helsinki",
+     *      },
+     *  )
+     */
+    private string $timezone = Localization::DEFAULT_TIMEZONE;
 
     /**
      * @var string
@@ -179,7 +252,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      name="password",
      *      type="string",
      *      length=255,
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private string $password = '';
@@ -290,6 +363,66 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     *
+     * @return User
+     */
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return User
+     */
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimezone(): string
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * @param string $timezone
+     *
+     * @return User
+     */
+    public function setTimezone(string $timezone): self
+    {
+        $this->timezone = $timezone;
 
         return $this;
     }
