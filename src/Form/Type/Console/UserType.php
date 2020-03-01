@@ -8,18 +8,23 @@ declare(strict_types = 1);
 
 namespace App\Form\Type\Console;
 
+use App\Doctrine\DBAL\Types\EnumLanguageType;
+use App\Doctrine\DBAL\Types\EnumLocaleType;
 use App\DTO\User\User as UserDto;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Form\Type\Traits\UserGroupChoices;
 use App\Resource\UserGroupResource;
+use App\Service\Localization;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
+use function array_combine;
+use function array_map;
 
 /**
  * Class UserType
@@ -119,15 +124,54 @@ class UserType extends AbstractType
 
         $this->addBasicFieldToForm($builder, self::$formFields);
 
+        $languages = Localization::getLanguages();
+        $locales = Localization::getLocales();
+
+        $builder
+            ->add(
+                'language',
+                Type\ChoiceType::class,
+                [
+                    FormTypeLabelInterface::LABEL => 'Language',
+                    FormTypeLabelInterface::REQUIRED => true,
+                    FormTypeLabelInterface::EMPTY_DATA => EnumLanguageType::LANGUAGE_EN,
+                    FormTypeLabelInterface::CHOICES => array_combine($languages, $languages),
+                ],
+            );
+
+        $builder
+            ->add(
+                'locale',
+                Type\ChoiceType::class,
+                [
+                    FormTypeLabelInterface::LABEL => 'Locale',
+                    FormTypeLabelInterface::REQUIRED => true,
+                    FormTypeLabelInterface::EMPTY_DATA => EnumLocaleType::LOCALE_EN,
+                    FormTypeLabelInterface::CHOICES => array_combine($locales, $locales),
+                ],
+            );
+
+        $builder
+            ->add(
+                'timezone',
+                Type\ChoiceType::class,
+                [
+                    FormTypeLabelInterface::LABEL => 'Timezone',
+                    FormTypeLabelInterface::REQUIRED => true,
+                    FormTypeLabelInterface::EMPTY_DATA => 'Europe/Helsinki',
+                    FormTypeLabelInterface::CHOICES => $this->getTimeZoneChoices(),
+                ],
+            );
+
         $builder
             ->add(
                 'userGroups',
                 Type\ChoiceType::class,
                 [
-                    'choices' => $this->getUserGroupChoices(),
-                    'multiple' => true,
+                    FormTypeLabelInterface::CHOICES => $this->getUserGroupChoices(),
                     FormTypeLabelInterface::REQUIRED => true,
                     FormTypeLabelInterface::EMPTY_DATA => '',
+                    'multiple' => true,
                 ]
             );
 
@@ -148,5 +192,22 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class' => UserDto::class,
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function getTimeZoneChoices(): array
+    {
+        // Initialize output
+        $choices = [];
+
+        $iterator = static function (array $timezone) use (&$choices): void {
+            $choices[$timezone['value']] = $timezone['identifier'];
+        };
+
+        array_map($iterator, Localization::getTimeZones());
+
+        return $choices;
     }
 }

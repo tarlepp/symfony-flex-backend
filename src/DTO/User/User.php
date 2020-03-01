@@ -8,6 +8,8 @@ declare(strict_types = 1);
 
 namespace App\DTO\User;
 
+use App\Doctrine\DBAL\Types\EnumLanguageType;
+use App\Doctrine\DBAL\Types\EnumLocaleType;
 use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
@@ -88,6 +90,33 @@ class User extends RestDto
      * @Assert\Email()
      */
     protected string $email = '';
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Choice(callback={"App\Service\Localization", "getLanguages"})
+     */
+    protected string $language = EnumLanguageType::LANGUAGE_EN;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Choice(callback={"App\Service\Localization", "getLocales"})
+     */
+    protected string $locale =  EnumLocaleType::LOCALE_EN;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     * @Assert\NotNull()
+     * @Assert\Choice(callback={"App\Service\Localization", "getTimeZoneIdentifiers"})
+     */
+    protected string $timezone = 'Europe/Helsinki';
 
     /**
      * @var UserGroupEntity[]|array<int, UserGroupEntity>
@@ -196,6 +225,72 @@ class User extends RestDto
     }
 
     /**
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     *
+     * @return User
+     */
+    public function setLanguage(string $language): self
+    {
+        $this->setVisited('language');
+
+        $this->language = $language;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale(): string
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return User
+     */
+    public function setLocale(string $locale): self
+    {
+        $this->setVisited('locale');
+
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTimezone(): string
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * @param string $timezone
+     *
+     * @return User
+     */
+    public function setTimezone(string $timezone): self
+    {
+        $this->setVisited('timezone');
+
+        $this->timezone = $timezone;
+
+        return $this;
+    }
+
+    /**
      * @return UserGroupEntity[]
      */
     public function getUserGroups(): array
@@ -256,6 +351,9 @@ class User extends RestDto
             $this->firstName = $entity->getFirstName();
             $this->lastName = $entity->getLastName();
             $this->email = $entity->getEmail();
+            $this->language = $entity->getLanguage();
+            $this->locale = $entity->getLocale();
+            $this->timezone = $entity->getTimezone();
 
             /** @var array<int, UserGroupEntity> $userGroups */
             $userGroups = $entity->getUserGroups()->toArray();

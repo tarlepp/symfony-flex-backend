@@ -261,6 +261,9 @@ class UserControllerTest extends WebTestCase
             'lastName'  => 'user',
             'email'     => 'test-user@test.com',
             'password'  => 'some password',
+            'language'  => 'fi',
+            'locale'    => 'fi',
+            'timezone'  => 'Europe/Amsterdam'
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');
@@ -336,6 +339,9 @@ class UserControllerTest extends WebTestCase
             'firstName' => 'test-1',
             'lastName'  => 'user-2',
             'email'     => 'test-user@test.com',
+            'language'  => 'fi',
+            'locale'    => 'fi',
+            'timezone'  => 'Europe/Amsterdam'
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');
@@ -443,6 +449,7 @@ class UserControllerTest extends WebTestCase
         $data = [
             'id'        => $userId,
             'email'     => 'test-user2@test.com',
+            'locale'    => 'en',
         ];
 
         $expectedData = [
@@ -451,6 +458,9 @@ class UserControllerTest extends WebTestCase
             'firstName' => 'test-1',
             'lastName'  => 'user-2',
             'email'     => 'test-user2@test.com',
+            'language'  => 'fi',
+            'locale'    => 'en',
+            'timezone'  => 'Europe/Amsterdam'
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');

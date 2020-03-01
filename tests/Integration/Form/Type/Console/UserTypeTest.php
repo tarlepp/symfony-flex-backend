@@ -57,13 +57,16 @@ class UserTypeTest extends TypeTestCase
         $form = $this->factory->create(UserType::class);
 
         // Create new DTO object
-        $dto = new UserDto();
-        $dto->setUsername('username');
-        $dto->setFirstName('John');
-        $dto->setLastName('Doe');
-        $dto->setEmail('john.doe@test.com');
-        $dto->setPassword('password');
-        $dto->setUserGroups([$userGroupEntity]);
+        $dto = (new UserDto())
+            ->setUsername('username')
+            ->setFirstName('John')
+            ->setLastName('Doe')
+            ->setEmail('john.doe@test.com')
+            ->setPassword('password')
+            ->setLanguage('fi')
+            ->setLocale('fi')
+            ->setTimezone('Europe/Stockholm')
+            ->setUserGroups([$userGroupEntity]);
 
         // Specify used form data
         $formData = [
@@ -75,6 +78,9 @@ class UserTypeTest extends TypeTestCase
                 'password1' => 'password',
                 'password2' => 'password',
             ],
+            'language'      => 'fi',
+            'locale'        => 'fi',
+            'timezone'      => 'Europe/Stockholm',
             'userGroups'    => [$userGroupEntity->getId()],
         ];
 
