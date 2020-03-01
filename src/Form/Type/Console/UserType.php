@@ -127,7 +127,44 @@ class UserType extends AbstractType
         parent::buildForm($builder, $options);
 
         $this->addBasicFieldToForm($builder, self::$formFields);
+        $this->addLocalizationFieldsToForm($builder);
 
+        $builder
+            ->add(
+                'userGroups',
+                Type\ChoiceType::class,
+                [
+                    FormTypeLabelInterface::CHOICES => $this->getUserGroupChoices(),
+                    FormTypeLabelInterface::REQUIRED => true,
+                    FormTypeLabelInterface::EMPTY_DATA => '',
+                    'multiple' => true,
+                ]
+            );
+
+        $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
+    }
+
+    /**
+     * Configures the options for this type.
+     *
+     * @param OptionsResolver $resolver The resolver for the options
+     *
+     * @throws AccessException
+     */
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults([
+            'data_class' => UserDto::class,
+        ]);
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function addLocalizationFieldsToForm(FormBuilderInterface $builder): void
+    {
         $languages = $this->localization->getLanguages();
         $locales = $this->localization->getLocales();
 
@@ -166,36 +203,6 @@ class UserType extends AbstractType
                     FormTypeLabelInterface::CHOICES => $this->getTimeZoneChoices(),
                 ],
             );
-
-        $builder
-            ->add(
-                'userGroups',
-                Type\ChoiceType::class,
-                [
-                    FormTypeLabelInterface::CHOICES => $this->getUserGroupChoices(),
-                    FormTypeLabelInterface::REQUIRED => true,
-                    FormTypeLabelInterface::EMPTY_DATA => '',
-                    'multiple' => true,
-                ]
-            );
-
-        $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
-    }
-
-    /**
-     * Configures the options for this type.
-     *
-     * @param OptionsResolver $resolver The resolver for the options
-     *
-     * @throws AccessException
-     */
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setDefaults([
-            'data_class' => UserDto::class,
-        ]);
     }
 
     /**
