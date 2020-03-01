@@ -17,6 +17,7 @@ use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\UserRelations;
 use App\Entity\Traits\Uuid;
+use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
@@ -184,7 +185,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Choice(callback={"App\Service\Localization", "getLanguages"})
+     * @AppAssert\Language()
      *
      * @ORM\Column(
      *      name="language",
@@ -207,7 +208,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Choice(callback={"App\Service\Localization", "getLocales"})
+     * @AppAssert\Locale()
      *
      * @ORM\Column(
      *      name="locale",
@@ -230,7 +231,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Choice(callback={"App\Service\Localization", "getTimeZoneIdentifiers"})
+     * @AppAssert\Timezone()
      *
      * @ORM\Column(
      *      name="timezone",

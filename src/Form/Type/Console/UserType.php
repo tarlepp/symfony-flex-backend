@@ -99,17 +99,23 @@ class UserType extends AbstractType
     ];
 
     private UserGroupTransformer $userGroupTransformer;
+    private Localization $localization;
 
     /**
      * UserType constructor.
      *
      * @param UserGroupResource    $userGroupResource
      * @param UserGroupTransformer $userGroupTransformer
+     * @param Localization         $localization
      */
-    public function __construct(UserGroupResource $userGroupResource, UserGroupTransformer $userGroupTransformer)
-    {
+    public function __construct(
+        UserGroupResource $userGroupResource,
+        UserGroupTransformer $userGroupTransformer,
+        Localization $localization
+    ) {
         $this->userGroupTransformer = $userGroupTransformer;
         $this->userGroupResource = $userGroupResource;
+        $this->localization = $localization;
     }
 
     /**
@@ -124,8 +130,8 @@ class UserType extends AbstractType
 
         $this->addBasicFieldToForm($builder, self::$formFields);
 
-        $languages = Localization::getLanguages();
-        $locales = Localization::getLocales();
+        $languages = $this->localization->getLanguages();
+        $locales = $this->localization->getLocales();
 
         $builder
             ->add(
@@ -206,7 +212,7 @@ class UserType extends AbstractType
             $choices[$timezone['value']] = $timezone['identifier'];
         };
 
-        array_map($iterator, Localization::getTimeZones());
+        array_map($iterator, $this->localization->getTimezones());
 
         return $choices;
     }

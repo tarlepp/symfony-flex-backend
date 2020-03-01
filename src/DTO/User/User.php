@@ -96,7 +96,7 @@ class User extends RestDto
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Choice(callback={"App\Service\Localization", "getLanguages"})
+     * @AppAssert\Language()
      */
     protected string $language = EnumLanguageType::LANGUAGE_EN;
 
@@ -105,7 +105,7 @@ class User extends RestDto
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Choice(callback={"App\Service\Localization", "getLocales"})
+     * @AppAssert\Locale()
      */
     protected string $locale =  EnumLocaleType::LOCALE_EN;
 
@@ -114,7 +114,7 @@ class User extends RestDto
      *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     * @Assert\Choice(callback={"App\Service\Localization", "getTimeZoneIdentifiers"})
+     * @AppAssert\Timezone()
      */
     protected string $timezone = 'Europe/Helsinki';
 
