@@ -106,7 +106,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @AppAssert\Locale()
      */
-    protected string $locale =  Localization::DEFAULT_LOCALE;
+    protected string $locale = Localization::DEFAULT_LOCALE;
 
     /**
      * @var string
