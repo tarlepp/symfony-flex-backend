@@ -23,13 +23,26 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class LocalizationTest extends KernelTestCase
 {
-    public function testThatGetLanguagesReturnsExpected(): void
+    public function testThatLoggerIsCalledWhenCacheThrowsAnException(): void
     {
-        static::assertSame(['en', 'fi'], Localization::getLanguages());
-    }
+        /**
+         * @var MockObject|CacheInterface  $cache
+         * @var MockObject|LoggerInterface $logger
+         */
+        $cache = $this->getMockBuilder(CacheInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $exception = new Exception('test exception');
 
-    public function testThatGetLocalesReturnsExpected(): void
-    {
-        static::assertSame(['en', 'fi'], Localization::getLocales());
+        $cache
+            ->expects(static::once())
+            ->method('get')
+            ->willThrowException($exception);
+
+        $logger
+            ->expects(static::once())
+            ->method('error')
+            ->with($exception->getMessage(), $exception->getTrace());
+
+        (new Localization($cache, $logger))->getTimezones();
     }
 }
