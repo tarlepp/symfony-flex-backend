@@ -28,6 +28,10 @@ use function str_replace;
  */
 class Localization
 {
+    public const DEFAULT_LANGUAGE = EnumLanguageType::LANGUAGE_EN;
+    public const DEFAULT_LOCALE = EnumLocaleType::LOCALE_EN;
+    public const DEFAULT_TIMEZONE = 'Europe/Helsinki';
+
     private CacheInterface $cache;
     private LoggerInterface $logger;
 

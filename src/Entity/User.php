@@ -8,8 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
-use App\Doctrine\DBAL\Types\EnumLanguageType;
-use App\Doctrine\DBAL\Types\EnumLocaleType;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\Interfaces\UserInterface;
@@ -17,6 +15,7 @@ use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\UserRelations;
 use App\Entity\Traits\Uuid;
+use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -196,7 +195,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      }
      *  )
      */
-    private string $language = EnumLanguageType::LANGUAGE_EN;
+    private string $language = Localization::DEFAULT_LANGUAGE;
 
     /**
      * @var string
@@ -219,7 +218,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      }
      *  )
      */
-    private string $locale = EnumLocaleType::LOCALE_EN;
+    private string $locale = Localization::DEFAULT_LOCALE;
 
     /**
      * @var string
@@ -244,7 +243,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      },
      *  )
      */
-    private string $timezone = 'Europe/Helsinki';
+    private string $timezone = Localization::DEFAULT_TIMEZONE;
 
     /**
      * @var string

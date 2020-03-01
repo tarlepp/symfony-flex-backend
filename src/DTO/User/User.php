@@ -8,14 +8,13 @@ declare(strict_types = 1);
 
 namespace App\DTO\User;
 
-use App\Doctrine\DBAL\Types\EnumLanguageType;
-use App\Doctrine\DBAL\Types\EnumLocaleType;
 use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\User as Entity;
 use App\Entity\UserGroup as UserGroupEntity;
+use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 use function array_map;
@@ -98,7 +97,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @AppAssert\Language()
      */
-    protected string $language = EnumLanguageType::LANGUAGE_EN;
+    protected string $language = Localization::DEFAULT_LANGUAGE;
 
     /**
      * @var string
@@ -107,7 +106,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @AppAssert\Locale()
      */
-    protected string $locale =  EnumLocaleType::LOCALE_EN;
+    protected string $locale =  Localization::DEFAULT_LOCALE;
 
     /**
      * @var string
@@ -116,7 +115,7 @@ class User extends RestDto
      * @Assert\NotNull()
      * @AppAssert\Timezone()
      */
-    protected string $timezone = 'Europe/Helsinki';
+    protected string $timezone = Localization::DEFAULT_TIMEZONE;
 
     /**
      * @var UserGroupEntity[]|array<int, UserGroupEntity>

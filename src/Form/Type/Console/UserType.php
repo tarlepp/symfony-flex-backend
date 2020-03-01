@@ -8,8 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Form\Type\Console;
 
-use App\Doctrine\DBAL\Types\EnumLanguageType;
-use App\Doctrine\DBAL\Types\EnumLocaleType;
 use App\DTO\User\User as UserDto;
 use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\FormTypeLabelInterface;
@@ -140,7 +138,7 @@ class UserType extends AbstractType
                 [
                     FormTypeLabelInterface::LABEL => 'Language',
                     FormTypeLabelInterface::REQUIRED => true,
-                    FormTypeLabelInterface::EMPTY_DATA => EnumLanguageType::LANGUAGE_EN,
+                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_LANGUAGE,
                     FormTypeLabelInterface::CHOICES => array_combine($languages, $languages),
                 ],
             );
@@ -152,7 +150,7 @@ class UserType extends AbstractType
                 [
                     FormTypeLabelInterface::LABEL => 'Locale',
                     FormTypeLabelInterface::REQUIRED => true,
-                    FormTypeLabelInterface::EMPTY_DATA => EnumLocaleType::LOCALE_EN,
+                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_LOCALE,
                     FormTypeLabelInterface::CHOICES => array_combine($locales, $locales),
                 ],
             );
@@ -164,7 +162,7 @@ class UserType extends AbstractType
                 [
                     FormTypeLabelInterface::LABEL => 'Timezone',
                     FormTypeLabelInterface::REQUIRED => true,
-                    FormTypeLabelInterface::EMPTY_DATA => 'Europe/Helsinki',
+                    FormTypeLabelInterface::EMPTY_DATA => Localization::DEFAULT_TIMEZONE,
                     FormTypeLabelInterface::CHOICES => $this->getTimeZoneChoices(),
                 ],
             );
