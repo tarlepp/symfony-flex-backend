@@ -207,10 +207,10 @@ class UserType extends AbstractType
         $choices = [];
 
         $iterator = static function (array $timezone) use (&$choices): void {
-            $choices[$timezone['value']] = $timezone['identifier'];
+            $choices[$timezone['value'] . ' (' . $timezone['offset'] . ')'] = $timezone['identifier'];
         };
 
-        array_map($iterator, $this->localization->getTimezones());
+        array_map($iterator, $this->localization->getFormattedTimezones());
 
         return $choices;
     }

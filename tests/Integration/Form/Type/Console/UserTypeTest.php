@@ -71,7 +71,7 @@ class UserTypeTest extends TypeTestCase
 
         $this->mockLocalization
             ->expects(static::once())
-            ->method('getTimezones')
+            ->method('getFormattedTimezones')
             ->willReturn([
                 [
                     'timezone' => 'Europe',
