@@ -98,14 +98,14 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     /**
      * @param array                      $payload
      * @param UserInterface|SecurityUser $user
+     *
+     * psalm-param SecurityUser $user
      */
     private function setLocalizationData(array &$payload, UserInterface $user): void
     {
-        $isSecurityUser = $user instanceof SecurityUser;
-
-        $payload['language'] = $isSecurityUser ? $user->getLanguage() : Localization::DEFAULT_LANGUAGE;
-        $payload['locale'] = $isSecurityUser ? $user->getLocale() : Localization::DEFAULT_LOCALE;
-        $payload['timezone'] = $isSecurityUser ? $user->getTimezone() : Localization::DEFAULT_TIMEZONE;
+        $payload['language'] = $user instanceof SecurityUser ? $user->getLanguage() : Localization::DEFAULT_LANGUAGE;
+        $payload['locale'] = $user instanceof SecurityUser ? $user->getLocale() : Localization::DEFAULT_LOCALE;
+        $payload['timezone'] = $user instanceof SecurityUser ? $user->getTimezone() : Localization::DEFAULT_TIMEZONE;
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
