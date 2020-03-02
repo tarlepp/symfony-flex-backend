@@ -98,8 +98,6 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     /**
      * @param array                      $payload
      * @param UserInterface|SecurityUser $user
-     *
-     * psalm-param SecurityUser $user
      */
     private function setLocalizationData(array &$payload, UserInterface $user): void
     {
