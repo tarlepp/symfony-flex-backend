@@ -8,12 +8,16 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
+use App\Security\SecurityUser;
+use App\Service\Localization;
 use DateTime;
 use DateTimeZone;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\User\UserInterface;
 use function hash;
 use function implode;
 
@@ -62,6 +66,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     {
         return [
             JWTCreatedEvent::class => 'onJWTCreated',
+            Events::JWT_CREATED => 'onJWTCreated',
         ];
     }
 
@@ -77,6 +82,9 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
         // Get current original payload
         $payload = $event->getData();
 
+        // Set localization data
+        $this->setLocalizationData($payload, $event->getUser());
+
         // Update JWT expiration data
         $this->setExpiration($payload);
 
@@ -85,6 +93,17 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
 
         // And set new payload for JWT
         $event->setData($payload);
+    }
+
+    /**
+     * @param array                      $payload
+     * @param UserInterface|SecurityUser $user
+     */
+    private function setLocalizationData(array &$payload, UserInterface $user): void
+    {
+        $payload['language'] = $user instanceof SecurityUser ? $user->getLanguage() : Localization::DEFAULT_LANGUAGE;
+        $payload['locale'] = $user instanceof SecurityUser ? $user->getLocale() : Localization::DEFAULT_LOCALE;
+        $payload['timezone'] = $user instanceof SecurityUser ? $user->getTimezone() : Localization::DEFAULT_TIMEZONE;
     }
 
     /** @noinspection PhpDocMissingThrowsInspection */
