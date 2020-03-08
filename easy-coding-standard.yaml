@@ -1,8 +1,8 @@
 imports:
-    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/set/psr12.yaml' }
-    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/set/php71.yaml' }
-    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/set/clean-code.yaml' }
-    - { resource: '%vendor_dir%/symplify/easy-coding-standard/config/set/common.yaml' }
+    - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/psr12.yaml' }
+    - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/php71.yaml' }
+    - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/clean-code.yaml' }
+    - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/common.yaml' }
 
 parameters:
     skip:
