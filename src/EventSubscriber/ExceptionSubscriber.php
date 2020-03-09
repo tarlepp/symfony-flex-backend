@@ -24,11 +24,13 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
+use function array_intersect;
 use function class_implements;
 use function count;
 use function get_class;
 use function in_array;
 use function method_exists;
+use function spl_object_hash;
 
 /**
  * Class ExceptionSubscriber
@@ -212,7 +214,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private function determineStatusCode(Throwable $exception, bool $isUser): int
     {
         // Default status code is always 500
-        $statusCode = 0;
+        $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
 
         // HttpExceptionInterface is a special type of exception that holds status code and header details
         if ($exception instanceof AuthenticationException) {
@@ -221,9 +223,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $statusCode = $isUser ? Response::HTTP_FORBIDDEN : Response::HTTP_UNAUTHORIZED;
         } elseif ($exception instanceof HttpExceptionInterface) {
             $statusCode = $exception->getStatusCode();
-        }
-
-        if ($statusCode === 0 && $this->isClientExceptions($exception)) {
+        } elseif ($this->isClientExceptions($exception)) {
             $statusCode = (int)$exception->getCode();
 
             if (method_exists($exception, 'getStatusCode')) {
@@ -235,7 +235,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Method to check if exception is internal one.
+     * Method to check if exception is ok to show to user (client) or not. Note
+     * that if this is returns true exception message is shown as-is to user.
      *
      * @param Throwable $exception
      *
