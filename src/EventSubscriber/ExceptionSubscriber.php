@@ -236,7 +236,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
     /**
      * Method to check if exception is ok to show to user (client) or not. Note
-     * that if this is returns true exception message is shown as-is to user.
+     * that if this returns true exception message is shown as-is to user.
      *
      * @param Throwable $exception
      *
