@@ -94,7 +94,7 @@ class Localization
     {
         $output = [];
 
-        foreach (DateTimeZone::listIdentifiers() as $identifier) {
+        foreach ((array)DateTimeZone::listIdentifiers() as $identifier) {
             $dateTimeZone = new DateTimeZone($identifier);
             $dateTime = new DateTime('now', $dateTimeZone);
 

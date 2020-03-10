@@ -175,7 +175,7 @@ trait LogEntityTrait
      */
     protected function processTimeAndDate(): void
     {
-        $now = (new DateTimeImmutable('now'))->setTimezone(new DateTimeZone('UTC'));
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
 
         $this->time = $now;
         $this->date = $now;
