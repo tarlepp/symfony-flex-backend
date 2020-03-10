@@ -11,6 +11,8 @@ namespace App\Tests\Integration\EventSubscriber;
 use App\Entity\User;
 use App\EventSubscriber\ExceptionSubscriber;
 use App\Exception\ValidatorException;
+use App\Security\SecurityUser;
+use App\Security\UserTypeIdentification;
 use App\Utils\JSON;
 use App\Utils\Tests\PhpUnitUtil;
 use BadMethodCallException;
@@ -29,13 +31,12 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Throwable;
 use Symfony\Component\Validator\Exception\ValidatorException as BaseValidatorException;
+use Throwable;
 use function array_keys;
 
 /**
@@ -58,11 +59,11 @@ class ExceptionSubscriberTest extends KernelTestCase
     public function testThatOnKernelExceptionMethodCallsLogger(string $environment): void
     {
         /**
-         * @var MockObject|TokenStorageInterface $stubTokenStorage
-         * @var MockObject|LoggerInterface       $stubLogger
-         * @var MockObject|ExceptionEvent        $stubEvent
+         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
+         * @var MockObject|LoggerInterface        $stubLogger
+         * @var MockObject|ExceptionEvent         $stubEvent
          */
-        $stubTokenStorage = $this->createMock(TokenStorageInterface::class);
+        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
         $stubEvent = $this->createMock(ExceptionEvent::class);
 
@@ -78,7 +79,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->method('error')
             ->with((string)$exception);
 
-        (new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment))->onKernelException($stubEvent);
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+            ->onKernelException($stubEvent);
     }
 
     /**
@@ -93,11 +95,11 @@ class ExceptionSubscriberTest extends KernelTestCase
     public function testThatOnKernelExceptionMethodSetResponse(string $environment): void
     {
         /**
-         * @var MockObject|TokenStorageInterface $stubTokenStorage
-         * @var MockObject|LoggerInterface       $stubLogger
-         * @var MockObject|ExceptionEvent        $stubEvent
+         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
+         * @var MockObject|LoggerInterface        $stubLogger
+         * @var MockObject|ExceptionEvent         $stubEvent
          */
-        $stubTokenStorage = $this->createMock(TokenStorageInterface::class);
+        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
         $stubEvent = $this->createMock(ExceptionEvent::class);
 
@@ -112,7 +114,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->expects(static::once())
             ->method('setResponse');
 
-        (new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment))->onKernelException($stubEvent);
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+            ->onKernelException($stubEvent);
     }
 
     /**
@@ -133,13 +136,14 @@ class ExceptionSubscriberTest extends KernelTestCase
         string $environment,
         string $message
     ): void {
+
         /**
-         * @var MockObject|TokenStorageInterface $stubTokenStorage
-         * @var MockObject|LoggerInterface       $stubLogger
-         * @var MockObject|HttpKernelInterface   $stubHttpKernel
-         * @var MockObject|Request               $stubRequest
+         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
+         * @var MockObject|LoggerInterface        $stubLogger
+         * @var MockObject|HttpKernelInterface    $stubHttpKernel
+         * @var MockObject|Request                $stubRequest
          */
-        $stubTokenStorage = $this->createMock(TokenStorageInterface::class);
+        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
         $stubHttpKernel = $this->createMock(HttpKernelInterface::class);
         $stubRequest = $this->createMock(Request::class);
@@ -152,7 +156,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             $exception
         );
 
-        (new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment))->onKernelException($event);
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))->onKernelException($event);
 
         static::assertSame($status, $event->getResponse()->getStatusCode());
         static::assertSame($message, JSON::decode($event->getResponse()->getContent())->message);
@@ -171,12 +175,12 @@ class ExceptionSubscriberTest extends KernelTestCase
     public function testThatResponseHasExpectedKeys(array $expectedKeys, string $environment): void
     {
         /**
-         * @var MockObject|TokenStorageInterface $stubTokenStorage
-         * @var MockObject|LoggerInterface       $stubLogger
-         * @var MockObject|HttpKernelInterface   $stubHttpKernel
-         * @var MockObject|Request               $stubRequest
+         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
+         * @var MockObject|LoggerInterface        $stubLogger
+         * @var MockObject|HttpKernelInterface    $stubHttpKernel
+         * @var MockObject|Request                $stubRequest
          */
-        $stubTokenStorage = $this->createMock(TokenStorageInterface::class);
+        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
         $stubHttpKernel = $this->createMock(HttpKernelInterface::class);
         $stubRequest = $this->createMock(Request::class);
@@ -189,7 +193,7 @@ class ExceptionSubscriberTest extends KernelTestCase
             new Exception('error')
         );
 
-        (new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment))->onKernelException($event);
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))->onKernelException($event);
 
         $result = JSON::decode($event->getResponse()->getContent(), true);
 
@@ -215,20 +219,20 @@ class ExceptionSubscriberTest extends KernelTestCase
         string $environment
     ): void {
         /**
-         * @var MockObject|TokenStorageInterface  $stubTokenStorage
+         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
          * @var MockObject|LoggerInterface        $stubLogger
          */
-        $stubTokenStorage = $this->createMock(TokenStorageInterface::class);
+        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
 
         if ($user) {
-            $stubTokenStorage
+            $stubUserTypeIdentification
                 ->expects(static::once())
-                ->method('getToken')
-                ->willReturn(true);
+                ->method('getSecurityUser')
+                ->willReturn(new SecurityUser(new User()));
         }
 
-        $subscriber = new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment);
+        $subscriber = new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment);
 
         static::assertSame(
             $expectedStatusCode,
@@ -253,14 +257,14 @@ class ExceptionSubscriberTest extends KernelTestCase
         string $environment
     ): void {
         /**
-         * @var MockObject|TokenStorageInterface $stubTokenStorage
-         * @var MockObject|LoggerInterface       $stubLogger
+         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
+         * @var MockObject|LoggerInterface        $stubLogger
          */
-        $stubTokenStorage = $this->createMock(TokenStorageInterface::class);
+        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
 
         // Create subscriber
-        $subscriber = new ExceptionSubscriber($stubTokenStorage, $stubLogger, $environment);
+        $subscriber = new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment);
 
         static::assertSame(
             $expectedMessage,
