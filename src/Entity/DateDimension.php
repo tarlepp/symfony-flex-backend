@@ -399,6 +399,6 @@ class DateDimension implements EntityInterface
     {
         $output = DateTimeImmutable::createFromFormat('U', (string)$this->getUnixTime(), new DateTimeZone('UTC'));
 
-        return $output === false ? (new DateTimeImmutable('now'))->setTimezone(new DateTimeZone('UTC')) : $output;
+        return $output === false ? new DateTimeImmutable('now', new DateTimeZone('UTC')) : $output;
     }
 }

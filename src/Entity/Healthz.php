@@ -79,7 +79,7 @@ class Healthz implements EntityInterface
     {
         $this->id = $this->createUuid();
 
-        $this->setTimestamp((new DateTimeImmutable('now'))->setTimezone(new DateTimeZone('UTC')));
+        $this->setTimestamp(new DateTimeImmutable('now', new DateTimeZone('UTC')));
     }
 
     /**
