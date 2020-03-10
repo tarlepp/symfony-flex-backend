@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Exception\interfaces\ClientErrorInterface;
+use App\Security\UserTypeIdentification;
 use App\Utils\JSON;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\ORMException;
@@ -19,8 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
@@ -40,7 +39,7 @@ use function spl_object_hash;
  */
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    private TokenStorageInterface $tokenStorage;
+    private UserTypeIdentification $userService;
     private LoggerInterface $logger;
     private string $environment;
     private static array $cache = [];
@@ -48,14 +47,14 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * ExceptionSubscriber constructor.
      *
-     * @param TokenStorageInterface $tokenStorage
-     * @param LoggerInterface       $logger
-     * @param string                $environment
+     * @param LoggerInterface        $logger
+     * @param UserTypeIdentification $userService
+     * @param string                 $environment
      */
-    public function __construct(TokenStorageInterface $tokenStorage, LoggerInterface $logger, string $environment)
+    public function __construct(LoggerInterface $logger, UserTypeIdentification $userService, string $environment)
     {
-        $this->tokenStorage = $tokenStorage;
         $this->logger = $logger;
+        $this->userService = $userService;
         $this->environment = $environment;
     }
 
@@ -121,11 +120,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
      */
     private function getStatusCode(Throwable $exception): int
     {
-        // Get current token, and determine if request is made from logged in user or not
-        $token = $this->tokenStorage->getToken();
-        $isUser = !($token === null || $token instanceof AnonymousToken);
-
-        return $this->determineStatusCode($exception, $isUser);
+        return $this->determineStatusCode($exception, $this->userService->getSecurityUser() !== null);
     }
 
     /**
