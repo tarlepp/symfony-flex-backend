@@ -10,8 +10,8 @@ namespace App\Tests\Integration\ArgumentResolver;
 
 use App\ArgumentResolver\LoggedInUserValueResolver;
 use App\Entity\User;
-use App\Resource\UserResource;
 use App\Security\SecurityUser;
+use App\Security\UserTypeIdentification;
 use Closure;
 use Generator;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\MissingTokenException;
@@ -39,11 +39,11 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatSupportsReturnFalseWithWrongType(): void
     {
-        /** @var MockObject|UserResource $userResource */
-        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        /** @var MockObject|UserTypeIdentification $userService */
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $tokenStorage = new TokenStorage();
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
         $metadata = new ArgumentMetadata('foo', null, false, false, null);
 
         static::assertFalse($resolver->supports(Request::create('/'), $metadata));
@@ -54,11 +54,11 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatSupportsReturnFalseWithNoToken(): void
     {
-        /** @var MockObject|UserResource $userResource */
-        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        /** @var MockObject|UserTypeIdentification $userService */
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $tokenStorage = new TokenStorage();
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
         static::assertFalse($resolver->supports(Request::create('/'), $metadata));
@@ -72,15 +72,15 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $this->expectException(MissingTokenException::class);
         $this->expectExceptionMessage('JWT Token not found');
 
-        /** @var MockObject|UserResource $userResource */
-        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        /** @var MockObject|UserTypeIdentification $userService */
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $token = new UsernamePasswordToken('username', 'password', 'provider');
 
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         $resolver->supports(Request::create('/'), $metadata);
@@ -91,16 +91,21 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatSupportsReturnsTrueWithProperUser(): void
     {
-        /** @var MockObject|UserResource $userResource */
-        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        /** @var MockObject|UserTypeIdentification $userService */
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
-        $SecurityUser = new SecurityUser(new User());
-        $token = new UsernamePasswordToken($SecurityUser, 'password', 'provider');
+        $securityUser = new SecurityUser(new User());
+        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
 
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
+        $userService
+            ->expects(static::once())
+            ->method('getSecurityUser')
+            ->willReturn($securityUser);
+
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         static::assertTrue($resolver->supports(Request::create('/'), $metadata));
@@ -115,11 +120,11 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $this->expectExceptionMessage('JWT Token not found');
 
         /**
-         * @var MockObject|UserResource $userResource
+         * @var MockObject|UserTypeIdentification $userService
          */
-        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
-        (new LoggedInUserValueResolver(new TokenStorage(), $userResource))
+        (new LoggedInUserValueResolver(new TokenStorage(), $userService))
             ->resolve(new Request(), new ArgumentMetadata('loggedInUser', null, false, false, null))
             ->current();
     }
@@ -129,20 +134,20 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatResolveCallsExpectedResourceMethod(): void
     {
-        /** @var MockObject|UserResource $userResource */
-        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        /** @var MockObject|UserTypeIdentification $userService */
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
-        $userResource
+        $userService
             ->expects(static::once())
-            ->method('findOne');
+            ->method('getUser');
 
-        $SecurityUser = new SecurityUser(new User());
-        $token = new UsernamePasswordToken($SecurityUser, 'password', 'provider');
+        $securityUser = new SecurityUser(new User());
+        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
 
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
         // Note that we need to actually get current value here
@@ -154,23 +159,22 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatResolveReturnsExpectedUser(): void
     {
-        /** @var MockObject|UserResource $userResource */
-        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        /** @var MockObject|UserTypeIdentification $userService */
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $user = new User();
-        $SecurityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($SecurityUser, 'password', 'provider');
+        $securityUser = new SecurityUser($user);
+        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
 
-        $userResource
+        $userService
             ->expects(static::once())
-            ->method('findOne')
-            ->with($SecurityUser->getUsername())
+            ->method('getUser')
             ->willReturn($user);
 
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userResource);
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
         static::assertSame([$user], iterator_to_array($resolver->resolve(Request::create('/'), $metadata)));
@@ -181,23 +185,27 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(): void
     {
-        /** @var MockObject|UserResource $userResource */
-        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        /** @var MockObject|UserTypeIdentification $userService */
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $user = new User();
-        $SecurityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($SecurityUser, 'password', 'provider');
+        $securityUser = new SecurityUser($user);
+        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
 
-        $userResource
+        $userService
             ->expects(static::once())
-            ->method('findOne')
-            ->with($SecurityUser->getUsername())
+            ->method('getSecurityUser')
+            ->willReturn($securityUser);
+
+        $userService
+            ->expects(static::once())
+            ->method('getUser')
             ->willReturn($user);
 
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($tokenStorage, $userResource)]);
+        $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($tokenStorage, $userService)]);
 
         $closure = static function (User $loggedInUser) {
             // Do nothing
@@ -215,13 +223,13 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(Closure $closure): void
     {
-        /** @var MockObject|UserResource $userResource */
-        $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
+        /** @var MockObject|UserTypeIdentification $userService */
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $tokenStorage = new TokenStorage();
         $argumentResolver = new ArgumentResolver(
             null,
-            [new LoggedInUserValueResolver($tokenStorage, $userResource), new DefaultValueResolver()]
+            [new LoggedInUserValueResolver($tokenStorage, $userService), new DefaultValueResolver()]
         );
 
         static::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));

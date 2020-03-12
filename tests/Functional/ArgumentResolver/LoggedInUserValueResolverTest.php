@@ -10,8 +10,9 @@ namespace App\Tests\Functional\ArgumentResolver;
 
 use App\ArgumentResolver\LoggedInUserValueResolver;
 use App\Entity\User;
-use App\Resource\UserResource;
+use App\Repository\UserRepository;
 use App\Security\SecurityUser;
+use App\Security\UserTypeIdentification;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,18 +44,22 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     {
         static::bootKernel();
 
-        /** @var UserResource $resource */
-        $resource = static::$container->get(UserResource::class);
+        /**
+         * @var UserRepository $userRepository
+         */
+        $userRepository = static::$container->get(UserRepository::class);
 
-        $user = $resource->findOneBy(['username' => $username]);
+        $user = $userRepository->loadUserByUsername($username, false);
 
-        $SecurityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($SecurityUser, 'password', 'provider');
+        $securityUser = new SecurityUser($user);
+        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
 
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $resource);
+        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $userRepository);
+
+        $resolver = new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         static::assertSame([$user], iterator_to_array($resolver->resolve(Request::create('/'), $metadata)));
@@ -73,18 +78,25 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     {
         static::bootKernel();
 
-        /** @var UserResource $resource */
-        $resource = static::$container->get(UserResource::class);
+        /**
+         * @var UserRepository $userRepository
+         */
+        $userRepository = static::$container->get(UserRepository::class);
 
-        $user = $resource->findOneBy(['username' => $username]);
+        $user = $userRepository->loadUserByUsername($username, false);
 
-        $SecurityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($SecurityUser, 'password', 'provider');
+        $securityUser = new SecurityUser($user);
+        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
 
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($tokenStorage, $resource)]);
+        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $userRepository);
+
+        $argumentResolver = new ArgumentResolver(
+            null,
+            [new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification)]
+        );
 
         $closure = static function (User $loggedInUser) {
             // Do nothing
