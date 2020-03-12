@@ -121,7 +121,7 @@ class RequestSubscriber implements EventSubscriberInterface
         $this->requestLogger->setRequest($request);
         $this->requestLogger->setResponse($event->getResponse());
 
-        $identify = $this->userService->getIdentify();
+        $identify = $this->userService->getIdentity();
 
         if ($identify instanceof SecurityUser) {
             $userEntity = $this->userRepository->getReference($identify->getUsername());

@@ -28,7 +28,7 @@ class UserTypeIdentification
     private UserRepository $userRepository;
 
     /**
-     * UserService constructor.
+     * UserTypeIdentification constructor.
      *
      * @param TokenStorageInterface $tokenStorage
      * @param UserRepository        $userRepository
@@ -66,11 +66,11 @@ class UserTypeIdentification
     }
 
     /**
-     * Helper method to get user identify object via token storage.
+     * Helper method to get user identity object via token storage.
      *
      * @return SecurityUser|ApiKeyUser|null
      */
-    public function getIdentify(): ?UserInterface
+    public function getIdentity(): ?UserInterface
     {
         return $this->getSecurityUser() ?? $this->getApiKeyUser();
     }

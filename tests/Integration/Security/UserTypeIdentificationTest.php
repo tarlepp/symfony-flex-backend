@@ -135,26 +135,26 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @dataProvider dataProviderTestThatGetIdentifyReturnsNullWhenTokenIsNotValid
+     * @dataProvider dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid
      *
      * @param TokenInterface|null $token
      *
-     * @testdox Test that `getIdentify` returns null when using `$token` as a token.
+     * @testdox Test that `getIdentity` returns null when using `$token` as a token.
      */
-    public function testThatGetIdentifyReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
+    public function testThatGetIdentityReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
         $this->tokenStorage
             ->expects(static::exactly(2))
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull((new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getIdentify());
+        static::assertNull((new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getIdentity());
     }
 
     /**
-     * @testdox Test that `getIdentify` returns correct SecurityUser.
+     * @testdox Test that `getIdentity` returns correct SecurityUser.
      */
-    public function testThatGetIdentifyReturnsExpectedSecurityUser(): void
+    public function testThatGetIdentityReturnsExpectedSecurityUser(): void
     {
         $securityUser = new SecurityUser(new User());
 
@@ -167,14 +167,14 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         static::assertSame(
             $securityUser,
-            (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getIdentify()
+            (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getIdentity()
         );
     }
 
     /**
-     * @testdox Test that `getIdentify` returns correct ApiKeyUser.
+     * @testdox Test that `getIdentity` returns correct ApiKeyUser.
      */
-    public function testThatGetIdentifyReturnsExpectedApiKeyUser(): void
+    public function testThatGetIdentityReturnsExpectedApiKeyUser(): void
     {
         $apiKeyUser = new ApiKeyUser(new ApiKey(), $this->rolesService);
 
@@ -187,7 +187,7 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         static::assertSame(
             $apiKeyUser,
-            (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getIdentify()
+            (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getIdentity()
         );
     }
 
@@ -300,7 +300,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     /**
      * @return Generator
      */
-    public function dataProviderTestThatGetIdentifyReturnsNullWhenTokenIsNotValid(): Generator
+    public function dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
