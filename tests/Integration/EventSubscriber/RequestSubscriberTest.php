@@ -118,7 +118,7 @@ class RequestSubscriberTest extends KernelTestCase
 
         $userService
             ->expects(static::once())
-            ->method('getIdentify')
+            ->method('getIdentity')
             ->willReturn($securityUser);
 
         $requestLogger
@@ -166,7 +166,7 @@ class RequestSubscriberTest extends KernelTestCase
 
         $userService
             ->expects(static::once())
-            ->method('getIdentify')
+            ->method('getIdentity')
             ->willReturn($securityUser);
 
         $requestLogger
@@ -218,7 +218,7 @@ class RequestSubscriberTest extends KernelTestCase
 
         $userService
             ->expects(static::once())
-            ->method('getIdentify')
+            ->method('getIdentity')
             ->willReturn($apiKeyUser);
 
         $requestLogger
