@@ -25,6 +25,7 @@ use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use function array_filter;
 use function array_map;
@@ -91,7 +92,8 @@ class IntegrityTest extends KernelTestCase
      *
      * @testdox Test that repository `$repository` has integration test class `$testClass`.
      */
-    public function testThatRepositoryClassHasIntegrationTests(string $testClass, string $repository): void {
+    public function testThatRepositoryClassHasIntegrationTests(string $testClass, string $repository): void
+    {
         $format = <<<FORMAT
 Repository '%s' doesn't have required test class '%s'.
 FORMAT;
@@ -350,6 +352,25 @@ FORMAT;
         );
 
         static::assertTrue(class_exists($dataTransformerTestClass), $message);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatConstraintHasUnitTest
+     *
+     * @param string $constraintTestClass
+     * @param string $constraintClass
+     *
+     * @testdox Test that constraint `$constraintClass` has unit test class `$constraintTestClass`
+     */
+    public function testThatConstraintHasUnitTest(string $constraintTestClass, $constraintClass): void
+    {
+        $message = sprintf(
+            'Constraint "%s" does not have required test class "%s".',
+            $constraintClass,
+            $constraintTestClass
+        );
+
+        static::assertTrue(class_exists($constraintTestClass), $message);
     }
 
     /**
@@ -722,6 +743,23 @@ FORMAT;
     /**
      * @return array
      */
+    public function dataProviderTestThatConstraintHasUnitTest(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/Validator/';
+
+        $namespace = '\\App\\Validator\\';
+        $namespaceTest = '\\App\\Tests\\Unit\\Validator\\';
+
+        $filter = $this->getSubclassOfFilter(Constraint::class);
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    /**
+     * @return array
+     */
     public function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -889,5 +927,17 @@ FORMAT;
             !$reflectionClass->isInterface()
             && !$reflectionClass->isAbstract()
             && $reflectionClass->implementsInterface($interface);
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return Closure
+     */
+    private function getSubclassOfFilter(string $class): Closure
+    {
+        return fn (ReflectionClass $reflectionClass): bool =>
+            !$reflectionClass->isInterface()
+            && $reflectionClass->isSubclassOf($class);
     }
 }
