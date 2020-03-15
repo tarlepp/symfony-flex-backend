@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f62295f1369bbdfbcaf4d54b7b4c6fa5",
+    "content-hash": "51c026a656f4da246e4a7b1831af212d",
     "packages": [],
     "packages-dev": [
         {
@@ -2071,12 +2071,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "f0eca1ac3194cc94726f0bb366672f38629272b4"
+                "reference": "b68e249f4348e45a501e2e6f591e79e61b70453c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f0eca1ac3194cc94726f0bb366672f38629272b4",
-                "reference": "f0eca1ac3194cc94726f0bb366672f38629272b4",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b68e249f4348e45a501e2e6f591e79e61b70453c",
+                "reference": "b68e249f4348e45a501e2e6f591e79e61b70453c",
                 "shasum": ""
             },
             "conflict": {
@@ -2216,6 +2216,7 @@
                 "socalnick/scn-social-auth": "<1.15.2",
                 "spoonity/tcpdf": "<6.2.22",
                 "squizlabs/php_codesniffer": ">=1,<2.8.1|>=3,<3.0.1",
+                "ssddanbrown/bookstack": "<0.25.3",
                 "stormpath/sdk": ">=0,<9.9.99",
                 "studio-42/elfinder": "<2.1.49",
                 "swiftmailer/swiftmailer": ">=4,<5.4.5",
@@ -2323,7 +2324,17 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2020-03-03T17:52:54+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/Ocramius",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/roave/security-advisories",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-03-14T00:01:35+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -4579,16 +4590,16 @@
         },
         {
             "name": "symplify/auto-bind-parameter",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/auto-bind-parameter.git",
-                "reference": "a5be68ec99403f9fcb7a3e2eacd8fd732f781574"
+                "reference": "ff9c5b60aba14f5a91449684f28a52e4411181c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/a5be68ec99403f9fcb7a3e2eacd8fd732f781574",
-                "reference": "a5be68ec99403f9fcb7a3e2eacd8fd732f781574",
+                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/ff9c5b60aba14f5a91449684f28a52e4411181c3",
+                "reference": "ff9c5b60aba14f5a91449684f28a52e4411181c3",
                 "shasum": ""
             },
             "require": {
@@ -4596,7 +4607,7 @@
                 "php": "^7.2",
                 "symfony/dependency-injection": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
-                "symplify/package-builder": "^7.2.3"
+                "symplify/package-builder": "^7.2.4"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -4617,20 +4628,30 @@
                 "MIT"
             ],
             "description": "Auto bind parameters for your Symfony applications",
-            "time": "2020-02-27T16:45:59+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/rectorphp",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-03-12T09:43:53+00:00"
         },
         {
             "name": "symplify/autowire-array-parameter",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/autowire-array-parameter.git",
-                "reference": "e9d728d0b46e27442f01b371bb3989084e4604f9"
+                "reference": "3acb60ed2aa469a222f39dd79fcc12d64e30b6d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/e9d728d0b46e27442f01b371bb3989084e4604f9",
-                "reference": "e9d728d0b46e27442f01b371bb3989084e4604f9",
+                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/3acb60ed2aa469a222f39dd79fcc12d64e30b6d5",
+                "reference": "3acb60ed2aa469a222f39dd79fcc12d64e30b6d5",
                 "shasum": ""
             },
             "require": {
@@ -4638,7 +4659,7 @@
                 "nette/utils": "^3.0",
                 "php": "^7.2",
                 "symfony/dependency-injection": "^4.4|^5.0",
-                "symplify/package-builder": "^7.2.3"
+                "symplify/package-builder": "^7.2.4"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -4659,20 +4680,30 @@
                 "MIT"
             ],
             "description": "Autowire array parameters for your Symfony applications",
-            "time": "2020-02-27T16:45:59+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/rectorphp",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-03-12T09:43:53+00:00"
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/coding-standard.git",
-                "reference": "6bfcfab76e7a12765481a51864b1faa7e9321bdd"
+                "reference": "9e994e7309cc8f1c80467eb91512538bc938b28a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/coding-standard/zipball/6bfcfab76e7a12765481a51864b1faa7e9321bdd",
-                "reference": "6bfcfab76e7a12765481a51864b1faa7e9321bdd",
+                "url": "https://api.github.com/repos/symplify/coding-standard/zipball/9e994e7309cc8f1c80467eb91512538bc938b28a",
+                "reference": "9e994e7309cc8f1c80467eb91512538bc938b28a",
                 "shasum": ""
             },
             "require": {
@@ -4682,15 +4713,15 @@
                 "php": "^7.2",
                 "phpstan/phpdoc-parser": "^0.4",
                 "squizlabs/php_codesniffer": "^3.5",
-                "symplify/autowire-array-parameter": "^7.2.3",
-                "symplify/package-builder": "^7.2.3",
-                "symplify/smart-file-system": "^7.2.3"
+                "symplify/autowire-array-parameter": "^7.2.4",
+                "symplify/package-builder": "^7.2.4",
+                "symplify/smart-file-system": "^7.2.4"
             },
             "require-dev": {
                 "nette/application": "^3.0",
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard-tester": "^7.2.3",
-                "symplify/package-builder": "^7.2.3"
+                "symplify/easy-coding-standard-tester": "^7.2.4",
+                "symplify/package-builder": "^7.2.4"
             },
             "type": "library",
             "extra": {
@@ -4709,20 +4740,30 @@
                 "MIT"
             ],
             "description": "Set of Symplify rules for PHP_CodeSniffer and PHP CS Fixer.",
-            "time": "2020-02-27T16:45:59+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/rectorphp",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-03-12T09:43:53+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "23493070017542e18acf998e91c0f4a75d727a14"
+                "reference": "87b9af5959fa6ccfb98a3d50123174715fbe3d4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/23493070017542e18acf998e91c0f4a75d727a14",
-                "reference": "23493070017542e18acf998e91c0f4a75d727a14",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/87b9af5959fa6ccfb98a3d50123174715fbe3d4c",
+                "reference": "87b9af5959fa6ccfb98a3d50123174715fbe3d4c",
                 "shasum": ""
             },
             "require": {
@@ -4743,19 +4784,19 @@
                 "symfony/finder": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
                 "symfony/yaml": "^4.4|^5.0",
-                "symplify/auto-bind-parameter": "^7.2.3",
-                "symplify/autowire-array-parameter": "^7.2.3",
-                "symplify/coding-standard": "^7.2.3",
-                "symplify/package-builder": "^7.2.3",
-                "symplify/set-config-resolver": "^7.2.3",
-                "symplify/smart-file-system": "^7.2.3"
+                "symplify/auto-bind-parameter": "^7.2.4",
+                "symplify/autowire-array-parameter": "^7.2.4",
+                "symplify/coding-standard": "^7.2.4",
+                "symplify/package-builder": "^7.2.4",
+                "symplify/set-config-resolver": "^7.2.4",
+                "symplify/smart-file-system": "^7.2.4"
             },
             "replace": {
                 "symfony/polyfill-php70": "*"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard-tester": "^7.2.3"
+                "symplify/easy-coding-standard-tester": "^7.2.4"
             },
             "bin": [
                 "bin/ecs"
@@ -4780,28 +4821,38 @@
                 "MIT"
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
-            "time": "2020-02-27T16:45:59+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/rectorphp",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-03-12T09:43:53+00:00"
         },
         {
             "name": "symplify/easy-coding-standard-tester",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard-tester.git",
-                "reference": "84b6f86322a46e637d7a60ad4a5a98c5128e21c0"
+                "reference": "96fc3620e22fe7dcf3aac0bf8a222669953c1fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard-tester/zipball/84b6f86322a46e637d7a60ad4a5a98c5128e21c0",
-                "reference": "84b6f86322a46e637d7a60ad4a5a98c5128e21c0",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard-tester/zipball/96fc3620e22fe7dcf3aac0bf8a222669953c1fd9",
+                "reference": "96fc3620e22fe7dcf3aac0bf8a222669953c1fd9",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2",
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard": "^7.2.3",
-                "symplify/package-builder": "^7.2.3",
-                "symplify/smart-file-system": "^7.2.3"
+                "symplify/easy-coding-standard": "^7.2.4",
+                "symplify/package-builder": "^7.2.4",
+                "symplify/smart-file-system": "^7.2.4"
             },
             "type": "library",
             "extra": {
@@ -4819,20 +4870,30 @@
                 "MIT"
             ],
             "description": "The Best Way to Test Sniffs and Fixers",
-            "time": "2020-02-27T16:45:59+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/rectorphp",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-03-12T09:43:53+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/package-builder.git",
-                "reference": "5f72b6735d1b82c771856807752088ec81ae7584"
+                "reference": "819df91cdc61e901429746656acec37ef1f38aac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/package-builder/zipball/5f72b6735d1b82c771856807752088ec81ae7584",
-                "reference": "5f72b6735d1b82c771856807752088ec81ae7584",
+                "url": "https://api.github.com/repos/symplify/package-builder/zipball/819df91cdc61e901429746656acec37ef1f38aac",
+                "reference": "819df91cdc61e901429746656acec37ef1f38aac",
                 "shasum": ""
             },
             "require": {
@@ -4865,20 +4926,30 @@
                 "MIT"
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
-            "time": "2020-02-19T14:06:37+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/rectorphp",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-03-12T09:04:14+00:00"
         },
         {
             "name": "symplify/set-config-resolver",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/set-config-resolver.git",
-                "reference": "3a34bb51870e2a6213bcc26702450ee7b58855d9"
+                "reference": "04b48cead95bf20d4091b44b71dbb346d70c8e90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/3a34bb51870e2a6213bcc26702450ee7b58855d9",
-                "reference": "3a34bb51870e2a6213bcc26702450ee7b58855d9",
+                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/04b48cead95bf20d4091b44b71dbb346d70c8e90",
+                "reference": "04b48cead95bf20d4091b44b71dbb346d70c8e90",
                 "shasum": ""
             },
             "require": {
@@ -4887,7 +4958,7 @@
                 "symfony/console": "^4.4|^5.0",
                 "symfony/filesystem": "^4.4|^5.0",
                 "symfony/finder": "^4.4|^5.0",
-                "symplify/smart-file-system": "^7.2.3"
+                "symplify/smart-file-system": "^7.2.4"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -4908,20 +4979,30 @@
                 "MIT"
             ],
             "description": "Resolve config and sets from configs and cli opptions for CLI applications",
-            "time": "2020-02-27T16:45:59+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/rectorphp",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-03-12T09:43:53+00:00"
         },
         {
             "name": "symplify/smart-file-system",
-            "version": "v7.2.3",
+            "version": "v7.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/smart-file-system.git",
-                "reference": "a871319d4b27dddc3ec9d6ee4e837aa518dbe2cd"
+                "reference": "5e0fa2a90bae6174bc2de2f8a40ab216b0e38e50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/a871319d4b27dddc3ec9d6ee4e837aa518dbe2cd",
-                "reference": "a871319d4b27dddc3ec9d6ee4e837aa518dbe2cd",
+                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/5e0fa2a90bae6174bc2de2f8a40ab216b0e38e50",
+                "reference": "5e0fa2a90bae6174bc2de2f8a40ab216b0e38e50",
                 "shasum": ""
             },
             "require": {
@@ -4951,7 +5032,17 @@
                 "MIT"
             ],
             "description": "Sanitized FileInfo with safe getRealPath() and other handy methods",
-            "time": "2020-02-10T10:07:57+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/tomasvotruba",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/rectorphp",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2020-03-02T16:35:33+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -5053,5 +5144,6 @@
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.4.0"
-    }
+    },
+    "plugin-api-version": "1.1.0"
 }
