@@ -73,7 +73,7 @@ jobs:
         run: make ecs
 
       - name: Run Psalm static analysis tool and report statistics to https://shepherd.dev/
-        run: make psalm-shepherd
+        run: make psalm-github
 
       #- name: Run Psalm static analysis tool
       #  run: make psalm

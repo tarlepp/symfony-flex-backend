@@ -195,6 +195,14 @@ psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
 	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json
 ###< psalm ###
 
+###> psalm for GitHub actions ###
+psalm-github: ## Runs Psalm static analysis tool
+	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
+	@mkdir -p build
+	@php ./vendor/bin/psalm --version
+	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json --output-format=github
+###< psalm ###
+
 ###> phpstan ###
 phpstan: ## Runs PHPStan static analysis tool
 	@echo "\033[32mRunning PHPStan - PHP Static Analysis Tool\033[39m"
