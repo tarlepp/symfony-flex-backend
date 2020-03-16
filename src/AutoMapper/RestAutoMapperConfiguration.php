@@ -32,7 +32,7 @@ abstract class RestAutoMapperConfiguration implements AutoMapperConfiguratorInte
     /**
      * Use this method to register your mappings.
      *
-     * @param AutoMapperConfigInterface $config
+     * @param AutoMapperConfigInterface|Foo $config
      */
     public function configure(AutoMapperConfigInterface $config): void
     {
