@@ -442,6 +442,9 @@
     "symfony/polyfill-php73": {
         "version": "v1.13.1"
     },
+    "symfony/polyfill-php80": {
+        "version": "v1.15.0"
+    },
     "symfony/polyfill-util": {
         "version": "v1.13.1"
     },
