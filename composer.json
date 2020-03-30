@@ -51,7 +51,7 @@
 		"symfony/process": "4.4.6",
 		"symfony/routing": "4.4.6",
 		"symfony/security-bundle": "4.4.6",
-		"symfony/serializer-pack": "1.0.2",
+		"symfony/serializer-pack": "1.0.3",
 		"symfony/translation": "4.4.6",
 		"symfony/twig-bundle": "4.4.6",
 		"symfony/validator": "4.4.6",
