@@ -47,7 +47,7 @@ trait FindMethod
         try {
             $criteria = RequestHandler::getCriteria($request);
 
-            $this->processCriteria($criteria);
+            $this->processCriteria($criteria, $request, __METHOD__);
 
             return $this
                 ->getResponseHandler()

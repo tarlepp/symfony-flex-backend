@@ -39,7 +39,7 @@ trait AbstractGenericMethods
     /**
      * {@inheritdoc}
      */
-    abstract public function processCriteria(array &$criteria): void;
+    abstract public function processCriteria(array &$criteria, Request $request, string $method): void;
 
     /**
      * {@inheritdoc}
