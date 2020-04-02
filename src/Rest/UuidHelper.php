@@ -10,7 +10,9 @@ namespace App\Rest;
 
 use Ramsey\Uuid\Codec\OrderedTimeCodec;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
+use Ramsey\Uuid\Doctrine\UuidBinaryType;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
+use Ramsey\Uuid\Rfc4122\FieldsInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
@@ -49,9 +51,11 @@ class UuidHelper
         $output = null;
 
         try {
-            $factory->fromString($value);
+            $fields = $factory->fromString($value)->getFields();
 
-            $output = UuidBinaryOrderedTimeType::NAME;
+            if ($fields instanceof FieldsInterface) {
+                $output = $fields->getVersion() === 1 ? UuidBinaryOrderedTimeType::NAME : UuidBinaryType::NAME;
+            }
         } catch (InvalidUuidStringException $exception) {
             // ok, so now we know that value isn't uuid
             (static fn (Throwable $exception): Throwable => $exception)($exception);
