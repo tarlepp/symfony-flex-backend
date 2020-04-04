@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75c7ed4f21fc6a05fca35bc6cba784f3",
+    "content-hash": "20934b4b9e8b69e6fbc9ed3bba8abed1",
     "packages": [],
     "packages-dev": [
         {
@@ -61,16 +61,16 @@
         },
         {
             "name": "phpmetrics/phpmetrics",
-            "version": "v2.6.0",
+            "version": "v2.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmetrics/PhpMetrics.git",
-                "reference": "ec9a174c7686f22699b46503c82788353272291c"
+                "reference": "67ac2cea23c6f9c5bdfd1c98fc0e55eef16ef59d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmetrics/PhpMetrics/zipball/ec9a174c7686f22699b46503c82788353272291c",
-                "reference": "ec9a174c7686f22699b46503c82788353272291c",
+                "url": "https://api.github.com/repos/phpmetrics/PhpMetrics/zipball/67ac2cea23c6f9c5bdfd1c98fc0e55eef16ef59d",
+                "reference": "67ac2cea23c6f9c5bdfd1c98fc0e55eef16ef59d",
                 "shasum": ""
             },
             "require": {
@@ -120,7 +120,7 @@
                 "quality",
                 "testing"
             ],
-            "time": "2020-03-28T13:34:12+00:00"
+            "time": "2020-04-02T20:22:19+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -128,12 +128,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "abf855b59c93a92efbebc39107e2a5a6215a0488"
+                "reference": "0f73cf4b4b9227eb8845723bc2a8869bc4dd6e8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/abf855b59c93a92efbebc39107e2a5a6215a0488",
-                "reference": "abf855b59c93a92efbebc39107e2a5a6215a0488",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0f73cf4b4b9227eb8845723bc2a8869bc4dd6e8f",
+                "reference": "0f73cf4b4b9227eb8845723bc2a8869bc4dd6e8f",
                 "shasum": ""
             },
             "conflict": {
@@ -174,8 +174,8 @@
                 "doctrine/orm": ">=2,<2.4.8|>=2.5,<2.5.1",
                 "dolibarr/dolibarr": "<=10.0.6",
                 "dompdf/dompdf": ">=0.6,<0.6.2",
-                "drupal/core": ">=7,<7.69|>=8,<8.7.11|>=8.8,<8.8.1",
-                "drupal/drupal": ">=7,<7.69|>=8,<8.7.11|>=8.8,<8.8.1",
+                "drupal/core": ">=7,<7.69|>=8,<8.7.12|>=8.8,<8.8.4",
+                "drupal/drupal": ">=7,<7.69|>=8,<8.7.12|>=8.8,<8.8.4",
                 "endroid/qr-code-bundle": "<3.4.2",
                 "enshrined/svg-sanitize": "<0.13.1",
                 "erusev/parsedown": "<1.7.2",
@@ -394,7 +394,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-03-30T15:16:05+00:00"
+            "time": "2020-03-31T14:30:16+00:00"
         }
     ],
     "aliases": [],
