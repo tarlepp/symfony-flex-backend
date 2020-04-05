@@ -17,7 +17,7 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install intl \
     && docker-php-ext-install opcache \
     && docker-php-ext-install zip \
-    && pecl install xdebug-2.9.3 \
+    && pecl install xdebug-2.9.4 \
     && docker-php-ext-enable xdebug
 
 # Install APCu and APC backward compatibility
