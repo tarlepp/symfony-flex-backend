@@ -36,7 +36,7 @@
 		"nelmio/cors-bundle": "2.0.1",
 		"piwik/device-detector": "3.12.4",
 		"ramsey/uuid-doctrine": "1.6.0",
-		"sensio/framework-extra-bundle": "5.5.3",
+		"sensio/framework-extra-bundle": "5.5.4",
 		"symfony/asset": "4.4.7",
 		"symfony/config": "4.4.7",
 		"symfony/console": "4.4.7",
@@ -69,7 +69,7 @@
 		"sensiolabs/security-checker": "6.0.3",
 		"symfony/browser-kit": "4.4.7",
 		"symfony/debug-pack": "1.0.7",
-		"symfony/maker-bundle": "1.14.6",
+		"symfony/maker-bundle": "1.15.0",
 		"symfony/requirements-checker": "1.1.5"
 	},
 	"config": {
