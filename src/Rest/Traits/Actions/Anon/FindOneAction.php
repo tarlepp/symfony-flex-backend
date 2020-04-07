@@ -34,7 +34,7 @@ trait FindOneAction
      * @Route(
      *      "/{id}",
      *      requirements={
-     *          "id" = "%app.uuid_regex%",
+     *          "id" = "%app.uuid_v1_regex%",
      *      },
      *      methods={"GET"},
      *  )

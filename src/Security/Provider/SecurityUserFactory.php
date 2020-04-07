@@ -29,20 +29,20 @@ class SecurityUserFactory implements UserProviderInterface
 {
     private UserRepository $userRepository;
     private RolesService $rolesService;
-    private string $uuidRegex;
+    private string $uuidV1Regex;
 
     /**
      * SecurityUserFactory constructor.
      *
      * @param UserRepository $userRepository
      * @param RolesService   $rolesService
-     * @param string         $uuidRegex
+     * @param string         $uuidV1Regex
      */
-    public function __construct(UserRepository $userRepository, RolesService $rolesService, string $uuidRegex)
+    public function __construct(UserRepository $userRepository, RolesService $rolesService, string $uuidV1Regex)
     {
         $this->userRepository = $userRepository;
         $this->rolesService = $rolesService;
-        $this->uuidRegex = $uuidRegex;
+        $this->uuidV1Regex = $uuidV1Regex;
     }
 
     /**
@@ -60,7 +60,7 @@ class SecurityUserFactory implements UserProviderInterface
     {
         $user = $this->userRepository->loadUserByUsername(
             $username,
-            (bool)preg_match('#' . $this->uuidRegex . '#', $username)
+            (bool)preg_match('#' . $this->uuidV1Regex . '#', $username)
         );
 
         if (!($user instanceof User)) {

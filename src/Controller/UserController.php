@@ -82,7 +82,7 @@ class UserController extends Controller
      * @Route(
      *      "/{requestUser}",
      *      requirements={
-     *          "requestUser" = "%app.uuid_regex%",
+     *          "requestUser" = "%app.uuid_v1_regex%",
      *      },
      *      methods={"DELETE"},
      *  )
@@ -119,7 +119,7 @@ class UserController extends Controller
      * @Route(
      *      "/{requestUser}/roles",
      *      requirements={
-     *          "requestUser" = "%app.uuid_regex%",
+     *          "requestUser" = "%app.uuid_v1_regex%",
      *      },
      *      methods={"GET"},
      *  )
@@ -190,7 +190,7 @@ class UserController extends Controller
      * @Route(
      *      "/{requestUser}/groups",
      *      requirements={
-     *          "requestUser" = "%app.uuid_regex%",
+     *          "requestUser" = "%app.uuid_v1_regex%",
      *      },
      *      methods={"GET"},
      *  )
@@ -266,8 +266,8 @@ class UserController extends Controller
      * @Route(
      *      "/{user}/group/{userGroup}",
      *      requirements={
-     *          "user" = "%app.uuid_regex%",
-     *          "userGroup" = "%app.uuid_regex%",
+     *          "user" = "%app.uuid_v1_regex%",
+     *          "userGroup" = "%app.uuid_v1_regex%",
      *      },
      *      methods={"POST"},
      *  )
@@ -386,8 +386,8 @@ class UserController extends Controller
      * @Route(
      *      "/{user}/group/{userGroup}",
      *      requirements={
-     *          "user" = "%app.uuid_regex%",
-     *          "userGroup" = "%app.uuid_regex%",
+     *          "user" = "%app.uuid_v1_regex%",
+     *          "userGroup" = "%app.uuid_v1_regex%",
      *      },
      *      methods={"DELETE"},
      *  )
