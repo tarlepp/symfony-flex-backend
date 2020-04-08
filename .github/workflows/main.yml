@@ -301,3 +301,23 @@ jobs:
         with:
           config: './markdown-lint.yml'
           args: './secrets/README.md'
+
+  build:
+    name: Build application and run Phonito Security Docker Vulnerability Scanner
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Set tag var
+        id: vars
+        run: echo ::set-output name=docker_tag::$(echo ${GITHUB_REF} | cut -d'/' -f3)-${GITHUB_SHA}
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.docker_tag }}
+
+      - name: Scan with Phonito Security
+        uses: phonito/phonito-scanner-action@master
+        with:
+          image: symfony-flex-backend:${{ steps.vars.outputs.docker_tag }}
+          phonito-token: '${{ secrets.PHONITO_TOKEN }}'
