@@ -1,5 +1,5 @@
 FROM composer:1.10.1 AS composer
-FROM php:7.4.4-fpm
+FROM php:7.4.4-fpm AS build
 
 RUN apt-get update && apt-get install -y \
     unattended-upgrades zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ \
@@ -45,6 +45,10 @@ RUN chmod +x /usr/bin/composer
 RUN rm -rf /app/var \
     && mkdir -p /app/var \
     && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader
+
+FROM php:7.4.4-fpm
+
+COPY --from=build /app /app
 
 EXPOSE 9000
 
