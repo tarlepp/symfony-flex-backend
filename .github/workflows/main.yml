@@ -175,12 +175,12 @@ jobs:
           php ocular.phar code-coverage:upload --access-token ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
 
       # This is waiting for - https://github.com/php-coveralls/php-coveralls/issues/273
-      #- name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
-      #  run: php ./vendor/bin/php-coveralls -v
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #    COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-      #    COVERALLS_RUN_LOCALLY: 1
+      - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
+        run: php ./vendor/bin/php-coveralls -v
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          COVERALLS_RUN_LOCALLY: 1
 
       # This is waiting for - https://github.com/SonarSource/sonarcloud-github-action/pull/6
       #- name: SonarCloud Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
