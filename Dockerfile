@@ -25,6 +25,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 # Update composer to latest version
 RUN composer self-update
 
+ENV APP_ENV prod
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 WORKDIR /app
