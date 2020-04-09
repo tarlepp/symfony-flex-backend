@@ -303,7 +303,7 @@ jobs:
           args: './secrets/README.md'
 
   build:
-    name: Build application and check image with trivy
+    name: Build application Docker image
     runs-on: ubuntu-latest
 
     steps:
