@@ -2,7 +2,7 @@ FROM composer:1.10.1 AS composer
 FROM php:7.4.4-fpm
 
 RUN apt-get update && apt-get install -y \
-    zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 \
+    zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install -j$(nproc) bcmath \
@@ -25,6 +25,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 # Update composer to latest version
 RUN composer self-update
 
+ENV APP_ENV prod
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 WORKDIR /app

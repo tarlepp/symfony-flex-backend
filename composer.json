@@ -136,7 +136,6 @@
 			"cache:clear": "symfony-cmd",
 			"cache:warmup": "symfony-cmd",
 			"assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd",
-			"security-checker security:check": "script",
 			"assets:install %PUBLIC_DIR%": "symfony-cmd"
 		}
 	},
