@@ -319,4 +319,4 @@ jobs:
         uses: homoluctus/gitrivy@master
         with:
           image: symfony-flex-backend:${{ steps.vars.outputs.docker_tag }}
-          token-token: '${{ secrets.GITHUB_TOKEN }}'
+          token: '${{ secrets.GITHUB_TOKEN }}'
