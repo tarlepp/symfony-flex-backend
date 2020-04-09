@@ -303,7 +303,7 @@ jobs:
           args: './secrets/README.md'
 
   build:
-    name: Build application and run Phonito Security Docker Vulnerability Scanner
+    name: Build application and check image with trivy
     runs-on: ubuntu-latest
 
     steps:
@@ -317,7 +317,7 @@ jobs:
         run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.docker_tag }}
 
       - name: Scan with Phonito Security
-        uses: phonito/phonito-scanner-action@master
+        uses: homoluctus/gitrivy@master
         with:
           image: symfony-flex-backend:${{ steps.vars.outputs.docker_tag }}
-          phonito-token: '${{ secrets.PHONITO_TOKEN }}'
+          token-token: '${{ secrets.GITHUB_TOKEN }}'
