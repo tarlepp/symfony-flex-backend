@@ -181,12 +181,11 @@ jobs:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           COVERALLS_RUN_LOCALLY: 1
 
-      # This is waiting for - https://github.com/SonarSource/sonarcloud-github-action/pull/6
-      #- name: SonarCloud Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
-      #  uses: sonarsource/sonarcloud-github-action@master
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # https://github.com/SonarSource/sonarcloud-github-action#secrets
+      - name: SonarCloud Scan (https://sonarcloud.io/dashboard?id=github.com.tarlepp.symfony-flex-backend)
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # https://github.com/SonarSource/sonarcloud-github-action#secrets
 
       - name: Create PhpMetrics report
         run: make phpmetrics
