@@ -315,11 +315,3 @@ jobs:
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag symfony-flex-backend:${{ steps.vars.outputs.docker_tag }}
-
-      - name: Scan image with trivy
-        uses: homoluctus/gitrivy@master
-        with:
-          image: symfony-flex-backend:${{ steps.vars.outputs.docker_tag }}
-          severity: 'UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL'
-          ignore_unfixed: true
-          token: '${{ secrets.GITHUB_TOKEN }}'
