@@ -1,10 +1,8 @@
 FROM composer:1.10.1 AS composer
-FROM php:7.4.4-fpm AS build
+FROM php:7.4.4-fpm
 
 RUN apt-get update && apt-get install -y \
-    unattended-upgrades zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ \
-    bash-completion iproute2 \
-    nano vim git unzip jq \
+    zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq \
     && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install -j$(nproc) bcmath \
@@ -20,9 +18,6 @@ RUN pecl install apcu \
     && pecl install apcu_bc-1.0.5 \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
     && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
-
-# Install all possible security updates
-RUN unattended-upgrade -d
 
 # copy the Composer PHAR from the Composer image into the PHP image
 COPY --from=composer /usr/bin/composer /usr/bin/composer
@@ -45,10 +40,6 @@ RUN chmod +x /usr/bin/composer
 RUN rm -rf /app/var \
     && mkdir -p /app/var \
     && php -d memory_limit=-1 /usr/bin/composer install --no-dev --optimize-autoloader
-
-FROM php:7.4.4-fpm
-
-COPY --from=build /app /app
 
 EXPOSE 9000
 

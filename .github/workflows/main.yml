@@ -320,4 +320,5 @@ jobs:
         uses: homoluctus/gitrivy@master
         with:
           image: symfony-flex-backend:${{ steps.vars.outputs.docker_tag }}
+          severity: 'LOW,MEDIUM,HIGH,CRITICAL'
           token: '${{ secrets.GITHUB_TOKEN }}'
