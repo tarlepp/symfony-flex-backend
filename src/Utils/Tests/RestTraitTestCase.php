@@ -56,13 +56,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route . self::END_POINT_COUNT);
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $username, $password, $method);
 
         static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -83,13 +77,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route . self::END_POINT_COUNT);
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $username, $password, $method);
 
         static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -110,13 +98,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route . self::END_POINT_COUNT);
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route . self::END_POINT_COUNT, $username, $password, $method);
 
         static::assertSame(
             $username === null ? 401 : 403,
@@ -141,13 +123,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route);
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route, $username, $password, $method);
 
         static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -168,13 +144,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route);
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route, $username, $password, $method);
 
         static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -195,13 +165,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route);
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route, $username, $password, $method);
 
         static::assertSame(
             $username === null ? 401 : 403,
@@ -213,28 +177,22 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods
      *
+     * @param string      $uuid
      * @param string|null $username
      * @param string|null $password
      * @param string|null $method
      *
      * @throws Throwable
      *
-     * @testdox Test that `/{id}` route doesn't allow `$method` method with `$username + $password`.
+     * @testdox Test that `/$uuid` route doesn't allow `$method` method with `$username + $password`.
      */
     public function testThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(
+        string $uuid,
         ?string $username = null,
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $uuid = UuidHelper::getFactory()->uuid1()->toString();
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route . '/' . $uuid);
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route . '/' . $uuid, $username, $password, $method);
 
         static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -242,28 +200,22 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods
      *
+     * @param string      $uuid
      * @param string|null $username
      * @param string|null $password
      * @param string|null $method
      *
      * @throws Throwable
      *
-     * @testdox Test that `/{id}` route works as expected when using `$method` method with `$username + $password`.
+     * @testdox Test that `/$uuid` route works as expected when using `$method` method with `$username + $password`.
      */
     public function testThatRootRouteWithIdWorksWithAllowedHttpMethods(
+        string $uuid,
         ?string $username = null,
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $uuid = UuidHelper::getFactory()->uuid1()->toString();
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route . '/' . $uuid);
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route . '/' . $uuid, $username, $password, $method);
 
         static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -271,28 +223,22 @@ abstract class RestTraitTestCase extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser
      *
+     * @param string      $uuid
      * @param string|null $username
      * @param string|null $password
      * @param string|null $method
      *
      * @throws Throwable
      *
-     * @testdox Test that `/{id}` route doesn't allow invalid user `$username + $password` when using `$method` method.
+     * @testdox Test that `/$uuid` route doesn't allow invalid user `$username + $password` when using `$method` method.
      */
     public function testThatRootRouteWithIdDoesNotAllowInvalidUser(
+        string $uuid,
         ?string $username = null,
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $uuid = UuidHelper::getFactory()->uuid1()->toString();
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route . '/' . $uuid);
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route . '/' . $uuid, $username, $password, $method);
 
         static::assertSame(
             $username === null ? 401 : 403,
@@ -317,13 +263,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route . '/ids');
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route . '/ids', $username, $password, $method);
 
         static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -344,13 +284,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route . '/ids');
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route . '/ids', $username, $password, $method);
 
         static::assertSame(500, $response->getStatusCode(), (string)$response->getContent());
     }
@@ -371,13 +305,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= Request::METHOD_GET;
-
-        $client = $this->getTestClient($username, $password);
-        $client->request($method, static::$route . '/ids');
-
-        /** @var Response $response */
-        $response = $client->getResponse();
+        $response = $this->getClientResponse(static::$route . '/ids', $username, $password, $method);
 
         static::assertSame(
             $username === null ? 401 : 403,
@@ -482,7 +410,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [self::INVALID_METHOD],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods);
+        return $this->createDataForTest($this->getValidUsers(), $methods, true);
     }
 
     /**
@@ -496,7 +424,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_PUT],
         ];
 
-        return $this->createDataForTest($this->getValidUsers(), $methods);
+        return $this->createDataForTest($this->getValidUsers(), $methods, true);
     }
 
     /**
@@ -510,7 +438,7 @@ abstract class RestTraitTestCase extends WebTestCase
             [Request::METHOD_PUT],
         ];
 
-        return $this->createDataForTest($this->getInvalidUsers(), $methods);
+        return $this->createDataForTest($this->getInvalidUsers(), $methods, true);
     }
 
     /**
@@ -560,12 +488,42 @@ abstract class RestTraitTestCase extends WebTestCase
      *
      * @return Generator<array<int, string|null>>
      */
-    private function createDataForTest(Generator $users, array $methods): Generator
+    private function createDataForTest(Generator $users, array $methods, ?bool $uuid = null): Generator
     {
+        $uuid ??= false;
+
         foreach ($users as $userData) {
             foreach ($methods as $method) {
-                yield array_merge($userData, $method);
+                yield array_merge(
+                    $uuid ? [UuidHelper::getFactory()->uuid1()->toString()] : [],
+                    $userData,
+                    $method
+                );
             }
         }
+    }
+
+    /**
+     * @param string      $route
+     * @param string|null $username
+     * @param string|null $password
+     * @param string|null $method
+     *
+     * @return Response
+     *
+     * @throws Throwable
+     */
+    private function getClientResponse(
+        string $route,
+        ?string $username,
+        ?string $password,
+        ?string $method
+    ): Response {
+        $method ??= Request::METHOD_GET;
+
+        $client = $this->getTestClient($username, $password);
+        $client->request($method, $route);
+
+        return $client->getResponse();
     }
 }
