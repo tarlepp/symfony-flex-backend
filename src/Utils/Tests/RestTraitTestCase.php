@@ -10,6 +10,7 @@ namespace App\Utils\Tests;
 
 use App\Rest\UuidHelper;
 use Generator;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_merge;
@@ -25,6 +26,7 @@ use function array_merge;
 abstract class RestTraitTestCase extends WebTestCase
 {
     private const END_POINT_COUNT = '/count';
+    private const INVALID_METHOD = 'foobar';
 
     protected static string $route;
 
@@ -54,7 +56,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . self::END_POINT_COUNT);
@@ -81,7 +83,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . self::END_POINT_COUNT);
@@ -108,7 +110,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . self::END_POINT_COUNT);
@@ -139,7 +141,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route);
@@ -166,7 +168,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route);
@@ -193,7 +195,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route);
@@ -224,7 +226,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $uuid = UuidHelper::getFactory()->uuid1()->toString();
 
@@ -253,7 +255,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $uuid = UuidHelper::getFactory()->uuid1()->toString();
 
@@ -282,7 +284,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $uuid = UuidHelper::getFactory()->uuid1()->toString();
 
@@ -315,7 +317,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/ids');
@@ -342,7 +344,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/ids');
@@ -369,7 +371,7 @@ abstract class RestTraitTestCase extends WebTestCase
         ?string $password = null,
         ?string $method = null
     ): void {
-        $method ??= 'GET';
+        $method ??= Request::METHOD_GET;
 
         $client = $this->getTestClient($username, $password);
         $client->request($method, static::$route . '/ids');
@@ -390,13 +392,13 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatCountRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
-            ['POST'],
-            ['HEAD'],
-            ['PUT'],
-            ['DELETE'],
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['foobar'],
+            [Request::METHOD_POST],
+            [Request::METHOD_HEAD],
+            [Request::METHOD_PUT],
+            [Request::METHOD_DELETE],
+            [Request::METHOD_OPTIONS],
+            [Request::METHOD_CONNECT],
+            [self::INVALID_METHOD],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
@@ -408,7 +410,7 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatCountRouteWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
-            ['GET'],
+            [Request::METHOD_GET],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
@@ -420,7 +422,7 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatCountRouteDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
-            ['GET'],
+            [Request::METHOD_GET],
         ];
 
         return $this->createDataForTest($this->getInvalidUsers(), $methods);
@@ -432,11 +434,11 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatRootRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
-            ['PUT'],
-            ['DELETE'],
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['foobar'],
+            [Request::METHOD_PUT],
+            [Request::METHOD_DELETE],
+            [Request::METHOD_OPTIONS],
+            [Request::METHOD_CONNECT],
+            [self::INVALID_METHOD],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
@@ -448,8 +450,8 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatRootRouteWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
-            ['GET'],
-            ['POST'],
+            [Request::METHOD_GET],
+            [Request::METHOD_POST],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
@@ -461,8 +463,8 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatRootRouteDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
-            ['GET'],
-            ['POST'],
+            [Request::METHOD_GET],
+            [Request::METHOD_POST],
         ];
 
         return $this->createDataForTest($this->getInvalidUsers(), $methods);
@@ -474,10 +476,10 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatRootRouteWithIdDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
-            ['POST'],
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['foobar'],
+            [Request::METHOD_POST],
+            [Request::METHOD_OPTIONS],
+            [Request::METHOD_CONNECT],
+            [self::INVALID_METHOD],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
@@ -489,9 +491,9 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatRootRouteWithIdWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
-            ['DELETE'],
-            ['GET'],
-            ['PUT'],
+            [Request::METHOD_DELETE],
+            [Request::METHOD_GET],
+            [Request::METHOD_PUT],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
@@ -503,9 +505,9 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatRootRouteWithIdDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
-            ['DELETE'],
-            ['GET'],
-            ['PUT'],
+            [Request::METHOD_DELETE],
+            [Request::METHOD_GET],
+            [Request::METHOD_PUT],
         ];
 
         return $this->createDataForTest($this->getInvalidUsers(), $methods);
@@ -517,12 +519,12 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatIdsRouteDoesNotAllowNotSupportedHttpMethods(): Generator
     {
         $methods = [
-            ['POST'],
-            ['PUT'],
-            ['DELETE'],
-            ['OPTIONS'],
-            ['CONNECT'],
-            ['foobar'],
+            [Request::METHOD_POST],
+            [Request::METHOD_PUT],
+            [Request::METHOD_DELETE],
+            [Request::METHOD_OPTIONS],
+            [Request::METHOD_CONNECT],
+            [self::INVALID_METHOD],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
@@ -534,7 +536,7 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatIdsRouteWorksWithAllowedHttpMethods(): Generator
     {
         $methods = [
-            ['GET'],
+            [Request::METHOD_GET],
         ];
 
         return $this->createDataForTest($this->getValidUsers(), $methods);
@@ -546,7 +548,7 @@ abstract class RestTraitTestCase extends WebTestCase
     public function dataProviderTestThatIdsRouteDoesNotAllowInvalidUser(): Generator
     {
         $methods = [
-            ['GET'],
+            [Request::METHOD_GET],
         ];
 
         return $this->createDataForTest($this->getInvalidUsers(), $methods);
