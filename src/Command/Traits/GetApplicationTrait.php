@@ -28,7 +28,7 @@ trait GetApplicationTrait
     public function getApplication(): Application
     {
         if (!($this instanceof Command)) {
-            throw new \RuntimeException('This trait ' . __TRAIT__ . ' is only mentioned to use with console commands.');
+            throw new RuntimeException('This trait ' . __TRAIT__ . ' is only mentioned to use with console commands.');
         }
 
         /** @noinspection PhpUndefinedClassInspection */
