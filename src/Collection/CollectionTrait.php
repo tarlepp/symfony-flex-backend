@@ -85,7 +85,7 @@ trait CollectionTrait
      */
     public function has(?string $className = null): bool
     {
-        return $className === null ? false : $this->getFilteredItem($className) !== null;
+        return $this->getFilteredItem($className ?? '') !== null;
     }
 
     /**

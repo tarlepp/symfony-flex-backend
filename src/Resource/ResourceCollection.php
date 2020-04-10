@@ -80,7 +80,7 @@ class ResourceCollection implements Countable
      */
     public function hasEntityResource(?string $className = null): bool
     {
-        return $className === null ? false : $this->getFilteredItemByEntity($className) !== null;
+        return $this->getFilteredItemByEntity($className ?? '') !== null;
     }
 
     /**
