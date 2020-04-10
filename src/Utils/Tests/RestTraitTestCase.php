@@ -524,9 +524,6 @@ abstract class RestTraitTestCase extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request($method, $route);
 
-        /** @var Response $response */
-        $response = $client->getResponse();
-
-        return $response;
+        return $client->getResponse();
     }
 }
