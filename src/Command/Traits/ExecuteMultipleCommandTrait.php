@@ -71,7 +71,7 @@ trait ExecuteMultipleCommandTrait
 
             $input = new ArrayInput($arguments);
 
-            $cmd = $this->getApplication()->find((string)$command);
+            $cmd = $this->getApplication()->find($command);
             $cmd->run($input, $output);
 
             $command = $this->ask();
