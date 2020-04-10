@@ -62,32 +62,34 @@ trait ExecuteMultipleCommandTrait
     {
         $this->io = new SymfonyStyle($input, $output);
         $this->io->write("\033\143");
+        $command = $this->ask();
 
-        /** @noinspection PhpAssignmentInConditionInspection */
-        while ($command = $this->ask()) {
+        while ($command !== null) {
             $arguments = [
                 'command' => $command,
             ];
 
             $input = new ArrayInput($arguments);
 
-            $cmd = $this->getApplication()->find((string)$command);
-            $cmd->run($input, $output);
+            $cmd = $this->getApplication()->find($command);
+            $outputValue = $cmd->run($input, $output);
+
+            $command = $this->ask();
         }
 
         if ($input->isInteractive()) {
             $this->io->success('Have a nice day');
         }
 
-        return 0;
+        return $outputValue ?? 0;
     }
 
     /**
      * Method to ask user to make choose one of defined choices.
      *
-     * @return string|bool
+     * @return string|null
      */
-    private function ask()
+    private function ask(): ?string
     {
         $index = array_search(
             $this->io->choice('What you want to do', array_values($this->choices)),
@@ -97,6 +99,6 @@ trait ExecuteMultipleCommandTrait
 
         $choice = (string)array_values(array_flip($this->choices))[(int)$index];
 
-        return $choice === '0' ? false : $choice;
+        return $choice === '0' ? null : $choice;
     }
 }
