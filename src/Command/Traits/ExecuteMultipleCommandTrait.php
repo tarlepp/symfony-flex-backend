@@ -72,7 +72,7 @@ trait ExecuteMultipleCommandTrait
             $input = new ArrayInput($arguments);
 
             $cmd = $this->getApplication()->find($command);
-            $cmd->run($input, $output);
+            $outputValue = $cmd->run($input, $output);
 
             $command = $this->ask();
         }
@@ -81,7 +81,7 @@ trait ExecuteMultipleCommandTrait
             $this->io->success('Have a nice day');
         }
 
-        return 0;
+        return $outputValue ?? 0;
     }
 
     /**
