@@ -10,8 +10,10 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\ApiKey as UserEntity;
 use App\Entity\Interfaces\EntityInterface;
+use App\Entity\Role;
 use App\Repository\ApiKeyRepository;
 use App\Repository\Interfaces\BaseRepositoryInterface;
+use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
 use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
@@ -49,6 +51,17 @@ class GenericRepositoryTest extends KernelTestCase
         $repository = static::$container->get($this->resourceClass)->getRepository();
 
         static::assertInstanceOf(UserEntity::class, $repository->getReference($entity->getId()));
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatGetReferenceReturnsExpectedWithNonUuidInput(): void
+    {
+        /** @var RoleRepository $repository */
+        $repository = static::$container->get(RoleRepository::class);
+
+        static::assertInstanceOf(Role::class, $repository->getReference('some-role'));
     }
 
     public function testThatGetAssociationsReturnsExpected(): void
