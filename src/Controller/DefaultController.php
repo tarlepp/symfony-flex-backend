@@ -42,8 +42,10 @@ class DefaultController
      *
      * @throws Throwable
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        dd($request->headers->all());
+
         return new Response('', Response::HTTP_OK);
     }
 
