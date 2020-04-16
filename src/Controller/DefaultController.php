@@ -42,7 +42,7 @@ class DefaultController
      *
      * @throws Throwable
      */
-    public function index(Request $request): Response
+    public function index(): Response
     {
         return new Response('', Response::HTTP_OK);
     }
