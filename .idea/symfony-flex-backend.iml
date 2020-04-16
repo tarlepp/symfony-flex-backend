@@ -5,7 +5,6 @@
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/phpunit/phpunit/src" isTestSource="true" packagePrefix="PHPUnit\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/symfony/phpunit-bridge" isTestSource="true" packagePrefix="Symfony\Bridge\PhpUnit\" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/phpunit/phpunit/src/Framework/MockObject/ForwardCompatibility" isTestSource="true" packagePrefix="PHPUnit\Framework\MockObject\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest/src" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/theseer/fdomdocument/src" isTestSource="true" packagePrefix="TheSeer\fDOM\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />

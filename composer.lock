@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e3a7a2a1cb91a90f632e466c23298713",
+    "content-hash": "7f4de76013021f1305ef5aec0adffc8b",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -1893,16 +1893,16 @@
         },
         {
             "name": "mark-gerarts/auto-mapper-plus",
-            "version": "1.3.9",
+            "version": "1.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mark-gerarts/automapper-plus.git",
-                "reference": "a74b074d99a5483139ea9e52fd94fdaf9623cd03"
+                "reference": "d3fc01021c0681213bbd4071acc6d98654c5c513"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus/zipball/a74b074d99a5483139ea9e52fd94fdaf9623cd03",
-                "reference": "a74b074d99a5483139ea9e52fd94fdaf9623cd03",
+                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus/zipball/d3fc01021c0681213bbd4071acc6d98654c5c513",
+                "reference": "d3fc01021c0681213bbd4071acc6d98654c5c513",
                 "shasum": ""
             },
             "require": {
@@ -1936,7 +1936,7 @@
                 "converter",
                 "object-to-object"
             ],
-            "time": "2020-02-27T16:24:32+00:00"
+            "time": "2020-04-15T07:32:37+00:00"
         },
         {
             "name": "mark-gerarts/automapper-plus-bundle",
@@ -2441,22 +2441,22 @@
         },
         {
             "name": "ocramius/proxy-manager",
-            "version": "2.7.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/ProxyManager.git",
-                "reference": "e77928e8f11ea36b388f87e75c993d05f5da6bf1"
+                "reference": "22eadabbaa2e01a2144e23ac27869c231ecfd34e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/e77928e8f11ea36b388f87e75c993d05f5da6bf1",
-                "reference": "e77928e8f11ea36b388f87e75c993d05f5da6bf1",
+                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/22eadabbaa2e01a2144e23ac27869c231ecfd34e",
+                "reference": "22eadabbaa2e01a2144e23ac27869c231ecfd34e",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-code": "^3.4.1",
                 "ocramius/package-versions": "^1.5.1",
-                "php": "7.4.*",
+                "php": "7.4.0",
                 "webimpress/safe-writer": "^2.0"
             },
             "conflict": {
@@ -2512,7 +2512,7 @@
                 "proxy pattern",
                 "service proxies"
             ],
-            "time": "2020-02-08T19:22:03+00:00"
+            "time": "2020-04-07T19:06:30+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -7866,22 +7866,23 @@
         },
         {
             "name": "doctrine/doctrine-fixtures-bundle",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineFixturesBundle.git",
-                "reference": "8f07fcfdac7f3591f3c4bf13a50cbae05f65ed70"
+                "reference": "39defca57ee0949e1475c46177b30b6d1b732e8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/8f07fcfdac7f3591f3c4bf13a50cbae05f65ed70",
-                "reference": "8f07fcfdac7f3591f3c4bf13a50cbae05f65ed70",
+                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/39defca57ee0949e1475c46177b30b6d1b732e8f",
+                "reference": "39defca57ee0949e1475c46177b30b6d1b732e8f",
                 "shasum": ""
             },
             "require": {
                 "doctrine/data-fixtures": "^1.3",
                 "doctrine/doctrine-bundle": "^1.11|^2.0",
                 "doctrine/orm": "^2.6.0",
+                "doctrine/persistence": "^1.3",
                 "php": "^7.1",
                 "symfony/config": "^3.4|^4.3|^5.0",
                 "symfony/console": "^3.4|^4.3|^5.0",
@@ -7929,7 +7930,7 @@
                 "Fixture",
                 "persistence"
             ],
-            "time": "2019-11-13T15:46:58+00:00"
+            "time": "2020-04-02T16:40:37+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -7989,12 +7990,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "0f73cf4b4b9227eb8845723bc2a8869bc4dd6e8f"
+                "reference": "09afa996c68c18f49e6487b06adcb2ef27da61fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0f73cf4b4b9227eb8845723bc2a8869bc4dd6e8f",
-                "reference": "0f73cf4b4b9227eb8845723bc2a8869bc4dd6e8f",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/09afa996c68c18f49e6487b06adcb2ef27da61fa",
+                "reference": "09afa996c68c18f49e6487b06adcb2ef27da61fa",
                 "shasum": ""
             },
             "conflict": {
@@ -8115,7 +8116,7 @@
                 "serluck/phpwhois": "<=4.2.6",
                 "shopware/shopware": "<5.3.7",
                 "silverstripe/admin": ">=1.0.3,<1.0.4|>=1.1,<1.1.1",
-                "silverstripe/assets": ">=1,<1.3.5|>=1.4,<1.4.4",
+                "silverstripe/assets": ">=1,<1.4.7|>=1.5,<1.5.2",
                 "silverstripe/cms": "<4.3.6|>=4.4,<4.4.4",
                 "silverstripe/comments": ">=1.3,<1.9.99|>=2,<2.9.99|>=3,<3.1.1",
                 "silverstripe/forum": "<=0.6.1|>=0.7,<=0.7.3",
@@ -8245,17 +8246,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "funding": [
-                {
-                    "url": "https://github.com/Ocramius",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/roave/security-advisories",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2020-03-31T14:30:16+00:00"
+            "time": "2020-04-15T04:56:51+00:00"
         },
         {
             "name": "sensiolabs/security-checker",
