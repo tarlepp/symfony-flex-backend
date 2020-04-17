@@ -2,7 +2,9 @@ monolog:
     handlers:
         main:
             type: stream
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            path: "php://stdout"
+            # Use below if you're not running application in container
+            #path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
             channels: ["!event"]
         # uncomment to get logging in your browser
