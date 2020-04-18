@@ -14,6 +14,11 @@ services:
             - /app/var/
         environment:
             PHP_IDE_CONFIG: "serverName=app.localhost"
+            # Eg. in GCP environment just set this environment variable
+            # to your k8s configuration.
+            #
+            # https://symfony.com/doc/current/deployment/proxies.html
+            TRUSTED_PROXIES: "127.0.0.1,REMOTE_ADDR"
 
     nginx:
         build:
