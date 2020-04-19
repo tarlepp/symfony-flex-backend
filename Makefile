@@ -12,7 +12,9 @@ JWT_PUBLIC_KEY=$$(echo | jq -r .JWT_PUBLIC_KEY ${APPLICATION_CONFIG})
 JWT_SECRET_KEY=$$(echo | jq -r .JWT_SECRET_KEY ${APPLICATION_CONFIG})
 JWT_PASSPHRASE=$$(echo | jq -r .JWT_PASSPHRASE ${APPLICATION_CONFIG})
 
-ifneq ("$(wildcard /.dockerenv)", "")
+ifdef GITHUB_WORKFLOW
+	INSIDE_DOCKER = 1
+else ifneq ("$(wildcard /.dockerenv)", "")
 	INSIDE_DOCKER = 1
 else
 	INSIDE_DOCKER = 0
