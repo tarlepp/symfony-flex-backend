@@ -1,8 +1,8 @@
 FROM composer:1.10.5 AS composer
 FROM php:7.4.5-fpm
 
-# Let's use bash as a default shell
-SHELL ["/bin/bash", "-c"]
+# Let's use bash as a default shell with login each time
+SHELL ["/bin/bash", "--login", "-c"]
 
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
@@ -51,6 +51,16 @@ COPY . .
 RUN composer --no-cache global require \
     bamarni/symfony-console-autocomplete \
     ergebnis/composer-normalize
+
+# Install Node Version Manager (nvm)
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+
+# Node setup
+#   1) Install latest 13.x version of node and use it as default
+#   2) Install `composer-version` helper tool globally
+RUN nvm install 13 \
+    && nvm use 13 \
+    && npm install -g composer-version
 
 # Ensure that all required files has execute rights
 RUN chmod +x /app/bin/console \
