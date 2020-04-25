@@ -11,11 +11,6 @@ set -e
 #   3) Generate JWT encryption keys + allow apache to read this file
 #   4) Create database if it not exists yet
 #   5) Run possible migrations, so that database is always up to date
-#   6) Ensure that _all_ files have "correct" permissions
-#
-# Note that all the chmod stuff is for users who are using docker-compose within Linux environment. More info in link
-# below:
-#   https://jtreminio.com/blog/running-docker-containers-as-current-host-user/
 #
 
 # Step 0
@@ -46,8 +41,5 @@ chmod 644 /app/config/jwt/private.pem
 
 # Step 5
 ./bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration --all-or-nothing
-
-# Step 6
-chmod -R o+s+w /app
 
 exec "$@"

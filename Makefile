@@ -20,6 +20,9 @@ else
 	INSIDE_DOCKER = 0
 endif
 
+# Global variables that we're using
+HOST_UID := $(shell id -u)
+HOST_GID := $(shell id -g)
 WARNING_HOST = @printf "\033[31mThis command cannot be run inside docker container!\033[39m\n"
 WARNING_DOCKER = @printf "\033[31mThis command must be run inside docker container!\nUse 'make bash' command to get shell inside container.\033[39m\n"
 
@@ -36,7 +39,6 @@ endif
 help:
 	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "[32m%-27s[0m %s\n", $$1, $$2}'
 
-###> symfony/framework-bundle ###
 CONSOLE := $(shell which bin/console)
 sf_console:
 ifndef CONSOLE
@@ -59,9 +61,6 @@ else
 endif
 .PHONY: cache-warmup
 
-###< symfony/framework-bundle ###
-
-###> lexik/jwt-authentication-bundle ###
 OPENSSL_BIN := $(shell which openssl)
 generate-jwt-keys: ## Generates JWT auth keys
 ifndef OPENSSL_BIN
@@ -79,9 +78,7 @@ else
 	@chmod 664 ${JWT_PUBLIC_KEY}
 	@echo "\033[32mRSA key pair successfully generated\033[39m"
 endif
-###< lexik/jwt-authentication-bundle ###
 
-###> phpunit ###
 PHPDBG := $(shell which phpdbg)
 run-tests: ## Runs all tests via phpunit (Uses phpdbg if that is installed)
 ifndef PHPDBG
@@ -157,7 +154,6 @@ else
 	$(WARNING_DOCKER)
 endif
 
-###> infection ###
 infection: ## Runs Infection to codebase
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Infection to codebase (pure PHP)\033[39m"
@@ -167,9 +163,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< infection ###
 
-###> phpmetrics ###
 phpmetrics: ## Generates PhpMetrics static analysis
 ifeq ($(INSIDE_DOCKER), 1)
 	@mkdir -p build/phpmetrics
@@ -183,9 +177,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< phpmetrics ###
 
-###> phpcs ###
 phpcs: ## Runs PHP CodeSniffer
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning PhpCodeSniffer\033[39m"
@@ -194,9 +186,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< phpcs ###
 
-###> ecs ###
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning EasyCodingStandard\033[39m"
@@ -212,9 +202,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< ecs ###
 
-###> phpinsights ###
 phpinsights: ## Runs PHP Insights
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning PHP Insights\033[39m"
@@ -222,9 +210,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< phpinsights ###
 
-###> psalm ###
 psalm: ## Runs Psalm static analysis tool
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
@@ -234,9 +220,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< psalm ###
 
-###> psalm with shepherd ###
 psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
@@ -246,9 +230,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< psalm ###
 
-###> psalm for GitHub actions ###
 psalm-github: ## Runs Psalm static analysis tool
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
@@ -258,9 +240,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< psalm ###
 
-###> phpstan ###
 phpstan: ## Runs PHPStan static analysis tool
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning PHPStan - PHP Static Analysis Tool\033[39m"
@@ -270,18 +250,14 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< phpstan ###
 
-###> lint configuration ###
 lint-configuration: ## Lint current defined `application.json` that it contains valid JSON
 ifeq ($(INSIDE_DOCKER), 1)
 	@php -r "if (!json_decode(file_get_contents('${APPLICATION_CONFIG}'))) { echo \"\033[31mInvalid JSON in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; exit(1); } else { echo \"\033[32mNo errors in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; }"
 else
 	$(WARNING_DOCKER)
 endif
-###< lint configuration ###
 
-###> lint yaml ###
 lint-yaml: ## Lint config YAML files
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mLinting YAML config files\033[39m"
@@ -289,9 +265,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< lint yaml ###
 
-###> clear tools ###
 clear-tools: ## Clears all tools depedencies
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mClearing tools dependencies\033[39m"
@@ -300,9 +274,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< clear tools ###
 
-###> check dependencies ###
 check-dependencies: ## Checks if any vendor dependency can be updated
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mChecking vendor dependencies\033[39m"
@@ -310,18 +282,14 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< check dependencies ###
 
-###> update composer dependencies ###
 update: ## Update composer dependencies
 ifeq ($(INSIDE_DOCKER), 1)
 	@php -d memory_limit=-1 /usr/bin/composer update
 else
 	$(WARNING_DOCKER)
 endif
-###< update composer dependencies ###
 
-###> update composer bin dependencies ###
 COMPOSER_BIN := $(shell which composer)
 update-bin: ## Update composer bin dependencies
 ifeq ($(INSIDE_DOCKER), 1)
@@ -329,45 +297,35 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< update composer bin dependencies ###
 
-###> get bash inside php container ###
 bash: ## Get bash inside PHP container
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)
 else
-	@docker-compose exec php bash
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php bash
 endif
-###< get bash inside php container ###
 
-###> Start application in development mode ###
 start: ## Start application in development mode
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)
 else
-	@docker-compose up
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up
 endif
-###< Start application in development mode ###
 
-###> Stop application containers ###
 stop: ## Stop application containers
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)
 else
-	@docker-compose down
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose down
 endif
-###< Stop application containers ###
 
-###> Start application in development mode and build containers ###
 start-build: ## Start application in development mode and build containers
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)
 else
-	@docker-compose up --build
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build
 endif
-###< Start application in development mode and build containers ###
 
-###> Create local configuration ###
 local-configuration: ## Create local configuration files
 ifeq ($(INSIDE_DOCKER), 1)
 	@cp /app/.env /app/.env.local
@@ -377,22 +335,17 @@ ifeq ($(INSIDE_DOCKER), 1)
 else
 	$(WARNING_DOCKER)
 endif
-###< Create local configuration ###
 
-###> Normalizes `composer.json` content ###
 normalize-composer: ## Normalizes `composer.json` content
 ifeq ($(INSIDE_DOCKER), 1)
 	@composer normalize
 else
 	$(WARNING_DOCKER)
 endif
-###< Normalizes `composer.json` content ###
 
-###> Runs `phploc` and create json output ###
 phploc: ## Runs `phploc` and create json output
 ifeq ($(INSIDE_DOCKER), 1)
 	@php ./vendor/bin/phploc --log-json=./build/phploc.json ./src
 else
 	$(WARNING_DOCKER)
 endif
-###< Runs `phploc` and create json output ###

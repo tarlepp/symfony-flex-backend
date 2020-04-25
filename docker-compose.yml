@@ -4,14 +4,19 @@ services:
         build:
             context: .
             dockerfile: ./Dockerfile_dev
+            args:
+                HOST_UID: $HOST_UID
+                HOST_GID: $HOST_GID
         command: php-fpm
+        user: $HOST_UID:$HOST_GID
         depends_on:
             - mysql
         ports:
             - 9000:9000
         volumes:
             - ./:/app:cached
-            - /app/var/
+            # Cannot use this because of the directory rights are forced for root user
+            #- /app/var/
         environment:
             PHP_IDE_CONFIG: "serverName=app.localhost"
             # Eg. in GCP environment just set this environment variable
@@ -23,13 +28,17 @@ services:
     nginx:
         build:
             context: ./docker/nginx/
+            args:
+                HOST_UID: $HOST_UID
+                HOST_GID: $HOST_GID
         depends_on:
             - php
         ports:
             - 8000:80
         volumes:
             - ./:/app:cached
-            - /app/var/
+            # Cannot use this because of the directory rights are forced for root user
+            #- /app/var/
 
     mysql:
         build:
