@@ -4,9 +4,18 @@ FROM php:7.4.5-fpm
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
 
+# Decrale used arguments from `docker-compose.yml` file
+ARG HOST_UID
+ARG HOST_GID
+
+# Declare constants
+ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin:/app/bin"
+ENV NVM_VERSION v0.35.3
+ENV NODE_VERSION 13
+
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
-    zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 \
+    zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 sudo \
     && rm -rf /var/lib/apt/lists/*
 
 # Enable all necessary PHP packages
@@ -29,21 +38,31 @@ RUN pecl install apcu \
 # Copy the Composer PHAR from the Composer image into the PHP image
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-# Update composer to latest version
+# Update Composer to latest version
 RUN composer self-update
 
-# Copy use php.ini to container
+# Copy development `php.ini` configuration to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
-
-# Allow use of composer as a root, add necessary directories to `$PATH`
-ENV COMPOSER_ALLOW_SUPERUSER 1
-ENV PATH "$PATH:/root/.composer/vendor/bin:/app/vendor/bin:/app/bin"
 
 # Define used work directory
 WORKDIR /app
 
 # Add everything inside docker image
 COPY . .
+
+# Ensure that all required files has execute rights
+RUN chmod +x /app/bin/console \
+    && chmod +x /app/docker-entrypoint-dev.sh \
+    && chmod +x /usr/bin/composer
+
+RUN chmod -R o+s+w /usr/local/etc/php
+
+RUN groupadd --gid ${HOST_GID} dev \
+    && useradd --password dev --uid ${HOST_UID} --gid ${HOST_GID} --shell /bin/bash --create-home dev \
+    && usermod -a -G www-data,sudo dev \
+    && chgrp -hR dev /app
+
+USER dev
 
 # Install following common tools;
 #   - bamarni/symfony-console-autocomplete, to get application commands and composer autocomplete working
@@ -53,23 +72,19 @@ RUN composer --no-cache global require \
     ergebnis/composer-normalize
 
 # Install Node Version Manager (nvm)
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh | bash
 
 # Node setup
-#   1) Install latest 13.x version of node and use it as default
+#   1) Install defined version of node and use it as default
 #   2) Install `composer-version` helper tool globally
-RUN nvm install 13 \
-    && nvm use 13 \
+RUN source ~/.nvm/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm use $NODE_VERSION \
     && npm install -g composer-version
 
-# Ensure that all required files has execute rights
-RUN chmod +x /app/bin/console \
-    && chmod +x /app/docker-entrypoint-dev.sh \
-    && chmod +x /usr/bin/composer
-
 # Add necessary stuff to bash autocomplete
-RUN echo 'source /usr/share/bash-completion/bash_completion' >> /etc/bash.bashrc \
-    && echo 'eval "$(symfony-autocomplete --shell bash)"' >> /etc/bash.bashrc
+RUN echo 'source /usr/share/bash-completion/bash_completion' >> /home/dev/.bashrc \
+    && echo 'eval "$(symfony-autocomplete --shell bash)"' >> /home/dev/.bashrc
 
 EXPOSE 9000
 
