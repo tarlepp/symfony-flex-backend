@@ -1,4 +1,6 @@
 services:
     EasyCorp\EasyLog\EasyLogHandler:
         public: false
-        arguments: ['%kernel.logs_dir%/%kernel.environment%-readable.log']
+        arguments: ['php://stdout']
+        # Use below if you're not running application in container
+        #arguments: ['%kernel.logs_dir%/%kernel.environment%-readable.log']

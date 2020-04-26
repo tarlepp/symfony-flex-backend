@@ -3,14 +3,8 @@ monolog:
         main:
             type: fingers_crossed
             action_level: error
-            handler: nested
+            handler: buffered
             excluded_http_codes: [404, 405]
-        nested:
-            type: stream
-            path: "php://stdout"
-            # Use below if you're not running application in container
-            #path: '%kernel.logs_dir%/%kernel.environment%.log'
-            level: debug
         console:
             type: console
             process_psr_3_messages: false
