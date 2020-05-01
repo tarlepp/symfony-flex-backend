@@ -743,16 +743,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v5.0.7",
+            "version": "v5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "3e633c31a34738f7f4ed7a225c43fc45ca74c986"
+                "reference": "db1674e1a261148429f123871f30d211992294e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/3e633c31a34738f7f4ed7a225c43fc45ca74c986",
-                "reference": "3e633c31a34738f7f4ed7a225c43fc45ca74c986",
+                "url": "https://api.github.com/repos/symfony/config/zipball/db1674e1a261148429f123871f30d211992294e7",
+                "reference": "db1674e1a261148429f123871f30d211992294e7",
                 "shasum": ""
             },
             "require": {
@@ -817,11 +817,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-03-27T16:56:45+00:00"
+            "time": "2020-04-15T15:59:10+00:00"
         },
         {
             "name": "symfony/console",
-            "version": "v5.0.7",
+            "version": "v5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
@@ -911,16 +911,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.0.7",
+            "version": "v5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "ca3b87dd09fff9b771731637f5379965fbfab420"
+                "reference": "7cd0dafc4353a0f62e307df90b48466379c8cc91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/ca3b87dd09fff9b771731637f5379965fbfab420",
-                "reference": "ca3b87dd09fff9b771731637f5379965fbfab420",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/7cd0dafc4353a0f62e307df90b48466379c8cc91",
+                "reference": "7cd0dafc4353a0f62e307df90b48466379c8cc91",
                 "shasum": ""
             },
             "require": {
@@ -971,7 +971,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-03-27T16:56:45+00:00"
+            "time": "2020-04-12T14:40:17+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -1395,7 +1395,7 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v5.0.7",
+            "version": "v5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -1459,16 +1459,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.0.7",
+            "version": "v5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "ad5e9c83ade5bbb3a96a3f30588a0622708caefd"
+                "reference": "482fb4e710e5af3e0e78015f19aa716ad953392f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/ad5e9c83ade5bbb3a96a3f30588a0622708caefd",
-                "reference": "ad5e9c83ade5bbb3a96a3f30588a0622708caefd",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/482fb4e710e5af3e0e78015f19aa716ad953392f",
+                "reference": "482fb4e710e5af3e0e78015f19aa716ad953392f",
                 "shasum": ""
             },
             "require": {
@@ -1528,7 +1528,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-03-30T11:42:42+00:00"
+            "time": "2020-04-28T17:58:55+00:00"
         }
     ],
     "aliases": [],

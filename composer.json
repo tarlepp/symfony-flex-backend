@@ -34,7 +34,7 @@
 		"matthiasnoback/symfony-console-form": "3.6.0",
 		"nelmio/api-doc-bundle": "3.6.1",
 		"nelmio/cors-bundle": "2.0.1",
-		"piwik/device-detector": "3.12.4",
+		"piwik/device-detector": "3.12.5",
 		"ramsey/uuid-doctrine": "1.6.0",
 		"sensio/framework-extra-bundle": "5.5.4",
 		"symfony/asset": "4.4.7",
