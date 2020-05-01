@@ -52,7 +52,7 @@
 		"symfony/routing": "4.4.7",
 		"symfony/security-bundle": "4.4.7",
 		"symfony/serializer-pack": "1.0.3",
-		"symfony/translation": "4.4.7",
+		"symfony/translation": "4.4.8",
 		"symfony/twig-bundle": "4.4.7",
 		"symfony/validator": "4.4.7",
 		"symfony/yaml": "4.4.7"
