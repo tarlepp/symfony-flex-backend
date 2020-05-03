@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "159b91b87fa7ff2e7a7163945e76ddf4",
+    "content-hash": "da1284f8a504d8d5cab29b35e5d84f92",
     "packages": [],
     "packages-dev": [
         {
@@ -759,6 +759,58 @@
             "time": "2020-02-09T14:10:55+00:00"
         },
         {
+            "name": "nikic/php-parser",
+            "version": "v4.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/PHP-Parser.git",
+                "reference": "bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120",
+                "reference": "bd43ec7152eaaab3bd8c6d0aa95ceeb1df8ee120",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "ircmaxell/php-yacc": "0.0.5",
+                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0"
+            },
+            "bin": [
+                "bin/php-parse"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "PhpParser\\": "lib/PhpParser"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov"
+                }
+            ],
+            "description": "A PHP parser written in PHP",
+            "keywords": [
+                "parser",
+                "php"
+            ],
+            "time": "2020-04-10T16:34:50+00:00"
+        },
+        {
             "name": "paragonie/random_compat",
             "version": "v9.99.99",
             "source": {
@@ -1217,6 +1269,62 @@
             "time": "2020-04-13T16:28:46+00:00"
         },
         {
+            "name": "phpstan/phpstan",
+            "version": "0.12.19",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan.git",
+                "reference": "054f6d76b12ba9a6c13a5a8d5fcdf51219615f4d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/054f6d76b12ba9a6c13a5a8d5fcdf51219615f4d",
+                "reference": "054f6d76b12ba9a6c13a5a8d5fcdf51219615f4d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.12-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/phpstan",
+                    "type": "patreon"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-04-19T20:35:10+00:00"
+        },
+        {
             "name": "phpunit/php-code-coverage",
             "version": "8.0.1",
             "source": {
@@ -1529,16 +1637,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.1.3",
+            "version": "9.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a74780472172957a65cb5999a597e8c0878cf39c"
+                "reference": "2d7080c622cf7884992e7c3cf87853877bae8ff4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a74780472172957a65cb5999a597e8c0878cf39c",
-                "reference": "a74780472172957a65cb5999a597e8c0878cf39c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2d7080c622cf7884992e7c3cf87853877bae8ff4",
+                "reference": "2d7080c622cf7884992e7c3cf87853877bae8ff4",
                 "shasum": ""
             },
             "require": {
@@ -1559,7 +1667,7 @@
                 "phpunit/php-invoker": "^3.0",
                 "phpunit/php-text-template": "^2.0",
                 "phpunit/php-timer": "^3.1.4",
-                "sebastian/code-unit": "^1.0",
+                "sebastian/code-unit": "^1.0.2",
                 "sebastian/comparator": "^4.0",
                 "sebastian/diff": "^4.0",
                 "sebastian/environment": "^5.0.1",
@@ -1623,7 +1731,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-23T04:42:05+00:00"
+            "time": "2020-04-30T06:32:53+00:00"
         },
         {
             "name": "psr/cache",
@@ -2139,16 +2247,16 @@
         },
         {
             "name": "sebastian/code-unit",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/code-unit.git",
-                "reference": "00d2094a93573796ec6666401be467fa6efcd86a"
+                "reference": "ac958085bc19fcd1d36425c781ef4cbb5b06e2a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/code-unit/zipball/00d2094a93573796ec6666401be467fa6efcd86a",
-                "reference": "00d2094a93573796ec6666401be467fa6efcd86a",
+                "url": "https://api.github.com/repos/sebastianbergmann/code-unit/zipball/ac958085bc19fcd1d36425c781ef4cbb5b06e2a5",
+                "reference": "ac958085bc19fcd1d36425c781ef4cbb5b06e2a5",
                 "shasum": ""
             },
             "require": {
@@ -2187,7 +2295,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-27T06:25:01+00:00"
+            "time": "2020-04-30T05:58:10+00:00"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -4827,16 +4935,16 @@
         },
         {
             "name": "symplify/auto-bind-parameter",
-            "version": "v7.2.20",
+            "version": "v7.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/auto-bind-parameter.git",
-                "reference": "de96bbe22df7d5693f07afb3ff49fd83a36b9118"
+                "reference": "6f8508392bdc7987a37b3cc8e544f28af58833e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/de96bbe22df7d5693f07afb3ff49fd83a36b9118",
-                "reference": "de96bbe22df7d5693f07afb3ff49fd83a36b9118",
+                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/6f8508392bdc7987a37b3cc8e544f28af58833e7",
+                "reference": "6f8508392bdc7987a37b3cc8e544f28af58833e7",
                 "shasum": ""
             },
             "require": {
@@ -4847,12 +4955,12 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/package-builder": "^7.2.20"
+                "symplify/package-builder": "^7.3.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.3-dev"
+                    "dev-master": "7.4-dev"
                 }
             },
             "autoload": {
@@ -4871,27 +4979,27 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-26T00:48:56+00:00"
+            "time": "2020-05-02T01:47:09+00:00"
         },
         {
             "name": "symplify/autowire-array-parameter",
-            "version": "v7.2.20",
+            "version": "v7.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/autowire-array-parameter.git",
-                "reference": "24c0249263a3b3201bd4026e942358a3bb8b6a27"
+                "reference": "3068c37c3eb6cc958b5eba6c75dc3bacd5639ec3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/24c0249263a3b3201bd4026e942358a3bb8b6a27",
-                "reference": "24c0249263a3b3201bd4026e942358a3bb8b6a27",
+                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/3068c37c3eb6cc958b5eba6c75dc3bacd5639ec3",
+                "reference": "3068c37c3eb6cc958b5eba6c75dc3bacd5639ec3",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.0",
                 "php": "^7.2",
                 "symfony/dependency-injection": "^4.4|^5.0",
-                "symplify/package-builder": "^7.2.20"
+                "symplify/package-builder": "^7.3.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -4899,7 +5007,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.3-dev"
+                    "dev-master": "7.4-dev"
                 }
             },
             "autoload": {
@@ -4918,49 +5026,54 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-26T00:48:56+00:00"
+            "time": "2020-05-02T01:47:09+00:00"
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v7.2.20",
+            "version": "v7.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/coding-standard.git",
-                "reference": "0a964b7c8fba99ebd5e7280fba27304b3603157b"
+                "reference": "ef224cf7b31b91c8944b1a55ff35b4c57bf89196"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/coding-standard/zipball/0a964b7c8fba99ebd5e7280fba27304b3603157b",
-                "reference": "0a964b7c8fba99ebd5e7280fba27304b3603157b",
+                "url": "https://api.github.com/repos/symplify/coding-standard/zipball/ef224cf7b31b91c8944b1a55ff35b4c57bf89196",
+                "reference": "ef224cf7b31b91c8944b1a55ff35b4c57bf89196",
                 "shasum": ""
             },
             "require": {
                 "friendsofphp/php-cs-fixer": "^2.16",
                 "nette/finder": "^2.5",
                 "nette/utils": "^3.0",
+                "nikic/php-parser": "^4.4",
                 "php": "^7.2",
                 "phpstan/phpdoc-parser": "^0.4",
+                "phpstan/phpstan": "^0.12.10",
                 "slevomat/coding-standard": "^6.3.2",
                 "squizlabs/php_codesniffer": "^3.5",
-                "symplify/autowire-array-parameter": "^7.2.20",
-                "symplify/package-builder": "^7.2.20",
-                "symplify/smart-file-system": "^7.2.20"
+                "symplify/autowire-array-parameter": "^7.3.3",
+                "symplify/package-builder": "^7.3.3",
+                "symplify/smart-file-system": "^7.3.3"
             },
             "require-dev": {
                 "nette/application": "^3.0",
+                "nette/bootstrap": "^3.0",
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard-tester": "^7.2.20",
-                "symplify/package-builder": "^7.2.20"
+                "symplify/easy-coding-standard-tester": "^7.3.3",
+                "symplify/package-builder": "^7.3.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.3-dev"
+                    "dev-master": "7.4-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Symplify\\CodingStandard\\": "src"
+                    "Symplify\\CodingStandard\\": "src",
+                    "Symplify\\CodingStandard\\CognitiveComplexity\\": "packages/cognitive-complexity/src",
+                    "Symplify\\CodingStandard\\ObjectCalisthenics\\": "packages/object-calisthenics/src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -4974,20 +5087,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-26T00:48:56+00:00"
+            "time": "2020-05-02T01:47:09+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v7.2.20",
+            "version": "v7.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "1bfbcac5f9d09e8128962372f0dad54f5c310091"
+                "reference": "ad16d3ef9dc0a2da7aca6897ba583295f111a161"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/1bfbcac5f9d09e8128962372f0dad54f5c310091",
-                "reference": "1bfbcac5f9d09e8128962372f0dad54f5c310091",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/ad16d3ef9dc0a2da7aca6897ba583295f111a161",
+                "reference": "ad16d3ef9dc0a2da7aca6897ba583295f111a161",
                 "shasum": ""
             },
             "require": {
@@ -5008,16 +5121,16 @@
                 "symfony/finder": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
                 "symfony/yaml": "^4.4|^5.0",
-                "symplify/auto-bind-parameter": "^7.2.20",
-                "symplify/autowire-array-parameter": "^7.2.20",
-                "symplify/coding-standard": "^7.2.20",
-                "symplify/package-builder": "^7.2.20",
-                "symplify/set-config-resolver": "^7.2.20",
-                "symplify/smart-file-system": "^7.2.20"
+                "symplify/auto-bind-parameter": "^7.3.3",
+                "symplify/autowire-array-parameter": "^7.3.3",
+                "symplify/coding-standard": "^7.3.3",
+                "symplify/package-builder": "^7.3.3",
+                "symplify/set-config-resolver": "^7.3.3",
+                "symplify/smart-file-system": "^7.3.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard-tester": "^7.2.20"
+                "symplify/easy-coding-standard-tester": "^7.3.3"
             },
             "bin": [
                 "bin/ecs"
@@ -5025,7 +5138,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.3-dev"
+                    "dev-master": "7.4-dev"
                 }
             },
             "autoload": {
@@ -5048,33 +5161,33 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-26T00:48:56+00:00"
+            "time": "2020-05-02T01:47:09+00:00"
         },
         {
             "name": "symplify/easy-coding-standard-tester",
-            "version": "v7.2.20",
+            "version": "v7.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard-tester.git",
-                "reference": "cb8652d94493dc8f5c7de772ae73717cdce2524f"
+                "reference": "649587e4925f08a7a1e037618dfed8ec03406e25"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard-tester/zipball/cb8652d94493dc8f5c7de772ae73717cdce2524f",
-                "reference": "cb8652d94493dc8f5c7de772ae73717cdce2524f",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard-tester/zipball/649587e4925f08a7a1e037618dfed8ec03406e25",
+                "reference": "649587e4925f08a7a1e037618dfed8ec03406e25",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2",
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard": "^7.2.20",
-                "symplify/package-builder": "^7.2.20",
-                "symplify/smart-file-system": "^7.2.20"
+                "symplify/easy-coding-standard": "^7.3.3",
+                "symplify/package-builder": "^7.3.3",
+                "symplify/smart-file-system": "^7.3.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.3-dev"
+                    "dev-master": "7.4-dev"
                 }
             },
             "autoload": {
@@ -5093,20 +5206,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-26T00:48:56+00:00"
+            "time": "2020-05-02T01:47:09+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v7.2.20",
+            "version": "v7.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/package-builder.git",
-                "reference": "e99dd64a9d14defd8217e4671d555d24eab80196"
+                "reference": "83bd164c0dbef91a05c25b9aec1db1a7fa7b275b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/package-builder/zipball/e99dd64a9d14defd8217e4671d555d24eab80196",
-                "reference": "e99dd64a9d14defd8217e4671d555d24eab80196",
+                "url": "https://api.github.com/repos/symplify/package-builder/zipball/83bd164c0dbef91a05c25b9aec1db1a7fa7b275b",
+                "reference": "83bd164c0dbef91a05c25b9aec1db1a7fa7b275b",
                 "shasum": ""
             },
             "require": {
@@ -5126,7 +5239,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.3-dev"
+                    "dev-master": "7.4-dev"
                 }
             },
             "autoload": {
@@ -5145,20 +5258,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-19T11:07:36+00:00"
+            "time": "2020-05-01T22:34:00+00:00"
         },
         {
             "name": "symplify/set-config-resolver",
-            "version": "v7.2.20",
+            "version": "v7.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/set-config-resolver.git",
-                "reference": "bd8fe245c0dbdc358416919239f2fa86ecb0afe4"
+                "reference": "4c3f3896951214991149ebd7b84cdc0dfbeaba63"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/bd8fe245c0dbdc358416919239f2fa86ecb0afe4",
-                "reference": "bd8fe245c0dbdc358416919239f2fa86ecb0afe4",
+                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/4c3f3896951214991149ebd7b84cdc0dfbeaba63",
+                "reference": "4c3f3896951214991149ebd7b84cdc0dfbeaba63",
                 "shasum": ""
             },
             "require": {
@@ -5167,7 +5280,7 @@
                 "symfony/console": "^4.4|^5.0",
                 "symfony/filesystem": "^4.4|^5.0",
                 "symfony/finder": "^4.4|^5.0",
-                "symplify/smart-file-system": "^7.2.20"
+                "symplify/smart-file-system": "^7.3.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -5175,7 +5288,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.3-dev"
+                    "dev-master": "7.4-dev"
                 }
             },
             "autoload": {
@@ -5194,20 +5307,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-26T00:48:56+00:00"
+            "time": "2020-05-02T01:47:09+00:00"
         },
         {
             "name": "symplify/smart-file-system",
-            "version": "v7.2.20",
+            "version": "v7.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/smart-file-system.git",
-                "reference": "c231445db395a33c222ca1ccf7f63857c2fc45d3"
+                "reference": "f415ce9e52beb978f717303fdb705bc5b79365e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/c231445db395a33c222ca1ccf7f63857c2fc45d3",
-                "reference": "c231445db395a33c222ca1ccf7f63857c2fc45d3",
+                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/f415ce9e52beb978f717303fdb705bc5b79365e9",
+                "reference": "f415ce9e52beb978f717303fdb705bc5b79365e9",
                 "shasum": ""
             },
             "require": {
@@ -5224,7 +5337,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "7.3-dev"
+                    "dev-master": "7.4-dev"
                 }
             },
             "autoload": {
@@ -5243,7 +5356,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-04-09T21:24:04+00:00"
+            "time": "2020-05-01T22:34:00+00:00"
         },
         {
             "name": "theseer/tokenizer",
