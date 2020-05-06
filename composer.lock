@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5456a45c05514f8e3877bdcf6f38b70c",
+    "content-hash": "c5b82e3b24f669e1e6b5ab706498fe6d",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -1957,26 +1957,31 @@
         },
         {
             "name": "mark-gerarts/automapper-plus-bundle",
-            "version": "1.2.1",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mark-gerarts/automapper-plus-bundle.git",
-                "reference": "d05ea44a006e1ebbd688bb8f74887bf9d0fe5e23"
+                "reference": "1183b2b98082b40dab9940c5a17621eeb163ecaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus-bundle/zipball/d05ea44a006e1ebbd688bb8f74887bf9d0fe5e23",
-                "reference": "d05ea44a006e1ebbd688bb8f74887bf9d0fe5e23",
+                "url": "https://api.github.com/repos/mark-gerarts/automapper-plus-bundle/zipball/1183b2b98082b40dab9940c5a17621eeb163ecaa",
+                "reference": "1183b2b98082b40dab9940c5a17621eeb163ecaa",
                 "shasum": ""
             },
             "require": {
-                "mark-gerarts/auto-mapper-plus": "^1.1",
+                "mark-gerarts/auto-mapper-plus": "^1.3",
                 "php": ">=7.1.0",
-                "symfony/framework-bundle": "^3.3|^4.0|^5.0"
+                "symfony/framework-bundle": "^3.4|^4.0|^5.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.5|^8.0",
-                "symfony/phpunit-bridge": "^3.4|^4.0"
+                "matthiasnoback/symfony-dependency-injection-test": "^3.1|^4.1",
+                "phpunit/phpunit": "^7.5|^8.0",
+                "symfony/phpunit-bridge": "^5.0",
+                "symfony/property-access": "^3.4|^4.4|^5.0"
+            },
+            "suggest": {
+                "symfony/property-access": "^3.4|^4.4"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -2001,7 +2006,7 @@
                 "automapper",
                 "bundle"
             ],
-            "time": "2019-12-11T12:15:35+00:00"
+            "time": "2020-04-01T13:52:25+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -8011,12 +8016,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "81541a731da2f245a08666de73169cb5da7ac573"
+                "reference": "f46390d28af4fdb07c09d9aabf4c4e35149a7a08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/81541a731da2f245a08666de73169cb5da7ac573",
-                "reference": "81541a731da2f245a08666de73169cb5da7ac573",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f46390d28af4fdb07c09d9aabf4c4e35149a7a08",
+                "reference": "f46390d28af4fdb07c09d9aabf4c4e35149a7a08",
                 "shasum": ""
             },
             "conflict": {
@@ -8106,6 +8111,7 @@
                 "magento/product-community-edition": ">=2,<2.2.10|>=2.3,<2.3.2-p.2",
                 "monolog/monolog": ">=1.8,<1.12",
                 "namshi/jose": "<2.2",
+                "nzo/url-encryptor-bundle": ">=4,<4.3.2|>=5,<5.0.1",
                 "onelogin/php-saml": "<2.10.4",
                 "oneup/uploader-bundle": "<1.9.3|>=2,<2.1.5",
                 "openid/php-openid": "<2.3",
@@ -8279,7 +8285,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-04-23T00:01:30+00:00"
+            "time": "2020-05-04T14:37:25+00:00"
         },
         {
             "name": "sensiolabs/security-checker",
