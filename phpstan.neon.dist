@@ -2,9 +2,5 @@ parameters:
     level: max
     excludes_analyse:
         - %currentWorkingDirectory%/src/Migrations/*
-
-    symfony:
-        container_xml_path: '%currentWorkingDirectory%/var/cache/test/srcApp_KernelTestDebugContainer.xml'
-
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
