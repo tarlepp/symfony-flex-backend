@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use function array_column;
 use function in_array;
+use function is_string;
 
 /**
  * Class TimezoneValidator
@@ -40,6 +41,10 @@ class TimezoneValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint): void
     {
         if (in_array($value, array_column($this->localization->getTimezones(), 'identifier'), true) !== true) {
+            if (!is_string($value)) {
+                $value = $value->getTimezone();
+            }
+
             $this->context
                 ->buildViolation(Timezone::MESSAGE)
                 ->setParameter('{{ timezone }}', $value)
