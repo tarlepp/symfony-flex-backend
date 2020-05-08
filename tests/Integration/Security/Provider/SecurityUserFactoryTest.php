@@ -9,15 +9,21 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Security\Provider;
 
 use App\Entity\User;
+use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
+use App\Security\ApiKeyUser;
 use App\Security\Provider\SecurityUserFactory;
 use App\Security\RolesService;
 use App\Security\SecurityUser;
+use DateTime;
+use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User as CoreUser;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 
 /**
@@ -87,9 +93,11 @@ class SecurityUserFactoryTest extends KernelTestCase
     }
 
     /**
-     * @throws Throwable
+     * @dataProvider dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType
+     *
+     * @param mixed $input
      */
-    public function testThatSupportsMethodsReturnsFalseWithNotSupportedType(): void
+    public function testThatSupportsMethodsReturnsFalseWithNotSupportedType($input): void
     {
         /**
          * @var MockObject|UserRepository $userRepository
@@ -98,7 +106,9 @@ class SecurityUserFactoryTest extends KernelTestCase
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $rolesService = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
 
-        static::assertFalse((new SecurityUserFactory($userRepository, $rolesService, ''))->supportsClass(null));
+        static::assertFalse(
+            (new SecurityUserFactory($userRepository, $rolesService, ''))->supportsClass((string)$input)
+        );
     }
 
     /**
@@ -189,5 +199,16 @@ class SecurityUserFactoryTest extends KernelTestCase
         static::assertNotSame($securityUser, $newSecurityUser);
         static::assertSame($securityUser->getUsername(), $newSecurityUser->getUsername());
         static::assertSame($securityUser->getRoles(), $newSecurityUser->getRoles());
+    }
+
+    public function dataProviderTestThatSupportsMethodsReturnsFalseWithNotSupportedType(): Generator
+    {
+        yield [true];
+        yield ['foobar'];
+        yield [123];
+        yield [stdClass::class];
+        yield [UserInterface::class];
+        yield [UserEntity::class];
+        yield [ApiKeyUser::class];
     }
 }

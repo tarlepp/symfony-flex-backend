@@ -54,7 +54,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $provider = new ApiKeyUserProvider($apiKeyRepository, $rolesService);
 
-        static::assertSame($expected, $provider->supportsClass($input));
+        static::assertSame($expected, $provider->supportsClass((string)$input));
     }
 
     /**
@@ -161,7 +161,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
         yield [false, true];
         yield [false, 'foobar'];
         yield [false, 123];
-        yield [false, new DateTime()];
         yield [false, stdClass::class];
         yield [false, UserInterface::class];
         yield [false, UserEntity::class];
