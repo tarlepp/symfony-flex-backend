@@ -66,7 +66,7 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface
      *
      * @throws UsernameNotFoundException
      */
-    public function loadUserByUsername($token): ApiKeyUserInterface
+    public function loadUserByUsername(string $token): ApiKeyUserInterface
     {
         $apiKey = $this->getApiKeyForToken($token);
 
@@ -104,7 +104,7 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface
      *
      * @return bool
      */
-    public function supportsClass($class): bool
+    public function supportsClass(string $class): bool
     {
         return $class === ApiKeyUser::class;
     }

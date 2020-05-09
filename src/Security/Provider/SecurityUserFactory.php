@@ -56,7 +56,7 @@ class SecurityUserFactory implements UserProviderInterface
      *
      * @throws Throwable
      */
-    public function loadUserByUsername($username): UserInterface
+    public function loadUserByUsername(string $username): UserInterface
     {
         $user = $this->userRepository->loadUserByUsername(
             $username,
@@ -73,7 +73,7 @@ class SecurityUserFactory implements UserProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsClass($class): bool
+    public function supportsClass(string $class): bool
     {
         return $class === SecurityUser::class;
     }

@@ -31,6 +31,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -61,26 +62,21 @@ class ExceptionSubscriberTest extends KernelTestCase
         /**
          * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
          * @var MockObject|LoggerInterface        $stubLogger
-         * @var MockObject|ExceptionEvent         $stubEvent
+         * @var MockObject|KernelInterface        $stubKernel
          */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
-        $stubEvent = $this->createMock(ExceptionEvent::class);
+        $stubKernel = $this->createMock(KernelInterface::class);
 
         $exception = new Exception('test exception');
-
-        $stubEvent
-            ->expects(static::once())
-            ->method('getThrowable')
-            ->willReturn($exception);
+        $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
 
         $stubLogger
             ->expects(static::once())
             ->method('error')
             ->with((string)$exception);
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
-            ->onKernelException($stubEvent);
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))->onKernelException($event);
     }
 
     /**
@@ -97,25 +93,20 @@ class ExceptionSubscriberTest extends KernelTestCase
         /**
          * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
          * @var MockObject|LoggerInterface        $stubLogger
-         * @var MockObject|ExceptionEvent         $stubEvent
+         * @var MockObject|KernelInterface        $stubKernel
          */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
-        $stubEvent = $this->createMock(ExceptionEvent::class);
+        $stubKernel = $this->createMock(KernelInterface::class);
 
         $exception = new Exception('test exception');
+        $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
 
-        $stubEvent
-            ->expects(static::once())
-            ->method('getThrowable')
-            ->willReturn($exception);
+        $originalResponse = $event->getResponse();
 
-        $stubEvent
-            ->expects(static::once())
-            ->method('setResponse');
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))->onKernelException($event);
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
-            ->onKernelException($stubEvent);
+        static::assertNotSame($originalResponse, $event->getResponse());
     }
 
     /**

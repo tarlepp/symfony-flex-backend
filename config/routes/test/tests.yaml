@@ -1,7 +1,7 @@
 test_controllers:
-    resource: ../tests/E2E/Rest/Traits/Actions/src/
+    resource: ../../../tests/E2E/Rest/Traits/Actions/src/
     type: annotation
 
 test_life_cycle_controllers:
-    resource: ../tests/E2E/Rest/src/Controller
+    resource: ../../../tests/E2E/Rest/src/Controller
     type: annotation
