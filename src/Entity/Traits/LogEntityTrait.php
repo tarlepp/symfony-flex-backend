@@ -169,28 +169,27 @@ trait LogEntityTrait
     }
 
     /**
-     * @ORM\PrePersist()
-     *
-     * @throws Throwable
-     */
-    protected function processTimeAndDate(): void
-    {
-        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
-
-        $this->time = $now;
-        $this->date = $now;
-    }
-
-    /**
      * @param Request $request
      */
-    protected function processRequestData(Request $request): void
+    private function processRequestData(Request $request): void
     {
-        /** @var string $userAgent */
         $userAgent = $request->headers->get('User-Agent') ?? '';
 
         $this->clientIp = (string)$request->getClientIp();
         $this->httpHost = $request->getHttpHost();
         $this->agent = $userAgent;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     *
+     * @throws Throwable
+     */
+    private function processTimeAndDate(): void
+    {
+        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+
+        $this->time = $now;
+        $this->date = $now;
     }
 }

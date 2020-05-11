@@ -30,6 +30,7 @@ class StringableArrayObject extends ArrayObject
     public function __toString(): string
     {
         /**
+         * @psalm-suppress MissingClosureParamType
          * @psalm-suppress MissingClosureReturnType
          * @psalm-suppress MissingParamType
          * @psalm-suppress InvalidCast
