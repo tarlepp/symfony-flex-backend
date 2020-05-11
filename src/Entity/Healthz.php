@@ -78,8 +78,7 @@ class Healthz implements EntityInterface
     public function __construct()
     {
         $this->id = $this->createUuid();
-
-        $this->setTimestamp(new DateTimeImmutable('now', new DateTimeZone('UTC')));
+        $this->timestamp = new DateTimeImmutable('now', new DateTimeZone('UTC'));
     }
 
     /**
