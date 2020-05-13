@@ -21,7 +21,6 @@ use Throwable;
  */
 trait PatchMethod
 {
-    // Traits
     use AbstractGenericMethods;
 
     /**

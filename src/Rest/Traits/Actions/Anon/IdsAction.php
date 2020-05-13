@@ -27,7 +27,6 @@ use Throwable;
  */
 trait IdsAction
 {
-    // Traits
     use IdsMethod;
 
     /**

@@ -49,7 +49,6 @@ use Throwable;
  */
 class UserController extends Controller
 {
-    // Traits for REST actions
     use Actions\Admin\CountAction;
     use Actions\Admin\FindAction;
     use Actions\Admin\FindOneAction;

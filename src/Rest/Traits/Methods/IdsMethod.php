@@ -21,7 +21,6 @@ use Throwable;
  */
 trait IdsMethod
 {
-    // Traits
     use AbstractGenericMethods;
 
     /**

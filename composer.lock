@@ -1475,16 +1475,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v2.4.40",
+            "version": "v2.4.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "fbc95cd0d22560000e82eb6838011b366425d16c"
+                "reference": "e55a6727052f91834a968937c93b6fb193be8fb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/fbc95cd0d22560000e82eb6838011b366425d16c",
-                "reference": "fbc95cd0d22560000e82eb6838011b366425d16c",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/e55a6727052f91834a968937c93b6fb193be8fb6",
+                "reference": "e55a6727052f91834a968937c93b6fb193be8fb6",
                 "shasum": ""
             },
             "require": {
@@ -1553,7 +1553,7 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2020-04-28T03:03:09+00:00"
+            "time": "2020-05-10T22:20:03+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -8039,12 +8039,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ec1a75b10126327b351fdea7c2b9bfb94e2f6f35"
+                "reference": "5a342e2dc0408d026b97ee3176b5b406e54e3766"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ec1a75b10126327b351fdea7c2b9bfb94e2f6f35",
-                "reference": "ec1a75b10126327b351fdea7c2b9bfb94e2f6f35",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5a342e2dc0408d026b97ee3176b5b406e54e3766",
+                "reference": "5a342e2dc0408d026b97ee3176b5b406e54e3766",
                 "shasum": ""
             },
             "conflict": {
@@ -8235,8 +8235,8 @@
                 "titon/framework": ">=0,<9.9.99",
                 "truckersmp/phpwhois": "<=4.3.1",
                 "twig/twig": "<1.38|>=2,<2.7",
-                "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.32|>=8,<8.7.30|>=9,<9.5.12|>=10,<10.2.1",
-                "typo3/cms-core": ">=8,<8.7.30|>=9,<9.5.12|>=10,<10.2.1",
+                "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.32|>=8,<8.7.30|>=9,<9.5.17|>=10,<10.4.2",
+                "typo3/cms-core": ">=8,<8.7.30|>=9,<9.5.17|>=10,<10.4.2",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "typo3/phar-stream-wrapper": ">=1,<2.1.1|>=3,<3.1.1",
@@ -8309,7 +8309,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-09T00:00:21+00:00"
+            "time": "2020-05-12T11:18:47+00:00"
         },
         {
             "name": "sensiolabs/security-checker",

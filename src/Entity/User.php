@@ -46,7 +46,6 @@ use Throwable;
  */
 class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 {
-    // Traits
     use Blameable;
     use Timestampable;
     use UserRelations;
@@ -260,7 +259,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     /**
      * Plain password. Used for model validation. Must not be persisted.
      *
-     * @var  string
+     * @var string
      */
     private string $plainPassword = '';
 
@@ -436,8 +435,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     }
 
     /**
-     * @param callable  $encoder
-     * @param string    $plainPassword
+     * @param callable $encoder
+     * @param string   $plainPassword
      *
      * @return User
      */

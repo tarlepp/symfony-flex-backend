@@ -20,7 +20,6 @@ use Throwable;
  */
 trait FindOneMethod
 {
-    // Traits
     use AbstractGenericMethods;
 
     /**

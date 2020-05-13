@@ -51,7 +51,7 @@ class DefaultController
      * Route for application health check. This action will make some simple tasks to ensure that application is up
      * and running like expected.
      *
-     * @link https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
+     * @see https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
      *
      * @Route(
      *     path="/healthz",

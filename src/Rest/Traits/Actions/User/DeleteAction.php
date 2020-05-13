@@ -28,7 +28,6 @@ use Throwable;
  */
 trait DeleteAction
 {
-    // Traits
     use DeleteMethod;
 
     /**

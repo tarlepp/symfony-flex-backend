@@ -42,7 +42,6 @@ use function mb_strlen;
  */
 class LogRequest implements EntityInterface
 {
-    // Traits
     use LogEntityTrait;
     use LogRequestProcessRequestTrait;
     use Uuid;

@@ -30,7 +30,6 @@ use function sprintf;
  */
 class CreateRolesCommand extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     private EntityManagerInterface $entityManager;

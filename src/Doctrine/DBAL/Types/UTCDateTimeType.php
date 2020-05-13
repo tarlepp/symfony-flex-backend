@@ -30,10 +30,10 @@ class UTCDateTimeType extends DateTimeType
      * Converts a value from its PHP representation to its database representation
      * of this type.
      *
-     * @param mixed            $value    The value to convert.
-     * @param AbstractPlatform $platform The currently used database platform.
+     * @param mixed            $value    the value to convert
+     * @param AbstractPlatform $platform the currently used database platform
      *
-     * @return string The database representation of the value.
+     * @return string the database representation of the value
      *
      * @throws ConversionException
      */
@@ -50,10 +50,10 @@ class UTCDateTimeType extends DateTimeType
      * Converts a value from its database representation to its PHP representation
      * of this type.
      *
-     * @param mixed            $value    The value to convert.
-     * @param AbstractPlatform $platform The currently used database platform.
+     * @param mixed            $value    the value to convert
+     * @param AbstractPlatform $platform the currently used database platform
      *
-     * @return mixed The PHP representation of the value.
+     * @return mixed the PHP representation of the value
      *
      * @throws ConversionException
      */

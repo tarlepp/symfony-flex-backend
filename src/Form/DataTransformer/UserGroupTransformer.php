@@ -70,7 +70,7 @@ class UserGroupTransformer implements DataTransformerInterface
      *
      * @return UserGroup[]|null
      *
-     * @throws TransformationFailedException if object (issue) is not found.
+     * @throws TransformationFailedException if object (issue) is not found
      */
     public function reverseTransform($userGroups): ?array
     {

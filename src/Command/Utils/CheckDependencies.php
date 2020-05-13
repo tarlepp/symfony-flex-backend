@@ -43,7 +43,6 @@ use function wordwrap;
  */
 class CheckDependencies extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     /**
@@ -70,7 +69,7 @@ class CheckDependencies extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int

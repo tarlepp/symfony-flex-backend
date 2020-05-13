@@ -24,7 +24,6 @@ use function sprintf;
  */
 abstract class RestResource implements RestResourceInterface
 {
-    // Traits
     use Traits\RestResourceBaseMethods;
 
     private BaseRepositoryInterface $repository;

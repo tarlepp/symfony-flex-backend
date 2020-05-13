@@ -23,7 +23,6 @@ use UnexpectedValueException;
  */
 abstract class Controller implements ControllerInterface
 {
-    // Traits
     use RestActionBase;
     use RestMethodHelper;
 

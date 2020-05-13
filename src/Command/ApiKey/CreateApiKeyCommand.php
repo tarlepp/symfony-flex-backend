@@ -34,7 +34,6 @@ use Throwable;
  */
 class CreateApiKeyCommand extends Command
 {
-    // Traits
     use ApiKeyUserManagementHelperTrait;
 
     /**

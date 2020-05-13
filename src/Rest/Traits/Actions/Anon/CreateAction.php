@@ -28,7 +28,6 @@ use Throwable;
  */
 trait CreateAction
 {
-    // Traits
     use CreateMethod;
 
     /**

@@ -38,7 +38,6 @@ use function floor;
  */
 class DateDimension implements EntityInterface
 {
-    // Traits
     use Uuid;
 
     /**

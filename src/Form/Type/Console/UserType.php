@@ -32,7 +32,6 @@ use function array_map;
  */
 class UserType extends AbstractType
 {
-    // Traits
     use AddBasicFieldToForm;
     use UserGroupChoices;
 

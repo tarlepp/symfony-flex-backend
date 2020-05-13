@@ -25,7 +25,6 @@ use function get_class;
  */
 trait RestResourceBaseMethods
 {
-    // Attach generic life cycle traits
     use RestResourceLifeCycles;
 
     /**

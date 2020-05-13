@@ -28,7 +28,6 @@ use Throwable;
  */
 class EditUserCommand extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     private UserResource $userResource;
@@ -56,7 +55,7 @@ class EditUserCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int
@@ -87,9 +86,9 @@ class EditUserCommand extends Command
     /**
      * Method to update specified user entity via specified form.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
-     * @param UserEntity $user
+     * @param UserEntity      $user
      *
      * @return string
      *

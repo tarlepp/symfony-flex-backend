@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 // phpcs:ignoreFile
 /** @noinspection PhpIllegalPsrClassPathInspection */
+
 namespace DoctrineMigrations;
 
 use Doctrine\DBAL\DBALException;

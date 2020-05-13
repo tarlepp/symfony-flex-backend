@@ -33,7 +33,6 @@ use Throwable;
  */
 class Role implements EntityInterface
 {
-    // Traits
     use Blameable;
     use Timestampable;
 

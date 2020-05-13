@@ -61,7 +61,7 @@ class ListApiKeysCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int 0 if everything went fine, or an exit code

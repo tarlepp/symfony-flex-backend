@@ -47,7 +47,7 @@ class UserHelper
      * changes to users.
      *
      * @param SymfonyStyle $io
-     * @param string $question
+     * @param string       $question
      *
      * @return UserEntity|null
      *
@@ -77,7 +77,7 @@ class UserHelper
      * changes to user groups.
      *
      * @param SymfonyStyle $io
-     * @param string $question
+     * @param string       $question
      *
      * @return UserGroupEntity|null
      *
@@ -106,7 +106,7 @@ class UserHelper
      * Method to get User entity. Within this user will be asked which User entity he/she wants to process with.
      *
      * @param SymfonyStyle $io
-     * @param string $question
+     * @param string       $question
      *
      * @return UserEntity|EntityInterface|null
      *
@@ -129,7 +129,7 @@ class UserHelper
      * with.
      *
      * @param SymfonyStyle $io
-     * @param string $question
+     * @param string       $question
      *
      * @return UserGroupEntity|EntityInterface|null
      *

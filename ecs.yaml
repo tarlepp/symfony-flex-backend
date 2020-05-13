@@ -1,37 +1,49 @@
 imports:
     - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/psr12.yaml' }
+    - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/php70.yaml' }
     - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/php71.yaml' }
     - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/clean-code.yaml' }
     - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/common.yaml' }
+    - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/dead-code.yaml' }
+    - { resource: 'tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/symfony.yaml' }
+
+services:
+    PhpCsFixer\Fixer\Operator\IncrementStyleFixer:
+        style: 'post'
+    PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer:
+        equal: false
+        identical: false
+        less_and_greater: false
+    PhpCsFixer\Fixer\Operator\ConcatSpaceFixer:
+        spacing: 'one'
+    PhpCsFixer\Fixer\CastNotation\CastSpacesFixer:
+        space: 'none'
+    PhpCsFixer\Fixer\Import\OrderedImportsFixer:
+        importsOrder:
+            - 'class'
+            - 'function'
+            - 'const'
+    PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer:
+        space: 'single'
+    PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer:
+        statements:
+            - continue
+            - declare
+            - return
+            - throw
+            - try
+    PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer: ~
 
 parameters:
     skip:
         PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer: ~
+        PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer: ~
+        PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer: ~
+        PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer: ~
+        PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer: ~
         PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer: ~
-        PhpCsFixer\Fixer\ArrayNotation\TrailingCommaInMultilineArrayFixer: ~
-        PhpCsFixer\Fixer\CastNotation\CastSpacesFixer: ~
         PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
-        PhpCsFixer\Fixer\Import\OrderedImportsFixer: ~
-        PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer: ~
-        PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer: ~
+        PhpCsFixer\Fixer\NamespaceNotation\NoBlankLinesBeforeNamespaceFixer: ~
         PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer: ~
-        SlevomatCodingStandard\Sniffs\Exceptions\ReferenceThrowableOnlySniff: ~
-        SlevomatCodingStandard\Sniffs\Classes\TraitUseSpacingSniff: ~
-        Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer: ~
-        Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDocBlockFixer: ~
         Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer: ~
-        PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.Found: ~
-        PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff.FoundInWhileCondition:
-            - '*src/Command/Traits/ExecuteMultipleCommandTrait.php'
-        SlevomatCodingStandard\Sniffs\TypeHints\NullableTypeForNullDefaultValueSniff.NullabilitySymbolRequired:
-            - '*src/Security/Authenticator/ApiKeyAuthenticator.php'
-        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingParameterTypeHint:
-            - '*src/Entity/Traits/UserSerializer.php'
-            - '*src/Repository/Traits/LoadUserByUserNameTrait.php'
-            - '*src/Security/Authenticator/ApiKeyAuthenticator.php'
-            - '*src/Security/Provider/ApiKeyUserProvider.php'
-            - '*src/Security/UserProvider.php'
-            - '*src/Security/Provider/SecurityUserFactory.php'
-            - '*src/Security/Voter/IsUserHimselfVoter.php'
-        SlevomatCodingStandard\Sniffs\TypeHints\TypeHintDeclarationSniff.MissingTraversableReturnTypeHintSpecification:
-            - '*src/Kernel.php'
+        Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer: ~

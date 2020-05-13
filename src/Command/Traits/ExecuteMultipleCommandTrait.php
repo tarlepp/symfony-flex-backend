@@ -25,7 +25,6 @@ use function array_values;
  */
 trait ExecuteMultipleCommandTrait
 {
-    // Traits
     use GetApplicationTrait;
 
     /**

@@ -31,7 +31,6 @@ use Throwable;
  */
 class Healthz implements EntityInterface
 {
-    // Traits
     use Uuid;
 
     /**

@@ -29,7 +29,6 @@ use Throwable;
  */
 class ApiKeyType extends AbstractType
 {
-    // Traits
     use AddBasicFieldToForm;
     use UserGroupChoices;
 

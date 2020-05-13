@@ -28,7 +28,6 @@ use Throwable;
  */
 class EditApiKeyCommand extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     private ApiKeyResource $apiKeyResource;

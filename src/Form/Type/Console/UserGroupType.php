@@ -31,7 +31,6 @@ use Throwable;
  */
 class UserGroupType extends AbstractType
 {
-    // Traits
     use AddBasicFieldToForm;
 
     /**

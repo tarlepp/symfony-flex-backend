@@ -36,7 +36,6 @@ use Throwable;
  */
 class LogLoginFailure implements EntityInterface
 {
-    // Traits
     use Uuid;
 
     /**

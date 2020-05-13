@@ -30,7 +30,6 @@ use function sprintf;
  */
 class ListUserGroupsCommand extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     private UserGroupResource $userGroupResource;
