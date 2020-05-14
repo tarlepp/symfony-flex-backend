@@ -21,7 +21,6 @@ use Throwable;
  */
 trait FindMethod
 {
-    // Traits
     use AbstractGenericMethods;
 
     /**

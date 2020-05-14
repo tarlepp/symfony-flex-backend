@@ -35,7 +35,6 @@ use function spl_object_hash;
  */
 abstract class BaseRepository implements BaseRepositoryInterface
 {
-    // Traits
     use RepositoryMethodsTrait;
     use RepositoryWrappersTrait;
 

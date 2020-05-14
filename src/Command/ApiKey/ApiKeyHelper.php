@@ -46,7 +46,7 @@ class ApiKeyHelper
      * changes to API keys.
      *
      * @param SymfonyStyle $io
-     * @param string $question
+     * @param string       $question
      *
      * @return ApiKeyEntity|null
      *
@@ -106,7 +106,7 @@ class ApiKeyHelper
      * Method to list ApiKeys where user can select desired one.
      *
      * @param SymfonyStyle $io
-     * @param string $question
+     * @param string       $question
      *
      * @return ApiKeyEntity|null
      *

@@ -10,13 +10,13 @@ namespace App\Rest;
 
 use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
-use Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\SerializerInterface;
+use Throwable;
 use function array_key_exists;
 use function array_map;
 use function array_merge;
@@ -240,7 +240,7 @@ final class ResponseHandler implements ResponseHandlerInterface
             $response = new Response();
             $response->setContent($this->serializer->serialize($data, $format, $context));
             $response->setStatusCode($httpStatus);
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             $status = Response::HTTP_BAD_REQUEST;
 
             throw new HttpException($status, $exception->getMessage(), $exception, [], $status);

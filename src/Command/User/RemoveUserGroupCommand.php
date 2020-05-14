@@ -25,7 +25,6 @@ use Throwable;
  */
 class RemoveUserGroupCommand extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     private UserGroupResource $userGroupResource;

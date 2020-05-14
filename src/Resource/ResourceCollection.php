@@ -33,7 +33,6 @@ use function sprintf;
  */
 class ResourceCollection implements Countable
 {
-    // Traits
     use CollectionTrait;
 
     /**

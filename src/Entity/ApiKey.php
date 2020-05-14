@@ -48,7 +48,6 @@ use function random_int;
  */
 class ApiKey implements EntityInterface, UserGroupAwareInterface
 {
-    // Traits
     use Blameable;
     use Timestampable;
     use Uuid;
@@ -199,7 +198,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $max = mb_strlen($chars, '8bit') - 1;
 
-        for ($i = 0; $i < 40; ++$i) {
+        for ($i = 0; $i < 40; $i++) {
             $random .= $chars[random_int(0, $max)];
         }
 

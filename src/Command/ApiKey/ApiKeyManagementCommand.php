@@ -20,7 +20,6 @@ use Symfony\Component\Console\Exception\LogicException;
  */
 class ApiKeyManagementCommand extends Command
 {
-    // Traits
     use ExecuteMultipleCommandTrait;
 
     /**

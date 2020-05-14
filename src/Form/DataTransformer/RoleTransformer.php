@@ -54,7 +54,7 @@ class RoleTransformer implements DataTransformerInterface
      *
      * @return Role|null
      *
-     * @throws TransformationFailedException if object (issue) is not found.
+     * @throws TransformationFailedException if object (issue) is not found
      * @throws Throwable
      */
     public function reverseTransform($roleName): ?Role

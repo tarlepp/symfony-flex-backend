@@ -41,7 +41,6 @@ use function is_array;
  */
 class LogLogin implements EntityInterface
 {
-    // Traits
     use LogEntityTrait;
     use Uuid;
 

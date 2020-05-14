@@ -28,7 +28,6 @@ use Throwable;
  */
 class EditUserGroupCommand extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     private UserGroupResource $userGroupResource;

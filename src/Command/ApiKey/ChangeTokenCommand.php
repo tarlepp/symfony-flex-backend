@@ -25,7 +25,6 @@ use Throwable;
  */
 class ChangeTokenCommand extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     private ApiKeyResource $apiKeyResource;

@@ -21,7 +21,6 @@ use Throwable;
  */
 trait ApiKeyUserManagementHelperTrait
 {
-    // Traits
     use GetApplicationTrait;
 
     /**

@@ -47,7 +47,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param EntityInterface|array<int, EntityInterface>|mixed $value The value that should be validated
+     * @param EntityInterface|array<int, EntityInterface>|mixed $value      The value that should be validated
      * @param Constraint                                        $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint): void

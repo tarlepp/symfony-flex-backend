@@ -34,7 +34,6 @@ use Throwable;
  */
 class UserGroup implements EntityInterface
 {
-    // Traits
     use Blameable;
     use Timestampable;
     use Uuid;
@@ -231,9 +230,9 @@ class UserGroup implements EntityInterface
     /**
      * Method to attach new user group to user.
      *
-     * @param   User    $user
+     * @param User $user
      *
-     * @return  UserGroup
+     * @return UserGroup
      */
     public function addUser(User $user): self
     {
@@ -248,9 +247,9 @@ class UserGroup implements EntityInterface
     /**
      * Method to remove specified user from user group.
      *
-     * @param   User    $user
+     * @param User $user
      *
-     * @return  UserGroup
+     * @return UserGroup
      */
     public function removeUser(User $user): self
     {
@@ -264,7 +263,7 @@ class UserGroup implements EntityInterface
     /**
      * Method to remove all many-to-many user relations from current user group.
      *
-     * @return  UserGroup
+     * @return UserGroup
      */
     public function clearUsers(): self
     {

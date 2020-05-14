@@ -12,10 +12,10 @@ use App\Doctrine\DBAL\Types\EnumLanguageType;
 use App\Doctrine\DBAL\Types\EnumLocaleType;
 use DateTime;
 use DateTimeZone;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Throwable;
 use function explode;
 use function floor;
 use function str_replace;
@@ -78,7 +78,7 @@ class Localization
 
                 return $this->getFormattedTimezones();
             });
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }
 

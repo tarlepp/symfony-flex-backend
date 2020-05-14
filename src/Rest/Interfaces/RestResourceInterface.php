@@ -96,7 +96,7 @@ interface RestResourceInterface
      * Gets a reference to the entity identified by the given type and identifier without actually loading it,
      * if the entity is not yet loaded.
      *
-     * @param string $id The entity identifier.
+     * @param string $id the entity identifier
      *
      * @return object|null
      *

@@ -160,7 +160,6 @@ trait RepositoryMethodsTrait
          *
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
          */
-
         RepositoryHelper::resetParameterCount();
 
         $iterator = (new Paginator($queryBuilder, true))->getIterator();
@@ -210,7 +209,6 @@ trait RepositoryMethodsTrait
          *
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
          */
-
         RepositoryHelper::resetParameterCount();
 
         return array_values(array_map('\strval', array_map('\current', $queryBuilder->getQuery()->getArrayResult())));
@@ -244,7 +242,6 @@ trait RepositoryMethodsTrait
          *
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
          */
-
         RepositoryHelper::resetParameterCount();
 
         return (int)$queryBuilder->getQuery()->getSingleScalarResult();

@@ -28,7 +28,6 @@ use Throwable;
  */
 trait FindAction
 {
-    // Traits
     use FindMethod;
 
     /**

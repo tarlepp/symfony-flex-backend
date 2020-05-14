@@ -25,7 +25,6 @@ use Throwable;
  */
 class RemoveUserCommand extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     private UserResource $userResource;

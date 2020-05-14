@@ -34,7 +34,6 @@ use Throwable;
  */
 class CreateUserCommand extends Command
 {
-    // Traits
     use ApiKeyUserManagementHelperTrait;
     use SymfonyStyleTrait;
 
@@ -167,8 +166,8 @@ class CreateUserCommand extends Command
      * sure that we can create all groups correctly.
      *
      * @param OutputInterface $output
-     * @param bool $interactive
-     * @param SymfonyStyle $io
+     * @param bool            $interactive
+     * @param SymfonyStyle    $io
      *
      * @throws Throwable
      */

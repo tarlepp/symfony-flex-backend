@@ -28,7 +28,6 @@ use Throwable;
  */
 trait PatchAction
 {
-    // Traits
     use PatchMethod;
 
     /**

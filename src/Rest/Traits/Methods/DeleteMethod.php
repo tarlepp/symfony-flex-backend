@@ -20,7 +20,6 @@ use Throwable;
  */
 trait DeleteMethod
 {
-    // Traits
     use AbstractGenericMethods;
 
     /**

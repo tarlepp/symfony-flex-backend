@@ -9,11 +9,11 @@ declare(strict_types = 1);
 namespace App\Service;
 
 use App\Utils\JSON;
-use Exception;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use Throwable;
 
 /**
  * Class Version
@@ -62,7 +62,7 @@ class Version
 
                 return (string)($composerData->version ?? '0.0.0');
             });
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }
 

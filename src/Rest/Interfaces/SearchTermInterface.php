@@ -28,8 +28,8 @@ interface SearchTermInterface
     /**
      * Static method to get search term criteria for specified columns and search terms with specified operand and mode.
      *
-     * @param string|string[] $column  Search column(s), could be a string or an array of strings.
-     * @param string|string[] $search  Search term(s), could be a string or an array of strings.
+     * @param string|string[] $column  search column(s), could be a string or an array of strings
+     * @param string|string[] $search  search term(s), could be a string or an array of strings
      * @param string|null     $operand Used operand with multiple search terms. See OPERAND_* constants. Defaults
      *                                 to self::OPERAND_OR
      * @param int|null        $mode    Used mode on LIKE search. See MODE_* constants. Defaults to self::MODE_FULL

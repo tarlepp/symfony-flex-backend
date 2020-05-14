@@ -27,7 +27,6 @@ use Throwable;
  */
 trait FindOneAction
 {
-    // Traits
     use FindOneMethod;
 
     /**

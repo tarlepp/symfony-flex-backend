@@ -31,7 +31,6 @@ use function sprintf;
  */
 class ListUsersCommand extends Command
 {
-    // Traits
     use SymfonyStyleTrait;
 
     private UserResource $userResource;

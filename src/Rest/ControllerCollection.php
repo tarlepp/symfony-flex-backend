@@ -30,7 +30,6 @@ use function sprintf;
  */
 class ControllerCollection implements Countable
 {
-    // Traits
     use CollectionTrait;
 
     /**

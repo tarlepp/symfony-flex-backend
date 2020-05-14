@@ -21,7 +21,6 @@ use Throwable;
  */
 trait CountMethod
 {
-    // Traits
     use AbstractGenericMethods;
 
     /**

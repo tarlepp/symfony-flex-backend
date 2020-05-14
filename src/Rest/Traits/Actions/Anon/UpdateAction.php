@@ -28,7 +28,6 @@ use Throwable;
  */
 trait UpdateAction
 {
-    // Traits
     use UpdateMethod;
 
     /**

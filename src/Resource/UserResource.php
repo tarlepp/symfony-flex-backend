@@ -48,7 +48,7 @@ class UserResource extends RestResource
     /**
      * Class constructor.
      *
-     * @param Repository $repository
+     * @param Repository   $repository
      * @param RolesService $rolesService
      */
     public function __construct(Repository $repository, RolesService $rolesService)

@@ -28,7 +28,6 @@ use Throwable;
  */
 trait CountAction
 {
-    // Traits
     use CountMethod;
 
     /**
