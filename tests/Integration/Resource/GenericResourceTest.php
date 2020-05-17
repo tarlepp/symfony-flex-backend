@@ -377,6 +377,11 @@ class GenericResourceTest extends KernelTestCase
         /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
+        $repository
+            ->expects(static::once())
+            ->method('getEntityName')
+            ->willReturn(UserEntity::class);
+
         $dto = new $this->dtoClass();
 
         $this->resource->setRepository($repository);
