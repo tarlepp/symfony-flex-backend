@@ -36,6 +36,7 @@ services:
 
 parameters:
     skip:
+        PhpCsFixer\Fixer\ArrayNotation\NoMultilineWhitespaceAroundDoubleArrowFixer: ~
         PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer: ~
