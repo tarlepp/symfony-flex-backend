@@ -11,7 +11,7 @@ namespace App\Utils\Tests;
 use App\Utils\JSON;
 use ArrayObject;
 use JsonException;
-use function is_object;
+use Stringable;
 
 /**
  * Class StringableArrayObject
@@ -19,11 +19,9 @@ use function is_object;
  * @package App\Utils\Tests
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class StringableArrayObject extends ArrayObject
+class StringableArrayObject extends ArrayObject implements Stringable
 {
     /**
-     * @codeCoverageIgnore
-     *
      * @return string
      *
      * @throws JsonException
@@ -33,14 +31,12 @@ class StringableArrayObject extends ArrayObject
         /**
          * @psalm-suppress MissingClosureParamType
          * @psalm-suppress MissingClosureReturnType
-         * @psalm-suppress MissingParamType
-         * @psalm-suppress InvalidCast
          *
          * @param mixed $input
          *
          * @return mixed
          */
-        $iterator = static fn ($input) => is_object($input) ? (string)$input : $input;
+        $iterator = static fn ($input) => $input instanceof Stringable ? (string)$input : $input;
 
         return JSON::encode(array_map($iterator, $this->getArrayCopy()));
     }
