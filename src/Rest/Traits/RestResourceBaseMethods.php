@@ -199,14 +199,14 @@ trait RestResourceBaseMethods
         $flush ??= true;
         $skipValidation ??= false;
 
-        // Validate DTO
-        $this->validateDto($dto, $skipValidation);
-
         // Create new entity
         $entity = $this->createEntity();
 
         // Before callback method call
         $this->beforeCreate($dto, $entity);
+
+        // Validate DTO
+        $this->validateDto($dto, $skipValidation);
 
         // Create or update entity
         $this->persistEntity($entity, $dto, $flush, $skipValidation);
@@ -247,11 +247,11 @@ trait RestResourceBaseMethods
          */
         $restDto = $this->getDtoForEntity($id, get_class($dto), $dto);
 
-        // Validate DTO
-        $this->validateDto($restDto, $skipValidation);
-
         // Before callback method call
         $this->beforeUpdate($id, $restDto, $entity);
+
+        // Validate DTO
+        $this->validateDto($restDto, $skipValidation);
 
         // Create or update entity
         $this->persistEntity($entity, $restDto, $flush, $skipValidation);
@@ -292,11 +292,11 @@ trait RestResourceBaseMethods
          */
         $restDto = $this->getDtoForEntity($id, get_class($dto), $dto, true);
 
-        // Validate DTO
-        $this->validateDto($restDto, $skipValidation);
-
         // Before callback method call
         $this->beforePatch($id, $restDto, $entity);
+
+        // Validate DTO
+        $this->validateDto($restDto, $skipValidation);
 
         // Create or update entity
         $this->persistEntity($entity, $restDto, $flush, $skipValidation);
