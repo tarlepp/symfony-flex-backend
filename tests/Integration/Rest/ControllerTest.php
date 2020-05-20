@@ -37,9 +37,8 @@ class ControllerTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('Resource service not set');
 
-        /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class, [], '', false);
-        $controller->getResource();
+        ($this->getMockForAbstractClass(Controller::class, [], '', false))
+            ->getResource();
     }
 
     /**
@@ -47,10 +46,11 @@ class ControllerTest extends KernelTestCase
      */
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {
-        /** @var RestResourceInterface $resource */
+        /**
+         * @var RestResourceInterface $resource
+         * @var Controller            $controller
+         */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        /** @var Controller $controller */
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
         /** @noinspection UnnecessaryAssertionInspection */
@@ -65,9 +65,8 @@ class ControllerTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('ResponseHandler service not set');
 
-        /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class, [], '', false);
-        $controller->getResponseHandler();
+        ($this->getMockForAbstractClass(Controller::class, [], '', false))
+            ->getResponseHandler();
     }
 
     /**
@@ -78,9 +77,8 @@ class ControllerTest extends KernelTestCase
         /** @var RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
-        /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
-        $controller->setResponseHandler(new ResponseHandler(new Serializer()));
+        $controller = ($this->getMockForAbstractClass(Controller::class, [$resource]))
+            ->setResponseHandler(new ResponseHandler(new Serializer()));
 
         static::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
     }
@@ -90,10 +88,11 @@ class ControllerTest extends KernelTestCase
      */
     public function testThatGetDtoClassCallsExpectedServiceMethods(): void
     {
-        /** @var MockObject|RestDtoInterface $dtoClass */
+        /**
+         * @var MockObject|RestDtoInterface      $dtoClass
+         * @var MockObject|RestResourceInterface $resource
+         */
         $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-
-        /** @var MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
         $resource
@@ -101,9 +100,8 @@ class ControllerTest extends KernelTestCase
             ->method('getDtoClass')
             ->willReturn(get_class($dtoClass));
 
-        /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
-        $controller->getDtoClass();
+        ($this->getMockForAbstractClass(Controller::class, [$resource]))
+            ->getDtoClass();
     }
 
     /**
@@ -124,9 +122,8 @@ class ControllerTest extends KernelTestCase
             ->method('getDtoClass')
             ->willReturn(stdClass::class);
 
-        /** @var Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
-        $controller->getDtoClass();
+        ($this->getMockForAbstractClass(Controller::class, [$resource]))
+            ->getDtoClass();
     }
 
     /**
@@ -134,18 +131,18 @@ class ControllerTest extends KernelTestCase
      */
     public function testThatGetDtoClassWorksAsExpectedWithGivenDtoClasses(): void
     {
-        /** @var MockObject|RestDtoInterface $dtoClass */
+        /**
+         * @var MockObject|RestDtoInterface      $dtoClass
+         * @var MockObject|RestResourceInterface $resource
+         * @var MockObject|Controller            $controller
+         */
         $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-
-        /** @var MockObject|RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
         $dtoClasses = [
             'foo' => get_class($dtoClass),
         ];
-
-        /** @var MockObject|Controller $controller */
-        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
 
         $reflection = new ReflectionProperty(get_class($controller), 'dtoClasses');
         $reflection->setAccessible(true);

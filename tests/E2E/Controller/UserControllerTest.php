@@ -41,7 +41,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -69,7 +68,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/count');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -89,7 +87,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getApiKeyClient($role);
         $client->request('GET', $this->baseUrl . '/count');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -112,7 +109,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/count');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -136,7 +132,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getApiKeyClient($role);
         $client->request('GET', $this->baseUrl . '/count');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -163,7 +158,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -186,7 +180,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -213,7 +206,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/ids');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -236,7 +228,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/ids');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -256,20 +247,19 @@ class UserControllerTest extends WebTestCase
     public function testThatCreateActionWorksLikeExpected(): string
     {
         $data = [
-            'username'  => 'test-user',
+            'username' => 'test-user',
             'firstName' => 'test',
-            'lastName'  => 'user',
-            'email'     => 'test-user@test.com',
-            'password'  => 'some password',
-            'language'  => 'fi',
-            'locale'    => 'fi',
-            'timezone'  => 'Europe/Amsterdam'
+            'lastName' => 'user',
+            'email' => 'test-user@test.com',
+            'password' => 'some password',
+            'language' => 'fi',
+            'locale' => 'fi',
+            'timezone' => 'Europe/Amsterdam',
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('POST', $this->baseUrl, [], [], [], JSON::encode($data));
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -299,16 +289,15 @@ class UserControllerTest extends WebTestCase
     public function testThatCreateActionReturns403ForInvalidUser(string $username, string $password): void
     {
         $data = [
-            'username'  => 'test-user',
+            'username' => 'test-user',
             'firstName' => 'test',
-            'lastName'  => 'user',
-            'email'     => 'test-user@test.com',
+            'lastName' => 'user',
+            'email' => 'test-user@test.com',
         ];
 
         $client = $this->getTestClient($username, $password);
         $client->request('POST', $this->baseUrl, [], [], [], JSON::encode($data));
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -334,20 +323,19 @@ class UserControllerTest extends WebTestCase
     public function testThatUpdateActionWorksLikeExpected(string $userId): string
     {
         $data = [
-            'id'        => $userId,
-            'username'  => 'test-user',
+            'id' => $userId,
+            'username' => 'test-user',
             'firstName' => 'test-1',
-            'lastName'  => 'user-2',
-            'email'     => 'test-user@test.com',
-            'language'  => 'fi',
-            'locale'    => 'fi',
-            'timezone'  => 'Europe/Amsterdam'
+            'lastName' => 'user-2',
+            'email' => 'test-user@test.com',
+            'language' => 'fi',
+            'locale' => 'fi',
+            'timezone' => 'Europe/Amsterdam',
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -374,14 +362,13 @@ class UserControllerTest extends WebTestCase
     public function testThatUpdateActionDoesNotWorkWithPartialData(string $userId): string
     {
         $data = [
-            'id'        => $userId,
-            'email'     => 'test-user@test.com',
+            'id' => $userId,
+            'email' => 'test-user@test.com',
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -410,16 +397,15 @@ class UserControllerTest extends WebTestCase
         string $userId
     ): string {
         $data = [
-            'username'  => 'test-user',
+            'username' => 'test-user',
             'firstName' => 'test-1',
-            'lastName'  => 'user-2',
-            'email'     => 'test-user@test.com',
+            'lastName' => 'user-2',
+            'email' => 'test-user@test.com',
         ];
 
         $client = $this->getTestClient($username, $password);
         $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -447,26 +433,25 @@ class UserControllerTest extends WebTestCase
     public function testThatPatchActionWorksWithPartialData(string $userId): string
     {
         $data = [
-            'id'        => $userId,
-            'email'     => 'test-user2@test.com',
-            'locale'    => 'en',
+            'id' => $userId,
+            'email' => 'test-user2@test.com',
+            'locale' => 'en',
         ];
 
         $expectedData = [
-            'id'        => $userId,
-            'username'  => 'test-user',
+            'id' => $userId,
+            'username' => 'test-user',
             'firstName' => 'test-1',
-            'lastName'  => 'user-2',
-            'email'     => 'test-user2@test.com',
-            'language'  => 'fi',
-            'locale'    => 'en',
-            'timezone'  => 'Europe/Amsterdam'
+            'lastName' => 'user-2',
+            'email' => 'test-user2@test.com',
+            'language' => 'fi',
+            'locale' => 'en',
+            'timezone' => 'Europe/Amsterdam',
         ];
 
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('PATCH', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -496,7 +481,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('DELETE', $this->baseUrl . '/' . $userId);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -522,7 +506,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('DELETE', $this->baseUrl . '/' . $userId);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -542,7 +525,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('DELETE', $this->baseUrl . '/' . $user->getId());
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -572,7 +554,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -600,7 +581,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -623,7 +603,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -650,7 +629,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -678,7 +656,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -724,7 +701,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('POST', $url);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -766,7 +742,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('POST', $url);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -800,7 +775,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('DELETE', $url);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -841,7 +815,6 @@ class UserControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('DELETE', $url);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -867,12 +840,11 @@ class UserControllerTest extends WebTestCase
      */
     public function testThatGetUserGroupsActionReturns200ForRootRoleUser(
         string $userId,
-        string $expectedResponse = null
+        ?string $expectedResponse = null
     ): void {
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -974,7 +946,7 @@ class UserControllerTest extends WebTestCase
         */
 
         foreach ($this->dataProviderInvalidUsersCreate() as $userData) {
-            $users = array_values(array_filter($users, fn(User $user): bool => $user->getUsername() !== $userData[0]));
+            $users = array_values(array_filter($users, fn (User $user): bool => $user->getUsername() !== $userData[0]));
 
             yield array_merge($userData, [$users[0]->getId()]);
         }
@@ -1073,7 +1045,7 @@ class UserControllerTest extends WebTestCase
         $users = $userResource->find();
 
         $iterator = static function (array $userData) use ($users): array {
-            $users = array_values(array_filter($users, fn (User $user): bool =>$userData[0] === $user->getUsername()));
+            $users = array_values(array_filter($users, fn (User $user): bool => $userData[0] === $user->getUsername()));
 
             $userData[] = $users[0]->getId();
 

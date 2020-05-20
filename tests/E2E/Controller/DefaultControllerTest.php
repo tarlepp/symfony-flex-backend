@@ -11,7 +11,6 @@ namespace App\Tests\E2E\Controller;
 use App\Resource\LogRequestResource;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function file_get_contents;
 
@@ -31,7 +30,6 @@ class DefaultControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
@@ -45,7 +43,6 @@ class DefaultControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/healthz');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
@@ -77,7 +74,6 @@ class DefaultControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/version');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
@@ -109,7 +105,6 @@ class DefaultControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', '/version');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         $version = $response->headers->get('X-API-VERSION');

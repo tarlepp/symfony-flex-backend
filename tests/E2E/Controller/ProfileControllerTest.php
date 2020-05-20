@@ -37,7 +37,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -73,7 +72,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -88,7 +86,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient();
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -123,7 +120,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -152,7 +148,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl . '/roles');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -181,7 +176,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient();
         $client->request('GET', $this->baseUrl . '/roles');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -218,7 +212,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/roles');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -240,7 +233,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl . '/roles');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -269,7 +261,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl . '/groups');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -298,7 +289,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient();
         $client->request('GET', $this->baseUrl . '/groups');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -335,7 +325,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl . '/groups');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -368,7 +357,6 @@ class ProfileControllerTest extends WebTestCase
         $client = $this->getApiKeyClient($token);
         $client->request('GET', $this->baseUrl . '/groups');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);

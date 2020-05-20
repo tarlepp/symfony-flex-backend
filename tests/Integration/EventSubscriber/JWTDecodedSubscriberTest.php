@@ -47,7 +47,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $event = new JWTDecodedEvent($payload);
 
         // Create subscriber and call actual process method
-        (new JWTDecodedSubscriber($requestStack, $logger))->onJWTDecoded($event);
+        (new JWTDecodedSubscriber($requestStack, $logger))
+            ->onJWTDecoded($event);
 
         static::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
     }
@@ -61,8 +62,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
         // Server parameters for new Request
         $server = [
-            'REMOTE_ADDR'       => '123.123.123.123',
-            'HTTP_USER_AGENT'   => 'foobar'
+            'REMOTE_ADDR' => '123.123.123.123',
+            'HTTP_USER_AGENT' => 'foobar',
         ];
 
         // Create RequestStack and push pure Request to it
@@ -78,7 +79,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $event = new JWTDecodedEvent($payload);
 
         // Create subscriber and call actual process method
-        (new JWTDecodedSubscriber($requestStack, $logger))->onJWTDecoded($event);
+        (new JWTDecodedSubscriber($requestStack, $logger))
+            ->onJWTDecoded($event);
 
         static::assertTrue($event->isValid(), 'JWTDecodedEvent did mark event as invalid.');
     }
@@ -94,7 +96,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $event = new JWTDecodedEvent([]);
 
         // Create subscriber and call actual process method
-        (new JWTDecodedSubscriber(new RequestStack(), $logger))->onJWTDecoded($event);
+        (new JWTDecodedSubscriber(new RequestStack(), $logger))
+            ->onJWTDecoded($event);
 
         static::assertFalse($event->isValid(), 'JWTDecodedEvent did not mark event as invalid.');
     }
@@ -113,7 +116,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
         $expectedEvent = clone $event;
 
         // Create subscriber and call actual process method
-        (new JWTDecodedSubscriber(new RequestStack(), $logger))->onJWTDecoded($event);
+        (new JWTDecodedSubscriber(new RequestStack(), $logger))
+            ->onJWTDecoded($event);
 
         static::assertSame($expectedEvent->getPayload(), $event->getPayload());
         static::assertFalse($event->isValid());
@@ -133,7 +137,8 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
         $event = new JWTDecodedEvent([]);
 
-        (new JWTDecodedSubscriber(new RequestStack(), $logger))->onJWTDecoded($event);
+        (new JWTDecodedSubscriber(new RequestStack(), $logger))
+            ->onJWTDecoded($event);
 
         static::assertFalse($event->isValid());
     }

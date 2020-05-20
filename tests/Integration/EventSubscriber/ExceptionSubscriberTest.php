@@ -76,7 +76,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             ->method('error')
             ->with((string)$exception);
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))->onKernelException($event);
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+            ->onKernelException($event);
     }
 
     /**
@@ -104,7 +105,8 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         $originalResponse = $event->getResponse();
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))->onKernelException($event);
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+            ->onKernelException($event);
 
         static::assertNotSame($originalResponse, $event->getResponse());
     }
@@ -113,7 +115,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @dataProvider dataProviderTestResponseHasExpectedStatusCode
      *
      * @param int       $status
-     * @param Exception $exception
+     * @param Throwable $exception
      * @param string    $environment
      * @param string    $message
      *
@@ -123,11 +125,10 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function testThatResponseHasExpectedStatusCode(
         int $status,
-        Exception $exception,
+        Throwable $exception,
         string $environment,
         string $message
     ): void {
-
         /**
          * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
          * @var MockObject|LoggerInterface        $stubLogger
@@ -147,7 +148,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             $exception
         );
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))->onKernelException($event);
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+            ->onKernelException($event);
 
         static::assertSame($status, $event->getResponse()->getStatusCode());
         static::assertSame($message, JSON::decode($event->getResponse()->getContent())->message);
@@ -184,7 +186,8 @@ class ExceptionSubscriberTest extends KernelTestCase
             new Exception('error')
         );
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))->onKernelException($event);
+        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+            ->onKernelException($event);
 
         $result = JSON::decode($event->getResponse()->getContent(), true);
 
@@ -195,7 +198,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @dataProvider dataProviderTestThatGetStatusCodeReturnsExpected
      *
      * @param int       $expectedStatusCode
-     * @param Exception $exception
+     * @param Throwable $exception
      * @param bool      $user
      * @param string    $environment
      *
@@ -205,7 +208,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function testThatGetStatusCodeReturnsExpected(
         int $expectedStatusCode,
-        Exception $exception,
+        Throwable $exception,
         bool $user,
         string $environment
     ): void {
@@ -235,7 +238,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      * @dataProvider dataProviderTestThatGetExceptionMessageReturnsExpected
      *
      * @param string    $expectedMessage
-     * @param Exception $exception
+     * @param Throwable $exception
      * @param string    $environment
      *
      * @throws Throwable
@@ -244,7 +247,7 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function testThatGetExceptionMessageReturnsExpected(
         string $expectedMessage,
-        Exception $exception,
+        Throwable $exception,
         string $environment
     ): void {
         /**
@@ -283,14 +286,14 @@ class ExceptionSubscriberTest extends KernelTestCase
     {
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
-            new Exception(Exception::class),
+            new Exception(Throwable::class),
             'dev',
-            Exception::class,
+            Throwable::class,
         ];
 
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
-            new Exception(Exception::class),
+            new Exception(Throwable::class),
             'prod',
             'Internal server error.',
         ];
@@ -471,21 +474,21 @@ class ExceptionSubscriberTest extends KernelTestCase
             Response::HTTP_BAD_REQUEST,
             new ValidatorException('', new ConstraintViolationList([$violation])),
             false,
-            'dev'
+            'dev',
         ];
 
         yield [
             Response::HTTP_BAD_REQUEST,
             new ValidatorException('', new ConstraintViolationList([$violation])),
             false,
-            'prod'
+            'prod',
         ];
 
         yield [
             Response::HTTP_INTERNAL_SERVER_ERROR,
             new BaseValidatorException('', 400),
             false,
-            'prod'
+            'prod',
         ];
 
         yield [

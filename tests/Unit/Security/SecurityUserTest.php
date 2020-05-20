@@ -11,6 +11,7 @@ namespace App\Tests\Unit\Security;
 use App\Entity\User;
 use App\Security\SecurityUser;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use function str_rot13;
 
 /**
  * Class SecurityUserTest
@@ -22,18 +23,18 @@ class SecurityUserTest extends KernelTestCase
 {
     public function testThatGetRolesReturnsExpected(): void
     {
-        $securityUser = (new SecurityUser(new User()))->setRoles(['Foo', 'Bar']);
+        $securityUser = (new SecurityUser(new User()))
+            ->setRoles(['Foo', 'Bar']);
 
         static::assertSame(['Foo', 'Bar'], $securityUser->getRoles());
     }
 
     public function testThatGetPasswordReturnsExpected(): void
     {
-        $encoder = static function (string $password): string {
-            return str_rot13($password);
-        };
+        $encoder = fn (string $password): string => str_rot13($password);
 
-        $securityUser = new SecurityUser((new User())->setPassword($encoder, 'foobar'));
+        $securityUser = new SecurityUser((new User())
+            ->setPassword($encoder, 'foobar'));
 
         static::assertSame('sbbone', $securityUser->getPassword());
     }
@@ -59,9 +60,7 @@ class SecurityUserTest extends KernelTestCase
 
     public function testThatPasswordIsNotPresentAfterEraseCredential(): void
     {
-        $encoder = static function (string $password) {
-            return $password;
-        };
+        $encoder = fn (string $password): string => $password;
 
         $securityUser = new SecurityUser((new User())->setPassword($encoder, 'foobar'));
 

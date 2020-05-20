@@ -29,6 +29,22 @@ class EnumLogLoginTypeTest extends KernelTestCase
     private AbstractPlatform $platform;
     private Type $type;
 
+    /**
+     * @throws DBALException
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->platform = new MySqlPlatform();
+
+        Type::hasType('EnumLogLogin')
+            ? Type::overrideType('EnumLogLogin', EnumLogLoginType::class)
+            : Type::addType('EnumLogLogin', EnumLogLoginType::class);
+
+        $this->type = Type::getType('EnumLogLogin');
+    }
+
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
         static::assertSame("ENUM('failure', 'success')", $this->type->getSQLDeclaration([], $this->platform));
@@ -88,23 +104,5 @@ class EnumLogLoginTypeTest extends KernelTestCase
         yield ['foobar'];
         yield [[]];
         yield [new stdClass()];
-    }
-
-    /**
-     * @throws DBALException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->platform = new MySqlPlatform();
-
-        if (Type::hasType('EnumLogLogin')) {
-            Type::overrideType('EnumLogLogin', EnumLogLoginType::class);
-        } else {
-            Type::addType('EnumLogLogin', EnumLogLoginType::class);
-        }
-
-        $this->type = Type::getType('EnumLogLogin');
     }
 }

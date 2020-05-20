@@ -29,29 +29,6 @@ class SchemaTest extends KernelTestCase
 {
     private SchemaValidator $validator;
 
-    public function testThatMappingsAreValid(): void
-    {
-        $errors = $this->validator->validateMapping();
-
-        $messages = [];
-
-        $formatter = static function ($errors, $className) use (&$messages): void {
-            $messages[] = $className . ': ' . implode(', ', $errors);
-        };
-
-        array_walk($errors, $formatter);
-
-        static::assertEmpty($errors, implode("\n", $messages));
-    }
-
-    public function testThatSchemaInSyncWithMetadata(): void
-    {
-        static::assertTrue(
-            $this->validator->schemaInSyncWithMetadata(),
-            'The database schema is not in sync with the current mapping file.'
-        );
-    }
-
     /**
      * @throws Throwable
      */
@@ -79,5 +56,28 @@ class SchemaTest extends KernelTestCase
             ->getManager();
 
         $this->validator = new SchemaValidator($em);
+    }
+
+    public function testThatMappingsAreValid(): void
+    {
+        $errors = $this->validator->validateMapping();
+
+        $messages = [];
+
+        $formatter = static function ($errors, $className) use (&$messages): void {
+            $messages[] = $className . ': ' . implode(', ', $errors);
+        };
+
+        array_walk($errors, $formatter);
+
+        static::assertEmpty($errors, implode("\n", $messages));
+    }
+
+    public function testThatSchemaInSyncWithMetadata(): void
+    {
+        static::assertTrue(
+            $this->validator->schemaInSyncWithMetadata(),
+            'The database schema is not in sync with the current mapping file.'
+        );
     }
 }

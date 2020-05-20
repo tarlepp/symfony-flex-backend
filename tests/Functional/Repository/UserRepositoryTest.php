@@ -11,12 +11,12 @@ namespace App\Tests\Functional\Repository;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Utils\Tests\PhpUnitUtil;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
 use function array_fill;
 use function array_map;
 use function array_merge;
 use function count;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Throwable;
 
 /**
  * Class UserRepositoryTest
@@ -45,6 +45,15 @@ class UserRepositoryTest extends KernelTestCase
         parent::tearDownAfterClass();
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->userRepository = static::$container->get(UserRepository::class);
+    }
+
     /**
      * @throws Throwable
      */
@@ -53,6 +62,9 @@ class UserRepositoryTest extends KernelTestCase
         static::assertSame(6, $this->userRepository->countAdvanced());
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatFindByAdvancedReturnsExpected(): void
     {
         $users = $this->userRepository->findByAdvanced(['username' => 'john']);
@@ -88,7 +100,6 @@ class UserRepositoryTest extends KernelTestCase
         foreach ($data as $set) {
             [$expected, $username, $id] = $set;
 
-            /** @noinspection DisconnectedForeachInstructionInspection */
             static::assertSame($expected, $this->userRepository->isUsernameAvailable($username, $id));
         }
     }
@@ -116,7 +127,6 @@ class UserRepositoryTest extends KernelTestCase
         foreach ($data as $set) {
             [$expected, $email, $id] = $set;
 
-            /** @noinspection DisconnectedForeachInstructionInspection */
             static::assertSame($expected, $this->userRepository->isEmailAvailable($email, $id));
         }
     }
@@ -132,14 +142,5 @@ class UserRepositoryTest extends KernelTestCase
         static::assertSame(6, $this->userRepository->countAdvanced());
         static::assertSame(6, $this->userRepository->reset());
         static::assertSame(0, $this->userRepository->countAdvanced());
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->userRepository = static::$container->get(UserRepository::class);
     }
 }

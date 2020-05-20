@@ -34,7 +34,7 @@ class ApiKeyTest extends EntityTestCase
 
     public function testThatGetRolesContainsExpectedRole(): void
     {
-        static::assertContains(RolesService::ROLE_API, $this->entity->getRoles());
+        static::assertContainsEquals(RolesService::ROLE_API, $this->entity->getRoles());
     }
 
     /**

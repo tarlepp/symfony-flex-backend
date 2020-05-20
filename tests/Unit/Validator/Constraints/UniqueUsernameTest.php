@@ -19,6 +19,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class UniqueUsernameTest extends KernelTestCase
 {
+    protected bool $backupGlobals = false;
+    protected bool $backupStaticAttributes = false;
+
     public function testThatGetTargetsReturnsExpected(): void
     {
         static::assertSame('class', (new UniqueUsername())->getTargets());

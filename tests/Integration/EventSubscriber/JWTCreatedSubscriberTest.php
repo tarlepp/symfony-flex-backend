@@ -46,7 +46,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber($requestStack, $logger))->onJWTCreated($event);
+        (new JWTCreatedSubscriber($requestStack, $logger))
+            ->onJWTCreated($event);
 
         $keys = ['exp', 'checksum'];
 
@@ -71,7 +72,8 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber(new RequestStack(), $logger))->onJWTCreated($event);
+        (new JWTCreatedSubscriber(new RequestStack(), $logger))
+            ->onJWTCreated($event);
 
         $keys = ['exp'];
 
@@ -103,6 +105,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber(new RequestStack(), $logger))->onJWTCreated($event);
+        (new JWTCreatedSubscriber(new RequestStack(), $logger))
+            ->onJWTCreated($event);
     }
 }

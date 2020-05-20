@@ -59,7 +59,7 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
             ->with($userEntity->getId())
             ->willReturn($userEntity);
 
-        $subscriber = new AuthenticationSuccessSubscriber($loginLogger, $userRepository);
-        $subscriber->onAuthenticationSuccess($event);
+        (new AuthenticationSuccessSubscriber($loginLogger, $userRepository))
+            ->onAuthenticationSuccess($event);
     }
 }

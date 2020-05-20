@@ -38,7 +38,8 @@ class UserUpdateTest extends DtoTestCase
             ->setUsername('username')
             ->addUserGroup($userGroup1);
 
-        $dto = (new UserUpdate())->load($user)
+        $dto = (new UserUpdate())
+            ->load($user)
             ->setUserGroups([$userGroup2]);
 
         $updatedUser = $dto->update($user);

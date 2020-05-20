@@ -47,8 +47,8 @@ class UserTest extends DtoTestCase
             ->addUserGroup($userGroupEntity);
 
         /** @var UserDto $dto */
-        $dto = new $this->dtoClass();
-        $dto->load($userEntity);
+        $dto = (new $this->dtoClass())
+            ->load($userEntity);
 
         static::assertSame('username', $dto->getUsername());
         static::assertSame('first name', $dto->getFirstName());
@@ -71,10 +71,9 @@ class UserTest extends DtoTestCase
             ->method('setPlainPassword')
             ->with('password');
 
-        /** @var UserDto $dto */
-        $dto = new $this->dtoClass();
-        $dto->setPassword('password');
-        $dto->update($entity);
+        (new $this->dtoClass())
+            ->setPassword('password')
+            ->update($entity);
     }
 
     /**
@@ -100,9 +99,8 @@ class UserTest extends DtoTestCase
             ->method('addUserGroup')
             ->willReturn($entity);
 
-        /** @var UserDto $dto */
-        $dto = new $this->dtoClass();
-        $dto->setUserGroups($userGroups);
-        $dto->update($entity);
+        (new $this->dtoClass())
+            ->setUserGroups($userGroups)
+            ->update($entity);
     }
 }

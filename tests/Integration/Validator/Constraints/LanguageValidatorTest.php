@@ -43,11 +43,24 @@ class LanguageValidatorTest extends KernelTestCase
      */
     private $localization;
 
+    /**
+     * @throws Throwable
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->constraint = new Language();
+        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
+        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
+        $this->localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
+    }
+
     public function testThatValidateCallsExpectedMethods(): void
     {
         // Create new user
-        $user = new User();
-        $user->setLanguage('foo');
+        $user = (new User())
+            ->setLanguage('foo');
 
         $this->localization
             ->expects(static::once())
@@ -79,18 +92,5 @@ class LanguageValidatorTest extends KernelTestCase
         $validator = new LanguageValidator($this->localization);
         $validator->initialize($this->context);
         $validator->validate($user, $this->constraint);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->constraint = new Language();
-        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
-        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $this->localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
     }
 }

@@ -32,6 +32,19 @@ class UserGroupTransformerTest extends KernelTestCase
     private MockObject $userGroupResource;
 
     /**
+     * @throws Throwable
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->userGroupResource = $this
+            ->getMockBuilder(UserGroupResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
      * @param StringableArrayObject      $expected
@@ -47,7 +60,7 @@ class UserGroupTransformerTest extends KernelTestCase
 
         static::assertSame(
             $expected->getArrayCopy(),
-            $transformer->transform($input == null ? null : $input->getArrayCopy())
+            $transformer->transform($input === null ? null : $input->getArrayCopy())
         );
     }
 
@@ -62,8 +75,8 @@ class UserGroupTransformerTest extends KernelTestCase
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
 
-        $transformer = new UserGroupTransformer($this->userGroupResource);
-        $transformer->reverseTransform(['1', '2']);
+        (new UserGroupTransformer($this->userGroupResource))
+            ->reverseTransform(['1', '2']);
     }
 
     public function testThatReverseTransformThrowsAnException(): void
@@ -79,8 +92,8 @@ class UserGroupTransformerTest extends KernelTestCase
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity, null);
 
-        $transformer = new UserGroupTransformer($this->userGroupResource);
-        $transformer->reverseTransform(['1', '2']);
+        (new UserGroupTransformer($this->userGroupResource))
+            ->reverseTransform(['1', '2']);
     }
 
     public function testThatReverseTransformReturnsExpected(): void
@@ -111,18 +124,5 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity = new UserGroup();
 
         yield [new StringableArrayObject([$entity->getId()]), new StringableArrayObject([$entity])];
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->userGroupResource = $this
-            ->getMockBuilder(UserGroupResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }

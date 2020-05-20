@@ -14,7 +14,6 @@ use App\Entity\User;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\StringableArrayObject;
 use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +36,29 @@ class LogRequestTest extends EntityTestCase
 {
     protected string $entityName = LogRequest::class;
 
+    /**
+     * @throws Throwable
+     *
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
+    protected function setUp(): void
+    {
+        static::bootKernel();
+
+        // Store container and entity manager
+        $this->testContainer = static::$kernel->getContainer();
+
+        /** @noinspection MissingService */
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
+
+        // Create new entity object
+        $this->entity = new $this->entityName([]);
+
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->repository = $this->entityManager->getRepository($this->entityName);
+    }
+
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * @param string $field
@@ -46,9 +68,9 @@ class LogRequestTest extends EntityTestCase
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
-        string $field = null,
-        string $type = null,
-        array $meta = null
+        ?string $field = null,
+        ?string $type = null,
+        ?array $meta = null
     ): void {
         static::markTestSkipped('There is not setter in read only entity...');
     }
@@ -62,9 +84,9 @@ class LogRequestTest extends EntityTestCase
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterReturnsInstanceOfEntity(
-        string $field = null,
-        string $type = null,
-        array $meta = null
+        ?string $field = null,
+        ?string $type = null,
+        ?array $meta = null
     ): void {
         static::markTestSkipped('There is not setter in read only entity...');
     }
@@ -75,7 +97,7 @@ class LogRequestTest extends EntityTestCase
      *
      * @param string $field
      * @param string $type
-     * @param array $meta
+     * @param array  $meta
      *
      * @throws Throwable
      *
@@ -97,7 +119,7 @@ class LogRequestTest extends EntityTestCase
             new ApiKey()
         );
 
-        $value = $logRequest->$getter();
+        $value = $logRequest->{$getter}();
 
         if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
             $type = ArrayCollection::class;
@@ -127,7 +149,7 @@ class LogRequestTest extends EntityTestCase
 
                 static::$method($value, $message);
             }
-        } catch (Exception $error) {
+        } catch (Throwable $error) {
             static::assertInstanceOf($type, $value, $message . ' - ' . $error->getMessage());
         }
     }
@@ -236,7 +258,7 @@ class LogRequestTest extends EntityTestCase
                 'password',
                 'token',
                 'authorization',
-                'cookie'
+                'cookie',
             ]),
             new StringableArrayObject([
                 'password' => 'password',
@@ -272,25 +294,5 @@ class LogRequestTest extends EntityTestCase
             'false',
             new StringableArrayObject([false]),
         ];
-    }
-
-    /**
-     * @throws Throwable
-     *
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    protected function setUp(): void
-    {
-        static::bootKernel();
-
-        // Store container and entity manager
-        $this->testContainer = static::$kernel->getContainer();
-
-        /** @noinspection MissingService */
-        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
-
-        // Create new entity object
-        $this->entity = new $this->entityName([]);
-        $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 }

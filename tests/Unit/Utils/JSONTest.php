@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 /**
  * /tests/Unit/Utils/JSONTest.php.
  *
@@ -175,7 +175,7 @@ class JSONTest extends KernelTestCase
     public function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {
         $iterator = fn (array $data): array => [
-            [$data[1], is_array($data[0]) ? true : false],
+            [$data[1], is_array($data[0])],
             $data[0],
         ];
 

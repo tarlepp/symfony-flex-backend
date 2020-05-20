@@ -25,14 +25,6 @@ class LogRequestRepositoryTest extends KernelTestCase
      */
     private $repository;
 
-    /**
-     * @throws Throwable
-     */
-    public function testThatCleanHistoryReturnsExpected(): void
-    {
-        static::assertSame(0, $this->repository->cleanHistory());
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -40,5 +32,13 @@ class LogRequestRepositoryTest extends KernelTestCase
         static::bootKernel();
 
         $this->repository = static::$container->get(LogRequestRepository::class);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    public function testThatCleanHistoryReturnsExpected(): void
+    {
+        static::assertSame(0, $this->repository->cleanHistory());
     }
 }

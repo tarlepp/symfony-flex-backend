@@ -36,11 +36,12 @@ class ResponseSubscriberTest extends KernelTestCase
         static::bootKernel();
 
         /**
-         * @var MockObject|CacheInterface $cacheStub
+         * @var MockObject|CacheInterface  $cacheStub
          * @var MockObject|LoggerInterface $logger
          */
         $cacheStub = $this->createMock(CacheInterface::class);
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
 
         $cacheStub
             ->expects(static::once())
@@ -53,11 +54,10 @@ class ResponseSubscriberTest extends KernelTestCase
         $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
         $version = new Version(static::$kernel->getProjectDir(), $cacheStub, $logger);
 
-        $subscriber = new ResponseSubscriber($version);
-        $subscriber->onKernelResponse($event);
+        (new ResponseSubscriber($version))
+            ->onKernelResponse($event);
 
-        $response = $event->getResponse();
-        $version = $response->headers->get('X-API-VERSION');
+        $version = $event->getResponse()->headers->get('X-API-VERSION');
 
         static::assertNotNull($version);
         static::assertSame('1.2.3', $version);

@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest;
 
-use App\Rest\ResponseHandler;
 use App\Rest\Interfaces\RestResourceInterface;
+use App\Rest\ResponseHandler;
 use App\Utils\Tests\ContainerTestCase;
 use Exception;
 use Generator;
@@ -89,8 +89,8 @@ class ResponseHandlerTest extends ContainerTestCase
             ->withAnyParameters()
             ->willThrowException($exception);
 
-        $responseClass = new ResponseHandler($stubSerializer);
-        $responseClass->createResponse($request, []);
+        (new ResponseHandler($stubSerializer))
+            ->createResponse($request, []);
     }
 
     /**
@@ -121,7 +121,7 @@ class ResponseHandlerTest extends ContainerTestCase
     /**
      * @throws Throwable
      */
-    public function testThatGetSerializeContextMethodCallsExpectedServiceMethods():void
+    public function testThatGetSerializeContextMethodCallsExpectedServiceMethods(): void
     {
         /**
          * @var MockObject|SerializerInterface   $stubSerializer
@@ -146,7 +146,8 @@ class ResponseHandlerTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))->getSerializeContext($stubRequest, $stubResourceService);
+        $context = (new ResponseHandler($stubSerializer))
+            ->getSerializeContext($stubRequest, $stubResourceService);
 
         static::assertSame(['FakeEntity'], $context['groups']);
     }
@@ -179,7 +180,8 @@ class ResponseHandlerTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))->getSerializeContext($stubRequest, $stubResourceService);
+        $context = (new ResponseHandler($stubSerializer))
+            ->getSerializeContext($stubRequest, $stubResourceService);
 
         static::assertSame(['FakeEntity'], $context['groups']);
     }
@@ -217,7 +219,8 @@ class ResponseHandlerTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))->getSerializeContext($stubRequest, $stubResourceService);
+        $context = (new ResponseHandler($stubSerializer))
+            ->getSerializeContext($stubRequest, $stubResourceService);
 
         static::assertSame(['FakeEntity', 'FakeEntity.AnotherFakeEntity'], $context['groups']);
     }
@@ -250,7 +253,8 @@ class ResponseHandlerTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))->getSerializeContext($stubRequest, $stubResourceService);
+        $context = (new ResponseHandler($stubSerializer))
+            ->getSerializeContext($stubRequest, $stubResourceService);
 
         static::assertSame(['FakeEntity'], $context['groups']);
     }
@@ -289,7 +293,8 @@ class ResponseHandlerTest extends ContainerTestCase
 
         $stubRequest->query = $stubParameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))->getSerializeContext($stubRequest, $stubResourceService);
+        $context = (new ResponseHandler($stubSerializer))
+            ->getSerializeContext($stubRequest, $stubResourceService);
 
         static::assertSame(['AnotherFakeEntity'], $context['groups']);
     }
@@ -310,7 +315,7 @@ class ResponseHandlerTest extends ContainerTestCase
         $expected = [
             'groups' => 'foo',
             'some' => 'bar',
-            'another' => 'foobar'
+            'another' => 'foobar',
         ];
 
         $stubParameterBag
@@ -383,8 +388,8 @@ class ResponseHandlerTest extends ContainerTestCase
             ->method('getMessage')
             ->willReturn('test error');
 
-        $testClass = new ResponseHandler($serializer);
-        $testClass->handleFormError($formInterface);
+        (new ResponseHandler($serializer))
+            ->handleFormError($formInterface);
     }
 
     /**
@@ -428,8 +433,8 @@ class ResponseHandlerTest extends ContainerTestCase
             ->method('getMessage')
             ->willReturn('test error');
 
-        $testClass = new ResponseHandler($serializer);
-        $testClass->handleFormError($formInterface);
+        (new ResponseHandler($serializer))
+            ->handleFormError($formInterface);
     }
 
     /**
@@ -440,13 +445,13 @@ class ResponseHandlerTest extends ContainerTestCase
         yield [
             Request::create(''),
             ['foo' => 'bar'],
-            '{"foo":"bar"}'
+            '{"foo":"bar"}',
         ];
 
         yield [
             Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => 'Some weird content type']),
             ['foo' => 'bar'],
-            '{"foo":"bar"}'
+            '{"foo":"bar"}',
         ];
 
         yield [

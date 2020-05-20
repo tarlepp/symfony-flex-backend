@@ -37,9 +37,9 @@ class DateDimensionTest extends EntityTestCase
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
-        string $field = null,
-        string $type = null,
-        array $meta = null
+        ?string $field = null,
+        ?string $type = null,
+        ?array $meta = null
     ): void {
         static::markTestSkipped('There is not setter in read only entity...');
     }
@@ -53,9 +53,9 @@ class DateDimensionTest extends EntityTestCase
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterReturnsInstanceOfEntity(
-        string $field = null,
-        string $type = null,
-        array $meta = null
+        ?string $field = null,
+        ?string $type = null,
+        ?array $meta = null
     ): void {
         static::markTestSkipped('There is not setter in read only entity...');
     }
@@ -86,10 +86,10 @@ class DateDimensionTest extends EntityTestCase
             if (static::isType($type)) {
                 $method = 'assertIs' . ucfirst($type);
 
-                static::$method($dateDimension->$getter());
+                static::$method($dateDimension->{$getter}());
             }
-        } catch (Exception $error) {
-            static::assertInstanceOf($type, $dateDimension->$getter(), $error->getMessage());
+        } catch (\Throwable $error) {
+            static::assertInstanceOf($type, $dateDimension->{$getter}(), $error->getMessage());
         }
     }
 

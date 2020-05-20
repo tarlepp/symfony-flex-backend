@@ -31,6 +31,19 @@ class SecurityUserFactoryTest extends KernelTestCase
     private SecurityUserFactory $securityUserFactory;
     private UserRepository $userRepository;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
+
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->userRepository = static::$container->get(UserRepository::class);
+    }
+
     /**
      * @throws Throwable
      */
@@ -127,15 +140,5 @@ class SecurityUserFactoryTest extends KernelTestCase
         yield ['john-user', new StringableArrayObject(['ROLE_USER', 'ROLE_LOGGED'])];
         yield ['john-admin', new StringableArrayObject(['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'])];
         yield ['john-root', new StringableArrayObject(['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'])];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
-        $this->userRepository = static::$container->get(UserRepository::class);
     }
 }

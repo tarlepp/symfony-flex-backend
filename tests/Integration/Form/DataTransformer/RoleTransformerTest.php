@@ -31,6 +31,19 @@ class RoleTransformerTest extends KernelTestCase
     private MockObject $roleResource;
 
     /**
+     * @throws Throwable
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->roleResource = $this
+            ->getMockBuilder(RoleResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
      * @param mixed $expected
@@ -58,8 +71,8 @@ class RoleTransformerTest extends KernelTestCase
             ->with($entity->getId())
             ->willReturn($entity);
 
-        $transformer = new RoleTransformer($this->roleResource);
-        $transformer->reverseTransform($entity->getId());
+        (new RoleTransformer($this->roleResource))
+            ->reverseTransform($entity->getId());
     }
 
     /**
@@ -76,8 +89,8 @@ class RoleTransformerTest extends KernelTestCase
             ->with('role_name')
             ->willReturn(null);
 
-        $transformer = new RoleTransformer($this->roleResource);
-        $transformer->reverseTransform('role_name');
+        (new RoleTransformer($this->roleResource))
+            ->reverseTransform('role_name');
     }
 
     /**
@@ -110,18 +123,5 @@ class RoleTransformerTest extends KernelTestCase
         $entity = new Role('some role');
 
         yield [$entity->getId(), $entity];
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->roleResource = $this
-            ->getMockBuilder(RoleResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }

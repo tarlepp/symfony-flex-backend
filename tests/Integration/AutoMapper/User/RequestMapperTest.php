@@ -40,6 +40,17 @@ class RequestMapperTest extends RestRequestMapperTestCase
      */
     private MockObject $mockUserGroupResource;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->mockUserGroupResource = $this->getMockBuilder(UserGroupResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->mapperObject = new RequestMapper($this->mockUserGroupResource);
+    }
+
     /**
      * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod
      *
@@ -77,16 +88,5 @@ class RequestMapperTest extends RestRequestMapperTestCase
         foreach ($this->restDtoClasses as $dtoClass) {
             yield [$dtoClass];
         }
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->mockUserGroupResource = $this->getMockBuilder(UserGroupResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->mapperObject = new RequestMapper($this->mockUserGroupResource);
     }
 }

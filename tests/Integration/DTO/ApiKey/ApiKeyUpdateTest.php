@@ -38,7 +38,8 @@ class ApiKeyUpdateTest extends DtoTestCase
             ->setDescription('description')
             ->addUserGroup($userGroup1);
 
-        $dto = (new ApiKeyUpdate())->load($user)
+        $dto = (new ApiKeyUpdate())
+            ->load($user)
             ->setUserGroups([$userGroup2]);
 
         $updatedApiKey = $dto->update($user);

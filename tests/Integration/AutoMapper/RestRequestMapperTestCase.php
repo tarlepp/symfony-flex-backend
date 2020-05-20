@@ -22,7 +22,7 @@ use Throwable;
  *
  * @property RestRequestMapper $mapperObject
  */
-class RestRequestMapperTestCase extends KernelTestCase
+abstract class RestRequestMapperTestCase extends KernelTestCase
 {
     protected string $mapperClass;
     protected array $restDtoClasses = [];
@@ -36,8 +36,9 @@ class RestRequestMapperTestCase extends KernelTestCase
      *
      * @testdox Test that `mapToObject` method returns `$expectedDto`.
      */
-    public function testThatMapToObjectReturnsExpectedDtoObject(string $expectedDto):  void
+    public function testThatMapToObjectReturnsExpectedDtoObject(string $expectedDto): void
     {
+        /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf($expectedDto, $this->mapperObject->mapToObject(new Request(), new $expectedDto()));
     }
 

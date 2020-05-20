@@ -6,7 +6,7 @@ declare(strict_types = 1);
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
-namespace App\Tests\Integration\Dto\src;
+namespace App\Tests\Integration\DTO\src;
 
 use App\Dto\RestDto;
 use App\DTO\RestDtoInterface;
@@ -31,7 +31,7 @@ class DummyDto extends RestDto
      *
      * @return DummyDto
      */
-    public function setFoo($foo): DummyDto
+    public function setFoo($foo): self
     {
         $this->setVisited('foo');
 
@@ -97,6 +97,8 @@ class DummyDto extends RestDto
      */
     public function update(EntityInterface $entity): EntityInterface
     {
+        parent::update($entity);
+
         return $entity;
     }
 }

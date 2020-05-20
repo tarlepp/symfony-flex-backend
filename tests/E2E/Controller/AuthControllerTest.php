@@ -39,7 +39,6 @@ class AuthControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request($method, $this->baseUrl . '/getToken');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -67,13 +66,12 @@ class AuthControllerTest extends WebTestCase
             [],
             [],
             [
-                'CONTENT_TYPE'          => 'application/json',
-                'HTTP_X-Requested-With' => 'XMLHttpRequest'
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_X-Requested-With' => 'XMLHttpRequest',
             ],
             $payload
         );
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -112,13 +110,12 @@ class AuthControllerTest extends WebTestCase
             [],
             [],
             [
-                'CONTENT_TYPE'          => 'application/json',
-                'HTTP_X-Requested-With' => 'XMLHttpRequest'
+                'CONTENT_TYPE' => 'application/json',
+                'HTTP_X-Requested-With' => 'XMLHttpRequest',
             ],
             json_encode(['username' => 'username', 'password' => 'password'], JSON_THROW_ON_ERROR)
         );
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -129,7 +126,7 @@ class AuthControllerTest extends WebTestCase
         $info = "\nResponse: \n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
-        static::assertSame(401, $responseContent->code, 'Response code was not expected'. $info);
+        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
 
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(

@@ -18,8 +18,8 @@ use App\Service\Localization;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use function array_keys;
 use Throwable;
+use function array_keys;
 
 /**
  * Class UserTypeTest
@@ -39,14 +39,25 @@ class UserTypeTest extends TypeTestCase
      */
     private MockObject $mockLocalization;
 
+    /**
+     * @throws Throwable
+     */
+    protected function setUp(): void
+    {
+        $this->mockUserGroupResource = $this->createMock(UserGroupResource::class);
+        $this->mockLocalization = $this->createMock(Localization::class);
+
+        parent::setUp();
+    }
+
     public function testSubmitValidData(): void
     {
         // Create new role entity for testing
         $roleEntity = new Role('ROLE_ADMIN');
 
         // Create new user group entity
-        $userGroupEntity = new UserGroup();
-        $userGroupEntity->setRole($roleEntity);
+        $userGroupEntity = (new UserGroup())
+            ->setRole($roleEntity);
 
         $this->mockUserGroupResource
             ->expects(static::once())
@@ -77,13 +88,13 @@ class UserTypeTest extends TypeTestCase
                     'timezone' => 'Europe',
                     'identifier' => 'Europe/Helsinki',
                     'offset' => 'GMT+2:00',
-                    'value' => 'Europe/Helsinki'
+                    'value' => 'Europe/Helsinki',
                 ],
                 [
                     'timezone' => 'Europe',
                     'identifier' => 'Europe/Stockholm',
                     'offset' => 'GMT+1:00',
-                    'value' => 'Europe/Stockholm'
+                    'value' => 'Europe/Stockholm',
                 ],
             ]);
 
@@ -104,18 +115,18 @@ class UserTypeTest extends TypeTestCase
 
         // Specify used form data
         $formData = [
-            'username'      => 'username',
-            'firstName'     => 'John',
-            'lastName'      => 'Doe',
-            'email'         => 'john.doe@test.com',
-            'password'      => [
+            'username' => 'username',
+            'firstName' => 'John',
+            'lastName' => 'Doe',
+            'email' => 'john.doe@test.com',
+            'password' => [
                 'password1' => 'password',
                 'password2' => 'password',
             ],
-            'language'      => 'fi',
-            'locale'        => 'fi',
-            'timezone'      => 'Europe/Stockholm',
-            'userGroups'    => [$userGroupEntity->getId()],
+            'language' => 'fi',
+            'locale' => 'fi',
+            'timezone' => 'Europe/Stockholm',
+            'userGroups' => [$userGroupEntity->getId()],
         ];
 
         // submit the data to the form directly
@@ -125,7 +136,15 @@ class UserTypeTest extends TypeTestCase
         static::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        static::assertEquals($dto, $form->getData());
+        static::assertSame($dto->getId(), $form->getData()->getId());
+        static::assertSame($dto->getUsername(), $form->getData()->getUsername());
+        static::assertSame($dto->getFirstName(), $form->getData()->getFirstName());
+        static::assertSame($dto->getLastName(), $form->getData()->getLastName());
+        static::assertSame($dto->getEmail(), $form->getData()->getEmail());
+        static::assertSame($dto->getLanguage(), $form->getData()->getLanguage());
+        static::assertSame($dto->getLocale(), $form->getData()->getLocale());
+        static::assertSame($dto->getTimezone(), $form->getData()->getTimezone());
+        static::assertSame($dto->getUserGroups(), $form->getData()->getUserGroups());
 
         // Check that form renders correctly
         $view = $form->createView();
@@ -134,17 +153,6 @@ class UserTypeTest extends TypeTestCase
         foreach (array_keys($formData) as $key) {
             static::assertArrayHasKey($key, $children);
         }
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        $this->mockUserGroupResource = $this->createMock(UserGroupResource::class);
-        $this->mockLocalization = $this->createMock(Localization::class);
-
-        parent::setUp();
     }
 
     /**

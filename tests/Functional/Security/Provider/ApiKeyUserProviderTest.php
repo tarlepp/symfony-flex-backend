@@ -33,6 +33,22 @@ class ApiKeyUserProviderTest extends KernelTestCase
 {
     private ApiKeyUserProvider $apiKeyUserProvider;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $managerRegistry = static::$container->get('doctrine');
+
+        $repository = ApiKeyRepository::class;
+
+        $this->apiKeyUserProvider = new ApiKeyUserProvider(
+            new $repository($managerRegistry),
+            static::$container->get(RolesService::class)
+        );
+    }
+
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsExpected
      *
@@ -166,21 +182,5 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         yield [false, User::class];
         yield [true, ApiKeyUser::class];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $managerRegistry = static::$container->get('doctrine');
-
-        $repository = ApiKeyRepository::class;
-
-        $this->apiKeyUserProvider = new ApiKeyUserProvider(
-            new $repository($managerRegistry),
-            static::$container->get(RolesService::class)
-        );
     }
 }

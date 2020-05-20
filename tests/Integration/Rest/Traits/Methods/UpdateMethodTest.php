@@ -37,7 +37,7 @@ class UpdateMethodTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatTraitThrowsAnException():void
+    public function testThatTraitThrowsAnException(): void
     {
         $this->expectException(LogicException::class);
 

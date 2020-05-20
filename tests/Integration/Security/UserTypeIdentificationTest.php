@@ -51,6 +51,15 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     private MockObject $rolesService;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $this->userRepository = $this->createMock(UserRepository::class);
+        $this->rolesService = $this->createMock(RolesService::class);
+    }
+
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid
      *
@@ -303,15 +312,6 @@ class UserTypeIdentificationTest extends KernelTestCase
     public function dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
-        $this->userRepository = $this->createMock(UserRepository::class);
-        $this->rolesService = $this->createMock(RolesService::class);
     }
 
     /**

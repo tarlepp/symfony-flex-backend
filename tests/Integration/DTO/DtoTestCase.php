@@ -112,10 +112,10 @@ abstract class DtoTestCase extends KernelTestCase
             $setter = 'set' . ucfirst($reflectionProperty->getName());
 
             // Call setter method
-            $mock->$setter($value);
+            $mock->{$setter}($value);
         }
 
-        static::assertEquals($expectedVisited, $mock->getVisited());
+        static::assertSame($expectedVisited, $mock->getVisited());
     }
 
     /**
@@ -127,7 +127,6 @@ abstract class DtoTestCase extends KernelTestCase
 
         $dto = new $this->dtoClass();
 
-        /** @var ReflectionProperty $reflectionProperty */
         foreach ($this->getDtoProperties() as $reflectionProperty) {
             // Get "valid" value for current property
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
@@ -137,9 +136,9 @@ abstract class DtoTestCase extends KernelTestCase
             $getter = 'get' . ucfirst($reflectionProperty->getName());
 
             // Call setter method
-            $dto->$setter($value);
+            $dto->{$setter}($value);
 
-            static::assertSame($value, $dto->$getter());
+            static::assertSame($value, $dto->{$getter}());
         }
     }
 
@@ -163,7 +162,7 @@ abstract class DtoTestCase extends KernelTestCase
         $setter = 'set' . ucfirst($field);
 
         $dto = new $this->dtoClass();
-        $dto->$setter($value);
+        $dto->{$setter}($value);
 
         $message = sprintf(
             "Setter '%s' didn't fail with invalid value type '%s', maybe missing variable type?",
@@ -219,7 +218,7 @@ abstract class DtoTestCase extends KernelTestCase
     /**
      * @param ReflectionProperty $reflectionProperty
      *
-     * @return null|string
+     * @return string|null
      */
     private function parseType(ReflectionProperty $reflectionProperty): ?string
     {
@@ -281,8 +280,6 @@ abstract class DtoTestCase extends KernelTestCase
             );
 
         /** @var ReflectionProperty[] $properties */
-        $properties = array_filter($dtoReflection->getProperties(), $filter);
-
-        return $properties;
+        return array_filter($dtoReflection->getProperties(), $filter);
     }
 }

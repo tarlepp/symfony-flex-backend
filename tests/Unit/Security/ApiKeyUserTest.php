@@ -13,7 +13,6 @@ use App\Resource\UserGroupResource;
 use App\Security\ApiKeyUser;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
-use ArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;

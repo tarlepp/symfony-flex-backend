@@ -34,7 +34,6 @@ class RoleControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -57,7 +56,6 @@ class RoleControllerTest extends WebTestCase
 
         $client->request('GET', $this->baseUrl . '/ROLE_ADMIN');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -86,7 +84,6 @@ class RoleControllerTest extends WebTestCase
 
             $client->request('GET', $this->baseUrl . '/' . $role . '/inherited');
 
-            /** @var Response $response */
             $response = $client->getResponse();
 
             static::assertInstanceOf(Response::class, $response);

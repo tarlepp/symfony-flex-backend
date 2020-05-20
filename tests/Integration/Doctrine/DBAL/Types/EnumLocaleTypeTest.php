@@ -29,6 +29,22 @@ class EnumLocaleTypeTest extends KernelTestCase
     private AbstractPlatform $platform;
     private Type $type;
 
+    /**
+     * @throws DBALException
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->platform = new MySqlPlatform();
+
+        Type::hasType('EnumLocale')
+            ? Type::overrideType('EnumLocale', EnumLocaleType::class)
+            : Type::addType('EnumLocale', EnumLocaleType::class);
+
+        $this->type = Type::getType('EnumLocale');
+    }
+
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
         static::assertSame("ENUM('en', 'fi')", $this->type->getSQLDeclaration([], $this->platform));
@@ -88,23 +104,5 @@ class EnumLocaleTypeTest extends KernelTestCase
         yield ['foobar'];
         yield [[]];
         yield [new stdClass()];
-    }
-
-    /**
-     * @throws DBALException
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->platform = new MySqlPlatform();
-
-        if (Type::hasType('EnumLocale')) {
-            Type::overrideType('EnumLocale', EnumLocaleType::class);
-        } else {
-            Type::addType('EnumLocale', EnumLocaleType::class);
-        }
-
-        $this->type = Type::getType('EnumLocale');
     }
 }
