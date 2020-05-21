@@ -74,9 +74,6 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserNotPresent(): void
     {
-        $user = (new User())
-            ->setUsername('test-user');
-
         $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
 
         $authenticationException = new AuthenticationException();
@@ -114,8 +111,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         try {
             $subscriber->onAuthenticationFailure($event);
         } catch (Throwable $exception) {
-            (static function ($exception): void {
-            })($exception);
+            (fn ($exception): bool => true)($exception);
         }
     }
 }

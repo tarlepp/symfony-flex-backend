@@ -37,7 +37,7 @@ class ControllerTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('Resource service not set');
 
-        ($this->getMockForAbstractClass(Controller::class, [], '', false))
+        $this->getMockForAbstractClass(Controller::class, [], '', false)
             ->getResource();
     }
 
@@ -65,7 +65,7 @@ class ControllerTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessage('ResponseHandler service not set');
 
-        ($this->getMockForAbstractClass(Controller::class, [], '', false))
+        $this->getMockForAbstractClass(Controller::class, [], '', false)
             ->getResponseHandler();
     }
 
@@ -77,7 +77,7 @@ class ControllerTest extends KernelTestCase
         /** @var RestResourceInterface $resource */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
 
-        $controller = ($this->getMockForAbstractClass(Controller::class, [$resource]))
+        $controller = $this->getMockForAbstractClass(Controller::class, [$resource])
             ->setResponseHandler(new ResponseHandler(new Serializer()));
 
         static::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
@@ -100,7 +100,7 @@ class ControllerTest extends KernelTestCase
             ->method('getDtoClass')
             ->willReturn(get_class($dtoClass));
 
-        ($this->getMockForAbstractClass(Controller::class, [$resource]))
+        $this->getMockForAbstractClass(Controller::class, [$resource])
             ->getDtoClass();
     }
 
@@ -122,7 +122,7 @@ class ControllerTest extends KernelTestCase
             ->method('getDtoClass')
             ->willReturn(stdClass::class);
 
-        ($this->getMockForAbstractClass(Controller::class, [$resource]))
+        $this->getMockForAbstractClass(Controller::class, [$resource])
             ->getDtoClass();
     }
 
