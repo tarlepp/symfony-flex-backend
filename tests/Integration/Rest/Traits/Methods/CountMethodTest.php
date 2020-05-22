@@ -36,7 +36,7 @@ class CountMethodTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatTraitThrowsAnException():void
+    public function testThatTraitThrowsAnException(): void
     {
         $this->expectException(LogicException::class);
 
@@ -122,7 +122,7 @@ class CountMethodTest extends KernelTestCase
      *
      * @testdox Test that `App\Rest\Traits\Methods\CountMethod` uses `$expectedCode` code on HttpException.
      */
-    public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
+    public function testThatTraitHandlesException(\Throwable $exception, int $expectedCode): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);

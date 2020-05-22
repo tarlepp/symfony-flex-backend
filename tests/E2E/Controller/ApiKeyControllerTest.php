@@ -31,7 +31,6 @@ class ApiKeyControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -54,7 +53,6 @@ class ApiKeyControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);

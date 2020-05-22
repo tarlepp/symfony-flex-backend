@@ -57,11 +57,11 @@ class ResourceForLifeCycleTests extends RestResource
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
      *
      * @param string                      $id
-     * @param null|EntityInterface|Entity $entity
+     * @param EntityInterface|Entity|null $entity
      *
      * @throws Throwable
      */
-    public function afterFindOne(string &$id, EntityInterface $entity = null): void
+    public function afterFindOne(string &$id, ?EntityInterface $entity = null): void
     {
         parent::afterFindOne($id, $entity);
 

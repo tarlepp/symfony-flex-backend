@@ -17,8 +17,8 @@ use App\Security\RolesService;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use function array_keys;
 use Throwable;
+use function array_keys;
 
 /**
  * Class UserGroupTypeTest
@@ -37,6 +37,17 @@ class UserGroupTypeTest extends TypeTestCase
      * @var MockObject|RoleResource
      */
     private $mockRoleResource;
+
+    /**
+     * @throws Throwable
+     */
+    protected function setUp(): void
+    {
+        $this->mockRoleService = $this->createMock(RolesService::class);
+        $this->mockRoleResource = $this->createMock(RoleResource::class);
+
+        parent::setUp();
+    }
 
     public function testSubmitValidData(): void
     {
@@ -63,14 +74,14 @@ class UserGroupTypeTest extends TypeTestCase
         $form = $this->factory->create(UserGroupType::class);
 
         // Create new DTO object
-        $dto = new UserGroupDto();
-        $dto->setName('ROLE_ADMIN');
-        $dto->setRole($roleEntity);
+        $dto = (new UserGroupDto())
+            ->setName('ROLE_ADMIN')
+            ->setRole($roleEntity);
 
         // Specify used form data
         $formData = [
-            'name'  => 'ROLE_ADMIN',
-            'role'  => 'ROLE_ADMIN',
+            'name' => 'ROLE_ADMIN',
+            'role' => 'ROLE_ADMIN',
         ];
 
         // submit the data to the form directly
@@ -80,7 +91,9 @@ class UserGroupTypeTest extends TypeTestCase
         static::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        static::assertEquals($dto, $form->getData());
+        static::assertSame($dto->getId(), $form->getData()->getId());
+        static::assertSame($dto->getName(), $form->getData()->getName());
+        static::assertSame($dto->getRole(), $form->getData()->getRole());
 
         // Check that form renders correctly
         $view = $form->createView();
@@ -89,17 +102,6 @@ class UserGroupTypeTest extends TypeTestCase
         foreach (array_keys($formData) as $key) {
             static::assertArrayHasKey($key, $children);
         }
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        $this->mockRoleService = $this->createMock(RolesService::class);
-        $this->mockRoleResource = $this->createMock(RoleResource::class);
-
-        parent::setUp();
     }
 
     /**

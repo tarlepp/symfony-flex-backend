@@ -30,13 +30,13 @@ class UserGroupTest extends DtoTestCase
         $roleEntity = new RoleEntity('test role');
 
         // Create UserGroup entity
-        $userGroupEntity = new UserGroupEntity();
-        $userGroupEntity->setName('test user group');
-        $userGroupEntity->setRole($roleEntity);
+        $userGroupEntity = (new UserGroupEntity())
+            ->setName('test user group')
+            ->setRole($roleEntity);
 
         /** @var UserGroup $dto */
-        $dto = new $this->dtoClass();
-        $dto->load($userGroupEntity);
+        $dto = (new $this->dtoClass())
+            ->load($userGroupEntity);
 
         static::assertSame('test user group', $dto->getName());
         static::assertSame($roleEntity, $dto->getRole());
@@ -62,10 +62,9 @@ class UserGroupTest extends DtoTestCase
             ->with($roleEntity)
             ->willReturn($userGroupEntity);
 
-        /** @var UserGroup $dto */
-        $dto = new $this->dtoClass();
-        $dto->setName('test name');
-        $dto->setRole($roleEntity);
-        $dto->update($userGroupEntity);
+        (new $this->dtoClass())
+            ->setName('test name')
+            ->setRole($roleEntity)
+            ->update($userGroupEntity);
     }
 }

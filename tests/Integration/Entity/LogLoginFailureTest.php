@@ -11,7 +11,6 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\LogLoginFailure;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 use Throwable;
 use function array_key_exists;
 use function ucfirst;
@@ -28,6 +27,28 @@ class LogLoginFailureTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
+     * @throws Throwable
+     */
+    protected function setUp(): void
+    {
+        static::bootKernel();
+
+        // Store container and entity manager
+        $this->testContainer = static::$kernel->getContainer();
+
+        /** @noinspection MissingService */
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
+
+        // Create new entity object and set repository
+        $this->entity = new $this->entityName(new User());
+
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->repository = $this->entityManager->getRepository($this->entityName);
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
      * @param string $field
      * @param string $type
      * @param array  $meta
@@ -35,9 +56,9 @@ class LogLoginFailureTest extends EntityTestCase
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
-        string $field = null,
-        string $type = null,
-        array $meta = null
+        ?string $field = null,
+        ?string $type = null,
+        ?array $meta = null
     ): void {
         static::markTestSkipped('There is not setter in read only entity...');
     }
@@ -51,9 +72,9 @@ class LogLoginFailureTest extends EntityTestCase
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterReturnsInstanceOfEntity(
-        string $field = null,
-        string $type = null,
-        array $meta = null
+        ?string $field = null,
+        ?string $type = null,
+        ?array $meta = null
     ): void {
         static::markTestSkipped('There is not setter in read only entity...');
     }
@@ -85,36 +106,17 @@ class LogLoginFailureTest extends EntityTestCase
         if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
             $type = ArrayCollection::class;
 
-            static::assertInstanceOf($type, $logRequest->$getter());
+            static::assertInstanceOf($type, $logRequest->{$getter}());
         }
 
         try {
             if (static::isType($type)) {
                 $method = 'assertIs' . ucfirst($type);
 
-                static::$method($logRequest->$getter());
+                static::$method($logRequest->{$getter}());
             }
-        } catch (Exception $error) {
-            static::assertInstanceOf($type, $logRequest->$getter(), $error->getMessage());
+        } catch (Throwable $error) {
+            static::assertInstanceOf($type, $logRequest->{$getter}(), $error->getMessage());
         }
-    }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        static::bootKernel();
-
-        // Store container and entity manager
-        $this->testContainer = static::$kernel->getContainer();
-
-        /** @noinspection MissingService */
-        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
-
-        // Create new entity object and set repository
-        $this->entity = new $this->entityName(new User());
-        $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 }

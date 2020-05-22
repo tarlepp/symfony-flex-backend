@@ -11,7 +11,7 @@ namespace App\Tests\Integration\DTO;
 use App\DTO\RestDtoInterface;
 use App\DTO\User\User;
 use App\Entity\User as UserEntity;
-use App\Tests\Integration\Dto\src\DummyDto;
+use App\Tests\Integration\DTO\src\DummyDto;
 use App\Utils\Tests\PhpUnitUtil;
 use BadMethodCallException;
 use Generator;
@@ -43,8 +43,8 @@ class GenericDtoTest extends KernelTestCase
             ->method('getVisited')
             ->willReturn(['foo']);
 
-        $dto = new User();
-        $dto->patch($dtoMock);
+        (new User())
+            ->patch($dtoMock);
     }
 
     /**
@@ -73,11 +73,11 @@ class GenericDtoTest extends KernelTestCase
 
         require_once __DIR__ . '/src/DummyDto.php';
 
-        $dtoMock = new DummyDto();
-        $dtoMock->setFoo('foo');
+        $dtoMock = (new DummyDto())
+            ->setFoo('foo');
 
-        $dto = new User();
-        $dto->patch($dtoMock);
+        (new User())
+            ->patch($dtoMock);
     }
 
     /**
@@ -103,7 +103,8 @@ class GenericDtoTest extends KernelTestCase
             ->method('getEmail')
             ->willReturn('email@com');
 
-        $dto = (new User())->patch($dtoUser);
+        $dto = (new User())
+            ->patch($dtoUser);
 
         static::assertSame('username', $dto->getUsername());
         static::assertSame('email@com', $dto->getEmail());
@@ -135,12 +136,11 @@ class GenericDtoTest extends KernelTestCase
             ->with('password')
             ->willReturn($userEntity);
 
-        $dto = (new User())
+        (new User())
             ->setUsername('username')
             ->setEmail('email@com')
-            ->setPassword('password');
-
-        $dto->update($userEntity);
+            ->setPassword('password')
+            ->update($userEntity);
     }
 
     /**

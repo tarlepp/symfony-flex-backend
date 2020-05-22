@@ -43,11 +43,24 @@ class TimezoneValidatorTest extends KernelTestCase
      */
     private $localization;
 
+    /**
+     * @throws Throwable
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->constraint = new Timezone();
+        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
+        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
+        $this->localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
+    }
+
     public function testThatValidateCallsExpectedMethods(): void
     {
         // Create new user
-        $user = new User();
-        $user->setTimezone('foo/bar');
+        $user = (new User())
+            ->setTimezone('foo/bar');
 
         $this->localization
             ->expects(static::once())
@@ -79,18 +92,5 @@ class TimezoneValidatorTest extends KernelTestCase
         $validator = new TimezoneValidator($this->localization);
         $validator->initialize($this->context);
         $validator->validate($user, $this->constraint);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->constraint = new Timezone();
-        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
-        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $this->localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
     }
 }

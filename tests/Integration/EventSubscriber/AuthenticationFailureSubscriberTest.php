@@ -33,8 +33,8 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
      */
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserPresent(): void
     {
-        $user = new User();
-        $user->setUsername('test-user');
+        $user = (new User())
+            ->setUsername('test-user');
 
         $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
 
@@ -68,15 +68,12 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
             ->expects(static::once())
             ->method('process');
 
-        $subscriber = new AuthenticationFailureSubscriber($loginLogger, $userRepository);
-        $subscriber->onAuthenticationFailure($event);
+        (new AuthenticationFailureSubscriber($loginLogger, $userRepository))
+            ->onAuthenticationFailure($event);
     }
 
     public function testThatOnAuthenticationFailureCallsExpectedServiceMethodsWhenUserNotPresent(): void
     {
-        $user = new User();
-        $user->setUsername('test-user');
-
         $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
 
         $authenticationException = new AuthenticationException();
@@ -114,8 +111,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         try {
             $subscriber->onAuthenticationFailure($event);
         } catch (Throwable $exception) {
-            (static function ($exception): void {
-            })($exception);
+            (fn ($exception): bool => true)($exception);
         }
     }
 }

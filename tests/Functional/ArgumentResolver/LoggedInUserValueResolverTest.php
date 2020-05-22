@@ -98,7 +98,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
             [new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification)]
         );
 
-        $closure = static function (User $loggedInUser) {
+        $closure = static function (User $loggedInUser): void {
             // Do nothing
         };
 

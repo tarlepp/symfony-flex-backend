@@ -10,9 +10,9 @@ namespace App\Tests\Unit\Rest;
 
 use App\Rest\SearchTerm;
 use App\Utils\Tests\StringableArrayObject;
-use function call_user_func_array;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use function call_user_func_array;
 
 /**
  * Class SearchTermTest

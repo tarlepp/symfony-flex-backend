@@ -5,6 +5,7 @@ declare(strict_types = 1);
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+
 namespace App\Tests\Integration\Repository;
 
 use App\Repository\BaseRepository;
@@ -21,7 +22,7 @@ use function sort;
  *
  * @property BaseRepository $repository
  */
-class RepositoryTestCase extends KernelTestCase
+abstract class RepositoryTestCase extends KernelTestCase
 {
     protected string $entityName;
     protected string $repositoryName;
@@ -29,6 +30,19 @@ class RepositoryTestCase extends KernelTestCase
     protected array $associations = [];
     protected array $searchColumns = [];
     protected RestResource $resource;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        self::bootKernel();
+
+        /** @var RestResource $resource */
+        $resource = self::$container->get($this->resourceName);
+
+        $this->resource = $resource;
+        $this->repository = $this->resource->getRepository();
+    }
 
     public function testThatGetEntityNameReturnsExpected(): void
     {
@@ -57,18 +71,5 @@ class RepositoryTestCase extends KernelTestCase
         sort($actual);
 
         static::assertSame($expected, $actual, $message);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        self::bootKernel();
-
-        /** @var RestResource $resource */
-        $resource = self::$container->get($this->resourceName);
-
-        $this->resource = $resource;
-        $this->repository = $this->resource->getRepository();
     }
 }

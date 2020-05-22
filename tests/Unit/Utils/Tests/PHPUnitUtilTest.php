@@ -101,7 +101,7 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue
      *
-     * @param mixed $expected
+     * @param mixed  $expected
      * @param string $input
      *
      * @throws Throwable

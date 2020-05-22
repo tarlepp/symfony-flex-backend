@@ -25,6 +25,16 @@ abstract class ResourceTestCase extends KernelTestCase
     protected string $entityClass;
     protected RestResourceInterface $resource;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->resource = static::$container->get($this->resourceClass);
+    }
+
     public function testThatGetRepositoryReturnsExpected(): void
     {
         $message = sprintf(
@@ -44,14 +54,5 @@ abstract class ResourceTestCase extends KernelTestCase
         );
 
         static::assertSame($this->entityClass, $this->resource->getEntityName(), $message);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->resource = static::$container->get($this->resourceClass);
     }
 }

@@ -38,7 +38,7 @@ class DeleteMethodTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatTraitThrowsAnException():void
+    public function testThatTraitThrowsAnException(): void
     {
         $this->expectException(LogicException::class);
 
@@ -92,13 +92,13 @@ class DeleteMethodTest extends KernelTestCase
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
      * @param Exception $exception
-     * @param integer    $expectedCode
+     * @param int       $expectedCode
      *
      * @throws Throwable
      *
      * @testdox Test that `App\Rest\Traits\Methods\DeleteMethod` uses `$expectedCode` code on HttpException.
      */
-    public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
+    public function testThatTraitHandlesException(\Throwable $exception, int $expectedCode): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);

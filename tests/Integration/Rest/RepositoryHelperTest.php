@@ -25,6 +25,17 @@ class RepositoryHelperTest extends KernelTestCase
 {
     protected UserRepository $repository;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$container->get(UserResource::class)->getRepository();
+
+        RepositoryHelper::resetParameterCount();
+    }
+
     /**
      * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
      *
@@ -78,7 +89,7 @@ class RepositoryHelperTest extends KernelTestCase
      *
      * @testdox Test that `processSearchTerms` method returns `$expected`.
      */
-    public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $terms):  void
+    public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $terms): void
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
@@ -552,7 +563,6 @@ DQL
                     ['u.field4', 'eq', 'four'],
                 ],
                 ['u.field5', 'neq', 5],
-
             ],
             /** @lang text */
             <<<'DQL'
@@ -583,16 +593,5 @@ DQL
             ],
         ];
         // @codingStandardsIgnoreEnd
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$container->get(UserResource::class)->getRepository();
-
-        RepositoryHelper::resetParameterCount();
     }
 }

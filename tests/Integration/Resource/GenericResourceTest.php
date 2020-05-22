@@ -43,12 +43,14 @@ class GenericResourceTest extends KernelTestCase
     private string $entityClass = UserEntity::class;
     private UserResource $resource;
 
-    /**
-     * @return EntityManagerInterface|Object
-     */
-    private static function getEntityManager(): EntityManagerInterface
+    protected function setUp(): void
     {
-        return static::$container->get('doctrine')->getManager();
+        parent::setUp();
+
+        static::bootKernel();
+
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->resource = static::$container->get($this->resourceClass);
     }
 
     public function testThatGetDtoClassThrowsAnExceptionWithoutDto(): void
@@ -56,8 +58,9 @@ class GenericResourceTest extends KernelTestCase
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageMatches('/DTO class not specified for \'.*\' resource/');
 
-        $this->resource->setDtoClass('');
-        $this->resource->getDtoClass();
+        $this->resource
+            ->setDtoClass('')
+            ->getDtoClass();
     }
 
     public function testThatGetDtoClassReturnsExpectedDto(): void
@@ -79,8 +82,9 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('getEntityName');
 
-        $this->resource->setRepository($repository);
-        $this->resource->getEntityName();
+        $this->resource
+            ->setRepository($repository)
+            ->getEntityName();
     }
 
     /**
@@ -95,8 +99,9 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('getReference');
 
-        $this->resource->setRepository($repository);
-        $this->resource->getReference('some id');
+        $this->resource
+            ->setRepository($repository)
+            ->getReference('some id');
     }
 
     /**
@@ -111,8 +116,9 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('getAssociations');
 
-        $this->resource->setRepository($repository);
-        $this->resource->getAssociations();
+        $this->resource
+            ->setRepository($repository)
+            ->getAssociations();
     }
 
     /**
@@ -163,8 +169,9 @@ class GenericResourceTest extends KernelTestCase
         /** @var MockObject|RestDtoInterface $dto */
         $dto = $this->getDtoMockBuilder()->getMock();
 
-        $this->resource->setRepository($repository);
-        $this->resource->getDtoForEntity('some id', get_class($dto), $dto);
+        $this->resource
+            ->setRepository($repository)
+            ->getDtoForEntity('some id', get_class($dto), $dto);
     }
 
     /**
@@ -189,8 +196,9 @@ class GenericResourceTest extends KernelTestCase
             ->method('findByAdvanced')
             ->with(...$expectedArguments->getArrayCopy());
 
-        $this->resource->setRepository($repository);
-        $this->resource->find(...$arguments->getArrayCopy());
+        $this->resource
+            ->setRepository($repository)
+            ->find(...$arguments->getArrayCopy());
     }
 
     /**
@@ -204,10 +212,11 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findAdvanced')
-            ->withAnyParameters();
+            ->with('some id');
 
-        $this->resource->setRepository($repository);
-        $this->resource->findOne('some id');
+        $this->resource
+            ->setRepository($repository)
+            ->findOne('some id');
     }
 
     /**
@@ -224,11 +233,12 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findAdvanced')
-            ->withAnyParameters()
+            ->with('some id')
             ->willReturn(null);
 
-        $this->resource->setRepository($repository);
-        $this->resource->findOne('some id', true);
+        $this->resource
+            ->setRepository($repository)
+            ->findOne('some id', true);
     }
 
     /**
@@ -244,7 +254,7 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findAdvanced')
-            ->withAnyParameters()
+            ->with('some id')
             ->willReturn($entity);
 
         $this->resource->setRepository($repository);
@@ -274,12 +284,12 @@ class GenericResourceTest extends KernelTestCase
             ->method('findOneBy')
             ->with(...$expectedArguments->getArrayCopy());
 
-        $this->resource->setRepository($repository);
-        $this->resource->findOneBy(...$arguments->getArrayCopy());
+        $this->resource
+            ->setRepository($repository)
+            ->findOneBy(...$arguments->getArrayCopy());
     }
 
     /**
-     *
      * @throws Throwable
      */
     public function testThatFindOneByThrowsAnExceptionIfEntityWasNotFound(): void
@@ -293,11 +303,12 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findOneBy')
-            ->withAnyParameters()
+            ->with([], [])
             ->willReturn(null);
 
-        $this->resource->setRepository($repository);
-        $this->resource->findOneBy([], null, true);
+        $this->resource
+            ->setRepository($repository)
+            ->findOneBy([], null, true);
     }
 
     /**
@@ -313,7 +324,7 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('findOneBy')
-            ->withAnyParameters()
+            ->with([], [])
             ->willReturn($entity);
 
         $this->resource->setRepository($repository);
@@ -343,8 +354,9 @@ class GenericResourceTest extends KernelTestCase
             ->method('countAdvanced')
             ->with(...$expectedArguments->getArrayCopy());
 
-        $this->resource->setRepository($repository);
-        $this->resource->count(...$arguments->getArrayCopy());
+        $this->resource
+            ->setRepository($repository)
+            ->count(...$arguments->getArrayCopy());
     }
 
     /**
@@ -384,8 +396,9 @@ class GenericResourceTest extends KernelTestCase
 
         $dto = new $this->dtoClass();
 
-        $this->resource->setRepository($repository);
-        $this->resource->create($dto);
+        $this->resource
+            ->setRepository($repository)
+            ->create($dto);
     }
 
     /**
@@ -428,9 +441,10 @@ class GenericResourceTest extends KernelTestCase
             ->expects(static::once())
             ->method('update');
 
-        $this->resource->setRepository($repository);
-        $this->resource->setValidator($validator);
-        $this->resource->create($dto);
+        $this->resource
+            ->setRepository($repository)
+            ->setValidator($validator)
+            ->create($dto);
     }
 
     /**
@@ -452,8 +466,9 @@ class GenericResourceTest extends KernelTestCase
 
         $dto = new $this->dtoClass();
 
-        $this->resource->setRepository($repository);
-        $this->resource->update('some id', $dto);
+        $this->resource
+            ->setRepository($repository)
+            ->update('some id', $dto);
     }
 
     /**
@@ -465,15 +480,15 @@ class GenericResourceTest extends KernelTestCase
         $entity = new $this->entityClass();
 
         $methods = [
-            'setUsername'   => 'username',
-            'setFirstName'  => 'first name',
-            'setLastName'   => 'last name',
-            'setEmail'      => 'test@test.com',
+            'setUsername' => 'username',
+            'setFirstName' => 'first name',
+            'setLastName' => 'last name',
+            'setEmail' => 'test@test.com',
         ];
 
         foreach ($methods as $method => $value) {
-            $dto->$method($value);
-            $entity->$method($value);
+            $dto->{$method}($value);
+            $entity->{$method}($value);
         }
 
         /** @var MockObject|UserRepository|RepositoryInterface $repository */
@@ -490,8 +505,9 @@ class GenericResourceTest extends KernelTestCase
             ->method('save')
             ->with($entity);
 
-        $this->resource->setRepository($repository);
-        $this->resource->update('some id', $dto);
+        $this->resource
+            ->setRepository($repository)
+            ->update('some id', $dto);
     }
 
     /**
@@ -542,8 +558,9 @@ class GenericResourceTest extends KernelTestCase
             ->method('findIds')
             ->with(...$expectedArguments->getArrayCopy());
 
-        $this->resource->setRepository($repository);
-        $this->resource->getIds(...$arguments->getArrayCopy());
+        $this->resource
+            ->setRepository($repository)
+            ->getIds(...$arguments->getArrayCopy());
     }
 
     /**
@@ -563,8 +580,9 @@ class GenericResourceTest extends KernelTestCase
             ->method('save')
             ->with($entity);
 
-        $this->resource->setRepository($repository);
-        $this->resource->save($entity);
+        $this->resource
+            ->setRepository($repository)
+            ->save($entity);
     }
 
     /**
@@ -666,13 +684,12 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
-    protected function setUp(): void
+    /**
+     * @return EntityManagerInterface|object
+     */
+    private static function getEntityManager(): EntityManagerInterface
     {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->resource = static::$container->get($this->resourceClass);
+        return static::$container->get('doctrine')->getManager();
     }
 
     /**

@@ -43,6 +43,7 @@ class BlameableDecoratorTest extends KernelTestCase
             ->with($user->getId())
             ->willReturn($user);
 
-        (new BlameableDecorator($resource))->setUserValue($domainUser);
+        (new BlameableDecorator($resource))
+            ->setUserValue($domainUser);
     }
 }

@@ -38,7 +38,7 @@ class FindOneMethodTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatTraitThrowsAnException():void
+    public function testThatTraitThrowsAnException(): void
     {
         $this->expectException(LogicException::class);
 
@@ -50,7 +50,6 @@ class FindOneMethodTest extends KernelTestCase
 
         /** @var MockObject|FindOneMethodInvalidTestClass $testClass */
         $testClass = $this->getMockForAbstractClass(FindOneMethodInvalidTestClass::class);
-
 
         $uuid = Uuid::uuid4()->toString();
 
@@ -93,13 +92,13 @@ class FindOneMethodTest extends KernelTestCase
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
      * @param Exception $exception
-     * @param integer   $expectedCode
+     * @param int       $expectedCode
      *
      * @throws Throwable
      *
      * @testdox Test that `App\Rest\Traits\Methods\FindOneMethod` uses `$expectedCode` code on HttpException.
      */
-    public function testThatTraitHandlesException(Exception $exception, int $expectedCode): void
+    public function testThatTraitHandlesException(\Throwable $exception, int $expectedCode): void
     {
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);

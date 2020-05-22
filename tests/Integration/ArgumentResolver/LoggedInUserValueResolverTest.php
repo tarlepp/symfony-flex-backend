@@ -207,7 +207,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($tokenStorage, $userService)]);
 
-        $closure = static function (User $loggedInUser) {
+        $closure = static function (User $loggedInUser): void {
             // Do nothing
         };
 
@@ -240,15 +240,15 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(): Generator
     {
-        yield [static function (User $loggedInUser = null) {
+        yield [static function (?User $loggedInUser = null): void {
             // Do nothing
         }];
 
-        yield [static function (?User $loggedInUser = null) {
+        yield [static function (?User $loggedInUser = null): void {
             // Do nothing
         }];
 
-        yield [static function (?User $loggedInUser) {
+        yield [static function (?User $loggedInUser): void {
             // Do nothing
         }];
     }

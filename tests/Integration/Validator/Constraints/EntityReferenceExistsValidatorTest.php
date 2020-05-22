@@ -46,7 +46,8 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
 
         $constraint = $this->getMockForAbstractClass(Constraint::class, [], 'SomeConstraint');
 
-        (new EntityReferenceExistsValidator($logger))->validate('', $constraint);
+        (new EntityReferenceExistsValidator($logger))
+            ->validate('', $constraint);
     }
 
     /**
@@ -193,19 +194,19 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         yield [
             new stdClass(),
             EntityInterface::class,
-            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given'
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given',
         ];
 
         yield [
             [''],
             EntityInterface::class,
-            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "string" given'
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "string" given',
         ];
 
         yield [
             [new stdClass()],
             EntityInterface::class,
-            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given'
+            'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given',
         ];
     }
 }

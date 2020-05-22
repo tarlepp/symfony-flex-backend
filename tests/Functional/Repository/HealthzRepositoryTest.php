@@ -45,6 +45,18 @@ class HealthzRepositoryTest extends KernelTestCase
     /**
      * @throws Throwable
      */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$container->get(HealthzRepository::class);
+    }
+
+    /**
+     * @throws Throwable
+     */
     public function testThatReadValueMethodReturnsExpectedWithEmptyDatabase(): void
     {
         PhpUnitUtil::loadFixtures(static::$kernel);
@@ -81,17 +93,5 @@ class HealthzRepositoryTest extends KernelTestCase
     public function testThatCleanupMethodClearsDatabaseReturnsExpected(): void
     {
         static::assertSame(0, $this->repository->cleanup());
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$container->get(HealthzRepository::class);
     }
 }

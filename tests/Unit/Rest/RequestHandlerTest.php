@@ -11,6 +11,7 @@ namespace App\Tests\Unit\Rest;
 use App\Rest\RequestHandler;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
+use JsonException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -41,6 +42,8 @@ class RequestHandlerTest extends KernelTestCase
      * @param StringableArrayObject $where
      *
      * @testdox Test that `getCriteria` returns `$expected` when using `$where` as `?where` parameter.
+     *
+     * @throws JsonException
      */
     public function testThatGetCriteriaMethodsReturnsExpectedGenerator(
         StringableArrayObject $expected,
@@ -126,7 +129,7 @@ class RequestHandlerTest extends KernelTestCase
      * @dataProvider dataProviderTestThatGetOffsetReturnsExpectedValue
      *
      * @param StringableArrayObject $parameters
-     * @param integer               $expected
+     * @param int                   $expected
      *
      * @testdox Test that `getOffset` method returns `$expected` when using `$parameters`
      */
@@ -167,7 +170,7 @@ class RequestHandlerTest extends KernelTestCase
         );
 
         $parameters = [
-            'search' => '{"foo": "bar"}'
+            'search' => '{"foo": "bar"}',
         ];
 
         $fakeRequest = Request::create('/', 'GET', $parameters);
@@ -506,7 +509,7 @@ class RequestHandlerTest extends KernelTestCase
                     'foo',
                 ],
             ]),
-            '{"and": ["foo"]}'
+            '{"and": ["foo"]}',
         ];
 
         yield [
@@ -515,7 +518,7 @@ class RequestHandlerTest extends KernelTestCase
                     'bar',
                 ],
             ]),
-            '{"or": ["bar"]}'
+            '{"or": ["bar"]}',
         ];
 
         yield [
@@ -525,7 +528,7 @@ class RequestHandlerTest extends KernelTestCase
                     'bar',
                 ],
             ]),
-            '{"and": ["foo", "bar"]}'
+            '{"and": ["foo", "bar"]}',
         ];
 
         yield [
@@ -535,7 +538,7 @@ class RequestHandlerTest extends KernelTestCase
                     'foo',
                 ],
             ]),
-            '{"or": ["bar", "foo"]}'
+            '{"or": ["bar", "foo"]}',
         ];
 
         yield [
@@ -549,7 +552,7 @@ class RequestHandlerTest extends KernelTestCase
                     'bar',
                 ],
             ]),
-            '{"or": ["bar", "foo"], "and": ["foo", "bar"]}'
+            '{"or": ["bar", "foo"], "and": ["foo", "bar"]}',
         ];
 
         yield [

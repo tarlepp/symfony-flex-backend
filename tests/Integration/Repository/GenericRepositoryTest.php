@@ -39,6 +39,13 @@ class GenericRepositoryTest extends KernelTestCase
     private string $repositoryClass = ApiKeyRepository::class;
     private string $resourceClass = ApiKeyResource::class;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+    }
+
     /**
      * @throws Throwable
      */
@@ -205,8 +212,9 @@ class GenericRepositoryTest extends KernelTestCase
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
-        $repository->addLeftJoin($parameters->getArrayCopy());
-        $repository->processQueryBuilder($queryBuilder);
+        $repository
+            ->addLeftJoin($parameters->getArrayCopy())
+            ->processQueryBuilder($queryBuilder);
 
         $message = 'addLeftJoin method did not return expected';
 
@@ -228,8 +236,9 @@ class GenericRepositoryTest extends KernelTestCase
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
-        $repository->addInnerJoin($parameters->getArrayCopy());
-        $repository->processQueryBuilder($queryBuilder);
+        $repository
+            ->addInnerJoin($parameters->getArrayCopy())
+            ->processQueryBuilder($queryBuilder);
 
         $message = 'addLeftJoin method did not return expected';
 
@@ -252,9 +261,10 @@ class GenericRepositoryTest extends KernelTestCase
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         // Add same join twice to query
-        $repository->addLeftJoin($parameters->getArrayCopy());
-        $repository->addLeftJoin($parameters->getArrayCopy());
-        $repository->processQueryBuilder($queryBuilder);
+        $repository
+            ->addLeftJoin($parameters->getArrayCopy())
+            ->addLeftJoin($parameters->getArrayCopy())
+            ->processQueryBuilder($queryBuilder);
 
         $message = 'addLeftJoin method did not return expected';
 
@@ -277,9 +287,10 @@ class GenericRepositoryTest extends KernelTestCase
         $queryBuilder = $repository->createQueryBuilder('entity');
 
         // Add same join twice to query
-        $repository->addInnerJoin($parameters->getArrayCopy());
-        $repository->addInnerJoin($parameters->getArrayCopy());
-        $repository->processQueryBuilder($queryBuilder);
+        $repository
+            ->addInnerJoin($parameters->getArrayCopy())
+            ->addInnerJoin($parameters->getArrayCopy())
+            ->processQueryBuilder($queryBuilder);
 
         $message = 'addLeftJoin method did not return expected';
 
@@ -293,14 +304,15 @@ class GenericRepositoryTest extends KernelTestCase
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
-        $callable = static function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder) {
+        $callable = static function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder): void {
             static::assertSame($queryBuilder, $qb);
             static::assertSame(1, $foo);
             static::assertSame('string', $bar);
         };
 
-        $repository->addCallback($callable, [1, 'string']);
-        $repository->processQueryBuilder($queryBuilder);
+        $repository
+            ->addCallback($callable, [1, 'string'])
+            ->processQueryBuilder($queryBuilder);
     }
 
     public function testThatAddCallbackCallsCallbackJustOnce(): void
@@ -312,7 +324,7 @@ class GenericRepositoryTest extends KernelTestCase
 
         $queryBuilder = $repository->createQueryBuilder('entity');
 
-        $callable = static function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder, &$count) {
+        $callable = static function (QueryBuilder $qb, int $foo, string $bar) use ($queryBuilder, &$count): void {
             static::assertSame($queryBuilder, $qb);
             static::assertSame(1, $foo);
             static::assertSame('string', $bar);
@@ -321,8 +333,9 @@ class GenericRepositoryTest extends KernelTestCase
         };
 
         // Attach same callback twice
-        $repository->addCallback($callable, [1, 'string']);
-        $repository->addCallback($callable, [1, 'string']);
+        $repository
+            ->addCallback($callable, [1, 'string'])
+            ->addCallback($callable, [1, 'string']);
 
         // Process query builder
         $repository->processQueryBuilder($queryBuilder);
@@ -401,7 +414,7 @@ class GenericRepositoryTest extends KernelTestCase
 
         $arguments = [
             ['some criteria'],
-            ['some order by']
+            ['some order by'],
         ];
 
         $repositoryMock
@@ -577,12 +590,5 @@ class GenericRepositoryTest extends KernelTestCase
             ],
         ];
         // @codingStandardsIgnoreEnd
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
     }
 }

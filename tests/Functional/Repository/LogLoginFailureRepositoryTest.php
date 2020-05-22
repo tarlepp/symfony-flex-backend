@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\Functional\Repository;
 
-use App\Repository\LogLoginFailureRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -19,22 +18,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class LogLoginFailureRepositoryTest extends KernelTestCase
 {
-    /**
-     * @var LogLoginFailureRepository;
-     */
-    private $repository;
-
     public function testThatClearReturnsExpected(): void
     {
         static::markTestIncomplete('TODO implemented this test');
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$container->get(LogLoginFailureRepository::class);
     }
 }

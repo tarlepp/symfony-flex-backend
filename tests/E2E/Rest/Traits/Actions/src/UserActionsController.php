@@ -14,8 +14,8 @@ use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\User as Actions;
-use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class UserActionsController

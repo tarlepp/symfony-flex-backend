@@ -47,7 +47,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
          */
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
 
@@ -62,7 +64,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
          */
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
 
@@ -90,7 +94,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
          */
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
 
@@ -114,7 +120,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
          */
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
 
@@ -143,7 +151,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
          */
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         (new ApiKeyAuthenticator($apiKeyUserProvider))->checkCredentials(
             $credentials instanceof StringableArrayObject ? $credentials->getArrayCopy() : $credentials,
@@ -159,7 +169,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
          */
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProvider);
 
@@ -178,7 +190,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
          */
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $output = (new ApiKeyAuthenticator($apiKeyUserProvider))
             ->onAuthenticationFailure(new Request(), new AuthenticationException('foobar'));
@@ -198,7 +212,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         /**
          * @var MockObject|ApiKeyUserProvider $apiKeyUserProvider
          */
-        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)->disableOriginalConstructor()->getMock();
+        $apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         static::assertFalse((new ApiKeyAuthenticator($apiKeyUserProvider))->supportsRememberMe());
     }

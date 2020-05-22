@@ -9,9 +9,9 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Controller;
 
 use App\Controller\AuthController;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Throwable;
 
 /**
  * Class AuthControllerTest
@@ -28,12 +28,14 @@ class AuthControllerTest extends KernelTestCase
         try {
             $controller = new AuthController();
             $controller->getTokenAction();
-        } catch (Exception $exception) {
+        } catch (Throwable $exception) {
             static::assertInstanceOf(HttpException::class, $exception);
             static::assertSame(
                 'You need to send JSON body to obtain token eg. {"username":"username","password":"password"}',
                 $exception->getMessage()
             );
+
+            /** @noinspection PhpPossiblePolymorphicInvocationInspection */
             static::assertSame(400, $exception->getStatusCode());
         }
     }

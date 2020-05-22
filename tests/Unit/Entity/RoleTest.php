@@ -22,8 +22,8 @@ class RoleTest extends KernelTestCase
 {
     public function testThatGetUserGroupsWorksLikeExpected(): void
     {
-        $userGroup = new UserGroup();
-        $userGroup->setName('some name');
+        $userGroup = (new UserGroup())
+            ->setName('some name');
 
         $role = new Role('some role');
         $role->getUserGroups()->add($userGroup);

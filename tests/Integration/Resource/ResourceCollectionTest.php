@@ -48,12 +48,14 @@ class ResourceCollectionTest extends KernelTestCase
     public function testThatGetMethodThrowsAnException(): void
     {
         /** @var MockObject|LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
 
-        (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))->get('FooBar');
+        (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))
+            ->get('FooBar');
     }
 
     public function testThatLoggerIsCalledIfGetMethodGetIteratorThrowsAnException(): void
@@ -62,24 +64,28 @@ class ResourceCollectionTest extends KernelTestCase
         $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
 
         /** @var MockObject|LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
 
         $logger
             ->expects(static::once())
             ->method('error');
 
-        (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))->get('FooBar');
+        (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
+            ->get('FooBar');
     }
 
     public function testThatGetEntityResourceMethodThrowsAnException(): void
     {
         /** @var MockObject|LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
 
-        (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))->getEntityResource('FooBar');
+        (new ResourceCollection($this->getEmptyIteratorAggregate(), $logger))
+            ->getEntityResource('FooBar');
     }
 
     public function testThatLoggerIsCalledIfGetEntityResourceMethodGetIteratorThrowsAnException(): void
@@ -88,7 +94,8 @@ class ResourceCollectionTest extends KernelTestCase
         $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
 
         /** @var MockObject|LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)
+            ->getMock();
 
         $logger
             ->expects(static::once())
@@ -130,6 +137,7 @@ class ResourceCollectionTest extends KernelTestCase
      */
     public function testThatGetEntityResourceReturnsExpectedResource(string $resourceClass, string $entityClass): void
     {
+        /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf($resourceClass, $this->getCollection()->getEntityResource($entityClass));
     }
 
@@ -274,7 +282,7 @@ class ResourceCollectionTest extends KernelTestCase
     {
         return new class() implements IteratorAggregate {
             /**
-             * {@inheritDoc}
+             * {@inheritdoc}
              */
             public function getIterator(): ArrayObject
             {

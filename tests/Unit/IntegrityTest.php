@@ -632,8 +632,7 @@ FORMAT;
         $namespace = '\\App\\Security\\Authenticator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Authenticator\\';
 
-        $filter = fn (ReflectionClass $reflectionClass): bool =>
-            !$reflectionClass->isAbstract()
+        $filter = fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
             && !$reflectionClass->isInterface()
             && $reflectionClass->implementsInterface(AuthenticatorInterface::class);
 
@@ -804,8 +803,7 @@ FORMAT;
         $namespace = '\\App\\AutoMapper\\';
         $namespaceTest = '\\App\\Tests\\Integration\\AutoMapper\\';
 
-        $filter = fn (ReflectionClass $reflectionClass): bool =>
-            !$reflectionClass->isAbstract()
+        $filter = fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
             && !$reflectionClass->isTrait()
             && $reflectionClass->isSubclassOf(RestRequestMapper::class);
 
@@ -846,7 +844,7 @@ FORMAT;
         $pattern = '/^.+\.php$/i';
 
         $filter ??= $filter ?? $filter = fn (ReflectionClass $reflectionClass): bool =>
-            !$reflectionClass->isInterface() && !$reflectionClass->isAbstract() && !$reflectionClass->isTrait();
+                !$reflectionClass->isInterface() && !$reflectionClass->isAbstract() && !$reflectionClass->isTrait();
 
         $formatter ??= $this->getFormatterClosure($folder, $namespace, $namespaceTest);
         $iterator = $this->getReflectionClass($folder, $namespace);
@@ -871,10 +869,9 @@ FORMAT;
      */
     private function getReflectionClass(string $folder, string $namespace): Closure
     {
-        return fn (string $file): ReflectionClass =>
-            new ReflectionClass(
-                $namespace . str_replace([$folder, '.php', DIRECTORY_SEPARATOR], ['', '', '\\'], $file)
-            );
+        return fn (string $file): ReflectionClass => new ReflectionClass(
+            $namespace . str_replace([$folder, '.php', DIRECTORY_SEPARATOR], ['', '', '\\'], $file)
+        );
     }
 
     /**
@@ -923,8 +920,7 @@ FORMAT;
      */
     private function getInterfaceFilter(string $interface): Closure
     {
-        return fn (ReflectionClass $reflectionClass): bool  =>
-            !$reflectionClass->isInterface()
+        return fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
             && !$reflectionClass->isAbstract()
             && $reflectionClass->implementsInterface($interface);
     }
@@ -936,8 +932,7 @@ FORMAT;
      */
     private function getSubclassOfFilter(string $class): Closure
     {
-        return fn (ReflectionClass $reflectionClass): bool =>
-            !$reflectionClass->isInterface()
+        return fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
             && $reflectionClass->isSubclassOf($class);
     }
 }

@@ -34,18 +34,18 @@ class ApiKeyTest extends DtoTestCase
         $roleEntity = new RoleEntity('test role');
 
         // Create UserGroup entity
-        $userGroupEntity = new UserGroupEntity();
-        $userGroupEntity->setName('test user group');
-        $userGroupEntity->setRole($roleEntity);
+        $userGroupEntity = (new UserGroupEntity())
+            ->setName('test user group')
+            ->setRole($roleEntity);
 
         // Create ApiKey entity
-        $apiKeyEntity = new ApiKeyEntity();
-        $apiKeyEntity->setDescription('Some description');
-        $apiKeyEntity->addUserGroup($userGroupEntity);
+        $apiKeyEntity = (new ApiKeyEntity())
+            ->setDescription('Some description')
+            ->addUserGroup($userGroupEntity);
 
         /** @var ApiKeyDto $dto */
-        $dto = new $this->dtoClass();
-        $dto->load($apiKeyEntity);
+        $dto = (new $this->dtoClass())
+            ->load($apiKeyEntity);
 
         static::assertSame('Some description', $dto->getDescription());
         static::assertSame([$userGroupEntity], $dto->getUserGroups());
@@ -79,10 +79,9 @@ class ApiKeyTest extends DtoTestCase
             ->method('addUserGroup')
             ->willReturn($entity);
 
-        /** @var ApiKeyDto $dto */
-        $dto = new $this->dtoClass();
-        $dto->setDescription('some description');
-        $dto->setUserGroups($userGroups);
-        $dto->update($entity);
+        (new $this->dtoClass())
+            ->setDescription('some description')
+            ->setUserGroups($userGroups)
+            ->update($entity);
     }
 }

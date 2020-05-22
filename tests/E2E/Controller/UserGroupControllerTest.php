@@ -35,7 +35,6 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -57,7 +56,6 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('GET', $this->baseUrl . '/' . $userGroupId . '/users');
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -96,7 +94,6 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('POST', $url);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -138,7 +135,6 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('POST', $url);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -171,7 +167,6 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient('john-root', 'password-root');
         $client->request('DELETE', $url);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
@@ -212,7 +207,6 @@ class UserGroupControllerTest extends WebTestCase
         $client = $this->getTestClient($username, $password);
         $client->request('DELETE', $url);
 
-        /** @var Response $response */
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);

@@ -40,6 +40,15 @@ class RoleRepositoryTest extends KernelTestCase
         parent::tearDownAfterClass();
     }
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$container->get(RoleRepository::class);
+    }
+
     /**
      * @throws Throwable
      */
@@ -48,14 +57,5 @@ class RoleRepositoryTest extends KernelTestCase
         static::assertSame(5, $this->repository->countAdvanced());
         static::assertSame(5, $this->repository->reset());
         static::assertSame(0, $this->repository->countAdvanced());
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$container->get(RoleRepository::class);
     }
 }

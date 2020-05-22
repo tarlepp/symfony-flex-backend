@@ -32,6 +32,7 @@ use Throwable;
 class ControllerForLifeCycleTests extends Controller
 {
     // Traits
+
     use Methods\FindOneMethod;
 
     /**

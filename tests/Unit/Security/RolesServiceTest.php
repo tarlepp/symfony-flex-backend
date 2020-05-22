@@ -26,6 +26,15 @@ class RolesServiceTest extends KernelTestCase
      */
     private $service;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->service = static::$container->get(RolesService::class);
+    }
+
     public function testThatGetHierarchyReturnsExpected(): void
     {
         $expected = [
@@ -40,7 +49,7 @@ class RolesServiceTest extends KernelTestCase
             ],
             'ROLE_ROOT' => [
                 'ROLE_ADMIN',
-            ]
+            ],
         ];
 
         static::assertSame($expected, $this->service->getHierarchy(), 'Roles hierarchy is not expected.');
@@ -162,18 +171,9 @@ class RolesServiceTest extends KernelTestCase
                 RolesService::ROLE_ROOT,
                 RolesService::ROLE_ADMIN,
                 RolesService::ROLE_USER,
-                RolesService::ROLE_LOGGED
+                RolesService::ROLE_LOGGED,
             ]),
             new StringableArrayObject([RolesService::ROLE_ROOT]),
         ];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->service = static::$container->get(RolesService::class);
     }
 }

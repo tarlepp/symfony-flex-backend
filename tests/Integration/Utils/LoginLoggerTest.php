@@ -35,11 +35,12 @@ class LoginLoggerTest extends KernelTestCase
         /**
          * @var MockObject|LogLoginResource $logLoginResource
          */
-        $logLoginResource = $this->getMockBuilder(LogLoginResource::class)->disableOriginalConstructor()->getMock();
-        $requestStack = new RequestStack();
+        $logLoginResource = $this->getMockBuilder(LogLoginResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $loginLogger = new LoginLogger($logLoginResource, $requestStack);
-        $loginLogger->process('');
+        (new LoginLogger($logLoginResource, new RequestStack()))
+            ->process('');
     }
 
     /**
@@ -53,10 +54,11 @@ class LoginLoggerTest extends KernelTestCase
         /**
          * @var MockObject|LogLoginResource $logLoginResource
          */
-        $logLoginResource = $this->getMockBuilder(LogLoginResource::class)->disableOriginalConstructor()->getMock();
-        $requestStack = new RequestStack();
+        $logLoginResource = $this->getMockBuilder(LogLoginResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $loginLogger = new LoginLogger($logLoginResource, $requestStack);
-        $loginLogger->process('');
+        (new LoginLogger($logLoginResource, new RequestStack()))
+            ->process('');
     }
 }

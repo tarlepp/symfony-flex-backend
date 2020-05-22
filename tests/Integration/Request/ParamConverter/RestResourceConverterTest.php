@@ -14,6 +14,7 @@ use App\Resource\ResourceCollection;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
+use Generator;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -30,6 +31,16 @@ use Throwable;
 class RestResourceConverterTest extends KernelTestCase
 {
     private RestResourceConverter $converter;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        /** @noinspection PhpParamsInspection */
+        $this->converter = new RestResourceConverter(static::$container->get(ResourceCollection::class));
+    }
 
     /**
      * @dataProvider dataProviderTestThatSupportMethodReturnsExpected
@@ -55,8 +66,8 @@ class RestResourceConverterTest extends KernelTestCase
         $request->attributes->set('foo', 'bar');
 
         $paramConverter = new ParamConverter([
-            'name'  => 'foo',
-            'class' => RoleResource::class
+            'name' => 'foo',
+            'class' => RoleResource::class,
         ]);
 
         $this->converter->apply($request, $paramConverter);
@@ -77,8 +88,8 @@ class RestResourceConverterTest extends KernelTestCase
         $request->attributes->set('role', $role);
 
         $paramConverter = new ParamConverter([
-            'name'  => 'role',
-            'class' => RoleResource::class
+            'name' => 'role',
+            'class' => RoleResource::class,
         ]);
 
         static::assertTrue($this->converter->apply($request, $paramConverter));
@@ -87,50 +98,40 @@ class RestResourceConverterTest extends KernelTestCase
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatSupportMethodReturnsExpected(): array
+    public function dataProviderTestThatSupportMethodReturnsExpected(): Generator
     {
-        return [
-            [
-                false,
-                new StringableArrayObject(['class' => 'FooBar']),
-            ],
-            [
-                false,
-                new StringableArrayObject(['class' => LoggerInterface::class]),
-            ],
-            [
-                false,
-                new StringableArrayObject(['class' => Role::class]),
-            ],
-            [
-                true,
-                new StringableArrayObject(['class' => RoleResource::class]),
-            ],
+        yield [
+            false,
+            new StringableArrayObject(['class' => 'FooBar']),
+        ];
+
+        yield [
+            false,
+            new StringableArrayObject(['class' => LoggerInterface::class]),
+        ];
+
+        yield [
+            false,
+            new StringableArrayObject(['class' => Role::class]),
+        ];
+
+        yield [
+            true,
+            new StringableArrayObject(['class' => RoleResource::class]),
         ];
     }
 
     /**
-     * @return array
+     * @return Generator
      */
-    public function dataProviderTestThatApplyMethodReturnsExpected(): array
+    public function dataProviderTestThatApplyMethodReturnsExpected(): Generator
     {
-        return [
-            [RolesService::ROLE_LOGGED],
-            [RolesService::ROLE_USER],
-            [RolesService::ROLE_ADMIN],
-            [RolesService::ROLE_ROOT],
-            [RolesService::ROLE_API],
-        ];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->converter = new RestResourceConverter(static::$container->get(ResourceCollection::class));
+        yield [RolesService::ROLE_LOGGED];
+        yield [RolesService::ROLE_USER];
+        yield [RolesService::ROLE_ADMIN];
+        yield [RolesService::ROLE_ROOT];
+        yield [RolesService::ROLE_API];
     }
 }

@@ -11,7 +11,6 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\UserGroup;
-use App\Security\RolesService;
 use Generator;
 use function serialize;
 use function unserialize;
@@ -91,7 +90,6 @@ class UserTest extends EntityTestCase
     public function testThatEraseCredentialsMethodWorksAsExpected(): void
     {
         $this->entity->setPlainPassword('password');
-
         $this->entity->eraseCredentials();
 
         static::assertEmpty($this->entity->getPlainPassword());
