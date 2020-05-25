@@ -206,7 +206,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->getMock();
 
         $user = new User();
-        $securityUser = (new SecurityUser($user))->setRoles(['FOO', 'BAR']);
+        $securityUser = new SecurityUser($user, ['FOO', 'BAR']);
 
         $userRepository
             ->expects(static::once())

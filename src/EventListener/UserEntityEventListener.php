@@ -95,7 +95,7 @@ class UserEntityEventListener
 
             // Password hash callback
             $callback = fn (string $plainPassword): string => $this->userPasswordEncoder
-                ->encodePassword(new SecurityUser($user), $plainPassword);
+                ->encodePassword(new SecurityUser($user, []), $plainPassword);
 
             // Set new password and encode it with user encoder
             $user->setPassword($callback, $plainPassword);

@@ -28,20 +28,22 @@ class SecurityUser implements SecurityUserInterface
     /**
      * @var string[]
      */
-    private array $roles = [];
+    private array $roles;
 
     /**
      * SecurityUser constructor.
      *
-     * @param User $user
+     * @param User     $user
+     * @param string[] $roles
      */
-    public function __construct(User $user)
+    public function __construct(User $user, array $roles = [])
     {
         $this->username = $user->getId();
         $this->password = $user->getPassword();
         $this->language = $user->getLanguage();
         $this->locale = $user->getLocale();
         $this->timezone = $user->getTimezone();
+        $this->roles = $roles;
     }
 
     /**
@@ -62,18 +64,6 @@ class SecurityUser implements SecurityUserInterface
     public function getRoles(): array
     {
         return $this->roles;
-    }
-
-    /**
-     * @param string[] $roles
-     *
-     * @return SecurityUser
-     */
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
     }
 
     /**
@@ -141,6 +131,5 @@ class SecurityUser implements SecurityUserInterface
      */
     public function eraseCredentials(): void
     {
-        $this->password = '';
     }
 }
