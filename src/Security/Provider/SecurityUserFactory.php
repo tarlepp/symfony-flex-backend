@@ -67,7 +67,7 @@ class SecurityUserFactory implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('User not found for UUID: "%s".', $username));
         }
 
-        return (new SecurityUser($user))->setRoles($this->rolesService->getInheritedRoles($user->getRoles()));
+        return new SecurityUser($user, $this->rolesService->getInheritedRoles($user->getRoles()));
     }
 
     /**
@@ -97,7 +97,6 @@ class SecurityUserFactory implements UserProviderInterface
             throw new UsernameNotFoundException(sprintf('User not found for UUID: "%s".', $user->getUsername()));
         }
 
-        return (new SecurityUser($userEntity))
-            ->setRoles($this->rolesService->getInheritedRoles($userEntity->getRoles()));
+        return new SecurityUser($userEntity, $this->rolesService->getInheritedRoles($userEntity->getRoles()));
     }
 }

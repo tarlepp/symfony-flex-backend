@@ -23,8 +23,7 @@ class SecurityUserTest extends KernelTestCase
 {
     public function testThatGetRolesReturnsExpected(): void
     {
-        $securityUser = (new SecurityUser(new User()))
-            ->setRoles(['Foo', 'Bar']);
+        $securityUser = new SecurityUser(new User(), ['Foo', 'Bar']);
 
         static::assertSame(['Foo', 'Bar'], $securityUser->getRoles());
     }
@@ -58,16 +57,14 @@ class SecurityUserTest extends KernelTestCase
         static::assertSame($user->getId(), (new SecurityUser($user))->getUuid());
     }
 
-    public function testThatPasswordIsNotPresentAfterEraseCredential(): void
+    public function testThatPasswordIsPresentAfterEraseCredential(): void
     {
-        $encoder = fn (string $password): string => $password;
+        $encoder = fn (string $password): string => str_rot13($password);
 
         $securityUser = new SecurityUser((new User())->setPassword($encoder, 'foobar'));
 
-        static::assertSame('foobar', $securityUser->getPassword());
-
         $securityUser->eraseCredentials();
 
-        static::assertSame('', $securityUser->getPassword());
+        static::assertSame('sbbone', $securityUser->getPassword());
     }
 }
