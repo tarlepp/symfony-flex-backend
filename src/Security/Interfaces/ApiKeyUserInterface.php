@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Security\Interfaces;
 
 use App\Entity\ApiKey;
-use App\Security\RolesService;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**

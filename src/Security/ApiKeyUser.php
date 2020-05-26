@@ -11,8 +11,8 @@ namespace App\Security;
 use App\Entity\ApiKey;
 use App\Security\Interfaces\ApiKeyUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use function array_unique;
 use function array_merge;
+use function array_unique;
 
 /**
  * Class ApiKeyUser
@@ -55,7 +55,7 @@ class ApiKeyUser implements ApiKeyUserInterface
      * ApiKeyUser constructor.
      *
      * @param ApiKey   $apiKey
-     * @param String[] $roles
+     * @param string[] $roles
      */
     public function __construct(ApiKey $apiKey, array $roles)
     {
