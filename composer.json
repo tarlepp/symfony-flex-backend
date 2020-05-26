@@ -26,7 +26,7 @@
 		"ext-pdo": "*",
 		"ext-pdo_mysql": "*",
 		"antishov/doctrine-extensions-bundle": "1.4.2",
-		"doctrine/annotations": "1.10.2",
+		"doctrine/annotations": "1.10.3",
 		"doctrine/doctrine-migrations-bundle": "2.1.2",
 		"easycorp/easy-log-handler": "1.0.9",
 		"lexik/jwt-authentication-bundle": "2.6.5",
