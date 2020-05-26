@@ -12,7 +12,6 @@ use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Security\ApiKeyUser;
-use App\Security\RolesService;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use Doctrine\ORM\NonUniqueResultException;
@@ -46,18 +45,12 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     private MockObject $userRepository;
 
-    /**
-     * @var MockObject|RolesService
-     */
-    private MockObject $rolesService;
-
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->userRepository = $this->createMock(UserRepository::class);
-        $this->rolesService = $this->createMock(RolesService::class);
     }
 
     /**
@@ -83,7 +76,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     public function testThatGetApiKeyReturnsExpectedApiKey(): void
     {
         $apiKey = new ApiKey();
-        $apiKeyUser = new ApiKeyUser($apiKey, $this->rolesService);
+        $apiKeyUser = new ApiKeyUser($apiKey, []);
 
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
 
@@ -185,7 +178,7 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     public function testThatGetIdentityReturnsExpectedApiKeyUser(): void
     {
-        $apiKeyUser = new ApiKeyUser(new ApiKey(), $this->rolesService);
+        $apiKeyUser = new ApiKeyUser(new ApiKey(), []);
 
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
 
@@ -222,7 +215,7 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     public function testThatGetApiKeyUserReturnsExpectedUser(): void
     {
-        $apiKeyUser = new ApiKeyUser(new ApiKey(), $this->rolesService);
+        $apiKeyUser = new ApiKeyUser(new ApiKey(), []);
 
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
 

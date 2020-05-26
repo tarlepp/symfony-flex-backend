@@ -37,9 +37,10 @@ class ApiKeyUserTest extends KernelTestCase
     {
         static::bootKernel();
 
-        $rolesService = static::$container->get(RolesService::class);
-
-        $apiKeyUser = new ApiKeyUser($apiKey, $rolesService);
+        $apiKeyUser = new ApiKeyUser(
+            $apiKey,
+            static::$container->get(RolesService::class)->getInheritedRoles($apiKey->getRoles())
+        );
 
         static::assertEqualsCanonicalizing($expectedRoles->getArrayCopy(), $apiKeyUser->getRoles());
     }
