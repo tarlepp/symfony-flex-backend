@@ -9,9 +9,9 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Entity\ApiKey;
-use App\Entity\UserGroup;
 use App\Security\Interfaces\ApiKeyUserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use function array_merge;
 use function array_unique;
 
 /**
@@ -54,23 +54,14 @@ class ApiKeyUser implements ApiKeyUserInterface
     /**
      * ApiKeyUser constructor.
      *
-     * @param ApiKey       $apiKey
-     * @param RolesService $rolesService
+     * @param ApiKey   $apiKey
+     * @param string[] $roles
      */
-    public function __construct(ApiKey $apiKey, RolesService $rolesService)
+    public function __construct(ApiKey $apiKey, array $roles)
     {
         $this->apiKey = $apiKey;
         $this->username = $this->apiKey->getToken();
-
-        // Iterate API key user groups and extract roles from those and attach base 'ROLE_API'
-        $roles = $this->apiKey
-            ->getUserGroups()
-            ->map(static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
-            ->toArray();
-
-        $roles[] = RolesService::ROLE_API;
-
-        $this->roles = array_unique($rolesService->getInheritedRoles($roles));
+        $this->roles = array_unique(array_merge($roles, [RolesService::ROLE_API]));
     }
 
     /**
