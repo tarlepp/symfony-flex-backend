@@ -18,10 +18,11 @@ if (!isset($_SERVER['HTTP_HOST'])) {
 }
 
 if (!in_array(
-    @$_SERVER['REMOTE_ADDR'],
+    $_SERVER['REMOTE_ADDR'],
     [
         '127.0.0.1',
         '::1',
+        '10.0.2.2', // VirtualBox default gateway on NAT network - https://www.virtualbox.org/manual/ch09.html#changenat
         $_ENV['DOCKER_IP'],
     ],
     true
@@ -30,17 +31,23 @@ if (!in_array(
     exit('This script is only accessible from localhost.');
 }
 
-if (file_exists($autoloader = __DIR__.'/../../../autoload.php')) {
-    /** @noinspection PhpIncludeInspection */
-    require_once $autoloader;
-} elseif (file_exists($autoloader = __DIR__.'/../vendor/autoload.php')) {
-    /** @noinspection PhpIncludeInspection */
-    require_once $autoloader;
-} else {
+$bits = [
+    __DIR__,
+    '..',
+    'vendor',
+    'autoload.php',
+];
+
+$autoloader = implode(DIRECTORY_SEPARATOR, $bits);
+
+if (!is_readable($autoloader)) {
     throw new RuntimeException('Unable to find the Composer autoloader.');
 }
 
-$symfonyVersion = class_exists('\Symfony\Component\HttpKernel\Kernel') ? Kernel::VERSION : null;
+/** @noinspection PhpIncludeInspection */
+require_once $autoloader;
+
+$symfonyVersion = class_exists(Kernel::class) ? Kernel::VERSION : null;
 
 $symfonyRequirements = new SymfonyRequirements(dirname(realpath($autoloader), 2), $symfonyVersion);
 
