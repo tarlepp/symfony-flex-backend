@@ -218,7 +218,12 @@ class ProfileController
             'groups' => $this->getUserGroupGroups(),
         ];
 
-        return new JsonResponse($serializer->serialize($loggedInUser->getUserGroups(), 'json', $groups), 200, [], true);
+        return new JsonResponse(
+            $serializer->serialize($loggedInUser->getUserGroups()->toArray(), 'json', $groups),
+            200,
+            [],
+            true
+        );
     }
 
     /**
