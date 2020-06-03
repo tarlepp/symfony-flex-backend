@@ -18,7 +18,6 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
  */
 class Kernel extends BaseKernel
 {
-    // Traits
     use MicroKernelTrait;
 
     /**
