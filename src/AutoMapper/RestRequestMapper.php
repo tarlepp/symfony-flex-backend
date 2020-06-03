@@ -40,9 +40,9 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * {@inheritdoc}
      *
-     * @param array|object            $source
-     * @param string                  $targetClass
-     * @param array|array<int, mixed> $context
+     * @param array|object      $source
+     * @param string            $targetClass
+     * @param array<int, mixed> $context
      *
      * @return RestDtoInterface
      */
@@ -57,9 +57,9 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * {@inheritdoc}
      *
-     * @param array|object            $source
-     * @param object                  $destination
-     * @param array|array<int, mixed> $context
+     * @param array|object      $source
+     * @param object            $destination
+     * @param array<int, mixed> $context
      *
      * @return RestDtoInterface
      */
@@ -117,7 +117,7 @@ abstract class RestRequestMapper implements MapperInterface
             $transformer = 'transform' . ucfirst($property);
 
             /** @var int|string|array|null $value */
-            $value = $request->request->get($property);
+            $value = $request->get($property);
 
             if (method_exists($this, $transformer)) {
                 /** @var int|string|object|array|null $value */
