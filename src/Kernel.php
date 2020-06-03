@@ -22,7 +22,7 @@ class Kernel extends BaseKernel
     use MicroKernelTrait;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function configureContainer(ContainerConfigurator $container): void
     {
@@ -33,7 +33,7 @@ class Kernel extends BaseKernel
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
