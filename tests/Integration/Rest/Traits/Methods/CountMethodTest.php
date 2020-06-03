@@ -162,7 +162,7 @@ class CountMethodTest extends KernelTestCase
 
         // Create request and response
         $request = Request::create('/count');
-        $response = Response::create('123');
+        $response = new Response('123');
 
         $resource
             ->expects(static::once())
