@@ -29,11 +29,11 @@ class AuthenticatedActionsTest extends RestTraitTestCase
      */
     public function getValidUsers(): Generator
     {
-        //yield ['john-root',   'password-root'];
-        //yield ['john-admin',  'password-admin'];
-        //yield ['john-user',   'password-user'];
+        //yield ['john-root', 'password-root'];
+        //yield ['john-admin', 'password-admin'];
+        //yield ['john-user', 'password-user'];
         //yield ['john-logged', 'password-logged'];
-        yield ['john',        'password'];
+        yield ['john', 'password'];
     }
 
     /**

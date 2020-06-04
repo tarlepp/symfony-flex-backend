@@ -74,7 +74,8 @@ class Localization
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
             $output = $this->cache->get('application_timezone', function (ItemInterface $item): array {
-                $item->expiresAfter(31536000); // One year
+                // One year
+                $item->expiresAfter(31536000);
 
                 return $this->getFormattedTimezones();
             });

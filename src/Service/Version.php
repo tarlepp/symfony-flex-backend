@@ -55,7 +55,8 @@ class Version
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
             $output = $this->cache->get('application_version', function (ItemInterface $item): string {
-                $item->expiresAfter(31536000); // One year
+                // One year
+                $item->expiresAfter(31536000);
 
                 /** @var stdClass $composerData */
                 $composerData = JSON::decode((string)file_get_contents($this->projectDir . '/composer.json'));

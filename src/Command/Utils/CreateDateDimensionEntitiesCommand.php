@@ -33,7 +33,8 @@ use function sprintf;
 class CreateDateDimensionEntitiesCommand extends Command
 {
     private const YEAR_MIN = 1970;
-    private const YEAR_MAX = 2047; // This should be the year when I'm officially retired
+    // This should be the year when I'm officially retired
+    private const YEAR_MAX = 2047;
 
     /**
      * @psalm-suppress PropertyNotSetInConstructor
@@ -210,14 +211,7 @@ class CreateDateDimensionEntitiesCommand extends Command
      */
     private function validatorYearStart(): Closure
     {
-        return /**
-         * @param int|string $year
-         *
-         * @return int
-         */
-        static function ($year): int {
-            $year = (int)$year;
-
+        return static function (int $year): int {
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
                 $message = sprintf(
                     'Start year must be between %d and %d',
@@ -243,14 +237,7 @@ class CreateDateDimensionEntitiesCommand extends Command
      */
     private function validatorYearEnd(int $yearStart): Closure
     {
-        return /**
-         * @param int|string $year
-         *
-         * @return int
-         */
-        static function ($year) use ($yearStart): int {
-            $year = (int)$year;
-
+        return static function (int $year) use ($yearStart): int {
             if ($year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart) {
                 $message = sprintf(
                     'End year must be between %d and %d and after given start year %d',

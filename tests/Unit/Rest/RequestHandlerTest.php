@@ -563,7 +563,8 @@ class RequestHandlerTest extends KernelTestCase
                     '"foo"],',
                 ],
             ]),
-            '{"or": ["bar", "foo"], ', // With invalid JSON input it should fallback to string handling
+            // With invalid JSON input it should fallback to string handling
+            '{"or": ["bar", "foo"], ',
         ];
     }
 }
