@@ -161,7 +161,7 @@ class IdsMethodTest extends KernelTestCase
 
         // Create request and response
         $request = Request::create('/');
-        $response = Response::create('[]');
+        $response = new Response('[]');
 
         $resource
             ->expects(static::once())

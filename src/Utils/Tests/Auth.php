@@ -11,8 +11,8 @@ namespace App\Utils\Tests;
 use App\Utils\JSON;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use UnexpectedValueException;
 use function array_key_exists;
@@ -35,16 +35,16 @@ use function sys_get_temp_dir;
  */
 class Auth
 {
-    private ContainerInterface $testContainer;
+    private KernelInterface $kernel;
 
     /**
      * Auth constructor.
      *
-     * @param ContainerInterface $container
+     * @param KernelInterface $kernel
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(KernelInterface $kernel)
     {
-        $this->testContainer = $container;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -142,7 +142,7 @@ class Auth
         if (!array_key_exists($hash, $cache)) {
             // Get client
             /** @var KernelBrowser $client */
-            $client = $this->testContainer->get('test.client');
+            $client = $this->kernel->getContainer()->get('test.client');
 
             // Create request to make login using given credentials
             $client->request(

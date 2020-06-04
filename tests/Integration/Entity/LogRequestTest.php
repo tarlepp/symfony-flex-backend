@@ -114,7 +114,7 @@ class LogRequestTest extends EntityTestCase
         $logRequest = new LogRequest(
             [],
             Request::create(''),
-            Response::create('abcdefgh'),
+            new Response('abcdefgh'),
             new User(),
             new ApiKey()
         );
@@ -173,7 +173,7 @@ class LogRequestTest extends EntityTestCase
         $request = Request::create('');
         $request->headers->replace($headers->getArrayCopy());
 
-        $logRequest = new LogRequest($properties->getArrayCopy(), $request, Response::create());
+        $logRequest = new LogRequest($properties->getArrayCopy(), $request, new Response());
 
         static::assertSame($expected->getArrayCopy(), $logRequest->getHeaders());
     }
@@ -197,7 +197,7 @@ class LogRequestTest extends EntityTestCase
         $request = Request::create('', 'POST');
         $request->request->replace($parameters->getArrayCopy());
 
-        $logRequest = new LogRequest($properties->getArrayCopy(), $request, Response::create());
+        $logRequest = new LogRequest($properties->getArrayCopy(), $request, new Response());
 
         static::assertSame($expected->getArrayCopy(), $logRequest->getParameters());
     }
@@ -214,7 +214,7 @@ class LogRequestTest extends EntityTestCase
      */
     public function testThatDetermineParametersWorksLikeExpected(string $content, StringableArrayObject $expected): void
     {
-        $logRequest = new LogRequest([], Request::create(''), Response::create());
+        $logRequest = new LogRequest([], Request::create(''), new Response());
 
         $request = Request::create('', 'GET', [], [], [], [], $content);
 

@@ -12,8 +12,6 @@
 
         <ignoreFiles>
             <directory name="vendor" />
-
-            <file name="src/Kernel.php" />
         </ignoreFiles>
     </projectFiles>
 
