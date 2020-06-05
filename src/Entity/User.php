@@ -465,8 +465,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         if ($plainPassword !== '') {
             $this->plainPassword = $plainPassword;
 
-            // Change some mapped values so preUpdate will get called.
-            $this->password = ''; // just blank it out
+            // Change some mapped values so preUpdate will get called - just blank it out
+            $this->password = '';
         }
 
         return $this;

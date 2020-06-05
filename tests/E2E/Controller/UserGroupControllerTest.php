@@ -242,11 +242,11 @@ class UserGroupControllerTest extends WebTestCase
      */
     public function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): Generator
     {
-        //yield ['john',        'password'];
-        //yield ['john-api',    'password-api'];
+        //yield ['john', 'password'];
+        //yield ['john-api', 'password-api'];
         //yield ['john-logged', 'password-logged'];
-        //yield ['john-user',   'password-user'];
-        yield ['john-admin',  'password-admin'];
+        //yield ['john-user', 'password-user'];
+        yield ['john-admin', 'password-admin'];
     }
 
     /**

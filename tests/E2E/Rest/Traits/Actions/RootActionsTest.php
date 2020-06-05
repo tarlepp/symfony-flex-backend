@@ -29,7 +29,7 @@ class RootActionsTest extends RestTraitTestCase
      */
     public function getValidUsers(): Generator
     {
-        yield ['john-root',   'password-root'];
+        yield ['john-root', 'password-root'];
     }
 
     /**
@@ -37,10 +37,10 @@ class RootActionsTest extends RestTraitTestCase
      */
     public function getInvalidUsers(): Generator
     {
-        //yield [null,          null];
-        //yield ['john',        'password'];
+        //yield [null, null];
+        //yield ['john', 'password'];
         //yield ['john-logged', 'password-logged'];
-        //yield ['john-user',   'password-user'];
-        yield ['john-admin',  'password-admin'];
+        //yield ['john-user', 'password-user'];
+        yield ['john-admin', 'password-admin'];
     }
 }

@@ -364,7 +364,8 @@ class RepositoryHelper
 
             $parameters[] = '?' . self::$parameterCount;
             $queryBuilder->setParameter(self::$parameterCount, $value[1], UuidHelper::getType((string)$value[1]));
-        } else { // Otherwise this must be IN or NOT IN expression
+        } else {
+            // Otherwise this must be IN or NOT IN expression
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
             } catch (InvalidUuidStringException $exception) {
@@ -399,7 +400,8 @@ class RepositoryHelper
             // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
             if (strcmp($column, 'and') === 0 || strcmp($column, 'or') === 0) {
                 $condition[$column] = $value;
-            } else { // Add condition
+            } else {
+                // Add condition
                 $condition[] = self::createCriteria($column, $value);
             }
         };

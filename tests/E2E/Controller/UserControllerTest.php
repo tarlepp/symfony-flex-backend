@@ -864,8 +864,8 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderValidUsers(): Generator
     {
-        yield ['john-admin',  'password-admin'];
-        //yield ['john-root',   'password-root'];
+        yield ['john-admin', 'password-admin'];
+        //yield ['john-root', 'password-root'];
     }
 
     /**
@@ -882,10 +882,10 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderInvalidUsers(): Generator
     {
-        //yield ['john',        'password'];
-        //yield ['john-api',    'password-api'];
+        //yield ['john', 'password'];
+        //yield ['john-api', 'password-api'];
         //yield ['john-logged', 'password-logged'];
-        yield ['john-user',   'password-user'];
+        yield ['john-user', 'password-user'];
     }
 
     /**
@@ -912,11 +912,11 @@ class UserControllerTest extends WebTestCase
      */
     public function dataProviderInvalidUsersCreate(): Generator
     {
-        //yield ['john',        'password'];
-        //yield ['john-api',    'password-api'];
+        //yield ['john', 'password'];
+        //yield ['john-api', 'password-api'];
         //yield ['john-logged', 'password-logged'];
-        //yield ['john-user',   'password-user'];
-        yield ['john-admin',  'password-admin'];
+        //yield ['john-user', 'password-user'];
+        yield ['john-admin', 'password-admin'];
     }
 
     /**
@@ -932,18 +932,6 @@ class UserControllerTest extends WebTestCase
         $userResource = static::$container->get(UserResource::class);
 
         $users = $userResource->find();
-
-        /*
-        foreach ($this->dataProviderInvalidUsersCreate() as $userData) {
-            foreach ($users as $user) {
-                if ($user->getUsername() === $userData[0]) {
-                    continue;
-                }
-
-                yield array_merge($userData, [$user->getId()]);
-            }
-        }
-        */
 
         foreach ($this->dataProviderInvalidUsersCreate() as $userData) {
             $users = array_values(array_filter($users, fn (User $user): bool => $user->getUsername() !== $userData[0]));
@@ -987,12 +975,12 @@ class UserControllerTest extends WebTestCase
         };
 
         $credentials = [
-            ['john',        'password'],
-            ['john-api',    'password-api'],
+            ['john', 'password'],
+            ['john-api', 'password-api'],
             ['john-logged', 'password-logged'],
-            ['john-user',   'password-user'],
-            ['john-admin',  'password-admin'],
-            ['john-root',   'password-root'],
+            ['john-user', 'password-user'],
+            ['john-admin', 'password-admin'],
+            ['john-root', 'password-root'],
         ];
 
         return array_map($iterator, $credentials);
@@ -1053,12 +1041,12 @@ class UserControllerTest extends WebTestCase
         };
 
         $credentials = [
-            ['john',        'password',         ''],
-            ['john-api',    'password-api',     'ROLE_API'],
-            ['john-logged', 'password-logged',  'ROLE_LOGGED'],
-            ['john-user',   'password-user',    'ROLE_USER'],
-            ['john-admin',  'password-admin',   'ROLE_ADMIN'],
-            ['john-root',   'password-root',    'ROLE_ROOT'],
+            ['john', 'password', ''],
+            ['john-api', 'password-api', 'ROLE_API'],
+            ['john-logged', 'password-logged', 'ROLE_LOGGED'],
+            ['john-user', 'password-user', 'ROLE_USER'],
+            ['john-admin', 'password-admin', 'ROLE_ADMIN'],
+            ['john-root', 'password-root', 'ROLE_ROOT'],
         ];
 
         return array_map($iterator, $credentials);

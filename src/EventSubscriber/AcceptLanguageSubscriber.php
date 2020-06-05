@@ -64,7 +64,8 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
         return [
             RequestEvent::class => [
                 'onKernelRequest',
-                100, // Note that this needs to at least `100` to get translation messages as expected
+                // Note that this needs to at least `100` to get translation messages as expected
+                100,
             ],
         ];
     }

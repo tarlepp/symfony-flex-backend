@@ -189,7 +189,8 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         if (in_array(get_class($exception), $accessDeniedClasses, true)) {
             $message = 'Access denied.';
-        } elseif ($exception instanceof DBALException || $exception instanceof ORMException) { // Database errors
+        } elseif ($exception instanceof DBALException || $exception instanceof ORMException) {
+            // Database errors
             $message = 'Database error.';
         } elseif (!$this->isClientExceptions($exception)) {
             $message = 'Internal server error.';

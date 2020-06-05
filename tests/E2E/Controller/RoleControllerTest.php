@@ -97,7 +97,7 @@ class RoleControllerTest extends WebTestCase
      */
     public function dataProviderTestThatFindOneActionWorksAsExpected(): Generator
     {
-        yield ['john-admin',  'password-admin'];
+        yield ['john-admin', 'password-admin'];
         //yield ['john-root',   'password-root'];
     }
 
@@ -106,10 +106,10 @@ class RoleControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): Generator
     {
-        yield ['john',        'password'];
+        yield ['john', 'password'];
         yield ['john-logged', 'password-logged'];
-        yield ['john-user',   'password-user'];
-        yield ['john-admin',  'password-admin'];
-        yield ['john-root',   'password-root'];
+        yield ['john-user', 'password-user'];
+        yield ['john-admin', 'password-admin'];
+        yield ['john-root', 'password-root'];
     }
 }
