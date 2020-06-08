@@ -21,8 +21,6 @@ use Throwable;
  */
 trait FindMethod
 {
-    use AbstractGenericMethods;
-
     /**
      * Generic 'findMethod' method for REST resources.
      *

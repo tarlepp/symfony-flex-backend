@@ -21,8 +21,6 @@ use Throwable;
  */
 trait UpdateMethod
 {
-    use AbstractGenericMethods;
-
     /**
      * Generic 'updateMethod' method for REST resources.
      *

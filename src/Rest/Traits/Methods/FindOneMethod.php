@@ -20,8 +20,6 @@ use Throwable;
  */
 trait FindOneMethod
 {
-    use AbstractGenericMethods;
-
     /**
      * Generic 'findOneMethod' method for REST resources.
      *

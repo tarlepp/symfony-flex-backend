@@ -21,8 +21,6 @@ use Throwable;
  */
 trait IdsMethod
 {
-    use AbstractGenericMethods;
-
     /**
      * Generic 'idsMethod' method for REST resources.
      *
