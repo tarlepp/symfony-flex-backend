@@ -1,4 +1,4 @@
-FROM composer:1.10.6 AS composer
+FROM composer:1.10.7 AS composer
 FROM php:7.4.6-fpm
 
 RUN apt-get update && apt-get install -y \
