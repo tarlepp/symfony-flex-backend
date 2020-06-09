@@ -21,8 +21,6 @@ use Throwable;
  */
 trait CreateMethod
 {
-    use AbstractGenericMethods;
-
     /**
      * Generic 'createMethod' method for REST resources.
      *

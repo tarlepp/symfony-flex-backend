@@ -20,8 +20,6 @@ use Throwable;
  */
 trait DeleteMethod
 {
-    use AbstractGenericMethods;
-
     /**
      * Generic 'deleteMethod' method for REST resources.
      *

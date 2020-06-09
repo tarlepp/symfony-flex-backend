@@ -9,9 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Actions;
 
 use App\Rest\Interfaces\RestResourceInterface;
-use LogicException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 /**
@@ -23,24 +21,8 @@ use Throwable;
 trait RestActionBase
 {
     /**
-     * {@inheritdoc}
-     */
-    abstract public function getResource(): RestResourceInterface;
-
-    /**
-     * Method to validate REST trait method.
-     *
-     * @param Request  $request
-     * @param string[] $allowedHttpMethods
-     *
-     * @throws LogicException
-     * @throws MethodNotAllowedHttpException
-     */
-    abstract public function validateRestMethod(Request $request, array $allowedHttpMethods): void;
-
-    /**
-     * @param Request                  $request
-     * @param array|array<int, string> $allowedHttpMethods
+     * @param Request            $request
+     * @param array<int, string> $allowedHttpMethods
      *
      * @return RestResourceInterface
      *

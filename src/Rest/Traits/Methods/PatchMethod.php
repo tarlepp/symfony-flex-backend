@@ -21,8 +21,6 @@ use Throwable;
  */
 trait PatchMethod
 {
-    use AbstractGenericMethods;
-
     /**
      * Generic 'patchMethod' method for REST resources.
      *

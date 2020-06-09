@@ -33,7 +33,7 @@ interface ControllerInterface
      *
      * @param ResponseHandler $responseHandler
      *
-     * @return ControllerInterface|Controller|self
+     * @return ControllerInterface|Controller
      */
     public function setResponseHandler(ResponseHandler $responseHandler);
 
@@ -67,10 +67,20 @@ interface ControllerInterface
     public function getDtoClass(?string $method = null): string;
 
     /**
+     * @param Request            $request
+     * @param array<int, string> $allowedHttpMethods
+     *
+     * @return RestResourceInterface
+     *
+     * @throws Throwable
+     */
+    public function getResourceForMethod(Request $request, array $allowedHttpMethods): RestResourceInterface;
+
+    /**
      * Method to validate REST trait method.
      *
-     * @param Request  $request
-     * @param string[] $allowedHttpMethods
+     * @param Request            $request
+     * @param array<int, string> $allowedHttpMethods
      *
      * @throws LogicException
      * @throws MethodNotAllowedHttpException

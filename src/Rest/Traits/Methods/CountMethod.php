@@ -21,8 +21,6 @@ use Throwable;
  */
 trait CountMethod
 {
-    use AbstractGenericMethods;
-
     /**
      * Generic 'countMethod' method for REST resources.
      *
