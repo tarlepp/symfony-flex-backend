@@ -431,3 +431,7 @@ class SomeService
 
 With this example you can see how much your custom code will take time to
 process and you can see this easily from your profiler.
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)

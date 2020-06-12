@@ -82,3 +82,7 @@ And after that open `build/phpmetrics/index.html` with your favorite browser.
 
 Also note that you can run tests directly from your IDE (PhpStorm) - if you're
 using that you should read [PhpStorm](PHPSTORM.md) documentation.
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)

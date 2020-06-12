@@ -130,3 +130,7 @@ To initialize database you need to run following commands:
 ./bin/console doctrine:database:create
 ./bin/console doctrine:migrations:migrate
 ```
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)

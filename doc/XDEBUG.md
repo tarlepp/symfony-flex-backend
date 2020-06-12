@@ -113,3 +113,7 @@ that you use with Postman.
 ## Closure
 
 Happy debugging \o/ - it has not ever be as easy as this...
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)

@@ -91,3 +91,7 @@ To start application you just need to use command `docker-sync-stack start`
 
 If / when you want to use Xdebug, you should read this document:
 [Using Xdebug](XDEBUG.md)
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)
