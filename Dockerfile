@@ -1,5 +1,5 @@
 FROM composer:1.10.7 AS composer
-FROM php:7.4.6-fpm
+FROM php:7.4.7-fpm
 
 RUN apt-get update && apt-get install -y \
     zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq \
