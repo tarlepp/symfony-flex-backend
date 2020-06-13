@@ -76,3 +76,7 @@ documentation and you're ready to start debugging your application.
 * [PHP Annotations plugin for PhpStorm](https://plugins.jetbrains.com/plugin/7320)
 * [Php Inspections (EA Extended) plugin for PhpStorm](https://plugins.jetbrains.com/idea/plugin/7622-php-inspections-ea-extended-)
 * [EditorConfig](https://plugins.jetbrains.com/plugin/7294-editorconfig)
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)

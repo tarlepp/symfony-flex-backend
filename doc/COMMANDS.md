@@ -139,3 +139,7 @@ This command is just a wrapper for following commands:
 
 Command to create `DateDimension` entities that can be used with date/time
 related report queries.
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)

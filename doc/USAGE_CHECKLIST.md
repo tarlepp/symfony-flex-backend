@@ -47,3 +47,8 @@ started to use this template.
       jobs to check application code.
   * [ ] [main.yml](../.github/workflows/main.yml) - Check file contents and
         modify it for your needs.
+* [ ] Last step when all above is done - just delete this file.
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)

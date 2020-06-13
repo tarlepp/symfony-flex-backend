@@ -75,3 +75,7 @@ REQUEST_LOG_SENSITIVE_PROPERTIES  = Which request parameters are "sensitive"
 * [How to Master and Create new Environments](https://symfony.com/doc/current/configuration/environments.html)
 * [Configuring Symfony (and Environments)](https://symfony.com/doc/current/configuration.html)
 * [Improvements to the Handling of .env Files for all Symfony Versions](https://symfony.com/blog/improvements-to-the-handling-of-env-files-for-all-symfony-versions)
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)

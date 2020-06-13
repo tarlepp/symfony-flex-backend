@@ -226,83 +226,29 @@ jobs:
       - name: Make checkout
         uses: actions/checkout@v1
 
-      - name: Lint `README.md`
+      - name: Lint `./README.md`
         uses: avto-dev/markdown-lint@v1
         with:
           config: './markdown-lint.yml'
           args: './README.md'
 
-      - name: Lint `doc/COMMANDS.md`
+      - name: Lint all the resource docs under `./doc/` directory
         uses: avto-dev/markdown-lint@v1
         with:
           config: './markdown-lint.yml'
-          args: './doc/COMMANDS.md'
+          args: './doc/*.md'
 
-      - name: Lint `doc/CONCEPTS_AND_FEATURES.md`
+      - name: Lint all the docs under `./docker/` directory
         uses: avto-dev/markdown-lint@v1
         with:
           config: './markdown-lint.yml'
-          args: './doc/CONCEPTS_AND_FEATURES.md'
+          args: './docker/*.md'
 
-      - name: Lint `doc/CUSTOM_CONFIGURATION.md`
+      - name: Lint all the docs under `./secrets/` directory
         uses: avto-dev/markdown-lint@v1
         with:
           config: './markdown-lint.yml'
-          args: './doc/CUSTOM_CONFIGURATION.md'
-
-      - name: Lint `doc/DEVELOPMENT.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './doc/DEVELOPMENT.md'
-
-      - name: Lint `doc/INSTALLATION_WITHOUT_DOCKER.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './doc/INSTALLATION_WITHOUT_DOCKER.md'
-
-      - name: Lint `doc/PHPSTORM.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './doc/PHPSTORM.md'
-
-      - name: Lint `doc/SPEED_UP_DOCKER_COMPOSE.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './doc/SPEED_UP_DOCKER_COMPOSE.md'
-
-      - name: Lint `doc/TESTING.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './doc/TESTING.md'
-
-      - name: Lint `doc/USAGE_CHECKLIST.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './doc/USAGE_CHECKLIST.md'
-
-      - name: Lint `doc/XDEBUG.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './doc/XDEBUG.md'
-
-      - name: Lint `docker/README.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './docker/README.md'
-
-      - name: Lint `secrets/README.md`
-        uses: avto-dev/markdown-lint@v1
-        with:
-          config: './markdown-lint.yml'
-          args: './secrets/README.md'
+          args: './secrets/*.md'
 
   build:
     name: Build application Docker image

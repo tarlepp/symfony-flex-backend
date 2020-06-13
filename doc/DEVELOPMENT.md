@@ -75,3 +75,7 @@ application. And you don't need to make any migrations files by hand (just let
 Doctrine handle those). Although remember to really take a closer look of those
 generated migration files to make sure that those doesn't contain anything that
 you really don't want.
+
+---
+
+[Back to resources index](README.md) - [Back to main README.md](../README.md)
