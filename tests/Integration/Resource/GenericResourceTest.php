@@ -14,7 +14,6 @@ use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
-use App\Rest\Interfaces\RepositoryInterface;
 use App\Utils\Tests\StringableArrayObject;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -406,7 +405,7 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatCreateMethodCallsExpectedMethods(): void
     {
-        /** @var MockObject|UserRepository|RepositoryInterface $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository
@@ -491,7 +490,7 @@ class GenericResourceTest extends KernelTestCase
             $entity->{$method}($value);
         }
 
-        /** @var MockObject|UserRepository|RepositoryInterface $repository */
+        /** @var MockObject|UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
         $repository

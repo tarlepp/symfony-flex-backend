@@ -12,7 +12,6 @@ use App\AutoMapper\RestRequestMapper;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Rest\Interfaces\ControllerInterface;
-use App\Rest\Interfaces\RepositoryInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\StringableArrayObject;
 use Closure;
@@ -553,7 +552,7 @@ FORMAT;
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
 
-        $filter = $this->getInterfaceFilter(RepositoryInterface::class);
+        $filter = $this->getInterfaceFilter(BaseRepositoryInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }

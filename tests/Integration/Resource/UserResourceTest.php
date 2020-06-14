@@ -9,9 +9,9 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Resource;
 
 use App\Entity\User;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
-use App\Rest\Interfaces\RepositoryInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Security\RolesService;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -29,13 +29,13 @@ class UserResourceTest extends ResourceTestCase
     protected string $resourceClass = UserResource::class;
 
     /**
-     * @param RepositoryInterface $repository
-     * @param ValidatorInterface  $validator
+     * @param BaseRepositoryInterface $repository
+     * @param ValidatorInterface      $validator
      *
      * @return RestResourceInterface
      */
     protected function getResource(
-        RepositoryInterface $repository,
+        BaseRepositoryInterface $repository,
         ValidatorInterface $validator
     ): RestResourceInterface {
         $roles = $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock();
