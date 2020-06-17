@@ -36,7 +36,7 @@ if [[ "$1" = 'php-fpm' ]]; then
     ./bin/console doctrine:database:create --if-not-exists --no-interaction --no-ansi
 
     # Step 5
-    ./bin/console doctrine:migrations:migrate --no-interaction --no-ansi
+    ./bin/console doctrine:migrations:migrate --no-interaction --no-ansi --allow-no-migration
 
     # Step 6
     ./bin/console assets:install --symlink --relative --no-interaction --no-ansi --env prod
