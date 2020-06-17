@@ -1518,16 +1518,16 @@
         },
         {
             "name": "sebastian/comparator",
-            "version": "4.0.1",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/comparator.git",
-                "reference": "1de7b33e1d1fa4a58cb29b295c6e3349d73a6c4e"
+                "reference": "266d85ef789da8c41f06af4093c43e9798af2784"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/1de7b33e1d1fa4a58cb29b295c6e3349d73a6c4e",
-                "reference": "1de7b33e1d1fa4a58cb29b295c6e3349d73a6c4e",
+                "url": "https://api.github.com/repos/sebastianbergmann/comparator/zipball/266d85ef789da8c41f06af4093c43e9798af2784",
+                "reference": "266d85ef789da8c41f06af4093c43e9798af2784",
                 "shasum": ""
             },
             "require": {
@@ -1584,7 +1584,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-06-15T13:14:18+00:00"
+            "time": "2020-06-15T15:04:48+00:00"
         },
         {
             "name": "sebastian/diff",

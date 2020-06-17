@@ -1,6 +1,11 @@
 doctrine_migrations:
-    dir_name: '%kernel.project_dir%/src/Migrations'
-    # namespace is arbitrary but should be different from App\Migrations
-    # as migrations classes should NOT be autoloaded
-    namespace: DoctrineMigrations
+    migrations_paths:
+        'DoctrineMigrations': '%kernel.project_dir%/src/Migrations'
+    storage:
+        table_storage:
+            table_name: 'migration_versions'
+            version_column_name: 'version'
+            version_column_length: 512
+            executed_at_column_name: 'executed_at'
+    all_or_nothing: true
     custom_template: '%kernel.project_dir%/templates/Doctrine/migration.tpl'
