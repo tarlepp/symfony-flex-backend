@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b8e47ab713e863e483a88563b6d8a104",
+    "content-hash": "e7c03fe515610a8dc3684f9b56cb188a",
     "packages": [],
     "packages-dev": [
         {
@@ -152,28 +152,29 @@
         },
         {
             "name": "composer/semver",
-            "version": "1.5.1",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/semver.git",
-                "reference": "c6bea70230ef4dd483e6bbcab6005f682ed3a8de"
+                "reference": "3426bd5efa8a12d230824536c42a8a4ad30b7940"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/semver/zipball/c6bea70230ef4dd483e6bbcab6005f682ed3a8de",
-                "reference": "c6bea70230ef4dd483e6bbcab6005f682ed3a8de",
+                "url": "https://api.github.com/repos/composer/semver/zipball/3426bd5efa8a12d230824536c42a8a4ad30b7940",
+                "reference": "3426bd5efa8a12d230824536c42a8a4ad30b7940",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.2 || ^7.0"
+                "php": "^5.3.2 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.5 || ^5.0.5"
+                "phpstan/phpstan": "^0.12.19",
+                "symfony/phpunit-bridge": "^4.2 || ^5"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.x-dev"
+                    "dev-master": "3.x-dev"
                 }
             },
             "autoload": {
@@ -209,7 +210,21 @@
                 "validation",
                 "versioning"
             ],
-            "time": "2020-01-13T12:06:48+00:00"
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-05-26T18:22:04+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -815,12 +830,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "59f3050bcd5dab238c9ac3eada55269cc2fcfaa8"
+                "reference": "499fb201e495ef0064da064f520c845d3638fe24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/59f3050bcd5dab238c9ac3eada55269cc2fcfaa8",
-                "reference": "59f3050bcd5dab238c9ac3eada55269cc2fcfaa8",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/499fb201e495ef0064da064f520c845d3638fe24",
+                "reference": "499fb201e495ef0064da064f520c845d3638fe24",
                 "shasum": ""
             },
             "conflict": {
@@ -829,6 +844,7 @@
                 "alterphp/easyadmin-extension-bundle": ">=1.2,<1.2.11|>=1.3,<1.3.1",
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
                 "amphp/http": "<1.0.1",
+                "amphp/http-client": ">=4,<4.4",
                 "api-platform/core": ">=2.2,<2.2.10|>=2.3,<2.3.6",
                 "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
                 "aws/aws-sdk-php": ">=3,<3.2.1",
@@ -1091,7 +1107,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-11T00:01:52+00:00"
+            "time": "2020-06-17T06:37:54+00:00"
         },
         {
             "name": "sebastian/diff",
@@ -1851,22 +1867,22 @@
         },
         {
             "name": "vimeo/psalm",
-            "version": "3.11.5",
+            "version": "3.11.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vimeo/psalm.git",
-                "reference": "3c60609c218d4d4b3b257728b8089094e5c6c6c2"
+                "reference": "7fc1f50f54bd6b174b1c43a37c1b0b151915d55c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vimeo/psalm/zipball/3c60609c218d4d4b3b257728b8089094e5c6c6c2",
-                "reference": "3c60609c218d4d4b3b257728b8089094e5c6c6c2",
+                "url": "https://api.github.com/repos/vimeo/psalm/zipball/7fc1f50f54bd6b174b1c43a37c1b0b151915d55c",
+                "reference": "7fc1f50f54bd6b174b1c43a37c1b0b151915d55c",
                 "shasum": ""
             },
             "require": {
                 "amphp/amp": "^2.1",
                 "amphp/byte-stream": "^1.5",
-                "composer/semver": "^1.4",
+                "composer/semver": "^1.4 || ^2.0 || ^3.0",
                 "composer/xdebug-handler": "^1.1",
                 "ext-dom": "*",
                 "ext-json": "*",
@@ -1944,20 +1960,20 @@
                 "inspection",
                 "php"
             ],
-            "time": "2020-05-27T15:12:09+00:00"
+            "time": "2020-06-17T20:40:35+00:00"
         },
         {
             "name": "webmozart/assert",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "ab2cb0b3b559010b75981b1bdce728da3ee90ad6"
+                "reference": "9dc4f203e36f2b486149058bade43c851dd97451"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/ab2cb0b3b559010b75981b1bdce728da3ee90ad6",
-                "reference": "ab2cb0b3b559010b75981b1bdce728da3ee90ad6",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/9dc4f203e36f2b486149058bade43c851dd97451",
+                "reference": "9dc4f203e36f2b486149058bade43c851dd97451",
                 "shasum": ""
             },
             "require": {
@@ -1965,6 +1981,7 @@
                 "symfony/polyfill-ctype": "^1.8"
             },
             "conflict": {
+                "phpstan/phpstan": "<0.12.20",
                 "vimeo/psalm": "<3.9.1"
             },
             "require-dev": {
@@ -1992,7 +2009,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2020-04-18T12:12:48+00:00"
+            "time": "2020-06-16T10:16:42+00:00"
         },
         {
             "name": "webmozart/glob",

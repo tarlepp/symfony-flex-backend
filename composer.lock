@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7d564ad4236e1bbde05dd52244315a84",
+    "content-hash": "f98e84535cc20c185fd4321fe31f7849",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -2846,16 +2846,16 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.12.5",
+            "version": "3.12.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "8b0143211dd4496d86d3b1a6c8857a4d2014bbca"
+                "reference": "4eb7b6d4d1a2ac1e8fee64fc73698fcb869d60f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/8b0143211dd4496d86d3b1a6c8857a4d2014bbca",
-                "reference": "8b0143211dd4496d86d3b1a6c8857a4d2014bbca",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/4eb7b6d4d1a2ac1e8fee64fc73698fcb869d60f3",
+                "reference": "4eb7b6d4d1a2ac1e8fee64fc73698fcb869d60f3",
                 "shasum": ""
             },
             "require": {
@@ -2897,7 +2897,7 @@
                 "parser",
                 "useragent"
             ],
-            "time": "2020-04-29T12:12:31+00:00"
+            "time": "2020-06-16T12:10:46+00:00"
         },
         {
             "name": "psr/cache",
@@ -3283,16 +3283,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v5.5.5",
+            "version": "v5.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "c76bb1c5c67840ecb6d9be8e9d8d7036e375e317"
+                "reference": "b49f079d8a87a6e6dd434062085ff5a132af466b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/c76bb1c5c67840ecb6d9be8e9d8d7036e375e317",
-                "reference": "c76bb1c5c67840ecb6d9be8e9d8d7036e375e317",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/b49f079d8a87a6e6dd434062085ff5a132af466b",
+                "reference": "b49f079d8a87a6e6dd434062085ff5a132af466b",
                 "shasum": ""
             },
             "require": {
@@ -3352,7 +3352,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2020-05-06T12:12:33+00:00"
+            "time": "2020-06-15T20:28:02+00:00"
         },
         {
             "name": "symfony/asset",
@@ -4522,16 +4522,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.8.1",
+            "version": "v1.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "967fb2d58d4e8437e0e417979dd0e8ee4891cfb9"
+                "reference": "7df5a72c7664baab629ec33de7890e9e3996b51b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/967fb2d58d4e8437e0e417979dd0e8ee4891cfb9",
-                "reference": "967fb2d58d4e8437e0e417979dd0e8ee4891cfb9",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/7df5a72c7664baab629ec33de7890e9e3996b51b",
+                "reference": "7df5a72c7664baab629ec33de7890e9e3996b51b",
                 "shasum": ""
             },
             "require": {
@@ -4581,7 +4581,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-14T09:29:35+00:00"
+            "time": "2020-06-16T23:10:41+00:00"
         },
         {
             "name": "symfony/form",
@@ -8020,16 +8020,16 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "ab2cb0b3b559010b75981b1bdce728da3ee90ad6"
+                "reference": "9dc4f203e36f2b486149058bade43c851dd97451"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/ab2cb0b3b559010b75981b1bdce728da3ee90ad6",
-                "reference": "ab2cb0b3b559010b75981b1bdce728da3ee90ad6",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/9dc4f203e36f2b486149058bade43c851dd97451",
+                "reference": "9dc4f203e36f2b486149058bade43c851dd97451",
                 "shasum": ""
             },
             "require": {
@@ -8037,6 +8037,7 @@
                 "symfony/polyfill-ctype": "^1.8"
             },
             "conflict": {
+                "phpstan/phpstan": "<0.12.20",
                 "vimeo/psalm": "<3.9.1"
             },
             "require-dev": {
@@ -8064,7 +8065,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2020-04-18T12:12:48+00:00"
+            "time": "2020-06-16T10:16:42+00:00"
         },
         {
             "name": "zircote/swagger-php",
@@ -8380,12 +8381,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "59f3050bcd5dab238c9ac3eada55269cc2fcfaa8"
+                "reference": "499fb201e495ef0064da064f520c845d3638fe24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/59f3050bcd5dab238c9ac3eada55269cc2fcfaa8",
-                "reference": "59f3050bcd5dab238c9ac3eada55269cc2fcfaa8",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/499fb201e495ef0064da064f520c845d3638fe24",
+                "reference": "499fb201e495ef0064da064f520c845d3638fe24",
                 "shasum": ""
             },
             "conflict": {
@@ -8394,6 +8395,7 @@
                 "alterphp/easyadmin-extension-bundle": ">=1.2,<1.2.11|>=1.3,<1.3.1",
                 "amphp/artax": "<1.0.6|>=2,<2.0.6",
                 "amphp/http": "<1.0.1",
+                "amphp/http-client": ">=4,<4.4",
                 "api-platform/core": ">=2.2,<2.2.10|>=2.3,<2.3.6",
                 "asymmetricrypt/asymmetricrypt": ">=0,<9.9.99",
                 "aws/aws-sdk-php": ">=3,<3.2.1",
@@ -8656,7 +8658,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-11T00:01:52+00:00"
+            "time": "2020-06-17T06:37:54+00:00"
         },
         {
             "name": "sensiolabs/security-checker",
