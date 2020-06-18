@@ -1,6 +1,4 @@
 {
-	"name": "",
-	"description": "",
 	"require": {},
 	"require-dev": {
 		"infection/infection": "0.16.3",
