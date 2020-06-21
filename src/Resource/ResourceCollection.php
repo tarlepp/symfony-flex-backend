@@ -26,10 +26,10 @@ use function sprintf;
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @property IteratorAggregate|IteratorAggregate<int, RestResourceInterface> $items
+ * @property IteratorAggregate<int, RestResourceInterface> $items
  *
  * @method RestResourceInterface                         get(string $className)
- * @method IteratorAggregate<int, RestResourceInterface> getAll(): IteratorAggregate
+ * @method IteratorAggregate<int, RestResourceInterface> getAll()
  */
 class ResourceCollection implements Countable
 {
@@ -38,8 +38,8 @@ class ResourceCollection implements Countable
     /**
      * Collection constructor.
      *
-     * @param IteratorAggregate|IteratorAggregate<int, RestResourceInterface> $resources
-     * @param LoggerInterface                                                 $logger
+     * @param IteratorAggregate<int, RestResourceInterface> $resources
+     * @param LoggerInterface                               $logger
      */
     public function __construct(IteratorAggregate $resources, LoggerInterface $logger)
     {

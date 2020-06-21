@@ -23,10 +23,10 @@ use function sprintf;
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @property IteratorAggregate|IteratorAggregate<int, ControllerInterface> $items
+ * @property IteratorAggregate<int, ControllerInterface> $items
  *
  * @method ControllerInterface                         get(string $className)
- * @method IteratorAggregate<int, ControllerInterface> getAll(): IteratorAggregate
+ * @method IteratorAggregate<int, ControllerInterface> getAll()
  */
 class ControllerCollection implements Countable
 {
@@ -35,8 +35,8 @@ class ControllerCollection implements Countable
     /**
      * Collection constructor.
      *
-     * @param IteratorAggregate|IteratorAggregate<int, ControllerInterface> $controllers
-     * @param LoggerInterface                                               $logger
+     * @param IteratorAggregate<int, ControllerInterface> $controllers
+     * @param LoggerInterface                             $logger
      */
     public function __construct(IteratorAggregate $controllers, LoggerInterface $logger)
     {
