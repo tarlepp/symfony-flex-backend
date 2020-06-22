@@ -47,7 +47,7 @@
 		"symfony/framework-bundle": "5.1.2",
 		"symfony/monolog-bundle": "3.5.0",
 		"symfony/orm-pack": "1.0.8",
-		"symfony/polyfill-php80": "1.17.0",
+		"symfony/polyfill-php80": "1.17.1",
 		"symfony/process": "5.1.2",
 		"symfony/routing": "5.1.2",
 		"symfony/security-bundle": "5.1.2",

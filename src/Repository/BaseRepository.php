@@ -96,7 +96,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * Getter method for search columns of current entity.
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getSearchColumns(): array
     {

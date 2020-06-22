@@ -33,11 +33,11 @@ use function array_values;
  * @package App\Repository\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method EntityManager getEntityManager(): EntityManager
- * @method string        getEntityName(): string
- * @method array         getSearchColumns(): array
- * @method QueryBuilder  createQueryBuilder(string $alias = null, string $indexBy = null): QueryBuilder
- * @method void          processQueryBuilder(QueryBuilder $queryBuilder): void
+ * @method EntityManager      getEntityManager()
+ * @method string             getEntityName()
+ * @method array<int, string> getSearchColumns()
+ * @method QueryBuilder       createQueryBuilder(string $alias = null, string $indexBy = null)
+ * @method void               processQueryBuilder(QueryBuilder $queryBuilder)
  */
 trait RepositoryMethodsTrait
 {
