@@ -215,8 +215,9 @@ psalm: ## Runs Psalm static analysis tool
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
+	@@bin/console cache:clear --env=test
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json
+	@php ./vendor/bin/psalm --no-cache --taint-analysis --report=./build/psalm.json
 else
 	$(WARNING_DOCKER)
 endif
@@ -225,8 +226,9 @@ psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
+	@@bin/console cache:clear --env=test
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json
+	@php ./vendor/bin/psalm --no-cache --taint-analysis --shepherd --report=./build/psalm.json
 else
 	$(WARNING_DOCKER)
 endif
@@ -235,6 +237,7 @@ psalm-github: ## Runs Psalm static analysis tool
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
+	@@bin/console cache:clear --env=test
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json --output-format=github
 else
