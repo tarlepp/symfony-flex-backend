@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use function in_array;
 use function is_array;
-use function is_string;
 
 /**
  * Class BodySubscriber
@@ -68,7 +67,7 @@ class BodySubscriber implements EventSubscriberInterface
         $content = $request->getContent();
 
         // Request content is empty so assume that it's ok - probably DELETE or OPTION request
-        if (is_string($content) && $content === '') {
+        if ($content === '') {
             return;
         }
 
@@ -99,12 +98,7 @@ class BodySubscriber implements EventSubscriberInterface
      */
     private function transformJsonBody(Request $request): void
     {
-        $data = null;
-        $content = $request->getContent();
-
-        if (is_string($content)) {
-            $data = JSON::decode($content, true);
-        }
+        $data = JSON::decode($request->getContent(), true);
 
         if (is_array($data)) {
             $request->request->replace($data);
