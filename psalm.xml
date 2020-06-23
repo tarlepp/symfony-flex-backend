@@ -15,6 +15,12 @@
         </ignoreFiles>
     </projectFiles>
 
+    <plugins>
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
+            <containerXml>var/cache/test/App_KernelTestDebugContainer.xml</containerXml>
+        </pluginClass>
+    </plugins>
+
     <issueHandlers>
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
