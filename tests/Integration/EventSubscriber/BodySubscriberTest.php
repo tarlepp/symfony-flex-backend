@@ -121,7 +121,7 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @throws JsonException
      */
-    public function testThatWithNullBodyReplaceIsNotCalled(): void
+    public function testThatWithEmptyBodyReplaceIsNotCalled(): void
     {
         static::bootKernel();
 
@@ -135,9 +135,9 @@ class BodySubscriberTest extends KernelTestCase
         $request->request = $parameterBag;
 
         $request
-            ->expects(static::exactly(2))
+            ->expects(static::once())
             ->method('getContent')
-            ->willReturn(null);
+            ->willReturn('');
 
         $parameterBag
             ->expects(static::never())

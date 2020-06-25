@@ -64,15 +64,9 @@ class BodySubscriber implements EventSubscriberInterface
     {
         // Get current request
         $request = $event->getRequest();
-        $content = $request->getContent();
 
-        // Request content is empty so assume that it's ok - probably DELETE or OPTION request
-        if ($content === '') {
-            return;
-        }
-
-        // If request is JSON type convert it to request parameters
-        if ($this->isJsonRequest($request)) {
+        // If request has some content and is JSON type convert it to request parameters
+        if ($request->getContent() !== '' && $this->isJsonRequest($request)) {
             $this->transformJsonBody($request);
         }
     }
