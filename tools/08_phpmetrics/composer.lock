@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bab03f738e7e3b93a3e924bc262582b7",
+    "content-hash": "4fe40aa7d48ef3f498d860673bb1c927",
     "packages": [],
     "packages-dev": [
         {
@@ -61,16 +61,16 @@
         },
         {
             "name": "phpmetrics/phpmetrics",
-            "version": "v2.7.3",
+            "version": "v2.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmetrics/PhpMetrics.git",
-                "reference": "52e52f29f951e9c73faab5ed4080984a9159bcc6"
+                "reference": "e6a7aee0e0948e363eb78ce9d58573cd5af2cdec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmetrics/PhpMetrics/zipball/52e52f29f951e9c73faab5ed4080984a9159bcc6",
-                "reference": "52e52f29f951e9c73faab5ed4080984a9159bcc6",
+                "url": "https://api.github.com/repos/phpmetrics/PhpMetrics/zipball/e6a7aee0e0948e363eb78ce9d58573cd5af2cdec",
+                "reference": "e6a7aee0e0948e363eb78ce9d58573cd5af2cdec",
                 "shasum": ""
             },
             "require": {
@@ -120,7 +120,7 @@
                 "quality",
                 "testing"
             ],
-            "time": "2020-06-27T13:22:12+00:00"
+            "time": "2020-06-30T20:33:55+00:00"
         },
         {
             "name": "roave/security-advisories",
