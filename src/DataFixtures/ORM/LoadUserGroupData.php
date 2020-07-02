@@ -15,7 +15,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Throwable;
 use function array_map;
 
@@ -27,37 +27,13 @@ use function array_map;
  */
 final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private ContainerInterface $container;
+    use ContainerAwareTrait;
 
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
     private ObjectManager $manager;
-
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
     private RolesServiceInterface $roles;
 
     /**
-     * Setter for container.
-     *
-     * @param ContainerInterface|null $container
-     */
-    public function setContainer(?ContainerInterface $container = null): void
-    {
-        if ($container !== null) {
-            $this->container = $container;
-        }
-    }
-
-    /**
      * Load data fixtures with the passed EntityManager
-     *
-     * @param ObjectManager $manager
      *
      * @throws Throwable
      */
@@ -78,8 +54,6 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
 
     /**
      * Get the order of this fixture
-     *
-     * @return int
      */
     public function getOrder(): int
     {
@@ -88,10 +62,6 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
 
     /**
      * Method to create UserGroup entity for specified role.
-     *
-     * @param string $role
-     *
-     * @return bool
      *
      * @throws Throwable
      */
