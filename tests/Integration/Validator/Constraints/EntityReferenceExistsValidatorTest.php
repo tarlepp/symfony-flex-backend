@@ -53,9 +53,8 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatValidateMethodThrowsUnexpectedValueException
      *
-     * @param mixed  $value
-     * @param mixed  $entityClass
-     * @param string $expectedMessage
+     * @param mixed $value
+     * @param mixed $entityClass
      *
      * @testdox Test that `validate` method throws `$expectedMessage` with `$value` using entity class `$entityClass`
      */
@@ -184,9 +183,6 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
         $validator->validate($value, $constraint);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatValidateMethodThrowsUnexpectedValueException(): Generator
     {
         yield ['', stdClass::class, 'Expected argument of type "stdClass", "string" given'];

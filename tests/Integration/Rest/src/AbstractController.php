@@ -21,8 +21,6 @@ abstract class AbstractController extends Controller
 {
     /**
      * AbstractController constructor.
-     *
-     * @param RestResourceInterface $resource
      */
     public function __construct(RestResourceInterface $resource)
     {

@@ -30,10 +30,6 @@ class LogLoginTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetCreatedAtReturnsExpected
      *
-     * @param string         $type
-     * @param Request        $request
-     * @param DeviceDetector $deviceDetector
-     *
      * @throws Throwable
      *
      * @testdox Test that `getCreatedAt` method returns expected with `$type` type.
@@ -69,9 +65,6 @@ class LogLoginTest extends KernelTestCase
         static::assertSame($user, $entity->getUser());
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetCreatedAtReturnsExpected(): Generator
     {
         yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector('')];

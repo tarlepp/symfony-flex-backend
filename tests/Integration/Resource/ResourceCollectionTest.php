@@ -118,8 +118,6 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetReturnsExpectedResource
      *
-     * @param string $resourceClass
-     *
      * @testdox Test that `get` method with `$resourceClass` input returns instance of that resource class.
      */
     public function testThatGetReturnsExpectedResource(string $resourceClass): void
@@ -129,9 +127,6 @@ class ResourceCollectionTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetEntityResourceReturnsExpectedResource
-     *
-     * @param string $resourceClass
-     * @param string $entityClass
      *
      * @testdox Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class.
      */
@@ -144,9 +139,6 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatHasReturnsExpected
      *
-     * @param bool        $expected
-     * @param string|null $resource
-     *
      * @testdox Test that `has` method returns `$expected` with `$resource` input.
      */
     public function testThatHasReturnsExpected(bool $expected, ?string $resource): void
@@ -157,9 +149,6 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatHasEntityResourceReturnsExpected
      *
-     * @param bool        $expected
-     * @param string|null $entity
-     *
      * @testdox Test that `hasEntityResource` method returns `$expected` with `$entity` input.
      */
     public function testThatHasEntityResourceReturnsExpected(bool $expected, ?string $entity): void
@@ -167,9 +156,6 @@ class ResourceCollectionTest extends KernelTestCase
         static::assertSame($expected, $this->getCollection()->hasEntityResource($entity));
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetReturnsExpectedResource(): Generator
     {
         yield [ApiKeyResource::class];
@@ -183,9 +169,6 @@ class ResourceCollectionTest extends KernelTestCase
         yield [UserResource::class];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetEntityResourceReturnsExpectedResource(): Generator
     {
         yield [ApiKeyResource::class, ApiKey::class];
@@ -199,9 +182,6 @@ class ResourceCollectionTest extends KernelTestCase
         yield [UserResource::class, User::class];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatHasReturnsExpected(): Generator
     {
         yield [true, ApiKeyResource::class];
@@ -218,9 +198,6 @@ class ResourceCollectionTest extends KernelTestCase
         yield [false, stdClass::class];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatHasEntityResourceReturnsExpected(): Generator
     {
         yield [true, ApiKey::class];
@@ -237,9 +214,6 @@ class ResourceCollectionTest extends KernelTestCase
         yield [false, stdClass::class];
     }
 
-    /**
-     * @return ResourceCollection
-     */
     private function getCollection(): ResourceCollection
     {
         static::bootKernel();
@@ -247,9 +221,6 @@ class ResourceCollectionTest extends KernelTestCase
         return static::$container->get(ResourceCollection::class);
     }
 
-    /**
-     * @return IteratorAggregate
-     */
     private function getEmptyIteratorAggregate(): IteratorAggregate
     {
         return new class([]) implements IteratorAggregate {
@@ -275,9 +246,6 @@ class ResourceCollectionTest extends KernelTestCase
         };
     }
 
-    /**
-     * @return IteratorAggregate
-     */
     private function getIteratorAggregateThatThrowsAnException(): IteratorAggregate
     {
         return new class() implements IteratorAggregate {

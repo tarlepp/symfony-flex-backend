@@ -35,9 +35,6 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSupportReturnsExpected
      *
-     * @param bool    $expected
-     * @param Request $request
-     *
      * @throws Throwable
      *
      * @testdox Test that `supports` method returns `$expected` for request `$request`
@@ -81,9 +78,6 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetCredentialsReturnsExpected
-     *
-     * @param StringableArrayObject|null $expected
-     * @param Request                    $request
      *
      * @throws Throwable
      *
@@ -219,9 +213,6 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         static::assertFalse((new ApiKeyAuthenticator($apiKeyUserProvider))->supportsRememberMe());
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatSupportReturnsExpected(): Generator
     {
         yield [false, new Request()];
@@ -237,9 +228,6 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [true, $request];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetCredentialsReturnsExpected(): Generator
     {
         yield [null, new Request()];
@@ -265,9 +253,6 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [new StringableArrayObject(['token' => 'somekey']), $request];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetUserReturnsExpected(): Generator
     {
         yield [null];
@@ -280,9 +265,6 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [new StringableArrayObject(['token' => null])];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatCheckCredentialsThrowsAnException(): Generator
     {
         yield [null];

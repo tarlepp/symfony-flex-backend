@@ -56,8 +56,6 @@ class FindMethodTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
      *
-     * @param string $httpMethod
-     *
      * @throws Throwable
      *
      * @testdox Test that `App\Rest\Traits\Methods\FindMethod` throws an exception with `$httpMethod` HTTP method.
@@ -115,7 +113,6 @@ class FindMethodTest extends KernelTestCase
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
      * @param Exception $exception
-     * @param int       $expectedCode
      *
      * @throws Throwable
      *
@@ -178,9 +175,6 @@ class FindMethodTest extends KernelTestCase
         $testClass->findMethod($request);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -193,9 +187,6 @@ class FindMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400), 0];

@@ -41,8 +41,6 @@ class DateDimension implements EntityInterface
     use Uuid;
 
     /**
-     * @var UuidInterface
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.id",
@@ -61,8 +59,6 @@ class DateDimension implements EntityInterface
     private UuidInterface $id;
 
     /**
-     * @var DateTime
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.date",
@@ -77,8 +73,6 @@ class DateDimension implements EntityInterface
     private DateTime $date;
 
     /**
-     * @var int
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.year",
@@ -96,8 +90,6 @@ class DateDimension implements EntityInterface
     private int $year;
 
     /**
-     * @var int
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.month",
@@ -115,8 +107,6 @@ class DateDimension implements EntityInterface
     private int $month;
 
     /**
-     * @var int
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.day",
@@ -134,8 +124,6 @@ class DateDimension implements EntityInterface
     private int $day;
 
     /**
-     * @var int
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.quarter",
@@ -153,8 +141,6 @@ class DateDimension implements EntityInterface
     private int $quarter;
 
     /**
-     * @var int
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.weekNumber",
@@ -172,8 +158,6 @@ class DateDimension implements EntityInterface
     private int $weekNumber;
 
     /**
-     * @var int
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.dayNumber",
@@ -191,8 +175,6 @@ class DateDimension implements EntityInterface
     private int $dayNumberOfWeek;
 
     /**
-     * @var int
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.dayNumberOfYear",
@@ -210,8 +192,6 @@ class DateDimension implements EntityInterface
     private int $dayNumberOfYear;
 
     /**
-     * @var bool
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.leapYear",
@@ -229,8 +209,6 @@ class DateDimension implements EntityInterface
     private bool $leapYear;
 
     /**
-     * @var int
-     *
      * @Groups({
      *      "DateDimension",
      *      "DateDimension.weekNumberingYear",
@@ -248,8 +226,6 @@ class DateDimension implements EntityInterface
     private int $weekNumberingYear;
 
     /**
-     * @var int
-     *
      * @Groups({
      *      "Default",
      *      "DateDimension",
@@ -269,10 +245,6 @@ class DateDimension implements EntityInterface
 
     /**
      * DateDimension constructor.
-     *
-     * @param DateTime $dateTime
-     *
-     * @throws Throwable
      */
     public function __construct(DateTime $dateTime)
     {
@@ -291,107 +263,67 @@ class DateDimension implements EntityInterface
         $this->unixTime = (int)$dateTime->format('U');
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id->toString();
     }
 
-    /**
-     * @return DateTime|null
-     */
-    public function getDate(): ?DateTime
+    public function getDate(): DateTime
     {
         return $this->date;
     }
 
-    /**
-     * @return int
-     */
     public function getYear(): int
     {
         return $this->year;
     }
 
-    /**
-     * @return int
-     */
     public function getMonth(): int
     {
         return $this->month;
     }
 
-    /**
-     * @return int
-     */
     public function getDay(): int
     {
         return $this->day;
     }
 
-    /**
-     * @return int
-     */
     public function getQuarter(): int
     {
         return $this->quarter;
     }
 
-    /**
-     * @return int
-     */
     public function getWeekNumber(): int
     {
         return $this->weekNumber;
     }
 
-    /**
-     * @return int
-     */
     public function getDayNumberOfWeek(): int
     {
         return $this->dayNumberOfWeek;
     }
 
-    /**
-     * @return int
-     */
     public function getDayNumberOfYear(): int
     {
         return $this->dayNumberOfYear;
     }
 
-    /**
-     * @return bool
-     */
     public function isLeapYear(): bool
     {
         return $this->leapYear;
     }
 
-    /**
-     * @return int
-     */
     public function getWeekNumberingYear(): int
     {
         return $this->weekNumberingYear;
     }
 
-    /**
-     * @return int
-     */
     public function getUnixTime(): int
     {
         return $this->unixTime;
     }
 
     /**
-     * Returns createdAt.
-     *
-     * @return DateTimeImmutable
-     *
      * @throws Throwable
      */
     public function getCreatedAt(): DateTimeImmutable

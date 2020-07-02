@@ -20,19 +20,11 @@ use Throwable;
  */
 trait Uuid
 {
-    /**
-     * @return UuidInterface
-     */
     public function getUuid(): UuidInterface
     {
         return $this->id;
     }
 
-    /**
-     * @return UuidInterface
-     *
-     * @throws Throwable
-     */
     protected function createUuid(): UuidInterface
     {
         return UuidHelper::getFactory()->uuid1();

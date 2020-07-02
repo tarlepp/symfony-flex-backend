@@ -176,9 +176,6 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @param StringableArrayObject $expectedArguments
-     * @param StringableArrayObject $arguments
-     *
      * @throws Throwable
      *
      * @testdox Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments.
@@ -264,9 +261,6 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @param StringableArrayObject $expectedArguments
-     * @param StringableArrayObject $arguments
-     *
      * @throws Throwable
      *
      * @testdox Test that `findOneBy` method is called with `$expectedArguments` when using `$arguments` arguments.
@@ -333,9 +327,6 @@ class GenericResourceTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters
-     *
-     * @param StringableArrayObject $expectedArguments
-     * @param StringableArrayObject $arguments
      *
      * @throws Throwable
      *
@@ -538,9 +529,6 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @param StringableArrayObject $expectedArguments
-     * @param StringableArrayObject $arguments
-     *
      * @throws Throwable
      *
      * @testdox Test that `findIds` method is called with `$expectedArguments` when using `$arguments` arguments.
@@ -584,9 +572,6 @@ class GenericResourceTest extends KernelTestCase
             ->save($entity);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -605,9 +590,6 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -641,9 +623,6 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -662,9 +641,6 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -691,9 +667,6 @@ class GenericResourceTest extends KernelTestCase
         return static::$container->get('doctrine')->getManager();
     }
 
-    /**
-     * @return MockBuilder
-     */
     private function getRepositoryMockBuilder(): MockBuilder
     {
         return $this
@@ -711,9 +684,6 @@ class GenericResourceTest extends KernelTestCase
         return $this->createMock($this->entityClass);
     }
 
-    /**
-     * @return MockBuilder
-     */
     private function getDtoMockBuilder(): MockBuilder
     {
         return $this->getMockBuilder($this->dtoClass);

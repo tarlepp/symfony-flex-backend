@@ -28,10 +28,6 @@ class UserTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatPasswordHashingIsWorkingAsExpected
      *
-     * @param callable $callable
-     * @param string   $password
-     * @param string   $expected
-     *
      * @testdox Test that password hashing is working with `$callable` callable.
      */
     public function testThatPasswordHashingIsWorkingAsExpected(
@@ -105,8 +101,6 @@ class UserTest extends EntityTestCase
 
     /**
      * Data provider for testThatPasswordHashingIsWorkingAsExpected
-     *
-     * @return Generator
      */
     public function dataProviderTestThatPasswordHashingIsWorkingAsExpected(): Generator
     {

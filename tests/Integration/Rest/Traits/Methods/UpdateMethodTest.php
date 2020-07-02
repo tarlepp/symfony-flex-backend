@@ -64,8 +64,6 @@ class UpdateMethodTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
      *
-     * @param string $httpMethod
-     *
      * @throws Throwable
      *
      * @testdox Test that `App\Rest\Traits\Methods\UpdateMethod` throws an exception with `$httpMethod` HTTP method.
@@ -125,9 +123,6 @@ class UpdateMethodTest extends KernelTestCase
         $testClass->updateMethod($request, $restDtoInterface, $uuid);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -140,9 +135,6 @@ class UpdateMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400), 0];

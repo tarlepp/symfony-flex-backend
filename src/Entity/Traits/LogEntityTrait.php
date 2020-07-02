@@ -27,8 +27,6 @@ use Throwable;
 trait LogEntityTrait
 {
     /**
-     * @var DateTimeImmutable
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.time",
@@ -45,8 +43,6 @@ trait LogEntityTrait
     protected DateTimeImmutable $time;
 
     /**
-     * @var DateTimeImmutable
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.date",
@@ -63,8 +59,6 @@ trait LogEntityTrait
     protected DateTimeImmutable $date;
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.agent",
@@ -81,8 +75,6 @@ trait LogEntityTrait
     protected string $agent = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.httpHost",
@@ -100,8 +92,6 @@ trait LogEntityTrait
     protected string $httpHost = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.clientIp",
@@ -118,59 +108,36 @@ trait LogEntityTrait
      */
     private string $clientIp = '';
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getTime(): DateTimeImmutable
     {
         return $this->time;
     }
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getDate(): DateTimeImmutable
     {
         return $this->date;
     }
 
-    /**
-     * @return string
-     */
     public function getAgent(): string
     {
         return $this->agent;
     }
 
-    /**
-     * @return string
-     */
     public function getHttpHost(): string
     {
         return $this->httpHost;
     }
 
-    /**
-     * @return string
-     */
     public function getClientIp(): string
     {
         return $this->clientIp;
     }
 
-    /**
-     * Returns createdAt.
-     *
-     * @return DateTimeImmutable|null
-     */
     public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->getDate();
     }
 
-    /**
-     * @param Request $request
-     */
     private function processRequestData(Request $request): void
     {
         $userAgent = $request->headers->get('User-Agent') ?? '';

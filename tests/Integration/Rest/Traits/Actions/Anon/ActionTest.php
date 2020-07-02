@@ -32,11 +32,6 @@ class ActionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitCallsExpectedMethod
      *
-     * @param string $className
-     * @param string $method
-     * @param string $traitMethod
-     * @param array  $parameters
-     *
      * @throws Throwable
      *
      * @testdox Test that `$method` method call trigger `$traitMethod` method call in `$className` trait.
@@ -67,9 +62,6 @@ class ActionTest extends KernelTestCase
         static::assertInstanceOf(Response::class, $result);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatTraitCallsExpectedMethod(): array
     {
         static::bootKernel();

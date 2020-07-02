@@ -43,9 +43,7 @@ class ResponseHandlerTest extends ContainerTestCase
     /**
      * @dataProvider dataProviderTestThatCreateResponseReturnsExpected
      *
-     * @param Request $request
-     * @param mixed   $data
-     * @param string  $expectedContent
+     * @param mixed $data
      *
      * @throws Throwable
      *
@@ -95,8 +93,6 @@ class ResponseHandlerTest extends ContainerTestCase
 
     /**
      * @dataProvider dataProviderTestThatNonSupportedSerializerFormatThrowsHttpException
-     *
-     * @param string $format
      *
      * @throws Throwable
      *
@@ -437,9 +433,6 @@ class ResponseHandlerTest extends ContainerTestCase
             ->handleFormError($formInterface);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatCreateResponseReturnsExpected(): Generator
     {
         yield [
@@ -465,9 +458,6 @@ DATA
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatNonSupportedSerializerFormatThrowsHttpException(): Generator
     {
         yield ['not supported format'];

@@ -89,7 +89,6 @@ class UTCDateTimeTypeTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestDateTimeConvertsToPHPValue
      *
-     * @param string          $expected
      * @param string|DateTime $value
      *
      * @testdox Test that `convertToPHPValue` method converts `$value` to `$expected`.
@@ -133,8 +132,6 @@ class UTCDateTimeTypeTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestDateTimeConvertsToPHPValue(): Generator

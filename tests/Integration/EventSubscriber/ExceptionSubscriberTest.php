@@ -51,8 +51,6 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderEnvironment
      *
-     * @param string $environment
-     *
      * @throws JsonException
      *
      * @testdox Test that `onKernelException` method calls logger with environment: '$environment'.
@@ -83,8 +81,6 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderEnvironment
      *
-     * @param string $environment
-     *
      * @throws JsonException
      *
      * @testdox Test that `ExceptionEvent::setResponse` method is called with environment: '$environment'.
@@ -113,11 +109,6 @@ class ExceptionSubscriberTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestResponseHasExpectedStatusCode
-     *
-     * @param int       $status
-     * @param Throwable $exception
-     * @param string    $environment
-     * @param string    $message
      *
      * @throws JsonException
      *
@@ -158,9 +149,6 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatResponseHasExpectedKeys
      *
-     * @param array  $expectedKeys
-     * @param string $environment
-     *
      * @throws Throwable
      *
      * @testdox Test that `Response` has expected keys in JSON response with environment: '$environment'.
@@ -197,11 +185,6 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetStatusCodeReturnsExpected
      *
-     * @param int       $expectedStatusCode
-     * @param Throwable $exception
-     * @param bool      $user
-     * @param string    $environment
-     *
      * @throws Throwable
      *
      * @testdox Test that `getStatusCode` returns `$expectedStatusCode` with environment: '$environment'.
@@ -237,10 +220,6 @@ class ExceptionSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetExceptionMessageReturnsExpected
      *
-     * @param string    $expectedMessage
-     * @param Throwable $exception
-     * @param string    $environment
-     *
      * @throws Throwable
      *
      * @testdox Test that `$environment` environment exception message is `$expectedMessage`.
@@ -266,9 +245,6 @@ class ExceptionSubscriberTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderEnvironment(): Generator
     {
         yield ['dev'];
@@ -279,7 +255,6 @@ class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
      * @throws JsonException
      */
     public function dataProviderTestResponseHasExpectedStatusCode(): Generator
@@ -420,9 +395,6 @@ class ExceptionSubscriberTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatResponseHasExpectedKeys(): Generator
     {
         yield [
@@ -442,8 +414,6 @@ class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws JsonException
      */
     public function dataProviderTestThatGetStatusCodeReturnsExpected(): Generator
@@ -507,8 +477,6 @@ class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws JsonException
      */
     public function dataProviderTestThatGetExceptionMessageReturnsExpected(): Generator

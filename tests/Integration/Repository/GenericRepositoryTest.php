@@ -200,9 +200,6 @@ class GenericRepositoryTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatAddLeftJoinWorksAsExpected
      *
-     * @param string                $expected
-     * @param StringableArrayObject $parameters
-     *
      * @testdox Test that add left join works as expected, using $parameters and expecting '$expected'
      */
     public function testThatAddLeftJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
@@ -224,9 +221,6 @@ class GenericRepositoryTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatAddInnerJoinWorksAsExpected
      *
-     * @param string                $expected
-     * @param StringableArrayObject $parameters
-     *
      * @testdox Test that add inner join works as expected, using $parameters and expecting '$expected'
      */
     public function testThatAddInnerJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
@@ -247,9 +241,6 @@ class GenericRepositoryTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatAddLeftJoinWorksAsExpected
-     *
-     * @param string                $expected
-     * @param StringableArrayObject $parameters
      *
      * @testdox Test that add left join adds same join just once, using $parameters and expecting '$expected'
      */
@@ -275,9 +266,6 @@ class GenericRepositoryTest extends KernelTestCase
      * @dataProvider dataProviderTestThatAddInnerJoinWorksAsExpected
      *
      * @testdox Test that add inner join adds same join just once, using $parameters and expecting '$expected'
-     *
-     * @param string                $expected
-     * @param StringableArrayObject $parameters
      */
     public function testThatAddInnerJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
@@ -540,9 +528,6 @@ class GenericRepositoryTest extends KernelTestCase
         $repository->findAll();
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatAddLeftJoinWorksAsExpected(): array
     {
         // @codingStandardsIgnoreStart
@@ -566,9 +551,6 @@ class GenericRepositoryTest extends KernelTestCase
         // @codingStandardsIgnoreEnd
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatAddInnerJoinWorksAsExpected(): array
     {
         // @codingStandardsIgnoreStart

@@ -50,10 +50,6 @@ class GenericDtoTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatDetermineGetterMethodReturnsExpected
      *
-     * @param string           $expected
-     * @param string           $property
-     * @param RestDtoInterface $dto
-     *
      * @throws Throwable
      *
      * @testdox Test that `determineGetterMethod` method returns `$expected` when using `$dto::$$property` property.
@@ -143,9 +139,6 @@ class GenericDtoTest extends KernelTestCase
             ->update($userEntity);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatDetermineGetterMethodReturnsExpected(): Generator
     {
         yield [

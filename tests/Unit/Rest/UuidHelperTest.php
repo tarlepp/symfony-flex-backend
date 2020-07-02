@@ -35,9 +35,6 @@ class UuidHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetTypeReturnsExpected
      *
-     * @param string|null $expected
-     * @param string      $value
-     *
      * @testdox test that `getType` method returns `$expected` with `$value` value.
      */
     public function testThatGetTypeReturnsExpected(?string $expected, string $value): void
@@ -64,8 +61,6 @@ class UuidHelperTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatGetTypeReturnsExpected(): Generator

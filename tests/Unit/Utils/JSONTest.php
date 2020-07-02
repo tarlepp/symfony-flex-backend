@@ -42,7 +42,6 @@ class JSONTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatDecodeWorksLikeExpected
      *
-     * @param array $parameters
      * @param mixed $expected
      *
      * @throws JsonException
@@ -94,8 +93,6 @@ class JSONTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson
      *
-     * @param string $json
-     *
      * @throws JsonException
      *
      * @testdox Test that JSON::decode throws an exception with malformed JSON: '$json'
@@ -111,8 +108,6 @@ class JSONTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters
      *
-     * @param string $input
-     *
      * @throws JsonException
      *
      * @testdox Test that JSON::decode throws an exception with invalid UTF characters in JSON: '$input'
@@ -127,8 +122,6 @@ class JSONTest extends KernelTestCase
 
     /**
      * Data provider for 'testThatEncodeWorksLikeExpected'.
-     *
-     * @return Generator
      */
     public function dataProviderTestThatEncodeWorksLikeExpected(): Generator
     {
@@ -169,8 +162,6 @@ class JSONTest extends KernelTestCase
 
     /**
      * Data provider for 'testThatDecodeWorksLikeExpected'.
-     *
-     * @return Generator
      */
     public function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {
@@ -186,8 +177,6 @@ class JSONTest extends KernelTestCase
 
     /**
      * Data provider for 'testThatDecodeThrowsAnExceptionOnMalformedJson'.
-     *
-     * @return Generator
      */
     public function dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson(): Generator
     {
@@ -199,8 +188,6 @@ class JSONTest extends KernelTestCase
 
     /**
      * Data provider for 'testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters'.
-     *
-     * @return Generator
      */
     public function dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(): Generator
     {

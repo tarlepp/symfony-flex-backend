@@ -40,8 +40,6 @@ class UserGroup implements EntityInterface, Stringable
     use Uuid;
 
     /**
-     * @var UuidInterface
-     *
      * @Groups({
      *      "UserGroup",
      *      "UserGroup.id",
@@ -64,8 +62,6 @@ class UserGroup implements EntityInterface, Stringable
     private UuidInterface $id;
 
     /**
-     * @var Role
-     *
      * @Groups({
      *      "UserGroup.role",
      *  })
@@ -89,8 +85,6 @@ class UserGroup implements EntityInterface, Stringable
     private Role $role;
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "UserGroup",
      *      "UserGroup.name",
@@ -156,35 +150,21 @@ class UserGroup implements EntityInterface, Stringable
         $this->apiKeys = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return self::class;
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id->toString();
     }
 
-    /**
-     * @return Role
-     */
     public function getRole(): Role
     {
         return $this->role;
     }
 
-    /**
-     * @param Role $role
-     *
-     * @return UserGroup
-     */
     public function setRole(Role $role): self
     {
         $this->role = $role;
@@ -192,19 +172,11 @@ class UserGroup implements EntityInterface, Stringable
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return UserGroup
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -228,13 +200,6 @@ class UserGroup implements EntityInterface, Stringable
         return $this->apiKeys;
     }
 
-    /**
-     * Method to attach new user group to user.
-     *
-     * @param User $user
-     *
-     * @return UserGroup
-     */
     public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
@@ -245,13 +210,6 @@ class UserGroup implements EntityInterface, Stringable
         return $this;
     }
 
-    /**
-     * Method to remove specified user from user group.
-     *
-     * @param User $user
-     *
-     * @return UserGroup
-     */
     public function removeUser(User $user): self
     {
         if ($this->users->removeElement($user)) {
@@ -261,11 +219,6 @@ class UserGroup implements EntityInterface, Stringable
         return $this;
     }
 
-    /**
-     * Method to remove all many-to-many user relations from current user group.
-     *
-     * @return UserGroup
-     */
     public function clearUsers(): self
     {
         $this->users->clear();
@@ -273,13 +226,6 @@ class UserGroup implements EntityInterface, Stringable
         return $this;
     }
 
-    /**
-     * Method to attach new user group to user.
-     *
-     * @param ApiKey $apiKey
-     *
-     * @return UserGroup
-     */
     public function addApiKey(ApiKey $apiKey): self
     {
         if (!$this->apiKeys->contains($apiKey)) {
@@ -290,13 +236,6 @@ class UserGroup implements EntityInterface, Stringable
         return $this;
     }
 
-    /**
-     * Method to remove specified user from user group.
-     *
-     * @param ApiKey $apiKey
-     *
-     * @return UserGroup
-     */
     public function removeApiKey(ApiKey $apiKey): self
     {
         if ($this->apiKeys->removeElement($apiKey)) {
@@ -306,11 +245,6 @@ class UserGroup implements EntityInterface, Stringable
         return $this;
     }
 
-    /**
-     * Method to remove all many-to-many api key relations from current user group.
-     *
-     * @return UserGroup
-     */
     public function clearApiKeys(): self
     {
         $this->apiKeys->clear();

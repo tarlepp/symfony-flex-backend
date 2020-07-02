@@ -45,9 +45,6 @@ class RestResourceConverterTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSupportMethodReturnsExpected
      *
-     * @param bool                  $expected
-     * @param StringableArrayObject $configuration
-     *
      * @testdox Test `supports` method returns `$expected` when using `$configuration` as ParamConverter input.
      */
     public function testThatSupportMethodReturnsExpected(bool $expected, StringableArrayObject $configuration): void
@@ -76,8 +73,6 @@ class RestResourceConverterTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatApplyMethodReturnsExpected
      *
-     * @param string $role
-     *
      * @throws Throwable
      *
      * @testdox Test that `apply` method works as expected when using `$role` as a request attribute.
@@ -97,9 +92,6 @@ class RestResourceConverterTest extends KernelTestCase
         static::assertSame('Description - ' . $role, $request->attributes->get('role')->getDescription());
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatSupportMethodReturnsExpected(): Generator
     {
         yield [
@@ -123,9 +115,6 @@ class RestResourceConverterTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatApplyMethodReturnsExpected(): Generator
     {
         yield [RolesService::ROLE_LOGGED];

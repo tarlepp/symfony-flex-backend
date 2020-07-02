@@ -40,9 +40,6 @@ class ApiKeyTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatApiKeyHasExpectedRoles
      *
-     * @param StringableArrayObject $expectedRoles
-     * @param StringableArrayObject $criteria
-     *
      * @testdox Test that `ApiKey` has expected roles `$expectedRoles` with criteria `$criteria`.
      */
     public function testThatApiKeyHasExpectedRoles(
@@ -55,9 +52,6 @@ class ApiKeyTest extends EntityTestCase
         static::assertSame($expectedRoles->getArrayCopy(), $apiKey->getRoles());
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatApiKeyHasExpectedRoles(): Generator
     {
         static::bootKernel();

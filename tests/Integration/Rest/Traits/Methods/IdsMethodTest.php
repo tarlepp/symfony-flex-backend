@@ -56,8 +56,6 @@ class IdsMethodTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
      *
-     * @param string $httpMethod
-     *
      * @throws Throwable
      *
      * @testdox Test that `App\Rest\Traits\Methods\IdsMethod` throws an exception with `$httpMethod` HTTP method.
@@ -115,7 +113,6 @@ class IdsMethodTest extends KernelTestCase
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
      * @param Exception $exception
-     * @param int       $expectedCode
      *
      * @throws Throwable
      *
@@ -178,9 +175,6 @@ class IdsMethodTest extends KernelTestCase
         $testClass->idsMethod($request);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -193,9 +187,6 @@ class IdsMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400), 0];

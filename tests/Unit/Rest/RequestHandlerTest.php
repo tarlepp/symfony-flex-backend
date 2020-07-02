@@ -38,9 +38,6 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator
      *
-     * @param StringableArrayObject $expected
-     * @param StringableArrayObject $where
-     *
      * @testdox Test that `getCriteria` returns `$expected` when using `$where` as `?where` parameter.
      *
      * @throws JsonException
@@ -60,9 +57,6 @@ class RequestHandlerTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetOrderByReturnsExpectedValue
-     *
-     * @param StringableArrayObject $parameters
-     * @param StringableArrayObject $expected
      *
      * @testdox Test that `getOrderBy` returns `$expected` when using `$parameters`.
      */
@@ -91,9 +85,6 @@ class RequestHandlerTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetLimitReturnsExpectedValue
-     *
-     * @param StringableArrayObject $parameters
-     * @param int                   $expected
      *
      * @testdox Test that `getLimit` method returns `$expected` when using `$parameters`.
      */
@@ -127,9 +118,6 @@ class RequestHandlerTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetOffsetReturnsExpectedValue
-     *
-     * @param StringableArrayObject $parameters
-     * @param int                   $expected
      *
      * @testdox Test that `getOffset` method returns `$expected` when using `$parameters`
      */
@@ -181,8 +169,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetSearchTermsReturnsExpectedValue
      *
-     * @param StringableArrayObject $expected
-     * @param string|bool           $search
+     * @param string|bool $search
      *
      * @testdox Test that `getSearchTerms` returns `$expected` when using `$search` as `?search` parameter.
      */
@@ -201,9 +188,6 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator(): Generator
     {
         yield [
@@ -269,8 +253,6 @@ class RequestHandlerTest extends KernelTestCase
 
     /**
      * Data provider method for 'testThatGetOrderByReturnsExpectedValue' test.
-     *
-     * @return Generator
      */
     public function dataProviderTestThatGetOrderByReturnsExpectedValue(): Generator
     {
@@ -403,8 +385,6 @@ class RequestHandlerTest extends KernelTestCase
 
     /**
      * Data provider method for 'testThatGetLimitReturnsExpectedValue' test.
-     *
-     * @return Generator
      */
     public function dataProviderTestThatGetLimitReturnsExpectedValue(): Generator
     {
@@ -431,8 +411,6 @@ class RequestHandlerTest extends KernelTestCase
 
     /**
      * Data provider method for 'testThatGetOffsetReturnsExpectedValue' test.
-     *
-     * @return Generator
      */
     public function dataProviderTestThatGetOffsetReturnsExpectedValue(): Generator
     {
@@ -459,8 +437,6 @@ class RequestHandlerTest extends KernelTestCase
 
     /**
      * Data provider method for 'testThatGetSearchTermsReturnsExpectedValue' test.
-     *
-     * @return Generator
      */
     public function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
     {

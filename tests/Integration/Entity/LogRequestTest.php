@@ -95,10 +95,6 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatSetterAndGettersWorks
      *
-     * @param string $field
-     * @param string $type
-     * @param array  $meta
-     *
      * @throws Throwable
      *
      * @testdox Test that getter method for `$field` with `$type` returns expected.
@@ -157,10 +153,6 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
      *
-     * @param StringableArrayObject $properties
-     * @param StringableArrayObject $headers
-     * @param StringableArrayObject $expected
-     *
      * @throws Throwable
      *
      * @testdox Test that sensitive data `$properties` from `$headers` is cleaned and output is expected `$expected`.
@@ -180,10 +172,6 @@ class LogRequestTest extends EntityTestCase
 
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
-     *
-     * @param StringableArrayObject $properties
-     * @param StringableArrayObject $parameters
-     * @param StringableArrayObject $expected
      *
      * @throws Throwable
      *
@@ -205,9 +193,6 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatDetermineParametersWorksLikeExpected
      *
-     * @param string                $content
-     * @param StringableArrayObject $expected
-     *
      * @throws Throwable
      *
      * @testdox Test that `determineParameters` method returns `$expected` when using `$content` as input.
@@ -224,9 +209,6 @@ class LogRequestTest extends EntityTestCase
         );
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatSensitiveDataIsCleaned(): Generator
     {
         yield [
@@ -275,9 +257,6 @@ class LogRequestTest extends EntityTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatDetermineParametersWorksLikeExpected(): Generator
     {
         yield [

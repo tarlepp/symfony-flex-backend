@@ -34,8 +34,6 @@ class Healthz implements EntityInterface
     use Uuid;
 
     /**
-     * @var UuidInterface
-     *
      * @Groups({
      *      "Healthz",
      *      "Healthz.id",
@@ -54,8 +52,6 @@ class Healthz implements EntityInterface
     private UuidInterface $id;
 
     /**
-     * @var DateTimeImmutable
-     *
      * @Groups({
      *      "Healthz",
      *      "Healthz.timestamp",
@@ -80,27 +76,16 @@ class Healthz implements EntityInterface
         $this->timestamp = new DateTimeImmutable('now', new DateTimeZone('UTC'));
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id->toString();
     }
 
-    /**
-     * @return DateTimeImmutable
-     */
     public function getTimestamp(): DateTimeImmutable
     {
         return $this->getCreatedAt();
     }
 
-    /**
-     * @param DateTimeImmutable $timestamp
-     *
-     * @return Healthz
-     */
     public function setTimestamp(DateTimeImmutable $timestamp): self
     {
         $this->timestamp = $timestamp;
@@ -108,11 +93,6 @@ class Healthz implements EntityInterface
         return $this;
     }
 
-    /**
-     * Returns createdAt.
-     *
-     * @return DateTimeImmutable
-     */
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->timestamp;

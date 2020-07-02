@@ -93,10 +93,6 @@ class LogLoginTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatSetterAndGettersWorks
      *
-     * @param string $field
-     * @param string $type
-     * @param array  $meta
-     *
      * @throws Throwable
      *
      * @testdox Test that getter method for `$field` with `$type` returns expected.

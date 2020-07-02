@@ -39,9 +39,6 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
      *
-     * @param string $expected
-     * @param array  $input
-     *
      * @testdox Test that `processCriteria` method returns `$expected`.
      */
     public function testThatProcessCriteriaWorksAsExpected(string $expected, array $input): void
@@ -84,9 +81,6 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatProcessSearchTermsWorksLikeExpected
      *
-     * @param string $expected
-     * @param array  $terms
-     *
      * @testdox Test that `processSearchTerms` method returns `$expected`.
      */
     public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(string $expected, array $terms): void
@@ -102,9 +96,6 @@ class RepositoryHelperTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatProcessOrderByWorksLikeExpected
-     *
-     * @param string $expected
-     * @param array  $input
      *
      * @testdox Test that `processOrderBy` method returns `$expected`.
      */
@@ -134,10 +125,6 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria
      *
-     * @param array  $criteria
-     * @param string $expectedDQL
-     * @param array  $expectedParameters
-     *
      * @testdox Test that `getExpression` method returns `$expectedDQL` with simple criteria.
      */
     public function testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
@@ -162,10 +149,6 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria
      *
-     * @param array  $criteria
-     * @param string $expectedDQL
-     * @param array  $expectedParameters
-     *
      * @testdox Test that `getExpression` method returns `$expectedDQL` with complex criteria.
      */
     public function testThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(
@@ -187,9 +170,6 @@ class RepositoryHelperTest extends KernelTestCase
         }
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatProcessCriteriaWorksAsExpected(): Generator
     {
         yield [
@@ -256,9 +236,6 @@ class RepositoryHelperTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): Generator
     {
         // @codingStandardsIgnoreStart
@@ -305,9 +282,6 @@ class RepositoryHelperTest extends KernelTestCase
         // @codingStandardsIgnoreEnd
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatProcessOrderByWorksLikeExpected(): Generator
     {
         yield [
@@ -350,9 +324,6 @@ class RepositoryHelperTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(): Generator
     {
         yield [
@@ -510,9 +481,6 @@ class RepositoryHelperTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithComplexCriteria(): Generator
     {
         // @codingStandardsIgnoreStart

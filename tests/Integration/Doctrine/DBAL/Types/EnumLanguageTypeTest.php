@@ -53,8 +53,6 @@ class EnumLanguageTypeTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
      *
-     * @param string $value
-     *
      * @testdox Test that `convertToDatabaseValue` method returns `$value`.
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
@@ -82,18 +80,12 @@ class EnumLanguageTypeTest extends KernelTestCase
         static::assertTrue($this->type->requiresSQLCommentHint($this->platform));
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
         yield ['en'];
         yield ['fi'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
     {
         yield [null];

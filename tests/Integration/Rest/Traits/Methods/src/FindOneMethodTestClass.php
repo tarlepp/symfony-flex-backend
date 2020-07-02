@@ -25,9 +25,6 @@ abstract class FindOneMethodTestClass extends Controller
 
     /**
      * FindOneMethodTestClass constructor.
-     *
-     * @param RestResourceInterface    $resource
-     * @param ResponseHandlerInterface $responseHandler
      */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {

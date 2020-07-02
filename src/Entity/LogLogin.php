@@ -45,8 +45,6 @@ class LogLogin implements EntityInterface
     use Uuid;
 
     /**
-     * @var UuidInterface
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.id",
@@ -65,8 +63,6 @@ class LogLogin implements EntityInterface
     private UuidInterface $id;
 
     /**
-     * @var User|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.user",
@@ -88,8 +84,6 @@ class LogLogin implements EntityInterface
     private ?User $user;
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.type",
@@ -104,8 +98,6 @@ class LogLogin implements EntityInterface
     private string $type;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.clientType",
@@ -121,8 +113,6 @@ class LogLogin implements EntityInterface
     private ?string $clientType = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.clientName",
@@ -138,8 +128,6 @@ class LogLogin implements EntityInterface
     private ?string $clientName = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.clientShortName",
@@ -155,8 +143,6 @@ class LogLogin implements EntityInterface
     private ?string $clientShortName = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.clientVersion",
@@ -172,8 +158,6 @@ class LogLogin implements EntityInterface
     private ?string $clientVersion = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.clientEngine",
@@ -189,8 +173,6 @@ class LogLogin implements EntityInterface
     private ?string $clientEngine = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.osName",
@@ -206,8 +188,6 @@ class LogLogin implements EntityInterface
     private ?string $osName = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.osShortName",
@@ -223,8 +203,6 @@ class LogLogin implements EntityInterface
     private ?string $osShortName = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.osVersion",
@@ -240,8 +218,6 @@ class LogLogin implements EntityInterface
     private ?string $osVersion = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.osPlatform",
@@ -257,8 +233,6 @@ class LogLogin implements EntityInterface
     private ?string $osPlatform = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.deviceName",
@@ -274,8 +248,6 @@ class LogLogin implements EntityInterface
     private ?string $deviceName = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.brandName",
@@ -291,8 +263,6 @@ class LogLogin implements EntityInterface
     private ?string $brandName = null;
 
     /**
-     * @var string|null
-     *
      * @Groups({
      *      "LogLogin",
      *      "LogLogin.model",
@@ -312,11 +282,6 @@ class LogLogin implements EntityInterface
     /**
      * LogLogin constructor.
      *
-     * @param string         $type
-     * @param Request        $request
-     * @param DeviceDetector $deviceDetector
-     * @param User|null      $user
-     *
      * @throws Throwable
      */
     public function __construct(string $type, Request $request, DeviceDetector $deviceDetector, ?User $user = null)
@@ -332,121 +297,76 @@ class LogLogin implements EntityInterface
         $this->processClientData();
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id->toString();
     }
 
-    /**
-     * @return User|null
-     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * @return string
-     */
     public function getType(): string
     {
         return $this->type;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClientType(): ?string
     {
         return $this->clientType;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClientName(): ?string
     {
         return $this->clientName;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClientShortName(): ?string
     {
         return $this->clientShortName;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClientVersion(): ?string
     {
         return $this->clientVersion;
     }
 
-    /**
-     * @return string|null
-     */
     public function getClientEngine(): ?string
     {
         return $this->clientEngine;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOsName(): ?string
     {
         return $this->osName;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOsShortName(): ?string
     {
         return $this->osShortName;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOsVersion(): ?string
     {
         return $this->osVersion;
     }
 
-    /**
-     * @return string|null
-     */
     public function getOsPlatform(): ?string
     {
         return $this->osPlatform;
     }
 
-    /**
-     * @return string|null
-     */
     public function getDeviceName(): ?string
     {
         return $this->deviceName;
     }
 
-    /**
-     * @return string|null
-     */
     public function getBrandName(): ?string
     {
         return $this->brandName;
     }
 
-    /**
-     * @return string|null
-     */
     public function getModel(): ?string
     {
         return $this->model;
@@ -468,12 +388,6 @@ class LogLogin implements EntityInterface
         $this->model = $this->deviceDetector->getModel();
     }
 
-    /**
-     * @param string $method
-     * @param string $attribute
-     *
-     * @return string
-     */
     private function getClientData(string $method, string $attribute): string
     {
         /** @var string|array $value */
