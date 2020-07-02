@@ -193,19 +193,19 @@ class RepositoryHelperTest extends KernelTestCase
     public function dataProviderTestThatProcessCriteriaWorksAsExpected(): Generator
     {
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1',
             ['foo' => 'bar'],
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE foo.bar = ?1',
             ['foo.bar' => 'foobar'],
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1 AND entity.bar = ?2',
             [
                 'foo' => 'bar',
@@ -214,7 +214,7 @@ class RepositoryHelperTest extends KernelTestCase
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
             [
                 'and' => [
@@ -224,7 +224,7 @@ class RepositoryHelperTest extends KernelTestCase
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE bar = ?1',
             [
                 'or' => [
@@ -234,7 +234,7 @@ class RepositoryHelperTest extends KernelTestCase
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 AND foo = ?2',
             [
                 'and' => [
@@ -245,7 +245,7 @@ class RepositoryHelperTest extends KernelTestCase
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE bar = ?1 OR foo = ?2',
             [
                 'or' => [
@@ -263,7 +263,7 @@ class RepositoryHelperTest extends KernelTestCase
     {
         // @codingStandardsIgnoreStart
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstName LIKE ?2 AND entity.lastName LIKE ?3 AND entity.email LIKE ?4',
             [
                 'and' => ['foo'],
@@ -271,7 +271,7 @@ class RepositoryHelperTest extends KernelTestCase
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstName LIKE ?2 OR entity.lastName LIKE ?3 OR entity.email LIKE ?4',
             [
                 'or' => ['foo'],
@@ -279,7 +279,7 @@ class RepositoryHelperTest extends KernelTestCase
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 AND entity.firstName LIKE ?2 AND entity.lastName LIKE ?3 AND entity.email LIKE ?4 AND entity.username LIKE ?5 AND entity.firstName LIKE ?6 AND entity.lastName LIKE ?7 AND entity.email LIKE ?8',
             [
                 'and' => ['foo', 'bar'],
@@ -287,7 +287,7 @@ class RepositoryHelperTest extends KernelTestCase
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE entity.username LIKE ?1 OR entity.firstName LIKE ?2 OR entity.lastName LIKE ?3 OR entity.email LIKE ?4 OR entity.username LIKE ?5 OR entity.firstName LIKE ?6 OR entity.lastName LIKE ?7 OR entity.email LIKE ?8',
             [
                 'or' => ['foo', 'bar'],
@@ -295,7 +295,7 @@ class RepositoryHelperTest extends KernelTestCase
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE (entity.username LIKE ?1 AND entity.firstName LIKE ?2 AND entity.lastName LIKE ?3 AND entity.email LIKE ?4) AND (entity.username LIKE ?5 OR entity.firstName LIKE ?6 OR entity.lastName LIKE ?7 OR entity.email LIKE ?8)',
             [
                 'and' => ['foo'],
@@ -311,37 +311,37 @@ class RepositoryHelperTest extends KernelTestCase
     public function dataProviderTestThatProcessOrderByWorksLikeExpected(): Generator
     {
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
             ['foo' => 'asc'],
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo DESC',
             ['foo' => 'DESC'],
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
             ['entity.foo' => 'asc'],
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY .foo asdf',
             ['.foo' => 'asdf'],
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY foo.bar asc',
             ['foo.bar' => 'asc'],
         ];
 
         yield [
-            /** @lang text */
+            /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc, foo.bar desc',
             [
                 'foo' => 'asc',
@@ -357,7 +357,7 @@ class RepositoryHelperTest extends KernelTestCase
     {
         yield [
             ['u.id', 'eq', 123],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id = ?1',
             [
                 [
@@ -369,7 +369,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'neq', 123],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id <> ?1',
             [
                 [
@@ -381,7 +381,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'lt', 123],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id < ?1',
             [
                 [
@@ -393,7 +393,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'lte', 123],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id <= ?1',
             [
                 [
@@ -405,7 +405,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'gt', 123],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id > ?1',
             [
                 [
@@ -417,7 +417,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'gte', 123],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id >= ?1',
             [
                 [
@@ -429,7 +429,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'in', [1, 2]],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id IN(1, 2)',
             [
                 [
@@ -441,7 +441,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'notIn', [1, 2]],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id NOT IN(1, 2)',
             [
                 [
@@ -457,21 +457,21 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'isNull', null],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id IS NULL',
             [],
         ];
 
         yield [
             ['u.id', 'isNotNull', null],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id IS NOT NULL',
             [],
         ];
 
         yield [
             ['u.id', 'like', 'abc'],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id LIKE ?1',
             [
                 [
@@ -483,7 +483,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'notLike', 'abc'],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id NOT LIKE ?1',
             [
                 [
@@ -495,7 +495,7 @@ class RepositoryHelperTest extends KernelTestCase
 
         yield [
             ['u.id', 'between', [1, 6]],
-            /** @lang text */
+            /* @lang text */
             'SELECT u FROM App\Entity\User u WHERE u.id BETWEEN ?1 AND ?2',
             [
                 [
@@ -527,7 +527,7 @@ class RepositoryHelperTest extends KernelTestCase
                     ['u.lastName', 'neq', 'foo'],
                 ],
             ],
-            /** @lang text */
+            /* @lang text */
             <<<'DQL'
 SELECT u FROM App\Entity\User u WHERE (u.firstName = ?1 AND u.firstName <> ?2) AND (u.firstName = ?3 OR u.lastName <> ?4)
 DQL
@@ -564,7 +564,7 @@ DQL
                 ],
                 ['u.field5', 'neq', 5],
             ],
-            /** @lang text */
+            /* @lang text */
             <<<'DQL'
 SELECT u FROM App\Entity\User u WHERE (u.field1 LIKE ?1 OR u.field2 LIKE ?2) AND (u.field3 = ?3 AND u.field4 = ?4) AND u.field5 <> ?5
 DQL

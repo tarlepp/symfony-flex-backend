@@ -39,7 +39,7 @@ class IdsMethodTest extends KernelTestCase
     {
         $this->expectException(LogicException::class);
 
-        /** @codingStandardsIgnoreStart */
+        /* @codingStandardsIgnoreStart */
         $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );

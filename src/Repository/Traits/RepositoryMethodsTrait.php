@@ -85,7 +85,7 @@ trait RepositoryMethodsTrait
             ->where('entity.id = :id')
             ->setParameter('id', $id, UuidHelper::getType($id));
 
-        /**
+        /*
          * This is just to help debug queries
          *
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
@@ -155,7 +155,7 @@ trait RepositoryMethodsTrait
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
 
-        /**
+        /*
          * This is just to help debug queries
          *
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
@@ -204,7 +204,7 @@ trait RepositoryMethodsTrait
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
 
-        /**
+        /*
          * This is just to help debug queries
          *
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());
@@ -237,7 +237,7 @@ trait RepositoryMethodsTrait
         // Process custom QueryBuilder actions
         $this->processQueryBuilder($queryBuilder);
 
-        /**
+        /*
          * This is just to help debug queries
          *
          * dd($queryBuilder->getQuery()->getDQL(), $queryBuilder->getQuery()->getSQL());

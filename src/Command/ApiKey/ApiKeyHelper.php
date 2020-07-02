@@ -133,7 +133,7 @@ class ApiKeyHelper
      */
     private function getApiKeyIterator(array &$choices): Closure
     {
-        /**
+        /*
          * Lambda function create api key choices
          *
          * @param ApiKeyEntity $apiKey

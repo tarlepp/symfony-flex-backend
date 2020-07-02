@@ -279,7 +279,7 @@ abstract class DtoTestCase extends KernelTestCase
                 || $reflectionProperty->getDeclaringClass()->isInstance($dto)
             );
 
-        /** @var ReflectionProperty[] $properties */
+        /* @var ReflectionProperty[] $properties */
         return array_filter($dtoReflection->getProperties(), $filter);
     }
 }

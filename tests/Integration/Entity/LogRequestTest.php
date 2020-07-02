@@ -48,14 +48,14 @@ class LogRequestTest extends EntityTestCase
         // Store container and entity manager
         $this->testContainer = static::$kernel->getContainer();
 
-        /** @noinspection MissingService */
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection MissingService */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
         // Create new entity object
         $this->entity = new $this->entityName([]);
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 

@@ -266,7 +266,7 @@ final class RequestHandler
      */
     private static function getIterator(array &$output): Closure
     {
-        /**
+        /*
          * @psalm-suppress MissingClosureParamType
          *
          * @param string     $value

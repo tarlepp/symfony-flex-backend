@@ -390,7 +390,7 @@ class RepositoryHelper
      */
     private static function getIterator(array &$condition): Closure
     {
-        /**
+        /*
          * @psalm-suppress MissingClosureParamType
          *
          * @param string|array $value

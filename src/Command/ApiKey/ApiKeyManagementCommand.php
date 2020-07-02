@@ -33,7 +33,7 @@ class ApiKeyManagementCommand extends Command
 
         $this->setDescription('Console command to manage API keys');
 
-        /** @psalm-suppress InvalidScalarArgument */
+        /* @psalm-suppress InvalidScalarArgument */
         $this->setChoices([
             'api-key:list' => 'List API keys',
             'api-key:create' => 'Create API key',

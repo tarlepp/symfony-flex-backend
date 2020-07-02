@@ -48,7 +48,7 @@ class GenericResourceTest extends KernelTestCase
 
         static::bootKernel();
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->resource = static::$container->get($this->resourceClass);
     }
 

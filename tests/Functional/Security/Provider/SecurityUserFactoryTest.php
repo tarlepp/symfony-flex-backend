@@ -37,10 +37,10 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->userRepository = static::$container->get(UserRepository::class);
     }
 

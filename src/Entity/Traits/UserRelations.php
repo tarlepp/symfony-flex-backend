@@ -161,11 +161,11 @@ trait UserRelations
         if (!$this->userGroups->contains($userGroup)) {
             $this->userGroups->add($userGroup);
 
-            /** @noinspection PhpParamsInspection */
+            /* @noinspection PhpParamsInspection */
             $userGroup->addUser($this);
         }
 
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /* @noinspection PhpIncompatibleReturnTypeInspection */
         return $this;
     }
 
@@ -179,11 +179,11 @@ trait UserRelations
     public function removeUserGroup(UserGroup $userGroup): UserGroupAwareInterface
     {
         if ($this->userGroups->removeElement($userGroup)) {
-            /** @noinspection PhpParamsInspection */
+            /* @noinspection PhpParamsInspection */
             $userGroup->removeUser($this);
         }
 
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /* @noinspection PhpIncompatibleReturnTypeInspection */
         return $this;
     }
 
@@ -196,7 +196,7 @@ trait UserRelations
     {
         $this->userGroups->clear();
 
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        /* @noinspection PhpIncompatibleReturnTypeInspection */
         return $this;
     }
 }

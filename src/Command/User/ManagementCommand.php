@@ -33,7 +33,7 @@ class ManagementCommand extends Command
 
         $this->setDescription('Console command to manage users and user groups');
 
-        /** @psalm-suppress InvalidScalarArgument */
+        /* @psalm-suppress InvalidScalarArgument */
         $this->setChoices([
             'user:list' => 'List users',
             'user:list-groups' => 'List user groups',

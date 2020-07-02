@@ -548,17 +548,17 @@ class GenericRepositoryTest extends KernelTestCase
         // @codingStandardsIgnoreStart
         return [
             [
-                /** @lang text */
+                /* @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity',
                 new StringableArrayObject([]),
             ],
             [
-                /** @lang text */
+                /* @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity LEFT JOIN entity.someProperty someAlias',
                 new StringableArrayObject(['entity.someProperty', 'someAlias']),
             ],
             [
-                /** @lang text */
+                /* @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity LEFT JOIN entity.someProperty someAlias WITH someAlias.someAnotherProperty = 1',
                 new StringableArrayObject(['entity.someProperty', 'someAlias', Expr\Join::WITH, 'someAlias.someAnotherProperty = 1']),
             ],
@@ -574,17 +574,17 @@ class GenericRepositoryTest extends KernelTestCase
         // @codingStandardsIgnoreStart
         return [
             [
-                /** @lang text */
+                /* @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity',
                 new StringableArrayObject([]),
             ],
             [
-                /** @lang text */
+                /* @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity INNER JOIN entity.someProperty someAlias',
                 new StringableArrayObject(['entity.someProperty', 'someAlias']),
             ],
             [
-                /** @lang text */
+                /* @lang text */
                 'SELECT entity FROM App\\Entity\\ApiKey entity INNER JOIN entity.someProperty someAlias WITH someAlias.someAnotherProperty = 1',
                 new StringableArrayObject(['entity.someProperty', 'someAlias', Expr\Join::WITH, 'someAlias.someAnotherProperty = 1']),
             ],

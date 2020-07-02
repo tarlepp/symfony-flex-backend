@@ -118,7 +118,7 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getColumnIterator(string $term, int $mode): Closure
     {
-        /**
+        /*
          * Lambda function to create actual criteria for specified column + term + mode combo.
          *
          * @param string $column

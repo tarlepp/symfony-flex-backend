@@ -38,7 +38,7 @@ class RestResourceConverterTest extends KernelTestCase
 
         static::bootKernel();
 
-        /** @noinspection PhpParamsInspection */
+        /* @noinspection PhpParamsInspection */
         $this->converter = new RestResourceConverter(static::$container->get(ResourceCollection::class));
     }
 

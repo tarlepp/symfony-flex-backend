@@ -43,7 +43,6 @@ parameters:
         PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer: ~
-        PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer: ~
         PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer: ~
         PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
         PhpCsFixer\Fixer\NamespaceNotation\NoBlankLinesBeforeNamespaceFixer: ~
