@@ -41,10 +41,7 @@ abstract class RestRequestMapper implements MapperInterface
      * {@inheritdoc}
      *
      * @param array|object      $source
-     * @param string            $targetClass
      * @param array<int, mixed> $context
-     *
-     * @return RestDtoInterface
      */
     public function map($source, string $targetClass, array $context = []): RestDtoInterface
     {
@@ -60,8 +57,6 @@ abstract class RestRequestMapper implements MapperInterface
      * @param array|object      $source
      * @param object            $destination
      * @param array<int, mixed> $context
-     *
-     * @return RestDtoInterface
      */
     public function mapToObject($source, $destination, array $context = []): RestDtoInterface
     {
@@ -104,12 +99,6 @@ abstract class RestRequestMapper implements MapperInterface
         return $this->getObject($source, $destination);
     }
 
-    /**
-     * @param Request          $request
-     * @param RestDtoInterface $restDto
-     *
-     * @return RestDtoInterface
-     */
     private function getObject(Request $request, RestDtoInterface $restDto): RestDtoInterface
     {
         foreach ($this->getValidProperties($request) as $property) {
@@ -131,8 +120,6 @@ abstract class RestRequestMapper implements MapperInterface
     }
 
     /**
-     * @param Request $request
-     *
      * @return array<int, string>
      */
     private function getValidProperties(Request $request): array

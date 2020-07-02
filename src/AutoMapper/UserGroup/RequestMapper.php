@@ -33,8 +33,6 @@ class RequestMapper extends RestRequestMapper
 
     /**
      * RequestMapper constructor.
-     *
-     * @param RoleResource $roleResource
      */
     public function __construct(RoleResource $roleResource)
     {
@@ -42,10 +40,6 @@ class RequestMapper extends RestRequestMapper
     }
 
     /**
-     * @param string $role
-     *
-     * @return Role
-     *
      * @throws ORMException
      */
     protected function transformRole(string $role): Role
