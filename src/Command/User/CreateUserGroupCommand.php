@@ -17,8 +17,6 @@ use App\Repository\RoleRepository;
 use App\Resource\UserGroupResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,7 +37,7 @@ class CreateUserGroupCommand extends Command
     /**
      * @var array<int, array<string, int|string>>
      */
-    private static $commandParameters = [
+    private static array $commandParameters = [
         [
             'name' => 'name',
             'description' => 'Name of the user group',
@@ -55,11 +53,6 @@ class CreateUserGroupCommand extends Command
 
     /**
      * CreateUserGroupCommand constructor.
-     *
-     * @param UserGroupResource $userGroupResource
-     * @param RoleRepository    $roleRepository
-     *
-     * @throws LogicException
      */
     public function __construct(UserGroupResource $userGroupResource, RoleRepository $roleRepository)
     {
@@ -71,11 +64,6 @@ class CreateUserGroupCommand extends Command
         $this->setDescription('Console command to create user groups');
     }
 
-    /**
-     * Configures the current command.
-     *
-     * @throws InvalidArgumentException
-     */
     protected function configure(): void
     {
         parent::configure();
@@ -85,12 +73,7 @@ class CreateUserGroupCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @return int 0 if everything went fine, or an error code
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -118,12 +101,9 @@ class CreateUserGroupCommand extends Command
     }
 
     /**
-     * Method to check if database contains role(s), if non exists method will run 'user:create-roles' command
-     * which creates all roles to database so that user groups can be created.
-     *
-     * @param OutputInterface $output
-     * @param bool            $interactive
-     * @param SymfonyStyle    $io
+     * Method to check if database contains role(s), if non exists method will
+     * run 'user:create-roles' command which creates all roles to database so
+     * that user groups can be created.
      *
      * @throws Throwable
      */

@@ -48,12 +48,7 @@ trait ExecuteMultipleCommandTrait
     }
 
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int 0 if everything went fine, or an exit code
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -85,8 +80,6 @@ trait ExecuteMultipleCommandTrait
 
     /**
      * Method to ask user to make choose one of defined choices.
-     *
-     * @return string|null
      */
     private function ask(): ?string
     {

@@ -31,9 +31,6 @@ class ApiKeyHelper
 
     /**
      * ApiKeyHelper constructor.
-     *
-     * @param ApiKeyResource $apiKeyResource
-     * @param RolesService   $rolesService
      */
     public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
     {
@@ -42,13 +39,8 @@ class ApiKeyHelper
     }
 
     /**
-     * Method to get API key entity. Also note that this may return a null in cases that user do not want to make any
-     * changes to API keys.
-     *
-     * @param SymfonyStyle $io
-     * @param string       $question
-     *
-     * @return ApiKeyEntity|null
+     * Method to get API key entity. Also note that this may return a null in
+     * cases that user do not want to make any changes to API keys.
      *
      * @throws Throwable
      */
@@ -79,14 +71,12 @@ class ApiKeyHelper
     }
 
     /**
-     * Helper method to get "normalized" message for API key. This is used on following cases:
+     * Helper method to get "normalized" message for API key. This is used on
+     * following cases:
      *  - User changes API key token
      *  - User creates new API key
      *  - User modifies API key
      *  - User removes API key
-     *
-     * @param string       $message
-     * @param ApiKeyEntity $apiKey
      *
      * @return array<int, string>
      */
@@ -105,11 +95,6 @@ class ApiKeyHelper
     /**
      * Method to list ApiKeys where user can select desired one.
      *
-     * @param SymfonyStyle $io
-     * @param string       $question
-     *
-     * @return ApiKeyEntity|null
-     *
      * @throws Throwable
      */
     private function getApiKeyEntity(SymfonyStyle $io, string $question): ?ApiKeyEntity
@@ -125,11 +110,10 @@ class ApiKeyHelper
     }
 
     /**
-     * Method to return ApiKeyIterator closure. This will format ApiKey entities for choice list.
+     * Method to return ApiKeyIterator closure. This will format ApiKey
+     * entities for choice list.
      *
      * @param string[] $choices
-     *
-     * @return Closure
      */
     private function getApiKeyIterator(array &$choices): Closure
     {

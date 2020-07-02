@@ -12,7 +12,6 @@ use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -32,11 +31,6 @@ class RemoveUserGroupCommand extends Command
 
     /**
      * RemoveUserGroupCommand constructor.
-     *
-     * @param UserGroupResource $userGroupResource
-     * @param UserHelper        $userHelper
-     *
-     * @throws LogicException
      */
     public function __construct(UserGroupResource $userGroupResource, UserHelper $userHelper)
     {
@@ -50,12 +44,7 @@ class RemoveUserGroupCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
+     * {@inheritdoc}
      *
      * @throws Throwable
      */

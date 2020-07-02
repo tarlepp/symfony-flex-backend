@@ -32,9 +32,6 @@ class UserHelper
 
     /**
      * UserHelper constructor.
-     *
-     * @param UserResource      $userResource
-     * @param UserGroupResource $userGroupResource
      */
     public function __construct(UserResource $userResource, UserGroupResource $userGroupResource)
     {
@@ -43,13 +40,8 @@ class UserHelper
     }
 
     /**
-     * Method to get user entity. Also note that this may return a null in cases that user do not want to make any
-     * changes to users.
-     *
-     * @param SymfonyStyle $io
-     * @param string       $question
-     *
-     * @return UserEntity|null
+     * Method to get user entity. Also note that this may return a null in
+     * cases that user do not want to make any changes to users.
      *
      * @throws Throwable
      */
@@ -73,13 +65,8 @@ class UserHelper
     }
 
     /**
-     * Method to get user group entity. Also note that this may return a null in cases that user do not want to make any
-     * changes to user groups.
-     *
-     * @param SymfonyStyle $io
-     * @param string       $question
-     *
-     * @return UserGroupEntity|null
+     * Method to get user group entity. Also note that this may return a null
+     * in cases that user do not want to make any changes to user groups.
      *
      * @throws Throwable
      */
@@ -103,10 +90,8 @@ class UserHelper
     }
 
     /**
-     * Method to get User entity. Within this user will be asked which User entity he/she wants to process with.
-     *
-     * @param SymfonyStyle $io
-     * @param string       $question
+     * Method to get User entity. Within this user will be asked which User
+     * entity he/she wants to process with.
      *
      * @return UserEntity|EntityInterface|null
      *
@@ -125,11 +110,8 @@ class UserHelper
     }
 
     /**
-     * Method to get UserGroup entity. Within this user will be asked which UserGroup entity he/she wants to process
-     * with.
-     *
-     * @param SymfonyStyle $io
-     * @param string       $question
+     * Method to get UserGroup entity. Within this user will be asked which
+     * UserGroup entity he/she wants to process with.
      *
      * @return UserGroupEntity|EntityInterface|null
      *
@@ -148,11 +130,10 @@ class UserHelper
     }
 
     /**
-     * Getter method for user formatter closure. This closure will format single User entity for choice list.
+     * Getter method for user formatter closure. This closure will format
+     * single User entity for choice list.
      *
      * @param array<int, string> $choices
-     *
-     * @return Closure
      */
     private function getUserIterator(array &$choices): Closure
     {
@@ -170,11 +151,10 @@ class UserHelper
     }
 
     /**
-     * Getter method for user group formatter closure. This closure will format single UserGroup entity for choice list.
+     * Getter method for user group formatter closure. This closure will format
+     * single UserGroup entity for choice list.
      *
      * @param mixed[] $choices
-     *
-     * @return Closure
      */
     private function getUserGroupIterator(array &$choices): Closure
     {
@@ -184,12 +164,8 @@ class UserHelper
     }
 
     /**
-     * Helper method to confirm user that he/she has chosen correct User entity to process with.
-     *
-     * @param SymfonyStyle $io
-     * @param UserEntity   $userEntity
-     *
-     * @return bool
+     * Helper method to confirm user that he/she has chosen correct User
+     * entity to process with.
      */
     private function isCorrectUser(SymfonyStyle $io, UserEntity $userEntity): bool
     {
@@ -206,12 +182,8 @@ class UserHelper
     }
 
     /**
-     * Helper method to confirm user that he/she has chosen correct UserGroup entity to process with.
-     *
-     * @param SymfonyStyle    $io
-     * @param UserGroupEntity $userGroupEntity
-     *
-     * @return bool
+     * Helper method to confirm user that he/she has chosen correct UserGroup
+     * entity to process with.
      */
     private function isCorrectUserGroup(SymfonyStyle $io, UserGroupEntity $userGroupEntity): bool
     {

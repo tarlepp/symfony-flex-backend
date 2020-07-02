@@ -24,14 +24,12 @@ trait ApiKeyUserManagementHelperTrait
     use GetApplicationTrait;
 
     /**
-     * @return RolesService
+     * Getter for RolesService
      */
     abstract public function getRolesService(): RolesService;
 
     /**
      * Method to create user groups via existing 'user:create-group' command.
-     *
-     * @param OutputInterface $output
      *
      * @throws Throwable
      */

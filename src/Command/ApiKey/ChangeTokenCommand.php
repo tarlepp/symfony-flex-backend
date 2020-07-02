@@ -12,7 +12,6 @@ use App\Command\Traits\SymfonyStyleTrait;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -32,11 +31,6 @@ class ChangeTokenCommand extends Command
 
     /**
      * ChangeTokenCommand constructor.
-     *
-     * @param ApiKeyResource $apiKeyResource
-     * @param ApiKeyHelper   $apiKeyHelper
-     *
-     * @throws LogicException
      */
     public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
@@ -50,12 +44,7 @@ class ChangeTokenCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int 0 if everything went fine, or an exit code
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -82,8 +71,6 @@ class ChangeTokenCommand extends Command
 
     /**
      * Method to change API key token.
-     *
-     * @param ApiKeyEntity $apiKey
      *
      * @return mixed[]
      *

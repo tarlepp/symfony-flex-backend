@@ -22,12 +22,6 @@ trait SymfonyStyleTrait
 {
     /**
      * Method to get SymfonyStyle object for console commands.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param bool|null       $clearScreen
-     *
-     * @return SymfonyStyle
      */
     protected function getSymfonyStyle(
         InputInterface $input,

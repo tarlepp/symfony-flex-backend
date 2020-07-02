@@ -25,7 +25,6 @@ use function array_map;
 class HelperConfigure
 {
     /**
-     * @param Command                               $command
      * @param array<int, array<string, int|string>> $parameters
      *
      * @throws InvalidArgumentException
@@ -37,8 +36,6 @@ class HelperConfigure
     }
 
     /**
-     * @return Closure
-     *
      * @throws InvalidArgumentException
      */
     private static function getParameterIterator(): Closure
