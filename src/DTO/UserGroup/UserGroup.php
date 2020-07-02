@@ -22,14 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\DTO\UserGroup
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
- * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
+ * @method self|RestDtoInterface  get(string $id)
+ * @method self|RestDtoInterface  patch(RestDtoInterface $dto)
+ * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class UserGroup extends RestDto
 {
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Length(
@@ -41,25 +40,15 @@ class UserGroup extends RestDto
     protected string $name = '';
 
     /**
-     * @var \App\Entity\Role
-     *
      * @AppAssert\EntityReferenceExists(entityClass=RoleEntity::class)
      */
     protected ?RoleEntity $role = null;
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return UserGroup
-     */
     public function setName(string $name): self
     {
         $this->setVisited('name');
@@ -69,19 +58,11 @@ class UserGroup extends RestDto
         return $this;
     }
 
-    /**
-     * @return RoleEntity|string|null
-     */
-    public function getRole()
+    public function getRole(): ?RoleEntity
     {
         return $this->role;
     }
 
-    /**
-     * @param RoleEntity $role
-     *
-     * @return UserGroup
-     */
     public function setRole(RoleEntity $role): self
     {
         $this->setVisited('role');

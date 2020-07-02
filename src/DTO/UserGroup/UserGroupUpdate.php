@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\DTO\UserGroup;
 
 use App\Entity\Role;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class UserGroupUpdate
@@ -19,12 +20,8 @@ use App\Entity\Role;
 class UserGroupUpdate extends UserGroup
 {
     /**
-     * @var \App\Entity\Role
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     *
-     * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
      */
     protected ?Role $role = null;
 }

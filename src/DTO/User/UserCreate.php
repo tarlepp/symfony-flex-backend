@@ -19,8 +19,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserCreate extends User
 {
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Length(
