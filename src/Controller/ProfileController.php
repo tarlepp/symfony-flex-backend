@@ -75,12 +75,6 @@ class ProfileController
      *  )
      * @SWG\Tag(name="Profile")
      *
-     * @param SerializerInterface $serializer
-     * @param RolesService        $rolesService
-     * @param User                $loggedInUser
-     *
-     * @return JsonResponse
-     *
      * @throws JsonException
      */
     public function profileAction(
@@ -140,11 +134,6 @@ class ProfileController
      *      },
      *  )
      * @SWG\Tag(name="Profile")
-     *
-     * @param RolesService $rolesService
-     * @param User         $loggedInUser
-     *
-     * @return JsonResponse
      */
     public function rolesAction(RolesService $rolesService, User $loggedInUser): JsonResponse
     {
@@ -206,11 +195,6 @@ class ProfileController
      *      },
      *  )
      * @SWG\Tag(name="Profile")
-     *
-     * @param SerializerInterface $serializer
-     * @param User                $loggedInUser
-     *
-     * @return JsonResponse
      */
     public function groupsAction(SerializerInterface $serializer, User $loggedInUser): JsonResponse
     {
@@ -227,7 +211,7 @@ class ProfileController
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     private function getSerializationGroupsForUser(): array
     {
@@ -242,7 +226,7 @@ class ProfileController
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     private function getUserGroupGroups(): array
     {

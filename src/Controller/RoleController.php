@@ -15,15 +15,12 @@ use App\Rest\Controller;
 use App\Rest\Traits\Actions;
 use App\Rest\Traits\Methods;
 use App\Security\RolesService;
-use LogicException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
 
@@ -52,8 +49,6 @@ class RoleController extends Controller
 
     /**
      * RoleController constructor.
-     *
-     * @param RoleResource $resource
      */
     public function __construct(RoleResource $resource)
     {
@@ -73,15 +68,7 @@ class RoleController extends Controller
      *
      * @RestApiDoc()
      *
-     * @param Request $request
-     * @param string  $role
-     *
-     * @return Response
-     *
-     * @throws LogicException
      * @throws Throwable
-     * @throws HttpException
-     * @throws MethodNotAllowedHttpException
      */
     public function findOneAction(Request $request, string $role): Response
     {
@@ -139,11 +126,6 @@ class RoleController extends Controller
      *  )
      *
      * @RestApiDoc()
-     *
-     * @param Role         $role
-     * @param RolesService $rolesService
-     *
-     * @return JsonResponse
      */
     public function getInheritedRolesAction(Role $role, RolesService $rolesService): JsonResponse
     {

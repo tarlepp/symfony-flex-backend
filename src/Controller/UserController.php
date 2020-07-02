@@ -69,8 +69,6 @@ class UserController extends Controller
 
     /**
      * UserController constructor.
-     *
-     * @param UserResource $resource
      */
     public function __construct(UserResource $resource)
     {
@@ -94,12 +92,6 @@ class UserController extends Controller
      * @Security("is_granted('ROLE_ROOT')")
      *
      * @RestApiDoc()
-     *
-     * @param Request $request
-     * @param User    $requestUser
-     * @param User    $loggedInUser
-     *
-     * @return Response
      *
      * @throws Throwable
      */
@@ -172,11 +164,6 @@ class UserController extends Controller
      *      ),
      *  )
      * @SWG\Tag(name="User Management")
-     *
-     * @param User         $requestUser
-     * @param RolesService $roles
-     *
-     * @return JsonResponse
      */
     public function getUserRolesAction(User $requestUser, RolesService $roles): JsonResponse
     {
@@ -248,11 +235,6 @@ class UserController extends Controller
      *      ),
      *  )
      * @SWG\Tag(name="User Management")
-     *
-     * @param User                $requestUser
-     * @param SerializerInterface $serializer
-     *
-     * @return JsonResponse
      */
     public function getUserGroupsAction(User $requestUser, SerializerInterface $serializer): JsonResponse
     {
@@ -359,12 +341,6 @@ class UserController extends Controller
      *  )
      * @SWG\Tag(name="User Management")
      *
-     * @param User                $user
-     * @param UserGroup           $userGroup
-     * @param SerializerInterface $serializer
-     *
-     * @return JsonResponse
-     *
      * @throws Throwable
      */
     public function attachUserGroupAction(
@@ -466,12 +442,6 @@ class UserController extends Controller
      *  )
      * @SWG\Tag(name="User Management")
      *
-     * @param User                $user
-     * @param UserGroup           $userGroup
-     * @param SerializerInterface $serializer
-     *
-     * @return JsonResponse
-     *
      * @throws Throwable
      */
     public function detachUserGroupAction(
@@ -486,12 +456,6 @@ class UserController extends Controller
 
     /**
      * Helper method to create UserGroup response.
-     *
-     * @param User                $user
-     * @param SerializerInterface $serializer
-     * @param int|null            $status
-     *
-     * @return JsonResponse
      */
     private function getUserGroupResponse(
         User $user,

@@ -32,8 +32,6 @@ class LocaleController
 
     /**
      * LanguageController constructor.
-     *
-     * @param Localization $localization
      */
     public function __construct(Localization $localization)
     {
@@ -54,8 +52,6 @@ class LocaleController
      *          @SWG\Items(type="string"),
      *      ),
      *  )
-     *
-     * @return JsonResponse
      */
     public function __invoke(): JsonResponse
     {
