@@ -10,7 +10,6 @@ namespace App\Entity\Traits;
 
 use App\Rest\UuidHelper;
 use Ramsey\Uuid\UuidInterface;
-use Throwable;
 
 /**
  * Trait Uuid
