@@ -23,6 +23,10 @@ services:
             - 'class'
             - 'function'
             - 'const'
+    PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer:
+        remove_inheritdoc: false
+        allow_mixed: true
+        allow_unused_params: true
     PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer:
         space: 'single'
     PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer:
@@ -39,7 +43,7 @@ services:
 parameters:
     skip:
         PhpCsFixer\Fixer\ArrayNotation\NoMultilineWhitespaceAroundDoubleArrowFixer: ~
-        PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer: ~
+        #PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer: ~
