@@ -100,10 +100,6 @@ class UserType extends AbstractType
 
     /**
      * UserType constructor.
-     *
-     * @param UserGroupResource    $userGroupResource
-     * @param UserGroupTransformer $userGroupTransformer
-     * @param Localization         $localization
      */
     public function __construct(
         UserGroupResource $userGroupResource,
@@ -116,8 +112,7 @@ class UserType extends AbstractType
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param mixed[]              $options
+     * @param mixed[] $options
      *
      * @throws Throwable
      */
@@ -159,9 +154,6 @@ class UserType extends AbstractType
         ]);
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     */
     private function addLocalizationFieldsToForm(FormBuilderInterface $builder): void
     {
         $languages = $this->localization->getLanguages();
@@ -205,7 +197,9 @@ class UserType extends AbstractType
     }
 
     /**
-     * @return array
+     * Method to get choices array for time zones.
+     *
+     * @return array<string, string>
      */
     private function getTimeZoneChoices(): array
     {
