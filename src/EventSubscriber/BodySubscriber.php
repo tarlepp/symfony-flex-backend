@@ -25,22 +25,9 @@ use function is_array;
 class BodySubscriber implements EventSubscriberInterface
 {
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * {@inheritdoc}
      *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
-     *
-     * @return array<string, array<int, string|int>> The event names to listen to
+     * @return array<string, array<int, string|int>>
      */
     public static function getSubscribedEvents(): array
     {
@@ -55,8 +42,6 @@ class BodySubscriber implements EventSubscriberInterface
     /**
      * Implementation of BodySubscriber event. Purpose of this is to convert JSON request data to proper request
      * parameters.
-     *
-     * @param RequestEvent $event
      *
      * @throws JsonException
      */
@@ -73,10 +58,6 @@ class BodySubscriber implements EventSubscriberInterface
 
     /**
      * Method to determine if current Request is JSON type or not.
-     *
-     * @param Request $request
-     *
-     * @return bool
      */
     private function isJsonRequest(Request $request): bool
     {
@@ -85,8 +66,6 @@ class BodySubscriber implements EventSubscriberInterface
 
     /**
      * Method to transform JSON type request to proper request parameters.
-     *
-     * @param Request $request
      *
      * @throws JsonException
      */

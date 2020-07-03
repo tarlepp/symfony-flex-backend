@@ -11,7 +11,6 @@ namespace App\EventSubscriber;
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
-use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Throwable;
@@ -30,9 +29,6 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
 
     /**
      * AuthenticationFailureSubscriber constructor.
-     *
-     * @param LoginLogger    $loginLogger
-     * @param UserRepository $userRepository
      */
     public function __construct(LoginLogger $loginLogger, UserRepository $userRepository)
     {
@@ -41,22 +37,9 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * {@inheritdoc}
      *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
-     *
-     * @return array<string, string> The event names to listen to
+     * @return array<string, string>
      */
     public static function getSubscribedEvents(): array
     {
@@ -68,12 +51,9 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     /**
      * Method to log login failures to database.
      *
-     * This method is called when '\Lexik\Bundle\JWTAuthenticationBundle\Events::AUTHENTICATION_FAILURE'
-     * event is broadcast.
+     * This method is called when following event is broadcast;
+     *  - \Lexik\Bundle\JWTAuthenticationBundle\Events::AUTHENTICATION_FAILURE
      *
-     * @param AuthenticationFailureEvent $event
-     *
-     * @throws ORMException
      * @throws Throwable
      */
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void

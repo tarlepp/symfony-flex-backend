@@ -25,8 +25,6 @@ class BlameableDecorator extends BlameableListener
 
     /**
      * BlameableDecorator constructor.
-     *
-     * @param UserResource $userResource
      */
     public function __construct(UserResource $userResource)
     {

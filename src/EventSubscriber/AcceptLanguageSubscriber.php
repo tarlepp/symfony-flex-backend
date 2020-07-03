@@ -33,8 +33,6 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
 
     /**
      * LocaleSubscriber constructor.
-     *
-     * @param string $locale
      */
     public function __construct(string $locale)
     {
@@ -42,22 +40,9 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * {@inheritdoc}
      *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * ['eventName' => 'methodName']
-     *  * ['eventName' => ['methodName', $priority]]
-     *  * ['eventName' => [['methodName1', $priority], ['methodName2']]]
-     *
-     * @return array The event names to listen to
+     * @return array<string, array<int, string|int>>
      */
     public static function getSubscribedEvents(): array
     {
@@ -72,8 +57,6 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
 
     /**
      * Method to change used locale according to current request.
-     *
-     * @param RequestEvent $event
      */
     public function onKernelRequest(RequestEvent $event): void
     {
