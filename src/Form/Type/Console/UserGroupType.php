@@ -16,10 +16,8 @@ use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
 
