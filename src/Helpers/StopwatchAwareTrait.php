@@ -25,7 +25,7 @@ trait StopwatchAwareTrait
     protected Stopwatch $stopwatch;
 
     /**
-     * @link https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
+     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
      *
      * @required
      */
