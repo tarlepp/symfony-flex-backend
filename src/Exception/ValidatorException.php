@@ -27,9 +27,6 @@ class ValidatorException extends BaseValidatorException implements ClientErrorIn
     /**
      * ValidatorException constructor.
      *
-     * @param string                           $target
-     * @param ConstraintViolationListInterface $errors
-     *
      * @throws JsonException
      */
     public function __construct(string $target, ConstraintViolationListInterface $errors)
@@ -49,9 +46,6 @@ class ValidatorException extends BaseValidatorException implements ClientErrorIn
         parent::__construct(JSON::encode($output));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getStatusCode(): int
     {
         return 400;
