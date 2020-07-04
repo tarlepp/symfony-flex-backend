@@ -80,8 +80,8 @@ class RepositoryHelper
      * @see \App\Rest\Repository::getExpression
      * @see \App\Controller\Rest::processCriteria
      *
-     * @param QueryBuilder                               $queryBuilder
-     * @param array|array<int|string, string|array>|null $criteria
+     * @param QueryBuilder                         $queryBuilder
+     * @param array<int|string, string|array>|null $criteria
      *
      * @throws InvalidArgumentException
      */
@@ -109,9 +109,9 @@ class RepositoryHelper
      *
      * @see \App\Controller\Rest::getSearchTerms
      *
-     * @param QueryBuilder $queryBuilder
-     * @param string[]     $columns
-     * @param mixed[]|null $terms
+     * @param QueryBuilder               $queryBuilder
+     * @param array<int, string>         $columns
+     * @param array<string, string>|null $terms
      *
      * @throws InvalidArgumentException
      */
