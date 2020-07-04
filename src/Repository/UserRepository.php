@@ -23,12 +23,12 @@ use function array_key_exists;
  *
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null                     find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?Entity
- * @method array<int|string, mixed>|Entity findAdvanced(string $id, $hydrationMode = null)
- * @method Entity|null                     findOneBy(array $criteria, ?array $orderBy = null): ?Entity
- * @method array<int, Entity>              findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
- * @method array<int, Entity>              findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null): array
- * @method array<int, Entity>              findAll(): array
+ * @method Entity|null    find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method Entity[]|array findAdvanced(string $id, $hydrationMode = null)
+ * @method Entity|null    findOneBy(array $criteria, ?array $orderBy = null)
+ * @method Entity[]       findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ * @method Entity[]       findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method Entity[]       findAll()
  *
  * @codingStandardsIgnoreEnd
  */
@@ -41,9 +41,6 @@ class UserRepository extends BaseRepository
 
     /**
      * UserRepository constructor.
-     *
-     * @param ManagerRegistry $managerRegistry
-     * @param string          $environment
      */
     public function __construct(ManagerRegistry $managerRegistry, string $environment)
     {
@@ -54,11 +51,6 @@ class UserRepository extends BaseRepository
 
     /**
      * Method to check if specified username is available or not.
-     *
-     * @param string      $username
-     * @param string|null $id
-     *
-     * @return bool
      *
      * @throws NonUniqueResultException
      */
@@ -72,8 +64,6 @@ class UserRepository extends BaseRepository
      *
      * @param string      $email Email to check
      * @param string|null $id    User id to ignore
-     *
-     * @return bool
      *
      * @throws NonUniqueResultException
      */
@@ -95,9 +85,7 @@ class UserRepository extends BaseRepository
      * @param string $username The username
      * @param bool   $uuid     Is username parameter UUID or not
      *
-     * @return Entity|null
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function loadUserByUsername(string $username, bool $uuid): ?Entity
     {
@@ -140,8 +128,6 @@ class UserRepository extends BaseRepository
      * @param string      $column Column to check
      * @param string      $value  Value of specified column
      * @param string|null $id     User id to ignore
-     *
-     * @return bool
      *
      * @throws NonUniqueResultException
      */
