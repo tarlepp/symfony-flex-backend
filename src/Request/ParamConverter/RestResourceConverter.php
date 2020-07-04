@@ -51,8 +51,6 @@ class RestResourceConverter implements ParamConverterInterface
 
     /**
      * RestResourceConverter constructor.
-     *
-     * @param ResourceCollection $collection
      */
     public function __construct(ResourceCollection $collection)
     {
@@ -60,12 +58,7 @@ class RestResourceConverter implements ParamConverterInterface
     }
 
     /**
-     * Stores the object in the request.
-     *
-     * @param Request        $request
-     * @param ParamConverter $configuration Contains the name, class and options of the object
-     *
-     * @return bool True if the object has been successfully set, else false
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -82,13 +75,6 @@ class RestResourceConverter implements ParamConverterInterface
         return true;
     }
 
-    /**
-     * Checks if the object is supported.
-     *
-     * @param ParamConverter $configuration
-     *
-     * @return bool
-     */
     public function supports(ParamConverter $configuration): bool
     {
         return $this->collection->has($configuration->getClass());
