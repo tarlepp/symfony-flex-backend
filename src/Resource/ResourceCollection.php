@@ -25,11 +25,6 @@ use function sprintf;
  *
  * @package App\Resource
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @property IteratorAggregate<int, RestResourceInterface> $items
- *
- * @method RestResourceInterface                         get(string $className)
- * @method IteratorAggregate<int, RestResourceInterface> getAll()
  */
 class ResourceCollection implements Countable
 {
@@ -39,7 +34,6 @@ class ResourceCollection implements Countable
      * Collection constructor.
      *
      * @param IteratorAggregate<int, RestResourceInterface> $resources
-     * @param LoggerInterface                               $logger
      */
     public function __construct(IteratorAggregate $resources, LoggerInterface $logger)
     {
@@ -49,10 +43,6 @@ class ResourceCollection implements Countable
 
     /**
      * Getter method for REST resource by entity class name.
-     *
-     * @param string $className
-     *
-     * @return RestResourceInterface
      */
     public function getEntityResource(string $className): RestResourceInterface
     {
@@ -71,28 +61,19 @@ class ResourceCollection implements Countable
     }
 
     /**
-     * Method to check if specified entity class REST resource exists or not in current collection.
-     *
-     * @param string|null $className
-     *
-     * @return bool
+     * Method to check if specified entity class REST resource exists or not
+     * in current collection.
      */
     public function hasEntityResource(?string $className = null): bool
     {
         return $this->getFilteredItemByEntity($className ?? '') !== null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filter(string $className): Closure
     {
         return static fn (RestResourceInterface $restResource): bool => $restResource instanceof $className;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function error(string $className): void
     {
         $message = sprintf(
@@ -105,10 +86,6 @@ class ResourceCollection implements Countable
 
     /**
      * Getter method to get filtered item by given entity class.
-     *
-     * @param string $entityName
-     *
-     * @return RestResourceInterface|null
      */
     private function getFilteredItemByEntity(string $entityName): ?RestResourceInterface
     {
