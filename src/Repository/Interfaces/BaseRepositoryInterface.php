@@ -68,11 +68,6 @@ interface BaseRepositoryInterface
 
     /**
      * Method to create new query builder for current entity.
-     *
-     * @param string|null $alias
-     * @param string|null $indexBy
-     *
-     * @return QueryBuilder
      */
     public function createQueryBuilder(?string $alias = null, ?string $indexBy = null): QueryBuilder;
 
