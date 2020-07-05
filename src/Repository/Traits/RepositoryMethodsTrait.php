@@ -173,7 +173,7 @@ trait RepositoryMethodsTrait
      *
      * @param array<int|string, string|array>|null $criteria
      * @param array<string, string>|null           $search
-     * @param array<int, string>|null              $orderBy
+     * @param array<string, string>|null           $orderBy
      *
      * @throws InvalidArgumentException
      */

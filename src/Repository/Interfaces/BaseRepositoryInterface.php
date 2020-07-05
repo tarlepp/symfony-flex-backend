@@ -113,7 +113,7 @@ interface BaseRepositoryInterface
      * generic LIKE search.
      *
      * @param array<int|string, string|array> $criteria
-     * @param array<int, string>|null         $orderBy
+     * @param array<string, string>|null      $orderBy
      * @param array<string, string>|null      $search
      *
      * @return array<int, EntityInterface>
