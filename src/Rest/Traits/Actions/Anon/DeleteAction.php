@@ -40,11 +40,6 @@ trait DeleteAction
      *
      * @RestApiDoc()
      *
-     * @param Request $request
-     * @param string  $id
-     *
-     * @return Response
-     *
      * @throws Throwable
      */
     public function deleteAction(Request $request, string $id): Response

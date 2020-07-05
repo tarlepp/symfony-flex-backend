@@ -30,53 +30,35 @@ abstract class RestResource implements RestResourceInterface
     private ValidatorInterface $validator;
     private string $dtoClass = '';
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSerializerContext(): array
     {
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRepository(): BaseRepositoryInterface
     {
         return $this->repository;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setRepository(BaseRepositoryInterface $repository): RestResourceInterface
+    public function setRepository(BaseRepositoryInterface $repository): self
     {
         $this->repository = $repository;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getValidator(): ValidatorInterface
     {
         return $this->validator;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setValidator(ValidatorInterface $validator): RestResourceInterface
+    public function setValidator(ValidatorInterface $validator): self
     {
         $this->validator = $validator;
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDtoClass(): string
     {
         if ($this->dtoClass === '') {
@@ -91,9 +73,6 @@ abstract class RestResource implements RestResourceInterface
         return $this->dtoClass;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setDtoClass(string $dtoClass): RestResourceInterface
     {
         $this->dtoClass = $dtoClass;
@@ -101,9 +80,6 @@ abstract class RestResource implements RestResourceInterface
         return $this;
     }
 
-    /**
-     * G{@inheritdoc}
-     */
     public function getEntityName(): string
     {
         return $this->getRepository()->getEntityName();
@@ -117,17 +93,11 @@ abstract class RestResource implements RestResourceInterface
         return $this->getRepository()->getReference($id);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getAssociations(): array
     {
         return array_keys($this->getRepository()->getAssociations());
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDtoForEntity(
         string $id,
         string $dtoClass,
@@ -142,8 +112,8 @@ abstract class RestResource implements RestResourceInterface
         // Create new instance of DTO and load entity to that.
         /** @var RestDtoInterface $restDto */
         /** @var class-string<RestDtoInterface> $dtoClass */
-        $restDto = new $dtoClass();
-        $restDto->setId($id);
+        $restDto = (new $dtoClass())
+            ->setId($id);
 
         if ($patch === true) {
             $restDto->load($entity);

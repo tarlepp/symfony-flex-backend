@@ -22,8 +22,6 @@ trait RestResourceFindOne
 {
     /**
      * Before lifecycle method for findOne method.
-     *
-     * @param string $id
      */
     public function beforeFindOne(string &$id): void
     {
@@ -37,9 +35,6 @@ trait RestResourceFindOne
      *
      *          Also note that if you've made some changes to entity and you eg. throw an exception within this method
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
-     *
-     * @param string               $id
-     * @param EntityInterface|null $entity
      */
     public function afterFindOne(string &$id, ?EntityInterface $entity = null): void
     {

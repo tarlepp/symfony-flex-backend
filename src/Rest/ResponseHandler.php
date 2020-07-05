@@ -50,31 +50,19 @@ final class ResponseHandler implements ResponseHandlerInterface
 
     /**
      * ResponseHandler constructor.
-     *
-     * @param SerializerInterface $serializer
      */
     public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
     }
 
-    /**
-     * Getter for serializer
-     *
-     * @return SerializerInterface
-     */
     public function getSerializer(): SerializerInterface
     {
         return $this->serializer;
     }
 
     /**
-     * Helper method to get serialization context for request.
-     *
-     * @param Request                    $request
-     * @param RestResourceInterface|null $restResource
-     *
-     * @return mixed[]
+     * @return array<int|string, array<int, array<int, string>|string>|bool|string>
      */
     public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array
     {
@@ -116,18 +104,7 @@ final class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * Helper method to create response for request.
-     *
-     * @param Request                    $request
-     * @param mixed                      $data
-     * @param RestResourceInterface|null $restResource
-     * @param int|null                   $httpStatus
-     * @param string|null                $format
-     * @param mixed[]|null               $context
-     *
-     * @return Response
-     *
-     * @throws HttpException
+     * {@inheritdoc}
      */
     public function createResponse(
         Request $request,
@@ -150,13 +127,6 @@ final class ResponseHandler implements ResponseHandlerInterface
         return $response;
     }
 
-    /**
-     * Method to handle form errors.
-     *
-     * @param FormInterface $form
-     *
-     * @throws HttpException
-     */
     public function handleFormError(FormInterface $form): void
     {
         $errors = [];
@@ -183,12 +153,9 @@ final class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param bool                  $populateAll
-     * @param string[]              $populate
-     * @param string                $entityName
-     * @param RestResourceInterface $restResource
+     * @param array<int, string> $populate
      *
-     * @return string[]
+     * @return array<int, string>
      */
     private function checkPopulateAll(
         bool $populateAll,
@@ -212,11 +179,6 @@ final class ResponseHandler implements ResponseHandlerInterface
      * Getter method response format with fallback to default formats;
      *  - XML
      *  - JSON
-     *
-     * @param Request     $request
-     * @param string|null $format
-     *
-     * @return string
      */
     private function getFormat(Request $request, ?string $format = null): string
     {
@@ -224,12 +186,8 @@ final class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param mixed   $data
-     * @param int     $httpStatus
-     * @param string  $format
-     * @param mixed[] $context
-     *
-     * @return Response
+     * @param mixed                                                                $data
+     * @param array<int|string, array<int, array<int, string>|string>|bool|string> $context
      *
      * @throws HttpException
      */

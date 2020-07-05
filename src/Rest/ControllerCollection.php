@@ -22,11 +22,6 @@ use function sprintf;
  *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @property IteratorAggregate<int, ControllerInterface> $items
- *
- * @method ControllerInterface                         get(string $className)
- * @method IteratorAggregate<int, ControllerInterface> getAll()
  */
 class ControllerCollection implements Countable
 {
@@ -36,7 +31,6 @@ class ControllerCollection implements Countable
      * Collection constructor.
      *
      * @param IteratorAggregate<int, ControllerInterface> $controllers
-     * @param LoggerInterface                             $logger
      */
     public function __construct(IteratorAggregate $controllers, LoggerInterface $logger)
     {
@@ -44,9 +38,6 @@ class ControllerCollection implements Countable
         $this->logger = $logger;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function error(string $className): void
     {
         $message = sprintf(
@@ -57,9 +48,6 @@ class ControllerCollection implements Countable
         throw new InvalidArgumentException($message);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function filter(string $className): Closure
     {
         return static fn (ControllerInterface $restController): bool => $restController instanceof $className;

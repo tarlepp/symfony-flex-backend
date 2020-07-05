@@ -23,11 +23,7 @@ trait FindOneMethod
     /**
      * Generic 'findOneMethod' method for REST resources.
      *
-     * @param Request       $request
-     * @param string        $id
      * @param string[]|null $allowedHttpMethods
-     *
-     * @return Response
      *
      * @throws Throwable
      */

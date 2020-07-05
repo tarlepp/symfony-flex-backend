@@ -40,10 +40,6 @@ trait FindAction
      *
      * @RestApiDoc()
      *
-     * @param Request $request
-     *
-     * @return Response
-     *
      * @throws Throwable
      */
     public function findAction(Request $request): Response

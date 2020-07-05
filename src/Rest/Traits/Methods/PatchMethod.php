@@ -24,12 +24,7 @@ trait PatchMethod
     /**
      * Generic 'patchMethod' method for REST resources.
      *
-     * @param Request          $request
-     * @param RestDtoInterface $restDto
-     * @param string           $id
-     * @param string[]|null    $allowedHttpMethods
-     *
-     * @return Response
+     * @param string[]|null $allowedHttpMethods
      *
      * @throws Throwable
      */

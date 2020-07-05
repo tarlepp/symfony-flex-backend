@@ -40,10 +40,6 @@ trait CountAction
      *
      * @RestApiDoc()
      *
-     * @param Request $request
-     *
-     * @return Response
-     *
      * @throws Throwable
      */
     public function countAction(Request $request): Response

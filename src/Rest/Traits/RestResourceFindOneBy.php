@@ -39,9 +39,8 @@ trait RestResourceFindOneBy
      *          Also note that if you've made some changes to entity and you eg. throw an exception within this method
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
      *
-     * @param mixed[]              $criteria
-     * @param mixed[]              $orderBy
-     * @param EntityInterface|null $entity
+     * @param mixed[] $criteria
+     * @param mixed[] $orderBy
      */
     public function afterFindOneBy(array &$criteria, array &$orderBy, ?EntityInterface $entity): void
     {

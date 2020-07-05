@@ -23,11 +23,9 @@ trait RestResourceFind
     /**
      * Before lifecycle method for find method.
      *
-     * @param mixed[]  $criteria
-     * @param mixed[]  $orderBy
-     * @param int|null $limit
-     * @param int|null $offset
-     * @param mixed[]  $search
+     * @param mixed[] $criteria
+     * @param mixed[] $orderBy
+     * @param mixed[] $search
      */
     public function beforeFind(array &$criteria, array &$orderBy, ?int &$limit, ?int &$offset, array &$search): void
     {
@@ -41,8 +39,6 @@ trait RestResourceFind
      *
      * @param mixed[]           $criteria
      * @param mixed[]           $orderBy
-     * @param int|null          $limit
-     * @param int|null          $offset
      * @param mixed[]           $search
      * @param EntityInterface[] $entities
      */

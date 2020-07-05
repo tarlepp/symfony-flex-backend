@@ -41,12 +41,6 @@ trait UpdateAction
      *
      * @RestApiDoc()
      *
-     * @param Request          $request
-     * @param RestDtoInterface $restDto
-     * @param string           $id
-     *
-     * @return Response
-     *
      * @throws Throwable
      */
     public function updateAction(Request $request, RestDtoInterface $restDto, string $id): Response

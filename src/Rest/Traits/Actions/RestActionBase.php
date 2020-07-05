@@ -20,14 +20,6 @@ use Throwable;
  */
 trait RestActionBase
 {
-    /**
-     * @param Request            $request
-     * @param array<int, string> $allowedHttpMethods
-     *
-     * @return RestResourceInterface
-     *
-     * @throws Throwable
-     */
     public function getResourceForMethod(Request $request, array $allowedHttpMethods): RestResourceInterface
     {
         // Make sure that we have everything we need to make this work

@@ -23,10 +23,6 @@ trait RestResourcePatch
 {
     /**
      * Before lifecycle method for patch method.
-     *
-     * @param string           $id
-     * @param RestDtoInterface $restDto
-     * @param EntityInterface  $entity
      */
     public function beforePatch(string &$id, RestDtoInterface $restDto, EntityInterface $entity): void
     {
@@ -40,10 +36,6 @@ trait RestResourcePatch
      *
      *          Also note that if you've made some changes to entity and you eg. throw an exception within this method
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
-     *
-     * @param string           $id
-     * @param RestDtoInterface $dto
-     * @param EntityInterface  $entity
      */
     public function afterPatch(string &$id, RestDtoInterface $dto, EntityInterface $entity): void
     {

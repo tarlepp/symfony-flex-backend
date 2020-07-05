@@ -41,11 +41,6 @@ trait CreateAction
      *
      * @RestApiDoc()
      *
-     * @param Request          $request
-     * @param RestDtoInterface $restDto
-     *
-     * @return Response
-     *
      * @throws Throwable
      */
     public function createAction(Request $request, RestDtoInterface $restDto): Response

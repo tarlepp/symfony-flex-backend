@@ -37,10 +37,6 @@ trait IdsAction
      *
      * @RestApiDoc()
      *
-     * @param Request $request
-     *
-     * @return Response
-     *
      * @throws Throwable
      */
     public function idsAction(Request $request): Response

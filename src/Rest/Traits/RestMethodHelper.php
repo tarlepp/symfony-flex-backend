@@ -46,15 +46,6 @@ trait RestMethodHelper
      */
     protected static array $dtoClasses = [];
 
-    /**
-     * Getter method for used DTO class for current controller.
-     *
-     * @param string|null $method
-     *
-     * @return string
-     *
-     * @throws UnexpectedValueException
-     */
     public function getDtoClass(?string $method = null): string
     {
         $dtoClass = $method !== null && array_key_exists($method, static::$dtoClasses)
@@ -74,15 +65,6 @@ trait RestMethodHelper
         return $dtoClass;
     }
 
-    /**
-     * Method to validate REST trait method.
-     *
-     * @param Request            $request
-     * @param array<int, string> $allowedHttpMethods
-     *
-     * @throws LogicException
-     * @throws MethodNotAllowedHttpException
-     */
     public function validateRestMethod(Request $request, array $allowedHttpMethods): void
     {
         // Make sure that we have everything we need to make this work
@@ -101,9 +83,6 @@ trait RestMethodHelper
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function handleRestMethodException(Throwable $exception, ?string $id = null): Throwable
     {
         if ($id !== null) {
@@ -115,10 +94,6 @@ trait RestMethodHelper
 
     /**
      * Getter method for exception code with fallback to `400` bad response.
-     *
-     * @param Throwable $exception
-     *
-     * @return int
      */
     private function getExceptionCode(Throwable $exception): int
     {
@@ -128,9 +103,8 @@ trait RestMethodHelper
     }
 
     /**
-     * Method to detach entity from entity manager so possible changes to it won't be saved.
-     *
-     * @param string $id
+     * Method to detach entity from entity manager so possible changes to it
+     * won't be saved.
      */
     private function detachEntityFromManager(string $id): void
     {
@@ -151,8 +125,6 @@ trait RestMethodHelper
 
     /**
      * @param Throwable|Exception|TypeError|Error $exception
-     *
-     * @return Throwable
      */
     private function determineOutputAndStatusCodeForRestMethodException($exception): Throwable
     {
