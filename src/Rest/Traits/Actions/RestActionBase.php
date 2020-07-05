@@ -10,7 +10,6 @@ namespace App\Rest\Traits\Actions;
 
 use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Throwable;
 
 /**
  * Trait MethodHelper

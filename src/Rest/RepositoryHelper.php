@@ -337,7 +337,7 @@ class RepositoryHelper
 
     /**
      * @param array<int, string> $parameters
-     * @param array<int, mixed> $value
+     * @param array<int, mixed>  $value
      *
      * @return array<int, array<int, Literal>|string>
      */
