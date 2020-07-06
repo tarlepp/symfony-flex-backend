@@ -12,6 +12,7 @@ use App\Doctrine\DBAL\Types\EnumLanguageType;
 use App\Doctrine\DBAL\Types\EnumLocaleType;
 use DateTime;
 use DateTimeZone;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -37,9 +38,6 @@ class Localization
 
     /**
      * Localization constructor.
-     *
-     * @param CacheInterface  $appCacheApcu
-     * @param LoggerInterface $logger
      */
     public function __construct(CacheInterface $appCacheApcu, LoggerInterface $logger)
     {
@@ -48,7 +46,7 @@ class Localization
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public function getLanguages(): array
     {
@@ -56,29 +54,29 @@ class Localization
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public function getLocales(): array
     {
         return EnumLocaleType::getValues();
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * @return array
+     * @return array<int, array<string, string>>
      */
     public function getTimezones(): array
     {
         $output = [];
 
         try {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $output = $this->cache->get('application_timezone', function (ItemInterface $item): array {
                 // One year
                 $item->expiresAfter(31536000);
 
                 return $this->getFormattedTimezones();
             });
+        } catch (InvalidArgumentException $exception) {
+            $this->logger->error($exception->getMessage(), $exception->getTrace());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }
@@ -86,10 +84,10 @@ class Localization
         return $output;
     }
 
-    /** @noinspection PhpUnhandledExceptionInspection */
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * @return array
+     * @noinspection PhpDocMissingThrowsInspection
+     *
+     * @return array<int, array<string, string>>
      */
     public function getFormattedTimezones(): array
     {
@@ -97,6 +95,8 @@ class Localization
 
         foreach ((array)DateTimeZone::listIdentifiers() as $identifier) {
             $dateTimeZone = new DateTimeZone($identifier);
+
+            /** @noinspection PhpUnhandledExceptionInspection */
             $dateTime = new DateTime('now', $dateTimeZone);
 
             $hours = floor($dateTimeZone->getOffset($dateTime) / 3600);
@@ -105,6 +105,7 @@ class Localization
             $hours = 'GMT' . ($hours < 0 ? $hours : '+' . $hours);
             $minutes = ($minutes > 0 ? $minutes : '0' . $minutes);
 
+            /** @noinspection OffsetOperationsInspection */
             $output[] = [
                 'timezone' => explode('/', $identifier)[0],
                 'identifier' => $identifier,

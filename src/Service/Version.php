@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Service;
 
 use App\Utils\JSON;
+use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -29,10 +30,6 @@ class Version
 
     /**
      * Version constructor.
-     *
-     * @param string          $projectDir
-     * @param CacheInterface  $appCacheApcu
-     * @param LoggerInterface $logger
      */
     public function __construct(string $projectDir, CacheInterface $appCacheApcu, LoggerInterface $logger)
     {
@@ -41,19 +38,15 @@ class Version
         $this->logger = $logger;
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * Method to get application version from cache or create new entry to cache with version value from
-     * composer.json file.
-     *
-     * @return string
+     * Method to get application version from cache or create new entry to
+     * cache with version value from composer.json file.
      */
     public function get(): string
     {
         $output = '0.0.0';
 
         try {
-            /** @noinspection PhpUnhandledExceptionInspection */
             $output = $this->cache->get('application_version', function (ItemInterface $item): string {
                 // One year
                 $item->expiresAfter(31536000);
@@ -63,6 +56,8 @@ class Version
 
                 return (string)($composerData->version ?? '0.0.0');
             });
+        } catch (InvalidArgumentException $exception) {
+            $this->logger->error($exception->getMessage(), $exception->getTrace());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }
