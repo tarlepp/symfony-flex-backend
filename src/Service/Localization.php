@@ -105,7 +105,7 @@ class Localization
             $hours = 'GMT' . ($hours < 0 ? $hours : '+' . $hours);
             $minutes = ($minutes > 0 ? $minutes : '0' . $minutes);
 
-            /** @noinspection OffsetOperationsInspection */
+            /* @noinspection OffsetOperationsInspection */
             $output[] = [
                 'timezone' => explode('/', $identifier)[0],
                 'identifier' => $identifier,
