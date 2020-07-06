@@ -36,8 +36,6 @@ class EntityReferenceExistsValidator extends ConstraintValidator
 
     /**
      * EntityReferenceExistsValidator constructor.
-     *
-     * @param LoggerInterface $logger
      */
     public function __construct(LoggerInterface $logger)
     {
@@ -45,10 +43,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     }
 
     /**
-     * Checks if the passed value is valid.
-     *
-     * @param EntityInterface|array<int, EntityInterface>|mixed $value      The value that should be validated
-     * @param Constraint                                        $constraint The constraint for the validation
+     * {@inheritdoc}
      */
     public function validate($value, Constraint $constraint): void
     {
@@ -56,7 +51,6 @@ class EntityReferenceExistsValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, EntityReferenceExists::class);
         }
 
-        /** @var array<int, EntityInterface> $values */
         $values = $this->normalize($constraint->entityClass, $value);
 
         $this->check($values);
@@ -65,10 +59,9 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     /**
      * Checks if the passed value is valid.
      *
-     * @param string                                            $target Target class to check
-     * @param EntityInterface|array<int, EntityInterface>|mixed $input  The value that should be validated
+     * @param EntityInterface|array<int, EntityInterface>|mixed $input
      *
-     * @return array<mixed, mixed>
+     * @return array<int, EntityInterface>
      */
     private function normalize(string $target, $input): array
     {
@@ -127,8 +120,6 @@ class EntityReferenceExistsValidator extends ConstraintValidator
 
     /**
      * Method to return used filter closure.
-     *
-     * @return Closure
      */
     private function getFilterClosure(): Closure
     {
