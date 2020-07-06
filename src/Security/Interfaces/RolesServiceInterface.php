@@ -46,23 +46,17 @@ interface RolesServiceInterface
 
     /**
      * Getter method for role label.
-     *
-     * @param string $role
-     *
-     * @return string
      */
     public function getRoleLabel(string $role): string;
 
     /**
      * Getter method for short role.
-     *
-     * @param string $role
-     *
-     * @return string
      */
     public function getShort(string $role): string;
 
     /**
+     * Helper method to get inherited roles for given roles.
+     *
      * @param array<int, string> $roles
      *
      * @return array<int, string>

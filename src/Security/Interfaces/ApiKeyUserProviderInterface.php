@@ -23,18 +23,11 @@ interface ApiKeyUserProviderInterface extends UserProviderInterface
 {
     /**
      * ApiKeyUserProvider constructor.
-     *
-     * @param ApiKeyRepository $apiKeyRepository
-     * @param RolesService     $rolesService
      */
     public function __construct(ApiKeyRepository $apiKeyRepository, RolesService $rolesService);
 
     /**
      * Method to fetch ApiKey entity for specified token.
-     *
-     * @param string $token
-     *
-     * @return ApiKey|null
      */
     public function getApiKeyForToken(string $token): ?ApiKey;
 }

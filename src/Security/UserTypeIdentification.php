@@ -29,9 +29,6 @@ class UserTypeIdentification
 
     /**
      * UserTypeIdentification constructor.
-     *
-     * @param TokenStorageInterface $tokenStorage
-     * @param UserRepository        $userRepository
      */
     public function __construct(TokenStorageInterface $tokenStorage, UserRepository $userRepository)
     {
@@ -41,8 +38,6 @@ class UserTypeIdentification
 
     /**
      * Helper method to get current logged in ApiKey entity via token storage.
-     *
-     * @return ApiKey|null
      */
     public function getApiKey(): ?ApiKey
     {
@@ -53,8 +48,6 @@ class UserTypeIdentification
 
     /**
      * Helper method to get current logged in User entity via token storage.
-     *
-     * @return User|null
      *
      * @throws NonUniqueResultException
      */
@@ -77,8 +70,6 @@ class UserTypeIdentification
 
     /**
      * Helper method to get current logged in ApiKeyUser via token storage.
-     *
-     * @return ApiKeyUser|null
      */
     public function getApiKeyUser(): ?ApiKeyUser
     {
@@ -93,8 +84,6 @@ class UserTypeIdentification
 
     /**
      * Helper method to get current logged in SecurityUser via token storage.
-     *
-     * @return SecurityUser|null
      */
     public function getSecurityUser(): ?SecurityUser
     {
@@ -108,8 +97,9 @@ class UserTypeIdentification
     }
 
     /**
-     * Returns a user representation. Can be a UserInterface instance, an object
-     * implementing a __toString method, or the username as a regular string.
+     * Returns a user representation. Can be a UserInterface instance, an
+     * object implementing a __toString method, or the username as a regular
+     * string.
      *
      * @return object|string|null
      */

@@ -22,15 +22,12 @@ interface ApiKeyUserInterface extends UserInterface
     /**
      * ApiKeyUser constructor.
      *
-     * @param ApiKey   $apiKey
-     * @param string[] $roles
+     * @param array<int, string> $roles
      */
     public function __construct(ApiKey $apiKey, array $roles);
 
     /**
      * Getter method for ApiKey entity
-     *
-     * @return ApiKey
      */
     public function getApiKey(): ApiKey;
 }

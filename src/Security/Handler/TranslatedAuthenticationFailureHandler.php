@@ -29,9 +29,6 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
 
     /**
      * TranslatedAuthenticationFailureHandler constructor.
-     *
-     * @param EventDispatcherInterface $dispatcher
-     * @param TranslatorInterface      $translator
      */
     public function __construct(EventDispatcherInterface $dispatcher, TranslatorInterface $translator)
     {
@@ -42,11 +39,6 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
 
     /**
      * {@inheritdoc}
-     *
-     * @param Request                 $request
-     * @param AuthenticationException $exception
-     *
-     * @return Response
      *
      * @noinspection PhpMissingParentCallCommonInspection
      */
