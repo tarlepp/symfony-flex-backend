@@ -40,13 +40,9 @@ class LocaleValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint): void
     {
         if (in_array($value, $this->localization->getLocales(), true) !== true) {
-            if (!is_string($value)) {
-                $value = $value->getLocale();
-            }
-
             $this->context
                 ->buildViolation(Locale::MESSAGE)
-                ->setParameter('{{ locale }}', $value)
+                ->setParameter('{{ locale }}', (string)$value)
                 ->setCode(Locale::INVALID_LOCALE)
                 ->addViolation();
         }
