@@ -11,7 +11,6 @@ namespace App\Utils\Tests;
 use App\Utils\JSON;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use UnexpectedValueException;
