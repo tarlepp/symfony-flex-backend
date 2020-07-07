@@ -236,9 +236,6 @@ class ResourceCollectionTest extends KernelTestCase
                 $this->iterator = new ArrayObject($input);
             }
 
-            /**
-             * {@inheritdoc}
-             */
             public function getIterator(): ArrayObject
             {
                 return $this->iterator;
@@ -249,9 +246,6 @@ class ResourceCollectionTest extends KernelTestCase
     private function getIteratorAggregateThatThrowsAnException(): IteratorAggregate
     {
         return new class() implements IteratorAggregate {
-            /**
-             * {@inheritdoc}
-             */
             public function getIterator(): ArrayObject
             {
                 throw new LogicException('Exception with getIterator');

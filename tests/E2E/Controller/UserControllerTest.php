@@ -56,9 +56,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderValidUsers
      *
-     * @param string $username
-     * @param string $password
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /count` returns expected response with $username + $password
@@ -78,8 +75,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderValidApiKeyUsers
      *
-     * @param string $role
-     *
      * @testdox Test that `GET /count` returns expected response with $role `ApiKey` token
      */
     public function testThatCountActionReturnsExpectedForApiKeyUser(string $role): void
@@ -96,9 +91,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderInvalidUsers
-     *
-     * @param string $username
-     * @param string $password
      *
      * @throws Throwable
      *
@@ -123,8 +115,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderInvalidApiKeyUsers
      *
-     * @param string $role
-     *
      * @testdox Test that `GET /count` returns HTTP 403 with $role `ApiKey` token
      */
     public function testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
@@ -146,9 +136,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderValidUsers
      *
-     * @param string $username
-     * @param string $password
-     *
      * @throws Throwable
      *
      * @testdox Test that `Find` action returns expected with $username + $password
@@ -167,9 +154,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderInvalidUsers
-     *
-     * @param string $username
-     * @param string $password
      *
      * @throws Throwable
      *
@@ -194,9 +178,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderValidUsers
      *
-     * @param string $username
-     * @param string $password
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /user/ids` returns expected with $username + $password
@@ -215,9 +196,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderInvalidUsers
-     *
-     * @param string $username
-     * @param string $password
      *
      * @throws Throwable
      *
@@ -240,8 +218,6 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return string
-     *
      * @throws Throwable
      */
     public function testThatCreateActionWorksLikeExpected(): string
@@ -279,9 +255,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderInvalidUsersCreate
      *
-     * @param string $username
-     * @param string $password
-     *
      * @throws Throwable
      *
      * @testdox Test that `POST /user` returns HTTP status code 403 with invalid user $username + $password
@@ -311,10 +284,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @depends testThatCreateActionWorksLikeExpected
-     *
-     * @param string $userId
-     *
-     * @return string
      *
      * @throws Throwable
      *
@@ -351,10 +320,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @depends testThatCreateActionWorksLikeExpected
      *
-     * @param string $userId
-     *
-     * @return string
-     *
      * @throws Throwable
      *
      * @testdox Test that `PUT /user/_userId_` returns HTTP status 400 with partial data
@@ -380,12 +345,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @depends      testThatUpdateActionWorksLikeExpected
      * @dataProvider dataProviderInvalidUsersCreate
-     *
-     * @param string $username
-     * @param string $password
-     * @param string $userId
-     *
-     * @return string
      *
      * @throws Throwable
      *
@@ -421,10 +380,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @depends testThatUpdateActionWorksLikeExpected
-     *
-     * @param string $userId
-     *
-     * @return string
      *
      * @throws Throwable
      *
@@ -465,10 +420,6 @@ class UserControllerTest extends WebTestCase
      * @depends      testThatUpdateActionWorksLikeExpected
      * @dataProvider dataProviderInvalidUsersCreate
      *
-     * @param string $username
-     * @param string $password
-     * @param string $userId
-     *
      * @throws Throwable
      *
      * @testdox Test that `DELETE /user/_userId_` returns HTTP status 403 with invalid user $username + $password
@@ -494,8 +445,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @depends testThatUpdateActionWorksLikeExpected
-     *
-     * @param string $userId
      *
      * @throws Throwable
      *
@@ -538,10 +487,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatGetRolesActionsReturns403ForInvalidUser
      *
-     * @param string $username
-     * @param string $password
-     * @param string $userId
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /user/$userId/roles` returns 403 with invalid user $username + $password
@@ -562,11 +507,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetRolesActionsReturns200ForUserHimself
-     *
-     * @param string $username
-     * @param string $password
-     * @param string $userId
-     * @param string $expectedResponse
      *
      * @throws Throwable
      *
@@ -591,9 +531,6 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatGetRolesActionReturns200ForRootRoleUser
      *
-     * @param string $userId
-     * @param string $expectedResponse
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /user/$userId/roles` returns expected `$expectedResponse` for user who has `ROLE_ROOT`
@@ -612,10 +549,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetUserGroupsActionsReturns403ForInvalidUser
-     *
-     * @param string $username
-     * @param string $password
-     * @param string $userId
      *
      * @throws Throwable
      *
@@ -637,11 +570,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself
-     *
-     * @param string $username
-     * @param string $password
-     * @param string $expectedResponse
-     * @param string $userId
      *
      * @throws Throwable
      *
@@ -672,9 +600,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderInvalidUsersCreate
-     *
-     * @param string $username
-     * @param string $password
      *
      * @throws Throwable
      *
@@ -714,8 +639,6 @@ class UserControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatAttachUserGroupActionWorksAsExpected
-     *
-     * @param int $expectedStatus
      *
      * @throws Throwable
      *
@@ -787,9 +710,6 @@ class UserControllerTest extends WebTestCase
      *
      * @dataProvider dataProviderInvalidUsersCreate
      *
-     * @param string $username
-     * @param string $password
-     *
      * @throws Throwable
      *
      * @testdox Test that `DELETE /user/_u_id_/groups/_ug_id_` returns HTTP 403 with invalid user $username + $password
@@ -831,7 +751,6 @@ class UserControllerTest extends WebTestCase
      *
      * depends testThatDetachUserGroupActionWorksAsExpected
      *
-     * @param string $userId
      * @param string $expectedResponse
      *
      * @throws Throwable
@@ -859,27 +778,18 @@ class UserControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderValidUsers(): Generator
     {
         yield ['john-admin', 'password-admin'];
         //yield ['john-root', 'password-root'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderValidApiKeyUsers(): Generator
     {
         yield ['admin'];
         //yield ['root'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderInvalidUsers(): Generator
     {
         //yield ['john', 'password'];
@@ -888,9 +798,6 @@ class UserControllerTest extends WebTestCase
         yield ['john-user', 'password-user'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderInvalidApiKeyUsers(): Generator
     {
         //yield ['api'];
@@ -898,18 +805,12 @@ class UserControllerTest extends WebTestCase
         yield ['user'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatAttachUserGroupActionWorksAsExpected(): Generator
     {
         yield [201];
         yield [200];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderInvalidUsersCreate(): Generator
     {
         //yield ['john', 'password'];
@@ -920,8 +821,6 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatGetRolesActionsReturns403ForInvalidUser(): Generator
@@ -941,8 +840,6 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatGetRolesActionsReturns200ForUserHimself(): array
@@ -987,8 +884,6 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatGetRolesActionReturns200ForRootRoleUser(): array
@@ -1009,8 +904,6 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatGetUserGroupsActionsReturns403ForInvalidUser(): Generator
@@ -1019,8 +912,6 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return array
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): array
@@ -1053,8 +944,6 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatGetUserGroupsActionReturns200ForRootRoleUser(): Generator
@@ -1070,8 +959,6 @@ class UserControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatUpdateActionDoesNotWorkWithTakenUsername(): Generator

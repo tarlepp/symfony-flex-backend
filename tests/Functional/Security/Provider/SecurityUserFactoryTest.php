@@ -57,9 +57,6 @@ class SecurityUserFactoryTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance
      *
-     * @param string                $username
-     * @param StringableArrayObject $roles
-     *
      * @throws Throwable
      *
      * @testdox Test that `loadUserByUsername` method with `$username` input returns `SecurityUser` with `$roles` roles.
@@ -129,9 +126,6 @@ class SecurityUserFactoryTest extends KernelTestCase
         $this->securityUserFactory->refreshUser($user);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance(): Generator
     {
         yield ['john', new StringableArrayObject([])];

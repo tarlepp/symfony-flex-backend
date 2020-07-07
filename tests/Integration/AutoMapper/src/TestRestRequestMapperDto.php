@@ -26,8 +26,6 @@ class TestRestRequestMapperDto extends RestDto
     /**
      * Method to load DTO data from specified entity.
      *
-     * @param EntityInterface $entity
-     *
      * @return RestDtoInterface|TestRestRequestMapperDto
      */
     public function load(EntityInterface $entity): RestDtoInterface
@@ -35,17 +33,12 @@ class TestRestRequestMapperDto extends RestDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSomeProperty(): string
     {
         return $this->someProperty;
     }
 
     /**
-     * @param string $someProperty
-     *
      * @return TestRestRequestMapperDto
      */
     public function setSomeProperty(string $someProperty): self
@@ -55,17 +48,12 @@ class TestRestRequestMapperDto extends RestDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSomeTransformProperty(): string
     {
         return $this->someTransformProperty;
     }
 
     /**
-     * @param string $someTransformProperty
-     *
      * @return TestRestRequestMapperDto
      */
     public function setSomeTransformProperty(string $someTransformProperty): self

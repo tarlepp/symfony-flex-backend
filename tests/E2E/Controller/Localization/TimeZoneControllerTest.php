@@ -27,8 +27,6 @@ class TimeZoneControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatTimeZoneRouteDoesNotAllowOtherMethodThanGet
      *
-     * @param string $method
-     *
      * @throws Throwable
      *
      * @testdox Test that `/localization/timezone` endpoint returns 405 with `$method` method.
@@ -97,9 +95,6 @@ class TimeZoneControllerTest extends WebTestCase
         static::assertArrayHasKey('value', $data);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTimeZoneRouteDoesNotAllowOtherMethodThanGet(): Generator
     {
         yield ['PUT'];

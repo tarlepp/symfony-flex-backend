@@ -145,9 +145,6 @@ abstract class DtoTestCase extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSetterOnlyAcceptSpecifiedType
      *
-     * @param string $field
-     * @param string $type
-     *
      * @throws Throwable
      *
      * @testdox Test that `setter` method for `$field` will fail if parameter is not `$type` type.
@@ -174,8 +171,6 @@ abstract class DtoTestCase extends KernelTestCase
     }
 
     /**
-     * @return array
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatSetterOnlyAcceptSpecifiedType(): array
@@ -191,9 +186,6 @@ abstract class DtoTestCase extends KernelTestCase
     }
 
     /**
-     * @param ReflectionClass    $dtoReflection
-     * @param ReflectionProperty $reflectionProperty
-     *
      * @return float|int|string
      *
      * @throws Throwable
@@ -215,11 +207,6 @@ abstract class DtoTestCase extends KernelTestCase
         return PhpUnitUtil::getValidValueForType($type);
     }
 
-    /**
-     * @param ReflectionProperty $reflectionProperty
-     *
-     * @return string|null
-     */
     private function parseType(ReflectionProperty $reflectionProperty): ?string
     {
         $output = null;

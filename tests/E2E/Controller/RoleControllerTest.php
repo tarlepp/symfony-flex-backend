@@ -43,9 +43,6 @@ class RoleControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatFindOneActionWorksAsExpected
      *
-     * @param string $username
-     * @param string $password
-     *
      * @throws Throwable
      *
      * @testdox Test that `findOne` action returns HTTP 200 with $username + $password
@@ -64,9 +61,6 @@ class RoleControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetInheritedRolesActionWorksAsExpected
-     *
-     * @param string $username
-     * @param string $password
      *
      * @throws Throwable
      *
@@ -92,18 +86,12 @@ class RoleControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatFindOneActionWorksAsExpected(): Generator
     {
         yield ['john-admin', 'password-admin'];
         //yield ['john-root',   'password-root'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): Generator
     {
         yield ['john', 'password'];

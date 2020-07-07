@@ -28,8 +28,6 @@ class AuthControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost
      *
-     * @param string $method
-     *
      * @throws Throwable
      *
      * @testdox Test that `getToken` action returns 405 with $method method
@@ -47,9 +45,6 @@ class AuthControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
-     *
-     * @param string $username
-     * @param string $password
      *
      * @throws Throwable
      *
@@ -136,9 +131,6 @@ class AuthControllerTest extends WebTestCase
         );
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost(): Generator
     {
         yield ['HEAD'];
@@ -150,9 +142,6 @@ class AuthControllerTest extends WebTestCase
         yield ['PATCH'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
     {
         yield ['john', 'password'];

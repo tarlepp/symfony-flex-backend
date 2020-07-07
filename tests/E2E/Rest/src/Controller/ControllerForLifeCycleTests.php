@@ -37,8 +37,6 @@ class ControllerForLifeCycleTests extends Controller
 
     /**
      * ControllerForLifeCycleTests constructor.
-     *
-     * @param ResourceForLifeCycleTests $resource
      */
     public function __construct(ResourceForLifeCycleTests $resource)
     {
@@ -53,11 +51,6 @@ class ControllerForLifeCycleTests extends Controller
      *      },
      *      methods={"GET"}
      *  )
-     *
-     * @param Request $request
-     * @param string  $role
-     *
-     * @return Response
      *
      * @throws Throwable
      */

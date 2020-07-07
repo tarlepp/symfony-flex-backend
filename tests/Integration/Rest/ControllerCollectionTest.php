@@ -49,9 +49,6 @@ class ControllerCollectionTest extends KernelTestCase
                 $this->iterator = new ArrayObject($input);
             }
 
-            /**
-             * {@inheritdoc}
-             */
             public function getIterator(): ArrayObject
             {
                 return $this->iterator;

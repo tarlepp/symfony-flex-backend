@@ -34,8 +34,6 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     /**
      * @dataProvider dataProviderValidUsers
      *
-     * @param string $username
-     *
      * @throws Throwable
      *
      * @testdox Test that `resolve` method with `$username` input returns expected `User` object.
@@ -67,8 +65,6 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderValidUsers
-     *
-     * @param string $username
      *
      * @throws Throwable
      *
@@ -105,9 +101,6 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         static::assertSame([$user], $argumentResolver->getArguments(Request::create('/'), $closure));
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderValidUsers(): Generator
     {
         yield ['john'];

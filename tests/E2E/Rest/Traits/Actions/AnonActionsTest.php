@@ -19,14 +19,8 @@ use Generator;
  */
 class AnonActionsTest extends RestTraitTestCase
 {
-    /**
-     * @var string
-     */
     protected static string $route = '/test_anon_actions';
 
-    /**
-     * @return Generator
-     */
     public function getValidUsers(): Generator
     {
         //yield ['john-root', 'password-root'];
@@ -37,9 +31,6 @@ class AnonActionsTest extends RestTraitTestCase
         yield [null, null];
     }
 
-    /**
-     * @return Generator
-     */
     public function getInvalidUsers(): Generator
     {
         yield from [];

@@ -27,8 +27,6 @@ class LocaleControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatLocaleRouteDoesNotAllowOtherMethodThanGet
      *
-     * @param string $method
-     *
      * @throws Throwable
      *
      * @testdox Test that `/localization/locale` endpoint returns 405 with `$method` method.
@@ -77,9 +75,6 @@ class LocaleControllerTest extends WebTestCase
         static::assertCount(2, $data);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatLocaleRouteDoesNotAllowOtherMethodThanGet(): Generator
     {
         yield ['PUT'];

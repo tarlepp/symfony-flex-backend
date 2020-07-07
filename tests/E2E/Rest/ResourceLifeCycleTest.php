@@ -37,8 +37,6 @@ class ResourceLifeCycleTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException
      *
-     * @param string $role
-     *
      * @throws Throwable
      *
      * @testdox Test that modified entity ($role) is not flushed if life cycle method throws exception
@@ -55,9 +53,6 @@ class ResourceLifeCycleTest extends WebTestCase
         static::assertSame('Description - ' . $role, $entity->getDescription());
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): Generator
     {
         yield [RolesService::ROLE_ADMIN];
