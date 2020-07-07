@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Logged;
 
-use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CountMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,8 +36,6 @@ trait CountAction
      *  )
      *
      * @Security("is_granted('ROLE_LOGGED')")
-     *
-     * @RestApiDoc()
      *
      * @throws Throwable
      */

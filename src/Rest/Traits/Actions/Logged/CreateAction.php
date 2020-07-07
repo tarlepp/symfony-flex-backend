@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Logged;
 
-use App\Annotation\RestApiDoc;
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\CreateMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -38,8 +37,6 @@ trait CreateAction
      *  )
      *
      * @Security("is_granted('ROLE_LOGGED')")
-     *
-     * @RestApiDoc()
      *
      * @throws Throwable
      */

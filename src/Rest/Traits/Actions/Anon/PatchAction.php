@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Anon;
 
-use App\Annotation\RestApiDoc;
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\PatchMethod;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,8 +37,6 @@ trait PatchAction
      *      },
      *      methods={"PATCH"},
      *  )
-     *
-     * @RestApiDoc()
      *
      * @throws Throwable
      */

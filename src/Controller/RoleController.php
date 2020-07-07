@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
-use App\Annotation\RestApiDoc;
 use App\Entity\Role;
 use App\Resource\RoleResource;
 use App\Rest\Controller;
@@ -66,8 +65,6 @@ class RoleController extends Controller
      *
      * @Security("is_granted('ROLE_ADMIN')")
      *
-     * @RestApiDoc()
-     *
      * @throws Throwable
      */
     public function findOneAction(Request $request, string $role): Response
@@ -124,8 +121,6 @@ class RoleController extends Controller
      *          @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
-     *
-     * @RestApiDoc()
      */
     public function getInheritedRolesAction(Role $role, RolesService $rolesService): JsonResponse
     {

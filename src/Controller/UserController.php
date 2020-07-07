@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
-use App\Annotation\RestApiDoc;
 use App\DTO\User\UserCreate;
 use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
@@ -90,8 +89,6 @@ class UserController extends Controller
      *  )
      *
      * @Security("is_granted('ROLE_ROOT')")
-     *
-     * @RestApiDoc()
      *
      * @throws Throwable
      */

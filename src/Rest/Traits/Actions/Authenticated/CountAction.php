@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Authenticated;
 
-use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CountMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,8 +36,6 @@ trait CountAction
      *  )
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-     *
-     * @RestApiDoc()
      *
      * @throws Throwable
      */

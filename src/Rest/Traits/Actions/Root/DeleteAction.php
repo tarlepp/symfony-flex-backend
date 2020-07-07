@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Root;
 
-use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\DeleteMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,8 +39,6 @@ trait DeleteAction
      *  )
      *
      * @Security("is_granted('ROLE_ROOT')")
-     *
-     * @RestApiDoc()
      *
      * @throws Throwable
      */
