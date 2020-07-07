@@ -24,8 +24,6 @@ final class HealthzService
 
     /**
      * HealthzService constructor.
-     *
-     * @param HealthzRepository $repository
      */
     public function __construct(HealthzRepository $repository)
     {
@@ -33,14 +31,14 @@ final class HealthzService
     }
 
     /**
-     * Method to check that "all" is ok within our application. This will try to do following:
+     * Method to check that "all" is ok within our application. This will try
+     * to do following:
      *  1) Remove data from database
      *  2) Create data to database
      *  3) Read data from database
      *
-     * These steps should make sure that at least application database is working as expected.
-     *
-     * @return Healthz|null
+     * These steps should make sure that at least application database is
+     * working as expected.
      *
      * @throws Throwable
      */

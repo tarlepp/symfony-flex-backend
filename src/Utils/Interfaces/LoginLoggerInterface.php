@@ -23,25 +23,16 @@ interface LoginLoggerInterface
 {
     /**
      * LoginLogger constructor.
-     *
-     * @param LogLoginResource $logLoginFailureResource
-     * @param RequestStack     $requestStack
      */
     public function __construct(LogLoginResource $logLoginFailureResource, RequestStack $requestStack);
 
     /**
-     * Setter for User object
-     *
-     * @param User|null $user
-     *
-     * @return LoginLoggerInterface
+     * Setter for User object (Entity).
      */
     public function setUser(?User $user = null): self;
 
     /**
      * Method to handle login event.
-     *
-     * @param string $type
      *
      * @throws Throwable
      */

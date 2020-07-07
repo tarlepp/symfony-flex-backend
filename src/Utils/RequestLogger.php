@@ -37,10 +37,6 @@ class RequestLogger implements RequestLoggerInterface
 
     /**
      * ResponseLogger constructor.
-     *
-     * @param LogRequestResource $resource
-     * @param LoggerInterface    $logger
-     * @param array              $sensitiveProperties
      */
     public function __construct(LogRequestResource $resource, LoggerInterface $logger, array $sensitiveProperties)
     {
@@ -49,79 +45,41 @@ class RequestLogger implements RequestLoggerInterface
         $this->sensitiveProperties = $sensitiveProperties;
     }
 
-    /**
-     * Setter for response object.
-     *
-     * @param Response $response
-     *
-     * @return RequestLoggerInterface
-     */
-    public function setResponse(Response $response): RequestLoggerInterface
+    public function setResponse(Response $response): self
     {
         $this->response = $response;
 
         return $this;
     }
 
-    /**
-     * Setter for request object.
-     *
-     * @param Request $request
-     *
-     * @return RequestLoggerInterface
-     */
-    public function setRequest(Request $request): RequestLoggerInterface
+    public function setRequest(Request $request): self
     {
         $this->request = $request;
 
         return $this;
     }
 
-    /**
-     * Setter method for current user.
-     *
-     * @param User|null $user
-     *
-     * @return RequestLoggerInterface
-     */
-    public function setUser(?User $user = null): RequestLoggerInterface
+    public function setUser(?User $user = null): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Setter method for current api key
-     *
-     * @param ApiKey|null $apiKey
-     *
-     * @return RequestLoggerInterface
-     */
-    public function setApiKey(?ApiKey $apiKey = null): RequestLoggerInterface
+    public function setApiKey(?ApiKey $apiKey = null): self
     {
         $this->apiKey = $apiKey;
 
         return $this;
     }
 
-    /**
-     * Setter method for 'master request' info.
-     *
-     * @param bool $masterRequest
-     *
-     * @return RequestLoggerInterface
-     */
-    public function setMasterRequest(bool $masterRequest): RequestLoggerInterface
+    public function setMasterRequest(bool $masterRequest): self
     {
         $this->masterRequest = $masterRequest;
 
         return $this;
     }
 
-    /**
-     * Method to handle current response and log it to database.
-     */
     public function handle(): void
     {
         // Just check that we have all that we need
@@ -137,7 +95,7 @@ class RequestLogger implements RequestLoggerInterface
     }
 
     /**
-     * Store request log.
+     * Store request log to database.
      *
      * @throws Throwable
      */

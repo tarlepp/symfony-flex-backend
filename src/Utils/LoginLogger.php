@@ -33,9 +33,6 @@ class LoginLogger implements LoginLoggerInterface
 
     /**
      * LoginLogger constructor.
-     *
-     * @param LogLoginResource $logLoginFailureResource
-     * @param RequestStack     $requestStack
      */
     public function __construct(LogLoginResource $logLoginFailureResource, RequestStack $requestStack)
     {
@@ -46,27 +43,13 @@ class LoginLogger implements LoginLoggerInterface
         $this->deviceDetector = new DeviceDetector();
     }
 
-    /**
-     * Setter for User object
-     *
-     * @param User|null $user
-     *
-     * @return LoginLoggerInterface
-     */
-    public function setUser(?User $user = null): LoginLoggerInterface
+    public function setUser(?User $user = null): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Method to handle login event.
-     *
-     * @param string $type
-     *
-     * @throws Throwable
-     */
     public function process(string $type): void
     {
         // Get current request
@@ -87,14 +70,10 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * Method to create new login entry and store it to database.
      *
-     * @param string  $type
-     * @param Request $request
-     *
      * @throws Throwable
      */
     private function createEntry(string $type, Request $request): void
     {
-        /** @var LogLogin $entry */
         $entry = new LogLogin($type, $request, $this->deviceDetector, $this->user);
 
         // And store entry to database

@@ -34,8 +34,6 @@ class JSON
      *                       The behaviour of these constants is described on the JSON constants page.
      * @param int   $depth   Set the maximum depth. Must be greater than zero.
      *
-     * @return string
-     *
      * @throws JsonException
      */
     public static function encode($input, ?int $options = null, ?int $depth = null): string
@@ -60,7 +58,7 @@ class JSON
      * @param int    $options Bitmask of JSON decode options. Currently only JSON_BIGINT_AS_STRING is supported
      *                        (default is to cast large integers as floats)
      *
-     * @return stdClass|mixed|mixed[]
+     * @return stdClass|mixed|array<mixed>
      *
      * @throws JsonException
      */
