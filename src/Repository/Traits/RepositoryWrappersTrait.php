@@ -43,6 +43,11 @@ trait RepositoryWrappersTrait
         return $this->getEntityManager()->getReference($this->getEntityName(), $referenceId);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return array<string, string>
+     */
     public function getAssociations(): array
     {
         return $this->getClassMetaData()->getAssociationMappings();

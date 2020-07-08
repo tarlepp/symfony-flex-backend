@@ -25,6 +25,11 @@ trait RestResourceBaseMethods
 {
     use RestResourceLifeCycles;
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return array<int, EntityInterface>
+     */
     public function find(
         ?array $criteria = null,
         ?array $orderBy = null,
@@ -214,6 +219,11 @@ trait RestResourceBaseMethods
         return $entity;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return array<int, string>
+     */
     public function getIds(?array $criteria = null, ?array $search = null): array
     {
         $criteria ??= [];
@@ -314,6 +324,9 @@ trait RestResourceBaseMethods
         }
     }
 
+    /**
+     * @psalm-suppress MoreSpecificReturnType
+     */
     private function createEntity(): EntityInterface
     {
         /** @var class-string $entityClass */

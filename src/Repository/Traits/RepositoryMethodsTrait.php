@@ -68,6 +68,11 @@ trait RepositoryMethodsTrait
         return $repository instanceof EntityRepository ? $repository->findOneBy($criteria, $orderBy) : null;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return array<int, EntityInterface>
+     */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
         return array_values(
@@ -78,6 +83,11 @@ trait RepositoryMethodsTrait
         );
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return array<int, EntityInterface>
+     */
     public function findByAdvanced(
         array $criteria,
         ?array $orderBy = null,
@@ -103,6 +113,11 @@ trait RepositoryMethodsTrait
         return $iterator instanceof ArrayIterator ? $iterator->getArrayCopy() : iterator_to_array($iterator);
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return array<int, EntityInterface>
+     */
     public function findAll(): array
     {
         return array_values(
@@ -112,6 +127,11 @@ trait RepositoryMethodsTrait
         );
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @return array<int, string>
+     */
     public function findIds(?array $criteria = null, ?array $search = null): array
     {
         // Get query builder

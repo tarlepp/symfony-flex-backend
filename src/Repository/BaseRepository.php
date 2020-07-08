@@ -45,7 +45,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
      *
-     * @var array<string, array<int, string>>
+     * @var array<string, array<int, array<int, array<int, string>>>>
      */
     private static array $joins = [
         self::INNER_JOIN => [],
@@ -173,6 +173,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     /**
      * Process defined callbacks for current QueryBuilder instance.
+     *
+     * @psalm-suppress PossiblyInvalidArgument
      */
     protected function processCallbacks(QueryBuilder $queryBuilder): void
     {

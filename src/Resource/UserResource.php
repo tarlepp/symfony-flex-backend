@@ -28,16 +28,16 @@ use function in_array;
  *
  * @codingStandardsIgnoreStart
  *
- * @method Entity      getReference(string $id)
- * @method Repository  getRepository()
- * @method Entity[]    find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
- * @method Entity|null findOne(string $id, ?bool $throwExceptionIfNotFound = null)
- * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null, ?bool $throwExceptionIfNotFound = null)
- * @method Entity      create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)
- * @method Entity      update(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)
- * @method Entity      patch(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)
- * @method Entity      delete(string $id, ?bool $flush = null)
- * @method Entity      save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null)
+ * @method Entity             getReference(string $id)
+ * @method Repository         getRepository()
+ * @method array<int, Entity> find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method Entity|null        findOne(string $id, ?bool $throwExceptionIfNotFound = null)
+ * @method Entity|null        findOneBy(array $criteria, ?array $orderBy = null, ?bool $throwExceptionIfNotFound = null)
+ * @method Entity             create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)
+ * @method Entity             update(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)
+ * @method Entity             patch(string $id, RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)
+ * @method Entity             delete(string $id, ?bool $flush = null)
+ * @method Entity             save(EntityInterface $entity, ?bool $flush = null, ?bool $skipValidation = null)
  *
  * @codingStandardsIgnoreEnd
  */

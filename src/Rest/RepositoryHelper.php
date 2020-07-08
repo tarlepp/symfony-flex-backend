@@ -377,15 +377,11 @@ class RepositoryHelper
 
     /**
      * @param array<int|string, string|array> $condition
+     *
+     * @psalm-suppress MissingClosureParamType
      */
     private static function getIterator(array &$condition): Closure
     {
-        /*
-         * @psalm-suppress MissingClosureParamType
-         *
-         * @param string|array $value
-         * @param string       $column
-         */
         return static function ($value, string $column) use (&$condition): void {
             // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
             if (strcmp($column, 'and') === 0 || strcmp($column, 'or') === 0) {

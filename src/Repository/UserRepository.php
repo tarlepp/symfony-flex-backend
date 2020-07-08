@@ -23,12 +23,12 @@ use function array_key_exists;
  *
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null    find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
- * @method Entity[]|array findAdvanced(string $id, $hydrationMode = null)
- * @method Entity|null    findOneBy(array $criteria, ?array $orderBy = null)
- * @method Entity[]       findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
- * @method Entity[]       findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
- * @method Entity[]       findAll()
+ * @method Entity|null        find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method array<int, Entity> findAdvanced(string $id, $hydrationMode = null)
+ * @method Entity|null        findOneBy(array $criteria, ?array $orderBy = null)
+ * @method array<int, Entity> findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ * @method array<int, Entity> findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method array<int, Entity> findAll()
  *
  * @codingStandardsIgnoreEnd
  */

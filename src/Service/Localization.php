@@ -12,7 +12,6 @@ use App\Doctrine\DBAL\Types\EnumLanguageType;
 use App\Doctrine\DBAL\Types\EnumLocaleType;
 use DateTime;
 use DateTimeZone;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -63,20 +62,21 @@ class Localization
 
     /**
      * @return array<int, array<string, string>>
+     *
+     * @noinspection PhpDocMissingThrowsInspection
      */
     public function getTimezones(): array
     {
         $output = [];
 
         try {
+            /** @noinspection PhpUnhandledExceptionInspection */
             $output = $this->cache->get('application_timezone', function (ItemInterface $item): array {
                 // One year
                 $item->expiresAfter(31536000);
 
                 return $this->getFormattedTimezones();
             });
-        } catch (InvalidArgumentException $exception) {
-            $this->logger->error($exception->getMessage(), $exception->getTrace());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }

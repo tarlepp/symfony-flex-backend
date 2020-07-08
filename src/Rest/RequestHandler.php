@@ -249,15 +249,11 @@ final class RequestHandler
 
     /**
      * @param array<string, string> $output
+     *
+     * @psalm-suppress MissingClosureParamType
      */
     private static function getIterator(array &$output): Closure
     {
-        /*
-         * @psalm-suppress MissingClosureParamType
-         *
-         * @param string     $value
-         * @param int|string $key
-         */
         return static function (string $value, $key) use (&$output): void {
             $order = in_array(mb_strtoupper($value), ['ASC', 'DESC'], true) ? mb_strtoupper($value) : 'ASC';
             $column = is_string($key) ? $key : $value;
