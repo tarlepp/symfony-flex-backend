@@ -230,7 +230,7 @@ class PhpUnitUtil
      *
      * @param array<mixed>|null $meta
      *
-     * @return array<mixed, object|mixed>|int|string|object|true
+     * @return mixed
      *
      * @throws Throwable
      */
