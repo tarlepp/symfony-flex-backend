@@ -49,7 +49,7 @@ class UserGroupTransformer implements DataTransformerInterface
         $output = [];
 
         if (is_array($userGroups)) {
-            $iterator = static fn ($x): string => $x instanceof UserGroup ? $x->getId() : (string)$x;
+            $iterator = static fn ($group): string => $group instanceof UserGroup ? $group->getId() : (string)$group;
 
             $output = array_values(array_map('\strval', array_map($iterator, $userGroups)));
         }
