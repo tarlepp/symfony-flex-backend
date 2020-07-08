@@ -103,7 +103,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * Method to get actual error message.
      *
-     * @return array<string, string|int|array<string, string|int|array<int, string>>>>
+     * @return array<string, string|int|array<string, string|int|array<int, string>>>
      */
     private function getErrorMessage(Throwable $exception, Response $response): array
     {

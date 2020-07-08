@@ -26,6 +26,8 @@ class ApiKeyManagementCommand extends Command
      * ManagementCommand constructor.
      *
      * @throws LogicException
+     *
+     * @psalm-suppress InvalidScalarArgument
      */
     public function __construct()
     {
@@ -33,7 +35,6 @@ class ApiKeyManagementCommand extends Command
 
         $this->setDescription('Console command to manage API keys');
 
-        /* @psalm-suppress InvalidScalarArgument */
         $this->setChoices([
             'api-key:list' => 'List API keys',
             'api-key:create' => 'Create API key',

@@ -25,6 +25,8 @@ use function str_pad;
  *
  * @package App\DataFixtures\ORM
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @psalm-suppress MissingConstructor
  */
 final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
