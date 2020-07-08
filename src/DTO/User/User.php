@@ -104,7 +104,7 @@ class User extends RestDto
     protected string $timezone = Localization::DEFAULT_TIMEZONE;
 
     /**
-     * @var array<int, UserGroupEntity>
+     * @var UserGroupEntity[]|array<int, UserGroupEntity>
      *
      * @AppAssert\EntityReferenceExists(entityClass=UserGroupEntity::class)
      */

@@ -46,7 +46,7 @@ class ApiKey extends RestDto
     protected string $token = '';
 
     /**
-     * @var array<int, UserGroupEntity>
+     * @var UserGroupEntity[]|array<int, UserGroupEntity>
      *
      * @AppAssert\EntityReferenceExists(entityClass=UserGroupEntity::class)
      */

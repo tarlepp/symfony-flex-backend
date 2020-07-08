@@ -93,13 +93,11 @@ trait UserRelations
      * If you want to get user inherited roles you need to implement that
      * logic by yourself OR use eg. `/user/{uuid}/roles` API endpoint.
      *
-     * @psalm-return array<int, string>
-     *
      * @Groups({
      *      "User.roles",
      *  })
      *
-     * @return array<int, string>
+     * @return string[]
      */
     public function getRoles(): array
     {
