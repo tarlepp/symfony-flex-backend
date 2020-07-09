@@ -41,11 +41,11 @@ class UserEntityEventListenerTest extends KernelTestCase
         // Store container and entity manager
         $testContainer = static::$kernel->getContainer();
 
-        /** @noinspection MissingService */
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection MissingService */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->entityManager = $testContainer->get('doctrine.orm.default_entity_manager');
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->encoder = $testContainer->get('security.password_encoder');
 
         // Create listener

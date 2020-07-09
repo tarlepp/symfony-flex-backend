@@ -52,8 +52,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsExpected
      *
-     * @param string $shortRole
-     *
      * @testdox Test that `getApiKeyForToken` method returns expected when using `$shortRole` as token base.
      */
     public function testThatGetApiKeyReturnsExpected(string $shortRole): void
@@ -67,8 +65,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsExpected
-     *
-     * @param string $shortRole
      *
      * @testdox Test that `getApiKeyForToken` method returns null when using `$shortRole` as an invalid token base.
      */
@@ -94,9 +90,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatLoadUserByUsernameWorksAsExpected
-     *
-     * @param string                $token
-     * @param StringableArrayObject $roles
      *
      * @throws Throwable
      *
@@ -126,9 +119,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSupportsClassReturnsExpected
      *
-     * @param bool   $expected
-     * @param string $class
-     *
      * @testdox Test that `supportsClass` returns `$expected` when using `$class` as an input.
      */
     public function testThatSupportsClassReturnsExpected(bool $expected, string $class): void
@@ -136,9 +126,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
         static::assertSame($expected, $this->apiKeyUserProvider->supportsClass($class));
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatGetApiKeyReturnsExpected(): array
     {
         static::bootKernel();
@@ -152,9 +139,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
         return array_map($iterator, $rolesService->getRoles());
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatLoadUserByUsernameWorksAsExpected(): array
     {
         static::bootKernel();
@@ -175,9 +159,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
         return array_map($iterator, $repository->findAll());
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatSupportsClassReturnsExpected(): Generator
     {
         yield [false, User::class];

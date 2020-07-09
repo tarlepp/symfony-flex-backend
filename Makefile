@@ -217,7 +217,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 	@mkdir -p build
 	@@bin/console cache:clear --env=test
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --taint-analysis --report=./build/psalm.json
+	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json
 else
 	$(WARNING_DOCKER)
 endif
@@ -228,7 +228,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 	@mkdir -p build
 	@@bin/console cache:clear --env=test
 	@php ./vendor/bin/psalm --version
-	@php ./vendor/bin/psalm --no-cache --taint-analysis --shepherd --report=./build/psalm.json
+	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json
 else
 	$(WARNING_DOCKER)
 endif

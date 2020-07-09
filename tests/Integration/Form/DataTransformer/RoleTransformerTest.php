@@ -112,8 +112,6 @@ class RoleTransformerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatTransformReturnsExpected(): Generator

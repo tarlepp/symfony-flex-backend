@@ -28,9 +28,6 @@ class ApiKeyUserTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetRolesReturnsExpected
      *
-     * @param ApiKey                $apiKey
-     * @param StringableArrayObject $expectedRoles
-     *
      * @testdox Test that `$apiKey` has expected roles `$expectedRoles`.
      */
     public function testThatGetRolesReturnsExpected(ApiKey $apiKey, StringableArrayObject $expectedRoles): void
@@ -46,8 +43,6 @@ class ApiKeyUserTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatGetRolesReturnsExpected(): Generator

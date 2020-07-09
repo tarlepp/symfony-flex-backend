@@ -24,8 +24,6 @@ class ResponseSubscriber implements EventSubscriberInterface
 
     /**
      * ResponseSubscriber constructor.
-     *
-     * @param Version $version
      */
     public function __construct(Version $version)
     {
@@ -33,22 +31,9 @@ class ResponseSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * {@inheritdoc}
      *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
-     *
-     * @return array<string, array<int, string|int>> The event names to listen to
+     * @return array<string, array<int, string|int>>
      */
     public static function getSubscribedEvents(): array
     {
@@ -62,8 +47,6 @@ class ResponseSubscriber implements EventSubscriberInterface
 
     /**
      * Subscriber method to attach API version to every response.
-     *
-     * @param ResponseEvent $event
      */
     public function onKernelResponse(ResponseEvent $event): void
     {

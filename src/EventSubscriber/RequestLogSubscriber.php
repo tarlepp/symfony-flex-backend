@@ -14,11 +14,11 @@ use App\Security\ApiKeyUser;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use App\Utils\RequestLogger;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
+use Throwable;
 use function array_filter;
 use function count;
 use function in_array;
@@ -42,11 +42,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
     /**
      * RequestSubscriber constructor.
      *
-     * @param RequestLogger          $requestLogger
-     * @param UserRepository         $userRepository
-     * @param LoggerInterface        $logger
-     * @param UserTypeIdentification $userService
-     * @param array<int, string>     $ignoredRoutes
+     * @param array<int, string> $ignoredRoutes
      */
     public function __construct(
         RequestLogger $requestLogger,
@@ -63,22 +59,9 @@ class RequestLogSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * {@inheritdoc}
      *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
-     *
-     * @return array<string, array<int, string|int>> The event names to listen to
+     * @return array<string, array<int, string|int>>
      */
     public static function getSubscribedEvents(): array
     {
@@ -93,9 +76,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
     /**
      * Subscriber method to log every request / response.
      *
-     * @param TerminateEvent $event
-     *
-     * @throws Exception
+     * @throws Throwable
      */
     public function onTerminateEvent(TerminateEvent $event): void
     {
@@ -123,9 +104,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
     /**
      * Method to process current request event.
      *
-     * @param TerminateEvent $event
-     *
-     * @throws Exception
+     * @throws Throwable
      */
     private function process(TerminateEvent $event): void
     {

@@ -10,6 +10,7 @@ namespace App\Command\Utils;
 
 use App\Command\Traits\SymfonyStyleTrait;
 use InvalidArgumentException;
+use JsonException;
 use LogicException;
 use SplFileInfo;
 use stdClass;
@@ -53,8 +54,6 @@ class CheckDependencies extends Command
 
     /**
      * CheckVendorDependencies constructor.
-     *
-     * @param string $projectDir
      */
     public function __construct(string $projectDir)
     {
@@ -65,14 +64,8 @@ class CheckDependencies extends Command
         $this->projectDir = $projectDir;
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -103,7 +96,7 @@ class CheckDependencies extends Command
     /**
      * Method to determine all namespace directories under 'tools' directory.
      *
-     * @return string[]
+     * @return array<int, string>
      *
      * @throws LogicException
      * @throws InvalidArgumentException
@@ -140,7 +133,7 @@ class CheckDependencies extends Command
     /**
      * Method to determine table rows.
      *
-     * @param string[] $directories
+     * @param array<int, string> $directories
      *
      * @return array<int, array<int, string>|TableSeparator>
      */
@@ -165,7 +158,7 @@ class CheckDependencies extends Command
                 // First row of current library
                 if ($row === 0) {
                     // We want to add table separator between different libraries
-                    if (count((array)$rows) > 0) {
+                    if (count($rows) > 0) {
                         $rows[] = new TableSeparator();
                     }
 
@@ -194,9 +187,9 @@ class CheckDependencies extends Command
     /**
      * Method to process namespace inside 'tools' directory.
      *
-     * @param string $path
+     * @return array<int, stdClass>
      *
-     * @return stdClass[]
+     * @throws JsonException
      */
     private function processNamespacePath(string $path): array
     {
@@ -233,11 +226,6 @@ class CheckDependencies extends Command
 
     /**
      * Helper method to get progress bar for console.
-     *
-     * @param int    $steps
-     * @param string $message
-     *
-     * @return ProgressBar
      */
     private function getProgressBar(int $steps, string $message): ProgressBar
     {

@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Root;
 
-use App\Annotation\RestApiDoc;
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -41,14 +40,6 @@ trait UpdateAction
      *  )
      *
      * @Security("is_granted('ROLE_ROOT')")
-     *
-     * @RestApiDoc()
-     *
-     * @param Request          $request
-     * @param RestDtoInterface $restDto
-     * @param string           $id
-     *
-     * @return Response
      *
      * @throws Throwable
      */

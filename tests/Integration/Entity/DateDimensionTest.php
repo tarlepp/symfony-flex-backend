@@ -64,10 +64,6 @@ class DateDimensionTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatSetterAndGettersWorks
      *
-     * @param string $field
-     * @param string $type
-     * @param array  $meta
-     *
      * @throws Throwable
      *
      * @testdox Test that getter method for `$field` with `$type` returns expected.
@@ -117,8 +113,6 @@ class DateDimensionTest extends EntityTestCase
     }
 
     /**
-     * @return EntityInterface
-     *
      * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Exception

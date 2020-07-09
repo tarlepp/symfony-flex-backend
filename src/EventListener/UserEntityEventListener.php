@@ -27,43 +27,22 @@ class UserEntityEventListener
 
     /**
      * Constructor of the class.
-     *
-     * @param UserPasswordEncoderInterface $userPasswordEncoder
      */
     public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
     {
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
-    /**
-     * Doctrine lifecycle event for 'prePersist' event.
-     *
-     * @param LifecycleEventArgs $event
-     *
-     * @throws LengthException
-     */
     public function prePersist(LifecycleEventArgs $event): void
     {
         $this->process($event);
     }
 
-    /**
-     * Doctrine lifecycle event for 'preUpdate' event.
-     *
-     * @param LifecycleEventArgs $event
-     *
-     * @throws LengthException
-     */
     public function preUpdate(LifecycleEventArgs $event): void
     {
         $this->process($event);
     }
 
-    /**
-     * @param LifecycleEventArgs $event
-     *
-     * @throws LengthException
-     */
     private function process(LifecycleEventArgs $event): void
     {
         // Get user entity object
@@ -75,13 +54,6 @@ class UserEntityEventListener
         }
     }
 
-    /**
-     * Method to change user password whenever it's needed.
-     *
-     * @param User $user
-     *
-     * @throws LengthException
-     */
     private function changePassword(User $user): void
     {
         // Get plain password from user entity

@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Anon;
 
-use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\DeleteMethod;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,13 +36,6 @@ trait DeleteAction
      *      },
      *      methods={"DELETE"},
      *  )
-     *
-     * @RestApiDoc()
-     *
-     * @param Request $request
-     * @param string  $id
-     *
-     * @return Response
      *
      * @throws Throwable
      */

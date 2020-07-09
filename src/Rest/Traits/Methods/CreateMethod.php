@@ -24,11 +24,7 @@ trait CreateMethod
     /**
      * Generic 'createMethod' method for REST resources.
      *
-     * @param Request          $request
-     * @param RestDtoInterface $restDto
-     * @param string[]|null    $allowedHttpMethods
-     *
-     * @return Response
+     * @param string[]|null $allowedHttpMethods
      *
      * @throws Throwable
      */

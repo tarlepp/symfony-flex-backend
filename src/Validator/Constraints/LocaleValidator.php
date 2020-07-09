@@ -12,7 +12,6 @@ use App\Service\Localization;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use function in_array;
-use function is_string;
 
 /**
  * Class LocaleValidator
@@ -26,8 +25,6 @@ class LocaleValidator extends ConstraintValidator
 
     /**
      * LocaleValidator constructor.
-     *
-     * @param Localization $localization
      */
     public function __construct(Localization $localization)
     {
@@ -40,13 +37,9 @@ class LocaleValidator extends ConstraintValidator
     public function validate($value, Constraint $constraint): void
     {
         if (in_array($value, $this->localization->getLocales(), true) !== true) {
-            if (!is_string($value)) {
-                $value = $value->getLocale();
-            }
-
             $this->context
                 ->buildViolation(Locale::MESSAGE)
-                ->setParameter('{{ locale }}', $value)
+                ->setParameter('{{ locale }}', (string)$value)
                 ->setCode(Locale::INVALID_LOCALE)
                 ->addViolation();
         }

@@ -40,7 +40,7 @@ class PatchMethodTest extends KernelTestCase
     {
         $this->expectException(LogicException::class);
 
-        /** @codingStandardsIgnoreStart */
+        /* @codingStandardsIgnoreStart */
         $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
@@ -62,8 +62,6 @@ class PatchMethodTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
-     *
-     * @param string $httpMethod
      *
      * @throws Throwable
      *
@@ -162,9 +160,6 @@ class PatchMethodTest extends KernelTestCase
         $testClass->patchMethod($request, $restDtoInterface, $uuid);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -177,9 +172,6 @@ class PatchMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400), 0];

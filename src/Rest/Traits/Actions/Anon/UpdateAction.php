@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Anon;
 
-use App\Annotation\RestApiDoc;
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,14 +37,6 @@ trait UpdateAction
      *      },
      *      methods={"PUT"},
      *  )
-     *
-     * @RestApiDoc()
-     *
-     * @param Request          $request
-     * @param RestDtoInterface $restDto
-     * @param string           $id
-     *
-     * @return Response
      *
      * @throws Throwable
      */

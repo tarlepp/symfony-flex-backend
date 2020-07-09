@@ -8,9 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Serializer\Normalizer;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use function is_object;
@@ -20,8 +18,6 @@ use function is_object;
  *
  * @package App\Serializer
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @template T
  */
 class CollectionNormalizer implements NormalizerInterface
 {
@@ -29,8 +25,6 @@ class CollectionNormalizer implements NormalizerInterface
 
     /**
      * CollectionNormalizer constructor.
-     *
-     * @param ObjectNormalizer $normalizer
      */
     public function __construct(ObjectNormalizer $normalizer)
     {
@@ -38,15 +32,9 @@ class CollectionNormalizer implements NormalizerInterface
     }
 
     /**
-     * @param Collection|ArrayCollection|mixed $collection
-     * @param string|null                      $format
-     * @param array<array-key, mixed>          $context
-     *
-     * @return array<\ArrayObject<int, T>|array|bool|float|int|string|null>
-     *
-     * @throws ExceptionInterface
+     * {@inheritdoc}
      */
-    public function normalize($collection, $format = null, array $context = []): array
+    public function normalize($collection, ?string $format = null, array $context = []): array
     {
         $output = [];
 
@@ -60,7 +48,7 @@ class CollectionNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null): bool
+    public function supportsNormalization($data, ?string $format = null): bool
     {
         return $format === 'json' && is_object($data) && $data instanceof Collection && is_object($data->first());
     }

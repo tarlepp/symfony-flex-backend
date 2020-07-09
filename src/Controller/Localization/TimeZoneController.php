@@ -33,8 +33,6 @@ class TimeZoneController
 
     /**
      * LanguageController constructor.
-     *
-     * @param Localization $localization
      */
     public function __construct(Localization $localization)
     {
@@ -80,8 +78,6 @@ class TimeZoneController
      *          ),
      *      ),
      *  )
-     *
-     * @return JsonResponse
      *
      * @throws Throwable
      */

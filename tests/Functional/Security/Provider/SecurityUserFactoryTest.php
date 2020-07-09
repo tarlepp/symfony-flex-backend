@@ -37,10 +37,10 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->userRepository = static::$container->get(UserRepository::class);
     }
 
@@ -56,9 +56,6 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance
-     *
-     * @param string                $username
-     * @param StringableArrayObject $roles
      *
      * @throws Throwable
      *
@@ -129,9 +126,6 @@ class SecurityUserFactoryTest extends KernelTestCase
         $this->securityUserFactory->refreshUser($user);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance(): Generator
     {
         yield ['john', new StringableArrayObject([])];

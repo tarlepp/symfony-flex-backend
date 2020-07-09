@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\User;
 
-use App\Annotation\RestApiDoc;
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\PatchMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -41,14 +40,6 @@ trait PatchAction
      *  )
      *
      * @Security("is_granted('ROLE_USER')")
-     *
-     * @RestApiDoc()
-     *
-     * @param Request          $request
-     * @param RestDtoInterface $restDto
-     * @param string           $id
-     *
-     * @return Response
      *
      * @throws Throwable
      */

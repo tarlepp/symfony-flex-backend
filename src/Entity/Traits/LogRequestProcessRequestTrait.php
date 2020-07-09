@@ -9,8 +9,8 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use App\Utils\JSON;
+use Doctrine\ORM\Mapping as ORM;
 use JsonException;
-use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
@@ -53,8 +53,6 @@ trait LogRequestProcessRequestTrait
     private array $headers = [];
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.method",
@@ -70,8 +68,6 @@ trait LogRequestProcessRequestTrait
     private string $method = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.scheme",
@@ -87,8 +83,6 @@ trait LogRequestProcessRequestTrait
     private string $scheme = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.basePath",
@@ -104,8 +98,6 @@ trait LogRequestProcessRequestTrait
     private string $basePath = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.script",
@@ -121,8 +113,6 @@ trait LogRequestProcessRequestTrait
     private string $script = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.path",
@@ -138,8 +128,6 @@ trait LogRequestProcessRequestTrait
     private string $path = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.queryString",
@@ -154,8 +142,6 @@ trait LogRequestProcessRequestTrait
     private string $queryString = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.uri",
@@ -170,8 +156,6 @@ trait LogRequestProcessRequestTrait
     private string $uri = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.controller",
@@ -187,8 +171,6 @@ trait LogRequestProcessRequestTrait
     private string $controller = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.contentType",
@@ -204,8 +186,6 @@ trait LogRequestProcessRequestTrait
     private string $contentType = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.contentTypeShort",
@@ -221,8 +201,6 @@ trait LogRequestProcessRequestTrait
     private string $contentTypeShort = '';
 
     /**
-     * @var bool
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.isXmlHttpRequest",
@@ -237,8 +215,6 @@ trait LogRequestProcessRequestTrait
     private bool $xmlHttpRequest = false;
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.action",
@@ -254,8 +230,6 @@ trait LogRequestProcessRequestTrait
     private string $action = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "LogRequest",
      *      "LogRequest.content",
@@ -284,41 +258,26 @@ trait LogRequestProcessRequestTrait
      */
     private array $parameters = [];
 
-    /**
-     * @return string
-     */
     public function getUri(): string
     {
         return $this->uri;
     }
 
-    /**
-     * @return string
-     */
     public function getMethod(): string
     {
         return $this->method;
     }
 
-    /**
-     * @return string
-     */
     public function getScheme(): string
     {
         return $this->scheme;
     }
 
-    /**
-     * @return string
-     */
     public function getBasePath(): string
     {
         return $this->basePath;
     }
 
-    /**
-     * @return string|null
-     */
     public function getQueryString(): ?string
     {
         return $this->queryString;
@@ -340,75 +299,46 @@ trait LogRequestProcessRequestTrait
         return $this->parameters;
     }
 
-    /**
-     * @return bool
-     */
     public function isXmlHttpRequest(): bool
     {
         return $this->xmlHttpRequest;
     }
 
-    /**
-     * @return string|null
-     */
     public function getController(): ?string
     {
         return $this->controller;
     }
 
-    /**
-     * @return string|null
-     */
     public function getAction(): ?string
     {
         return $this->action;
     }
 
-    /**
-     * @return string|null
-     */
     public function getPath(): ?string
     {
         return $this->path;
     }
 
-    /**
-     * @return string
-     */
     public function getScript(): string
     {
         return $this->script;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @return string|null
-     */
     public function getContentType(): ?string
     {
         return $this->contentType;
     }
 
-    /**
-     * @return string|null
-     */
     public function getContentTypeShort(): ?string
     {
         return $this->contentTypeShort;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @throws LogicException
-     */
     protected function processRequest(Request $request): void
     {
         $this->processRequestBaseInfo($request);
@@ -418,11 +348,6 @@ trait LogRequestProcessRequestTrait
         $this->content = $this->cleanContent((string)$request->getContent());
     }
 
-    /**
-     * @param Request $request
-     *
-     * @throws LogicException
-     */
     private function processHeadersAndParameters(Request $request): void
     {
         $rawHeaders = $request->headers->all();
@@ -431,8 +356,7 @@ trait LogRequestProcessRequestTrait
         array_walk(
             $rawHeaders,
             /**
-             * @param mixed  $value
-             * @param string $key
+             * @param mixed $value
              */
             function (&$value, string $key): void {
                 $this->cleanParameters($value, $key);
@@ -447,8 +371,7 @@ trait LogRequestProcessRequestTrait
         array_walk(
             $rawParameters,
             /**
-             * @param mixed  $value
-             * @param string $key
+             * @param mixed $value
              */
             function (&$value, string $key): void {
                 $this->cleanParameters($value, $key);
@@ -458,9 +381,6 @@ trait LogRequestProcessRequestTrait
         $this->parameters = $rawParameters;
     }
 
-    /**
-     * @param Request $request
-     */
     private function processRequestBaseInfo(Request $request): void
     {
         $this->method = $request->getRealMethod();
@@ -476,11 +396,6 @@ trait LogRequestProcessRequestTrait
         $this->xmlHttpRequest = $request->isXmlHttpRequest();
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return string
-     */
     private function determineAction(Request $request): string
     {
         $rawAction = (string)$request->get('_controller', '');
@@ -492,11 +407,7 @@ trait LogRequestProcessRequestTrait
     /**
      * Getter method to convert current request parameters to array.
      *
-     * @param Request $request
-     *
      * @return mixed[]
-     *
-     * @throws LogicException
      */
     private function determineParameters(Request $request): array
     {
@@ -527,8 +438,7 @@ trait LogRequestProcessRequestTrait
     /**
      * Helper method to clean parameters / header array of any sensitive data.
      *
-     * @param mixed  $value
-     * @param string $key
+     * @param mixed $value
      */
     private function cleanParameters(&$value, string $key): void
     {
@@ -548,8 +458,7 @@ trait LogRequestProcessRequestTrait
             array_walk(
                 $value,
                 /**
-                 * @param mixed  $value
-                 * @param string $key
+                 * @param mixed $value
                  */
                 function (&$value, string $key): void {
                     $this->cleanParameters($value, $key);
@@ -560,10 +469,6 @@ trait LogRequestProcessRequestTrait
 
     /**
      * Method to clean raw request content of any sensitive data.
-     *
-     * @param string $inputContent
-     *
-     * @return string
      */
     private function cleanContent(string $inputContent): string
     {

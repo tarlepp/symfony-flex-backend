@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Logged;
 
-use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\IdsMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,12 +36,6 @@ trait IdsAction
      *  )
      *
      * @Security("is_granted('ROLE_LOGGED')")
-     *
-     * @RestApiDoc()
-     *
-     * @param Request $request
-     *
-     * @return Response
      *
      * @throws Throwable
      */

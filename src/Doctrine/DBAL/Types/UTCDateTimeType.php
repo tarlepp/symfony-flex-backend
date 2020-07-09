@@ -27,13 +27,7 @@ class UTCDateTimeType extends DateTimeType
     private static ?DateTimeZone $utc;
 
     /**
-     * Converts a value from its PHP representation to its database representation
-     * of this type.
-     *
-     * @param mixed            $value    the value to convert
-     * @param AbstractPlatform $platform the currently used database platform
-     *
-     * @return string the database representation of the value
+     * {@inheritdoc}
      *
      * @throws ConversionException
      */
@@ -47,13 +41,7 @@ class UTCDateTimeType extends DateTimeType
     }
 
     /**
-     * Converts a value from its database representation to its PHP representation
-     * of this type.
-     *
-     * @param mixed            $value    the value to convert
-     * @param AbstractPlatform $platform the currently used database platform
-     *
-     * @return mixed the PHP representation of the value
+     * {@inheritdoc}
      *
      * @throws ConversionException
      */
@@ -74,11 +62,6 @@ class UTCDateTimeType extends DateTimeType
         return parent::convertToPHPValue($value, $platform);
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param AbstractPlatform $platform
-     */
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         parent::requiresSQLCommentHint($platform);
@@ -88,8 +71,6 @@ class UTCDateTimeType extends DateTimeType
 
     /**
      * Method to initialize DateTimeZone as in UTC.
-     *
-     * @return DateTimeZone
      */
     private function getUtcDateTimeZone(): DateTimeZone
     {
@@ -98,12 +79,6 @@ class UTCDateTimeType extends DateTimeType
 
     /**
      * Method to check if conversion was successfully or not.
-     *
-     * @param string           $value
-     * @param AbstractPlatform $platform
-     * @param DateTime|null    $converted
-     *
-     * @return DateTime
      *
      * @throws ConversionException
      */

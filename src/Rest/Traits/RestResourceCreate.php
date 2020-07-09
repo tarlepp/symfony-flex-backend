@@ -23,9 +23,6 @@ trait RestResourceCreate
 {
     /**
      * Before lifecycle method for create method.
-     *
-     * @param RestDtoInterface $restDto
-     * @param EntityInterface  $entity
      */
     public function beforeCreate(RestDtoInterface $restDto, EntityInterface $entity): void
     {
@@ -39,9 +36,6 @@ trait RestResourceCreate
      *
      *          Also note that if you've made some changes to entity and you eg. throw an exception within this method
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
-     *
-     * @param RestDtoInterface $restDto
-     * @param EntityInterface  $entity
      */
     public function afterCreate(RestDtoInterface $restDto, EntityInterface $entity): void
     {

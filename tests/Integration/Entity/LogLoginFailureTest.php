@@ -36,14 +36,14 @@ class LogLoginFailureTest extends EntityTestCase
         // Store container and entity manager
         $this->testContainer = static::$kernel->getContainer();
 
-        /** @noinspection MissingService */
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection MissingService */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
         // Create new entity object and set repository
         $this->entity = new $this->entityName(new User());
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 
@@ -82,10 +82,6 @@ class LogLoginFailureTest extends EntityTestCase
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
-     * @param string $field
-     * @param string $type
-     * @param array  $meta
      *
      * @throws Throwable
      *

@@ -47,9 +47,6 @@ abstract class Controller implements ControllerInterface
     protected ?RestResourceInterface $resource = null;
     protected ?ResponseHandlerInterface $responseHandler = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getResource(): RestResourceInterface
     {
         if (!$this->resource instanceof RestResourceInterface) {
@@ -59,9 +56,6 @@ abstract class Controller implements ControllerInterface
         return $this->resource;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getResponseHandler(): ResponseHandlerInterface
     {
         if (!$this->responseHandler instanceof ResponseHandlerInterface) {
@@ -71,9 +65,6 @@ abstract class Controller implements ControllerInterface
         return $this->responseHandler;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function setResponseHandler(ResponseHandler $responseHandler): self
     {
         $this->responseHandler = $responseHandler;

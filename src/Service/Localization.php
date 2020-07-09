@@ -37,9 +37,6 @@ class Localization
 
     /**
      * Localization constructor.
-     *
-     * @param CacheInterface  $appCacheApcu
-     * @param LoggerInterface $logger
      */
     public function __construct(CacheInterface $appCacheApcu, LoggerInterface $logger)
     {
@@ -48,7 +45,7 @@ class Localization
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public function getLanguages(): array
     {
@@ -56,16 +53,17 @@ class Localization
     }
 
     /**
-     * @return array
+     * @return array<int, string>
      */
     public function getLocales(): array
     {
         return EnumLocaleType::getValues();
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * @return array
+     * @return array<int, array<string, string>>
+     *
+     * @noinspection PhpDocMissingThrowsInspection
      */
     public function getTimezones(): array
     {
@@ -86,10 +84,10 @@ class Localization
         return $output;
     }
 
-    /** @noinspection PhpUnhandledExceptionInspection */
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * @return array
+     * @noinspection PhpDocMissingThrowsInspection
+     *
+     * @return array<int, array<string, string>>
      */
     public function getFormattedTimezones(): array
     {
@@ -97,6 +95,8 @@ class Localization
 
         foreach ((array)DateTimeZone::listIdentifiers() as $identifier) {
             $dateTimeZone = new DateTimeZone($identifier);
+
+            /** @noinspection PhpUnhandledExceptionInspection */
             $dateTime = new DateTime('now', $dateTimeZone);
 
             $hours = floor($dateTimeZone->getOffset($dateTime) / 3600);
@@ -105,6 +105,7 @@ class Localization
             $hours = 'GMT' . ($hours < 0 ? $hours : '+' . $hours);
             $minutes = ($minutes > 0 ? $minutes : '0' . $minutes);
 
+            /* @noinspection OffsetOperationsInspection */
             $output[] = [
                 'timezone' => explode('/', $identifier)[0],
                 'identifier' => $identifier,

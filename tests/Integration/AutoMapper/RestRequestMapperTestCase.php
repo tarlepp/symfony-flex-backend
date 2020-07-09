@@ -30,8 +30,6 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatMapToObjectReturnsExpectedDtoObject
      *
-     * @param string $expectedDto
-     *
      * @throws Throwable
      *
      * @testdox Test that `mapToObject` method returns `$expectedDto`.
@@ -42,9 +40,6 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
         static::assertInstanceOf($expectedDto, $this->mapperObject->mapToObject(new Request(), new $expectedDto()));
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatMapToObjectReturnsExpectedDtoObject(): Generator
     {
         foreach ($this->restDtoClasses as $dtoClass) {

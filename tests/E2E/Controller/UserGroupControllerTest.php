@@ -44,9 +44,6 @@ class UserGroupControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatGetUserGroupUsersActionReturnsExpected
      *
-     * @param int    $userCount
-     * @param string $userGroupId
-     *
      * @throws Throwable
      *
      * @testdox Test that `GET /user_group/$userGroupId/users` returns expected count $userCount of users
@@ -65,9 +62,6 @@ class UserGroupControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatAttachUserActionReturns403ForInvalidUser
-     *
-     * @param string $username
-     * @param string $password
      *
      * @throws Throwable
      *
@@ -107,8 +101,6 @@ class UserGroupControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatAttachUserActionWorksAsExpected
-     *
-     * @param int $expectedStatus
      *
      * @throws Throwable
      *
@@ -179,9 +171,6 @@ class UserGroupControllerTest extends WebTestCase
      *
      * @dataProvider dataProviderTestThatDetachUserActionReturns403ForInvalidUser
      *
-     * @param string $username
-     * @param string $password
-     *
      * @throws Throwable
      *
      * @testdox Test that `DELETE /user_group/_ug_id_/user/_u_id_` with $username + password returns HTTP status 403
@@ -219,8 +208,6 @@ class UserGroupControllerTest extends WebTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): Generator
@@ -237,9 +224,6 @@ class UserGroupControllerTest extends WebTestCase
         yield [5, $userGroupResource->findOneBy(['name' => 'Logged in users'])->getId()];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): Generator
     {
         //yield ['john', 'password'];
@@ -249,18 +233,12 @@ class UserGroupControllerTest extends WebTestCase
         yield ['john-admin', 'password-admin'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatAttachUserActionWorksAsExpected(): Generator
     {
         yield [201];
         yield [200];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatDetachUserActionReturns403ForInvalidUser(): Generator
     {
         return $this->dataProviderTestThatAttachUserActionReturns403ForInvalidUser();

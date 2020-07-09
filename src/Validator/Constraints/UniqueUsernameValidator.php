@@ -26,8 +26,6 @@ class UniqueUsernameValidator extends ConstraintValidator
 
     /**
      * UniqueUsernameValidator constructor.
-     *
-     * @param UserRepository $repository
      */
     public function __construct(UserRepository $repository)
     {
@@ -35,14 +33,9 @@ class UniqueUsernameValidator extends ConstraintValidator
     }
 
     /**
-     * Checks if the passed value is valid.
-     *
-     * In this case check if 'username' is available or not within User repository.
+     * {@inheritdoc}
      *
      * @throws NonUniqueResultException
-     *
-     * @param UserInterface|mixed       $value      The value that should be validated
-     * @param Constraint|UniqueUsername $constraint The constraint for the validation
      */
     public function validate($value, Constraint $constraint): void
     {

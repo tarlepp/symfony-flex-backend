@@ -23,9 +23,6 @@ class StringableArrayObjectTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatCastingToStringReturnsExpected
      *
-     * @param StringableArrayObject $input
-     * @param string                $expected
-     *
      * @testdox Test that casting to string with `$input` input (array converted to JSON) returns `$expected`
      */
     public function testThatCastingToStringReturnsExpected(StringableArrayObject $input, string $expected): void

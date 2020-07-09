@@ -13,8 +13,9 @@ use Psr\Log\LoggerInterface;
 /**
  * Trait LoggerAwareTrait
  *
- * NOTE: Do not use this in your services, just inject `LoggerInterface` to service where you need it.
- *       This trait is just for quick debug purposes and nothing else.
+ * NOTE: Do not use this in your services, just inject `LoggerInterface` to
+ *       service where you need it. This trait is just for quick debug purposes
+ *       and nothing else.
  *
  * @package App\Helpers
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -27,10 +28,6 @@ trait LoggerAwareTrait
      * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
      *
      * @required
-     *
-     * @param LoggerInterface $logger
-     *
-     * @return self
      */
     public function setLogger(LoggerInterface $logger): self
     {

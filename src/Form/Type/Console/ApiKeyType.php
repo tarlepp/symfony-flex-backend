@@ -17,7 +17,6 @@ use App\Resource\UserGroupResource;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
 
@@ -53,9 +52,6 @@ class ApiKeyType extends AbstractType
 
     /**
      * ApiKeyType constructor.
-     *
-     * @param UserGroupResource    $userGroupResource
-     * @param UserGroupTransformer $userGroupTransformer
      */
     public function __construct(UserGroupResource $userGroupResource, UserGroupTransformer $userGroupTransformer)
     {
@@ -64,8 +60,7 @@ class ApiKeyType extends AbstractType
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param mixed[]              $options
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -90,13 +85,6 @@ class ApiKeyType extends AbstractType
         $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
     }
 
-    /**
-     * Configures the options for this type.
-     *
-     * @param OptionsResolver $resolver The resolver for the options
-     *
-     * @throws AccessException
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);

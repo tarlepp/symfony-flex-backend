@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Validator\Constraints;
 
-use App\Entity\User;
 use App\Service\Localization;
 use App\Validator\Constraints\Language;
 use App\Validator\Constraints\LanguageValidator;
@@ -58,10 +57,6 @@ class LanguageValidatorTest extends KernelTestCase
 
     public function testThatValidateCallsExpectedMethods(): void
     {
-        // Create new user
-        $user = (new User())
-            ->setLanguage('foo');
-
         $this->localization
             ->expects(static::once())
             ->method('getLanguages')
@@ -91,6 +86,6 @@ class LanguageValidatorTest extends KernelTestCase
         // Run validator
         $validator = new LanguageValidator($this->localization);
         $validator->initialize($this->context);
-        $validator->validate($user, $this->constraint);
+        $validator->validate('foo', $this->constraint);
     }
 }

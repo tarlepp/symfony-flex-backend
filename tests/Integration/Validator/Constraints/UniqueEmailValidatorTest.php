@@ -26,9 +26,6 @@ use Throwable;
  */
 class UniqueEmailValidatorTest extends KernelTestCase
 {
-    /**
-     * @var UniqueEmail
-     */
     private UniqueEmail $constraint;
 
     /**

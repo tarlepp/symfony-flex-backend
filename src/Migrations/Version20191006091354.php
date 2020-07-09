@@ -16,9 +16,8 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20191006091354 extends AbstractMigration
 {
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @return string
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function getDescription(): string
     {
@@ -26,8 +25,6 @@ final class Version20191006091354 extends AbstractMigration
     }
 
     /**
-     * @param Schema $schema
-     *
      * @throws DBALException
      */
     public function up(Schema $schema): void
@@ -267,7 +264,7 @@ SQL;
     }
 
     /**
-     * @param Schema $schema
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws DBALException
      */

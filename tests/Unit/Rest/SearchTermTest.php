@@ -41,9 +41,6 @@ class SearchTermTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatReturnedCriteriaIsExpected
      *
-     * @param StringableArrayObject $inputArguments
-     * @param StringableArrayObject $expected
-     *
      * @testdox Test that `getCriteria` returns `$expected` with given `$inputArguments` arguments.
      */
     public function testThatReturnedCriteriaIsExpected(
@@ -58,8 +55,6 @@ class SearchTermTest extends KernelTestCase
 
     /**
      * Data provider for testThatWithoutColumnOrSearchTermCriteriaIsNull
-     *
-     * @return Generator
      */
     public function dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull(): Generator
     {
@@ -90,8 +85,6 @@ class SearchTermTest extends KernelTestCase
 
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
-     *
-     * @return Generator
      */
     public function dataProviderTestThatReturnedCriteriaIsExpected(): Generator
     {

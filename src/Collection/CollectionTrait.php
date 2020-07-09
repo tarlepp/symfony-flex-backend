@@ -30,17 +30,11 @@ trait CollectionTrait
 
     /**
      * Method to filter current collection.
-     *
-     * @param string $className
-     *
-     * @return Closure
      */
     abstract public function filter(string $className): Closure;
 
     /**
      * Method to process error message for current collection.
-     *
-     * @param string $className
      *
      * @throws InvalidArgumentException
      */
@@ -48,8 +42,6 @@ trait CollectionTrait
 
     /**
      * Getter method for given class for current collection.
-     *
-     * @param string $className
      *
      * @return mixed
      *
@@ -68,8 +60,6 @@ trait CollectionTrait
 
     /**
      * Method to get all items from current collection.
-     *
-     * @return IteratorAggregate
      */
     public function getAll(): IteratorAggregate
     {
@@ -78,10 +68,6 @@ trait CollectionTrait
 
     /**
      * Method to check if specified class exists or not in current collection.
-     *
-     * @param string|null $className
-     *
-     * @return bool
      */
     public function has(?string $className = null): bool
     {
@@ -90,8 +76,6 @@ trait CollectionTrait
 
     /**
      * Count elements of an object.
-     *
-     * @return int
      */
     public function count(): int
     {
@@ -99,8 +83,6 @@ trait CollectionTrait
     }
 
     /**
-     * @param string $className
-     *
      * @return mixed|null
      */
     private function getFilteredItem(string $className)

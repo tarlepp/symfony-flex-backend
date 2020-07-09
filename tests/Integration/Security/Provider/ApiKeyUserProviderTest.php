@@ -35,7 +35,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSupportClassReturnsExpected
      *
-     * @param bool  $expected
      * @param mixed $input
      *
      * @throws Throwable
@@ -171,8 +170,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatSupportClassReturnsExpected(): Generator

@@ -61,14 +61,14 @@ abstract class EntityTestCase extends KernelTestCase
         // Store container and entity manager
         $this->testContainer = static::$kernel->getContainer();
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        /** @noinspection MissingService */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection MissingService */
         $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
         // Create new entity object
         $this->entity = $this->getEntity();
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 
@@ -113,11 +113,6 @@ abstract class EntityTestCase extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSetterAndGettersWorks
      *
-     * @param string $field
-     * @param string $type
-     * @param array  $meta
-     * @param bool   $readOnly
-     *
      * @testdox Test that `getter` and `setter` methods exists for `$field` field.
      */
     public function testThatGetterAndSetterExists(string $field, string $type, array $meta, bool $readOnly): void
@@ -155,10 +150,6 @@ abstract class EntityTestCase extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSetterAndGettersWorks
      *
-     * @param string $field
-     * @param string $type
-     * @param array  $meta
-     *
      * @throws Throwable
      *
      * @testdox Test that `setter` method for `$field` field only accepts `$type` parameter.
@@ -192,10 +183,6 @@ abstract class EntityTestCase extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatSetterAndGettersWorks
      *
-     * @param string $field
-     * @param string $type
-     * @param array  $meta
-     *
      * @throws Throwable
      *
      * @testdox Test that `setter` method for `$field` field is fluent.
@@ -225,10 +212,6 @@ abstract class EntityTestCase extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
-     * @param string $field
-     * @param string $type
-     * @param array  $meta
      *
      * @throws Throwable
      *
@@ -282,8 +265,6 @@ abstract class EntityTestCase extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatAssociationMethodsExists
      *
-     * @param string      $method
-     * @param string      $field
      * @param mixed       $input
      * @param bool|string $output
      *
@@ -323,7 +304,6 @@ abstract class EntityTestCase extends KernelTestCase
      * @param string|bool $clear
      * @param string|bool $field
      * @param string|bool $entity
-     * @param array       $mappings
      *
      * @testdox Test that `many-to-many` assoc methods `$getter, $adder, $removal, $clear` works for `$field + $entity`.
      */
@@ -490,8 +470,6 @@ abstract class EntityTestCase extends KernelTestCase
      *  - testThatGetterAndSetterExists
      *  - testThatSetterReturnsInstanceOfEntity
      *  - testThatGetterReturnsExpectedValue
-     *
-     * @return array
      */
     public function dataProviderTestThatSetterAndGettersWorks(): array
     {
@@ -556,9 +534,6 @@ abstract class EntityTestCase extends KernelTestCase
         );
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatManyToManyAssociationMethodsWorksAsExpected(): array
     {
         static::bootKernel();
@@ -609,9 +584,6 @@ abstract class EntityTestCase extends KernelTestCase
         return $output;
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatManyToOneAssociationMethodsWorksAsExpected(): array
     {
         static::bootKernel();
@@ -663,9 +635,6 @@ abstract class EntityTestCase extends KernelTestCase
         return $output;
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatAssociationMethodsExists(): array
     {
         static::bootKernel();
@@ -757,9 +726,6 @@ abstract class EntityTestCase extends KernelTestCase
         return $output;
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatOneToManyAssociationMethodsWorksAsExpected(): array
     {
         static::bootKernel();
@@ -799,9 +765,6 @@ abstract class EntityTestCase extends KernelTestCase
         return $output;
     }
 
-    /**
-     * @return EntityInterface
-     */
     protected function getEntity(): EntityInterface
     {
         return new $this->entityName();

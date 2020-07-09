@@ -19,12 +19,12 @@ use App\Entity\User;
  *
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null                     find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?Entity
- * @method array<int|string, mixed>|Entity findAdvanced(string $id, $hydrationMode = null)
- * @method Entity|null                     findOneBy(array $criteria, ?array $orderBy = null): ?Entity
- * @method array<int, Entity>              findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
- * @method array<int, Entity>              findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null): array
- * @method array<int, Entity>              findAll(): array
+ * @method Entity|null        find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method array<int, Entity> findAdvanced(string $id, $hydrationMode = null)
+ * @method Entity|null        findOneBy(array $criteria, ?array $orderBy = null)
+ * @method array<int, Entity> findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ * @method array<int, Entity> findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method array<int, Entity> findAll()
  *
  * @codingStandardsIgnoreEnd
  */
@@ -34,10 +34,6 @@ class LogLoginFailureRepository extends BaseRepository
 
     /**
      * Method to clear specified user login failures.
-     *
-     * @param User $user
-     *
-     * @return int
      */
     public function clear(User $user): int
     {

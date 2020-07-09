@@ -63,8 +63,6 @@ class PhpUnitUtil
     /**
      * @codeCoverageIgnore
      *
-     * @param KernelInterface $kernel
-     *
      * @throws Exception
      */
     public static function loadFixtures(KernelInterface $kernel): void
@@ -86,10 +84,7 @@ class PhpUnitUtil
     /**
      * @codeCoverageIgnore
      *
-     * @param string $folder
-     * @param string $pattern
-     *
-     * @return string[]
+     * @return array<int, string>
      */
     public static function recursiveFileSearch(string $folder, string $pattern): array
     {
@@ -110,9 +105,9 @@ class PhpUnitUtil
     /**
      * Method to call specified 'protected' or 'private' method on given class.
      *
-     * @param object  $object The instantiated instance of your class
-     * @param string  $name   The name of your private/protected method
-     * @param mixed[] $args   Method arguments
+     * @param object       $object The instantiated instance of your class
+     * @param string       $name   The name of your private/protected method
+     * @param array<mixed> $args   Method arguments
      *
      * @return mixed
      *
@@ -150,7 +145,6 @@ class PhpUnitUtil
     /**
      * Helper method to get any property value from given class.
      *
-     * @param string $property
      * @param object $object
      *
      * @return mixed
@@ -169,8 +163,6 @@ class PhpUnitUtil
 
     /**
      * @param Type|string|null $type
-     *
-     * @return string
      */
     public static function getType($type): string
     {
@@ -219,7 +211,6 @@ class PhpUnitUtil
     /**
      * Helper method to override any property value within given class.
      *
-     * @param string $property
      * @param mixed  $value
      * @param object $object
      *
@@ -237,10 +228,9 @@ class PhpUnitUtil
     /**
      * Helper method to get valid value for specified type.
      *
-     * @param string       $type
-     * @param mixed[]|null $meta
+     * @param array<mixed>|null $meta
      *
-     * @return array<mixed, object|mixed>|int|string|object|true
+     * @return mixed
      *
      * @throws Throwable
      */
@@ -268,6 +258,7 @@ class PhpUnitUtil
             }
 
             if (strpos($type, '|') !== false) {
+                /** @noinspection OffsetOperationsInspection */
                 $output = self::getValidValueForType(explode('|', $type)[0], $meta);
             } elseif (strpos($type, '[]') !== false) {
                 /** @var array<mixed, object> $output */
@@ -316,8 +307,6 @@ class PhpUnitUtil
     /**
      * Helper method to get invalid value for specified type.
      *
-     * @param string $type
-     *
      * @return stdClass|DateTime|string
      *
      * @throws Throwable
@@ -330,6 +319,7 @@ class PhpUnitUtil
 
         if (!array_key_exists($type, self::$invalidValueCache)) {
             if (strpos($type, '|') !== false) {
+                /** @noinspection OffsetOperationsInspection */
                 $output = self::getInvalidValueForType(explode('|', $type)[0]);
             } elseif (strpos($type, '[]') !== false) {
                 $output = self::getInvalidValueForType(self::TYPE_ARRAY);

@@ -32,8 +32,6 @@ class RoleTest extends EntityTestCase
     }
 
     /**
-     * @return EntityInterface
-     *
      * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Exception

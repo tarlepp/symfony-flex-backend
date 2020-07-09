@@ -20,7 +20,6 @@ use function call_user_func_array;
 trait AddBasicFieldToForm
 {
     /**
-     * @param FormBuilderInterface          $builder
      * @param array<int, array<int, mixed>> $fields
      */
     protected function addBasicFieldToForm(FormBuilderInterface $builder, array $fields): void

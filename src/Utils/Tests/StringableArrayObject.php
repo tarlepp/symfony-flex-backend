@@ -22,8 +22,6 @@ use Stringable;
 class StringableArrayObject extends ArrayObject implements Stringable
 {
     /**
-     * @return string
-     *
      * @throws JsonException
      */
     public function __toString(): string

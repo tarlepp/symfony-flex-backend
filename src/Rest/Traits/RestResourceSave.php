@@ -28,8 +28,6 @@ trait RestResourceSave
      *
      *          Also note that if you've made some changes to entity and you eg. throw an exception within this method
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
-     *
-     * @param EntityInterface $entity
      */
     public function beforeSave(EntityInterface $entity): void
     {
@@ -43,8 +41,6 @@ trait RestResourceSave
      *
      *          Also note that if you've made some changes to entity and you eg. throw an exception within this method
      *          your entity will be saved if it has eg Blameable / Timestampable traits attached.
-     *
-     * @param EntityInterface $entity
      */
     public function afterSave(EntityInterface $entity): void
     {

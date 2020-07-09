@@ -14,7 +14,6 @@ use App\Repository\RoleRepository;
 use App\Security\RolesService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -38,12 +37,6 @@ class CreateRolesCommand extends Command
 
     /**
      * CreateRolesCommand constructor.
-     *
-     * @param EntityManagerInterface $entityManager
-     * @param RoleRepository         $roleRepository
-     * @param RolesService           $rolesService
-     *
-     * @throws LogicException
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -59,14 +52,8 @@ class CreateRolesCommand extends Command
         $this->setDescription('Console command to create roles to database');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @return int 0 if everything went fine, or an error code
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -97,11 +84,8 @@ class CreateRolesCommand extends Command
     }
 
     /**
-     * Method to check if specified role exists on database and if not create and persist it to database.
-     *
-     * @param string $role
-     *
-     * @return int
+     * Method to check if specified role exists on database and if not create
+     * and persist it to database.
      *
      * @throws Throwable
      */
@@ -121,11 +105,10 @@ class CreateRolesCommand extends Command
     }
 
     /**
-     * Method to clean existing roles from database that does not really exists.
+     * Method to clean existing roles from database that does not really
+     * exists.
      *
-     * @param string[] $roles
-     *
-     * @return int
+     * @param array<int, string> $roles
      */
     private function clearRoles(array $roles): int
     {

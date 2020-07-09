@@ -66,8 +66,6 @@ class UserGroupController extends Controller
 
     /**
      * UserGroupController constructor.
-     *
-     * @param UserGroupResource $resource
      */
     public function __construct(UserGroupResource $resource)
     {
@@ -123,12 +121,6 @@ class UserGroupController extends Controller
      *      description="User Group not found",
      *  )
      * @SWG\Tag(name="UserGroup Management")
-     *
-     * @param Request      $request
-     * @param UserResource $userResource
-     * @param UserGroup    $userGroup
-     *
-     * @return Response
      *
      * @throws Throwable
      */
@@ -229,12 +221,6 @@ class UserGroupController extends Controller
      *  )
      * @SWG\Tag(name="UserGroup Management")
      *
-     * @param UserGroup           $userGroup
-     * @param User                $user
-     * @param SerializerInterface $serializer
-     *
-     * @return JsonResponse
-     *
      * @throws Throwable
      */
     public function attachUserAction(
@@ -323,12 +309,6 @@ class UserGroupController extends Controller
      *  )
      * @SWG\Tag(name="UserGroup Management")
      *
-     * @param UserGroup           $userGroup
-     * @param User                $user
-     * @param SerializerInterface $serializer
-     *
-     * @return JsonResponse
-     *
      * @throws Throwable
      */
     public function detachUserAction(
@@ -343,12 +323,6 @@ class UserGroupController extends Controller
 
     /**
      * Helper method to create User response.
-     *
-     * @param UserGroup           $userGroup
-     * @param SerializerInterface $serializer
-     * @param int|null            $status
-     *
-     * @return JsonResponse
      */
     private function getUserResponse(
         UserGroup $userGroup,

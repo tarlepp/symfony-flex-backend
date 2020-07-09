@@ -47,9 +47,6 @@ class UserGroupTransformerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
-     * @param StringableArrayObject      $expected
-     * @param StringableArrayObject|null $input
-     *
      * @testdox Test that `transform` method returns `$expected` when using `$input` input.
      */
     public function testThatTransformReturnsExpected(
@@ -113,8 +110,6 @@ class UserGroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator
-     *
      * @throws Throwable
      */
     public function dataProviderTestThatTransformReturnsExpected(): Generator

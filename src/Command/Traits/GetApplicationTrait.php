@@ -21,8 +21,6 @@ use Symfony\Component\Console\Exception\RuntimeException;
 trait GetApplicationTrait
 {
     /**
-     * @return Application
-     *
      * @throws RuntimeException
      */
     public function getApplication(): Application

@@ -26,9 +26,6 @@ use Throwable;
  */
 class UniqueUsernameValidatorTest extends KernelTestCase
 {
-    /**
-     * @var UniqueUsername
-     */
     private UniqueUsername $constraint;
 
     /**

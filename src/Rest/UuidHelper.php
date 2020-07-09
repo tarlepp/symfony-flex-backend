@@ -30,8 +30,6 @@ class UuidHelper
 
     /**
      * Getter method for UUID factory.
-     *
-     * @return UuidFactory
      */
     public static function getFactory(): UuidFactory
     {
@@ -39,11 +37,8 @@ class UuidHelper
     }
 
     /**
-     * Method to get proper doctrine parameter type for UuidBinaryOrderedTimeType values.
-     *
-     * @param string $value
-     *
-     * @return string|null
+     * Method to get proper doctrine parameter type for
+     * UuidBinaryOrderedTimeType values.
      */
     public static function getType(string $value): ?string
     {
@@ -66,10 +61,6 @@ class UuidHelper
 
     /**
      * Creates a UUID from the string standard representation
-     *
-     * @param string $value
-     *
-     * @return UuidInterface
      */
     public static function fromString(string $value): UuidInterface
     {
@@ -78,10 +69,6 @@ class UuidHelper
 
     /**
      * Method to get bytes value for specified UuidBinaryOrderedTimeType value.
-     *
-     * @param string $value
-     *
-     * @return string
      */
     public static function getBytes(string $value): string
     {
@@ -92,8 +79,6 @@ class UuidHelper
      * Method to init UUID factory cache.
      *
      * @codeCoverageIgnore
-     *
-     * @return UuidFactory
      */
     private static function initCache(): UuidFactory
     {

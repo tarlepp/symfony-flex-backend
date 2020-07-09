@@ -15,7 +15,6 @@ use App\Form\Type\Console\UserGroupType;
 use App\Resource\UserGroupResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -35,11 +34,6 @@ class EditUserGroupCommand extends Command
 
     /**
      * EditUserGroupCommand constructor.
-     *
-     * @param UserGroupResource $userGroupResource
-     * @param UserHelper        $userHelper
-     *
-     * @throws LogicException
      */
     public function __construct(UserGroupResource $userGroupResource, UserHelper $userHelper)
     {
@@ -53,12 +47,7 @@ class EditUserGroupCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -84,12 +73,6 @@ class EditUserGroupCommand extends Command
 
     /**
      * Method to update specified user group entity via specified form.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param UserGroupEntity $userGroup
-     *
-     * @return string
      *
      * @throws Throwable
      */

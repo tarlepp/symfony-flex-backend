@@ -15,7 +15,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Throwable;
 use function array_map;
 
@@ -24,40 +24,18 @@ use function array_map;
  *
  * @package App\DataFixtures\ORM
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @psalm-suppress MissingConstructor
  */
 final class LoadUserData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private ContainerInterface $container;
+    use ContainerAwareTrait;
 
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
     private ObjectManager $manager;
-
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
     private RolesServiceInterface $roles;
 
     /**
-     * Setter for container.
-     *
-     * @param ContainerInterface|null $container
-     */
-    public function setContainer(?ContainerInterface $container = null): void
-    {
-        if ($container !== null) {
-            $this->container = $container;
-        }
-    }
-
-    /**
      * Load data fixtures with the passed EntityManager
-     *
-     * @param ObjectManager $manager
      *
      * @throws Throwable
      */
@@ -80,8 +58,6 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
 
     /**
      * Get the order of this fixture
-     *
-     * @return int
      */
     public function getOrder(): int
     {
@@ -90,8 +66,6 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
 
     /**
      * Method to create User entity with specified role.
-     *
-     * @param string|null $role
      *
      * @throws Throwable
      */

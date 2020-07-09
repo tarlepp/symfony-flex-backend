@@ -40,10 +40,6 @@ class ApiKeyControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatFindActionWorksAsExpected
      *
-     * @param string $username
-     * @param string $password
-     * @param int    $expectedStatus
-     *
      * @throws Throwable
      *
      * @testdox Test that find action returns $expectedStatus with $username + $password
@@ -59,9 +55,6 @@ class ApiKeyControllerTest extends WebTestCase
         static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatFindActionWorksAsExpected(): Generator
     {
         //yield ['john', 'password', 403];

@@ -11,7 +11,6 @@ namespace App\Command\ApiKey;
 use App\Command\HelperConfigure;
 use App\Command\Traits\ApiKeyUserManagementHelperTrait;
 use App\DTO\ApiKey\ApiKeyCreate as ApiKey;
-use App\Entity\ApiKey as ApiKeyEntity;
 use App\Form\Type\Console\ApiKeyType;
 use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
@@ -19,8 +18,6 @@ use App\Resource\UserGroupResource;
 use App\Security\RolesService;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -59,14 +56,6 @@ class CreateApiKeyCommand extends Command
 
     /**
      * CreateApiKeyCommand constructor.
-     *
-     * @param ApiKeyHelper      $apiKeyHelper
-     * @param ApiKeyResource    $apiKeyResource
-     * @param UserGroupResource $userGroupResource
-     * @param RolesService      $rolesService
-     * @param RoleRepository    $roleRepository
-     *
-     * @throws LogicException
      */
     public function __construct(
         ApiKeyHelper $apiKeyHelper,
@@ -86,21 +75,11 @@ class CreateApiKeyCommand extends Command
         $this->setDescription('Command to create new API key');
     }
 
-    /**
-     * Getter for RolesService
-     *
-     * @return RolesService
-     */
     public function getRolesService(): RolesService
     {
         return $this->rolesService;
     }
 
-    /**
-     * Configures the current command.
-     *
-     * @throws InvalidArgumentException
-     */
     protected function configure(): void
     {
         parent::configure();
@@ -110,12 +89,7 @@ class CreateApiKeyCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input  An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @return int 0 if everything went fine, or an exit code
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -134,7 +108,6 @@ class CreateApiKeyCommand extends Command
         $dto = $helper->interactUsingForm(ApiKeyType::class, $input, $output);
 
         // Create new API key
-        /** @var ApiKeyEntity $apiKey */
         $apiKey = $this->apiKeyResource->create($dto);
 
         if ($input->isInteractive()) {
@@ -151,9 +124,6 @@ class CreateApiKeyCommand extends Command
      *
      * Also note that if groups are not found method will reset application 'role' table content, so that we can be
      * sure that we can create all groups correctly.
-     *
-     * @param OutputInterface $output
-     * @param bool            $interactive
      *
      * @throws Throwable
      */

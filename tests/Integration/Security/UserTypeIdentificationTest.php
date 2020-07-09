@@ -56,8 +56,6 @@ class UserTypeIdentificationTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid
      *
-     * @param TokenInterface|null $token
-     *
      * @testdox Test that `getApiKey` returns null when using `$token` as a token.
      */
     public function testThatGetApiKeyReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
@@ -93,8 +91,6 @@ class UserTypeIdentificationTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetUserReturnsNullWhenTokenIsNotValid
-     *
-     * @param TokenInterface|null $token
      *
      * @throws NonUniqueResultException
      *
@@ -138,8 +134,6 @@ class UserTypeIdentificationTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid
-     *
-     * @param TokenInterface|null $token
      *
      * @testdox Test that `getIdentity` returns null when using `$token` as a token.
      */
@@ -196,8 +190,6 @@ class UserTypeIdentificationTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid
      *
-     * @param TokenInterface|null $token
-     *
      * @testdox Test that `getApiKeyUser` returns null when using `$token` as a token.
      */
     public function testThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
@@ -233,8 +225,6 @@ class UserTypeIdentificationTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid
      *
-     * @param TokenInterface|null $token
-     *
      * @testdox Test that `getSecurityUser` returns null when using `$token` as a token.
      */
     public function testThatGetSecurityUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
@@ -267,49 +257,31 @@ class UserTypeIdentificationTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetUserReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
-    /**
-     * @return Generator
-     */
     private function getInvalidTokens(): Generator
     {
         yield [null];

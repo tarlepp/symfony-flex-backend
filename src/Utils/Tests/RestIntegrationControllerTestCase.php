@@ -32,9 +32,6 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
      */
     protected string $resourceClass;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function setUp(): void
     {
         gc_enable();
@@ -47,9 +44,6 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
         $this->controller = $controller;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -76,8 +70,9 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
     }
 
     /**
-     * This test is to make sure that controller has set the expected resource. There is multiple resources and each
-     * controller needs to use specified one.
+     * This test is to make sure that controller has set the expected resource.
+     * There is multiple resources and each controller needs to use specified
+     * one.
      */
     public function testThatGetResourceReturnsExpected(): void
     {

@@ -19,23 +19,14 @@ use Generator;
  */
 class AdminActionsTest extends RestTraitTestCase
 {
-    /**
-     * @var string
-     */
     protected static string $route = '/test_admin_actions';
 
-    /**
-     * @return Generator
-     */
     public function getValidUsers(): Generator
     {
         //yield ['john-root', 'password-root'];
         yield ['john-admin', 'password-admin'];
     }
 
-    /**
-     * @return Generator
-     */
     public function getInvalidUsers(): Generator
     {
         //yield [null, null];

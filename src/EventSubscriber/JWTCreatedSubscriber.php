@@ -34,9 +34,6 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
 
     /**
      * JWTCreatedListener constructor.
-     *
-     * @param RequestStack    $requestStack
-     * @param LoggerInterface $logger
      */
     public function __construct(RequestStack $requestStack, LoggerInterface $logger)
     {
@@ -45,22 +42,9 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * {@inheritdoc}
      *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
-     *
-     * @return array<string, string> The event names to listen to
+     * @return array<string, string>
      */
     public static function getSubscribedEvents(): array
     {
@@ -73,9 +57,8 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     /**
      * Subscriber method to attach some custom data to current JWT payload.
      *
-     * This method is called when 'lexik_jwt_authentication.on_jwt_created' event is broadcast.
-     *
-     * @param JWTCreatedEvent $event
+     * This method is called when following event is broadcast;
+     *  - lexik_jwt_authentication.on_jwt_created
      */
     public function onJWTCreated(JWTCreatedEvent $event): void
     {
@@ -95,10 +78,6 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
         $event->setData($payload);
     }
 
-    /**
-     * @param array                      $payload
-     * @param UserInterface|SecurityUser $user
-     */
     private function setLocalizationData(array &$payload, UserInterface $user): void
     {
         $payload['language'] = $user instanceof SecurityUser ? $user->getLanguage() : Localization::DEFAULT_LANGUAGE;
@@ -115,7 +94,7 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     private function setExpiration(array &$payload): void
     {
         // Set new exp value for JWT
-        /** @noinspection PhpUnhandledExceptionInspection */
+        /* @noinspection PhpUnhandledExceptionInspection */
         $payload['exp'] = (new DateTime('+1 day', new DateTimeZone('UTC')))->getTimestamp();
     }
 

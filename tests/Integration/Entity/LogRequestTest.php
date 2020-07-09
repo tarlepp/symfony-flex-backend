@@ -48,14 +48,14 @@ class LogRequestTest extends EntityTestCase
         // Store container and entity manager
         $this->testContainer = static::$kernel->getContainer();
 
-        /** @noinspection MissingService */
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection MissingService */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
 
         // Create new entity object
         $this->entity = new $this->entityName([]);
 
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->repository = $this->entityManager->getRepository($this->entityName);
     }
 
@@ -94,10 +94,6 @@ class LogRequestTest extends EntityTestCase
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
      * @dataProvider dataProviderTestThatSetterAndGettersWorks
-     *
-     * @param string $field
-     * @param string $type
-     * @param array  $meta
      *
      * @throws Throwable
      *
@@ -157,10 +153,6 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
      *
-     * @param StringableArrayObject $properties
-     * @param StringableArrayObject $headers
-     * @param StringableArrayObject $expected
-     *
      * @throws Throwable
      *
      * @testdox Test that sensitive data `$properties` from `$headers` is cleaned and output is expected `$expected`.
@@ -180,10 +172,6 @@ class LogRequestTest extends EntityTestCase
 
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
-     *
-     * @param StringableArrayObject $properties
-     * @param StringableArrayObject $parameters
-     * @param StringableArrayObject $expected
      *
      * @throws Throwable
      *
@@ -205,9 +193,6 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatDetermineParametersWorksLikeExpected
      *
-     * @param string                $content
-     * @param StringableArrayObject $expected
-     *
      * @throws Throwable
      *
      * @testdox Test that `determineParameters` method returns `$expected` when using `$content` as input.
@@ -224,9 +209,6 @@ class LogRequestTest extends EntityTestCase
         );
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatSensitiveDataIsCleaned(): Generator
     {
         yield [
@@ -275,9 +257,6 @@ class LogRequestTest extends EntityTestCase
         ];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatDetermineParametersWorksLikeExpected(): Generator
     {
         yield [

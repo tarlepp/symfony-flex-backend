@@ -29,10 +29,6 @@ class Version
 
     /**
      * Version constructor.
-     *
-     * @param string          $projectDir
-     * @param CacheInterface  $appCacheApcu
-     * @param LoggerInterface $logger
      */
     public function __construct(string $projectDir, CacheInterface $appCacheApcu, LoggerInterface $logger)
     {
@@ -41,12 +37,11 @@ class Version
         $this->logger = $logger;
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * Method to get application version from cache or create new entry to cache with version value from
-     * composer.json file.
+     * Method to get application version from cache or create new entry to
+     * cache with version value from composer.json file.
      *
-     * @return string
+     * @noinspection PhpDocMissingThrowsInspection
      */
     public function get(): string
     {

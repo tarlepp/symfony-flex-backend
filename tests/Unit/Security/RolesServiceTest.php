@@ -73,9 +73,6 @@ class RolesServiceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetRoleLabelReturnsExpected
      *
-     * @param string $role
-     * @param string $expected
-     *
      * @testdox Test that `getRoleLabel` method returns '$expected` with `$role`.
      */
     public function testThatGetRoleLabelReturnsExpected(string $role, string $expected): void
@@ -86,9 +83,6 @@ class RolesServiceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetShortReturnsExpected
      *
-     * @param string $input
-     * @param string $expected
-     *
      * @testdox Test that `getShort` method returns '$expected` with `$input`.
      */
     public function testThatGetShortReturnsExpected(string $input, string $expected): void
@@ -98,9 +92,6 @@ class RolesServiceTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetInheritedRolesReturnsExpected
-     *
-     * @param StringableArrayObject $expected
-     * @param StringableArrayObject $roles
      *
      * @testdox Test that `getInheritedRoles` method returns `$expected` when using `$roles`.
      */
@@ -115,9 +106,6 @@ class RolesServiceTest extends KernelTestCase
         );
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetRoleLabelReturnsExpected(): Generator
     {
         yield [RolesService::ROLE_LOGGED, 'Logged in users'];
@@ -128,9 +116,6 @@ class RolesServiceTest extends KernelTestCase
         yield ['Not supported role', 'Unknown - Not supported role'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetShortReturnsExpected(): Generator
     {
         yield [RolesService::ROLE_LOGGED, 'logged'];
@@ -141,9 +126,6 @@ class RolesServiceTest extends KernelTestCase
         yield ['SOME_CUSTOM_ROLE', 'custom_role'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetInheritedRolesReturnsExpected(): Generator
     {
         yield [

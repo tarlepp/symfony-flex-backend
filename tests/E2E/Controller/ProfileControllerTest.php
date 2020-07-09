@@ -60,9 +60,6 @@ class ProfileControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatGetTokenReturnsJwtWithValidCredentials
      *
-     * @param string $username
-     * @param string $password
-     *
      * @throws Throwable
      *
      * @testdox Test that `profile` action returns HTTP 200 with $username + $password
@@ -108,8 +105,6 @@ class ProfileControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatProfileActionReturnsExpected
-     *
-     * @param string $token
      *
      * @throws JsonException
      *
@@ -199,10 +194,6 @@ class ProfileControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatRolesActionReturnsExpected
      *
-     * @param string $username
-     * @param string $password
-     * @param array  $expected
-     *
      * @throws Throwable
      *
      * @testdox Test that `roles` action returns expected roles with $username + $password
@@ -221,8 +212,6 @@ class ProfileControllerTest extends WebTestCase
 
     /**
      * @dataProvider dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey
-     *
-     * @param string $token
      *
      * @throws JsonException
      *
@@ -312,10 +301,6 @@ class ProfileControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatGroupsActionReturnExpected
      *
-     * @param array  $expected
-     * @param string $username
-     * @param string $password
-     *
      * @throws Throwable
      *
      *  @testdox Test that `groups` action returns expected groups with $username + $password
@@ -346,8 +331,6 @@ class ProfileControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey
      *
-     * @param string $token
-     *
      * @throws JsonException
      *
      * @testdox Test that `groups` action returns expected with invalid $token token.
@@ -377,9 +360,6 @@ class ProfileControllerTest extends WebTestCase
         );
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
     {
         //yield ['john', 'password'];
@@ -394,9 +374,6 @@ class ProfileControllerTest extends WebTestCase
         yield ['john.doe-root@test.com', 'password-root'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatProfileActionReturnsExpected(): Generator
     {
         static::bootKernel();
@@ -408,9 +385,6 @@ class ProfileControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatRolesActionReturnsExpected(): Generator
     {
         //yield ['john', 'password', []];
@@ -425,9 +399,6 @@ class ProfileControllerTest extends WebTestCase
         yield ['john.doe-root@test.com', 'password-root', ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
     {
         static::bootKernel();
@@ -439,9 +410,6 @@ class ProfileControllerTest extends WebTestCase
         }
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGroupsActionReturnExpected(): Generator
     {
         //yield ['john', 'password', []];
@@ -456,9 +424,6 @@ class ProfileControllerTest extends WebTestCase
         yield ['john.doe-root@test.com', 'password-root', ['ROLE_ROOT']];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
     {
         static::bootKernel();

@@ -98,9 +98,6 @@ class ApiKeyTypeTest extends TypeTestCase
         }
     }
 
-    /**
-     * @return array
-     */
     protected function getExtensions(): array
     {
         parent::getExtensions();

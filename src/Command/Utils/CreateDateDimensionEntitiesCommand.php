@@ -16,7 +16,6 @@ use DateTime;
 use DateTimeZone;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -44,10 +43,6 @@ class CreateDateDimensionEntitiesCommand extends Command
 
     /**
      * PopulateDateDimensionCommand constructor.
-     *
-     * @param DateDimensionRepository $dateDimensionRepository
-     *
-     * @throws LogicException
      */
     public function __construct(DateDimensionRepository $dateDimensionRepository)
     {
@@ -60,12 +55,7 @@ class CreateDateDimensionEntitiesCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int 0 if everything went fine, or an error code
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -92,8 +82,6 @@ class CreateDateDimensionEntitiesCommand extends Command
     /**
      * Method to get start year value from user.
      *
-     * @return int
-     *
      * @throws InvalidArgumentException
      */
     private function getYearStart(): int
@@ -103,10 +91,6 @@ class CreateDateDimensionEntitiesCommand extends Command
 
     /**
      * Method to get end year value from user.
-     *
-     * @param int $yearStart
-     *
-     * @return int
      *
      * @throws InvalidArgumentException
      */
@@ -121,9 +105,6 @@ class CreateDateDimensionEntitiesCommand extends Command
 
     /**
      * Method to create DateDimension entities to database.
-     *
-     * @param int $yearStart
-     * @param int $yearEnd
      *
      * @throws Throwable
      */
@@ -146,11 +127,6 @@ class CreateDateDimensionEntitiesCommand extends Command
 
     /**
      * Helper method to get progress bar for console.
-     *
-     * @param int    $steps
-     * @param string $message
-     *
-     * @return ProgressBar
      */
     private function getProgressBar(int $steps, string $message): ProgressBar
     {
@@ -171,10 +147,6 @@ class CreateDateDimensionEntitiesCommand extends Command
     }
 
     /**
-     * @param int         $yearEnd
-     * @param DateTime    $dateStart
-     * @param ProgressBar $progress
-     *
      * @throws Throwable
      */
     private function createEntities(int $yearEnd, DateTime $dateStart, ProgressBar $progress): void
@@ -205,8 +177,6 @@ class CreateDateDimensionEntitiesCommand extends Command
     /**
      * Getter method for year start validator closure.
      *
-     * @return Closure
-     *
      * @throws InvalidArgumentException
      */
     private function validatorYearStart(): Closure
@@ -228,10 +198,6 @@ class CreateDateDimensionEntitiesCommand extends Command
 
     /**
      * Getter method for year end validator closure.
-     *
-     * @param int $yearStart
-     *
-     * @return Closure
      *
      * @throws InvalidArgumentException
      */

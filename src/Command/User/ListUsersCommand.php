@@ -15,7 +15,6 @@ use App\Resource\UserResource;
 use App\Security\RolesService;
 use Closure;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -38,11 +37,6 @@ class ListUsersCommand extends Command
 
     /**
      * ListUsersCommand constructor.
-     *
-     * @param UserResource $userResource
-     * @param RolesService $roles
-     *
-     * @throws LogicException
      */
     public function __construct(UserResource $userResource, RolesService $roles)
     {
@@ -56,12 +50,7 @@ class ListUsersCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -97,9 +86,8 @@ class ListUsersCommand extends Command
     }
 
     /**
-     * Getter method for user formatter closure. This closure will format single User entity for console table.
-     *
-     * @return Closure
+     * Getter method for user formatter closure. This closure will format
+     * single User entity for console table.
      */
     private function getFormatterUser(): Closure
     {

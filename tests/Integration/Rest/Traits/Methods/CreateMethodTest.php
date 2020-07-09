@@ -39,7 +39,7 @@ class CreateMethodTest extends KernelTestCase
     {
         $this->expectException(LogicException::class);
 
-        /** @codingStandardsIgnoreStart */
+        /* @codingStandardsIgnoreStart */
         $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
@@ -59,8 +59,6 @@ class CreateMethodTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
-     *
-     * @param string $httpMethod
      *
      * @throws Throwable
      *
@@ -156,9 +154,6 @@ class CreateMethodTest extends KernelTestCase
         $testClass->createMethod($request, $restDtoInterface);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -171,9 +166,6 @@ class CreateMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400), 0];

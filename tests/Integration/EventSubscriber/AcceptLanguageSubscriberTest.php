@@ -41,10 +41,6 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatLocaleIsSetAsExpected
      *
-     * @param string $expected
-     * @param string $default
-     * @param string $asked
-     *
      * @testdox Test that when default locale is `$default` and when asking `$asked` locale result is `$expected`.
      */
     public function testThatLocaleIsSetAsExpected(string $expected, string $default, string $asked): void
@@ -62,9 +58,6 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
         static::assertSame($expected, $request->getLocale());
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatLocaleIsSetAsExpected(): Generator
     {
         yield ['fi', 'fi', 'fi'];

@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Anon;
 
-use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\CountMethod;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,12 +33,6 @@ trait CountAction
      *     path="/count",
      *     methods={"GET"},
      *  )
-     *
-     * @RestApiDoc()
-     *
-     * @param Request $request
-     *
-     * @return Response
      *
      * @throws Throwable
      */

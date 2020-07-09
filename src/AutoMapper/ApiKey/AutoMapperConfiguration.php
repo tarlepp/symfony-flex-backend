@@ -37,8 +37,6 @@ class AutoMapperConfiguration extends RestAutoMapperConfiguration
 
     /**
      * AutoMapperConfiguration constructor.
-     *
-     * @param RequestMapper $requestMapper
      */
     public function __construct(RequestMapper $requestMapper)
     {

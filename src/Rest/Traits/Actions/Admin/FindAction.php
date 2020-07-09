@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Rest\Traits\Actions\Admin;
 
-use App\Annotation\RestApiDoc;
 use App\Rest\Traits\Methods\FindMethod;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,12 +36,6 @@ trait FindAction
      *  )
      *
      * @Security("is_granted('ROLE_ADMIN')")
-     *
-     * @RestApiDoc()
-     *
-     * @param Request $request
-     *
-     * @return Response
      *
      * @throws Throwable
      */

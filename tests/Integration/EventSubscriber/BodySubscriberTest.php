@@ -75,10 +75,6 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatJsonContentReplaceParametersAsExpected
      *
-     * @param StringableArrayObject $expectedParameters
-     * @param string                $contentType
-     * @param string                $content
-     *
      * @throws JsonException
      *
      * @testdox Test that subscriber converts `$content` content with `$contentType` type to `$expectedParameters`.
@@ -149,9 +145,6 @@ class BodySubscriberTest extends KernelTestCase
         $subscriber->onKernelRequest($event);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
     {
         yield [

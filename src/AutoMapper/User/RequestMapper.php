@@ -40,8 +40,6 @@ class RequestMapper extends RestRequestMapper
 
     /**
      * RequestMapper constructor.
-     *
-     * @param UserGroupResource $userGroupResource
      */
     public function __construct(UserGroupResource $userGroupResource)
     {
@@ -49,9 +47,9 @@ class RequestMapper extends RestRequestMapper
     }
 
     /**
-     * @param array|array<int, string> $userGroups
+     * @param array<int, string> $userGroups
      *
-     * @return array|UserGroup[]
+     * @return array<int, UserGroup>
      */
     protected function transformUserGroups(array $userGroups): array
     {

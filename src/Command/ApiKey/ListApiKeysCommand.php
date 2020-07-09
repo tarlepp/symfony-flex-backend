@@ -14,7 +14,6 @@ use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
 use Closure;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -35,17 +34,7 @@ class ListApiKeysCommand extends Command
     private RolesService $rolesService;
 
     /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private SymfonyStyle $io;
-
-    /**
      * ListUsersCommand constructor.
-     *
-     * @param ApiKeyResource $apiKeyResource
-     * @param RolesService   $rolesService
-     *
-     * @throws LogicException
      */
     public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
     {
@@ -59,19 +48,14 @@ class ListApiKeysCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int 0 if everything went fine, or an exit code
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
+        $io = new SymfonyStyle($input, $output);
+        $io->write("\033\143");
 
         $headers = [
             'Id',
@@ -81,8 +65,8 @@ class ListApiKeysCommand extends Command
             'Roles (inherited)',
         ];
 
-        $this->io->title('Current API keys');
-        $this->io->table($headers, $this->getRows());
+        $io->title('Current API keys');
+        $io->table($headers, $this->getRows());
 
         return 0;
     }
@@ -102,8 +86,6 @@ class ListApiKeysCommand extends Command
     /**
      * Getter method for API key formatter closure. This closure will format single ApiKey entity for console
      * table.
-     *
-     * @return Closure
      */
     private function getFormatterApiKey(): Closure
     {

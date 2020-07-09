@@ -28,9 +28,9 @@ use function array_map;
  * @package App\DTO\User
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method self|RestDtoInterface  get(string $id): RestDtoInterface
- * @method self|RestDtoInterface  patch(RestDtoInterface $dto): RestDtoInterface
- * @method Entity|EntityInterface update(EntityInterface $entity): EntityInterface
+ * @method self|RestDtoInterface  get(string $id)
+ * @method self|RestDtoInterface  patch(RestDtoInterface $dto)
+ * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class User extends RestDto
 {
@@ -43,8 +43,6 @@ class User extends RestDto
     ];
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Length(
@@ -56,8 +54,6 @@ class User extends RestDto
     protected string $username = '';
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Length(
@@ -69,8 +65,6 @@ class User extends RestDto
     protected string $firstName = '';
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Length(
@@ -82,8 +76,6 @@ class User extends RestDto
     protected string $lastName = '';
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @Assert\Email()
@@ -91,8 +83,6 @@ class User extends RestDto
     protected string $email = '';
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @AppAssert\Language()
@@ -100,8 +90,6 @@ class User extends RestDto
     protected string $language = Localization::DEFAULT_LANGUAGE;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @AppAssert\Locale()
@@ -109,8 +97,6 @@ class User extends RestDto
     protected string $locale = Localization::DEFAULT_LOCALE;
 
     /**
-     * @var string
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
      * @AppAssert\Timezone()
@@ -125,8 +111,6 @@ class User extends RestDto
     protected array $userGroups = [];
 
     /**
-     * @var string
-     *
      * @Assert\Length(
      *      min = 8,
      *      max = 255,
@@ -135,19 +119,11 @@ class User extends RestDto
      */
     protected string $password = '';
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @param string $username
-     *
-     * @return User
-     */
     public function setUsername(string $username): self
     {
         $this->setVisited('username');
@@ -157,19 +133,11 @@ class User extends RestDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    /**
-     * @param string $firstName
-     *
-     * @return User
-     */
     public function setFirstName(string $firstName): self
     {
         $this->setVisited('firstName');
@@ -179,19 +147,11 @@ class User extends RestDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLastName(): string
     {
         return $this->lastName;
     }
 
-    /**
-     * @param string $lastName
-     *
-     * @return User
-     */
     public function setLastName(string $lastName): self
     {
         $this->setVisited('lastName');
@@ -201,19 +161,11 @@ class User extends RestDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     *
-     * @return User
-     */
     public function setEmail(string $email): self
     {
         $this->setVisited('email');
@@ -223,19 +175,11 @@ class User extends RestDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLanguage(): string
     {
         return $this->language;
     }
 
-    /**
-     * @param string $language
-     *
-     * @return User
-     */
     public function setLanguage(string $language): self
     {
         $this->setVisited('language');
@@ -245,19 +189,11 @@ class User extends RestDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLocale(): string
     {
         return $this->locale;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return User
-     */
     public function setLocale(string $locale): self
     {
         $this->setVisited('locale');
@@ -267,19 +203,11 @@ class User extends RestDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTimezone(): string
     {
         return $this->timezone;
     }
 
-    /**
-     * @param string $timezone
-     *
-     * @return User
-     */
     public function setTimezone(string $timezone): self
     {
         $this->setVisited('timezone');
@@ -290,7 +218,7 @@ class User extends RestDto
     }
 
     /**
-     * @return UserGroupEntity[]
+     * @return array<int, UserGroupEntity>
      */
     public function getUserGroups(): array
     {
@@ -299,8 +227,6 @@ class User extends RestDto
 
     /**
      * @param array<int, UserGroupEntity> $userGroups
-     *
-     * @return User
      */
     public function setUserGroups(array $userGroups): self
     {
@@ -311,19 +237,11 @@ class User extends RestDto
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     * @param string|null $password
-     *
-     * @return User
-     */
     public function setPassword(?string $password = null): self
     {
         if ($password !== null) {
@@ -365,11 +283,6 @@ class User extends RestDto
 
     /**
      * Method to update User entity password.
-     *
-     * @param Entity $entity
-     * @param string $value
-     *
-     * @return User
      */
     protected function updatePassword(Entity $entity, string $value): self
     {
@@ -381,8 +294,7 @@ class User extends RestDto
     /**
      * Method to update User entity user groups.
      *
-     * @param UserGroupAwareInterface $entity
-     * @param UserGroupEntity[]       $value
+     * @param array<int, UserGroupEntity> $value
      */
     protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): void
     {

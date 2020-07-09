@@ -301,9 +301,6 @@ class RequestLogSubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatLoggerServiceIsNotCalledWhenUsingWhitelistedWildcard
      *
-     * @param string $url
-     * @param string $ignored
-     *
      * @throws Throwable
      *
      * @testdox Test that `RequestLogger` service isn't used when making request to `$url` with `$ignored` ignored route

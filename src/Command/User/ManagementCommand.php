@@ -26,6 +26,8 @@ class ManagementCommand extends Command
      * ManagementCommand constructor.
      *
      * @throws LogicException
+     *
+     * @psalm-suppress InvalidScalarArgument
      */
     public function __construct()
     {
@@ -33,7 +35,6 @@ class ManagementCommand extends Command
 
         $this->setDescription('Console command to manage users and user groups');
 
-        /** @psalm-suppress InvalidScalarArgument */
         $this->setChoices([
             'user:list' => 'List users',
             'user:list-groups' => 'List user groups',

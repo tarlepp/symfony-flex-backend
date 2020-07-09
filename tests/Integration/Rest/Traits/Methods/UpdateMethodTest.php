@@ -41,7 +41,7 @@ class UpdateMethodTest extends KernelTestCase
     {
         $this->expectException(LogicException::class);
 
-        /** @codingStandardsIgnoreStart */
+        /* @codingStandardsIgnoreStart */
         $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
@@ -63,8 +63,6 @@ class UpdateMethodTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
-     *
-     * @param string $httpMethod
      *
      * @throws Throwable
      *
@@ -125,9 +123,6 @@ class UpdateMethodTest extends KernelTestCase
         $testClass->updateMethod($request, $restDtoInterface, $uuid);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -140,9 +135,6 @@ class UpdateMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400), 0];

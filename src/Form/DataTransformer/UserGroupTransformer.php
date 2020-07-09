@@ -29,8 +29,6 @@ class UserGroupTransformer implements DataTransformerInterface
 
     /**
      * UserGroupTransformer constructor.
-     *
-     * @param UserGroupResource $resource
      */
     public function __construct(UserGroupResource $resource)
     {
@@ -40,22 +38,18 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * Transforms an object (Role) to a string (Role id).
      *
-     * @param string[]|UserGroup[]|mixed|null $userGroups
+     * @param array<int, string|UserGroup>|mixed $userGroups
      *
-     * @return string[]
+     * @return array<int, string>
+     *
+     * @psalm-suppress MissingClosureParamType
      */
-    public function transform($userGroups): ?array
+    public function transform($userGroups): array
     {
         $output = [];
 
         if (is_array($userGroups)) {
-            $iterator =
-                /**
-                 * @param string|UserGroup $userGroup
-                 *
-                 * @return string
-                 */
-                static fn ($userGroup): string => $userGroup instanceof UserGroup ? $userGroup->getId() : $userGroup;
+            $iterator = static fn ($group): string => $group instanceof UserGroup ? $group->getId() : (string)$group;
 
             $output = array_values(array_map('\strval', array_map($iterator, $userGroups)));
         }
@@ -66,9 +60,9 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * Transforms a string (Role id) to an object (Role).
      *
-     * @param string[]|mixed $userGroups
+     * @param array<int, string>|mixed $userGroups
      *
-     * @return UserGroup[]|null
+     * @return array<int, UserGroup>|null
      *
      * @throws TransformationFailedException if object (issue) is not found
      */

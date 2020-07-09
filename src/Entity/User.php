@@ -52,8 +52,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     use Uuid;
 
     /**
-     * @var UuidInterface
-     *
      * @Groups({
      *      "User",
      *      "User.id",
@@ -78,8 +76,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     private UuidInterface $id;
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "User",
      *      "User.username",
@@ -103,8 +99,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     private string $username = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "User",
      *      "User.firstName",
@@ -128,8 +122,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     private string $firstName = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "User",
      *      "User.lastName",
@@ -153,8 +145,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     private string $lastName = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "User",
      *      "User.email",
@@ -174,8 +164,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     private string $email = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "User",
      *      "User.language",
@@ -197,8 +185,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     private string $language = Localization::DEFAULT_LANGUAGE;
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "User",
      *      "User.locale",
@@ -220,8 +206,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     private string $locale = Localization::DEFAULT_LOCALE;
 
     /**
-     * @var string
-     *
      * * @Groups({
      *      "User",
      *      "User.locale",
@@ -245,8 +229,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     private string $timezone = Localization::DEFAULT_TIMEZONE;
 
     /**
-     * @var string
-     *
      * @ORM\Column(
      *      name="password",
      *      type="string",
@@ -258,8 +240,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     /**
      * Plain password. Used for model validation. Must not be persisted.
-     *
-     * @var string
      */
     private string $plainPassword = '';
 
@@ -278,27 +258,16 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         $this->logsLoginFailure = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id->toString();
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
-    /**
-     * @param string $username
-     *
-     * @return User
-     */
     public function setUsername(string $username): self
     {
         $this->username = $username;
@@ -306,19 +275,11 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getFirstName(): string
     {
         return $this->firstName;
     }
 
-    /**
-     * @param string $firstName
-     *
-     * @return User
-     */
     public function setFirstName(string $firstName): self
     {
         $this->firstName = $firstName;
@@ -326,19 +287,11 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLastName(): string
     {
         return $this->lastName;
     }
 
-    /**
-     * @param string $lastName
-     *
-     * @return User
-     */
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
@@ -346,19 +299,11 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     *
-     * @return User
-     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -366,19 +311,11 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLanguage(): string
     {
         return $this->language;
     }
 
-    /**
-     * @param string $language
-     *
-     * @return User
-     */
     public function setLanguage(string $language): self
     {
         $this->language = $language;
@@ -386,19 +323,11 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLocale(): string
     {
         return $this->locale;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return User
-     */
     public function setLocale(string $locale): self
     {
         $this->locale = $locale;
@@ -406,19 +335,11 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTimezone(): string
     {
         return $this->timezone;
     }
 
-    /**
-     * @param string $timezone
-     *
-     * @return User
-     */
     public function setTimezone(string $timezone): self
     {
         $this->timezone = $timezone;
@@ -426,20 +347,11 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     * @param callable $encoder
-     * @param string   $plainPassword
-     *
-     * @return User
-     */
     public function setPassword(callable $encoder, string $plainPassword): self
     {
         $this->password = (string)$encoder($plainPassword);
@@ -447,19 +359,11 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getPlainPassword(): string
     {
         return $this->plainPassword;
     }
 
-    /**
-     * @param string $plainPassword
-     *
-     * @return User
-     */
     public function setPlainPassword(string $plainPassword): self
     {
         if ($plainPassword !== '') {

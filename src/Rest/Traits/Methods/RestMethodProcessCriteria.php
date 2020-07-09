@@ -18,9 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 trait RestMethodProcessCriteria
 {
-    /**
-     * {@inheritdoc}
-     */
     public function processCriteria(array &$criteria, Request $request, string $method): void
     {
     }

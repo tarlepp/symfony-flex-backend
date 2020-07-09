@@ -28,12 +28,6 @@ class UserResourceTest extends ResourceTestCase
     protected string $repositoryClass = UserRepository::class;
     protected string $resourceClass = UserResource::class;
 
-    /**
-     * @param BaseRepositoryInterface $repository
-     * @param ValidatorInterface      $validator
-     *
-     * @return RestResourceInterface
-     */
     protected function getResource(
         BaseRepositoryInterface $repository,
         ValidatorInterface $validator

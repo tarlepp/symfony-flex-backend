@@ -10,7 +10,6 @@ namespace App\Entity\Traits;
 
 use App\Rest\UuidHelper;
 use Ramsey\Uuid\UuidInterface;
-use Throwable;
 
 /**
  * Trait Uuid
@@ -20,19 +19,11 @@ use Throwable;
  */
 trait Uuid
 {
-    /**
-     * @return UuidInterface
-     */
     public function getUuid(): UuidInterface
     {
         return $this->id;
     }
 
-    /**
-     * @return UuidInterface
-     *
-     * @throws Throwable
-     */
     protected function createUuid(): UuidInterface
     {
         return UuidHelper::getFactory()->uuid1();

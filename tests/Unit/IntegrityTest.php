@@ -46,9 +46,6 @@ class IntegrityTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatControllerHasE2ETests
      *
-     * @param string $controllerTestClass
-     * @param string $controllerClass
-     *
      * @testdox Test that controller $controllerClass has E2E test class $controllerTestClass
      */
     public function testThatControllerHasE2ETests(string $controllerTestClass, string $controllerClass): void
@@ -64,9 +61,6 @@ class IntegrityTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatRestControllerHaveIntegrationTests
-     *
-     * @param string $controllerTestClass
-     * @param string $controllerClass
      *
      * @testdox Test that REST controller $controllerClass has integration test class $controllerTestClass
      */
@@ -85,9 +79,6 @@ class IntegrityTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatRepositoryClassHasIntegrationTests
-     *
-     * @param string $testClass
-     * @param string $repository
      *
      * @testdox Test that repository `$repository` has integration test class `$testClass`.
      */
@@ -108,10 +99,6 @@ FORMAT;
 
     /**
      * @dataProvider dataProviderTestThatRepositoryHaveFunctionalTests
-     *
-     * @param string                $testClass
-     * @param string                $repository
-     * @param StringableArrayObject $methods
      *
      * @testdox Test that repository `$repository` has functional test class `$testClass` for `$methods` methods.
      */
@@ -137,9 +124,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatRestRepositoryHaveIntegrationTests
      *
-     * @param string $repositoryTestClass
-     * @param string $repositoryClass
-     *
      * @testdox Test that repository $repositoryClass has integration test class $repositoryTestClass
      */
     public function testThatRestRepositoryHaveIntegrationTests(
@@ -158,9 +142,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatEntityHaveIntegrationTests
      *
-     * @param string $entityTestClass
-     * @param string $entityClass
-     *
      * @testdox Test that entity $entityClass has integration test class $entityTestClass
      */
     public function testThatEntityHaveIntegrationTests(string $entityTestClass, string $entityClass): void
@@ -176,9 +157,6 @@ FORMAT;
 
     /**
      * @dataProvider dataProviderTestThatEventSubscriberHaveIntegrationTest
-     *
-     * @param string $eventSubscriberTestClass
-     * @param string $eventSubscriberClass
      *
      * @testdox Test that event subscriber $eventSubscriberClass has integration test class $eventSubscriberTestClass
      */
@@ -198,9 +176,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatEventListenerHaveIntegrationTest
      *
-     * @param string $eventListenerTestClass
-     * @param string $eventListenerClass
-     *
      * @testdox Test that event listener $eventListenerClass has integration test class $eventListenerTestClass
      */
     public function testThatEventListenerHaveIntegrationTest(
@@ -219,9 +194,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatResourceHaveIntegrationTest
      *
-     * @param string $resourceTestClass
-     * @param string $resourceClass
-     *
      * @testdox Test that resource $resourceClass has integration test class $resourceTestClass
      */
     public function testThatResourceHaveIntegrationTest(string $resourceTestClass, string $resourceClass): void
@@ -237,9 +209,6 @@ FORMAT;
 
     /**
      * @dataProvider dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest
-     *
-     * @param string $authenticatorTestClass
-     * @param string $authenticatorClass
      *
      * @testdox Test that authenticator $authenticatorClass has integration test class $authenticatorTestClass
      */
@@ -259,9 +228,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatSecurityProvidersHaveIntegrationTest
      *
-     * @param string $providerTestClass
-     * @param string $providerClass
-     *
      * @testdox Test that security provider $providerClass has integration test class $providerTestClass
      */
     public function testThatSecurityProvidersHaveIntegrationTest(string $providerTestClass, string $providerClass): void
@@ -277,9 +243,6 @@ FORMAT;
 
     /**
      * @dataProvider dataProviderTestThatSecurityVoterHaveIntegrationTest
-     *
-     * @param string $voterTestClass
-     * @param string $voterClass
      *
      * @testdox Test that security voter $voterClass has integration test class $voterTestClass
      */
@@ -297,9 +260,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatDtoHaveIntegrationTest
      *
-     * @param string $dtoTestClass
-     * @param string $dtoClass
-     *
      * @testdox Test that REST DTO $dtoClass has integration test class $dtoTestClass
      */
     public function testThatDtoHaveIntegrationTest(string $dtoTestClass, string $dtoClass): void
@@ -316,9 +276,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatFormTypeHaveIntegrationTest
      *
-     * @param string $formTypeTestClass
-     * @param string $formTypeClass
-     *
      * @testdox Test that form type $formTypeClass has integration test class $formTypeTestClass
      */
     public function testThatFormTypeHaveIntegrationTest(string $formTypeTestClass, string $formTypeClass): void
@@ -334,9 +291,6 @@ FORMAT;
 
     /**
      * @dataProvider dataProviderTestThatDataTransformerHaveIntegrationTest
-     *
-     * @param string $dataTransformerTestClass
-     * @param string $dataTransformerClass
      *
      * @testdox Test that data transformer $dataTransformerClass has integration test class $dataTransformerTestClass
      */
@@ -356,7 +310,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatConstraintHasUnitTest
      *
-     * @param string $constraintTestClass
      * @param string $constraintClass
      *
      * @testdox Test that constraint `$constraintClass` has unit test class `$constraintTestClass`
@@ -374,9 +327,6 @@ FORMAT;
 
     /**
      * @dataProvider dataProviderTestThatValidatorConstraintsHaveIntegrationTest
-     *
-     * @param string $validatorTestClass
-     * @param string $validatorClass
      *
      * @testdox Test that validator $validatorClass has integration test class $validatorTestClass
      */
@@ -396,9 +346,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatCustomDBALTypeHaveIntegrationTest
      *
-     * @param string $dbalTypeTestClass
-     * @param string $dbalTypeClass
-     *
      * @testdox Test that DBAL type $dbalTypeClass has integration test class $dbalTypeTestClass
      */
     public function testThatCustomDBALTypeHaveIntegrationTest(
@@ -416,9 +363,6 @@ FORMAT;
 
     /**
      * @dataProvider dataProviderTestThatRestRequestMapperHaveIntegrationTest
-     *
-     * @param string $restRequestMapperTestClass
-     * @param string $restRequestMapper
      *
      * @testdox Test that REST request mapper $restRequestMapper has integration test class $restRequestMapperTestClass
      */
@@ -438,9 +382,6 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatGenericServiceHaveIntegrationTests
      *
-     * @param string $serviceTestClass
-     * @param string $serviceClass
-     *
      * @testdox Test that generic service $serviceClass has integration test class $serviceTestClass
      */
     public function testThatGenericServiceHaveIntegrationTests(
@@ -456,9 +397,6 @@ FORMAT;
         static::assertTrue(class_exists($serviceTestClass), $message);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatControllerHasE2ETests(): array
     {
         $this->bootKernelCached();
@@ -471,9 +409,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -487,9 +422,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {
         $this->bootKernelCached();
@@ -540,9 +472,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter, $formatter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -557,9 +486,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatEntityHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -574,9 +500,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -589,9 +512,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatEventListenerHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -604,9 +524,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatResourceHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -619,9 +536,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -638,9 +552,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -655,9 +566,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -672,9 +580,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatDtoHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -687,9 +592,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatFormTypeHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -704,9 +606,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -721,9 +620,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatRestControllerHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -738,9 +634,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatConstraintHasUnitTest(): array
     {
         $this->bootKernelCached();
@@ -755,9 +648,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -772,9 +662,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatCustomDBALTypeHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -790,9 +677,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -809,9 +693,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
-    /**
-     * @return array
-     */
     public function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -824,15 +705,6 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
-    /**
-     * @param string       $folder
-     * @param string       $namespace
-     * @param string       $namespaceTest
-     * @param Closure|null $filter
-     * @param Closure|null $formatter
-     *
-     * @return array
-     */
     private function getTestCases(
         string $folder,
         string $namespace,
@@ -860,12 +732,6 @@ FORMAT;
         );
     }
 
-    /**
-     * @param string $folder
-     * @param string $namespace
-     *
-     * @return Closure
-     */
     private function getReflectionClass(string $folder, string $namespace): Closure
     {
         return fn (string $file): ReflectionClass => new ReflectionClass(
@@ -875,12 +741,6 @@ FORMAT;
 
     /**
      * Formatter closure to return an array which contains names of expected test class and actual class.
-     *
-     * @param string $folder
-     * @param string $namespace
-     * @param string $namespaceTest
-     *
-     * @return Closure
      */
     private function getFormatterClosure(string $folder, string $namespace, string $namespaceTest): Closure
     {
@@ -912,11 +772,6 @@ FORMAT;
         }
     }
 
-    /**
-     * @param string $interface
-     *
-     * @return Closure
-     */
     private function getInterfaceFilter(string $interface): Closure
     {
         return fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
@@ -924,11 +779,6 @@ FORMAT;
             && $reflectionClass->implementsInterface($interface);
     }
 
-    /**
-     * @param string $class
-     *
-     * @return Closure
-     */
     private function getSubclassOfFilter(string $class): Closure
     {
         return fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()

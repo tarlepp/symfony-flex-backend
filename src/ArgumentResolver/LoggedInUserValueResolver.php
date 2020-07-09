@@ -45,9 +45,6 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
 
     /**
      * LoggedInUserValueResolver constructor.
-     *
-     * @param TokenStorageInterface  $tokenStorage
-     * @param UserTypeIdentification $userService
      */
     public function __construct(TokenStorageInterface $tokenStorage, UserTypeIdentification $userService)
     {
@@ -56,12 +53,7 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * Whether this resolver can resolve the value for the given ArgumentMetadata.
-     *
-     * @param Request          $request
-     * @param ArgumentMetadata $argument
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
@@ -86,12 +78,7 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * Returns the possible value(s).
-     *
-     * @param Request          $request
-     * @param ArgumentMetadata $argumentMetadata
-     *
-     * @return Generator
+     * {@inheritdoc}
      *
      * @throws Throwable
      */

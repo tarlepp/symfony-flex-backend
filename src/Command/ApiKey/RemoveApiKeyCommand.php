@@ -33,9 +33,6 @@ class RemoveApiKeyCommand extends Command
     /**
      * RemoveApiKeyCommand constructor.
      *
-     * @param ApiKeyResource $apiKeyResource
-     * @param ApiKeyHelper   $apiKeyHelper
-     *
      * @throws LogicException
      */
     public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
@@ -50,12 +47,7 @@ class RemoveApiKeyCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int 0 if everything went fine, or an exit code
+     * {@inheritdoc}
      *
      * @throws Throwable
      */

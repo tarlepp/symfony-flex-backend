@@ -36,9 +36,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
 
     /**
      * LockedUserSubscriber constructor.
-     *
-     * @param UserRepository          $userRepository
-     * @param LogLoginFailureResource $logLoginFailureResource
      */
     public function __construct(UserRepository $userRepository, LogLoginFailureResource $logLoginFailureResource)
     {
@@ -47,22 +44,9 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * {@inheritdoc}
      *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2')))
-     *
-     * @return array<string, string|array<int, string|int>> The event names to listen to
+     * @return array<string, string|array<int, string|int>>
      */
     public static function getSubscribedEvents(): array
     {
@@ -76,8 +60,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param AuthenticationSuccessEvent $event
-     *
      * @throws Throwable
      */
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
@@ -96,8 +78,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param AuthenticationFailureEvent $event
-     *
      * @throws Throwable
      */
     public function onAuthenticationFailure(AuthenticationFailureEvent $event): void
@@ -117,8 +97,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
 
     /**
      * @param string|object $user
-     *
-     * @return User|null
      *
      * @throws ORMException
      */

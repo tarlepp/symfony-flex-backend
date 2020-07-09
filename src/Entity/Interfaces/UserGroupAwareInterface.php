@@ -26,27 +26,18 @@ interface UserGroupAwareInterface extends EntityInterface
     public function getUserGroups(): Collection;
 
     /**
-     * Method to attach new userGroup to current api key.
-     *
-     * @param UserGroup $userGroup
-     *
-     * @return UserGroupAwareInterface
+     * Method to attach new userGroup to current user OR api key.
      */
     public function addUserGroup(UserGroup $userGroup): self;
 
     /**
-     * Method to remove specified userGroup from current api key.
-     *
-     * @param UserGroup $userGroup
-     *
-     * @return UserGroupAwareInterface
+     * Method to remove specified userGroup from current user OR api key.
      */
     public function removeUserGroup(UserGroup $userGroup): self;
 
     /**
-     * Method to remove all many-to-many userGroup relations from current api key.
-     *
-     * @return UserGroupAwareInterface
+     * Method to remove all many-to-many userGroup relations from current user
+     * OR api key.
      */
     public function clearUserGroups(): self;
 }

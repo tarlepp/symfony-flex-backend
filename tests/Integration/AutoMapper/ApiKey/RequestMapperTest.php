@@ -54,8 +54,6 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod
      *
-     * @param string $dtoClass
-     *
      * @throws Throwable
      *
      * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass`.
@@ -80,9 +78,6 @@ class RequestMapperTest extends RestRequestMapperTestCase
         static::assertSame([$userGroup], $dto->getUserGroups());
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {
         foreach ($this->restDtoClasses as $dtoClass) {

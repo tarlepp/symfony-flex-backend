@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\E2E\Rest\src\Controller;
 
-use App\Annotation\RestApiDoc;
 use App\Rest\Controller;
 use App\Rest\Traits\Methods;
 use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
@@ -23,8 +22,7 @@ use Throwable;
  * @Route(
  *     path="/test_lifecycle_behaviour",
  *  )
- *
- * @RestApiDoc(disabled=true)
+
  *
  * @package App\Tests\E2E\Rest\src\Controller
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -37,8 +35,6 @@ class ControllerForLifeCycleTests extends Controller
 
     /**
      * ControllerForLifeCycleTests constructor.
-     *
-     * @param ResourceForLifeCycleTests $resource
      */
     public function __construct(ResourceForLifeCycleTests $resource)
     {
@@ -53,11 +49,6 @@ class ControllerForLifeCycleTests extends Controller
      *      },
      *      methods={"GET"}
      *  )
-     *
-     * @param Request $request
-     * @param string  $role
-     *
-     * @return Response
      *
      * @throws Throwable
      */

@@ -53,8 +53,6 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     use Uuid;
 
     /**
-     * @var UuidInterface
-     *
      * @Groups({
      *      "ApiKey",
      *      "ApiKey.id",
@@ -75,8 +73,6 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     private UuidInterface $id;
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "ApiKey",
      *      "ApiKey.token",
@@ -100,8 +96,6 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     private string $token = '';
 
     /**
-     * @var string
-     *
      * @Groups({
      *      "ApiKey",
      *      "ApiKey.description",
@@ -159,27 +153,16 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         $this->generateToken();
     }
 
-    /**
-     * @return string
-     */
     public function getId(): string
     {
         return $this->id->toString();
     }
 
-    /**
-     * @return string
-     */
     public function getToken(): string
     {
         return $this->token;
     }
 
-    /**
-     * @param string $token
-     *
-     * @return ApiKey
-     */
     public function setToken(string $token): self
     {
         $this->token = $token;
@@ -188,8 +171,6 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     }
 
     /**
-     * @return ApiKey
-     *
      * @throws Throwable
      */
     public function generateToken(): self
@@ -205,19 +186,11 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         return $this->setToken($random);
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return ApiKey
-     */
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -226,6 +199,8 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     }
 
     /**
+     * Getter method for user groups collection.
+     *
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
     public function getUserGroups(): Collection
@@ -234,7 +209,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     }
 
     /**
-     * Getter for user request log collection.
+     * Getter method for user request log collection.
      *
      * @return Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
@@ -269,14 +244,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         );
     }
 
-    /**
-     * Method to attach new userGroup to current api key.
-     *
-     * @param UserGroup $userGroup
-     *
-     * @return ApiKey|UserGroupAwareInterface
-     */
-    public function addUserGroup(UserGroup $userGroup): UserGroupAwareInterface
+    public function addUserGroup(UserGroup $userGroup): self
     {
         if (!$this->userGroups->contains($userGroup)) {
             $this->userGroups->add($userGroup);
@@ -286,14 +254,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * Method to remove specified userGroup from current api key.
-     *
-     * @param UserGroup $userGroup
-     *
-     * @return ApiKey|UserGroupAwareInterface
-     */
-    public function removeUserGroup(UserGroup $userGroup): UserGroupAwareInterface
+    public function removeUserGroup(UserGroup $userGroup): self
     {
         if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeApiKey($this);
@@ -302,12 +263,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         return $this;
     }
 
-    /**
-     * Method to remove all many-to-many userGroup relations from current api key.
-     *
-     * @return ApiKey|UserGroupAwareInterface
-     */
-    public function clearUserGroups(): UserGroupAwareInterface
+    public function clearUserGroups(): self
     {
         $this->userGroups->clear();
 

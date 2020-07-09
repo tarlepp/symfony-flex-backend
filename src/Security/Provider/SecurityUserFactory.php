@@ -33,10 +33,6 @@ class SecurityUserFactory implements UserProviderInterface
 
     /**
      * SecurityUserFactory constructor.
-     *
-     * @param UserRepository $userRepository
-     * @param RolesService   $rolesService
-     * @param string         $uuidV1Regex
      */
     public function __construct(UserRepository $userRepository, RolesService $rolesService, string $uuidV1Regex)
     {
@@ -46,13 +42,7 @@ class SecurityUserFactory implements UserProviderInterface
     }
 
     /**
-     * Loads the user for the given username.
-     *
-     * This method must return null if the user is not found.
-     *
-     * @param string $username The username
-     *
-     * @return UserInterface
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -70,21 +60,11 @@ class SecurityUserFactory implements UserProviderInterface
         return new SecurityUser($user, $this->rolesService->getInheritedRoles($user->getRoles()));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supportsClass(string $class): bool
     {
         return $class === SecurityUser::class;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return SecurityUser
-     *
-     * @throws Throwable
-     */
     public function refreshUser(UserInterface $user): SecurityUser
     {
         if (!($user instanceof SecurityUser)) {

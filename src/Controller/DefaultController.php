@@ -38,8 +38,6 @@ class DefaultController
      *      methods={"GET"}
      *  )
      *
-     * @return Response
-     *
      * @throws Throwable
      */
     public function index(): Response
@@ -67,12 +65,6 @@ class DefaultController
      *          @SWG\Property(property="timestamp", type="string"),
      *      ),
      *  )
-     *
-     * @param Request         $request
-     * @param ResponseHandler $responseHandler
-     * @param HealthzService  $healthzService
-     *
-     * @return Response
      *
      * @throws Throwable
      */
@@ -112,10 +104,6 @@ class DefaultController
      *          @SWG\Property(property="version", type="string", description="Version number"),
      *      ),
      *  )
-     *
-     * @param Version $version
-     *
-     * @return JsonResponse
      */
     public function version(Version $version): JsonResponse
     {

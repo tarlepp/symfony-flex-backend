@@ -26,7 +26,7 @@ trait UserGroupChoices
     /**
      * Method to create choices array for user groups.
      *
-     * @return mixed[]
+     * @return array<string, string>
      *
      * @throws Throwable
      */

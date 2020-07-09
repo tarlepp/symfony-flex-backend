@@ -11,7 +11,6 @@ namespace App\Utils\Tests;
 use App\Utils\JSON;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -39,8 +38,6 @@ class Auth
 
     /**
      * Auth constructor.
-     *
-     * @param KernelInterface $kernel
      */
     public function __construct(KernelInterface $kernel)
     {
@@ -49,9 +46,6 @@ class Auth
 
     /**
      * Method to get authorization headers for specified user.
-     *
-     * @param string $username
-     * @param string $password
      *
      * @return array<string, string>
      *
@@ -65,8 +59,6 @@ class Auth
 
     /**
      * Method to get authorization headers for specified API Key role.
-     *
-     * @param string $role
      *
      * @return array<string, string>
      */
@@ -82,8 +74,6 @@ class Auth
 
     /**
      * Method to get authorization headers for specified token.
-     *
-     * @param string $token
      *
      * @return array<string, string>
      */
@@ -113,11 +103,6 @@ class Auth
      *
      * @codeCoverageIgnore
      *
-     * @param string $username
-     * @param string $password
-     *
-     * @return string
-     *
      * @throws UnexpectedValueException
      * @throws JsonException
      */
@@ -132,7 +117,6 @@ class Auth
         );
 
         // Read current cache
-        /** @var array<string, string> $cache */
         $cache = (array)JSON::decode((string)file_get_contents($filename), true);
 
         // Create hash for username + password
@@ -160,12 +144,7 @@ class Auth
                 JSON::encode(compact('username', 'password'))
             );
 
-            /** @var Response|null $response */
             $response = $client->getResponse();
-
-            if ($response === null) {
-                throw new UnexpectedValueException('Test client did not return response at all');
-            }
 
             if ($response->getStatusCode() !== 200) {
                 throw new UnexpectedValueException(

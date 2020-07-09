@@ -20,12 +20,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserGroupCreate extends UserGroup
 {
     /**
-     * @var \App\Entity\Role
-     *
      * @Assert\NotBlank()
      * @Assert\NotNull()
-     *
-     * @noinspection PhpUnnecessaryFullyQualifiedNameInspection
      */
     protected ?Role $role = null;
 }

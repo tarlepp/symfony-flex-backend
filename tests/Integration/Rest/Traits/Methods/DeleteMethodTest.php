@@ -42,7 +42,7 @@ class DeleteMethodTest extends KernelTestCase
     {
         $this->expectException(LogicException::class);
 
-        /** @codingStandardsIgnoreStart */
+        /* @codingStandardsIgnoreStart */
         $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
@@ -60,8 +60,6 @@ class DeleteMethodTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod
-     *
-     * @param string $httpMethod
      *
      * @throws Throwable
      *
@@ -92,7 +90,6 @@ class DeleteMethodTest extends KernelTestCase
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
      * @param Exception $exception
-     * @param int       $expectedCode
      *
      * @throws Throwable
      *
@@ -164,9 +161,6 @@ class DeleteMethodTest extends KernelTestCase
         $testClass->deleteMethod($request, $uuid);
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -179,9 +173,6 @@ class DeleteMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400), 0];

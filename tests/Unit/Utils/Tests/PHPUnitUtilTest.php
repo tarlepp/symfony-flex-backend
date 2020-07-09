@@ -38,9 +38,6 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetTypeReturnExpected
      *
-     * @param string $expected
-     * @param string $input
-     *
      * @testdox Test that `getType` method returns `$expected` with `$input` input.
      */
     public function testThatGetTypeReturnExpected(string $expected, string $input): void
@@ -62,9 +59,7 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetValidValueReturnsExpectedValue
      *
-     * @param mixed  $expected
-     * @param string $input
-     * @param bool   $strict
+     * @param mixed $expected
      *
      * @throws Throwable
      *
@@ -101,8 +96,7 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue
      *
-     * @param mixed  $expected
-     * @param string $input
+     * @param mixed $expected
      *
      * @throws Throwable
      *
@@ -113,9 +107,6 @@ class PHPUnitUtilTest extends KernelTestCase
         static::assertInstanceOf($expected, PhpUnitUtil::getInvalidValueForType($input));
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue(): Generator
     {
         yield [DateTime::class, stdClass::class];
@@ -129,9 +120,6 @@ class PHPUnitUtilTest extends KernelTestCase
         yield [stdClass::class, 'bool'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetTypeReturnExpected(): Generator
     {
         yield ['int', 'integer'];
@@ -149,9 +137,6 @@ class PHPUnitUtilTest extends KernelTestCase
         yield ['bool', 'bool'];
     }
 
-    /**
-     * @return Generator
-     */
     public function dataProviderTestThatGetValidValueReturnsExpectedValue(): Generator
     {
         yield [666, 'int', true];

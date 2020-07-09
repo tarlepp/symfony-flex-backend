@@ -46,8 +46,6 @@ class EntityValueResolver implements ArgumentValueResolverInterface
 
     /**
      * EntityValueResolver constructor.
-     *
-     * @param ResourceCollection $resourceCollection
      */
     public function __construct(ResourceCollection $resourceCollection)
     {
@@ -55,12 +53,7 @@ class EntityValueResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * Whether this resolver can resolve the value for the given ArgumentMetadata.
-     *
-     * @param Request          $request
-     * @param ArgumentMetadata $argument
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
@@ -70,18 +63,14 @@ class EntityValueResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * Returns the possible value(s).
-     *
-     * @param Request          $request
-     * @param ArgumentMetadata $argument
-     *
-     * @return Generator
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        yield $this->resourceCollection->getEntityResource((string)$argument->getType())
+        yield $this->resourceCollection
+            ->getEntityResource((string)$argument->getType())
             ->findOne($request->get($argument->getName()), !$argument->isNullable());
     }
 }

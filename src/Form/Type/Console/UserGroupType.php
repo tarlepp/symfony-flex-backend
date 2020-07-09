@@ -16,10 +16,8 @@ use App\Form\Type\Traits\AddBasicFieldToForm;
 use App\Resource\RoleResource;
 use App\Security\RolesService;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Exception\InvalidArgumentException;
 use Symfony\Component\Form\Extension\Core\Type;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\Exception\AccessException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Throwable;
 
@@ -56,10 +54,6 @@ class UserGroupType extends AbstractType
 
     /**
      * UserGroupType constructor.
-     *
-     * @param RolesService    $rolesService
-     * @param RoleResource    $roleResource
-     * @param RoleTransformer $roleTransformer
      */
     public function __construct(
         RolesService $rolesService,
@@ -72,10 +66,8 @@ class UserGroupType extends AbstractType
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param mixed[]              $options
+     * {@inheritdoc}
      *
-     * @throws InvalidArgumentException
      * @throws Throwable
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -98,13 +90,6 @@ class UserGroupType extends AbstractType
         $builder->get('role')->addModelTransformer($this->roleTransformer);
     }
 
-    /**
-     * Configures the options for this type.
-     *
-     * @param OptionsResolver $resolver The resolver for the options
-     *
-     * @throws AccessException
-     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
@@ -115,7 +100,7 @@ class UserGroupType extends AbstractType
     }
 
     /**
-     * Method to  choices array for user groups.
+     * Method to get choices array for user groups.
      *
      * @return array<string, string>
      *

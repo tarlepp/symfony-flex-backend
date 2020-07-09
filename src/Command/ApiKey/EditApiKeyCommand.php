@@ -15,7 +15,6 @@ use App\Form\Type\Console\ApiKeyType;
 use App\Resource\ApiKeyResource;
 use Matthias\SymfonyConsoleForm\Console\Helper\FormHelper;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -35,11 +34,6 @@ class EditApiKeyCommand extends Command
 
     /**
      * EditUserCommand constructor.
-     *
-     * @param ApiKeyResource $apiKeyResource
-     * @param ApiKeyHelper   $apiKeyHelper
-     *
-     * @throws LogicException
      */
     public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
@@ -53,12 +47,7 @@ class EditApiKeyCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int 0 if everything went fine, or an exit code
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -85,10 +74,6 @@ class EditApiKeyCommand extends Command
 
     /**
      * Method to update specified API key via specified form.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param ApiKeyEntity    $apiKey
      *
      * @return mixed[]
      *

@@ -11,7 +11,6 @@ namespace App\Repository\Traits;
 use App\Rest\UuidHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
@@ -23,22 +22,13 @@ use UnexpectedValueException;
  *
  * @package App\Repository\Traits
  * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @method string getEntityName(): string
  */
 trait RepositoryWrappersTrait
 {
     protected ManagerRegistry $managerRegistry;
 
     /**
-     * Gets a reference to the entity identified by the given type and identifier without actually loading it,
-     * if the entity is not yet loaded.
-     *
-     * @param string $id
-     *
-     * @return object|null
-     *
-     * @throws ORMException
+     * {@inheritdoc}
      */
     public function getReference(string $id)
     {
@@ -54,30 +44,20 @@ trait RepositoryWrappersTrait
     }
 
     /**
-     * Gets all association mappings of the class.
+     * {@inheritdoc}
      *
-     * @return array<int, string>
+     * @return array<string, string>
      */
     public function getAssociations(): array
     {
         return $this->getClassMetaData()->getAssociationMappings();
     }
 
-    /**
-     * Returns the ORM metadata descriptor for a class.
-     *
-     * @return ClassMetadataInfo
-     */
     public function getClassMetaData(): ClassMetadataInfo
     {
         return $this->getEntityManager()->getClassMetadata($this->getEntityName());
     }
 
-    /**
-     * Getter method for EntityManager for current entity.
-     *
-     * @return EntityManager
-     */
     public function getEntityManager(): EntityManager
     {
         $manager = $this->managerRegistry->getManagerForClass($this->getEntityName());
@@ -97,14 +77,6 @@ trait RepositoryWrappersTrait
         return $manager;
     }
 
-    /**
-     * Method to create new query builder for current entity.
-     *
-     * @param string|null $alias
-     * @param string|null $indexBy
-     *
-     * @return QueryBuilder
-     */
     public function createQueryBuilder(?string $alias = null, ?string $indexBy = null): QueryBuilder
     {
         $alias ??= 'entity';

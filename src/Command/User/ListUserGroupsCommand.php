@@ -14,7 +14,6 @@ use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use Closure;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -36,10 +35,6 @@ class ListUserGroupsCommand extends Command
 
     /**
      * ListUserGroupsCommand constructor.
-     *
-     * @param UserGroupResource $userGroupResource
-     *
-     * @throws LogicException
      */
     public function __construct(UserGroupResource $userGroupResource)
     {
@@ -52,12 +47,7 @@ class ListUserGroupsCommand extends Command
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @return int
+     * {@inheritdoc}
      *
      * @throws Throwable
      */
@@ -91,10 +81,8 @@ class ListUserGroupsCommand extends Command
     }
 
     /**
-     * Getter method for user group formatter closure. This closure will format single UserGroup entity for console
-     * table.
-     *
-     * @return Closure
+     * Getter method for user group formatter closure. This closure will
+     * format single UserGroup entity for console table.
      */
     private function getFormatterUserGroup(): Closure
     {
