@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2faaa304c43806a833759d0da310357",
+    "content-hash": "9e09612471bb6e2e96da3fb501d4a20f",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -5442,33 +5442,6 @@
             "time": "2020-05-23T13:08:13+00:00"
         },
         {
-            "name": "symfony/orm-pack",
-            "version": "v1.0.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/orm-pack.git",
-                "reference": "c9bcc08102061f406dc908192c0f33524a675666"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/orm-pack/zipball/c9bcc08102061f406dc908192c0f33524a675666",
-                "reference": "c9bcc08102061f406dc908192c0f33524a675666",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/doctrine-bundle": "*",
-                "doctrine/doctrine-migrations-bundle": "*",
-                "doctrine/orm": "*"
-            },
-            "type": "symfony-pack",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A pack for the Doctrine ORM",
-            "time": "2020-02-10T18:03:48+00:00"
-        },
-        {
             "name": "symfony/polyfill-ctype",
             "version": "v1.17.1",
             "source": {
@@ -8127,20 +8100,20 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozart/assert.git",
-                "reference": "9dc4f203e36f2b486149058bade43c851dd97451"
+                "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozart/assert/zipball/9dc4f203e36f2b486149058bade43c851dd97451",
-                "reference": "9dc4f203e36f2b486149058bade43c851dd97451",
+                "url": "https://api.github.com/repos/webmozart/assert/zipball/bafc69caeb4d49c39fd0779086c03a3738cbb389",
+                "reference": "bafc69caeb4d49c39fd0779086c03a3738cbb389",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.3.3 || ^7.0",
+                "php": "^5.3.3 || ^7.0 || ^8.0",
                 "symfony/polyfill-ctype": "^1.8"
             },
             "conflict": {
@@ -8172,7 +8145,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2020-06-16T10:16:42+00:00"
+            "time": "2020-07-08T17:02:28+00:00"
         },
         {
             "name": "zircote/swagger-php",
@@ -8985,49 +8958,6 @@
             "time": "2020-05-20T17:43:50+00:00"
         },
         {
-            "name": "symfony/debug-pack",
-            "version": "v1.0.8",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/debug-pack.git",
-                "reference": "7310a66f9f81c9f292ff9089f0b0062386cb83fb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug-pack/zipball/7310a66f9f81c9f292ff9089f0b0062386cb83fb",
-                "reference": "7310a66f9f81c9f292ff9089f0b0062386cb83fb",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0",
-                "symfony/debug-bundle": "*",
-                "symfony/monolog-bundle": "^3.0",
-                "symfony/profiler-pack": "*",
-                "symfony/var-dumper": "*"
-            },
-            "type": "symfony-pack",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A debug pack for Symfony projects",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2020-04-07T10:08:51+00:00"
-        },
-        {
             "name": "symfony/dom-crawler",
             "version": "v5.1.2",
             "source": {
@@ -9266,16 +9196,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.19.0",
+            "version": "v1.19.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "bea8c3c959e48a2c952cc7c4f4f32964be8b8874"
+                "reference": "51c48ca9df84c16ed522a7781866900edf7c99f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/bea8c3c959e48a2c952cc7c4f4f32964be8b8874",
-                "reference": "bea8c3c959e48a2c952cc7c4f4f32964be8b8874",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/51c48ca9df84c16ed522a7781866900edf7c99f8",
+                "reference": "51c48ca9df84c16ed522a7781866900edf7c99f8",
                 "shasum": ""
             },
             "require": {
@@ -9344,7 +9274,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-29T14:47:30+00:00"
+            "time": "2020-07-06T00:27:41+00:00"
         },
         {
             "name": "symfony/mime",
@@ -9571,34 +9501,6 @@
                 }
             ],
             "time": "2020-05-12T16:47:27+00:00"
-        },
-        {
-            "name": "symfony/profiler-pack",
-            "version": "v1.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/profiler-pack.git",
-                "reference": "99c4370632c2a59bb0444852f92140074ef02209"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/profiler-pack/zipball/99c4370632c2a59bb0444852f92140074ef02209",
-                "reference": "99c4370632c2a59bb0444852f92140074ef02209",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0",
-                "symfony/stopwatch": "*",
-                "symfony/twig-bundle": "*",
-                "symfony/web-profiler-bundle": "*"
-            },
-            "type": "symfony-pack",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "A pack for the Symfony web profiler",
-            "time": "2018-12-10T12:11:44+00:00"
         },
         {
             "name": "symfony/requirements-checker",
