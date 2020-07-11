@@ -30,6 +30,8 @@ trait UserRelations
      *
      * @Groups({
      *      "User.userGroups",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @ORM\ManyToMany(
@@ -95,6 +97,8 @@ trait UserRelations
      *
      * @Groups({
      *      "User.roles",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @return string[]

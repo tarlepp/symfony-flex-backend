@@ -61,6 +61,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "LogRequest.user",
      *
      *      "UserGroup.users",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @ORM\Column(
@@ -79,6 +81,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Groups({
      *      "User",
      *      "User.username",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @Assert\NotBlank()
@@ -102,6 +106,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Groups({
      *      "User",
      *      "User.firstName",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @Assert\NotBlank()
@@ -125,6 +131,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Groups({
      *      "User",
      *      "User.lastName",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @Assert\NotBlank()
@@ -148,6 +156,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Groups({
      *      "User",
      *      "User.email",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @Assert\NotBlank()
@@ -167,6 +177,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Groups({
      *      "User",
      *      "User.language",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @Assert\NotBlank()
@@ -188,6 +200,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Groups({
      *      "User",
      *      "User.locale",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @Assert\NotBlank()
@@ -208,7 +222,9 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     /**
      * * @Groups({
      *      "User",
-     *      "User.locale",
+     *      "User.timezone",
+     *
+     *      "set.UserProfile",
      *  })
      *
      * @Assert\NotBlank()
