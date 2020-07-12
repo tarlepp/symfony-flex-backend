@@ -1,9 +1,9 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/DefaultControllerTest.php
+ * /tests/E2E/Controller/VersionControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller;
@@ -15,57 +15,13 @@ use Throwable;
 use function file_get_contents;
 
 /**
- * Class DefaultControllerTest
+ * Class VersionControllerTest
  *
  * @package App\Tests\E2E\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DefaultControllerTest extends WebTestCase
+class VersionControllerTest extends WebTestCase
 {
-    /**
-     * @throws Throwable
-     */
-    public function testThatDefaultRouteReturns200(): void
-    {
-        $client = $this->getTestClient();
-        $client->request('GET', '/');
-
-        $response = $client->getResponse();
-
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatHealthzRouteReturns200(): void
-    {
-        $client = $this->getTestClient();
-        $client->request('GET', '/healthz');
-
-        $response = $client->getResponse();
-
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatHealthzRouteDoesNotMakeRequestLog(): void
-    {
-        static::bootKernel();
-
-        /** @var LogRequestResource $resource */
-        $resource = static::$container->get(LogRequestResource::class);
-
-        $expectedLogCount = $resource->count();
-
-        $client = $this->getTestClient();
-        $client->request('GET', '/healthz');
-
-        static::assertSame($expectedLogCount, $resource->count());
-    }
-
     /**
      * @throws Throwable
      */
