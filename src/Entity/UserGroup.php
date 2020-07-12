@@ -47,6 +47,9 @@ class UserGroup implements EntityInterface, Stringable
      *      "ApiKey.userGroups",
      *      "User.userGroups",
      *      "Role.userGroups",
+     *
+     *      "set.UserProfile",
+     *      "set.UserProfileGroups",
      *  })
      *
      * @ORM\Column(
@@ -64,6 +67,9 @@ class UserGroup implements EntityInterface, Stringable
     /**
      * @Groups({
      *      "UserGroup.role",
+     *
+     *      "set.UserProfile",
+     *      "set.UserProfileGroups",
      *  })
      *
      * @Assert\NotBlank()
@@ -88,6 +94,9 @@ class UserGroup implements EntityInterface, Stringable
      * @Groups({
      *      "UserGroup",
      *      "UserGroup.name",
+     *
+     *      "set.UserProfile",
+     *      "set.UserProfileGroups",
      *  })
      *
      * @Assert\NotBlank()
