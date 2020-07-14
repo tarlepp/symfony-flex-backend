@@ -1,22 +1,22 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Controller/RoleControllerTest.php
+ * /tests/Integration/Controller/Role/RoleControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Controller;
+namespace App\Tests\Integration\Controller\Role;
 
-use App\Controller\RoleController;
+use App\Controller\Role\RoleController;
 use App\Resource\RoleResource;
 use App\Utils\Tests\RestIntegrationControllerTestCase;
 
 /**
  * Class RoleControllerTest
  *
- * @package App\Tests\Integration\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @package App\Tests\Integration\Controller\Role
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @property RoleController $controller
  */
