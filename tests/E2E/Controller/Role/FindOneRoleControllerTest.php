@@ -24,6 +24,41 @@ class FindOneRoleControllerTest extends WebTestCase
     private string $baseUrl = '/role';
 
     /**
+     * @throws Throwable
+     *
+     * @testdox Test that `GET /role/ROLE_ADMIN` returns HTTP 401 for non-logged in user.
+     */
+    public function testThatFindOneRoleReturns401(): void
+    {
+        $client = $this->getTestClient();
+
+        $client->request('GET', $this->baseUrl . '/ROLE_ADMIN');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(401, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatFindOneRoleReturns403
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `GET /role/ROLE_ADMIN` returns HTTP 403 when using `$username` + `$password` as a user.
+     */
+    public function testThatFindOneRoleReturns403(string $username, string $password): void
+    {
+        $client = $this->getTestClient($username, $password);
+        $client->request('GET', $this->baseUrl);
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
+    }
+
+    /**
      * @dataProvider dataProviderTestThatFindOneActionWorksAsExpected
      *
      * @throws Throwable
@@ -40,6 +75,14 @@ class FindOneRoleControllerTest extends WebTestCase
 
         static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+    }
+
+    public function dataProviderTestThatFindOneRoleReturns403(): Generator
+    {
+        //yield ['john', 'password'];
+        //yield ['john-api', 'password-api'];
+        //yield ['john-logged', 'password-logged'];
+        yield ['john-user', 'password-user'];
     }
 
     public function dataProviderTestThatFindOneActionWorksAsExpected(): Generator

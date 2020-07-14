@@ -27,6 +27,23 @@ class InheritedRolesControllerTest extends WebTestCase
     private string $baseUrl = '/role';
 
     /**
+     * @throws Throwable
+     *
+     * @testdox Test that `GET /role/ROLE_ADMIN/inherited` returns HTTP 401 for non-logged in user.
+     */
+    public function testThatGetInheritedRoles401(): void
+    {
+        $client = $this->getTestClient();
+
+        $client->request('GET', $this->baseUrl . '/ROLE_ADMIN/inherited');
+
+        $response = $client->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+        static::assertSame(401, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+    }
+
+    /**
      * @dataProvider dataProviderTestThatGetInheritedRolesActionWorksAsExpected
      *
      * @throws Throwable
