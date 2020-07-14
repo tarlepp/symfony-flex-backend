@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/AuthController.php
+ * /src/Controller/Auth/GetTokenController.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller;
+namespace App\Controller\Auth;
 
 use App\Utils\JSON;
 use JsonException;
@@ -16,22 +16,18 @@ use Symfony\Component\Routing\Annotation\Route;
 use function sprintf;
 
 /**
- * Class AuthController
- *
- * @Route(
- *      path="/auth",
- *  )
+ * Class GetTokenController
  *
  * @package App\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class AuthController
+class GetTokenController
 {
     /**
      * Endpoint action to get user Json Web Token (JWT) for authentication.
      *
      * @Route(
-     *      path="/getToken",
+     *      path="/auth/getToken",
      *      methods={"POST"},
      *  );
      *
@@ -78,7 +74,7 @@ class AuthController
      * @throws HttpException
      * @throws JsonException
      */
-    public function getTokenAction(): void
+    public function __invoke(): void
     {
         $message = sprintf(
             'You need to send JSON body to obtain token eg. %s',

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/AuthControllerTest.php
+ * /tests/E2E/Controller/Auth/GetTokenControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller;
+namespace App\Tests\E2E\Controller\Auth;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -16,14 +16,14 @@ use Throwable;
 use function json_encode;
 
 /**
- * Class AuthControllerTest
+ * Class GetTokenControllerTest
  *
- * @package App\Tests\E2E\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @package App\Tests\E2E\Controller\Auth
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class AuthControllerTest extends WebTestCase
+class GetTokenControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/auth';
+    private string $baseUrl = '/auth/getToken';
 
     /**
      * @dataProvider dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost
@@ -35,7 +35,7 @@ class AuthControllerTest extends WebTestCase
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
         $client = $this->getTestClient();
-        $client->request($method, $this->baseUrl . '/getToken');
+        $client->request($method, $this->baseUrl);
 
         $response = $client->getResponse();
 
@@ -57,7 +57,7 @@ class AuthControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request(
             'POST',
-            $this->baseUrl . '/getToken',
+            $this->baseUrl,
             [],
             [],
             [
@@ -101,7 +101,7 @@ class AuthControllerTest extends WebTestCase
         $client = $this->getTestClient();
         $client->request(
             'POST',
-            $this->baseUrl . '/getToken',
+            $this->baseUrl,
             [],
             [],
             [

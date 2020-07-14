@@ -1,33 +1,32 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Controller/AuthControllerTest.php
+ * /tests/Integration/Controller/Auth/GetTokenControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Controller;
+namespace App\Tests\Integration\Controller\Auth;
 
-use App\Controller\AuthController;
+use App\Controller\Auth\GetTokenController;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 
 /**
- * Class AuthControllerTest
+ * Class GetTokenControllerTest
  *
- * @package App\Tests\Integration\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @package App\Tests\Integration\Controller\Auth
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @property AuthController $controller
+ * @property GetTokenController $controller
  */
-class AuthControllerTest extends KernelTestCase
+class GetTokenControllerTest extends KernelTestCase
 {
     public function testThatGetTokenThrowsAnException(): void
     {
         try {
-            $controller = new AuthController();
-            $controller->getTokenAction();
+            (new GetTokenController())();
         } catch (Throwable $exception) {
             static::assertInstanceOf(HttpException::class, $exception);
             static::assertSame(
