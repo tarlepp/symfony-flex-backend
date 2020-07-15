@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/RoleControllerTest.php
+ * /tests/E2E/Controller/Role/InheritedRolesControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller;
+namespace App\Tests\E2E\Controller\Role;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -17,46 +17,30 @@ use function array_search;
 use function array_slice;
 
 /**
- * Class RoleControllerTest
+ * Class InheritedRolesControllerTest
  *
- * @package App\Tests\E2E\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @package App\Tests\E2E\Controller\Role
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RoleControllerTest extends WebTestCase
+class InheritedRolesControllerTest extends WebTestCase
 {
     private string $baseUrl = '/role';
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /role/ROLE_ADMIN/inherited` returns HTTP 401 for non-logged in user.
      */
-    public function testThatGetBaseRouteReturn403(): void
+    public function testThatGetInheritedRoles401(): void
     {
         $client = $this->getTestClient();
-        $client->request('GET', $this->baseUrl);
+
+        $client->request('GET', $this->baseUrl . '/ROLE_ADMIN/inherited');
 
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
-    }
-
-    /**
-     * @dataProvider dataProviderTestThatFindOneActionWorksAsExpected
-     *
-     * @throws Throwable
-     *
-     * @testdox Test that `findOne` action returns HTTP 200 with $username + $password
-     */
-    public function testThatFindOneActionWorksAsExpected(string $username, string $password): void
-    {
-        $client = $this->getTestClient($username, $password);
-
-        $client->request('GET', $this->baseUrl . '/ROLE_ADMIN');
-
-        $response = $client->getResponse();
-
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertSame(401, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
     }
 
     /**
@@ -84,12 +68,6 @@ class RoleControllerTest extends WebTestCase
             static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
             static::assertJsonStringEqualsJsonString(JSON::encode($expectedRoles), $response->getContent());
         }
-    }
-
-    public function dataProviderTestThatFindOneActionWorksAsExpected(): Generator
-    {
-        yield ['john-admin', 'password-admin'];
-        //yield ['john-root',   'password-root'];
     }
 
     public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): Generator

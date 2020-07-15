@@ -1,91 +1,56 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/RoleController.php
+ * /src/Controller/Role/RoleController.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller;
+namespace App\Controller\Role;
 
 use App\Entity\Role;
-use App\Resource\RoleResource;
-use App\Rest\Controller;
-use App\Rest\Traits\Actions;
-use App\Rest\Traits\Methods;
 use App\Security\RolesService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
 
 /**
- * Class RoleController
- *
- * @Route(
- *     path="/role",
- *  )
- *
- * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ * Class InheritedRolesController
  *
  * @SWG\Tag(name="Role Management")
  *
- * @package App\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @method RoleResource getResource()
+ * @package App\Controller\Role
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class RoleController extends Controller
+class InheritedRolesController
 {
-    use Actions\Admin\CountAction;
-    use Actions\Admin\FindAction;
-    use Actions\Admin\IdsAction;
-    use Methods\FindOneMethod;
+    private RolesService $rolesService;
 
     /**
-     * RoleController constructor.
+     * InheritedRolesController constructor.
      */
-    public function __construct(RoleResource $resource)
+    public function __construct(RolesService $rolesService)
     {
-        $this->resource = $resource;
+        $this->rolesService = $rolesService;
     }
 
     /**
+     * Endpoint action to return all inherited roles as an array for specified
+     * Role.
+     *
      * @Route(
-     *      path="/{role}",
+     *      "/role/{role}/inherited",
      *      requirements={
      *          "role" = "^ROLE_\w+$",
      *      },
-     *      methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
-     * @throws Throwable
-     */
-    public function findOneAction(Request $request, string $role): Response
-    {
-        return $this->findOneMethod($request, $role);
-    }
-
-    /**
-     * Endpoint action to return all inherited roles as an array for specified Role.
-     *
-     * @Route(
-     *      "/{role}/inherited",
-     *      requirements={
-     *          "role" = "^ROLE_\w+$",
-     *      },
-     *     methods={"GET"}
+     *      methods={"GET"}
      *  )
      *
      * @ParamConverter(
-     *     "role",
-     *     class="App\Resource\RoleResource"
+     *      "role",
+     *      class="App\Resource\RoleResource"
      * )
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
@@ -122,8 +87,8 @@ class RoleController extends Controller
      *      ),
      *  )
      */
-    public function getInheritedRolesAction(Role $role, RolesService $rolesService): JsonResponse
+    public function __invoke(Role $role): JsonResponse
     {
-        return new JsonResponse($rolesService->getInheritedRoles([$role->getId()]));
+        return new JsonResponse($this->rolesService->getInheritedRoles([$role->getId()]));
     }
 }

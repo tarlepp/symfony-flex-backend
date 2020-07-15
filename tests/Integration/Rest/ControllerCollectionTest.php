@@ -9,8 +9,9 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Rest;
 
 use App\Controller\ApiKeyController;
-use App\Controller\AuthController;
-use App\Controller\RoleController;
+use App\Controller\Auth\GetTokenController;
+use App\Controller\Role\FindOneRoleController;
+use App\Controller\Role\RoleController;
 use App\Controller\UserController;
 use App\Controller\UserGroupController;
 use App\Rest\ControllerCollection;
@@ -63,7 +64,7 @@ class ControllerCollectionTest extends KernelTestCase
     {
         $collection = $this->getCollection();
 
-        static::assertCount(11, $collection->getAll());
+        static::assertCount(12, $collection->getAll());
     }
 
     /**
@@ -94,6 +95,7 @@ class ControllerCollectionTest extends KernelTestCase
     {
         yield [ApiKeyController::class];
         yield [RoleController::class];
+        yield [FindOneRoleController::class];
         yield [UserController::class];
         yield [UserGroupController::class];
     }
@@ -102,11 +104,12 @@ class ControllerCollectionTest extends KernelTestCase
     {
         yield [true, ApiKeyController::class];
         yield [true, RoleController::class];
+        yield [true, FindOneRoleController::class];
         yield [true, UserController::class];
         yield [true, UserGroupController::class];
         yield [false, null];
         yield [false, 'foobar'];
-        yield [false, AuthController::class];
+        yield [false, GetTokenController::class];
     }
 
     private function getCollection(): ControllerCollection
