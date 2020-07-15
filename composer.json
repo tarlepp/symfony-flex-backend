@@ -70,7 +70,7 @@
 		"sensiolabs/security-checker": "6.0.3",
 		"symfony/browser-kit": "5.1.2",
 		"symfony/debug-bundle": "5.1.2",
-		"symfony/maker-bundle": "1.19.1",
+		"symfony/maker-bundle": "1.20.0",
 		"symfony/requirements-checker": "1.1.5",
 		"symfony/stopwatch": "5.1.2",
 		"symfony/var-dumper": "5.1.2",
