@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "114dccb7e1255b738e4d291ade6dac3e",
+    "content-hash": "33ecd8377702966583196de1880748aa",
     "packages": [],
     "packages-dev": [
         {
@@ -575,12 +575,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "239e50ae0e1906d32b32ed58bc7d15c81bfc06f0"
+                "reference": "881b9e4a8de3186c93904230bdf6344b685fe6a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/239e50ae0e1906d32b32ed58bc7d15c81bfc06f0",
-                "reference": "239e50ae0e1906d32b32ed58bc7d15c81bfc06f0",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/881b9e4a8de3186c93904230bdf6344b685fe6a5",
+                "reference": "881b9e4a8de3186c93904230bdf6344b685fe6a5",
                 "shasum": ""
             },
             "conflict": {
@@ -854,7 +854,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-06T15:00:46+00:00"
+            "time": "2020-07-11T19:04:25+00:00"
         },
         {
             "name": "symfony/config",
@@ -2124,16 +2124,16 @@
         },
         {
             "name": "symfony/polyfill-php72",
-            "version": "v1.17.0",
+            "version": "v1.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-php72.git",
-                "reference": "f048e612a3905f34931127360bdd2def19a5e582"
+                "reference": "3d9c70ff1b9f6bb618f9954b2f7f760220c2b38a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/f048e612a3905f34931127360bdd2def19a5e582",
-                "reference": "f048e612a3905f34931127360bdd2def19a5e582",
+                "url": "https://api.github.com/repos/symfony/polyfill-php72/zipball/3d9c70ff1b9f6bb618f9954b2f7f760220c2b38a",
+                "reference": "3d9c70ff1b9f6bb618f9954b2f7f760220c2b38a",
                 "shasum": ""
             },
             "require": {
@@ -2143,6 +2143,10 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "1.17-dev"
+                },
+                "thanks": {
+                    "name": "symfony/polyfill",
+                    "url": "https://github.com/symfony/polyfill"
                 }
             },
             "autoload": {
@@ -2189,7 +2193,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-12T16:47:27+00:00"
+            "time": "2020-06-06T08:46:27+00:00"
         },
         {
             "name": "symfony/polyfill-php73",
@@ -2741,16 +2745,16 @@
         },
         {
             "name": "symplify/auto-bind-parameter",
-            "version": "v8.1.6",
+            "version": "v8.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/auto-bind-parameter.git",
-                "reference": "360339b048bbc336c6292d26a41210de4610e1d7"
+                "reference": "c6f658dc94485bc445f2e0d4c3001536b5cf5861"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/360339b048bbc336c6292d26a41210de4610e1d7",
-                "reference": "360339b048bbc336c6292d26a41210de4610e1d7",
+                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/c6f658dc94485bc445f2e0d4c3001536b5cf5861",
+                "reference": "c6f658dc94485bc445f2e0d4c3001536b5cf5861",
                 "shasum": ""
             },
             "require": {
@@ -2761,7 +2765,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/package-builder": "^8.1.6"
+                "symplify/package-builder": "^8.1.7"
             },
             "type": "library",
             "extra": {
@@ -2785,27 +2789,27 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-07-08T13:31:36+00:00"
+            "time": "2020-07-14T22:36:15+00:00"
         },
         {
             "name": "symplify/autowire-array-parameter",
-            "version": "v8.1.6",
+            "version": "v8.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/autowire-array-parameter.git",
-                "reference": "ee1d654d74f5cfd4db9d74223ffc15889eb62444"
+                "reference": "a2efa8388daa658faf088fcd67d5272d60df47fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/ee1d654d74f5cfd4db9d74223ffc15889eb62444",
-                "reference": "ee1d654d74f5cfd4db9d74223ffc15889eb62444",
+                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/a2efa8388daa658faf088fcd67d5272d60df47fd",
+                "reference": "a2efa8388daa658faf088fcd67d5272d60df47fd",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.0",
                 "php": "^7.2",
                 "symfony/dependency-injection": "^4.4|^5.0",
-                "symplify/package-builder": "^8.1.6"
+                "symplify/package-builder": "^8.1.7"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -2832,20 +2836,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-07-08T13:31:36+00:00"
+            "time": "2020-07-14T22:36:15+00:00"
         },
         {
             "name": "symplify/changelog-linker",
-            "version": "v8.1.6",
+            "version": "v8.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/changelog-linker.git",
-                "reference": "f02047b5aa8774593ba239bd0881979b3038da47"
+                "reference": "368c18794da87b967822f2b3666dff50595325f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/changelog-linker/zipball/f02047b5aa8774593ba239bd0881979b3038da47",
-                "reference": "f02047b5aa8774593ba239bd0881979b3038da47",
+                "url": "https://api.github.com/repos/symplify/changelog-linker/zipball/368c18794da87b967822f2b3666dff50595325f1",
+                "reference": "368c18794da87b967822f2b3666dff50595325f1",
                 "shasum": ""
             },
             "require": {
@@ -2855,11 +2859,11 @@
                 "symfony/console": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
                 "symfony/process": "^4.4|^5.0",
-                "symplify/auto-bind-parameter": "^8.1.6",
-                "symplify/autowire-array-parameter": "^8.1.6",
-                "symplify/package-builder": "^8.1.6",
-                "symplify/set-config-resolver": "^8.1.6",
-                "symplify/smart-file-system": "^8.1.6"
+                "symplify/auto-bind-parameter": "^8.1.7",
+                "symplify/autowire-array-parameter": "^8.1.7",
+                "symplify/package-builder": "^8.1.7",
+                "symplify/set-config-resolver": "^8.1.7",
+                "symplify/smart-file-system": "^8.1.7"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -2889,20 +2893,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-07-08T13:31:36+00:00"
+            "time": "2020-07-14T22:36:15+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v8.1.6",
+            "version": "v8.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/package-builder.git",
-                "reference": "a471f0533f8a813fd4429bc92fd60ac27f1c1772"
+                "reference": "8dc7da58bdb5e27352c13997bee79c3072ab9ebd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/package-builder/zipball/a471f0533f8a813fd4429bc92fd60ac27f1c1772",
-                "reference": "a471f0533f8a813fd4429bc92fd60ac27f1c1772",
+                "url": "https://api.github.com/repos/symplify/package-builder/zipball/8dc7da58bdb5e27352c13997bee79c3072ab9ebd",
+                "reference": "8dc7da58bdb5e27352c13997bee79c3072ab9ebd",
                 "shasum": ""
             },
             "require": {
@@ -2945,16 +2949,16 @@
         },
         {
             "name": "symplify/set-config-resolver",
-            "version": "v8.1.6",
+            "version": "v8.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/set-config-resolver.git",
-                "reference": "0a5bbf080ccc834a8932a2f3ca757bda5f3c6ee6"
+                "reference": "07339dc875ac890e62691182ff15ad0728d48cf4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/0a5bbf080ccc834a8932a2f3ca757bda5f3c6ee6",
-                "reference": "0a5bbf080ccc834a8932a2f3ca757bda5f3c6ee6",
+                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/07339dc875ac890e62691182ff15ad0728d48cf4",
+                "reference": "07339dc875ac890e62691182ff15ad0728d48cf4",
                 "shasum": ""
             },
             "require": {
@@ -2963,7 +2967,7 @@
                 "symfony/console": "^4.4|^5.0",
                 "symfony/filesystem": "^4.4|^5.0",
                 "symfony/finder": "^4.4|^5.0",
-                "symplify/smart-file-system": "^8.1.6"
+                "symplify/smart-file-system": "^8.1.7"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -2990,20 +2994,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-07-08T13:31:36+00:00"
+            "time": "2020-07-14T22:36:15+00:00"
         },
         {
             "name": "symplify/smart-file-system",
-            "version": "v8.1.6",
+            "version": "v8.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/smart-file-system.git",
-                "reference": "4c15b3e1dc51a3503ed1da01b7498a56a0990a49"
+                "reference": "d1732312499943775c1851d74153cdb44a8e5a50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/4c15b3e1dc51a3503ed1da01b7498a56a0990a49",
-                "reference": "4c15b3e1dc51a3503ed1da01b7498a56a0990a49",
+                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/d1732312499943775c1851d74153cdb44a8e5a50",
+                "reference": "d1732312499943775c1851d74153cdb44a8e5a50",
                 "shasum": ""
             },
             "require": {
@@ -3038,7 +3042,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-07-07T10:48:02+00:00"
+            "time": "2020-07-14T11:18:35+00:00"
         }
     ],
     "aliases": [],
