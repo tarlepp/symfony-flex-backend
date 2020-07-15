@@ -2,7 +2,7 @@
 	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"symplify/changelog-linker": "8.1.6"
+		"symplify/changelog-linker": "8.1.7"
 	},
 	"config": {
 		"platform": {
