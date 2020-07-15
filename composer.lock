@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e09612471bb6e2e96da3fb501d4a20f",
+    "content-hash": "ee8a848db09e86530e6abe03ad246224",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -4563,16 +4563,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.8.4",
+            "version": "v1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "7df5a72c7664baab629ec33de7890e9e3996b51b"
+                "reference": "0e752e47d8382361ca2d7ef016f549828185ddb6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/7df5a72c7664baab629ec33de7890e9e3996b51b",
-                "reference": "7df5a72c7664baab629ec33de7890e9e3996b51b",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/0e752e47d8382361ca2d7ef016f549828185ddb6",
+                "reference": "0e752e47d8382361ca2d7ef016f549828185ddb6",
                 "shasum": ""
             },
             "require": {
@@ -4622,7 +4622,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-16T23:10:41+00:00"
+            "time": "2020-07-14T15:18:33+00:00"
         },
         {
             "name": "symfony/form",
@@ -8475,12 +8475,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "239e50ae0e1906d32b32ed58bc7d15c81bfc06f0"
+                "reference": "881b9e4a8de3186c93904230bdf6344b685fe6a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/239e50ae0e1906d32b32ed58bc7d15c81bfc06f0",
-                "reference": "239e50ae0e1906d32b32ed58bc7d15c81bfc06f0",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/881b9e4a8de3186c93904230bdf6344b685fe6a5",
+                "reference": "881b9e4a8de3186c93904230bdf6344b685fe6a5",
                 "shasum": ""
             },
             "conflict": {
@@ -8754,7 +8754,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-06T15:00:46+00:00"
+            "time": "2020-07-11T19:04:25+00:00"
         },
         {
             "name": "sensiolabs/security-checker",
