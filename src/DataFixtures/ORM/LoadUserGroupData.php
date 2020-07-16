@@ -10,7 +10,9 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\Role;
 use App\Entity\UserGroup;
+use App\Rest\UuidHelper;
 use App\Security\Interfaces\RolesServiceInterface;
+use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -33,6 +35,17 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
 
     private ObjectManager $manager;
     private RolesServiceInterface $roles;
+
+    /**
+     * @var array<string, string>
+     */
+    private array $uuids = [
+        'Role-logged' => 'f94629ce-c79b-11ea-87d0-0242ac130003',
+        'Role-api' => 'fe4df1e0-c79b-11ea-87d0-0242ac130003',
+        'Role-user' => '042650e4-c79c-11ea-87d0-0242ac130003',
+        'Role-admin' => '08c19fa0-c79c-11ea-87d0-0242ac130003',
+        'Role-root' => '0ef6ce9a-c79c-11ea-87d0-0242ac130003',
+    ];
 
     /**
      * Load data fixtures with the passed EntityManager
@@ -76,6 +89,12 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
         $entity = new UserGroup();
         $entity->setRole($roleReference);
         $entity->setName($this->roles->getRoleLabel($role));
+
+        PhpUnitUtil::setProperty(
+            'id',
+            UuidHelper::fromString($this->uuids['Role-' . $this->roles->getShort($role)]),
+            $entity
+        );
 
         // Persist entity
         $this->manager->persist($entity);
