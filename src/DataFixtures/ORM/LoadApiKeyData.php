@@ -41,11 +41,12 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
      * @var array<string, string>
      */
     private array $uuids = [
-        'logged' => '066482a0-c79b-11ea-87d0-0242ac130003',
-        'api' => '0cd106cc-c79b-11ea-87d0-0242ac130003',
-        'user' => '1154e02e-c79b-11ea-87d0-0242ac130003',
-        'admin' => '154ea868-c79b-11ea-87d0-0242ac130003',
-        'root' => '187b35ba-c79b-11ea-87d0-0242ac130003',
+        '' => 'daffdcdc-c79b-11ea-87d0-0242ac130003',
+        '-logged' => '066482a0-c79b-11ea-87d0-0242ac130003',
+        '-api' => '0cd106cc-c79b-11ea-87d0-0242ac130003',
+        '-user' => '1154e02e-c79b-11ea-87d0-0242ac130003',
+        '-admin' => '154ea868-c79b-11ea-87d0-0242ac130003',
+        '-root' => '187b35ba-c79b-11ea-87d0-0242ac130003',
     ];
 
     /**
@@ -101,13 +102,13 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
             $entity->addUserGroup($userGroup);
 
             $suffix = '-' . $this->roles->getShort($role);
-
-            PhpUnitUtil::setProperty(
-                'id',
-                UuidHelper::fromString($this->uuids[$this->roles->getShort($role)]),
-                $entity
-            );
         }
+
+        PhpUnitUtil::setProperty(
+            'id',
+            UuidHelper::fromString($this->uuids[$suffix]),
+            $entity
+        );
 
         // Persist entity
         $this->manager->persist($entity);
