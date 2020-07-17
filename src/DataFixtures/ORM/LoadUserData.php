@@ -33,13 +33,10 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
 {
     use ContainerAwareTrait;
 
-    private ObjectManager $manager;
-    private RolesServiceInterface $roles;
-
     /**
      * @var array<string, string>
      */
-    private array $uuids = [
+    public static array $uuids = [
         'john' => '7ac0d766-c79b-11ea-87d0-0242ac130003',
         'john-logged' => '82bb15a8-c79b-11ea-87d0-0242ac130003',
         'john-api' => '8718d162-c79b-11ea-87d0-0242ac130003',
@@ -47,6 +44,9 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
         'john-admin' => '919e2c9a-c79b-11ea-87d0-0242ac130003',
         'john-root' => '96ae154c-c79b-11ea-87d0-0242ac130003',
     ];
+
+    private ObjectManager $manager;
+    private RolesServiceInterface $roles;
 
     /**
      * Load data fixtures with the passed EntityManager
@@ -104,7 +104,7 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
 
         PhpUnitUtil::setProperty(
             'id',
-            UuidHelper::fromString($this->uuids['john' . $suffix]),
+            UuidHelper::fromString(self::$uuids['john' . $suffix]),
             $entity
         );
 

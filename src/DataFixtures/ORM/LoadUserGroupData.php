@@ -33,19 +33,19 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
 {
     use ContainerAwareTrait;
 
-    private ObjectManager $manager;
-    private RolesServiceInterface $roles;
-
     /**
      * @var array<string, string>
      */
-    private array $uuids = [
+    public static array $uuids = [
         'Role-logged' => 'f94629ce-c79b-11ea-87d0-0242ac130003',
         'Role-api' => 'fe4df1e0-c79b-11ea-87d0-0242ac130003',
         'Role-user' => '042650e4-c79c-11ea-87d0-0242ac130003',
         'Role-admin' => '08c19fa0-c79c-11ea-87d0-0242ac130003',
         'Role-root' => '0ef6ce9a-c79c-11ea-87d0-0242ac130003',
     ];
+
+    private ObjectManager $manager;
+    private RolesServiceInterface $roles;
 
     /**
      * Load data fixtures with the passed EntityManager
@@ -92,7 +92,7 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
 
         PhpUnitUtil::setProperty(
             'id',
-            UuidHelper::fromString($this->uuids['Role-' . $this->roles->getShort($role)]),
+            UuidHelper::fromString(self::$uuids['Role-' . $this->roles->getShort($role)]),
             $entity
         );
 
