@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Rest/ControllerCollectionTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest;
@@ -12,7 +12,8 @@ use App\Controller\ApiKeyController;
 use App\Controller\Auth\GetTokenController;
 use App\Controller\Role\FindOneRoleController;
 use App\Controller\Role\RoleController;
-use App\Controller\UserController;
+use App\Controller\User\DeleteUserController;
+use App\Controller\User\UserController;
 use App\Controller\UserGroupController;
 use App\Rest\ControllerCollection;
 use ArrayObject;
@@ -26,7 +27,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * Class ControllerCollectionTest
  *
  * @package App\Tests\Integration\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ControllerCollectionTest extends KernelTestCase
 {
@@ -56,15 +57,14 @@ class ControllerCollectionTest extends KernelTestCase
             }
         };
 
-        (new ControllerCollection($iteratorAggregate, $stubLogger))
-            ->get('FooBar');
+        (new ControllerCollection($iteratorAggregate, $stubLogger))->get('FooBar');
     }
 
     public function testThatGetAllReturnsCorrectCountOfRestControllers(): void
     {
         $collection = $this->getCollection();
 
-        static::assertCount(12, $collection->getAll());
+        static::assertCount(13, $collection->getAll());
     }
 
     /**
@@ -98,6 +98,7 @@ class ControllerCollectionTest extends KernelTestCase
         yield [FindOneRoleController::class];
         yield [UserController::class];
         yield [UserGroupController::class];
+        yield [DeleteUserController::class];
     }
 
     public function dataProviderTestThatHasReturnsExpected(): Generator
@@ -107,6 +108,7 @@ class ControllerCollectionTest extends KernelTestCase
         yield [true, FindOneRoleController::class];
         yield [true, UserController::class];
         yield [true, UserGroupController::class];
+        yield [true, DeleteUserController::class];
         yield [false, null];
         yield [false, 'foobar'];
         yield [false, GetTokenController::class];
