@@ -51,7 +51,7 @@ class DetachUserGroupControllerTest extends WebTestCase
         $groupUuid = LoadUserGroupData::$uuids['Role-user'];
 
         $client = $this->getTestClient();
-        $client->request('DELETE', $this->baseUrl . '/' . $userUuid  . '/group/' . $groupUuid);
+        $client->request('DELETE', $this->baseUrl . '/' . $userUuid . '/group/' . $groupUuid);
 
         $response = $client->getResponse();
 
@@ -72,7 +72,7 @@ class DetachUserGroupControllerTest extends WebTestCase
         $groupUuid = LoadUserGroupData::$uuids['Role-user'];
 
         $client = $this->getTestClient($u, $p);
-        $client->request('DELETE', $this->baseUrl . '/' . $userUuid  . '/group/' . $groupUuid);
+        $client->request('DELETE', $this->baseUrl . '/' . $userUuid . '/group/' . $groupUuid);
 
         $response = $client->getResponse();
 
@@ -91,7 +91,7 @@ class DetachUserGroupControllerTest extends WebTestCase
         $groupUuid = LoadUserGroupData::$uuids['Role-user'];
 
         $client = $this->getTestClient('john-root', 'password-root');
-        $client->request('DELETE', $this->baseUrl . '/' . $userUuid  . '/group/' . $groupUuid);
+        $client->request('DELETE', $this->baseUrl . '/' . $userUuid . '/group/' . $groupUuid);
 
         $response = $client->getResponse();
 

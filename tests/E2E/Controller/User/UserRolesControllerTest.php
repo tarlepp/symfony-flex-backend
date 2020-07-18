@@ -180,7 +180,7 @@ class UserRolesControllerTest extends WebTestCase
         /** @var RolesService $rolesService */
         $rolesService = static::$container->get(RolesService::class);
 
-        yield [LoadUserData::$uuids['john'], '[]',];
+        yield [LoadUserData::$uuids['john'], '[]'];
 
         yield [
             LoadUserData::$uuids['john-api'],
