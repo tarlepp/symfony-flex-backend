@@ -126,7 +126,6 @@ class DetachUserGroupController
      *          @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
-
      *
      * @throws Throwable
      */
