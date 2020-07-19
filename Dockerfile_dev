@@ -1,5 +1,5 @@
-FROM composer:1.10.7 AS composer
-FROM php:7.4.7-fpm
+FROM composer:1.10.9 AS composer
+FROM php:7.4.8-fpm
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -11,7 +11,7 @@ ARG HOST_GID
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin:/app/bin"
 ENV NVM_VERSION v0.35.3
-ENV NODE_VERSION 13
+ENV NODE_VERSION 14
 
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
