@@ -10,7 +10,9 @@ namespace App\DataFixtures\ORM;
 
 use App\Entity\ApiKey;
 use App\Entity\UserGroup;
+use App\Rest\UuidHelper;
 use App\Security\Interfaces\RolesServiceInterface;
+use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -34,6 +36,18 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
 
     private ObjectManager $manager;
     private RolesServiceInterface $roles;
+
+    /**
+     * @var array<string, string>
+     */
+    private array $uuids = [
+        '' => 'daffdcdc-c79b-11ea-87d0-0242ac130003',
+        '-logged' => '066482a0-c79b-11ea-87d0-0242ac130003',
+        '-api' => '0cd106cc-c79b-11ea-87d0-0242ac130003',
+        '-user' => '1154e02e-c79b-11ea-87d0-0242ac130003',
+        '-admin' => '154ea868-c79b-11ea-87d0-0242ac130003',
+        '-root' => '187b35ba-c79b-11ea-87d0-0242ac130003',
+    ];
 
     /**
      * Load data fixtures with the passed EntityManager
@@ -89,6 +103,12 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
 
             $suffix = '-' . $this->roles->getShort($role);
         }
+
+        PhpUnitUtil::setProperty(
+            'id',
+            UuidHelper::fromString($this->uuids[$suffix]),
+            $entity
+        );
 
         // Persist entity
         $this->manager->persist($entity);

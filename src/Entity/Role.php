@@ -45,6 +45,7 @@ class Role implements EntityInterface
      *
      *      "set.UserProfile",
      *      "set.UserProfileGroups",
+     *      "set.UserGroupBasic",
      *  })
      *
      * @ORM\Column(

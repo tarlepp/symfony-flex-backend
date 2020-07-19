@@ -50,6 +50,7 @@ class UserGroup implements EntityInterface, Stringable
      *
      *      "set.UserProfile",
      *      "set.UserProfileGroups",
+     *      "set.UserGroupBasic",
      *  })
      *
      * @ORM\Column(
@@ -70,6 +71,7 @@ class UserGroup implements EntityInterface, Stringable
      *
      *      "set.UserProfile",
      *      "set.UserProfileGroups",
+     *      "set.UserGroupBasic",
      *  })
      *
      * @Assert\NotBlank()
@@ -97,6 +99,7 @@ class UserGroup implements EntityInterface, Stringable
      *
      *      "set.UserProfile",
      *      "set.UserProfileGroups",
+     *      "set.UserGroupBasic",
      *  })
      *
      * @Assert\NotBlank()
