@@ -26,7 +26,7 @@ class RoleControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /role` returns HTTP 401 for non-logged in user.
+     * @testdox Test that `GET /role` returns HTTP 401 for non-logged in user
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -44,7 +44,7 @@ class RoleControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /role` returns HTTP 403 when using `$username` + `$password` as a user.
+     * @testdox Test that `GET /role` returns HTTP 403 when using `$username` + `$password` as a user
      */
     public function testThatGetBaseRouteReturn403(string $username, string $password): void
     {
