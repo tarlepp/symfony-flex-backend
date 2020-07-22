@@ -14,7 +14,7 @@ use App\Controller\Role\FindOneRoleController;
 use App\Controller\Role\RoleController;
 use App\Controller\User\DeleteUserController;
 use App\Controller\User\UserController;
-use App\Controller\UserGroupController;
+use App\Controller\UserGroup\UserGroupController;
 use App\Rest\ControllerCollection;
 use ArrayObject;
 use Generator;

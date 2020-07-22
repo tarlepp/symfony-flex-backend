@@ -63,6 +63,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "UserGroup.users",
      *
      *      "set.UserProfile",
+     *      "set.UserBasic",
      *  })
      *
      * @ORM\Column(
@@ -83,6 +84,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User.username",
      *
      *      "set.UserProfile",
+     *      "set.UserBasic",
      *  })
      *
      * @Assert\NotBlank()
@@ -108,6 +110,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User.firstName",
      *
      *      "set.UserProfile",
+     *      "set.UserBasic",
      *  })
      *
      * @Assert\NotBlank()
@@ -133,6 +136,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User.lastName",
      *
      *      "set.UserProfile",
+     *      "set.UserBasic",
      *  })
      *
      * @Assert\NotBlank()
@@ -158,6 +162,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User.email",
      *
      *      "set.UserProfile",
+     *      "set.UserBasic",
      *  })
      *
      * @Assert\NotBlank()
@@ -179,6 +184,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User.language",
      *
      *      "set.UserProfile",
+     *      "set.UserBasic",
      *  })
      *
      * @Assert\NotBlank()
@@ -202,6 +208,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User.locale",
      *
      *      "set.UserProfile",
+     *      "set.UserBasic",
      *  })
      *
      * @Assert\NotBlank()
@@ -225,6 +232,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      "User.timezone",
      *
      *      "set.UserProfile",
+     *      "set.UserBasic",
      *  })
      *
      * @Assert\NotBlank()
