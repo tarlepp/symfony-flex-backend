@@ -37,13 +37,10 @@ services:
             - throw
             - try
     PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer: ~
-    SlevomatCodingStandard\Sniffs\Whitespaces\DuplicateSpacesSniff:
-        ignoreSpacesInComment: true
 
 parameters:
     skip:
         PhpCsFixer\Fixer\ArrayNotation\NoMultilineWhitespaceAroundDoubleArrowFixer: ~
-        #PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer: ~
         PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer: ~
