@@ -2,7 +2,7 @@
 	"require": {},
 	"require-dev": {
 		"phpstan/extension-installer": "1.0.4",
-		"phpstan/phpstan": "0.12.32",
+		"phpstan/phpstan": "0.12.36",
 		"phpstan/phpstan-phpunit": "0.12.11",
 		"phpstan/phpstan-symfony": "0.12.6",
 		"roave/security-advisories": "dev-master"
