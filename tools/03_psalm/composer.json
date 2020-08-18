@@ -3,7 +3,7 @@
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
 		"psalm/plugin-symfony": "1.4.0",
-		"vimeo/psalm": "3.12.2"
+		"vimeo/psalm": "3.14.1"
 	},
 	"config": {
 		"platform": {
