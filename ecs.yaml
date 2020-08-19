@@ -48,5 +48,6 @@ parameters:
         PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer: ~
         PhpCsFixer\Fixer\NamespaceNotation\NoBlankLinesBeforeNamespaceFixer: ~
         PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer: ~
+        PhpCsFixer\Fixer\FunctionNotation\SingleLineThrowFixer: ~
         Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer: ~
         Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer: ~
