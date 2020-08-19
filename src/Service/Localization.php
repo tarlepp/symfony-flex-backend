@@ -10,6 +10,7 @@ namespace App\Service;
 
 use App\Doctrine\DBAL\Types\EnumLanguageType;
 use App\Doctrine\DBAL\Types\EnumLocaleType;
+use Closure;
 use DateTime;
 use DateTimeZone;
 use Psr\Log\LoggerInterface;
@@ -71,12 +72,7 @@ class Localization
 
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
-            $output = $this->cache->get('application_timezone', function (ItemInterface $item): array {
-                // One year
-                $item->expiresAfter(31536000);
-
-                return $this->getFormattedTimezones();
-            });
+            $output = $this->cache->get('application_timezone', $this->getClosure());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }
@@ -105,7 +101,6 @@ class Localization
             $hours = 'GMT' . ($hours < 0 ? $hours : '+' . $hours);
             $minutes = ($minutes > 0 ? $minutes : '0' . $minutes);
 
-            /* @noinspection OffsetOperationsInspection */
             $output[] = [
                 'timezone' => explode('/', $identifier)[0],
                 'identifier' => $identifier,
@@ -115,5 +110,15 @@ class Localization
         }
 
         return $output;
+    }
+
+    private function getClosure(): Closure
+    {
+        return function (ItemInterface $item): array {
+            // One year
+            $item->expiresAfter(31536000);
+
+            return $this->getFormattedTimezones();
+        };
     }
 }

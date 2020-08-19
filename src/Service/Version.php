@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Service;
 
 use App\Utils\JSON;
+use Closure;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -49,19 +50,24 @@ class Version
 
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
-            $output = $this->cache->get('application_version', function (ItemInterface $item): string {
-                // One year
-                $item->expiresAfter(31536000);
-
-                /** @var stdClass $composerData */
-                $composerData = JSON::decode((string)file_get_contents($this->projectDir . '/composer.json'));
-
-                return (string)($composerData->version ?? '0.0.0');
-            });
+            $output = $this->cache->get('application_version', $this->getClosure());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }
 
         return $output;
+    }
+
+    private function getClosure(): Closure
+    {
+        return function (ItemInterface $item): string {
+            // One year
+            $item->expiresAfter(31536000);
+
+            /** @var stdClass $composerData */
+            $composerData = JSON::decode((string)file_get_contents($this->projectDir . '/composer.json'));
+
+            return (string)($composerData->version ?? '0.0.0');
+        };
     }
 }
