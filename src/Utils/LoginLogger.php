@@ -34,10 +34,10 @@ class LoginLogger implements LoginLoggerInterface
     /**
      * LoginLogger constructor.
      */
-    public function __construct(LogLoginResource $logLoginFailureResource, RequestStack $requestStack)
+    public function __construct(LogLoginResource $logLoginResource, RequestStack $requestStack)
     {
         // Store used services
-        $this->logLoginResource = $logLoginFailureResource;
+        $this->logLoginResource = $logLoginResource;
         $this->requestStack = $requestStack;
 
         $this->deviceDetector = new DeviceDetector();
