@@ -82,7 +82,7 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
      *
      * @throws Throwable
      */
-    public function resolve(Request $request, ArgumentMetadata $argumentMetadata): Generator
+    public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         $token = $this->tokenStorage->getToken();
 
