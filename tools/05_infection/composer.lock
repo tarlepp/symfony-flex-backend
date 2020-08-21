@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "99c52888b0ff48714d9dc02b3889eed7",
+    "content-hash": "d4a7dc71298564d1214228997349e609",
     "packages": [],
     "packages-dev": [
         {
             "name": "composer/xdebug-handler",
-            "version": "1.4.2",
+            "version": "1.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/xdebug-handler.git",
-                "reference": "fa2aaf99e2087f013a14f7432c1cd2dd7d8f1f51"
+                "reference": "ebd27a9866ae8254e873866f795491f02418c5a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/fa2aaf99e2087f013a14f7432c1cd2dd7d8f1f51",
-                "reference": "fa2aaf99e2087f013a14f7432c1cd2dd7d8f1f51",
+                "url": "https://api.github.com/repos/composer/xdebug-handler/zipball/ebd27a9866ae8254e873866f795491f02418c5a5",
+                "reference": "ebd27a9866ae8254e873866f795491f02418c5a5",
                 "shasum": ""
             },
             "require": {
@@ -63,7 +63,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-04T11:16:35+00:00"
+            "time": "2020-08-19T10:27:58+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",
@@ -200,16 +200,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.17.1",
+            "version": "0.17.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "9488dfd4aff308026f22907e468cf1fd79b71158"
+                "reference": "31e4af4be7e7508bed086d8254f010a56ff79bea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/9488dfd4aff308026f22907e468cf1fd79b71158",
-                "reference": "9488dfd4aff308026f22907e468cf1fd79b71158",
+                "url": "https://api.github.com/repos/infection/infection/zipball/31e4af4be7e7508bed086d8254f010a56ff79bea",
+                "reference": "31e4af4be7e7508bed086d8254f010a56ff79bea",
                 "shasum": ""
             },
             "require": {
@@ -304,7 +304,7 @@
                 "testing",
                 "unit testing"
             ],
-            "time": "2020-08-19T08:54:38+00:00"
+            "time": "2020-08-19T12:07:32+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -654,12 +654,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "b7e8c8916bca1758da0105979774ea6cb49072f7"
+                "reference": "89bed6788d61977969b89d912b5844e8beee09f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b7e8c8916bca1758da0105979774ea6cb49072f7",
-                "reference": "b7e8c8916bca1758da0105979774ea6cb49072f7",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/89bed6788d61977969b89d912b5844e8beee09f0",
+                "reference": "89bed6788d61977969b89d912b5844e8beee09f0",
                 "shasum": ""
             },
             "conflict": {
@@ -767,6 +767,7 @@
                 "onelogin/php-saml": "<2.10.4",
                 "oneup/uploader-bundle": "<1.9.3|>=2,<2.1.5",
                 "openid/php-openid": "<2.3",
+                "openmage/magento-lts": "<19.4.6|>=20,<20.0.2",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
                 "padraic/humbug_get_contents": "<1.1.2",
@@ -941,7 +942,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-18T07:47:20+00:00"
+            "time": "2020-08-19T19:01:52+00:00"
         },
         {
             "name": "sanmai/pipeline",
