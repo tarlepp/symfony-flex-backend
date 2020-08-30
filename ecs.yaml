@@ -51,3 +51,6 @@ parameters:
         PhpCsFixer\Fixer\FunctionNotation\SingleLineThrowFixer: ~
         Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer: ~
         Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer: ~
+
+        # Try to remove these later
+        PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer: ~
