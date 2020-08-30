@@ -28,7 +28,7 @@ use Throwable;
  * Class ApiKeyUserProviderTest
  *
  * @package App\Tests\Integration\Security\Provider
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyUserProviderTest extends KernelTestCase
 {
@@ -45,7 +45,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         /**
          * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService     $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
             ->disableOriginalConstructor()
@@ -69,7 +69,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         /**
          * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService     $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
             ->disableOriginalConstructor()
@@ -94,7 +94,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         /**
          * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService     $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
             ->disableOriginalConstructor()
@@ -120,7 +120,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         /**
          * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService     $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
             ->disableOriginalConstructor()
@@ -150,7 +150,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         /**
          * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService     $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
             ->disableOriginalConstructor()

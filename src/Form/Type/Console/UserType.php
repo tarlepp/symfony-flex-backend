@@ -28,7 +28,7 @@ use function array_map;
  * Class UserType
  *
  * @package App\Form\Type\Console
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserType extends AbstractType
 {

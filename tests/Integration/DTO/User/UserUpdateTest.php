@@ -18,7 +18,7 @@ use App\Tests\Integration\DTO\DtoTestCase;
  * Class UserUpdateTest
  *
  * @package App\Tests\Integration\DTO\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserUpdateTest extends DtoTestCase
 {

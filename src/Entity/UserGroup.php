@@ -31,7 +31,7 @@ use Throwable;
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroup implements EntityInterface, Stringable
 {
@@ -83,7 +83,7 @@ class UserGroup implements EntityInterface, Stringable
      *      inversedBy="userGroups",
      *  )
      * @ORM\JoinColumns({
-     *      @ORM\JoinColumn(
+     * @ORM\JoinColumn(
      *          name="role",
      *          referencedColumnName="role",
      *          onDelete="CASCADE",

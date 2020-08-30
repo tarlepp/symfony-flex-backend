@@ -28,7 +28,7 @@ use function str_replace;
  * Class EntityReferenceExistsValidator
  *
  * @package App\Validator\Constraints
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class EntityReferenceExistsValidator extends ConstraintValidator
 {

@@ -22,7 +22,7 @@ use function ucfirst;
  * Class DateDimensionTest
  *
  * @package App\Tests\Integration\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class DateDimensionTest extends EntityTestCase
 {
@@ -32,7 +32,7 @@ class DateDimensionTest extends EntityTestCase
     /**
      * @param string $field
      * @param string $type
-     * @param array  $meta
+     * @param array $meta
      *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
@@ -48,7 +48,7 @@ class DateDimensionTest extends EntityTestCase
     /**
      * @param string $field
      * @param string $type
-     * @param array  $meta
+     * @param array $meta
      *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */

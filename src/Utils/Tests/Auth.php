@@ -30,7 +30,7 @@ use function sys_get_temp_dir;
  * Class Auth
  *
  * @package App\Utils\Tests
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class Auth
 {

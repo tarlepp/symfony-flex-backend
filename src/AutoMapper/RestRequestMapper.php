@@ -26,7 +26,7 @@ use function ucfirst;
  * Class RestRequestMapper
  *
  * @package App\AutoMapper
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class RestRequestMapper implements MapperInterface
 {
@@ -40,7 +40,7 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * {@inheritdoc}
      *
-     * @param array|object      $source
+     * @param array|object $source
      * @param array<int, mixed> $context
      */
     public function map($source, string $targetClass, array $context = []): RestDtoInterface
@@ -54,8 +54,8 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * {@inheritdoc}
      *
-     * @param array|object      $source
-     * @param object            $destination
+     * @param array|object $source
+     * @param object $destination
      * @param array<int, mixed> $context
      */
     public function mapToObject($source, $destination, array $context = []): RestDtoInterface

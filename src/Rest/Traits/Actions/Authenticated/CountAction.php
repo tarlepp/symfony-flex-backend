@@ -23,7 +23,7 @@ use Throwable;
  * @see \App\Rest\Traits\Methods\CountMethod for detailed documents.
  *
  * @package App\Rest\Traits\Actions\Authenticated
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait CountAction
 {

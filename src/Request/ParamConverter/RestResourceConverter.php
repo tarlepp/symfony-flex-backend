@@ -22,16 +22,16 @@ use Throwable;
  * This is meant to be used within controller actions that uses @ParamConverter annotation. Example:
  *  /**
  *   * @Route(
- *   *    "/{userEntity}",
- *   *    requirements={
- *   *        "userEntity" = "%app.uuid_v1_regex%",
- *   *    }
+ *   * "/{userEntity}",
+ *   * requirements={
+ *   * "userEntity" = "%app.uuid_v1_regex%",
+ *   * }
  *   * )
  *   *
  *   * @ParamConverter(
- *   *      "userEntity",
- *   *      class="App\Resource\UserResource",
- *   *  )
+ *   * "userEntity",
+ *   * class="App\Resource\UserResource",
+ *   * )
  *   *
  *   * @param User $collection
  *   *\/
@@ -43,7 +43,7 @@ use Throwable;
  * Purpose of this param converter is to use exactly same methods and workflow as in basic REST API requests.
  *
  * @package App\Request\ParamConverter
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RestResourceConverter implements ParamConverterInterface
 {

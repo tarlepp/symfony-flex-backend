@@ -32,7 +32,7 @@ use function range;
  * Class LockedUserSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LockedUserSubscriberTest extends KernelTestCase
 {
@@ -45,7 +45,7 @@ class LockedUserSubscriberTest extends KernelTestCase
         $this->expectExceptionMessage('Unsupported user.');
 
         /**
-         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|UserRepository $userRepository
          * @var MockObject|LogLoginFailureResource $logLoginFailureResource
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
@@ -67,9 +67,9 @@ class LockedUserSubscriberTest extends KernelTestCase
         $this->expectExceptionMessage('Locked account.');
 
         /**
-         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|UserRepository $userRepository
          * @var MockObject|LogLoginFailureResource $logLoginFailureResource
-         * @var MockObject|UserEntity              $user
+         * @var MockObject|UserEntity $user
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
@@ -108,7 +108,7 @@ class LockedUserSubscriberTest extends KernelTestCase
     public function testThatOnAuthenticationSuccessResourceResetMethodIsCalled(): void
     {
         /**
-         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|UserRepository $userRepository
          * @var MockObject|LogLoginFailureResource $logLoginFailureResource
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
@@ -141,7 +141,7 @@ class LockedUserSubscriberTest extends KernelTestCase
     public function testThatOnAuthenticationFailureRepositoryAndResourceMethodsAreNotCalledWhenTokenIsNull(): void
     {
         /**
-         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|UserRepository $userRepository
          * @var MockObject|LogLoginFailureResource $logLoginFailureResource
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)
@@ -171,7 +171,7 @@ class LockedUserSubscriberTest extends KernelTestCase
     public function testThatOnAuthenticationFailureTestThatResourceMethodsAreNotCalledWhenWrongUser(): void
     {
         /**
-         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|UserRepository $userRepository
          * @var MockObject|LogLoginFailureResource $logLoginFailureResource
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
@@ -205,7 +205,7 @@ class LockedUserSubscriberTest extends KernelTestCase
     public function testThatOnAuthenticationFailureTestThatResourceSaveMethodIsCalled(): void
     {
         /**
-         * @var MockObject|UserRepository          $userRepository
+         * @var MockObject|UserRepository $userRepository
          * @var MockObject|LogLoginFailureResource $logLoginFailureResource
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)

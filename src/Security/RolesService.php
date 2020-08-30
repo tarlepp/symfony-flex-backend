@@ -21,7 +21,7 @@ use function mb_substr;
  * Class Roles
  *
  * @package App\Security
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RolesService implements RolesServiceInterface
 {

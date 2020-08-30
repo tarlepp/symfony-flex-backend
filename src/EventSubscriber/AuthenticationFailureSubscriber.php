@@ -20,7 +20,7 @@ use function is_string;
  * Class AuthenticationFailureSubscriber
  *
  * @package App\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AuthenticationFailureSubscriber implements EventSubscriberInterface
 {

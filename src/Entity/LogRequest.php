@@ -27,9 +27,9 @@ use function mb_strlen;
  * @ORM\Table(
  *      name="log_request",
  *      indexes={
- *          @ORM\Index(name="user_id", columns={"user_id"}),
- *          @ORM\Index(name="api_key_id", columns={"api_key_id"}),
- *          @ORM\Index(name="request_date", columns={"date"}),
+ * @ORM\Index(name="user_id", columns={"user_id"}),
+ * @ORM\Index(name="api_key_id", columns={"api_key_id"}),
+ * @ORM\Index(name="request_date", columns={"date"}),
  *      }
  *  )
  * @ORM\Entity(
@@ -38,7 +38,7 @@ use function mb_strlen;
  * @ORM\HasLifecycleCallbacks()
  *
  * @package App\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LogRequest implements EntityInterface
 {
@@ -77,7 +77,7 @@ class LogRequest implements EntityInterface
      *      inversedBy="logsRequest",
      *  )
      * @ORM\JoinColumns({
-     *      @ORM\JoinColumn(
+     * @ORM\JoinColumn(
      *          name="user_id",
      *          referencedColumnName="id",
      *          nullable=true,
@@ -97,7 +97,7 @@ class LogRequest implements EntityInterface
      *      inversedBy="logsRequest",
      *  )
      * @ORM\JoinColumns({
-     *      @ORM\JoinColumn(
+     * @ORM\JoinColumn(
      *          name="api_key_id",
      *          referencedColumnName="id",
      *          nullable=true,

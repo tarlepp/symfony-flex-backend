@@ -14,7 +14,7 @@ use App\DTO\Traits\PatchUserGroups;
  * Class UserPatch
  *
  * @package App\DTO\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserPatch extends User
 {

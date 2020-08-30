@@ -24,7 +24,7 @@ use Throwable;
  * Class GenericRestRequestMapperTest
  *
  * @package App\Tests\Integration\AutoMapper
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class GenericRestRequestMapperTest extends KernelTestCase
 {
@@ -90,7 +90,7 @@ class GenericRestRequestMapperTest extends KernelTestCase
 
         /**
          * @var MockObject|RestRequestMapper $mockRestRequestMapper
-         * @var MockObject|RestDtoInterface  $mockRestDtoInterface
+         * @var MockObject|RestDtoInterface $mockRestDtoInterface
          */
         $mockRestRequestMapper = $this->getMockForAbstractClass(RestRequestMapper::class, [], 'MockMapper');
         $mockRestDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();

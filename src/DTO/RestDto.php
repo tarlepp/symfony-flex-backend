@@ -24,7 +24,7 @@ use function ucfirst;
  * Class RestDto
  *
  * @package App\DTO
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class RestDto implements RestDtoInterface
 {

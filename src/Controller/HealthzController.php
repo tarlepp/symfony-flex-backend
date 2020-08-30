@@ -20,7 +20,7 @@ use Throwable;
  * Class HealthzController
  *
  * @package App\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class HealthzController
 {
@@ -50,10 +50,10 @@ class HealthzController
      * @SWG\Response(
      *      response=200,
      *      description="success",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="object",
      *          example={"timestamp": "2018-01-01T13:08:05+00:00"},
-     *          @SWG\Property(property="timestamp", type="string"),
+     * @SWG\Property(property="timestamp", type="string"),
      *      ),
      *  )
      *

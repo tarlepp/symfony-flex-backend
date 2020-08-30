@@ -12,7 +12,7 @@ namespace App\Security\Interfaces;
  * Interface RolesInterface
  *
  * @package Security
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface RolesServiceInterface
 {

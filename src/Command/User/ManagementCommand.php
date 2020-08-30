@@ -16,7 +16,7 @@ use Symfony\Component\Console\Exception\LogicException;
  * Class ManagementCommand
  *
  * @package App\Command\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ManagementCommand extends Command
 {

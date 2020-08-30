@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
  * Class ResponseSubscriber
  *
  * @package App\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ResponseSubscriber implements EventSubscriberInterface
 {

@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Interface RequestLoggerInterface
  *
  * @package App\Services\Interfaces
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface RequestLoggerInterface
 {

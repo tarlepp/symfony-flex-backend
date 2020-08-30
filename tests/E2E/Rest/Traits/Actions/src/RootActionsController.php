@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
  *
  * @package App\Tests\E2E\Rest\Traits\Actions\src
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RootActionsController extends Controller
 {

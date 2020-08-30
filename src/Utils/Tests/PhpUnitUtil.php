@@ -38,7 +38,7 @@ use function substr_count;
  * Class PHPUnitUtil
  *
  * @package App\Utils\Tests
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class PhpUnitUtil
 {
@@ -105,9 +105,9 @@ class PhpUnitUtil
     /**
      * Method to call specified 'protected' or 'private' method on given class.
      *
-     * @param object       $object The instantiated instance of your class
-     * @param string       $name   The name of your private/protected method
-     * @param array<mixed> $args   Method arguments
+     * @param object $object The instantiated instance of your class
+     * @param string $name The name of your private/protected method
+     * @param array<mixed> $args Method arguments
      *
      * @return mixed
      *
@@ -126,7 +126,7 @@ class PhpUnitUtil
      *      $foo->invoke($cls, $...);
      *
      * @param object $object The instantiated instance of your class
-     * @param string $name   The name of your private/protected method
+     * @param string $name The name of your private/protected method
      *
      * @return ReflectionMethod The method you asked for
      *
@@ -211,7 +211,7 @@ class PhpUnitUtil
     /**
      * Helper method to override any property value within given class.
      *
-     * @param mixed  $value
+     * @param mixed $value
      * @param object $object
      *
      * @throws ReflectionException

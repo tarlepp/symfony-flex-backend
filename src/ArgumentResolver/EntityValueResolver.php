@@ -38,7 +38,7 @@ use function is_subclass_of;
  * method argument name.
  *
  * @package App\ArgumentResolver
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class EntityValueResolver implements ArgumentValueResolverInterface
 {

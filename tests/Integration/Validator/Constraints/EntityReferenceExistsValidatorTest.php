@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
  * Class EntityReferenceExistsValidatorTest
  *
  * @package App\Tests\Integration\Validator\Constraints
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class EntityReferenceExistsValidatorTest extends KernelTestCase
 {
@@ -99,8 +99,8 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     {
         /**
          * @var MockObject|ExecutionContext $context
-         * @var MockObject|LoggerInterface  $logger
-         * @var MockObject|EntityInterface  $value
+         * @var MockObject|LoggerInterface $logger
+         * @var MockObject|EntityInterface $value
          */
         $context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -132,9 +132,9 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     {
         /**
          * @var MockObject|ConstraintViolationBuilderInterface $violation
-         * @var MockObject|ExecutionContext                    $context
-         * @var MockObject|LoggerInterface                     $logger
-         * @var MockObject|EntityInterface                     $value
+         * @var MockObject|ExecutionContext $context
+         * @var MockObject|LoggerInterface $logger
+         * @var MockObject|EntityInterface $value
          */
         $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
         $context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();

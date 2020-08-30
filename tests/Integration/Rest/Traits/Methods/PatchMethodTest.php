@@ -29,7 +29,7 @@ use Throwable;
  * Class PatchMethodTest
  *
  * @package App\Tests\Integration\Rest\Traits\Methods
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class PatchMethodTest extends KernelTestCase
 {
@@ -48,7 +48,7 @@ class PatchMethodTest extends KernelTestCase
 
         /**
          * @var MockObject|PatchMethodInvalidTestClass $testClass
-         * @var MockObject|RestDtoInterface            $restDtoInterface
+         * @var MockObject|RestDtoInterface $restDtoInterface
          */
         $testClass = $this->getMockForAbstractClass(PatchMethodInvalidTestClass::class);
         $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -75,7 +75,7 @@ class PatchMethodTest extends KernelTestCase
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /**
-         * @var MockObject|RestDtoInterface     $restDtoInterface
+         * @var MockObject|RestDtoInterface $restDtoInterface
          * @var MockObject|PatchMethodTestClass $testClass
          */
         $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -101,9 +101,9 @@ class PatchMethodTest extends KernelTestCase
         $this->expectExceptionMessage('some message');
 
         /**
-         * @var MockObject|RestResourceInterface    $resource
+         * @var MockObject|RestResourceInterface $resource
          * @var MockObject|ResponseHandlerInterface $responseHandler
-         * @var MockObject|RestDtoInterface         $restDtoInterface
+         * @var MockObject|RestDtoInterface $restDtoInterface
          */
         $resource = $this->createMock(RestResourceInterface::class);
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
@@ -139,8 +139,8 @@ class PatchMethodTest extends KernelTestCase
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /**
-         * @var MockObject|RestDtoInterface     $restDtoInterface
-         * @var MockObject|Request              $request
+         * @var MockObject|RestDtoInterface $restDtoInterface
+         * @var MockObject|Request $request
          * @var MockObject|PatchMethodTestClass $testClass
          */
         $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();

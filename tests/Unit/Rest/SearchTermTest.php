@@ -18,7 +18,7 @@ use function call_user_func_array;
  * Class SearchTermTest
  *
  * @package App\Tests\Unit\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class SearchTermTest extends KernelTestCase
 {

@@ -14,7 +14,7 @@ use App\Helpers\StopwatchAwareTrait;
  * Class StopwatchAwareService
  *
  * @package App\Tests\Integration\Helpers\src
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class StopwatchAwareService
 {

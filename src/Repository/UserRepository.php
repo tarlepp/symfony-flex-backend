@@ -19,13 +19,13 @@ use function array_key_exists;
  * Class UserRepository
  *
  * @package App\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null        find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method Entity|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
  * @method array<int, Entity> findAdvanced(string $id, $hydrationMode = null)
- * @method Entity|null        findOneBy(array $criteria, ?array $orderBy = null)
+ * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
  * @method array<int, Entity> findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
  * @method array<int, Entity> findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
  * @method array<int, Entity> findAll()
@@ -62,8 +62,8 @@ class UserRepository extends BaseRepository
     /**
      * Method to check if specified email is available or not.
      *
-     * @param string      $email Email to check
-     * @param string|null $id    User id to ignore
+     * @param string $email Email to check
+     * @param string|null $id User id to ignore
      *
      * @throws NonUniqueResultException
      */
@@ -83,7 +83,7 @@ class UserRepository extends BaseRepository
      *      #managing-roles-in-the-database
      *
      * @param string $username The username
-     * @param bool   $uuid     Is username parameter UUID or not
+     * @param bool $uuid Is username parameter UUID or not
      *
      * @throws NonUniqueResultException
      */
@@ -125,9 +125,9 @@ class UserRepository extends BaseRepository
     }
 
     /**
-     * @param string      $column Column to check
-     * @param string      $value  Value of specified column
-     * @param string|null $id     User id to ignore
+     * @param string $column Column to check
+     * @param string $value Value of specified column
+     * @param string|null $id User id to ignore
      *
      * @throws NonUniqueResultException
      */

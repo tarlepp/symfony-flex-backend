@@ -24,7 +24,7 @@ use Throwable;
  * Class ApiKeyType
  *
  * @package App\Form\Type\Console
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyType extends AbstractType
 {

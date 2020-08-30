@@ -18,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * Class UserGroupTest
  *
  * @package App\Tests\Integration\DTO
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroupTest extends DtoTestCase
 {

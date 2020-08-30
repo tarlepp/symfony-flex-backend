@@ -22,7 +22,7 @@ use Throwable;
  * Class UserGroupTransformerTest
  *
  * @package App\Tests\Integration\Form\Console\DataTransformer
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroupTransformerTest extends KernelTestCase
 {

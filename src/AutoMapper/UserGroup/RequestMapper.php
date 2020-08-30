@@ -17,7 +17,7 @@ use Doctrine\ORM\ORMException;
  * Class RequestMapper
  *
  * @package App\AutoMapper
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RequestMapper extends RestRequestMapper
 {

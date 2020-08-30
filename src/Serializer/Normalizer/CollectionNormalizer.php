@@ -17,7 +17,7 @@ use function is_object;
  * Class CollectionNormalizer
  *
  * @package App\Serializer
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class CollectionNormalizer implements NormalizerInterface
 {

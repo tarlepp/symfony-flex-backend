@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class ApiKeyUserProvider
  *
  * @package App\Security\Provider
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyUserProvider implements ApiKeyUserProviderInterface
 {

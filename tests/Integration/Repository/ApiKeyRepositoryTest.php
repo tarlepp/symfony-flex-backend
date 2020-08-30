@@ -16,7 +16,7 @@ use App\Resource\ApiKeyResource;
  * Class ApiKeyRepositoryTest
  *
  * @package App\Tests\Integration\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyRepositoryTest extends RepositoryTestCase
 {

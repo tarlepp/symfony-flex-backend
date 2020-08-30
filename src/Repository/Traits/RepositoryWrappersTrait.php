@@ -21,7 +21,7 @@ use UnexpectedValueException;
  * Class RepositoryWrappersTrait
  *
  * @package App\Repository\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait RepositoryWrappersTrait
 {

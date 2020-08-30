@@ -12,7 +12,7 @@ namespace App\DTO\User;
  * Class UserUpdate
  *
  * @package App\DTO\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserUpdate extends User
 {

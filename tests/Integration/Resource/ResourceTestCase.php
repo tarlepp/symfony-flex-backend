@@ -16,7 +16,7 @@ use function sprintf;
  * Class ResourceTestCase
  *
  * @package App\Tests\Integration\Resource
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class ResourceTestCase extends KernelTestCase
 {

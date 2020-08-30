@@ -29,7 +29,7 @@ use Throwable;
  * Class RequestLogSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RequestLogSubscriberTest extends KernelTestCase
 {

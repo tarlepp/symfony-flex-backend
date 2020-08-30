@@ -18,7 +18,7 @@ use Throwable;
  * Class StopwatchAwareTraitTest
  *
  * @package App\Tests\Integration\Helpers
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class StopwatchAwareTraitTest extends KernelTestCase
 {

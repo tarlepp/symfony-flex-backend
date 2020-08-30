@@ -22,7 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * Class EnumLocaleTypeTest
  *
  * @package App\Tests\Integration\Doctrine\DBAL\Types
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class EnumLocaleTypeTest extends KernelTestCase
 {

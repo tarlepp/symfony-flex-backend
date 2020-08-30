@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Event\TerminateEvent;
  * Class RequestLogSubscriberTest
  *
  * @package App\Tests\Unit\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RequestLogSubscriberTest extends KernelTestCase
 {

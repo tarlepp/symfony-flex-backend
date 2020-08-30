@@ -19,7 +19,7 @@ use Throwable;
  * Class LogRequestTest
  *
  * @package App\Tests\Unit\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LogRequestTest extends KernelTestCase
 {

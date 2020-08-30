@@ -18,7 +18,7 @@ use Throwable;
  * Class RestRequestMapperTestCase
  *
  * @package App\Tests\Integration\AutoMapper
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @property RestRequestMapper $mapperObject
  */

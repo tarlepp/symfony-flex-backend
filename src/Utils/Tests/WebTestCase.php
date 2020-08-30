@@ -20,7 +20,7 @@ use function getenv;
  * Class WebTestCase
  *
  * @package App\Tests
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class WebTestCase extends BaseWebTestCase
 {

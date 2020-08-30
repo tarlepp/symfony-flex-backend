@@ -32,7 +32,7 @@ use function strncmp;
  * Class ResponseHandler
  *
  * @package App\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 final class ResponseHandler implements ResponseHandlerInterface
 {
@@ -186,7 +186,7 @@ final class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param mixed                                                                $data
+     * @param mixed $data
      * @param array<int|string, array<int, array<int, string>|string>|bool|string> $context
      *
      * @throws HttpException

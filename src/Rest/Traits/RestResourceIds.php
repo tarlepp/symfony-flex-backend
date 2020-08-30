@@ -14,7 +14,7 @@ namespace App\Rest\Traits;
  * @SuppressWarnings("unused")
  *
  * @package App\Rest\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait RestResourceIds
 {
@@ -31,8 +31,8 @@ trait RestResourceIds
     /**
      * Before lifecycle method for ids method.
      *
-     * @param mixed[]  $criteria
-     * @param mixed[]  $search
+     * @param mixed[] $criteria
+     * @param mixed[] $search
      * @param string[] $ids
      */
     public function afterIds(array &$criteria, array &$search, array &$ids): void

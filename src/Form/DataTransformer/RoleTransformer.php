@@ -19,7 +19,7 @@ use function sprintf;
  * Class RoleTransformer
  *
  * @package App\Form\Console\DataTransformer
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RoleTransformer implements DataTransformerInterface
 {

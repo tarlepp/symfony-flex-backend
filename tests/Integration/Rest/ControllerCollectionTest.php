@@ -42,7 +42,7 @@ class ControllerCollectionTest extends KernelTestCase
             private ArrayObject $iterator;
 
             /**
-             * Constructor  of the class.
+             * Constructor of the class.
              *
              * @param $input
              */

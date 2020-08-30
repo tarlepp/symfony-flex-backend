@@ -12,7 +12,7 @@ namespace App\DTO\ApiKey;
  * Class ApiKeyUpdate
  *
  * @package App\DTO\ApiKey
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyUpdate extends ApiKey
 {

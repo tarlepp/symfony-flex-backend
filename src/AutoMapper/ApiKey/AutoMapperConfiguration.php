@@ -18,7 +18,7 @@ use App\DTO\ApiKey\ApiKeyUpdate;
  * Class AutoMapperConfiguration
  *
  * @package App\AutoMapper
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AutoMapperConfiguration extends RestAutoMapperConfiguration
 {

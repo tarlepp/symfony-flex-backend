@@ -15,7 +15,7 @@ use App\Tests\Integration\DTO\DtoTestCase;
  * Class UserGroupCreateTest
  *
  * @package App\Tests\Integration\DTO\UserGroup
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroupCreateTest extends DtoTestCase
 {

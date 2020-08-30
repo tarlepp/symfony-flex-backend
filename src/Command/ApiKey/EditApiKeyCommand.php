@@ -23,7 +23,7 @@ use Throwable;
  * Class EditApiKeyCommand
  *
  * @package App\Command\ApiKey
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class EditApiKeyCommand extends Command
 {

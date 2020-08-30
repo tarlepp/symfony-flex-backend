@@ -16,7 +16,7 @@ use Throwable;
  * Class HealthzService
  *
  * @package App\Utils
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 final class HealthzService
 {

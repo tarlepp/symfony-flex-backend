@@ -16,7 +16,7 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
  * Class ApiKeyControllerTest
  *
  * @package App\Tests\Integration\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @property ApiKeyController $controller
  */

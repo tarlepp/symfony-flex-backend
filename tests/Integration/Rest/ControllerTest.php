@@ -25,7 +25,7 @@ use function get_class;
  * Class ControllerTest
  *
  * @package App\Tests\Integration\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ControllerTest extends KernelTestCase
 {
@@ -48,7 +48,7 @@ class ControllerTest extends KernelTestCase
     {
         /**
          * @var RestResourceInterface $resource
-         * @var Controller            $controller
+         * @var Controller $controller
          */
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
         $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
@@ -89,7 +89,7 @@ class ControllerTest extends KernelTestCase
     public function testThatGetDtoClassCallsExpectedServiceMethods(): void
     {
         /**
-         * @var MockObject|RestDtoInterface      $dtoClass
+         * @var MockObject|RestDtoInterface $dtoClass
          * @var MockObject|RestResourceInterface $resource
          */
         $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -132,9 +132,9 @@ class ControllerTest extends KernelTestCase
     public function testThatGetDtoClassWorksAsExpectedWithGivenDtoClasses(): void
     {
         /**
-         * @var MockObject|RestDtoInterface      $dtoClass
+         * @var MockObject|RestDtoInterface $dtoClass
          * @var MockObject|RestResourceInterface $resource
-         * @var MockObject|Controller            $controller
+         * @var MockObject|Controller $controller
          */
         $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
         $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();

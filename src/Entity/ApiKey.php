@@ -38,13 +38,13 @@ use function random_int;
  * @ORM\Table(
  *      name="api_key",
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="uq_token", columns={"token"}),
+ * @ORM\UniqueConstraint(name="uq_token", columns={"token"}),
  *      },
  *  )
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKey implements EntityInterface, UserGroupAwareInterface
 {

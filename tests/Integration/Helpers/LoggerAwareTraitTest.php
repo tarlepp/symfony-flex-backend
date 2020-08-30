@@ -18,7 +18,7 @@ use Throwable;
  * Class LoggerAwareTraitTest
  *
  * @package App\Tests\Integration\Helpers
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LoggerAwareTraitTest extends KernelTestCase
 {

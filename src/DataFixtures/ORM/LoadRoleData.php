@@ -22,7 +22,7 @@ use function array_map;
  * Class LoadRoleData
  *
  * @package App\DataFixtures\ORM
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @psalm-suppress MissingConstructor
  */

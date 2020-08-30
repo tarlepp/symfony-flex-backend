@@ -16,7 +16,7 @@ use App\Entity\Interfaces\EntityInterface;
  * Class TestRestRequestMapperDto
  *
  * @package App\Tests\Integration\AutoMapper\src
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class TestRestRequestMapperDto extends RestDto
 {

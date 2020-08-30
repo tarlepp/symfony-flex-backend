@@ -19,7 +19,7 @@ use Throwable;
  * Class UuidHelperTest
  *
  * @package App\Tests\Unit\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UuidHelperTest extends KernelTestCase
 {

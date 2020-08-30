@@ -17,7 +17,7 @@ use Throwable;
  * Class RoleRepositoryTest
  *
  * @package Functional\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RoleRepositoryTest extends KernelTestCase
 {

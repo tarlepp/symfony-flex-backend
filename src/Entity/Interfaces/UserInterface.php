@@ -12,7 +12,7 @@ namespace App\Entity\Interfaces;
  * Interface UserInterface
  *
  * @package App\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface UserInterface
 {

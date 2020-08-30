@@ -20,7 +20,7 @@ use Throwable;
  * Class BlameableDecoratorTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class BlameableDecoratorTest extends KernelTestCase
 {

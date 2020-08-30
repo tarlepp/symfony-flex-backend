@@ -25,7 +25,7 @@ use function sprintf;
  * Class ListUserGroupsCommand
  *
  * @package App\Command\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ListUserGroupsCommand extends Command
 {

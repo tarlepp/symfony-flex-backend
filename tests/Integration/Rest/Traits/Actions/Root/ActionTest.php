@@ -25,7 +25,7 @@ use const DIRECTORY_SEPARATOR;
  * Class ActionTest
  *
  * @package App\Tests\Integration\Rest\Traits\Actions\Root
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ActionTest extends KernelTestCase
 {

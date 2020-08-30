@@ -16,7 +16,7 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
  * Class UserControllerTest
  *
  * @package App\Tests\Integration\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserControllerTest extends RestIntegrationControllerTestCase
 {

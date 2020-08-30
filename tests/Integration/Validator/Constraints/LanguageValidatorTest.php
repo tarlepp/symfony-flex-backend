@@ -21,7 +21,7 @@ use Throwable;
  * Class LanguageValidatorTest
  *
  * @package App\Tests\Integration\Validator\Constraints
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LanguageValidatorTest extends KernelTestCase
 {

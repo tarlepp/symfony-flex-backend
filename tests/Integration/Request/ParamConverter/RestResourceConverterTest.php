@@ -26,7 +26,7 @@ use Throwable;
  * Class RestResourceConverterTest
  *
  * @package App\Tests\Integration\Request\ParamConverter
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RestResourceConverterTest extends KernelTestCase
 {

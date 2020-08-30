@@ -15,13 +15,13 @@ use App\Entity\User;
  * Class LogLoginFailureRepository
  *
  * @package App\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @codingStandardsIgnoreStart
  *
- * @method Entity|null        find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
+ * @method Entity|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
  * @method array<int, Entity> findAdvanced(string $id, $hydrationMode = null)
- * @method Entity|null        findOneBy(array $criteria, ?array $orderBy = null)
+ * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
  * @method array<int, Entity> findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
  * @method array<int, Entity> findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
  * @method array<int, Entity> findAll()

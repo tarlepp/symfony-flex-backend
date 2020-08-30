@@ -15,7 +15,7 @@ use Generator;
  * Class AuthenticatedActionsTest
  *
  * @package App\Tests\E2E\Rest\Traits\Actions
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AuthenticatedActionsTest extends RestTraitTestCase
 {

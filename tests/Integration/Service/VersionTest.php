@@ -19,14 +19,14 @@ use Symfony\Contracts\Cache\CacheInterface;
  * Class VersionTest
  *
  * @package App\Tests\Integration\Service
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class VersionTest extends KernelTestCase
 {
     public function testThatLoggerIsCalledWhenCacheThrowsAnException(): void
     {
         /**
-         * @var MockObject|CacheInterface  $cache
+         * @var MockObject|CacheInterface $cache
          * @var MockObject|LoggerInterface $logger
          */
         $cache = $this->getMockBuilder(CacheInterface::class)->getMock();

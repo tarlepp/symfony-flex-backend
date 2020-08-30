@@ -21,7 +21,7 @@ use function sprintf;
  * Class EnumType
  *
  * @package App\Doctrine\DBAL\Types
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class EnumType extends Type
 {

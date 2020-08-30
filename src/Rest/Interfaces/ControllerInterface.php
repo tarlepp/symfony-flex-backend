@@ -19,7 +19,7 @@ use UnexpectedValueException;
  * Interface ControllerInterface
  *
  * @package App\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface ControllerInterface
 {

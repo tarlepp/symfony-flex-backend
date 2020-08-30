@@ -12,7 +12,7 @@ namespace App\Doctrine\DBAL\Types;
  * Class EnumLocaleType
  *
  * @package App\Doctrine\DBAL\Types
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class EnumLocaleType extends EnumType
 {

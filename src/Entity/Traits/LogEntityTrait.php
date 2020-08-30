@@ -20,7 +20,7 @@ use Throwable;
  * Trait LogEntityTrait
  *
  * @package App\Entity\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @property User|null $user
  */

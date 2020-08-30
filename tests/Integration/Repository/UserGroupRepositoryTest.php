@@ -16,7 +16,7 @@ use App\Resource\UserGroupResource;
  * Class UserGroupRepositoryTest
  *
  * @package App\Tests\Integration\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserGroupRepositoryTest extends RepositoryTestCase
 {

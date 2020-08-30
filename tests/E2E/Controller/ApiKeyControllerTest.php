@@ -17,7 +17,7 @@ use Throwable;
  * Class ApiKeyControllerTest
  *
  * @package App\Tests\E2E\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyControllerTest extends WebTestCase
 {

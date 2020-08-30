@@ -16,7 +16,7 @@ use App\Resource\ApiKeyResource;
  * Class ApiKeyResourceTest
  *
  * @package App\Tests\Integration\Resource
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyResourceTest extends ResourceTestCase
 {

@@ -17,7 +17,7 @@ use Throwable;
  * Trait ApiKeyUserManagementHelperTrait
  *
  * @package App\Command\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait ApiKeyUserManagementHelperTrait
 {

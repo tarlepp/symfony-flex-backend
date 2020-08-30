@@ -40,7 +40,7 @@ use function wordwrap;
  * Class CheckDependencies
  *
  * @package App\Command\Utils
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class CheckDependencies extends Command
 {

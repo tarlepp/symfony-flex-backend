@@ -28,7 +28,7 @@ use function spl_object_hash;
  * Class BaseRepository
  *
  * @package App\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class BaseRepository implements BaseRepositoryInterface
 {
@@ -199,7 +199,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @see QueryBuilder::leftJoin()
      * @see QueryBuilder::innerJoin()
      *
-     * @param string                         $type       Join type; leftJoin, innerJoin or join
+     * @param string $type Join type; leftJoin, innerJoin or join
      * @param array<int, array<int, string>> $parameters Query builder join parameters
      */
     private function addJoinToQuery(string $type, array $parameters): void

@@ -35,7 +35,7 @@ use function spl_object_hash;
  * Class ExceptionSubscriber
  *
  * @package App\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ExceptionSubscriber implements EventSubscriberInterface
 {

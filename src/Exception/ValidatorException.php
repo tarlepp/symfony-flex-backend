@@ -20,7 +20,7 @@ use function str_replace;
  * Class ValidatorException
  *
  * @package App\Exception
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ValidatorException extends BaseValidatorException implements ClientErrorInterface
 {

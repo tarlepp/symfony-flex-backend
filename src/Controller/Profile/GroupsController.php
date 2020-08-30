@@ -55,9 +55,9 @@ class GroupsController
      * @SWG\Response(
      *      response=200,
      *      description="User groups",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="array",
-     *          @SWG\Items(
+     * @SWG\Items(
      *              ref=@Model(
      *                  type=App\Entity\UserGroup::class,
      *                  groups={"set.UserProfileGroups"},
@@ -68,10 +68,10 @@ class GroupsController
      * @SWG\Response(
      *      response=401,
      *      description="Invalid token",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="object",
-     *          @SWG\Property(property="code", type="integer", description="Error code"),
-     *          @SWG\Property(property="message", type="string", description="Error description"),
+     * @SWG\Property(property="code", type="integer", description="Error code"),
+     * @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
@@ -81,10 +81,10 @@ class GroupsController
      * @SWG\Response(
      *      response=403,
      *      description="Access denied",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="403",
-     *          @SWG\Property(property="code", type="integer", description="Error code"),
-     *          @SWG\Property(property="message", type="string", description="Error description"),
+     * @SWG\Property(property="code", type="integer", description="Error code"),
+     * @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *      examples={
      *          "Access denied": "{code: 403, message: 'Access denied'}",

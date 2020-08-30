@@ -25,7 +25,7 @@ use function str_replace;
  * Class Localization
  *
  * @package App\Service
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class Localization
 {

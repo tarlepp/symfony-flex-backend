@@ -19,7 +19,7 @@ use UnexpectedValueException;
  * Class Controller
  *
  * @package App\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class Controller implements ControllerInterface
 {

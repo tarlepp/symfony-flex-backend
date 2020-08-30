@@ -28,7 +28,7 @@ use Throwable;
  * Class CreateUserCommand
  *
  * @package App\Command\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class CreateUserCommand extends Command
 {

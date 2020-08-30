@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraint;
  * @Target({"CLASS"})
  *
  * @package App\Validator\Constraints
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UniqueUsername extends Constraint
 {

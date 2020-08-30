@@ -23,7 +23,7 @@ use Throwable;
  * Class EditUserGroupCommand
  *
  * @package App\Command\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class EditUserGroupCommand extends Command
 {

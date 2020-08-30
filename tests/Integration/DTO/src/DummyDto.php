@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  * Class DummyDto
  *
  * @package App\Tests\Integration\Dto\src
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class DummyDto extends RestDto
 {

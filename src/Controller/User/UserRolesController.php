@@ -64,9 +64,9 @@ class UserRolesController
      * @SWG\Response(
      *      response=200,
      *      description="Specified user roles",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="array",
-     *          @SWG\Items(type="string"),
+     * @SWG\Items(type="string"),
      *      ),
      *  )
      * @SWG\Response(
@@ -76,10 +76,10 @@ class UserRolesController
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
      *      },
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="object",
-     *          @SWG\Property(property="code", type="integer", description="Error code"),
-     *          @SWG\Property(property="message", type="string", description="Error description"),
+     * @SWG\Property(property="code", type="integer", description="Error code"),
+     * @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
      * @SWG\Response(
@@ -88,10 +88,10 @@ class UserRolesController
      *      examples={
      *          "Access denied": "{code: 403, message: 'Access denied'}",
      *      },
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="object",
-     *          @SWG\Property(property="code", type="integer", description="Error code"),
-     *          @SWG\Property(property="message", type="string", description="Error description"),
+     * @SWG\Property(property="code", type="integer", description="Error code"),
+     * @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
      */
