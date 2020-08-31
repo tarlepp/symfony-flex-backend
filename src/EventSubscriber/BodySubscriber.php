@@ -20,7 +20,7 @@ use function is_array;
  * Class BodySubscriber
  *
  * @package App\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class BodySubscriber implements EventSubscriberInterface
 {

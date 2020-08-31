@@ -17,7 +17,7 @@ use function is_object;
  * Class CollectionNormalizer
  *
  * @package App\Serializer
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class CollectionNormalizer implements NormalizerInterface
 {
@@ -34,11 +34,11 @@ class CollectionNormalizer implements NormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function normalize($collection, ?string $format = null, array $context = []): array
+    public function normalize($object, ?string $format = null, array $context = []): array
     {
         $output = [];
 
-        foreach ($collection as $value) {
+        foreach ($object as $value) {
             $output[] = $this->normalizer->normalize($value, $format, $context);
         }
 

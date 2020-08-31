@@ -91,9 +91,9 @@ class DetachUserGroupController
      * @SWG\Response(
      *      response=200,
      *      description="User groups",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="array",
-     *          @SWG\Items(
+     * @SWG\Items(
      *              ref=@Model(
      *                  type=App\Entity\UserGroup::class,
      *                  groups={"UserGroup", "UserGroup.role"},
@@ -108,10 +108,10 @@ class DetachUserGroupController
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
      *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
      *      },
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="object",
-     *          @SWG\Property(property="code", type="integer", description="Error code"),
-     *          @SWG\Property(property="message", type="string", description="Error description"),
+     * @SWG\Property(property="code", type="integer", description="Error code"),
+     * @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
      * @SWG\Response(
@@ -120,10 +120,10 @@ class DetachUserGroupController
      *      examples={
      *          "Access denied": "{code: 403, message: 'Access denied'}",
      *      },
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="object",
-     *          @SWG\Property(property="code", type="integer", description="Error code"),
-     *          @SWG\Property(property="message", type="string", description="Error description"),
+     * @SWG\Property(property="code", type="integer", description="Error code"),
+     * @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
      *

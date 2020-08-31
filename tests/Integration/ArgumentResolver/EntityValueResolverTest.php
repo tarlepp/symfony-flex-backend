@@ -24,7 +24,7 @@ use function iterator_to_array;
  * Class EntityValueResolverTest
  *
  * @package App\Tests\Integration\ArgumentResolver
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class EntityValueResolverTest extends KernelTestCase
 {
@@ -91,7 +91,7 @@ class EntityValueResolverTest extends KernelTestCase
     {
         /**
          * @var MockObject|ResourceCollection $resourceCollection
-         * @var MockObject|UserResource       $userResource
+         * @var MockObject|UserResource $userResource
          */
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
         $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();

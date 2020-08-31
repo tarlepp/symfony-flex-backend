@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Class JWTCreatedSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class JWTCreatedSubscriberTest extends KernelTestCase
 {

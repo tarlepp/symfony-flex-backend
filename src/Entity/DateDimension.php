@@ -26,7 +26,7 @@ use function floor;
  * @ORM\Table(
  *      name="date_dimension",
  *      indexes={
- *          @ORM\Index(name="date", columns={"date"}),
+ * @ORM\Index(name="date", columns={"date"}),
  *      }
  *  )
  * @ORM\Entity(
@@ -34,7 +34,7 @@ use function floor;
  *  )
  *
  * @package App\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class DateDimension implements EntityInterface
 {

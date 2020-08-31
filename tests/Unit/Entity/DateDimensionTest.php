@@ -18,7 +18,7 @@ use Throwable;
  * Class DateDimensionTest
  *
  * @package App\Tests\Unit\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class DateDimensionTest extends KernelTestCase
 {

@@ -29,7 +29,7 @@ use function substr;
  * Class RequestLogSubscriber
  *
  * @package App\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RequestLogSubscriber implements EventSubscriberInterface
 {

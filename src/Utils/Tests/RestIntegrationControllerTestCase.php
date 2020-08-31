@@ -20,7 +20,7 @@ use function sprintf;
  * Class RestIntegrationControllerTestCase
  *
  * @package App\Utils\Tests
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 {

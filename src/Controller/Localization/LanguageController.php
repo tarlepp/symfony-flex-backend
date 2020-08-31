@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @SWG\Tag(name="Localization")
  *
  * @package App\Controller\Localization
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LanguageController
 {
@@ -45,10 +45,10 @@ class LanguageController
      * @SWG\Response(
      *      response=200,
      *      description="List of language strings.",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="array",
      *          example={"en","fi"},
-     *          @SWG\Items(type="string"),
+     * @SWG\Items(type="string"),
      *      ),
      *  )
      */

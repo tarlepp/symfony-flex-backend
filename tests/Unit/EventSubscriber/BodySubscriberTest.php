@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  * Class BodySubscriberTest
  *
  * @package App\Tests\Unit\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class BodySubscriberTest extends KernelTestCase
 {

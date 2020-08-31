@@ -29,7 +29,7 @@ use Throwable;
  * Class SecurityUserFactoryTest
  *
  * @package App\Tests\Integration\Security\Provider
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class SecurityUserFactoryTest extends KernelTestCase
 {
@@ -43,7 +43,7 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         /**
          * @var MockObject|UserRepository $userRepository
-         * @var MockObject|RolesService   $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
@@ -69,7 +69,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     {
         /**
          * @var MockObject|UserRepository $userRepository
-         * @var MockObject|RolesService   $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
@@ -108,7 +108,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     {
         /**
          * @var MockObject|UserRepository $userRepository
-         * @var MockObject|RolesService   $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
@@ -129,7 +129,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     {
         /**
          * @var MockObject|UserRepository $userRepository
-         * @var MockObject|RolesService   $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
@@ -153,7 +153,7 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         /**
          * @var MockObject|UserRepository $userRepository
-         * @var MockObject|RolesService   $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
@@ -176,7 +176,7 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         /**
          * @var MockObject|UserRepository $userRepository
-         * @var MockObject|RolesService   $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
@@ -196,7 +196,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     {
         /**
          * @var MockObject|UserRepository $userRepository
-         * @var MockObject|RolesService   $rolesService
+         * @var MockObject|RolesService $rolesService
          */
         $userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()

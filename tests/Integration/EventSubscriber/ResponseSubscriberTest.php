@@ -24,7 +24,7 @@ use Throwable;
  * Class ResponseSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ResponseSubscriberTest extends KernelTestCase
 {
@@ -36,7 +36,7 @@ class ResponseSubscriberTest extends KernelTestCase
         static::bootKernel();
 
         /**
-         * @var MockObject|CacheInterface  $cacheStub
+         * @var MockObject|CacheInterface $cacheStub
          * @var MockObject|LoggerInterface $logger
          */
         $cacheStub = $this->createMock(CacheInterface::class);

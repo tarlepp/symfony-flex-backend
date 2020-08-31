@@ -14,7 +14,7 @@ use App\DTO\Traits\PatchUserGroups;
  * Class ApiKeyPatch
  *
  * @package App\DTO\ApiKey
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyPatch extends ApiKey
 {

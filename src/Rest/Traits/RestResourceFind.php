@@ -16,7 +16,7 @@ use App\Entity\Interfaces\EntityInterface;
  * @SuppressWarnings("unused")
  *
  * @package App\Rest\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait RestResourceFind
 {
@@ -34,12 +34,12 @@ trait RestResourceFind
     /**
      * After lifecycle method for find method.
      *
-     * Notes:   If you make changes to entities in this lifecycle method by default it will be saved on end of current
+     * Notes: If you make changes to entities in this lifecycle method by default it will be saved on end of current
      *          request. To prevent this you need to clone each entity and use those.
      *
-     * @param mixed[]           $criteria
-     * @param mixed[]           $orderBy
-     * @param mixed[]           $search
+     * @param mixed[] $criteria
+     * @param mixed[] $orderBy
+     * @param mixed[] $search
      * @param EntityInterface[] $entities
      */
     public function afterFind(

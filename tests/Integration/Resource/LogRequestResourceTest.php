@@ -16,7 +16,7 @@ use App\Resource\LogRequestResource;
  * Class LogRequestResourceTest
  *
  * @package App\Tests\Integration\Resource
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LogRequestResourceTest extends ResourceTestCase
 {

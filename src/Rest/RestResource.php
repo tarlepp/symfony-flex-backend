@@ -20,7 +20,7 @@ use function sprintf;
  * Class RestResource
  *
  * @package App\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class RestResource implements RestResourceInterface
 {

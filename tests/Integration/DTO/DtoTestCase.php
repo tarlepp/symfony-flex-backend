@@ -31,7 +31,7 @@ use function ucfirst;
  * Class DtoTestCase
  *
  * @package App\Tests\Integration\DTO
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class DtoTestCase extends KernelTestCase
 {

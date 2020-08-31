@@ -91,9 +91,9 @@ class AttachUserController
      * @SWG\Response(
      *      response=200,
      *      description="List of user group users - specified user already exists on this group",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="array",
-     *          @SWG\Items(
+     * @SWG\Items(
      *              ref=@Model(
      *                  type=App\Entity\User::class,
      *                  groups={"User"},
@@ -104,9 +104,9 @@ class AttachUserController
      * @SWG\Response(
      *      response=201,
      *      description="List of user group users - specified user has been attached to this group",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="array",
-     *          @SWG\Items(
+     * @SWG\Items(
      *              ref=@Model(
      *                  type=App\Entity\User::class,
      *                  groups={"User"},

@@ -44,7 +44,7 @@ use function array_keys;
  * Class ExceptionSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ExceptionSubscriberTest extends KernelTestCase
 {
@@ -59,8 +59,8 @@ class ExceptionSubscriberTest extends KernelTestCase
     {
         /**
          * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface        $stubLogger
-         * @var MockObject|KernelInterface        $stubKernel
+         * @var MockObject|LoggerInterface $stubLogger
+         * @var MockObject|KernelInterface $stubKernel
          */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -89,8 +89,8 @@ class ExceptionSubscriberTest extends KernelTestCase
     {
         /**
          * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface        $stubLogger
-         * @var MockObject|KernelInterface        $stubKernel
+         * @var MockObject|LoggerInterface $stubLogger
+         * @var MockObject|KernelInterface $stubKernel
          */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -122,9 +122,9 @@ class ExceptionSubscriberTest extends KernelTestCase
     ): void {
         /**
          * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface        $stubLogger
-         * @var MockObject|HttpKernelInterface    $stubHttpKernel
-         * @var MockObject|Request                $stubRequest
+         * @var MockObject|LoggerInterface $stubLogger
+         * @var MockObject|HttpKernelInterface $stubHttpKernel
+         * @var MockObject|Request $stubRequest
          */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -157,9 +157,9 @@ class ExceptionSubscriberTest extends KernelTestCase
     {
         /**
          * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface        $stubLogger
-         * @var MockObject|HttpKernelInterface    $stubHttpKernel
-         * @var MockObject|Request                $stubRequest
+         * @var MockObject|LoggerInterface $stubLogger
+         * @var MockObject|HttpKernelInterface $stubHttpKernel
+         * @var MockObject|Request $stubRequest
          */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -197,7 +197,7 @@ class ExceptionSubscriberTest extends KernelTestCase
     ): void {
         /**
          * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface        $stubLogger
+         * @var MockObject|LoggerInterface $stubLogger
          */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -231,7 +231,7 @@ class ExceptionSubscriberTest extends KernelTestCase
     ): void {
         /**
          * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface        $stubLogger
+         * @var MockObject|LoggerInterface $stubLogger
          */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);

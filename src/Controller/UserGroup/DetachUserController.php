@@ -91,9 +91,9 @@ class DetachUserController
      * @SWG\Response(
      *      response=200,
      *      description="Users",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="array",
-     *          @SWG\Items(
+     * @SWG\Items(
      *              ref=@Model(
      *                  type=App\Entity\User::class,
      *                  groups={"User"},

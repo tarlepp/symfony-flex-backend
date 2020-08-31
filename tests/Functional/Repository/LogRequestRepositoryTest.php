@@ -16,7 +16,7 @@ use Throwable;
  * Class LogRequestRepositoryTest
  *
  * @package App\Tests\Functional\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LogRequestRepositoryTest extends KernelTestCase
 {

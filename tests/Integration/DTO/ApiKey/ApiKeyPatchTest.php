@@ -18,7 +18,7 @@ use App\Tests\Integration\DTO\DtoTestCase;
  * Class ApiKeyPatchTest
  *
  * @package App\Tests\Integration\DTO\ApiKey
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyPatchTest extends DtoTestCase
 {

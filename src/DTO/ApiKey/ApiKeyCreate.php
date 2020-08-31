@@ -12,7 +12,7 @@ namespace App\DTO\ApiKey;
  * Class ApiKeyCreate
  *
  * @package App\DTO\ApiKey
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyCreate extends ApiKey
 {

@@ -15,7 +15,7 @@ use App\Tests\Integration\DTO\DtoTestCase;
  * Class ApiKeyCreateTest
  *
  * @package App\Tests\Integration\DTO\ApiKey
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyCreateTest extends DtoTestCase
 {

@@ -36,7 +36,7 @@ use Throwable;
  * you can use within your controller as you like.
  *
  * @package App\ArgumentResolver
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LoggedInUserValueResolver implements ArgumentValueResolverInterface
 {
@@ -82,7 +82,7 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
      *
      * @throws Throwable
      */
-    public function resolve(Request $request, ArgumentMetadata $argumentMetadata): Generator
+    public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         $token = $this->tokenStorage->getToken();
 

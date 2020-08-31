@@ -24,7 +24,7 @@ use Throwable;
  * @ORM\Table(
  *      name="log_login_failure",
  *      indexes={
- *          @ORM\Index(name="user_id", columns={"user_id"}),
+ * @ORM\Index(name="user_id", columns={"user_id"}),
  *      }
  *  )
  * @ORM\Entity(
@@ -32,7 +32,7 @@ use Throwable;
  *  )
  *
  * @package App\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LogLoginFailure implements EntityInterface
 {
@@ -67,7 +67,7 @@ class LogLoginFailure implements EntityInterface
      *      inversedBy="logsLoginFailure",
      *  )
      * @ORM\JoinColumns({
-     *      @ORM\JoinColumn(
+     * @ORM\JoinColumn(
      *          name="user_id",
      *          referencedColumnName="id",
      *          nullable=false,

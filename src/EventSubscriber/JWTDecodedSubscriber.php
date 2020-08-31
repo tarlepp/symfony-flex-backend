@@ -22,7 +22,7 @@ use function implode;
  * Class JWTDecodedSubscriber
  *
  * @package App\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class JWTDecodedSubscriber implements EventSubscriberInterface
 {

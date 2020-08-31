@@ -41,7 +41,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * Class ResourceCollectionTest
  *
  * @package App\Tests\Integration\Resource
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ResourceCollectionTest extends KernelTestCase
 {
@@ -227,7 +227,7 @@ class ResourceCollectionTest extends KernelTestCase
             private ArrayObject $iterator;
 
             /**
-             * Constructor  of the class.
+             * Constructor of the class.
              *
              * @param $input
              */

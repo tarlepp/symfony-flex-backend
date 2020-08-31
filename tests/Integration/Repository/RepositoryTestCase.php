@@ -18,7 +18,7 @@ use function sort;
  * Class RepositoryTestCase
  *
  * @package App\Tests\Integration\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @property BaseRepository $repository
  */

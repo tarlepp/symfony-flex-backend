@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  * Class IsUserHimselfVoterTest
  *
  * @package App\Tests\Integration\Security\Voter
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class IsUserHimselfVoterTest extends KernelTestCase
 {

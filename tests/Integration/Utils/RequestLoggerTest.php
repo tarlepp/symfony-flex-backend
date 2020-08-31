@@ -22,7 +22,7 @@ use Throwable;
  * Class RequestLoggerTest
  *
  * @package App\Tests\Integration\Utils
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RequestLoggerTest extends KernelTestCase
 {
@@ -33,7 +33,7 @@ class RequestLoggerTest extends KernelTestCase
     {
         /**
          * @var MockObject|LogRequestResource $resource
-         * @var MockObject|LoggerInterface    $logger
+         * @var MockObject|LoggerInterface $logger
          */
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -54,7 +54,7 @@ class RequestLoggerTest extends KernelTestCase
     {
         /**
          * @var MockObject|LogRequestResource $resource
-         * @var MockObject|LoggerInterface    $logger
+         * @var MockObject|LoggerInterface $logger
          */
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -75,7 +75,7 @@ class RequestLoggerTest extends KernelTestCase
     {
         /**
          * @var MockObject|LogRequestResource $resource
-         * @var MockObject|LoggerInterface    $logger
+         * @var MockObject|LoggerInterface $logger
          */
         $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
@@ -102,7 +102,7 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLoggerIsCalledIfExceptionIsThrown(): void
     {
         /**
-         * @var MockObject|LoggerInterface    $logger
+         * @var MockObject|LoggerInterface $logger
          * @var MockObject|LogRequestResource $resource
          */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();

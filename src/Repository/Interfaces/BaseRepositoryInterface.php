@@ -23,7 +23,7 @@ use Throwable;
  * Interface BaseRepositoryInterface
  *
  * @package App\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface BaseRepositoryInterface
 {
@@ -92,7 +92,7 @@ interface BaseRepositoryInterface
      * Wrapper for default Doctrine repository findOneBy method.
      *
      * @param array<int|string, string|array> $criteria
-     * @param array<int, string>|null         $orderBy
+     * @param array<int, string>|null $orderBy
      *
      * @return EntityInterface|object|null
      */
@@ -102,7 +102,7 @@ interface BaseRepositoryInterface
      * Wrapper for default Doctrine repository findBy method.
      *
      * @param array<int|string, string|array> $criteria
-     * @param array<int, string>|null         $orderBy
+     * @param array<int, string>|null $orderBy
      *
      * @return array<int, EntityInterface|object>
      */
@@ -113,8 +113,8 @@ interface BaseRepositoryInterface
      * generic LIKE search.
      *
      * @param array<int|string, string|array> $criteria
-     * @param array<string, string>|null      $orderBy
-     * @param array<string, string>|null      $search
+     * @param array<string, string>|null $orderBy
+     * @param array<string, string>|null $search
      *
      * @return array<int, EntityInterface>
      *
@@ -140,7 +140,7 @@ interface BaseRepositoryInterface
      * return those as an array.
      *
      * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null           $search
+     * @param array<string, string>|null $search
      *
      * @return array<int, string>
      *
@@ -153,7 +153,7 @@ interface BaseRepositoryInterface
      * criteria and search term(s).
      *
      * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null           $search
+     * @param array<string, string>|null $search
      *
      * @throws InvalidArgumentException
      * @throws NonUniqueResultException

@@ -20,7 +20,7 @@ use Throwable;
  * Class ChangeTokenCommand
  *
  * @package App\Command\ApiKey
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ChangeTokenCommand extends Command
 {

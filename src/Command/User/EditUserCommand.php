@@ -23,7 +23,7 @@ use Throwable;
  * Class EditUserCommand
  *
  * @package App\Command\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class EditUserCommand extends Command
 {

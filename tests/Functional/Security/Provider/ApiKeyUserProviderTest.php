@@ -27,7 +27,7 @@ use function str_pad;
  * Class ApiKeyUserProviderTest
  *
  * @package App\Tests\Functional\Security\Provider
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyUserProviderTest extends KernelTestCase
 {

@@ -21,7 +21,7 @@ use function iterator_count;
  * Trait CollectionTrait
  *
  * @package App\Collection
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait CollectionTrait
 {

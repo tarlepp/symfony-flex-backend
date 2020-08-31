@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class UserCreate
  *
  * @package App\DTO\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserCreate extends User
 {

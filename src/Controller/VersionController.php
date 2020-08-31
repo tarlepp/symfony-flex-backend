@@ -42,10 +42,10 @@ class VersionController
      * @SWG\Response(
      *      response=200,
      *      description="success",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="object",
      *          example={"version": "1.2.3"},
-     *          @SWG\Property(property="version", type="string", description="Version number"),
+     * @SWG\Property(property="version", type="string", description="Version number"),
      *      ),
      *  )
      */

@@ -21,7 +21,7 @@ use function array_merge;
  * @codeCoverageIgnore
  *
  * @package App\Utils\Tests
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class RestTraitTestCase extends WebTestCase
 {
@@ -433,7 +433,7 @@ abstract class RestTraitTestCase extends WebTestCase
 
     /**
      * @param Generator<array<int, string|null>> $users
-     * @param array<int, array<int, string>>     $methods
+     * @param array<int, array<int, string>> $methods
      *
      * @return Generator<array<int, string|null>>
      */

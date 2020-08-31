@@ -12,7 +12,7 @@ namespace App\Rest\Traits;
  * Trait Resource
  *
  * @package App\Rest\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait RestResourceLifeCycles
 {

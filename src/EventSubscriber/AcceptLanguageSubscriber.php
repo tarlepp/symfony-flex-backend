@@ -16,7 +16,7 @@ use function in_array;
  * Class LocaleSubscriber
  *
  * @package App\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AcceptLanguageSubscriber implements EventSubscriberInterface
 {

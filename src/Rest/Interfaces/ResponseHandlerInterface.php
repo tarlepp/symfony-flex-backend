@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Interface ResponseHandlerInterface
  *
  * @package App\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface ResponseHandlerInterface
 {
@@ -48,7 +48,7 @@ interface ResponseHandlerInterface
     /**
      * Helper method to create response for request.
      *
-     * @param mixed                                           $data
+     * @param mixed $data
      * @param array<int|string, bool|array<int, string>>|null $context
      *
      * @throws HttpException

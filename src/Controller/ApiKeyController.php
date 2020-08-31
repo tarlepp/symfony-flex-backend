@@ -30,7 +30,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @SWG\Tag(name="ApiKey Management")
  *
  * @package App\Controller
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @method ApiKeyResource getResource()
  */

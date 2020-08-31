@@ -24,7 +24,7 @@ use function array_keys;
  * Class ApiKeyTypeTest
  *
  * @package App\Tests\Integration\Form\Type\Console
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyTypeTest extends TypeTestCase
 {

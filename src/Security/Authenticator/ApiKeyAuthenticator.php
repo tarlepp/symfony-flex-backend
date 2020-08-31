@@ -27,7 +27,7 @@ use function preg_match;
  * Class ApiKeyAuthenticator
  *
  * @package App\Security\Authenticator
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 {

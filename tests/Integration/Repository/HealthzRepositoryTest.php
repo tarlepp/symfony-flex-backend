@@ -16,7 +16,7 @@ use App\Resource\HealthzResource;
  * Class HealthzRepositoryTest
  *
  * @package App\Tests\Integration\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class HealthzRepositoryTest extends RepositoryTestCase
 {

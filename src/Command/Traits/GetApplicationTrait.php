@@ -16,7 +16,7 @@ use Symfony\Component\Console\Exception\RuntimeException;
  * Trait GetApplicationTrait
  *
  * @package App\Command\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait GetApplicationTrait
 {

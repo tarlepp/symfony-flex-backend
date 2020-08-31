@@ -60,7 +60,7 @@ class IndexController
      * @SWG\Response(
      *      response=200,
      *      description="User profile data",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          ref=@Model(
      *              type=User::class,
      *              groups={"set.UserProfile"},
@@ -70,10 +70,10 @@ class IndexController
      * @SWG\Response(
      *      response=401,
      *      description="Invalid token",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="object",
-     *          @SWG\Property(property="code", type="integer", description="Error code"),
-     *          @SWG\Property(property="message", type="string", description="Error description"),
+     * @SWG\Property(property="code", type="integer", description="Error code"),
+     * @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",

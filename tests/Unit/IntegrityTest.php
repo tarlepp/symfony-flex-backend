@@ -39,7 +39,7 @@ use const DIRECTORY_SEPARATOR;
  * Class IntegrityTest
  *
  * @package App\Tests\Unit
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class IntegrityTest extends KernelTestCase
 {

@@ -22,7 +22,7 @@ use Throwable;
  * Class RequestMapperTest
  *
  * @package App\Tests\Integration\AutoMapper\UserGroup
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RequestMapperTest extends RestRequestMapperTestCase
 {

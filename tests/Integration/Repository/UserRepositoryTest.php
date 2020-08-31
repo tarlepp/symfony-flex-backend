@@ -16,7 +16,7 @@ use App\Resource\UserResource;
  * Class UserRepositoryTest
  *
  * @package App\Tests\Integration\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserRepositoryTest extends RepositoryTestCase
 {

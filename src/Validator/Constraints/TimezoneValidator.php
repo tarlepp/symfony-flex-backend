@@ -19,7 +19,7 @@ use function is_string;
  * Class TimezoneValidator
  *
  * @package App\Validator\Constraints
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class TimezoneValidator extends ConstraintValidator
 {

@@ -19,7 +19,7 @@ use function ucfirst;
  * Class LogLoginFailureTest
  *
  * @package App\Tests\Integration\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LogLoginFailureTest extends EntityTestCase
 {
@@ -51,7 +51,7 @@ class LogLoginFailureTest extends EntityTestCase
     /**
      * @param string $field
      * @param string $type
-     * @param array  $meta
+     * @param array $meta
      *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
@@ -67,7 +67,7 @@ class LogLoginFailureTest extends EntityTestCase
     /**
      * @param string $field
      * @param string $type
-     * @param array  $meta
+     * @param array $meta
      *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */

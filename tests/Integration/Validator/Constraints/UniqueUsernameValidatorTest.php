@@ -22,7 +22,7 @@ use Throwable;
  * Class UniqueUsernameValidatorTest
  *
  * @package App\Tests\Integration\Validator\Constraints
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UniqueUsernameValidatorTest extends KernelTestCase
 {

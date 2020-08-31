@@ -21,7 +21,7 @@ use Throwable;
  * Class RemoveApiKeyCommand
  *
  * @package App\Command\ApiKey
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RemoveApiKeyCommand extends Command
 {

@@ -23,7 +23,7 @@ use function implode;
  * Class SchemaTest
  *
  * @package App\Tests\Integration
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class SchemaTest extends KernelTestCase
 {

@@ -23,7 +23,7 @@ use Throwable;
  * Class PHPUnitUtilTest
  *
  * @package App\Tests\Unit\Utils\Tests
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class PHPUnitUtilTest extends KernelTestCase
 {

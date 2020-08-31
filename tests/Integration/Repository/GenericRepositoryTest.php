@@ -31,7 +31,7 @@ use UnexpectedValueException;
  * Class GenericRepositoryTest
  *
  * @package App\Tests\Integration\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class GenericRepositoryTest extends KernelTestCase
 {
@@ -338,7 +338,7 @@ class GenericRepositoryTest extends KernelTestCase
     {
         /**
          * @var MockObject|AbstractManagerRegistry $managerObject
-         * @var MockObject|EntityManager           $entityManager
+         * @var MockObject|EntityManager $entityManager
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
@@ -384,8 +384,8 @@ class GenericRepositoryTest extends KernelTestCase
     {
         /**
          * @var MockObject|AbstractManagerRegistry $managerObject
-         * @var MockObject|EntityManager           $entityManager
-         * @var MockObject|EntityRepository        $repositoryMock
+         * @var MockObject|EntityManager $entityManager
+         * @var MockObject|EntityRepository $repositoryMock
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
@@ -435,8 +435,8 @@ class GenericRepositoryTest extends KernelTestCase
     {
         /**
          * @var MockObject|AbstractManagerRegistry $managerObject
-         * @var MockObject|EntityManager           $entityManager
-         * @var MockObject|EntityRepository        $repositoryMock
+         * @var MockObject|EntityManager $entityManager
+         * @var MockObject|EntityRepository $repositoryMock
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()
@@ -489,8 +489,8 @@ class GenericRepositoryTest extends KernelTestCase
     {
         /**
          * @var MockObject|AbstractManagerRegistry $managerObject
-         * @var MockObject|EntityManager           $entityManager
-         * @var MockObject|EntityRepository        $repositoryMock
+         * @var MockObject|EntityManager $entityManager
+         * @var MockObject|EntityRepository $repositoryMock
          */
         $managerObject = $this->getMockBuilder(AbstractManagerRegistry::class)
             ->disableOriginalConstructor()

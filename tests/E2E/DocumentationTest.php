@@ -15,7 +15,7 @@ use Throwable;
  * Class DocumentationTest
  *
  * @package App\Tests\Functional
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class DocumentationTest extends WebTestCase
 {

@@ -28,7 +28,7 @@ use function json_encode;
  * Class ApiKeyAuthenticatorTest
  *
  * @package App\Tests\Integration\Security\Authenticator
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyAuthenticatorTest extends KernelTestCase
 {

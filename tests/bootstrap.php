@@ -13,7 +13,7 @@ declare(strict_types = 1);
  *  7) Write cache files about database initialization
  *
  * @package App\Tests
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 
 use App\Kernel;

@@ -17,7 +17,7 @@ use Throwable;
  * Interface LoginLogger
  *
  * @package App\Utils
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface LoginLoggerInterface
 {

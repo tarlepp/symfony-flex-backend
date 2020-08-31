@@ -22,10 +22,10 @@ use function array_map;
  * Class ApiKey
  *
  * @package App\DTO
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method self|RestDtoInterface  get(string $id)
- * @method self|RestDtoInterface  patch(RestDtoInterface $dto)
+ * @method self|RestDtoInterface get(string $id)
+ * @method self|RestDtoInterface patch(RestDtoInterface $dto)
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class ApiKey extends RestDto

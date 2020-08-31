@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * Class AcceptLanguageSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AcceptLanguageSubscriberTest extends KernelTestCase
 {

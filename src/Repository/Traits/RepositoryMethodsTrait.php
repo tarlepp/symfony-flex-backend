@@ -23,7 +23,7 @@ use function array_values;
  * Trait RepositoryMethodsTrait
  *
  * @package App\Repository\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait RepositoryMethodsTrait
 {
@@ -192,8 +192,8 @@ trait RepositoryMethodsTrait
      * Helper method to get QueryBuilder for current instance within specified default parameters.
      *
      * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null           $search
-     * @param array<string, string>|null           $orderBy
+     * @param array<string, string>|null $search
+     * @param array<string, string>|null $orderBy
      *
      * @throws InvalidArgumentException
      */

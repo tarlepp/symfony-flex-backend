@@ -16,7 +16,7 @@ use function array_map;
  * Trait PatchUserGroups
  *
  * @package App\DTO\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait PatchUserGroups
 {

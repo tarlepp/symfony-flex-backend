@@ -23,13 +23,13 @@ use Throwable;
  * @ORM\Table(
  *      name="role",
  *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="uq_role", columns={"role"}),
+ * @ORM\UniqueConstraint(name="uq_role", columns={"role"}),
  *      },
  *  )
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class Role implements EntityInterface
 {

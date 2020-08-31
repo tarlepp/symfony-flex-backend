@@ -19,7 +19,7 @@ use Throwable;
  * Class AuthenticationSuccessSubscriber
  *
  * @package App\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AuthenticationSuccessSubscriber implements EventSubscriberInterface
 {

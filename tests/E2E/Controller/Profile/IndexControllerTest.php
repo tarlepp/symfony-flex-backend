@@ -21,7 +21,7 @@ use function str_pad;
  * Class IndexControllerTest
  *
  * @package App\Tests\E2E\Controller\Profile
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class IndexControllerTest extends WebTestCase
 {

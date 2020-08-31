@@ -17,7 +17,7 @@ use Throwable;
  * Class UserGroupControllerTest
  *
  * @package App\Tests\E2E\Controller\UserGroup
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserGroupControllerTest extends WebTestCase
 {

@@ -26,10 +26,10 @@ use function array_map;
  * @AppAssert\UniqueUsername()
  *
  * @package App\DTO\User
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
- * @method self|RestDtoInterface  get(string $id)
- * @method self|RestDtoInterface  patch(RestDtoInterface $dto)
+ * @method self|RestDtoInterface get(string $id)
+ * @method self|RestDtoInterface patch(RestDtoInterface $dto)
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class User extends RestDto

@@ -23,7 +23,7 @@ use Throwable;
  * Class UserEntityEventListenerTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UserEntityEventListenerTest extends KernelTestCase
 {

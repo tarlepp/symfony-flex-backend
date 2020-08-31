@@ -20,7 +20,7 @@ use UnexpectedValueException;
  * Interface ResourceInterface
  *
  * @package App\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface RestResourceInterface
 {
@@ -107,8 +107,8 @@ interface RestResourceInterface
      * value is an array of specified repository entities.
      *
      * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null           $orderBy
-     * @param array<string, string>|null           $search
+     * @param array<string, string>|null $orderBy
+     * @param array<string, string>|null $search
      *
      * @return array<int, EntityInterface>
      *
@@ -136,7 +136,7 @@ interface RestResourceInterface
      * null if entity was not found.
      *
      * @param array<int|string, string|array> $criteria
-     * @param array<int, string>|null         $orderBy
+     * @param array<int, string>|null $orderBy
      *
      * @throws Throwable
      */
@@ -151,7 +151,7 @@ interface RestResourceInterface
      * search terms.
      *
      * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null           $search
+     * @param array<string, string>|null $search
      *
      * @throws Throwable
      */
@@ -201,7 +201,7 @@ interface RestResourceInterface
      * value is an array of specified repository entity id values.
      *
      * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null           $search
+     * @param array<string, string>|null $search
      *
      * @return array<int, string>
      */

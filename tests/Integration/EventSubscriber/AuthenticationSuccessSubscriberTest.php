@@ -23,7 +23,7 @@ use Throwable;
  * Class AuthenticationSuccessSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AuthenticationSuccessSubscriberTest extends KernelTestCase
 {
@@ -37,7 +37,7 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
         $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
 
         /**
-         * @var MockObject|LoginLogger    $loginLogger
+         * @var MockObject|LoginLogger $loginLogger
          * @var MockObject|UserRepository $userRepository
          */
         $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();

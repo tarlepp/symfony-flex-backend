@@ -26,7 +26,7 @@ use function str_pad;
  * Class LoadApiKeyData
  *
  * @package App\DataFixtures\ORM
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @psalm-suppress MissingConstructor
  */

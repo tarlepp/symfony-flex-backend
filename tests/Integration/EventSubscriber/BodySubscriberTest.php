@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * Class BodySubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class BodySubscriberTest extends KernelTestCase
 {
@@ -122,7 +122,7 @@ class BodySubscriberTest extends KernelTestCase
         static::bootKernel();
 
         /**
-         * @var MockObject|Request      $request
+         * @var MockObject|Request $request
          * @var MockObject|ParameterBag $parameterBag
          */
         $request = $this->getMockBuilder(Request::class)->getMock();

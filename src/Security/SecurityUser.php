@@ -15,7 +15,7 @@ use App\Security\Interfaces\SecurityUserInterface;
  * Class SecurityUser
  *
  * @package App\Security
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class SecurityUser implements SecurityUserInterface
 {

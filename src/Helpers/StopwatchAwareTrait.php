@@ -18,7 +18,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
  *       nothing else.
  *
  * @package App\Helpers
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait StopwatchAwareTrait
 {

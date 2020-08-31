@@ -20,7 +20,7 @@ use Throwable;
  * Class LoginLoggerTest
  *
  * @package App\Tests\Integration\Utils
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LoginLoggerTest extends KernelTestCase
 {

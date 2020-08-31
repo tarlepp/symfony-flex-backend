@@ -14,7 +14,7 @@ namespace App\Rest\Traits;
  * @SuppressWarnings("unused")
  *
  * @package App\Rest\Traits
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 trait RestResourceCount
 {

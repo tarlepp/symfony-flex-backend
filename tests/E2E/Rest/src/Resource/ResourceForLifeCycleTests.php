@@ -20,18 +20,18 @@ use Throwable;
  * Class ResourceForLifeCycleTests
  *
  * @package App\Tests\E2E\Rest\src\Resource
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
  * @codingStandardsIgnoreStart
  *
- * @method Repository  getRepository(): Repository
- * @method Entity[]    find(array $criteria = null, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
+ * @method Repository getRepository(): Repository
+ * @method Entity[] find(array $criteria = null, array $orderBy = null, int $limit = null, int $offset = null, array $search = null): array
  * @method Entity|null findOne(string $id, bool $throwExceptionIfNotFound = null): ?EntityInterface
  * @method Entity|null findOneBy(array $criteria, array $orderBy = null, bool $throwExceptionIfNotFound = null): ?EntityInterface
- * @method Entity      create(RestDtoInterface $dto, bool $skipValidation = null): EntityInterface
- * @method Entity      update(string $id, RestDtoInterface $dto, bool $skipValidation = null): EntityInterface
- * @method Entity      delete(string $id): EntityInterface
- * @method Entity      save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
+ * @method Entity create(RestDtoInterface $dto, bool $skipValidation = null): EntityInterface
+ * @method Entity update(string $id, RestDtoInterface $dto, bool $skipValidation = null): EntityInterface
+ * @method Entity delete(string $id): EntityInterface
+ * @method Entity save(EntityInterface $entity, bool $skipValidation = null): EntityInterface
  *
  * @codingStandardsIgnoreEnd
  */
@@ -48,7 +48,7 @@ class ResourceForLifeCycleTests extends RestResource
     /**
      * After lifecycle method for findOne method.
      *
-     * Notes:   If you make changes to entity in this lifecycle method by default it will be saved on end of current
+     * Notes: If you make changes to entity in this lifecycle method by default it will be saved on end of current
      *          request. To prevent this you need to detach current entity from entity manager.
      *
      *          Also note that if you've made some changes to entity and you eg. throw an exception within this method

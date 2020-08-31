@@ -22,7 +22,7 @@ use function sprintf;
  * Class ApiKeyHelper
  *
  * @package App\Command\ApiKey
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ApiKeyHelper
 {

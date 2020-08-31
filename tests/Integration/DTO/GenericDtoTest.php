@@ -24,7 +24,7 @@ use Throwable;
  * Class GenericDtoTest
  *
  * @package App\Tests\Integration\DTO
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class GenericDtoTest extends KernelTestCase
 {

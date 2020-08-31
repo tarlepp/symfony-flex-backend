@@ -33,7 +33,7 @@ use function get_class;
  * Class GenericResourceTest
  *
  * @package App\Tests\Integration\Resource
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class GenericResourceTest extends KernelTestCase
 {

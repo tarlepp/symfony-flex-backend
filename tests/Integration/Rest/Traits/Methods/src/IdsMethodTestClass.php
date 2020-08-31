@@ -17,7 +17,7 @@ use App\Rest\Traits\Methods\IdsMethod;
  * Class IdsMethodTestClass - just a dummy class so that we can actually test that trait.
  *
  * @package App\Tests\Integration\Rest\Traits\Methods\src
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class IdsMethodTestClass extends Controller
 {

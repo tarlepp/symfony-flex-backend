@@ -30,7 +30,7 @@ use Throwable;
  * Class UpdateMethodTest
  *
  * @package App\Tests\Integration\Rest\Traits\Methods
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class UpdateMethodTest extends KernelTestCase
 {
@@ -49,7 +49,7 @@ class UpdateMethodTest extends KernelTestCase
 
         /**
          * @var MockObject|UpdateMethodInvalidTestClass $testClass
-         * @var MockObject|RestDtoInterface             $restDtoInterface
+         * @var MockObject|RestDtoInterface $restDtoInterface
          */
         $testClass = $this->getMockForAbstractClass(UpdateMethodInvalidTestClass::class);
         $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -76,7 +76,7 @@ class UpdateMethodTest extends KernelTestCase
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /**
-         * @var MockObject|RestDtoInterface     $restDtoInterface
+         * @var MockObject|RestDtoInterface $restDtoInterface
          * @var MockObject|PatchMethodTestClass $testClass
          */
         $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
@@ -102,8 +102,8 @@ class UpdateMethodTest extends KernelTestCase
         $responseHandler = $this->createMock(ResponseHandlerInterface::class);
 
         /**
-         * @var MockObject|RestDtoInterface      $restDtoInterface
-         * @var MockObject|Request               $request
+         * @var MockObject|RestDtoInterface $restDtoInterface
+         * @var MockObject|Request $request
          * @var MockObject|UpdateMethodTestClass $testClass
          */
         $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();

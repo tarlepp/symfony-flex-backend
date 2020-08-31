@@ -32,7 +32,7 @@ use function strtolower;
  * Class RepositoryHelper
  *
  * @package App\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RepositoryHelper
 {
@@ -58,7 +58,7 @@ class RepositoryHelper
      * and 'in' expressions. See example array below:
      *
      *  [
-     *      'u.id'  => 3,
+     *      'u.id' => 3,
      *      'u.uid' => 'uid',
      *      'u.foo' => [1, 2, 3],
      *      'u.bar' => ['foo', 'bar'],
@@ -115,7 +115,7 @@ class RepositoryHelper
      *
      * @see \App\Controller\Rest::getSearchTerms
      *
-     * @param array<int, string>         $columns
+     * @param array<int, string> $columns
      * @param array<string, string>|null $terms
      *
      * @throws InvalidArgumentException
@@ -164,39 +164,39 @@ class RepositoryHelper
      * to comparison methods located in ExpressionBuilder. The key in the array
      * can be used to identify grouping of comparisons.
      *
-     * Currently supported  Doctrine\ORM\Query\Expr methods:
+     * Currently supported Doctrine\ORM\Query\Expr methods:
      *
-     * OPERATOR   EXAMPLE INPUT ARRAY            GENERATED QUERY RESULT  NOTES
-     *  eq         ['u.id',  'eq',        123]    u.id = ?1               -
-     *  neq        ['u.id',  'neq',       123]    u.id <> ?1              -
-     *  lt         ['u.id',  'lt',        123]    u.id < ?1               -
-     *  lte        ['u.id',  'lte',       123]    u.id <= ?1              -
-     *  gt         ['u.id',  'gt',        123]    u.id > ?1               -
-     *  gte        ['u.id',  'gte',       123]    u.id >= ?1              -
-     *  in         ['u.id',  'in',        [1,2]]  u.id IN (1,2)           third value may contain n values
-     *  notIn      ['u.id',  'notIn',     [1,2]]  u.id NOT IN (1,2)       third value may contain n values
-     *  isNull     ['u.id',  'isNull',    null]   u.id IS NULL            third value must be set, but not used
-     *  isNotNull  ['u.id',  'isNotNull', null]   u.id IS NOT NULL        third value must be set, but not used
-     *  like       ['u.id',  'like',      'abc']  u.id LIKE ?1            -
-     *  notLike    ['u.id',  'notLike',   'abc']  u.id NOT LIKE ?1        -
-     *  between    ['u.id',  'between',  [1,6]]   u.id BETWEEN ?1 AND ?2  third value must contain two values
+     * OPERATOR EXAMPLE INPUT ARRAY GENERATED QUERY RESULT NOTES
+     *  eq ['u.id', 'eq', 123] u.id = ?1 -
+     *  neq ['u.id', 'neq', 123] u.id <> ?1 -
+     *  lt ['u.id', 'lt', 123] u.id < ?1 -
+     *  lte ['u.id', 'lte', 123] u.id <= ?1 -
+     *  gt ['u.id', 'gt', 123] u.id > ?1 -
+     *  gte ['u.id', 'gte', 123] u.id >= ?1 -
+     *  in ['u.id', 'in', [1,2]] u.id IN (1,2) third value may contain n values
+     *  notIn ['u.id', 'notIn', [1,2]] u.id NOT IN (1,2) third value may contain n values
+     *  isNull ['u.id', 'isNull', null] u.id IS NULL third value must be set, but not used
+     *  isNotNull ['u.id', 'isNotNull', null] u.id IS NOT NULL third value must be set, but not used
+     *  like ['u.id', 'like', 'abc'] u.id LIKE ?1 -
+     *  notLike ['u.id', 'notLike', 'abc'] u.id NOT LIKE ?1 -
+     *  between ['u.id', 'between', [1,6]] u.id BETWEEN ?1 AND ?2 third value must contain two values
      *
      * Also note that you can easily combine 'and' and 'or' queries like
      * following examples:
      *
-     * EXAMPLE INPUT ARRAY                                  GENERATED QUERY RESULT
+     * EXAMPLE INPUT ARRAY GENERATED QUERY RESULT
      *  [
      *      'and' => [
-     *          ['u.firstName', 'eq',   'foo bar']
-     *          ['u.lastName',  'neq',  'not this one']
+     *          ['u.firstName', 'eq', 'foo bar']
+     *          ['u.lastName', 'neq', 'not this one']
      *      ]
-     *  ]                                                   (u.firstName = ?1 AND u.lastName <> ?2)
+     *  ] (u.firstName = ?1 AND u.lastName <> ?2)
      *  [
      *      'or' => [
-     *          ['u.firstName', 'eq',   'foo bar']
-     *          ['u.lastName',  'neq',  'not this one']
+     *          ['u.firstName', 'eq', 'foo bar']
+     *          ['u.lastName', 'neq', 'not this one']
      *      ]
-     *  ]                                                   (u.firstName = ?1 OR u.lastName <> ?2)
+     *  ] (u.firstName = ?1 OR u.lastName <> ?2)
      *
      * Also note that you can nest these criteria arrays as many levels as you
      * need - only the sky is the limit...
@@ -337,7 +337,7 @@ class RepositoryHelper
 
     /**
      * @param array<int, string> $parameters
-     * @param array<int, mixed>  $value
+     * @param array<int, mixed> $value
      *
      * @return array<int, array<int, Literal>|string>
      */

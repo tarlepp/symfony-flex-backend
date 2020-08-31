@@ -39,7 +39,7 @@ use function ucfirst;
  * Class EntityTestCase
  *
  * @package App\Tests\Helpers
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 abstract class EntityTestCase extends KernelTestCase
 {
@@ -265,7 +265,7 @@ abstract class EntityTestCase extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatAssociationMethodsExists
      *
-     * @param mixed       $input
+     * @param mixed $input
      * @param bool|string $output
      *
      * @testdox Test that association method `$method` exist for `$field` and it returns `$output` when using `$input`.

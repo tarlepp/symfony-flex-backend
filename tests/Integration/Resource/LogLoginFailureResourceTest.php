@@ -18,7 +18,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * Class LogLoginFailureResourceTest
  *
  * @package App\Tests\Integration\Resource
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class LogLoginFailureResourceTest extends ResourceTestCase
 {

@@ -71,7 +71,7 @@ class UsersController
      * @SWG\Response(
      *      response=200,
      *      description="User group users",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          ref=@Model(
      *              type=User::class,
      *              groups={"User", "User.userGroups", "User.roles", "UserGroup", "UserGroup.role"},

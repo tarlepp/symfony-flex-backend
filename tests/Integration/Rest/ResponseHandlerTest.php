@@ -27,7 +27,7 @@ use Throwable;
  * Class ResponseTest
  *
  * @package App\Tests\Integration\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class ResponseHandlerTest extends ContainerTestCase
 {
@@ -120,9 +120,9 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextMethodCallsExpectedServiceMethods(): void
     {
         /**
-         * @var MockObject|SerializerInterface   $stubSerializer
-         * @var MockObject|Request               $stubRequest
-         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|SerializerInterface $stubSerializer
+         * @var MockObject|Request $stubRequest
+         * @var MockObject|ParameterBag $stubParameterBag
          * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
@@ -154,9 +154,9 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenNonAnyAssociations(): void
     {
         /**
-         * @var MockObject|SerializerInterface   $stubSerializer
-         * @var MockObject|Request               $stubRequest
-         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|SerializerInterface $stubSerializer
+         * @var MockObject|Request $stubRequest
+         * @var MockObject|ParameterBag $stubParameterBag
          * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
@@ -188,9 +188,9 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenAssociations(): void
     {
         /**
-         * @var MockObject|SerializerInterface   $stubSerializer
-         * @var MockObject|Request               $stubRequest
-         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|SerializerInterface $stubSerializer
+         * @var MockObject|Request $stubRequest
+         * @var MockObject|ParameterBag $stubParameterBag
          * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
@@ -227,9 +227,9 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenNonAssociations(): void
     {
         /**
-         * @var MockObject|SerializerInterface   $stubSerializer
-         * @var MockObject|Request               $stubRequest
-         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|SerializerInterface $stubSerializer
+         * @var MockObject|Request $stubRequest
+         * @var MockObject|ParameterBag $stubParameterBag
          * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
@@ -261,9 +261,9 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityAssociations(): void
     {
         /**
-         * @var MockObject|SerializerInterface   $stubSerializer
-         * @var MockObject|Request               $stubRequest
-         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|SerializerInterface $stubSerializer
+         * @var MockObject|Request $stubRequest
+         * @var MockObject|ParameterBag $stubParameterBag
          * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
@@ -298,9 +298,9 @@ class ResponseHandlerTest extends ContainerTestCase
     public function testThatGetSerializeContextReturnsExpectedWhenResourceHasGetSerializerContextMethod(): void
     {
         /**
-         * @var MockObject|SerializerInterface   $stubSerializer
-         * @var MockObject|Request               $stubRequest
-         * @var MockObject|ParameterBag          $stubParameterBag
+         * @var MockObject|SerializerInterface $stubSerializer
+         * @var MockObject|Request $stubRequest
+         * @var MockObject|ParameterBag $stubParameterBag
          * @var MockObject|RestResourceInterface $stubResourceService
          */
         $stubSerializer = $this->createMock(SerializerInterface::class);
@@ -353,8 +353,8 @@ class ResponseHandlerTest extends ContainerTestCase
 
         /**
          * @var MockObject|SerializerInterface $serializer
-         * @var MockObject|FormInterface       $formInterface
-         * @var MockObject|FormError           $formError
+         * @var MockObject|FormInterface $formInterface
+         * @var MockObject|FormError $formError
          */
         $serializer = $this->createMock(SerializerInterface::class);
         $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
@@ -398,8 +398,8 @@ class ResponseHandlerTest extends ContainerTestCase
 
         /**
          * @var MockObject|SerializerInterface $serializer
-         * @var MockObject|FormInterface       $formInterface
-         * @var MockObject|FormError           $formError
+         * @var MockObject|FormInterface $formInterface
+         * @var MockObject|FormError $formError
          */
         $serializer = $this->createMock(SerializerInterface::class);
         $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();

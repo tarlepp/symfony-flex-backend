@@ -54,18 +54,18 @@ class RolesController
      * @SWG\Response(
      *      response=200,
      *      description="User roles",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="array",
-     *          @SWG\Items(type="string"),
+     * @SWG\Items(type="string"),
      *      ),
      *  )
      * @SWG\Response(
      *      response=401,
      *      description="Invalid token",
-     *      @SWG\Schema(
+     * @SWG\Schema(
      *          type="object",
-     *          @SWG\Property(property="code", type="integer", description="Error code"),
-     *          @SWG\Property(property="message", type="string", description="Error description"),
+     * @SWG\Property(property="code", type="integer", description="Error code"),
+     * @SWG\Property(property="message", type="string", description="Error description"),
      *      ),
      *      examples={
      *          "Token not found": "{code: 401, message: 'JWT Token not found'}",

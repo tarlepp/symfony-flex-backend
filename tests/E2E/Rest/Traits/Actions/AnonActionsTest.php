@@ -15,7 +15,7 @@ use Generator;
  * Class AnonActionsTest
  *
  * @package App\Tests\E2E\Rest\Traits\Actions
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class AnonActionsTest extends RestTraitTestCase
 {

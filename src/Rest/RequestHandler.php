@@ -34,7 +34,7 @@ use function strncmp;
  * Class RequestHandler
  *
  * @package App\Rest
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 final class RequestHandler
 {
@@ -43,10 +43,10 @@ final class RequestHandler
      * examples below.
      *
      * Basic usage:
-     *  ?where={"foo": "bar"}                       => WHERE entity.foo = 'bar'
-     *  ?where={"bar.foo": "foobar"}                => WHERE bar.foo = 'foobar'
-     *  ?where={"id": [1,2,3]}                      => WHERE entity.id IN (1,2,3)
-     *  ?where={"bar.foo": [1,2,3]}                 => WHERE bar.foo IN (1,2,3)
+     *  ?where={"foo": "bar"} => WHERE entity.foo = 'bar'
+     *  ?where={"bar.foo": "foobar"} => WHERE bar.foo = 'foobar'
+     *  ?where={"id": [1,2,3]} => WHERE entity.id IN (1,2,3)
+     *  ?where={"bar.foo": [1,2,3]} => WHERE bar.foo IN (1,2,3)
      *
      * Advanced usage:
      *  By default you cannot make anything else that described above,
@@ -55,7 +55,7 @@ final class RequestHandler
      *  'criteria' array as you like.
      *
      *  Note that with advanced usage you can easily use everything that
-     *  App\Repository\Base::getExpression method  supports - and that is
+     *  App\Repository\Base::getExpression method supports - and that is
      *  basically 99% that you need on advanced search criteria.
      *
      * @return array<string, string|array<string|int, string|int>>
@@ -85,19 +85,19 @@ final class RequestHandler
      * examples below.
      *
      * Basic usage:
-     *  ?order=column1                               => ORDER BY entity.column1 ASC
-     *  ?order=-column1                              => ORDER BY entity.column2 DESC
-     *  ?order=foo.column1                           => ORDER BY foo.column1 ASC
-     *  ?order=-foo.column1                          => ORDER BY foo.column2 DESC
+     *  ?order=column1 => ORDER BY entity.column1 ASC
+     *  ?order=-column1 => ORDER BY entity.column2 DESC
+     *  ?order=foo.column1 => ORDER BY foo.column1 ASC
+     *  ?order=-foo.column1 => ORDER BY foo.column2 DESC
      *
      * Array parameter usage:
-     *  ?order[column1]=ASC                          => ORDER BY entity.column1 ASC
-     *  ?order[column1]=DESC                         => ORDER BY entity.column1 DESC
-     *  ?order[column1]=foobar                       => ORDER BY entity.column1 ASC
-     *  ?order[column1]=DESC&order[column2]=DESC     => ORDER BY entity.column1 DESC, entity.column2 DESC
-     *  ?order[foo.column1]=ASC                      => ORDER BY foo.column1 ASC
-     *  ?order[foo.column1]=DESC                     => ORDER BY foo.column1 DESC
-     *  ?order[foo.column1]=foobar                   => ORDER BY foo.column1 ASC
+     *  ?order[column1]=ASC => ORDER BY entity.column1 ASC
+     *  ?order[column1]=DESC => ORDER BY entity.column1 DESC
+     *  ?order[column1]=foobar => ORDER BY entity.column1 ASC
+     *  ?order[column1]=DESC&order[column2]=DESC => ORDER BY entity.column1 DESC, entity.column2 DESC
+     *  ?order[foo.column1]=ASC => ORDER BY foo.column1 ASC
+     *  ?order[foo.column1]=DESC => ORDER BY foo.column1 DESC
+     *  ?order[foo.column1]=foobar => ORDER BY foo.column1 ASC
      *  ?order[foo.column1]=DESC&order[column2]=DESC => ORDER BY foo.column1 DESC, entity.column2 DESC
      *
      * @return array<string, string>

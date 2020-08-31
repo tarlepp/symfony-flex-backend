@@ -16,7 +16,7 @@ use App\Resource\DateDimensionResource;
  * Class DateDimensionRepositoryTest
  *
  * @package App\Tests\Integration\Repository
- * @author  TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class DateDimensionRepositoryTest extends RepositoryTestCase
 {
