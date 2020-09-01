@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fdfb39c727b512f796a8d0c91c3ff0b2",
+    "content-hash": "5426ce4f24a5f14d97008d13e21d99b5",
     "packages": [],
     "packages-dev": [
         {
@@ -761,16 +761,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.9.0",
+            "version": "v4.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "aaee038b912e567780949787d5fe1977be11a778"
+                "reference": "88e519766fc58bd46b8265561fb79b54e2e00b28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/aaee038b912e567780949787d5fe1977be11a778",
-                "reference": "aaee038b912e567780949787d5fe1977be11a778",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/88e519766fc58bd46b8265561fb79b54e2e00b28",
+                "reference": "88e519766fc58bd46b8265561fb79b54e2e00b28",
                 "shasum": ""
             },
             "require": {
@@ -809,7 +809,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2020-08-18T19:48:01+00:00"
+            "time": "2020-08-30T16:15:20+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -1609,32 +1609,32 @@
         },
         {
             "name": "slevomat/coding-standard",
-            "version": "6.3.11",
+            "version": "6.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "4f7eb27c2036ce3cf9d47fc1d55acda4f0f4e5e2"
+                "reference": "bf3a16a630d8245c350b459832a71afa55c02fd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/4f7eb27c2036ce3cf9d47fc1d55acda4f0f4e5e2",
-                "reference": "4f7eb27c2036ce3cf9d47fc1d55acda4f0f4e5e2",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/bf3a16a630d8245c350b459832a71afa55c02fd3",
+                "reference": "bf3a16a630d8245c350b459832a71afa55c02fd3",
                 "shasum": ""
             },
             "require": {
                 "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2 || ^0.7",
                 "php": "^7.1 || ^8.0",
                 "phpstan/phpdoc-parser": "0.4.5 - 0.4.9",
-                "squizlabs/php_codesniffer": "^3.5.5"
+                "squizlabs/php_codesniffer": "^3.5.6"
             },
             "require-dev": {
                 "phing/phing": "2.16.3",
                 "php-parallel-lint/php-parallel-lint": "1.2.0",
-                "phpstan/phpstan": "0.12.39",
+                "phpstan/phpstan": "0.12.40",
                 "phpstan/phpstan-deprecation-rules": "0.12.5",
                 "phpstan/phpstan-phpunit": "0.12.16",
-                "phpstan/phpstan-strict-rules": "0.12.4",
-                "phpunit/phpunit": "7.5.20|8.5.2|9.3.7"
+                "phpstan/phpstan-strict-rules": "0.12.5",
+                "phpunit/phpunit": "7.5.20|8.5.5|9.3.8"
             },
             "type": "phpcodesniffer-standard",
             "extra": {
@@ -1662,7 +1662,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-25T14:57:20+00:00"
+            "time": "2020-08-31T07:02:52+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -1717,16 +1717,16 @@
         },
         {
             "name": "symfony/cache",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "a9ac09a5e9786b734a4baa98158c2cd3251f1e4c"
+                "reference": "5a165f187e675312e4b179e4955daa4e02b8f365"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/a9ac09a5e9786b734a4baa98158c2cd3251f1e4c",
-                "reference": "a9ac09a5e9786b734a4baa98158c2cd3251f1e4c",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/5a165f187e675312e4b179e4955daa4e02b8f365",
+                "reference": "5a165f187e675312e4b179e4955daa4e02b8f365",
                 "shasum": ""
             },
             "require": {
@@ -1807,7 +1807,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-23T17:22:30+00:00"
+            "time": "2020-08-23T09:22:34+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -1887,16 +1887,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "cf63f0613a6c6918e96db39c07a43b01e19a0773"
+                "reference": "22f961ddffdc81389670b2ca74a1cc0213761ec0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/cf63f0613a6c6918e96db39c07a43b01e19a0773",
-                "reference": "cf63f0613a6c6918e96db39c07a43b01e19a0773",
+                "url": "https://api.github.com/repos/symfony/config/zipball/22f961ddffdc81389670b2ca74a1cc0213761ec0",
+                "reference": "22f961ddffdc81389670b2ca74a1cc0213761ec0",
                 "shasum": ""
             },
             "require": {
@@ -1963,20 +1963,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-15T10:53:22+00:00"
+            "time": "2020-08-17T07:48:54+00:00"
         },
         {
             "name": "symfony/console",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "2226c68009627934b8cfc01260b4d287eab070df"
+                "reference": "51ff337ce194bdc3d8db12b20ce8cd54ac9f71e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/2226c68009627934b8cfc01260b4d287eab070df",
-                "reference": "2226c68009627934b8cfc01260b4d287eab070df",
+                "url": "https://api.github.com/repos/symfony/console/zipball/51ff337ce194bdc3d8db12b20ce8cd54ac9f71e9",
+                "reference": "51ff337ce194bdc3d8db12b20ce8cd54ac9f71e9",
                 "shasum": ""
             },
             "require": {
@@ -2056,20 +2056,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-06T13:23:11+00:00"
+            "time": "2020-08-17T13:51:41+00:00"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "c45c3f26d2ae7c5239e5ad420b0c2717dbbc0bcb"
+                "reference": "52e8a8a63f9e6ba56e83be076fd48cc309191e10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/c45c3f26d2ae7c5239e5ad420b0c2717dbbc0bcb",
-                "reference": "c45c3f26d2ae7c5239e5ad420b0c2717dbbc0bcb",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/52e8a8a63f9e6ba56e83be076fd48cc309191e10",
+                "reference": "52e8a8a63f9e6ba56e83be076fd48cc309191e10",
                 "shasum": ""
             },
             "require": {
@@ -2145,7 +2145,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-23T08:36:24+00:00"
+            "time": "2020-08-26T09:10:33+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -2213,16 +2213,16 @@
         },
         {
             "name": "symfony/error-handler",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "4a0d1673a4731c3cb2dea3580c73a676ecb9ed4b"
+                "reference": "525636d4b84e06c6ca72d96b6856b5b169416e6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/4a0d1673a4731c3cb2dea3580c73a676ecb9ed4b",
-                "reference": "4a0d1673a4731c3cb2dea3580c73a676ecb9ed4b",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/525636d4b84e06c6ca72d96b6856b5b169416e6a",
+                "reference": "525636d4b84e06c6ca72d96b6856b5b169416e6a",
                 "shasum": ""
             },
             "require": {
@@ -2280,20 +2280,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-23T08:36:24+00:00"
+            "time": "2020-08-17T10:01:29+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "7827d55911f91c070fc293ea51a06eec80797d76"
+                "reference": "94871fc0a69c3c5da57764187724cdce0755899c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/7827d55911f91c070fc293ea51a06eec80797d76",
-                "reference": "7827d55911f91c070fc293ea51a06eec80797d76",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/94871fc0a69c3c5da57764187724cdce0755899c",
+                "reference": "94871fc0a69c3c5da57764187724cdce0755899c",
                 "shasum": ""
             },
             "require": {
@@ -2366,7 +2366,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-18T18:24:02+00:00"
+            "time": "2020-08-13T14:19:42+00:00"
         },
         {
             "name": "symfony/event-dispatcher-contracts",
@@ -2446,16 +2446,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "6e4320f06d5f2cce0d96530162491f4465179157"
+                "reference": "f7b9ed6142a34252d219801d9767dedbd711da1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/6e4320f06d5f2cce0d96530162491f4465179157",
-                "reference": "6e4320f06d5f2cce0d96530162491f4465179157",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/f7b9ed6142a34252d219801d9767dedbd711da1a",
+                "reference": "f7b9ed6142a34252d219801d9767dedbd711da1a",
                 "shasum": ""
             },
             "require": {
@@ -2506,20 +2506,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-30T20:35:19+00:00"
+            "time": "2020-08-21T17:19:47+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "4298870062bfc667cb78d2b379be4bf5dec5f187"
+                "reference": "2b765f0cf6612b3636e738c0689b29aa63088d5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/4298870062bfc667cb78d2b379be4bf5dec5f187",
-                "reference": "4298870062bfc667cb78d2b379be4bf5dec5f187",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/2b765f0cf6612b3636e738c0689b29aa63088d5d",
+                "reference": "2b765f0cf6612b3636e738c0689b29aa63088d5d",
                 "shasum": ""
             },
             "require": {
@@ -2569,20 +2569,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-20T17:43:50+00:00"
+            "time": "2020-08-17T10:01:29+00:00"
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "1f0d6627e680591c61e9176f04a0dc887b4e6702"
+                "reference": "41a4647f12870e9d41d9a7d72ff0614a27208558"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/1f0d6627e680591c61e9176f04a0dc887b4e6702",
-                "reference": "1f0d6627e680591c61e9176f04a0dc887b4e6702",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/41a4647f12870e9d41d9a7d72ff0614a27208558",
+                "reference": "41a4647f12870e9d41d9a7d72ff0614a27208558",
                 "shasum": ""
             },
             "require": {
@@ -2644,20 +2644,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-23T10:04:31+00:00"
+            "time": "2020-08-17T07:48:54+00:00"
         },
         {
             "name": "symfony/http-kernel",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "d6dd8f6420e377970ddad0d6317d4ce4186fc6b3"
+                "reference": "f829c240113986b60fda425c2533142e88efd7c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/d6dd8f6420e377970ddad0d6317d4ce4186fc6b3",
-                "reference": "d6dd8f6420e377970ddad0d6317d4ce4186fc6b3",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/f829c240113986b60fda425c2533142e88efd7c4",
+                "reference": "f829c240113986b60fda425c2533142e88efd7c4",
                 "shasum": ""
             },
             "require": {
@@ -2757,11 +2757,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-24T04:22:56+00:00"
+            "time": "2020-08-31T06:18:12+00:00"
         },
         {
             "name": "symfony/options-resolver",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/options-resolver.git",
@@ -3449,7 +3449,7 @@
         },
         {
             "name": "symfony/process",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
@@ -3589,7 +3589,7 @@
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -3653,16 +3653,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "f629ba9b611c76224feb21fe2bcbf0b6f992300b"
+                "reference": "0de4cc1e18bb596226c06a82e2e7e9bc6001a63a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/f629ba9b611c76224feb21fe2bcbf0b6f992300b",
-                "reference": "f629ba9b611c76224feb21fe2bcbf0b6f992300b",
+                "url": "https://api.github.com/repos/symfony/string/zipball/0de4cc1e18bb596226c06a82e2e7e9bc6001a63a",
+                "reference": "0de4cc1e18bb596226c06a82e2e7e9bc6001a63a",
                 "shasum": ""
             },
             "require": {
@@ -3734,20 +3734,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-07-08T08:27:49+00:00"
+            "time": "2020-08-17T07:48:54+00:00"
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "2ebe1c7bb52052624d6dc1250f4abe525655d75a"
+                "reference": "b43a3905262bcf97b2510f0621f859ca4f5287be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2ebe1c7bb52052624d6dc1250f4abe525655d75a",
-                "reference": "2ebe1c7bb52052624d6dc1250f4abe525655d75a",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/b43a3905262bcf97b2510f0621f859ca4f5287be",
+                "reference": "b43a3905262bcf97b2510f0621f859ca4f5287be",
                 "shasum": ""
             },
             "require": {
@@ -3824,11 +3824,11 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-24T13:36:18+00:00"
+            "time": "2020-08-17T07:42:30+00:00"
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
@@ -3903,16 +3903,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.1.3",
+            "version": "v5.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "ea342353a3ef4f453809acc4ebc55382231d4d23"
+                "reference": "a44bd3a91bfbf8db12367fa6ffac9c3eb1a8804a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/ea342353a3ef4f453809acc4ebc55382231d4d23",
-                "reference": "ea342353a3ef4f453809acc4ebc55382231d4d23",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/a44bd3a91bfbf8db12367fa6ffac9c3eb1a8804a",
+                "reference": "a44bd3a91bfbf8db12367fa6ffac9c3eb1a8804a",
                 "shasum": ""
             },
             "require": {
@@ -3976,31 +3976,31 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-05-20T17:43:50+00:00"
+            "time": "2020-08-26T08:30:57+00:00"
         },
         {
             "name": "symplify/auto-bind-parameter",
-            "version": "v8.2.16",
+            "version": "8.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/auto-bind-parameter.git",
-                "reference": "501a620d0b0d99116bc3116aa00a0b5cdac89f12"
+                "reference": "84a8ca6786d20e9111306b1724c9716dfc4a8490"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/501a620d0b0d99116bc3116aa00a0b5cdac89f12",
-                "reference": "501a620d0b0d99116bc3116aa00a0b5cdac89f12",
+                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/84a8ca6786d20e9111306b1724c9716dfc4a8490",
+                "reference": "84a8ca6786d20e9111306b1724c9716dfc4a8490",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.0",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "symfony/dependency-injection": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/package-builder": "^8.2.16"
+                "symplify/package-builder": "^8.2.17"
             },
             "type": "library",
             "extra": {
@@ -4024,27 +4024,27 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-28T05:24:40+00:00"
+            "time": "2020-08-31T17:03:26+00:00"
         },
         {
             "name": "symplify/autowire-array-parameter",
-            "version": "v8.2.16",
+            "version": "8.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/autowire-array-parameter.git",
-                "reference": "63d4b6bc36eb56efd7cea3d78a2765bc900538c0"
+                "reference": "9baa1dd10d459fd15074150ce4980480d4db1600"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/63d4b6bc36eb56efd7cea3d78a2765bc900538c0",
-                "reference": "63d4b6bc36eb56efd7cea3d78a2765bc900538c0",
+                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/9baa1dd10d459fd15074150ce4980480d4db1600",
+                "reference": "9baa1dd10d459fd15074150ce4980480d4db1600",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.0",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "symfony/dependency-injection": "^4.4|^5.0",
-                "symplify/package-builder": "^8.2.16"
+                "symplify/package-builder": "^8.2.17"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -4071,20 +4071,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-28T05:24:40+00:00"
+            "time": "2020-08-31T17:03:26+00:00"
         },
         {
             "name": "symplify/coding-standard",
-            "version": "v8.2.16",
+            "version": "8.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/coding-standard.git",
-                "reference": "f69fe628debfae803091644e282497f58cc1b8c5"
+                "reference": "14d341ece01f55ca0628bab0644398fa1dd3f7b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/coding-standard/zipball/f69fe628debfae803091644e282497f58cc1b8c5",
-                "reference": "f69fe628debfae803091644e282497f58cc1b8c5",
+                "url": "https://api.github.com/repos/symplify/coding-standard/zipball/14d341ece01f55ca0628bab0644398fa1dd3f7b8",
+                "reference": "14d341ece01f55ca0628bab0644398fa1dd3f7b8",
                 "shasum": ""
             },
             "require": {
@@ -4092,21 +4092,21 @@
                 "nette/finder": "^2.5",
                 "nette/utils": "^3.0",
                 "nikic/php-parser": "^4.8",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "phpstan/phpstan": "^0.12.40",
                 "slevomat/coding-standard": "^6.3.11",
                 "squizlabs/php_codesniffer": "^3.5",
-                "symplify/autowire-array-parameter": "^8.2.16",
-                "symplify/package-builder": "^8.2.16"
+                "symplify/autowire-array-parameter": "^8.2.17",
+                "symplify/package-builder": "^8.2.17"
             },
             "require-dev": {
                 "nette/application": "^3.0",
                 "nette/bootstrap": "^3.0",
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard-tester": "^8.2.16",
-                "symplify/package-builder": "^8.2.16",
-                "symplify/phpstan-extensions": "^8.2.16",
-                "symplify/smart-file-system": "^8.2.16"
+                "symplify/easy-coding-standard-tester": "^8.2.17",
+                "symplify/package-builder": "^8.2.17",
+                "symplify/phpstan-extensions": "^8.2.17",
+                "symplify/smart-file-system": "^8.2.17"
             },
             "type": "library",
             "extra": {
@@ -4132,30 +4132,30 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-28T05:24:40+00:00"
+            "time": "2020-08-31T17:03:26+00:00"
         },
         {
             "name": "symplify/console-color-diff",
-            "version": "v8.2.16",
+            "version": "8.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/console-color-diff.git",
-                "reference": "9112553f5e9c68e17ddc869479383630d0f2e372"
+                "reference": "abb2aa3aa0a663d13148b6149fb2a8216e7eae2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/console-color-diff/zipball/9112553f5e9c68e17ddc869479383630d0f2e372",
-                "reference": "9112553f5e9c68e17ddc869479383630d0f2e372",
+                "url": "https://api.github.com/repos/symplify/console-color-diff/zipball/abb2aa3aa0a663d13148b6149fb2a8216e7eae2f",
+                "reference": "abb2aa3aa0a663d13148b6149fb2a8216e7eae2f",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.0",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "sebastian/diff": "^3.0|^4.0",
                 "symfony/console": "^4.4|^5.0",
                 "symfony/dependency-injection": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
-                "symplify/package-builder": "^8.2.16"
+                "symplify/package-builder": "^8.2.17"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -4182,20 +4182,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-28T05:24:40+00:00"
+            "time": "2020-08-31T17:03:26+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v8.2.16",
+            "version": "8.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "bdc4bd7debb0ac66f48b7b2b59af48107d0ffc6b"
+                "reference": "31fb7df8298b0c0a733f7c0659864df880495bdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/bdc4bd7debb0ac66f48b7b2b59af48107d0ffc6b",
-                "reference": "bdc4bd7debb0ac66f48b7b2b59af48107d0ffc6b",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/31fb7df8298b0c0a733f7c0659864df880495bdc",
+                "reference": "31fb7df8298b0c0a733f7c0659864df880495bdc",
                 "shasum": ""
             },
             "require": {
@@ -4205,7 +4205,7 @@
                 "nette/robot-loader": "^3.2",
                 "nette/utils": "^3.0",
                 "ocramius/package-versions": "^1.4",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "psr/simple-cache": "^1.0",
                 "slevomat/coding-standard": "^6.3.11",
                 "squizlabs/php_codesniffer": "^3.5",
@@ -4216,17 +4216,17 @@
                 "symfony/finder": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
                 "symfony/yaml": "^4.4|^5.0",
-                "symplify/auto-bind-parameter": "^8.2.16",
-                "symplify/autowire-array-parameter": "^8.2.16",
-                "symplify/coding-standard": "^8.2.16",
-                "symplify/console-color-diff": "^8.2.16",
-                "symplify/package-builder": "^8.2.16",
-                "symplify/set-config-resolver": "^8.2.16",
-                "symplify/smart-file-system": "^8.2.16"
+                "symplify/auto-bind-parameter": "^8.2.17",
+                "symplify/autowire-array-parameter": "^8.2.17",
+                "symplify/coding-standard": "^8.2.17",
+                "symplify/console-color-diff": "^8.2.17",
+                "symplify/package-builder": "^8.2.17",
+                "symplify/set-config-resolver": "^8.2.17",
+                "symplify/smart-file-system": "^8.2.17"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard-tester": "^8.2.16"
+                "symplify/easy-coding-standard-tester": "^8.2.17"
             },
             "bin": [
                 "bin/ecs"
@@ -4257,26 +4257,26 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-28T05:24:40+00:00"
+            "time": "2020-08-31T17:03:26+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v8.2.16",
+            "version": "8.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/package-builder.git",
-                "reference": "27ad99ada1a55d0cd0b72903037dd5792dd8c1ce"
+                "reference": "919228deac5d4091e31b05ec0c45dd30a022fb7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/package-builder/zipball/27ad99ada1a55d0cd0b72903037dd5792dd8c1ce",
-                "reference": "27ad99ada1a55d0cd0b72903037dd5792dd8c1ce",
+                "url": "https://api.github.com/repos/symplify/package-builder/zipball/919228deac5d4091e31b05ec0c45dd30a022fb7f",
+                "reference": "919228deac5d4091e31b05ec0c45dd30a022fb7f",
                 "shasum": ""
             },
             "require": {
                 "nette/finder": "^2.5",
                 "nette/utils": "^3.0",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "symfony/config": "^4.4|^5.0",
                 "symfony/console": "^4.4|^5.0",
                 "symfony/dependency-injection": "^4.4|^5.0",
@@ -4309,32 +4309,32 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-19T14:13:41+00:00"
+            "time": "2020-08-30T23:49:42+00:00"
         },
         {
             "name": "symplify/set-config-resolver",
-            "version": "v8.2.16",
+            "version": "8.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/set-config-resolver.git",
-                "reference": "46eeff19f87d2279d83e702448ce120d1df22cc8"
+                "reference": "2c8f2cac0612f322ea99e2c4a4964b67416f3cfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/46eeff19f87d2279d83e702448ce120d1df22cc8",
-                "reference": "46eeff19f87d2279d83e702448ce120d1df22cc8",
+                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/2c8f2cac0612f322ea99e2c4a4964b67416f3cfc",
+                "reference": "2c8f2cac0612f322ea99e2c4a4964b67416f3cfc",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.0",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "symfony/config": "^4.4|^5.0",
                 "symfony/console": "^4.4|^5.0",
                 "symfony/dependency-injection": "^4.4|^5.0",
                 "symfony/filesystem": "^4.4|^5.0",
                 "symfony/finder": "^4.4|^5.0",
                 "symfony/yaml": "^4.4|^5.0",
-                "symplify/smart-file-system": "^8.2.16"
+                "symplify/smart-file-system": "^8.2.17"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -4361,25 +4361,25 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-28T05:24:40+00:00"
+            "time": "2020-08-31T17:03:26+00:00"
         },
         {
             "name": "symplify/smart-file-system",
-            "version": "v8.2.16",
+            "version": "8.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/smart-file-system.git",
-                "reference": "dbc192d51d0ddf5c2084394db44dbab1c579918a"
+                "reference": "ae098d860bc57043bc534e61bc363f37cbd6732d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/dbc192d51d0ddf5c2084394db44dbab1c579918a",
-                "reference": "dbc192d51d0ddf5c2084394db44dbab1c579918a",
+                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/ae098d860bc57043bc534e61bc363f37cbd6732d",
+                "reference": "ae098d860bc57043bc534e61bc363f37cbd6732d",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.0",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "symfony/filesystem": "^4.4|^5.0",
                 "symfony/finder": "^4.4|^5.0"
             },
@@ -4409,7 +4409,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-24T13:39:46+00:00"
+            "time": "2020-08-30T23:49:42+00:00"
         }
     ],
     "aliases": [],
