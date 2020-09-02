@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "943d51e91c52d749bc7ccd1c6d4b9077",
+    "content-hash": "3034ce6800be325e8c40fe50f9a711f6",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -7187,7 +7187,7 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v5.1.4",
+            "version": "v5.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
