@@ -55,7 +55,7 @@
 		"symfony/serializer-pack": "1.0.3",
 		"symfony/translation": " 5.1.4",
 		"symfony/twig-bundle": " 5.1.4",
-		"symfony/validator": " 5.1.4",
+		"symfony/validator": " 5.1.5",
 		"symfony/yaml": " 5.1.4"
 	},
 	"conflict": {
