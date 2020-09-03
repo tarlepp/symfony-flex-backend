@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dfb7a7474d323951877721c2c49130a2",
+    "content-hash": "031b75c1b03c7338034379611cb896a3",
     "packages": [],
     "packages-dev": [
         {
@@ -2670,12 +2670,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/auto-bind-parameter.git",
-                "reference": "7c65a269a8030fe35912513c69d451f3b32d4990"
+                "reference": "555d98f41db7dbbfb31c72b2a7fcc44cb561231e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/7c65a269a8030fe35912513c69d451f3b32d4990",
-                "reference": "7c65a269a8030fe35912513c69d451f3b32d4990",
+                "url": "https://api.github.com/repos/symplify/auto-bind-parameter/zipball/555d98f41db7dbbfb31c72b2a7fcc44cb561231e",
+                "reference": "555d98f41db7dbbfb31c72b2a7fcc44cb561231e",
                 "shasum": ""
             },
             "require": {
@@ -2718,12 +2718,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/autowire-array-parameter.git",
-                "reference": "a09e5b1c53cf5d079218153fc798ac3215f8f03d"
+                "reference": "a69ce2dd00ef099b3ac3882b0709d4a70f1b5845"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/a09e5b1c53cf5d079218153fc798ac3215f8f03d",
-                "reference": "a09e5b1c53cf5d079218153fc798ac3215f8f03d",
+                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/a69ce2dd00ef099b3ac3882b0709d4a70f1b5845",
+                "reference": "a69ce2dd00ef099b3ac3882b0709d4a70f1b5845",
                 "shasum": ""
             },
             "require": {
@@ -2761,30 +2761,30 @@
         },
         {
             "name": "symplify/changelog-linker",
-            "version": "v8.2.16",
+            "version": "8.2.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/changelog-linker.git",
-                "reference": "40199d14af892398b3d836ae0f18bf13cb9164e5"
+                "reference": "540a2e7719cdd9028cc133271a662662928fd3d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/changelog-linker/zipball/40199d14af892398b3d836ae0f18bf13cb9164e5",
-                "reference": "40199d14af892398b3d836ae0f18bf13cb9164e5",
+                "url": "https://api.github.com/repos/symplify/changelog-linker/zipball/540a2e7719cdd9028cc133271a662662928fd3d8",
+                "reference": "540a2e7719cdd9028cc133271a662662928fd3d8",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.5|^7.0",
                 "nette/utils": "^3.0",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "symfony/console": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
                 "symfony/process": "^4.4|^5.0",
-                "symplify/auto-bind-parameter": "^8.2.16",
-                "symplify/autowire-array-parameter": "^8.2.16",
-                "symplify/package-builder": "^8.2.16",
-                "symplify/set-config-resolver": "^8.2.16",
-                "symplify/smart-file-system": "^8.2.16"
+                "symplify/auto-bind-parameter": "^8.2.21",
+                "symplify/autowire-array-parameter": "^8.2.21",
+                "symplify/package-builder": "^8.2.21",
+                "symplify/set-config-resolver": "^8.2.21",
+                "symplify/smart-file-system": "^8.2.21"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -2814,7 +2814,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-28T05:24:40+00:00"
+            "time": "2020-09-02T20:45:10+00:00"
         },
         {
             "name": "symplify/package-builder",
@@ -2822,12 +2822,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/package-builder.git",
-                "reference": "06f5c2dd99ceb5494b2f9e5aae39b30e1378eb3d"
+                "reference": "0ff6d617e85b6dfeb31a15226fda654cf8ee6dab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/package-builder/zipball/06f5c2dd99ceb5494b2f9e5aae39b30e1378eb3d",
-                "reference": "06f5c2dd99ceb5494b2f9e5aae39b30e1378eb3d",
+                "url": "https://api.github.com/repos/symplify/package-builder/zipball/0ff6d617e85b6dfeb31a15226fda654cf8ee6dab",
+                "reference": "0ff6d617e85b6dfeb31a15226fda654cf8ee6dab",
                 "shasum": ""
             },
             "require": {
@@ -2874,12 +2874,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/set-config-resolver.git",
-                "reference": "7d14b079c9d8322500b0f63cf588f7248882782e"
+                "reference": "4dd1f1c79e45213bc09eea8c89221ae74e09ae1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/7d14b079c9d8322500b0f63cf588f7248882782e",
-                "reference": "7d14b079c9d8322500b0f63cf588f7248882782e",
+                "url": "https://api.github.com/repos/symplify/set-config-resolver/zipball/4dd1f1c79e45213bc09eea8c89221ae74e09ae1b",
+                "reference": "4dd1f1c79e45213bc09eea8c89221ae74e09ae1b",
                 "shasum": ""
             },
             "require": {
@@ -2926,12 +2926,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/smart-file-system.git",
-                "reference": "60c99a20056de6e7c045b9c7e3a65e552c054d2e"
+                "reference": "06b3893e62e691b81e3bda5b4fd23d3574ec7ea5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/60c99a20056de6e7c045b9c7e3a65e552c054d2e",
-                "reference": "60c99a20056de6e7c045b9c7e3a65e552c054d2e",
+                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/06b3893e62e691b81e3bda5b4fd23d3574ec7ea5",
+                "reference": "06b3893e62e691b81e3bda5b4fd23d3574ec7ea5",
                 "shasum": ""
             },
             "require": {
