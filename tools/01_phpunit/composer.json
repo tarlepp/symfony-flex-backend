@@ -6,8 +6,8 @@
 		"phpunit/phpunit": "9.3.8",
 		"roave/security-advisories": "dev-master",
 		"sebastian/finder-facade": "2.0.0",
-		"symfony/browser-kit": " 5.1.5",
-		"symfony/phpunit-bridge": " 5.1.5",
+		"symfony/browser-kit": "5.1.5",
+		"symfony/phpunit-bridge": "5.1.5",
 		"theseer/fdomdocument": "1.6.6"
 	},
 	"config": {
@@ -21,7 +21,7 @@
 	},
 	"extra": {
 		"symfony": {
-			"require": "4.4.7"
+			"require": "5.1.5"
 		}
 	}
 }
