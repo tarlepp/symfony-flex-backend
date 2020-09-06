@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fdfb39c727b512f796a8d0c91c3ff0b2",
+    "content-hash": "2e8a4c8fc7e76849d157f84fe4942128",
     "packages": [],
     "packages-dev": [
         {
@@ -4187,16 +4187,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v8.2.16",
+            "version": "8.2.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "e7170dc2385759231e4577f9fd7a61aa9fc7485d"
+                "reference": "772f93b8a7606abcb4eb78dabc74ef9eb7234f7f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/e7170dc2385759231e4577f9fd7a61aa9fc7485d",
-                "reference": "e7170dc2385759231e4577f9fd7a61aa9fc7485d",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/772f93b8a7606abcb4eb78dabc74ef9eb7234f7f",
+                "reference": "772f93b8a7606abcb4eb78dabc74ef9eb7234f7f",
                 "shasum": ""
             },
             "require": {
@@ -4206,7 +4206,7 @@
                 "nette/robot-loader": "^3.2",
                 "nette/utils": "^3.0",
                 "ocramius/package-versions": "^1.4",
-                "php": "^7.2",
+                "php": "^7.2|^8.0",
                 "psr/simple-cache": "^1.0",
                 "slevomat/coding-standard": "^6.3.11",
                 "squizlabs/php_codesniffer": "^3.5",
@@ -4217,17 +4217,17 @@
                 "symfony/finder": "^4.4|^5.0",
                 "symfony/http-kernel": "^4.4|^5.0",
                 "symfony/yaml": "^4.4|^5.0",
-                "symplify/auto-bind-parameter": "^8.2.16",
-                "symplify/autowire-array-parameter": "^8.2.16",
-                "symplify/coding-standard": "^8.2.16",
-                "symplify/console-color-diff": "^8.2.16",
-                "symplify/package-builder": "^8.2.16",
-                "symplify/set-config-resolver": "^8.2.16",
-                "symplify/smart-file-system": "^8.2.16"
+                "symplify/auto-bind-parameter": "^8.2.21",
+                "symplify/autowire-array-parameter": "^8.2.21",
+                "symplify/coding-standard": "^8.2.21",
+                "symplify/console-color-diff": "^8.2.21",
+                "symplify/package-builder": "^8.2.21",
+                "symplify/set-config-resolver": "^8.2.21",
+                "symplify/smart-file-system": "^8.2.21"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard-tester": "^8.2.16"
+                "symplify/easy-coding-standard-tester": "^8.2.21"
             },
             "bin": [
                 "bin/ecs"
@@ -4258,7 +4258,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-28T05:24:40+00:00"
+            "time": "2020-09-02T20:45:10+00:00"
         },
         {
             "name": "symplify/package-builder",
