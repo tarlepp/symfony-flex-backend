@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aaea01f72eee3f056e51f120aad69f70",
+    "content-hash": "8d1f9ebef8620c9a481982cd1ac5286d",
     "packages": [],
     "packages-dev": [
         {
@@ -202,16 +202,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.17.3",
+            "version": "0.17.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "d3d77a7629d237e437d5bb66606f9493bdcf369e"
+                "reference": "14ff2578179588dfdc3cd05ceb8337cdedfdf5cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/d3d77a7629d237e437d5bb66606f9493bdcf369e",
-                "reference": "d3d77a7629d237e437d5bb66606f9493bdcf369e",
+                "url": "https://api.github.com/repos/infection/infection/zipball/14ff2578179588dfdc3cd05ceb8337cdedfdf5cc",
+                "reference": "14ff2578179588dfdc3cd05ceb8337cdedfdf5cc",
                 "shasum": ""
             },
             "require": {
@@ -240,6 +240,7 @@
             },
             "conflict": {
                 "phpunit/php-code-coverage": ">9 <9.1.4",
+                "phpunit/phpunit": ">=9.3",
                 "symfony/console": "=4.1.5"
             },
             "require-dev": {
@@ -306,7 +307,7 @@
                 "testing",
                 "unit testing"
             ],
-            "time": "2020-08-25T06:36:58+00:00"
+            "time": "2020-09-01T05:23:59+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -489,25 +490,24 @@
         },
         {
             "name": "ondram/ci-detector",
-            "version": "3.5.0",
+            "version": "3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OndraM/ci-detector.git",
-                "reference": "789e9fcc7a8c3ef6d54f645fef744ad35946e896"
+                "reference": "594e61252843b68998bddd48078c5058fe9028bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OndraM/ci-detector/zipball/789e9fcc7a8c3ef6d54f645fef744ad35946e896",
-                "reference": "789e9fcc7a8c3ef6d54f645fef744ad35946e896",
+                "url": "https://api.github.com/repos/OndraM/ci-detector/zipball/594e61252843b68998bddd48078c5058fe9028bd",
+                "reference": "594e61252843b68998bddd48078c5058fe9028bd",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1"
+                "php": "^7.1 || ^8.0"
             },
             "require-dev": {
                 "ergebnis/composer-normalize": "^2.2",
                 "lmc/coding-standard": "^1.3 || ^2.0",
-                "php-coveralls/php-coveralls": "^2.2",
                 "php-parallel-lint/php-parallel-lint": "^1.1",
                 "phpstan/extension-installer": "^1.0.3",
                 "phpstan/phpstan": "^0.12.0",
@@ -554,7 +554,7 @@
                 "teamcity",
                 "travis"
             ],
-            "time": "2020-08-25T11:58:23+00:00"
+            "time": "2020-09-04T11:21:14+00:00"
         },
         {
             "name": "psr/container",

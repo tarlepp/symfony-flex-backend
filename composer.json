@@ -44,7 +44,7 @@
 		"symfony/console": "5.1.5",
 		"symfony/dotenv": "5.1.5",
 		"symfony/expression-language": "5.1.5",
-		"symfony/flex": "1.9.2",
+		"symfony/flex": "1.9.3",
 		"symfony/form": "5.1.5",
 		"symfony/framework-bundle": "5.1.5",
 		"symfony/monolog-bundle": "3.5.0",
@@ -65,7 +65,7 @@
 	},
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "1.4.1",
-		"doctrine/doctrine-fixtures-bundle": "3.3.1",
+		"doctrine/doctrine-fixtures-bundle": "3.3.2",
 		"roave/security-advisories": "dev-master",
 		"sensiolabs/security-checker": "6.0.3",
 		"symfony/browser-kit": "5.1.5",
