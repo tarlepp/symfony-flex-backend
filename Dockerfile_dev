@@ -1,4 +1,4 @@
-FROM composer:1.10.9 AS composer
+FROM composer:1.10.10 AS composer
 FROM php:7.4.8-fpm
 
 # Let's use bash as a default shell with login each time
