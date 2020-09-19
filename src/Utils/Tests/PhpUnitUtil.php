@@ -56,7 +56,7 @@ class PhpUnitUtil
     private static array $validValueCache = [];
 
     /**
-     * @var array<string, mixed>
+     * @var array<string, stdClass|DateTime|string>
      */
     private static array $invalidValueCache = [];
 
@@ -258,7 +258,6 @@ class PhpUnitUtil
             }
 
             if (strpos($type, '|') !== false) {
-                /** @noinspection OffsetOperationsInspection */
                 $output = self::getValidValueForType(explode('|', $type)[0], $meta);
             } elseif (strpos($type, '[]') !== false) {
                 /** @var array<mixed, object> $output */
@@ -319,7 +318,6 @@ class PhpUnitUtil
 
         if (!array_key_exists($type, self::$invalidValueCache)) {
             if (strpos($type, '|') !== false) {
-                /** @noinspection OffsetOperationsInspection */
                 $output = self::getInvalidValueForType(explode('|', $type)[0]);
             } elseif (strpos($type, '[]') !== false) {
                 $output = self::getInvalidValueForType(self::TYPE_ARRAY);
