@@ -39,7 +39,7 @@ class CreateUserCommand extends Command
     private const PARAMETER_DESCRIPTION = 'description';
 
     /**
-     * @var array<int, array<string, int|string>>
+     * @var array<int, array<string, string>>
      */
     private static array $commandParameters = [
         [

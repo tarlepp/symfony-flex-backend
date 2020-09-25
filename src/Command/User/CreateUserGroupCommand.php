@@ -35,7 +35,7 @@ class CreateUserGroupCommand extends Command
     use SymfonyStyleTrait;
 
     /**
-     * @var array<int, array<string, int|string>>
+     * @var array<int, array<string, string>>
      */
     private static array $commandParameters = [
         [

@@ -42,6 +42,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
     private UserTypeIdentification $userService;
     private LoggerInterface $logger;
     private string $environment;
+
+    /**
+     * @var array<string, bool>
+     */
     private static array $cache = [];
 
     /**
