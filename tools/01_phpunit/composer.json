@@ -21,7 +21,7 @@
 	},
 	"extra": {
 		"symfony": {
-			"require": "5.1.5"
+			"require": "5.1.6"
 		}
 	}
 }
