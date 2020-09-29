@@ -291,7 +291,7 @@ class RepositoryHelper
     /**
      * Lambda function to create condition array for 'getExpression' method.
      *
-     * @param string|array $value
+     * @param string|array<int, string> $value
      *
      * @return array<int, string|array>
      */
