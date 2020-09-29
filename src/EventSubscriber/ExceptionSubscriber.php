@@ -24,6 +24,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Throwable;
 use function array_intersect;
+use function array_key_exists;
 use function class_implements;
 use function count;
 use function get_class;
@@ -47,6 +48,14 @@ class ExceptionSubscriber implements EventSubscriberInterface
      * @var array<string, bool>
      */
     private static array $cache = [];
+
+    /**
+     * @var array<int, string>
+     */
+    private static array $clientExceptions = [
+        HttpExceptionInterface::class,
+        ClientErrorInterface::class,
+    ];
 
     /**
      * ExceptionSubscriber constructor.
@@ -203,16 +212,10 @@ class ExceptionSubscriber implements EventSubscriberInterface
     {
         $cacheKey = spl_object_hash($exception);
 
-        if (!in_array($cacheKey, self::$cache, true)) {
-            self::$cache[$cacheKey] = count(
-                array_intersect(
-                    class_implements($exception),
-                    [
-                        HttpExceptionInterface::class,
-                        ClientErrorInterface::class,
-                    ]
-                )
-            ) !== 0;
+        if (!array_key_exists($cacheKey, self::$cache)) {
+            $intersect = array_intersect((array)class_implements($exception), self::$clientExceptions);
+
+            self::$cache[$cacheKey] = count($intersect) !== 0;
         }
 
         return self::$cache[$cacheKey];
