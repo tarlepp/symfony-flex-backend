@@ -24,7 +24,7 @@ trait IdsMethod
     /**
      * Generic 'idsMethod' method for REST resources.
      *
-     * @param string[]|null $allowedHttpMethods
+     * @param array<int, string>|null $allowedHttpMethods
      *
      * @throws Throwable
      */

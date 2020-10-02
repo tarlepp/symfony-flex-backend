@@ -26,14 +26,14 @@ class SecurityUser implements SecurityUserInterface
     private string $timezone;
 
     /**
-     * @var string[]
+     * @var array<int, string>
      */
     private array $roles;
 
     /**
      * SecurityUser constructor.
      *
-     * @param string[] $roles
+     * @param array<int, string> $roles
      */
     public function __construct(User $user, array $roles = [])
     {

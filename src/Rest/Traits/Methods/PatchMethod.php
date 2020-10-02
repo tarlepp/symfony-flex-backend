@@ -24,7 +24,7 @@ trait PatchMethod
     /**
      * Generic 'patchMethod' method for REST resources.
      *
-     * @param string[]|null $allowedHttpMethods
+     * @param array<int, string>|null $allowedHttpMethods
      *
      * @throws Throwable
      */

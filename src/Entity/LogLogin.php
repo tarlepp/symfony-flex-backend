@@ -390,7 +390,7 @@ class LogLogin implements EntityInterface
 
     private function getClientData(string $method, string $attribute): string
     {
-        /** @var string|array $value */
+        /** @var string|array<int, string> $value */
         $value = $this->deviceDetector->{$method}($attribute);
 
         return is_array($value) ? implode(', ', $value) : (string)$value;
