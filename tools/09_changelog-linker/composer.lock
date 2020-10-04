@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f003b35c09976c556a2d136a7f313b81",
+    "content-hash": "125aa56ebc2290f502628a2c183ade7a",
     "packages": [],
     "packages-dev": [
         {
@@ -2820,16 +2820,16 @@
         },
         {
             "name": "symplify/changelog-linker",
-            "version": "8.3.17",
+            "version": "8.3.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/changelog-linker.git",
-                "reference": "b5171f2e336252041d9196501d5ab61cc2a23c24"
+                "reference": "520ffc75d1cf25205e86417243f053b379d6eac6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/changelog-linker/zipball/b5171f2e336252041d9196501d5ab61cc2a23c24",
-                "reference": "b5171f2e336252041d9196501d5ab61cc2a23c24",
+                "url": "https://api.github.com/repos/symplify/changelog-linker/zipball/520ffc75d1cf25205e86417243f053b379d6eac6",
+                "reference": "520ffc75d1cf25205e86417243f053b379d6eac6",
                 "shasum": ""
             },
             "require": {
@@ -2839,10 +2839,10 @@
                 "symfony/console": "^4.4|^5.1",
                 "symfony/http-kernel": "^4.4|^5.1",
                 "symfony/process": "^4.4|^5.1",
-                "symplify/autowire-array-parameter": "^8.3.17",
-                "symplify/package-builder": "^8.3.17",
-                "symplify/set-config-resolver": "^8.3.17",
-                "symplify/smart-file-system": "^8.3.17"
+                "symplify/autowire-array-parameter": "^8.3.27",
+                "symplify/package-builder": "^8.3.27",
+                "symplify/set-config-resolver": "^8.3.27",
+                "symplify/smart-file-system": "^8.3.27"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -2876,7 +2876,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-09-22T20:33:01+00:00"
+            "time": "2020-10-03T12:10:58+00:00"
         },
         {
             "name": "symplify/package-builder",

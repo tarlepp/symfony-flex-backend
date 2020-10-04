@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "81bffb3d6fe9d7214b160fcaed43d407",
+    "content-hash": "631dda6a7af130ed2628ff0b229a1e77",
     "packages": [],
     "packages-dev": [
         {
@@ -4252,16 +4252,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "8.3.17",
+            "version": "8.3.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "db71af55aab4904fd9977aa8a9d011349d8ade95"
+                "reference": "8f4086d7c192f1c43c7f6d009f97423824f0f4b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/db71af55aab4904fd9977aa8a9d011349d8ade95",
-                "reference": "db71af55aab4904fd9977aa8a9d011349d8ade95",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/8f4086d7c192f1c43c7f6d009f97423824f0f4b4",
+                "reference": "8f4086d7c192f1c43c7f6d009f97423824f0f4b4",
                 "shasum": ""
             },
             "require": {
@@ -4282,16 +4282,17 @@
                 "symfony/finder": "^4.4|^5.1",
                 "symfony/http-kernel": "^4.4|^5.1",
                 "symfony/yaml": "^4.4|^5.1",
-                "symplify/autowire-array-parameter": "^8.3.17",
-                "symplify/coding-standard": "^8.3.17",
-                "symplify/console-color-diff": "^8.3.17",
-                "symplify/package-builder": "^8.3.17",
-                "symplify/set-config-resolver": "^8.3.17",
-                "symplify/smart-file-system": "^8.3.17"
+                "symplify/autowire-array-parameter": "^8.3.27",
+                "symplify/coding-standard": "^8.3.27",
+                "symplify/console-color-diff": "^8.3.27",
+                "symplify/package-builder": "^8.3.27",
+                "symplify/set-config-resolver": "^8.3.27",
+                "symplify/smart-file-system": "^8.3.27",
+                "symplify/symplify-kernel": "^8.3.27"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-coding-standard-tester": "^8.3.17"
+                "symplify/easy-coding-standard-tester": "^8.3.27"
             },
             "bin": [
                 "bin/ecs"
@@ -4327,7 +4328,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-09-22T20:33:01+00:00"
+            "time": "2020-10-03T12:10:58+00:00"
         },
         {
             "name": "symplify/package-builder",
