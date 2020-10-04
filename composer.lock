@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "121fd31ebd62c96f07c53f710c1a180b",
+    "content-hash": "e1aea8ed3a39ae590f9f9f1fd3997d61",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -1612,45 +1612,6 @@
             "time": "2019-10-24T07:13:31+00:00"
         },
         {
-            "name": "exsyst/swagger",
-            "version": "v0.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/GuilhemN/swagger.git",
-                "reference": "a02984db5edacdce2b4e09dae5ba8fe17a0e449e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/GuilhemN/swagger/zipball/a02984db5edacdce2b4e09dae5ba8fe17a0e449e",
-                "reference": "a02984db5edacdce2b4e09dae5ba8fe17a0e449e",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^6.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "EXSyst\\Component\\Swagger\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ener-Getick",
-                    "email": "egetick@gmail.com"
-                }
-            ],
-            "description": "A php library to manipulate Swagger specifications",
-            "time": "2018-07-27T06:40:00+00:00"
-        },
-        {
             "name": "gedmo/doctrine-extensions",
             "version": "v2.4.42",
             "source": {
@@ -2441,52 +2402,52 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "v3.7.0",
+            "version": "v4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "d9f1611f729782fe12a849748813eac27e45eef9"
+                "reference": "416d1f2d2a58227be7d731b956b5d6a959c0c608"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/d9f1611f729782fe12a849748813eac27e45eef9",
-                "reference": "d9f1611f729782fe12a849748813eac27e45eef9",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/416d1f2d2a58227be7d731b956b5d6a959c0c608",
+                "reference": "416d1f2d2a58227be7d731b956b5d6a959c0c608",
                 "shasum": ""
             },
             "require": {
-                "exsyst/swagger": "^0.4.1",
+                "ext-json": "*",
                 "php": "^7.1",
                 "phpdocumentor/reflection-docblock": "^3.1|^4.0|^5.0",
-                "symfony/framework-bundle": "^3.4|^4.0|^5.0",
-                "symfony/options-resolver": "^3.4.4|^4.0|^5.0",
-                "symfony/property-info": "^3.4|^4.0|^5.0",
-                "zircote/swagger-php": "^2.0.9"
+                "symfony/framework-bundle": "^4.0|^5.0",
+                "symfony/options-resolver": "^4.0|^5.0",
+                "symfony/property-info": "^4.0|^5.0",
+                "zircote/swagger-php": "^3.0"
             },
             "conflict": {
                 "symfony/framework-bundle": "4.2.7"
             },
             "require-dev": {
-                "api-platform/core": "^2.1.2",
+                "api-platform/core": "^2.4",
                 "doctrine/annotations": "^1.2",
                 "doctrine/common": "^2.4",
                 "friendsofsymfony/rest-bundle": "^2.0|^3.0@beta",
                 "jms/serializer": "^1.14|^3.0",
                 "jms/serializer-bundle": "^2.3|^3.0",
-                "sensio/framework-extra-bundle": "^3.0.13|^4.0|^5.0",
-                "symfony/asset": "^3.4|^4.0|^5.0",
-                "symfony/browser-kit": "^3.4|^4.0|^5.0",
-                "symfony/cache": "^3.4|^4.0|^5.0",
-                "symfony/config": "^3.4|^4.0|^5.0",
-                "symfony/console": "^3.4|^4.0|^5.0",
-                "symfony/dom-crawler": "^3.4|^4.0|^5.0",
-                "symfony/form": "^3.4|^4.0|^5.0",
-                "symfony/phpunit-bridge": "^3.4.24|^4.0|^5.0",
-                "symfony/property-access": "^3.4|^4.0|^5.0",
-                "symfony/routing": "^3.4.42|^4.0|^5.0",
-                "symfony/stopwatch": "^3.4|^4.0|^5.0",
-                "symfony/templating": "^3.4|^4.0|^5.0",
-                "symfony/twig-bundle": "^3.4|^4.0|^5.0",
-                "symfony/validator": "^3.4|^4.0|^5.0",
+                "sensio/framework-extra-bundle": "^4.0|^5.0",
+                "symfony/asset": "^4.0|^5.0",
+                "symfony/browser-kit": "^4.0|^5.0",
+                "symfony/cache": "^4.0|^5.0",
+                "symfony/config": "^4.0|^5.0",
+                "symfony/console": "^4.0|^5.0",
+                "symfony/dom-crawler": "^4.0|^5.0",
+                "symfony/form": "^4.0|^5.0",
+                "symfony/phpunit-bridge": "^4.0|^5.0",
+                "symfony/property-access": "^4.0|^5.0",
+                "symfony/routing": "^4.0|^5.0",
+                "symfony/stopwatch": "^4.0|^5.0",
+                "symfony/templating": "^4.0|^5.0",
+                "symfony/twig-bundle": "^4.0|^5.0",
+                "symfony/validator": "^4.0|^5.0",
                 "willdurand/hateoas-bundle": "^1.0|^2.0"
             },
             "suggest": {
@@ -2496,7 +2457,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-3.x": "3.7.x-dev"
+                    "dev-master": "4.0.x-dev"
                 }
             },
             "autoload": {
@@ -2528,7 +2489,7 @@
                 "documentation",
                 "rest"
             ],
-            "time": "2020-08-12T09:06:17+00:00"
+            "time": "2020-09-20T18:38:43+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
@@ -8161,35 +8122,36 @@
         },
         {
             "name": "zircote/swagger-php",
-            "version": "2.0.16",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zircote/swagger-php.git",
-                "reference": "a25c1bfe508e5f27d5f618648449593a79cbe406"
+                "reference": "9d172471e56433b5c7061006b9a766f262a3edfd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/a25c1bfe508e5f27d5f618648449593a79cbe406",
-                "reference": "a25c1bfe508e5f27d5f618648449593a79cbe406",
+                "url": "https://api.github.com/repos/zircote/swagger-php/zipball/9d172471e56433b5c7061006b9a766f262a3edfd",
+                "reference": "9d172471e56433b5c7061006b9a766f262a3edfd",
                 "shasum": ""
             },
             "require": {
                 "doctrine/annotations": "*",
-                "php": ">=5.6",
-                "symfony/finder": ">=2.2"
+                "ext-json": "*",
+                "php": ">=7.2",
+                "symfony/finder": ">=2.2",
+                "symfony/yaml": ">=3.3"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=4.8.35 <=5.6",
-                "squizlabs/php_codesniffer": ">=2.7",
-                "zendframework/zend-form": "<2.8"
+                "friendsofphp/php-cs-fixer": "^2.16",
+                "phpunit/phpunit": ">=8"
             },
             "bin": [
-                "bin/swagger"
+                "bin/openapi"
             ],
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Swagger\\": "src"
+                    "OpenApi\\": "src"
                 },
                 "files": [
                     "src/functions.php"
@@ -8202,16 +8164,20 @@
             "authors": [
                 {
                     "name": "Robert Allen",
-                    "email": "zircote@gmail.com",
-                    "homepage": "http://www.zircote.com"
+                    "email": "zircote@gmail.com"
                 },
                 {
                     "name": "Bob Fanger",
                     "email": "bfanger@gmail.com",
-                    "homepage": "http://bfanger.nl"
+                    "homepage": "https://bfanger.nl"
+                },
+                {
+                    "name": "Martin Rademacher",
+                    "email": "mano@radebatz.net",
+                    "homepage": "https://radebatz.net"
                 }
             ],
-            "description": "Swagger-PHP - Generate interactive documentation for your RESTful API using phpdoc annotations",
+            "description": "swagger-php - Generate interactive documentation for your RESTful API using phpdoc annotations",
             "homepage": "https://github.com/zircote/swagger-php/",
             "keywords": [
                 "api",
@@ -8219,7 +8185,7 @@
                 "rest",
                 "service discovery"
             ],
-            "time": "2020-05-10T13:42:24+00:00"
+            "time": "2020-09-03T20:18:43+00:00"
         }
     ],
     "packages-dev": [
