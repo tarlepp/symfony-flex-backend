@@ -38,6 +38,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
     private const INNER_JOIN = 'innerJoin';
     private const LEFT_JOIN = 'leftJoin';
 
+    /**
+     * @var array<int, string>
+     */
     protected static array $searchColumns = [];
     protected static string $entityName;
     protected static EntityManager $entityManager;
@@ -204,12 +207,12 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     private function addJoinToQuery(string $type, array $parameters): void
     {
-        $comparision = implode('|', $parameters);
+        $comparison = implode('|', $parameters);
 
-        if (!in_array($comparision, self::$processedJoins[$type], true)) {
+        if (!in_array($comparison, self::$processedJoins[$type], true)) {
             self::$joins[$type][] = $parameters;
 
-            self::$processedJoins[$type][] = $comparision;
+            self::$processedJoins[$type][] = $comparison;
         }
     }
 }
