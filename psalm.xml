@@ -16,16 +16,13 @@
     </projectFiles>
 
     <plugins>
-        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin">
-            <containerXml>var/cache/test/App_KernelTestDebugContainer.xml</containerXml>
-        </pluginClass>
+        <pluginClass class="Psalm\SymfonyPsalmPlugin\Plugin" />
     </plugins>
 
     <issueHandlers>
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <referencedProperty name="App\Entity\UserGroup::$role" />
-                <referencedProperty name="Symfony\Component\Validator\ConstraintValidator::$context" />
             </errorLevel>
         </PropertyNotSetInConstructor>
     </issueHandlers>
