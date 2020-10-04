@@ -51,6 +51,8 @@ parameters:
         PhpCsFixer\Fixer\FunctionNotation\SingleLineThrowFixer: ~
         Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer: ~
         Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer: ~
+        Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer: ~
+        Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer: ~
 
         # Try to remove these later
         PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer: ~
