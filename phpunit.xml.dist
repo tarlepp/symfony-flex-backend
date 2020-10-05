@@ -3,7 +3,7 @@
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/8.4/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
     backupGlobals="false"
     colors="true"
     testdox="true"
@@ -13,6 +13,23 @@
     stopOnFailure="true"
     bootstrap="tests/bootstrap.php"
 >
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+        <exclude>
+            <directory>./src/Command</directory>
+            <directory>./src/DataFixtures</directory>
+            <directory>./src/Migrations</directory>
+            <file>./src/Kernel.php</file>
+        </exclude>
+        <report>
+            <clover outputFile="build/logs/clover.xml"/>
+            <html outputDirectory="build/report" lowUpperBound="55" highLowerBound="90" />
+            <text outputFile="php://stdout" showOnlySummary="true" />
+        </report>
+    </coverage>
+
     <php>
         <ini name="error_reporting" value="-1" />
         <ini name="display_errors" value="On" />
@@ -24,7 +41,6 @@
         <env name="APP_ENV" value="test" force="true" />
         <env name="APP_DEBUG" value="1" />
         <env name="APP_SECRET" value="93b60d4136baea83cf3821ee6a0a2adb" />
-
         <!--
             To make sure that application has no "direct" deprecations we use `max[direct]=0` as a default one
             indirect deprecations are just shown on test output to help to track those.
@@ -55,23 +71,7 @@
             <directory>./tests/Functional/</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-            <exclude>
-                <directory>./src/Command</directory>
-                <directory>./src/DataFixtures</directory>
-                <directory>./src/Migrations</directory>
-                <file>./src/Kernel.php</file>
-            </exclude>
-        </whitelist>
-    </filter>
-
     <logging>
-        <log type="coverage-html" target="build/report" lowUpperBound="55" highLowerBound="90" />
-        <log type="coverage-clover" target="build/logs/clover.xml" />
-        <log type="coverage-text" target="php://stdout" showOnlySummary="true" />
-        <log type="junit" target="build/logs/junit.xml" />
+        <junit outputFile="build/logs/junit.xml" />
     </logging>
 </phpunit>
