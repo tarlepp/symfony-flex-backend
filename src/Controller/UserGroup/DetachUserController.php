@@ -14,7 +14,7 @@ use App\Resource\UserGroupResource;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -63,37 +63,43 @@ class DetachUserController
      *
      * @Security("is_granted('ROLE_ROOT')")
      *
-     * @SWG\Tag(name="UserGroup Management")
-     * @SWG\Parameter(
-     *      type="string",
+     * @OA\Tag(name="UserGroup Management")
+     * @OA\Parameter(
      *      name="Authorization",
      *      in="header",
      *      required=true,
      *      description="Authorization header",
-     *      default="Bearer _your_jwt_here_",
+     *      @OA\Schema(
+     *          type="string",
+     *          default="Bearer _your_jwt_here_",
+     *      )
      *  )
-     * @SWG\Parameter(
-     *      type="string",
+     * @OA\Parameter(
      *      name="userGroupId",
      *      in="path",
      *      required=true,
      *      description="User Group GUID",
-     *      default="User Group GUID",
+     *      @OA\Schema(
+     *          type="string",
+     *          default="User Group GUID",
+     *      )
      *  )
-     * @SWG\Parameter(
-     *      type="string",
+     * @OA\Parameter(
      *      name="userId",
      *      in="path",
      *      required=true,
      *      description="User GUID",
-     *      default="User GUID",
+     *      @OA\Schema(
+     *          type="string",
+     *          default="User GUID",
+     *      )
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=200,
      *      description="Users",
-     * @SWG\Schema(
+     * @OA\Schema(
      *          type="array",
-     * @SWG\Items(
+     * @OA\Items(
      *              ref=@Model(
      *                  type=App\Entity\User::class,
      *                  groups={"User"},
@@ -101,15 +107,17 @@ class DetachUserController
      *          ),
      *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=401,
      *      description="Invalid token",
-     *      examples={
-     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
-     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
-     *      },
+     *      @OA\Schema(
+     *          example={
+     *              "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *              "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *          },
+     *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=403,
      *      description="Access denied",
      *  )

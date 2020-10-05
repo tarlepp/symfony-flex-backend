@@ -14,7 +14,7 @@ use App\Entity\Traits\LogRequestProcessRequestTrait;
 use App\Entity\Traits\Uuid;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -63,7 +63,7 @@ class LogRequest implements EntityInterface
      *  )
      * @ORM\Id()
      *
-     * @SWG\Property(type="string", format="uuid")
+     * @OA\Property(type="string", format="uuid")
      */
     private UuidInterface $id;
 

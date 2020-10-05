@@ -10,7 +10,7 @@ namespace App\Controller\Auth;
 
 use App\Utils\JSON;
 use JsonException;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use function sprintf;
@@ -31,45 +31,44 @@ class GetTokenController
      *      methods={"POST"},
      *  );
      *
-     * @SWG\Parameter(
-     *      name="body",
-     *      in="body",
+     * @OA\RequestBody(
+     *      request="body",
      *      description="Credentials object",
      *      required=true,
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          example={"username": "username", "password": "password"}
      *      )
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=200,
      *      description="JSON Web Token for user",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="object",
      *          example={"token": "_json_web_token_"},
-     * @SWG\Property(property="token", type="string", description="Json Web Token"),
+     *          @OA\Property(property="token", type="string", description="Json Web Token"),
      *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=400,
      *      description="Bad Request",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="object",
      *          example={"code": 400, "message": "Bad Request"},
-     * @SWG\Property(property="code", type="integer", description="Error code"),
-     * @SWG\Property(property="message", type="string", description="Error description"),
+     *          @OA\Property(property="code", type="integer", description="Error code"),
+     *          @OA\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=401,
      *      description="Unauthorized",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="object",
      *          example={"code": 401, "message": "Bad credentials"},
-     * @SWG\Property(property="code", type="integer", description="Error code"),
-     * @SWG\Property(property="message", type="string", description="Error description"),
+     *          @OA\Property(property="code", type="integer", description="Error code"),
+     *          @OA\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
-     * @SWG\Tag(name="Authentication")
+     * @OA\Tag(name="Authentication")
      *
      * @throws HttpException
      * @throws JsonException

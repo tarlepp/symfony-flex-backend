@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Service\Version;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -39,13 +39,13 @@ class VersionController
      *     methods={"GET"}
      *  )
      *
-     * @SWG\Response(
+     * @OA\Response(
      *      response=200,
      *      description="success",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="object",
      *          example={"version": "1.2.3"},
-     * @SWG\Property(property="version", type="string", description="Version number"),
+     *          @OA\Property(property="version", type="string", description="Version number"),
      *      ),
      *  )
      */

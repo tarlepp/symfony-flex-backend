@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Throwable;
@@ -61,7 +61,7 @@ class UserGroup implements EntityInterface, Stringable
      *  )
      * @ORM\Id()
      *
-     * @SWG\Property(type="string", format="uuid")
+     * @OA\Property(type="string", format="uuid")
      */
     private UuidInterface $id;
 

@@ -10,7 +10,7 @@ namespace App\Controller;
 
 use App\Rest\ResponseHandler;
 use App\Utils\HealthzService;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -47,13 +47,13 @@ class HealthzController
      *     methods={"GET"}
      *  )
      *
-     * @SWG\Response(
+     * @OA\Response(
      *      response=200,
      *      description="success",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="object",
      *          example={"timestamp": "2018-01-01T13:08:05+00:00"},
-     * @SWG\Property(property="timestamp", type="string"),
+     *          @OA\Property(property="timestamp", type="string"),
      *      ),
      *  )
      *

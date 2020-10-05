@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Controller\Localization;
 
 use App\Service\Localization;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Throwable;
@@ -22,7 +22,7 @@ use Throwable;
  *     methods={"GET"}
  *  )
  *
- * @SWG\Tag(name="Localization")
+ * @OA\Tag(name="Localization")
  *
  * @package App\Controller\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -44,32 +44,32 @@ class TimeZoneController
      * choose what timezone your frontend application can use within its date,
      * time, datetime, etc. formatting.
      *
-     * @SWG\Response(
+     * @OA\Response(
      *      response=200,
      *      description="List of timezone objects.",
-     * @SWG\Schema(
+     * @OA\Schema(
      *          type="array",
-     * @SWG\Items(
+     * @OA\Items(
      *              type="object",
-     * @SWG\Property(
+     * @OA\Property(
      *                  property="timezone",
      *                  type="string",
      *                  example="Europe",
      *                  description="Africa,America,Antarctica,Arctic,Asia,Atlantic,Australia,Europe,Indian,Pacific,UTC."
      *              ),
-     * @SWG\Property(
+     * @OA\Property(
      *                  property="identier",
      *                  type="string",
      *                  example="Europe/Helsinki",
      *                  description="Timezone identifier that you can use with other librariers."
      *              ),
-     * @SWG\Property(
+     * @OA\Property(
      *                  property="offset",
      *                  type="string",
      *                  example="GMT+2:00",
      *                  description="GMT offset of identifier."
      *              ),
-     * @SWG\Property(
+     * @OA\Property(
      *                  property="value",
      *                  type="string",
      *                  example="Europe/Helsinki",
