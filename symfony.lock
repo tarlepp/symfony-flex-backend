@@ -116,9 +116,6 @@
             "ref": "70062abc2cd58794d2a90274502f81b55cd9951b"
         }
     },
-    "exsyst/swagger": {
-        "version": "v0.4.1"
-    },
     "gedmo/doctrine-extensions": {
         "version": "v2.4.39"
     },
