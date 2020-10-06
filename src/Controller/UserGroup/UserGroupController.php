@@ -14,8 +14,8 @@ use App\DTO\UserGroup\UserGroupUpdate;
 use App\Resource\UserGroupResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use OpenApi\Annotations as OA;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
