@@ -12,9 +12,9 @@ use App\Entity\User;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Methods;
+use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -24,7 +24,7 @@ use Throwable;
 /**
  * Class DeleteUserController
  *
- * @SWG\Tag(name="User Management")
+ * @OA\Tag(name="User Management")
  *
  * @package App\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>

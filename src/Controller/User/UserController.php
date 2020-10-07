@@ -14,8 +14,8 @@ use App\DTO\User\UserUpdate;
 use App\Resource\UserResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions;
+use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Swagger\Annotations as SWG;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
- * @SWG\Tag(name="User Management")
+ * @OA\Tag(name="User Management")
  *
  * @package App\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>

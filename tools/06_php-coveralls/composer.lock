@@ -551,12 +551,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "e859317fce42b1ec2d42b204285beaba541e8dbf"
+                "reference": "107aa9daab3521a0d28f868ff8dc75db546f7ee3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/e859317fce42b1ec2d42b204285beaba541e8dbf",
-                "reference": "e859317fce42b1ec2d42b204285beaba541e8dbf",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/107aa9daab3521a0d28f868ff8dc75db546f7ee3",
+                "reference": "107aa9daab3521a0d28f868ff8dc75db546f7ee3",
                 "shasum": ""
             },
             "conflict": {
@@ -616,7 +616,7 @@
                 "ezsystems/ezplatform-kernel": ">=1,<1.0.2.1",
                 "ezsystems/ezplatform-user": ">=1,<1.0.1",
                 "ezsystems/ezpublish-kernel": ">=5.3,<5.3.12.1|>=5.4,<5.4.14.2|>=6,<6.7.9.1|>=6.8,<6.13.6.3|>=7,<7.2.4.1|>=7.3,<7.3.2.1|>=7.5,<7.5.7.1",
-                "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.6|>=5.4,<5.4.14.1|>=2011,<2017.12.7.2|>=2018.6,<2018.6.1.4|>=2018.9,<2018.9.1.3|>=2019.3,<2019.3.4.2",
+                "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.6|>=5.4,<5.4.14.2|>=2011,<2017.12.7.3|>=2018.6,<2018.6.1.4|>=2018.9,<2018.9.1.3|>=2019.3,<2019.3.5.1",
                 "ezsystems/platform-ui-assets-bundle": ">=4.2,<4.2.3",
                 "ezsystems/repository-forms": ">=2.3,<2.3.2.1",
                 "ezyang/htmlpurifier": "<4.1.1",
@@ -850,7 +850,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-02T17:02:13+00:00"
+            "time": "2020-10-05T16:02:42+00:00"
         },
         {
             "name": "symfony/config",

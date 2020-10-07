@@ -37,6 +37,8 @@ services:
             - throw
             - try
     PhpCsFixer\Fixer\NamespaceNotation\SingleBlankLineBeforeNamespaceFixer: ~
+    SlevomatCodingStandard\Sniffs\Whitespaces\DuplicateSpacesSniff:
+        ignoreSpacesInAnnotation: true
 
 parameters:
     skip:

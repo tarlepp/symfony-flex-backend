@@ -10,9 +10,9 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Security\RolesService;
+use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -52,46 +52,48 @@ class UserRolesController
      *
      * @Security("is_granted('IS_USER_HIMSELF', requestUser) or is_granted('ROLE_ROOT')")
      *
-     * @SWG\Tag(name="User Management")
-     * @SWG\Parameter(
-     *      type="string",
+     * @OA\Tag(name="User Management")
+     * @OA\Parameter(
      *      name="Authorization",
      *      in="header",
      *      required=true,
      *      description="Authorization header",
-     *      default="Bearer _your_jwt_here_",
+     *      @OA\Schema(
+     *          type="string",
+     *          default="Bearer _your_jwt_here_",
+     *      )
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=200,
      *      description="Specified user roles",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="array",
-     * @SWG\Items(type="string"),
+     *          @OA\Items(type="string"),
      *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=401,
      *      description="Unauthorized",
-     *      examples={
-     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
-     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
-     *      },
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="object",
-     * @SWG\Property(property="code", type="integer", description="Error code"),
-     * @SWG\Property(property="message", type="string", description="Error description"),
+     *          example={
+     *              "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *              "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *          },
+     *          @OA\Property(property="code", type="integer", description="Error code"),
+     *          @OA\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=403,
      *      description="Access denied",
-     *      examples={
-     *          "Access denied": "{code: 403, message: 'Access denied'}",
-     *      },
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="object",
-     * @SWG\Property(property="code", type="integer", description="Error code"),
-     * @SWG\Property(property="message", type="string", description="Error description"),
+     *          example={
+     *              "Access denied": "{code: 403, message: 'Access denied'}",
+     *          },
+     *          @OA\Property(property="code", type="integer", description="Error code"),
+     *          @OA\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
      */

@@ -13,9 +13,9 @@ use App\Entity\UserGroup;
 use App\Resource\UserResource;
 use App\Rest\ResponseHandler;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -59,34 +59,38 @@ class UsersController
      *
      * @Security("is_granted('ROLE_ADMIN')")
      *
-     * @SWG\Tag(name="UserGroup Management")
-     * @SWG\Parameter(
-     *      type="string",
+     * @OA\Tag(name="UserGroup Management")
+     * @OA\Parameter(
      *      name="Authorization",
      *      in="header",
      *      required=true,
      *      description="Authorization header",
-     *      default="Bearer _your_jwt_here_",
+     *      @OA\Schema(
+     *          type="string",
+     *          default="Bearer _your_jwt_here_",
+     *      )
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=200,
      *      description="User group users",
-     * @SWG\Schema(
+     * @OA\Schema(
      *          ref=@Model(
      *              type=User::class,
      *              groups={"User", "User.userGroups", "User.roles", "UserGroup", "UserGroup.role"},
      *          ),
      *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=401,
      *      description="Invalid token",
-     *      examples={
-     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
-     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
-     *      },
+     *      @OA\Schema(
+     *          example={
+     *              "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *              "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *          },
+     *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=404,
      *      description="User Group not found",
      *  )

@@ -10,8 +10,8 @@ namespace App\Controller\Profile;
 
 use App\Entity\User;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Swagger\Annotations as SWG;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -44,20 +44,22 @@ class GroupsController
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
-     * @SWG\Parameter(
-     *      type="string",
+     * @OA\Parameter(
      *      name="Authorization",
      *      in="header",
      *      required=true,
      *      description="Authorization header",
-     *      default="Bearer _your_jwt_here_",
+     *      @OA\Schema(
+     *          type="string",
+     *          default="Bearer _your_jwt_here_",
+     *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=200,
      *      description="User groups",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="array",
-     * @SWG\Items(
+     *          @OA\Items(
      *              ref=@Model(
      *                  type=App\Entity\UserGroup::class,
      *                  groups={"set.UserProfileGroups"},
@@ -65,32 +67,32 @@ class GroupsController
      *          ),
      *      ),
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=401,
      *      description="Invalid token",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="object",
-     * @SWG\Property(property="code", type="integer", description="Error code"),
-     * @SWG\Property(property="message", type="string", description="Error description"),
+     *          example={
+     *              "Token not found": "{code: 401, message: 'JWT Token not found'}",
+     *              "Expired token": "{code: 401, message: 'Expired JWT Token'}",
+     *          },
+     *          @OA\Property(property="code", type="integer", description="Error code"),
+     *          @OA\Property(property="message", type="string", description="Error description"),
      *      ),
-     *      examples={
-     *          "Token not found": "{code: 401, message: 'JWT Token not found'}",
-     *          "Expired token": "{code: 401, message: 'Expired JWT Token'}",
-     *      },
      *  )
-     * @SWG\Response(
+     * @OA\Response(
      *      response=403,
      *      description="Access denied",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="403",
-     * @SWG\Property(property="code", type="integer", description="Error code"),
-     * @SWG\Property(property="message", type="string", description="Error description"),
+     *          example={
+     *              "Access denied": "{code: 403, message: 'Access denied'}",
+     *          },
+     *          @OA\Property(property="code", type="integer", description="Error code"),
+     *          @OA\Property(property="message", type="string", description="Error description"),
      *      ),
-     *      examples={
-     *          "Access denied": "{code: 403, message: 'Access denied'}",
-     *      },
      *  )
-     * @SWG\Tag(name="Profile")
+     * @OA\Tag(name="Profile")
      */
     public function __invoke(User $loggedInUser): JsonResponse
     {

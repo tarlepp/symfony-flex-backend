@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Controller\Localization;
 
 use App\Service\Localization;
-use Swagger\Annotations as SWG;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *     methods={"GET"}
  *  )
  *
- * @SWG\Tag(name="Localization")
+ * @OA\Tag(name="Localization")
  *
  * @package App\Controller\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -43,13 +43,13 @@ class LocaleController
      * locale your frontend application can use within its number, time, date,
      * datetime, etc. formatting.
      *
-     * @SWG\Response(
+     * @OA\Response(
      *      response=200,
      *      description="List of locale strings.",
-     * @SWG\Schema(
+     *      @OA\Schema(
      *          type="array",
      *          example={"en","fi"},
-     * @SWG\Items(type="string"),
+     *          @OA\Items(type="string"),
      *      ),
      *  )
      */

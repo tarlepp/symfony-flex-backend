@@ -14,8 +14,8 @@ use App\DTO\UserGroup\UserGroupUpdate;
 use App\Resource\UserGroupResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions;
+use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Swagger\Annotations as SWG;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -27,7 +27,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *
- * @SWG\Tag(name="UserGroup Management")
+ * @OA\Tag(name="UserGroup Management")
  *
  * @package App\Controller\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
