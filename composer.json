@@ -114,7 +114,10 @@
 			"Liuggio\\Fastest\\": [
 				"tools/01_phpunit/vendor/liuggio/fastest/src",
 				"tools/01_phpunit/vendor/liuggio/fastest/adapters"
-			]
+			],
+			"PhpCsFixer\\": "tools/04_ecs/vendor/friendsofphp/php-cs-fixer/src",
+			"SlevomatCodingStandard\\": "tools/04_ecs/vendor/slevomat/coding-standard/SlevomatCodingStandard",
+			"Symplify\\CodingStandard\\": "tools/04_ecs/vendor/symplify/coding-standard/src"
 		}
 	},
 	"prefer-stable": true,
