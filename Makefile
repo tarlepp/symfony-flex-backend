@@ -190,7 +190,8 @@ endif
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning EasyCodingStandard\033[39m"
-	@php -d error_reporting=0 ./vendor/bin/ecs --clear-cache check src tests
+	@php ./vendor/bin/ecs --version
+	@php ./vendor/bin/ecs --clear-cache check src tests
 else
 	$(WARNING_DOCKER)
 endif
@@ -198,7 +199,8 @@ endif
 ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning EasyCodingStandard\033[39m"
-	@php -d error_reporting=0 ./vendor/bin/ecs --clear-cache --fix check src tests
+	@php ./vendor/bin/ecs --version
+	@php ./vendor/bin/ecs --clear-cache --fix check src tests
 else
 	$(WARNING_DOCKER)
 endif
