@@ -107,7 +107,7 @@
 	"autoload-dev": {
 		"psr-4": {
 			"App\\Tests\\": "tests/",
-			"PHPUnit\\": "tools/01_phpunit/vendor/phpunit/phpunit/src/",
+			"PHPUnit\\": "tools/01_phpunit/vendor/phpunit/phpunit/src",
 			"SebastianBergmann\\FinderFacade\\": "tools/01_phpunit/vendor/sebastian/finder-facade/src",
 			"Symfony\\Bridge\\PhpUnit\\": "tools/01_phpunit/vendor/symfony/phpunit-bridge",
 			"TheSeer\\fDOM\\": "tools/01_phpunit/vendor/theseer/fdomdocument/src",
