@@ -80,7 +80,7 @@ interface BaseRepositoryInterface
      * Advanced version of find method, with this you can process query as you
      * like, eg. add joins and callbacks to modify / optimize current query.
      *
-     * @param string|int $hydrationMode
+     * @param string|int|null $hydrationMode
      *
      * @return array<int|string, mixed>|EntityInterface
      *

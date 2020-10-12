@@ -2,18 +2,14 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/phpunit/phpunit/src" isTestSource="true" packagePrefix="PHPUnit\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/symfony/phpunit-bridge" isTestSource="true" packagePrefix="Symfony\Bridge\PhpUnit\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/04_ecs/vendor/friendsofphp/php-cs-fixer/src" isTestSource="true" packagePrefix="PhpCsFixer\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/04_ecs/vendor/symplify/coding-standard/src" isTestSource="true" packagePrefix="Symplify\CodingStandard\" />
-      <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/04_ecs/vendor/slevomat/coding-standard/SlevomatCodingStandard" isTestSource="true" packagePrefix="SlevomatCodingStandard\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest/src" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/theseer/fdomdocument/src" isTestSource="true" packagePrefix="TheSeer\fDOM\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest/src" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest/adapters" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/phpunit/phpunit/src" isTestSource="true" packagePrefix="PHPUnit\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/sebastian/finder-facade/src" isTestSource="true" packagePrefix="SebastianBergmann\FinderFacade\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/symfony/phpunit-bridge" isTestSource="true" packagePrefix="Symfony\Bridge\PhpUnit\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/theseer/fdomdocument/src" isTestSource="true" packagePrefix="TheSeer\fDOM\" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine" />
@@ -47,7 +43,6 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/08_phpmetrics" />
       <excludeFolder url="file://$MODULE_DIR$/tools/09_changelog-linker" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/antishov/doctrine-extensions-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/bamarni/composer-bin-plugin" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/behat/transliterator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/brick/math" />
@@ -102,6 +97,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/uuid-doctrine" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sensio/framework-extra-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/sensiolabs/security-checker" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/stof/doctrine-extensions-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/asset" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/browser-kit" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/cache" />

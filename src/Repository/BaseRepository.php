@@ -12,7 +12,7 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\Traits\RepositoryMethodsTrait;
 use App\Repository\Traits\RepositoryWrappersTrait;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use function array_merge;

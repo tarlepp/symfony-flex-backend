@@ -10,7 +10,7 @@ namespace App\Repository;
 
 use App\Entity\User as Entity;
 use App\Rest\UuidHelper;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\NonUniqueResultException;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use function array_key_exists;
