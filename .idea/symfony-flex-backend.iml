@@ -46,6 +46,7 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/07_phpinsights" />
       <excludeFolder url="file://$MODULE_DIR$/tools/08_phpmetrics" />
       <excludeFolder url="file://$MODULE_DIR$/tools/09_changelog-linker" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/10_config-transformer" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/antishov/doctrine-extensions-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/bamarni/composer-bin-plugin" />
