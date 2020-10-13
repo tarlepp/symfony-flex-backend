@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Security/ApiKeyUserTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Security;
@@ -21,14 +21,14 @@ use Throwable;
  * Class ApiKeyUserTest
  *
  * @package App\Tests\Unit\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyUserTest extends KernelTestCase
 {
     /**
      * @dataProvider dataProviderTestThatGetRolesReturnsExpected
      *
-     * @testdox Test that `$apiKey` has expected roles `$expectedRoles`.
+     * @testdox Test that `$apiKey` has expected roles `$expectedRoles`
      */
     public function testThatGetRolesReturnsExpected(ApiKey $apiKey, StringableArrayObject $expectedRoles): void
     {
