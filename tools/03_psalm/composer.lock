@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53f36c1652ab55164f5c69b2c8097cd9",
+    "content-hash": "c36a97660d41b45fd1e9424975f6368d",
     "packages": [],
     "packages-dev": [
         {
@@ -776,23 +776,23 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v1.4.4",
+            "version": "v1.4.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "02408457444c4ab0d1228cc7c68d18eced2a89e0"
+                "reference": "1978edad3f1ebc5cd3d0c49cad7b1bc9b39a6ac0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/02408457444c4ab0d1228cc7c68d18eced2a89e0",
-                "reference": "02408457444c4ab0d1228cc7c68d18eced2a89e0",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/1978edad3f1ebc5cd3d0c49cad7b1bc9b39a6ac0",
+                "reference": "1978edad3f1ebc5cd3d0c49cad7b1bc9b39a6ac0",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": "^7.1",
                 "symfony/framework-bundle": "^3.0 || ^4.0 || ^5.0",
-                "vimeo/psalm": "^3.13"
+                "vimeo/psalm": "^3.16 <3.17"
             },
             "require-dev": {
                 "doctrine/orm": "^2.7",
@@ -830,7 +830,7 @@
                 }
             ],
             "description": "Psalm Plugin for Symfony",
-            "time": "2020-09-14T08:17:23+00:00"
+            "time": "2020-10-13T13:52:11+00:00"
         },
         {
             "name": "psr/cache",
@@ -1732,7 +1732,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-18T14:27:32+00:00"
+            "time": "2020-10-07T15:23:00+00:00"
         },
         {
             "name": "symfony/dependency-injection",
