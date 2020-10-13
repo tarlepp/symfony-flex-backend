@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Utils/Tests/PHPUnitUtilTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Utils\Tests;
@@ -23,10 +23,13 @@ use Throwable;
  * Class PHPUnitUtilTest
  *
  * @package App\Tests\Unit\Utils\Tests
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class PHPUnitUtilTest extends KernelTestCase
 {
+    /**
+     * @testdox Test that `getType` method throws exception with not know type
+     */
     public function testThatGetTypeThrowsAnExceptionWithNotKnowType(): void
     {
         $this->expectException(LogicException::class);
@@ -38,7 +41,7 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetTypeReturnExpected
      *
-     * @testdox Test that `getType` method returns `$expected` with `$input` input.
+     * @testdox Test that `getType` method returns `$expected` when using `$input` as input
      */
     public function testThatGetTypeReturnExpected(string $expected, string $input): void
     {
@@ -47,6 +50,8 @@ class PHPUnitUtilTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getValidValueForType` method throws exception with not know type
      */
     public function testThatGetValidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
@@ -63,7 +68,7 @@ class PHPUnitUtilTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `getValidValueForType` method returns `$expected` with `$input` and strict mode `$strict`.
+     * @testdox Test that `getValidValueForType` method returns `$expected` with `$input` and strict mode `$strict`
      */
     public function testThatGetValidValueReturnsExpectedValue($expected, string $input, bool $strict): void
     {
@@ -76,6 +81,8 @@ class PHPUnitUtilTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getValidValueForType` works as expected with custom type
      */
     public function testThatGetValidValueForTypeWorksWithCustomType(): void
     {
@@ -84,6 +91,8 @@ class PHPUnitUtilTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getInvalidValueForType` method throws exception with not know type
      */
     public function testThatGetInvalidValueForTypeThrowsAnExceptionWithNotKnowType(): void
     {
@@ -100,7 +109,7 @@ class PHPUnitUtilTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `getInvalidValueForType` method returns `$expected` with `$input` input.
+     * @testdox Test that `getInvalidValueForType` method returns `$expected` when using `$input` as input
      */
     public function testThatGetInvalidValueForTypeReturnsExpectedValue($expected, string $input): void
     {
