@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Rest/RequestHandlerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Rest;
@@ -21,10 +21,13 @@ use function json_encode;
  * Class RequestTest
  *
  * @package App\Tests\Unit\Rest;
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RequestHandlerTest extends KernelTestCase
 {
+    /**
+     * @testdox Test that `getCriteria` method throws an exception with invalid (non JSON) `?where` parameter
+     */
     public function testThatGetCriteriaMethodThrowsAnExceptionWithInvalidWhereParameter(): void
     {
         $this->expectException(HttpException::class);
@@ -38,7 +41,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator
      *
-     * @testdox Test that `getCriteria` returns `$expected` when using `$where` as `?where` parameter.
+     * @testdox Test that `getCriteria` method returns `$expected` when using `$where` as `?where` parameter
      *
      * @throws JsonException
      */
@@ -58,7 +61,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetOrderByReturnsExpectedValue
      *
-     * @testdox Test that `getOrderBy` returns `$expected` when using `$parameters`.
+     * @testdox Test that `getOrderBy` method returns `$expected` when using `$parameters` as an input
      */
     public function testThatGetOrderByReturnsExpectedValue(
         StringableArrayObject $parameters,
@@ -73,6 +76,9 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
+    /**
+     * @testdox Test that `getLimit` method returns `null` when there is no `?limit` parameter on request
+     */
     public function testThatGetLimitReturnsNullWithoutParameter(): void
     {
         $fakeRequest = Request::create('/');
@@ -86,7 +92,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetLimitReturnsExpectedValue
      *
-     * @testdox Test that `getLimit` method returns `$expected` when using `$parameters`.
+     * @testdox Test that `getLimit` method returns `$expected` when using `$parameters` as request parameter
      */
     public function testThatGetLimitReturnsExpectedValue(StringableArrayObject $parameters, int $expected): void
     {
@@ -106,6 +112,9 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
+    /**
+     * @testdox Test that `getOffset` method returns `null` when there is no `?offset` parameter on request
+     */
     public function testThatGetOffsetReturnsNullWithoutParameter(): void
     {
         $fakeRequest = Request::create('/');
@@ -119,7 +128,7 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetOffsetReturnsExpectedValue
      *
-     * @testdox Test that `getOffset` method returns `$expected` when using `$parameters`
+     * @testdox Test that `getOffset` method returns `$expected` when using `$parameters` as request parameter
      */
     public function testThatGetOffsetReturnsExpectedValue(StringableArrayObject $parameters, int $expected): void
     {
@@ -139,6 +148,9 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
+    /**
+     * @testdox Test that `getSearchTerms` method returns empty array when there is no `?search` parameter on request
+     */
     public function testThatGetSearchTermsReturnsEmptyGeneratorWithoutParameters(): void
     {
         $fakeRequest = Request::create('/');
@@ -150,6 +162,9 @@ class RequestHandlerTest extends KernelTestCase
         );
     }
 
+    /**
+     * @testdox Test that `getSearchTerms` method throws an exception when `?search` parameter contains invalid JSON
+     */
     public function testThatGetSearchTermsThrowsAnExceptionWithInvalidJson(): void
     {
         $this->expectException(HttpException::class);
@@ -171,7 +186,7 @@ class RequestHandlerTest extends KernelTestCase
      *
      * @param string|bool $search
      *
-     * @testdox Test that `getSearchTerms` returns `$expected` when using `$search` as `?search` parameter.
+     * @testdox Test that `getSearchTerms` returns `$expected` when using `$search` as `?search` parameter
      */
     public function testThatGetSearchTermsReturnsExpectedValue(StringableArrayObject $expected, $search): void
     {
