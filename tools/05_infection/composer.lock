@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1008a1f3f4a784702bbd86e20fc932c0",
+    "content-hash": "6fc8454e0c397f07eb397ed780d5657b",
     "packages": [],
     "packages-dev": [
         {
@@ -271,16 +271,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.17.6",
+            "version": "0.17.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "941d40af2de0890dc1dcf679850124d12c9556c3"
+                "reference": "3a35481822b795e021907e5a80d7b622e4d97be0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/941d40af2de0890dc1dcf679850124d12c9556c3",
-                "reference": "941d40af2de0890dc1dcf679850124d12c9556c3",
+                "url": "https://api.github.com/repos/infection/infection/zipball/3a35481822b795e021907e5a80d7b622e4d97be0",
+                "reference": "3a35481822b795e021907e5a80d7b622e4d97be0",
                 "shasum": ""
             },
             "require": {
@@ -376,7 +376,7 @@
                 "testing",
                 "unit testing"
             ],
-            "time": "2020-10-02T07:20:09+00:00"
+            "time": "2020-10-13T21:51:12+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -1236,7 +1236,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-18T14:27:32+00:00"
+            "time": "2020-10-07T15:23:00+00:00"
         },
         {
             "name": "symfony/filesystem",
