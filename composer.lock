@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a0902a4f8067615507c28f394f3b0b9",
+    "content-hash": "8f9045e8cafb3e84fa795b44ba130864",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -3767,7 +3767,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-18T14:27:32+00:00"
+            "time": "2020-10-07T15:23:00+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -4537,16 +4537,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.9.6",
+            "version": "v1.9.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "5c71110ad383ada3d5305c19ff8419a58f799c00"
+                "reference": "1cc70238036f54760ce9180484c973b1a3c87b05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/5c71110ad383ada3d5305c19ff8419a58f799c00",
-                "reference": "5c71110ad383ada3d5305c19ff8419a58f799c00",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/1cc70238036f54760ce9180484c973b1a3c87b05",
+                "reference": "1cc70238036f54760ce9180484c973b1a3c87b05",
                 "shasum": ""
             },
             "require": {
@@ -4596,7 +4596,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-07T12:55:56+00:00"
+            "time": "2020-10-13T17:37:40+00:00"
         },
         {
             "name": "symfony/form",
