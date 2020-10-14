@@ -4,26 +4,26 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fed3ff89993c0d4cb5ad1488e48e8c4d",
+    "content-hash": "842f4f15fc945edf5c9ae23e797afc4a",
     "packages": [],
     "packages-dev": [
         {
             "name": "migrify/config-transformer",
-            "version": "0.3.48",
+            "version": "0.3.49",
             "source": {
                 "type": "git",
                 "url": "https://github.com/migrify/config-transformer.git",
-                "reference": "366f7d184f75efa22d41d4e671f925e3d40d9cc1"
+                "reference": "7eb4bf6c057918b41e6c0f79706fc6dbe137db55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/migrify/config-transformer/zipball/366f7d184f75efa22d41d4e671f925e3d40d9cc1",
-                "reference": "366f7d184f75efa22d41d4e671f925e3d40d9cc1",
+                "url": "https://api.github.com/repos/migrify/config-transformer/zipball/7eb4bf6c057918b41e6c0f79706fc6dbe137db55",
+                "reference": "7eb4bf6c057918b41e6c0f79706fc6dbe137db55",
                 "shasum": ""
             },
             "require": {
-                "migrify/migrify-kernel": "^0.3.48",
-                "migrify/php-config-printer": "^0.3.48",
+                "migrify/migrify-kernel": "^0.3.49",
+                "migrify/php-config-printer": "^0.3.49",
                 "nette/neon": "^3.0",
                 "nette/utils": "^3.1",
                 "nikic/php-parser": "^4.9",
@@ -53,20 +53,20 @@
                 "MIT"
             ],
             "description": "Convert Symfony YAML/XML format to PHP/YAML",
-            "time": "2020-09-28T14:37:07+00:00"
+            "time": "2020-10-12T21:46:55+00:00"
         },
         {
             "name": "migrify/migrify-kernel",
-            "version": "0.3.48",
+            "version": "0.3.49",
             "source": {
                 "type": "git",
                 "url": "https://github.com/migrify/migrify-kernel.git",
-                "reference": "33071782a409e11fcda0d7d2d627c812c77ec5cc"
+                "reference": "c10a3cb237a26b1abffca6632cbb51095c4cbf17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/migrify/migrify-kernel/zipball/33071782a409e11fcda0d7d2d627c812c77ec5cc",
-                "reference": "33071782a409e11fcda0d7d2d627c812c77ec5cc",
+                "url": "https://api.github.com/repos/migrify/migrify-kernel/zipball/c10a3cb237a26b1abffca6632cbb51095c4cbf17",
+                "reference": "c10a3cb237a26b1abffca6632cbb51095c4cbf17",
                 "shasum": ""
             },
             "require": {
@@ -96,20 +96,20 @@
         },
         {
             "name": "migrify/php-config-printer",
-            "version": "0.3.48",
+            "version": "0.3.49",
             "source": {
                 "type": "git",
                 "url": "https://github.com/migrify/php-config-printer.git",
-                "reference": "d657fe5316f2fe69f06321d482903863214fbe86"
+                "reference": "b95e9ce8d323b952f7c1d9f68c040008e7e4edca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/migrify/php-config-printer/zipball/d657fe5316f2fe69f06321d482903863214fbe86",
-                "reference": "d657fe5316f2fe69f06321d482903863214fbe86",
+                "url": "https://api.github.com/repos/migrify/php-config-printer/zipball/b95e9ce8d323b952f7c1d9f68c040008e7e4edca",
+                "reference": "b95e9ce8d323b952f7c1d9f68c040008e7e4edca",
                 "shasum": ""
             },
             "require": {
-                "migrify/migrify-kernel": "^0.3.48",
+                "migrify/migrify-kernel": "^0.3.49",
                 "nette/utils": "^3.1",
                 "nikic/php-parser": "^4.9",
                 "php": ">=7.2",
@@ -130,7 +130,7 @@
                 "MIT"
             ],
             "description": "Print Symfony services array with configuration to to plain PHP file format thanks to this simple php-parser wrapper",
-            "time": "2020-09-28T14:37:07+00:00"
+            "time": "2020-10-12T21:46:55+00:00"
         },
         {
             "name": "nette/finder",
@@ -2944,23 +2944,23 @@
         },
         {
             "name": "symplify/autowire-array-parameter",
-            "version": "8.3.33",
+            "version": "8.3.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/autowire-array-parameter.git",
-                "reference": "7183c3bb301e205596cf6162835f0a0ef5418da1"
+                "reference": "1075a4651b31b8dc4e587280a4b4700eceba384a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/7183c3bb301e205596cf6162835f0a0ef5418da1",
-                "reference": "7183c3bb301e205596cf6162835f0a0ef5418da1",
+                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/1075a4651b31b8dc4e587280a4b4700eceba384a",
+                "reference": "1075a4651b31b8dc4e587280a4b4700eceba384a",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.0",
                 "php": ">=7.2",
                 "symfony/dependency-injection": "^4.4|^5.1",
-                "symplify/package-builder": "^8.3.33"
+                "symplify/package-builder": "^8.3.34"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -2991,20 +2991,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-10T21:52:31+00:00"
+            "time": "2020-10-14T04:45:04+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "8.3.33",
+            "version": "8.3.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/package-builder.git",
-                "reference": "c77474a2fcf037d2e5628f237fb4c10090e65e8d"
+                "reference": "03b2d722f16c7af9bd01db2b611a8529162f89f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/package-builder/zipball/c77474a2fcf037d2e5628f237fb4c10090e65e8d",
-                "reference": "c77474a2fcf037d2e5628f237fb4c10090e65e8d",
+                "url": "https://api.github.com/repos/symplify/package-builder/zipball/03b2d722f16c7af9bd01db2b611a8529162f89f2",
+                "reference": "03b2d722f16c7af9bd01db2b611a8529162f89f2",
                 "shasum": ""
             },
             "require": {
@@ -3017,8 +3017,8 @@
                 "symfony/finder": "^4.4|^5.1",
                 "symfony/http-kernel": "^4.4|^5.1",
                 "symfony/yaml": "^4.4|^5.1",
-                "symplify/autowire-array-parameter": "^8.3.33",
-                "symplify/symplify-kernel": "^8.3.33"
+                "symplify/autowire-array-parameter": "^8.3.34",
+                "symplify/symplify-kernel": "^8.3.34"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -3049,20 +3049,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-10-10T21:52:31+00:00"
+            "time": "2020-10-14T04:45:04+00:00"
         },
         {
             "name": "symplify/smart-file-system",
-            "version": "8.3.33",
+            "version": "8.3.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/smart-file-system.git",
-                "reference": "fc70123c37fafcfdeca33f23042eafe9c1491ed0"
+                "reference": "0cb2152b23e9f86bfb5dbea603b240682a3c01fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/fc70123c37fafcfdeca33f23042eafe9c1491ed0",
-                "reference": "fc70123c37fafcfdeca33f23042eafe9c1491ed0",
+                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/0cb2152b23e9f86bfb5dbea603b240682a3c01fc",
+                "reference": "0cb2152b23e9f86bfb5dbea603b240682a3c01fc",
                 "shasum": ""
             },
             "require": {
@@ -3105,16 +3105,16 @@
         },
         {
             "name": "symplify/symplify-kernel",
-            "version": "8.3.33",
+            "version": "8.3.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/symplify-kernel.git",
-                "reference": "4f60b1e36f1e485861f8b6038d373ec052abf308"
+                "reference": "8c6d75360342d0d6c9fbce4c63f3f1d2b56c16c3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/symplify-kernel/zipball/4f60b1e36f1e485861f8b6038d373ec052abf308",
-                "reference": "4f60b1e36f1e485861f8b6038d373ec052abf308",
+                "url": "https://api.github.com/repos/symplify/symplify-kernel/zipball/8c6d75360342d0d6c9fbce4c63f3f1d2b56c16c3",
+                "reference": "8c6d75360342d0d6c9fbce4c63f3f1d2b56c16c3",
                 "shasum": ""
             },
             "require": {
@@ -3122,8 +3122,8 @@
                 "symfony/console": "^4.4|^5.1",
                 "symfony/dependency-injection": "^4.4|^5.1",
                 "symfony/http-kernel": "^4.4|^5.1",
-                "symplify/package-builder": "^8.3.33",
-                "symplify/smart-file-system": "^8.3.33"
+                "symplify/package-builder": "^8.3.34",
+                "symplify/smart-file-system": "^8.3.34"
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0"
@@ -3144,7 +3144,7 @@
                 "MIT"
             ],
             "description": "Internal Kernel for Symplify packages",
-            "time": "2020-10-10T21:52:31+00:00"
+            "time": "2020-10-14T04:45:04+00:00"
         }
     ],
     "aliases": [],
