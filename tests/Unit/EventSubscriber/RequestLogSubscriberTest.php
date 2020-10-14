@@ -20,6 +20,9 @@ use Symfony\Component\HttpKernel\Event\TerminateEvent;
  */
 class RequestLogSubscriberTest extends KernelTestCase
 {
+    /**
+     * @testdox Test that `getSubscribedEvents` method returns expected
+     */
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [
