@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/SchemaTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration;
@@ -23,11 +23,40 @@ use function implode;
  * Class SchemaTest
  *
  * @package App\Tests\Integration
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class SchemaTest extends KernelTestCase
 {
     private SchemaValidator $validator;
+
+    /**
+     * @testdox Test that entity mappings are valid
+     */
+    public function testThatMappingsAreValid(): void
+    {
+        $errors = $this->validator->validateMapping();
+
+        $messages = [];
+
+        $formatter = static function ($errors, $className) use (&$messages): void {
+            $messages[] = $className . ': ' . implode(', ', $errors);
+        };
+
+        array_walk($errors, $formatter);
+
+        static::assertEmpty($errors, implode("\n", $messages));
+    }
+
+    /**
+     * @testdox Test that database schema is sync with entity metadata
+     */
+    public function testThatSchemaInSyncWithMetadata(): void
+    {
+        static::assertTrue(
+            $this->validator->schemaInSyncWithMetadata(),
+            'The database schema is not in sync with the current mapping file.'
+        );
+    }
 
     /**
      * @throws Throwable
@@ -56,28 +85,5 @@ class SchemaTest extends KernelTestCase
             ->getManager();
 
         $this->validator = new SchemaValidator($em);
-    }
-
-    public function testThatMappingsAreValid(): void
-    {
-        $errors = $this->validator->validateMapping();
-
-        $messages = [];
-
-        $formatter = static function ($errors, $className) use (&$messages): void {
-            $messages[] = $className . ': ' . implode(', ', $errors);
-        };
-
-        array_walk($errors, $formatter);
-
-        static::assertEmpty($errors, implode("\n", $messages));
-    }
-
-    public function testThatSchemaInSyncWithMetadata(): void
-    {
-        static::assertTrue(
-            $this->validator->schemaInSyncWithMetadata(),
-            'The database schema is not in sync with the current mapping file.'
-        );
     }
 }
