@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Utils/RequestLoggerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Utils;
@@ -16,118 +16,108 @@ use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 /**
  * Class RequestLoggerTest
  *
  * @package App\Tests\Integration\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RequestLoggerTest extends KernelTestCase
 {
     /**
-     * @throws Throwable
+     * @var MockObject|LoggerInterface
      */
-    public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
-    {
-        /**
-         * @var MockObject|LogRequestResource $resource
-         * @var MockObject|LoggerInterface $logger
-         */
-        $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+    private $logger;
 
-        $resource
+    /**
+     * @var MockObject|LogRequestResource
+     */
+    private $resource;
+
+    /**
+     * @testdox Test that log is not created if `Request` and `Response` object are not set
+     */
+    public function testThatLogIsNotCreatedIfRequestAndResponseObjectsAreNotSet(): void
+    {
+        $this->resource
             ->expects(static::never())
             ->method('save');
 
-        (new RequestLogger($resource, $logger, []))
+        (new RequestLogger($this->resource, $this->logger, []))
+            ->handle();
+    }
+
+    /**
+     * @testdox Test that log is not created if `Request` object is not set
+     */
+    public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
+    {
+        $this->resource
+            ->expects(static::never())
+            ->method('save');
+
+        (new RequestLogger($this->resource, $this->logger, []))
             ->setResponse(new Response())
             ->handle();
     }
 
     /**
-     * @throws Throwable
+     * @testdox Test that log is not created if `Response` object is not set
      */
     public function testThatLogIsNotCreatedIfResponseObjectIsNotSet(): void
     {
-        /**
-         * @var MockObject|LogRequestResource $resource
-         * @var MockObject|LoggerInterface $logger
-         */
-        $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-
-        $resource
+        $this->resource
             ->expects(static::never())
             ->method('save');
 
-        (new RequestLogger($resource, $logger, []))
+        (new RequestLogger($this->resource, $this->logger, []))
             ->setRequest(new Request())
             ->handle();
     }
 
     /**
-     * @throws Throwable
+     * @testdox Test that log is created when `Request` and `Response` object are set
      */
     public function testThatResourceSaveMethodIsCalled(): void
     {
-        /**
-         * @var MockObject|LogRequestResource $resource
-         * @var MockObject|LoggerInterface $logger
-         */
-        $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-
-        $request = new Request();
-        $response = new Response();
-
-        $resource
+        $this->resource
             ->expects(static::once())
-            ->method('save');
+            ->method('save')
+            ->with();
 
-        (new RequestLogger($resource, $logger, []))
-            ->setRequest($request)
-            ->setResponse($response)
-            ->setMasterRequest(true)
-            ->setUser()
-            ->setApiKey()
+        (new RequestLogger($this->resource, $this->logger, []))
+            ->setRequest(new Request())
+            ->setResponse(new Response())
             ->handle();
     }
 
     /**
-     * @throws Throwable
+     * @testdox Test that `LoggerInterface::error` method is called when exception is thrown
      */
     public function testThatLoggerIsCalledIfExceptionIsThrown(): void
     {
-        /**
-         * @var MockObject|LoggerInterface $logger
-         * @var MockObject|LogRequestResource $resource
-         */
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
-
-        $request = new Request();
-        $response = new Response();
-        $exception = new Exception('test exception');
-
-        $resource
+        $this->resource
             ->expects(static::once())
             ->method('save')
-            ->willThrowException($exception);
+            ->willThrowException(new Exception('test exception'));
 
-        $logger
+        $this->logger
             ->expects(static::once())
             ->method('error')
             ->with('test exception');
 
-        (new RequestLogger($resource, $logger, []))
-            ->setRequest($request)
-            ->setResponse($response)
-            ->setMasterRequest(true)
-            ->setUser()
-            ->setApiKey()
+        (new RequestLogger($this->resource, $this->logger, []))
+            ->setRequest(new Request())
+            ->setResponse(new Response())
             ->handle();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $this->resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
     }
 }
