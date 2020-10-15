@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Entity/DateDimensionTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Entity;
@@ -18,12 +18,14 @@ use Throwable;
  * Class DateDimensionTest
  *
  * @package App\Tests\Unit\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DateDimensionTest extends KernelTestCase
 {
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `DateDimension::getCreatedAt` method returns expected
      */
     public function testThatGetCreatedAtReturnsExpected(): void
     {
