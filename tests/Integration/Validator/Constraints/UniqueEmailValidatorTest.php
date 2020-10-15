@@ -82,9 +82,6 @@ class UniqueEmailValidatorTest extends KernelTestCase
         $validator->validate($user, $this->constraint);
     }
 
-    /**
-     * @throws Throwable
-     */
     protected function setUp(): void
     {
         parent::setUp();

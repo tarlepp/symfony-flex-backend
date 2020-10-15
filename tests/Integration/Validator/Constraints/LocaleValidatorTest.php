@@ -15,7 +15,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
-use Throwable;
 
 /**
  * Class LocaleValidatorTest
@@ -79,9 +78,6 @@ class LocaleValidatorTest extends KernelTestCase
         $validator->validate('foo', $this->constraint);
     }
 
-    /**
-     * @throws Throwable
-     */
     protected function setUp(): void
     {
         parent::setUp();
