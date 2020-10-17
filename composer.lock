@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a0902a4f8067615507c28f394f3b0b9",
+    "content-hash": "c3855dbd0f57e5effac5a3332af6f94f",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -4537,16 +4537,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.9.6",
+            "version": "v1.9.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "5c71110ad383ada3d5305c19ff8419a58f799c00"
+                "reference": "277e060340d733100b0fff591357f476c02b36cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/5c71110ad383ada3d5305c19ff8419a58f799c00",
-                "reference": "5c71110ad383ada3d5305c19ff8419a58f799c00",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/277e060340d733100b0fff591357f476c02b36cb",
+                "reference": "277e060340d733100b0fff591357f476c02b36cb",
                 "shasum": ""
             },
             "require": {
@@ -4596,7 +4596,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-07T12:55:56+00:00"
+            "time": "2020-10-14T14:59:43+00:00"
         },
         {
             "name": "symfony/form",
