@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Security/UserTypeIdentificationTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Security;
@@ -31,7 +31,7 @@ use Throwable;
  * Class UserTypeIdentificationTest
  *
  * @package App\Tests\Integration\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserTypeIdentificationTest extends KernelTestCase
 {
@@ -45,18 +45,10 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     private MockObject $userRepository;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
-        $this->userRepository = $this->createMock(UserRepository::class);
-    }
-
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid
      *
-     * @testdox Test that `getApiKey` returns null when using `$token` as a token.
+     * @testdox Test that `getApiKey` returns null when using `$token` as a token
      */
     public function testThatGetApiKeyReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
@@ -69,7 +61,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getApiKey` returns correct user.
+     * @testdox Test that `getApiKey` returns correct user
      */
     public function testThatGetApiKeyReturnsExpectedApiKey(): void
     {
@@ -94,7 +86,7 @@ class UserTypeIdentificationTest extends KernelTestCase
      *
      * @throws NonUniqueResultException
      *
-     * @testdox Test that `getUser` returns null when using `$token` as a token.
+     * @testdox Test that `getUser` returns null when using `$token` as a token
      */
     public function testThatGetUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
@@ -109,7 +101,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `getUser` returns correct user.
+     * @testdox Test that `getUser` returns correct user
      */
     public function testThatGetUserReturnsExpectedUser(): void
     {
@@ -135,7 +127,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid
      *
-     * @testdox Test that `getIdentity` returns null when using `$token` as a token.
+     * @testdox Test that `getIdentity` returns null when using `$token` as a token
      */
     public function testThatGetIdentityReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
@@ -148,7 +140,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getIdentity` returns correct SecurityUser.
+     * @testdox Test that `getIdentity` returns correct `SecurityUser` instance
      */
     public function testThatGetIdentityReturnsExpectedSecurityUser(): void
     {
@@ -168,7 +160,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getIdentity` returns correct ApiKeyUser.
+     * @testdox Test that `getIdentity` returns correct `ApiKeyUser` instance
      */
     public function testThatGetIdentityReturnsExpectedApiKeyUser(): void
     {
@@ -190,7 +182,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid
      *
-     * @testdox Test that `getApiKeyUser` returns null when using `$token` as a token.
+     * @testdox Test that `getApiKeyUser` returns null when using `$token` as a token
      */
     public function testThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
@@ -203,7 +195,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getApiKeyUser` returns correct user.
+     * @testdox Test that `getApiKeyUser` returns correct user
      */
     public function testThatGetApiKeyUserReturnsExpectedUser(): void
     {
@@ -225,7 +217,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid
      *
-     * @testdox Test that `getSecurityUser` returns null when using `$token` as a token.
+     * @testdox Test that `getSecurityUser` returns null when using `$token` as a token
      */
     public function testThatGetSecurityUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
@@ -238,7 +230,7 @@ class UserTypeIdentificationTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `getSecurityUser` returns correct user.
+     * @testdox Test that `getSecurityUser` returns correct user
      */
     public function testThatGetSecurityUserReturnsExpectedUser(): void
     {
@@ -299,5 +291,13 @@ class UserTypeIdentificationTest extends KernelTestCase
         yield [new PreAuthenticatedToken(new CoreUser('username', 'password'), 'credentials', 'providerKey')];
 
         yield [new RememberMeToken(new CoreUser('username', 'password'), 'provider-key', 'some-secret')];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $this->userRepository = $this->createMock(UserRepository::class);
     }
 }
