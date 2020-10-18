@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Security/Provider/ApiKeyUserProviderTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Security\Provider;
@@ -28,10 +28,20 @@ use Throwable;
  * Class ApiKeyUserProviderTest
  *
  * @package App\Tests\Integration\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyUserProviderTest extends KernelTestCase
 {
+    /**
+     * @var MockObject|ApiKeyRepository
+     */
+    private $apiKeyRepository;
+
+    /**
+     * @var MockObject|RolesService
+     */
+    private $rolesService;
+
     /**
      * @dataProvider dataProviderTestThatSupportClassReturnsExpected
      *
@@ -39,105 +49,67 @@ class ApiKeyUserProviderTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `supportsClass` method returns `$expected` with `$input` input.
+     * @testdox Test that `supportsClass` method returns `$expected` when using `$input` as input
      */
     public function testThatSupportClassReturnsExpected(bool $expected, $input): void
     {
-        /**
-         * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService $rolesService
-         */
-        $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $provider = new ApiKeyUserProvider($apiKeyRepository, $rolesService);
+        $provider = new ApiKeyUserProvider($this->apiKeyRepository, $this->rolesService);
 
         static::assertSame($expected, $provider->supportsClass((string)$input));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `refreshUser` method throws an exception
      */
     public function testThatRefreshUserThrowsAnException(): void
     {
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage('API key cannot refresh user');
 
-        /**
-         * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService $rolesService
-         */
-        $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $user = new User('username', 'password');
 
-        (new ApiKeyUserProvider($apiKeyRepository, $rolesService))
+        (new ApiKeyUserProvider($this->apiKeyRepository, $this->rolesService))
             ->refreshUser($user);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `loadUserByUsername` method throws an exception when API key is not found
      */
     public function testThatLoadUserByUsernameThrowsAnException(): void
     {
         $this->expectException(UsernameNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
 
-        /**
-         * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService $rolesService
-         */
-        $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $apiKeyRepository
+        $this->apiKeyRepository
             ->expects(static::once())
             ->method('findOneBy')
             ->with(['token' => 'guid'])
             ->willReturn(null);
 
-        (new ApiKeyUserProvider($apiKeyRepository, $rolesService))
+        (new ApiKeyUserProvider($this->apiKeyRepository, $this->rolesService))
             ->loadUserByUsername('guid');
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `loadUserByUsername` method returns expected `ApiKeyUser` instance
      */
     public function testThatLoadUserByUsernameCreatesExpectedApiKeyUser(): void
     {
-        /**
-         * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService $rolesService
-         */
-        $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $apiKey = new ApiKey();
 
-        $apiKeyRepository
+        $this->apiKeyRepository
             ->expects(static::once())
             ->method('findOneBy')
             ->with(['token' => 'guid'])
             ->willReturn($apiKey);
 
-        $user = (new ApiKeyUserProvider($apiKeyRepository, $rolesService))
+        $user = (new ApiKeyUserProvider($this->apiKeyRepository, $this->rolesService))
             ->loadUserByUsername('guid');
 
         static::assertSame($apiKey, $user->getApiKey());
@@ -145,27 +117,18 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getApiKeyForToken` method calls expected repository methods
      */
     public function testThatGetApiKeyForTokenCallsExpectedRepositoryMethod(): void
     {
-        /**
-         * @var MockObject|ApiKeyRepository $apiKeyRepository
-         * @var MockObject|RolesService $rolesService
-         */
-        $apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $apiKeyRepository
+        $this->apiKeyRepository
             ->expects(static::once())
             ->method('findOneBy')
             ->with(['token' => 'some_token'])
             ->willReturn(null);
 
-        (new ApiKeyUserProvider($apiKeyRepository, $rolesService))
+        (new ApiKeyUserProvider($this->apiKeyRepository, $this->rolesService))
             ->getApiKeyForToken('some_token');
     }
 
@@ -181,5 +144,18 @@ class ApiKeyUserProviderTest extends KernelTestCase
         yield [false, UserInterface::class];
         yield [false, UserEntity::class];
         yield [true, ApiKeyUser::class];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->rolesService = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }
