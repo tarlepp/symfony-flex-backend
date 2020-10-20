@@ -3,7 +3,7 @@
 	"require-dev": {
 		"liuggio/fastest": "1.7.1",
 		"phpunit/php-code-coverage": "9.2.0",
-		"phpunit/phpunit": "9.4.1",
+		"phpunit/phpunit": "9.4.2",
 		"roave/security-advisories": "dev-master",
 		"sebastian/finder-facade": "2.0.0",
 		"symfony/browser-kit": "5.1.7",
