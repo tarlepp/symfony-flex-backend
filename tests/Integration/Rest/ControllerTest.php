@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Rest/ControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest;
@@ -25,12 +25,39 @@ use function get_class;
  * Class ControllerTest
  *
  * @package App\Tests\Integration\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ControllerTest extends KernelTestCase
 {
     /**
+     * @var MockObject|RestResourceInterface
+     */
+    private $resource;
+
+    /**
+     * @var MockObject|Controller
+     */
+    private $controller;
+
+    /**
+     * @var MockObject|RestDtoInterface
+     */
+    private $dtoClass;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $this->controller = $this->getMockForAbstractClass(Controller::class, [$this->resource])
+            ->setResponseHandler(new ResponseHandler(new Serializer()));
+    }
+
+    /**
      * @throws Throwable
+     *
+     * @testdox Test that `getResource` method throws an exception if `Resource` service is not set
      */
     public function testThatGetResourceThrowsAnExceptionIfNotSet(): void
     {
@@ -43,22 +70,19 @@ class ControllerTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getResource` method doesn't throw an exception if `Resource` service is set
      */
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {
-        /**
-         * @var RestResourceInterface $resource
-         * @var Controller $controller
-         */
-        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
-
         /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf(RestResourceInterface::class, $controller->getResource());
+        static::assertInstanceOf(RestResourceInterface::class, $this->controller->getResource());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getResponseHandler` method throws an exception if `ResponseHandler` service is not set
      */
     public function testThatGetResponseHandlerThrowsAnExceptionIfNotSet(): void
     {
@@ -71,41 +95,33 @@ class ControllerTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getResponseHandler` method doesn't throw an exception if `ResponseHandler` service is set
      */
     public function testThatGetResponseHandlerDoesNotThrowsAnExceptionIfSet(): void
     {
-        /** @var RestResourceInterface $resource */
-        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $controller = $this->getMockForAbstractClass(Controller::class, [$resource])
-            ->setResponseHandler(new ResponseHandler(new Serializer()));
-
-        static::assertInstanceOf(ResponseHandler::class, $controller->getResponseHandler());
+        static::assertInstanceOf(ResponseHandler::class, $this->controller->getResponseHandler());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getDtoClass` method calls expected `Resource` service method
      */
     public function testThatGetDtoClassCallsExpectedServiceMethods(): void
     {
-        /**
-         * @var MockObject|RestDtoInterface $dtoClass
-         * @var MockObject|RestResourceInterface $resource
-         */
-        $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $resource
+        $this->resource
             ->expects(static::once())
             ->method('getDtoClass')
-            ->willReturn(get_class($dtoClass));
+            ->willReturn(get_class($this->dtoClass));
 
-        $this->getMockForAbstractClass(Controller::class, [$resource])
-            ->getDtoClass();
+        $this->controller->getDtoClass();
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getDtoClass` method throws an exception when `Resource` class not returning expected
      */
     public function testThatGetDtoClassThrowsAnExceptionIfResourceDoesNotReturnExpectedClass(): void
     {
@@ -114,40 +130,29 @@ class ControllerTest extends KernelTestCase
             'Given DTO class \'stdClass\' is not implementing \'App\DTO\RestDtoInterface\' interface.'
         );
 
-        /** @var MockObject|RestResourceInterface $resource */
-        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $resource
+        $this->resource
             ->expects(static::once())
             ->method('getDtoClass')
             ->willReturn(stdClass::class);
 
-        $this->getMockForAbstractClass(Controller::class, [$resource])
-            ->getDtoClass();
+        $this->controller->getDtoClass();
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `getDtoClass` returns expected when using custom DTO class mapping
      */
     public function testThatGetDtoClassWorksAsExpectedWithGivenDtoClasses(): void
     {
-        /**
-         * @var MockObject|RestDtoInterface $dtoClass
-         * @var MockObject|RestResourceInterface $resource
-         * @var MockObject|Controller $controller
-         */
-        $dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $controller = $this->getMockForAbstractClass(Controller::class, [$resource]);
-
         $dtoClasses = [
-            'foo' => get_class($dtoClass),
+            'foo' => get_class($this->dtoClass),
         ];
 
-        $reflection = new ReflectionProperty(get_class($controller), 'dtoClasses');
+        $reflection = new ReflectionProperty(get_class($this->controller), 'dtoClasses');
         $reflection->setAccessible(true);
         $reflection->setValue(null, $dtoClasses);
 
-        static::assertSame(get_class($dtoClass), $controller->getDtoClass('foo'));
+        static::assertSame(get_class($this->dtoClass), $this->controller->getDtoClass('foo'));
     }
 }
