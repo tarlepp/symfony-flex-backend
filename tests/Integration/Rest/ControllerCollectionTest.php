@@ -31,6 +31,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class ControllerCollectionTest extends KernelTestCase
 {
+    /**
+     * @testdox Test that `get` method throws an exception when specified `REST` controller is not found
+     */
     public function testThatGetMethodThrowsAnException(): void
     {
         $stubLogger = $this->createMock(LoggerInterface::class);
@@ -60,6 +63,9 @@ class ControllerCollectionTest extends KernelTestCase
         (new ControllerCollection($iteratorAggregate, $stubLogger))->get('FooBar');
     }
 
+    /**
+     * @testdox Test that `getAll` method returns expected count of `REST` controllers
+     */
     public function testThatGetAllReturnsCorrectCountOfRestControllers(): void
     {
         $collection = $this->getCollection();
@@ -70,7 +76,7 @@ class ControllerCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetReturnsExpectedController
      *
-     * @testdox Test that `get` method with `$controllerName` input returns instance of that controller.
+     * @testdox Test that `get` method with `$controllerName` input returns instance of that controller
      */
     public function testThatGetReturnsExpectedController(string $controllerName): void
     {
@@ -82,7 +88,7 @@ class ControllerCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatHasReturnsExpected
      *
-     * @testdox Test that `has` method returns `$expected` with `$controller` input.
+     * @testdox Test that `has` method returns `$expected` with `$controller` input
      */
     public function testThatHasReturnsExpected(bool $expected, ?string $controller): void
     {
