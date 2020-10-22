@@ -3,19 +3,22 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Rest/Traits/Methods/UpdateMethodTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
 use App\DTO\RestDtoInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
-use App\Tests\Integration\Rest\Traits\Methods\src\PatchMethodTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\UpdateMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\UpdateMethodTestClass;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Exception;
 use Generator;
+use InvalidArgumentException;
 use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Ramsey\Uuid\Uuid;
@@ -30,12 +33,44 @@ use Throwable;
  * Class UpdateMethodTest
  *
  * @package App\Tests\Integration\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UpdateMethodTest extends KernelTestCase
 {
     /**
+     * @var MockObject|RestDtoInterface
+     */
+    private $restDto;
+
+    /**
+     * @var MockObject|EntityInterface
+     */
+    private $entity;
+
+    /**
+     * @var MockObject|RestResourceInterface
+     */
+    private $resource;
+
+    /**
+     * @var MockObject|ResponseHandlerInterface
+     */
+    private $responseHandler;
+
+    /**
+     * @var MockObject|UpdateMethodTestClass
+     */
+    private $validTestClass;
+
+    /**
+     * @var MockObject|UpdateMethodInvalidTestClass
+     */
+    private $inValidTestClass;
+
+    /**
      * @throws Throwable
+     *
+     * @testdox Test that `updateMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
     public function testThatTraitThrowsAnException(): void
     {
@@ -47,18 +82,9 @@ class UpdateMethodTest extends KernelTestCase
         );
         /** @codingStandardsIgnoreEnd */
 
-        /**
-         * @var MockObject|UpdateMethodInvalidTestClass $testClass
-         * @var MockObject|RestDtoInterface $restDtoInterface
-         */
-        $testClass = $this->getMockForAbstractClass(UpdateMethodInvalidTestClass::class);
-        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $request = Request::create('/' . Uuid::uuid4()->toString(), 'PUT');
 
-        $uuid = Uuid::uuid4()->toString();
-
-        $request = Request::create('/' . $uuid, 'PUT');
-
-        $testClass->updateMethod($request, $restDtoInterface, 'some-id');
+        $this->inValidTestClass->updateMethod($request, $this->restDto, 'some-id');
     }
 
     /**
@@ -66,61 +92,64 @@ class UpdateMethodTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `App\Rest\Traits\Methods\UpdateMethod` throws an exception with `$httpMethod` HTTP method.
+     * @testdox Test that `updateMethod` throws an exception when using `$httpMethod` HTTP method
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
+        $request = Request::create('/' . Uuid::uuid4()->toString(), $httpMethod);
 
-        /**
-         * @var MockObject|RestDtoInterface $restDtoInterface
-         * @var MockObject|PatchMethodTestClass $testClass
-         */
-        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $testClass = $this->getMockForAbstractClass(
-            UpdateMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
+        $this->validTestClass->updateMethod($request, $this->restDto, 'some-id')->getContent();
+    }
 
+    /**
+     * @dataProvider dataProviderTestThatTraitHandlesException
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `updateMethod` uses `$expectedCode` HTTP status code with `$exception` exception
+     */
+    public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
+    {
         $uuid = Uuid::uuid4()->toString();
+        $request = Request::create('/' . $uuid, 'PUT');
 
-        // Create request and response
-        $request = Request::create('/' . $uuid, $httpMethod);
+        $this->resource
+            ->expects(static::once())
+            ->method('update')
+            ->with($uuid, $this->restDto, true)
+            ->willThrowException($exception);
 
-        $testClass->updateMethod($request, $restDtoInterface, 'some-id')->getContent();
+        $this->expectException(HttpException::class);
+        $this->expectExceptionCode($expectedCode);
+
+        $this->validTestClass->updateMethod($request, $this->restDto, $uuid);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `updateMethod` method calls expected service methods
      */
     public function testThatTraitCallsServiceMethods(): void
     {
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /**
-         * @var MockObject|RestDtoInterface $restDtoInterface
-         * @var MockObject|Request $request
-         * @var MockObject|UpdateMethodTestClass $testClass
-         */
-        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $request = $this->createMock(Request::class);
-        $testClass = $this->getMockForAbstractClass(
-            UpdateMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
         $uuid = Uuid::uuid4()->toString();
 
-        $request
-            ->expects(static::once())
-            ->method('getMethod')
-            ->willReturn('PUT');
+        $request = Request::create('/' . $uuid, 'PUT');
 
-        $testClass->updateMethod($request, $restDtoInterface, $uuid);
+        $this->resource
+            ->expects(static::once())
+            ->method('update')
+            ->with($uuid, $this->restDto, true)
+            ->willReturn($this->entity);
+
+        $this->responseHandler
+            ->expects(static::once())
+            ->method('createResponse')
+            ->with($request, $this->entity, $this->resource);
+
+        $this->validTestClass->updateMethod($request, $this->restDto, $uuid);
     }
 
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
@@ -137,8 +166,32 @@ class UpdateMethodTest extends KernelTestCase
 
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        yield [new HttpException(400), 0];
-        yield [new NotFoundHttpException(), 0];
+        yield [new HttpException(400), 400];
+        yield [new NoResultException(), 404];
+        yield [new NotFoundHttpException(), 404];
+        yield [new NonUniqueResultException(), 500];
         yield [new Exception(), 400];
+        yield [new LogicException(), 400];
+        yield [new InvalidArgumentException(), 400];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->restDto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+
+        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->validTestClass = $this->getMockForAbstractClass(
+            UpdateMethodTestClass::class,
+            [$this->resource, $this->responseHandler]
+        );
+
+        $this->inValidTestClass = $this->getMockForAbstractClass(UpdateMethodInvalidTestClass::class);
     }
 }
