@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 use TypeError;
 use UnexpectedValueException;
@@ -132,9 +133,7 @@ trait RestMethodHelper
 
         $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
 
-        if ($exception instanceof HttpException) {
-            $output = $exception;
-        } elseif ($exception instanceof NoResultException) {
+        if ($exception instanceof NoResultException || $exception instanceof NotFoundHttpException) {
             $code = Response::HTTP_NOT_FOUND;
 
             $output = new HttpException($code, 'Not found', $exception, [], $code);
@@ -142,6 +141,18 @@ trait RestMethodHelper
             $code = Response::HTTP_INTERNAL_SERVER_ERROR;
 
             $output = new HttpException($code, $exception->getMessage(), $exception, [], $code);
+        } elseif ($exception instanceof HttpException) {
+            if ($exception->getCode() === 0) {
+                $output = new HttpException(
+                    $exception->getStatusCode(),
+                    $exception->getMessage(),
+                    $exception->getPrevious(),
+                    $exception->getHeaders(),
+                    $code,
+                );
+            } else {
+                $output = $exception;
+            }
         }
 
         return $output;
