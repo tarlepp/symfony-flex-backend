@@ -166,7 +166,7 @@ class UpdateMethodTest extends KernelTestCase
 
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        yield [new HttpException(400), 400];
+        yield [new HttpException(400, '', null, [], 400), 400];
         yield [new NoResultException(), 404];
         yield [new NotFoundHttpException(), 404];
         yield [new NonUniqueResultException(), 500];

@@ -98,7 +98,6 @@ class PatchMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        // Create request and response
         $request = Request::create('/' . Uuid::uuid4()->toString(), $httpMethod);
 
         $this->validTestClass->patchMethod($request, $this->restDto, 'some-id')->getContent();
@@ -167,7 +166,7 @@ class PatchMethodTest extends KernelTestCase
 
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        yield [new HttpException(400), 400];
+        yield [new HttpException(400, '', null, [], 400), 400];
         yield [new NoResultException(), 404];
         yield [new NotFoundHttpException(), 404];
         yield [new NonUniqueResultException(), 500];
