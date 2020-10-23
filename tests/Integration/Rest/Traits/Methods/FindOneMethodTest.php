@@ -13,6 +13,8 @@ use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindOneMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\FindOneMethodTestClass;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Exception;
 use Generator;
 use InvalidArgumentException;
@@ -36,7 +38,34 @@ use Throwable;
 class FindOneMethodTest extends KernelTestCase
 {
     /**
+     * @var MockObject|RestResourceInterface
+     */
+    private $resource;
+
+    /**
+     * @var MockObject|EntityInterface
+     */
+    private $entity;
+
+    /**
+     * @var MockObject|ResponseHandlerInterface
+     */
+    private $responseHandler;
+
+    /**
+     * @var MockObject|FindOneMethodTestClass
+     */
+    private $validTestClass;
+
+    /**
+     * @var MockObject|FindOneMethodInvalidTestClass
+     */
+    private $inValidTestClass;
+
+    /**
      * @throws Throwable
+     *
+     * @testdox Test that `findOneMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
     public function testThatTraitThrowsAnException(): void
     {
@@ -48,14 +77,7 @@ class FindOneMethodTest extends KernelTestCase
         );
         /** @codingStandardsIgnoreEnd */
 
-        /** @var MockObject|FindOneMethodInvalidTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(FindOneMethodInvalidTestClass::class);
-
-        $uuid = Uuid::uuid4()->toString();
-
-        $request = Request::create('/' . $uuid);
-
-        $testClass->findOneMethod($request, 'some-id');
+        $this->inValidTestClass->findOneMethod(Request::create('/' . Uuid::uuid4()->toString()), 'some-id');
     }
 
     /**
@@ -63,102 +85,61 @@ class FindOneMethodTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `App\Rest\Traits\Methods\FindOneMethod` throws an exception with `$httpMethod` HTTP method.
+     * @testdox Test that `findOneMethod` throws an exception when using `$httpMethod` HTTP method
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|FindOneMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            FindOneMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
-        $uuid = Uuid::uuid4()->toString();
-
-        // Create request and response
-        $request = Request::create('/' . $uuid, $httpMethod);
-
-        $testClass->findOneMethod($request, 'some-id')->getContent();
+        $this->validTestClass->findOneMethod(Request::create('/', $httpMethod), 'some-id')->getContent();
     }
 
     /**
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
-     * @param Exception $exception
-     *
      * @throws Throwable
      *
-     * @testdox Test that `App\Rest\Traits\Methods\FindOneMethod` uses `$expectedCode` code on HttpException.
+     * @testdox Test that `findOneMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
-    public function testThatTraitHandlesException(\Throwable $exception, int $expectedCode): void
+    public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|FindOneMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            FindOneMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
-        $uuid = Uuid::uuid4()->toString();
-        $request = Request::create('/' . $uuid);
-
-        $resource
-            ->expects(static::once())
-            ->method('findOne')
-            ->willThrowException($exception);
-
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $testClass->findOneMethod($request, $uuid);
+        $uuid = Uuid::uuid4()->toString();
+
+        $this->resource
+            ->expects(static::once())
+            ->method('findOne')
+            ->with($uuid)
+            ->willThrowException($exception);
+
+        $this->validTestClass->findOneMethod(Request::create('/' . $uuid), $uuid);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `findOneMethod` method calls expected service methods
      */
     public function testThatTraitCallsServiceMethods(): void
     {
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|FindOneMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            FindOneMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
-        /** @var MockObject|Request $request */
-        $request = $this->createMock(Request::class);
-        $response = $this->createMock(Response::class);
-        $entityInterface = $this->createMock(EntityInterface::class);
-
         $uuid = Uuid::uuid4()->toString();
 
-        $request
-            ->expects(static::once())
-            ->method('getMethod')
-            ->willReturn('GET');
+        $request = Request::create('/' . $uuid);
 
-        $resource
+        $this->resource
             ->expects(static::once())
             ->method('findOne')
-            ->with($uuid, true)
-            ->willReturn($entityInterface);
+            ->with($uuid)
+            ->willReturn($this->entity);
 
-        $responseHandler
+        $this->responseHandler
             ->expects(static::once())
             ->method('createResponse')
-            ->withAnyParameters()
-            ->willReturn($response);
+            ->with($request, $this->entity, $this->resource);
 
-        $testClass->findOneMethod($request, $uuid);
+        $this->validTestClass->findOneMethod($request, $uuid);
     }
 
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
@@ -175,10 +156,31 @@ class FindOneMethodTest extends KernelTestCase
 
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        yield [new HttpException(400), 0];
-        yield [new NotFoundHttpException(), 0];
+        yield [new HttpException(400, '', null, [], 400), 400];
+        yield [new NoResultException(), 404];
+        yield [new NotFoundHttpException(), 404];
+        yield [new NonUniqueResultException(), 500];
+        yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
-        yield [new Exception(), 400];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
+
+        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->validTestClass = $this->getMockForAbstractClass(
+            FindOneMethodTestClass::class,
+            [$this->resource, $this->responseHandler]
+        );
+
+        $this->inValidTestClass = $this->getMockForAbstractClass(FindOneMethodInvalidTestClass::class);
     }
 }
