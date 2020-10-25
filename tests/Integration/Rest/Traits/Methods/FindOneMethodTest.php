@@ -90,7 +90,9 @@ class FindOneMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $this->validTestClass->findOneMethod(Request::create('/', $httpMethod), 'some-id')->getContent();
+        $this->validTestClass
+            ->findOneMethod(Request::create('/' . Uuid::uuid4()->toString(), $httpMethod), 'some-id')
+            ->getContent();
     }
 
     /**
@@ -130,7 +132,7 @@ class FindOneMethodTest extends KernelTestCase
         $this->resource
             ->expects(static::once())
             ->method('findOne')
-            ->with($uuid)
+            ->with($uuid, true)
             ->willReturn($this->entity);
 
         $this->responseHandler
