@@ -3,16 +3,19 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Rest/Traits/Methods/CreateMethodTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest\Traits\Methods;
 
 use App\DTO\RestDtoInterface;
+use App\Entity\Interfaces\EntityInterface;
 use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\CreateMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\CreateMethodTestClass;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Exception;
 use Generator;
 use InvalidArgumentException;
@@ -22,18 +25,51 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 /**
  * Class CreateMethodTest
  *
  * @package App\Tests\Integration\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class CreateMethodTest extends KernelTestCase
 {
     /**
+     * @var MockObject|RestDtoInterface
+     */
+    private $restDto;
+
+    /**
+     * @var MockObject|EntityInterface
+     */
+    private $entity;
+
+    /**
+     * @var MockObject|RestResourceInterface
+     */
+    private $resource;
+
+    /**
+     * @var MockObject|ResponseHandlerInterface
+     */
+    private $responseHandler;
+
+    /**
+     * @var MockObject|CreateMethodTestClass
+     */
+    private $validTestClass;
+
+    /**
+     * @var MockObject|CreateMethodInvalidTestClass
+     */
+    private $inValidTestClass;
+
+    /**
      * @throws Throwable
+     *
+     * @testdox Test that `createMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
     public function testThatTraitThrowsAnException(): void
     {
@@ -45,16 +81,7 @@ class CreateMethodTest extends KernelTestCase
         );
         /** @codingStandardsIgnoreEnd */
 
-        /**
-         * @var MockObject|CreateMethodInvalidTestClass $testClass
-         * @var MockObject|RestDtoInterface $restDtoInterface
-         */
-        $testClass = $this->getMockForAbstractClass(CreateMethodInvalidTestClass::class);
-        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-
-        $request = Request::create('/');
-
-        $testClass->createMethod($request, $restDtoInterface);
+        $this->inValidTestClass->createMethod(Request::create('/', 'POST'), $this->restDto);
     }
 
     /**
@@ -62,96 +89,61 @@ class CreateMethodTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `App\Rest\Traits\Methods\CreateMethod` throws an exception with `$httpMethod` HTTP method.
+     * @testdox Test that `createMethod` throws an exception when using `$httpMethod` HTTP method
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|RestDtoInterface $restDtoInterface */
-        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-
-        /** @var MockObject|CreateMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            CreateMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
-        // Create request and response
-        $request = Request::create('/', $httpMethod);
-
-        $testClass->createMethod($request, $restDtoInterface)->getContent();
+        $this->validTestClass
+            ->createMethod(Request::create('/', $httpMethod), $this->restDto)
+            ->getContent();
     }
 
     /**
+     * @dataProvider dataProviderTestThatTraitHandlesException
+     *
      * @throws Throwable
+     *
+     * @testdox Test that `createMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
-    public function testThatHandleRestMethodExceptionIsCalled(): void
+    public function testThatHandleRestMethodExceptionIsCalled(Throwable $exception, int $expectedCode): void
     {
-        $this->expectException(HttpException::class);
-        $this->expectExceptionMessage('some message');
-
-        /**
-         * @var MockObject|RestResourceInterface $resource
-         * @var MockObject|ResponseHandlerInterface $responseHandler
-         * @var MockObject|RestDtoInterface $restDtoInterface
-         */
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-
-        $exception = new Exception('some message');
-
-        $resource
+        $this->resource
             ->expects(static::once())
             ->method('create')
-            ->with($restDtoInterface, true)
+            ->with($this->restDto, true)
             ->willThrowException($exception);
 
-        /** @var MockObject|CreateMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            CreateMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
+        $this->expectException(HttpException::class);
+        $this->expectExceptionCode($expectedCode);
 
-        // Create request and response
-        $request = Request::create('/', 'POST');
-
-        $testClass->createMethod($request, $restDtoInterface)->getContent();
+        $this->validTestClass
+            ->createMethod(Request::create('/', 'POST'), $this->restDto)
+            ->getContent();
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `createMethod` method calls expected service methods
      */
     public function testThatTraitCallsServiceMethods(): void
     {
-        static::bootKernel();
+        $request = Request::create('/', 'POST');
 
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /**
-         * @var MockObject|RestDtoInterface $restDtoInterface
-         * @var MockObject|Request $request
-         */
-        $restDtoInterface = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $request = $this->createMock(Request::class);
-
-        /** @var MockObject|CreateMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            CreateMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
-        $request
+        $this->resource
             ->expects(static::once())
-            ->method('getMethod')
-            ->willReturn('POST');
+            ->method('create')
+            ->with($this->restDto, true)
+            ->willReturn($this->entity);
 
-        $testClass->createMethod($request, $restDtoInterface);
+        $this->responseHandler
+            ->expects(static::once())
+            ->method('createResponse')
+            ->with($request, $this->entity, $this->resource, 201);
+
+        $this->validTestClass->createMethod($request, $this->restDto);
     }
 
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
@@ -168,9 +160,32 @@ class CreateMethodTest extends KernelTestCase
 
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        yield [new HttpException(400), 0];
+        yield [new HttpException(400, '', null, [], 400), 400];
+        yield [new NoResultException(), 404];
+        yield [new NotFoundHttpException(), 404];
+        yield [new NonUniqueResultException(), 500];
+        yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
-        yield [new Exception(), 400];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->restDto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+
+        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->validTestClass = $this->getMockForAbstractClass(
+            CreateMethodTestClass::class,
+            [$this->resource, $this->responseHandler]
+        );
+
+        $this->inValidTestClass = $this->getMockForAbstractClass(CreateMethodInvalidTestClass::class);
     }
 }
