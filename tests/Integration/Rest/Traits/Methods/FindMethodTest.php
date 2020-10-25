@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Rest/Traits/Methods/FindMethodTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest\Traits\Methods;
@@ -31,7 +31,7 @@ use Throwable;
  * Class FindMethodTest
  *
  * @package App\Tests\Integration\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class FindMethodTest extends KernelTestCase
 {
