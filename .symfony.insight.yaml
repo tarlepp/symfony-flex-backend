@@ -1,0 +1,14 @@
+php_version: 7.4
+
+global_exclude_dirs:
+    - bin
+    - build
+    - config
+    - migrations
+    - tests
+    - var
+    - vendor
+
+pre_composer_script: |
+    #!/bin/bash
+    sed -i -e 's/\/app\/secrets\/application.json/.\/secrets\/application.json/g' .env
