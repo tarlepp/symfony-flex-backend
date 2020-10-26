@@ -1,5 +1,9 @@
 php_version: 7.4
 
+pre_composer_script: |
+    #!/bin/bash
+    sed -i -e 's/\/app\/secrets\/application.json/.\/secrets\/application.json/g' .env
+
 global_exclude_dirs:
     - bin
     - build
@@ -9,6 +13,5 @@ global_exclude_dirs:
     - var
     - vendor
 
-pre_composer_script: |
-    #!/bin/bash
-    sed -i -e 's/\/app\/secrets\/application.json/.\/secrets\/application.json/g' .env
+exclude_patterns:
+    - tests/bootstrap_fastest.php
