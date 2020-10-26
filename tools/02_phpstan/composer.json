@@ -4,7 +4,7 @@
 		"phpstan/extension-installer": "1.0.5",
 		"phpstan/phpstan": "0.12.50",
 		"phpstan/phpstan-phpunit": "0.12.16",
-		"phpstan/phpstan-symfony": "0.12.8",
+		"phpstan/phpstan-symfony": "0.12.10",
 		"roave/security-advisories": "dev-master"
 	},
 	"config": {
