@@ -48,7 +48,7 @@
 		"symfony/form": "5.1.7",
 		"symfony/framework-bundle": "5.1.7",
 		"symfony/monolog-bundle": "3.6.0",
-		"symfony/polyfill-php80": "1.18.1",
+		"symfony/polyfill-php80": "1.20.0",
 		"symfony/process": "5.1.7",
 		"symfony/routing": "5.1.7",
 		"symfony/security-bundle": "5.1.7",
