@@ -1,7 +1,7 @@
 {
 	"require": {},
 	"require-dev": {
-		"migrify/config-transformer": "0.3.49",
+		"migrify/config-transformer": "0.3.51",
 		"roave/security-advisories": "dev-master"
 	},
 	"config": {
