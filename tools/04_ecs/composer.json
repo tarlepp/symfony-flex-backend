@@ -2,7 +2,7 @@
 	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"symplify/easy-coding-standard": "8.3.41"
+		"symplify/easy-coding-standard": "8.3.47"
 	},
 	"config": {
 		"platform": {
