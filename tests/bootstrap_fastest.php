@@ -4,7 +4,7 @@ declare(strict_types = 1);
  * /tests/bootstrap_fastest.php
  *
  * @package App\Tests
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 $pattern = sprintf('%s%stest_database_cache*', sys_get_temp_dir(), DIRECTORY_SEPARATOR);
 
