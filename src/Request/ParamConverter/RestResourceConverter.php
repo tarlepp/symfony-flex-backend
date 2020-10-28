@@ -19,19 +19,20 @@ use Throwable;
 /**
  * Class RestResourceConverter
  *
- * This is meant to be used within controller actions that uses @ParamConverter annotation. Example:
+ * This is meant to be used within controller actions that uses @ParamConverter annotation. Example
+ * (just remember to add `@` to those annotations):
  *  /**
- *   * @Route(
- *   * "/{userEntity}",
- *   * requirements={
- *   * "userEntity" = "%app.uuid_v1_regex%",
- *   * }
- *   * )
+ *   * Route(
+ *   *      "/{userEntity}",
+ *   *      requirements={
+ *   *          "userEntity" = "%app.uuid_v1_regex%",
+ *   *      }
+ *   *  )
  *   *
- *   * @ParamConverter(
- *   * "userEntity",
- *   * class="App\Resource\UserResource",
- *   * )
+ *   * ParamConverter(
+ *   *      "userEntity",
+ *   *      class="App\Resource\UserResource",
+ *   *  )
  *   *
  *   * @param User $collection
  *   *\/
