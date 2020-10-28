@@ -21,9 +21,9 @@ use function is_subclass_of;
 /**
  * Class EntityValueResolver
  *
- * Example how to use this within your controller;
+ * Example how to use this within your controller (just remember to add `@` to route annotation);
  *  /**
- *   * @Symfony\Component\Routing\Annotation\Route(path="some_path_to_your_route/{user}/{apikey}")
+ *   * Symfony\Component\Routing\Annotation\Route(path="some_path_to_your_route/{user}/{apikey}")
  *   *\/
  *  public function someMethod(\App\Entity\User $user, \App\Entity\ApiKey $apikey): Response
  *  {
