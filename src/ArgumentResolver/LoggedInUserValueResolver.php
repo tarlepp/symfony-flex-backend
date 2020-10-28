@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/ArgumentResolver/LoggedInUserValueResolver.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\ArgumentResolver;
@@ -22,10 +22,10 @@ use Throwable;
 /**
  * Class LoggedInUserValueResolver
  *
- * Example how to use this within your controller;
+ * Example how to use this within your controller (just remember to add `@` to those annotations);
  *  /**
- *   * @Symfony\Component\Routing\Annotation\Route(path="some_path_to_your_route")
- *   * @Sensio\Bundle\FrameworkExtraBundle\Configuration\Security("is_granted('IS_AUTHENTICATED_FULLY')")
+ *   * Symfony\Component\Routing\Annotation\Route(path="some_path_to_your_route")
+ *   * Sensio\Bundle\FrameworkExtraBundle\Configuration\Security("is_granted('IS_AUTHENTICATED_FULLY')")
  *   *\/
  *  public function someMethod(\App\Entity\User $loggedInUser): Response
  *  {
@@ -36,7 +36,7 @@ use Throwable;
  * you can use within your controller as you like.
  *
  * @package App\ArgumentResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LoggedInUserValueResolver implements ArgumentValueResolverInterface
 {

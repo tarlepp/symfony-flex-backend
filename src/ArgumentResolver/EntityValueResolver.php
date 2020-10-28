@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/ArgumentResolver/EntityValueResolver.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\ArgumentResolver;
@@ -21,7 +21,7 @@ use function is_subclass_of;
 /**
  * Class EntityValueResolver
  *
- * Example how to use this within your controller (just remember to add `@` to route annotation);
+ * Example how to use this within your controller (just remember to add `@` to those annotations);
  *  /**
  *   * Symfony\Component\Routing\Annotation\Route(path="some_path_to_your_route/{user}/{apikey}")
  *   *\/
@@ -38,7 +38,7 @@ use function is_subclass_of;
  * method argument name.
  *
  * @package App\ArgumentResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class EntityValueResolver implements ArgumentValueResolverInterface
 {
