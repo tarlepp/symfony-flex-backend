@@ -51,7 +51,7 @@
 		"symfony/polyfill-php80": "1.18.1",
 		"symfony/process": "5.1.7",
 		"symfony/routing": "5.1.7",
-		"symfony/security-bundle": "5.1.7",
+		"symfony/security-bundle": "5.1.8",
 		"symfony/serializer-pack": "1.0.4",
 		"symfony/translation": "5.1.7",
 		"symfony/twig-bundle": "5.1.7",
