@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3929ee8f8139de406ad0ae32248967e0",
+    "content-hash": "65c8daca0f3d63e2438730f8cc10afd8",
     "packages": [
         {
             "name": "antishov/doctrine-extensions-bundle",
@@ -3000,28 +3000,33 @@
         },
         {
             "name": "piwik/device-detector",
-            "version": "3.13.1",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "e90533302c58acf41f0d8075a0151537d0ddf34d"
+                "reference": "7ced8fa471d4d136e31e37c8ae49af3ea4567b5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/e90533302c58acf41f0d8075a0151537d0ddf34d",
-                "reference": "e90533302c58acf41f0d8075a0151537d0ddf34d",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/7ced8fa471d4d136e31e37c8ae49af3ea4567b5f",
+                "reference": "7ced8fa471d4d136e31e37c8ae49af3ea4567b5f",
                 "shasum": ""
             },
             "require": {
                 "mustangostang/spyc": "*",
-                "php": ">=5.5"
+                "php": ">=7.2"
+            },
+            "replace": {
+                "piwik/device-detector": "*"
             },
             "require-dev": {
-                "fabpot/php-cs-fixer": "~1.7",
                 "matthiasmullie/scrapbook": "@stable",
-                "phpunit/phpunit": "^4.8.36",
-                "psr/cache": "^1.0",
-                "psr/simple-cache": "^1.0"
+                "mayflower/mo4-coding-standard": "dev-master#275cb9d",
+                "phpstan/phpstan": "^0.12.52",
+                "phpunit/phpunit": "^8.5.8",
+                "psr/cache": "^1.0.1",
+                "psr/simple-cache": "^1.0.1",
+                "symfony/yaml": "^5.1.7"
             },
             "suggest": {
                 "doctrine/cache": "Can directly be used for caching purpose",
@@ -3060,7 +3065,8 @@
                 "source": "https://github.com/matomo-org/piwik",
                 "wiki": "https://dev.matomo.org/"
             },
-            "time": "2020-10-25T10:17:36+00:00"
+            "abandoned": "matomo/device-detector",
+            "time": "2020-10-30T14:37:50+00:00"
         },
         {
             "name": "psr/cache",

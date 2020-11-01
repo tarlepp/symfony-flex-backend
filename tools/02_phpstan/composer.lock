@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8126c7e972feffe7d639d15886908bf",
+    "content-hash": "44db295bb53c8289c99c629e0ffcc452",
     "packages": [],
     "packages-dev": [
         {
@@ -178,22 +178,22 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "0.12.10",
+            "version": "0.12.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "675703d820235cac1abe08e8bfb12e5509a3b169"
+                "reference": "edb6aeb171980b11dca1fd27d3fa7573af89ac8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/675703d820235cac1abe08e8bfb12e5509a3b169",
-                "reference": "675703d820235cac1abe08e8bfb12e5509a3b169",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/edb6aeb171980b11dca1fd27d3fa7573af89ac8e",
+                "reference": "edb6aeb171980b11dca1fd27d3fa7573af89ac8e",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": "^7.1 || ^8.0",
-                "phpstan/phpstan": "^0.12.26"
+                "phpstan/phpstan": "^0.12.51"
             },
             "conflict": {
                 "symfony/framework-bundle": "<3.0"
@@ -246,9 +246,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/0.12.10"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/0.12.11"
             },
-            "time": "2020-10-22T10:47:37+00:00"
+            "time": "2020-10-30T09:50:09+00:00"
         },
         {
             "name": "roave/security-advisories",
