@@ -37,9 +37,6 @@ RUN pecl install apcu \
 # Copy the Composer PHAR from the Composer image into the PHP image
 COPY --from=composer:2.0.4 /usr/bin/composer /usr/bin/composer
 
-# Update Composer to latest version
-RUN composer self-update
-
 # Copy development `php.ini` configuration to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
 
