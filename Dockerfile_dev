@@ -10,7 +10,7 @@ ARG HOST_GID
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin:/app/bin"
 ENV NVM_VERSION v0.35.3
-ENV NODE_VERSION 14
+ENV NODE_VERSION 15
 
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
@@ -78,7 +78,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.s
 #   2) Install `composer-version` helper tool globally
 RUN source ~/.nvm/nvm.sh \
     && nvm install $NODE_VERSION \
-    && nvm use $NODE_VERSION \
     && npm install -g composer-version
 
 # Add necessary stuff to bash autocomplete
