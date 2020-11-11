@@ -27,7 +27,7 @@
 		"ext-pdo_mysql": "*",
 		"antishov/doctrine-extensions-bundle": "1.4.2",
 		"doctrine/annotations": "1.11.1",
-		"doctrine/doctrine-bundle": "2.2.0",
+		"doctrine/doctrine-bundle": "2.2.1",
 		"doctrine/doctrine-migrations-bundle": "3.0.1",
 		"doctrine/orm": "2.7.4",
 		"easycorp/easy-log-handler": "1.0.9",
