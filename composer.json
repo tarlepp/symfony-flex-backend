@@ -36,7 +36,7 @@
 		"matthiasnoback/symfony-console-form": "4.1.0",
 		"nelmio/api-doc-bundle": "4.0.1",
 		"nelmio/cors-bundle": "2.1.0",
-		"piwik/device-detector": "4.0.0",
+		"piwik/device-detector": "4.0.1",
 		"ramsey/uuid-doctrine": "1.6.0",
 		"sensio/framework-extra-bundle": "5.6.1",
 		"symfony/asset": "5.1.8",
@@ -65,7 +65,7 @@
 	},
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "1.4.1",
-		"doctrine/doctrine-fixtures-bundle": "3.3.2",
+		"doctrine/doctrine-fixtures-bundle": "3.4.0",
 		"roave/security-advisories": "dev-master",
 		"sensiolabs/security-checker": "6.0.3",
 		"symfony/browser-kit": "5.1.8",
