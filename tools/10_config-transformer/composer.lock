@@ -4,26 +4,26 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "754aa675babc3811bc0c497b77a10d61",
+    "content-hash": "e9d7f6285f248bcdc6129bb3c3e6e182",
     "packages": [],
     "packages-dev": [
         {
             "name": "migrify/config-transformer",
-            "version": "0.3.52",
+            "version": "0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/migrify/config-transformer.git",
-                "reference": "c36ba891226ffc405b73938c92c1913705b10700"
+                "reference": "fbefd719c49a53e03feea3b7774ccb51cc83dab3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/migrify/config-transformer/zipball/c36ba891226ffc405b73938c92c1913705b10700",
-                "reference": "c36ba891226ffc405b73938c92c1913705b10700",
+                "url": "https://api.github.com/repos/migrify/config-transformer/zipball/fbefd719c49a53e03feea3b7774ccb51cc83dab3",
+                "reference": "fbefd719c49a53e03feea3b7774ccb51cc83dab3",
                 "shasum": ""
             },
             "require": {
-                "migrify/migrify-kernel": "^0.3.52",
-                "migrify/php-config-printer": "^0.3.52",
+                "migrify/migrify-kernel": "^0.4.2",
+                "migrify/php-config-printer": "^0.4.2",
                 "nette/neon": "^3.0",
                 "nette/utils": "^3.1",
                 "nikic/php-parser": "^4.9",
@@ -37,7 +37,7 @@
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
                 "symfony/framework-bundle": "^4.4|^5.1",
-                "symplify/easy-testing": "^8.3.46"
+                "symplify/easy-testing": "^8.3.46|^9.0"
             },
             "bin": [
                 "bin/config-transformer"
@@ -54,22 +54,22 @@
             ],
             "description": "Convert Symfony YAML/XML format to PHP/YAML",
             "support": {
-                "source": "https://github.com/migrify/config-transformer/tree/0.3.52"
+                "source": "https://github.com/migrify/config-transformer/tree/0.4.2"
             },
-            "time": "2020-10-30T10:33:25+00:00"
+            "time": "2020-11-17T12:04:43+00:00"
         },
         {
             "name": "migrify/migrify-kernel",
-            "version": "0.3.52",
+            "version": "0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/migrify/migrify-kernel.git",
-                "reference": "79c8015edeaeafc7d7d27ff0f528ab6165e5d10c"
+                "reference": "679ef17540401c30b28257786ee94fda464a5a8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/migrify/migrify-kernel/zipball/79c8015edeaeafc7d7d27ff0f528ab6165e5d10c",
-                "reference": "79c8015edeaeafc7d7d27ff0f528ab6165e5d10c",
+                "url": "https://api.github.com/repos/migrify/migrify-kernel/zipball/679ef17540401c30b28257786ee94fda464a5a8b",
+                "reference": "679ef17540401c30b28257786ee94fda464a5a8b",
                 "shasum": ""
             },
             "require": {
@@ -77,9 +77,9 @@
                 "symfony/console": "^4.4|^5.1",
                 "symfony/dependency-injection": "^4.4|^5.1",
                 "symfony/http-kernel": "^4.4|^5.1",
-                "symplify/autowire-array-parameter": "^8.3.46",
-                "symplify/package-builder": "^8.3.46",
-                "symplify/smart-file-system": "^8.3.46"
+                "symplify/autowire-array-parameter": "^8.3.46|^9.0",
+                "symplify/package-builder": "^8.3.46|^9.0",
+                "symplify/smart-file-system": "^8.3.46|^9.0"
             },
             "require-dev": {
                 "tracy/tracy": "^2.7"
@@ -97,26 +97,26 @@
             "description": "Kernel for small CLI applications",
             "support": {
                 "issues": "https://github.com/migrify/migrify-kernel/issues",
-                "source": "https://github.com/migrify/migrify-kernel/tree/0.3.52"
+                "source": "https://github.com/migrify/migrify-kernel/tree/0.4.2"
             },
-            "time": "2020-10-25T12:09:47+00:00"
+            "time": "2020-11-14T20:12:17+00:00"
         },
         {
             "name": "migrify/php-config-printer",
-            "version": "0.3.52",
+            "version": "0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/migrify/php-config-printer.git",
-                "reference": "1c840c83cfa8b738ab20e229e8254177d38df068"
+                "reference": "a7d9d21cb34050aa808ccd35d2bedcd484fe1220"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/migrify/php-config-printer/zipball/1c840c83cfa8b738ab20e229e8254177d38df068",
-                "reference": "1c840c83cfa8b738ab20e229e8254177d38df068",
+                "url": "https://api.github.com/repos/migrify/php-config-printer/zipball/a7d9d21cb34050aa808ccd35d2bedcd484fe1220",
+                "reference": "a7d9d21cb34050aa808ccd35d2bedcd484fe1220",
                 "shasum": ""
             },
             "require": {
-                "migrify/migrify-kernel": "^0.3.52",
+                "migrify/migrify-kernel": "^0.4.2",
                 "nette/utils": "^3.1",
                 "nikic/php-parser": "^4.9",
                 "php": ">=7.2",
@@ -124,7 +124,7 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "^8.5|^9.0",
-                "symplify/easy-testing": "^8.3.46"
+                "symplify/easy-testing": "^8.3.46|^9.0"
             },
             "type": "library",
             "autoload": {
@@ -139,9 +139,9 @@
             "description": "Print Symfony services array with configuration to to plain PHP file format thanks to this simple php-parser wrapper",
             "support": {
                 "issues": "https://github.com/migrify/php-config-printer/issues",
-                "source": "https://github.com/migrify/php-config-printer/tree/0.3.52"
+                "source": "https://github.com/migrify/php-config-printer/tree/0.4.2"
             },
-            "time": "2020-10-30T10:33:25+00:00"
+            "time": "2020-11-17T12:04:46+00:00"
         },
         {
             "name": "nette/finder",
@@ -622,12 +622,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "0011d773ec873fbf3cde730da5655ff74eddc9f8"
+                "reference": "d50c04efe771797b10510188c4fbd11ee9fb1bdc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0011d773ec873fbf3cde730da5655ff74eddc9f8",
-                "reference": "0011d773ec873fbf3cde730da5655ff74eddc9f8",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d50c04efe771797b10510188c4fbd11ee9fb1bdc",
+                "reference": "d50c04efe771797b10510188c4fbd11ee9fb1bdc",
                 "shasum": ""
             },
             "conflict": {
@@ -657,7 +657,7 @@
                 "composer/composer": "<=1-alpha.11",
                 "contao-components/mediaelement": ">=2.14.2,<2.21.1",
                 "contao/core": ">=2,<3.5.39",
-                "contao/core-bundle": ">=4,<4.4.52|>=4.5,<4.9.6|= 4.10.0",
+                "contao/core-bundle": "= 4.10.0|>=4,<4.4.52|>=4.5,<4.9.6",
                 "contao/listing-bundle": ">=4,<4.4.8",
                 "datadog/dd-trace": ">=0.30,<0.30.2",
                 "david-garcia/phpwhois": "<=4.3.1",
@@ -673,8 +673,8 @@
                 "doctrine/orm": ">=2,<2.4.8|>=2.5,<2.5.1",
                 "dolibarr/dolibarr": "<11.0.4",
                 "dompdf/dompdf": ">=0.6,<0.6.2",
-                "drupal/core": ">=7,<7.73|>=8,<8.8.10|>=8.9,<8.9.6|>=9,<9.0.6",
-                "drupal/drupal": ">=7,<7.73|>=8,<8.8.10|>=8.9,<8.9.6|>=9,<9.0.6",
+                "drupal/core": ">=7,<7.74|>=8,<8.8.11|>=8.9,<8.9.9|>=9,<9.0.8",
+                "drupal/drupal": ">=7,<7.74|>=8,<8.8.11|>=8.9,<8.9.9|>=9,<9.0.8",
                 "endroid/qr-code-bundle": "<3.4.2",
                 "enshrined/svg-sanitize": "<0.13.1",
                 "erusev/parsedown": "<1.7.2",
@@ -727,7 +727,7 @@
                 "magento/magento1ee": ">=1,<1.14.4.3",
                 "magento/product-community-edition": ">=2,<2.2.10|>=2.3,<2.3.2-p.2",
                 "marcwillmann/turn": "<0.3.3",
-                "mediawiki/core": ">=1.31,<1.31.9|>=1.32,<1.32.4|>=1.33,<1.33.3|>=1.34,<1.34.3|>=1.34.99,<1.35",
+                "mediawiki/core": ">=1.27,<1.27.6|>=1.29,<1.29.3|>=1.30,<1.30.2|>=1.31,<1.31.9|>=1.32,<1.32.6|>=1.32.99,<1.33.3|>=1.33.99,<1.34.3|>=1.34.99,<1.35",
                 "mittwald/typo3_forum": "<1.2.1",
                 "monolog/monolog": ">=1.8,<1.12",
                 "namshi/jose": "<2.2",
@@ -766,6 +766,7 @@
                 "prestashop/autoupgrade": ">=4,<4.10.1",
                 "prestashop/contactform": ">1.0.1,<4.3",
                 "prestashop/gamification": "<2.3.2",
+                "prestashop/productcomments": ">=4,<4.2",
                 "prestashop/ps_facetedsearch": "<3.4.1",
                 "privatebin/privatebin": "<1.2.2|>=1.3,<1.3.2",
                 "propel/propel": ">=2-alpha.1,<=2-alpha.7",
@@ -856,7 +857,7 @@
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "typo3/phar-stream-wrapper": ">=1,<2.1.1|>=3,<3.1.1",
-                "typo3fluid/fluid": ">=2,<2.0.5|>=2.1,<2.1.4|>=2.2,<2.2.1|>=2.3,<2.3.5|>=2.4,<2.4.1|>=2.5,<2.5.5|>=2.6,<2.6.1",
+                "typo3fluid/fluid": ">=2,<2.0.8|>=2.1,<2.1.7|>=2.2,<2.2.4|>=2.3,<2.3.7|>=2.4,<2.4.4|>=2.5,<2.5.11|>=2.6,<2.6.10",
                 "ua-parser/uap-php": "<3.8",
                 "usmanhalalit/pixie": "<1.0.3|>=2,<2.0.2",
                 "verot/class.upload.php": "<=1.0.3|>=2,<=2.0.4",
@@ -930,7 +931,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-13T16:02:31+00:00"
+            "time": "2020-11-19T14:02:08+00:00"
         },
         {
             "name": "symfony/cache",
