@@ -1,7 +1,7 @@
 {
 	"require": {},
 	"require-dev": {
-		"infection/infection": "0.20.1",
+		"infection/infection": "0.20.2",
 		"roave/security-advisories": "dev-master"
 	},
 	"config": {
