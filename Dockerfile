@@ -19,7 +19,7 @@ RUN pecl install apcu \
     && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.0.6 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.0.7 /usr/bin/composer /usr/bin/composer
 
 ENV APP_ENV prod
 ENV COMPOSER_ALLOW_SUPERUSER 1
