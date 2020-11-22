@@ -14,31 +14,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInte
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
 
-/** @noinspection AnnotationMissingUseInspection */
-/** @noinspection PhpUndefinedClassInspection */
 /**
  * Class RestResourceConverter
- *
- * This is meant to be used within controller actions that uses @ParamConverter annotation. Example:
- *  /**
- *   * @Route(
- *   * "/{userEntity}",
- *   * requirements={
- *   * "userEntity" = "%app.uuid_v1_regex%",
- *   * }
- *   * )
- *   *
- *   * @ParamConverter(
- *   * "userEntity",
- *   * class="App\Resource\UserResource",
- *   * )
- *   *
- *   * @param User $collection
- *   *\/
- *  public function testAction(User $userEntity)
- *  {
- *      ...
- *  }
  *
  * Purpose of this param converter is to use exactly same methods and workflow as in basic REST API requests.
  *
