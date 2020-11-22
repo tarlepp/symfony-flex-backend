@@ -13,8 +13,8 @@ if ($_SERVER['APP_DEBUG']) {
     Debug::enable();
 }
 
-$trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false;
-$trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false;
+$trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false;
+$trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false;
 
 if ($trustedProxies !== false) {
     Request::setTrustedProxies(

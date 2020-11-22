@@ -191,9 +191,6 @@
     "ocramius/proxy-manager": {
         "version": "2.6.0"
     },
-    "paragonie/random_compat": {
-        "version": "v9.99.99"
-    },
     "php": {
         "version": "7.4.0"
     },
@@ -442,9 +439,6 @@
     "symfony/polyfill-php56": {
         "version": "v1.13.1"
     },
-    "symfony/polyfill-php70": {
-        "version": "v1.18.0"
-    },
     "symfony/polyfill-php72": {
         "version": "v1.13.1"
     },
@@ -453,9 +447,6 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.15.0"
-    },
-    "symfony/polyfill-util": {
-        "version": "v1.13.1"
     },
     "symfony/process": {
         "version": "v4.4.3"
