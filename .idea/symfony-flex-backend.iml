@@ -46,6 +46,7 @@
       <excludeFolder url="file://$MODULE_DIR$/tools/07_phpinsights" />
       <excludeFolder url="file://$MODULE_DIR$/tools/08_phpmetrics" />
       <excludeFolder url="file://$MODULE_DIR$/tools/09_changelog-linker" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/10_config-transformer" />
       <excludeFolder url="file://$MODULE_DIR$/var" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/antishov/doctrine-extensions-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/bamarni/composer-bin-plugin" />
@@ -87,7 +88,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/nelmio/cors-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ocramius/proxy-manager" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/paragonie/random_compat" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpdocumentor/type-resolver" />
@@ -138,12 +138,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-idn" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-normalizer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-mbstring" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php56" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php70" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php72" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php73" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php80" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-util" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/process" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/property-access" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/property-info" />
