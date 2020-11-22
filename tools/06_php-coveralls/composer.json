@@ -1,7 +1,7 @@
 {
 	"require": {},
 	"require-dev": {
-		"php-coveralls/php-coveralls": "2.4.1",
+		"php-coveralls/php-coveralls": "2.4.2",
 		"roave/security-advisories": "dev-master"
 	},
 	"config": {
