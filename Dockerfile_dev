@@ -1,5 +1,4 @@
-FROM composer:1.10.13 AS composer
-FROM php:7.4.11-fpm
+FROM php:7.4.12-fpm
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -11,7 +10,7 @@ ARG HOST_GID
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin:/app/bin"
 ENV NVM_VERSION v0.35.3
-ENV NODE_VERSION 14
+ENV NODE_VERSION 15
 
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
@@ -26,7 +25,7 @@ RUN docker-php-ext-install -j$(nproc) bcmath \
     && docker-php-ext-install intl \
     && docker-php-ext-install opcache \
     && docker-php-ext-install zip \
-    && pecl install xdebug-2.9.6 \
+    && pecl install xdebug-2.9.8 \
     && docker-php-ext-enable xdebug
 
 # Install APCu and APC backward compatibility
@@ -36,10 +35,7 @@ RUN pecl install apcu \
     && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer /usr/bin/composer /usr/bin/composer
-
-# Update Composer to latest version
-RUN composer self-update
+COPY --from=composer:2.0.7 /usr/bin/composer /usr/bin/composer
 
 # Copy development `php.ini` configuration to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini
@@ -79,7 +75,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.s
 #   2) Install `composer-version` helper tool globally
 RUN source ~/.nvm/nvm.sh \
     && nvm install $NODE_VERSION \
-    && nvm use $NODE_VERSION \
     && npm install -g composer-version
 
 # Add necessary stuff to bash autocomplete

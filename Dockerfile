@@ -1,5 +1,4 @@
-FROM composer:1.10.13 AS composer
-FROM php:7.4.11-fpm
+FROM php:7.4.12-fpm
 
 RUN apt-get update && apt-get install -y \
     zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq \
@@ -19,11 +18,8 @@ RUN pecl install apcu \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini \
     && docker-php-ext-enable apc --ini-name 20-docker-php-ext-apc.ini
 
-# copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer /usr/bin/composer /usr/bin/composer
-
-# Update composer to latest version
-RUN composer self-update
+# Copy the Composer PHAR from the Composer image into the PHP image
+COPY --from=composer:2.0.7 /usr/bin/composer /usr/bin/composer
 
 ENV APP_ENV prod
 ENV COMPOSER_ALLOW_SUPERUSER 1
