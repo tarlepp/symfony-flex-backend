@@ -3,13 +3,14 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Rest/Traits/Actions/Logged/ActionTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest\Traits\Actions\Logged;
 
 use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
+use App\Utils\Tests\StringableArrayObject;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,7 @@ use const DIRECTORY_SEPARATOR;
  * Class ActionTest
  *
  * @package App\Tests\Integration\Rest\Traits\Actions\Logged
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ActionTest extends KernelTestCase
 {
@@ -34,30 +35,30 @@ class ActionTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `$method` method call trigger `$traitMethod` method call in `$className` trait.
+     * @testdox Test that `$method` triggers `$trait` method call in `$class` trait when using `$parameters` parameters
      */
     public function testThatTraitCallsExpectedMethod(
-        string $className,
+        string $class,
         string $method,
-        string $traitMethod,
-        array $parameters
+        string $trait,
+        StringableArrayObject $parameters
     ): void {
         $stub = $this->getMockForTrait(
-            $className,
+            $class,
             [],
             '',
             true,
             true,
             true,
-            [$traitMethod]
+            [$trait]
         );
 
         $stub
             ->expects(static::once())
-            ->method($traitMethod)
-            ->with(...$parameters);
+            ->method($trait)
+            ->with(...$parameters->getArrayCopy());
 
-        $result = call_user_func_array([$stub, $method], $parameters);
+        $result = call_user_func_array([$stub, $method], $parameters->getArrayCopy());
 
         static::assertInstanceOf(Response::class, $result);
     }
@@ -98,7 +99,7 @@ class ActionTest extends KernelTestCase
                 $class,
                 lcfirst($base),
                 str_replace('Action', 'Method', lcfirst($base)),
-                $parameters,
+                new StringableArrayObject($parameters),
             ];
         };
 
