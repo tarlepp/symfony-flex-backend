@@ -16,7 +16,7 @@ use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\RoleRepository;
 use App\Resource\ApiKeyResource;
 use App\Utils\Tests\StringableArrayObject;
-use Doctrine\Common\Persistence\AbstractManagerRegistry;
+use Doctrine\Persistence\AbstractManagerRegistry;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
