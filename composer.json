@@ -48,7 +48,7 @@
 		"symfony/framework-bundle": "5.1.9",
 		"symfony/monolog-bundle": "3.6.0",
 		"symfony/polyfill-php80": "1.20.0",
-		"symfony/process": "5.1.9",
+		"symfony/process": "5.2.0",
 		"symfony/routing": "5.1.9",
 		"symfony/security-bundle": "5.1.9",
 		"symfony/serializer-pack": "1.0.4",
