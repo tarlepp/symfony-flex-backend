@@ -10,7 +10,7 @@ namespace App\EventListener;
 
 use App\Entity\User;
 use App\Security\SecurityUser;
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use LengthException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use function strlen;
