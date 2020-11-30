@@ -92,7 +92,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
-     *      allowEmptyString="false",
      *  )
      *
      * @ORM\Column(
@@ -118,7 +117,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
-     *      allowEmptyString="false",
      *  )
      *
      * @ORM\Column(
@@ -144,7 +142,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      * @Assert\Length(
      *      min = 2,
      *      max = 255,
-     *      allowEmptyString="false",
      *  )
      *
      * @ORM\Column(
