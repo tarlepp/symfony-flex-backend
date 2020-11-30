@@ -67,7 +67,7 @@
 		"doctrine/doctrine-fixtures-bundle": "3.4.0",
 		"roave/security-advisories": "dev-master",
 		"sensiolabs/security-checker": "6.0.3",
-		"symfony/browser-kit": "5.1.9",
+		"symfony/browser-kit": "5.2.0",
 		"symfony/debug-bundle": "5.1.9",
 		"symfony/maker-bundle": "1.24.2",
 		"symfony/requirements-checker": "2.0.0",
