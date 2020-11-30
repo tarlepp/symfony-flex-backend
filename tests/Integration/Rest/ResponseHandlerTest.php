@@ -33,7 +33,7 @@ class ResponseHandlerTest extends ContainerTestCase
 {
     public function testThatGetSerializerReturnsExpected(): void
     {
-        $serializer = $this->getContainer()->get('serializer');
+        $serializer = $this->getContainer()->get(SerializerInterface::class);
 
         $responseClass = new ResponseHandler($serializer);
 
@@ -54,7 +54,7 @@ class ResponseHandlerTest extends ContainerTestCase
         $data,
         string $expectedContent
     ): void {
-        $serializer = $this->getContainer()->get('serializer');
+        $serializer = $this->getContainer()->get(SerializerInterface::class);
 
         /** @var MockObject|RestResourceInterface $stubResourceService */
         $stubResourceService = $this->createMock(RestResourceInterface::class);
@@ -105,7 +105,7 @@ class ResponseHandlerTest extends ContainerTestCase
         $this->expectExceptionMessageMatches('/Serialization for the format .* is not supported/');
 
         $request = Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => $format]);
-        $serializer = $this->getContainer()->get('serializer');
+        $serializer = $this->getContainer()->get(SerializerInterface::class);
 
         /** @var MockObject|RestResourceInterface $stubResourceService */
         $stubResourceService = $this->createMock(RestResourceInterface::class);
