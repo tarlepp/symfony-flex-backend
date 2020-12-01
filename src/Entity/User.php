@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/User.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -35,14 +35,14 @@ use Throwable;
  * @ORM\Table(
  *      name="user",
  *      uniqueConstraints={
- * @ORM\UniqueConstraint(name="uq_username", columns={"username"}),
- * @ORM\UniqueConstraint(name="uq_email", columns={"email"}),
+ *          @ORM\UniqueConstraint(name="uq_username", columns={"username"}),
+ *          @ORM\UniqueConstraint(name="uq_email", columns={"email"}),
  *      },
  *  )
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 {
