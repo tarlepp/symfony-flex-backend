@@ -34,7 +34,6 @@ class UserGroup extends RestDto
      * @Assert\Length(
      *      min = 4,
      *      max = 255,
-     *      allowEmptyString="false",
      *  )
      */
     protected string $name = '';
