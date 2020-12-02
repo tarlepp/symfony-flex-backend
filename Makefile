@@ -290,7 +290,7 @@ endif
 
 update: ## Update composer dependencies
 ifeq ($(INSIDE_DOCKER), 1)
-	@php -d memory_limit=-1 /usr/bin/composer update
+	@php -d memory_limit=-1 /usr/bin/composer update --with-all-dependencies --optimize-autoloader
 else
 	$(WARNING_DOCKER)
 endif
