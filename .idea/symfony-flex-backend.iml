@@ -14,6 +14,8 @@
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest/adapters" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/sebastian/finder-facade/src" isTestSource="true" packagePrefix="SebastianBergmann\FinderFacade\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Symfony" isTestSource="true" packagePrefix="PHPStan\Symfony\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Type/Symfony" isTestSource="true" packagePrefix="PHPStan\Type\Symfony\" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine" />
