@@ -41,7 +41,7 @@ class ApiKeyManagementCommand extends Command
             'api-key:edit' => 'Edit API key',
             'api-key:change-token' => 'Change API key token',
             'api-key:remove' => 'Remove API key',
-            false => 'Exit',
+            '0' => 'Exit',
         ]);
     }
 }
