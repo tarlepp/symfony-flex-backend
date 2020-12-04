@@ -5,4 +5,5 @@ parameters:
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
 includes:
+    - tools/02_phpstan/vendor/phpstan/phpstan-phpunit/extension.neon
     - tools/02_phpstan/vendor/phpstan/phpstan-symfony/extension.neon
