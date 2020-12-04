@@ -4,3 +4,5 @@ parameters:
         - %currentWorkingDirectory%/src/Migrations/*
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
+includes:
+    - tools/02_phpstan/vendor/phpstan/phpstan-symfony/extension.neon
