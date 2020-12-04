@@ -268,10 +268,5 @@ class LogRequestTest extends EntityTestCase
             'foo=bar',
             new StringableArrayObject(['foo' => 'bar']),
         ];
-
-        yield [
-            'false',
-            new StringableArrayObject([false]),
-        ];
     }
 }
