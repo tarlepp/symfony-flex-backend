@@ -96,7 +96,7 @@ class PhpUnitUtil
         $fileList = [];
 
         foreach ($files as $file) {
-            $fileList[] = (string)$file[0];
+            $fileList[] = $file[0];
         }
 
         return $fileList;

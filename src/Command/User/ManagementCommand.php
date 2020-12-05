@@ -26,8 +26,6 @@ class ManagementCommand extends Command
      * ManagementCommand constructor.
      *
      * @throws LogicException
-     *
-     * @psalm-suppress InvalidScalarArgument
      */
     public function __construct()
     {
@@ -44,7 +42,7 @@ class ManagementCommand extends Command
             'user:edit-group' => 'Edit user group',
             'user:remove' => 'Remove user',
             'user:remove-group' => 'Remove user group',
-            false => 'Exit',
+            '0' => 'Exit',
         ]);
     }
 }

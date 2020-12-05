@@ -28,7 +28,7 @@ trait ExecuteMultipleCommandTrait
     use GetApplicationTrait;
 
     /**
-     * @var array<int|string, string>
+     * @var array<array-key, string>
      */
     private array $choices = [];
 
@@ -40,7 +40,7 @@ trait ExecuteMultipleCommandTrait
     /**
      * Setter method for choices to use.
      *
-     * @param array<int|string, string> $choices
+     * @param array<array-key, string> $choices
      */
     protected function setChoices(array $choices): void
     {

@@ -78,7 +78,7 @@ final class ResponseHandler implements ResponseHandlerInterface
         if ($restResource !== null) {
             // Get current entity name
             $bits = explode('\\', $restResource->getEntityName());
-            $entityName = (string)end($bits);
+            $entityName = end($bits);
 
             $populate = $this->checkPopulateAll(
                 array_key_exists('populateAll', $request->query->all()),

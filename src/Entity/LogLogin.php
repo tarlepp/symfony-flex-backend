@@ -393,6 +393,6 @@ class LogLogin implements EntityInterface
         /** @var string|array<int, string> $value */
         $value = $this->deviceDetector->{$method}($attribute);
 
-        return is_array($value) ? implode(', ', $value) : (string)$value;
+        return is_array($value) ? implode(', ', $value) : $value;
     }
 }

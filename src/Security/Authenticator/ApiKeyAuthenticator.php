@@ -45,7 +45,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request): bool
     {
-        $apiKey = (string)$request->headers->get('Authorization', '');
+        $apiKey = $request->headers->get('Authorization', '');
 
         preg_match('#^ApiKey (\w+)$#', $apiKey, $matches);
 
@@ -61,14 +61,11 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCredentials(Request $request)
+    public function getCredentials(Request $request): ?array
     {
         $output = null;
 
-        $apiKey = (string)$request->headers->get('Authorization', '');
+        $apiKey = $request->headers->get('Authorization', '');
 
         preg_match('#^ApiKey (\w+)$#', $apiKey, $matches);
 

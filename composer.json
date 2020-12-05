@@ -43,7 +43,7 @@
 		"symfony/console": "5.2.0",
 		"symfony/dotenv": "5.2.0",
 		"symfony/expression-language": "5.2.0",
-		"symfony/flex": "1.10.0",
+		"symfony/flex": "1.11.0",
 		"symfony/form": "5.2.0",
 		"symfony/framework-bundle": "5.2.0",
 		"symfony/monolog-bundle": "3.6.0",
@@ -115,7 +115,9 @@
 			],
 			"PhpCsFixer\\": "tools/04_ecs/vendor/friendsofphp/php-cs-fixer/src",
 			"SlevomatCodingStandard\\": "tools/04_ecs/vendor/slevomat/coding-standard/SlevomatCodingStandard",
-			"Symplify\\CodingStandard\\": "tools/04_ecs/vendor/symplify/coding-standard/src"
+			"Symplify\\CodingStandard\\": "tools/04_ecs/vendor/symplify/coding-standard/src",
+			"PHPStan\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Symfony",
+			"PHPStan\\Type\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Type/Symfony"
 		}
 	},
 	"prefer-stable": true,
