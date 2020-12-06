@@ -88,7 +88,7 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
 
         $dtoClass = $this->controllerCollection
             ->get($controllerName)
-            ->getDtoClass((string)$this->actionMethodMap[$actionName]);
+            ->getDtoClass($this->actionMethodMap[$actionName]);
 
         yield $this->autoMapper->map($request, $dtoClass);
     }

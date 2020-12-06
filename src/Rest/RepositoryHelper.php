@@ -152,7 +152,7 @@ class RepositoryHelper
                 $column = 'entity.' . $column;
             }
 
-            $queryBuilder->addOrderBy((string)$column, $order);
+            $queryBuilder->addOrderBy($column, $order);
         }
     }
 

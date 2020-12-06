@@ -64,7 +64,7 @@ class ApiKeyHelper
                 $apiKeyEntity->getDescription()
             );
 
-            $apiKeyFound = (bool)$io->confirm($message, false);
+            $apiKeyFound = $io->confirm($message, false);
         }
 
         return $apiKeyEntity ?? null;

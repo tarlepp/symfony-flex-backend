@@ -94,7 +94,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
             $entity = get_class($entities[0]);
 
             $parameterEntity = str_replace('Proxies\\__CG__\\', '', $entity);
-            $parameterId = count($invalidIds) > 1 ? implode('", "', $invalidIds) : (string)$invalidIds[0];
+            $parameterId = count($invalidIds) > 1 ? implode('", "', $invalidIds) : $invalidIds[0];
 
             $this->context
                 ->buildViolation($message)

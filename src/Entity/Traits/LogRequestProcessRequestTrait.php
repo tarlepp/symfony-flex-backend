@@ -345,7 +345,7 @@ trait LogRequestProcessRequestTrait
         $this->processHeadersAndParameters($request);
 
         $this->action = $this->determineAction($request);
-        $this->content = $this->cleanContent((string)$request->getContent());
+        $this->content = $this->cleanContent($request->getContent());
     }
 
     private function processHeadersAndParameters(Request $request): void
@@ -398,7 +398,7 @@ trait LogRequestProcessRequestTrait
 
     private function determineAction(Request $request): string
     {
-        $rawAction = (string)$request->get('_controller', '');
+        $rawAction = $request->get('_controller', '');
         $rawAction = explode(strpos($rawAction, '::') ? '::' : ':', $rawAction);
 
         return $rawAction[1] ?? '';
@@ -411,7 +411,7 @@ trait LogRequestProcessRequestTrait
      */
     private function determineParameters(Request $request): array
     {
-        $rawContent = (string)$request->getContent();
+        $rawContent = $request->getContent();
 
         // By default just get whole parameter bag
         $output = $request->request->all();
@@ -432,7 +432,7 @@ trait LogRequestProcessRequestTrait
             }
         }
 
-        return (array)$output;
+        return $output;
     }
 
     /**
@@ -450,7 +450,7 @@ trait LogRequestProcessRequestTrait
 
         // Replace current value
         if (array_key_exists($key, $replacements)) {
-            $value = $this->cleanContent((string)$replacements[$key]);
+            $value = $this->cleanContent($replacements[$key]);
         }
 
         // Recursive call
