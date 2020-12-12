@@ -42,6 +42,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @var array<int, string>
      */
     protected static array $searchColumns = [];
+
+    /**
+     * @var class-string
+     */
     protected static string $entityName;
     protected static EntityManager $entityManager;
 
@@ -81,6 +85,9 @@ abstract class BaseRepository implements BaseRepositoryInterface
         $this->managerRegistry = $managerRegistry;
     }
 
+    /**
+     * @return class-string
+     */
     public function getEntityName(): string
     {
         return static::$entityName;

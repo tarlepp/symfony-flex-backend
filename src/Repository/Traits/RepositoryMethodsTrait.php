@@ -11,8 +11,6 @@ namespace App\Repository\Traits;
 use App\Entity\Interfaces\EntityInterface;
 use App\Rest\RepositoryHelper;
 use App\Rest\UuidHelper;
-use ArrayIterator;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use InvalidArgumentException;
@@ -65,12 +63,10 @@ trait RepositoryMethodsTrait
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());
 
-        return $repository instanceof EntityRepository ? $repository->findOneBy($criteria, $orderBy) : null;
+        return $repository->findOneBy($criteria, $orderBy);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array<int, EntityInterface|object>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
@@ -110,7 +106,7 @@ trait RepositoryMethodsTrait
 
         $iterator = (new Paginator($queryBuilder, true))->getIterator();
 
-        return $iterator instanceof ArrayIterator ? $iterator->getArrayCopy() : iterator_to_array($iterator);
+        return $iterator->getArrayCopy();
     }
 
     /**
