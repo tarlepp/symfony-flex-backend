@@ -104,6 +104,7 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
+        /** @psalm-suppress InvalidTemplateParam */
         $iterator = (new Paginator($queryBuilder, true))->getIterator();
 
         return $iterator->getArrayCopy();
