@@ -298,7 +298,7 @@ endif
 COMPOSER_BIN := $(shell which composer)
 update-bin: ## Update composer bin dependencies
 ifeq ($(INSIDE_DOCKER), 1)
-	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --W --no-progress --no-suggest --optimize-autoloader
+	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --no-suggest --optimize-autoloader
 else
 	$(WARNING_DOCKER)
 endif
