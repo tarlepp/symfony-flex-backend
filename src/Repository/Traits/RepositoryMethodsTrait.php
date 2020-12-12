@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Repository/Traits/RepositoryMethodsTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository\Traits;
@@ -21,12 +21,13 @@ use function array_values;
  * Trait RepositoryMethodsTrait
  *
  * @package App\Repository\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait RepositoryMethodsTrait
 {
     public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
+        /** @phpstan-ignore-next-line */
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
         return $output instanceof EntityInterface ? $output : null;
