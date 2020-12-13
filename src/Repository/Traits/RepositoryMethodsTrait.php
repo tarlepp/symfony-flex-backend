@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Repository/Traits/RepositoryMethodsTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository\Traits;
@@ -11,8 +11,6 @@ namespace App\Repository\Traits;
 use App\Entity\Interfaces\EntityInterface;
 use App\Rest\RepositoryHelper;
 use App\Rest\UuidHelper;
-use ArrayIterator;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use InvalidArgumentException;
@@ -23,12 +21,13 @@ use function array_values;
  * Trait RepositoryMethodsTrait
  *
  * @package App\Repository\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait RepositoryMethodsTrait
 {
     public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface
     {
+        /** @phpstan-ignore-next-line */
         $output = $this->getEntityManager()->find($this->getEntityName(), $id, $lockMode, $lockVersion);
 
         return $output instanceof EntityInterface ? $output : null;
@@ -65,12 +64,10 @@ trait RepositoryMethodsTrait
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());
 
-        return $repository instanceof EntityRepository ? $repository->findOneBy($criteria, $orderBy) : null;
+        return $repository->findOneBy($criteria, $orderBy);
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @return array<int, EntityInterface|object>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
@@ -108,9 +105,10 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
+        /** @psalm-suppress InvalidTemplateParam */
         $iterator = (new Paginator($queryBuilder, true))->getIterator();
 
-        return $iterator instanceof ArrayIterator ? $iterator->getArrayCopy() : iterator_to_array($iterator);
+        return $iterator->getArrayCopy();
     }
 
     /**
