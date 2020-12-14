@@ -1110,7 +1110,7 @@
                 "issues": "https://github.com/object-calisthenics/phpcs-calisthenics-rules/issues",
                 "source": "https://github.com/object-calisthenics/phpcs-calisthenics-rules/tree/master"
             },
-            "abandoned": "symplify/coding-standard",
+            "abandoned": "symplify/phpstan-rules",
             "time": "2020-09-08T10:18:44+00:00"
         },
         {
