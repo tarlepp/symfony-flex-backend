@@ -32,9 +32,6 @@ class EditApiKeyCommand extends Command
     private ApiKeyResource $apiKeyResource;
     private ApiKeyHelper $apiKeyHelper;
 
-    /**
-     * EditUserCommand constructor.
-     */
     public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
         parent::__construct('api-key:edit');

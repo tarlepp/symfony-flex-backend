@@ -31,9 +31,6 @@ class AttachUserController
     private UserGroupResource $userGroupResource;
     private SerializerInterface $serializer;
 
-    /**
-     * AttachUserController constructor.
-     */
     public function __construct(UserGroupResource $userGroupResource, SerializerInterface $serializer)
     {
         $this->userGroupResource = $userGroupResource;

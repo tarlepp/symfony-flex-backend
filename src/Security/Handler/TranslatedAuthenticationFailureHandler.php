@@ -27,9 +27,6 @@ class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandle
 {
     private TranslatorInterface $translator;
 
-    /**
-     * TranslatedAuthenticationFailureHandler constructor.
-     */
     public function __construct(EventDispatcherInterface $dispatcher, TranslatorInterface $translator)
     {
         parent::__construct($dispatcher);

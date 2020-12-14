@@ -30,9 +30,6 @@ class IndexController
     private SerializerInterface $serializer;
     private RolesService $rolesService;
 
-    /**
-     * ProfileController constructor.
-     */
     public function __construct(SerializerInterface $serializer, RolesService $rolesService)
     {
         $this->serializer = $serializer;

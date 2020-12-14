@@ -32,9 +32,6 @@ class EditUserCommand extends Command
     private UserResource $userResource;
     private UserHelper $userHelper;
 
-    /**
-     * EditUserCommand constructor.
-     */
     public function __construct(UserResource $userResource, UserHelper $userHelper)
     {
         parent::__construct('user:edit');

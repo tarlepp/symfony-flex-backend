@@ -31,9 +31,6 @@ class SecurityUserFactory implements UserProviderInterface
     private RolesService $rolesService;
     private string $uuidV1Regex;
 
-    /**
-     * SecurityUserFactory constructor.
-     */
     public function __construct(UserRepository $userRepository, RolesService $rolesService, string $uuidV1Regex)
     {
         $this->userRepository = $userRepository;

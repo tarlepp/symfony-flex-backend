@@ -34,9 +34,6 @@ class LockedUserSubscriber implements EventSubscriberInterface
     private UserRepository $userRepository;
     private LogLoginFailureResource $logLoginFailureResource;
 
-    /**
-     * LockedUserSubscriber constructor.
-     */
     public function __construct(UserRepository $userRepository, LogLoginFailureResource $logLoginFailureResource)
     {
         $this->userRepository = $userRepository;

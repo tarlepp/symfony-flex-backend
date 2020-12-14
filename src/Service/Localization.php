@@ -36,9 +36,6 @@ class Localization
     private CacheInterface $cache;
     private LoggerInterface $logger;
 
-    /**
-     * Localization constructor.
-     */
     public function __construct(CacheInterface $appCacheApcu, LoggerInterface $logger)
     {
         $this->cache = $appCacheApcu;

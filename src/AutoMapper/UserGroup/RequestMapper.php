@@ -31,9 +31,6 @@ class RequestMapper extends RestRequestMapper
 
     private RoleResource $roleResource;
 
-    /**
-     * RequestMapper constructor.
-     */
     public function __construct(RoleResource $roleResource)
     {
         $this->roleResource = $roleResource;

@@ -26,9 +26,6 @@ class RestResourceConverter implements ParamConverterInterface
 {
     private ResourceCollection $collection;
 
-    /**
-     * RestResourceConverter constructor.
-     */
     public function __construct(ResourceCollection $collection)
     {
         $this->collection = $collection;

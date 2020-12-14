@@ -27,9 +27,6 @@ class UserGroupTransformer implements DataTransformerInterface
 {
     private UserGroupResource $resource;
 
-    /**
-     * UserGroupTransformer constructor.
-     */
     public function __construct(UserGroupResource $resource)
     {
         $this->resource = $resource;

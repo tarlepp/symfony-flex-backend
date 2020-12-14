@@ -30,9 +30,6 @@ class LocaleController
 {
     private Localization $localization;
 
-    /**
-     * LanguageController constructor.
-     */
     public function __construct(Localization $localization)
     {
         $this->localization = $localization;

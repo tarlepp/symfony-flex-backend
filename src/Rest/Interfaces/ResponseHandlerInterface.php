@@ -28,9 +28,6 @@ interface ResponseHandlerInterface
     public const FORMAT_JSON = 'json';
     public const FORMAT_XML = 'xml';
 
-    /**
-     * ResponseHandler constructor.
-     */
     public function __construct(SerializerInterface $serializer);
 
     /**

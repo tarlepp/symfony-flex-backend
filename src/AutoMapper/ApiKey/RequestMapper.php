@@ -33,9 +33,6 @@ class RequestMapper extends RestRequestMapper
 
     private UserGroupResource $userGroupResource;
 
-    /**
-     * RequestMapper constructor.
-     */
     public function __construct(UserGroupResource $userGroupResource)
     {
         $this->userGroupResource = $userGroupResource;

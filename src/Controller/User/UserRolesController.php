@@ -26,9 +26,6 @@ class UserRolesController
 {
     private RolesService $rolesService;
 
-    /**
-     * UserRolesController constructor.
-     */
     public function __construct(RolesService $rolesService)
     {
         $this->rolesService = $rolesService;

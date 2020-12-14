@@ -29,9 +29,6 @@ class RemoveUserGroupCommand extends Command
     private UserGroupResource $userGroupResource;
     private UserHelper $userHelper;
 
-    /**
-     * RemoveUserGroupCommand constructor.
-     */
     public function __construct(UserGroupResource $userGroupResource, UserHelper $userHelper)
     {
         parent::__construct('user:remove-group');

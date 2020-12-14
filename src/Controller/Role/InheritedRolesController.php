@@ -28,9 +28,6 @@ class InheritedRolesController
 {
     private RolesService $rolesService;
 
-    /**
-     * InheritedRolesController constructor.
-     */
     public function __construct(RolesService $rolesService)
     {
         $this->rolesService = $rolesService;

@@ -35,9 +35,6 @@ class CreateRolesCommand extends Command
     private RoleRepository $roleRepository;
     private RolesService $rolesService;
 
-    /**
-     * CreateRolesCommand constructor.
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         RoleRepository $roleRepository,

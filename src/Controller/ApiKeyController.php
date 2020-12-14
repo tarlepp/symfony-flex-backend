@@ -54,9 +54,6 @@ class ApiKeyController extends Controller
         Controller::METHOD_PATCH => ApiKeyPatch::class,
     ];
 
-    /**
-     * ApiKeyController constructor.
-     */
     public function __construct(ApiKeyResource $resource)
     {
         $this->resource = $resource;

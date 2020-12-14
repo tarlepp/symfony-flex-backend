@@ -37,9 +37,6 @@ use App\Rest\RestResource;
  */
 class HealthzResource extends RestResource
 {
-    /**
-     * HealthzResource constructor.
-     */
     public function __construct(Repository $repository)
     {
         $this->setRepository($repository);

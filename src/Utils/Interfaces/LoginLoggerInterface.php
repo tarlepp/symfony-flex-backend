@@ -21,9 +21,6 @@ use Throwable;
  */
 interface LoginLoggerInterface
 {
-    /**
-     * LoginLogger constructor.
-     */
     public function __construct(LogLoginResource $logLoginFailureResource, RequestStack $requestStack);
 
     /**

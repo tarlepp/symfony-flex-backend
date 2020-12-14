@@ -23,9 +23,6 @@ class BlameableDecorator extends BlameableListener
 {
     private UserResource $userResource;
 
-    /**
-     * BlameableDecorator constructor.
-     */
     public function __construct(UserResource $userResource)
     {
         parent::__construct();

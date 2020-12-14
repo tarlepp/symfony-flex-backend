@@ -23,9 +23,6 @@ abstract class DeleteMethodTestClass extends Controller
 {
     use DeleteMethod;
 
-    /**
-     * DeleteMethodTestClass constructor.
-     */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
         $this->resource = $resource;

@@ -23,9 +23,6 @@ class LocaleValidator extends ConstraintValidator
 {
     private Localization $localization;
 
-    /**
-     * LocaleValidator constructor.
-     */
     public function __construct(Localization $localization)
     {
         $this->localization = $localization;

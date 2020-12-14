@@ -29,9 +29,6 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
     private RequestStack $requestStack;
     private LoggerInterface $logger;
 
-    /**
-     * JWTDecodedSubscriber constructor.
-     */
     public function __construct(RequestStack $requestStack, LoggerInterface $logger)
     {
         $this->requestStack = $requestStack;

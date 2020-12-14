@@ -27,9 +27,6 @@ class UserGroupsController
 {
     private SerializerInterface $serializer;
 
-    /**
-     * UserGroupsController constructor.
-     */
     public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;

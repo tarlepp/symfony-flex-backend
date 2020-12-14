@@ -34,9 +34,6 @@ class EntityReferenceExistsValidator extends ConstraintValidator
 {
     private LoggerInterface $logger;
 
-    /**
-     * EntityReferenceExistsValidator constructor.
-     */
     public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;

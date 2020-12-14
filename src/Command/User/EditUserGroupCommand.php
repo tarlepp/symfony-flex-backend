@@ -32,9 +32,6 @@ class EditUserGroupCommand extends Command
     private UserGroupResource $userGroupResource;
     private UserHelper $userHelper;
 
-    /**
-     * EditUserGroupCommand constructor.
-     */
     public function __construct(UserGroupResource $userGroupResource, UserHelper $userHelper)
     {
         parent::__construct('user:edit-group');

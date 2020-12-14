@@ -19,9 +19,6 @@ use App\Rest\Interfaces\RestResourceInterface;
  */
 abstract class AbstractController extends Controller
 {
-    /**
-     * AbstractController constructor.
-     */
     public function __construct(RestResourceInterface $resource)
     {
         $this->resource = $resource;

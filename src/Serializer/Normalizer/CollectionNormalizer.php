@@ -23,9 +23,6 @@ class CollectionNormalizer implements NormalizerInterface
 {
     private ObjectNormalizer $normalizer;
 
-    /**
-     * CollectionNormalizer constructor.
-     */
     public function __construct(ObjectNormalizer $normalizer)
     {
         $this->normalizer = $normalizer;

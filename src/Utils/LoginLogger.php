@@ -31,9 +31,6 @@ class LoginLogger implements LoginLoggerInterface
     private ?User $user = null;
     private DeviceDetector $deviceDetector;
 
-    /**
-     * LoginLogger constructor.
-     */
     public function __construct(LogLoginResource $logLoginResource, RequestStack $requestStack)
     {
         // Store used services

@@ -35,9 +35,6 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 
     private ApiKeyUserProvider $apiKeyUserProvider;
 
-    /**
-     * ApiKeyAuthenticator constructor.
-     */
     public function __construct(ApiKeyUserProvider $apiKeyUserProvider)
     {
         $this->apiKeyUserProvider = $apiKeyUserProvider;

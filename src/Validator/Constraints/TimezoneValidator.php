@@ -25,9 +25,6 @@ class TimezoneValidator extends ConstraintValidator
 {
     private Localization $localization;
 
-    /**
-     * TimezoneValidator constructor.
-     */
     public function __construct(Localization $localization)
     {
         $this->localization = $localization;

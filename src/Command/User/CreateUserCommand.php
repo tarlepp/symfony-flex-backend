@@ -73,9 +73,6 @@ class CreateUserCommand extends Command
     private RolesService $rolesService;
     private RoleRepository $roleRepository;
 
-    /**
-     * CreateUserCommand constructor.
-     */
     public function __construct(
         UserResource $userResource,
         UserGroupResource $userGroupResource,

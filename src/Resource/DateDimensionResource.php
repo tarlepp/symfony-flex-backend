@@ -37,9 +37,6 @@ use App\Rest\RestResource;
  */
 class DateDimensionResource extends RestResource
 {
-    /**
-     * DateDimensionResource constructor.
-     */
     public function __construct(Repository $repository)
     {
         $this->setRepository($repository);

@@ -33,9 +33,6 @@ class ListUserGroupsCommand extends Command
 
     private UserGroupResource $userGroupResource;
 
-    /**
-     * ListUserGroupsCommand constructor.
-     */
     public function __construct(UserGroupResource $userGroupResource)
     {
         parent::__construct('user:list-groups');

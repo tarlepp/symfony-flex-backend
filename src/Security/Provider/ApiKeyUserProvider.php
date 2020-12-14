@@ -29,9 +29,6 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface
     private ApiKeyRepository $apiKeyRepository;
     private RolesService $rolesService;
 
-    /**
-     * ApiKeyUserProvider constructor.
-     */
     public function __construct(ApiKeyRepository $apiKeyRepository, RolesService $rolesService)
     {
         $this->apiKeyRepository = $apiKeyRepository;
