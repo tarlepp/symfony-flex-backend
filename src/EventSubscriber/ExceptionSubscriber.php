@@ -57,9 +57,6 @@ class ExceptionSubscriber implements EventSubscriberInterface
         ClientErrorInterface::class,
     ];
 
-    /**
-     * ExceptionSubscriber constructor.
-     */
     public function __construct(LoggerInterface $logger, UserTypeIdentification $userService, string $environment)
     {
         $this->logger = $logger;

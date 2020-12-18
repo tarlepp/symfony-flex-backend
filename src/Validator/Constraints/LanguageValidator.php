@@ -23,9 +23,6 @@ class LanguageValidator extends ConstraintValidator
 {
     private Localization $localization;
 
-    /**
-     * LanguageValidator constructor.
-     */
     public function __construct(Localization $localization)
     {
         $this->localization = $localization;

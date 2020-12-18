@@ -29,9 +29,6 @@ class RemoveUserCommand extends Command
     private UserResource $userResource;
     private UserHelper $userHelper;
 
-    /**
-     * RemoveUserCommand constructor.
-     */
     public function __construct(UserResource $userResource, UserHelper $userHelper)
     {
         parent::__construct('user:remove');

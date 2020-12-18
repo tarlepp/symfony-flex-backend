@@ -45,9 +45,6 @@ class UserResource extends RestResource
 {
     private RolesService $rolesService;
 
-    /**
-     * Class constructor.
-     */
     public function __construct(Repository $repository, RolesService $rolesService)
     {
         $this->setRepository($repository);

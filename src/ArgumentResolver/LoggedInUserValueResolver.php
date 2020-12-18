@@ -43,9 +43,6 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
     private TokenStorageInterface $tokenStorage;
     private UserTypeIdentification $userService;
 
-    /**
-     * LoggedInUserValueResolver constructor.
-     */
     public function __construct(TokenStorageInterface $tokenStorage, UserTypeIdentification $userService)
     {
         $this->tokenStorage = $tokenStorage;

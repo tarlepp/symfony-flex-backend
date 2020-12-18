@@ -33,9 +33,6 @@ class ListApiKeysCommand extends Command
     private ApiKeyResource $apiKeyResource;
     private RolesService $rolesService;
 
-    /**
-     * ListUsersCommand constructor.
-     */
     public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
     {
         parent::__construct('api-key:list');

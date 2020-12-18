@@ -52,7 +52,7 @@ jobs:
         run: composer validate
 
       - name: Install Composer dependencies
-        run: composer install --no-progress --no-suggest --optimize-autoloader
+        run: composer install --no-progress --optimize-autoloader
 
       - name: Check which versions we're using
         run: |
@@ -83,8 +83,9 @@ jobs:
       - name: Run PHPStan static analysis tool
         run: make phpstan
 
-      - name: Run `phploc` to collect LOC stats
-        run: make phploc
+      # TODO: enable this when https://github.com/nunomaduro/phpinsights has new version
+      #- name: Run `phploc` to collect LOC stats
+      #  run: make phploc
 
       - name: Run `PHP Insights` static analysis tool
         run: make phpinsights
@@ -95,11 +96,12 @@ jobs:
           name: psalm.json
           path: ./build/psalm.json
 
-      - name: Archive `phploc` results (phploc.json)
-        uses: actions/upload-artifact@v1
-        with:
-          name: phploc.json
-          path: ./build/phploc.json
+      # TODO: enable this when https://github.com/nunomaduro/phpinsights has new version
+      #- name: Archive `phploc` results (phploc.json)
+      #  uses: actions/upload-artifact@v1
+      #  with:
+      #    name: phploc.json
+      #    path: ./build/phploc.json
 
   test:
     name: PHPUnit tests (PHP ${{ matrix.php-versions }})
@@ -153,7 +155,7 @@ jobs:
           chmod 644 ./config/jwt/private.pem
 
       - name: Install Composer dependencies
-        run: composer install --no-progress --no-suggest --optimize-autoloader
+        run: composer install --no-progress --optimize-autoloader
 
       - name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
         run: |

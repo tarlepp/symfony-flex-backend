@@ -77,9 +77,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     private static array $processedCallbacks = [];
 
-    /**
-     * BaseRepository constructor.
-     */
     public function __construct(ManagerRegistry $managerRegistry)
     {
         $this->managerRegistry = $managerRegistry;

@@ -22,9 +22,6 @@ class ResponseSubscriber implements EventSubscriberInterface
 {
     private Version $version;
 
-    /**
-     * ResponseSubscriber constructor.
-     */
     public function __construct(Version $version)
     {
         $this->version = $version;

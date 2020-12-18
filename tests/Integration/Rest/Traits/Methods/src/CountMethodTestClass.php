@@ -23,9 +23,6 @@ abstract class CountMethodTestClass extends Controller
 {
     use CountMethod;
 
-    /**
-     * CountMethodTestClass constructor.
-     */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
         $this->resource = $resource;

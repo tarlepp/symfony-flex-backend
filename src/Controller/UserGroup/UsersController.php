@@ -32,9 +32,6 @@ class UsersController
     private UserResource $userResource;
     private ResponseHandler $responseHandler;
 
-    /**
-     * UsersController constructor.
-     */
     public function __construct(UserResource $userResource, ResponseHandler $responseHandler)
     {
         $this->userResource = $userResource;
