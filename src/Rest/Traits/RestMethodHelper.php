@@ -27,6 +27,7 @@ use UnexpectedValueException;
 use function array_key_exists;
 use function class_implements;
 use function in_array;
+use function is_array;
 use function sprintf;
 
 /**
@@ -52,7 +53,9 @@ trait RestMethodHelper
             ? static::$dtoClasses[$method]
             : $this->getResource()->getDtoClass();
 
-        if (!in_array(RestDtoInterface::class, class_implements($dtoClass), true)) {
+        $interfaces = class_implements($dtoClass);
+
+        if (is_array($interfaces) && !in_array(RestDtoInterface::class, $interfaces, true)) {
             $message = sprintf(
                 'Given DTO class \'%s\' is not implementing \'%s\' interface.',
                 $dtoClass,
