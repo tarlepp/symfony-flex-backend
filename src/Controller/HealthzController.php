@@ -27,9 +27,6 @@ class HealthzController
     private ResponseHandler $responseHandler;
     private HealthzService $healthzService;
 
-    /**
-     * HealthzController constructor.
-     */
     public function __construct(ResponseHandler $responseHandler, HealthzService $healthzService)
     {
         $this->responseHandler = $responseHandler;

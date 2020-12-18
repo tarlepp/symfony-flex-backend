@@ -22,9 +22,6 @@ final class HealthzService
 {
     private HealthzRepository $repository;
 
-    /**
-     * HealthzService constructor.
-     */
     public function __construct(HealthzRepository $repository)
     {
         $this->repository = $repository;

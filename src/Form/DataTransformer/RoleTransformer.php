@@ -25,9 +25,6 @@ class RoleTransformer implements DataTransformerInterface
 {
     private RoleResource $resource;
 
-    /**
-     * RoleTransformer constructor.
-     */
     public function __construct(RoleResource $resource)
     {
         $this->resource = $resource;

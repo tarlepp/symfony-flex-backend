@@ -37,9 +37,6 @@ class RoleController extends Controller
     use Actions\Admin\FindAction;
     use Actions\Admin\IdsAction;
 
-    /**
-     * RoleController constructor.
-     */
     public function __construct(RoleResource $resource)
     {
         $this->resource = $resource;

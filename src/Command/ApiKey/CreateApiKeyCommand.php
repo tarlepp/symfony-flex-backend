@@ -54,9 +54,6 @@ class CreateApiKeyCommand extends Command
      */
     private SymfonyStyle $io;
 
-    /**
-     * CreateApiKeyCommand constructor.
-     */
     public function __construct(
         ApiKeyHelper $apiKeyHelper,
         ApiKeyResource $apiKeyResource,

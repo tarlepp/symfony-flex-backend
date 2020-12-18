@@ -30,9 +30,6 @@ class UserHelper
     private UserResource $userResource;
     private UserGroupResource $userGroupResource;
 
-    /**
-     * UserHelper constructor.
-     */
     public function __construct(UserResource $userResource, UserGroupResource $userGroupResource)
     {
         $this->userResource = $userResource;

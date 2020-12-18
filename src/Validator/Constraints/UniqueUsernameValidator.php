@@ -24,9 +24,6 @@ class UniqueUsernameValidator extends ConstraintValidator
 {
     private UserRepository $repository;
 
-    /**
-     * UniqueUsernameValidator constructor.
-     */
     public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;

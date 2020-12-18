@@ -48,9 +48,6 @@ final class ResponseHandler implements ResponseHandlerInterface
 
     private SerializerInterface $serializer;
 
-    /**
-     * ResponseHandler constructor.
-     */
     public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
@@ -118,7 +115,6 @@ final class ResponseHandler implements ResponseHandlerInterface
         $context ??= $this->getSerializeContext($request, $restResource);
         $format = $this->getFormat($request, $format);
 
-        // Get response
         $response = $this->getResponse($data, $httpStatus, $format, $context);
 
         // Set content type

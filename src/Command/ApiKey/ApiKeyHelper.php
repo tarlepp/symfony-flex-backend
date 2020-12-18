@@ -29,9 +29,6 @@ class ApiKeyHelper
     private ApiKeyResource $apiKeyResource;
     private RolesService $rolesService;
 
-    /**
-     * ApiKeyHelper constructor.
-     */
     public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
     {
         $this->apiKeyResource = $apiKeyResource;

@@ -26,9 +26,6 @@ class GroupsController
 {
     private SerializerInterface $serializer;
 
-    /**
-     * GroupsController constructor.
-     */
     public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;

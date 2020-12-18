@@ -41,9 +41,6 @@ class CreateDateDimensionEntitiesCommand extends Command
     private SymfonyStyle $io;
     private DateDimensionRepository $repository;
 
-    /**
-     * PopulateDateDimensionCommand constructor.
-     */
     public function __construct(DateDimensionRepository $dateDimensionRepository)
     {
         parent::__construct('utils:create-date-dimension-entities');
@@ -64,7 +61,6 @@ class CreateDateDimensionEntitiesCommand extends Command
         // Create output decorator helpers for the Symfony Style Guide.
         $this->io = new SymfonyStyle($input, $output);
 
-        // Set title
         $this->io->title($this->getDescription());
 
         // Determine start and end years

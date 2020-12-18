@@ -98,9 +98,6 @@ class UserType extends AbstractType
     private UserGroupTransformer $userGroupTransformer;
     private Localization $localization;
 
-    /**
-     * UserType constructor.
-     */
     public function __construct(
         UserGroupResource $userGroupResource,
         UserGroupTransformer $userGroupTransformer,

@@ -23,9 +23,6 @@ class VersionController
 {
     private Version $version;
 
-    /**
-     * VersionController constructor.
-     */
     public function __construct(Version $version)
     {
         $this->version = $version;

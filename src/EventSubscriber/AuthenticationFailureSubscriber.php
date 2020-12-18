@@ -27,9 +27,6 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     private LoginLogger $loginLogger;
     private UserRepository $userRepository;
 
-    /**
-     * AuthenticationFailureSubscriber constructor.
-     */
     public function __construct(LoginLogger $loginLogger, UserRepository $userRepository)
     {
         $this->loginLogger = $loginLogger;

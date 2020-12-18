@@ -52,9 +52,6 @@ class UserGroupType extends AbstractType
     private RoleResource $roleResource;
     private RoleTransformer $roleTransformer;
 
-    /**
-     * UserGroupType constructor.
-     */
     public function __construct(
         RolesService $rolesService,
         RoleResource $roleResource,

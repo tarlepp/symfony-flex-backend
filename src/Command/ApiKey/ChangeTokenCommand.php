@@ -29,9 +29,6 @@ class ChangeTokenCommand extends Command
     private ApiKeyResource $apiKeyResource;
     private ApiKeyHelper $apiKeyHelper;
 
-    /**
-     * ChangeTokenCommand constructor.
-     */
     public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
     {
         parent::__construct('api-key:change-token');

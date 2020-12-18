@@ -35,9 +35,6 @@ class ListUsersCommand extends Command
     private UserResource $userResource;
     private RolesService $roles;
 
-    /**
-     * ListUsersCommand constructor.
-     */
     public function __construct(UserResource $userResource, RolesService $roles)
     {
         parent::__construct('user:list');

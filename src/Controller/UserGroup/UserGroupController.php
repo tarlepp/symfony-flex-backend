@@ -54,9 +54,6 @@ class UserGroupController extends Controller
         Controller::METHOD_PATCH => UserGroupPatch::class,
     ];
 
-    /**
-     * UserGroupController constructor.
-     */
     public function __construct(UserGroupResource $resource)
     {
         $this->resource = $resource;

@@ -52,9 +52,6 @@ class CheckDependencies extends Command
     private SymfonyStyle $io;
     private string $projectDir;
 
-    /**
-     * CheckVendorDependencies constructor.
-     */
     public function __construct(string $projectDir)
     {
         parent::__construct('check-dependencies');
