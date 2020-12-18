@@ -52,7 +52,7 @@ jobs:
         run: composer validate
 
       - name: Install Composer dependencies
-        run: composer install --no-progress --no-suggest --optimize-autoloader
+        run: composer install --no-progress --optimize-autoloader
 
       - name: Check which versions we're using
         run: |
@@ -153,7 +153,7 @@ jobs:
           chmod 644 ./config/jwt/private.pem
 
       - name: Install Composer dependencies
-        run: composer install --no-progress --no-suggest --optimize-autoloader
+        run: composer install --no-progress --optimize-autoloader
 
       - name: Prepare Code Climate (https://codeclimate.com/github/tarlepp/symfony-flex-backend/)
         run: |
