@@ -140,6 +140,9 @@
     "mark-gerarts/automapper-plus-bundle": {
         "version": "1.2.1"
     },
+    "matomo/device-detector": {
+        "version": "4.0.2"
+    },
     "matthiasnoback/symfony-console-form": {
         "version": "v3.6.0"
     },
@@ -190,9 +193,6 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "1.0.1"
-    },
-    "piwik/device-detector": {
-        "version": "3.12.3"
     },
     "psr/cache": {
         "version": "1.0.1"
