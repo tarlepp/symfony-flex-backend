@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/Traits/Resource.php
+ * /src/Rest/Traits/RestResourceLifeCycles.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Rest\Traits;
 
 /**
- * Trait Resource
+ * Trait RestResourceLifeCycles
  *
  * @package App\Rest\Traits
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
