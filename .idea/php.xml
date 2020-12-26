@@ -162,7 +162,7 @@
             <configuration_option name="include_path" value=".:/usr/local/lib/php" />
           </configuration_options>
           <debuggers>
-            <debugger_info debugger="xdebug" debugger_version="2.9.8">
+            <debugger_info debugger="xdebug" debugger_version="3.0.1">
               <debug_extensions />
             </debugger_info>
           </debuggers>
@@ -312,6 +312,12 @@
       <PhpStanConfiguration tool_path="$PROJECT_DIR$/vendor/bin/phpstan" />
       <phpstan_by_interpreter interpreter_id="7377c17b-0802-4cb1-95f7-8eb151a88214" tool_path="vendor/bin/phpstan" timeout="60000" />
     </PhpStan_settings>
+  </component>
+  <component name="PhpStepFilterConfiguration">
+    <skipped_functions>
+      <skipped_function name="Symfony\Component\ErrorHandler\ErrorHandler::handleFatalError" />
+      <skipped_function name="Monolog\Handler\BufferHandler-&gt;close" />
+    </skipped_functions>
   </component>
   <component name="PhpUnit">
     <phpunit_settings>
