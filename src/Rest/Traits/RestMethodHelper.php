@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/Traits/MethodValidator.php
+ * /src/Rest/Traits/RestMethodHelper.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -31,7 +31,7 @@ use function is_array;
 use function sprintf;
 
 /**
- * Trait MethodValidator
+ * Trait RestMethodHelper
  *
  * @package App\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

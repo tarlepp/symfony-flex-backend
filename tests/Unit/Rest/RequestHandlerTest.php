@@ -18,9 +18,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use function json_encode;
 
 /**
- * Class RequestTest
+ * Class RequestHandlerTest
  *
- * @package App\Tests\Unit\Rest;
+ * @package App\Tests\Unit\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 class RequestHandlerTest extends KernelTestCase

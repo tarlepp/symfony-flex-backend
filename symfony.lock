@@ -101,6 +101,9 @@
             "ref": "70062abc2cd58794d2a90274502f81b55cd9951b"
         }
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.0"
+    },
     "gedmo/doctrine-extensions": {
         "version": "v2.4.42"
     },
@@ -136,6 +139,9 @@
     },
     "mark-gerarts/automapper-plus-bundle": {
         "version": "1.2.1"
+    },
+    "matomo/device-detector": {
+        "version": "4.0.2"
     },
     "matthiasnoback/symfony-console-form": {
         "version": "v3.6.0"
@@ -176,9 +182,6 @@
     "ocramius/package-versions": {
         "version": "1.5.1"
     },
-    "ocramius/proxy-manager": {
-        "version": "2.6.0"
-    },
     "php": {
         "version": "7.4.0"
     },
@@ -190,9 +193,6 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "1.0.1"
-    },
-    "piwik/device-detector": {
-        "version": "3.12.3"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -588,9 +588,6 @@
     },
     "twig/twig": {
         "version": "v3.0.1"
-    },
-    "webimpress/safe-writer": {
-        "version": "2.0.0"
     },
     "webmozart/assert": {
         "version": "1.6.0"

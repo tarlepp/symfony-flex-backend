@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Functional/ArgumentResolver/UserValueResolverTest.php
+ * /tests/Functional/ArgumentResolver/LoggedInUserValueResolverTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -24,7 +24,7 @@ use Throwable;
 use function iterator_to_array;
 
 /**
- * Class UserValueResolverTest
+ * Class LoggedInUserValueResolverTest
  *
  * @package App\Tests\Functional\ArgumentResolver
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

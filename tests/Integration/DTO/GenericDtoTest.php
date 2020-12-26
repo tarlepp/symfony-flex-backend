@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/DTO/DtoTestCase.php
+ * /tests/Integration/DTO/GenericDtoTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */

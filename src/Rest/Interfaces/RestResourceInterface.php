@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/Interfaces/RestResourceInterfaces.php
+ * /src/Rest/Interfaces/RestResourceInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -17,7 +17,7 @@ use Throwable;
 use UnexpectedValueException;
 
 /**
- * Interface ResourceInterface
+ * Interface RestResourceInterface
  *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
