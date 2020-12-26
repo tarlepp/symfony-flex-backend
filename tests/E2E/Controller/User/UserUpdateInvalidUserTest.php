@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/UserUpdateInvalidTest.php
+ * /tests/E2E/Controller/User/UserUpdateInvalidUserTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
- * Class UserUpdateInvalidTest
+ * Class UserUpdateInvalidUserTest
  *
  * @package App\Tests\E2E\Controller\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/Traits/Actions/MethodHelper.php
+ * /src/Rest/Traits/Actions/RestActionBase.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -12,7 +12,7 @@ use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Trait MethodHelper
+ * Trait RestActionBase
  *
  * @package App\Rest\Traits\Methods
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

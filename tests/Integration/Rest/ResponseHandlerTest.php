@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
 
 /**
- * Class ResponseTest
+ * Class ResponseHandlerTest
  *
  * @package App\Tests\Integration\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

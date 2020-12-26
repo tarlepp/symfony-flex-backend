@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Unit/EventSubscriber/RequestSubscriberTest.php
+ * /tests/Unit/EventSubscriber/ResponseSubscriberTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 /**
- * Class RequestSubscriberTest
+ * Class ResponseSubscriberTest
  *
  * @package App\Tests\Unit\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

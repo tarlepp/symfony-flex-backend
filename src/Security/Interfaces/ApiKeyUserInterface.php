@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Security/Interfaces/ApiKeyUser.php
+ * /src/Security/Interfaces/ApiKeyUserInterface.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */

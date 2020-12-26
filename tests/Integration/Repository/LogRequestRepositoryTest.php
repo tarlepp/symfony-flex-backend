@@ -13,7 +13,7 @@ use App\Repository\LogRequestRepository;
 use App\Resource\LogRequestResource;
 
 /**
- * Class UserRepositoryTest
+ * Class LogRequestRepositoryTest
  *
  * @package App\Tests\Integration\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
