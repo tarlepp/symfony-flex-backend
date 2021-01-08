@@ -53,7 +53,7 @@ class UuidHelper
             }
         } catch (InvalidUuidStringException $exception) {
             // ok, so now we know that value isn't uuid
-            (static fn (Throwable $exception): Throwable => $exception)($exception);
+            (static fn (InvalidUuidStringException $exception): InvalidUuidStringException => $exception)($exception);
         }
 
         return $output;

@@ -361,7 +361,9 @@ class RepositoryHelper
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
             } catch (InvalidUuidStringException $exception) {
-                (static fn (Throwable $exception): Throwable => $exception)($exception);
+                (
+                    static fn (InvalidUuidStringException $exception): InvalidUuidStringException => $exception
+                )($exception);
             }
 
             $parameters[] = array_map(
