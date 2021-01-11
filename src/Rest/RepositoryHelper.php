@@ -359,14 +359,14 @@ class RepositoryHelper
             // Otherwise this must be IN or NOT IN expression
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
-            } catch (InvalidUuidStringException $ex) {
-                (static fn (InvalidUuidStringException $exception): InvalidUuidStringException => $ex)($ex);
+            } catch (InvalidUuidStringException $error) {
+                (static fn (InvalidUuidStringException $error): InvalidUuidStringException => $error)($error);
             }
 
             $parameters[] = array_map(
-                static fn (string $value): Literal => $queryBuilder->expr()->literal(is_numeric($value)
-                    ? (int)$value
-                    : $value),
+                static fn (string $value): Literal => $queryBuilder->expr()->literal(
+                    is_numeric($value) ? (int)$value : $value
+                ),
                 $value
             );
         }
