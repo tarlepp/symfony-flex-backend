@@ -15,7 +15,6 @@ use Doctrine\ORM\QueryBuilder;
 use InvalidArgumentException;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use stdClass;
-use Throwable;
 use function array_combine;
 use function array_key_exists;
 use function array_map;
