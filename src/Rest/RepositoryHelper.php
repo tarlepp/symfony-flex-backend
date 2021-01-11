@@ -359,10 +359,8 @@ class RepositoryHelper
             // Otherwise this must be IN or NOT IN expression
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
-            } catch (InvalidUuidStringException $exception) {
-                (
-                    static fn (InvalidUuidStringException $exception): InvalidUuidStringException => $exception
-                )($exception);
+            } catch (InvalidUuidStringException $ex) {
+                (static fn (InvalidUuidStringException $exception): InvalidUuidStringException => $ex)($ex);
             }
 
             $parameters[] = array_map(
