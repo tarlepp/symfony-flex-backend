@@ -56,7 +56,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "3.0",
-            "ref": "fc52d86631a6dfd9fdf3381d0b7e3df2069e51b3"
+            "ref": "e5b542d4ef47d8a003c91beb35650c76907f7e53"
         },
         "files": [
             "src/DataFixtures/AppFixtures.php"
