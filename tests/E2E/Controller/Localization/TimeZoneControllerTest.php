@@ -72,7 +72,7 @@ class TimeZoneControllerTest extends WebTestCase
 
         $data = JSON::decode((string)$response->getContent());
 
-        static::assertCount(425, $data);
+        static::assertCount(426, $data);
     }
 
     /**
