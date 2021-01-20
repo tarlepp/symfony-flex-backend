@@ -283,16 +283,15 @@
         "version": "v4.4.3"
     },
     "symfony/console": {
-        "version": "4.4",
+        "version": "5.1",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "master",
-            "version": "4.4",
-            "ref": "fead3ab2e80622c61d13dac0d21a3430a45efae8"
+            "version": "5.1",
+            "ref": "c6d02bdfba9da13c22157520e32a602dbee8a75c"
         },
         "files": [
-            "bin/console",
-            "config/bootstrap.php"
+            "bin/console"
         ]
     },
     "symfony/debug-bundle": {
