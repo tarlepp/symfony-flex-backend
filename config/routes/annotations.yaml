@@ -3,3 +3,7 @@ controllers:
     type: annotation
     defaults:
         _format: json
+
+kernel:
+    resource: ../../src/Kernel.php
+    type: annotation
