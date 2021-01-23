@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "73f86171bb78b9c7a1556a45b89b1760",
+    "content-hash": "1664154477bf0537ae3daded90927009",
     "packages": [],
     "packages-dev": [
         {
@@ -2959,16 +2959,16 @@
         },
         {
             "name": "symplify/changelog-linker",
-            "version": "9.0.40",
+            "version": "9.0.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/changelog-linker.git",
-                "reference": "f70c4b747f569955490e1d00d3c9f9324ed54114"
+                "reference": "8063620f6f302bf4616af41648e1e5455e826bfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/changelog-linker/zipball/f70c4b747f569955490e1d00d3c9f9324ed54114",
-                "reference": "f70c4b747f569955490e1d00d3c9f9324ed54114",
+                "url": "https://api.github.com/repos/symplify/changelog-linker/zipball/8063620f6f302bf4616af41648e1e5455e826bfe",
+                "reference": "8063620f6f302bf4616af41648e1e5455e826bfe",
                 "shasum": ""
             },
             "require": {
@@ -2978,10 +2978,10 @@
                 "symfony/console": "^4.4|^5.1",
                 "symfony/http-kernel": "^4.4|^5.1",
                 "symfony/process": "^4.4|^5.1",
-                "symplify/package-builder": "^9.0.40",
-                "symplify/set-config-resolver": "^9.0.40",
-                "symplify/smart-file-system": "^9.0.40",
-                "symplify/symplify-kernel": "^9.0.40"
+                "symplify/package-builder": "^9.0.41",
+                "symplify/set-config-resolver": "^9.0.41",
+                "symplify/smart-file-system": "^9.0.41",
+                "symplify/symplify-kernel": "^9.0.41"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -3006,7 +3006,7 @@
             ],
             "description": "Generates beautiful CHANGELOG.md with links to PRs, versions and users grouped in Added/Changed/Fixed/Removed categories.",
             "support": {
-                "source": "https://github.com/symplify/changelog-linker/tree/9.0.40"
+                "source": "https://github.com/symplify/changelog-linker/tree/9.0.41"
             },
             "funding": [
                 {
@@ -3018,7 +3018,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-01-18T16:53:35+00:00"
+            "time": "2021-01-22T20:18:17+00:00"
         },
         {
             "name": "symplify/composer-json-manipulator",
