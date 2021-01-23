@@ -14,7 +14,7 @@ ENV NODE_VERSION 15
 
 # Update package list and install necessary libraries
 RUN apt-get update && apt-get install -y \
-    zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 sudo \
+    zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ nano vim git unzip jq bash-completion iproute2 sudo wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Enable all necessary PHP packages
@@ -52,6 +52,14 @@ RUN chmod +x /app/bin/console \
     && chmod +x /usr/bin/composer
 
 RUN chmod -R o+s+w /usr/local/etc/php
+
+RUN curl -s https://api.github.com/repos/fabpot/local-php-security-checker/releases/latest | \
+    grep -E "browser_download_url(.+)linux_amd64" | \
+    cut -d : -f 2,3 | \
+    tr -d \" | \
+    xargs -I{} wget -O local-php-security-checker {} \
+    && mv local-php-security-checker /usr/bin/local-php-security-checker \
+    && chmod +x /usr/bin/local-php-security-checker
 
 RUN groupadd --gid ${HOST_GID} dev \
     && useradd --password dev --uid ${HOST_UID} --gid ${HOST_GID} --shell /bin/bash --create-home dev \

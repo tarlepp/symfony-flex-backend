@@ -66,7 +66,6 @@
 		"bamarni/composer-bin-plugin": "1.4.1",
 		"doctrine/doctrine-fixtures-bundle": "3.4.0",
 		"roave/security-advisories": "dev-master",
-		"sensiolabs/security-checker": "6.0.3",
 		"symfony/browser-kit": "5.2.1",
 		"symfony/debug-bundle": "5.2.1",
 		"symfony/maker-bundle": "1.28.0",
@@ -122,15 +121,15 @@
 	"scripts": {
 		"post-install-cmd": [
 			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",
-			"if test -d vendor/sensiolabs/security-checker; then ./vendor/bin/security-checker security:check; fi",
 			"if test -d vendor/bamarni/composer-bin-plugin; then make update-bin; fi",
+			"local-php-security-checker --update-cache && local-php-security-checker",
 			"@auto-scripts",
 			"@composer dump-autoload"
 		],
 		"post-update-cmd": [
 			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",
-			"if test -d vendor/sensiolabs/security-checker; then ./vendor/bin/security-checker security:check; fi",
 			"if test -d vendor/bamarni/composer-bin-plugin; then composer bin all update; fi",
+			"local-php-security-checker --update-cache && local-php-security-checker",
 			"@auto-scripts",
 			"@composer dump-autoload"
 		],
