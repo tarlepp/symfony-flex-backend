@@ -35,6 +35,8 @@ trait RepositoryMethodsTrait
 
     /**
      * {@inheritdoc}
+     *
+     * @param string|int|null $hydrationMode
      */
     public function findAdvanced(string $id, $hydrationMode = null)
     {
