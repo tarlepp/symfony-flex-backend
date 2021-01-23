@@ -55,7 +55,7 @@ jobs:
           cut -d : -f 2,3 | \
           tr -d \" | \
           xargs -I{} wget -O local-php-security-checker {} \
-          && chmod +x /usr/bin/local-php-security-checker
+          && chmod +x local-php-security-checker
 
       - name: Validate composer.json and composer.lock
         run: composer validate
