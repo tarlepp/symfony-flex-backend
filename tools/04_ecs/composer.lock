@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3ade5f9e18877be611009739a39537bd",
+    "content-hash": "7c018cdade6334df5a61584fa55a7a9e",
     "packages": [],
     "packages-dev": [
         {
@@ -4258,16 +4258,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "9.0.40",
+            "version": "9.0.41",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "6c3fc85fe2079c8f4c34c9a5edcbf8b36714288e"
+                "reference": "815b2fb2f3c526f7d2be1c27c5619d46977efac1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/6c3fc85fe2079c8f4c34c9a5edcbf8b36714288e",
-                "reference": "6c3fc85fe2079c8f4c34c9a5edcbf8b36714288e",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/815b2fb2f3c526f7d2be1c27c5619d46977efac1",
+                "reference": "815b2fb2f3c526f7d2be1c27c5619d46977efac1",
                 "shasum": ""
             },
             "require": {
@@ -4287,20 +4287,20 @@
                 "symfony/finder": "^4.4|^5.1",
                 "symfony/http-kernel": "^4.4|^5.1",
                 "symfony/yaml": "^4.4|^5.1",
-                "symplify/autowire-array-parameter": "^9.0.40",
-                "symplify/coding-standard": "^9.0.40",
-                "symplify/console-color-diff": "^9.0.40",
-                "symplify/easy-testing": "^9.0.40",
-                "symplify/package-builder": "^9.0.40",
-                "symplify/set-config-resolver": "^9.0.40",
-                "symplify/skipper": "^9.0.40",
-                "symplify/smart-file-system": "^9.0.40",
-                "symplify/symplify-kernel": "^9.0.40"
+                "symplify/autowire-array-parameter": "^9.0.41",
+                "symplify/coding-standard": "^9.0.41",
+                "symplify/console-color-diff": "^9.0.41",
+                "symplify/easy-testing": "^9.0.41",
+                "symplify/package-builder": "^9.0.41",
+                "symplify/set-config-resolver": "^9.0.41",
+                "symplify/skipper": "^9.0.41",
+                "symplify/smart-file-system": "^9.0.41",
+                "symplify/symplify-kernel": "^9.0.41"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5",
-                "symplify/easy-coding-standard-tester": "^9.0.40",
-                "symplify/php-config-printer": "^9.0.40"
+                "symplify/easy-coding-standard-tester": "^9.0.41",
+                "symplify/php-config-printer": "^9.0.41"
             },
             "bin": [
                 "bin/ecs"
@@ -4327,7 +4327,7 @@
             ],
             "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer.",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/9.0.40"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/9.0.41"
             },
             "funding": [
                 {
@@ -4339,7 +4339,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-01-18T16:53:12+00:00"
+            "time": "2021-01-22T20:18:19+00:00"
         },
         {
             "name": "symplify/easy-testing",
