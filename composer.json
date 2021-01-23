@@ -122,14 +122,14 @@
 		"post-install-cmd": [
 			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",
 			"if test -d vendor/bamarni/composer-bin-plugin; then make update-bin; fi",
-			"local-php-security-checker --update-cache && local-php-security-checker",
+			"if which local-php-security-checker; then local-php-security-checker --update-cache && local-php-security-checker; fi",
 			"@auto-scripts",
 			"@composer dump-autoload"
 		],
 		"post-update-cmd": [
 			"if test -d vendor/symfony/requirements-checker; then ./vendor/bin/requirements-checker; fi",
 			"if test -d vendor/bamarni/composer-bin-plugin; then composer bin all update; fi",
-			"local-php-security-checker --update-cache && local-php-security-checker",
+			"if which local-php-security-checker; then local-php-security-checker --update-cache && local-php-security-checker; fi",
 			"@auto-scripts",
 			"@composer dump-autoload"
 		],
