@@ -243,18 +243,6 @@
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
     },
-    "sensiolabs/security-checker": {
-        "version": "4.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "master",
-            "version": "4.0",
-            "ref": "160c9b600564faa1224e8f387d49ef13ceb8b793"
-        },
-        "files": [
-            "config/packages/security_checker.yaml"
-        ]
-    },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
         "recipe": {
@@ -374,9 +362,6 @@
             "src/Kernel.php"
         ]
     },
-    "symfony/http-client": {
-        "version": "v5.0.1"
-    },
     "symfony/http-client-contracts": {
         "version": "v2.0.1"
     },
@@ -397,9 +382,6 @@
             "version": "1.0",
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
-    },
-    "symfony/mime": {
-        "version": "v4.4.3"
     },
     "symfony/monolog-bridge": {
         "version": "v4.4.3"
@@ -434,9 +416,6 @@
     "symfony/polyfill-intl-icu": {
         "version": "v1.13.1"
     },
-    "symfony/polyfill-intl-idn": {
-        "version": "v1.13.1"
-    },
     "symfony/polyfill-intl-normalizer": {
         "version": "v1.17.0"
     },
@@ -444,9 +423,6 @@
         "version": "v1.13.1"
     },
     "symfony/polyfill-php56": {
-        "version": "v1.13.1"
-    },
-    "symfony/polyfill-php72": {
         "version": "v1.13.1"
     },
     "symfony/polyfill-php73": {
