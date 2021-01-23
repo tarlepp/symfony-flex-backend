@@ -65,7 +65,7 @@ jobs:
       - name: PHP Security Checker
         uses: StephaneBour/actions-php-security-checker@1.1
         with:
-          composer-lock: './composer-lock'
+          composer-lock: './composer.lock'
 
       - name: Check that environment is configured correctly
         run: php ./vendor/bin/requirements-checker
