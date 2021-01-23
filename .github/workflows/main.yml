@@ -56,7 +56,7 @@ jobs:
           tr -d \" | \
           xargs -I{} wget -O local-php-security-checker {} \
           && chmod +x ./local-php-security-checker \
-          && ls -la
+          && export PATH=$PATH:$(pwd)
 
       - name: Validate composer.json and composer.lock
         run: composer validate
