@@ -61,9 +61,9 @@ class TimeZoneControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/localization/timezone` endpoint returns expected count of timezones (426).
+     * @testdox Test that `/localization/timezone` endpoint returns and array of timezones
      */
-    public function testThatTimeZoneRouteReturnsExpectedNumberOfTimeZones(): void
+    public function testThatTimeZoneRouteReturnsAnArrayOfTimeZones(): void
     {
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
@@ -72,7 +72,7 @@ class TimeZoneControllerTest extends WebTestCase
 
         $data = JSON::decode((string)$response->getContent());
 
-        static::assertCount(426, $data);
+        static::assertIsArray($data, (string)$response->getContent());
     }
 
     /**
