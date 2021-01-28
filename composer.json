@@ -40,7 +40,7 @@
 		"stof/doctrine-extensions-bundle": "1.5.0",
 		"symfony/asset": "5.2.1",
 		"symfony/config": "5.2.1",
-		"symfony/console": "5.2.1",
+		"symfony/console": "5.2.2",
 		"symfony/dotenv": "5.2.1",
 		"symfony/expression-language": "5.2.1",
 		"symfony/flex": "1.11.0",
