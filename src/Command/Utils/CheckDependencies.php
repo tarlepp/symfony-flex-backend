@@ -27,7 +27,6 @@ use Symfony\Component\Process\Process;
 use Traversable;
 use function array_map;
 use function array_unshift;
-use function basename;
 use function count;
 use function dirname;
 use function implode;
@@ -173,28 +172,16 @@ class CheckDependencies extends Command
                         $rows[] = new TableSeparator();
                     }
 
-                    $title = basename($directory);
                     $relativePath = str_replace($this->projectDir, '', $directory) . '/composer.json';
                 } else {
                     $rows[] = [''];
                 }
 
-                $rows[] = [
-                    dirname($relativePath),
-                    $data->name,
-                    $data->description,
-                    $data->version,
-                    $data->latest,
-                ];
+                $rows[] = [dirname($relativePath), $data->name, $data->description, $data->version, $data->latest];
 
                 if (isset($data->warning)) {
                     $rows[] = [''];
-
-                    $rows[] = [
-                        '',
-                        '',
-                        '<fg=red>' . $data->warning . '</>',
-                    ];
+                    $rows[] = ['', '', '<fg=red>' . $data->warning . '</>'];
                 }
             }
 
