@@ -72,10 +72,6 @@ services:
     App\Security\RolesService:
         arguments: [ '%security.role_hierarchy.roles%' ]
 
-    App\EventSubscriber\BlameableDecorator:
-        class: App\EventSubscriber\BlameableDecorator
-        decorates: stof_doctrine_extensions.listener.blameable
-
     App\EventSubscriber\RequestLogSubscriber:
         arguments:
             $ignoredRoutes: '%env(key:REQUEST_LOG_IGNORED_ROUTES:json:file:APPLICATION_CONFIG)%'
