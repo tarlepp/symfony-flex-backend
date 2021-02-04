@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.4']
+        php-versions: ['8.0']
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -127,7 +127,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.4']
+        php-versions: ['8.0']
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -180,10 +180,11 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }} # https://docs.codeclimate.com/docs/finding-your-test-coverage-token
 
-      - name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
-        run: |
-          wget https://scrutinizer-ci.com/ocular.phar
-          php ocular.phar code-coverage:upload --access-token ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
+      # Disabled for now, enable after issue has some information - https://github.com/scrutinizer-ci/ocular/issues/54
+      #- name: Report results to Scrutinizer (https://scrutinizer-ci.com/g/tarlepp/symfony-flex-backend/)
+      #  run: |
+      #    wget https://scrutinizer-ci.com/ocular.phar
+      #    php ocular.phar code-coverage:upload --access-token ${{ secrets.SCRUTINIZER_ACCESS_TOKEN }} --format=php-clover ./build/logs/clover.xml
 
       - name: Report results to Coveralls (https://coveralls.io/github/tarlepp/symfony-flex-backend)
         run: php ./vendor/bin/php-coveralls -v
