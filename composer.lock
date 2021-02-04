@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d50e21fbb4771fb9213789a89ed62e83",
+    "content-hash": "dc921a7dab65599ad3dc199eda91a763",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -7656,16 +7656,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "c2c234d80dad3925247b0a3fbbcecfe676e2b551"
+                "reference": "d83d2a9f060ce42636feef6af6facc39793354cf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/c2c234d80dad3925247b0a3fbbcecfe676e2b551",
-                "reference": "c2c234d80dad3925247b0a3fbbcecfe676e2b551",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/d83d2a9f060ce42636feef6af6facc39793354cf",
+                "reference": "d83d2a9f060ce42636feef6af6facc39793354cf",
                 "shasum": ""
             },
             "require": {
@@ -7747,7 +7747,7 @@
             "description": "Provides tools to validate values",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/validator/tree/v5.2.2"
+                "source": "https://github.com/symfony/validator/tree/v5.2.3"
             },
             "funding": [
                 {
@@ -7763,7 +7763,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-27T12:56:27+00:00"
+            "time": "2021-01-28T22:06:19+00:00"
         },
         {
             "name": "symfony/var-dumper",
