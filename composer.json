@@ -52,7 +52,7 @@
 		"symfony/routing": "5.2.2",
 		"symfony/security-bundle": "5.2.2",
 		"symfony/serializer-pack": "1.0.4",
-		"symfony/translation": "5.2.2",
+		"symfony/translation": "5.2.3",
 		"symfony/twig-bundle": "5.2.2",
 		"symfony/validator": "5.2.2",
 		"symfony/yaml": "5.2.2"
