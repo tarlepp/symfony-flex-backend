@@ -33,6 +33,14 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
      */
     private MockObject $userTypeIdentification;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->blameableListener = $this->createMock(BlameableListener::class);
+        $this->userTypeIdentification = $this->createMock(UserTypeIdentification::class);
+    }
+
     /**
      * @testdox Test that user is not set to `BlameableListener` when there isn't logged in user
      */
@@ -68,13 +76,5 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
             ->with($user);
 
         (new DoctrineExtensionSubscriber($this->blameableListener, $this->userTypeIdentification))->onKernelRequest();
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->blameableListener = $this->createMock(BlameableListener::class);
-        $this->userTypeIdentification = $this->createMock(UserTypeIdentification::class);
     }
 }
