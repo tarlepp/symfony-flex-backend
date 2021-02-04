@@ -20,9 +20,6 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        public: false       # Allows optimizing the container by removing unused services; this also means
-                            # fetching services directly from the container via $container->get() won't work.
-                            # The best practice is to be explicit about your dependencies anyway.
         bind:
             $projectDir: '%kernel.project_dir%'
             $environment: '%kernel.environment%'
@@ -43,7 +40,6 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/EventListener/'
-            - '../src/Migrations/'
             - '../src/Kernel.php'
             - '../src/Tests/'
 
@@ -75,10 +71,6 @@ services:
 
     App\Security\RolesService:
         arguments: [ '%security.role_hierarchy.roles%' ]
-
-    App\EventSubscriber\BlameableDecorator:
-        class: App\EventSubscriber\BlameableDecorator
-        decorates: stof_doctrine_extensions.listener.blameable
 
     App\EventSubscriber\RequestLogSubscriber:
         arguments:

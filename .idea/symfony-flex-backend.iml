@@ -9,11 +9,9 @@
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tools/04_ecs/vendor/slevomat/coding-standard/SlevomatCodingStandard" isTestSource="true" packagePrefix="SlevomatCodingStandard\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest/src" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/theseer/fdomdocument/src" isTestSource="true" packagePrefix="TheSeer\fDOM\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest/adapters" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/sebastian/finder-facade/src" isTestSource="true" packagePrefix="SebastianBergmann\FinderFacade\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Symfony" isTestSource="true" packagePrefix="PHPStan\Symfony\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Type/Symfony" isTestSource="true" packagePrefix="PHPStan\Type\Symfony\" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
@@ -71,7 +69,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/jwt" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/clock" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/sensiolabs/security-checker" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mark-gerarts/automapper-plus-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mark-gerarts/auto-mapper-plus" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/mustangostang/spyc" />
@@ -84,7 +81,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/log" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/event-dispatcher" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/psr/container" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/stof/doctrine-extensions-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/twig/twig" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/behat/transliterator" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/brick/math" />
@@ -103,7 +99,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-eventmanager" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/laminas/laminas-code" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/monolog/monolog" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-client" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-normalizer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php73" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/options-resolver" />
@@ -119,7 +114,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-foundation" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/form" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/monolog-bridge" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php72" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/property-info" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-grapheme" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/flex" />
@@ -140,7 +134,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/twig-bridge" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/security-core" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/error-handler" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/mime" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-php80" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/translation-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/debug-bundle" />
@@ -160,7 +153,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/dependency-injection" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/twig-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/serializer-pack" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-idn" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/cache-contracts" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/http-kernel" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/routing" />

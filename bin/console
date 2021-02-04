@@ -8,13 +8,13 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\ErrorHandler\Debug;
 
-set_time_limit(0);
-
 if (in_array(PHP_SAPI, ['cli', 'phpdbg', 'embed'], true) === false) {
     echo 'Warning: The console should be invoked via the CLI version of PHP, not the ' . PHP_SAPI . ' SAPI' . PHP_EOL;
 }
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+set_time_limit(0);
+
+require dirname(__DIR__).'/vendor/autoload.php';
 
 if (!class_exists(Application::class) || !class_exists(Dotenv::class)) {
     throw new LogicException('You need to add "symfony/framework-bundle" and "symfony/dotenv" as Composer dependencies.');
