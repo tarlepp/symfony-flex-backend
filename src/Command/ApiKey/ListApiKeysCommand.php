@@ -30,15 +30,9 @@ use function sprintf;
  */
 class ListApiKeysCommand extends Command
 {
-    private ApiKeyResource $apiKeyResource;
-    private RolesService $rolesService;
-
-    public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
+    public function __construct(private ApiKeyResource $apiKeyResource, private RolesService $rolesService)
     {
         parent::__construct('api-key:list');
-
-        $this->apiKeyResource = $apiKeyResource;
-        $this->rolesService = $rolesService;
 
         $this->setDescription('Console command to list API keys');
     }
@@ -71,7 +65,7 @@ class ListApiKeysCommand extends Command
     /**
      * Getter method for formatted API key rows for console table.
      *
-     * @return mixed[]
+     * @return array<int, string>
      *
      * @throws Throwable
      */

@@ -27,20 +27,14 @@ class RemoveApiKeyCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    private ApiKeyResource $apiKeyResource;
-    private ApiKeyHelper $apiKeyHelper;
-
     /**
      * RemoveApiKeyCommand constructor.
      *
      * @throws LogicException
      */
-    public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
+    public function __construct(private ApiKeyResource $apiKeyResource, private ApiKeyHelper $apiKeyHelper)
     {
         parent::__construct('api-key:remove');
-
-        $this->apiKeyResource = $apiKeyResource;
-        $this->apiKeyHelper = $apiKeyHelper;
 
         $this->setDescription('Console command to remove existing API key');
     }

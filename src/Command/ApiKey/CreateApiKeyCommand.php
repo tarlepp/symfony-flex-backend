@@ -43,31 +43,19 @@ class CreateApiKeyCommand extends Command
         ],
     ];
 
-    private ApiKeyHelper $apiKeyHelper;
-    private ApiKeyResource $apiKeyResource;
-    private UserGroupResource $userGroupResource;
-    private RolesService $rolesService;
-    private RoleRepository $roleRepository;
-
     /**
      * @psalm-suppress PropertyNotSetInConstructor
      */
     private SymfonyStyle $io;
 
     public function __construct(
-        ApiKeyHelper $apiKeyHelper,
-        ApiKeyResource $apiKeyResource,
-        UserGroupResource $userGroupResource,
-        RolesService $rolesService,
-        RoleRepository $roleRepository
+        private ApiKeyHelper $apiKeyHelper,
+        private ApiKeyResource $apiKeyResource,
+        private UserGroupResource $userGroupResource,
+        private RolesService $rolesService,
+        private RoleRepository $roleRepository
     ) {
         parent::__construct('api-key:create');
-
-        $this->apiKeyHelper = $apiKeyHelper;
-        $this->apiKeyResource = $apiKeyResource;
-        $this->userGroupResource = $userGroupResource;
-        $this->rolesService = $rolesService;
-        $this->roleRepository = $roleRepository;
 
         $this->setDescription('Command to create new API key');
     }

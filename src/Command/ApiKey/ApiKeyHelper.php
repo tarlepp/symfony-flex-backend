@@ -26,13 +26,8 @@ use function sprintf;
  */
 class ApiKeyHelper
 {
-    private ApiKeyResource $apiKeyResource;
-    private RolesService $rolesService;
-
-    public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
+    public function __construct(private ApiKeyResource $apiKeyResource, private RolesService $rolesService)
     {
-        $this->apiKeyResource = $apiKeyResource;
-        $this->rolesService = $rolesService;
     }
 
     /**
@@ -47,7 +42,6 @@ class ApiKeyHelper
         $apiKeyEntity = null;
 
         while ($apiKeyFound !== true) {
-            /** @var ApiKeyEntity|null $apiKeyEntity */
             $apiKeyEntity = $this->getApiKeyEntity($io, $question);
 
             if ($apiKeyEntity === null) {

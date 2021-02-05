@@ -26,15 +26,9 @@ class ChangeTokenCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    private ApiKeyResource $apiKeyResource;
-    private ApiKeyHelper $apiKeyHelper;
-
-    public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
+    public function __construct(private ApiKeyResource $apiKeyResource, private ApiKeyHelper $apiKeyHelper)
     {
         parent::__construct('api-key:change-token');
-
-        $this->apiKeyResource = $apiKeyResource;
-        $this->apiKeyHelper = $apiKeyHelper;
 
         $this->setDescription('Command to change token for existing API key');
     }
@@ -69,7 +63,7 @@ class ChangeTokenCommand extends Command
     /**
      * Method to change API key token.
      *
-     * @return mixed[]
+     * @return array<int, string>
      *
      * @throws Throwable
      */
