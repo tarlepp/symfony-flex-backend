@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/Utils/CheckDependencies.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\Utils;
@@ -24,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
+use Throwable;
 use Traversable;
 use function array_map;
 use function array_unshift;
@@ -40,7 +41,7 @@ use function str_replace;
  * Class CheckDependencies
  *
  * @package App\Command\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class CheckDependencies extends Command
 {
@@ -50,21 +51,19 @@ class CheckDependencies extends Command
      * @psalm-suppress PropertyNotSetInConstructor
      */
     private SymfonyStyle $io;
-    private string $projectDir;
 
-    public function __construct(string $projectDir)
+    public function __construct(private string $projectDir)
     {
         parent::__construct('check-dependencies');
 
         $this->setDescription('Console command to check which vendor dependencies has updates');
-
-        $this->projectDir = $projectDir;
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @noinspection PhpMissingParentCallCommonInspection
+     * {@inheritdoc}
      *
-     * @throws JsonException
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
