@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/ListApiKeysCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -26,7 +26,7 @@ use function sprintf;
  * Class ListApiKeysCommand
  *
  * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ListApiKeysCommand extends Command
 {

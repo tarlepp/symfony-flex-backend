@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/ApiKeyManagementCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Exception\LogicException;
  * Class ApiKeyManagementCommand
  *
  * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyManagementCommand extends Command
 {

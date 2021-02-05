@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/ChangeTokenCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -20,7 +20,7 @@ use Throwable;
  * Class ChangeTokenCommand
  *
  * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ChangeTokenCommand extends Command
 {
