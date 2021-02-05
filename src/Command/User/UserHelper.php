@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/UserHelper.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -23,17 +23,12 @@ use function sprintf;
  * Class UserHelper
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserHelper
 {
-    private UserResource $userResource;
-    private UserGroupResource $userGroupResource;
-
-    public function __construct(UserResource $userResource, UserGroupResource $userGroupResource)
+    public function __construct(private UserResource $userResource, private UserGroupResource $userGroupResource)
     {
-        $this->userResource = $userResource;
-        $this->userGroupResource = $userGroupResource;
     }
 
     /**
@@ -48,7 +43,6 @@ class UserHelper
         $userEntity = null;
 
         while ($userFound !== true) {
-            /** @var UserEntity|null $userEntity */
             $userEntity = $this->getUserEntity($io, $question);
 
             if ($userEntity === null) {
@@ -73,7 +67,6 @@ class UserHelper
         $userGroupEntity = null;
 
         while ($userGroupFound !== true) {
-            /** @var UserGroupEntity|null $userGroupEntity */
             $userGroupEntity = $this->getUserGroupEntity($io, $question);
 
             if ($userGroupEntity === null) {
@@ -90,11 +83,9 @@ class UserHelper
      * Method to get User entity. Within this user will be asked which User
      * entity he/she wants to process with.
      *
-     * @return UserEntity|EntityInterface|null
-     *
      * @throws Throwable
      */
-    private function getUserEntity(SymfonyStyle $io, string $question): ?EntityInterface
+    private function getUserEntity(SymfonyStyle $io, string $question): ?UserEntity
     {
         $choices = [];
         $iterator = $this->getUserIterator($choices);
@@ -110,11 +101,9 @@ class UserHelper
      * Method to get UserGroup entity. Within this user will be asked which
      * UserGroup entity he/she wants to process with.
      *
-     * @return UserGroupEntity|EntityInterface|null
-     *
      * @throws Throwable
      */
-    private function getUserGroupEntity(SymfonyStyle $io, string $question): ?EntityInterface
+    private function getUserGroupEntity(SymfonyStyle $io, string $question): ?UserGroupEntity
     {
         $choices = [];
         $iterator = $this->getUserGroupIterator($choices);

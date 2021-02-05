@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/RemoveUserGroupCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -20,21 +20,15 @@ use Throwable;
  * Class RemoveUserGroupCommand
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RemoveUserGroupCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    private UserGroupResource $userGroupResource;
-    private UserHelper $userHelper;
-
-    public function __construct(UserGroupResource $userGroupResource, UserHelper $userHelper)
+    public function __construct(private UserGroupResource $userGroupResource, private UserHelper $userHelper)
     {
         parent::__construct('user:remove-group');
-
-        $this->userGroupResource = $userGroupResource;
-        $this->userHelper = $userHelper;
 
         $this->setDescription('Console command to remove existing user group');
     }

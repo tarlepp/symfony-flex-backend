@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/ListUserGroupsCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -25,19 +25,15 @@ use function sprintf;
  * Class ListUserGroupsCommand
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ListUserGroupsCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    private UserGroupResource $userGroupResource;
-
-    public function __construct(UserGroupResource $userGroupResource)
+    public function __construct(private UserGroupResource $userGroupResource)
     {
         parent::__construct('user:list-groups');
-
-        $this->userGroupResource = $userGroupResource;
 
         $this->setDescription('Console command to list user groups');
     }
@@ -68,7 +64,7 @@ class ListUserGroupsCommand extends Command
     /**
      * Getter method for formatted user group rows for console table.
      *
-     * @return mixed[]
+     * @return array<int, string>
      *
      * @throws Throwable
      */
@@ -90,13 +86,11 @@ class ListUserGroupsCommand extends Command
             $user->getEmail()
         );
 
-        return static function (UserGroup $userGroup) use ($userFormatter): array {
-            return [
-                $userGroup->getId(),
-                $userGroup->getName(),
-                $userGroup->getRole()->getId(),
-                implode(",\n", $userGroup->getUsers()->map($userFormatter)->toArray()),
-            ];
-        };
+        return static fn (UserGroup $userGroup): array => [
+            $userGroup->getId(),
+            $userGroup->getName(),
+            $userGroup->getRole()->getId(),
+            implode(",\n", $userGroup->getUsers()->map($userFormatter)->toArray()),
+        ];
     }
 }

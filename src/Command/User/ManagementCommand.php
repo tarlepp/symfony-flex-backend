@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/ManagementCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Exception\LogicException;
  * Class ManagementCommand
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ManagementCommand extends Command
 {

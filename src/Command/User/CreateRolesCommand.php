@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/CreateRolesCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -25,32 +25,27 @@ use function sprintf;
  * Class CreateRolesCommand
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class CreateRolesCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    private EntityManagerInterface $entityManager;
-    private RoleRepository $roleRepository;
-    private RolesService $rolesService;
-
     public function __construct(
-        EntityManagerInterface $entityManager,
-        RoleRepository $roleRepository,
-        RolesService $rolesService
+        private EntityManagerInterface $entityManager,
+        private RoleRepository $roleRepository,
+        private RolesService $rolesService
     ) {
         parent::__construct('user:create-roles');
-
-        $this->entityManager = $entityManager;
-        $this->roleRepository = $roleRepository;
-        $this->rolesService = $rolesService;
 
         $this->setDescription('Console command to create roles to database');
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @noinspection PhpMissingParentCallCommonInspection
+     * {@inheritdoc}
+     *
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
