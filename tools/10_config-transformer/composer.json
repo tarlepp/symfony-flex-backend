@@ -2,7 +2,7 @@
 	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-master",
-		"symplify/config-transformer": "9.0.50"
+		"symplify/config-transformer": "9.1.0"
 	},
 	"config": {
 		"platform": {
