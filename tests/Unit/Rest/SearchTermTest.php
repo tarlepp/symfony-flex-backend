@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Rest/SearchTermTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Rest;
@@ -18,7 +18,7 @@ use function call_user_func_array;
  * Class SearchTermTest
  *
  * @package App\Tests\Unit\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class SearchTermTest extends KernelTestCase
 {
@@ -28,7 +28,7 @@ class SearchTermTest extends KernelTestCase
      * @param mixed $column
      * @param mixed $search
      *
-     * @testdox Test that `getCriteria` method returns null with `$column` + `$search` parameters.
+     * @testdox Test that `getCriteria` method returns null with `$column` + `$search` parameters
      */
     public function testThatWithoutColumnOrSearchTermCriteriaIsNull($column, $search): void
     {
@@ -41,7 +41,7 @@ class SearchTermTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatReturnedCriteriaIsExpected
      *
-     * @testdox Test that `getCriteria` returns `$expected` with given `$inputArguments` arguments.
+     * @testdox Test that `getCriteria` method returns `$expected` with given `$inputArguments` arguments
      */
     public function testThatReturnedCriteriaIsExpected(
         StringableArrayObject $inputArguments,

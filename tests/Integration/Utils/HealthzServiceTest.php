@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Utils/HealthzServiceTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Utils;
@@ -18,33 +18,42 @@ use Throwable;
  * Class HealthzServiceTest
  *
  * @package App\Tests\Integration\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class HealthzServiceTest extends KernelTestCase
 {
     /**
+     * @var MockObject|HealthzRepository
+     */
+    private $repository;
+
+    /**
      * @throws Throwable
+     *
+     * @testdox Test that `HealthzService::check` method calls expected repository methods
      */
     public function testThatCheckMethodCallsExpectedRepositoryMethods(): void
     {
-        /** @var MockObject|HealthzRepository $mockRepository */
-        $mockRepository = $this->getMockBuilder(HealthzRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockRepository
+        $this->repository
             ->expects(static::once())
             ->method('cleanup');
 
-        $mockRepository
+        $this->repository
             ->expects(static::once())
             ->method('create');
 
-        $mockRepository
+        $this->repository
             ->expects(static::once())
             ->method('read');
 
-        (new HealthzService($mockRepository))
+        (new HealthzService($this->repository))
             ->check();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->repository = $this->getMockBuilder(HealthzRepository::class)->disableOriginalConstructor()->getMock();
     }
 }

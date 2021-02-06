@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Validator/Constraints/LanguageValidatorTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Validator\Constraints;
@@ -15,13 +15,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
-use Throwable;
 
 /**
  * Class LanguageValidatorTest
  *
  * @package App\Tests\Integration\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LanguageValidatorTest extends KernelTestCase
 {
@@ -43,18 +42,8 @@ class LanguageValidatorTest extends KernelTestCase
     private $localization;
 
     /**
-     * @throws Throwable
+     * @testdox Test that `LanguageValidator::validate` method calls expected service methods
      */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->constraint = new Language();
-        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
-        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $this->localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
-    }
-
     public function testThatValidateCallsExpectedMethods(): void
     {
         $this->localization
@@ -87,5 +76,15 @@ class LanguageValidatorTest extends KernelTestCase
         $validator = new LanguageValidator($this->localization);
         $validator->initialize($this->context);
         $validator->validate('foo', $this->constraint);
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->constraint = new Language();
+        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
+        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
+        $this->localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
     }
 }

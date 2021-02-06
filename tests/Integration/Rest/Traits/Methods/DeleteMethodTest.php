@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Rest/Traits/Methods/DeleteMethodTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest\Traits\Methods;
@@ -13,6 +13,8 @@ use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\DeleteMethodTestClass;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Exception;
 use Generator;
 use InvalidArgumentException;
@@ -21,7 +23,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -31,12 +32,39 @@ use Throwable;
  * Class DeleteMethodTest
  *
  * @package Integration\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DeleteMethodTest extends KernelTestCase
 {
     /**
+     * @var MockObject|EntityInterface
+     */
+    private $entity;
+
+    /**
+     * @var MockObject|RestResourceInterface
+     */
+    private $resource;
+
+    /**
+     * @var MockObject|ResponseHandlerInterface
+     */
+    private $responseHandler;
+
+    /**
+     * @var MockObject|DeleteMethodTestClass
+     */
+    private $validTestClass;
+
+    /**
+     * @var MockObject|DeleteMethodInvalidTestClass
+     */
+    private $inValidTestClass;
+
+    /**
      * @throws Throwable
+     *
+     * @testdox Test that `deleteMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
     public function testThatTraitThrowsAnException(): void
     {
@@ -48,14 +76,10 @@ class DeleteMethodTest extends KernelTestCase
         );
         /** @codingStandardsIgnoreEnd */
 
-        /** @var MockObject|DeleteMethodInvalidTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(DeleteMethodInvalidTestClass::class);
-
-        $uuid = Uuid::uuid4()->toString();
-
-        $request = Request::create('/' . $uuid, 'DELETE');
-
-        $testClass->deleteMethod($request, 'some-id');
+        $this->inValidTestClass->deleteMethod(
+            Request::create('/' . Uuid::uuid4()->toString(), 'DELETE'),
+            'some-id'
+        );
     }
 
     /**
@@ -63,102 +87,64 @@ class DeleteMethodTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `App\Rest\Traits\Methods\DeleteMethod` throws an exception with `$httpMethod` HTTP method.
+     * @testdox Test that `deleteMethod` throws an exception when using `$httpMethod` HTTP method
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|DeleteMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            DeleteMethodTestClass::class,
-            [$resource, $responseHandler]
+        $this->validTestClass->deleteMethod(
+            Request::create('/' . Uuid::uuid4()->toString(), $httpMethod),
+            'some-id'
         );
-
-        $uuid = Uuid::uuid4()->toString();
-
-        // Create request and response
-        $request = Request::create('/' . $uuid, $httpMethod);
-
-        $testClass->deleteMethod($request, 'some-id')->getContent();
     }
 
     /**
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
-     * @param Exception $exception
-     *
      * @throws Throwable
      *
-     * @testdox Test that `App\Rest\Traits\Methods\DeleteMethod` uses `$expectedCode` code on HttpException.
+     * @testdox Test that `deleteMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
-    public function testThatTraitHandlesException(\Throwable $exception, int $expectedCode): void
+    public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|DeleteMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            DeleteMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
         $uuid = Uuid::uuid4()->toString();
         $request = Request::create('/' . $uuid, 'DELETE');
 
-        $resource
+        $this->resource
             ->expects(static::once())
             ->method('delete')
+            ->with($uuid)
             ->willThrowException($exception);
 
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $testClass->deleteMethod($request, $uuid);
+        $this->validTestClass->deleteMethod($request, $uuid);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `deleteMethod` method calls expected service methods
      */
     public function testThatTraitCallsServiceMethods(): void
     {
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|DeleteMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            DeleteMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
-        /** @var MockObject|Request $request */
-        $request = $this->createMock(Request::class);
-        $response = $this->createMock(Response::class);
-        $entityInterface = $this->createMock(EntityInterface::class);
-
         $uuid = Uuid::uuid4()->toString();
+        $request = Request::create('/' . $uuid, 'DELETE');
 
-        $request
-            ->expects(static::once())
-            ->method('getMethod')
-            ->willReturn('DELETE');
-
-        $resource
+        $this->resource
             ->expects(static::once())
             ->method('delete')
             ->with($uuid)
-            ->willReturn($entityInterface);
+            ->willReturn($this->entity);
 
-        $responseHandler
+        $this->responseHandler
             ->expects(static::once())
             ->method('createResponse')
-            ->withAnyParameters()
-            ->willReturn($response);
+            ->with($request, $this->entity, $this->resource);
 
-        $testClass->deleteMethod($request, $uuid);
+        $this->validTestClass->deleteMethod($request, $uuid);
     }
 
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
@@ -175,10 +161,31 @@ class DeleteMethodTest extends KernelTestCase
 
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        yield [new HttpException(400), 0];
-        yield [new NotFoundHttpException(), 0];
+        yield [new HttpException(400, '', null, [], 400), 400];
+        yield [new NoResultException(), 404];
+        yield [new NotFoundHttpException(), 404];
+        yield [new NonUniqueResultException(), 500];
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+
+        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->validTestClass = $this->getMockForAbstractClass(
+            DeleteMethodTestClass::class,
+            [$this->resource, $this->responseHandler]
+        );
+
+        $this->inValidTestClass = $this->getMockForAbstractClass(DeleteMethodInvalidTestClass::class);
     }
 }

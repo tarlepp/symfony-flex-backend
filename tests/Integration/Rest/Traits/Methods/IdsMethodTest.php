@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Rest/Traits/Methods/IdsMethodTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Rest\Traits\Methods;
@@ -12,6 +12,9 @@ use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodInvalidTestClass;
 use App\Tests\Integration\Rest\Traits\Methods\src\IdsMethodTestClass;
+use App\Utils\Tests\StringableArrayObject;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Exception;
 use Generator;
 use InvalidArgumentException;
@@ -19,21 +22,43 @@ use LogicException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 /**
  * Class IdsMethodTest
  *
  * @package App\Tests\Integration\Rest\Traits\Methods
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class IdsMethodTest extends KernelTestCase
 {
     /**
+     * @var MockObject|RestResourceInterface
+     */
+    private $resource;
+
+    /**
+     * @var MockObject|ResponseHandlerInterface
+     */
+    private $responseHandler;
+
+    /**
+     * @var MockObject|IdsMethodTestClass
+     */
+    private $validTestClass;
+
+    /**
+     * @var MockObject|IdsMethodInvalidTestClass
+     */
+    private $inValidTestClass;
+
+    /**
      * @throws Throwable
+     *
+     * @testdox Test that `idsMethod` throws an exception if class doesn't implement `ControllerInterface`
      */
     public function testThatTraitThrowsAnException(): void
     {
@@ -45,12 +70,7 @@ class IdsMethodTest extends KernelTestCase
         );
         /** @codingStandardsIgnoreEnd */
 
-        /** @var MockObject|IdsMethodInvalidTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(IdsMethodInvalidTestClass::class);
-
-        $request = Request::create('/');
-
-        $testClass->idsMethod($request);
+        $this->inValidTestClass->idsMethod(Request::create('/'));
     }
 
     /**
@@ -58,121 +78,130 @@ class IdsMethodTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `App\Rest\Traits\Methods\IdsMethod` throws an exception with `$httpMethod` HTTP method.
+     * @testdox Test that `idsMethod` throws an exception when using `$httpMethod` HTTP method
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|IdsMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            IdsMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
-        // Create request and response
         $request = Request::create('/', $httpMethod);
 
-        $testClass->idsMethod($request)->getContent();
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatTraitCallsProcessCriteriaIfItExists(): void
-    {
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|IdsMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            IdsMethodTestClass::class,
-            [$resource, $responseHandler],
-            '',
-            true,
-            true,
-            true,
-            ['processCriteria']
-        );
-
-        // Create request
-        $request = Request::create('/');
-
-        $testClass
-            ->expects(static::once())
-            ->method('processCriteria')
-            ->withAnyParameters();
-
-        $testClass->idsMethod($request)->getContent();
+        $this->validTestClass->idsMethod($request)->getContent();
     }
 
     /**
      * @dataProvider dataProviderTestThatTraitHandlesException
      *
-     * @param Exception $exception
-     *
      * @throws Throwable
      *
-     * @testdox Test that `App\Rest\Traits\Methods\IdsMethod` uses `$expectedCode` code on HttpException.
+     * @testdox Test that `patchMethod` uses `$expectedCode` HTTP status code with `$exception` exception
      */
-    public function testThatTraitHandlesException(\Throwable $exception, int $expectedCode): void
+    public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
-
-        /** @var MockObject|IdsMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            IdsMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
-
         $request = Request::create('/');
 
-        $resource
+        $this->resource
             ->expects(static::once())
             ->method('getIds')
+            ->with([], [])
             ->willThrowException($exception);
 
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $testClass->idsMethod($request);
+        $this->validTestClass->idsMethod($request);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatTraitCallsServiceMethods
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `idsMethod` method calls expected service methods when using `$queryString` as query string
+     */
+    public function testThatTraitCallsServiceMethods(
+        string $queryString,
+        StringableArrayObject $criteria,
+        StringableArrayObject $search
+    ): void {
+        $request = Request::create('/' . $queryString);
+
+        $this->resource
+            ->expects(static::once())
+            ->method('getIds')
+            ->with($criteria->getArrayCopy(), $search->getArrayCopy())
+            ->willReturn([]);
+
+        $this->responseHandler
+            ->expects(static::once())
+            ->method('createResponse')
+            ->with($request, [], $this->resource);
+
+        $this->validTestClass->idsMethod($request);
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `idsMethod` throws an exception when `?where` parameter is not valid JSON
+     */
+    public function testThatTraitThrowsAnExceptionWhenWhereParameterIsNotValidJson(): void
+    {
+        $this->expectException(HttpException::class);
+        $this->expectExceptionCode(400);
+        $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
+
+        $this->validTestClass->idsMethod(Request::create('/?where=foo'));
     }
 
     /**
      * @throws Throwable
      */
-    public function testThatTraitCallsServiceMethods(): void
+    public function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {
-        $resource = $this->createMock(RestResourceInterface::class);
-        $responseHandler = $this->createMock(ResponseHandlerInterface::class);
+        yield ['', new StringableArrayObject([]), new StringableArrayObject([])];
 
-        /** @var MockObject|IdsMethodTestClass $testClass */
-        $testClass = $this->getMockForAbstractClass(
-            IdsMethodTestClass::class,
-            [$resource, $responseHandler]
-        );
+        yield [
+            '?where={"foo": "bar"}',
+            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([]),
+        ];
 
-        // Create request and response
-        $request = Request::create('/');
-        $response = new Response('[]');
+        yield [
+            '?where={"foo": {"bar": "foobar"}}',
+            new StringableArrayObject(['foo' => ['bar' => 'foobar']]),
+            new StringableArrayObject([]),
+        ];
 
-        $resource
-            ->expects(static::once())
-            ->method('getIds')
-            ->withAnyParameters()
-            ->willReturn([]);
+        yield [
+            '?search=term',
+            new StringableArrayObject([]),
+            new StringableArrayObject(['or' => ['term']]),
+        ];
 
-        $responseHandler
-            ->expects(static::once())
-            ->method('createResponse')
-            ->withAnyParameters()
-            ->willReturn($response);
+        yield [
+            '?search=term1+term2',
+            new StringableArrayObject([]),
+            new StringableArrayObject(['or' => ['term1', 'term2']]),
+        ];
 
-        $testClass->idsMethod($request);
+        yield [
+            '?search={"and": ["term1", "term2"]}',
+            new StringableArrayObject([]),
+            new StringableArrayObject(['and' => ['term1', 'term2']]),
+        ];
+
+        yield [
+            '?search={"or": ["term1", "term2"]}',
+            new StringableArrayObject([]),
+            new StringableArrayObject(['or' => ['term1', 'term2']]),
+        ];
+
+        yield [
+            '?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}',
+            new StringableArrayObject([]),
+            new StringableArrayObject(['and' => ['term1', 'term2'], 'or' => ['term3', 'term4']]),
+        ];
     }
 
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
@@ -189,9 +218,30 @@ class IdsMethodTest extends KernelTestCase
 
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
-        yield [new HttpException(400), 0];
+        yield [new HttpException(400, '', null, [], 400), 400];
+        yield [new NoResultException(), 404];
+        yield [new NotFoundHttpException(), 404];
+        yield [new NonUniqueResultException(), 500];
+        yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
-        yield [new Exception(), 400];
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+
+        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->validTestClass = $this->getMockForAbstractClass(
+            IdsMethodTestClass::class,
+            [$this->resource, $this->responseHandler]
+        );
+
+        $this->inValidTestClass = $this->getMockForAbstractClass(IdsMethodInvalidTestClass::class);
     }
 }

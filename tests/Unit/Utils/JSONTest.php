@@ -4,12 +4,13 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Utils/JSONTest.php.
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Utils;
 
 use App\Utils\JSON;
+use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use JsonException;
 use stdClass;
@@ -20,7 +21,7 @@ use function serialize;
 /**
  * Class JSONTest.
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class JSONTest extends KernelTestCase
 {
@@ -32,7 +33,7 @@ class JSONTest extends KernelTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that encode returns `$expected` when using `$value` as input
+     * @testdox Test that `JSON::encode` method returns `$expected` when using `$value` as input
      */
     public function testThatEncodeWorksLikeExpected($value, $expected): void
     {
@@ -46,9 +47,9 @@ class JSONTest extends KernelTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `decode` method returns `$expected`.
+     * @testdox Test that `JSON::decode` method returns `$expected` when using `$parameters` as input
      */
-    public function testThatDecodeWorksLikeExpected(array $parameters, $expected): void
+    public function testThatDecodeWorksLikeExpected(StringableArrayObject $parameters, $expected): void
     {
         static::assertSame(
             serialize($expected),
@@ -58,6 +59,8 @@ class JSONTest extends KernelTestCase
 
     /**
      * @throws JsonException
+     *
+     * @testdox Test that `JSON::encode` method throws exception when maximum stack depth exceeded
      */
     public function testThatEncodeThrowsAnExceptionOnMaximumDepth(): void
     {
@@ -75,6 +78,8 @@ class JSONTest extends KernelTestCase
 
     /**
      * @throws JsonException
+     *
+     * @testdox Test that `JSON::decode` method throws exception when maximum stack depth exceeded
      */
     public function testThatDecodeThrowsAnExceptionOnMaximumDepth(): void
     {
@@ -95,7 +100,7 @@ class JSONTest extends KernelTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that JSON::decode throws an exception with malformed JSON: '$json'
+     * @testdox Test that `JSON::decode` method throws an exception with malformed JSON: `$json`
      */
     public function testThatDecodeThrowsAnExceptionOnMalformedJson(string $json): void
     {
@@ -110,7 +115,7 @@ class JSONTest extends KernelTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that JSON::decode throws an exception with invalid UTF characters in JSON: '$input'
+     * @testdox Test that `JSON::decode` method throws an exception with invalid UTF characters in JSON: `$input`
      */
     public function testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(string $input): void
     {
@@ -165,8 +170,8 @@ class JSONTest extends KernelTestCase
      */
     public function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {
-        $iterator = fn (array $data): array => [
-            [$data[1], is_array($data[0])],
+        $iterator = static fn (array $data): array => [
+            new StringableArrayObject([$data[1], is_array($data[0])]),
             $data[0],
         ];
 
