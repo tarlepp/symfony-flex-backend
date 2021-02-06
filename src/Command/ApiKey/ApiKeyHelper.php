@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/ApiKeyHelper.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -22,17 +22,14 @@ use function sprintf;
  * Class ApiKeyHelper
  *
  * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyHelper
 {
-    private ApiKeyResource $apiKeyResource;
-    private RolesService $rolesService;
-
-    public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
-    {
-        $this->apiKeyResource = $apiKeyResource;
-        $this->rolesService = $rolesService;
+    public function __construct(
+        private ApiKeyResource $apiKeyResource,
+        private RolesService $rolesService
+    ) {
     }
 
     /**
@@ -47,7 +44,6 @@ class ApiKeyHelper
         $apiKeyEntity = null;
 
         while ($apiKeyFound !== true) {
-            /** @var ApiKeyEntity|null $apiKeyEntity */
             $apiKeyEntity = $this->getApiKeyEntity($io, $question);
 
             if ($apiKeyEntity === null) {

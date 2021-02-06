@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/Traits/ExecuteMultipleCommandTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\Traits;
@@ -21,7 +21,7 @@ use function array_values;
  * Trait ExecuteMultipleCommandTrait
  *
  * @package App\Command\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait ExecuteMultipleCommandTrait
 {
