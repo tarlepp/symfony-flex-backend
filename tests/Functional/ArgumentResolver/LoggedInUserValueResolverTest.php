@@ -49,6 +49,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $user = $userRepository->loadUserByUsername($username, false);
 
+        static::assertNotNull($user);
+
         $securityUser = new SecurityUser($user);
         $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
 
@@ -59,8 +61,11 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $resolver = new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
+        $request = Request::create('/');
 
-        static::assertSame([$user], iterator_to_array($resolver->resolve(Request::create('/'), $metadata)));
+        $resolver->supports($request, $metadata);
+
+        static::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
     }
 
     /**
@@ -80,6 +85,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $userRepository = static::$container->get(UserRepository::class);
 
         $user = $userRepository->loadUserByUsername($username, false);
+
+        static::assertNotNull($user);
 
         $securityUser = new SecurityUser($user);
         $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
