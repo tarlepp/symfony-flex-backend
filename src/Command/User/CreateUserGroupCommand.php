@@ -48,8 +48,10 @@ class CreateUserGroupCommand extends Command
         ],
     ];
 
-    public function __construct(private UserGroupResource $userGroupResource, private RoleRepository $roleRepository)
-    {
+    public function __construct(
+        private UserGroupResource $userGroupResource,
+        private RoleRepository $roleRepository
+    ) {
         parent::__construct('user:create-group');
 
         $this->setDescription('Console command to create user groups');

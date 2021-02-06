@@ -29,8 +29,10 @@ class EditApiKeyCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public function __construct(private ApiKeyResource $apiKeyResource, private ApiKeyHelper $apiKeyHelper)
-    {
+    public function __construct(
+        private ApiKeyResource $apiKeyResource,
+        private ApiKeyHelper $apiKeyHelper
+    ) {
         parent::__construct('api-key:edit');
 
         $this->setDescription('Command to edit existing API key');

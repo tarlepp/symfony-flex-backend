@@ -26,8 +26,10 @@ class RemoveUserCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public function __construct(private UserResource $userResource, private UserHelper $userHelper)
-    {
+    public function __construct(
+        private UserResource $userResource,
+        private UserHelper $userHelper
+    ) {
         parent::__construct('user:remove');
 
         $this->setDescription('Console command to remove existing user');

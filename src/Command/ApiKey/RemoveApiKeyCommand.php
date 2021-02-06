@@ -32,8 +32,10 @@ class RemoveApiKeyCommand extends Command
      *
      * @throws LogicException
      */
-    public function __construct(private ApiKeyResource $apiKeyResource, private ApiKeyHelper $apiKeyHelper)
-    {
+    public function __construct(
+        private ApiKeyResource $apiKeyResource,
+        private ApiKeyHelper $apiKeyHelper
+    ) {
         parent::__construct('api-key:remove');
 
         $this->setDescription('Console command to remove existing API key');

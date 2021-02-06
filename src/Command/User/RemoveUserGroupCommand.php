@@ -26,8 +26,10 @@ class RemoveUserGroupCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public function __construct(private UserGroupResource $userGroupResource, private UserHelper $userHelper)
-    {
+    public function __construct(
+        private UserGroupResource $userGroupResource,
+        private UserHelper $userHelper
+    ) {
         parent::__construct('user:remove-group');
 
         $this->setDescription('Console command to remove existing user group');

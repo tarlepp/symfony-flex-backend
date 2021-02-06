@@ -29,8 +29,10 @@ class EditUserCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public function __construct(private UserResource $userResource, private UserHelper $userHelper)
-    {
+    public function __construct(
+        private UserResource $userResource,
+        private UserHelper $userHelper
+    ) {
         parent::__construct('user:edit');
 
         $this->setDescription('Command to edit existing user');

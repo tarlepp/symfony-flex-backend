@@ -31,8 +31,9 @@ class ListUserGroupsCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public function __construct(private UserGroupResource $userGroupResource)
-    {
+    public function __construct(
+        private UserGroupResource $userGroupResource
+    ) {
         parent::__construct('user:list-groups');
 
         $this->setDescription('Console command to list user groups');

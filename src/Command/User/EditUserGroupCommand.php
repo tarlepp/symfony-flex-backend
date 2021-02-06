@@ -29,8 +29,10 @@ class EditUserGroupCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public function __construct(private UserGroupResource $userGroupResource, private UserHelper $userHelper)
-    {
+    public function __construct(
+        private UserGroupResource $userGroupResource,
+        private UserHelper $userHelper
+    ) {
         parent::__construct('user:edit-group');
 
         $this->setDescription('Command to edit existing user group');

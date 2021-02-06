@@ -40,8 +40,9 @@ class CreateDateDimensionEntitiesCommand extends Command
      */
     private SymfonyStyle $io;
 
-    public function __construct(private DateDimensionRepository $dateDimensionRepository)
-    {
+    public function __construct(
+        private DateDimensionRepository $dateDimensionRepository
+    ) {
         parent::__construct('utils:create-date-dimension-entities');
 
         $this->setDescription('Console command to create \'DateDimension\' entities.');

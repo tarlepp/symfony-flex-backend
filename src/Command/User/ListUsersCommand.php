@@ -32,8 +32,10 @@ class ListUsersCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    public function __construct(private UserResource $userResource, private RolesService $roles)
-    {
+    public function __construct(
+        private UserResource $userResource,
+        private RolesService $roles
+    ) {
         parent::__construct('user:list');
 
         $this->setDescription('Console command to list users');

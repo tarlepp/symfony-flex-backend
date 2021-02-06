@@ -26,8 +26,10 @@ use function sprintf;
  */
 class ApiKeyHelper
 {
-    public function __construct(private ApiKeyResource $apiKeyResource, private RolesService $rolesService)
-    {
+    public function __construct(
+        private ApiKeyResource $apiKeyResource,
+        private RolesService $rolesService
+    ) {
     }
 
     /**

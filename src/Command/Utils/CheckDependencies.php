@@ -52,8 +52,9 @@ class CheckDependencies extends Command
      */
     private SymfonyStyle $io;
 
-    public function __construct(private string $projectDir)
-    {
+    public function __construct(
+        private string $projectDir
+    ) {
         parent::__construct('check-dependencies');
 
         $this->setDescription('Console command to check which vendor dependencies has updates');
