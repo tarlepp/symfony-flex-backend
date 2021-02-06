@@ -45,6 +45,14 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     private MockObject $userRepository;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $this->userRepository = $this->createMock(UserRepository::class);
+    }
+
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid
      *
@@ -291,13 +299,5 @@ class UserTypeIdentificationTest extends KernelTestCase
         yield [new PreAuthenticatedToken(new CoreUser('username', 'password'), 'credentials', 'providerKey')];
 
         yield [new RememberMeToken(new CoreUser('username', 'password'), 'provider-key', 'some-secret')];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
-        $this->userRepository = $this->createMock(UserRepository::class);
     }
 }

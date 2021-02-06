@@ -33,6 +33,14 @@ class VersionTest extends KernelTestCase
      */
     private $logger;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->cache = $this->getMockBuilder(CacheInterface::class)->getMock();
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+    }
+
     /**
      * @testdox Test that `LoggerInterface::error` method is called when `CacheInterface::get` throws an exception
      */
@@ -52,13 +60,5 @@ class VersionTest extends KernelTestCase
 
         (new Version('', $this->cache, $this->logger))
             ->get();
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->cache = $this->getMockBuilder(CacheInterface::class)->getMock();
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
     }
 }

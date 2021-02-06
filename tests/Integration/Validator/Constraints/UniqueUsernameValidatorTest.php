@@ -43,6 +43,16 @@ class UniqueUsernameValidatorTest extends KernelTestCase
      */
     private $repository;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->constraint = new UniqueUsername();
+        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
+        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
+        $this->repository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+    }
+
     /**
      * @throws Throwable
      *
@@ -80,15 +90,5 @@ class UniqueUsernameValidatorTest extends KernelTestCase
         $validator = new UniqueUsernameValidator($this->repository);
         $validator->initialize($this->context);
         $validator->validate($user, $this->constraint);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->constraint = new UniqueUsername();
-        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
-        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $this->repository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
     }
 }

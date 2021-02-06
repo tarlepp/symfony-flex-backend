@@ -33,10 +33,16 @@ use function json_encode;
  */
 class ApiKeyAuthenticatorTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|ApiKeyUserProvider
-     */
-    private $apiKeyUserProvider;
+    private MockObject|ApiKeyUserProvider $apiKeyUserProvider;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
 
     /**
      * @dataProvider dataProviderTestThatSupportReturnsExpected
@@ -269,14 +275,5 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [new StringableArrayObject(['foobar'])];
         yield [new StringableArrayObject(['foobar' => 'barfoo'])];
         yield [new StringableArrayObject(['token' => null])];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }

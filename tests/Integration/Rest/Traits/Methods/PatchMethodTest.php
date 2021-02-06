@@ -67,6 +67,26 @@ class PatchMethodTest extends KernelTestCase
      */
     private $inValidTestClass;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->restDto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+
+        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->validTestClass = $this->getMockForAbstractClass(
+            PatchMethodTestClass::class,
+            [$this->resource, $this->responseHandler]
+        );
+
+        $this->inValidTestClass = $this->getMockForAbstractClass(PatchMethodInvalidTestClass::class);
+    }
+
     /**
      * @throws Throwable
      *
@@ -81,7 +101,6 @@ class PatchMethodTest extends KernelTestCase
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
         /** @codingStandardsIgnoreEnd */
-
         $request = Request::create('/' . Uuid::uuid4()->toString(), 'PATCH');
 
         $this->inValidTestClass->patchMethod($request, $this->restDto, 'some-id');
@@ -173,25 +192,5 @@ class PatchMethodTest extends KernelTestCase
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->restDto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
-        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->validTestClass = $this->getMockForAbstractClass(
-            PatchMethodTestClass::class,
-            [$this->resource, $this->responseHandler]
-        );
-
-        $this->inValidTestClass = $this->getMockForAbstractClass(PatchMethodInvalidTestClass::class);
     }
 }

@@ -27,6 +27,13 @@ class HealthzServiceTest extends KernelTestCase
      */
     private $repository;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->repository = $this->getMockBuilder(HealthzRepository::class)->disableOriginalConstructor()->getMock();
+    }
+
     /**
      * @throws Throwable
      *
@@ -48,12 +55,5 @@ class HealthzServiceTest extends KernelTestCase
 
         (new HealthzService($this->repository))
             ->check();
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->repository = $this->getMockBuilder(HealthzRepository::class)->disableOriginalConstructor()->getMock();
     }
 }

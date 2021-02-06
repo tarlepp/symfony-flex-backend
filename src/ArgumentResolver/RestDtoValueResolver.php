@@ -94,7 +94,7 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
         if ($this->controllerName === null || $this->actionName === null) {
             $message = sprintf(
                 'You cannot call `%1$s::resolve(...)` method without calling `%1$s::supports(...)` first',
-                __CLASS__
+                self::class
             );
 
             throw new BadMethodCallException($message);

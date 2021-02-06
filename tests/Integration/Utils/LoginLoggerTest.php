@@ -30,6 +30,15 @@ class LoginLoggerTest extends KernelTestCase
      */
     private $logLoginResource;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->logLoginResource = $this->getMockBuilder(LogLoginResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     /**
      * @throws Throwable
      *
@@ -60,14 +69,5 @@ class LoginLoggerTest extends KernelTestCase
 
         (new LoginLogger($this->logLoginResource, $requestStack))
             ->process('');
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->logLoginResource = $this->getMockBuilder(LogLoginResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }

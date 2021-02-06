@@ -42,6 +42,19 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     private $rolesService;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->rolesService = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     /**
      * @dataProvider dataProviderTestThatSupportClassReturnsExpected
      *
@@ -144,18 +157,5 @@ class ApiKeyUserProviderTest extends KernelTestCase
         yield [false, UserInterface::class];
         yield [false, UserEntity::class];
         yield [true, ApiKeyUser::class];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }

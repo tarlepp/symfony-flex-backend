@@ -42,6 +42,16 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
      */
     private $context;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $this->context = $this->getMockBuilder(ExecutionContext::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     /**
      * @testdox Test that `validate` method throws exception if constraint is not `EntityReferenceExists`
      */
@@ -205,15 +215,5 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
             EntityInterface::class,
             'Expected argument of type "App\Entity\Interfaces\EntityInterface", "stdClass" given',
         ];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $this->context = $this->getMockBuilder(ExecutionContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }

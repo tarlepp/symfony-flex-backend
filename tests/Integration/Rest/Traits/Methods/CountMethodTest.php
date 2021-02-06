@@ -55,6 +55,24 @@ class CountMethodTest extends KernelTestCase
      */
     private $inValidTestClass;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+
+        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->validTestClass = $this->getMockForAbstractClass(
+            CountMethodTestClass::class,
+            [$this->resource, $this->responseHandler]
+        );
+
+        $this->inValidTestClass = $this->getMockForAbstractClass(CountMethodInvalidTestClass::class);
+    }
+
     /**
      * @throws Throwable
      *
@@ -68,7 +86,7 @@ class CountMethodTest extends KernelTestCase
         $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
-        /** @codingStandardsIgnoreEnd */
+        /* @codingStandardsIgnoreEnd */
 
         $this->inValidTestClass->countMethod(Request::create('/'));
     }
@@ -223,23 +241,5 @@ class CountMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             new StringableArrayObject(['and' => ['term1', 'term2'], 'or' => ['term3', 'term4']]),
         ];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->validTestClass = $this->getMockForAbstractClass(
-            CountMethodTestClass::class,
-            [$this->resource, $this->responseHandler]
-        );
-
-        $this->inValidTestClass = $this->getMockForAbstractClass(CountMethodInvalidTestClass::class);
     }
 }
