@@ -22,6 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
+use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
@@ -394,6 +395,22 @@ FORMAT;
         static::assertTrue(class_exists($testClass), $message);
     }
 
+    /**
+     * @dataProvider dataProviderTestThatArgumentValueResolverServiceHasIntegrationTest
+     *
+     * @testdox Test that argument value resolver service `$class` has integration test class `$testClass`
+     */
+    public function testThatArgumentValueResolverServiceHasIntegrationTest(string $testClass, string $class): void
+    {
+        $message = sprintf(
+            'Argument value resolver service "%s" does not have required test class "%s".',
+            $class,
+            $testClass
+        );
+
+        static::assertTrue(class_exists($testClass), $message);
+    }
+
     public function dataProviderTestThatControllerHasE2ETests(): array
     {
         $this->bootKernelCached();
@@ -682,6 +699,18 @@ FORMAT;
         $namespaceTest = '\\App\\Tests\\Integration\\Service\\';
 
         return $this->getTestCases($folder, $namespace, $namespaceTest);
+    }
+
+    public function dataProviderTestThatArgumentValueResolverServiceHasIntegrationTest(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/ArgumentResolver/';
+        $namespace = '\\App\\ArgumentResolver\\';
+        $namespaceTest = '\\App\\Tests\\Integration\\ArgumentResolver\\';
+        $filter = $this->getInterfaceFilter(ArgumentValueResolverInterface::class);
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
     private function getTestCases(
