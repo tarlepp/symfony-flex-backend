@@ -23,9 +23,6 @@ abstract class IdsMethodTestClass extends Controller
 {
     use IdsMethod;
 
-    /**
-     * FindMethodTestClass constructor.
-     */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
         $this->resource = $resource;

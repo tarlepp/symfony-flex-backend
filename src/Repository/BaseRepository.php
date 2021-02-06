@@ -42,6 +42,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @var array<int, string>
      */
     protected static array $searchColumns = [];
+
+    /**
+     * @psalm-var class-string
+     */
     protected static string $entityName;
     protected static EntityManager $entityManager;
 
@@ -73,14 +77,14 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     private static array $processedCallbacks = [];
 
-    /**
-     * BaseRepository constructor.
-     */
     public function __construct(ManagerRegistry $managerRegistry)
     {
         $this->managerRegistry = $managerRegistry;
     }
 
+    /**
+     * @psalm-return class-string
+     */
     public function getEntityName(): string
     {
         return static::$entityName;

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/Utils/CreateDateDimensionEntitiesCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\Utils;
@@ -27,7 +27,7 @@ use function sprintf;
  * Class CreateDateDimensionEntitiesCommand
  *
  * @package App\Command\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class CreateDateDimensionEntitiesCommand extends Command
 {
@@ -39,16 +39,11 @@ class CreateDateDimensionEntitiesCommand extends Command
      * @psalm-suppress PropertyNotSetInConstructor
      */
     private SymfonyStyle $io;
-    private DateDimensionRepository $repository;
 
-    /**
-     * PopulateDateDimensionCommand constructor.
-     */
-    public function __construct(DateDimensionRepository $dateDimensionRepository)
-    {
+    public function __construct(
+        private DateDimensionRepository $dateDimensionRepository
+    ) {
         parent::__construct('utils:create-date-dimension-entities');
-
-        $this->repository = $dateDimensionRepository;
 
         $this->setDescription('Console command to create \'DateDimension\' entities.');
     }
@@ -64,7 +59,6 @@ class CreateDateDimensionEntitiesCommand extends Command
         // Create output decorator helpers for the Symfony Style Guide.
         $this->io = new SymfonyStyle($input, $output);
 
-        // Set title
         $this->io->title($this->getDescription());
 
         // Determine start and end years
@@ -111,7 +105,7 @@ class CreateDateDimensionEntitiesCommand extends Command
     private function process(int $yearStart, int $yearEnd): void
     {
         $dateStart = new DateTime($yearStart . '-01-01 00:00:00', new DateTimeZone('UTC'));
-        $dateEnd = new DateTime($yearEnd . '-12-31 00:00:00', new DateTimeZone('UTC'));
+        $dateEnd = new DateTime($yearEnd . '-12-31 23:59:59', new DateTimeZone('UTC'));
 
         $progress = $this->getProgressBar(
             (int)$dateEnd->diff($dateStart)->format('%a') + 1,
@@ -119,7 +113,7 @@ class CreateDateDimensionEntitiesCommand extends Command
         );
 
         // Remove existing entities
-        $this->repository->reset();
+        $this->dateDimensionRepository->reset();
 
         // Create entities to database
         $this->createEntities($yearEnd, $dateStart, $progress);
@@ -152,7 +146,7 @@ class CreateDateDimensionEntitiesCommand extends Command
     private function createEntities(int $yearEnd, DateTime $dateStart, ProgressBar $progress): void
     {
         // Get entity manager for _fast_ database handling.
-        $em = $this->repository->getEntityManager();
+        $em = $this->dateDimensionRepository->getEntityManager();
 
         // You spin me round (like a record... er like a date)
         while ((int)$dateStart->format('Y') < $yearEnd + 1) {

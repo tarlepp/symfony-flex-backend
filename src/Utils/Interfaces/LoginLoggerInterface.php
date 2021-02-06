@@ -14,16 +14,13 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
 
 /**
- * Interface LoginLogger
+ * Interface LoginLoggerInterface
  *
  * @package App\Utils
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
 interface LoginLoggerInterface
 {
-    /**
-     * LoginLogger constructor.
-     */
     public function __construct(LogLoginResource $logLoginFailureResource, RequestStack $requestStack);
 
     /**

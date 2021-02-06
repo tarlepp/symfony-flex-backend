@@ -31,9 +31,6 @@ class DetachUserController
     private UserGroupResource $userGroupResource;
     private SerializerInterface $serializer;
 
-    /**
-     * DetachUserController constructor.
-     */
     public function __construct(UserGroupResource $userGroupResource, SerializerInterface $serializer)
     {
         $this->userGroupResource = $userGroupResource;

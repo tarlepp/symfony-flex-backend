@@ -32,9 +32,6 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     private RequestStack $requestStack;
     private LoggerInterface $logger;
 
-    /**
-     * JWTCreatedListener constructor.
-     */
     public function __construct(RequestStack $requestStack, LoggerInterface $logger)
     {
         $this->requestStack = $requestStack;

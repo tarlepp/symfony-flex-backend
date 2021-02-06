@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/ListUsersCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -26,24 +26,17 @@ use function sprintf;
  * Class ListUsersCommand
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ListUsersCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    private UserResource $userResource;
-    private RolesService $roles;
-
-    /**
-     * ListUsersCommand constructor.
-     */
-    public function __construct(UserResource $userResource, RolesService $roles)
-    {
+    public function __construct(
+        private UserResource $userResource,
+        private RolesService $roles
+    ) {
         parent::__construct('user:list');
-
-        $this->userResource = $userResource;
-        $this->roles = $roles;
 
         $this->setDescription('Console command to list users');
     }
@@ -76,7 +69,7 @@ class ListUsersCommand extends Command
     /**
      * Getter method for formatted user rows for console table.
      *
-     * @return mixed[]
+     * @return array<int, string>
      *
      * @throws Throwable
      */

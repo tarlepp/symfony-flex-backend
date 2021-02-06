@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/CreateUserCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -28,7 +28,7 @@ use Throwable;
  * Class CreateUserCommand
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class CreateUserCommand extends Command
 {
@@ -68,26 +68,13 @@ class CreateUserCommand extends Command
         ],
     ];
 
-    private UserResource $userResource;
-    private UserGroupResource $userGroupResource;
-    private RolesService $rolesService;
-    private RoleRepository $roleRepository;
-
-    /**
-     * CreateUserCommand constructor.
-     */
     public function __construct(
-        UserResource $userResource,
-        UserGroupResource $userGroupResource,
-        RolesService $rolesService,
-        RoleRepository $roleRepository
+        private UserResource $userResource,
+        private UserGroupResource $userGroupResource,
+        private RolesService $rolesService,
+        private RoleRepository $roleRepository
     ) {
         parent::__construct('user:create');
-
-        $this->userResource = $userResource;
-        $this->userGroupResource = $userGroupResource;
-        $this->rolesService = $rolesService;
-        $this->roleRepository = $roleRepository;
 
         $this->setDescription('Console command to create user to database');
     }

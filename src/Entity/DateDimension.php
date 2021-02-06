@@ -243,9 +243,6 @@ class DateDimension implements EntityInterface
      */
     private int $unixTime;
 
-    /**
-     * DateDimension constructor.
-     */
     public function __construct(DateTime $dateTime)
     {
         $this->id = $this->createUuid();

@@ -44,9 +44,6 @@ class EntityValueResolver implements ArgumentValueResolverInterface
 {
     private ResourceCollection $resourceCollection;
 
-    /**
-     * EntityValueResolver constructor.
-     */
     public function __construct(ResourceCollection $resourceCollection)
     {
         $this->resourceCollection = $resourceCollection;

@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 use JsonException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Throwable;
 use function array_key_exists;
 use function array_map;
 use function array_walk;
@@ -423,7 +422,7 @@ trait LogRequestProcessRequestTrait
                 /** @var array<string, mixed> $output */
                 $output = JSON::decode($rawContent, true);
             } catch (JsonException $error) {
-                (static fn (Throwable $error): Throwable => $error)($error);
+                (static fn (JsonException $error): JsonException => $error)($error);
 
                 // Oh noes content isn't JSON so just parse it
                 $output = [];

@@ -39,9 +39,6 @@ class UserRepository extends BaseRepository
 
     private string $environment;
 
-    /**
-     * UserRepository constructor.
-     */
     public function __construct(ManagerRegistry $managerRegistry, string $environment)
     {
         parent::__construct($managerRegistry);

@@ -37,9 +37,6 @@ use App\Rest\RestResource;
  */
 class LogLoginResource extends RestResource
 {
-    /**
-     * LogLoginFailureResource constructor.
-     */
     public function __construct(Repository $repository)
     {
         $this->setRepository($repository);

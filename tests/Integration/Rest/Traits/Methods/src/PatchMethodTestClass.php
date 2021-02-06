@@ -23,9 +23,6 @@ abstract class PatchMethodTestClass extends Controller
 {
     use PatchMethod;
 
-    /**
-     * PatchMethodTestClass constructor.
-     */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
         $this->resource = $resource;

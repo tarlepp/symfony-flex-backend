@@ -53,9 +53,6 @@ class UserController extends Controller
         Controller::METHOD_PATCH => UserPatch::class,
     ];
 
-    /**
-     * UserController constructor.
-     */
     public function __construct(UserResource $resource)
     {
         $this->resource = $resource;

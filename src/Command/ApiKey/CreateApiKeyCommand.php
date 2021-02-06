@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/CreateApiKeyCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -27,7 +27,7 @@ use Throwable;
  * Class CreateApiKeyCommand
  *
  * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class CreateApiKeyCommand extends Command
 {
@@ -43,34 +43,19 @@ class CreateApiKeyCommand extends Command
         ],
     ];
 
-    private ApiKeyHelper $apiKeyHelper;
-    private ApiKeyResource $apiKeyResource;
-    private UserGroupResource $userGroupResource;
-    private RolesService $rolesService;
-    private RoleRepository $roleRepository;
-
     /**
      * @psalm-suppress PropertyNotSetInConstructor
      */
     private SymfonyStyle $io;
 
-    /**
-     * CreateApiKeyCommand constructor.
-     */
     public function __construct(
-        ApiKeyHelper $apiKeyHelper,
-        ApiKeyResource $apiKeyResource,
-        UserGroupResource $userGroupResource,
-        RolesService $rolesService,
-        RoleRepository $roleRepository
+        private ApiKeyHelper $apiKeyHelper,
+        private ApiKeyResource $apiKeyResource,
+        private UserGroupResource $userGroupResource,
+        private RolesService $rolesService,
+        private RoleRepository $roleRepository
     ) {
         parent::__construct('api-key:create');
-
-        $this->apiKeyHelper = $apiKeyHelper;
-        $this->apiKeyResource = $apiKeyResource;
-        $this->userGroupResource = $userGroupResource;
-        $this->rolesService = $rolesService;
-        $this->roleRepository = $roleRepository;
 
         $this->setDescription('Command to create new API key');
     }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/Utils/CheckDependencies.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\Utils;
@@ -17,30 +17,31 @@ use stdClass;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
+use Throwable;
 use Traversable;
 use function array_map;
 use function array_unshift;
-use function basename;
 use function count;
+use function dirname;
 use function implode;
 use function is_array;
 use function iterator_to_array;
 use function sort;
 use function sprintf;
 use function str_replace;
-use function wordwrap;
 
 /**
  * Class CheckDependencies
  *
  * @package App\Command\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class CheckDependencies extends Command
 {
@@ -50,22 +51,20 @@ class CheckDependencies extends Command
      * @psalm-suppress PropertyNotSetInConstructor
      */
     private SymfonyStyle $io;
-    private string $projectDir;
 
-    /**
-     * CheckVendorDependencies constructor.
-     */
-    public function __construct(string $projectDir)
-    {
+    public function __construct(
+        private string $projectDir
+    ) {
         parent::__construct('check-dependencies');
 
         $this->setDescription('Console command to check which vendor dependencies has updates');
-
-        $this->projectDir = $projectDir;
     }
 
+    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @noinspection PhpMissingParentCallCommonInspection
+     * {@inheritdoc}
+     *
+     * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -78,7 +77,6 @@ class CheckDependencies extends Command
         $rows = $this->determineTableRows($directories);
 
         $headers = [
-            'Namespace',
             'Path',
             'Dependency',
             'Description',
@@ -86,8 +84,19 @@ class CheckDependencies extends Command
             'New version',
         ];
 
+        $style = clone Table::getStyleDefinition('box');
+        $style->setCellHeaderFormat('<info>%s</info>');
+
+        $table = new Table($output);
+        $table->setHeaders($headers);
+        $table->setRows($rows);
+        $table->setStyle($style);
+        $table->setColumnMaxWidth(2, 80);
+        $table->setColumnMaxWidth(3, 10);
+        $table->setColumnMaxWidth(4, 11);
+
         count($rows)
-            ? $this->io->table($headers, $rows)
+            ? $table->render()
             : $this->io->success('Good news, there is not any vendor dependency to update at this time!');
 
         return 0;
@@ -136,6 +145,8 @@ class CheckDependencies extends Command
      * @param array<int, string> $directories
      *
      * @return array<int, array<int, string>|TableSeparator>
+     *
+     * @throws JsonException
      */
     private function determineTableRows(array $directories): array
     {
@@ -152,7 +163,6 @@ class CheckDependencies extends Command
          */
         $iterator = function (string $directory) use ($progressBar, &$rows): void {
             foreach ($this->processNamespacePath($directory) as $row => $data) {
-                $title = '';
                 $relativePath = '';
 
                 // First row of current library
@@ -162,18 +172,17 @@ class CheckDependencies extends Command
                         $rows[] = new TableSeparator();
                     }
 
-                    $title = basename($directory);
                     $relativePath = str_replace($this->projectDir, '', $directory) . '/composer.json';
+                } else {
+                    $rows[] = [''];
                 }
 
-                $rows[] = [
-                    $title,
-                    $relativePath,
-                    $data->name,
-                    wordwrap((string)$data->description, 60),
-                    $data->version,
-                    $data->latest,
-                ];
+                $rows[] = [dirname($relativePath), $data->name, $data->description, $data->version, $data->latest];
+
+                if (isset($data->warning)) {
+                    $rows[] = [''];
+                    $rows[] = ['', '', '<fg=red>' . $data->warning . '</>'];
+                }
             }
 
             $progressBar->advance();

@@ -27,9 +27,6 @@ class UserTypeIdentification
     private TokenStorageInterface $tokenStorage;
     private UserRepository $userRepository;
 
-    /**
-     * UserTypeIdentification constructor.
-     */
     public function __construct(TokenStorageInterface $tokenStorage, UserRepository $userRepository)
     {
         $this->tokenStorage = $tokenStorage;

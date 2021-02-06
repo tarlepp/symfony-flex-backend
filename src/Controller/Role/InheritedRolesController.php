@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/Role/RoleController.php
+ * /src/Controller/Role/InheritedRolesController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -28,9 +28,6 @@ class InheritedRolesController
 {
     private RolesService $rolesService;
 
-    /**
-     * InheritedRolesController constructor.
-     */
     public function __construct(RolesService $rolesService)
     {
         $this->rolesService = $rolesService;

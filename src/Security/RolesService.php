@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Security/Roles.php
+ * /src/Security/RolesService.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -18,7 +18,7 @@ use function mb_strtolower;
 use function mb_substr;
 
 /**
- * Class Roles
+ * Class RolesService
  *
  * @package App\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Unit/EventSubscriber/BodySubscriberTest.php
+ * /tests/Unit/EventSubscriber/ExceptionSubscriberTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 
 /**
- * Class BodySubscriberTest
+ * Class ExceptionSubscriberTest
  *
  * @package App\Tests\Unit\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>

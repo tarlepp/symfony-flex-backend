@@ -23,9 +23,6 @@ abstract class UpdateMethodTestClass extends Controller
 {
     use UpdateMethod;
 
-    /**
-     * UpdateMethodTestClass constructor.
-     */
     public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
     {
         $this->resource = $resource;

@@ -19,6 +19,7 @@ use Doctrine\DBAL\Types\Type;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
@@ -312,6 +313,24 @@ FORMAT;
     }
 
     /**
+     * @dataProvider dataProviderTestThatEventSubscriberHasUnitTest
+     *
+     * @testdox Test that EventSubscriber `$eventSubscriberClass` has unit test class `$eventSubscriberTestClass`
+     */
+    public function testThatEventSubscriberHasUnitTest(
+        string $eventSubscriberTestClass,
+        string $eventSubscriberClass
+    ): void {
+        $message = sprintf(
+            'EventSubscriber "%s" does not have required test class "%s".',
+            $eventSubscriberClass,
+            $eventSubscriberTestClass
+        );
+
+        static::assertTrue(class_exists($eventSubscriberTestClass), $message);
+    }
+
+    /**
      * @dataProvider dataProviderTestThatValidatorConstraintsHaveIntegrationTest
      *
      * @testdox Test that validator `$class` has integration test class `$testClass`
@@ -597,6 +616,20 @@ FORMAT;
         $namespace = '\\App\\Validator\\';
         $namespaceTest = '\\App\\Tests\\Unit\\Validator\\';
         $filter = $this->getSubclassOfFilter(Constraint::class);
+
+        return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
+    }
+
+    public function dataProviderTestThatEventSubscriberHasUnitTest(): array
+    {
+        $this->bootKernelCached();
+
+        $folder = static::$kernel->getProjectDir() . '/src/EventSubscriber/';
+
+        $namespace = '\\App\\EventSubscriber\\';
+        $namespaceTest = '\\App\\Tests\\Unit\\EventSubscriber\\';
+
+        $filter = $this->getInterfaceFilter(EventSubscriberInterface::class);
 
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }

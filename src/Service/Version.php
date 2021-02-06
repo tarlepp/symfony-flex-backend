@@ -28,9 +28,6 @@ class Version
     private CacheInterface $cache;
     private LoggerInterface $logger;
 
-    /**
-     * Version constructor.
-     */
     public function __construct(string $projectDir, CacheInterface $appCacheApcu, LoggerInterface $logger)
     {
         $this->projectDir = $projectDir;

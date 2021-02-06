@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/RemoveApiKeyCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -21,26 +21,22 @@ use Throwable;
  * Class RemoveApiKeyCommand
  *
  * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RemoveApiKeyCommand extends Command
 {
     use SymfonyStyleTrait;
-
-    private ApiKeyResource $apiKeyResource;
-    private ApiKeyHelper $apiKeyHelper;
 
     /**
      * RemoveApiKeyCommand constructor.
      *
      * @throws LogicException
      */
-    public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
-    {
+    public function __construct(
+        private ApiKeyResource $apiKeyResource,
+        private ApiKeyHelper $apiKeyHelper
+    ) {
         parent::__construct('api-key:remove');
-
-        $this->apiKeyResource = $apiKeyResource;
-        $this->apiKeyHelper = $apiKeyHelper;
 
         $this->setDescription('Console command to remove existing API key');
     }

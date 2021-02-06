@@ -18,16 +18,19 @@ make lint-configuration
 
 # Step 1
 if [[ -z "${DOCKER_WITH_MAC}" ]]; then
-  # Not Mac, so determine actual docker container IP address
-  HOST=`/sbin/ip route|awk '/default/ { print $3 }'`
+    # Not Mac, so determine actual docker container IP address
+    HOST=$(/sbin/ip route|awk '/default/ { print $3 }')
 else
-  # Otherwise use special value, which works wit Mac
-  HOST="docker.for.mac.localhost"
+    # Otherwise use special value, which works wit Mac
+    HOST="docker.for.mac.localhost"
 fi
 
-sed -i "s/xdebug\.remote_host \=.*/xdebug\.remote_host\=$HOST/g" /usr/local/etc/php/php.ini
+sed -i "s/xdebug\.client_host \=.*/xdebug\.client_host\=$HOST/g" /usr/local/etc/php/php.ini
 
-export DOCKER_IP=`/sbin/ip route|awk '/default/ { print $3 }'`
+DOCKER_IP=$(/sbin/ip route|awk '/default/ { print $3 }')
+
+export DOCKER_IP
+export XDEBUG_SESSION=PHPSTORM
 
 # Step 2
 COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader

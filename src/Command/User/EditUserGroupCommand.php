@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/EditUserGroupCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -23,24 +23,17 @@ use Throwable;
  * Class EditUserGroupCommand
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class EditUserGroupCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    private UserGroupResource $userGroupResource;
-    private UserHelper $userHelper;
-
-    /**
-     * EditUserGroupCommand constructor.
-     */
-    public function __construct(UserGroupResource $userGroupResource, UserHelper $userHelper)
-    {
+    public function __construct(
+        private UserGroupResource $userGroupResource,
+        private UserHelper $userHelper
+    ) {
         parent::__construct('user:edit-group');
-
-        $this->userGroupResource = $userGroupResource;
-        $this->userHelper = $userHelper;
 
         $this->setDescription('Command to edit existing user group');
     }

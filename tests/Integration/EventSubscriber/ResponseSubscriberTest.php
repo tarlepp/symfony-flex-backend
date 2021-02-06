@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/EventSubscriber/RequestSubscriberTest.php
+ * /tests/Integration/EventSubscriber/ResponseSubscriberTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */

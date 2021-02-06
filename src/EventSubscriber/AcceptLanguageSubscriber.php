@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/EventSubscriber/LocaleSubscriber.php
+ * /src/EventSubscriber/AcceptLanguageSubscriber.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use function in_array;
 
 /**
- * Class LocaleSubscriber
+ * Class AcceptLanguageSubscriber
  *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
@@ -31,9 +31,6 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
 
     private string $defaultLocale;
 
-    /**
-     * LocaleSubscriber constructor.
-     */
     public function __construct(string $locale)
     {
         $this->defaultLocale = $locale;
