@@ -66,6 +66,26 @@ class CreateMethodTest extends KernelTestCase
      */
     private $inValidTestClass;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->restDto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+
+        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->validTestClass = $this->getMockForAbstractClass(
+            CreateMethodTestClass::class,
+            [$this->resource, $this->responseHandler]
+        );
+
+        $this->inValidTestClass = $this->getMockForAbstractClass(CreateMethodInvalidTestClass::class);
+    }
+
     /**
      * @throws Throwable
      *
@@ -79,7 +99,7 @@ class CreateMethodTest extends KernelTestCase
         $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
-        /** @codingStandardsIgnoreEnd */
+        /* @codingStandardsIgnoreEnd */
 
         $this->inValidTestClass->createMethod(Request::create('/', 'POST'), $this->restDto);
     }
@@ -167,25 +187,5 @@ class CreateMethodTest extends KernelTestCase
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->restDto = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
-        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->validTestClass = $this->getMockForAbstractClass(
-            CreateMethodTestClass::class,
-            [$this->resource, $this->responseHandler]
-        );
-
-        $this->inValidTestClass = $this->getMockForAbstractClass(CreateMethodInvalidTestClass::class);
     }
 }

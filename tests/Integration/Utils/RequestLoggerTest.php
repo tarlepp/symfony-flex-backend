@@ -35,6 +35,14 @@ class RequestLoggerTest extends KernelTestCase
      */
     private $resource;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $this->resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
+    }
+
     /**
      * @testdox Test that log is not created if `Request` and `Response` object are not set
      */
@@ -111,13 +119,5 @@ class RequestLoggerTest extends KernelTestCase
             ->setRequest(new Request())
             ->setResponse(new Response())
             ->handle();
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
-        $this->resource = $this->getMockBuilder(LogRequestResource::class)->disableOriginalConstructor()->getMock();
     }
 }

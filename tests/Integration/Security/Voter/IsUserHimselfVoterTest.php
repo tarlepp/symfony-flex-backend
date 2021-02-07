@@ -26,6 +26,13 @@ class IsUserHimselfVoterTest extends KernelTestCase
 {
     private IsUserHimselfVoter $voter;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->voter = new IsUserHimselfVoter();
+    }
+
     /**
      * @testdox Test that `vote` method returns `Voter::ACCESS_ABSTAIN` when subject is not supported
      */
@@ -55,12 +62,5 @@ class IsUserHimselfVoterTest extends KernelTestCase
         $token = new JWTUserToken([], new SecurityUser($user));
 
         static::assertSame(Voter::ACCESS_GRANTED, $this->voter->vote($token, $user, ['IS_USER_HIMSELF']));
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->voter = new IsUserHimselfVoter();
     }
 }

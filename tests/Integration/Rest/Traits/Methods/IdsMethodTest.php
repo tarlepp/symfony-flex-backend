@@ -55,6 +55,24 @@ class IdsMethodTest extends KernelTestCase
      */
     private $inValidTestClass;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+
+        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->validTestClass = $this->getMockForAbstractClass(
+            IdsMethodTestClass::class,
+            [$this->resource, $this->responseHandler]
+        );
+
+        $this->inValidTestClass = $this->getMockForAbstractClass(IdsMethodInvalidTestClass::class);
+    }
+
     /**
      * @throws Throwable
      *
@@ -68,7 +86,7 @@ class IdsMethodTest extends KernelTestCase
         $this->expectExceptionMessageMatches(
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
-        /** @codingStandardsIgnoreEnd */
+        /* @codingStandardsIgnoreEnd */
 
         $this->inValidTestClass->idsMethod(Request::create('/'));
     }
@@ -225,23 +243,5 @@ class IdsMethodTest extends KernelTestCase
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->validTestClass = $this->getMockForAbstractClass(
-            IdsMethodTestClass::class,
-            [$this->resource, $this->responseHandler]
-        );
-
-        $this->inValidTestClass = $this->getMockForAbstractClass(IdsMethodInvalidTestClass::class);
     }
 }

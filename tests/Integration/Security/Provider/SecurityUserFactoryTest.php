@@ -43,6 +43,19 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     private $rolesService;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->userRepository = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->rolesService = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
     /**
      * @throws Throwable
      *
@@ -191,18 +204,5 @@ class SecurityUserFactoryTest extends KernelTestCase
         yield [UserInterface::class];
         yield [UserEntity::class];
         yield [ApiKeyUser::class];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->userRepository = $this->getMockBuilder(UserRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 }

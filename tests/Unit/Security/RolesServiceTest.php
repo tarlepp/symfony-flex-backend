@@ -23,6 +23,16 @@ class RolesServiceTest extends KernelTestCase
 {
     private RolesService $service;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->service = static::$container->get(RolesService::class);
+    }
+
     /**
      * @testdox Test that `RolesService::getHierarchy` method returns expected
      */
@@ -151,15 +161,5 @@ class RolesServiceTest extends KernelTestCase
             ]),
             new StringableArrayObject([RolesService::ROLE_ROOT]),
         ];
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $this->service = static::$container->get(RolesService::class);
     }
 }

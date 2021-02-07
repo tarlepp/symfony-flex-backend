@@ -83,14 +83,14 @@ class UuidHelperTest extends KernelTestCase
 
         yield [
             UuidBinaryType::NAME,
-            UuidHelper::getFactory()->uuid3(Uuid::NAMESPACE_URL, 'https://www.github.com/tarlepp')->toString()
+            UuidHelper::getFactory()->uuid3(Uuid::NAMESPACE_URL, 'https://www.github.com/tarlepp')->toString(),
         ];
 
         yield [UuidBinaryType::NAME, UuidHelper::getFactory()->uuid4()->toString()];
 
         yield [
             UuidBinaryType::NAME,
-            UuidHelper::getFactory()->uuid5(Uuid::NAMESPACE_URL, 'https://www.github.com/tarlepp')->toString()
+            UuidHelper::getFactory()->uuid5(Uuid::NAMESPACE_URL, 'https://www.github.com/tarlepp')->toString(),
         ];
     }
 }

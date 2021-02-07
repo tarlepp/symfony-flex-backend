@@ -41,6 +41,16 @@ class LocaleValidatorTest extends KernelTestCase
      */
     private $localization;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->constraint = new Locale();
+        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
+        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
+        $this->localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
+    }
+
     /**
      * @testdox Test that `LocaleValidator::validate` method calls expected service methods
      */
@@ -76,15 +86,5 @@ class LocaleValidatorTest extends KernelTestCase
         $validator = new LocaleValidator($this->localization);
         $validator->initialize($this->context);
         $validator->validate('foo', $this->constraint);
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->constraint = new Locale();
-        $this->context = $this->getMockBuilder(ExecutionContext::class)->disableOriginalConstructor()->getMock();
-        $this->builder = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-        $this->localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
     }
 }

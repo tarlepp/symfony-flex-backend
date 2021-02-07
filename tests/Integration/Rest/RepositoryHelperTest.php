@@ -26,6 +26,17 @@ class RepositoryHelperTest extends KernelTestCase
 {
     protected UserRepository $repository;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        $this->repository = static::$container->get(UserResource::class)->getRepository();
+
+        RepositoryHelper::resetParameterCount();
+    }
+
     /**
      * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
      *
@@ -378,7 +389,6 @@ class RepositoryHelperTest extends KernelTestCase
             ]),
         ];
 
-
         yield [
             new StringableArrayObject(['u.id', 'in', [1, 2]]),
             /* @lang text */
@@ -525,16 +535,5 @@ DQL
             ]),
         ];
         // @codingStandardsIgnoreEnd
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $this->repository = static::$container->get(UserResource::class)->getRepository();
-
-        RepositoryHelper::resetParameterCount();
     }
 }

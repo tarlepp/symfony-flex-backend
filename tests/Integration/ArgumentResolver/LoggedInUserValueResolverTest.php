@@ -149,9 +149,12 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $request = Request::create('/');
+
+        $resolver->supports($request, $metadata);
 
         // Note that we need to actually get current value here
-        $resolver->resolve(Request::create('/'), $metadata)->current();
+        $resolver->resolve($request, $metadata)->current();
     }
 
     /**
@@ -176,8 +179,11 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $request = Request::create('/');
 
-        static::assertSame([$user], iterator_to_array($resolver->resolve(Request::create('/'), $metadata)));
+        $resolver->supports($request, $metadata);
+
+        static::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
     }
 
     /**
@@ -221,7 +227,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(Closure $closure): void
     {
-        /** @var MockObject|UserTypeIdentification $userService */
+        /** @var UserTypeIdentification $userService */
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $tokenStorage = new TokenStorage();
