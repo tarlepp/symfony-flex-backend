@@ -3,13 +3,12 @@ declare(strict_types = 1);
 /**
  * /src/AutoMapper/User/AutoMapperConfiguration.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\AutoMapper\User;
 
 use App\AutoMapper\RestAutoMapperConfiguration;
-use App\AutoMapper\RestRequestMapper;
 use App\DTO\User\UserCreate;
 use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
@@ -18,7 +17,7 @@ use App\DTO\User\UserUpdate;
  * Class AutoMapperConfiguration
  *
  * @package App\AutoMapper
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AutoMapperConfiguration extends RestAutoMapperConfiguration
 {
@@ -33,10 +32,8 @@ class AutoMapperConfiguration extends RestAutoMapperConfiguration
         UserPatch::class,
     ];
 
-    protected RestRequestMapper $requestMapper;
-
-    public function __construct(RequestMapper $requestMapper)
-    {
-        $this->requestMapper = $requestMapper;
+    public function __construct(
+        protected RequestMapper $requestMapper,
+    ) {
     }
 }
