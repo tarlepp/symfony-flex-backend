@@ -73,7 +73,9 @@ jobs:
       - name: Lint YAML configurations
         run: make lint-yaml
 
-      # Disable this until 3.6 is released
+      # TODO: Disable this until 3.6 is released
+      # See:
+      #   - https://github.com/squizlabs/PHP_CodeSniffer/issues/3167
       #- name: Run PHP CodeSniffer
       #  run: make phpcs
 
@@ -93,8 +95,9 @@ jobs:
       #- name: Run `phploc` to collect LOC stats
       #  run: make phploc
 
-      - name: Run `PHP Insights` static analysis tool
-        run: make phpinsights
+      # TODO: enable this when https://github.com/nunomaduro/phpinsights/issues/457 is solved
+      #- name: Run `PHP Insights` static analysis tool
+      #  run: make phpinsights
 
       - name: Archive Psalm results (psalm.json)
         uses: actions/upload-artifact@v1
