@@ -30,9 +30,9 @@ class FindOneRoleController extends Controller
 {
     use Methods\FindOneMethod;
 
-    public function __construct(RoleResource $resource)
-    {
-        $this->resource = $resource;
+    public function __construct(
+        protected RoleResource $resource,
+    ) {
     }
 
     /**
