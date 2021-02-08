@@ -3,13 +3,12 @@ declare(strict_types = 1);
 /**
  * /src/AutoMapper/UserGroup/AutoMapperConfiguration.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\AutoMapper\UserGroup;
 
 use App\AutoMapper\RestAutoMapperConfiguration;
-use App\AutoMapper\RestRequestMapper;
 use App\DTO\UserGroup\UserGroupCreate;
 use App\DTO\UserGroup\UserGroupPatch;
 use App\DTO\UserGroup\UserGroupUpdate;
@@ -18,7 +17,7 @@ use App\DTO\UserGroup\UserGroupUpdate;
  * Class AutoMapperConfiguration
  *
  * @package App\AutoMapper
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AutoMapperConfiguration extends RestAutoMapperConfiguration
 {
@@ -33,10 +32,8 @@ class AutoMapperConfiguration extends RestAutoMapperConfiguration
         UserGroupPatch::class,
     ];
 
-    protected RestRequestMapper $requestMapper;
-
-    public function __construct(RequestMapper $requestMapper)
-    {
-        $this->requestMapper = $requestMapper;
+    public function __construct(
+        protected RequestMapper $requestMapper,
+    ) {
     }
 }
