@@ -33,7 +33,7 @@ use function json_encode;
  */
 class ApiKeyAuthenticatorTest extends KernelTestCase
 {
-    private MockObject|ApiKeyUserProvider $apiKeyUserProvider;
+    private MockObject | ApiKeyUserProvider $apiKeyUserProvider;
 
     protected function setUp(): void
     {

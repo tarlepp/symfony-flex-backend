@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/AutoMapper/RestRequestMapper.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\AutoMapper;
@@ -26,7 +26,7 @@ use function ucfirst;
  * Class RestRequestMapper
  *
  * @package App\AutoMapper
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestRequestMapper implements MapperInterface
 {
@@ -45,7 +45,7 @@ abstract class RestRequestMapper implements MapperInterface
      */
     public function map($source, string $targetClass, array $context = []): RestDtoInterface
     {
-        /** @var class-string $targetClass */
+        /** @psalm-var class-string $targetClass */
         $destination = new $targetClass();
 
         return $this->mapToObject($source, $destination, $context);

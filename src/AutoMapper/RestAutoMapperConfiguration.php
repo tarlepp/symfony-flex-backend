@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/AutoMapper/RestAutoMapperConfiguration.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\AutoMapper;
@@ -16,7 +16,9 @@ use Symfony\Component\HttpFoundation\Request;
  * Class RestAutoMapperConfiguration
  *
  * @package App\AutoMapper
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @property RestRequestMapper $requestMapper
  */
 abstract class RestAutoMapperConfiguration implements AutoMapperConfiguratorInterface
 {
@@ -27,10 +29,13 @@ abstract class RestAutoMapperConfiguration implements AutoMapperConfiguratorInte
      */
     protected static array $requestMapperClasses = [];
 
-    protected RestRequestMapper $requestMapper;
+    // We cannot define this here if we're using constructor property promotion
+    // protected RestRequestMapper $requestMapper;
 
     /**
      * Use this method to register your mappings.
+     *
+     * @psalm-suppress UndefinedThisPropertyFetch
      */
     public function configure(AutoMapperConfigInterface $config): void
     {
