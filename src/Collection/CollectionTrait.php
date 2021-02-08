@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Collection/CollectionTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Collection;
@@ -21,7 +21,7 @@ use function iterator_count;
  * Trait CollectionTrait
  *
  * @package App\Collection
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait CollectionTrait
 {
@@ -30,11 +30,15 @@ trait CollectionTrait
 
     /**
      * Method to filter current collection.
+     *
+     * @psalm-var class-string $className
      */
     abstract public function filter(string $className): Closure;
 
     /**
      * Method to process error message for current collection.
+     *
+     * @psalm-var class-string $className
      *
      * @throws InvalidArgumentException
      */
@@ -43,11 +47,11 @@ trait CollectionTrait
     /**
      * Getter method for given class for current collection.
      *
-     * @return mixed
+     * @psalm-var class-string $className
      *
      * @throws InvalidArgumentException
      */
-    public function get(string $className)
+    public function get(string $className): mixed
     {
         $current = $this->getFilteredItem($className);
 
@@ -68,6 +72,8 @@ trait CollectionTrait
 
     /**
      * Method to check if specified class exists or not in current collection.
+     *
+     * @psalm-var class-string $className
      */
     public function has(?string $className = null): bool
     {
@@ -83,9 +89,9 @@ trait CollectionTrait
     }
 
     /**
-     * @return mixed|null
+     * @psalm-var class-string $className
      */
-    private function getFilteredItem(string $className)
+    private function getFilteredItem(string $className): mixed
     {
         try {
             $iterator = $this->items->getIterator();
