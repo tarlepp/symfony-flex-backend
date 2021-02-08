@@ -25,11 +25,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class UserGroupsController
 {
-    private SerializerInterface $serializer;
-
-    public function __construct(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
+    public function __construct(
+        private SerializerInterface $serializer,
+    ) {
     }
 
     /**
@@ -68,7 +66,7 @@ class UserGroupsController
      *          type="array",
      *          @OA\Items(
      *              ref=@Model(
-     *                  type=App\Entity\UserGroup::class,
+     *                  type=\App\Entity\UserGroup::class,
      *                  groups={"UserGroup", "UserGroup.role"},
      *              ),
      *          ),
