@@ -37,8 +37,8 @@ class RoleController extends Controller
     use Actions\Admin\FindAction;
     use Actions\Admin\IdsAction;
 
-    public function __construct(RoleResource $resource)
-    {
-        $this->resource = $resource;
+    public function __construct(
+        protected  RoleResource $resource,
+    ) {
     }
 }

@@ -21,11 +21,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class VersionController
 {
-    private Version $version;
-
-    public function __construct(Version $version)
-    {
-        $this->version = $version;
+    public function __construct(
+        private Version $version,
+    ) {
     }
 
     /**

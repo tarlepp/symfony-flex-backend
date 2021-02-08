@@ -24,11 +24,9 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class GroupsController
 {
-    private SerializerInterface $serializer;
-
-    public function __construct(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
+    public function __construct(
+        private SerializerInterface $serializer,
+    ) {
     }
 
     /**

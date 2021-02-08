@@ -53,8 +53,8 @@ class UserController extends Controller
         Controller::METHOD_PATCH => UserPatch::class,
     ];
 
-    public function __construct(UserResource $resource)
-    {
-        $this->resource = $resource;
+    public function __construct(
+        protected UserResource $resource,
+    ) {
     }
 }

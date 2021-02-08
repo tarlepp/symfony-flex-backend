@@ -24,13 +24,10 @@ use Throwable;
  */
 class HealthzController
 {
-    private ResponseHandler $responseHandler;
-    private HealthzService $healthzService;
-
-    public function __construct(ResponseHandler $responseHandler, HealthzService $healthzService)
-    {
-        $this->responseHandler = $responseHandler;
-        $this->healthzService = $healthzService;
+    public function __construct(
+        private ResponseHandler $responseHandler,
+        private HealthzService $healthzService,
+    ) {
     }
 
     /**

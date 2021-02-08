@@ -27,13 +27,10 @@ use Symfony\Component\Serializer\SerializerInterface;
  */
 class IndexController
 {
-    private SerializerInterface $serializer;
-    private RolesService $rolesService;
-
-    public function __construct(SerializerInterface $serializer, RolesService $rolesService)
-    {
-        $this->serializer = $serializer;
-        $this->rolesService = $rolesService;
+    public function __construct(
+        private SerializerInterface $serializer,
+        private RolesService $rolesService,
+    ) {
     }
 
     /**

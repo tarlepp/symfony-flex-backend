@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Controller.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -19,7 +19,9 @@ use UnexpectedValueException;
  * Class Controller
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @property ?RestResourceInterface $resource
  */
 abstract class Controller implements ControllerInterface
 {
@@ -44,12 +46,18 @@ abstract class Controller implements ControllerInterface
     public const METHOD_PATCH = 'patchMethod';
     public const METHOD_UPDATE = 'updateMethod';
 
-    protected ?RestResourceInterface $resource = null;
+    // We cannot define this here if we're using constructor property promotion
+    // protected ?RestResourceInterface $resource = null;
     protected ?ResponseHandlerInterface $responseHandler = null;
 
+    /**
+     * @psalm-suppress UndefinedThisPropertyFetch
+     */
     public function getResource(): RestResourceInterface
     {
-        if (!$this->resource instanceof RestResourceInterface) {
+        $exists = property_exists($this, 'resource');
+
+        if (!$exists || !$this->resource instanceof RestResourceInterface) {
             throw new UnexpectedValueException('Resource service not set', 500);
         }
 

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Controller/Localization/TimezoneController.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Controller\Localization;
@@ -25,15 +25,13 @@ use Throwable;
  * @OA\Tag(name="Localization")
  *
  * @package App\Controller\Localization
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class TimeZoneController
 {
-    private Localization $localization;
-
-    public function __construct(Localization $localization)
-    {
-        $this->localization = $localization;
+    public function __construct(
+        private Localization $localization,
+    ) {
     }
 
     /**

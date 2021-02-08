@@ -33,9 +33,9 @@ class DeleteUserController extends Controller
 {
     use Methods\DeleteMethod;
 
-    public function __construct(UserResource $resource)
-    {
-        $this->resource = $resource;
+    public function __construct(
+        protected UserResource $resource,
+    ) {
     }
 
     /**

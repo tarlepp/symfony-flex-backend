@@ -28,13 +28,10 @@ use Throwable;
  */
 class DetachUserController
 {
-    private UserGroupResource $userGroupResource;
-    private SerializerInterface $serializer;
-
-    public function __construct(UserGroupResource $userGroupResource, SerializerInterface $serializer)
-    {
-        $this->userGroupResource = $userGroupResource;
-        $this->serializer = $serializer;
+    public function __construct(
+        private UserGroupResource $userGroupResource,
+        private SerializerInterface $serializer,
+    ) {
     }
 
     /**
@@ -98,7 +95,7 @@ class DetachUserController
      *          type="array",
      * @OA\Items(
      *              ref=@Model(
-     *                  type=App\Entity\User::class,
+     *                  type=\App\Entity\User::class,
      *                  groups={"User"},
      *              ),
      *          ),
