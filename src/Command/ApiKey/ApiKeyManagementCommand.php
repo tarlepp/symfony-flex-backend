@@ -23,11 +23,9 @@ class ApiKeyManagementCommand extends Command
     use ExecuteMultipleCommandTrait;
 
     /**
-     * ManagementCommand constructor.
+     * ApiKeyManagementCommand constructor.
      *
      * @throws LogicException
-     *
-     * @psalm-suppress InvalidScalarArgument
      */
     public function __construct()
     {
