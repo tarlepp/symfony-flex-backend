@@ -9,10 +9,9 @@ declare(strict_types = 1);
 namespace App\Command\ApiKey;
 
 use App\Command\Traits\SymfonyStyleTrait;
-use App\Entity\ApiKey as ApiKeyEntity;
+use App\Entity\ApiKey;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
@@ -27,11 +26,6 @@ class RemoveApiKeyCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    /**
-     * RemoveApiKeyCommand constructor.
-     *
-     * @throws LogicException
-     */
     public function __construct(
         private ApiKeyResource $apiKeyResource,
         private ApiKeyHelper $apiKeyHelper
@@ -50,24 +44,25 @@ class RemoveApiKeyCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
-
-        // Get API key entity
         $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to remove?');
-        $message = null;
-
-        if ($apiKey instanceof ApiKeyEntity) {
-            // Delete API key
-            $this->apiKeyResource->delete($apiKey->getId());
-
-            $message = $this->apiKeyHelper->getApiKeyMessage('API key deleted - have a nice day', $apiKey);
-        }
+        $message = $apiKey instanceof ApiKey ? $this->delete($apiKey) : null;
 
         if ($input->isInteractive()) {
-            $message ??= 'Nothing changed - have a nice day';
-
-            $io->success($message);
+            $io->success($message ?? ['Nothing changed - have a nice day']);
         }
 
         return 0;
+    }
+
+    /**
+     * @return array<int, string>
+     *
+     * @throws Throwable
+     */
+    private function delete(ApiKey $apiKey): array
+    {
+        $this->apiKeyResource->delete($apiKey->getId());
+
+        return $this->apiKeyHelper->getApiKeyMessage('API key deleted - have a nice day', $apiKey);
     }
 }
