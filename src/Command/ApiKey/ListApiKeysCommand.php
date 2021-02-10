@@ -73,19 +73,19 @@ class ListApiKeysCommand extends Command
      */
     private function getRows(): array
     {
-        return array_map($this->getFormatterApiKey(), $this->apiKeyResource->find(null, ['token' => 'ASC']));
+        return array_map($this->getFormatterApiKey(), $this->apiKeyResource->find(orderBy: ['token' => 'ASC']));
     }
 
     /**
-     * Getter method for API key formatter closure. This closure will format single ApiKey entity for console
-     * table.
+     * Getter method for API key formatter closure. This closure will format
+     * single ApiKey entity for console table.
      */
     private function getFormatterApiKey(): Closure
     {
         $userGroupFormatter = static fn (UserGroup $userGroup): string => sprintf(
             '%s (%s)',
             $userGroup->getName(),
-            $userGroup->getRole()->getId()
+            $userGroup->getRole()->getId(),
         );
 
         return fn (ApiKey $apiToken): array => [
