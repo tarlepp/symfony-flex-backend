@@ -50,7 +50,7 @@ class CreateUserGroupCommand extends Command
 
     public function __construct(
         private UserGroupResource $userGroupResource,
-        private RoleRepository $roleRepository
+        private RoleRepository $roleRepository,
     ) {
         parent::__construct('user:create-group');
 
