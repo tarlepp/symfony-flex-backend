@@ -34,7 +34,7 @@ class GroupsController
      *
      * @Route(
      *     path="/profile/groups",
-     *     methods={"GET"}
+     *     methods={"GET"},
      *  );
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
@@ -56,7 +56,7 @@ class GroupsController
      *          type="array",
      *          @OA\Items(
      *              ref=@Model(
-     *                  type=App\Entity\UserGroup::class,
+     *                  type=\App\Entity\UserGroup::class,
      *                  groups={"set.UserProfileGroups"},
      *              ),
      *          ),
@@ -97,9 +97,7 @@ class GroupsController
                 'json',
                 ['groups' => 'set.UserProfileGroups']
             ),
-            200,
-            [],
-            true
+            json: true,
         );
     }
 }
