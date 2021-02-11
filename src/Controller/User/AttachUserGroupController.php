@@ -16,6 +16,7 @@ use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
@@ -66,7 +67,7 @@ class AttachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="Bearer _your_jwt_here_",
-     *      )
+     *      ),
      *  )
      * @OA\Parameter(
      *      name="userId",
@@ -76,7 +77,7 @@ class AttachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="User GUID",
-     *      )
+     *      ),
      *  )
      * @OA\Parameter(
      *      name="userGroupId",
@@ -86,7 +87,7 @@ class AttachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="User Group GUID",
-     *      )
+     *      ),
      *  )
      * @OA\Response(
      *      response=200,
@@ -144,7 +145,7 @@ class AttachUserGroupController
      */
     public function __invoke(User $user, UserGroup $userGroup): JsonResponse
     {
-        $status = $user->getUserGroups()->contains($userGroup) ? 200 : 201;
+        $status = $user->getUserGroups()->contains($userGroup) ? Response::HTTP_OK : Response::HTTP_CREATED;
 
         $this->userResource->save($user->addUserGroup($userGroup));
 
@@ -157,8 +158,7 @@ class AttachUserGroupController
         return new JsonResponse(
             $this->serializer->serialize($user->getUserGroups()->getValues(), 'json', $groups),
             $status,
-            [],
-            true
+            json: true
         );
     }
 }
