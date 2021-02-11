@@ -34,7 +34,7 @@ class ListUsersCommand extends Command
 
     public function __construct(
         private UserResource $userResource,
-        private RolesService $roles
+        private RolesService $roles,
     ) {
         parent::__construct('user:list');
 
@@ -75,7 +75,7 @@ class ListUsersCommand extends Command
      */
     private function getRows(): array
     {
-        return array_map($this->getFormatterUser(), $this->userResource->find(null, ['username' => 'ASC']));
+        return array_map($this->getFormatterUser(), $this->userResource->find(orderBy: ['username' => 'ASC']));
     }
 
     /**
@@ -87,7 +87,7 @@ class ListUsersCommand extends Command
         $userGroupFormatter = static fn (UserGroup $userGroup): string => sprintf(
             '%s (%s)',
             $userGroup->getName(),
-            $userGroup->getRole()->getId()
+            $userGroup->getRole()->getId(),
         );
 
         return fn (User $user): array => [
