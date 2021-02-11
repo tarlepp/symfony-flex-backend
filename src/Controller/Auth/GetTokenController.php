@@ -11,6 +11,7 @@ namespace App\Controller\Auth;
 use App\Utils\JSON;
 use JsonException;
 use OpenApi\Annotations as OA;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use function sprintf;
@@ -36,7 +37,7 @@ class GetTokenController
      *      description="Credentials object",
      *      required=true,
      *      @OA\Schema(
-     *          example={"username": "username", "password": "password"}
+     *          example={"username": "username", "password": "password"},
      *      )
      *  )
      * @OA\Response(
@@ -80,6 +81,6 @@ class GetTokenController
             JSON::encode(['username' => 'username', 'password' => 'password'])
         );
 
-        throw new HttpException(400, $message);
+        throw new HttpException(Response::HTTP_BAD_REQUEST, $message);
     }
 }
