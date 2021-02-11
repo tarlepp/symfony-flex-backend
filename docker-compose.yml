@@ -13,6 +13,7 @@ services:
             - mysql
         ports:
             - 9000:9000
+            - 9009:9009
         volumes:
             - ./:/app:cached
             # Cannot use this because of the directory rights are forced for root user

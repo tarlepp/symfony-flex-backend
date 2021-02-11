@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/CreateUserGroupCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -27,7 +27,7 @@ use Throwable;
  * Class CreateUserGroupCommand
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class CreateUserGroupCommand extends Command
 {
@@ -48,15 +48,11 @@ class CreateUserGroupCommand extends Command
         ],
     ];
 
-    private UserGroupResource $userGroupResource;
-    private RoleRepository $roleRepository;
-
-    public function __construct(UserGroupResource $userGroupResource, RoleRepository $roleRepository)
-    {
+    public function __construct(
+        private UserGroupResource $userGroupResource,
+        private RoleRepository $roleRepository
+    ) {
         parent::__construct('user:create-group');
-
-        $this->userGroupResource = $userGroupResource;
-        $this->roleRepository = $roleRepository;
 
         $this->setDescription('Console command to create user groups');
     }

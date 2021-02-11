@@ -1,5 +1,5 @@
 security:
-    # http://symfony.com/doc/current/cookbook/security/named_encoders.html
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     encoders:
         App\Security\SecurityUser:
             algorithm: auto
@@ -51,3 +51,9 @@ security:
 
     access_decision_manager:
         strategy: unanimous
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+    # - { path: ^/admin, roles: ROLE_ADMIN }
+    # - { path: ^/profile, roles: ROLE_USER }

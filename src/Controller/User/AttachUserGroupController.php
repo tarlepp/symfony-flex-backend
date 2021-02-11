@@ -28,13 +28,10 @@ use Throwable;
  */
 class AttachUserGroupController
 {
-    private SerializerInterface $serializer;
-    private UserResource $userResource;
-
-    public function __construct(SerializerInterface $serializer, UserResource $userResource)
-    {
-        $this->serializer = $serializer;
-        $this->userResource = $userResource;
+    public function __construct(
+        private SerializerInterface $serializer,
+        private UserResource $userResource,
+    ) {
     }
 
     /**
@@ -98,7 +95,7 @@ class AttachUserGroupController
      *          type="array",
      *          @OA\Items(
      *              ref=@Model(
-     *                  type=App\Entity\UserGroup::class,
+     *                  type=\App\Entity\UserGroup::class,
      *                  groups={"UserGroup", "UserGroup.role"},
      *              ),
      *          ),
@@ -111,7 +108,7 @@ class AttachUserGroupController
      *          type="array",
      *          @OA\Items(
      *              ref=@Model(
-     *                  type=App\Entity\UserGroup::class,
+     *                  type=\App\Entity\UserGroup::class,
      *                  groups={"UserGroup", "UserGroup.role"},
      *              ),
      *          ),

@@ -35,7 +35,7 @@ return [
         'docker',
         'public',
         'secrets',
-        'src/Migrations',
+        'migrations',
         'templates',
         'tests',
         'translations',

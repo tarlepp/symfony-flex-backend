@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/EditApiKeyCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -23,21 +23,17 @@ use Throwable;
  * Class EditApiKeyCommand
  *
  * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class EditApiKeyCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    private ApiKeyResource $apiKeyResource;
-    private ApiKeyHelper $apiKeyHelper;
-
-    public function __construct(ApiKeyResource $apiKeyResource, ApiKeyHelper $apiKeyHelper)
-    {
+    public function __construct(
+        private ApiKeyResource $apiKeyResource,
+        private ApiKeyHelper $apiKeyHelper
+    ) {
         parent::__construct('api-key:edit');
-
-        $this->apiKeyResource = $apiKeyResource;
-        $this->apiKeyHelper = $apiKeyHelper;
 
         $this->setDescription('Command to edit existing API key');
     }
@@ -51,19 +47,11 @@ class EditApiKeyCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
-
-        // Get API key entity
         $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to edit?');
-        $message = null;
-
-        if ($apiKey instanceof ApiKeyEntity) {
-            $message = $this->updateApiKey($input, $output, $apiKey);
-        }
+        $message = $apiKey instanceof ApiKeyEntity ? $this->updateApiKey($input, $output, $apiKey) : null;
 
         if ($input->isInteractive()) {
-            $message ??= 'Nothing changed - have a nice day';
-
-            $io->success($message);
+            $io->success($message ?? ['Nothing changed - have a nice day']);
         }
 
         return 0;
@@ -72,7 +60,7 @@ class EditApiKeyCommand extends Command
     /**
      * Method to update specified API key via specified form.
      *
-     * @return mixed[]
+     * @return array<int, string>
      *
      * @throws Throwable
      */

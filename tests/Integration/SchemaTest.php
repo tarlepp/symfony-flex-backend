@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/SchemaTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration;
@@ -23,7 +23,7 @@ use function implode;
  * Class SchemaTest
  *
  * @package App\Tests\Integration
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class SchemaTest extends KernelTestCase
 {
@@ -58,6 +58,9 @@ class SchemaTest extends KernelTestCase
         $this->validator = new SchemaValidator($em);
     }
 
+    /**
+     * @testdox Test that entity mappings are valid
+     */
     public function testThatMappingsAreValid(): void
     {
         $errors = $this->validator->validateMapping();
@@ -73,6 +76,9 @@ class SchemaTest extends KernelTestCase
         static::assertEmpty($errors, implode("\n", $messages));
     }
 
+    /**
+     * @testdox Test that database schema is sync with entity metadata
+     */
     public function testThatSchemaInSyncWithMetadata(): void
     {
         static::assertTrue(

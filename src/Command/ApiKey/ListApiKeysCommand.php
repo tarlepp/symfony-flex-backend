@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/ListApiKeysCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
@@ -26,19 +26,15 @@ use function sprintf;
  * Class ListApiKeysCommand
  *
  * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ListApiKeysCommand extends Command
 {
-    private ApiKeyResource $apiKeyResource;
-    private RolesService $rolesService;
-
-    public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
-    {
+    public function __construct(
+        private ApiKeyResource $apiKeyResource,
+        private RolesService $rolesService
+    ) {
         parent::__construct('api-key:list');
-
-        $this->apiKeyResource = $apiKeyResource;
-        $this->rolesService = $rolesService;
 
         $this->setDescription('Console command to list API keys');
     }
@@ -71,25 +67,25 @@ class ListApiKeysCommand extends Command
     /**
      * Getter method for formatted API key rows for console table.
      *
-     * @return mixed[]
+     * @return array<int, string>
      *
      * @throws Throwable
      */
     private function getRows(): array
     {
-        return array_map($this->getFormatterApiKey(), $this->apiKeyResource->find(null, ['token' => 'ASC']));
+        return array_map($this->getFormatterApiKey(), $this->apiKeyResource->find(orderBy: ['token' => 'ASC']));
     }
 
     /**
-     * Getter method for API key formatter closure. This closure will format single ApiKey entity for console
-     * table.
+     * Getter method for API key formatter closure. This closure will format
+     * single ApiKey entity for console table.
      */
     private function getFormatterApiKey(): Closure
     {
         $userGroupFormatter = static fn (UserGroup $userGroup): string => sprintf(
             '%s (%s)',
             $userGroup->getName(),
-            $userGroup->getRole()->getId()
+            $userGroup->getRole()->getId(),
         );
 
         return fn (ApiKey $apiToken): array => [

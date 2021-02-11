@@ -29,13 +29,10 @@ use Throwable;
  */
 class UsersController
 {
-    private UserResource $userResource;
-    private ResponseHandler $responseHandler;
-
-    public function __construct(UserResource $userResource, ResponseHandler $responseHandler)
-    {
-        $this->userResource = $userResource;
-        $this->responseHandler = $responseHandler;
+    public function __construct(
+        private UserResource $userResource,
+        private ResponseHandler $responseHandler,
+    ) {
     }
 
     /**

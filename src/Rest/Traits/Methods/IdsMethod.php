@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Rest/Traits/Methods/FindOneMethod.php
+ * /src/Rest/Traits/Methods/IdsMethod.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */

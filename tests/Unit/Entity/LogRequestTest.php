@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Entity/LogRequestTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Entity;
@@ -19,12 +19,14 @@ use Throwable;
  * Class LogRequestTest
  *
  * @package App\Tests\Unit\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LogRequestTest extends KernelTestCase
 {
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `LogRequest::getCreatedAt` method returns expected
      */
     public function testThatGetCreatedAtReturnsExpected(): void
     {
@@ -35,6 +37,8 @@ class LogRequestTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `LogRequest::getUser` method returns `null` if user is not provided
      */
     public function testThatGetUserReturnsNullIfUserNotGiven(): void
     {
@@ -45,6 +49,8 @@ class LogRequestTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `LogRequest::getUser` method returns provided user
      */
     public function testThatGetUserReturnsExpectedUser(): void
     {

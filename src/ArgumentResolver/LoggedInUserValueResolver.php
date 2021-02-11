@@ -40,13 +40,12 @@ use Throwable;
  */
 class LoggedInUserValueResolver implements ArgumentValueResolverInterface
 {
-    private TokenStorageInterface $tokenStorage;
-    private UserTypeIdentification $userService;
+    private ?TokenInterface $token = null;
 
-    public function __construct(TokenStorageInterface $tokenStorage, UserTypeIdentification $userService)
-    {
-        $this->tokenStorage = $tokenStorage;
-        $this->userService = $userService;
+    public function __construct(
+        private TokenStorageInterface $tokenStorage,
+        private UserTypeIdentification $userService,
+    ) {
     }
 
     /**
@@ -55,10 +54,10 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
         $output = false;
-        $token = $this->tokenStorage->getToken();
+        $this->token = $this->tokenStorage->getToken();
 
         // only security user implementations are supported
-        if ($token instanceof TokenInterface
+        if ($this->token instanceof TokenInterface
             && $argument->getName() === 'loggedInUser'
             && $argument->getType() === User::class
         ) {
@@ -81,9 +80,7 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        $token = $this->tokenStorage->getToken();
-
-        if ($token === null) {
+        if ($this->token === null) {
             throw new MissingTokenException('JWT Token not found');
         }
 

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/AutoMapper/UserGroup/RequestMapper.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\AutoMapper\UserGroup;
@@ -11,13 +11,13 @@ namespace App\AutoMapper\UserGroup;
 use App\AutoMapper\RestRequestMapper;
 use App\Entity\Role;
 use App\Resource\RoleResource;
-use Doctrine\ORM\ORMException;
+use Throwable;
 
 /**
  * Class RequestMapper
  *
  * @package App\AutoMapper
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RequestMapper extends RestRequestMapper
 {
@@ -29,15 +29,13 @@ class RequestMapper extends RestRequestMapper
         'role',
     ];
 
-    private RoleResource $roleResource;
-
-    public function __construct(RoleResource $roleResource)
-    {
-        $this->roleResource = $roleResource;
+    public function __construct(
+        private RoleResource $roleResource,
+    ) {
     }
 
     /**
-     * @throws ORMException
+     * @throws Throwable
      */
     protected function transformRole(string $role): Role
     {

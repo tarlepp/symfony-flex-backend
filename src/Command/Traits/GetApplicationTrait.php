@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/Traits/GetApplicationTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\Traits;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Exception\RuntimeException;
  * Trait GetApplicationTrait
  *
  * @package App\Command\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait GetApplicationTrait
 {

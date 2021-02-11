@@ -24,11 +24,9 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserRolesController
 {
-    private RolesService $rolesService;
-
-    public function __construct(RolesService $rolesService)
-    {
-        $this->rolesService = $rolesService;
+    public function __construct(
+        private RolesService $rolesService,
+    ) {
     }
 
     /**

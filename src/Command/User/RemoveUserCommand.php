@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/User/RemoveUserCommand.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\User;
@@ -20,21 +20,17 @@ use Throwable;
  * Class RemoveUserCommand
  *
  * @package App\Command\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RemoveUserCommand extends Command
 {
     use SymfonyStyleTrait;
 
-    private UserResource $userResource;
-    private UserHelper $userHelper;
-
-    public function __construct(UserResource $userResource, UserHelper $userHelper)
-    {
+    public function __construct(
+        private UserResource $userResource,
+        private UserHelper $userHelper
+    ) {
         parent::__construct('user:remove');
-
-        $this->userResource = $userResource;
-        $this->userHelper = $userHelper;
 
         $this->setDescription('Console command to remove existing user');
     }

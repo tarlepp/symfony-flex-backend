@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Unit/Security/RolesServiceTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Unit\Security;
@@ -17,14 +17,11 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * Class RolesServiceTest
  *
  * @package App\Tests\Unit\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RolesServiceTest extends KernelTestCase
 {
-    /**
-     * @var RolesService
-     */
-    private $service;
+    private RolesService $service;
 
     protected function setUp(): void
     {
@@ -32,9 +29,13 @@ class RolesServiceTest extends KernelTestCase
 
         static::bootKernel();
 
+        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->service = static::$container->get(RolesService::class);
     }
 
+    /**
+     * @testdox Test that `RolesService::getHierarchy` method returns expected
+     */
     public function testThatGetHierarchyReturnsExpected(): void
     {
         $expected = [
@@ -55,6 +56,9 @@ class RolesServiceTest extends KernelTestCase
         static::assertSame($expected, $this->service->getHierarchy(), 'Roles hierarchy is not expected.');
     }
 
+    /**
+     * @testdox Test that `RolesService::getRoles` method returns expected
+     */
     public function testThatGetRolesReturnsExpected(): void
     {
         static::assertSame(
@@ -73,7 +77,7 @@ class RolesServiceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetRoleLabelReturnsExpected
      *
-     * @testdox Test that `getRoleLabel` method returns '$expected` with `$role`.
+     * @testdox Test that `RolesService::getRoleLabel` method returns `$expected` when using `$role` as input
      */
     public function testThatGetRoleLabelReturnsExpected(string $role, string $expected): void
     {
@@ -83,7 +87,7 @@ class RolesServiceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetShortReturnsExpected
      *
-     * @testdox Test that `getShort` method returns '$expected` with `$input`.
+     * @testdox Test that `RolesService::getShort` method returns `$expected` when using `$input` as input
      */
     public function testThatGetShortReturnsExpected(string $input, string $expected): void
     {
@@ -93,7 +97,7 @@ class RolesServiceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetInheritedRolesReturnsExpected
      *
-     * @testdox Test that `getInheritedRoles` method returns `$expected` when using `$roles`.
+     * @testdox Test that `RolesService::getInheritedRoles` method returns `$expected` when using `$roles` as input
      */
     public function testThatGetInheritedRolesReturnsExpected(
         StringableArrayObject $expected,

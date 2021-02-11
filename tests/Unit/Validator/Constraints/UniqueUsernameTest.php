@@ -15,10 +15,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * Class UniqueUsernameTest
  *
  * @package App\Tests\Unit\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UniqueUsernameTest extends KernelTestCase
 {
+    /**
+     * @testdox Test that `getTargets` method returns expected
+     */
     public function testThatGetTargetsReturnsExpected(): void
     {
         static::assertSame('class', (new UniqueUsername())->getTargets());

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Validator/Constraints/LanguageValidatorTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Validator\Constraints;
@@ -15,13 +15,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Context\ExecutionContext;
 use Symfony\Component\Validator\Violation\ConstraintViolationBuilderInterface;
-use Throwable;
 
 /**
  * Class LanguageValidatorTest
  *
  * @package App\Tests\Integration\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LanguageValidatorTest extends KernelTestCase
 {
@@ -42,9 +41,6 @@ class LanguageValidatorTest extends KernelTestCase
      */
     private $localization;
 
-    /**
-     * @throws Throwable
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -55,6 +51,9 @@ class LanguageValidatorTest extends KernelTestCase
         $this->localization = $this->getMockBuilder(Localization::class)->disableOriginalConstructor()->getMock();
     }
 
+    /**
+     * @testdox Test that `LanguageValidator::validate` method calls expected service methods
+     */
     public function testThatValidateCallsExpectedMethods(): void
     {
         $this->localization

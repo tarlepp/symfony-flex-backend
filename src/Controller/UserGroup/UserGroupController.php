@@ -54,8 +54,8 @@ class UserGroupController extends Controller
         Controller::METHOD_PATCH => UserGroupPatch::class,
     ];
 
-    public function __construct(UserGroupResource $resource)
-    {
-        $this->resource = $resource;
+    public function __construct(
+        protected UserGroupResource $resource,
+    ) {
     }
 }

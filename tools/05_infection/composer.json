@@ -1,12 +1,12 @@
 {
 	"require": {},
 	"require-dev": {
-		"infection/infection": "0.20.2",
+		"infection/infection": "0.21.0",
 		"roave/security-advisories": "dev-master"
 	},
 	"config": {
 		"platform": {
-			"php": "7.4.0"
+			"php": "8.0.0"
 		},
 		"preferred-install": {
 			"*": "dist"

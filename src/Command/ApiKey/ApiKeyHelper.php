@@ -3,12 +3,12 @@ declare(strict_types = 1);
 /**
  * /src/Command/ApiKey/ApiKeyHelper.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\ApiKey;
 
-use App\Entity\ApiKey as ApiKeyEntity;
+use App\Entity\ApiKey;
 use App\Resource\ApiKeyResource;
 use App\Security\RolesService;
 use Closure;
@@ -22,17 +22,14 @@ use function sprintf;
  * Class ApiKeyHelper
  *
  * @package App\Command\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyHelper
 {
-    private ApiKeyResource $apiKeyResource;
-    private RolesService $rolesService;
-
-    public function __construct(ApiKeyResource $apiKeyResource, RolesService $rolesService)
-    {
-        $this->apiKeyResource = $apiKeyResource;
-        $this->rolesService = $rolesService;
+    public function __construct(
+        private ApiKeyResource $apiKeyResource,
+        private RolesService $rolesService
+    ) {
     }
 
     /**
@@ -41,30 +38,29 @@ class ApiKeyHelper
      *
      * @throws Throwable
      */
-    public function getApiKey(SymfonyStyle $io, string $question): ?ApiKeyEntity
+    public function getApiKey(SymfonyStyle $io, string $question): ?ApiKey
     {
-        $apiKeyFound = false;
-        $apiKeyEntity = null;
+        $found = false;
+        $apiKey = null;
 
-        while ($apiKeyFound !== true) {
-            /** @var ApiKeyEntity|null $apiKeyEntity */
-            $apiKeyEntity = $this->getApiKeyEntity($io, $question);
+        while ($found !== true) {
+            $apiKey = $this->getApiKeyEntity($io, $question);
 
-            if ($apiKeyEntity === null) {
+            if ($apiKey === null) {
                 break;
             }
 
             $message = sprintf(
                 'Is this the correct API key \'[%s] [%s] %s\'?',
-                $apiKeyEntity->getId(),
-                $apiKeyEntity->getToken(),
-                $apiKeyEntity->getDescription()
+                $apiKey->getId(),
+                $apiKey->getToken(),
+                $apiKey->getDescription()
             );
 
-            $apiKeyFound = $io->confirm($message, false);
+            $found = $io->confirm($message, false);
         }
 
-        return $apiKeyEntity ?? null;
+        return $apiKey ?? null;
     }
 
     /**
@@ -77,7 +73,7 @@ class ApiKeyHelper
      *
      * @return array<int, string>
      */
-    public function getApiKeyMessage(string $message, ApiKeyEntity $apiKey): array
+    public function getApiKeyMessage(string $message, ApiKey $apiKey): array
     {
         return [
             $message,
@@ -94,12 +90,11 @@ class ApiKeyHelper
      *
      * @throws Throwable
      */
-    private function getApiKeyEntity(SymfonyStyle $io, string $question): ?ApiKeyEntity
+    private function getApiKeyEntity(SymfonyStyle $io, string $question): ?ApiKey
     {
         $choices = [];
-        $iterator = $this->getApiKeyIterator($choices);
 
-        array_map($iterator, $this->apiKeyResource->find(null, ['token' => 'ASC']));
+        array_map($this->getApiKeyIterator($choices), $this->apiKeyResource->find(orderBy: ['token' => 'ASC']));
 
         $choices['Exit'] = 'Exit command';
 
@@ -110,24 +105,17 @@ class ApiKeyHelper
      * Method to return ApiKeyIterator closure. This will format ApiKey
      * entities for choice list.
      *
-     * @param string[] $choices
+     * @param array<string, string> $choices
      */
     private function getApiKeyIterator(array &$choices): Closure
     {
-        /*
-         * Lambda function create api key choices
-         *
-         * @param ApiKeyEntity $apiKey
-         */
-        return function (ApiKeyEntity $apiKey) use (&$choices): void {
-            $value = sprintf(
-                '[%s] %s - Roles: %s',
+        return function (ApiKey $apiKey) use (&$choices): void {
+            $choices[$apiKey->getId()] = sprintf(
+                '[Token: %s] %s - Roles: %s',
                 $apiKey->getToken(),
                 $apiKey->getDescription(),
                 implode(', ', $this->rolesService->getInheritedRoles($apiKey->getRoles()))
             );
-
-            $choices[$apiKey->getId()] = $value;
         };
     }
 }

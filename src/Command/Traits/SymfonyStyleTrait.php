@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Command/Traits/SymfonyStyleTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Command\Traits;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Trait SymfonyStyleTrait
  *
  * @package App\Command\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait SymfonyStyleTrait
 {

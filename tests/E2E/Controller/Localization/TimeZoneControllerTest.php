@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/E2E/Controller/Localization/TimeZoneControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Controller\Localization;
@@ -18,7 +18,7 @@ use Throwable;
  * Class TimeZoneControllerTest
  *
  * @package App\Tests\E2E\Controller\Localization
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class TimeZoneControllerTest extends WebTestCase
 {
@@ -39,7 +39,7 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
@@ -55,24 +55,24 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/localization/timezone` endpoint returns expected count of timezones (426).
+     * @testdox Test that `/localization/timezone` endpoint returns and array of timezones
      */
-    public function testThatTimeZoneRouteReturnsExpectedNumberOfTimeZones(): void
+    public function testThatTimeZoneRouteReturnsAnArrayOfTimeZones(): void
     {
         $client = $this->getTestClient();
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
 
-        $data = JSON::decode($response->getContent());
+        $data = JSON::decode((string)$response->getContent());
 
-        static::assertCount(426, $data);
+        static::assertIsArray($data, (string)$response->getContent());
     }
 
     /**
@@ -87,7 +87,7 @@ class TimeZoneControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        $data = JSON::decode($response->getContent(), true)[0];
+        $data = JSON::decode((string)$response->getContent(), true)[0];
 
         static::assertArrayHasKey('timezone', $data);
         static::assertArrayHasKey('identifier', $data);
