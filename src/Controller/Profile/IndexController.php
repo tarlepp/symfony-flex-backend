@@ -38,7 +38,7 @@ class IndexController
      *
      * @Route(
      *     path="/profile",
-     *     methods={"GET"}
+     *     methods={"GET"},
      *  );
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
@@ -51,7 +51,7 @@ class IndexController
      *      @OA\Schema(
      *          type="string",
      *          default="Bearer _your_jwt_here_",
-     *      )
+     *      ),
      *  )
      * @OA\Response(
      *      response=200,
@@ -82,7 +82,7 @@ class IndexController
      */
     public function __invoke(User $loggedInUser): JsonResponse
     {
-        /** @var array<string, string|array> $output */
+        /** @var array<string, string|array<string, string>> $output */
         $output = JSON::decode(
             $this->serializer->serialize($loggedInUser, 'json', ['groups' => 'set.UserProfile']),
             true
