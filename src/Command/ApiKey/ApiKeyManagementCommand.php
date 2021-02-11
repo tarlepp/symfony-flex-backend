@@ -10,7 +10,6 @@ namespace App\Command\ApiKey;
 
 use App\Command\Traits\ExecuteMultipleCommandTrait;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Exception\LogicException;
 
 /**
  * Class ApiKeyManagementCommand
@@ -22,13 +21,6 @@ class ApiKeyManagementCommand extends Command
 {
     use ExecuteMultipleCommandTrait;
 
-    /**
-     * ManagementCommand constructor.
-     *
-     * @throws LogicException
-     *
-     * @psalm-suppress InvalidScalarArgument
-     */
     public function __construct()
     {
         parent::__construct('api-key:management');

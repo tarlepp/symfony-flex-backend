@@ -47,19 +47,11 @@ class EditApiKeyCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
-
-        // Get API key entity
         $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key you want to edit?');
-        $message = null;
-
-        if ($apiKey instanceof ApiKeyEntity) {
-            $message = $this->updateApiKey($input, $output, $apiKey);
-        }
+        $message = $apiKey instanceof ApiKeyEntity ? $this->updateApiKey($input, $output, $apiKey) : null;
 
         if ($input->isInteractive()) {
-            $message ??= 'Nothing changed - have a nice day';
-
-            $io->success($message);
+            $io->success($message ?? ['Nothing changed - have a nice day']);
         }
 
         return 0;

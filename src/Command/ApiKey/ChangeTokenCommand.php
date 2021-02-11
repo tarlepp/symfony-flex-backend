@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Command\ApiKey;
 
 use App\Command\Traits\SymfonyStyleTrait;
-use App\Entity\ApiKey as ApiKeyEntity;
+use App\Entity\ApiKey;
 use App\Resource\ApiKeyResource;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,19 +44,11 @@ class ChangeTokenCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
-
-        // Get API key entity
         $apiKey = $this->apiKeyHelper->getApiKey($io, 'Which API key token you want to change?');
-        $message = null;
-
-        if ($apiKey instanceof ApiKeyEntity) {
-            $message = $this->changeApiKeyToken($apiKey);
-        }
+        $message = $apiKey instanceof ApiKey ? $this->changeToken($apiKey) : null;
 
         if ($input->isInteractive()) {
-            $message ??= 'Nothing changed - have a nice day';
-
-            $io->success($message);
+            $io->success($message ?? ['Nothing changed - have a nice day']);
         }
 
         return 0;
@@ -69,7 +61,7 @@ class ChangeTokenCommand extends Command
      *
      * @throws Throwable
      */
-    private function changeApiKeyToken(ApiKeyEntity $apiKey): array
+    private function changeToken(ApiKey $apiKey): array
     {
         // Generate new token for API key
         $apiKey->generateToken();
