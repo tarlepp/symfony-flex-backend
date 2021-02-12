@@ -58,14 +58,12 @@ class HealthzController
         return $this->responseHandler->createResponse(
             $request,
             $this->healthzService->check(),
-            null,
-            200,
-            ResponseHandler::FORMAT_JSON,
-            [
+            format: ResponseHandler::FORMAT_JSON,
+            context: [
                 'groups' => [
                     'Healthz.timestamp',
                 ],
-            ]
+            ],
         );
     }
 }
