@@ -16,6 +16,7 @@ use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
@@ -66,7 +67,7 @@ class DetachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="Bearer _your_jwt_here_",
-     *      )
+     *      ),
      *  )
      * @OA\Parameter(
      *      name="userId",
@@ -76,7 +77,7 @@ class DetachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="User GUID",
-     *      )
+     *      ),
      *  )
      * @OA\Parameter(
      *      name="userGroupId",
@@ -86,7 +87,7 @@ class DetachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="User Group GUID",
-     *      )
+     *      ),
      *  )
      * @OA\Response(
      *      response=200,
@@ -141,9 +142,8 @@ class DetachUserGroupController
 
         return new JsonResponse(
             $this->serializer->serialize($user->getUserGroups()->getValues(), 'json', $groups),
-            200,
-            [],
-            true
+            Response::HTTP_OK,
+            json: true
         );
     }
 }
