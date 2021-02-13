@@ -126,7 +126,7 @@ final class RequestHandler
     {
         $limit = $request->get('limit');
 
-        return $limit !== null ? (int)abs($limit) : null;
+        return $limit !== null ? (int)abs((float)$limit) : null;
     }
 
     /**
@@ -139,7 +139,7 @@ final class RequestHandler
     {
         $offset = $request->get('offset');
 
-        return $offset !== null ? (int)abs($offset) : null;
+        return $offset !== null ? (int)abs((float)$offset) : null;
     }
 
     /**
