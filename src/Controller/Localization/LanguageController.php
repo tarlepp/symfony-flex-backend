@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @Route(
  *     path="/localization/language",
- *     methods={"GET"}
+ *     methods={"GET"},
  *  )
  *
  * @OA\Tag(name="Localization")

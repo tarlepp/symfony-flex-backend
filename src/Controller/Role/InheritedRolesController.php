@@ -40,12 +40,12 @@ class InheritedRolesController
      *      requirements={
      *          "role" = "^ROLE_\w+$",
      *      },
-     *      methods={"GET"}
+     *      methods={"GET"},
      *  )
      *
      * @ParamConverter(
      *      "role",
-     *      class="App\Resource\RoleResource"
+     *      class="App\Resource\RoleResource",
      * )
      *
      * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
@@ -58,7 +58,7 @@ class InheritedRolesController
      *      @OA\Schema(
      *          type="string",
      *          default="Bearer _your_jwt_here_",
-     *      )
+     *      ),
      *  )
      * @OA\Response(
      *      response=200,
