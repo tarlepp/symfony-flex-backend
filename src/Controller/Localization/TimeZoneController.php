@@ -19,7 +19,7 @@ use Throwable;
  *
  * @Route(
  *     path="/localization/timezone",
- *     methods={"GET"}
+ *     methods={"GET"},
  *  )
  *
  * @OA\Tag(name="Localization")
@@ -42,33 +42,33 @@ class TimeZoneController
      * @OA\Response(
      *      response=200,
      *      description="List of timezone objects.",
-     * @OA\Schema(
+     *      @OA\Schema(
      *          type="array",
-     * @OA\Items(
+     *          @OA\Items(
      *              type="object",
-     * @OA\Property(
+     *              @OA\Property(
      *                  property="timezone",
      *                  type="string",
      *                  example="Europe",
-     *                  description="Africa,America,Antarctica,Arctic,Asia,Atlantic,Australia,Europe,Indian,Pacific,UTC."
+     *                  description="Africa,America,Antarctica,Arctic,Asia,Atlantic,Australia,Europe,Indian,Pacific,UTC.",
      *              ),
-     * @OA\Property(
+     *              @OA\Property(
      *                  property="identier",
      *                  type="string",
      *                  example="Europe/Helsinki",
-     *                  description="Timezone identifier that you can use with other librariers."
+     *                  description="Timezone identifier that you can use with other librariers.",
      *              ),
-     * @OA\Property(
+     *              @OA\Property(
      *                  property="offset",
      *                  type="string",
      *                  example="GMT+2:00",
-     *                  description="GMT offset of identifier."
+     *                  description="GMT offset of identifier.",
      *              ),
-     * @OA\Property(
+     *              @OA\Property(
      *                  property="value",
      *                  type="string",
      *                  example="Europe/Helsinki",
-     *                  description="User friendly value of identifier value eg. '_' characters are replaced by space."
+     *                  description="User friendly value of identifier value eg. '_' characters are replaced by space.",
      *              ),
      *          ),
      *      ),
