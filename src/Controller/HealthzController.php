@@ -38,7 +38,7 @@ class HealthzController
      *
      * @Route(
      *     path="/healthz",
-     *     methods={"GET"}
+     *     methods={"GET"},
      *  )
      *
      * @OA\Response(
