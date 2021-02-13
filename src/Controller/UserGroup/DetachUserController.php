@@ -131,8 +131,7 @@ class DetachUserController
         return new JsonResponse(
             $this->serializer->serialize($userGroup->getUsers()->getValues(), 'json', $groups),
             200,
-            [],
-            true
+            json: true,
         );
     }
 }

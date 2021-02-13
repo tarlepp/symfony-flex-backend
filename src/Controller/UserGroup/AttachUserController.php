@@ -146,8 +146,7 @@ class AttachUserController
         return new JsonResponse(
             $this->serializer->serialize($userGroup->getUsers()->getValues(), 'json', $groups),
             $status,
-            [],
-            true
+            json: true,
         );
     }
 }

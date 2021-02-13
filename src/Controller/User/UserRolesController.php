@@ -42,7 +42,7 @@ class UserRolesController
      *
      * @ParamConverter(
      *     "requestUser",
-     *     class="App\Resource\UserResource"
+     *     class="App\Resource\UserResource",
      *  )
      *
      * @Security("is_granted('IS_USER_HIMSELF', requestUser) or is_granted('ROLE_ROOT')")
@@ -56,7 +56,7 @@ class UserRolesController
      *      @OA\Schema(
      *          type="string",
      *          default="Bearer _your_jwt_here_",
-     *      )
+     *      ),
      *  )
      * @OA\Response(
      *      response=200,
