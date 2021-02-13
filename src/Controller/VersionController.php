@@ -31,7 +31,7 @@ class VersionController
      *
      * @Route(
      *     path="/version",
-     *     methods={"GET"}
+     *     methods={"GET"},
      *  )
      *
      * @OA\Response(

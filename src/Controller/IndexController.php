@@ -25,13 +25,13 @@ class IndexController
      *
      * @Route(
      *      path="/",
-     *      methods={"GET"}
+     *      methods={"GET"},
      *  )
      *
      * @throws Throwable
      */
     public function __invoke(): Response
     {
-        return new Response('', Response::HTTP_OK);
+        return new Response();
     }
 }
