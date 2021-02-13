@@ -108,14 +108,13 @@ class Auth
     private function getToken(string $username, string $password): string
     {
         $testChannel = getenv('ENV_TEST_CHANNEL_READABLE');
-        $message = 'Could not get `ENV_TEST_CHANNEL_READABLE` environment variable.';
 
         // Specify used cache file
         $filename = sprintf(
             '%s%stest_jwt_auth_cache%s.json',
             sys_get_temp_dir(),
             DIRECTORY_SEPARATOR,
-            is_string($testChannel) ? $testChannel : throw new RuntimeException($message),
+            is_string($testChannel) ? $testChannel : '',
         );
 
         // Read current cache
