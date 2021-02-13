@@ -29,5 +29,8 @@ use App\Entity\Role as Entity;
  */
 class RoleRepository extends BaseRepository
 {
+    /**
+     * @psalm-var class-string
+     */
     protected static string $entityName = Entity::class;
 }

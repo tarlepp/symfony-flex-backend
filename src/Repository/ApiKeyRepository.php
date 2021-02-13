@@ -29,5 +29,8 @@ use App\Entity\ApiKey as Entity;
  */
 class ApiKeyRepository extends BaseRepository
 {
+    /**
+     * @psalm-var class-string
+     */
     protected static string $entityName = Entity::class;
 }

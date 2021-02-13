@@ -33,6 +33,9 @@ use Exception;
  */
 class LogRequestRepository extends BaseRepository
 {
+    /**
+     * @psalm-var class-string
+     */
     protected static string $entityName = Entity::class;
 
     /**

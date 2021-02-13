@@ -39,14 +39,14 @@ abstract class BaseRepository implements BaseRepositoryInterface
     private const LEFT_JOIN = 'leftJoin';
 
     /**
-     * @var array<int, string>
-     */
-    protected static array $searchColumns = [];
-
-    /**
      * @psalm-var class-string
      */
     protected static string $entityName;
+
+    /**
+     * @var array<int, string>
+     */
+    protected static array $searchColumns = [];
     protected static EntityManager $entityManager;
 
     /**

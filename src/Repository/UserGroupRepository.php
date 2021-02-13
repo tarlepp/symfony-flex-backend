@@ -29,6 +29,13 @@ use App\Entity\UserGroup as Entity;
  */
 class UserGroupRepository extends BaseRepository
 {
+    /**
+     * @psalm-var class-string
+     */
     protected static string $entityName = Entity::class;
+
+    /**
+     * @var array<int, string>
+     */
     protected static array $searchColumns = ['role', 'name'];
 }
