@@ -10,7 +10,6 @@ namespace App\Utils\Tests;
 
 use App\Utils\JSON;
 use JsonException;
-use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
