@@ -53,7 +53,7 @@ class CheckDependencies extends Command
     private SymfonyStyle $io;
 
     public function __construct(
-        private string $projectDir
+        private string $projectDir,
     ) {
         parent::__construct('check-dependencies');
 
@@ -225,7 +225,7 @@ class CheckDependencies extends Command
         }
 
         /** @var stdClass $decoded */
-        $decoded = json_decode($process->getOutput(), false, 512, JSON_THROW_ON_ERROR);
+        $decoded = json_decode($process->getOutput(), flags: JSON_THROW_ON_ERROR);
 
         /** @var array<int, stdClass>|string|null $installed */
         $installed = $decoded->installed;

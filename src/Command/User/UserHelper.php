@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Command\User;
 
-use App\Entity\User as UserEntity;
-use App\Entity\UserGroup as UserGroupEntity;
+use App\Entity\User;
+use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use Closure;
@@ -28,7 +28,7 @@ class UserHelper
 {
     public function __construct(
         private UserResource $userResource,
-        private UserGroupResource $userGroupResource
+        private UserGroupResource $userGroupResource,
     ) {
     }
 
@@ -38,22 +38,22 @@ class UserHelper
      *
      * @throws Throwable
      */
-    public function getUser(SymfonyStyle $io, string $question): ?UserEntity
+    public function getUser(SymfonyStyle $io, string $question): ?User
     {
-        $userFound = false;
-        $userEntity = null;
+        $found = false;
+        $user = null;
 
-        while ($userFound !== true) {
-            $userEntity = $this->getUserEntity($io, $question);
+        while ($found !== true) {
+            $user = $this->getUserEntity($io, $question);
 
-            if ($userEntity === null) {
+            if ($user === null) {
                 break;
             }
 
-            $userFound = $this->isCorrectUser($io, $userEntity);
+            $found = $this->isCorrectUser($io, $user);
         }
 
-        return $userEntity ?? null;
+        return $user ?? null;
     }
 
     /**
@@ -62,22 +62,22 @@ class UserHelper
      *
      * @throws Throwable
      */
-    public function getUserGroup(SymfonyStyle $io, string $question): ?UserGroupEntity
+    public function getUserGroup(SymfonyStyle $io, string $question): ?UserGroup
     {
-        $userGroupFound = false;
-        $userGroupEntity = null;
+        $found = false;
+        $userGroup = null;
 
-        while ($userGroupFound !== true) {
-            $userGroupEntity = $this->getUserGroupEntity($io, $question);
+        while ($found !== true) {
+            $userGroup = $this->getUserGroupEntity($io, $question);
 
-            if ($userGroupEntity === null) {
+            if ($userGroup === null) {
                 break;
             }
 
-            $userGroupFound = $this->isCorrectUserGroup($io, $userGroupEntity);
+            $found = $this->isCorrectUserGroup($io, $userGroup);
         }
 
-        return $userGroupEntity ?? null;
+        return $userGroup ?? null;
     }
 
     /**
@@ -86,12 +86,12 @@ class UserHelper
      *
      * @throws Throwable
      */
-    private function getUserEntity(SymfonyStyle $io, string $question): ?UserEntity
+    private function getUserEntity(SymfonyStyle $io, string $question): ?User
     {
         $choices = [];
         $iterator = $this->getUserIterator($choices);
 
-        array_map($iterator, $this->userResource->find([], ['username' => 'asc']));
+        array_map($iterator, $this->userResource->find(orderBy: ['username' => 'asc']));
 
         $choices['Exit'] = 'Exit command';
 
@@ -104,12 +104,12 @@ class UserHelper
      *
      * @throws Throwable
      */
-    private function getUserGroupEntity(SymfonyStyle $io, string $question): ?UserGroupEntity
+    private function getUserGroupEntity(SymfonyStyle $io, string $question): ?UserGroup
     {
         $choices = [];
         $iterator = $this->getUserGroupIterator($choices);
 
-        array_map($iterator, $this->userGroupResource->find([], ['name' => 'asc']));
+        array_map($iterator, $this->userGroupResource->find(orderBy: ['name' => 'asc']));
 
         $choices['Exit'] = 'Exit command';
 
@@ -120,17 +120,17 @@ class UserHelper
      * Getter method for user formatter closure. This closure will format
      * single User entity for choice list.
      *
-     * @param array<int, string> $choices
+     * @param array<string, string> $choices
      */
     private function getUserIterator(array &$choices): Closure
     {
-        return static function (UserEntity $user) use (&$choices): void {
+        return static function (User $user) use (&$choices): void {
             $message = sprintf(
                 '%s (%s %s <%s>)',
                 $user->getUsername(),
                 $user->getFirstName(),
                 $user->getLastName(),
-                $user->getEmail()
+                $user->getEmail(),
             );
 
             $choices[$user->getId()] = $message;
@@ -141,11 +141,11 @@ class UserHelper
      * Getter method for user group formatter closure. This closure will format
      * single UserGroup entity for choice list.
      *
-     * @param mixed[] $choices
+     * @param array<string, string> $choices
      */
     private function getUserGroupIterator(array &$choices): Closure
     {
-        return static function (UserGroupEntity $userGroup) use (&$choices): void {
+        return static function (UserGroup $userGroup) use (&$choices): void {
             $choices[$userGroup->getId()] = sprintf('%s (%s)', $userGroup->getName(), $userGroup->getRole()->getId());
         };
     }
@@ -154,7 +154,7 @@ class UserHelper
      * Helper method to confirm user that he/she has chosen correct User
      * entity to process with.
      */
-    private function isCorrectUser(SymfonyStyle $io, UserEntity $userEntity): bool
+    private function isCorrectUser(SymfonyStyle $io, User $userEntity): bool
     {
         $message = sprintf(
             'Is this the correct  user [%s - %s (%s %s <%s>)]?',
@@ -162,7 +162,7 @@ class UserHelper
             $userEntity->getUsername(),
             $userEntity->getFirstName(),
             $userEntity->getLastName(),
-            $userEntity->getEmail()
+            $userEntity->getEmail(),
         );
 
         return $io->confirm($message, false);
@@ -172,13 +172,13 @@ class UserHelper
      * Helper method to confirm user that he/she has chosen correct UserGroup
      * entity to process with.
      */
-    private function isCorrectUserGroup(SymfonyStyle $io, UserGroupEntity $userGroupEntity): bool
+    private function isCorrectUserGroup(SymfonyStyle $io, UserGroup $userGroupEntity): bool
     {
         $message = sprintf(
             'Is this the correct user group [%s - %s (%s)]?',
             $userGroupEntity->getId(),
             $userGroupEntity->getName(),
-            $userGroupEntity->getRole()->getId()
+            $userGroupEntity->getRole()->getId(),
         );
 
         return $io->confirm($message, false);

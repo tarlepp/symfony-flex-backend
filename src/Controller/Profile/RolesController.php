@@ -46,7 +46,7 @@ class RolesController
      *      @OA\Schema(
      *          type="string",
      *          default="Bearer _your_jwt_here_",
-     *      )
+     *      ),
      *  )
      * @OA\Response(
      *      response=200,
