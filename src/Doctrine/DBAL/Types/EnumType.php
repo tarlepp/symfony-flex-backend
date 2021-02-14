@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Doctrine/DBAL/Types/EnumType.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Doctrine\DBAL\Types;
@@ -21,7 +21,7 @@ use function sprintf;
  * Class EnumType
  *
  * @package App\Doctrine\DBAL\Types
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class EnumType extends Type
 {
