@@ -354,7 +354,7 @@ trait LogRequestProcessRequestTrait
         // Clean possible sensitive data from parameters
         array_walk(
             $rawHeaders,
-            fn (mixed &$value, string $key): void => $this->cleanParameters($value, $key),
+            fn (mixed &$value, string $key) => $this->cleanParameters($value, $key),
         );
 
         $this->headers = $rawHeaders;
@@ -364,7 +364,7 @@ trait LogRequestProcessRequestTrait
         // Clean possible sensitive data from parameters
         array_walk(
             $rawParameters,
-            fn (mixed &$value, string $key): void => $this->cleanParameters($value, $key),
+            fn (mixed &$value, string $key) => $this->cleanParameters($value, $key),
         );
 
         $this->parameters = $rawParameters;
@@ -444,7 +444,7 @@ trait LogRequestProcessRequestTrait
         if (is_array($value)) {
             array_walk(
                 $value,
-                fn (mixed &$value, string $key): void => $this->cleanParameters($value, $key),
+                fn (mixed &$value, string $key) => $this->cleanParameters($value, $key),
             );
         }
     }
