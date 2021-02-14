@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Traits/LogEntityTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -20,7 +20,7 @@ use Throwable;
  * Trait LogEntityTrait
  *
  * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @property User|null $user
  */

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Traits/LogRequestProcessRequestTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -28,7 +28,7 @@ use function strpos;
  * Trait LogRequestProcessRequestTrait
  *
  * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @method array getSensitiveProperties();
  */

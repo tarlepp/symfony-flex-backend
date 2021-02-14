@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Traits/UserRelations.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Class UserRelations
  *
  * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait UserRelations
 {
