@@ -38,7 +38,7 @@ use function random_int;
  * @ORM\Table(
  *      name="api_key",
  *      uniqueConstraints={
- * @ORM\UniqueConstraint(name="uq_token", columns={"token"}),
+ *          @ORM\UniqueConstraint(name="uq_token", columns={"token"}),
  *      },
  *  )
  * @ORM\Entity()
@@ -57,7 +57,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      "ApiKey",
      *      "ApiKey.id",
      *
-     *      "LogRequest.apiKey"
+     *      "LogRequest.apiKey",
      *  })
      *
      * @ORM\Column(
@@ -89,7 +89,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      name="token",
      *      type="string",
      *      length=40,
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private string $token = '';
@@ -119,7 +119,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      inversedBy="apiKeys",
      *  )
      * @ORM\JoinTable(
-     *      name="api_key_has_user_group"
+     *      name="api_key_has_user_group",
      *  )
      */
     private Collection $userGroups;
