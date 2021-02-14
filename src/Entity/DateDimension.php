@@ -26,11 +26,11 @@ use function floor;
  * @ORM\Table(
  *      name="date_dimension",
  *      indexes={
- * @ORM\Index(name="date", columns={"date"}),
- *      }
+ *          @ORM\Index(name="date", columns={"date"}),
+ *      },
  *  )
  * @ORM\Entity(
- *      readOnly=true
+ *      readOnly=true,
  *  )
  *
  * @package App\Entity
