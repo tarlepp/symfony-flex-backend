@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Interfaces/UserGroupAwareInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Interfaces;
@@ -16,7 +16,7 @@ use Doctrine\Common\Collections\Collection;
  * Interface UserGroupAwareInterface
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface UserGroupAwareInterface extends EntityInterface
 {
