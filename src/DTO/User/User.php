@@ -286,10 +286,12 @@ class User extends RestDto
      *
      * @param array<int, UserGroupEntity> $value
      */
-    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): void
+    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): self
     {
         $entity->clearUserGroups();
 
         array_map([$entity, 'addUserGroup'], $value);
+
+        return $this;
     }
 }
