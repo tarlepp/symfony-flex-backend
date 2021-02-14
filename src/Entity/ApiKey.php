@@ -122,7 +122,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      name="api_key_has_user_group",
      *  )
      */
-    private Collection $userGroups;
+    private Collection|ArrayCollection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
@@ -136,7 +136,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      mappedBy="apiKey",
      *  )
      */
-    private Collection $logsRequest;
+    private Collection|ArrayCollection $logsRequest;
 
     /**
      * ApiKey constructor.
@@ -202,7 +202,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection
+    public function getUserGroups(): Collection|ArrayCollection
     {
         return $this->userGroups;
     }
@@ -212,7 +212,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @return Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
-    public function getLogsRequest(): Collection
+    public function getLogsRequest(): Collection|ArrayCollection
     {
         return $this->logsRequest;
     }
@@ -236,10 +236,10 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
                         [RolesService::ROLE_API],
                         $this->userGroups
                             ->map(static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
-                            ->toArray()
-                    )
-                )
-            )
+                            ->toArray(),
+                    ),
+                ),
+            ),
         );
     }
 
