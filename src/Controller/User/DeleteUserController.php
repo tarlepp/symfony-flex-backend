@@ -49,7 +49,7 @@ class DeleteUserController extends Controller
      *
      * @ParamConverter(
      *     "requestUser",
-     *     class="App\Resource\UserResource"
+     *     class="App\Resource\UserResource",
      *  )
      *
      * @Security("is_granted('ROLE_ROOT')")
@@ -59,7 +59,7 @@ class DeleteUserController extends Controller
     public function __invoke(Request $request, User $requestUser, User $loggedInUser): Response
     {
         if ($loggedInUser === $requestUser) {
-            throw new HttpException(400, 'You cannot remove yourself...');
+            throw new HttpException(Response::HTTP_BAD_REQUEST, 'You cannot remove yourself...');
         }
 
         return $this->deleteMethod($request, $requestUser->getId());

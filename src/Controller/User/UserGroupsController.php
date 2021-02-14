@@ -14,6 +14,7 @@ use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -43,7 +44,7 @@ class UserGroupsController
      *
      * @ParamConverter(
      *     "requestUser",
-     *     class="App\Resource\UserResource"
+     *     class="App\Resource\UserResource",
      *  )
      *
      * @Security("is_granted('IS_USER_HIMSELF', requestUser) or is_granted('ROLE_ROOT')")
@@ -57,7 +58,7 @@ class UserGroupsController
      *      @OA\Schema(
      *          type="string",
      *          default="Bearer _your_jwt_here_",
-     *      )
+     *      ),
      *  )
      * @OA\Response(
      *      response=200,
@@ -108,9 +109,8 @@ class UserGroupsController
 
         return new JsonResponse(
             $this->serializer->serialize($requestUser->getUserGroups()->getValues(), 'json', $groups),
-            200,
-            [],
-            true
+            Response::HTTP_OK,
+            json: true
         );
     }
 }
