@@ -35,6 +35,9 @@ use Throwable;
  */
 class HealthzRepository extends BaseRepository
 {
+    /**
+     * @psalm-var class-string
+     */
     protected static string $entityName = Entity::class;
 
     /**

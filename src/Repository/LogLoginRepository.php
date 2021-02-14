@@ -29,5 +29,8 @@ use App\Entity\LogLogin as Entity;
  */
 class LogLoginRepository extends BaseRepository
 {
+    /**
+     * @psalm-var class-string
+     */
     protected static string $entityName = Entity::class;
 }
