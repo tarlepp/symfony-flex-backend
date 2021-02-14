@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/DataFixtures/ORM/LoadUserData.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DataFixtures\ORM;
@@ -25,7 +25,7 @@ use function array_map;
  * Class LoadUserData
  *
  * @package App\DataFixtures\ORM
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @psalm-suppress MissingConstructor
  */
@@ -49,8 +49,6 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
     private RolesServiceInterface $roles;
 
     /**
-     * Load data fixtures with the passed EntityManager
-     *
      * @throws Throwable
      */
     public function load(ObjectManager $manager): void
@@ -62,17 +60,12 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
         $this->manager = $manager;
 
         // Create entities
-        array_map([$this, 'createUser'], $this->roles->getRoles());
-
-        $this->createUser();
+        array_map(fn (?string $role): bool => $this->createUser($role), [null, ...$this->roles->getRoles()]);
 
         // Flush database changes
         $this->manager->flush();
     }
 
-    /**
-     * Get the order of this fixture
-     */
     public function getOrder(): int
     {
         return 3;
@@ -83,17 +76,17 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
      *
      * @throws Throwable
      */
-    private function createUser(?string $role = null): void
+    private function createUser(?string $role = null): bool
     {
         $suffix = $role === null ? '' : '-' . $this->roles->getShort($role);
 
         // Create new entity
-        $entity = new User();
-        $entity->setUsername('john' . $suffix);
-        $entity->setFirstName('John');
-        $entity->setLastName('Doe');
-        $entity->setEmail('john.doe' . $suffix . '@test.com');
-        $entity->setPlainPassword('password' . $suffix);
+        $entity = (new User())
+            ->setUsername('john' . $suffix)
+            ->setFirstName('John')
+            ->setLastName('Doe')
+            ->setEmail('john.doe' . $suffix . '@test.com')
+            ->setPlainPassword('password' . $suffix);
 
         if ($role !== null) {
             /** @var UserGroup $userGroup */
@@ -113,5 +106,7 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface, Con
 
         // Create reference for later usage
         $this->addReference('User-' . $entity->getUsername(), $entity);
+
+        return true;
     }
 }
