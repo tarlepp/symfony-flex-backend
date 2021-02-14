@@ -248,7 +248,7 @@ class User extends RestDto
      *
      * @param EntityInterface|Entity $entity
      */
-    public function load(EntityInterface $entity): RestDtoInterface
+    public function load(EntityInterface $entity): self
     {
         if ($entity instanceof Entity) {
             $this->id = $entity->getId();
