@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\DTO\UserGroup;
 
 use App\DTO\RestDto;
-use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as Entity;
@@ -22,8 +21,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\DTO\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method self|RestDtoInterface get(string $id)
- * @method self|RestDtoInterface patch(RestDtoInterface $dto)
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class UserGroup extends RestDto

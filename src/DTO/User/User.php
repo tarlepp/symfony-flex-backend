@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\DTO\User;
 
 use App\DTO\RestDto;
-use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\User as Entity;
@@ -28,8 +27,6 @@ use function array_map;
  * @package App\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method self|RestDtoInterface get(string $id)
- * @method self|RestDtoInterface patch(RestDtoInterface $dto)
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class User extends RestDto
