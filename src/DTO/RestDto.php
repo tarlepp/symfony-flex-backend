@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/DTO/RestDto.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO;
@@ -24,7 +24,7 @@ use function ucfirst;
  * Class RestDto
  *
  * @package App\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestDto implements RestDtoInterface
 {
