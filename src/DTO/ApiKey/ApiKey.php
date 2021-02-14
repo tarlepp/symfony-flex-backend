@@ -130,6 +130,9 @@ class ApiKey extends RestDto
     {
         $entity->clearUserGroups();
 
-        array_map([$entity, 'addUserGroup'], $value);
+        array_map(
+            static fn (UserGroupEntity $userGroup): UserGroupAwareInterface => $entity->addUserGroup($userGroup),
+            $value,
+        );
     }
 }
