@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/DataFixtures/ORM/LoadUserGroupData.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DataFixtures\ORM;
@@ -25,7 +25,7 @@ use function array_map;
  * Class LoadUserGroupData
  *
  * @package App\DataFixtures\ORM
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @psalm-suppress MissingConstructor
  */
@@ -48,8 +48,6 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
     private RolesServiceInterface $roles;
 
     /**
-     * Load data fixtures with the passed EntityManager
-     *
      * @throws Throwable
      */
     public function load(ObjectManager $manager): void
@@ -67,9 +65,6 @@ final class LoadUserGroupData extends Fixture implements OrderedFixtureInterface
         $this->manager->flush();
     }
 
-    /**
-     * Get the order of this fixture
-     */
     public function getOrder(): int
     {
         return 2;
