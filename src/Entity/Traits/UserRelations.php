@@ -39,7 +39,7 @@ trait UserRelations
      *      inversedBy="users",
      *  )
      * @ORM\JoinTable(
-     *      name="user_has_user_group"
+     *      name="user_has_user_group",
      *  )
      */
     protected Collection|ArrayCollection $userGroups;
