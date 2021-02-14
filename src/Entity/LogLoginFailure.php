@@ -67,7 +67,7 @@ class LogLoginFailure implements EntityInterface
      *      inversedBy="logsLoginFailure",
      *  )
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(
+     *      @ORM\JoinColumn(
      *          name="user_id",
      *          referencedColumnName="id",
      *          nullable=false,
