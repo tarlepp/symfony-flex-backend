@@ -24,11 +24,11 @@ use Throwable;
  * @ORM\Table(
  *      name="log_login_failure",
  *      indexes={
- * @ORM\Index(name="user_id", columns={"user_id"}),
- *      }
+ *          @ORM\Index(name="user_id", columns={"user_id"}),
+ *      },
  *  )
  * @ORM\Entity(
- *      readOnly=true
+ *      readOnly=true,
  *  )
  *
  * @package App\Entity
