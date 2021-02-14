@@ -244,11 +244,9 @@ class User extends RestDto
     }
 
     /**
-     * Method to load DTO data from specified entity.
+     * {@inheritdoc}
      *
      * @param EntityInterface|Entity $entity
-     *
-     * @return RestDtoInterface|User
      */
     public function load(EntityInterface $entity): RestDtoInterface
     {
