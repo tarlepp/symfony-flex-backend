@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/UserGroup.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -31,7 +31,7 @@ use Throwable;
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserGroup implements EntityInterface, Stringable
 {

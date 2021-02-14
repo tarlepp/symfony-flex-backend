@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/LogRequest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -38,7 +38,7 @@ use function mb_strlen;
  * @ORM\HasLifecycleCallbacks()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LogRequest implements EntityInterface
 {

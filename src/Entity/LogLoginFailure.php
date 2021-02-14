@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/LogLoginFailure.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -32,7 +32,7 @@ use Throwable;
  *  )
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LogLoginFailure implements EntityInterface
 {
