@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/ApiKey.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -44,7 +44,7 @@ use function random_int;
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKey implements EntityInterface, UserGroupAwareInterface
 {
