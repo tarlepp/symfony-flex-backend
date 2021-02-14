@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/DTO/Traits/PatchUserGroups.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO\Traits;
@@ -16,7 +16,7 @@ use function array_map;
  * Trait PatchUserGroups
  *
  * @package App\DTO\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait PatchUserGroups
 {
