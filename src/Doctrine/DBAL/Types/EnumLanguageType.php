@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Doctrine/DBAL/Types/EnumLanguageType.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Doctrine\DBAL\Types;
@@ -12,7 +12,7 @@ namespace App\Doctrine\DBAL\Types;
  * Class EnumLanguageType
  *
  * @package App\Doctrine\DBAL\Types
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class EnumLanguageType extends EnumType
 {
