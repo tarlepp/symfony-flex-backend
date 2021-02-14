@@ -27,12 +27,12 @@ use function is_array;
  * @ORM\Table(
  *      name="log_login",
  *      indexes={
- * @ORM\Index(name="user_id", columns={"user_id"}),
- * @ORM\Index(name="date", columns={"date"}),
- *      }
+ *          @ORM\Index(name="user_id", columns={"user_id"}),
+ *          @ORM\Index(name="date", columns={"date"}),
+ *      },
  *  )
  * @ORM\Entity(
- *      readOnly=true
+ *      readOnly=true,
  *  )
  * @ORM\HasLifecycleCallbacks()
  *
@@ -73,7 +73,7 @@ class LogLogin implements EntityInterface
      *      inversedBy="logsLogin",
      *  )
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(
+     *      @ORM\JoinColumn(
      *          name="user_id",
      *          referencedColumnName="id",
      *          onDelete="SET NULL",
