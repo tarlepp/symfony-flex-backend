@@ -140,11 +140,9 @@ trait LogEntityTrait
 
     private function processRequestData(Request $request): void
     {
-        $userAgent = $request->headers->get('User-Agent') ?? '';
-
         $this->clientIp = (string)$request->getClientIp();
         $this->httpHost = $request->getHttpHost();
-        $this->agent = $userAgent;
+        $this->agent = $request->headers->get('User-Agent') ?? '';
     }
 
     /**
@@ -154,7 +152,7 @@ trait LogEntityTrait
      */
     private function processTimeAndDate(): void
     {
-        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+        $now = new DateTimeImmutable(timezone: new DateTimeZone('UTC'));
 
         $this->time = $now;
         $this->date = $now;
