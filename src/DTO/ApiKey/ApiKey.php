@@ -3,13 +3,12 @@ declare(strict_types = 1);
 /**
  * /src/DTO/ApiKey/ApiKey.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO\ApiKey;
 
 use App\DTO\RestDto;
-use App\DTO\RestDtoInterface;
 use App\Entity\ApiKey as Entity;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
@@ -22,10 +21,8 @@ use function array_map;
  * Class ApiKey
  *
  * @package App\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method self|RestDtoInterface get(string $id)
- * @method self|RestDtoInterface patch(RestDtoInterface $dto)
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class ApiKey extends RestDto
@@ -105,7 +102,7 @@ class ApiKey extends RestDto
      *
      * @param EntityInterface|Entity $entity
      */
-    public function load(EntityInterface $entity): RestDtoInterface
+    public function load(EntityInterface $entity): self
     {
         if ($entity instanceof Entity) {
             $this->id = $entity->getId();
@@ -126,10 +123,15 @@ class ApiKey extends RestDto
      *
      * @param array<int, UserGroupEntity> $value
      */
-    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): void
+    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): self
     {
         $entity->clearUserGroups();
 
-        array_map([$entity, 'addUserGroup'], $value);
+        array_map(
+            static fn (UserGroupEntity $userGroup): UserGroupAwareInterface => $entity->addUserGroup($userGroup),
+            $value,
+        );
+
+        return $this;
     }
 }

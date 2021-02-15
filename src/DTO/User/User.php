@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\DTO\User;
 
 use App\DTO\RestDto;
-use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\User as Entity;
@@ -28,8 +27,6 @@ use function array_map;
  * @package App\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method self|RestDtoInterface get(string $id)
- * @method self|RestDtoInterface patch(RestDtoInterface $dto)
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class User extends RestDto
@@ -244,13 +241,11 @@ class User extends RestDto
     }
 
     /**
-     * Method to load DTO data from specified entity.
+     * {@inheritdoc}
      *
      * @param EntityInterface|Entity $entity
-     *
-     * @return RestDtoInterface|User
      */
-    public function load(EntityInterface $entity): RestDtoInterface
+    public function load(EntityInterface $entity): self
     {
         if ($entity instanceof Entity) {
             $this->id = $entity->getId();
@@ -286,10 +281,15 @@ class User extends RestDto
      *
      * @param array<int, UserGroupEntity> $value
      */
-    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): void
+    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): self
     {
         $entity->clearUserGroups();
 
-        array_map([$entity, 'addUserGroup'], $value);
+        array_map(
+            static fn (UserGroupEntity $userGroup): UserGroupAwareInterface => $entity->addUserGroup($userGroup),
+            $value,
+        );
+
+        return $this;
     }
 }
