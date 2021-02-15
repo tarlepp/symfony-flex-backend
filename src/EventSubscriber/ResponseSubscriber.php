@@ -20,11 +20,9 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
  */
 class ResponseSubscriber implements EventSubscriberInterface
 {
-    private Version $version;
-
-    public function __construct(Version $version)
-    {
-        $this->version = $version;
+    public function __construct(
+        private Version $version,
+    ) {
     }
 
     /**
