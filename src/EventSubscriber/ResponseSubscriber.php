@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/EventSubscriber/ResponseSubscriber.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
  * Class ResponseSubscriber
  *
  * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ResponseSubscriber implements EventSubscriberInterface
 {

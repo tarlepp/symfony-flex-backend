@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/EventSubscriber/AcceptLanguageSubscriber.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -16,7 +16,7 @@ use function in_array;
  * Class AcceptLanguageSubscriber
  *
  * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AcceptLanguageSubscriber implements EventSubscriberInterface
 {
