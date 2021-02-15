@@ -40,10 +40,6 @@ use function spl_object_hash;
  */
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    private UserTypeIdentification $userService;
-    private LoggerInterface $logger;
-    private string $environment;
-
     /**
      * @var array<string, bool>
      */
@@ -57,11 +53,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
         ClientErrorInterface::class,
     ];
 
-    public function __construct(LoggerInterface $logger, UserTypeIdentification $userService, string $environment)
-    {
-        $this->logger = $logger;
-        $this->userService = $userService;
-        $this->environment = $environment;
+    public function __construct(
+        private LoggerInterface $logger,
+        private UserTypeIdentification $userService,
+        private string $environment,
+    ) {
     }
 
     /**
