@@ -23,13 +23,10 @@ use Throwable;
  */
 class AuthenticationSuccessSubscriber implements EventSubscriberInterface
 {
-    private LoginLogger $loginLogger;
-    private UserRepository $userRepository;
-
-    public function __construct(LoginLogger $loginLogger, UserRepository $userRepository)
-    {
-        $this->loginLogger = $loginLogger;
-        $this->userRepository = $userRepository;
+    public function __construct(
+        private LoginLogger $loginLogger,
+        private UserRepository $userRepository,
+    ) {
     }
 
     /**
