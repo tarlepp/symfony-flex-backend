@@ -22,7 +22,7 @@ use Throwable;
 use function array_filter;
 use function count;
 use function in_array;
-use function strpos;
+use function str_contains;
 use function substr;
 
 /**
@@ -69,17 +69,14 @@ class RequestLogSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $path = $request->getPathInfo();
 
+        $filter = static fn (string $route): bool =>
+            str_contains($route, '/*') && str_contains($path, substr($route, 0, -2));
+
         // We don't want to log OPTIONS requests, /_profiler* -path, ignored routes and wildcard ignored routes
         if ($request->getRealMethod() === Request::METHOD_OPTIONS
-            || strpos($path, '/_profiler') !== false
+            || str_contains($path, '/_profiler')
             || in_array($path, $this->ignoredRoutes, true)
-            || count(
-                array_filter(
-                    $this->ignoredRoutes,
-                    static fn ($route): bool => strpos($route, '/*') !== false
-                        && strpos($path, substr($route, 0, -2)) !== false
-                )
-            ) !== 0
+            || count(array_filter($this->ignoredRoutes, $filter)) !== 0
         ) {
             return;
         }
