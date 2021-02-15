@@ -23,7 +23,7 @@ interface UserGroupAwareInterface extends EntityInterface
     /**
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection|ArrayCollection;
+    public function getUserGroups(): Collection | ArrayCollection;
 
     /**
      * Method to attach new userGroup to current user OR api key.

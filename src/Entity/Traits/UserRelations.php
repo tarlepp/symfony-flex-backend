@@ -42,7 +42,7 @@ trait UserRelations
      *      name="user_has_user_group",
      *  )
      */
-    protected Collection|ArrayCollection $userGroups;
+    protected Collection | ArrayCollection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
@@ -56,7 +56,7 @@ trait UserRelations
      *      mappedBy="user",
      *  )
      */
-    protected Collection|ArrayCollection $logsRequest;
+    protected Collection | ArrayCollection $logsRequest;
 
     /**
      * @var Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
@@ -70,7 +70,7 @@ trait UserRelations
      *      mappedBy="user",
      *  )
      */
-    protected Collection|ArrayCollection $logsLogin;
+    protected Collection | ArrayCollection $logsLogin;
 
     /**
      * @var Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
@@ -84,7 +84,7 @@ trait UserRelations
      *      mappedBy="user",
      *  )
      */
-    protected Collection|ArrayCollection $logsLoginFailure;
+    protected Collection | ArrayCollection $logsLoginFailure;
 
     /**
      * Getter for roles.
@@ -115,7 +115,7 @@ trait UserRelations
      *
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection|ArrayCollection
+    public function getUserGroups(): Collection | ArrayCollection
     {
         return $this->userGroups;
     }
@@ -125,7 +125,7 @@ trait UserRelations
      *
      * @return Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
-    public function getLogsRequest(): Collection|ArrayCollection
+    public function getLogsRequest(): Collection | ArrayCollection
     {
         return $this->logsRequest;
     }
@@ -135,7 +135,7 @@ trait UserRelations
      *
      * @return Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
      */
-    public function getLogsLogin(): Collection|ArrayCollection
+    public function getLogsLogin(): Collection | ArrayCollection
     {
         return $this->logsLogin;
     }
@@ -145,7 +145,7 @@ trait UserRelations
      *
      * @return Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
      */
-    public function getLogsLoginFailure(): Collection|ArrayCollection
+    public function getLogsLoginFailure(): Collection | ArrayCollection
     {
         return $this->logsLoginFailure;
     }

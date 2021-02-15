@@ -20,7 +20,6 @@ use Ramsey\Uuid\UuidInterface;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Throwable;
 
 /**
  * Class UserGroup
@@ -130,7 +129,7 @@ class UserGroup implements EntityInterface, Stringable
      *      name="user_has_user_group",
      *  )
      */
-    private Collection|ArrayCollection $users;
+    private Collection | ArrayCollection $users;
 
     /**
      * @var Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
@@ -147,7 +146,7 @@ class UserGroup implements EntityInterface, Stringable
      *      name="api_key_has_user_group",
      *  )
      */
-    private Collection|ArrayCollection $apiKeys;
+    private Collection | ArrayCollection $apiKeys;
 
     public function __construct()
     {
@@ -194,7 +193,7 @@ class UserGroup implements EntityInterface, Stringable
     /**
      * @return Collection<int, User>|ArrayCollection<int, User>
      */
-    public function getUsers(): Collection|ArrayCollection
+    public function getUsers(): Collection | ArrayCollection
     {
         return $this->users;
     }
@@ -202,7 +201,7 @@ class UserGroup implements EntityInterface, Stringable
     /**
      * @return Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
      */
-    public function getApiKeys(): Collection|ArrayCollection
+    public function getApiKeys(): Collection | ArrayCollection
     {
         return $this->apiKeys;
     }

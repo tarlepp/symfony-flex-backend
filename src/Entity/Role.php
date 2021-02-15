@@ -15,7 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Throwable;
 
 /**
  * Class Role
@@ -86,7 +85,7 @@ class Role implements EntityInterface
      *      mappedBy="role",
      *  )
      */
-    private Collection|ArrayCollection $userGroups;
+    private Collection | ArrayCollection $userGroups;
 
     /**
      * Constructor.
@@ -119,7 +118,7 @@ class Role implements EntityInterface
     /**
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection|ArrayCollection
+    public function getUserGroups(): Collection | ArrayCollection
     {
         return $this->userGroups;
     }
