@@ -58,11 +58,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
-        $user = $this->getUser($event->getUser());
-
-        if ($user === null) {
-            throw new UnsupportedUserException('Unsupported user.');
-        }
+        $user = $this->getUser($event->getUser()) ?? throw new UnsupportedUserException('Unsupported user.');
 
         if (count($user->getLogsLoginFailure()) > 10) {
             throw new LockedException('Locked account.');
