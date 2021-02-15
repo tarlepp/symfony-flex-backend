@@ -390,7 +390,7 @@ trait LogRequestProcessRequestTrait
         $rawAction = $request->get('_controller', '');
         $rawAction = (array)explode(strpos($rawAction, '::') ? '::' : ':', $rawAction);
 
-        return $rawAction[1] ?? '';
+        return (string)($rawAction[1] ?? '');
     }
 
     /**
