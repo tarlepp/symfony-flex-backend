@@ -16,7 +16,7 @@ use App\Security\UserTypeIdentification;
 use App\Utils\JSON;
 use App\Utils\Tests\PhpUnitUtil;
 use BadMethodCallException;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as DBALException;
 use Doctrine\ORM\ORMException;
 use Exception;
 use Generator;
