@@ -83,7 +83,7 @@ class UserGroup implements EntityInterface, Stringable
      *      inversedBy="userGroups",
      *  )
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(
+     *      @ORM\JoinColumn(
      *          name="role",
      *          referencedColumnName="role",
      *          onDelete="CASCADE",
@@ -110,7 +110,7 @@ class UserGroup implements EntityInterface, Stringable
      *      name="name",
      *      type="string",
      *      length=255,
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private string $name = '';
@@ -127,7 +127,7 @@ class UserGroup implements EntityInterface, Stringable
      *      mappedBy="userGroups",
      *  )
      * @ORM\JoinTable(
-     *      name="user_has_user_group"
+     *      name="user_has_user_group",
      *  )
      */
     private Collection $users;
@@ -144,7 +144,7 @@ class UserGroup implements EntityInterface, Stringable
      *      mappedBy="userGroups",
      *  )
      * @ORM\JoinTable(
-     *      name="api_key_has_user_group"
+     *      name="api_key_has_user_group",
      *  )
      */
     private Collection $apiKeys;
