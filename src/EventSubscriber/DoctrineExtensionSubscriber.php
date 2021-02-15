@@ -22,13 +22,10 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class DoctrineExtensionSubscriber implements EventSubscriberInterface
 {
-    private BlameableListener $blameableListener;
-    private UserTypeIdentification $userTypeIdentification;
-
-    public function __construct(BlameableListener $blameableListener, UserTypeIdentification $userTypeIdentification)
-    {
-        $this->blameableListener = $blameableListener;
-        $this->userTypeIdentification = $userTypeIdentification;
+    public function __construct(
+        private BlameableListener $blameableListener,
+        private UserTypeIdentification $userTypeIdentification,
+    ) {
     }
 
     /**
