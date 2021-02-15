@@ -29,11 +29,9 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
         self::LOCALE_FI,
     ];
 
-    private string $defaultLocale;
-
-    public function __construct(string $locale)
-    {
-        $this->defaultLocale = $locale;
+    public function __construct(
+        private string $locale,
+    ) {
     }
 
     /**
@@ -59,11 +57,11 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        $locale = $request->headers->get('Accept-Language', $this->defaultLocale);
+        $locale = $request->headers->get('Accept-Language', $this->locale);
 
         // Ensure that given locale is supported, if not fallback to default.
         if (!in_array($locale, self::SUPPORTED_LOCALES, true)) {
-            $locale = $this->defaultLocale;
+            $locale = $this->locale;
         }
 
         $request->setLocale($locale);
