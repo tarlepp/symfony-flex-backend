@@ -23,7 +23,7 @@ use Throwable;
  * @ORM\Table(
  *      name="role",
  *      uniqueConstraints={
- * @ORM\UniqueConstraint(name="uq_role", columns={"role"}),
+ *          @ORM\UniqueConstraint(name="uq_role", columns={"role"}),
  *      },
  *  )
  * @ORM\Entity()
@@ -67,7 +67,7 @@ class Role implements EntityInterface
      * @ORM\Column(
      *      name="description",
      *      type="text",
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private string $description = '';
