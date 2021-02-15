@@ -86,14 +86,12 @@ class Role implements EntityInterface
      *      mappedBy="role",
      *  )
      */
-    private Collection $userGroups;
+    private Collection|ArrayCollection $userGroups;
 
     /**
      * Constructor.
      *
      * @param string $role The role name
-     *
-     * @throws Throwable
      */
     public function __construct(string $role)
     {
@@ -121,7 +119,7 @@ class Role implements EntityInterface
     /**
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection
+    public function getUserGroups(): Collection|ArrayCollection
     {
         return $this->userGroups;
     }
