@@ -3,13 +3,12 @@ declare(strict_types = 1);
 /**
  * /src/Rest/DTO/UserGroup/UserGroup.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO\UserGroup;
 
 use App\DTO\RestDto;
-use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as Entity;
@@ -20,10 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Class UserGroup
  *
  * @package App\DTO\UserGroup
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method self|RestDtoInterface get(string $id)
- * @method self|RestDtoInterface patch(RestDtoInterface $dto)
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
 class UserGroup extends RestDto
@@ -72,13 +69,11 @@ class UserGroup extends RestDto
     }
 
     /**
-     * Method to load DTO data from specified entity.
+     * {@inheritdoc}
      *
      * @param EntityInterface|Entity $entity
-     *
-     * @return RestDtoInterface|UserGroup
      */
-    public function load(EntityInterface $entity): RestDtoInterface
+    public function load(EntityInterface $entity): self
     {
         if ($entity instanceof Entity) {
             $this->name = $entity->getName();

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/DataFixtures/ORM/LoadApiKeyData.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DataFixtures\ORM;
@@ -26,7 +26,7 @@ use function str_pad;
  * Class LoadApiKeyData
  *
  * @package App\DataFixtures\ORM
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @psalm-suppress MissingConstructor
  */
@@ -50,8 +50,6 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
     ];
 
     /**
-     * Load data fixtures with the passed EntityManager
-     *
      * @throws Throwable
      */
     public function load(ObjectManager $manager): void
@@ -63,35 +61,26 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
         $this->manager = $manager;
 
         // Create entities
-        array_map([$this, 'createApiKey'], $this->roles->getRoles());
-
-        $this->createApiKey();
+        array_map(fn (?string $role): bool => $this->createApiKey($role), [null, ...$this->roles->getRoles()]);
 
         // Flush database changes
         $this->manager->flush();
     }
 
-    /**
-     * Get the order of this fixture
-     */
     public function getOrder(): int
     {
         return 4;
     }
 
     /**
-     * Helper method to create new ApiKey entity with specified role.
-     *
      * @throws Throwable
      */
-    private function createApiKey(?string $role = null): void
+    private function createApiKey(?string $role = null): bool
     {
         // Create new entity
-        $entity = new ApiKey();
-        $entity->setDescription('ApiKey Description: ' . ($role === null ? '' : $this->roles->getShort($role)));
-        $entity->setToken(
-            str_pad($role === null ? '' : $this->roles->getShort($role), 40, '_')
-        );
+        $entity = (new ApiKey())
+            ->setDescription('ApiKey Description: ' . ($role === null ? '' : $this->roles->getShort($role)))
+            ->setToken(str_pad($role === null ? '' : $this->roles->getShort($role), 40, '_'));
 
         $suffix = '';
 
@@ -115,5 +104,7 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
 
         // Create reference for later usage
         $this->addReference('ApiKey' . $suffix, $entity);
+
+        return true;
     }
 }

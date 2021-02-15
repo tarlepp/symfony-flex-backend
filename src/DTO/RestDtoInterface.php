@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/DTO/RestDtoInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO;
@@ -15,7 +15,7 @@ use Throwable;
  * Interface RestDtoInterface
  *
  * @package App\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface RestDtoInterface
 {

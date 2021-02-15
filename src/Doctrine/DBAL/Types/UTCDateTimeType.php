@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Doctrine/DBAL/Types/UTCDateTimeType.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Doctrine\DBAL\Types;
@@ -20,7 +20,7 @@ use Doctrine\DBAL\Types\DateTimeType;
  * @see http://doctrine-orm.readthedocs.org/en/latest/cookbook/working-with-datetime.html
  *
  * @package App\Doctrine\DBAL\Types
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UTCDateTimeType extends DateTimeType
 {
