@@ -130,7 +130,7 @@ class UserGroup implements EntityInterface, Stringable
      *      name="user_has_user_group",
      *  )
      */
-    private Collection $users;
+    private Collection|ArrayCollection $users;
 
     /**
      * @var Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
@@ -147,13 +147,8 @@ class UserGroup implements EntityInterface, Stringable
      *      name="api_key_has_user_group",
      *  )
      */
-    private Collection $apiKeys;
+    private Collection|ArrayCollection $apiKeys;
 
-    /**
-     * UserGroup constructor.
-     *
-     * @throws Throwable
-     */
     public function __construct()
     {
         $this->id = $this->createUuid();
@@ -199,7 +194,7 @@ class UserGroup implements EntityInterface, Stringable
     /**
      * @return Collection<int, User>|ArrayCollection<int, User>
      */
-    public function getUsers(): Collection
+    public function getUsers(): Collection|ArrayCollection
     {
         return $this->users;
     }
@@ -207,7 +202,7 @@ class UserGroup implements EntityInterface, Stringable
     /**
      * @return Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
      */
-    public function getApiKeys(): Collection
+    public function getApiKeys(): Collection|ArrayCollection
     {
         return $this->apiKeys;
     }
