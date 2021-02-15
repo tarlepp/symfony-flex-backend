@@ -194,7 +194,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *      options={
      *          "comment": "User language for translations",
-     *      }
+     *      },
      *  )
      */
     private string $language = Localization::DEFAULT_LANGUAGE;
@@ -218,7 +218,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *      options={
      *          "comment": "User locale for number, time, date, etc. formatting.",
-     *      }
+     *      },
      *  )
      */
     private string $locale = Localization::DEFAULT_LOCALE;
