@@ -86,11 +86,9 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param string|object $user
-     *
      * @throws ORMException
      */
-    private function getUser($user): ?User
+    private function getUser(string|object $user): ?User
     {
         $output = null;
 
