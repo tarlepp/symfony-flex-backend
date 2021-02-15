@@ -30,36 +30,18 @@ use function substr;
  *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @property array<int, string> $ignoredRoutes
  */
 class RequestLogSubscriber implements EventSubscriberInterface
 {
-    private RequestLogger $requestLogger;
-    private UserRepository $userRepository;
-    private LoggerInterface $logger;
-    private UserTypeIdentification $userService;
-
-    /**
-     * @var array<int, string>
-     */
-    private array $ignoredRoutes;
-
-    /**
-     * RequestSubscriber constructor.
-     *
-     * @param array<int, string> $ignoredRoutes
-     */
     public function __construct(
-        RequestLogger $requestLogger,
-        UserRepository $userRepository,
-        LoggerInterface $logger,
-        UserTypeIdentification $userService,
-        array $ignoredRoutes
+        private RequestLogger $requestLogger,
+        private UserRepository $userRepository,
+        private LoggerInterface $logger,
+        private UserTypeIdentification $userService,
+        private array $ignoredRoutes,
     ) {
-        $this->requestLogger = $requestLogger;
-        $this->userRepository = $userRepository;
-        $this->logger = $logger;
-        $this->userService = $userService;
-        $this->ignoredRoutes = $ignoredRoutes;
     }
 
     /**
