@@ -13,7 +13,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
 use App\Security\SecurityUser;
-use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -86,7 +85,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @throws ORMException
+     * @throws Throwable
      */
     private function getUser(string|object $user): ?User
     {
