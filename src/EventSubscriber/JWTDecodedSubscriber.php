@@ -26,13 +26,10 @@ use function implode;
  */
 class JWTDecodedSubscriber implements EventSubscriberInterface
 {
-    private RequestStack $requestStack;
-    private LoggerInterface $logger;
-
-    public function __construct(RequestStack $requestStack, LoggerInterface $logger)
-    {
-        $this->requestStack = $requestStack;
-        $this->logger = $logger;
+    public function __construct(
+        private RequestStack $requestStack,
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
