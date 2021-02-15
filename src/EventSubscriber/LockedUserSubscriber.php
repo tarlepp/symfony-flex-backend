@@ -31,13 +31,10 @@ use function is_string;
  */
 class LockedUserSubscriber implements EventSubscriberInterface
 {
-    private UserRepository $userRepository;
-    private LogLoginFailureResource $logLoginFailureResource;
-
-    public function __construct(UserRepository $userRepository, LogLoginFailureResource $logLoginFailureResource)
-    {
-        $this->userRepository = $userRepository;
-        $this->logLoginFailureResource = $logLoginFailureResource;
+    public function __construct(
+        private UserRepository $userRepository,
+        private LogLoginFailureResource $logLoginFailureResource,
+    ) {
     }
 
     /**
