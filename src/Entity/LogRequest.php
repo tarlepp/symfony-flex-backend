@@ -150,11 +150,6 @@ class LogRequest implements EntityInterface
     private bool $masterRequest;
 
     /**
-     * @var array<int, string>
-     */
-    private array $sensitiveProperties;
-
-    /**
      * LogRequest constructor.
      *
      * @param array<int, string> $sensitiveProperties
@@ -162,14 +157,13 @@ class LogRequest implements EntityInterface
      * @throws Throwable
      */
     public function __construct(
-        array $sensitiveProperties,
+        private array $sensitiveProperties,
         ?Request $request = null,
         ?Response $response = null,
         ?User $user = null,
         ?ApiKey $apiKey = null,
         ?bool $masterRequest = null
     ) {
-        $this->sensitiveProperties = $sensitiveProperties;
         $this->id = $this->createUuid();
         $this->user = $user;
         $this->apiKey = $apiKey;
