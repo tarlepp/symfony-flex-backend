@@ -87,11 +87,6 @@ class Role implements EntityInterface
      */
     private Collection | ArrayCollection $userGroups;
 
-    /**
-     * Constructor.
-     *
-     * @param string $role The role name
-     */
     public function __construct(string $role)
     {
         $this->id = $role;

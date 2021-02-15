@@ -264,11 +264,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      */
     private string $plainPassword = '';
 
-    /**
-     * User constructor.
-     *
-     * @throws Throwable
-     */
     public function __construct()
     {
         $this->id = $this->createUuid();
