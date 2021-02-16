@@ -13,6 +13,7 @@ use App\Resource\RoleResource;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
+use function is_string;
 use function sprintf;
 
 /**
@@ -49,15 +50,13 @@ class RoleTransformer implements DataTransformerInterface
     {
         $role = null;
 
-        if ($roleName !== null) {
-            $role = $this->resource->findOne((string)$roleName, false);
-
-            if ($role === null) {
-                throw new TransformationFailedException(sprintf(
+        if (is_string($value)) {
+            $role = $this->resource->findOne($value, false) ?? throw new TransformationFailedException(
+                sprintf(
                     'Role with name "%s" does not exist!',
-                    (string)$roleName
-                ));
-            }
+                    $value
+                ),
+            );
         }
 
         return $role;
