@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Form/Type/Traits/UserGroupChoices.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type\Traits;
@@ -16,7 +16,7 @@ use function array_map;
  * Trait UserGroupChoices
  *
  * @package App\Form\Type\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait UserGroupChoices
 {
