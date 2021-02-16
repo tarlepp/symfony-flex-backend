@@ -74,7 +74,7 @@ class ApiKeyType extends AbstractType
                     'multiple' => true,
                     'required' => true,
                     'empty_data' => '',
-                ]
+                ],
             );
 
         $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
