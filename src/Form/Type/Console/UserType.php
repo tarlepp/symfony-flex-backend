@@ -95,17 +95,11 @@ class UserType extends AbstractType
         ],
     ];
 
-    private UserGroupTransformer $userGroupTransformer;
-    private Localization $localization;
-
     public function __construct(
-        UserGroupResource $userGroupResource,
-        UserGroupTransformer $userGroupTransformer,
-        Localization $localization
+        private UserGroupResource $userGroupResource,
+        private UserGroupTransformer $userGroupTransformer,
+        private Localization $localization
     ) {
-        $this->userGroupTransformer = $userGroupTransformer;
-        $this->userGroupResource = $userGroupResource;
-        $this->localization = $localization;
     }
 
     /**
