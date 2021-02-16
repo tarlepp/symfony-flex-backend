@@ -48,19 +48,11 @@ class UserGroupType extends AbstractType
         ],
     ];
 
-    private RolesService $rolesService;
-    private RoleResource $roleResource;
-    private RoleTransformer $roleTransformer;
-
     public function __construct(
-        RolesService $rolesService,
-        RoleResource $roleResource,
-        RoleTransformer $roleTransformer
-    ) {
-        $this->rolesService = $rolesService;
-        $this->roleResource = $roleResource;
-        $this->roleTransformer = $roleTransformer;
-    }
+        private RolesService $rolesService,
+        private RoleResource $roleResource,
+        private RoleTransformer $roleTransformer
+    ) { }
 
     /**
      * {@inheritdoc}
