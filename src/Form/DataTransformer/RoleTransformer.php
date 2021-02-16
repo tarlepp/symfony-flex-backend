@@ -50,17 +50,13 @@ class RoleTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value): ?Role
     {
-        $role = null;
-
-        if (is_string($value)) {
-            $role = $this->resource->findOne($value, false) ?? throw new TransformationFailedException(
+        return is_string($value)
+            ? $this->resource->findOne($value, false) ?? throw new TransformationFailedException(
                 sprintf(
                     'Role with name "%s" does not exist!',
                     $value
                 ),
-            );
-        }
-
-        return $role;
+            )
+            : null;
     }
 }

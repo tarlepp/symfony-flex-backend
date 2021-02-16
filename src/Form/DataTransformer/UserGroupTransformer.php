@@ -15,7 +15,6 @@ use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
 use function array_map;
-use function array_values;
 use function is_array;
 use function sprintf;
 
@@ -37,25 +36,28 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
+     * Transforms an array of objects (UserGroup) to an array of strings
+     * (UserGroup id).
+     *
      * @psalm-param array<int, string|UserGroup>|mixed $value
      * @psalm-return array<int, string>
      */
     public function transform($value): array
     {
-        $output = [];
-
-        if (is_array($value)) {
-            $iterator = static fn (UserGroup | Stringable $userGroup): string =>
-                $userGroup instanceof UserGroup ? $userGroup->getId() : (string)$userGroup;
-
-            $output = array_values(array_map('\strval', array_map($iterator, $value)));
-        }
-
-        return $output;
+        return is_array($value)
+            ? array_map(
+                static fn (UserGroup | Stringable $userGroup): string =>
+                    $userGroup instanceof UserGroup ? $userGroup->getId() : (string)$userGroup,
+                $value,
+            )
+            : [];
     }
 
     /**
      * {@inheritdoc}
+     *
+     * Transforms an array of strings (UserGroup id) to an array of objects
+     * (UserGroup).
      *
      * @psalm-param array<int, string>|mixed $value
      * @psalm-return array<int, UserGroup>|null
@@ -64,15 +66,14 @@ class UserGroupTransformer implements DataTransformerInterface
      */
     public function reverseTransform($value): ?array
     {
-        $output = null;
-
-        if (is_array($value)) {
-            $iterator = fn (string $groupId): UserGroup => $this->resource->findOne($groupId) ??
-                throw new TransformationFailedException(sprintf('User group with id "%s" does not exist!', $groupId));
-
-            $output = array_values(array_map($iterator, $value));
-        }
-
-        return $output;
+        return is_array($value)
+            ? array_map(
+                fn (string $groupId): UserGroup => $this->resource->findOne($groupId, false) ??
+                    throw new TransformationFailedException(
+                        sprintf('User group with id "%s" does not exist!', $groupId),
+                    ),
+                $value,
+            )
+            : null;
     }
 }
