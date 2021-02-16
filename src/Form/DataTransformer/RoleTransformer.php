@@ -29,24 +29,23 @@ class RoleTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms an object (Role) to a string (Role id).
+     * {@inheritDoc}
      *
-     * @param Role|mixed $role
+     * Transforms an object (Role) to a string (Role id).
      */
-    public function transform($role): string
+    public function transform($value): string
     {
-        return $role instanceof Role ? $role->getId() : '';
+        return $value instanceof Role ? $value->getId() : '';
     }
 
     /**
+     * {@inheritDoc}
+     *
      * Transforms a string (Role id) to an object (Role).
      *
-     * @param string|mixed $roleName
-     *
-     * @throws TransformationFailedException if object (issue) is not found
      * @throws Throwable
      */
-    public function reverseTransform($roleName): ?Role
+    public function reverseTransform($value): ?Role
     {
         $role = null;
 
