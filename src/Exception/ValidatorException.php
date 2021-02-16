@@ -9,12 +9,14 @@ declare(strict_types = 1);
 namespace App\Exception;
 
 use App\Exception\interfaces\ClientErrorInterface;
+use App\Exception\models\ValidatorError;
 use App\Utils\JSON;
 use JsonException;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException as BaseValidatorException;
-use function str_replace;
+use function array_map;
+use function iterator_to_array;
 
 /**
  * Class ValidatorException
@@ -25,25 +27,19 @@ use function str_replace;
 class ValidatorException extends BaseValidatorException implements ClientErrorInterface
 {
     /**
-     * ValidatorException constructor.
-     *
      * @throws JsonException
      */
     public function __construct(string $target, ConstraintViolationListInterface $errors)
     {
-        $output = [];
-
-        /** @var ConstraintViolationInterface $error */
-        foreach ($errors as $error) {
-            $output[] = [
-                'message' => $error->getMessage(),
-                'propertyPath' => $error->getPropertyPath(),
-                'target' => str_replace('\\', '.', $target),
-                'code' => $error->getCode(),
-            ];
-        }
-
-        parent::__construct(JSON::encode($output));
+        parent::__construct(
+            JSON::encode(
+                array_map(
+                    static fn (ConstraintViolationInterface $error): ValidatorError =>
+                        new ValidatorError($error, $target),
+                    iterator_to_array($errors),
+                ),
+            ),
+        );
     }
 
     public function getStatusCode(): int
