@@ -87,7 +87,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
     /**
      * @throws Throwable
      */
-    private function getUser(string|object $user): ?User
+    private function getUser(string | object $user): ?User
     {
         $output = null;
 
