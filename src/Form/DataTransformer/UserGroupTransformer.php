@@ -37,7 +37,8 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @psalm-return  array<int, string>
+     * @psalm-param array<int, string|UserGroup>|mixed $value
+     * @psalm-return array<int, string>
      */
     public function transform($value): array
     {
@@ -55,7 +56,8 @@ class UserGroupTransformer implements DataTransformerInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<int, UserGroup>|null
+     * @psalm-param array<int, string>|mixed $value
+     * @psalm-return array<int, UserGroup>|null
      *
      * @throws Throwable
      */

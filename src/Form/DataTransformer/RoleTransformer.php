@@ -34,7 +34,7 @@ class RoleTransformer implements DataTransformerInterface
      *
      * Transforms an object (Role) to a string (Role id).
      *
-     * @psalm-return  string
+     * @psalm-param Role|mixed $value
      */
     public function transform($value): string
     {
