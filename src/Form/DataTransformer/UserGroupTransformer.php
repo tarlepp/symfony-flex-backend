@@ -67,19 +67,8 @@ class UserGroupTransformer implements DataTransformerInterface
         $output = null;
 
         if (is_array($value)) {
-            $iterator = function (string $groupId): UserGroup {
-                /** @var UserGroup|null $group */
-                $group = $this->resource->findOne($groupId);
-
-                if ($group === null) {
-                    throw new TransformationFailedException(sprintf(
-                        'User group with id "%s" does not exist!',
-                        $groupId
-                    ));
-                }
-
-                return $group;
-            };
+            $iterator = fn (string $groupId): UserGroup => $this->resource->findOne($groupId) ??
+                throw new TransformationFailedException(sprintf('User group with id "%s" does not exist!', $groupId));
 
             $output = array_values(array_map($iterator, $value));
         }
