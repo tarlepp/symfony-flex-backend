@@ -10,8 +10,10 @@ namespace App\Form\DataTransformer;
 
 use App\Entity\UserGroup;
 use App\Resource\UserGroupResource;
+use Stringable;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
+use Throwable;
 use function array_map;
 use function array_values;
 use function is_array;
@@ -33,15 +35,11 @@ class UserGroupTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms an object (Role) to a string (Role id).
+     * {@inheritdoc}
      *
-     * @param array<int, string|UserGroup>|mixed $userGroups
-     *
-     * @return array<int, string>
-     *
-     * @psalm-suppress MissingClosureParamType
+     * @psalm-return  array<int, string>
      */
-    public function transform($userGroups): array
+    public function transform($value): array
     {
         $output = [];
 
@@ -55,19 +53,17 @@ class UserGroupTransformer implements DataTransformerInterface
     }
 
     /**
-     * Transforms a string (Role id) to an object (Role).
-     *
-     * @param array<int, string>|mixed $userGroups
+     * {@inheritdoc}
      *
      * @return array<int, UserGroup>|null
      *
-     * @throws TransformationFailedException if object (issue) is not found
+     * @throws Throwable
      */
-    public function reverseTransform($userGroups): ?array
+    public function reverseTransform($value): ?array
     {
         $output = null;
 
-        if (is_array($userGroups)) {
+        if (is_array($value)) {
             $iterator = function (string $groupId): UserGroup {
                 /** @var UserGroup|null $group */
                 $group = $this->resource->findOne($groupId);
@@ -82,7 +78,7 @@ class UserGroupTransformer implements DataTransformerInterface
                 return $group;
             };
 
-            $output = array_values(array_map($iterator, $userGroups));
+            $output = array_values(array_map($iterator, $value));
         }
 
         return $output;

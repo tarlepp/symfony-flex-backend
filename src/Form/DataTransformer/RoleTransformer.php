@@ -33,6 +33,8 @@ class RoleTransformer implements DataTransformerInterface
      * {@inheritdoc}
      *
      * Transforms an object (Role) to a string (Role id).
+     *
+     * @psalm-return  string
      */
     public function transform($value): string
     {
