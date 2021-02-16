@@ -24,7 +24,6 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Throwable;
 
 /**
  * Class User
@@ -194,7 +193,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *      options={
      *          "comment": "User language for translations",
-     *      }
+     *      },
      *  )
      */
     private string $language = Localization::DEFAULT_LANGUAGE;
@@ -218,7 +217,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *      options={
      *          "comment": "User locale for number, time, date, etc. formatting.",
-     *      }
+     *      },
      *  )
      */
     private string $locale = Localization::DEFAULT_LOCALE;
@@ -264,11 +263,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      */
     private string $plainPassword = '';
 
-    /**
-     * User constructor.
-     *
-     * @throws Throwable
-     */
     public function __construct()
     {
         $this->id = $this->createUuid();

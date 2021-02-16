@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Traits/UserRelations.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Class UserRelations
  *
  * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait UserRelations
 {
@@ -39,10 +39,10 @@ trait UserRelations
      *      inversedBy="users",
      *  )
      * @ORM\JoinTable(
-     *      name="user_has_user_group"
+     *      name="user_has_user_group",
      *  )
      */
-    protected Collection $userGroups;
+    protected Collection | ArrayCollection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
@@ -56,7 +56,7 @@ trait UserRelations
      *      mappedBy="user",
      *  )
      */
-    protected Collection $logsRequest;
+    protected Collection | ArrayCollection $logsRequest;
 
     /**
      * @var Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
@@ -70,7 +70,7 @@ trait UserRelations
      *      mappedBy="user",
      *  )
      */
-    protected Collection $logsLogin;
+    protected Collection | ArrayCollection $logsLogin;
 
     /**
      * @var Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
@@ -84,7 +84,7 @@ trait UserRelations
      *      mappedBy="user",
      *  )
      */
-    protected Collection $logsLoginFailure;
+    protected Collection | ArrayCollection $logsLoginFailure;
 
     /**
      * Getter for roles.
@@ -101,7 +101,7 @@ trait UserRelations
      *      "set.UserProfile",
      *  })
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getRoles(): array
     {
@@ -115,7 +115,7 @@ trait UserRelations
      *
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection
+    public function getUserGroups(): Collection | ArrayCollection
     {
         return $this->userGroups;
     }
@@ -125,7 +125,7 @@ trait UserRelations
      *
      * @return Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
-    public function getLogsRequest()
+    public function getLogsRequest(): Collection | ArrayCollection
     {
         return $this->logsRequest;
     }
@@ -135,7 +135,7 @@ trait UserRelations
      *
      * @return Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
      */
-    public function getLogsLogin()
+    public function getLogsLogin(): Collection | ArrayCollection
     {
         return $this->logsLogin;
     }
@@ -145,7 +145,7 @@ trait UserRelations
      *
      * @return Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
      */
-    public function getLogsLoginFailure()
+    public function getLogsLoginFailure(): Collection | ArrayCollection
     {
         return $this->logsLoginFailure;
     }

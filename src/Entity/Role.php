@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Role.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -15,7 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Throwable;
 
 /**
  * Class Role
@@ -23,13 +22,13 @@ use Throwable;
  * @ORM\Table(
  *      name="role",
  *      uniqueConstraints={
- * @ORM\UniqueConstraint(name="uq_role", columns={"role"}),
+ *          @ORM\UniqueConstraint(name="uq_role", columns={"role"}),
  *      },
  *  )
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class Role implements EntityInterface
 {
@@ -67,7 +66,7 @@ class Role implements EntityInterface
      * @ORM\Column(
      *      name="description",
      *      type="text",
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private string $description = '';
@@ -86,15 +85,8 @@ class Role implements EntityInterface
      *      mappedBy="role",
      *  )
      */
-    private Collection $userGroups;
+    private Collection | ArrayCollection $userGroups;
 
-    /**
-     * Constructor.
-     *
-     * @param string $role The role name
-     *
-     * @throws Throwable
-     */
     public function __construct(string $role)
     {
         $this->id = $role;
@@ -121,7 +113,7 @@ class Role implements EntityInterface
     /**
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection
+    public function getUserGroups(): Collection | ArrayCollection
     {
         return $this->userGroups;
     }

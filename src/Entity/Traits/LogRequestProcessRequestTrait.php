@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Traits/LogRequestProcessRequestTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -28,7 +28,7 @@ use function strpos;
  * Trait LogRequestProcessRequestTrait
  *
  * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @method array getSensitiveProperties();
  */
@@ -283,7 +283,7 @@ trait LogRequestProcessRequestTrait
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, string>
      */
     public function getHeaders(): array
     {
@@ -291,7 +291,7 @@ trait LogRequestProcessRequestTrait
     }
 
     /**
-     * @return mixed[]
+     * @return array<string, string>
      */
     public function getParameters(): array
     {
@@ -354,12 +354,7 @@ trait LogRequestProcessRequestTrait
         // Clean possible sensitive data from parameters
         array_walk(
             $rawHeaders,
-            /**
-             * @param mixed $value
-             */
-            function (&$value, string $key): void {
-                $this->cleanParameters($value, $key);
-            }
+            fn (mixed & $value, string $key) => $this->cleanParameters($value, $key),
         );
 
         $this->headers = $rawHeaders;
@@ -369,12 +364,7 @@ trait LogRequestProcessRequestTrait
         // Clean possible sensitive data from parameters
         array_walk(
             $rawParameters,
-            /**
-             * @param mixed $value
-             */
-            function (&$value, string $key): void {
-                $this->cleanParameters($value, $key);
-            }
+            fn (mixed & $value, string $key) => $this->cleanParameters($value, $key),
         );
 
         $this->parameters = $rawParameters;
@@ -398,9 +388,9 @@ trait LogRequestProcessRequestTrait
     private function determineAction(Request $request): string
     {
         $rawAction = $request->get('_controller', '');
-        $rawAction = explode(strpos($rawAction, '::') ? '::' : ':', $rawAction);
+        $rawAction = (array)explode(strpos($rawAction, '::') ? '::' : ':', $rawAction);
 
-        return $rawAction[1] ?? '';
+        return (string)($rawAction[1] ?? '');
     }
 
     /**
@@ -421,9 +411,7 @@ trait LogRequestProcessRequestTrait
             try {
                 /** @var array<string, mixed> $output */
                 $output = JSON::decode($rawContent, true);
-            } catch (JsonException $error) {
-                (static fn (JsonException $error): JsonException => $error)($error);
-
+            } catch (JsonException) {
                 // Oh noes content isn't JSON so just parse it
                 $output = [];
 
@@ -436,10 +424,8 @@ trait LogRequestProcessRequestTrait
 
     /**
      * Helper method to clean parameters / header array of any sensitive data.
-     *
-     * @param mixed $value
      */
-    private function cleanParameters(&$value, string $key): void
+    private function cleanParameters(mixed &$value, string $key): void
     {
         // What keys we should replace so that any sensitive data is not logged
         $replacements = array_fill_keys($this->sensitiveProperties, $this->replaceValue);
@@ -456,12 +442,7 @@ trait LogRequestProcessRequestTrait
         if (is_array($value)) {
             array_walk(
                 $value,
-                /**
-                 * @param mixed $value
-                 */
-                function (&$value, string $key): void {
-                    $this->cleanParameters($value, $key);
-                }
+                fn (mixed & $value, string $key) => $this->cleanParameters($value, $key),
             );
         }
     }
