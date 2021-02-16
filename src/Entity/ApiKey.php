@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/ApiKey.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -38,13 +38,13 @@ use function random_int;
  * @ORM\Table(
  *      name="api_key",
  *      uniqueConstraints={
- * @ORM\UniqueConstraint(name="uq_token", columns={"token"}),
+ *          @ORM\UniqueConstraint(name="uq_token", columns={"token"}),
  *      },
  *  )
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKey implements EntityInterface, UserGroupAwareInterface
 {
@@ -57,7 +57,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      "ApiKey",
      *      "ApiKey.id",
      *
-     *      "LogRequest.apiKey"
+     *      "LogRequest.apiKey",
      *  })
      *
      * @ORM\Column(
@@ -89,7 +89,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      name="token",
      *      type="string",
      *      length=40,
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
     private string $token = '';
@@ -119,10 +119,10 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      inversedBy="apiKeys",
      *  )
      * @ORM\JoinTable(
-     *      name="api_key_has_user_group"
+     *      name="api_key_has_user_group",
      *  )
      */
-    private Collection $userGroups;
+    private Collection | ArrayCollection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
@@ -136,7 +136,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      mappedBy="apiKey",
      *  )
      */
-    private Collection $logsRequest;
+    private Collection | ArrayCollection $logsRequest;
 
     /**
      * ApiKey constructor.
@@ -202,7 +202,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection
+    public function getUserGroups(): Collection | ArrayCollection
     {
         return $this->userGroups;
     }
@@ -212,7 +212,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @return Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
-    public function getLogsRequest(): Collection
+    public function getLogsRequest(): Collection | ArrayCollection
     {
         return $this->logsRequest;
     }
@@ -236,10 +236,10 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
                         [RolesService::ROLE_API],
                         $this->userGroups
                             ->map(static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
-                            ->toArray()
-                    )
-                )
-            )
+                            ->toArray(),
+                    ),
+                ),
+            ),
         );
     }
 
