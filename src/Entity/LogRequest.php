@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/LogRequest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -27,18 +27,18 @@ use function mb_strlen;
  * @ORM\Table(
  *      name="log_request",
  *      indexes={
- * @ORM\Index(name="user_id", columns={"user_id"}),
- * @ORM\Index(name="api_key_id", columns={"api_key_id"}),
- * @ORM\Index(name="request_date", columns={"date"}),
- *      }
+ *          @ORM\Index(name="user_id", columns={"user_id"}),
+ *          @ORM\Index(name="api_key_id", columns={"api_key_id"}),
+ *          @ORM\Index(name="request_date", columns={"date"}),
+ *      },
  *  )
  * @ORM\Entity(
- *      readOnly=true
+ *      readOnly=true,
  *  )
  * @ORM\HasLifecycleCallbacks()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LogRequest implements EntityInterface
 {
@@ -77,7 +77,7 @@ class LogRequest implements EntityInterface
      *      inversedBy="logsRequest",
      *  )
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(
+     *      @ORM\JoinColumn(
      *          name="user_id",
      *          referencedColumnName="id",
      *          nullable=true,
@@ -97,7 +97,7 @@ class LogRequest implements EntityInterface
      *      inversedBy="logsRequest",
      *  )
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(
+     *      @ORM\JoinColumn(
      *          name="api_key_id",
      *          referencedColumnName="id",
      *          nullable=true,
@@ -150,11 +150,6 @@ class LogRequest implements EntityInterface
     private bool $masterRequest;
 
     /**
-     * @var array<int, string>
-     */
-    private array $sensitiveProperties;
-
-    /**
      * LogRequest constructor.
      *
      * @param array<int, string> $sensitiveProperties
@@ -162,14 +157,13 @@ class LogRequest implements EntityInterface
      * @throws Throwable
      */
     public function __construct(
-        array $sensitiveProperties,
+        private array $sensitiveProperties,
         ?Request $request = null,
         ?Response $response = null,
         ?User $user = null,
         ?ApiKey $apiKey = null,
         ?bool $masterRequest = null
     ) {
-        $this->sensitiveProperties = $sensitiveProperties;
         $this->id = $this->createUuid();
         $this->user = $user;
         $this->apiKey = $apiKey;

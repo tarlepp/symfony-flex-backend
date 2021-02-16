@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/DateDimension.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -26,15 +26,15 @@ use function floor;
  * @ORM\Table(
  *      name="date_dimension",
  *      indexes={
- * @ORM\Index(name="date", columns={"date"}),
- *      }
+ *          @ORM\Index(name="date", columns={"date"}),
+ *      },
  *  )
  * @ORM\Entity(
- *      readOnly=true
+ *      readOnly=true,
  *  )
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DateDimension implements EntityInterface
 {
@@ -327,6 +327,6 @@ class DateDimension implements EntityInterface
     {
         $output = DateTimeImmutable::createFromFormat('U', (string)$this->getUnixTime(), new DateTimeZone('UTC'));
 
-        return $output === false ? new DateTimeImmutable('now', new DateTimeZone('UTC')) : $output;
+        return $output === false ? new DateTimeImmutable(timezone: new DateTimeZone('UTC')) : $output;
     }
 }
