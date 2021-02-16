@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Form/Type/Console/UserType.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type\Console;
@@ -28,7 +28,7 @@ use function array_map;
  * Class UserType
  *
  * @package App\Form\Type\Console
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserType extends AbstractType
 {
