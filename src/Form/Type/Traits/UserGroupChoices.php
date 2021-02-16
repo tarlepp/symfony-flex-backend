@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Form\Type\Traits;
 
 use App\Entity\UserGroup;
-use App\Resource\UserGroupResource;
 use Throwable;
 use function array_map;
 
@@ -21,8 +20,6 @@ use function array_map;
  */
 trait UserGroupChoices
 {
-    protected UserGroupResource $userGroupResource;
-
     /**
      * Method to create choices array for user groups.
      *

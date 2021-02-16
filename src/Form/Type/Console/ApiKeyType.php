@@ -48,12 +48,10 @@ class ApiKeyType extends AbstractType
         ],
     ];
 
-    private UserGroupTransformer $userGroupTransformer;
-
-    public function __construct(UserGroupResource $userGroupResource, UserGroupTransformer $userGroupTransformer)
-    {
-        $this->userGroupResource = $userGroupResource;
-        $this->userGroupTransformer = $userGroupTransformer;
+    public function __construct(
+        private UserGroupResource $userGroupResource,
+        private UserGroupTransformer $userGroupTransformer,
+    ) {
     }
 
     /**
