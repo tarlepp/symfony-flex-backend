@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Form/DataTransformer/UserGroupTransformer.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\DataTransformer;
@@ -21,7 +21,7 @@ use function sprintf;
  * Class UserGroupTransformer
  *
  * @package App\Form\Console\DataTransformer
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserGroupTransformer implements DataTransformerInterface
 {
