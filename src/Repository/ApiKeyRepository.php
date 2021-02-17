@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Repository/ApiKeyRepository.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -14,7 +14,7 @@ use App\Entity\ApiKey as Entity;
  * Class ApiKeyRepository
  *
  * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @codingStandardsIgnoreStart
  *

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Repository/DateDimensionRepository.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -14,7 +14,7 @@ use App\Entity\DateDimension as Entity;
  * Class DateDimensionRepository
  *
  * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @codingStandardsIgnoreStart
  *

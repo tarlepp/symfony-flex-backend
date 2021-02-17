@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Repository/BaseRepository.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -28,7 +28,7 @@ use function spl_object_hash;
  * Class BaseRepository
  *
  * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class BaseRepository implements BaseRepositoryInterface
 {
