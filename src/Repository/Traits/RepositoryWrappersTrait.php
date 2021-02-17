@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Repository/Traits/RepositoryWrappersTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository\Traits;
@@ -21,7 +21,7 @@ use UnexpectedValueException;
  * Class RepositoryWrappersTrait
  *
  * @package App\Repository\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait RepositoryWrappersTrait
 {
