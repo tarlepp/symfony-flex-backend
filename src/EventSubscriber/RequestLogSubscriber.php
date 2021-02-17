@@ -22,7 +22,7 @@ use Throwable;
 use function array_filter;
 use function count;
 use function in_array;
-use function strpos;
+use function str_contains;
 use function substr;
 
 /**
@@ -30,36 +30,18 @@ use function substr;
  *
  * @package App\EventSubscriber
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @property array<int, string> $ignoredRoutes
  */
 class RequestLogSubscriber implements EventSubscriberInterface
 {
-    private RequestLogger $requestLogger;
-    private UserRepository $userRepository;
-    private LoggerInterface $logger;
-    private UserTypeIdentification $userService;
-
-    /**
-     * @var array<int, string>
-     */
-    private array $ignoredRoutes;
-
-    /**
-     * RequestSubscriber constructor.
-     *
-     * @param array<int, string> $ignoredRoutes
-     */
     public function __construct(
-        RequestLogger $requestLogger,
-        UserRepository $userRepository,
-        LoggerInterface $logger,
-        UserTypeIdentification $userService,
-        array $ignoredRoutes
+        private RequestLogger $requestLogger,
+        private UserRepository $userRepository,
+        private LoggerInterface $logger,
+        private UserTypeIdentification $userService,
+        private array $ignoredRoutes,
     ) {
-        $this->requestLogger = $requestLogger;
-        $this->userRepository = $userRepository;
-        $this->logger = $logger;
-        $this->userService = $userService;
-        $this->ignoredRoutes = $ignoredRoutes;
     }
 
     /**
@@ -87,17 +69,14 @@ class RequestLogSubscriber implements EventSubscriberInterface
         $request = $event->getRequest();
         $path = $request->getPathInfo();
 
+        $filter = static fn (string $route): bool =>
+            str_contains($route, '/*') && str_contains($path, substr($route, 0, -2));
+
         // We don't want to log OPTIONS requests, /_profiler* -path, ignored routes and wildcard ignored routes
         if ($request->getRealMethod() === Request::METHOD_OPTIONS
-            || strpos($path, '/_profiler') !== false
+            || str_contains($path, '/_profiler')
             || in_array($path, $this->ignoredRoutes, true)
-            || count(
-                array_filter(
-                    $this->ignoredRoutes,
-                    static fn ($route): bool => strpos($route, '/*') !== false
-                        && strpos($path, substr($route, 0, -2)) !== false
-                )
-            ) !== 0
+            || count(array_filter($this->ignoredRoutes, $filter)) !== 0
         ) {
             return;
         }

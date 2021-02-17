@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/EventListener/UserEntityEventListener.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventListener;
@@ -19,18 +19,13 @@ use function strlen;
  * Class UserEntityEventListener
  *
  * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserEntityEventListener
 {
-    private UserPasswordEncoderInterface $userPasswordEncoder;
-
-    /**
-     * Constructor of the class.
-     */
-    public function __construct(UserPasswordEncoderInterface $userPasswordEncoder)
-    {
-        $this->userPasswordEncoder = $userPasswordEncoder;
+    public function __construct(
+        private UserPasswordEncoderInterface $userPasswordEncoder,
+    ) {
     }
 
     public function prePersist(LifecycleEventArgs $event): void
