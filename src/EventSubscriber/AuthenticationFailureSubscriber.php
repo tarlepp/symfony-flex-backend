@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/EventSubscriber/AuthenticationFailureSubscriber.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -20,17 +20,14 @@ use function is_string;
  * Class AuthenticationFailureSubscriber
  *
  * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AuthenticationFailureSubscriber implements EventSubscriberInterface
 {
-    private LoginLogger $loginLogger;
-    private UserRepository $userRepository;
-
-    public function __construct(LoginLogger $loginLogger, UserRepository $userRepository)
-    {
-        $this->loginLogger = $loginLogger;
-        $this->userRepository = $userRepository;
+    public function __construct(
+        private LoginLogger $loginLogger,
+        private UserRepository $userRepository,
+    ) {
     }
 
     /**
