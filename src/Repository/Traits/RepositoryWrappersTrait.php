@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\QueryBuilder;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
-use Throwable;
 use UnexpectedValueException;
 
 /**
@@ -28,9 +27,7 @@ trait RepositoryWrappersTrait
     {
         try {
             $referenceId = UuidHelper::fromString($id);
-        } catch (InvalidUuidStringException $exception) {
-            (static fn (Throwable $exception): string => (string)$exception)($exception);
-
+        } catch (InvalidUuidStringException) {
             $referenceId = $id;
         }
 
