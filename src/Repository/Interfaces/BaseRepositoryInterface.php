@@ -16,6 +16,7 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\TransactionRequiredException;
 use InvalidArgumentException;
 use Throwable;
 
@@ -43,11 +44,9 @@ interface BaseRepositoryInterface
      * Gets a reference to the entity identified by the given type and
      * identifier without actually loading it, if the entity is not yet loaded.
      *
-     * @return object|null
-     *
      * @throws ORMException
      */
-    public function getReference(string $id);
+    public function getReference(string $id): ?object;
 
     /**
      * Gets all association mappings of the class.
@@ -73,6 +72,10 @@ interface BaseRepositoryInterface
 
     /**
      * Wrapper for default Doctrine repository find method.
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
      */
     public function find(string $id, ?int $lockMode = null, ?int $lockVersion = null): ?EntityInterface;
 
@@ -80,13 +83,11 @@ interface BaseRepositoryInterface
      * Advanced version of find method, with this you can process query as you
      * like, eg. add joins and callbacks to modify / optimize current query.
      *
-     * @param string|int|null $hydrationMode
-     *
-     * @return array<int|string, mixed>|EntityInterface
+     * @psalm-return array<int|string, mixed>|EntityInterface|null
      *
      * @throws NonUniqueResultException
      */
-    public function findAdvanced(string $id, $hydrationMode = null);
+    public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface;
 
     /**
      * Wrapper for default Doctrine repository findOneBy method.
@@ -94,9 +95,9 @@ interface BaseRepositoryInterface
      * @param array<int|string, string|array> $criteria
      * @param array<int, string>|null $orderBy
      *
-     * @return EntityInterface|object|null
+     * @psalm-return EntityInterface|object|null
      */
-    public function findOneBy(array $criteria, ?array $orderBy = null);
+    public function findOneBy(array $criteria, ?array $orderBy = null): ?object;
 
     /**
      * Wrapper for default Doctrine repository findBy method.
@@ -104,7 +105,7 @@ interface BaseRepositoryInterface
      * @param array<int|string, string|array> $criteria
      * @param array<int, string>|null $orderBy
      *
-     * @return array<int, EntityInterface|object>
+     * @psalm-return list<object|EntityInterface>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array;
 
@@ -129,9 +130,9 @@ interface BaseRepositoryInterface
     ): array;
 
     /**
-     * Wrapper for default Doctrine repository findBy method.
+     * Wrapper for default Doctrine repository findAll method.
      *
-     * @return array<int, EntityInterface|object>
+     * @psalm-return list<object|EntityInterface>
      */
     public function findAll(): array;
 

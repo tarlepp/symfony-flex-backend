@@ -27,10 +27,7 @@ trait RepositoryWrappersTrait
 {
     protected ManagerRegistry $managerRegistry;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getReference(string $id)
+    public function getReference(string $id): ?object
     {
         try {
             $referenceId = UuidHelper::fromString($id);
