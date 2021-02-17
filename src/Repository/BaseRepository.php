@@ -70,7 +70,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     ];
 
     /**
-     * @var array<int, array<int, callable|mixed>>
+     * @var array<int, array{0: callable, 1: array}>
      */
     private static array $callbacks = [];
 
@@ -177,8 +177,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     /**
      * Process defined callbacks for current QueryBuilder instance.
-     *
-     * @psalm-suppress PossiblyInvalidArgument
      */
     protected function processCallbacks(QueryBuilder $queryBuilder): void
     {
