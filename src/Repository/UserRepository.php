@@ -45,13 +45,10 @@ class UserRepository extends BaseRepository
      */
     protected static string $entityName = Entity::class;
 
-    private string $environment;
-
-    public function __construct(ManagerRegistry $managerRegistry, string $environment)
-    {
-        parent::__construct($managerRegistry);
-
-        $this->environment = $environment;
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+        private string $environment,
+    ) {
     }
 
     /**

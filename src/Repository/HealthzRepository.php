@@ -13,6 +13,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Throwable;
 
@@ -40,6 +41,11 @@ class HealthzRepository extends BaseRepository
      * @psalm-var class-string
      */
     protected static string $entityName = Entity::class;
+
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
 
     /**
      * Method to read value from database

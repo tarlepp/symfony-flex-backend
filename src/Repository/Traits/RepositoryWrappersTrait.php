@@ -12,7 +12,6 @@ use App\Rest\UuidHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
 use Throwable;
 use UnexpectedValueException;
@@ -25,8 +24,6 @@ use UnexpectedValueException;
  */
 trait RepositoryWrappersTrait
 {
-    protected ManagerRegistry $managerRegistry;
-
     public function getReference(string $id): ?object
     {
         try {

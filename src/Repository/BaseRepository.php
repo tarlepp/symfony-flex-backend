@@ -49,6 +49,8 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected static array $searchColumns = [];
     protected static EntityManager $entityManager;
 
+    protected ManagerRegistry $managerRegistry;
+
     /**
      * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
      *
@@ -76,11 +78,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @var array<int, string>
      */
     private static array $processedCallbacks = [];
-
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
-        $this->managerRegistry = $managerRegistry;
-    }
 
     /**
      * @psalm-return class-string

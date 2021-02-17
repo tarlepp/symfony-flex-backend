@@ -10,6 +10,7 @@ namespace App\Repository;
 
 use App\Entity\LogLoginFailure as Entity;
 use App\Entity\User;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class LogLoginFailureRepository
@@ -35,6 +36,11 @@ class LogLoginFailureRepository extends BaseRepository
      * @psalm-var class-string
      */
     protected static string $entityName = Entity::class;
+
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
 
     /**
      * Method to clear specified user login failures.

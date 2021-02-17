@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\LogLogin as Entity;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class LogLoginRepository
@@ -34,4 +35,9 @@ class LogLoginRepository extends BaseRepository
      * @psalm-var class-string
      */
     protected static string $entityName = Entity::class;
+
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
 }

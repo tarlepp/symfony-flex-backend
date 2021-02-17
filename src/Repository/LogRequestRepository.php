@@ -12,6 +12,7 @@ use App\Entity\LogRequest as Entity;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 
 /**
@@ -38,6 +39,11 @@ class LogRequestRepository extends BaseRepository
      * @psalm-var class-string
      */
     protected static string $entityName = Entity::class;
+
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
 
     /**
      * Helper method to clean history data from request_log table.

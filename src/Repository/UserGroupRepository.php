@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Repository;
 
 use App\Entity\UserGroup as Entity;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class UserGroupRepository
@@ -39,4 +40,9 @@ class UserGroupRepository extends BaseRepository
      * @var array<int, string>
      */
     protected static array $searchColumns = ['role', 'name'];
+
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
 }

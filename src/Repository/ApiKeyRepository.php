@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace App\Repository;
 
-use App\DTO\User\User;
 use App\Entity\ApiKey as Entity;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class ApiKeyRepository
@@ -35,4 +35,9 @@ class ApiKeyRepository extends BaseRepository
      * @psalm-var class-string
      */
     protected static string $entityName = Entity::class;
+
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
 }
