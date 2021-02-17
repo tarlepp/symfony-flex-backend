@@ -15,6 +15,7 @@ use App\Repository\Traits\RepositoryWrappersTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use function array_map;
 use function array_merge;
 use function array_unshift;
 use function count;
@@ -167,9 +168,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected function processJoins(QueryBuilder $queryBuilder): void
     {
         foreach (self::$joins as $joinType => $joins) {
-            foreach ($joins as $joinParameters) {
-                $queryBuilder->{$joinType}(...$joinParameters);
-            }
+            array_map(
+                static fn (array $joinParameters): QueryBuilder => $queryBuilder->{$joinType}(...$joinParameters),
+                $joins,
+            );
 
             self::$joins[$joinType] = [];
         }
