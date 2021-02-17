@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/EventSubscriber/JWTDecodedSubscriber.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -22,17 +22,14 @@ use function implode;
  * Class JWTDecodedSubscriber
  *
  * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class JWTDecodedSubscriber implements EventSubscriberInterface
 {
-    private RequestStack $requestStack;
-    private LoggerInterface $logger;
-
-    public function __construct(RequestStack $requestStack, LoggerInterface $logger)
-    {
-        $this->requestStack = $requestStack;
-        $this->logger = $logger;
+    public function __construct(
+        private RequestStack $requestStack,
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
