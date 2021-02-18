@@ -58,7 +58,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
      *
      * @return array<int, EntityInterface>
      */
-    private function normalize(string $target, $input): array
+    private function normalize(string $target, mixed $input): array
     {
         $values = is_array($input) ? $input : [$input];
 
