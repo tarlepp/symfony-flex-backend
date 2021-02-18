@@ -21,11 +21,9 @@ use function in_array;
  */
 class LocaleValidator extends ConstraintValidator
 {
-    private Localization $localization;
-
-    public function __construct(Localization $localization)
-    {
-        $this->localization = $localization;
+    public function __construct(
+        private Localization $localization,
+    ) {
     }
 
     /**
