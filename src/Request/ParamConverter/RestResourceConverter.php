@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Request/ParamConverter/RestResourceConverter.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Request\ParamConverter;
@@ -20,7 +20,7 @@ use Throwable;
  * Purpose of this param converter is to use exactly same methods and workflow as in basic REST API requests.
  *
  * @package App\Request\ParamConverter
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RestResourceConverter implements ParamConverterInterface
 {
