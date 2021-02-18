@@ -13,6 +13,11 @@ use Symfony\Component\Validator\Constraint;
 /**
  * Class Language
  *
+ * Usage example;
+ *  App\Validator\Constraints\Language()
+ *
+ * Just add that to your property as an annotation and you're good to go.
+ *
  * @Annotation
  * @Target({"PROPERTY"})
  *
@@ -21,14 +26,7 @@ use Symfony\Component\Validator\Constraint;
  */
 class Language extends Constraint
 {
-    /**
-     * Unique constant for validator constrain
-     */
     public const INVALID_LANGUAGE = '08bd61cf-ba27-45a3-9916-78c39253833a';
-
-    /**
-     * Message for validation error
-     */
     public const MESSAGE = 'This language "{{ language }}" is not valid.';
 
     /**
@@ -41,9 +39,6 @@ class Language extends Constraint
     ];
 
     /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * {@inheritdoc}
-     */
     public function getTargets(): string
     {
         return self::PROPERTY_CONSTRAINT;
