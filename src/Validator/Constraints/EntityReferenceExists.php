@@ -41,7 +41,9 @@ class EntityReferenceExists extends Constraint
         self::ENTITY_REFERENCE_EXISTS_ERROR => 'ENTITY_REFERENCE_EXISTS_ERROR',
     ];
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function getTargets(): string
     {
         return self::PROPERTY_CONSTRAINT;

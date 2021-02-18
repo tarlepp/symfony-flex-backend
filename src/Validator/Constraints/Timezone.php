@@ -38,7 +38,9 @@ class Timezone extends Constraint
         self::INVALID_TIMEZONE => 'INVALID_TIMEZONE',
     ];
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function getTargets(): string
     {
         return self::PROPERTY_CONSTRAINT;

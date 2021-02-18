@@ -38,7 +38,9 @@ class Language extends Constraint
         self::INVALID_LANGUAGE => 'INVALID_LANGUAGE',
     ];
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function getTargets(): string
     {
         return self::PROPERTY_CONSTRAINT;

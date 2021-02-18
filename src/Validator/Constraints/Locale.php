@@ -38,7 +38,9 @@ class Locale extends Constraint
         self::INVALID_LOCALE => 'INVALID_LOCALE',
     ];
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     */
     public function getTargets(): string
     {
         return self::PROPERTY_CONSTRAINT;
