@@ -30,7 +30,7 @@ class Locale extends Constraint
     public const MESSAGE = 'This locale "{{ locale }}" is not valid.';
 
     /**
-     * Error names configuration
+     * {@inheritdoc}
      *
      * @var array<string, string>
      */

@@ -30,7 +30,7 @@ class Language extends Constraint
     public const MESSAGE = 'This language "{{ language }}" is not valid.';
 
     /**
-     * Error names configuration
+     * {@inheritdoc}
      *
      * @var array<string, string>
      */
