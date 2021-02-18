@@ -21,25 +21,14 @@ use Symfony\Component\Validator\Constraint;
  */
 class EntityReferenceExists extends Constraint
 {
-    /**
-     * Unique constant for validator constrain
-     */
     public const ENTITY_REFERENCE_EXISTS_ERROR = '64888b5e-bded-449b-82ed-0cc1f73df14d';
-
-    /**
-     * Message for validation error
-     */
     public const MESSAGE_SINGLE = 'Invalid id value "{{ id }}" given for entity "{{ entity }}".';
-
-    /**
-     * Message for validation error
-     */
     public const MESSAGE_MULTIPLE = 'Invalid id values "{{ id }}" given for entity "{{ entity }}".';
 
     public string $entityClass = '';
 
     /**
-     * Error names configuration
+     * {@inheritdoc}
      *
      * @var array<string, string>
      */
@@ -48,14 +37,6 @@ class EntityReferenceExists extends Constraint
     ];
 
     /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * Returns whether the constraint can be put onto classes, properties or both.
-     *
-     * This method should return one or more of the constants
-     * Constraint::CLASS_CONSTRAINT and Constraint::PROPERTY_CONSTRAINT.
-     *
-     * @return string One or more constant values
-     */
     public function getTargets(): string
     {
         return self::PROPERTY_CONSTRAINT;
