@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/EventSubscriber/LockedUserSubscriber.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -13,7 +13,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
 use App\Security\SecurityUser;
-use Doctrine\ORM\ORMException;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -27,17 +26,14 @@ use function is_string;
  * Class LockedUserSubscriber
  *
  * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LockedUserSubscriber implements EventSubscriberInterface
 {
-    private UserRepository $userRepository;
-    private LogLoginFailureResource $logLoginFailureResource;
-
-    public function __construct(UserRepository $userRepository, LogLoginFailureResource $logLoginFailureResource)
-    {
-        $this->userRepository = $userRepository;
-        $this->logLoginFailureResource = $logLoginFailureResource;
+    public function __construct(
+        private UserRepository $userRepository,
+        private LogLoginFailureResource $logLoginFailureResource,
+    ) {
     }
 
     /**
@@ -61,11 +57,7 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     public function onAuthenticationSuccess(AuthenticationSuccessEvent $event): void
     {
-        $user = $this->getUser($event->getUser());
-
-        if ($user === null) {
-            throw new UnsupportedUserException('Unsupported user.');
-        }
+        $user = $this->getUser($event->getUser()) ?? throw new UnsupportedUserException('Unsupported user.');
 
         if (count($user->getLogsLoginFailure()) > 10) {
             throw new LockedException('Locked account.');
@@ -93,11 +85,9 @@ class LockedUserSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param string|object $user
-     *
-     * @throws ORMException
+     * @throws Throwable
      */
-    private function getUser($user): ?User
+    private function getUser(string | object $user): ?User
     {
         $output = null;
 

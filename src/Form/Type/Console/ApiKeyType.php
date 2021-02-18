@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Form/Type/Console/ApiKeyType.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type\Console;
@@ -24,7 +24,7 @@ use Throwable;
  * Class ApiKeyType
  *
  * @package App\Form\Type\Console
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyType extends AbstractType
 {
@@ -48,12 +48,10 @@ class ApiKeyType extends AbstractType
         ],
     ];
 
-    private UserGroupTransformer $userGroupTransformer;
-
-    public function __construct(UserGroupResource $userGroupResource, UserGroupTransformer $userGroupTransformer)
-    {
-        $this->userGroupResource = $userGroupResource;
-        $this->userGroupTransformer = $userGroupTransformer;
+    public function __construct(
+        private UserGroupResource $userGroupResource,
+        private UserGroupTransformer $userGroupTransformer,
+    ) {
     }
 
     /**
@@ -76,7 +74,7 @@ class ApiKeyType extends AbstractType
                     'multiple' => true,
                     'required' => true,
                     'empty_data' => '',
-                ]
+                ],
             );
 
         $builder->get('userGroups')->addModelTransformer($this->userGroupTransformer);
