@@ -13,6 +13,11 @@ use Symfony\Component\Validator\Constraint;
 /**
  * Class Timezone
  *
+ * Usage example;
+ *  App\Validator\Constraints\Timezone()
+ *
+ * Just add that to your property as an annotation and you're good to go.
+ *
  * @Annotation
  * @Target({"PROPERTY"})
  *
@@ -21,18 +26,11 @@ use Symfony\Component\Validator\Constraint;
  */
 class Timezone extends Constraint
 {
-    /**
-     * Unique constant for validator constrain
-     */
     public const INVALID_TIMEZONE = '1f8dd2a3-5b61-43ca-a6b2-af553f86ac17';
-
-    /**
-     * Message for validation error
-     */
     public const MESSAGE = 'This timezone "{{ timezone }}" is not valid.';
 
     /**
-     * Error names configuration
+     * {@inheritdoc}
      *
      * @var array<string, string>
      */
@@ -41,9 +39,6 @@ class Timezone extends Constraint
     ];
 
     /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * {@inheritdoc}
-     */
     public function getTargets(): string
     {
         return self::PROPERTY_CONSTRAINT;
