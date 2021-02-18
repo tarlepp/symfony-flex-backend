@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Helpers/LoggerAwareTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Helpers;
@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
  *       and nothing else.
  *
  * @package App\Helpers
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait LoggerAwareTrait
 {

@@ -3,13 +3,13 @@ declare(strict_types = 1);
 /**
  * /src/Form/Type/Console/UserGroupType.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type\Console;
 
 use App\DTO\UserGroup\UserGroup;
-use App\Entity\Role as RoleEntity;
+use App\Entity\Role;
 use App\Form\DataTransformer\RoleTransformer;
 use App\Form\Type\FormTypeLabelInterface;
 use App\Form\Type\Traits\AddBasicFieldToForm;
@@ -25,7 +25,7 @@ use Throwable;
  * Class UserGroupType
  *
  * @package App\Form\Type\Console
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserGroupType extends AbstractType
 {
@@ -48,18 +48,11 @@ class UserGroupType extends AbstractType
         ],
     ];
 
-    private RolesService $rolesService;
-    private RoleResource $roleResource;
-    private RoleTransformer $roleTransformer;
-
     public function __construct(
-        RolesService $rolesService,
-        RoleResource $roleResource,
-        RoleTransformer $roleTransformer
+        private RolesService $rolesService,
+        private RoleResource $roleResource,
+        private RoleTransformer $roleTransformer,
     ) {
-        $this->rolesService = $rolesService;
-        $this->roleResource = $roleResource;
-        $this->roleTransformer = $roleTransformer;
     }
 
     /**
@@ -81,7 +74,7 @@ class UserGroupType extends AbstractType
                     FormTypeLabelInterface::LABEL => 'Role',
                     FormTypeLabelInterface::CHOICES => $this->getRoleChoices(),
                     FormTypeLabelInterface::REQUIRED => true,
-                ]
+                ],
             );
 
         $builder->get('role')->addModelTransformer($this->roleTransformer);
@@ -108,15 +101,11 @@ class UserGroupType extends AbstractType
         // Initialize output
         $choices = [];
 
-        $iterator = function (RoleEntity $role) use (&$choices): void {
-            $name = $this->rolesService->getRoleLabel($role->getId());
-
-            $choices[$name] = $role->getId();
+        $iterator = function (Role $role) use (&$choices): void {
+            $choices[$this->rolesService->getRoleLabel($role->getId())] = $role->getId();
         };
 
-        $roles = $this->roleResource->find();
-
-        array_map($iterator, $roles);
+        array_map($iterator, $this->roleResource->find());
 
         return $choices;
     }

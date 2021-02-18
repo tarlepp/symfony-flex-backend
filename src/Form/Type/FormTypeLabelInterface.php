@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Form/Type/FormTypeLabelInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type;
@@ -12,7 +12,7 @@ namespace App\Form\Type;
  * Interface FormTypeLabelInterface
  *
  * @package App\Form\Type
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface FormTypeLabelInterface
 {

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Form/Type/Traits/UserGroupChoices.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Form\Type\Traits;
@@ -17,12 +17,12 @@ use function array_map;
  * Trait UserGroupChoices
  *
  * @package App\Form\Type\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @property UserGroupResource $userGroupResource
  */
 trait UserGroupChoices
 {
-    protected UserGroupResource $userGroupResource;
-
     /**
      * Method to create choices array for user groups.
      *
@@ -36,9 +36,8 @@ trait UserGroupChoices
         $choices = [];
 
         /**
-         * Lambda function to iterate all user groups and to create necessary choices array.
-         *
-         * @param UserGroup $userGroup
+         * Lambda function to iterate all user groups and to create necessary
+         * choices array.
          */
         $iterator = static function (UserGroup $userGroup) use (&$choices): void {
             $name = $userGroup->getName() . ' [' . $userGroup->getRole()->getId() . ']';
@@ -46,9 +45,7 @@ trait UserGroupChoices
             $choices[$name] = $userGroup->getId();
         };
 
-        $userGroups = $this->userGroupResource->find();
-
-        array_map($iterator, $userGroups);
+        array_map($iterator, $this->userGroupResource->find());
 
         return $choices;
     }

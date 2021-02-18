@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/EventSubscriber/ExceptionSubscriber.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\EventSubscriber;
@@ -11,7 +11,7 @@ namespace App\EventSubscriber;
 use App\Exception\interfaces\ClientErrorInterface;
 use App\Security\UserTypeIdentification;
 use App\Utils\JSON;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\ORMException;
 use JsonException;
 use Psr\Log\LoggerInterface;
@@ -36,14 +36,10 @@ use function spl_object_hash;
  * Class ExceptionSubscriber
  *
  * @package App\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ExceptionSubscriber implements EventSubscriberInterface
 {
-    private UserTypeIdentification $userService;
-    private LoggerInterface $logger;
-    private string $environment;
-
     /**
      * @var array<string, bool>
      */
@@ -57,11 +53,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
         ClientErrorInterface::class,
     ];
 
-    public function __construct(LoggerInterface $logger, UserTypeIdentification $userService, string $environment)
-    {
-        $this->logger = $logger;
-        $this->userService = $userService;
-        $this->environment = $environment;
+    public function __construct(
+        private LoggerInterface $logger,
+        private UserTypeIdentification $userService,
+        private string $environment,
+    ) {
     }
 
     /**
@@ -165,7 +161,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         if (in_array(get_class($exception), $accessDeniedClasses, true)) {
             $message = 'Access denied.';
-        } elseif ($exception instanceof DBALException || $exception instanceof ORMException) {
+        } elseif ($exception instanceof Exception || $exception instanceof ORMException) {
             // Database errors
             $message = 'Database error.';
         } elseif (!$this->isClientExceptions($exception)) {
