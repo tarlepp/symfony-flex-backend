@@ -32,11 +32,9 @@ use function str_replace;
  */
 class EntityReferenceExistsValidator extends ConstraintValidator
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
