@@ -27,7 +27,7 @@
 		"doctrine/annotations": "1.11.1",
 		"doctrine/doctrine-bundle": "2.2.3",
 		"doctrine/doctrine-migrations-bundle": "3.0.2",
-		"doctrine/orm": "2.8.1",
+		"doctrine/orm": "2.8.2",
 		"easycorp/easy-log-handler": "1.0.9",
 		"gedmo/doctrine-extensions": "3.0.3",
 		"lexik/jwt-authentication-bundle": "2.11.1",
