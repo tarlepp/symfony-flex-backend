@@ -17,18 +17,17 @@ use Throwable;
 /**
  * Class RestResourceConverter
  *
- * Purpose of this param converter is to use exactly same methods and workflow as in basic REST API requests.
+ * Purpose of this param converter is to use exactly same methods and workflow
+ * as in basic REST API requests.
  *
  * @package App\Request\ParamConverter
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RestResourceConverter implements ParamConverterInterface
 {
-    private ResourceCollection $collection;
-
-    public function __construct(ResourceCollection $collection)
-    {
-        $this->collection = $collection;
+    public function __construct(
+        private ResourceCollection $collection,
+    ) {
     }
 
     /**
