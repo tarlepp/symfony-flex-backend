@@ -13,6 +13,11 @@ use Symfony\Component\Validator\Constraint;
 /**
  * Class EntityReferenceExists
  *
+ * Usage example;
+ *  App\Validator\Constraints\EntityReferenceExists(entityClass=SomeClass::class)
+ *
+ * Just add that to your property as an annotation and you're good to go.
+ *
  * @Annotation
  * @Target({"PROPERTY"})
  *
