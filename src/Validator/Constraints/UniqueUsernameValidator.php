@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Validator/Constraints/UniqueUsernameValidator.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\ConstraintValidator;
  * Class UniqueUsernameValidator
  *
  * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UniqueUsernameValidator extends ConstraintValidator
 {

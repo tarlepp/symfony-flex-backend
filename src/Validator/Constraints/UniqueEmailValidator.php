@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/App/Validator/Constraints/UniqueEmailValidator.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -18,7 +18,7 @@ use Symfony\Component\Validator\ConstraintValidator;
  * Class UniqueEmailValidator
  *
  * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UniqueEmailValidator extends ConstraintValidator
 {

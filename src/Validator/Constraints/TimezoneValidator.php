@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Validator/Constraints/TimezoneValidator.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -19,7 +19,7 @@ use function is_string;
  * Class TimezoneValidator
  *
  * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class TimezoneValidator extends ConstraintValidator
 {
