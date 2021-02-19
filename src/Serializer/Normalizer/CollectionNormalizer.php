@@ -21,11 +21,9 @@ use function is_object;
  */
 class CollectionNormalizer implements NormalizerInterface
 {
-    private ObjectNormalizer $normalizer;
-
-    public function __construct(ObjectNormalizer $normalizer)
-    {
-        $this->normalizer = $normalizer;
+    public function __construct(
+        private ObjectNormalizer $normalizer,
+    ) {
     }
 
     /**
