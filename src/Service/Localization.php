@@ -11,7 +11,7 @@ namespace App\Service;
 use App\Doctrine\DBAL\Types\EnumLanguageType;
 use App\Doctrine\DBAL\Types\EnumLocaleType;
 use Closure;
-use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
@@ -94,7 +94,7 @@ class Localization
             $dateTimeZone = new DateTimeZone($identifier);
 
             /** @noinspection PhpUnhandledExceptionInspection */
-            $dateTime = new DateTime('now', $dateTimeZone);
+            $dateTime = new DateTimeImmutable(timezone: $dateTimeZone);
 
             $hours = floor($dateTimeZone->getOffset($dateTime) / 3600);
             $minutes = floor(($dateTimeZone->getOffset($dateTime) - ($hours * 3600)) / 60);
