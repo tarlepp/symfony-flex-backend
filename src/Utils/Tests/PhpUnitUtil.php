@@ -32,7 +32,6 @@ use function explode;
 use function get_class;
 use function sprintf;
 use function str_contains;
-use function strpos;
 use function substr_count;
 
 /**
