@@ -10,7 +10,6 @@ namespace App\Utils\Tests;
 
 use App\Rest\Controller;
 use ReflectionClass;
-use ReflectionException;
 use function gc_collect_cycles;
 use function gc_enable;
 use function mb_substr;
@@ -53,9 +52,6 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
         gc_collect_cycles();
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function testThatGivenControllerIsCorrect(): void
     {
         $expected = mb_substr((new ReflectionClass($this))->getShortName(), 0, -4);
