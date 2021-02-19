@@ -35,11 +35,9 @@ use function sys_get_temp_dir;
  */
 class Auth
 {
-    private KernelInterface $kernel;
-
-    public function __construct(KernelInterface $kernel)
-    {
-        $this->kernel = $kernel;
+    public function __construct(
+        private KernelInterface $kernel,
+    ) {
     }
 
     /**
