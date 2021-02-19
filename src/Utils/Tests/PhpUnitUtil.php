@@ -31,6 +31,7 @@ use function count;
 use function explode;
 use function get_class;
 use function sprintf;
+use function str_contains;
 use function strpos;
 use function substr_count;
 
@@ -109,11 +110,9 @@ class PhpUnitUtil
      * @param string $name The name of your private/protected method
      * @param array<int, mixed> $args Method arguments
      *
-     * @return mixed
-     *
      * @throws ReflectionException
      */
-    public static function callMethod($object, string $name, array $args)
+    public static function callMethod(object $object, string $name, array $args): mixed
     {
         return self::getMethod($object, $name)->invokeArgs($object, $args);
     }
@@ -132,7 +131,7 @@ class PhpUnitUtil
      *
      * @throws ReflectionException
      */
-    public static function getMethod($object, string $name): ReflectionMethod
+    public static function getMethod(object $object, string $name): ReflectionMethod
     {
         // Get reflection and make specified method accessible
         $class = new ReflectionClass($object);
@@ -145,13 +144,9 @@ class PhpUnitUtil
     /**
      * Helper method to get any property value from given class.
      *
-     * @param object $object
-     *
-     * @return mixed
-     *
      * @throws ReflectionException
      */
-    public static function getProperty(string $property, $object)
+    public static function getProperty(string $property, object $object): mixed
     {
         $clazz = new ReflectionClass(get_class($object));
 
@@ -161,10 +156,7 @@ class PhpUnitUtil
         return $property->getValue($object);
     }
 
-    /**
-     * @param Type|string|null $type
-     */
-    public static function getType($type): string
+    public static function getType(Type | string | null $type): string
     {
         switch ($type) {
             case self::TYPE_INT:
@@ -211,12 +203,9 @@ class PhpUnitUtil
     /**
      * Helper method to override any property value within given class.
      *
-     * @param mixed $value
-     * @param object $object
-     *
      * @throws ReflectionException
      */
-    public static function setProperty(string $property, $value, $object): void
+    public static function setProperty(string $property, mixed $value, object $object): void
     {
         $clazz = new ReflectionClass(get_class($object));
 
@@ -230,11 +219,9 @@ class PhpUnitUtil
      *
      * @param array<string, string>|null $meta
      *
-     * @return mixed
-     *
      * @throws Throwable
      */
-    public static function getValidValueForType(string $type, ?array $meta = null)
+    public static function getValidValueForType(string $type, ?array $meta = null): mixed
     {
         $cacheKey = $type . serialize($meta);
 
@@ -244,7 +231,7 @@ class PhpUnitUtil
             $class = stdClass::class;
             $params = [null];
 
-            if (substr_count($type, '\\') > 1 && strpos($type, '|') === false) {
+            if (substr_count($type, '\\') > 1 && !str_contains($type, '|')) {
                 /** @var class-string $class */
                 $class = count($meta) ? $meta['targetEntity'] : $type;
 
@@ -257,9 +244,9 @@ class PhpUnitUtil
                 }
             }
 
-            if (strpos($type, '|') !== false) {
+            if (str_contains($type, '|')) {
                 $output = self::getValidValueForType(explode('|', $type)[0], $meta);
-            } elseif (strpos($type, '[]') !== false) {
+            } elseif (str_contains($type, '[]')) {
                 /** @var array<mixed, object> $output */
                 $output = self::getValidValueForType(self::TYPE_ARRAY, $meta);
             } else {
@@ -306,20 +293,18 @@ class PhpUnitUtil
     /**
      * Helper method to get invalid value for specified type.
      *
-     * @return stdClass|DateTime|string
-     *
      * @throws Throwable
      */
-    public static function getInvalidValueForType(string $type)
+    public static function getInvalidValueForType(string $type): DateTime | stdClass | string
     {
         if ($type !== stdClass::class && substr_count($type, '\\') > 1) {
             $type = self::TYPE_CUSTOM_CLASS;
         }
 
         if (!array_key_exists($type, self::$invalidValueCache)) {
-            if (strpos($type, '|') !== false) {
+            if (str_contains($type, '|')) {
                 $output = self::getInvalidValueForType(explode('|', $type)[0]);
-            } elseif (strpos($type, '[]') !== false) {
+            } elseif (str_contains($type, '[]')) {
                 $output = self::getInvalidValueForType(self::TYPE_ARRAY);
             } else {
                 switch ($type) {
