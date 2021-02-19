@@ -34,7 +34,7 @@ class StringableArrayObject extends ArrayObject implements Stringable
          *
          * @return mixed
          */
-        $iterator = static fn ($input) => $input instanceof Stringable ? (string)$input : $input;
+        $iterator = static fn (mixed $input): mixed => $input instanceof Stringable ? (string)$input : $input;
 
         return JSON::encode(array_map($iterator, $this->getArrayCopy()));
     }
