@@ -23,32 +23,22 @@ use Throwable;
  *
  * @package App\Services
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @property  array<int, string> $sensitiveProperties
  */
 class RequestLogger implements RequestLoggerInterface
 {
-    private LogRequestResource $resource;
-    private LoggerInterface $logger;
     private ?Response $response = null;
     private ?Request $request = null;
     private ?User $user = null;
     private ?ApiKey $apiKey = null;
     private bool $masterRequest = false;
 
-    /**
-     * @var array<int, string>
-     */
-    private array $sensitiveProperties;
-
-    /**
-     * ResponseLogger constructor.
-     *
-     * @param array<int, string> $sensitiveProperties
-     */
-    public function __construct(LogRequestResource $resource, LoggerInterface $logger, array $sensitiveProperties)
-    {
-        $this->resource = $resource;
-        $this->logger = $logger;
-        $this->sensitiveProperties = $sensitiveProperties;
+    public function __construct(
+        private LogRequestResource $resource,
+        private LoggerInterface $logger,
+        private array $sensitiveProperties,
+    ) {
     }
 
     public function setResponse(Response $response): self
