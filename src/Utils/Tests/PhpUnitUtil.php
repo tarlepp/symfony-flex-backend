@@ -157,46 +157,25 @@ class PhpUnitUtil
 
     public static function getType(Type | string | null $type): string
     {
-        switch ($type) {
-            case self::TYPE_INT:
-            case self::TYPE_INTEGER:
-            case 'bigint':
-                $output = self::TYPE_INT;
-                break;
-            case 'time':
-            case 'date':
-            case 'datetime':
-                $output = DateTime::class;
-                break;
-            case 'time_immutable':
-            case 'date_immutable':
-            case 'datetime_immutable':
-                $output = DateTimeImmutable::class;
-                break;
-            case 'text':
-            case self::TYPE_STRING:
-            case 'EnumLanguage':
-            case 'EnumLocale':
-            case 'EnumLogLogin':
-                $output = self::TYPE_STRING;
-                break;
-            case self::TYPE_ARRAY:
-                $output = self::TYPE_ARRAY;
-                break;
-            case self::TYPE_BOOL:
-            case self::TYPE_BOOLEAN:
-                $output = self::TYPE_BOOL;
-                break;
-            default:
-                $message = sprintf(
-                    "Currently type '%s' is not supported within type normalizer",
-                    (string)$type
-                );
-
-                throw new LogicException($message);
-        }
-
-        return $output;
+        return match ($type) {
+            self::TYPE_INT, self::TYPE_INTEGER, 'bigint'
+                => self::TYPE_INT,
+            'time', 'date', 'datetime'
+                => DateTime::class,
+            'time_immutable', 'date_immutable', 'datetime_immutable'
+                => DateTimeImmutable::class,
+            self::TYPE_STRING, 'text', 'EnumLanguage', 'EnumLocale', 'EnumLogLogin'
+                => self::TYPE_STRING,
+            self::TYPE_ARRAY
+                => self::TYPE_ARRAY,
+            self::TYPE_BOOL, self::TYPE_BOOLEAN
+                => self::TYPE_BOOL,
+            default
+                => throw new LogicException(sprintf(
+                "Currently type '%s' is not supported within type normalizer",
+                (string)$type,
+            )),
+        };
     }
 
     /**
@@ -249,38 +228,24 @@ class PhpUnitUtil
                 /** @var array<mixed, object> $output */
                 $output = self::getValidValueForType(self::TYPE_ARRAY, $meta);
             } else {
-                switch ($type) {
-                    case self::TYPE_CUSTOM_CLASS:
-                        $output = new $class(...$params);
-                        break;
-                    case self::TYPE_INT:
-                    case self::TYPE_INTEGER:
-                        $output = 666;
-                        break;
-                    case DateTime::class:
-                        $output = new DateTime();
-                        break;
-                    case DateTimeImmutable::class:
-                        $output = new DateTimeImmutable();
-                        break;
-                    case self::TYPE_STRING:
-                        $output = 'Some text here';
-                        break;
-                    case self::TYPE_ARRAY:
-                        $output = ['some', self::TYPE_ARRAY, 'here'];
-                        break;
-                    case self::TYPE_BOOL:
-                    case self::TYPE_BOOLEAN:
-                        $output = true;
-                        break;
-                    default:
-                        $message = sprintf(
-                            "Cannot create valid value for type '%s'.",
-                            $type
-                        );
-
-                        throw new LogicException($message);
-                }
+                $output = match ($type) {
+                    self::TYPE_CUSTOM_CLASS
+                        => new $class(...$params),
+                    self::TYPE_INT, self::TYPE_INTEGER
+                        => 666,
+                    self::TYPE_STRING
+                        => 'Some text here',
+                    self::TYPE_ARRAY
+                        => ['some', self::TYPE_ARRAY, 'here'],
+                    self::TYPE_BOOL, self::TYPE_BOOLEAN
+                        => true,
+                    DateTime::class
+                        => new DateTime(),
+                    DateTimeImmutable::class
+                        => new DateTimeImmutable(),
+                    default
+                        => throw new LogicException(sprintf("Cannot create valid value for type '%s'.", $type)),
+                };
             }
 
             self::$validValueCache[$cacheKey] = $output;
@@ -306,32 +271,15 @@ class PhpUnitUtil
             } elseif (str_contains($type, '[]')) {
                 $output = self::getInvalidValueForType(self::TYPE_ARRAY);
             } else {
-                switch ($type) {
-                    case stdClass::class:
-                    case DateTimeImmutable::class:
-                        $output = new DateTime();
-                        break;
-                    case self::TYPE_CUSTOM_CLASS:
-                    case self::TYPE_INT:
-                    case self::TYPE_INTEGER:
-                    case DateTime::class:
-                    case self::TYPE_STRING:
-                    case self::TYPE_ARRAY:
-                    case self::TYPE_BOOL:
-                    case self::TYPE_BOOLEAN:
-                    case 'enumLanguage':
-                    case 'enumLocale':
-                    case 'enumLogLogin':
-                        $output = new stdClass();
-                        break;
-                    default:
-                        $message = sprintf(
-                            "Cannot create invalid value for type '%s'.",
-                            $type
-                        );
-
-                        throw new LogicException($message);
-                }
+                $output = match ($type) {
+                    stdClass::class, DateTimeImmutable::class
+                        => new DateTime(),
+                    self::TYPE_CUSTOM_CLASS, self::TYPE_INT, self::TYPE_INTEGER, self::TYPE_STRING, self::TYPE_ARRAY,
+                    self::TYPE_BOOL, self::TYPE_BOOLEAN, DateTime::class, 'enumLanguage', 'enumLocale', 'enumLogLogin'
+                        => new stdClass(),
+                    default
+                        => throw new LogicException(sprintf("Cannot create invalid value for type '%s'.", $type)),
+                };
             }
 
             self::$invalidValueCache[$type] = $output;
