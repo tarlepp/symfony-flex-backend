@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Utils/Tests/RestIntegrationControllerTestCase.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils\Tests;
@@ -20,7 +20,7 @@ use function sprintf;
  * Class RestIntegrationControllerTestCase
  *
  * @package App\Utils\Tests
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 {
