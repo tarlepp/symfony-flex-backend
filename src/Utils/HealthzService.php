@@ -20,11 +20,9 @@ use Throwable;
  */
 final class HealthzService
 {
-    private HealthzRepository $repository;
-
-    public function __construct(HealthzRepository $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        private HealthzRepository $repository,
+    ) {
     }
 
     /**
