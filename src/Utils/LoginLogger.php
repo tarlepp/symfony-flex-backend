@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Utils/LoginLogger.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -22,7 +22,7 @@ use Throwable;
  * Class LoginLogger
  *
  * @package App\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LoginLogger implements LoginLoggerInterface
 {

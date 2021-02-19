@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Utils/Interfaces/RequestLoggerInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils\Interfaces;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Interface RequestLoggerInterface
  *
  * @package App\Services\Interfaces
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface RequestLoggerInterface
 {

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Utils/JSON.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -17,7 +17,7 @@ use function json_encode;
  * Class JSON
  *
  * @package App\Util
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class JSON
 {

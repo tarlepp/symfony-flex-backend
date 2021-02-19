@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Utils/RequestLogger.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -22,7 +22,7 @@ use Throwable;
  * Class RequestLogger
  *
  * @package App\Services
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RequestLogger implements RequestLoggerInterface
 {
