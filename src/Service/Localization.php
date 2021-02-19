@@ -34,13 +34,10 @@ class Localization
     public const DEFAULT_LOCALE = EnumLocaleType::LOCALE_EN;
     public const DEFAULT_TIMEZONE = 'Europe/Helsinki';
 
-    private CacheInterface $cache;
-    private LoggerInterface $logger;
-
-    public function __construct(CacheInterface $appCacheApcu, LoggerInterface $logger)
-    {
-        $this->cache = $appCacheApcu;
-        $this->logger = $logger;
+    public function __construct(
+        private CacheInterface $appCacheApcu,
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
@@ -70,7 +67,7 @@ class Localization
 
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
-            $output = $this->cache->get('application_timezone', $this->getClosure());
+            $output = $this->appCacheApcu->get('application_timezone', $this->getClosure());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }
