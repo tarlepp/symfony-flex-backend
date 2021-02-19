@@ -24,15 +24,11 @@ use Throwable;
  */
 class Version
 {
-    private string $projectDir;
-    private CacheInterface $cache;
-    private LoggerInterface $logger;
-
-    public function __construct(string $projectDir, CacheInterface $appCacheApcu, LoggerInterface $logger)
-    {
-        $this->projectDir = $projectDir;
-        $this->cache = $appCacheApcu;
-        $this->logger = $logger;
+    public function __construct(
+        private string $projectDir,
+        private CacheInterface $appCacheApcu,
+        private LoggerInterface $logger
+    ) {
     }
 
     /**
@@ -47,7 +43,7 @@ class Version
 
         try {
             /** @noinspection PhpUnhandledExceptionInspection */
-            $output = $this->cache->get('application_version', $this->getClosure());
+            $output = $this->appCacheApcu->get('application_version', $this->getClosure());
         } catch (Throwable $exception) {
             $this->logger->error($exception->getMessage(), $exception->getTrace());
         }
