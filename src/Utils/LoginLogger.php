@@ -53,7 +53,7 @@ class LoginLogger implements LoginLoggerInterface
         }
 
         // Parse user agent data with device detector
-        $this->deviceDetector = new DeviceDetector($request->headers->get('User-Agent', ''));
+        $this->deviceDetector->setUserAgent($request->headers->get('User-Agent', ''));
         $this->deviceDetector->parse();
 
         // Create entry
