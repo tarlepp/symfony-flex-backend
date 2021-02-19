@@ -26,17 +26,13 @@ use Throwable;
  */
 class LoginLogger implements LoginLoggerInterface
 {
-    private LogLoginResource $logLoginResource;
-    private RequestStack $requestStack;
-    private ?User $user = null;
     private DeviceDetector $deviceDetector;
+    private ?User $user = null;
 
-    public function __construct(LogLoginResource $logLoginResource, RequestStack $requestStack)
-    {
-        // Store used services
-        $this->logLoginResource = $logLoginResource;
-        $this->requestStack = $requestStack;
-
+    public function __construct(
+        private LogLoginResource $logLoginResource,
+        private RequestStack $requestStack,
+    ) {
         $this->deviceDetector = new DeviceDetector();
     }
 
