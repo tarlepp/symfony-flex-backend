@@ -25,6 +25,9 @@ use function sprintf;
  *
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method RestResourceInterface get()
+ * @method IteratorAggregate<int, RestResourceInterface> getAll()
  */
 class ResourceCollection implements Countable
 {
@@ -33,12 +36,12 @@ class ResourceCollection implements Countable
     /**
      * Collection constructor.
      *
-     * @param IteratorAggregate<int, RestResourceInterface> $resources
+     * @param IteratorAggregate<int, RestResourceInterface> $items
      */
-    public function __construct(IteratorAggregate $resources, LoggerInterface $logger)
-    {
-        $this->items = $resources;
-        $this->logger = $logger;
+    public function __construct(
+        private IteratorAggregate $items,
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
@@ -76,12 +79,7 @@ class ResourceCollection implements Countable
 
     public function error(string $className): void
     {
-        $message = sprintf(
-            'Resource \'%s\' does not exist',
-            $className
-        );
-
-        throw new InvalidArgumentException($message);
+        throw new InvalidArgumentException(sprintf('Resource \'%s\' does not exist', $className));
     }
 
     /**

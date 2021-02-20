@@ -22,6 +22,9 @@ use function sprintf;
  *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method ControllerInterface get()
+ * @method IteratorAggregate<int, ControllerInterface> getAll()
  */
 class ControllerCollection implements Countable
 {
@@ -30,22 +33,17 @@ class ControllerCollection implements Countable
     /**
      * Collection constructor.
      *
-     * @param IteratorAggregate<int, ControllerInterface> $controllers
+     * @param IteratorAggregate<int, ControllerInterface> $items
      */
-    public function __construct(IteratorAggregate $controllers, LoggerInterface $logger)
-    {
-        $this->items = $controllers;
-        $this->logger = $logger;
+    public function __construct(
+        private IteratorAggregate $items,
+        private LoggerInterface $logger,
+    ) {
     }
 
     public function error(string $className): void
     {
-        $message = sprintf(
-            'REST controller \'%s\' does not exist',
-            $className
-        );
-
-        throw new InvalidArgumentException($message);
+        throw new InvalidArgumentException(sprintf('REST controller \'%s\' does not exist', $className));
     }
 
     public function filter(string $className): Closure
