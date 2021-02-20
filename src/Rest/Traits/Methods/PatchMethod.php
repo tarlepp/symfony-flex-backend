@@ -32,7 +32,7 @@ trait PatchMethod
         Request $request,
         RestDtoInterface $restDto,
         string $id,
-        ?array $allowedHttpMethods = null
+        ?array $allowedHttpMethods = null,
     ): Response {
         $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['PATCH']);
 

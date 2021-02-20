@@ -14,8 +14,6 @@ use App\Rest\Traits\Methods\RestMethodProcessCriteria;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\UnitOfWork;
-use Error;
-use Exception;
 use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +21,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use TypeError;
 use UnexpectedValueException;
 use function array_key_exists;
 use function class_implements;
@@ -60,7 +57,7 @@ trait RestMethodHelper
             $message = sprintf(
                 'Given DTO class \'%s\' is not implementing \'%s\' interface.',
                 $dtoClass,
-                RestDtoInterface::class
+                RestDtoInterface::class,
             );
 
             throw new UnexpectedValueException($message);
@@ -76,7 +73,7 @@ trait RestMethodHelper
             $message = sprintf(
                 'You cannot use \'%s\' controller class with REST traits if that does not implement \'%s\'',
                 static::class,
-                ControllerInterface::class
+                ControllerInterface::class,
             );
 
             throw new LogicException($message);
@@ -87,6 +84,9 @@ trait RestMethodHelper
         }
     }
 
+    /**
+     * @throws Throwable
+     */
     public function handleRestMethodException(Throwable $exception, ?string $id = null): Throwable
     {
         if ($id !== null) {
@@ -109,6 +109,8 @@ trait RestMethodHelper
     /**
      * Method to detach entity from entity manager so possible changes to it
      * won't be saved.
+     *
+     * @throws Throwable
      */
     private function detachEntityFromManager(string $id): void
     {
@@ -127,10 +129,7 @@ trait RestMethodHelper
         }
     }
 
-    /**
-     * @param Throwable|Exception|TypeError|Error $exception
-     */
-    private function determineOutputAndStatusCodeForRestMethodException($exception): Throwable
+    private function determineOutputAndStatusCodeForRestMethodException(Throwable  $exception): Throwable
     {
         $code = $this->getExceptionCode($exception);
 
