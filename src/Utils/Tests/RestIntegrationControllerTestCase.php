@@ -3,14 +3,13 @@ declare(strict_types = 1);
 /**
  * /src/Utils/Tests/RestIntegrationControllerTestCase.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils\Tests;
 
 use App\Rest\Controller;
 use ReflectionClass;
-use ReflectionException;
 use function gc_collect_cycles;
 use function gc_enable;
 use function mb_substr;
@@ -20,7 +19,7 @@ use function sprintf;
  * Class RestIntegrationControllerTestCase
  *
  * @package App\Utils\Tests
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestIntegrationControllerTestCase extends ContainerTestCase
 {
@@ -53,9 +52,6 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
         gc_collect_cycles();
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function testThatGivenControllerIsCorrect(): void
     {
         $expected = mb_substr((new ReflectionClass($this))->getShortName(), 0, -4);
