@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Provider/ApiKeyUserProvider.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Provider;
@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class ApiKeyUserProvider
  *
  * @package App\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyUserProvider implements ApiKeyUserProviderInterface
 {

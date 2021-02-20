@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Authenticator/ApiKeyAuthenticator.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Authenticator;
@@ -27,7 +27,7 @@ use function preg_match;
  * Class ApiKeyAuthenticator
  *
  * @package App\Security\Authenticator
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 {

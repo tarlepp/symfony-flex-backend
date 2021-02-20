@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Provider/SecurityUserFactory.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Provider;
@@ -23,7 +23,7 @@ use function get_class;
  * Class SecurityUserFactory
  *
  * @package App\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class SecurityUserFactory implements UserProviderInterface
 {
