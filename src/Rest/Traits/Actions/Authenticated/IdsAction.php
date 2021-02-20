@@ -30,15 +30,13 @@ trait IdsAction
     use IdsMethod;
 
     /**
-     * @Route(
-     *     path="/ids",
-     *     methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/ids',
+        methods: ['GET'],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function idsAction(Request $request): Response
     {
         return $this->idsMethod($request);

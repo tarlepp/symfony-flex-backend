@@ -30,15 +30,13 @@ trait IdsAction
     use IdsMethod;
 
     /**
-     * @Route(
-     *      path="/ids",
-     *      methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_LOGGED')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/ids',
+        methods: ['GET'],
+    )]
+    #[Security('is_granted("ROLE_LOGGED")')]
     public function idsAction(Request $request): Response
     {
         return $this->idsMethod($request);

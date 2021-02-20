@@ -30,18 +30,16 @@ trait DeleteAction
     use DeleteMethod;
 
     /**
-     * @Route(
-     *      "/{id}",
-     *      requirements={
-     *          "id" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"DELETE"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_ROOT')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/{id}',
+        requirements: [
+            'id' => '%app.uuid_v1_regex%',
+        ],
+        methods: ['DELETE'],
+    )]
+    #[Security('is_granted("ROLE_ROOT")')]
     public function deleteAction(Request $request, string $id): Response
     {
         return $this->deleteMethod($request, $id);

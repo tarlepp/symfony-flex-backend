@@ -29,13 +29,12 @@ trait IdsAction
     use IdsMethod;
 
     /**
-     * @Route(
-     *     path="/ids",
-     *     methods={"GET"},
-     *  )
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/ids',
+        methods: ['GET'],
+    )]
     public function idsAction(Request $request): Response
     {
         return $this->idsMethod($request);

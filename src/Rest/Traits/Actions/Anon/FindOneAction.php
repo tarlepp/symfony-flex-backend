@@ -29,16 +29,15 @@ trait FindOneAction
     use FindOneMethod;
 
     /**
-     * @Route(
-     *      "/{id}",
-     *      requirements={
-     *          "id" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"GET"},
-     *  )
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/{id}',
+        requirements: [
+            'id' => '%app.uuid_v1_regex%',
+        ],
+        methods: ['GET'],
+    )]
     public function findOneAction(Request $request, string $id): Response
     {
         return $this->findOneMethod($request, $id);

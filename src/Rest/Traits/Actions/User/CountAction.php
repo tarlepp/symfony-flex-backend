@@ -30,15 +30,13 @@ trait CountAction
     use CountMethod;
 
     /**
-     * @Route(
-     *      path="/count",
-     *      methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_USER')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/count',
+        methods: ['GET'],
+    )]
+    #[Security('is_granted("ROLE_USER")')]
     public function countAction(Request $request): Response
     {
         return $this->countMethod($request);

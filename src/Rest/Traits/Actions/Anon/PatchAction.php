@@ -30,16 +30,15 @@ trait PatchAction
     use PatchMethod;
 
     /**
-     * @Route(
-     *      "/{id}",
-     *      requirements={
-     *          "id" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"PATCH"},
-     *  )
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/{id}',
+        requirements: [
+            'id' => '%app.uuid_v1_regex%',
+        ],
+        methods: ['PATCH'],
+    )]
     public function patchAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
         return $this->patchMethod($request, $restDto, $id);

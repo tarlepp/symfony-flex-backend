@@ -30,15 +30,13 @@ trait FindAction
     use FindMethod;
 
     /**
-     * @Route(
-     *     path="",
-     *     methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '',
+        methods: ['GET'],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function findAction(Request $request): Response
     {
         return $this->findMethod($request);

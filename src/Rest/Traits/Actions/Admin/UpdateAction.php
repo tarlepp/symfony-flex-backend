@@ -31,18 +31,16 @@ trait UpdateAction
     use UpdateMethod;
 
     /**
-     * @Route(
-     *      "/{id}",
-     *      requirements={
-     *          "id" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"PUT"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/{id}',
+        requirements: [
+            'id' => '%app.uuid_v1_regex%',
+        ],
+        methods: ['PUT'],
+    )]
+    #[Security('is_granted("ROLE_ADMIN")')]
     public function updateAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
         return $this->updateMethod($request, $restDto, $id);

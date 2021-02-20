@@ -31,15 +31,13 @@ trait CreateAction
     use CreateMethod;
 
     /**
-     * @Route(
-     *     path="",
-     *     methods={"POST"},
-     *  )
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '',
+        methods: ['POST'],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function createAction(Request $request, RestDtoInterface $restDto): Response
     {
         return $this->createMethod($request, $restDto);

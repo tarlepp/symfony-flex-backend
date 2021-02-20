@@ -30,13 +30,12 @@ trait CreateAction
     use CreateMethod;
 
     /**
-     * @Route(
-     *     path="",
-     *     methods={"POST"},
-     *  )
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '',
+        methods: ['POST'],
+    )]
     public function createAction(Request $request, RestDtoInterface $restDto): Response
     {
         return $this->createMethod($request, $restDto);

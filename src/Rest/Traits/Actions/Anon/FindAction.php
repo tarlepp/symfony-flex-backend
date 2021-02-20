@@ -29,13 +29,12 @@ trait FindAction
     use FindMethod;
 
     /**
-     * @Route(
-     *     path="",
-     *     methods={"GET"},
-     *  )
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '',
+        methods: ['GET'],
+    )]
     public function findAction(Request $request): Response
     {
         return $this->findMethod($request);

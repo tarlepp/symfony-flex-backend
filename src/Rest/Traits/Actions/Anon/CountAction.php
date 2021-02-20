@@ -29,13 +29,12 @@ trait CountAction
     use CountMethod;
 
     /**
-     * @Route(
-     *     path="/count",
-     *     methods={"GET"},
-     *  )
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/count',
+        methods: ['GET'],
+    )]
     public function countAction(Request $request): Response
     {
         return $this->countMethod($request);
