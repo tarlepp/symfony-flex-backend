@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Resource/ResourceCollection.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Resource;
@@ -24,7 +24,7 @@ use function sprintf;
  * Class ResourceCollection
  *
  * @package App\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ResourceCollection implements Countable
 {
