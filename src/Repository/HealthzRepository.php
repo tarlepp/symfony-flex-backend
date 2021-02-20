@@ -3,16 +3,17 @@ declare(strict_types = 1);
 /**
  * /src/Repository/HealthzRepository.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
 
 use App\Entity\Healthz as Entity;
 use DateInterval;
-use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Throwable;
 
@@ -20,16 +21,17 @@ use Throwable;
  * Class HealthzRepository
  *
  * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
+ * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
  * @method Entity|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
- * @method array<int, Entity> findAdvanced(string $id, $hydrationMode = null)
+ * @method Entity|null findAdvanced(string $id, string | int | null $hydrationMode = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
- * @method array<int, Entity> findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
- * @method array<int, Entity> findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
- * @method array<int, Entity> findAll()
+ * @method Entity[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ * @method Entity[] findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method Entity[] findAll()
  *
  * @codingStandardsIgnoreEnd
  */
@@ -39,6 +41,11 @@ class HealthzRepository extends BaseRepository
      * @psalm-var class-string
      */
     protected static string $entityName = Entity::class;
+
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
 
     /**
      * Method to read value from database
@@ -81,8 +88,8 @@ class HealthzRepository extends BaseRepository
     public function cleanup(): int
     {
         // Determine date
-        $date = new DateTime('now', new DateTimeZone('UTC'));
-        $date->sub(new DateInterval('P7D'));
+        $date = (new DateTimeImmutable(timezone: new DateTimeZone('UTC')))
+            ->sub(new DateInterval('P7D'));
 
         // Create query builder
         $queryBuilder = $this

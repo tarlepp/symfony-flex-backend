@@ -14,8 +14,7 @@ use App\Rest\UuidHelper;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use InvalidArgumentException;
-use function array_map;
-use function array_values;
+use function array_column;
 
 /**
  * Trait RepositoryMethodsTrait
@@ -32,12 +31,7 @@ trait RepositoryMethodsTrait
         return $output instanceof EntityInterface ? $output : null;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @param string|int|null $hydrationMode
-     */
-    public function findAdvanced(string $id, $hydrationMode = null)
+    public function findAdvanced(string $id, string | int | null $hydrationMode = null): null | array | EntityInterface
     {
         // Get query builder
         $queryBuilder = $this->getQueryBuilder();
@@ -58,10 +52,7 @@ trait RepositoryMethodsTrait
         return $queryBuilder->getQuery()->getOneOrNullResult($hydrationMode);
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function findOneBy(array $criteria, ?array $orderBy = null)
+    public function findOneBy(array $criteria, ?array $orderBy = null): ?object
     {
         $repository = $this->getEntityManager()->getRepository($this->getEntityName());
 
@@ -69,16 +60,16 @@ trait RepositoryMethodsTrait
     }
 
     /**
-     * @return array<int, EntityInterface|object>
+     * {@inheritdoc}
+     *
+     * @psalm-return list<object|EntityInterface>
      */
     public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null): array
     {
-        return array_values(
-            $this
-                ->getEntityManager()
-                ->getRepository($this->getEntityName())
-                ->findBy($criteria, $orderBy, $limit, $offset)
-        );
+        return $this
+            ->getEntityManager()
+            ->getRepository($this->getEntityName())
+            ->findBy($criteria, $orderBy, $limit, $offset);
     }
 
     /**
@@ -115,15 +106,14 @@ trait RepositoryMethodsTrait
     /**
      * {@inheritdoc}
      *
-     * @return array<int, EntityInterface|object>
+     * @psalm-return list<object|EntityInterface>
      */
     public function findAll(): array
     {
-        return array_values(
-            $this->getEntityManager()
-                ->getRepository($this->getEntityName())
-                ->findAll()
-        );
+        return $this
+            ->getEntityManager()
+            ->getRepository($this->getEntityName())
+            ->findAll();
     }
 
     /**
@@ -151,7 +141,7 @@ trait RepositoryMethodsTrait
          */
         RepositoryHelper::resetParameterCount();
 
-        return array_values(array_map('\strval', array_map('\current', $queryBuilder->getQuery()->getArrayResult())));
+        return array_column($queryBuilder->getQuery()->getArrayResult(), 'id');
     }
 
     public function countAdvanced(?array $criteria = null, ?array $search = null): int

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Repository/Traits/RepositoryWrappersTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository\Traits;
@@ -12,31 +12,22 @@ use App\Rest\UuidHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Persistence\ManagerRegistry;
 use Ramsey\Uuid\Exception\InvalidUuidStringException;
-use Throwable;
 use UnexpectedValueException;
 
 /**
  * Class RepositoryWrappersTrait
  *
  * @package App\Repository\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait RepositoryWrappersTrait
 {
-    protected ManagerRegistry $managerRegistry;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getReference(string $id)
+    public function getReference(string $id): ?object
     {
         try {
             $referenceId = UuidHelper::fromString($id);
-        } catch (InvalidUuidStringException $exception) {
-            (static fn (Throwable $exception): string => (string)$exception)($exception);
-
+        } catch (InvalidUuidStringException) {
             $referenceId = $id;
         }
 

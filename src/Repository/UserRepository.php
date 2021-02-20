@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Repository/UserRepository.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -19,16 +19,17 @@ use function array_key_exists;
  * Class UserRepository
  *
  * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
+ * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
  * @method Entity|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null)
- * @method array<int, Entity> findAdvanced(string $id, $hydrationMode = null)
+ * @method Entity|null findAdvanced(string $id, string | int | null $hydrationMode = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null)
- * @method array<int, Entity> findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
- * @method array<int, Entity> findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
- * @method array<int, Entity> findAll()
+ * @method Entity[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null)
+ * @method Entity[] findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method Entity[] findAll()
  *
  * @codingStandardsIgnoreEnd
  */
@@ -44,13 +45,10 @@ class UserRepository extends BaseRepository
      */
     protected static string $entityName = Entity::class;
 
-    private string $environment;
-
-    public function __construct(ManagerRegistry $managerRegistry, string $environment)
-    {
-        parent::__construct($managerRegistry);
-
-        $this->environment = $environment;
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+        private string $environment,
+    ) {
     }
 
     /**
