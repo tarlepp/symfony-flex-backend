@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/RestResource.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -20,7 +20,7 @@ use function sprintf;
  * Class RestResource
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestResource implements RestResourceInterface
 {

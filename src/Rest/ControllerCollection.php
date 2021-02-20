@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/ControllerCollection.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -21,7 +21,7 @@ use function sprintf;
  * Class ControllerCollection
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ControllerCollection implements Countable
 {

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Interfaces/ResponseHandlerInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Interfaces;
@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Interface ResponseHandlerInterface
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface ResponseHandlerInterface
 {

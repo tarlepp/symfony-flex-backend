@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Interfaces/SearchTermInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Interfaces;
@@ -12,7 +12,7 @@ namespace App\Rest\Interfaces;
  * Interface SearchTermInterface
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface SearchTermInterface
 {

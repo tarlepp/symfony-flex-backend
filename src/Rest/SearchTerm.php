@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/SearchTerm.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -25,7 +25,7 @@ use function trim;
  * Class SearchTerm
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 final class SearchTerm implements SearchTermInterface
 {

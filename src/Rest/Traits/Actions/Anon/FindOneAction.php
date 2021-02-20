@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/Actions/Anon/FindOneAction.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\Anon;
@@ -22,7 +22,7 @@ use Throwable;
  * @see \App\Rest\Traits\Methods\FindOneMethod for detailed documents.
  *
  * @package App\Rest\Traits\Actions\Anon
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait FindOneAction
 {
