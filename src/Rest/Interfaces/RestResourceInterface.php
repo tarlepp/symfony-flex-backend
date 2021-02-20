@@ -77,11 +77,9 @@ interface RestResourceInterface
      * identifier without actually loading it, if the entity is not yet
      * loaded.
      *
-     * @return object|null
-     *
      * @throws ORMException
      */
-    public function getReference(string $id);
+    public function getReference(string $id): ?object;
 
     /**
      * Getter method for all associations that current entity contains.
