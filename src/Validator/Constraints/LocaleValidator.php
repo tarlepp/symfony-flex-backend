@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Validator/Constraints/LocaleValidator.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -17,15 +17,13 @@ use function in_array;
  * Class LocaleValidator
  *
  * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LocaleValidator extends ConstraintValidator
 {
-    private Localization $localization;
-
-    public function __construct(Localization $localization)
-    {
-        $this->localization = $localization;
+    public function __construct(
+        private Localization $localization,
+    ) {
     }
 
     /**
