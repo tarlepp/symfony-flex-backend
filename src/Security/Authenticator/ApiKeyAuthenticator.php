@@ -93,7 +93,6 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
         return $this->apiKeyUserProvider->getApiKeyForToken($apiToken) instanceof ApiKey;
     }
 
-
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): ?Response
     {
         return null;
