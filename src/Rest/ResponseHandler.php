@@ -46,11 +46,9 @@ final class ResponseHandler implements ResponseHandlerInterface
         self::FORMAT_XML => 'application/xml',
     ];
 
-    private SerializerInterface $serializer;
-
-    public function __construct(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
+    public function __construct(
+        private SerializerInterface $serializer,
+    ) {
     }
 
     public function getSerializer(): SerializerInterface
@@ -59,7 +57,7 @@ final class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @return array<int|string, array<int, array<int, string>|string>|bool|string>
+     * @return array<int|string, mixed>
      */
     public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array
     {
@@ -100,21 +98,17 @@ final class ResponseHandler implements ResponseHandlerInterface
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createResponse(
         Request $request,
-        $data,
+        mixed $data,
         ?RestResourceInterface $restResource = null,
         ?int $httpStatus = null,
         ?string $format = null,
-        ?array $context = null
+        ?array $context = null,
     ): Response {
         $httpStatus ??= 200;
         $context ??= $this->getSerializeContext($request, $restResource);
         $format = $this->getFormat($request, $format);
-
         $response = $this->getResponse($data, $httpStatus, $format, $context);
 
         // Set content type
@@ -129,8 +123,7 @@ final class ResponseHandler implements ResponseHandlerInterface
 
         /** @var FormError $error */
         foreach ($form->getErrors(true) as $error) {
-            $origin = $error->getOrigin();
-            $name = $origin !== null ? $origin->getName() : '';
+            $name = $error->getOrigin()?->getName() ?? '';
 
             $errors[] = sprintf(
                 'Field \'%s\': %s',
@@ -157,14 +150,14 @@ final class ResponseHandler implements ResponseHandlerInterface
         bool $populateAll,
         array $populate,
         string $entityName,
-        RestResourceInterface $restResource
+        RestResourceInterface $restResource,
     ): array {
         // Set all associations to be populated
         if ($populateAll && count($populate) === 0) {
             $associations = $restResource->getAssociations();
             $populate = array_map(
                 static fn (string $assocName): string => $entityName . '.' . $assocName,
-                $associations
+                $associations,
             );
         }
 
@@ -183,11 +176,11 @@ final class ResponseHandler implements ResponseHandlerInterface
 
     /**
      * @param mixed $data
-     * @param array<int|string, array<int, array<int, string>|string>|bool|string> $context
+     * @param array<int|string, mixed> $context
      *
      * @throws HttpException
      */
-    private function getResponse($data, int $httpStatus, string $format, array $context): Response
+    private function getResponse(mixed $data, int $httpStatus, string $format, array $context): Response
     {
         try {
             // Create new response

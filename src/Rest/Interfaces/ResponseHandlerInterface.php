@@ -38,25 +38,24 @@ interface ResponseHandlerInterface
     /**
      * Helper method to get serialization context for request.
      *
-     * @return array<int|string, array<int, array<int, string>|string>|bool|string>
+     * @return array<int|string, mixed>
      */
     public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array;
 
     /**
      * Helper method to create response for request.
      *
-     * @param mixed $data
      * @param array<int|string, bool|array<int, string>>|null $context
      *
      * @throws HttpException
      */
     public function createResponse(
         Request $request,
-        $data,
+        mixed $data,
         ?RestResourceInterface $restResource = null,
         ?int $httpStatus = null,
         ?string $format = null,
-        ?array $context = null
+        ?array $context = null,
     ): Response;
 
     /**
