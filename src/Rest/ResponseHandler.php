@@ -175,7 +175,6 @@ final class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param mixed $data
      * @param array<int|string, mixed> $context
      *
      * @throws HttpException

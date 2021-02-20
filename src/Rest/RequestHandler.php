@@ -209,8 +209,6 @@ final class RequestHandler
     }
 
     /**
-     * @param mixed $searchTerms
-     *
      * @throws LogicException
      * @throws HttpException
      */
