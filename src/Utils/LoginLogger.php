@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Utils/LoginLogger.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -22,21 +22,17 @@ use Throwable;
  * Class LoginLogger
  *
  * @package App\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LoginLogger implements LoginLoggerInterface
 {
-    private LogLoginResource $logLoginResource;
-    private RequestStack $requestStack;
-    private ?User $user = null;
     private DeviceDetector $deviceDetector;
+    private ?User $user = null;
 
-    public function __construct(LogLoginResource $logLoginResource, RequestStack $requestStack)
-    {
-        // Store used services
-        $this->logLoginResource = $logLoginResource;
-        $this->requestStack = $requestStack;
-
+    public function __construct(
+        private LogLoginResource $logLoginResource,
+        private RequestStack $requestStack,
+    ) {
         $this->deviceDetector = new DeviceDetector();
     }
 
@@ -57,7 +53,7 @@ class LoginLogger implements LoginLoggerInterface
         }
 
         // Parse user agent data with device detector
-        $this->deviceDetector = new DeviceDetector($request->headers->get('User-Agent', ''));
+        $this->deviceDetector->setUserAgent($request->headers->get('User-Agent', ''));
         $this->deviceDetector->parse();
 
         // Create entry
