@@ -27,15 +27,11 @@ use function get_class;
  */
 class SecurityUserFactory implements UserProviderInterface
 {
-    private UserRepository $userRepository;
-    private RolesService $rolesService;
-    private string $uuidV1Regex;
-
-    public function __construct(UserRepository $userRepository, RolesService $rolesService, string $uuidV1Regex)
-    {
-        $this->userRepository = $userRepository;
-        $this->rolesService = $rolesService;
-        $this->uuidV1Regex = $uuidV1Regex;
+    public function __construct(
+        private UserRepository $userRepository,
+        private RolesService $rolesService,
+        private string $uuidV1Regex,
+    ) {
     }
 
     /**
@@ -62,6 +58,9 @@ class SecurityUserFactory implements UserProviderInterface
         return $class === SecurityUser::class;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function refreshUser(UserInterface $user): SecurityUser
     {
         if (!($user instanceof SecurityUser)) {
