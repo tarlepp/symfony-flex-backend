@@ -50,9 +50,8 @@ class UuidHelper
             if ($fields instanceof FieldsInterface) {
                 $output = $fields->getVersion() === 1 ? UuidBinaryOrderedTimeType::NAME : UuidBinaryType::NAME;
             }
-        } catch (InvalidUuidStringException $exception) {
+        } catch (InvalidUuidStringException) {
             // ok, so now we know that value isn't uuid
-            (static fn (InvalidUuidStringException $exception): InvalidUuidStringException => $exception)($exception);
         }
 
         return $output;
