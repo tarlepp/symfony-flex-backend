@@ -30,8 +30,8 @@ use function trim;
 final class SearchTerm implements SearchTermInterface
 {
     public static function getCriteria(
-        array | string $column,
-        array | string $search,
+        array | string | null $column,
+        array | string | null $search,
         ?string $operand = null,
         ?int $mode = null,
     ): ?array {
@@ -126,16 +126,16 @@ final class SearchTerm implements SearchTermInterface
     }
 
     /**
-     * @param string|array<int, string> $column search column(s), could be a
-     *                                          string or an array of strings
+     * @param string|array<int, string>|null $column search column(s), could be a
+     *                                               string or an array of strings
      *
      * @return array<int, string>
      */
-    private static function getColumns(array | string $column): array
+    private static function getColumns(array | string | null $column): array
     {
         // Normalize column and search parameters
         return array_filter(
-            array_map('trim', (is_array($column) ? $column : (array)$column)),
+            array_map('trim', (is_array($column) ? $column : (array)(string)$column)),
             static fn (string $value): bool => trim($value) !== ''
         );
     }
@@ -143,15 +143,15 @@ final class SearchTerm implements SearchTermInterface
     /**
      * Method to get search terms.
      *
-     * @param string|array<int, string> $search search term(s), could be a string or an array of strings
+     * @param string|array<int, string>|null $search search term(s), could be a string or an array of strings
      *
      * @return array<int, string>
      */
-    private static function getSearchTerms(array | string $search): array
+    private static function getSearchTerms(array | string | null $search): array
     {
         return array_unique(
             array_filter(
-                array_map('trim', (is_array($search) ? $search : explode(' ', $search))),
+                array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
                 static fn (string $value): bool => trim($value) !== ''
             )
         );
