@@ -18,7 +18,7 @@ use function array_values;
 use function count;
 use function explode;
 use function is_array;
-use function strpos;
+use function str_contains;
 use function trim;
 
 /**
@@ -29,11 +29,12 @@ use function trim;
  */
 final class SearchTerm implements SearchTermInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function getCriteria($column, $search, ?string $operand = null, ?int $mode = null): ?array
-    {
+    public static function getCriteria(
+        array | string $column,
+        array | string $search,
+        ?string $operand = null,
+        ?int $mode = null,
+    ): ?array {
         $operand ??= self::OPERAND_OR;
         $mode ??= self::MODE_FULL;
 
@@ -108,7 +109,7 @@ final class SearchTerm implements SearchTermInterface
          * @return array<int, string>
          */
         return static fn (string $column): array => [
-            strpos($column, '.') === false ? 'entity.' . $column : $column, 'like', self::getTerm($mode, $term),
+            !str_contains($column, '.') ? 'entity.' . $column : $column, 'like', self::getTerm($mode, $term),
         ];
     }
 
@@ -117,20 +118,11 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getTerm(int $mode, string $term): string
     {
-        switch ($mode) {
-            case self::MODE_STARTS_WITH:
-                $term .= '%';
-                break;
-            case self::MODE_ENDS_WITH:
-                $term = '%' . $term;
-                break;
-            case self::MODE_FULL:
-            default:
-                $term = '%' . $term . '%';
-                break;
-        }
-
-        return $term;
+        return match ($mode) {
+            self::MODE_STARTS_WITH => $term . '%',
+            self::MODE_ENDS_WITH => '%s' . $term,
+            default => '%' . $term . '%', // self::MODE_FULL
+        };
     }
 
     /**
@@ -139,7 +131,7 @@ final class SearchTerm implements SearchTermInterface
      *
      * @return array<int, string>
      */
-    private static function getColumns($column): array
+    private static function getColumns(array | string $column): array
     {
         // Normalize column and search parameters
         return array_filter(
@@ -151,17 +143,15 @@ final class SearchTerm implements SearchTermInterface
     /**
      * Method to get search terms.
      *
-     * @param string|array<int, string>|null $search search term(s), could be
-     *                                               a string or an array of
-     *                                               strings
+     * @param string|array<int, string> $search search term(s), could be a string or an array of strings
      *
      * @return array<int, string>
      */
-    private static function getSearchTerms($search): array
+    private static function getSearchTerms(array | string $search): array
     {
         return array_unique(
             array_filter(
-                array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
+                array_map('trim', (is_array($search) ? $search : explode(' ', $search))),
                 static fn (string $value): bool => trim($value) !== ''
             )
         );
