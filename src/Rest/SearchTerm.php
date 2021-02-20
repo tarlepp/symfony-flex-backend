@@ -120,7 +120,7 @@ final class SearchTerm implements SearchTermInterface
     {
         return match ($mode) {
             self::MODE_STARTS_WITH => $term . '%',
-            self::MODE_ENDS_WITH => '%s' . $term,
+            self::MODE_ENDS_WITH => '%' . $term,
             default => '%' . $term . '%', // self::MODE_FULL
         };
     }
