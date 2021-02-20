@@ -38,7 +38,7 @@ trait CollectionTrait
      *
      * @throws InvalidArgumentException
      */
-    abstract public function error(string $className): void;
+    abstract public function getErrorMessage(string $className): string;
 
     /**
      * Getter method for given class for current collection.
@@ -49,7 +49,8 @@ trait CollectionTrait
      */
     public function get(string $className): mixed
     {
-        return $this->getFilteredItem($className) ?? $this->error($className);
+        return $this->getFilteredItem($className)
+            ?? throw new InvalidArgumentException($this->getErrorMessage($className));
     }
 
     /**

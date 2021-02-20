@@ -12,7 +12,6 @@ use App\Collection\CollectionTrait;
 use App\Rest\Interfaces\ControllerInterface;
 use Closure;
 use Countable;
-use InvalidArgumentException;
 use IteratorAggregate;
 use Psr\Log\LoggerInterface;
 use function sprintf;
@@ -23,7 +22,7 @@ use function sprintf;
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method ControllerInterface get()
+ * @method ControllerInterface get(string $className)
  * @method IteratorAggregate<int, ControllerInterface> getAll()
  */
 class ControllerCollection implements Countable
@@ -41,9 +40,9 @@ class ControllerCollection implements Countable
     ) {
     }
 
-    public function error(string $className): void
+    public function getErrorMessage(string $className): string
     {
-        throw new InvalidArgumentException(sprintf('REST controller \'%s\' does not exist', $className));
+        return sprintf('REST controller \'%s\' does not exist', $className);
     }
 
     public function filter(string $className): Closure

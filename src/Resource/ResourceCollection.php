@@ -26,7 +26,7 @@ use function sprintf;
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method RestResourceInterface get()
+ * @method RestResourceInterface get(string $className)
  * @method IteratorAggregate<int, RestResourceInterface> getAll()
  */
 class ResourceCollection implements Countable
@@ -49,18 +49,9 @@ class ResourceCollection implements Countable
      */
     public function getEntityResource(string $className): RestResourceInterface
     {
-        $current = $this->getFilteredItemByEntity($className);
-
-        if ($current === null) {
-            $message = sprintf(
-                'Resource class does not exist for entity \'%s\'',
-                $className
-            );
-
-            throw new InvalidArgumentException($message);
-        }
-
-        return $current;
+        return $this->getFilteredItemByEntity($className) ?? throw new InvalidArgumentException(
+            sprintf('Resource class does not exist for entity \'%s\'', $className),
+        );
     }
 
     /**
@@ -77,9 +68,9 @@ class ResourceCollection implements Countable
         return static fn (RestResourceInterface $restResource): bool => $restResource instanceof $className;
     }
 
-    public function error(string $className): void
+    public function getErrorMessage(string $className): string
     {
-        throw new InvalidArgumentException(sprintf('Resource \'%s\' does not exist', $className));
+        return sprintf('Resource \'%s\' does not exist', $className);
     }
 
     /**
