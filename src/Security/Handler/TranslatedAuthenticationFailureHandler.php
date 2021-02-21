@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Handler/TranslatedAuthenticationFailureHandler.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Handler;
@@ -11,27 +11,25 @@ namespace App\Security\Handler;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationFailureResponse;
 use Lexik\Bundle\JWTAuthenticationBundle\Security\Http\Authentication\AuthenticationFailureHandler;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class TranslatedAuthenticationFailureHandler
  *
  * @package App\Security\Handler
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class TranslatedAuthenticationFailureHandler extends AuthenticationFailureHandler
 {
-    private TranslatorInterface $translator;
-
-    public function __construct(EventDispatcherInterface $dispatcher, TranslatorInterface $translator)
-    {
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        private TranslatorInterface $translator,
+    ) {
         parent::__construct($dispatcher);
-
-        $this->translator = $translator;
     }
 
     /**

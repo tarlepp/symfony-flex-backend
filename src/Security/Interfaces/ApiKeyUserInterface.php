@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Interfaces/ApiKeyUserInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Interfaces;
@@ -15,7 +15,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Interface ApiKeyUserInterface
  *
  * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface ApiKeyUserInterface extends UserInterface
 {
