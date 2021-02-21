@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/App/Validator/Constraints/EntityReferenceExistsValidator.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
@@ -28,15 +28,13 @@ use function str_replace;
  * Class EntityReferenceExistsValidator
  *
  * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class EntityReferenceExistsValidator extends ConstraintValidator
 {
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
@@ -60,7 +58,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
      *
      * @return array<int, EntityInterface>
      */
-    private function normalize(string $target, $input): array
+    private function normalize(string $target, mixed $input): array
     {
         $values = is_array($input) ? $input : [$input];
 

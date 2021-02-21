@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Utils/HealthzService.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils;
@@ -16,15 +16,13 @@ use Throwable;
  * Class HealthzService
  *
  * @package App\Utils
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 final class HealthzService
 {
-    private HealthzRepository $repository;
-
-    public function __construct(HealthzRepository $repository)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        private HealthzRepository $repository,
+    ) {
     }
 
     /**
