@@ -142,7 +142,7 @@ class AttachUserGroupController
         data: 'userGroup',
         class: UserGroupResource::class,
     )]
-    public function __invoke(User $user, UserGroup $userGroup,): JsonResponse
+    public function __invoke(User $user, UserGroup $userGroup): JsonResponse
     {
         $status = $user->getUserGroups()->contains($userGroup) ? Response::HTTP_OK : Response::HTTP_CREATED;
 
