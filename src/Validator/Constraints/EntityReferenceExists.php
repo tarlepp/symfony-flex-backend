@@ -34,6 +34,17 @@ class EntityReferenceExists extends Constraint
 
     public string $entityClass = '';
 
+    public function __construct(
+        ?string $entityClass = null,
+        array $options = [],
+        array $groups = [],
+        mixed $payload = null,
+    ) {
+        $this->entityClass = $entityClass ?? $options['entityClass'] ?? '';
+
+        parent::__construct($options, $groups, $payload);
+    }
+
     /**
      * {@inheritdoc}
      *
