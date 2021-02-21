@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/Actions/User/DeleteAction.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\User;
@@ -23,25 +23,23 @@ use Throwable;
  * @see \App\Rest\Traits\Methods\DeleteMethod for detailed documents.
  *
  * @package App\Rest\Traits\Actions\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait DeleteAction
 {
     use DeleteMethod;
 
     /**
-     * @Route(
-     *      "/{id}",
-     *      requirements={
-     *          "id" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"DELETE"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_USER')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/{id}',
+        requirements: [
+            'id' => '%app.uuid_v1_regex%',
+        ],
+        methods: ['DELETE'],
+    )]
+    #[Security('is_granted("ROLE_USER")')]
     public function deleteAction(Request $request, string $id): Response
     {
         return $this->deleteMethod($request, $id);

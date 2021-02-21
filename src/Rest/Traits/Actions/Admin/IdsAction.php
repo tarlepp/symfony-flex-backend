@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/Actions/Admin/IdsAction.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\Admin;
@@ -23,22 +23,20 @@ use Throwable;
  * @see \App\Rest\Traits\Methods\IdsMethod for detailed documents.
  *
  * @package App\Rest\Traits\Actions\Admin
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait IdsAction
 {
     use IdsMethod;
 
     /**
-     * @Route(
-     *     path="/ids",
-     *     methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/ids',
+        methods: ['GET'],
+    )]
+    #[Security('is_granted("ROLE_ADMIN")')]
     public function idsAction(Request $request): Response
     {
         return $this->idsMethod($request);
