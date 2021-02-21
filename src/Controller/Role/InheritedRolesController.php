@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Controller\Role;
 
 use App\Entity\Role;
-use App\Resource\UserResource;
+use App\Resource\RoleResource;
 use App\Security\RolesService;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -79,7 +79,7 @@ class InheritedRolesController
      */
     #[ParamConverter(
         data: 'role',
-        class: UserResource::class,
+        class: RoleResource::class,
     )]
     public function __invoke(Role $role): JsonResponse
     {
