@@ -34,6 +34,15 @@ class EntityReferenceExists extends Constraint
 
     public string $entityClass = '';
 
+    /**
+     * {@inheritdoc}
+     *
+     * @var array<string, string>
+     */
+    protected static $errorNames = [
+        self::ENTITY_REFERENCE_EXISTS_ERROR => 'ENTITY_REFERENCE_EXISTS_ERROR',
+    ];
+
     public function __construct(
         ?string $entityClass = null,
         array $options = [],
@@ -44,15 +53,6 @@ class EntityReferenceExists extends Constraint
 
         parent::__construct($options, $groups, $payload);
     }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @var array<string, string>
-     */
-    protected static $errorNames = [
-        self::ENTITY_REFERENCE_EXISTS_ERROR => 'ENTITY_REFERENCE_EXISTS_ERROR',
-    ];
 
     /**
      * @noinspection PhpMissingParentCallCommonInspection
