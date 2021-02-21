@@ -10,6 +10,7 @@ namespace App\Controller\UserGroup;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use App\Rest\ResponseHandler;
 use Nelmio\ApiDocBundle\Annotation\Model;
@@ -37,21 +38,6 @@ class UsersController
 
     /**
      * Endpoint action to list specified user group users.
-     *
-     * @Route(
-     *      "/user_group/{userGroup}/users",
-     *      requirements={
-     *          "userGroup" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"GET"},
-     *  )
-     *
-     * @ParamConverter(
-     *      "userGroup",
-     *      class="App\Resource\UserGroupResource",
-     *  )
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
      *
      * @OA\Tag(name="UserGroup Management")
      * @OA\Parameter(
@@ -91,6 +77,18 @@ class UsersController
      *
      * @throws Throwable
      */
+    #[Route(
+        path: '/user_group/{userGroup}/users',
+        requirements: [
+            'userGroup' => '%app.uuid_v1_regex%',
+        ],
+        methods: [Request::METHOD_GET],
+    )]
+    #[Security('is_granted("ROLE_ADMIN")')]
+    #[ParamConverter(
+        data: 'userGroup',
+        class: UserGroupResource::class,
+    )]
     public function __invoke(Request $request, UserGroup $userGroup): Response
     {
         return $this->responseHandler
