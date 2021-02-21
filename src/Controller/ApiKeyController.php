@@ -21,12 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ApiKeyController
  *
- * @Route(
- *     path="/api_key",
- *  )
- *
- * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
- *
  * @OA\Tag(name="ApiKey Management")
  *
  * @package App\Controller
@@ -34,6 +28,10 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @method ApiKeyResource getResource()
  */
+#[Route(
+    path: '/api_key',
+)]
+#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class ApiKeyController extends Controller
 {
     use Actions\Root\CountAction;
