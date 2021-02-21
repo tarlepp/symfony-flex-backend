@@ -13,6 +13,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -22,6 +23,11 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @package App\Controller\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Route(
+    path: '/profile/groups',
+    methods: [Request::METHOD_GET],
+)]
+#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class GroupsController
 {
     public function __construct(
@@ -31,13 +37,6 @@ class GroupsController
 
     /**
      * Endpoint action to get current user user groups.
-     *
-     * @Route(
-     *     path="/profile/groups",
-     *     methods={"GET"},
-     *  );
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
      * @OA\Parameter(
      *      name="Authorization",

@@ -13,6 +13,7 @@ use App\Security\RolesService;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,6 +22,11 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Route(
+    path: '/profile/roles',
+    methods: [Request::METHOD_GET],
+)]
+#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class RolesController
 {
     public function __construct(
@@ -30,13 +36,6 @@ class RolesController
 
     /**
      * Endpoint action to get current user roles as an array.
-     *
-     * @Route(
-     *     path="/profile/roles",
-     *     methods={"GET"},
-     *  );
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
      * @OA\Parameter(
      *      name="Authorization",
