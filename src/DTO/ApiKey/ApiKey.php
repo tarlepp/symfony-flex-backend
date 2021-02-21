@@ -34,10 +34,8 @@ class ApiKey extends RestDto
         'userGroups' => 'updateUserGroups',
     ];
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     protected string $description = '';
 
     protected string $token = '';
