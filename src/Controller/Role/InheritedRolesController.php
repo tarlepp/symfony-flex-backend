@@ -26,12 +26,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[Route(
-    path: '/role/{role}/inherited',
-    requirements: ['role' => '^ROLE_\w+$'],
-    methods: [Request::METHOD_GET],
-)]
-#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class InheritedRolesController
 {
     public function __construct(
@@ -77,6 +71,12 @@ class InheritedRolesController
      *      ),
      *  )
      */
+    #[Route(
+        path: '/role/{role}/inherited',
+        requirements: ['role' => '^ROLE_\w+$'],
+        methods: [Request::METHOD_GET],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     #[ParamConverter(
         data: 'role',
         class: RoleResource::class,
