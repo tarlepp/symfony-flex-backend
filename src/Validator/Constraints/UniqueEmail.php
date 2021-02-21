@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Validator\Constraints;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraint;
  * @package App\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 class UniqueEmail extends Constraint
 {
     public const IS_UNIQUE_EMAIL_ERROR = 'd487278d-8b13-4da0-b4cc-f862e6e99af6';
