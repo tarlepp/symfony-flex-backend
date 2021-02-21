@@ -23,11 +23,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @package App\Controller\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[Route(
-    path: '/profile/groups',
-    methods: [Request::METHOD_GET],
-)]
-#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class GroupsController
 {
     public function __construct(
@@ -88,6 +83,11 @@ class GroupsController
      *  )
      * @OA\Tag(name="Profile")
      */
+    #[Route(
+        path: '/profile/groups',
+        methods: [Request::METHOD_GET],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function __invoke(User $loggedInUser): JsonResponse
     {
         return new JsonResponse(

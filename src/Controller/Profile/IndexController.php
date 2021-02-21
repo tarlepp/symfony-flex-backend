@@ -26,11 +26,6 @@ use Symfony\Component\Serializer\SerializerInterface;
  * @package App\Controller\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[Route(
-    path: '/profile',
-    methods: [Request::METHOD_GET],
-)]
-#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class IndexController
 {
     public function __construct(
@@ -79,6 +74,11 @@ class IndexController
      *
      * @throws JsonException
      */
+    #[Route(
+        path: '/profile',
+        methods: [Request::METHOD_GET],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function __invoke(User $loggedInUser): JsonResponse
     {
         /** @var array<string, string|array<string, string>> $output */

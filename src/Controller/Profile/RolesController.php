@@ -22,11 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[Route(
-    path: '/profile/roles',
-    methods: [Request::METHOD_GET],
-)]
-#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class RolesController
 {
     public function __construct(
@@ -70,6 +65,11 @@ class RolesController
      *  )
      * @OA\Tag(name="Profile")
      */
+    #[Route(
+        path: '/profile/roles',
+        methods: [Request::METHOD_GET],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function __invoke(User $loggedInUser): JsonResponse
     {
         return new JsonResponse($this->rolesService->getInheritedRoles($loggedInUser->getRoles()));
