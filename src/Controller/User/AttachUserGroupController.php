@@ -10,12 +10,14 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -37,26 +39,6 @@ class AttachUserGroupController
 
     /**
      * Endpoint action to attach specified user group to specified user.
-     *
-     * @Route(
-     *      "/user/{user}/group/{userGroup}",
-     *      requirements={
-     *          "user" = "%app.uuid_v1_regex%",
-     *          "userGroup" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"POST"},
-     *  )
-     *
-     * @ParamConverter(
-     *      "user",
-     *      class="App\Resource\UserResource",
-     *  )
-     * @ParamConverter(
-     *      "userGroup",
-     *      class="App\Resource\UserGroupResource",
-     *  )
-     *
-     * @Security("is_granted('ROLE_ROOT')")
      *
      * @OA\Tag(name="User Management")
      * @OA\Parameter(
@@ -143,7 +125,24 @@ class AttachUserGroupController
      *
      * @throws Throwable
      */
-    public function __invoke(User $user, UserGroup $userGroup): JsonResponse
+    #[Route(
+        path: '/user/{user}/group/{userGroup}',
+        requirements: [
+            'user' => '%app.uuid_v1_regex%',
+            'userGroup' => '%app.uuid_v1_regex%',
+        ],
+        methods: [Request::METHOD_POST],
+    )]
+    #[Security('is_granted("ROLE_ROOT")')]
+    #[ParamConverter(
+        data: 'user',
+        class: UserResource::class,
+    )]
+    #[ParamConverter(
+        data: 'userGroup',
+        class: UserGroupResource::class,
+    )]
+    public function __invoke(User $user, UserGroup $userGroup,): JsonResponse
     {
         $status = $user->getUserGroups()->contains($userGroup) ? Response::HTTP_OK : Response::HTTP_CREATED;
 
