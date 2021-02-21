@@ -26,6 +26,12 @@ use Throwable;
  * @package App\Controller\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Route(
+    path: '/role/{role}',
+    requirements: ['role' => '^ROLE_\w+$'],
+    methods: [Request::METHOD_GET],
+)]
+#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class FindOneRoleController extends Controller
 {
     use Methods\FindOneMethod;
@@ -36,16 +42,6 @@ class FindOneRoleController extends Controller
     }
 
     /**
-     * @Route(
-     *      path="/role/{role}",
-     *      requirements={
-     *          "role" = "^ROLE_\w+$",
-     *      },
-     *      methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
      * @throws Throwable
      */
     public function __invoke(Request $request, string $role): Response

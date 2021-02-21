@@ -11,9 +11,9 @@ namespace App\Controller\Role;
 use App\Entity\Role;
 use App\Security\RolesService;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,6 +24,12 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Route(
+    path: '/role/{role}/inherited',
+    requirements: ['role' => '^ROLE_\w+$'],
+    methods: [Request::METHOD_GET],
+)]
+#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class InheritedRolesController
 {
     public function __construct(
@@ -34,21 +40,6 @@ class InheritedRolesController
     /**
      * Endpoint action to return all inherited roles as an array for specified
      * Role.
-     *
-     * @Route(
-     *      "/role/{role}/inherited",
-     *      requirements={
-     *          "role" = "^ROLE_\w+$",
-     *      },
-     *      methods={"GET"},
-     *  )
-     *
-     * @ParamConverter(
-     *      "role",
-     *      class="App\Resource\RoleResource",
-     * )
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
      * @OA\Parameter(
      *      name="Authorization",
