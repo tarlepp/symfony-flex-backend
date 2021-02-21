@@ -23,10 +23,6 @@ use Throwable;
  * @package App\Controller\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[Route(
-    path: '/localization/timezone',
-    methods: [Request::METHOD_GET],
-)]
 class TimeZoneController
 {
     public function __construct(
@@ -76,6 +72,10 @@ class TimeZoneController
      *
      * @throws Throwable
      */
+    #[Route(
+        path: '/localization/timezone',
+        methods: [Request::METHOD_GET],
+    )]
     public function __invoke(): JsonResponse
     {
         return new JsonResponse($this->localization->getTimezones());

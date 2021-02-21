@@ -22,10 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Controller\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[Route(
-    path: '/localization/locale',
-    methods: [Request::METHOD_GET],
-)]
 class LocaleController
 {
     public function __construct(
@@ -48,6 +44,10 @@ class LocaleController
      *      ),
      *  )
      */
+    #[Route(
+        path: '/localization/locale',
+        methods: [Request::METHOD_GET],
+    )]
     public function __invoke(): JsonResponse
     {
         return new JsonResponse($this->localization->getLocales());
