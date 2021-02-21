@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/SecurityUser.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security;
@@ -15,7 +15,7 @@ use App\Security\Interfaces\SecurityUserInterface;
  * Class SecurityUser
  *
  * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class SecurityUser implements SecurityUserInterface
 {

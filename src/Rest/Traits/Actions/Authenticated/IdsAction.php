@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/Actions/Authenticated/IdsAction.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\Authenticated;
@@ -23,22 +23,20 @@ use Throwable;
  * @see \App\Rest\Traits\Methods\IdsMethod for detailed documents.
  *
  * @package App\Rest\Traits\Actions\Authenticated
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait IdsAction
 {
     use IdsMethod;
 
     /**
-     * @Route(
-     *     path="/ids",
-     *     methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/ids',
+        methods: ['GET'],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function idsAction(Request $request): Response
     {
         return $this->idsMethod($request);

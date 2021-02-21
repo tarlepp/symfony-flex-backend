@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/UserTypeIdentification.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security;
@@ -12,6 +12,7 @@ use App\Entity\ApiKey;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Stringable;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -20,17 +21,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class UserTypeIdentification
  *
  * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserTypeIdentification
 {
-    private TokenStorageInterface $tokenStorage;
-    private UserRepository $userRepository;
-
-    public function __construct(TokenStorageInterface $tokenStorage, UserRepository $userRepository)
-    {
-        $this->tokenStorage = $tokenStorage;
-        $this->userRepository = $userRepository;
+    public function __construct(
+        private TokenStorageInterface $tokenStorage,
+        private UserRepository $userRepository,
+    ) {
     }
 
     /**
@@ -57,8 +55,6 @@ class UserTypeIdentification
 
     /**
      * Helper method to get user identity object via token storage.
-     *
-     * @return SecurityUser|ApiKeyUser|null
      */
     public function getIdentity(): ?UserInterface
     {
@@ -72,11 +68,7 @@ class UserTypeIdentification
     {
         $apiKeyUser = $this->getUserToken();
 
-        if ($apiKeyUser instanceof ApiKeyUser) {
-            $output = $apiKeyUser;
-        }
-
-        return $output ?? null;
+        return $apiKeyUser instanceof ApiKeyUser ? $apiKeyUser : null;
     }
 
     /**
@@ -86,28 +78,18 @@ class UserTypeIdentification
     {
         $securityUser = $this->getUserToken();
 
-        if ($securityUser instanceof SecurityUser) {
-            $output = $securityUser;
-        }
-
-        return $output ?? null;
+        return $securityUser instanceof SecurityUser ? $securityUser : null;
     }
 
     /**
      * Returns a user representation. Can be a UserInterface instance, an
      * object implementing a __toString method, or the username as a regular
      * string.
-     *
-     * @return object|string|null
      */
-    private function getUserToken()
+    private function getUserToken(): UserInterface | Stringable | string | null
     {
         $token = $this->tokenStorage->getToken();
 
-        if (!($token === null || $token instanceof AnonymousToken)) {
-            $output = $token->getUser();
-        }
-
-        return $output ?? null;
+        return !($token === null || $token instanceof AnonymousToken) ? $token->getUser() : null;
     }
 }

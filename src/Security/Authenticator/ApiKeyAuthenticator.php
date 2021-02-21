@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Authenticator/ApiKeyAuthenticator.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Authenticator;
@@ -27,17 +27,15 @@ use function preg_match;
  * Class ApiKeyAuthenticator
  *
  * @package App\Security\Authenticator
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 {
     private const CREDENTIAL_KEY = 'token';
 
-    private ApiKeyUserProvider $apiKeyUserProvider;
-
-    public function __construct(ApiKeyUserProvider $apiKeyUserProvider)
-    {
-        $this->apiKeyUserProvider = $apiKeyUserProvider;
+    public function __construct(
+        private ApiKeyUserProvider $apiKeyUserProvider,
+    ) {
     }
 
     public function supports(Request $request): bool
@@ -90,18 +88,11 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
      */
     public function checkCredentials($credentials, UserInterface $user): bool
     {
-        $apiToken = $this->getApiKeyToken($credentials);
-
-        if ($apiToken === null) {
-            throw new AuthenticationException('Invalid token');
-        }
+        $apiToken = $this->getApiKeyToken($credentials) ?? throw new AuthenticationException('Invalid token');
 
         return $this->apiKeyUserProvider->getApiKeyForToken($apiToken) instanceof ApiKey;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): ?Response
     {
         return null;
@@ -121,10 +112,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
         return false;
     }
 
-    /**
-     * @param mixed $credentials
-     */
-    private function getApiKeyToken($credentials): ?string
+    private function getApiKeyToken(mixed $credentials): ?string
     {
         return is_array($credentials) ? $credentials[self::CREDENTIAL_KEY] ?? null : null;
     }

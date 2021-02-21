@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Provider/ApiKeyUserProvider.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Provider;
@@ -22,17 +22,14 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * Class ApiKeyUserProvider
  *
  * @package App\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyUserProvider implements ApiKeyUserProviderInterface
 {
-    private ApiKeyRepository $apiKeyRepository;
-    private RolesService $rolesService;
-
-    public function __construct(ApiKeyRepository $apiKeyRepository, RolesService $rolesService)
-    {
-        $this->apiKeyRepository = $apiKeyRepository;
-        $this->rolesService = $rolesService;
+    public function __construct(
+        private ApiKeyRepository $apiKeyRepository,
+        private RolesService $rolesService,
+    ) {
     }
 
     public function getApiKeyForToken(string $token): ?ApiKey
@@ -40,9 +37,9 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface
         return $this->apiKeyRepository->findOneBy(['token' => $token]);
     }
 
-    public function loadUserByUsername(string $token): ApiKeyUserInterface
+    public function loadUserByUsername(string $username): ApiKeyUserInterface
     {
-        $apiKey = $this->getApiKeyForToken($token);
+        $apiKey = $this->getApiKeyForToken($username);
 
         if ($apiKey === null) {
             throw new UsernameNotFoundException('API key is not valid');

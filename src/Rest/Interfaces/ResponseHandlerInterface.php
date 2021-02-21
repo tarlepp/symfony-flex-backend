@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Interfaces/ResponseHandlerInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Interfaces;
@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\SerializerInterface;
  * Interface ResponseHandlerInterface
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface ResponseHandlerInterface
 {
@@ -38,25 +38,24 @@ interface ResponseHandlerInterface
     /**
      * Helper method to get serialization context for request.
      *
-     * @return array<int|string, array<int, array<int, string>|string>|bool|string>
+     * @return array<int|string, mixed>
      */
     public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array;
 
     /**
      * Helper method to create response for request.
      *
-     * @param mixed $data
      * @param array<int|string, bool|array<int, string>>|null $context
      *
      * @throws HttpException
      */
     public function createResponse(
         Request $request,
-        $data,
+        mixed $data,
         ?RestResourceInterface $restResource = null,
         ?int $httpStatus = null,
         ?string $format = null,
-        ?array $context = null
+        ?array $context = null,
     ): Response;
 
     /**
