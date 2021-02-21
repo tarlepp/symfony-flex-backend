@@ -129,7 +129,7 @@ trait RestMethodHelper
         }
     }
 
-    private function determineOutputAndStatusCodeForRestMethodException(Throwable  $exception): Throwable
+    private function determineOutputAndStatusCodeForRestMethodException(Throwable $exception): Throwable
     {
         $code = $this->getExceptionCode($exception);
 
