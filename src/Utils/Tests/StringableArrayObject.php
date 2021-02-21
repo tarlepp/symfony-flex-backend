@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Utils/Tests/StringableArrayObject.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils\Tests;
@@ -17,7 +17,7 @@ use Stringable;
  * Class StringableArrayObject
  *
  * @package App\Utils\Tests
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class StringableArrayObject extends ArrayObject implements Stringable
 {
@@ -34,7 +34,7 @@ class StringableArrayObject extends ArrayObject implements Stringable
          *
          * @return mixed
          */
-        $iterator = static fn ($input) => $input instanceof Stringable ? (string)$input : $input;
+        $iterator = static fn (mixed $input): mixed => $input instanceof Stringable ? (string)$input : $input;
 
         return JSON::encode(array_map($iterator, $this->getArrayCopy()));
     }
