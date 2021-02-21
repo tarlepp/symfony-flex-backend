@@ -11,21 +11,21 @@ namespace App\Controller\Localization;
 use App\Service\Localization;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class LocaleController
- *
- * @Route(
- *     path="/localization/locale",
- *     methods={"GET"},
- *  )
  *
  * @OA\Tag(name="Localization")
  *
  * @package App\Controller\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Route(
+    path: '/localization/locale',
+    methods: [Request::METHOD_GET],
+)]
 class LocaleController
 {
     public function __construct(
