@@ -53,13 +53,6 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     use Uuid;
 
     /**
-     * @Groups({
-     *      "ApiKey",
-     *      "ApiKey.id",
-     *
-     *      "LogRequest.apiKey",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -70,21 +63,15 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'ApiKey',
+        'ApiKey.id',
+
+        'LogRequest.apiKey',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "ApiKey",
-     *      "ApiKey.token",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(
-     *      min = 40,
-     *      max = 40,
-     *  )
-     *
      * @ORM\Column(
      *      name="token",
      *      type="string",
@@ -92,27 +79,30 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'ApiKey',
+        'ApiKey.token',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(exactly: 40)]
     private string $token = '';
 
     /**
-     * @Groups({
-     *      "ApiKey",
-     *      "ApiKey.description",
-     *  })
-     *
      * @ORM\Column(
      *      name="description",
      *      type="text",
      *  )
      */
+    #[Groups([
+        'ApiKey',
+        'ApiKey.description',
+    ])]
+    #[Assert\NotNull]
     private string $description = '';
 
     /**
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
-     *
-     * @Groups({
-     *      "ApiKey.userGroups",
-     *  })
      *
      * @ORM\ManyToMany(
      *      targetEntity="UserGroup",
@@ -122,20 +112,22 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
      *      name="api_key_has_user_group",
      *  )
      */
+    #[Groups([
+        'ApiKey.userGroups',
+    ])]
     private Collection | ArrayCollection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
-     *
-     * @Groups({
-     *      "ApiKey.logsRequest",
-     *  })
      *
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\LogRequest",
      *      mappedBy="apiKey",
      *  )
      */
+    #[Groups([
+        'ApiKey.logsRequest',
+    ])]
     private Collection | ArrayCollection $logsRequest;
 
     /**
@@ -220,12 +212,11 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     /**
      * Getter for roles.
      *
-     * @Groups({
-     *      "ApiKey.roles",
-     *  })
-     *
      * @return array<int, string>
      */
+    #[Groups([
+        'ApiKey.roles',
+    ])]
     public function getRoles(): array
     {
         return array_values(
