@@ -26,5 +26,8 @@ class UserCreate extends User
      *      max = 255,
      *  )
      */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 8, max: 255)]
     protected string $password = '';
 }
