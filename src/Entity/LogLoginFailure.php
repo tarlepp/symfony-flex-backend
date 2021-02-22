@@ -39,11 +39,6 @@ class LogLoginFailure implements EntityInterface
     use Uuid;
 
     /**
-     * @Groups({
-     *      "LogLoginFailure",
-     *      "LogLoginFailure.id",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -54,14 +49,13 @@ class LogLoginFailure implements EntityInterface
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'LogLoginFailure',
+        'LogLoginFailure.id',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "LogLoginFailure",
-     *      "LogLoginFailure.user",
-     *  })
-     *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\User",
      *      inversedBy="logsLoginFailure",
@@ -74,20 +68,23 @@ class LogLoginFailure implements EntityInterface
      *      ),
      *  })
      */
+    #[Groups([
+        'LogLoginFailure',
+        'LogLoginFailure.user',
+    ])]
     private User $user;
 
     /**
-     * @Groups({
-     *      "LogLoginFailure",
-     *      "LogLoginFailure.timestamp",
-     *  })
-     *
      * @ORM\Column(
      *      name="timestamp",
      *      type="datetime_immutable",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLoginFailure',
+        'LogLoginFailure.timestamp',
+    ])]
     private DateTimeImmutable $timestamp;
 
     /**
