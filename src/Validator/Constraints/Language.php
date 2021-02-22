@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Validator\Constraints;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraint;
  * @package App\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class Language extends Constraint
 {
     public const INVALID_LANGUAGE = '08bd61cf-ba27-45a3-9916-78c39253833a';

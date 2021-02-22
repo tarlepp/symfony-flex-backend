@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Validator\Constraints;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
@@ -24,6 +25,7 @@ use Symfony\Component\Validator\Constraint;
  * @package App\Validator\Constraints
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::IS_REPEATABLE)]
 class EntityReferenceExists extends Constraint
 {
     public const ENTITY_REFERENCE_EXISTS_ERROR = '64888b5e-bded-449b-82ed-0cc1f73df14d';
@@ -40,6 +42,17 @@ class EntityReferenceExists extends Constraint
     protected static $errorNames = [
         self::ENTITY_REFERENCE_EXISTS_ERROR => 'ENTITY_REFERENCE_EXISTS_ERROR',
     ];
+
+    public function __construct(
+        ?string $entityClass = null,
+        array $options = [],
+        array $groups = [],
+        mixed $payload = null,
+    ) {
+        $this->entityClass = $entityClass ?? $options['entityClass'] ?? '';
+
+        parent::__construct($options, $groups, $payload);
+    }
 
     /**
      * @noinspection PhpMissingParentCallCommonInspection
