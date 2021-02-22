@@ -36,17 +36,6 @@ class Role implements EntityInterface
     use Timestampable;
 
     /**
-     * @Groups({
-     *      "Role",
-     *      "Role.role",
-     *
-     *      "UserGroup.role",
-     *
-     *      "set.UserProfile",
-     *      "set.UserProfileGroups",
-     *      "set.UserGroupBasic",
-     *  })
-     *
      * @ORM\Column(
      *      name="role",
      *      type="string",
@@ -55,20 +44,29 @@ class Role implements EntityInterface
      *  )
      * @ORM\Id()
      */
+    #[Groups([
+        'Role',
+        'Role.id',
+
+        'UserGroup.role',
+
+        'set.UserProfile',
+        'set.UserProfileGroups',
+        'set.UserGroupBasic',
+    ])]
     private string $id;
 
     /**
-     * @Groups({
-     *      "Role",
-     *      "Role.description",
-     *  })
-     *
      * @ORM\Column(
      *      name="description",
      *      type="text",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'Role',
+        'Role.description',
+    ])]
     private string $description = '';
 
     /**
@@ -76,15 +74,14 @@ class Role implements EntityInterface
      *
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      *
-     * @Groups({
-     *      "Role.userGroups",
-     *  })
-     *
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\UserGroup",
      *      mappedBy="role",
      *  )
      */
+    #[Groups([
+        'Role.userGroups',
+    ])]
     private Collection | ArrayCollection $userGroups;
 
     public function __construct(string $role)
