@@ -392,16 +392,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     }
 
     /**
-     * Returns the salt that was originally used to encode the password.
-     *
-     * This can return null if the password was not encoded using a salt.
-     */
-    public function getSalt(): ?string
-    {
-        return null;
-    }
-
-    /**
      * Removes sensitive data from the user.
      *
      * This is important if, at any given point, sensitive information like

@@ -78,11 +78,6 @@ class UserTest extends EntityTestCase
         static::assertSame('cnffjbeq', $entity->getPassword());
     }
 
-    public function testThatGetSaltMethodReturnsNull(): void
-    {
-        static::assertNull($this->entity->getSalt());
-    }
-
     public function testThatEraseCredentialsMethodWorksAsExpected(): void
     {
         $this->entity->setPlainPassword('password');
