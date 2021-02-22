@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/RestResourceLifeCycles.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits;
@@ -12,7 +12,7 @@ namespace App\Rest\Traits;
  * Trait RestResourceLifeCycles
  *
  * @package App\Rest\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait RestResourceLifeCycles
 {

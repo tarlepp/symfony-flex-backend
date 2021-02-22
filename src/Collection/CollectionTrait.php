@@ -13,7 +13,6 @@ use Closure;
 use InvalidArgumentException;
 use IteratorAggregate;
 use IteratorIterator;
-use Psr\Log\LoggerInterface;
 use Throwable;
 use function iterator_count;
 
@@ -25,9 +24,6 @@ use function iterator_count;
  */
 trait CollectionTrait
 {
-    private IteratorAggregate $items;
-    private LoggerInterface $logger;
-
     /**
      * Method to filter current collection.
      *
@@ -42,7 +38,7 @@ trait CollectionTrait
      *
      * @throws InvalidArgumentException
      */
-    abstract public function error(string $className): void;
+    abstract public function getErrorMessage(string $className): string;
 
     /**
      * Getter method for given class for current collection.
@@ -53,13 +49,8 @@ trait CollectionTrait
      */
     public function get(string $className): mixed
     {
-        $current = $this->getFilteredItem($className);
-
-        if ($current === null) {
-            $this->error($className);
-        }
-
-        return $current;
+        return $this->getFilteredItem($className)
+            ?? throw new InvalidArgumentException($this->getErrorMessage($className));
     }
 
     /**

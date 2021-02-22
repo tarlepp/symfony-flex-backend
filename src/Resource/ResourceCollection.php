@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Resource/ResourceCollection.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Resource;
@@ -24,7 +24,10 @@ use function sprintf;
  * Class ResourceCollection
  *
  * @package App\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method RestResourceInterface get(string $className)
+ * @method IteratorAggregate<int, RestResourceInterface> getAll()
  */
 class ResourceCollection implements Countable
 {
@@ -33,12 +36,12 @@ class ResourceCollection implements Countable
     /**
      * Collection constructor.
      *
-     * @param IteratorAggregate<int, RestResourceInterface> $resources
+     * @param IteratorAggregate<int, RestResourceInterface> $items
      */
-    public function __construct(IteratorAggregate $resources, LoggerInterface $logger)
-    {
-        $this->items = $resources;
-        $this->logger = $logger;
+    public function __construct(
+        private IteratorAggregate $items,
+        private LoggerInterface $logger,
+    ) {
     }
 
     /**
@@ -46,18 +49,9 @@ class ResourceCollection implements Countable
      */
     public function getEntityResource(string $className): RestResourceInterface
     {
-        $current = $this->getFilteredItemByEntity($className);
-
-        if ($current === null) {
-            $message = sprintf(
-                'Resource class does not exist for entity \'%s\'',
-                $className
-            );
-
-            throw new InvalidArgumentException($message);
-        }
-
-        return $current;
+        return $this->getFilteredItemByEntity($className) ?? throw new InvalidArgumentException(
+            sprintf('Resource class does not exist for entity \'%s\'', $className),
+        );
     }
 
     /**
@@ -74,14 +68,9 @@ class ResourceCollection implements Countable
         return static fn (RestResourceInterface $restResource): bool => $restResource instanceof $className;
     }
 
-    public function error(string $className): void
+    public function getErrorMessage(string $className): string
     {
-        $message = sprintf(
-            'Resource \'%s\' does not exist',
-            $className
-        );
-
-        throw new InvalidArgumentException($message);
+        return sprintf('Resource \'%s\' does not exist', $className);
     }
 
     /**

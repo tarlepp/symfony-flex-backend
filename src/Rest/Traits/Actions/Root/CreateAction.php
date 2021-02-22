@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/Actions/Root/CreateAction.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\Root;
@@ -24,22 +24,20 @@ use Throwable;
  * @see \App\Rest\Traits\Methods\CreateMethod for detailed documents.
  *
  * @package App\Rest\Traits\Actions\Root
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait CreateAction
 {
     use CreateMethod;
 
     /**
-     * @Route(
-     *      path="",
-     *      methods={"POST"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_ROOT')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '',
+        methods: ['POST'],
+    )]
+    #[Security('is_granted("ROLE_ROOT")')]
     public function createAction(Request $request, RestDtoInterface $restDto): Response
     {
         return $this->createMethod($request, $restDto);
