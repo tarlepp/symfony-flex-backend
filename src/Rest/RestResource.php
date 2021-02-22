@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/RestResource.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -20,7 +20,7 @@ use function sprintf;
  * Class RestResource
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestResource implements RestResourceInterface
 {
@@ -85,10 +85,7 @@ abstract class RestResource implements RestResourceInterface
         return $this->getRepository()->getEntityName();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getReference(string $id)
+    public function getReference(string $id): ?object
     {
         return $this->getRepository()->getReference($id);
     }
@@ -109,9 +106,12 @@ abstract class RestResource implements RestResourceInterface
         // Fetch entity
         $entity = $this->getEntity($id);
 
-        // Create new instance of DTO and load entity to that.
-        /** @var RestDtoInterface $restDto */
-        /** @var class-string<RestDtoInterface> $dtoClass */
+        /**
+         * Create new instance of DTO and load entity to that.
+         *
+         * @var RestDtoInterface $restDto
+         * @var class-string<RestDtoInterface> $dtoClass
+         */
         $restDto = (new $dtoClass())
             ->setId($id);
 

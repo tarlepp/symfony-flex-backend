@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Provider/SecurityUserFactory.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Provider;
@@ -23,19 +23,15 @@ use function get_class;
  * Class SecurityUserFactory
  *
  * @package App\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class SecurityUserFactory implements UserProviderInterface
 {
-    private UserRepository $userRepository;
-    private RolesService $rolesService;
-    private string $uuidV1Regex;
-
-    public function __construct(UserRepository $userRepository, RolesService $rolesService, string $uuidV1Regex)
-    {
-        $this->userRepository = $userRepository;
-        $this->rolesService = $rolesService;
-        $this->uuidV1Regex = $uuidV1Regex;
+    public function __construct(
+        private UserRepository $userRepository,
+        private RolesService $rolesService,
+        private string $uuidV1Regex,
+    ) {
     }
 
     /**
@@ -62,6 +58,9 @@ class SecurityUserFactory implements UserProviderInterface
         return $class === SecurityUser::class;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function refreshUser(UserInterface $user): SecurityUser
     {
         if (!($user instanceof SecurityUser)) {
