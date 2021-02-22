@@ -33,8 +33,6 @@ use function random_int;
 /**
  * Class ApiKey
  *
- * @AssertCollection\UniqueEntity("token")
- *
  * @ORM\Table(
  *      name="api_key",
  *      uniqueConstraints={
@@ -46,6 +44,7 @@ use function random_int;
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AssertCollection\UniqueEntity('token')]
 class ApiKey implements EntityInterface, UserGroupAwareInterface
 {
     use Blameable;
