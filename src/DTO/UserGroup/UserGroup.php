@@ -25,19 +25,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class UserGroup extends RestDto
 {
-    /**
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(
-     *      min = 4,
-     *      max = 255,
-     *  )
-     */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 4, max: 255)]
     protected string $name = '';
 
-    /**
-     * @AppAssert\EntityReferenceExists(entityClass=RoleEntity::class)
-     */
+    #[AppAssert\EntityReferenceExists(entityClass: RoleEntity::class)]
     protected ?RoleEntity $role = null;
 
     public function getName(): string
