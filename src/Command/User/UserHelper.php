@@ -53,7 +53,7 @@ class UserHelper
             $found = $this->isCorrectUser($io, $user);
         }
 
-        return $user ?? null;
+        return $user;
     }
 
     /**
@@ -77,7 +77,7 @@ class UserHelper
             $found = $this->isCorrectUserGroup($io, $userGroup);
         }
 
-        return $userGroup ?? null;
+        return $userGroup;
     }
 
     /**
