@@ -16,6 +16,7 @@ use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -35,13 +36,6 @@ class IndexController
 
     /**
      * Endpoint action to get current user profile data.
-     *
-     * @Route(
-     *     path="/profile",
-     *     methods={"GET"},
-     *  );
-     *
-     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      *
      * @OA\Parameter(
      *      name="Authorization",
@@ -80,6 +74,11 @@ class IndexController
      *
      * @throws JsonException
      */
+    #[Route(
+        path: '/profile',
+        methods: [Request::METHOD_GET],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function __invoke(User $loggedInUser): JsonResponse
     {
         /** @var array<string, string|array<string, string>> $output */

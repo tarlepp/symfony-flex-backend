@@ -36,18 +36,14 @@ class FindOneRoleController extends Controller
     }
 
     /**
-     * @Route(
-     *      path="/role/{role}",
-     *      requirements={
-     *          "role" = "^ROLE_\w+$",
-     *      },
-     *      methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_ADMIN')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/role/{role}',
+        requirements: ['role' => '^ROLE_\w+$'],
+        methods: [Request::METHOD_GET],
+    )]
+    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function __invoke(Request $request, string $role): Response
     {
         return $this->findOneMethod($request, $role);
