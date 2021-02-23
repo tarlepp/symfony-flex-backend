@@ -30,12 +30,7 @@ trait GetApplicationTrait
         }
 
         /** @noinspection PhpUndefinedClassInspection */
-        $application = parent::getApplication();
-
-        if ($application === null) {
-            throw new RuntimeException('Cannot determine application for console command to use.');
-        }
-
-        return $application;
+        return parent::getApplication()
+            ?? throw new RuntimeException('Cannot determine application for console command to use.');
     }
 }
