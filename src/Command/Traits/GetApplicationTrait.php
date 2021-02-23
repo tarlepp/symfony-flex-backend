@@ -29,7 +29,7 @@ trait GetApplicationTrait
             throw new RuntimeException('This trait ' . __TRAIT__ . ' is only mentioned to use with console commands.');
         }
 
-        /** @noinspection PhpUndefinedClassInspection */
+        /* @noinspection PhpUndefinedClassInspection */
         return parent::getApplication()
             ?? throw new RuntimeException('Cannot determine application for console command to use.');
     }
