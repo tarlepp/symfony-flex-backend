@@ -35,9 +35,8 @@ class RemoveUserGroupCommand extends Command
         $this->setDescription('Console command to remove existing user group');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
