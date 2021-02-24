@@ -18,12 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class RoleController
  *
- * @Route(
- *     path="/role",
- *  )
- *
- * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
- *
  * @OA\Tag(name="Role Management")
  *
  * @package App\Controller
@@ -31,6 +25,10 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @method RoleResource getResource()
  */
+#[Route(
+    path: '/role',
+)]
+#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class RoleController extends Controller
 {
     use Actions\Admin\CountAction;
