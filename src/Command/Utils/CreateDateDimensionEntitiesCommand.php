@@ -34,11 +34,6 @@ class CreateDateDimensionEntitiesCommand extends Command
     private const YEAR_MIN = 1970;
     private const YEAR_MAX = 2047; // This should be the year when I'm officially retired
 
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private SymfonyStyle $io;
-
     public function __construct(
         private DateDimensionRepository $dateDimensionRepository,
     ) {
@@ -56,18 +51,18 @@ class CreateDateDimensionEntitiesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Create output decorator helpers for the Symfony Style Guide.
-        $this->io = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
 
-        $this->io->title($this->getDescription());
+        $io->title($this->getDescription());
 
         // Determine start and end years
-        $yearStart = $this->getYearStart();
-        $yearEnd = $this->getYearEnd($yearStart);
+        $yearStart = $this->getYearStart($io);
+        $yearEnd = $this->getYearEnd($io, $yearStart);
 
         // Create actual entities
-        $this->process($yearStart, $yearEnd);
+        $this->process($io, $yearStart, $yearEnd);
 
-        $this->io->success('All done - have a nice day!');
+        $io->success('All done - have a nice day!');
 
         return 0;
     }
@@ -77,9 +72,9 @@ class CreateDateDimensionEntitiesCommand extends Command
      *
      * @throws InvalidArgumentException
      */
-    private function getYearStart(): int
+    private function getYearStart(SymfonyStyle $io): int
     {
-        return (int)$this->io->ask('Give a year where to start', (string)self::YEAR_MIN, $this->validatorYearStart());
+        return (int)$io->ask('Give a year where to start', (string)self::YEAR_MIN, $this->validatorYearStart());
     }
 
     /**
@@ -87,9 +82,9 @@ class CreateDateDimensionEntitiesCommand extends Command
      *
      * @throws InvalidArgumentException
      */
-    private function getYearEnd(int $yearStart): int
+    private function getYearEnd(SymfonyStyle $io, int $yearStart): int
     {
-        return (int)$this->io->ask(
+        return (int)$io->ask(
             'Give a year where to end',
             (string)self::YEAR_MAX,
             $this->validatorYearEnd($yearStart),
@@ -101,12 +96,13 @@ class CreateDateDimensionEntitiesCommand extends Command
      *
      * @throws Throwable
      */
-    private function process(int $yearStart, int $yearEnd): void
+    private function process(SymfonyStyle $io, int $yearStart, int $yearEnd): void
     {
         $dateStart = new DateTime($yearStart . '-01-01 00:00:00', new DateTimeZone('UTC'));
         $dateEnd = new DateTime($yearEnd . '-12-31 23:59:59', new DateTimeZone('UTC'));
 
         $progress = $this->getProgressBar(
+            $io,
             (int)$dateEnd->diff($dateStart)->format('%a') + 1,
             sprintf('Creating DateDimension entities between years %d and %d...', $yearStart, $yearEnd),
         );
@@ -121,7 +117,7 @@ class CreateDateDimensionEntitiesCommand extends Command
     /**
      * Helper method to get progress bar for console.
      */
-    private function getProgressBar(int $steps, string $message): ProgressBar
+    private function getProgressBar(SymfonyStyle $io, int $steps, string $message): ProgressBar
     {
         $format = '
  %message%
@@ -132,7 +128,7 @@ class CreateDateDimensionEntitiesCommand extends Command
  Memory usage:   %memory:-6s%
 ';
 
-        $progress = $this->io->createProgressBar($steps);
+        $progress = $io->createProgressBar($steps);
         $progress->setFormat($format);
         $progress->setMessage($message);
 
