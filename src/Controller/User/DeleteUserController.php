@@ -39,23 +39,20 @@ class DeleteUserController extends Controller
     }
 
     /**
-     * @Route(
-     *      "/user/{requestUser}",
-     *      requirements={
-     *          "requestUser" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"DELETE"},
-     *  )
-     *
-     * @ParamConverter(
-     *     "requestUser",
-     *     class="App\Resource\UserResource",
-     *  )
-     *
-     * @Security("is_granted('ROLE_ROOT')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/user/{requestUser}',
+        requirements: [
+            'requestUser' => '%app.uuid_v1_regex%',
+        ],
+        methods: [Request::METHOD_DELETE],
+    )]
+    #[Security('is_granted("ROLE_ROOT")')]
+    #[ParamConverter(
+        data: 'requestUser',
+        class: UserResource::class,
+    )]
     public function __invoke(Request $request, User $requestUser, User $loggedInUser): Response
     {
         if ($loggedInUser === $requestUser) {

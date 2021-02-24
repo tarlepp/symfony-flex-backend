@@ -28,9 +28,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class User
  *
- * @AssertCollection\UniqueEntity("email")
- * @AssertCollection\UniqueEntity("username")
- *
  * @ORM\Table(
  *      name="user",
  *      uniqueConstraints={
@@ -43,6 +40,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[AssertCollection\UniqueEntity('email')]
+#[AssertCollection\UniqueEntity('username')]
 class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 {
     use Blameable;
@@ -51,20 +50,6 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     use Uuid;
 
     /**
-     * @Groups({
-     *      "User",
-     *      "User.id",
-     *
-     *      "LogLogin.user",
-     *      "LogLoginFailure.user",
-     *      "LogRequest.user",
-     *
-     *      "UserGroup.users",
-     *
-     *      "set.UserProfile",
-     *      "set.UserBasic",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -75,24 +60,22 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'User',
+        'User.id',
+
+        'LogLogin.user',
+        'LogLoginFailure.user',
+        'LogRequest.user',
+
+        'UserGroup.users',
+
+        'set.UserProfile',
+        'set.UserBasic',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "User",
-     *      "User.username",
-     *
-     *      "set.UserProfile",
-     *      "set.UserBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 255,
-     *  )
-     *
      * @ORM\Column(
      *      name="username",
      *      type="string",
@@ -100,24 +83,19 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'User',
+        'User.username',
+
+        'set.UserProfile',
+        'set.UserBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 2, max: 255)]
     private string $username = '';
 
     /**
-     * @Groups({
-     *      "User",
-     *      "User.firstName",
-     *
-     *      "set.UserProfile",
-     *      "set.UserBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 255,
-     *  )
-     *
      * @ORM\Column(
      *      name="first_name",
      *      type="string",
@@ -125,24 +103,19 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'User',
+        'User.firstName',
+
+        'set.UserProfile',
+        'set.UserBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 2, max: 255)]
     private string $firstName = '';
 
     /**
-     * @Groups({
-     *      "User",
-     *      "User.lastName",
-     *
-     *      "set.UserProfile",
-     *      "set.UserBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 255,
-     *  )
-     *
      * @ORM\Column(
      *      name="last_name",
      *      type="string",
@@ -150,21 +123,19 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'User',
+        'User.lastName',
+
+        'set.UserProfile',
+        'set.UserBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 2, max: 255)]
     private string $lastName = '';
 
     /**
-     * @Groups({
-     *      "User",
-     *      "User.email",
-     *
-     *      "set.UserProfile",
-     *      "set.UserBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Email()
-     *
      * @ORM\Column(
      *      name="email",
      *      type="string",
@@ -172,21 +143,19 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'User',
+        'User.email',
+
+        'set.UserProfile',
+        'set.UserBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Email]
     private string $email = '';
 
     /**
-     * @Groups({
-     *      "User",
-     *      "User.language",
-     *
-     *      "set.UserProfile",
-     *      "set.UserBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @AppAssert\Language()
-     *
      * @ORM\Column(
      *      name="language",
      *      type="EnumLanguage",
@@ -196,21 +165,19 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      },
      *  )
      */
+    #[Groups([
+        'User',
+        'User.language',
+
+        'set.UserProfile',
+        'set.UserBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[AppAssert\Language]
     private string $language = Localization::DEFAULT_LANGUAGE;
 
     /**
-     * @Groups({
-     *      "User",
-     *      "User.locale",
-     *
-     *      "set.UserProfile",
-     *      "set.UserBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @AppAssert\Locale()
-     *
      * @ORM\Column(
      *      name="locale",
      *      type="EnumLocale",
@@ -220,21 +187,19 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      },
      *  )
      */
+    #[Groups([
+        'User',
+        'User.locale',
+
+        'set.UserProfile',
+        'set.UserBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[AppAssert\Locale]
     private string $locale = Localization::DEFAULT_LOCALE;
 
     /**
-     * * @Groups({
-     *      "User",
-     *      "User.timezone",
-     *
-     *      "set.UserProfile",
-     *      "set.UserBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @AppAssert\Timezone()
-     *
      * @ORM\Column(
      *      name="timezone",
      *      type="string",
@@ -246,6 +211,16 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
      *      },
      *  )
      */
+    #[Groups([
+        'User',
+        'User.timezone',
+
+        'set.UserProfile',
+        'set.UserBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[AppAssert\Timezone]
     private string $timezone = Localization::DEFAULT_TIMEZONE;
 
     /**
