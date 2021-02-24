@@ -39,19 +39,6 @@ class UserGroup implements EntityInterface, Stringable
     use Uuid;
 
     /**
-     * @Groups({
-     *      "UserGroup",
-     *      "UserGroup.id",
-     *
-     *      "ApiKey.userGroups",
-     *      "User.userGroups",
-     *      "Role.userGroups",
-     *
-     *      "set.UserProfile",
-     *      "set.UserProfileGroups",
-     *      "set.UserGroupBasic",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -62,21 +49,21 @@ class UserGroup implements EntityInterface, Stringable
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'UserGroup',
+        'UserGroup.id',
+
+        'ApiKey.userGroups',
+        'User.userGroups',
+        'Role.userGroups',
+
+        'set.UserProfile',
+        'set.UserProfileGroups',
+        'set.UserGroupBasic',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "UserGroup.role",
-     *
-     *      "set.UserProfile",
-     *      "set.UserProfileGroups",
-     *      "set.UserGroupBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Valid()
-     *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\Role",
      *      inversedBy="userGroups",
@@ -89,22 +76,19 @@ class UserGroup implements EntityInterface, Stringable
      *      ),
      *  })
      */
+    #[Groups([
+        'UserGroup.role',
+
+        'set.UserProfile',
+        'set.UserProfileGroups',
+        'set.UserGroupBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Valid]
     private Role $role;
 
     /**
-     * @Groups({
-     *      "UserGroup",
-     *      "UserGroup.name",
-     *
-     *      "set.UserProfile",
-     *      "set.UserProfileGroups",
-     *      "set.UserGroupBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(min = 2, max = 255)
-     *
      * @ORM\Column(
      *      name="name",
      *      type="string",
@@ -112,14 +96,21 @@ class UserGroup implements EntityInterface, Stringable
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'UserGroup',
+        'UserGroup.name',
+
+        'set.UserProfile',
+        'set.UserProfileGroups',
+        'set.UserGroupBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 2, max: 255)]
     private string $name = '';
 
     /**
      * @var Collection<int, User>|ArrayCollection<int, User>
-     *
-     * @Groups({
-     *      "UserGroup.users",
-     *  })
      *
      * @ORM\ManyToMany(
      *      targetEntity="User",
@@ -129,14 +120,13 @@ class UserGroup implements EntityInterface, Stringable
      *      name="user_has_user_group",
      *  )
      */
+    #[Groups([
+        'UserGroup.users',
+    ])]
     private Collection | ArrayCollection $users;
 
     /**
      * @var Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
-     *
-     * @Groups({
-     *      "UserGroup.apiKeys",
-     *  })
      *
      * @ORM\ManyToMany(
      *      targetEntity="ApiKey",
@@ -146,6 +136,9 @@ class UserGroup implements EntityInterface, Stringable
      *      name="api_key_has_user_group",
      *  )
      */
+    #[Groups([
+        'UserGroup.apiKeys',
+    ])]
     private Collection | ArrayCollection $apiKeys;
 
     public function __construct()
