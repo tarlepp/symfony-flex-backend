@@ -37,7 +37,7 @@
 		"nelmio/api-doc-bundle": "4.2.0",
 		"nelmio/cors-bundle": "2.1.0",
 		"ramsey/uuid-doctrine": "1.6.0",
-		"sensio/framework-extra-bundle": "6.1.0",
+		"sensio/framework-extra-bundle": "6.1.1",
 		"symfony/asset": "5.2.3",
 		"symfony/config": "5.2.3",
 		"symfony/console": "5.2.3",
