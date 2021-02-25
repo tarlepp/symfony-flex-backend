@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "236fa48edfe99bbaf9751b3cee5b01b0",
+    "content-hash": "f6fec69edcaca768140c6179599819da",
     "packages": [],
     "packages-dev": [
         {
@@ -147,29 +147,29 @@
         },
         {
             "name": "liuggio/fastest",
-            "version": "v1.7.2",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/liuggio/fastest.git",
-                "reference": "ef1ac47a04b0b44dfccdc92aff066c41e3110a75"
+                "reference": "2f8fb336aa75fa2e475594e5ec256f8efd34a075"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/liuggio/fastest/zipball/ef1ac47a04b0b44dfccdc92aff066c41e3110a75",
-                "reference": "ef1ac47a04b0b44dfccdc92aff066c41e3110a75",
+                "url": "https://api.github.com/repos/liuggio/fastest/zipball/2f8fb336aa75fa2e475594e5ec256f8efd34a075",
+                "reference": "2f8fb336aa75fa2e475594e5ec256f8efd34a075",
                 "shasum": ""
             },
             "require": {
                 "doctrine/collections": "^1.2",
-                "php": "^7.3",
-                "symfony/console": "^3.4|^4.2|^5.0",
-                "symfony/process": "^3.4|^4.2|^5.0",
-                "symfony/stopwatch": "^3.4|^4.2|^5.0"
+                "php": "^7.3 || ^8.0",
+                "symfony/console": "^3.4|^4.4|^5.0",
+                "symfony/process": "^3.4|^4.4|^5.0",
+                "symfony/stopwatch": "^3.4|^4.4|^5.0"
             },
             "require-dev": {
-                "behat/behat": "^3.3",
-                "phpstan/phpstan": "^0.12.48",
-                "phpstan/phpstan-phpunit": "^0.12.16"
+                "behat/behat": "^3.6",
+                "phpstan/phpstan": "^0.12.78",
+                "phpstan/phpstan-phpunit": "^0.12.17"
             },
             "suggest": {
                 "behat/behat": "Install it if you want to run tests with the provided Behat extension"
@@ -180,7 +180,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.7-dev"
+                    "dev-master": "1.8-dev"
                 }
             },
             "autoload": {
@@ -204,9 +204,9 @@
             "description": "Simple parallel testing execution... with some goodies for functional tests.",
             "support": {
                 "issues": "https://github.com/liuggio/fastest/issues",
-                "source": "https://github.com/liuggio/fastest/tree/v1.7.2"
+                "source": "https://github.com/liuggio/fastest/tree/v1.8.0"
             },
-            "time": "2021-01-16T11:19:36+00:00"
+            "time": "2021-02-25T12:59:08+00:00"
         },
         {
             "name": "myclabs/deep-copy",
