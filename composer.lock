@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1c377db270dd1f48be57a3ef75556a3",
+    "content-hash": "02c5ade303292c8bfa1fc72702498422",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2291,16 +2291,16 @@
         },
         {
             "name": "matomo/device-detector",
-            "version": "4.1.0",
+            "version": "4.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "6b3facc35e7a465bc4223fddfa5fa88c5b327554"
+                "reference": "8e13f1f933fd2677ab6c3979cdd8da3412a51c5a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/6b3facc35e7a465bc4223fddfa5fa88c5b327554",
-                "reference": "6b3facc35e7a465bc4223fddfa5fa88c5b327554",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/8e13f1f933fd2677ab6c3979cdd8da3412a51c5a",
+                "reference": "8e13f1f933fd2677ab6c3979cdd8da3412a51c5a",
                 "shasum": ""
             },
             "require": {
@@ -2351,12 +2351,12 @@
                 "useragent"
             ],
             "support": {
-                "forum": "http://forum.matomo.org/",
+                "forum": "https://forum.matomo.org/",
                 "issues": "https://github.com/matomo-org/device-detector/issues",
-                "source": "https://github.com/matomo-org/piwik",
+                "source": "https://github.com/matomo-org/matomo",
                 "wiki": "https://dev.matomo.org/"
             },
-            "time": "2021-01-08T14:14:55+00:00"
+            "time": "2021-02-25T09:43:19+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -3371,16 +3371,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v6.1.0",
+            "version": "v6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "b3596907c3d35bee5a9a1096baaeb7d465a04f30"
+                "reference": "8ef75e99f20332f2725587896364f7079b53de95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/b3596907c3d35bee5a9a1096baaeb7d465a04f30",
-                "reference": "b3596907c3d35bee5a9a1096baaeb7d465a04f30",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/8ef75e99f20332f2725587896364f7079b53de95",
+                "reference": "8ef75e99f20332f2725587896364f7079b53de95",
                 "shasum": ""
             },
             "require": {
@@ -3443,9 +3443,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues",
-                "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/v6.1.0"
+                "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/v6.1.1"
             },
-            "time": "2021-02-16T10:59:31+00:00"
+            "time": "2021-02-23T11:50:58+00:00"
         },
         {
             "name": "symfony/asset",
