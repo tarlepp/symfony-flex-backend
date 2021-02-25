@@ -41,11 +41,6 @@ class DateDimension implements EntityInterface
     use Uuid;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.id",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -56,28 +51,26 @@ class DateDimension implements EntityInterface
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.id',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.date",
-     *  })
-     *
      * @ORM\Column(
      *      name="date",
      *      type="date",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.date',
+    ])]
     private DateTime $date;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.year",
-     *  })
-     *
      * @ORM\Column(
      *      name="year",
      *      type="integer",
@@ -87,14 +80,13 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.year',
+    ])]
     private int $year;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.month",
-     *  })
-     *
      * @ORM\Column(
      *      name="month",
      *      type="integer",
@@ -104,14 +96,13 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.month',
+    ])]
     private int $month;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.day",
-     *  })
-     *
      * @ORM\Column(
      *      name="day",
      *      type="integer",
@@ -121,14 +112,13 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.day',
+    ])]
     private int $day;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.quarter",
-     *  })
-     *
      * @ORM\Column(
      *      name="quarter",
      *      type="integer",
@@ -138,14 +128,13 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.quarter',
+    ])]
     private int $quarter;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.weekNumber",
-     *  })
-     *
      * @ORM\Column(
      *      name="week_number",
      *      type="integer",
@@ -155,14 +144,13 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.weekNumber',
+    ])]
     private int $weekNumber;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.dayNumber",
-     *  })
-     *
      * @ORM\Column(
      *      name="day_number_of_week",
      *      type="integer",
@@ -172,14 +160,13 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.dayNumber',
+    ])]
     private int $dayNumberOfWeek;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.dayNumberOfYear",
-     *  })
-     *
      * @ORM\Column(
      *      name="day_number_of_year",
      *      type="integer",
@@ -189,14 +176,13 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.dayNumberOfYear',
+    ])]
     private int $dayNumberOfYear;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.leapYear",
-     *  })
-     *
      * @ORM\Column(
      *      name="leap_year",
      *      type="boolean",
@@ -206,14 +192,13 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.leapYear',
+    ])]
     private bool $leapYear;
 
     /**
-     * @Groups({
-     *      "DateDimension",
-     *      "DateDimension.weekNumberingYear",
-     *  })
-     *
      * @ORM\Column(
      *      name="week_numbering_year",
      *      type="integer",
@@ -223,15 +208,13 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.weekNumberingYear',
+    ])]
     private int $weekNumberingYear;
 
     /**
-     * @Groups({
-     *      "Default",
-     *      "DateDimension",
-     *      "DateDimension.unixTime",
-     *  })
-     *
      * @ORM\Column(
      *      name="unix_time",
      *      type="bigint",
@@ -241,6 +224,10 @@ class DateDimension implements EntityInterface
      *      },
      *  )
      */
+    #[Groups([
+        'DateDimension',
+        'DateDimension.unixTime',
+    ])]
     private int $unixTime;
 
     public function __construct(DateTime $dateTime)

@@ -28,12 +28,6 @@ trait UserRelations
     /**
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      *
-     * @Groups({
-     *      "User.userGroups",
-     *
-     *      "set.UserProfile",
-     *  })
-     *
      * @ORM\ManyToMany(
      *      targetEntity="App\Entity\UserGroup",
      *      inversedBy="users",
@@ -42,48 +36,50 @@ trait UserRelations
      *      name="user_has_user_group",
      *  )
      */
+    #[Groups([
+        'User.userGroups',
+
+        'set.UserProfile',
+    ])]
     protected Collection | ArrayCollection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
-     *
-     * @Groups({
-     *      "User.logsRequest",
-     *  })
      *
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\LogRequest",
      *      mappedBy="user",
      *  )
      */
+    #[Groups([
+        'User.logsRequest',
+    ])]
     protected Collection | ArrayCollection $logsRequest;
 
     /**
      * @var Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
-     *
-     * @Groups({
-     *      "User.logsLogin",
-     *  })
      *
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\LogLogin",
      *      mappedBy="user",
      *  )
      */
+    #[Groups([
+        'User.logsLogin',
+    ])]
     protected Collection | ArrayCollection $logsLogin;
 
     /**
      * @var Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
-     *
-     * @Groups({
-     *      "User.logsLoginFailure",
-     *  })
      *
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\LogLoginFailure",
      *      mappedBy="user",
      *  )
      */
+    #[Groups([
+        'User.logsLoginFailure',
+    ])]
     protected Collection | ArrayCollection $logsLoginFailure;
 
     /**
@@ -95,14 +91,13 @@ trait UserRelations
      * If you want to get user inherited roles you need to implement that
      * logic by yourself OR use eg. `/user/{uuid}/roles` API endpoint.
      *
-     * @Groups({
-     *      "User.roles",
-     *
-     *      "set.UserProfile",
-     *  })
-     *
      * @return array<int, string>
      */
+    #[Groups([
+        'User.roles',
+
+        'set.UserProfile',
+    ])]
     public function getRoles(): array
     {
         return $this->userGroups

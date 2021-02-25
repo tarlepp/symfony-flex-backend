@@ -10,12 +10,14 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -37,26 +39,6 @@ class DetachUserGroupController
 
     /**
      * Endpoint action to detach specified user group from specified user.
-     *
-     * @Route(
-     *      "/user/{user}/group/{userGroup}",
-     *      requirements={
-     *          "user" = "%app.uuid_v1_regex%",
-     *          "userGroup" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"DELETE"},
-     *  )
-     *
-     * @ParamConverter(
-     *      "user",
-     *      class="App\Resource\UserResource",
-     *  )
-     * @ParamConverter(
-     *      "userGroup",
-     *      class="App\Resource\UserGroupResource",
-     *  )
-     *
-     * @Security("is_granted('ROLE_ROOT')")
      *
      * @OA\Tag(name="User Management")
      * @OA\Parameter(
@@ -130,6 +112,23 @@ class DetachUserGroupController
      *
      * @throws Throwable
      */
+    #[Route(
+        path: '/user/{user}/group/{userGroup}',
+        requirements: [
+            'user' => '%app.uuid_v1_regex%',
+            'userGroup' => '%app.uuid_v1_regex%',
+        ],
+        methods: [Request::METHOD_DELETE],
+    )]
+    #[Security('is_granted("ROLE_ROOT")')]
+    #[ParamConverter(
+        data: 'user',
+        class: UserResource::class,
+    )]
+    #[ParamConverter(
+        data: 'userGroup',
+        class: UserGroupResource::class,
+    )]
     public function __invoke(User $user, UserGroup $userGroup): JsonResponse
     {
         $this->userResource->save($user->removeUserGroup($userGroup));

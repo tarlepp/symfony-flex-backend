@@ -34,11 +34,6 @@ class Healthz implements EntityInterface
     use Uuid;
 
     /**
-     * @Groups({
-     *      "Healthz",
-     *      "Healthz.id",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -49,20 +44,23 @@ class Healthz implements EntityInterface
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'Healthz',
+        'Healthz.id',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "Healthz",
-     *      "Healthz.timestamp",
-     *  })
-     *
      * @ORM\Column(
      *      name="timestamp",
      *      type="datetime_immutable",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'Healthz',
+        'Healthz.timestamp',
+    ])]
     private DateTimeImmutable $timestamp;
 
     /**
