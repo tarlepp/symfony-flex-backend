@@ -343,7 +343,7 @@ class RepositoryHelper
         QueryBuilder $queryBuilder,
         string $lowercaseOperator,
         array $parameters,
-        array $value
+        array $value,
     ): array {
         // Operator is between, so we need to add third parameter for Expr method
         if ($lowercaseOperator === 'between') {
@@ -358,8 +358,7 @@ class RepositoryHelper
             // Otherwise this must be IN or NOT IN expression
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
-            } catch (InvalidUuidStringException $error) {
-                (static fn (InvalidUuidStringException $error): InvalidUuidStringException => $error)($error);
+            } catch (InvalidUuidStringException) {
             }
 
             $parameters[] = array_map(
@@ -398,7 +397,7 @@ class RepositoryHelper
         QueryBuilder $queryBuilder,
         stdClass $comparison,
         string $lowercaseOperator,
-        array $parameters
+        array $parameters,
     ): array {
         if (is_array($comparison->value)) {
             $value = $comparison->value;
