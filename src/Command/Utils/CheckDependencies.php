@@ -60,9 +60,8 @@ class CheckDependencies extends Command
         $this->setDescription('Console command to check which vendor dependencies has updates');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
@@ -119,13 +118,6 @@ class CheckDependencies extends Command
             ->directories()
             ->in($this->projectDir . DIRECTORY_SEPARATOR . 'tools/');
 
-        /**
-         * Closure to return pure path from current SplFileInfo object.
-         *
-         * @param SplFileInfo $fileInfo
-         *
-         * @return string
-         */
         $closure = static fn (SplFileInfo $fileInfo): string => $fileInfo->getPath();
 
         /** @var Traversable $iterator */

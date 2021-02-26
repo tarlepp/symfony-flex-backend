@@ -22,11 +22,10 @@ use Throwable;
 /**
  * Class LoggedInUserValueResolver
  *
- * Example how to use this within your controller (just remember to add `@` to those annotations);
- *  /**
- *   * Symfony\Component\Routing\Annotation\Route(path="some_path_to_your_route")
- *   * Sensio\Bundle\FrameworkExtraBundle\Configuration\Security("is_granted('IS_AUTHENTICATED_FULLY')")
- *   *\/
+ * Example how to use this within your controller;
+ *
+ *  #[Route(path: 'some-path')]
+ *  #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
  *  public function someMethod(\App\Entity\User $loggedInUser): Response
  *  {
  *      ...
@@ -48,9 +47,6 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
         $output = false;
@@ -74,8 +70,6 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws Throwable
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator

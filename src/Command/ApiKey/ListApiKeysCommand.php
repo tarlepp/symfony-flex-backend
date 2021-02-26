@@ -32,16 +32,15 @@ class ListApiKeysCommand extends Command
 {
     public function __construct(
         private ApiKeyResource $apiKeyResource,
-        private RolesService $rolesService
+        private RolesService $rolesService,
     ) {
         parent::__construct('api-key:list');
 
         $this->setDescription('Console command to list API keys');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

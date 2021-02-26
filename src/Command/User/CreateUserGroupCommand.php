@@ -64,9 +64,8 @@ class CreateUserGroupCommand extends Command
         HelperConfigure::configure($this, self::$commandParameters);
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

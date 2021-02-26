@@ -53,7 +53,7 @@ class CreateApiKeyCommand extends Command
         private ApiKeyResource $apiKeyResource,
         private UserGroupResource $userGroupResource,
         private RolesService $rolesService,
-        private RoleRepository $roleRepository
+        private RoleRepository $roleRepository,
     ) {
         parent::__construct('api-key:create');
 
@@ -72,9 +72,8 @@ class CreateApiKeyCommand extends Command
         HelperConfigure::configure($this, self::$commandParameters);
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

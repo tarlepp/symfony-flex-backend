@@ -48,8 +48,6 @@ trait ExecuteMultipleCommandTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -86,7 +84,7 @@ trait ExecuteMultipleCommandTrait
         $index = array_search(
             $this->io->choice('What you want to do', array_values($this->choices)),
             array_values($this->choices),
-            true
+            true,
         );
 
         $choice = (string)array_values(array_flip($this->choices))[(int)$index];
