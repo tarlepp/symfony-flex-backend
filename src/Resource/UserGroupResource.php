@@ -38,8 +38,8 @@ use App\Rest\RestResource;
  */
 class UserGroupResource extends RestResource
 {
-    public function __construct(Repository $repository)
-    {
-        $this->setRepository($repository);
+    public function __construct(
+        protected Repository $repository,
+    ) {
     }
 }

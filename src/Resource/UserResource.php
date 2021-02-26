@@ -44,13 +44,10 @@ use function in_array;
  */
 class UserResource extends RestResource
 {
-    private RolesService $rolesService;
-
-    public function __construct(Repository $repository, RolesService $rolesService)
-    {
-        $this->setRepository($repository);
-
-        $this->rolesService = $rolesService;
+    public function __construct(
+        protected Repository $repository,
+        private RolesService $rolesService,
+    ) {
     }
 
     /**
