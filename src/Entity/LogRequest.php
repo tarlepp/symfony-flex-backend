@@ -47,14 +47,6 @@ class LogRequest implements EntityInterface
     use Uuid;
 
     /**
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.id",
-     *
-     *      "ApiKey.logsRequest",
-     *      "User.logRequest",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -65,13 +57,16 @@ class LogRequest implements EntityInterface
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'LogRequest',
+        'LogRequest.id',
+
+        'ApiKey.logsRequest',
+        'User.logRequest',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "LogRequest.user",
-     *  })
-     *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\User",
      *      inversedBy="logsRequest",
@@ -85,13 +80,12 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
+    #[Groups([
+        'LogRequest.user',
+    ])]
     private ?User $user;
 
     /**
-     * @Groups({
-     *      "LogRequest.apiKey",
-     *  })
-     *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\ApiKey",
      *      inversedBy="logsRequest",
@@ -105,48 +99,48 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
+    #[Groups([
+        'LogRequest.apiKey',
+    ])]
     private ?ApiKey $apiKey;
 
     /**
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.statusCode",
-     *  })
-     *
      * @ORM\Column(
      *      name="status_code",
      *      type="integer",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogRequest',
+        'LogRequest.statusCode',
+    ])]
     private int $statusCode = 0;
 
     /**
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.responseContentLength",
-     *  })
-     *
      * @ORM\Column(
      *      name="response_content_length",
      *      type="integer",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogRequest',
+        'LogRequest.responseContentLength',
+    ])]
     private int $responseContentLength = 0;
 
     /**
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.isMasterRequest",
-     *  })
-     *
      * @ORM\Column(
      *      name="is_master_request",
      *      type="boolean",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogRequest',
+        'LogRequest.isMasterRequest',
+    ])]
     private bool $masterRequest;
 
     /**

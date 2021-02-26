@@ -27,61 +27,51 @@ use Throwable;
 trait LogEntityTrait
 {
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.time",
-     *      "LogRequest",
-     *      "LogRequest.time",
-     *  })
-     *
      * @ORM\Column(
      *      name="time",
      *      type="datetime_immutable",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.time',
+        'LogRequest',
+        'LogRequest.time',
+    ])]
     protected DateTimeImmutable $time;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.date",
-     *      "LogRequest",
-     *      "LogRequest.date",
-     *  })
-     *
      * @ORM\Column(
      *      name="`date`",
      *      type="date_immutable",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.date',
+        'LogRequest',
+        'LogRequest.date',
+    ])]
     protected DateTimeImmutable $date;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.agent",
-     *      "LogRequest",
-     *      "LogRequest.agent",
-     *  })
-     *
      * @ORM\Column(
      *      name="agent",
      *      type="text",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.agent',
+        'LogRequest',
+        'LogRequest.agent',
+    ])]
     protected string $agent = '';
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.httpHost",
-     *      "LogRequest",
-     *      "LogRequest.httpHost",
-     *  })
-     *
      * @ORM\Column(
      *      name="http_host",
      *      type="string",
@@ -89,16 +79,15 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.httpHost',
+        'LogRequest',
+        'LogRequest.httpHost',
+    ])]
     protected string $httpHost = '';
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.clientIp",
-     *      "LogRequest",
-     *      "LogRequest.clientIp",
-     *  })
-     *
      * @ORM\Column(
      *      name="client_ip",
      *      type="string",
@@ -106,6 +95,12 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.clientIp',
+        'LogRequest',
+        'LogRequest.clientIp',
+    ])]
     private string $clientIp = '';
 
     public function getTime(): DateTimeImmutable

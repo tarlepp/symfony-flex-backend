@@ -21,12 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class UserGroupController
  *
- * @Route(
- *     path="/user_group",
- *  )
- *
- * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
- *
  * @OA\Tag(name="UserGroup Management")
  *
  * @package App\Controller\UserGroup
@@ -34,6 +28,10 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @method UserGroupResource getResource()
  */
+#[Route(
+    path: '/user_group',
+)]
+#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class UserGroupController extends Controller
 {
     use Actions\Admin\CountAction;

@@ -21,12 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class UserController
  *
- * @Route(
- *     path="/user",
- *  )
- *
- * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
- *
  * @OA\Tag(name="User Management")
  *
  * @package App\Controller
@@ -34,6 +28,10 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @method UserResource getResource()
  */
+#[Route(
+    path: '/user',
+)]
+#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
 class UserController extends Controller
 {
     use Actions\Admin\CountAction;
