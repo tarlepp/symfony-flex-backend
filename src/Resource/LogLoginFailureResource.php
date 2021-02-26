@@ -14,6 +14,7 @@ use App\Entity\LogLoginFailure as Entity;
 use App\Entity\User;
 use App\Repository\LogLoginFailureRepository as Repository;
 use App\Rest\RestResource;
+use Throwable;
 
 /**
  * Class LogLoginFailureResource
@@ -46,6 +47,8 @@ class LogLoginFailureResource extends RestResource
 
     /**
      * Method to reset specified user log login failures.
+     *
+     * @throws Throwable
      */
     public function reset(User $user): void
     {
