@@ -25,7 +25,7 @@ use App\Rest\RestResource;
  *
  * @method Entity getReference(string $id)
  * @method Repository getRepository()
- * @method array<int, Entity> find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method Entity[] find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
  * @method Entity|null findOne(string $id, ?bool $throwExceptionIfNotFound = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null, ?bool $throwExceptionIfNotFound = null)
  * @method Entity create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)
