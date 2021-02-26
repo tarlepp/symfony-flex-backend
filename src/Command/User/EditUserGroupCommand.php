@@ -38,9 +38,8 @@ class EditUserGroupCommand extends Command
         $this->setDescription('Command to edit existing user group');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

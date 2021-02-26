@@ -31,16 +31,15 @@ class EditApiKeyCommand extends Command
 
     public function __construct(
         private ApiKeyResource $apiKeyResource,
-        private ApiKeyHelper $apiKeyHelper
+        private ApiKeyHelper $apiKeyHelper,
     ) {
         parent::__construct('api-key:edit');
 
         $this->setDescription('Command to edit existing API key');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

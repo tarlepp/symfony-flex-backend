@@ -24,13 +24,6 @@ trait Blameable
     /**
      * @Gedmo\Blameable(on="create")
      *
-     * @Groups({
-     *      "ApiKey.createdBy",
-     *      "Role.createdBy",
-     *      "User.createdBy",
-     *      "UserGroup.createdBy",
-     *  })
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(
      *      name="created_by_id",
@@ -39,17 +32,16 @@ trait Blameable
      *      onDelete="SET NULL",
      *  )
      */
+    #[Groups([
+        'ApiKey.createdBy',
+        'Role.createdBy',
+        'User.createdBy',
+        'UserGroup.createdBy',
+    ])]
     protected ?User $createdBy = null;
 
     /**
      * @Gedmo\Blameable(on="update")
-     *
-     * @Groups({
-     *      "ApiKey.updatedBy",
-     *      "Role.updatedBy",
-     *      "User.updatedBy",
-     *      "UserGroup.updatedBy",
-     *  })
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(
@@ -59,6 +51,12 @@ trait Blameable
      *      onDelete="SET NULL",
      *  )
      */
+    #[Groups([
+        'ApiKey.updatedBy',
+        'Role.updatedBy',
+        'User.updatedBy',
+        'UserGroup.updatedBy',
+    ])]
     protected ?User $updatedBy = null;
 
     public function getCreatedBy(): ?User

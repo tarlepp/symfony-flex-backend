@@ -42,9 +42,8 @@ class CreateDateDimensionEntitiesCommand extends Command
         $this->setDescription('Console command to create `DateDimension` entities.');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

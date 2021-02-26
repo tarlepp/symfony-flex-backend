@@ -26,7 +26,7 @@ trait SymfonyStyleTrait
     protected function getSymfonyStyle(
         InputInterface $input,
         OutputInterface $output,
-        ?bool $clearScreen = null
+        ?bool $clearScreen = null,
     ): SymfonyStyle {
         $clearScreen ??= true;
 

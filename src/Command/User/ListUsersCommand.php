@@ -41,9 +41,8 @@ class ListUsersCommand extends Command
         $this->setDescription('Console command to list users');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
