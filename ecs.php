@@ -24,6 +24,7 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\Whitespace\HeredocIndentationFixer;
 use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
@@ -168,6 +169,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PhpdocAlignFixer::class => null,
             UnusedParameterSniff::class => null,
             HeredocIndentationFixer::class => null,
+            PhpdocToCommentFixer::class => null,
         ]
     );
 };
