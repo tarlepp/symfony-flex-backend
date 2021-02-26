@@ -21,12 +21,12 @@ use function sprintf;
  *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
  */
 abstract class RestResource implements RestResourceInterface
 {
     use Traits\RestResourceBaseMethods;
 
-    private BaseRepositoryInterface $repository;
     private ValidatorInterface $validator;
     private string $dtoClass = '';
 
@@ -37,14 +37,15 @@ abstract class RestResource implements RestResourceInterface
 
     public function getRepository(): BaseRepositoryInterface
     {
-        return $this->repository;
-    }
+        static $cache;
 
-    public function setRepository(BaseRepositoryInterface $repository): self
-    {
-        $this->repository = $repository;
+        if ($cache === null) {
+            $exception = new UnexpectedValueException('Repository not set on constructor');
 
-        return $this;
+            $cache = property_exists($this, 'repository') ? $this->repository ?? throw $exception : throw $exception;
+        }
+
+        return $cache;
     }
 
     public function getValidator(): ValidatorInterface
