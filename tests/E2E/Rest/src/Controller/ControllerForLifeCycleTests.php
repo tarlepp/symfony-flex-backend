@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/E2E/Rest/src/Controller/ControllerForLifeCycleTests.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest\src\Controller;
@@ -22,20 +22,18 @@ use Throwable;
  * @Route(
  *     path="/test_lifecycle_behaviour",
  *  )
-
  *
  * @package App\Tests\E2E\Rest\src\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ControllerForLifeCycleTests extends Controller
 {
     // Traits
-
     use Methods\FindOneMethod;
 
-    public function __construct(ResourceForLifeCycleTests $resource)
-    {
-        $this->resource = $resource;
+    public function __construct(
+        protected ResourceForLifeCycleTests $resource,
+    ) {
     }
 
     /**
