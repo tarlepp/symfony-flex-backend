@@ -41,9 +41,8 @@ class CreateRolesCommand extends Command
         $this->setDescription('Console command to create roles to database');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

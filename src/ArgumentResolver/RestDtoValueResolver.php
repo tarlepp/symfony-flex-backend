@@ -12,12 +12,12 @@ use App\DTO\RestDtoInterface;
 use App\Rest\Controller;
 use App\Rest\ControllerCollection;
 use AutoMapperPlus\AutoMapperInterface;
-use AutoMapperPlus\Exception\UnregisteredMappingException;
 use BadMethodCallException;
 use Generator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Throwable;
 use function count;
 use function explode;
 use function in_array;
@@ -59,9 +59,6 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
         $bits = explode('::', (string)$request->attributes->get(self::CONTROLLER_KEY, ''));
@@ -85,16 +82,14 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @throws UnregisteredMappingException
+     * @throws Throwable
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
         if ($this->controllerName === null || $this->actionName === null) {
             $message = sprintf(
                 'You cannot call `%1$s::resolve(...)` method without calling `%1$s::supports(...)` first',
-                self::class
+                self::class,
             );
 
             throw new BadMethodCallException($message);
@@ -102,7 +97,7 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
 
         $dtoClass = $this->controllerCollection
             ->get($this->controllerName)
-            ->getDtoClass($this->actionMethodMap[$this->actionName]);
+            ->getDtoClass($this->actionMethodMap[$this->actionName] ?? null);
 
         yield $this->autoMapper->map($request, $dtoClass);
     }

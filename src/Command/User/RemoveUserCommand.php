@@ -35,9 +35,8 @@ class RemoveUserCommand extends Command
         $this->setDescription('Console command to remove existing user');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

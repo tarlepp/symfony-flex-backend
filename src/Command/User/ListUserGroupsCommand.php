@@ -39,9 +39,8 @@ class ListUserGroupsCommand extends Command
         $this->setDescription('Console command to list user groups');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

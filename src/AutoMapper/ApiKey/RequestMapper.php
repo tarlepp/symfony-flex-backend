@@ -48,7 +48,7 @@ class RequestMapper extends RestRequestMapper
     {
         return array_map(
             fn (string $userGroupUuid): UserGroup => $this->userGroupResource->getReference($userGroupUuid),
-            $userGroups
+            $userGroups,
         );
     }
 }

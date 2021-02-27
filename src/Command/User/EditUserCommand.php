@@ -38,9 +38,8 @@ class EditUserCommand extends Command
         $this->setDescription('Command to edit existing user');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
