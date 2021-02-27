@@ -34,7 +34,7 @@ trait CreateAction
      */
     #[Route(
         path: '',
-        methods: ['POST'],
+        methods: [Request::METHOD_POST],
     )]
     public function createAction(Request $request, RestDtoInterface $restDto): Response
     {

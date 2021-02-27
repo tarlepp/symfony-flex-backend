@@ -37,7 +37,7 @@ trait UpdateAction
         requirements: [
             'id' => '%app.uuid_v1_regex%',
         ],
-        methods: ['PUT'],
+        methods: [Request::METHOD_PUT],
     )]
     public function updateAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
