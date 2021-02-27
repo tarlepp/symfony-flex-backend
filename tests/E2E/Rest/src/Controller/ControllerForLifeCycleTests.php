@@ -19,13 +19,12 @@ use Throwable;
 /**
  * Class ControllerForLifeCycleTests
  *
- * @Route(
- *     path="/test_lifecycle_behaviour",
- *  )
- *
  * @package App\Tests\E2E\Rest\src\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Route(
+    path: '/test_lifecycle_behaviour',
+)]
 class ControllerForLifeCycleTests extends Controller
 {
     // Traits
@@ -37,16 +36,15 @@ class ControllerForLifeCycleTests extends Controller
     }
 
     /**
-     * @Route(
-     *      "/{role}",
-     *      requirements={
-     *          "role" = "^ROLE_\w+$"
-     *      },
-     *      methods={"GET"}
-     *  )
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/{role}',
+        requirements: [
+            'role' => '^ROLE_\w+$',
+        ],
+        methods: [Request::METHOD_GET],
+    )]
     public function findOneAction(Request $request, string $role): Response
     {
         return $this->findOneMethod($request, $role);
