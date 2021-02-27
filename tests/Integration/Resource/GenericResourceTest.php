@@ -55,7 +55,6 @@ class GenericResourceTest extends KernelTestCase
         $validator = static::$container->get(ValidatorInterface::class) instanceof ValidatorInterface
             ? static::$container->get(ValidatorInterface::class)
             : throw new UnexpectedValueException('ddd');
-
         $this->resource = new UserResource($repository, new RolesService([]));
 
         /** @var MockObject $repository */

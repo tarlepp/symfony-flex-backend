@@ -21,7 +21,6 @@ use function sprintf;
  *
  * @package App\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
  */
 abstract class RestResource implements RestResourceInterface
 {
