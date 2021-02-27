@@ -35,7 +35,7 @@ trait CreateAction
      */
     #[Route(
         path: '',
-        methods: ['POST'],
+        methods: [Request::METHOD_POST],
     )]
     #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function createAction(Request $request, RestDtoInterface $restDto): Response
