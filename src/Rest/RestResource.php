@@ -37,15 +37,9 @@ abstract class RestResource implements RestResourceInterface
 
     public function getRepository(): BaseRepositoryInterface
     {
-        static $cache;
+        $exception = new UnexpectedValueException('Repository not set on constructor');
 
-        if ($cache === null) {
-            $exception = new UnexpectedValueException('Repository not set on constructor');
-
-            $cache = property_exists($this, 'repository') ? $this->repository ?? throw $exception : throw $exception;
-        }
-
-        return $cache;
+        return property_exists($this, 'repository') ? $this->repository ?? throw $exception : throw $exception;
     }
 
     public function getValidator(): ValidatorInterface
