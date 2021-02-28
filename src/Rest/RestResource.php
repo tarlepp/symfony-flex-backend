@@ -26,7 +26,6 @@ abstract class RestResource implements RestResourceInterface
 {
     use Traits\RestResourceBaseMethods;
 
-    private BaseRepositoryInterface $repository;
     private ValidatorInterface $validator;
     private string $dtoClass = '';
 
@@ -37,14 +36,9 @@ abstract class RestResource implements RestResourceInterface
 
     public function getRepository(): BaseRepositoryInterface
     {
-        return $this->repository;
-    }
+        $exception = new UnexpectedValueException('Repository not set on constructor');
 
-    public function setRepository(BaseRepositoryInterface $repository): self
-    {
-        $this->repository = $repository;
-
-        return $this;
+        return property_exists($this, 'repository') ? $this->repository ?? throw $exception : throw $exception;
     }
 
     public function getValidator(): ValidatorInterface
