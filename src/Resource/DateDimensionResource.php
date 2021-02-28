@@ -20,11 +20,12 @@ use App\Rest\RestResource;
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
+ * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
  * @method Entity getReference(string $id)
  * @method Repository getRepository()
- * @method array<int, Entity> find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method Entity[] find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
  * @method Entity|null findOne(string $id, ?bool $throwExceptionIfNotFound = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null, ?bool $throwExceptionIfNotFound = null)
  * @method Entity create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)
@@ -37,8 +38,8 @@ use App\Rest\RestResource;
  */
 class DateDimensionResource extends RestResource
 {
-    public function __construct(Repository $repository)
-    {
-        $this->setRepository($repository);
+    public function __construct(
+        protected Repository $repository,
+    ) {
     }
 }

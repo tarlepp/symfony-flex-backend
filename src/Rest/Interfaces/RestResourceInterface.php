@@ -11,7 +11,6 @@ namespace App\Rest\Interfaces;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
-use Doctrine\ORM\ORMException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -33,13 +32,10 @@ interface RestResourceInterface
 
     /**
      * Getter method for entity repository.
+     *
+     * @throws Throwable
      */
     public function getRepository(): BaseRepositoryInterface;
-
-    /**
-     * Setter method for repository.
-     */
-    public function setRepository(BaseRepositoryInterface $repository): self;
 
     /**
      * Getter for used validator.
@@ -69,6 +65,8 @@ interface RestResourceInterface
 
     /**
      * Getter method for current entity name.
+     *
+     * @throws Throwable
      */
     public function getEntityName(): string;
 
@@ -77,7 +75,7 @@ interface RestResourceInterface
      * identifier without actually loading it, if the entity is not yet
      * loaded.
      *
-     * @throws ORMException
+     * @throws Throwable
      */
     public function getReference(string $id): ?object;
 
@@ -85,6 +83,8 @@ interface RestResourceInterface
      * Getter method for all associations that current entity contains.
      *
      * @return array<int, string>
+     *
+     * @throws Throwable
      */
     public function getAssociations(): array;
 

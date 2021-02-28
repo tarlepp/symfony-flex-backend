@@ -14,6 +14,7 @@ use App\Entity\LogLoginFailure as Entity;
 use App\Entity\User;
 use App\Repository\LogLoginFailureRepository as Repository;
 use App\Rest\RestResource;
+use Throwable;
 
 /**
  * Class LogLoginFailureResource
@@ -21,11 +22,12 @@ use App\Rest\RestResource;
  * @package App\Resource
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  *
+ * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
  *
  * @method Entity getReference(string $id)
  * @method Repository getRepository()
- * @method array<int, Entity> find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
+ * @method Entity[] find(?array $criteria = null, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null)
  * @method Entity|null findOne(string $id, ?bool $throwExceptionIfNotFound = null)
  * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null, ?bool $throwExceptionIfNotFound = null)
  * @method Entity create(RestDtoInterface $dto, ?bool $flush = null, ?bool $skipValidation = null)
@@ -38,13 +40,15 @@ use App\Rest\RestResource;
  */
 class LogLoginFailureResource extends RestResource
 {
-    public function __construct(Repository $repository)
-    {
-        $this->setRepository($repository);
+    public function __construct(
+        protected Repository $repository,
+    ) {
     }
 
     /**
      * Method to reset specified user log login failures.
+     *
+     * @throws Throwable
      */
     public function reset(User $user): void
     {
