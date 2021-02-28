@@ -33,7 +33,7 @@ trait CreateMethod
         RestDtoInterface $restDto,
         ?array $allowedHttpMethods = null,
     ): Response {
-        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['POST']);
+        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? [Request::METHOD_POST]);
 
         try {
             $data = $resource->create($restDto, true);
