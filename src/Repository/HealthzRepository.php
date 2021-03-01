@@ -12,6 +12,8 @@ use App\Entity\Healthz as Entity;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -96,7 +98,7 @@ class HealthzRepository extends BaseRepository
             ->createQueryBuilder('h')
             ->delete()
             ->where('h.timestamp < :timestamp')
-            ->setParameter('timestamp', $date);
+            ->setParameter('timestamp', $date, Types::DATETIME_IMMUTABLE);
 
         // Return deleted row count
         return (int)$queryBuilder->getQuery()->execute();
