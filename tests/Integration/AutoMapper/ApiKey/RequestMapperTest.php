@@ -68,7 +68,9 @@ class RequestMapperTest extends RestRequestMapperTestCase
             ->with($userGroup->getId())
             ->willReturn($userGroup);
 
-        $request = new Request([], ['userGroups' => [$userGroup->getId()]]);
+        $request = new Request([], [
+            'userGroups' => [$userGroup->getId()],
+        ]);
 
         /**
          * @var DTO\ApiKey $dto

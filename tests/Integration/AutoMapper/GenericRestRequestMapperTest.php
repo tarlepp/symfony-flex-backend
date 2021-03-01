@@ -103,7 +103,10 @@ class GenericRestRequestMapperTest extends KernelTestCase
      */
     public function testThatMapToObjectWorksAsExpected(): void
     {
-        $request = new Request([], ['someProperty' => 'someValue', 'someTransformProperty' => 'someTransformValue']);
+        $request = new Request([], [
+            'someProperty' => 'someValue',
+            'someTransformProperty' => 'someTransformValue',
+        ]);
 
         /** @var TestRestRequestMapperDto $transformedObject */
         $transformedObject = (new TestRestRequestMapper())->mapToObject($request, new TestRestRequestMapperDto());

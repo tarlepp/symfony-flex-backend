@@ -12,7 +12,6 @@ use App\Entity\Healthz as Entity;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;

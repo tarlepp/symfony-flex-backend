@@ -75,7 +75,9 @@ class RepositoryHelperTest extends KernelTestCase
     {
         $qb = $this->repository->createQueryBuilder('entity');
 
-        RepositoryHelper::processSearchTerms($qb, [], ['and' => ['foo', 'bar']]);
+        RepositoryHelper::processSearchTerms($qb, [], [
+            'and' => ['foo', 'bar'],
+        ]);
 
         $message = 'processSearchTerms did not return expected DQL.';
 

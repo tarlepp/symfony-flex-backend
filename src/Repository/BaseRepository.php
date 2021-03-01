@@ -124,7 +124,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
     public function processQueryBuilder(QueryBuilder $queryBuilder): void
     {
         // Reset processed joins and callbacks
-        self::$processedJoins = [self::INNER_JOIN => [], self::LEFT_JOIN => []];
+        self::$processedJoins = [
+            self::INNER_JOIN => [],
+            self::LEFT_JOIN => [],
+        ];
         self::$processedCallbacks = [];
 
         $this->processJoins($queryBuilder);
