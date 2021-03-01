@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Helpers;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * Trait LoggerAwareTrait
@@ -24,11 +25,7 @@ trait LoggerAwareTrait
 {
     protected LoggerInterface $logger;
 
-    /**
-     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
-     *
-     * @required
-     */
+    #[Required]
     public function setLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;
