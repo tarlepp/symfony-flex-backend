@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "286519df6b69b4b9c2e871c0c7adb84d",
+    "content-hash": "7c58cee9ada2bddc2c745e4e694fe08f",
     "packages": [],
     "packages-dev": [
         {
@@ -902,29 +902,30 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v2.1.2",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "a7e1b5559f2d420bb205dfec98af31178bd7ed0c"
+                "reference": "a56f44a3f4fdca8c96726aea602b54a7b6f92a8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/a7e1b5559f2d420bb205dfec98af31178bd7ed0c",
-                "reference": "a7e1b5559f2d420bb205dfec98af31178bd7ed0c",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/a56f44a3f4fdca8c96726aea602b54a7b6f92a8c",
+                "reference": "a56f44a3f4fdca8c96726aea602b54a7b6f92a8c",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": "^7.1 || ^8.0",
                 "symfony/framework-bundle": "^3.0 || ^4.0 || ^5.0",
-                "vimeo/psalm": "^4.4.1"
+                "vimeo/psalm": "^4.6.1"
             },
             "require-dev": {
                 "doctrine/orm": "^2.7",
                 "phpunit/phpunit": "~7.5 || ~9.5",
                 "symfony/cache-contracts": "^1.0 || ^2.0",
                 "symfony/console": "*",
+                "symfony/form": "^4.0 || ^5.0",
                 "symfony/messenger": "^4.2 || ^5.0",
                 "symfony/security-guard": "^4.0 || ^5.0",
                 "symfony/serializer": "^4.0 || ^5.0",
@@ -959,9 +960,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v2.1.2"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v2.2.0"
             },
-            "time": "2021-01-26T09:13:10+00:00"
+            "time": "2021-03-01T06:17:04+00:00"
         },
         {
             "name": "psr/cache",
