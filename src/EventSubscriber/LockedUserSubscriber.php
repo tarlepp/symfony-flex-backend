@@ -15,6 +15,7 @@ use App\Resource\LogLoginFailureResource;
 use App\Security\SecurityUser;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Exception\LockedException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -49,6 +50,11 @@ class LockedUserSubscriber implements EventSubscriberInterface
                 128,
             ],
             AuthenticationFailureEvent::class => 'onAuthenticationFailure',
+            Events::AUTHENTICATION_SUCCESS => [
+                'onAuthenticationSuccess',
+                128,
+            ],
+            Events::AUTHENTICATION_FAILURE => 'onAuthenticationFailure',
         ];
     }
 
@@ -89,14 +95,10 @@ class LockedUserSubscriber implements EventSubscriberInterface
      */
     private function getUser(string | object $user): ?User
     {
-        $output = null;
-
-        if (is_string($user)) {
-            $output = $this->userRepository->loadUserByUsername($user, false);
-        } elseif ($user instanceof SecurityUser) {
-            $output = $this->userRepository->loadUserByUsername($user->getUsername(), true);
-        }
-
-        return $output;
+        return match (true) {
+            is_string($user) => $this->userRepository->loadUserByUsername($user, false),
+            $user instanceof SecurityUser => $this->userRepository->loadUserByUsername($user->getUsername(), true),
+            default => null,
+        };
     }
 }
