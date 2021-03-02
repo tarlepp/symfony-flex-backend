@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Psr\Log\LoggerInterface;
@@ -35,8 +36,15 @@ class JWTDecodedSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<string, string>
+     * @return array{
+     *       Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent: string,
+     *      'lexik_jwt_authentication.on_jwt_decoded': string,
+     *  }
      */
+    #[ArrayShape([
+        JWTDecodedEvent::class => 'string',
+        Events::JWT_DECODED => 'string',
+    ])]
     public static function getSubscribedEvents(): array
     {
         return [

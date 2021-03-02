@@ -13,6 +13,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Resource\LogLoginFailureResource;
 use App\Security\SecurityUser;
+use JetBrains\PhpStorm\ArrayShape;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
@@ -40,8 +41,19 @@ class LockedUserSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<string, string|array<int, string|int>>
+     * @return array{
+     *      Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent: array{0: string, 1: int},
+     *      Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent: string,
+     *      'lexik_jwt_authentication.on_authentication_success': array{0: string, 1: int},
+     *      'lexik_jwt_authentication.on_authentication_failure': string,
+     *  }
      */
+    #[ArrayShape([
+        AuthenticationSuccessEvent::class => ['string', 'int'],
+        AuthenticationFailureEvent::class => 'string',
+        Events::AUTHENTICATION_SUCCESS => ['string', 'int'],
+        Events::AUTHENTICATION_FAILURE => 'string',
+    ])]
     public static function getSubscribedEvents(): array
     {
         return [

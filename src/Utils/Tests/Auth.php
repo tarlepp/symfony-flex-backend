@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Utils\Tests;
 
 use App\Utils\JSON;
+use JetBrains\PhpStorm\ArrayShape;
 use JsonException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -84,8 +85,12 @@ class Auth
     }
 
     /**
-     * @return array<string, string>
+     * @return array{REMOTE_ADDR: string, HTTP_USER_AGENT: string}
      */
+    #[ArrayShape([
+        'REMOTE_ADDR' => 'string',
+        'HTTP_USER_AGENT' => 'string',
+    ])]
     public function getJwtHeaders(): array
     {
         return [
@@ -162,8 +167,9 @@ class Auth
     }
 
     /**
-     * @return array<string, string>
+     * @return array{CONTENT_TYPE: string}
      */
+    #[ArrayShape(['CONTENT_TYPE' => 'string'])]
     private function getContentTypeHeader(): array
     {
         return [

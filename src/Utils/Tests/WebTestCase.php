@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Utils\Tests;
 
+use JetBrains\PhpStorm\ArrayShape;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase as BaseWebTestCase;
@@ -117,8 +118,15 @@ abstract class WebTestCase extends BaseWebTestCase
     }
 
     /**
-     * @return array<string, string>
+     * @return array{
+     *      CONTENT_TYPE: string,
+     *      HTTP_X-Requested-With: string,
+     *  }
      */
+    #[ArrayShape([
+        'CONTENT_TYPE' => 'string',
+        'HTTP_X-Requested-With' => 'string',
+    ])]
     public function getJsonHeaders(): array
     {
         return [
@@ -130,7 +138,7 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * @codeCoverageIgnore
      *
-     * @return array<string, string>
+     * @return array{X-FASTEST-ENV-TEST-CHANNEL-READABLE?: string}
      */
     public function getFastestHeaders(): array
     {

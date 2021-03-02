@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\EventSubscriber;
 
 use App\Service\Version;
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
@@ -28,8 +29,9 @@ class ResponseSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<string, array<int, string|int>>
+     * @return array{Symfony\Component\HttpKernel\Event\ResponseEvent: array{0: string, 1: int}}
      */
+    #[ArrayShape([ResponseEvent::class => ['string', 'int']])]
     public static function getSubscribedEvents(): array
     {
         return [
