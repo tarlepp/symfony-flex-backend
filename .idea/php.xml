@@ -129,6 +129,7 @@
       <path value="$PROJECT_DIR$/vendor/zircote/swagger-php" />
       <path value="$PROJECT_DIR$/vendor/friendsofphp/proxy-manager-lts" />
       <path value="$PROJECT_DIR$/vendor/matomo/device-detector" />
+      <path value="$PROJECT_DIR$/vendor/jetbrains/phpstorm-attributes" />
     </include_path>
   </component>
   <component name="PhpInterpreters">
