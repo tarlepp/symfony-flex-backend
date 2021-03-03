@@ -13,6 +13,7 @@ use App\Entity\Traits\Uuid;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use OpenApi\Annotations as OA;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -104,16 +105,19 @@ class LogLoginFailure implements EntityInterface
         return $this->id->toString();
     }
 
+    #[Pure]
     public function getUser(): User
     {
         return $this->user;
     }
 
+    #[Pure]
     public function getTimestamp(): DateTimeImmutable
     {
         return $this->getCreatedAt();
     }
 
+    #[Pure]
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->timestamp;

@@ -10,6 +10,7 @@ namespace App\Security;
 
 use App\Entity\ApiKey;
 use App\Security\Interfaces\ApiKeyUserInterface;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Serializer\Annotation\Groups;
 use function array_merge;
 use function array_unique;
@@ -47,9 +48,7 @@ class ApiKeyUser implements ApiKeyUserInterface
      */
     private array $roles;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Pure]
     public function __construct(ApiKey $apiKey, array $roles)
     {
         $this->apiKey = $apiKey;

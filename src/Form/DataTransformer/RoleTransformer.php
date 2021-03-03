@@ -10,6 +10,7 @@ namespace App\Form\DataTransformer;
 
 use App\Entity\Role;
 use App\Resource\RoleResource;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
@@ -36,6 +37,7 @@ class RoleTransformer implements DataTransformerInterface
      *
      * @psalm-param Role|mixed $value
      */
+    #[Pure]
     public function transform($value): string
     {
         return $value instanceof Role ? $value->getId() : '';

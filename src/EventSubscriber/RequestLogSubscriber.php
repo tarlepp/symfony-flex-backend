@@ -14,6 +14,7 @@ use App\Security\ApiKeyUser;
 use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use App\Utils\RequestLogger;
+use JetBrains\PhpStorm\ArrayShape;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,8 +48,9 @@ class RequestLogSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<string, array<int, string|int>>
+     * @return array{Symfony\Component\HttpKernel\Event\TerminateEvent: array{0: string, 1: int}}
      */
+    #[ArrayShape([TerminateEvent::class => ['string', 'int']])]
     public static function getSubscribedEvents(): array
     {
         return [

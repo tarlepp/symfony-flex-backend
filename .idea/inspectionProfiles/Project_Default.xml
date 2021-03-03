@@ -86,6 +86,7 @@
     <inspection_tool class="PhpMissingStrictTypesDeclarationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpShortOpenTagInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="PhpStanGlobal" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="level" value="8" />
       <option name="config" value="phpstan.neon.dist" />
       <option name="autoload" value="$PROJECT_DIR$/vendor/autoload.php" />
     </inspection_tool>

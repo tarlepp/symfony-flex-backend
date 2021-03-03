@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Security\Interfaces\RolesServiceInterface;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use function array_key_exists;
 use function array_unique;

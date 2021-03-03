@@ -11,7 +11,9 @@ namespace App\EventSubscriber;
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
+use JetBrains\PhpStorm\ArrayShape;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Throwable;
 use function is_string;
@@ -33,12 +35,20 @@ class AuthenticationFailureSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<string, string>
+     * @return array{
+     *      Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent: string,
+     *      'lexik_jwt_authentication.on_authentication_failure': string,
+     *  }
      */
+    #[ArrayShape([
+        AuthenticationFailureEvent::class => 'string',
+        Events::AUTHENTICATION_FAILURE => 'string',
+    ])]
     public static function getSubscribedEvents(): array
     {
         return [
             AuthenticationFailureEvent::class => 'onAuthenticationFailure',
+            Events::AUTHENTICATION_FAILURE => 'onAuthenticationFailure',
         ];
     }
 

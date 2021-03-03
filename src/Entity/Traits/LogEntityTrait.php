@@ -12,6 +12,7 @@ use App\Entity\User;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
@@ -128,6 +129,7 @@ trait LogEntityTrait
         return $this->clientIp;
     }
 
+    #[Pure]
     public function getCreatedAt(): ?DateTimeImmutable
     {
         return $this->getDate();

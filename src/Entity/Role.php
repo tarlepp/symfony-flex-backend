@@ -14,6 +14,7 @@ use App\Entity\Traits\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -84,12 +85,14 @@ class Role implements EntityInterface
     ])]
     private Collection | ArrayCollection $userGroups;
 
+    #[Pure]
     public function __construct(string $role)
     {
         $this->id = $role;
         $this->userGroups = new ArrayCollection();
     }
 
+    #[Pure]
     public function getId(): string
     {
         return $this->id;
@@ -110,6 +113,7 @@ class Role implements EntityInterface
     /**
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
+    #[Pure]
     public function getUserGroups(): Collection | ArrayCollection
     {
         return $this->userGroups;

@@ -12,6 +12,7 @@ use App\Security\SecurityUser;
 use App\Service\Localization;
 use DateTime;
 use DateTimeZone;
+use JetBrains\PhpStorm\ArrayShape;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Psr\Log\LoggerInterface;
@@ -38,8 +39,15 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<string, string>
+     * @return array{
+     *       Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent: string,
+     *      'lexik_jwt_authentication.on_jwt_created': string,
+     *  }
      */
+    #[ArrayShape([
+        JWTCreatedEvent::class => 'string',
+        Events::JWT_CREATED => 'string',
+    ])]
     public static function getSubscribedEvents(): array
     {
         return [

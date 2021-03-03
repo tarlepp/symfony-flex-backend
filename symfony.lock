@@ -114,6 +114,9 @@
     "gedmo/doctrine-extensions": {
         "version": "v2.4.42"
     },
+    "jetbrains/phpstorm-attributes": {
+        "version": "1.0"
+    },
     "laminas/laminas-code": {
         "version": "3.4.1"
     },

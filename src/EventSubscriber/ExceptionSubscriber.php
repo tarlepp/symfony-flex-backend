@@ -13,6 +13,7 @@ use App\Security\UserTypeIdentification;
 use App\Utils\JSON;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\ORMException;
+use JetBrains\PhpStorm\ArrayShape;
 use JsonException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -63,8 +64,9 @@ class ExceptionSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<string, array<int, string|int>>
+     * @return array{Symfony\Component\HttpKernel\Event\ExceptionEvent: array{0: string, 1: int}}
      */
+    #[ArrayShape([ExceptionEvent::class => ['string', 'int']])]
     public static function getSubscribedEvents(): array
     {
         return [

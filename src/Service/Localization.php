@@ -13,6 +13,7 @@ use App\Doctrine\DBAL\Types\EnumLocaleType;
 use Closure;
 use DateTimeImmutable;
 use DateTimeZone;
+use JetBrains\PhpStorm\Pure;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -42,6 +43,8 @@ class Localization
 
     /**
      * @return array<int, string>
+     *
+     * @noinspection PhpPureAttributeCanBeAddedInspection
      */
     public function getLanguages(): array
     {
@@ -50,6 +53,8 @@ class Localization
 
     /**
      * @return array<int, string>
+     *
+     * @noinspection PhpPureAttributeCanBeAddedInspection
      */
     public function getLocales(): array
     {

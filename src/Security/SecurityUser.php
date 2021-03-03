@@ -10,6 +10,7 @@ namespace App\Security;
 
 use App\Entity\User;
 use App\Security\Interfaces\SecurityUserInterface;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * Class SecurityUser
@@ -45,6 +46,7 @@ class SecurityUser implements SecurityUserInterface
         $this->roles = $roles;
     }
 
+    #[Pure]
     public function getUuid(): string
     {
         return $this->getUsername();

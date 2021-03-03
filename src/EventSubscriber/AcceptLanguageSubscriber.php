@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\EventSubscriber;
 
+use JetBrains\PhpStorm\ArrayShape;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use function in_array;
@@ -37,8 +38,9 @@ class AcceptLanguageSubscriber implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      *
-     * @return array<string, array<int, string|int>>
+     * @return array{Symfony\Component\HttpKernel\Event\RequestEvent: array{0: string, 1: int}}
      */
+    #[ArrayShape([RequestEvent::class => ['string', 'int']])]
     public static function getSubscribedEvents(): array
     {
         return [
