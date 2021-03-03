@@ -38,7 +38,7 @@ trait PatchAction
         requirements: [
             'id' => '%app.uuid_v1_regex%',
         ],
-        methods: ['PATCH'],
+        methods: [Request::METHOD_PATCH],
     )]
     #[Security('is_granted("ROLE_LOGGED")')]
     public function patchAction(Request $request, RestDtoInterface $restDto, string $id): Response
