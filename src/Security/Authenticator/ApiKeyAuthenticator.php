@@ -11,6 +11,7 @@ namespace App\Security\Authenticator;
 use App\Entity\ApiKey;
 use App\Security\Interfaces\ApiKeyUserInterface;
 use App\Security\Provider\ApiKeyUserProvider;
+use JetBrains\PhpStorm\Pure;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -112,6 +113,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
         return false;
     }
 
+    #[Pure]
     private function getApiKeyToken(mixed $credentials): ?string
     {
         return is_array($credentials) ? $credentials[self::CREDENTIAL_KEY] ?? null : null;

@@ -13,6 +13,7 @@ use Closure;
 use InvalidArgumentException;
 use IteratorAggregate;
 use IteratorIterator;
+use JetBrains\PhpStorm\Pure;
 use Throwable;
 use function iterator_count;
 
@@ -74,6 +75,7 @@ trait CollectionTrait
     /**
      * Count elements of an object.
      */
+    #[Pure]
     public function count(): int
     {
         return iterator_count($this->items);
