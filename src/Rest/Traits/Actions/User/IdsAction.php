@@ -34,7 +34,7 @@ trait IdsAction
      */
     #[Route(
         path: '/ids',
-        methods: ['GET'],
+        methods: [Request::METHOD_GET],
     )]
     #[Security('is_granted("ROLE_USER")')]
     public function idsAction(Request $request): Response

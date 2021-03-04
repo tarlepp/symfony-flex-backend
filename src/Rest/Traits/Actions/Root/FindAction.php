@@ -34,7 +34,7 @@ trait FindAction
      */
     #[Route(
         path: '',
-        methods: ['GET'],
+        methods: [Request::METHOD_GET],
     )]
     #[Security('is_granted("ROLE_ROOT")')]
     public function findAction(Request $request): Response

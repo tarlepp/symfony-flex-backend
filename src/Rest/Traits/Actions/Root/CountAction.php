@@ -34,7 +34,7 @@ trait CountAction
      */
     #[Route(
         path: '/count',
-        methods: ['GET'],
+        methods: [Request::METHOD_GET],
     )]
     #[Security('is_granted("ROLE_ROOT")')]
     public function countAction(Request $request): Response

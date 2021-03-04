@@ -33,7 +33,7 @@ trait CountAction
      */
     #[Route(
         path: '/count',
-        methods: ['GET'],
+        methods: [Request::METHOD_GET],
     )]
     public function countAction(Request $request): Response
     {
