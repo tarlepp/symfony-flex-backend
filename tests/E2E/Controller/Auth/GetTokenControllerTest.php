@@ -108,7 +108,10 @@ class GetTokenControllerTest extends WebTestCase
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_X-Requested-With' => 'XMLHttpRequest',
             ],
-            json_encode(['username' => 'username', 'password' => 'password'], JSON_THROW_ON_ERROR)
+            json_encode([
+                'username' => 'username',
+                'password' => 'password',
+            ], JSON_THROW_ON_ERROR)
         );
 
         $response = $client->getResponse();
