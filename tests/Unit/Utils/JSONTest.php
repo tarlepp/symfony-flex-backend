@@ -68,7 +68,15 @@ class JSONTest extends KernelTestCase
         $this->expectExceptionMessage('Maximum stack depth exceeded');
 
         $arguments = [
-            ['foo' => ['bar' => ['foo' => ['bar' => 'foo']]]],
+            [
+                'foo' => [
+                    'bar' => [
+                        'foo' => [
+                            'bar' => 'foo',
+                        ],
+                    ],
+                ],
+            ],
             0,
             3,
         ];

@@ -37,7 +37,7 @@ trait FindOneAction
         requirements: [
             'id' => '%app.uuid_v1_regex%',
         ],
-        methods: ['GET'],
+        methods: [Request::METHOD_GET],
     )]
     #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
     public function findOneAction(Request $request, string $id): Response

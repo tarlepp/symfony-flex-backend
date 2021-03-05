@@ -208,38 +208,53 @@ class CountMethodTest extends KernelTestCase
 
         yield [
             '?where={"foo": {"bar": "foobar"}}',
-            new StringableArrayObject(['foo' => ['bar' => 'foobar']]),
+            new StringableArrayObject([
+                'foo' => [
+                    'bar' => 'foobar',
+                ],
+            ]),
             new StringableArrayObject([]),
         ];
 
         yield [
             '?search=term',
             new StringableArrayObject([]),
-            new StringableArrayObject(['or' => ['term']]),
+            new StringableArrayObject([
+                'or' => ['term'],
+            ]),
         ];
 
         yield [
             '?search=term1+term2',
             new StringableArrayObject([]),
-            new StringableArrayObject(['or' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'or' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
             '?search={"and": ["term1", "term2"]}',
             new StringableArrayObject([]),
-            new StringableArrayObject(['and' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'and' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
             '?search={"or": ["term1", "term2"]}',
             new StringableArrayObject([]),
-            new StringableArrayObject(['or' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'or' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
             '?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}',
             new StringableArrayObject([]),
-            new StringableArrayObject(['and' => ['term1', 'term2'], 'or' => ['term3', 'term4']]),
+            new StringableArrayObject([
+                'and' => ['term1', 'term2'],
+                'or' => ['term3', 'term4'],
+            ]),
         ];
     }
 }

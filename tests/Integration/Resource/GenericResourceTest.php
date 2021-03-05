@@ -127,7 +127,10 @@ class GenericResourceTest extends KernelTestCase
         $this->getRepository()
             ->expects(static::once())
             ->method('getAssociations')
-            ->willReturn(['entity1' => 'foo', 'entity2' => 'bar']);
+            ->willReturn([
+                'entity1' => 'foo',
+                'entity2' => 'bar',
+            ]);
 
         static::assertSame(['entity1', 'entity2'], $this->getResource()->getAssociations());
     }
