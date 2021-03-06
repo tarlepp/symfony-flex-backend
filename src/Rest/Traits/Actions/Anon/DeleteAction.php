@@ -36,7 +36,7 @@ trait DeleteAction
         requirements: [
             'id' => '%app.uuid_v1_regex%',
         ],
-        methods: ['DELETE'],
+        methods: [Request::METHOD_DELETE],
     )]
     public function deleteAction(Request $request, string $id): Response
     {

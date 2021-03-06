@@ -34,7 +34,7 @@ trait PatchMethod
         string $id,
         ?array $allowedHttpMethods = null,
     ): Response {
-        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['PATCH']);
+        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? [Request::METHOD_PATCH]);
 
         try {
             $data = $resource->patch($id, $restDto, true);

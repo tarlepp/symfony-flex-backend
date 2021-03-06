@@ -78,7 +78,10 @@ class GetTokenController
     {
         $message = sprintf(
             'You need to send JSON body to obtain token eg. %s',
-            JSON::encode(['username' => 'username', 'password' => 'password']),
+            JSON::encode([
+                'username' => 'username',
+                'password' => 'password',
+            ]),
         );
 
         throw new HttpException(Response::HTTP_BAD_REQUEST, $message);

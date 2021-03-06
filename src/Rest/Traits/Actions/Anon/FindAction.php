@@ -33,7 +33,7 @@ trait FindAction
      */
     #[Route(
         path: '',
-        methods: ['GET'],
+        methods: [Request::METHOD_GET],
     )]
     public function findAction(Request $request): Response
     {

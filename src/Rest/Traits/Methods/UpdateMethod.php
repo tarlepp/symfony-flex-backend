@@ -34,7 +34,7 @@ trait UpdateMethod
         string $id,
         ?array $allowedHttpMethods = null,
     ): Response {
-        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? ['PUT']);
+        $resource = $this->getResourceForMethod($request, $allowedHttpMethods ?? [Request::METHOD_PUT]);
 
         try {
             $data = $resource->update($id, $restDto, true);

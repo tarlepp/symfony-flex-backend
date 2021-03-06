@@ -33,7 +33,7 @@ trait IdsAction
      */
     #[Route(
         path: '/ids',
-        methods: ['GET'],
+        methods: [Request::METHOD_GET],
     )]
     public function idsAction(Request $request): Response
     {

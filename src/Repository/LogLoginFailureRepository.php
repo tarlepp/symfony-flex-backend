@@ -10,6 +10,7 @@ namespace App\Repository;
 
 use App\Entity\LogLoginFailure as Entity;
 use App\Entity\User;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -52,7 +53,7 @@ class LogLoginFailureRepository extends BaseRepository
             ->createQueryBuilder('logLoginFailure')
             ->delete()
             ->where('logLoginFailure.user = :user')
-            ->setParameter('user', $user);
+            ->setParameter('user', $user, Types::OBJECT);
 
         // Return deleted row count
         return (int)$queryBuilder->getQuery()->execute();

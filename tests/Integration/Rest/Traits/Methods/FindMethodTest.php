@@ -224,7 +224,11 @@ class FindMethodTest extends KernelTestCase
 
         yield [
             '?where={"foo": {"bar": "foobar"}}',
-            new StringableArrayObject(['foo' => ['bar' => 'foobar']]),
+            new StringableArrayObject([
+                'foo' => [
+                    'bar' => 'foobar',
+                ],
+            ]),
             new StringableArrayObject([]),
             null,
             null,
@@ -237,7 +241,9 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['or' => ['term']]),
+            new StringableArrayObject([
+                'or' => ['term'],
+            ]),
         ];
 
         yield [
@@ -300,7 +306,9 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['or' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'or' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
@@ -309,7 +317,9 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['and' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'and' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
@@ -318,7 +328,9 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['or' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'or' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
@@ -327,7 +339,10 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['and' => ['term1', 'term2'], 'or' => ['term3', 'term4']]),
+            new StringableArrayObject([
+                'and' => ['term1', 'term2'],
+                'or' => ['term3', 'term4'],
+            ]),
         ];
     }
 }

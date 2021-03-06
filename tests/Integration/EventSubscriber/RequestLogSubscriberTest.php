@@ -277,7 +277,10 @@ class RequestLogSubscriberTest extends KernelTestCase
      */
     public function testThatLoggerServiceIsNotCalledIfOptionsRequest(): void
     {
-        $request = new Request([], [], [], [], [], ['REQUEST_METHOD' => 'OPTIONS', 'REQUEST_URI' => '/foobar']);
+        $request = new Request([], [], [], [], [], [
+            'REQUEST_METHOD' => 'OPTIONS',
+            'REQUEST_URI' => '/foobar',
+        ]);
         $response = new Response();
 
         $event = new TerminateEvent(static::$kernel, $request, $response);
