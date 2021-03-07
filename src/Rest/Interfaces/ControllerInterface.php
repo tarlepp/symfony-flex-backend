@@ -40,10 +40,6 @@ interface ControllerInterface
     /**
      * Setter method for `ResponseHandler` service, this is called by Symfony
      * DI.
-     *
-     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
-     *
-     * @required
      */
     public function setResponseHandler(ResponseHandler $responseHandler): self;
 

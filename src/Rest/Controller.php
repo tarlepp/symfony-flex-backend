@@ -13,6 +13,7 @@ use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\Traits\Actions\RestActionBase;
 use App\Rest\Traits\RestMethodHelper;
+use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
 
 /**
@@ -73,6 +74,7 @@ abstract class Controller implements ControllerInterface
         return $this->responseHandler;
     }
 
+    #[Required]
     public function setResponseHandler(ResponseHandler $responseHandler): self
     {
         $this->responseHandler = $responseHandler;
