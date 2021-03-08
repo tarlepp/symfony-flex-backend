@@ -12,6 +12,7 @@ use App\DTO\RestDtoInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
 use function array_keys;
 use function sprintf;
@@ -46,6 +47,7 @@ abstract class RestResource implements RestResourceInterface
         return $this->validator;
     }
 
+    #[Required]
     public function setValidator(ValidatorInterface $validator): self
     {
         $this->validator = $validator;
