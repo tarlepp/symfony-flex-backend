@@ -49,7 +49,7 @@
 		"symfony/monolog-bundle": "3.6.0",
 		"symfony/process": "5.2.3",
 		"symfony/routing": "5.2.3",
-		"symfony/security-bundle": "5.2.3",
+		"symfony/security-bundle": "5.2.4",
 		"symfony/serializer-pack": "1.0.4",
 		"symfony/translation": "5.2.3",
 		"symfony/twig-bundle": "5.2.3",
