@@ -205,6 +205,9 @@ class LogRequest implements EntityInterface
         return $this->masterRequest;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getSensitiveProperties(): array
     {
         return $this->sensitiveProperties;

@@ -115,7 +115,7 @@ class CheckDependencies extends Command
 
         $closure = static fn (SplFileInfo $fileInfo): string => $fileInfo->getPath();
 
-        /** @var Traversable $iterator */
+        /** @var Traversable<SplFileInfo> $iterator */
         $iterator = $finder->getIterator();
 
         // Determine namespace directories

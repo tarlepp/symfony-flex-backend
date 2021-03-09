@@ -39,6 +39,9 @@ abstract class RestRequestMapper implements MapperInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param array<array-key, mixed>|object $source
+     * @psalm-param array<int, mixed> $context
      */
     public function map($source, string $targetClass, array $context = []): RestDtoInterface
     {
@@ -49,7 +52,11 @@ abstract class RestRequestMapper implements MapperInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @psalm-param array<array-key, mixed>|object $source
+     * @psalm-param object $destination
+     * @psalm-param array<int, mixed> $context
      */
     public function mapToObject($source, $destination, array $context = []): RestDtoInterface
     {
@@ -98,11 +105,11 @@ abstract class RestRequestMapper implements MapperInterface
             $setter = 'set' . ucfirst($property);
             $transformer = 'transform' . ucfirst($property);
 
-            /** @var int|string|array|null $value */
+            /** @var int|string|array<mixed>|null $value */
             $value = $request->get($property);
 
             if (method_exists($this, $transformer)) {
-                /** @var int|string|object|array|null $value */
+                /** @var int|string|object|array<mixed>|null $value */
                 $value = $this->{$transformer}($value);
             }
 

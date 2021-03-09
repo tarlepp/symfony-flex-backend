@@ -83,6 +83,8 @@ class RestDtoValueResolver implements ArgumentValueResolverInterface
 
     /**
      * @throws Throwable
+     *
+     * @return Generator<RestDtoInterface>
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {

@@ -71,6 +71,8 @@ class LoggedInUserValueResolver implements ArgumentValueResolverInterface
 
     /**
      * @throws Throwable
+     *
+     * @return Generator<User|null>
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {

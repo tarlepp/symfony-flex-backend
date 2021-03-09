@@ -55,6 +55,8 @@ trait CollectionTrait
 
     /**
      * Method to get all items from current collection.
+     *
+     * @return IteratorAggregate<mixed>
      */
     public function getAll(): IteratorAggregate
     {
