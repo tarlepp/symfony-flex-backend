@@ -401,9 +401,6 @@
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.17.0"
     },
-    "symfony/polyfill-intl-icu": {
-        "version": "v1.13.1"
-    },
     "symfony/polyfill-intl-normalizer": {
         "version": "v1.17.0"
     },
