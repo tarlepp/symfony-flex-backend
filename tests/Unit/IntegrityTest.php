@@ -467,7 +467,7 @@ FORMAT;
             $namespace,
             $namespaceTest
         ): array {
-            $file = $reflectionClass->getFileName();
+            $file = (string)$reflectionClass->getFileName();
 
             $base = str_replace([$folder, DIRECTORY_SEPARATOR], ['', '\\'], $file);
             $class = $namespace . str_replace('.php', '', $base);
@@ -722,8 +722,7 @@ FORMAT;
     ): array {
         $pattern = '/^.+\.php$/i';
 
-        $filter ??= $filter ?? $filter = static fn (ReflectionClass $reflectionClass): bool =>
-                !$reflectionClass->isInterface() && !$reflectionClass->isAbstract() && !$reflectionClass->isTrait();
+        $filter ??= static fn (ReflectionClass $r): bool => !$r->isInterface() && !$r->isAbstract() && !$r->isTrait();
         $formatter ??= $this->getFormatterClosure($folder, $namespace, $namespaceTest);
         $iterator = $this->getReflectionClass($folder, $namespace);
 
@@ -741,9 +740,12 @@ FORMAT;
 
     private function getReflectionClass(string $folder, string $namespace): Closure
     {
-        return static fn (string $file): ReflectionClass => new ReflectionClass(
-            $namespace . str_replace([$folder, '.php', DIRECTORY_SEPARATOR], ['', '', '\\'], $file)
-        );
+        return static function (string $file) use ($folder, $namespace): ReflectionClass {
+            /** @psalm-var class-string $class */
+            $class = $namespace . str_replace([$folder, '.php', DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new ReflectionClass($class);
+        };
     }
 
     /**
@@ -752,7 +754,7 @@ FORMAT;
     private function getFormatterClosure(string $folder, string $namespace, string $namespaceTest): Closure
     {
         return static function (ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest): array {
-            $file = $reflectionClass->getFileName();
+            $file = (string)$reflectionClass->getFileName();
             $base = str_replace([$folder, DIRECTORY_SEPARATOR], ['', '\\'], $file);
             $class = $namespace . str_replace('.php', '', $base);
             $classTest = $namespaceTest . str_replace('.php', 'Test', $base);
@@ -778,6 +780,9 @@ FORMAT;
         }
     }
 
+    /**
+     * @param class-string $interface
+     */
     private function getInterfaceFilter(string $interface): Closure
     {
         return static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
@@ -785,6 +790,9 @@ FORMAT;
             && $reflectionClass->implementsInterface($interface);
     }
 
+    /**
+     * @param class-string $class
+     */
     private function getSubclassOfFilter(string $class): Closure
     {
         return static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
