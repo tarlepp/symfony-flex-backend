@@ -28,6 +28,10 @@ class CollectionNormalizer implements NormalizerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param mixed $object
+     *
+     * @return array<int, mixed>
      */
     public function normalize($object, ?string $format = null, array $context = []): array
     {

@@ -56,6 +56,9 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     public function getCredentials(Request $request): ?array
     {
         $output = null;

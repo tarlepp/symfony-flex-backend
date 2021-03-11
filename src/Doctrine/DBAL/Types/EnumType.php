@@ -32,6 +32,9 @@ abstract class EnumType extends Type
      */
     protected static array $values = [];
 
+    /**
+     * @return array<int, string>
+     */
     public static function getValues(): array
     {
         return static::$values;
