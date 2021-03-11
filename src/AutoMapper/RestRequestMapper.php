@@ -52,7 +52,7 @@ abstract class RestRequestMapper implements MapperInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @psalm-param array<array-key, mixed>|object $source
      * @psalm-param object $destination
