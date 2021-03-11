@@ -100,6 +100,9 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatRepositoryHaveFunctionalTests
      *
+     * @phpstan-param  StringableArrayObject<array<int, string>> $methods
+     * @psalm-param  StringableArrayObject $methods
+     *
      * @testdox Test that repository `$class` has functional test class `$testClass` for `$methods` methods
      */
     public function testThatRepositoryHaveFunctionalTests(
@@ -411,6 +414,9 @@ FORMAT;
         static::assertTrue(class_exists($testClass), $message);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatControllerHasE2ETests(): array
     {
         $this->bootKernelCached();
@@ -422,6 +428,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -434,6 +443,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
+     */
     public function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {
         $this->bootKernelCached();
@@ -483,6 +495,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter, $formatter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -495,6 +510,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatEntityHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -507,6 +525,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -518,6 +539,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatEventListenerHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -529,6 +553,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatResourceHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -540,6 +567,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -554,6 +584,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -566,6 +599,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -578,6 +614,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatDtoHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -589,6 +628,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatFormTypeHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -601,6 +643,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -613,6 +658,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatRestControllerHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -625,6 +673,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatConstraintHasUnitTest(): array
     {
         $this->bootKernelCached();
@@ -637,6 +688,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatEventSubscriberHasUnitTest(): array
     {
         $this->bootKernelCached();
@@ -651,6 +705,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -663,6 +720,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatCustomDBALTypeHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -676,6 +736,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -690,6 +753,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -701,6 +767,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatArgumentValueResolverServiceHasIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -713,6 +782,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     private function getTestCases(
         string $folder,
         string $namespace,
