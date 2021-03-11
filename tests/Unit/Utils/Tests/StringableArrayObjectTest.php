@@ -23,6 +23,9 @@ class StringableArrayObjectTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatCastingToStringReturnsExpected
      *
+     * @phpstan-param  StringableArrayObject<array<string, string>> $input
+     * @psalm-param  StringableArrayObject $input
+     *
      * @testdox Test that casting to string with `$input` input (array converted to JSON) returns `$expected`
      */
     public function testThatCastingToStringReturnsExpected(StringableArrayObject $input, string $expected): void
@@ -30,6 +33,9 @@ class StringableArrayObjectTest extends KernelTestCase
         static::assertSame($expected, (string)(new StringableArrayObject($input)));
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: string}>
+     */
     public function dataProviderTestThatCastingToStringReturnsExpected(): Generator
     {
         yield [
