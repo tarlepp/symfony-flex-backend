@@ -24,6 +24,8 @@ use function sprintf;
  *
  * @method ControllerInterface get(string $className)
  * @method IteratorAggregate<int, ControllerInterface> getAll()
+ *
+ * @template T<ControllerInterface>
  */
 class ControllerCollection implements Countable
 {
