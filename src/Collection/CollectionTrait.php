@@ -43,8 +43,6 @@ trait CollectionTrait
     /**
      * Getter method for given class for current collection.
      *
-     * @psalm-var class-string $className
-     *
      * @throws InvalidArgumentException
      */
     public function get(string $className): mixed
@@ -65,8 +63,6 @@ trait CollectionTrait
 
     /**
      * Method to check if specified class exists or not in current collection.
-     *
-     * @psalm-var class-string $className
      */
     public function has(?string $className = null): bool
     {
@@ -81,9 +77,6 @@ trait CollectionTrait
         return iterator_count($this->items);
     }
 
-    /**
-     * @psalm-var class-string $className
-     */
     private function getFilteredItem(string $className): mixed
     {
         try {
