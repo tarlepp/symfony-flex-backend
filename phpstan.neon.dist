@@ -2,7 +2,6 @@ parameters:
     level: max
     paths:
         - src
-    checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
 includes:
     - tools/02_phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon

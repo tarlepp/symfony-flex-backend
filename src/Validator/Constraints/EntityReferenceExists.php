@@ -43,6 +43,11 @@ class EntityReferenceExists extends Constraint
         self::ENTITY_REFERENCE_EXISTS_ERROR => 'ENTITY_REFERENCE_EXISTS_ERROR',
     ];
 
+    /**
+     * EntityReferenceExists constructor.
+     *
+     * @param array<string, string> $options
+     */
     public function __construct(
         ?string $entityClass = null,
         array $options = [],

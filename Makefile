@@ -303,6 +303,14 @@ else
 	$(WARNING_DOCKER)
 endif
 
+COMPOSER_BIN := $(shell which composer)
+install-bin: ## Install composer bin dependencies
+ifeq ($(INSIDE_DOCKER), 1)
+	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader
+else
+	$(WARNING_DOCKER)
+endif
+
 bash: ## Get bash inside PHP container
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)

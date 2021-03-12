@@ -72,6 +72,9 @@ class JWTCreatedSubscriber implements EventSubscriberInterface
         $event->setData($payload);
     }
 
+    /**
+     * @param array<string, string> $payload
+     */
     private function setLocalizationData(array &$payload, UserInterface $user): void
     {
         $payload['language'] = $user instanceof SecurityUser ? $user->getLanguage() : Localization::DEFAULT_LANGUAGE;
