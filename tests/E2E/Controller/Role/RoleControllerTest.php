@@ -34,8 +34,9 @@ class RoleControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
     }
 
@@ -52,8 +53,9 @@ class RoleControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
     }
 
@@ -70,22 +72,29 @@ class RoleControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGetBaseRouteReturn403(): Generator
     {
-        //yield ['john', 'password'];
-        //yield ['john-api', 'password-api'];
-        //yield ['john-logged', 'password-logged'];
+        yield ['john', 'password'];
+        yield ['john-api', 'password-api'];
+        yield ['john-logged', 'password-logged'];
         yield ['john-user', 'password-user'];
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGetBaseRouteReturn200(): Generator
     {
         yield ['john-admin', 'password-admin'];
-        //yield ['john-root', 'password-root'];
+        yield ['john-root', 'password-root'];
     }
 }
