@@ -11,7 +11,6 @@ namespace App\Tests\E2E\Controller\Localization;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -37,9 +36,10 @@ class LocaleControllerTest extends WebTestCase
         $client->request($method, $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        static::assertNotFalse($content);
+        static::assertSame(405, $response->getStatusCode(), $content);
     }
 
     /**
@@ -53,9 +53,10 @@ class LocaleControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent());
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content);
     }
 
     /**
@@ -69,12 +70,15 @@ class LocaleControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        $data = JSON::decode($response->getContent());
-
-        static::assertCount(2, $data);
+        static::assertNotFalse($content);
+        static::assertCount(2, JSON::decode($content));
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatLocaleRouteDoesNotAllowOtherMethodThanGet(): Generator
     {
         yield ['PUT'];
