@@ -10,7 +10,6 @@ namespace App\Tests\E2E\Controller\UserGroup;
 
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -35,7 +34,6 @@ class UserGroupControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        static::assertInstanceOf(Response::class, $response);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
     }
 
@@ -52,12 +50,13 @@ class UserGroupControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent(),
+            $content,
             "Response:\n" . $response
         );
     }
@@ -76,10 +75,12 @@ class UserGroupControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        static::assertInstanceOf(Response::class, $response);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGetBaseRouteReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];
@@ -88,6 +89,9 @@ class UserGroupControllerTest extends WebTestCase
         yield ['john-user', 'password-user'];
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGetBaseRouteReturns200ForValidUser(): Generator
     {
         yield ['john-admin', 'password-admin'];
