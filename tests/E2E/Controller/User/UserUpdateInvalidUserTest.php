@@ -12,7 +12,6 @@ use App\DataFixtures\ORM\LoadUserData;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -43,13 +42,14 @@ class UserUpdateInvalidUserTest extends WebTestCase
         $client->request('PUT', '/user/' . LoadUserData::$uuids['john'], [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent(),
-            "Response:\n" . $response
+            $content,
+            "Response:\n" . $response,
         );
     }
 
@@ -73,16 +73,20 @@ class UserUpdateInvalidUserTest extends WebTestCase
         $client->request('PUT', '/user/' . LoadUserData::$uuids['john'], [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent(),
-            "Response:\n" . $response
+            $content,
+            "Response:\n" . $response,
         );
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatPutActionReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];
@@ -92,6 +96,9 @@ class UserUpdateInvalidUserTest extends WebTestCase
         yield ['john-admin', 'password-admin'];
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatPatchActionReturns403ForInvalidUser(): Generator
     {
         return $this->dataProviderTestThatPutActionReturns403ForInvalidUser();

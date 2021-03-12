@@ -14,7 +14,6 @@ use App\Utils\JSON;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -55,9 +54,10 @@ class AttachUserGroupControllerTest extends WebTestCase
         $client->request('POST', $this->baseUrl . '/' . $userUuid . '/group/' . $groupUuid);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(401, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -76,9 +76,10 @@ class AttachUserGroupControllerTest extends WebTestCase
         $client->request('POST', $this->baseUrl . '/' . $userUuid . '/group/' . $groupUuid);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -97,12 +98,16 @@ class AttachUserGroupControllerTest extends WebTestCase
         $client->request('POST', $this->baseUrl . '/' . $userUuid . '/group/' . $groupUuid);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(1, JSON::decode($response->getContent()));
+        static::assertCount(1, JSON::decode($content));
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatAttachUserGroupReturns403(): Generator
     {
         yield ['john', 'password'];
@@ -112,6 +117,9 @@ class AttachUserGroupControllerTest extends WebTestCase
         yield ['john-admin', 'password-admin'];
     }
 
+    /**
+     * @return Generator<array{0: int}>
+     */
     public function dataProviderTestThatAttachUserGroupWorksAsExpected(): Generator
     {
         yield [201];

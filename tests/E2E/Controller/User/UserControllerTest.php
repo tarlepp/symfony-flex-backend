@@ -11,7 +11,6 @@ namespace App\Tests\E2E\Controller\User;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -33,14 +32,15 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), (string)$response);
 
         static::assertJsonStringEqualsJsonString(
             '{"message":"JWT Token not found","code":401}',
-            $response->getContent(),
-            "Response:\n" . $response
+            $content,
+            "Response:\n" . $response,
         );
     }
 
@@ -57,10 +57,11 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent(), "Response:\n" . $response);
+        static::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
     }
 
     /**
@@ -74,10 +75,11 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertJsonStringEqualsJsonString('{"count":6}', $response->getContent(), "Response:\n" . $response);
+        static::assertJsonStringEqualsJsonString('{"count":6}', $content, "Response:\n" . $response);
     }
 
     /**
@@ -93,13 +95,14 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent(),
-            "Response:\n" . $response
+            $content,
+            "Response:\n" . $response,
         );
     }
 
@@ -114,13 +117,14 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/count');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent(),
-            "Response:\n" . $response
+            $content,
+            "Response:\n" . $response,
         );
     }
 
@@ -137,10 +141,11 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(6, JSON::decode($response->getContent()), "Response:\n" . $response);
+        static::assertCount(6, JSON::decode($content), "Response:\n" . $response);
     }
 
     /**
@@ -156,13 +161,14 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent(),
-            "Response:\n" . $response
+            $content,
+            "Response:\n" . $response,
         );
     }
 
@@ -179,10 +185,11 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/ids');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(6, JSON::decode($response->getContent()), "Response:\n" . $response);
+        static::assertCount(6, JSON::decode($content), "Response:\n" . $response);
     }
 
     /**
@@ -198,40 +205,53 @@ class UserControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/ids');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent(),
-            "Response:\n" . $response
+            $content,
+            "Response:\n" . $response,
         );
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderValidUsers(): Generator
     {
         yield ['john-admin', 'password-admin'];
-        //yield ['john-root', 'password-root'];
+        yield ['john-root', 'password-root'];
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderValidApiKeyUsers(): Generator
     {
         yield ['admin'];
-        //yield ['root'];
+        yield ['root'];
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderInvalidUsers(): Generator
     {
-        //yield ['john', 'password'];
-        //yield ['john-api', 'password-api'];
-        //yield ['john-logged', 'password-logged'];
+        yield ['john', 'password'];
+        yield ['john-api', 'password-api'];
+        yield ['john-logged', 'password-logged'];
         yield ['john-user', 'password-user'];
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderInvalidApiKeyUsers(): Generator
     {
-        //yield ['api'];
-        //yield ['logged'];
+        yield ['api'];
+        yield ['logged'];
         yield ['user'];
     }
 }
