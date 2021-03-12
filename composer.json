@@ -48,7 +48,7 @@
 		"symfony/form": "5.2.3",
 		"symfony/framework-bundle": "5.2.3",
 		"symfony/monolog-bundle": "3.6.0",
-		"symfony/process": "5.2.3",
+		"symfony/process": "5.2.4",
 		"symfony/property-access": "5.2.3",
 		"symfony/property-info": "5.2.3",
 		"symfony/routing": "5.2.3",
