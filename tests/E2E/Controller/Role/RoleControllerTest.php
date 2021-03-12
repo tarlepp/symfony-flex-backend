@@ -10,7 +10,6 @@ namespace App\Tests\E2E\Controller\Role;
 
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
