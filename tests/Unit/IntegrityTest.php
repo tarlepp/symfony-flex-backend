@@ -100,6 +100,9 @@ FORMAT;
     /**
      * @dataProvider dataProviderTestThatRepositoryHaveFunctionalTests
      *
+     * @phpstan-param  StringableArrayObject<array<int, string>> $methods
+     * @psalm-param  StringableArrayObject $methods
+     *
      * @testdox Test that repository `$class` has functional test class `$testClass` for `$methods` methods
      */
     public function testThatRepositoryHaveFunctionalTests(
@@ -411,6 +414,9 @@ FORMAT;
         static::assertTrue(class_exists($testClass), $message);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatControllerHasE2ETests(): array
     {
         $this->bootKernelCached();
@@ -422,6 +428,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatRepositoryClassHasIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -434,6 +443,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
+     */
     public function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {
         $this->bootKernelCached();
@@ -467,7 +479,7 @@ FORMAT;
             $namespace,
             $namespaceTest
         ): array {
-            $file = $reflectionClass->getFileName();
+            $file = (string)$reflectionClass->getFileName();
 
             $base = str_replace([$folder, DIRECTORY_SEPARATOR], ['', '\\'], $file);
             $class = $namespace . str_replace('.php', '', $base);
@@ -483,6 +495,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter, $formatter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatRestRepositoryHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -495,6 +510,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatEntityHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -507,6 +525,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatEventSubscriberHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -518,6 +539,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatEventListenerHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -529,6 +553,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatResourceHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -540,6 +567,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatSecurityAuthenticatorHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -554,6 +584,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatSecurityProvidersHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -566,6 +599,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatSecurityVoterHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -578,6 +614,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatDtoHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -589,6 +628,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatFormTypeHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -601,6 +643,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatDataTransformerHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -613,6 +658,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatRestControllerHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -625,6 +673,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatConstraintHasUnitTest(): array
     {
         $this->bootKernelCached();
@@ -637,6 +688,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatEventSubscriberHasUnitTest(): array
     {
         $this->bootKernelCached();
@@ -651,6 +705,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatValidatorConstraintsHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -663,6 +720,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatCustomDBALTypeHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -676,6 +736,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatRestRequestMapperHaveIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -690,6 +753,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGenericServiceHaveIntegrationTests(): array
     {
         $this->bootKernelCached();
@@ -701,6 +767,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest);
     }
 
+    /**
+     * @return array<int, array{0: string, 1: string}>
+     */
     public function dataProviderTestThatArgumentValueResolverServiceHasIntegrationTest(): array
     {
         $this->bootKernelCached();
@@ -713,6 +782,9 @@ FORMAT;
         return $this->getTestCases($folder, $namespace, $namespaceTest, $filter);
     }
 
+    /**
+     * @return array<int, mixed>
+     */
     private function getTestCases(
         string $folder,
         string $namespace,
@@ -722,8 +794,7 @@ FORMAT;
     ): array {
         $pattern = '/^.+\.php$/i';
 
-        $filter ??= $filter ?? $filter = static fn (ReflectionClass $reflectionClass): bool =>
-                !$reflectionClass->isInterface() && !$reflectionClass->isAbstract() && !$reflectionClass->isTrait();
+        $filter ??= static fn (ReflectionClass $r): bool => !$r->isInterface() && !$r->isAbstract() && !$r->isTrait();
         $formatter ??= $this->getFormatterClosure($folder, $namespace, $namespaceTest);
         $iterator = $this->getReflectionClass($folder, $namespace);
 
@@ -741,9 +812,12 @@ FORMAT;
 
     private function getReflectionClass(string $folder, string $namespace): Closure
     {
-        return static fn (string $file): ReflectionClass => new ReflectionClass(
-            $namespace . str_replace([$folder, '.php', DIRECTORY_SEPARATOR], ['', '', '\\'], $file)
-        );
+        return static function (string $file) use ($folder, $namespace): ReflectionClass {
+            /** @psalm-var class-string $class */
+            $class = $namespace . str_replace([$folder, '.php', DIRECTORY_SEPARATOR], ['', '', '\\'], $file);
+
+            return new ReflectionClass($class);
+        };
     }
 
     /**
@@ -752,7 +826,7 @@ FORMAT;
     private function getFormatterClosure(string $folder, string $namespace, string $namespaceTest): Closure
     {
         return static function (ReflectionClass $reflectionClass) use ($folder, $namespace, $namespaceTest): array {
-            $file = $reflectionClass->getFileName();
+            $file = (string)$reflectionClass->getFileName();
             $base = str_replace([$folder, DIRECTORY_SEPARATOR], ['', '\\'], $file);
             $class = $namespace . str_replace('.php', '', $base);
             $classTest = $namespaceTest . str_replace('.php', 'Test', $base);
@@ -778,6 +852,9 @@ FORMAT;
         }
     }
 
+    /**
+     * @param class-string $interface
+     */
     private function getInterfaceFilter(string $interface): Closure
     {
         return static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
@@ -785,6 +862,9 @@ FORMAT;
             && $reflectionClass->implementsInterface($interface);
     }
 
+    /**
+     * @param class-string $class
+     */
     private function getSubclassOfFilter(string $class): Closure
     {
         return static fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isInterface()
