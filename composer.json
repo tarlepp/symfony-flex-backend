@@ -54,7 +54,7 @@
 		"symfony/routing": "5.2.3",
 		"symfony/security-bundle": "5.2.3",
 		"symfony/serializer": "5.2.3",
-		"symfony/translation": "5.2.3",
+		"symfony/translation": "5.2.5",
 		"symfony/twig-bundle": "5.2.3",
 		"symfony/validator": "5.2.3",
 		"symfony/yaml": "5.2.3"
