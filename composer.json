@@ -74,7 +74,7 @@
 		"symfony/requirements-checker": "2.0.0",
 		"symfony/stopwatch": "5.2.3",
 		"symfony/var-dumper": "5.2.3",
-		"symfony/web-profiler-bundle": "5.2.3"
+		"symfony/web-profiler-bundle": "5.2.4"
 	},
 	"config": {
 		"platform": {
