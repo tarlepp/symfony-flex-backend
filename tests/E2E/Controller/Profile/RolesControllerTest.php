@@ -13,7 +13,6 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function str_pad;
 
@@ -36,22 +35,22 @@ class RolesControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'JWT Token not found',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
@@ -64,27 +63,29 @@ class RolesControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'JWT Token not found',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
     /**
      * @dataProvider dataProviderTestThatRolesActionReturnsExpected
+     *
+     * @param array<int, string> $expected
      *
      * @throws Throwable
      *
@@ -96,10 +97,11 @@ class RolesControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-        static::assertSame($expected, JSON::decode($response->getContent(), true), $response->getContent());
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        static::assertSame($expected, JSON::decode($content, true), $content);
     }
 
     /**
@@ -115,32 +117,35 @@ class RolesControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'JWT Token not found',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string, 2: array<int, string>}>
+     */
     public function dataProviderTestThatRolesActionReturnsExpected(): Generator
     {
-        //yield ['john', 'password', []];
-        //yield ['john-logged', 'password-logged', ['ROLE_LOGGED']];
-        //yield ['john-user', 'password-user', ['ROLE_USER', 'ROLE_LOGGED']];
-        //yield ['john-admin', 'password-admin', ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
-        //yield ['john-root', 'password-root', ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
+        yield ['john', 'password', []];
+        yield ['john-logged', 'password-logged', ['ROLE_LOGGED']];
+        yield ['john-user', 'password-user', ['ROLE_USER', 'ROLE_LOGGED']];
+        yield ['john-admin', 'password-admin', ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
+        yield ['john-root', 'password-root', ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
         yield ['john.doe@test.com', 'password', []];
         yield ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']];
         yield ['john.doe-user@test.com', 'password-user', ['ROLE_USER', 'ROLE_LOGGED']];
@@ -148,10 +153,16 @@ class RolesControllerTest extends WebTestCase
         yield ['john.doe-root@test.com', 'password-root', ['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED']];
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
     {
         static::bootKernel();
 
+        /**
+         * @var RolesService $rolesService
+         */
         $rolesService = static::$container->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {
