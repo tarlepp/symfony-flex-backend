@@ -115,6 +115,9 @@
 			"PhpCsFixer\\": "tools/04_symplify/vendor/friendsofphp/php-cs-fixer/src",
 			"SlevomatCodingStandard\\": "tools/04_symplify/vendor/slevomat/coding-standard/SlevomatCodingStandard",
 			"Symplify\\CodingStandard\\": "tools/04_symplify/vendor/symplify/coding-standard/src",
+			"PHPStan\\PhpDoc\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/PhpDoc/PHPUnit",
+			"PHPStan\\Rules\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Rules/PHPUnit",
+			"PHPStan\\Type\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Type/PHPUnit",
 			"PHPStan\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Symfony",
 			"PHPStan\\Type\\Symfony\\": "tools/02_phpstan/vendor/phpstan/phpstan-symfony/src/Type/Symfony"
 		}

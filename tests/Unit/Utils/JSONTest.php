@@ -28,14 +28,11 @@ class JSONTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatEncodeWorksLikeExpected
      *
-     * @param mixed $value
-     * @param mixed $expected
-     *
      * @throws JsonException
      *
      * @testdox Test that `JSON::encode` method returns `$expected` when using `$value` as input
      */
-    public function testThatEncodeWorksLikeExpected($value, $expected): void
+    public function testThatEncodeWorksLikeExpected(mixed $value, mixed $expected): void
     {
         static::assertSame($expected, JSON::encode($value));
     }
@@ -43,13 +40,14 @@ class JSONTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatDecodeWorksLikeExpected
      *
-     * @param mixed $expected
+     * @phpstan-param  StringableArrayObject<string> $parameters
+     * @psalm-param  StringableArrayObject $parameters
      *
      * @throws JsonException
      *
      * @testdox Test that `JSON::decode` method returns `$expected` when using `$parameters` as input
      */
-    public function testThatDecodeWorksLikeExpected(StringableArrayObject $parameters, $expected): void
+    public function testThatDecodeWorksLikeExpected(StringableArrayObject $parameters, mixed $expected): void
     {
         static::assertSame(
             serialize($expected),
@@ -135,6 +133,8 @@ class JSONTest extends KernelTestCase
 
     /**
      * Data provider for 'testThatEncodeWorksLikeExpected'.
+     *
+     * @return Generator<array{0: mixed, 1: string}>
      */
     public function dataProviderTestThatEncodeWorksLikeExpected(): Generator
     {
@@ -175,6 +175,8 @@ class JSONTest extends KernelTestCase
 
     /**
      * Data provider for 'testThatDecodeWorksLikeExpected'.
+     *
+     * @return Generator<array>
      */
     public function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {
@@ -190,6 +192,8 @@ class JSONTest extends KernelTestCase
 
     /**
      * Data provider for 'testThatDecodeThrowsAnExceptionOnMalformedJson'.
+     *
+     * @return Generator<array{0: string}>
      */
     public function dataProviderTestThatDecodeThrowsAnExceptionOnMalformedJson(): Generator
     {
@@ -201,6 +205,8 @@ class JSONTest extends KernelTestCase
 
     /**
      * Data provider for 'testThatEncodeThrowsAnExceptionOnInvalidUtfCharacters'.
+     *
+     * @return Generator<array{0: string}>
      */
     public function dataProviderTestThatEncodeThrowsAnExceptionOnInvalidUtfCharacters(): Generator
     {

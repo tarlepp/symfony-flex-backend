@@ -1,7 +1,8 @@
 parameters:
     level: max
-    excludes_analyse:
-        - %currentWorkingDirectory%/src/Migrations/*
+    paths:
+        - src
+        - tests/Unit
     checkGenericClassInNonGenericObjectType: false
 includes:
     - tools/02_phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon

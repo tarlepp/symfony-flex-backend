@@ -25,12 +25,9 @@ class SearchTermTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull
      *
-     * @param mixed $column
-     * @param mixed $search
-     *
      * @testdox Test that `getCriteria` method returns null with `$column` + `$search` parameters
      */
-    public function testThatWithoutColumnOrSearchTermCriteriaIsNull($column, $search): void
+    public function testThatWithoutColumnOrSearchTermCriteriaIsNull(mixed $column, mixed $search): void
     {
         static::assertNull(SearchTerm::getCriteria(
             $column instanceof StringableArrayObject ? $column->getArrayCopy() : $column,
@@ -40,6 +37,11 @@ class SearchTermTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatReturnedCriteriaIsExpected
+     *
+     * @phpstan-param StringableArrayObject<array<mixed>> $inputArguments
+     * @phpstan-param StringableArrayObject<array<mixed>> $expected
+     * @psalm-param StringableArrayObject $inputArguments
+     * @psalm-param StringableArrayObject $expected
      *
      * @testdox Test that `getCriteria` method returns `$expected` with given `$inputArguments` arguments
      */
@@ -55,6 +57,8 @@ class SearchTermTest extends KernelTestCase
 
     /**
      * Data provider for testThatWithoutColumnOrSearchTermCriteriaIsNull
+     *
+     * @return Generator<array{0: null|string|StringableArrayObject, 1: null|string|StringableArrayObject}>
      */
     public function dataProviderTestThatWithoutColumnOrSearchTermCriteriaIsNull(): Generator
     {
@@ -85,6 +89,8 @@ class SearchTermTest extends KernelTestCase
 
     /**
      * Data provider for testThatReturnedCriteriaIsExpected
+     *
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
      */
     public function dataProviderTestThatReturnedCriteriaIsExpected(): Generator
     {

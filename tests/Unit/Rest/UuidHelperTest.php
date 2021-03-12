@@ -71,7 +71,7 @@ class UuidHelperTest extends KernelTestCase
     }
 
     /**
-     * @throws Throwable
+     * @return Generator<array{0: string|null, 1: string}>
      */
     public function dataProviderTestThatGetTypeReturnsExpected(): Generator
     {
