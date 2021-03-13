@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Functional/Repository/LogLoginFailureRepositoryTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Repository;
@@ -14,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  * Class LogLoginFailureRepositoryTest
  *
  * @package App\Tests\Functional\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LogLoginFailureRepositoryTest extends KernelTestCase
 {
