@@ -3,6 +3,7 @@ parameters:
     paths:
         - src
         - tests/E2E
+        - tests/Functional
         - tests/Unit
     checkGenericClassInNonGenericObjectType: false
 includes:
