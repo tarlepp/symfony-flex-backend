@@ -10,7 +10,6 @@ namespace App\Tests\E2E\Controller\User;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -45,17 +44,16 @@ class UserManagementFlowTest extends WebTestCase
         $client->request('POST', $this->baseUrl, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(201, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(201, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
-        $responseData = $response->getContent();
-
-        $data['id'] = JSON::decode($responseData)->id;
+        $data['id'] = JSON::decode($content)->id;
 
         unset($data['password']);
 
-        static::assertJsonStringEqualsJsonString(JSON::encode($data), $responseData);
+        static::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
 
         return $data['id'];
     }
@@ -84,13 +82,14 @@ class UserManagementFlowTest extends WebTestCase
         $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
         $data['id'] = $userId;
 
-        static::assertJsonStringEqualsJsonString(JSON::encode($data), $response->getContent());
+        static::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
 
         return $userId;
     }
@@ -113,9 +112,10 @@ class UserManagementFlowTest extends WebTestCase
         $client->request('PUT', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(400, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(400, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
         return $userId;
     }
@@ -150,10 +150,11 @@ class UserManagementFlowTest extends WebTestCase
         $client->request('PATCH', $this->baseUrl . '/' . $userId, [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-        static::assertJsonStringEqualsJsonString(JSON::encode($expectedData), $response->getContent());
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        static::assertJsonStringEqualsJsonString(JSON::encode($expectedData), $content);
 
         return $userId;
     }
@@ -171,8 +172,9 @@ class UserManagementFlowTest extends WebTestCase
         $client->request('DELETE', $this->baseUrl . '/' . $userId);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "Response:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "Response:\n" . $response);
     }
 }

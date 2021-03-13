@@ -14,7 +14,6 @@ use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
 use stdClass;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_map;
 
@@ -37,22 +36,22 @@ class GroupsControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'JWT Token not found',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
@@ -65,27 +64,29 @@ class GroupsControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'JWT Token not found',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
     /**
      * @dataProvider dataProviderTestThatGroupsActionReturnExpected
+     *
+     * @param array<int, string> $expected
      *
      * @throws Throwable
      *
@@ -97,11 +98,12 @@ class GroupsControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         if (empty($expected)) {
             static::assertEmpty($responseContent);
@@ -127,32 +129,35 @@ class GroupsControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'JWT Token not found',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string, 2: array<int, string>}>
+     */
     public function dataProviderTestThatGroupsActionReturnExpected(): Generator
     {
-        //yield ['john', 'password', []];
-        //yield ['john-logged', 'password-logged', ['ROLE_LOGGED']];
-        //yield ['john-user', 'password-user', ['ROLE_USER']];
-        //yield ['john-admin', 'password-admin', ['ROLE_ADMIN']];
-        //yield ['john-root', 'password-root', ['ROLE_ROOT']];
+        yield ['john', 'password', []];
+        yield ['john-logged', 'password-logged', ['ROLE_LOGGED']];
+        yield ['john-user', 'password-user', ['ROLE_USER']];
+        yield ['john-admin', 'password-admin', ['ROLE_ADMIN']];
+        yield ['john-root', 'password-root', ['ROLE_ROOT']];
         yield ['john.doe@test.com', 'password', []];
         yield ['john.doe-logged@test.com', 'password-logged', ['ROLE_LOGGED']];
         yield ['john.doe-user@test.com', 'password-user', ['ROLE_USER']];
@@ -160,10 +165,16 @@ class GroupsControllerTest extends WebTestCase
         yield ['john.doe-root@test.com', 'password-root', ['ROLE_ROOT']];
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
     {
         static::bootKernel();
 
+        /**
+         * @var RolesService $rolesService
+         */
         $rolesService = static::$container->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {

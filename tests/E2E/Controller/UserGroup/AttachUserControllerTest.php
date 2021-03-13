@@ -14,7 +14,6 @@ use App\Utils\JSON;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -55,9 +54,10 @@ class AttachUserControllerTest extends WebTestCase
         $client->request('POST', $this->baseUrl . '/' . $groupUuid . '/user/' . $userUuid);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(401, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -76,12 +76,13 @@ class AttachUserControllerTest extends WebTestCase
         $client->request('POST', $this->baseUrl . '/' . $groupUuid . '/user/' . $userUuid);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent(),
+            $content,
             "Response:\n" . $response
         );
     }
@@ -102,12 +103,16 @@ class AttachUserControllerTest extends WebTestCase
         $client->request('POST', $this->baseUrl . '/' . $groupUuid . '/user/' . $userUuid);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(2, JSON::decode($response->getContent()));
+        static::assertCount(2, JSON::decode($content));
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatAttachUserActionReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];
@@ -117,6 +122,9 @@ class AttachUserControllerTest extends WebTestCase
         yield ['john-admin', 'password-admin'];
     }
 
+    /**
+     * @return Generator<array{0: int}>
+     */
     public function dataProviderTestThatAttachUserActionWorksAsExpected(): Generator
     {
         yield [201];

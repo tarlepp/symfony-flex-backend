@@ -13,7 +13,6 @@ use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use JsonException;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function str_pad;
 
@@ -36,22 +35,22 @@ class IndexControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'JWT Token not found',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
@@ -68,9 +67,10 @@ class IndexControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -82,22 +82,22 @@ class IndexControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'JWT Token not found',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
@@ -114,32 +114,35 @@ class IndexControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'JWT Token not found',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
+    /**
+     * @return Generator<array{0: string, 1:  string}>
+     */
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
     {
-        //yield ['john', 'password'];
-        //yield ['john-logged', 'password-logged'];
-        //yield ['john-user', 'password-user'];
-        //yield ['john-admin', 'password-admin'];
-        //yield ['john-root', 'password-root'];
+        yield ['john', 'password'];
+        yield ['john-logged', 'password-logged'];
+        yield ['john-user', 'password-user'];
+        yield ['john-admin', 'password-admin'];
+        yield ['john-root', 'password-root'];
         yield ['john.doe@test.com', 'password'];
         yield ['john.doe-logged@test.com', 'password-logged'];
         yield ['john.doe-user@test.com', 'password-user'];
@@ -147,10 +150,16 @@ class IndexControllerTest extends WebTestCase
         yield ['john.doe-root@test.com', 'password-root'];
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatProfileActionReturnsExpected(): Generator
     {
         static::bootKernel();
 
+        /**
+         * @var RolesService $rolesService
+         */
         $rolesService = static::$container->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {

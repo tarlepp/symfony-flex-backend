@@ -11,7 +11,6 @@ namespace App\Tests\E2E\Controller\Localization;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -37,9 +36,10 @@ class TimeZoneControllerTest extends WebTestCase
         $client->request($method, $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(405, $response->getStatusCode(), (string)$response->getContent());
+        static::assertNotFalse($content);
+        static::assertSame(405, $response->getStatusCode(), $content);
     }
 
     /**
@@ -53,9 +53,10 @@ class TimeZoneControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), (string)$response->getContent());
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content);
     }
 
     /**
@@ -69,10 +70,12 @@ class TimeZoneControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
+        static::assertNotFalse($content);
         $data = JSON::decode((string)$response->getContent());
 
-        static::assertIsArray($data, (string)$response->getContent());
+        static::assertIsArray($data, $content);
     }
 
     /**
@@ -86,8 +89,10 @@ class TimeZoneControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        $data = JSON::decode((string)$response->getContent(), true)[0];
+        static::assertNotFalse($content);
+        $data = JSON::decode($content, true)[0];
 
         static::assertArrayHasKey('timezone', $data);
         static::assertArrayHasKey('identifier', $data);
@@ -95,6 +100,9 @@ class TimeZoneControllerTest extends WebTestCase
         static::assertArrayHasKey('value', $data);
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatTimeZoneRouteDoesNotAllowOtherMethodThanGet(): Generator
     {
         yield ['PUT'];

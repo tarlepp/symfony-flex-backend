@@ -11,7 +11,6 @@ namespace App\Tests\E2E\Controller\User;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -42,16 +41,20 @@ class UserCreateInvalidUserTest extends WebTestCase
         $client->request('POST', '/user', [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(403, $response->getStatusCode(), "Response:\n" . $response);
         static::assertJsonStringEqualsJsonString(
             '{"message":"Access denied.","code":0,"status":403}',
-            $response->getContent(),
-            "Response:\n" . $response
+            $content,
+            "Response:\n" . $response,
         );
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatCreateActionReturns403ForInvalidUser(): Generator
     {
         yield ['john', 'password'];

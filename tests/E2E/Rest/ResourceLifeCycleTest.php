@@ -66,6 +66,9 @@ class ResourceLifeCycleTest extends WebTestCase
         static::assertSame('Description - ' . $role, $entity->getDescription());
     }
 
+    /**
+     * @return Generator<array<int, string>>
+     */
     public function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): Generator
     {
         yield [RolesService::ROLE_ADMIN];
