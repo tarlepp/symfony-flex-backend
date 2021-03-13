@@ -2,9 +2,7 @@ parameters:
     level: max
     paths:
         - src
-        - tests/E2E
-        - tests/Functional
-        - tests/Unit
+        - tests
     checkGenericClassInNonGenericObjectType: false
 includes:
     - tools/02_phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
