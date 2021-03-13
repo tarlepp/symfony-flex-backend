@@ -105,10 +105,11 @@ class LoggedInUserValueResolverTest extends KernelTestCase
             [new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification)],
         );
 
-        static::assertSame(
-            [$user],
-            $argumentResolver->getArguments(Request::create('/'), static fn (User $user): bool => true),
-        );
+        $closure = static function (User $loggedInUser): void {
+            // Do nothing
+        };
+
+        static::assertSame([$user], $argumentResolver->getArguments(Request::create('/'), $closure));
     }
 
     /**
