@@ -22,6 +22,7 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use function assert;
 
 /**
  * Class ControllerCollectionTest
@@ -47,9 +48,9 @@ class ControllerCollectionTest extends KernelTestCase
             /**
              * Constructor of the class.
              *
-             * @param $input
+             * @param array<mixed> $input
              */
-            public function __construct($input)
+            public function __construct(array $input)
             {
                 $this->iterator = new ArrayObject($input);
             }
@@ -76,6 +77,8 @@ class ControllerCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetReturnsExpectedController
      *
+     * @param class-string $controllerName
+     *
      * @testdox Test that `get` method with `$controllerName` input returns instance of that controller
      */
     public function testThatGetReturnsExpectedController(string $controllerName): void
@@ -97,6 +100,9 @@ class ControllerCollectionTest extends KernelTestCase
         static::assertSame($expected, $collection->has($controller));
     }
 
+    /**
+     * @return Generator<array{0: class-string}>
+     */
     public function dataProviderTestThatGetReturnsExpectedController(): Generator
     {
         yield [ApiKeyController::class];
@@ -107,6 +113,9 @@ class ControllerCollectionTest extends KernelTestCase
         yield [DeleteUserController::class];
     }
 
+    /**
+     * @return Generator<array{0: boolean, 1: class-string|string|null}>
+     */
     public function dataProviderTestThatHasReturnsExpected(): Generator
     {
         yield [true, ApiKeyController::class];
@@ -123,6 +132,8 @@ class ControllerCollectionTest extends KernelTestCase
     private function getCollection(): ControllerCollection
     {
         static::bootKernel();
+
+        assert(static::$container->get(ControllerCollection::class) instanceof ControllerCollection);
 
         return static::$container->get(ControllerCollection::class);
     }

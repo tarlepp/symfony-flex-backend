@@ -17,6 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -33,6 +34,7 @@ class ResponseHandlerTest extends ContainerTestCase
 {
     public function testThatGetSerializerReturnsExpected(): void
     {
+        /** @var SerializerInterface $serializer */
         $serializer = $this->getContainer()->get(SerializerInterface::class);
 
         $responseClass = new ResponseHandler($serializer);
@@ -43,7 +45,7 @@ class ResponseHandlerTest extends ContainerTestCase
     /**
      * @dataProvider dataProviderTestThatCreateResponseReturnsExpected
      *
-     * @param mixed $data
+     * @param array<string, string> $data
      *
      * @throws Throwable
      *
@@ -51,12 +53,13 @@ class ResponseHandlerTest extends ContainerTestCase
      */
     public function testThatCreateResponseReturnsExpected(
         Request $request,
-        $data,
+        array $data,
         string $expectedContent
     ): void {
+        /** @var SerializerInterface $serializer */
         $serializer = $this->getContainer()->get(SerializerInterface::class);
 
-        /** @var MockObject|RestResourceInterface $stubResourceService */
+        /** @var RestResourceInterface $stubResourceService */
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $httpResponse = (new ResponseHandler($serializer))->createResponse($request, $data, $stubResourceService, 200);
@@ -72,13 +75,10 @@ class ResponseHandlerTest extends ContainerTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage('Some exception');
 
-        /**
-         * @var MockObject|SerializerInterface $stubSerializer
-         */
+        /** @var MockObject $stubSerializer */
         $stubSerializer = $this->createMock(SerializerInterface::class);
 
         $request = Request::create('');
-
         $exception = new Exception('Some exception');
 
         $stubSerializer
@@ -87,6 +87,7 @@ class ResponseHandlerTest extends ContainerTestCase
             ->withAnyParameters()
             ->willThrowException($exception);
 
+        /** @var SerializerInterface $stubSerializer */
         (new ResponseHandler($stubSerializer))
             ->createResponse($request, []);
     }
@@ -105,9 +106,11 @@ class ResponseHandlerTest extends ContainerTestCase
         $this->expectExceptionMessageMatches('/Serialization for the format .* is not supported/');
 
         $request = Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => $format]);
+
+        /** @var SerializerInterface $serializer */
         $serializer = $this->getContainer()->get(SerializerInterface::class);
 
-        /** @var MockObject|RestResourceInterface $stubResourceService */
+        /** @var RestResourceInterface $stubResourceService */
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         (new ResponseHandler($serializer))
@@ -119,31 +122,34 @@ class ResponseHandlerTest extends ContainerTestCase
      */
     public function testThatGetSerializeContextMethodCallsExpectedServiceMethods(): void
     {
-        /**
-         * @var MockObject|SerializerInterface $stubSerializer
-         * @var MockObject|Request $stubRequest
-         * @var MockObject|ParameterBag $stubParameterBag
-         * @var MockObject|RestResourceInterface $stubResourceService
-         */
-        $stubSerializer = $this->createMock(SerializerInterface::class);
-        $stubRequest = $this->createMock(Request::class);
-        $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(RestResourceInterface::class);
+        /** @var SerializerInterface $serializer */
+        $serializer = $this->createMock(SerializerInterface::class);
 
-        $stubParameterBag
+        /** @var Request $request */
+        $request = $this->createMock(Request::class);
+
+        /** @var MockObject $parameterBag */
+        $parameterBag = $this->createMock(ParameterBag::class);
+
+        /** @var MockObject $restResource */
+        $restResource = $this->createMock(RestResourceInterface::class);
+
+        $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
             ->willReturn([]);
 
-        $stubResourceService
+        $restResource
             ->expects(static::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        $stubRequest->query = $stubParameterBag;
+        /** @var InputBag $parameterBag */
+        $request->query = $parameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))
-            ->getSerializeContext($stubRequest, $stubResourceService);
+        /** @var RestResourceInterface $restResource */
+        $context = (new ResponseHandler($serializer))
+            ->getSerializeContext($request, $restResource);
 
         static::assertSame(['FakeEntity'], $context['groups']);
     }
@@ -153,31 +159,34 @@ class ResponseHandlerTest extends ContainerTestCase
      */
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenNonAnyAssociations(): void
     {
-        /**
-         * @var MockObject|SerializerInterface $stubSerializer
-         * @var MockObject|Request $stubRequest
-         * @var MockObject|ParameterBag $stubParameterBag
-         * @var MockObject|RestResourceInterface $stubResourceService
-         */
-        $stubSerializer = $this->createMock(SerializerInterface::class);
-        $stubRequest = $this->createMock(Request::class);
-        $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(RestResourceInterface::class);
+        /** @var SerializerInterface $serializer */
+        $serializer = $this->createMock(SerializerInterface::class);
 
-        $stubParameterBag
+        /** @var Request $request */
+        $request = $this->createMock(Request::class);
+
+        /** @var MockObject $parameterBag */
+        $parameterBag = $this->createMock(ParameterBag::class);
+
+        /** @var MockObject $restResource */
+        $restResource = $this->createMock(RestResourceInterface::class);
+
+        $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
             ->willReturn(['populateAll' => '']);
 
-        $stubResourceService
+        $restResource
             ->expects(static::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        $stubRequest->query = $stubParameterBag;
+        /** @var InputBag $parameterBag */
+        $request->query = $parameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))
-            ->getSerializeContext($stubRequest, $stubResourceService);
+        /** @var RestResourceInterface $restResource */
+        $context = (new ResponseHandler($serializer))
+            ->getSerializeContext($request, $restResource);
 
         static::assertSame(['FakeEntity'], $context['groups']);
     }
@@ -187,36 +196,39 @@ class ResponseHandlerTest extends ContainerTestCase
      */
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateAllParameterWhenAssociations(): void
     {
-        /**
-         * @var MockObject|SerializerInterface $stubSerializer
-         * @var MockObject|Request $stubRequest
-         * @var MockObject|ParameterBag $stubParameterBag
-         * @var MockObject|RestResourceInterface $stubResourceService
-         */
-        $stubSerializer = $this->createMock(SerializerInterface::class);
-        $stubRequest = $this->createMock(Request::class);
-        $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(RestResourceInterface::class);
+        /** @var SerializerInterface $serializer */
+        $serializer = $this->createMock(SerializerInterface::class);
 
-        $stubParameterBag
+        /** @var Request $request */
+        $request = $this->createMock(Request::class);
+
+        /** @var MockObject $parameterBag */
+        $parameterBag = $this->createMock(ParameterBag::class);
+
+        /** @var MockObject $restResource */
+        $restResource = $this->createMock(RestResourceInterface::class);
+
+        $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
             ->willReturn(['populateAll' => '']);
 
-        $stubResourceService
+        $restResource
             ->expects(static::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        $stubResourceService
+        $restResource
             ->expects(static::once())
             ->method('getAssociations')
             ->willReturn(['AnotherFakeEntity']);
 
-        $stubRequest->query = $stubParameterBag;
+        /** @var InputBag $parameterBag */
+        $request->query = $parameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))
-            ->getSerializeContext($stubRequest, $stubResourceService);
+        /** @var RestResourceInterface $restResource */
+        $context = (new ResponseHandler($serializer))
+            ->getSerializeContext($request, $restResource);
 
         static::assertSame(['FakeEntity', 'FakeEntity.AnotherFakeEntity'], $context['groups']);
     }
@@ -226,31 +238,34 @@ class ResponseHandlerTest extends ContainerTestCase
      */
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenNonAssociations(): void
     {
-        /**
-         * @var MockObject|SerializerInterface $stubSerializer
-         * @var MockObject|Request $stubRequest
-         * @var MockObject|ParameterBag $stubParameterBag
-         * @var MockObject|RestResourceInterface $stubResourceService
-         */
-        $stubSerializer = $this->createMock(SerializerInterface::class);
-        $stubRequest = $this->createMock(Request::class);
-        $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(RestResourceInterface::class);
+        /** @var SerializerInterface $serializer */
+        $serializer = $this->createMock(SerializerInterface::class);
 
-        $stubParameterBag
+        /** @var Request $request */
+        $request = $this->createMock(Request::class);
+
+        /** @var MockObject $parameterBag */
+        $parameterBag = $this->createMock(ParameterBag::class);
+
+        /** @var MockObject $restResource */
+        $restResource = $this->createMock(RestResourceInterface::class);
+
+        $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
             ->willReturn(['populateOnly' => '']);
 
-        $stubResourceService
+        $restResource
             ->expects(static::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        $stubRequest->query = $stubParameterBag;
+        /** @var InputBag $parameterBag */
+        $request->query = $parameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))
-            ->getSerializeContext($stubRequest, $stubResourceService);
+        /** @var RestResourceInterface $restResource */
+        $context = (new ResponseHandler($serializer))
+            ->getSerializeContext($request, $restResource);
 
         static::assertSame(['FakeEntity'], $context['groups']);
     }
@@ -260,53 +275,60 @@ class ResponseHandlerTest extends ContainerTestCase
      */
     public function testThatGetSerializeContextSetExpectedGroupsWithPopulateOnlyParameterWhenEntityAssociations(): void
     {
-        /**
-         * @var MockObject|SerializerInterface $stubSerializer
-         * @var MockObject|Request $stubRequest
-         * @var MockObject|ParameterBag $stubParameterBag
-         * @var MockObject|RestResourceInterface $stubResourceService
-         */
-        $stubSerializer = $this->createMock(SerializerInterface::class);
-        $stubRequest = $this->createMock(Request::class);
-        $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(RestResourceInterface::class);
+        /** @var SerializerInterface $serializer */
+        $serializer = $this->createMock(SerializerInterface::class);
 
-        $stubParameterBag
+        /** @var MockObject $request */
+        $request = $this->createMock(Request::class);
+
+        /** @var MockObject $parameterBag */
+        $parameterBag = $this->createMock(ParameterBag::class);
+
+        /** @var MockObject $restResource */
+        $restResource = $this->createMock(RestResourceInterface::class);
+
+        $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
             ->willReturn(['populateOnly' => '']);
 
-        $stubResourceService
+        $restResource
             ->expects(static::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        $stubRequest
+        $request
             ->expects(static::once())
             ->method('get')
             ->with('populate')
             ->willReturn(['AnotherFakeEntity']);
 
-        $stubRequest->query = $stubParameterBag;
+        /**
+         * @var Request  $request
+         * @var InputBag $parameterBag
+         */
+        $request->query = $parameterBag;
 
-        $context = (new ResponseHandler($stubSerializer))
-            ->getSerializeContext($stubRequest, $stubResourceService);
+        /** @var RestResourceInterface $restResource */
+        $context = (new ResponseHandler($serializer))
+            ->getSerializeContext($request, $restResource);
 
         static::assertSame(['AnotherFakeEntity'], $context['groups']);
     }
 
     public function testThatGetSerializeContextReturnsExpectedWhenResourceHasGetSerializerContextMethod(): void
     {
-        /**
-         * @var MockObject|SerializerInterface $stubSerializer
-         * @var MockObject|Request $stubRequest
-         * @var MockObject|ParameterBag $stubParameterBag
-         * @var MockObject|RestResourceInterface $stubResourceService
-         */
-        $stubSerializer = $this->createMock(SerializerInterface::class);
-        $stubRequest = $this->createMock(Request::class);
-        $stubParameterBag = $this->createMock(ParameterBag::class);
-        $stubResourceService = $this->createMock(RestResourceInterface::class);
+        /** @var SerializerInterface $serializer */
+        $serializer = $this->createMock(SerializerInterface::class);
+
+        /** @var MockObject $request */
+        $request = $this->createMock(Request::class);
+
+        /** @var MockObject $parameterBag */
+        $parameterBag = $this->createMock(ParameterBag::class);
+
+        /** @var MockObject $restResource */
+        $restResource = $this->createMock(RestResourceInterface::class);
 
         $expected = [
             'groups' => 'foo',
@@ -314,32 +336,37 @@ class ResponseHandlerTest extends ContainerTestCase
             'another' => 'foobar',
         ];
 
-        $stubParameterBag
+        $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
             ->willReturn(['populateOnly' => '']);
 
-        $stubResourceService
+        $restResource
             ->expects(static::once())
             ->method('getEntityName')
             ->willReturn('FakeEntity');
 
-        $stubResourceService
+        $restResource
             ->expects(static::once())
             ->method('getSerializerContext')
             ->willReturn($expected);
 
-        $stubRequest
+        $request
             ->expects(static::once())
             ->method('get')
             ->with('populate')
             ->willReturn(['AnotherFakeEntity']);
 
-        $stubRequest->query = $stubParameterBag;
+        /**
+         * @var Request  $request
+         * @var InputBag $parameterBag
+         */
+        $request->query = $parameterBag;
 
+        /** @var RestResourceInterface $restResource */
         static::assertSame(
             $expected,
-            (new ResponseHandler($stubSerializer))->getSerializeContext($stubRequest, $stubResourceService)
+            (new ResponseHandler($serializer))->getSerializeContext($request, $restResource)
         );
     }
 
@@ -351,18 +378,21 @@ class ResponseHandlerTest extends ContainerTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage('Field \'foo\': test error');
 
-        /**
-         * @var MockObject|SerializerInterface $serializer
-         * @var MockObject|FormInterface $formInterface
-         * @var MockObject|FormError $formError
-         */
+        /** @var SerializerInterface $serializer */
         $serializer = $this->createMock(SerializerInterface::class);
+
         $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
         $formError = $this->createMock(FormError::class);
 
-        // Create FormErrorIterator
+        /**
+         * Create FormErrorIterator
+         *
+         * @var FormInterface $formInterface
+         * @var FormError $formError
+         */
         $formErrorIterator = new FormErrorIterator($formInterface, [$formError]);
 
+        /** @var MockObject $formInterface */
         $formInterface
             ->expects(static::once())
             ->method('getErrors')
@@ -374,6 +404,7 @@ class ResponseHandlerTest extends ContainerTestCase
             ->method('getName')
             ->willReturn('foo');
 
+        /** @var MockObject $formError */
         $formError
             ->expects(static::once())
             ->method('getOrigin')
@@ -384,8 +415,8 @@ class ResponseHandlerTest extends ContainerTestCase
             ->method('getMessage')
             ->willReturn('test error');
 
-        (new ResponseHandler($serializer))
-            ->handleFormError($formInterface);
+        /** @var FormInterface $formInterface */
+        (new ResponseHandler($serializer))->handleFormError($formInterface);
     }
 
     /**
@@ -396,12 +427,9 @@ class ResponseHandlerTest extends ContainerTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionMessage('test error');
 
-        /**
-         * @var MockObject|SerializerInterface $serializer
-         * @var MockObject|FormInterface $formInterface
-         * @var MockObject|FormError $formError
-         */
+        /** @var SerializerInterface $serializer */
         $serializer = $this->createMock(SerializerInterface::class);
+
         $formInterface = $this->getMockBuilder(FormInterface::class)->getMock();
         $formError = $this->createMock(FormError::class);
 
@@ -429,10 +457,12 @@ class ResponseHandlerTest extends ContainerTestCase
             ->method('getMessage')
             ->willReturn('test error');
 
-        (new ResponseHandler($serializer))
-            ->handleFormError($formInterface);
+        (new ResponseHandler($serializer))->handleFormError($formInterface);
     }
 
+    /**
+     * @return Generator<array{0: Request, 1: array<string, string>, 2: string}>
+     */
     public function dataProviderTestThatCreateResponseReturnsExpected(): Generator
     {
         yield [
@@ -458,6 +488,9 @@ DATA
         ];
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatNonSupportedSerializerFormatThrowsHttpException(): Generator
     {
         yield ['not supported format'];

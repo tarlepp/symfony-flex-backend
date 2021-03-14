@@ -27,6 +27,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use function assert;
 
 /**
  * Class CreateMethodTest
@@ -36,35 +37,12 @@ use Throwable;
  */
 class CreateMethodTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|RestDtoInterface
-     */
-    private $restDto;
-
-    /**
-     * @var MockObject|EntityInterface
-     */
-    private $entity;
-
-    /**
-     * @var MockObject|RestResourceInterface
-     */
-    private $resource;
-
-    /**
-     * @var MockObject|ResponseHandlerInterface
-     */
-    private $responseHandler;
-
-    /**
-     * @var MockObject|CreateMethodTestClass
-     */
-    private $validTestClass;
-
-    /**
-     * @var MockObject|CreateMethodInvalidTestClass
-     */
-    private $inValidTestClass;
+    private MockObject | RestDtoInterface | null $restDto = null;
+    private MockObject | EntityInterface | null $entity = null;
+    private MockObject | RestResourceInterface | null $resource = null;
+    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
+    private MockObject | CreateMethodTestClass | null $validTestClass = null;
+    private MockObject | CreateMethodInvalidTestClass | null $inValidTestClass = null;
 
     protected function setUp(): void
     {
@@ -101,7 +79,7 @@ class CreateMethodTest extends KernelTestCase
         );
         /* @codingStandardsIgnoreEnd */
 
-        $this->inValidTestClass->createMethod(Request::create('/', 'POST'), $this->restDto);
+        $this->getInValidTestClass()->createMethod(Request::create('/', 'POST'), $this->getRestDto());
     }
 
     /**
@@ -115,8 +93,8 @@ class CreateMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $this->validTestClass
-            ->createMethod(Request::create('/', $httpMethod), $this->restDto)
+        $this->getValidTestClass()
+            ->createMethod(Request::create('/', $httpMethod), $this->getRestDto())
             ->getContent();
     }
 
@@ -129,7 +107,7 @@ class CreateMethodTest extends KernelTestCase
      */
     public function testThatHandleRestMethodExceptionIsCalled(Throwable $exception, int $expectedCode): void
     {
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('create')
             ->with($this->restDto, true)
@@ -138,8 +116,8 @@ class CreateMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $this->validTestClass
-            ->createMethod(Request::create('/', 'POST'), $this->restDto)
+        $this->getValidTestClass()
+            ->createMethod(Request::create('/', 'POST'), $this->getRestDto())
             ->getContent();
     }
 
@@ -152,20 +130,23 @@ class CreateMethodTest extends KernelTestCase
     {
         $request = Request::create('/', 'POST');
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('create')
             ->with($this->restDto, true)
             ->willReturn($this->entity);
 
-        $this->responseHandler
+        $this->getResponseHandlerMock()
             ->expects(static::once())
             ->method('createResponse')
             ->with($request, $this->entity, $this->resource, 201);
 
-        $this->validTestClass->createMethod($request, $this->restDto);
+        $this->getValidTestClass()->createMethod($request, $this->getRestDto());
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -178,6 +159,9 @@ class CreateMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
+    /**
+     * @return Generator<array{0: Throwable, 1: int}>
+     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
@@ -187,5 +171,40 @@ class CreateMethodTest extends KernelTestCase
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
+    }
+
+    private function getValidTestClass(): CreateMethodTestClass
+    {
+        assert($this->validTestClass instanceof CreateMethodTestClass);
+
+        return $this->validTestClass;
+    }
+
+    private function getInValidTestClass(): CreateMethodInvalidTestClass
+    {
+        assert($this->inValidTestClass instanceof CreateMethodInvalidTestClass);
+
+        return $this->inValidTestClass;
+    }
+
+    private function getRestDto(): RestDtoInterface
+    {
+        assert($this->restDto instanceof RestDtoInterface);
+
+        return $this->restDto;
+    }
+
+    private function getResourceMock(): MockObject
+    {
+        assert($this->resource instanceof MockObject);
+
+        return $this->resource;
+    }
+
+    private function getResponseHandlerMock(): MockObject
+    {
+        assert($this->responseHandler instanceof MockObject);
+
+        return $this->responseHandler;
     }
 }
