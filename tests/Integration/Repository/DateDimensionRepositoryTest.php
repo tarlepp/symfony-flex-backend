@@ -9,18 +9,35 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Repository;
 
 use App\Entity\DateDimension;
+use App\Entity\Interfaces\EntityInterface;
 use App\Repository\DateDimensionRepository;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Resource\DateDimensionResource;
+use App\Rest\Interfaces\RestResourceInterface;
 
 /**
  * Class DateDimensionRepositoryTest
  *
  * @package App\Tests\Integration\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method DateDimensionResource getResource()
+ * @method DateDimensionRepository getRepository()
  */
 class DateDimensionRepositoryTest extends RepositoryTestCase
 {
+    /**
+     * @var class-string<EntityInterface>
+     */
     protected string $entityName = DateDimension::class;
+
+    /**
+     * @var class-string<BaseRepositoryInterface>
+     */
     protected string $repositoryName = DateDimensionRepository::class;
+
+    /**
+     * @var class-string<RestResourceInterface>
+     */
     protected string $resourceName = DateDimensionResource::class;
 }

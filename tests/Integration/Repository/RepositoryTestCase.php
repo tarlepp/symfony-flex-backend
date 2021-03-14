@@ -8,9 +8,12 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Repository;
 
-use App\Repository\BaseRepository;
-use App\Rest\RestResource;
+use App\Entity\Interfaces\EntityInterface;
+use App\Repository\Interfaces\BaseRepositoryInterface;
+use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
+use UnexpectedValueException;
 use function array_keys;
 use function sort;
 
@@ -19,17 +22,35 @@ use function sort;
  *
  * @package App\Tests\Integration\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @property BaseRepository $repository
  */
 abstract class RepositoryTestCase extends KernelTestCase
 {
+    private ?RestResourceInterface $resource = null;
+
+    /**
+     * @var class-string<EntityInterface>
+     */
     protected string $entityName;
+
+    /**
+     * @var class-string<BaseRepositoryInterface>
+     */
     protected string $repositoryName;
+
+    /**
+     * @var class-string<RestResourceInterface>
+     */
     protected string $resourceName;
+
+    /**
+     * @var array<int, string>
+     */
     protected array $associations = [];
+
+    /**
+     * @var array<int, string>
+     */
     protected array $searchColumns = [];
-    protected RestResource $resource;
 
     protected function setUp(): void
     {
@@ -37,22 +58,27 @@ abstract class RepositoryTestCase extends KernelTestCase
 
         self::bootKernel();
 
-        /** @var RestResource $resource */
+        /** @var RestResourceInterface $resource */
         $resource = self::$container->get($this->resourceName);
 
         $this->resource = $resource;
-        $this->repository = $this->resource->getRepository();
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetEntityNameReturnsExpected(): void
     {
-        static::assertSame($this->entityName, $this->repository->getEntityName());
+        static::assertSame($this->entityName, $this->getRepository()->getEntityName());
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetAssociationsReturnsExpected(): void
     {
         $expected = $this->associations;
-        $actual = array_keys($this->repository->getAssociations());
+        $actual = array_keys($this->getRepository()->getAssociations());
         $message = 'Repository did not return expected associations for entity.';
 
         sort($expected);
@@ -61,15 +87,33 @@ abstract class RepositoryTestCase extends KernelTestCase
         static::assertSame($expected, $actual, $message);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetSearchColumnsReturnsExpected(): void
     {
         $expected = $this->searchColumns;
-        $actual = $this->repository->getSearchColumns();
+        $actual = $this->getRepository()->getSearchColumns();
         $message = 'Repository did not return expected search columns.';
 
         sort($expected);
         sort($actual);
 
         static::assertSame($expected, $actual, $message);
+    }
+
+    /**
+     * @throws Throwable
+     */
+    protected function getRepository(): BaseRepositoryInterface
+    {
+        return $this->getResource()->getRepository();
+    }
+
+    protected function getResource(): RestResourceInterface
+    {
+        return $this->resource instanceof RestResourceInterface
+            ? $this->resource
+            : throw new UnexpectedValueException('Resource not set');
     }
 }
