@@ -114,7 +114,7 @@ class RepositoryHelper
      * @see \App\Repository\Traits\RepositoryMethodsTrait::getQueryBuilder()
      *
      * @param array<int, string> $columns
-     * @param array<string, string>|null $terms
+     * @param array<mixed>|null $terms
      *
      * @throws InvalidArgumentException
      */
