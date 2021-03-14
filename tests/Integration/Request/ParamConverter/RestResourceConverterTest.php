@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Request/ParamConverter/RestResourceConverterTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Request\ParamConverter;
@@ -21,16 +21,18 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use UnexpectedValueException;
+use function assert;
 
 /**
  * Class RestResourceConverterTest
  *
  * @package App\Tests\Integration\Request\ParamConverter
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RestResourceConverterTest extends KernelTestCase
 {
-    private RestResourceConverter $converter;
+    private ?RestResourceConverter $converter = null;
 
     protected function setUp(): void
     {
@@ -38,18 +40,25 @@ class RestResourceConverterTest extends KernelTestCase
 
         static::bootKernel();
 
-        /* @noinspection PhpParamsInspection */
+        assert(static::$container->get(ResourceCollection::class) instanceof ResourceCollection);
+
         $this->converter = new RestResourceConverter(static::$container->get(ResourceCollection::class));
     }
 
     /**
      * @dataProvider dataProviderTestThatSupportMethodReturnsExpected
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $configuration
+     * @psalm-param StringableArrayObject $configuration
+     *
      * @testdox Test `supports` method returns `$expected` when using `$configuration` as ParamConverter input.
      */
     public function testThatSupportMethodReturnsExpected(bool $expected, StringableArrayObject $configuration): void
     {
-        static::assertSame($expected, $this->converter->supports(new ParamConverter($configuration->getArrayCopy())));
+        static::assertSame(
+            $expected,
+            $this->getConverter()->supports(new ParamConverter($configuration->getArrayCopy())),
+        );
     }
 
     /**
@@ -67,7 +76,7 @@ class RestResourceConverterTest extends KernelTestCase
             'class' => RoleResource::class,
         ]);
 
-        $this->converter->apply($request, $paramConverter);
+        $this->getConverter()->apply($request, $paramConverter);
     }
 
     /**
@@ -87,11 +96,14 @@ class RestResourceConverterTest extends KernelTestCase
             'class' => RoleResource::class,
         ]);
 
-        static::assertTrue($this->converter->apply($request, $paramConverter));
+        static::assertTrue($this->getConverter()->apply($request, $paramConverter));
         static::assertInstanceOf(Role::class, $request->attributes->get('role'));
         static::assertSame('Description - ' . $role, $request->attributes->get('role')->getDescription());
     }
 
+    /**
+     * @return Generator<array{0: boolean, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatSupportMethodReturnsExpected(): Generator
     {
         yield [
@@ -115,6 +127,9 @@ class RestResourceConverterTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatApplyMethodReturnsExpected(): Generator
     {
         yield [RolesService::ROLE_LOGGED];
@@ -122,5 +137,12 @@ class RestResourceConverterTest extends KernelTestCase
         yield [RolesService::ROLE_ADMIN];
         yield [RolesService::ROLE_ROOT];
         yield [RolesService::ROLE_API];
+    }
+
+    private function getConverter(): RestResourceConverter
+    {
+        return $this->converter instanceof RestResourceConverter
+            ? $this->converter
+            : throw new UnexpectedValueException('RestResourceConverter not found...');
     }
 }
