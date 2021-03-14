@@ -58,7 +58,7 @@ abstract class Controller implements ControllerInterface
     {
         $exists = property_exists($this, 'resource');
 
-        if (!$exists || !$this->resource instanceof RestResourceInterface) {
+        if (!$exists || !isset($this->resource)) {
             throw new UnexpectedValueException('Resource service not set', 500);
         }
 
