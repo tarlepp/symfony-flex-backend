@@ -10,7 +10,6 @@ namespace App\Tests\E2E\Controller;
 
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -32,8 +31,9 @@ class ApiKeyControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
     }
 
@@ -50,17 +50,21 @@ class ApiKeyControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string, 2: int}>
+     */
     public function dataProviderTestThatFindActionWorksAsExpected(): Generator
     {
-        //yield ['john', 'password', 403];
-        //yield ['john-api', 'password-api', 403];
-        //yield ['john-logged', 'password-logged', 403];
-        //yield ['john-user', 'password-user', 403];
+        yield ['john', 'password', 403];
+        yield ['john-api', 'password-api', 403];
+        yield ['john-logged', 'password-logged', 403];
+        yield ['john-user', 'password-user', 403];
         yield ['john-admin', 'password-admin', 403];
         yield ['john-root', 'password-root', 200];
     }

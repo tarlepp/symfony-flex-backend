@@ -9,6 +9,8 @@
 >
     <projectFiles>
         <directory name="src/" />
+        <directory name="tests/E2E" />
+        <directory name="tests/Functional" />
         <directory name="tests/Unit" />
 
         <ignoreFiles>

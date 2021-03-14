@@ -13,7 +13,6 @@ use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -37,9 +36,10 @@ class UserRolesControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/' . LoadUserData::$uuids['john-user'] . '/roles');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(401, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -58,9 +58,10 @@ class UserRolesControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -80,10 +81,11 @@ class UserRolesControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-        static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        static::assertJsonStringEqualsJsonString($expectedResponse, $content);
     }
 
     /**
@@ -99,14 +101,15 @@ class UserRolesControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/' . $userId . '/roles');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-        static::assertJsonStringEqualsJsonString($expectedResponse, $response->getContent());
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        static::assertJsonStringEqualsJsonString($expectedResponse, $content);
     }
 
     /**
-     * @throws Throwable
+     * @return Generator<array{0: string, 1: string, 2: string}>
      */
     public function dataProviderTestThatGetRolesActionsReturns403ForInvalidUser(): Generator
     {
@@ -119,6 +122,8 @@ class UserRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
+     *
+     * @return Generator<array{0: string, 1: string, 2: string, 3: string}>
      */
     public function dataProviderTestThatGetUserRolesReturns200ForUserHimself(): Generator
     {
@@ -172,6 +177,8 @@ class UserRolesControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
+     *
+     * @return Generator<array{0: string, 1: string}>
      */
     public function dataProviderTestThatGetRolesReturns200ForRootRoleUser(): Generator
     {

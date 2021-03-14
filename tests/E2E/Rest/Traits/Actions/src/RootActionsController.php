@@ -39,6 +39,9 @@ class RootActionsController extends Controller
     use Actions\IdsAction;
     use Actions\UpdateAction;
 
+    /**
+     * @var array<string, string>
+     */
     protected static array $dtoClasses = [
         Controller::METHOD_CREATE => UserCreate::class,
         Controller::METHOD_UPDATE => UserUpdate::class,

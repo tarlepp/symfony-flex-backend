@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Functional/Repository/HealthzRepositoryTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Repository;
@@ -14,19 +14,17 @@ use App\Utils\Tests\PhpUnitUtil;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
+use function assert;
 
 /**
  * Class HealthzRepositoryTest
  *
  * @package App\Tests\Functional\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class HealthzRepositoryTest extends KernelTestCase
 {
-    /**
-     * @var HealthzRepository;
-     */
-    private $repository;
+    private ?HealthzRepository $repository = null;
 
     /**
      * @throws Throwable
@@ -51,6 +49,8 @@ class HealthzRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
+        assert(static::$container->get(HealthzRepository::class) instanceof HealthzRepository);
+
         $this->repository = static::$container->get(HealthzRepository::class);
     }
 
@@ -61,7 +61,7 @@ class HealthzRepositoryTest extends KernelTestCase
     {
         PhpUnitUtil::loadFixtures(static::$kernel);
 
-        static::assertNull($this->repository->read());
+        static::assertNull($this->getRepository()->read());
     }
 
     /**
@@ -72,7 +72,7 @@ class HealthzRepositoryTest extends KernelTestCase
     public function testThatCreateValueReturnsExpected(): void
     {
         /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf(Healthz::class, $this->repository->create());
+        static::assertInstanceOf(Healthz::class, $this->getRepository()->create());
     }
 
     /**
@@ -82,7 +82,7 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public function testThatReadValueReturnExpectedAfterCreate(): void
     {
-        static::assertNotNull($this->repository->read());
+        static::assertNotNull($this->getRepository()->read());
     }
 
     /**
@@ -92,6 +92,13 @@ class HealthzRepositoryTest extends KernelTestCase
      */
     public function testThatCleanupMethodClearsDatabaseReturnsExpected(): void
     {
-        static::assertSame(0, $this->repository->cleanup());
+        static::assertSame(0, $this->getRepository()->cleanup());
+    }
+
+    private function getRepository(): HealthzRepository
+    {
+        assert($this->repository instanceof HealthzRepository);
+
+        return $this->repository;
     }
 }

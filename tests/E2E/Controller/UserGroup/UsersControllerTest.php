@@ -12,7 +12,6 @@ use App\DataFixtures\ORM\LoadUserGroupData;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -36,12 +35,16 @@ class UsersControllerTest extends WebTestCase
         $client->request('GET', '/user_group/' . $userGroupId . '/users');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-        static::assertCount($userCount, JSON::decode($response->getContent()));
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        static::assertCount($userCount, JSON::decode($content));
     }
 
+    /**
+     * @return Generator<array{0: int, 1: string}>
+     */
     public function dataProviderTestThatGetUserGroupUsersActionReturnsExpected(): Generator
     {
         yield [1, LoadUserGroupData::$uuids['Role-root']];

@@ -13,7 +13,6 @@ use App\Security\RolesService;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -37,9 +36,10 @@ class UserGroupsControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/' . LoadUserData::$uuids['john-user'] . '/groups');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(401, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -58,9 +58,10 @@ class UserGroupsControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -80,23 +81,20 @@ class UserGroupsControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
-        $data = JSON::decode($response->getContent());
+        $data = JSON::decode($content);
 
-        if ($expectedResponse === '') {
-            static::assertEmpty($data);
-        } else {
-            static::assertSame($expectedResponse, $data[0]->role->id);
-        }
+        $expectedResponse === ''
+            ? static::assertEmpty($data)
+            : static::assertSame($expectedResponse, $data[0]->role->id);
     }
 
     /**
      * @dataProvider dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser
-     *
-     * @param string $expectedResponse
      *
      * @throws Throwable
      *
@@ -110,21 +108,20 @@ class UserGroupsControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/' . $userId . '/groups');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
-        $data = JSON::decode($response->getContent());
+        $data = JSON::decode($content);
 
-        if ($expectedResponse === null) {
-            static::assertEmpty($data);
-        } else {
-            static::assertSame($expectedResponse, $data[0]->role->id, $response->getContent());
-        }
+        $expectedResponse === null
+            ? static::assertEmpty($data)
+            : static::assertSame($expectedResponse, $data[0]->role->id, $content);
     }
 
     /**
-     * @throws Throwable
+     * @return Generator<array{0: string, 1: string, 2: string}>
      */
     public function dataProviderTestThatGetUserGroupsReturns403ForInvalidUser(): Generator
     {
@@ -136,7 +133,7 @@ class UserGroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @throws Throwable
+     * @return Generator<array{0: string, 1: string, 2: string, 3: string}>
      */
     public function dataProviderTestThatGetUserGroupsActionsReturns200ForUserHimself(): Generator
     {
@@ -149,7 +146,7 @@ class UserGroupsControllerTest extends WebTestCase
     }
 
     /**
-     * @throws Throwable
+     * @return Generator<array{0: string, 1: string|null}>
      */
     public function dataProviderTestThatGetUserGroupsReturns200ForRootRoleUser(): Generator
     {

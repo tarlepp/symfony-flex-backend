@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Functional/Repository/UserRepositoryTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Repository;
@@ -16,20 +16,18 @@ use Throwable;
 use function array_fill;
 use function array_map;
 use function array_merge;
+use function assert;
 use function count;
 
 /**
  * Class UserRepositoryTest
  *
  * @package App\Tests\Functional\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserRepositoryTest extends KernelTestCase
 {
-    /**
-     * @var UserRepository;
-     */
-    private $userRepository;
+    private ?UserRepository $repository = null;
 
     /**
      * @throws Throwable
@@ -51,7 +49,9 @@ class UserRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        $this->userRepository = static::$container->get(UserRepository::class);
+        assert(static::$container->get(UserRepository::class) instanceof UserRepository);
+
+        $this->repository = static::$container->get(UserRepository::class);
     }
 
     /**
@@ -59,7 +59,7 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testThatCountAdvancedReturnsExpected(): void
     {
-        static::assertSame(6, $this->userRepository->countAdvanced());
+        static::assertSame(6, $this->getRepository()->countAdvanced());
     }
 
     /**
@@ -67,14 +67,14 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testThatFindByAdvancedReturnsExpected(): void
     {
-        $users = $this->userRepository->findByAdvanced(['username' => 'john']);
+        $users = $this->getRepository()->findByAdvanced(['username' => 'john']);
 
         static::assertCount(1, $users);
     }
 
     public function testThatFindIdsReturnsExpected(): void
     {
-        static::assertCount(5, $this->userRepository->findIds([], ['or' => 'john-']));
+        static::assertCount(5, $this->getRepository()->findIds([], ['or' => 'john-']));
     }
 
     /**
@@ -82,15 +82,13 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testThatIsUsernameAvailableMethodReturnsExpected(): void
     {
-        $iterator = static function (User $user, bool $expected) {
-            return [
-                $expected,
-                $user->getUsername(),
-                $expected ? $user->getId() : null,
-            ];
-        };
+        $iterator = static fn (User $user, bool $expected): array => [
+            $expected,
+            $user->getUsername(),
+            $expected ? $user->getId() : null,
+        ];
 
-        $users = $this->userRepository->findAll();
+        $users = $this->getRepository()->findAll();
 
         $data = array_merge(
             array_map($iterator, $users, array_fill(0, count($users), true)),
@@ -100,7 +98,7 @@ class UserRepositoryTest extends KernelTestCase
         foreach ($data as $set) {
             [$expected, $username, $id] = $set;
 
-            static::assertSame($expected, $this->userRepository->isUsernameAvailable($username, $id));
+            static::assertSame($expected, $this->getRepository()->isUsernameAvailable($username, $id));
         }
     }
 
@@ -109,15 +107,13 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testThatIsEmailAvailableMethodReturnsExpected(): void
     {
-        $iterator = static function (User $user, bool $expected) {
-            return [
-                $expected,
-                $user->getEmail(),
-                $expected ? $user->getId() : null,
-            ];
-        };
+        $iterator = static fn (User $user, bool $expected): array => [
+            $expected,
+            $user->getEmail(),
+            $expected ? $user->getId() : null,
+        ];
 
-        $users = $this->userRepository->findAll();
+        $users = $this->getRepository()->findAll();
 
         $data = array_merge(
             array_map($iterator, $users, array_fill(0, count($users), true)),
@@ -127,7 +123,7 @@ class UserRepositoryTest extends KernelTestCase
         foreach ($data as $set) {
             [$expected, $email, $id] = $set;
 
-            static::assertSame($expected, $this->userRepository->isEmailAvailable($email, $id));
+            static::assertSame($expected, $this->getRepository()->isEmailAvailable($email, $id));
         }
     }
 
@@ -139,8 +135,15 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
-        static::assertSame(6, $this->userRepository->countAdvanced());
-        static::assertSame(6, $this->userRepository->reset());
-        static::assertSame(0, $this->userRepository->countAdvanced());
+        static::assertSame(6, $this->getRepository()->countAdvanced());
+        static::assertSame(6, $this->getRepository()->reset());
+        static::assertSame(0, $this->getRepository()->countAdvanced());
+    }
+
+    private function getRepository(): UserRepository
+    {
+        assert($this->repository instanceof UserRepository);
+
+        return $this->repository;
     }
 }

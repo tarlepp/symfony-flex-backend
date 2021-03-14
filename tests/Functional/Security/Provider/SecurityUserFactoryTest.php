@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Functional/Security/Provider/SecurityUserFactoryTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Security\Provider;
@@ -19,17 +19,18 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User as CoreUser;
 use Throwable;
+use function assert;
 
 /**
  * Class SecurityUserFactoryTest
  *
  * @package App\Tests\Integration\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class SecurityUserFactoryTest extends KernelTestCase
 {
-    private SecurityUserFactory $securityUserFactory;
-    private UserRepository $userRepository;
+    private ?SecurityUserFactory $securityUserFactory = null;
+    private ?UserRepository $userRepository = null;
 
     protected function setUp(): void
     {
@@ -37,10 +38,10 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         static::bootKernel();
 
-        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
+        assert(static::$container->get(SecurityUserFactory::class) instanceof SecurityUserFactory);
+        assert(static::$container->get(UserRepository::class) instanceof UserRepository);
 
-        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
         $this->userRepository = static::$container->get(UserRepository::class);
     }
 
@@ -51,11 +52,14 @@ class SecurityUserFactoryTest extends KernelTestCase
     {
         $this->expectException(UsernameNotFoundException::class);
 
-        static::assertNull($this->securityUserFactory->loadUserByUsername('foobar'));
+        $this->getSecurityUserFactory()->loadUserByUsername('foobar');
     }
 
     /**
      * @dataProvider dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance
+     *
+     * @phpstan-param StringableArrayObject<array<int, string>> $roles
+     * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
      *
@@ -65,7 +69,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         string $username,
         StringableArrayObject $roles
     ): void {
-        $domainUser = $this->securityUserFactory->loadUserByUsername($username);
+        $domainUser = $this->getSecurityUserFactory()->loadUserByUsername($username);
 
         static::assertInstanceOf(SecurityUser::class, $domainUser);
         static::assertSame($roles->getArrayCopy(), $domainUser->getRoles());
@@ -78,7 +82,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     {
         $this->expectException(UsernameNotFoundException::class);
 
-        $this->securityUserFactory->refreshUser(new SecurityUser(new User()));
+        $this->getSecurityUserFactory()->refreshUser(new SecurityUser(new User()));
     }
 
     /**
@@ -86,15 +90,14 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserReturnsCorrectUser(): void
     {
-        /** @var User $user */
-        $user = $this->userRepository->findOneBy(['username' => 'john']);
+        $user = $this->getUserRepository()->findOneBy(['username' => 'john']);
 
         static::assertNotNull($user);
         static::assertInstanceOf(User::class, $user);
 
         $securityUser = new SecurityUser($user);
 
-        static::assertSame($user->getId(), $this->securityUserFactory->refreshUser($securityUser)->getUsername());
+        static::assertSame($user->getId(), $this->getSecurityUserFactory()->refreshUser($securityUser)->getUsername());
     }
 
     /**
@@ -102,15 +105,14 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserReturnsANewInstanceOfSecurityUser(): void
     {
-        /** @var User $user */
-        $user = $this->userRepository->findOneBy(['username' => 'john']);
+        $user = $this->getUserRepository()->findOneBy(['username' => 'john']);
 
         static::assertNotNull($user);
         static::assertInstanceOf(User::class, $user);
 
         $securityUser = new SecurityUser($user);
 
-        static::assertNotSame($securityUser, $this->securityUserFactory->refreshUser($securityUser));
+        static::assertNotSame($securityUser, $this->getSecurityUserFactory()->refreshUser($securityUser));
     }
 
     /**
@@ -123,9 +125,12 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         $user = new CoreUser('test', 'password');
 
-        $this->securityUserFactory->refreshUser($user);
+        $this->getSecurityUserFactory()->refreshUser($user);
     }
 
+    /**
+     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance(): Generator
     {
         yield ['john', new StringableArrayObject([])];
@@ -134,5 +139,19 @@ class SecurityUserFactoryTest extends KernelTestCase
         yield ['john-user', new StringableArrayObject(['ROLE_USER', 'ROLE_LOGGED'])];
         yield ['john-admin', new StringableArrayObject(['ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'])];
         yield ['john-root', new StringableArrayObject(['ROLE_ROOT', 'ROLE_ADMIN', 'ROLE_USER', 'ROLE_LOGGED'])];
+    }
+
+    private function getSecurityUserFactory(): SecurityUserFactory
+    {
+        assert($this->securityUserFactory instanceof SecurityUserFactory);
+
+        return $this->securityUserFactory;
+    }
+
+    private function getUserRepository(): UserRepository
+    {
+        assert($this->userRepository instanceof UserRepository);
+
+        return $this->userRepository;
     }
 }
