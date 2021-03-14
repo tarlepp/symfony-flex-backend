@@ -136,10 +136,6 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
     public function testThatContextAndLoggerMethodsAreCalledIfEntityReferenceIsNotValidEntity(): void
     {
         $violation = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
-
-        /**
-         * @var MockObject $value
-         */
         $value = $this->getMockForAbstractClass(EntityReference::class);
 
         $exception = new EntityNotFoundException('Entity not found');
