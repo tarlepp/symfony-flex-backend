@@ -179,6 +179,11 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
+     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @psalm-param StringableArrayObject $expectedArguments
+     * @psalm-param StringableArrayObject $arguments
+     *
      * @throws Throwable
      *
      * @testdox Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments
@@ -258,6 +263,11 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
+     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @psalm-param StringableArrayObject $expectedArguments
+     * @psalm-param StringableArrayObject $arguments
+     *
      * @throws Throwable
      *
      * @testdox Test that `findOneBy` method is called with `$expectedArguments` when using `$arguments` arguments
@@ -332,6 +342,11 @@ class GenericResourceTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters
+     *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
+     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @psalm-param StringableArrayObject $expectedArguments
+     * @psalm-param StringableArrayObject $arguments
      *
      * @throws Throwable
      *
@@ -550,8 +565,18 @@ class GenericResourceTest extends KernelTestCase
         $this->getResource()->delete('some id');
     }
 
+    public function __destruct()
+    {
+        // TODO: Implement __destruct() method.
+    }
+
     /**
      * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
+     *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
+     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @psalm-param StringableArrayObject $expectedArguments
+     * @psalm-param StringableArrayObject $arguments
      *
      * @throws Throwable
      *
@@ -569,6 +594,9 @@ class GenericResourceTest extends KernelTestCase
         $this->getResource()->getIds(...$arguments->getArrayCopy());
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -587,6 +615,9 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -620,6 +651,9 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -638,6 +672,9 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
