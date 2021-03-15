@@ -3,14 +3,13 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/EventSubscriber/ResponseSubscriberTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\ResponseSubscriber;
 use App\Service\Version;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,21 +23,19 @@ use Throwable;
  * Class ResponseSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ResponseSubscriberTest extends KernelTestCase
 {
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `ResponseSubscriber` adds expected `X-API-VERSION` header to response
      */
     public function testThatSubscriberAddsHeader(): void
     {
         static::bootKernel();
 
-        /**
-         * @var MockObject|CacheInterface $cacheStub
-         * @var MockObject|LoggerInterface $logger
-         */
         $cacheStub = $this->createMock(CacheInterface::class);
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();

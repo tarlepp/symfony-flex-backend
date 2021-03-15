@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/EventSubscriber/ExceptionSubscriberTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -21,7 +21,6 @@ use Doctrine\ORM\ORMException;
 use Exception;
 use Generator;
 use JsonException;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +43,7 @@ use function array_keys;
  * Class ExceptionSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ExceptionSubscriberTest extends KernelTestCase
 {
@@ -57,11 +56,6 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function testThatOnKernelExceptionMethodCallsLogger(string $environment): void
     {
-        /**
-         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface $stubLogger
-         * @var MockObject|KernelInterface $stubKernel
-         */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
         $stubKernel = $this->createMock(KernelInterface::class);
@@ -87,11 +81,6 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function testThatOnKernelExceptionMethodSetResponse(string $environment): void
     {
-        /**
-         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface $stubLogger
-         * @var MockObject|KernelInterface $stubKernel
-         */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
         $stubKernel = $this->createMock(KernelInterface::class);
@@ -120,12 +109,6 @@ class ExceptionSubscriberTest extends KernelTestCase
         string $environment,
         string $message
     ): void {
-        /**
-         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface $stubLogger
-         * @var MockObject|HttpKernelInterface $stubHttpKernel
-         * @var MockObject|Request $stubRequest
-         */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
         $stubHttpKernel = $this->createMock(HttpKernelInterface::class);
@@ -142,12 +125,22 @@ class ExceptionSubscriberTest extends KernelTestCase
         (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
             ->onKernelException($event);
 
-        static::assertSame($status, $event->getResponse()->getStatusCode());
-        static::assertSame($message, JSON::decode($event->getResponse()->getContent())->message);
+        $response = $event->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        $content = $response->getContent();
+
+        static::assertNotFalse($content);
+
+        static::assertSame($status, $response->getStatusCode());
+        static::assertSame($message, JSON::decode($content)->message);
     }
 
     /**
      * @dataProvider dataProviderTestThatResponseHasExpectedKeys
+     *
+     * @param array<int, string> $expectedKeys
      *
      * @throws Throwable
      *
@@ -155,12 +148,6 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function testThatResponseHasExpectedKeys(array $expectedKeys, string $environment): void
     {
-        /**
-         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface $stubLogger
-         * @var MockObject|HttpKernelInterface $stubHttpKernel
-         * @var MockObject|Request $stubRequest
-         */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
         $stubHttpKernel = $this->createMock(HttpKernelInterface::class);
@@ -177,7 +164,15 @@ class ExceptionSubscriberTest extends KernelTestCase
         (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
             ->onKernelException($event);
 
-        $result = JSON::decode($event->getResponse()->getContent(), true);
+        $response = $event->getResponse();
+
+        static::assertInstanceOf(Response::class, $response);
+
+        $content = $response->getContent();
+
+        static::assertNotFalse($content);
+
+        $result = JSON::decode($content, true);
 
         static::assertSame($expectedKeys, array_keys($result));
     }
@@ -195,10 +190,6 @@ class ExceptionSubscriberTest extends KernelTestCase
         bool $user,
         string $environment
     ): void {
-        /**
-         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface $stubLogger
-         */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
 
@@ -229,10 +220,6 @@ class ExceptionSubscriberTest extends KernelTestCase
         Throwable $exception,
         string $environment
     ): void {
-        /**
-         * @var MockObject|UserTypeIdentification $stubUserTypeIdentification
-         * @var MockObject|LoggerInterface $stubLogger
-         */
         $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
         $stubLogger = $this->createMock(LoggerInterface::class);
 
@@ -245,6 +232,9 @@ class ExceptionSubscriberTest extends KernelTestCase
         );
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderEnvironment(): Generator
     {
         yield ['dev'];
@@ -255,6 +245,8 @@ class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
+     * @return Generator<array{0: int, 1: Throwable, 2: string, 3: string}>
+     *
      * @throws JsonException
      */
     public function dataProviderTestResponseHasExpectedStatusCode(): Generator
@@ -395,6 +387,9 @@ class ExceptionSubscriberTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: array<int, string>, 1: string}>
+     */
     public function dataProviderTestThatResponseHasExpectedKeys(): Generator
     {
         yield [
@@ -414,6 +409,8 @@ class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
+     * @return Generator<array{0: int, 1: Throwable, 2: boolean, 3: string}>
+     *
      * @throws JsonException
      */
     public function dataProviderTestThatGetStatusCodeReturnsExpected(): Generator
@@ -477,6 +474,8 @@ class ExceptionSubscriberTest extends KernelTestCase
     }
 
     /**
+     * @return Generator<array{0: string, 1: Throwable, 2: string}>
+     *
      * @throws JsonException
      */
     public function dataProviderTestThatGetExceptionMessageReturnsExpected(): Generator

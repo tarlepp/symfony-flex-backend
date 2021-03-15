@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/EventSubscriber/LockedUserSubscriberTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -17,7 +17,6 @@ use App\Security\SecurityUser;
 use Doctrine\Common\Collections\ArrayCollection;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -32,7 +31,7 @@ use function range;
  * Class LockedUserSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LockedUserSubscriberTest extends KernelTestCase
 {
@@ -44,10 +43,6 @@ class LockedUserSubscriberTest extends KernelTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage('Unsupported user.');
 
-        /**
-         * @var MockObject|UserRepository $userRepository
-         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
-         */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()->getMock();
@@ -66,11 +61,6 @@ class LockedUserSubscriberTest extends KernelTestCase
         $this->expectException(LockedException::class);
         $this->expectExceptionMessage('Locked account.');
 
-        /**
-         * @var MockObject|UserRepository $userRepository
-         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
-         * @var MockObject|UserEntity $user
-         */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()
@@ -107,10 +97,6 @@ class LockedUserSubscriberTest extends KernelTestCase
      */
     public function testThatOnAuthenticationSuccessResourceResetMethodIsCalled(): void
     {
-        /**
-         * @var MockObject|UserRepository $userRepository
-         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
-         */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()->getMock();
@@ -140,13 +126,10 @@ class LockedUserSubscriberTest extends KernelTestCase
      */
     public function testThatOnAuthenticationFailureRepositoryAndResourceMethodsAreNotCalledWhenTokenIsNull(): void
     {
-        /**
-         * @var MockObject|UserRepository $userRepository
-         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
-         */
         $userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -170,13 +153,10 @@ class LockedUserSubscriberTest extends KernelTestCase
      */
     public function testThatOnAuthenticationFailureTestThatResourceMethodsAreNotCalledWhenWrongUser(): void
     {
-        /**
-         * @var MockObject|UserRepository $userRepository
-         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
-         */
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $token = new UsernamePasswordToken('test-user', 'password', 'providerKey');
 
@@ -204,13 +184,10 @@ class LockedUserSubscriberTest extends KernelTestCase
      */
     public function testThatOnAuthenticationFailureTestThatResourceSaveMethodIsCalled(): void
     {
-        /**
-         * @var MockObject|UserRepository $userRepository
-         * @var MockObject|LogLoginFailureResource $logLoginFailureResource
-         */
         $userRepository = $this->getMockBuilder(UserRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()
             ->getMock();

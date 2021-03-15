@@ -3,14 +3,13 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/EventSubscriber/JWTDecodedSubscriberTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
 
 use App\EventSubscriber\JWTDecodedSubscriber;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,15 +22,12 @@ use function implode;
  * Class JWTDecodedSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class JWTDecodedSubscriberTest extends KernelTestCase
 {
     public function testThatJwtIsMarkedInvalidIfChecksumDiffers(): void
     {
-        /**
-         * @var MockObject|LoggerInterface $logger
-         */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create RequestStack and push pure Request to it
@@ -55,9 +51,6 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
     public function testThatJwtIsNotMarkedInvalidIfChecksumMatches(): void
     {
-        /**
-         * @var MockObject|LoggerInterface $logger
-         */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Server parameters for new Request
@@ -87,9 +80,6 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
     public function testThatEventIsMarkedInvalidIfRequestDoesNotExist(): void
     {
-        /**
-         * @var MockObject|LoggerInterface $logger
-         */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create event for subscriber
@@ -104,9 +94,6 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
     public function testThatEventIsNotTouchedIfItHasAlreadyBeenMarkedInvalid(): void
     {
-        /**
-         * @var MockObject|LoggerInterface $logger
-         */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create event for subscriber
@@ -125,9 +112,6 @@ class JWTDecodedSubscriberTest extends KernelTestCase
 
     public function testThatLoggerIsCalledAndEventIsMarkedInvalidIfThereIsNoRequest(): void
     {
-        /**
-         * @var MockObject|LoggerInterface $logger
-         */
         $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $logger
