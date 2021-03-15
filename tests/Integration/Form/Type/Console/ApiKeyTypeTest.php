@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Form/Type/Console/ApiKeyTypeTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Form\Type\Console;
@@ -18,27 +18,25 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 use Throwable;
+use UnexpectedValueException;
 use function array_keys;
 
 /**
  * Class ApiKeyTypeTest
  *
  * @package App\Tests\Integration\Form\Type\Console
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyTypeTest extends TypeTestCase
 {
-    /**
-     * @var MockObject|UserGroupResource
-     */
-    private MockObject $mockUserGroupResource;
+    private MockObject | UserGroupResource | string $userGroupResource = '';
 
     /**
      * @throws Throwable
      */
     protected function setUp(): void
     {
-        $this->mockUserGroupResource = $this->createMock(UserGroupResource::class);
+        $this->userGroupResource = $this->createMock(UserGroupResource::class);
 
         parent::setUp();
     }
@@ -53,12 +51,12 @@ class ApiKeyTypeTest extends TypeTestCase
             ->setRole($roleEntity)
             ->setName('Some name');
 
-        $this->mockUserGroupResource
+        $this->getUserGroupResourceMock()
             ->expects(static::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
-        $this->mockUserGroupResource
+        $this->getUserGroupResourceMock()
             ->expects(static::once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
@@ -98,16 +96,33 @@ class ApiKeyTypeTest extends TypeTestCase
         }
     }
 
+    /**
+     * @return array<int, PreloadedExtension>
+     */
     protected function getExtensions(): array
     {
         parent::getExtensions();
 
         // create a type instance with the mocked dependencies
-        $type = new ApiKeyType($this->mockUserGroupResource, new UserGroupTransformer($this->mockUserGroupResource));
+        $type = new ApiKeyType($this->getUserGroupResource(), new UserGroupTransformer($this->getUserGroupResource()));
 
         return [
             // register the type instances with the PreloadedExtension
             new PreloadedExtension([$type], []),
         ];
+    }
+
+    private function getUserGroupResource(): UserGroupResource
+    {
+        return $this->userGroupResource instanceof UserGroupResource
+            ? $this->userGroupResource
+            : throw new UnexpectedValueException('UserGroupResource not set');
+    }
+
+    private function getUserGroupResourceMock(): MockObject
+    {
+        return $this->userGroupResource instanceof MockObject
+            ? $this->userGroupResource
+            : throw new UnexpectedValueException('UserGroupResource not set');
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Form/DataTransformer/RoleTransformerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Form\DataTransformer;
@@ -16,19 +16,17 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
+use UnexpectedValueException;
 
 /**
  * Class RoleTransformerTest
  *
  * @package App\Tests\Integration\Form\Console\DataTransformer
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RoleTransformerTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|RoleResource
-     */
-    private MockObject $roleResource;
+    private MockObject | RoleResource | null $roleResource = null;
 
     /**
      * @throws Throwable
@@ -46,14 +44,11 @@ class RoleTransformerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
-     * @param mixed $expected
-     * @param mixed $input
-     *
      * @testdox Test that `transform` method returns `$expected` when using `$input` input.
      */
-    public function testThatTransformReturnsExpected($expected, $input): void
+    public function testThatTransformReturnsExpected(string $expected, ?Role $input): void
     {
-        $transformer = new RoleTransformer($this->roleResource);
+        $transformer = new RoleTransformer($this->getRoleResource());
 
         static::assertSame($expected, $transformer->transform($input));
     }
@@ -65,13 +60,13 @@ class RoleTransformerTest extends KernelTestCase
     {
         $entity = new Role('Some Role');
 
-        $this->roleResource
+        $this->getRoleResourceMock()
             ->expects(static::once())
             ->method('findOne')
             ->with($entity->getId())
             ->willReturn($entity);
 
-        (new RoleTransformer($this->roleResource))
+        (new RoleTransformer($this->getRoleResource()))
             ->reverseTransform($entity->getId());
     }
 
@@ -83,13 +78,13 @@ class RoleTransformerTest extends KernelTestCase
         $this->expectException(TransformationFailedException::class);
         $this->expectExceptionMessage('Role with name "role_name" does not exist!');
 
-        $this->roleResource
+        $this->getRoleResourceMock()
             ->expects(static::once())
             ->method('findOne')
             ->with('role_name')
             ->willReturn(null);
 
-        (new RoleTransformer($this->roleResource))
+        (new RoleTransformer($this->getRoleResource()))
             ->reverseTransform('role_name');
     }
 
@@ -100,19 +95,19 @@ class RoleTransformerTest extends KernelTestCase
     {
         $entity = new Role('Some Role');
 
-        $this->roleResource
+        $this->getRoleResourceMock()
             ->expects(static::once())
             ->method('findOne')
             ->with('Some Role')
             ->willReturn($entity);
 
-        $transformer = new RoleTransformer($this->roleResource);
+        $transformer = new RoleTransformer($this->getRoleResource());
 
         static::assertSame($entity, $transformer->reverseTransform('Some Role'));
     }
 
     /**
-     * @throws Throwable
+     * @return Generator<array{0: string, 1: Role|null}>
      */
     public function dataProviderTestThatTransformReturnsExpected(): Generator
     {
@@ -121,5 +116,19 @@ class RoleTransformerTest extends KernelTestCase
         $entity = new Role('some role');
 
         yield [$entity->getId(), $entity];
+    }
+
+    private function getRoleResource(): RoleResource
+    {
+        return $this->roleResource instanceof RoleResource
+            ? $this->roleResource
+            : throw new UnexpectedValueException('RoleResource not set');
+    }
+
+    private function getRoleResourceMock(): MockObject
+    {
+        return $this->roleResource instanceof MockObject
+            ? $this->roleResource
+            : throw new UnexpectedValueException('RoleResource not set');
     }
 }
