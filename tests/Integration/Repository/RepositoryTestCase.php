@@ -25,8 +25,6 @@ use function sort;
  */
 abstract class RepositoryTestCase extends KernelTestCase
 {
-    private ?RestResourceInterface $resource = null;
-
     /**
      * @var class-string<EntityInterface>
      */
@@ -51,6 +49,7 @@ abstract class RepositoryTestCase extends KernelTestCase
      * @var array<int, string>
      */
     protected array $searchColumns = [];
+    private ?RestResourceInterface $resource = null;
 
     protected function setUp(): void
     {

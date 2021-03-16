@@ -412,7 +412,6 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
-
         $repository = $this->getRepositoryWithCustomManagerRegistry($managerObject);
         $repository->find(...$arguments);
     }
@@ -542,7 +541,6 @@ class GenericRepositoryTest extends KernelTestCase
             ->expects(static::once())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
-
 
         $repository = $this->getRepositoryWithCustomManagerRegistry($managerObject);
         $repository->findAll();
