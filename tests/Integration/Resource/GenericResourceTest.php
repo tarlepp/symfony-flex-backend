@@ -565,11 +565,6 @@ class GenericResourceTest extends KernelTestCase
         $this->getResource()->delete('some id');
     }
 
-    public function __destruct()
-    {
-        // TODO: Implement __destruct() method.
-    }
-
     /**
      * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
      *
