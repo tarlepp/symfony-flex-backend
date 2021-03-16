@@ -15,6 +15,8 @@ use App\Entity\UserGroup;
  *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method UserGroup getEntity()
  */
 class UserGroupTest extends EntityTestCase
 {

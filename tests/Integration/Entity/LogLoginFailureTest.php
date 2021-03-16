@@ -20,6 +20,8 @@ use function ucfirst;
  *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method LogLoginFailure getEntity()
  */
 class LogLoginFailureTest extends EntityTestCase
 {
@@ -27,18 +29,6 @@ class LogLoginFailureTest extends EntityTestCase
      * @var class-string
      */
     protected string $entityName = LogLoginFailure::class;
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        static::bootKernel();
-
-        // Create new entity object and set repository
-        $this->entity = new LogLoginFailure(new User());
-    }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
@@ -100,5 +90,15 @@ class LogLoginFailureTest extends EntityTestCase
              */
             static::assertInstanceOf($type, $logRequest->{$getter}(), $error->getMessage());
         }
+    }
+
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     *
+     * @throws Throwable
+     */
+    protected function createEntity(): LogLoginFailure
+    {
+        return new LogLoginFailure(new User());
     }
 }

@@ -15,6 +15,8 @@ use App\Entity\Role;
  *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method Role getEntity()
  */
 class RoleTest extends EntityTestCase
 {

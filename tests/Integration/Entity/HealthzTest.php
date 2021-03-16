@@ -15,6 +15,8 @@ use App\Entity\Healthz;
  *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method Healthz getEntity()
  */
 class HealthzTest extends EntityTestCase
 {

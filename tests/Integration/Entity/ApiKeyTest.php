@@ -22,7 +22,7 @@ use function strlen;
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @property ApiKey $entity
+ * @method ApiKey getEntity()
  */
 class ApiKeyTest extends EntityTestCase
 {
@@ -33,12 +33,12 @@ class ApiKeyTest extends EntityTestCase
 
     public function testThatTokenIsGenerated(): void
     {
-        static::assertSame(40, strlen($this->entity->getToken()));
+        static::assertSame(40, strlen($this->getEntity()->getToken()));
     }
 
     public function testThatGetRolesContainsExpectedRole(): void
     {
-        static::assertContainsEquals(RolesService::ROLE_API, $this->entity->getRoles());
+        static::assertContainsEquals(RolesService::ROLE_API, $this->getEntity()->getRoles());
     }
 
     /**

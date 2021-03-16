@@ -21,6 +21,8 @@ use function ucfirst;
  *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method DateDimension getEntity()
  */
 class DateDimensionTest extends EntityTestCase
 {

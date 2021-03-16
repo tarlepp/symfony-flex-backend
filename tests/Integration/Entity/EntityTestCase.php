@@ -28,7 +28,6 @@ use function assert;
 use function get_class;
 use function gettype;
 use function in_array;
-use function is_null;
 use function is_object;
 use function is_string;
 use function method_exists;
@@ -47,7 +46,7 @@ abstract class EntityTestCase extends KernelTestCase
      * @var class-string
      */
     protected string $entityName;
-    protected ?EntityInterface $entity = null;
+    private ?EntityInterface $entity = null;
 
     /**
      * @throws Throwable
@@ -264,7 +263,7 @@ abstract class EntityTestCase extends KernelTestCase
         mixed $input,
         ?string $output,
     ): void {
-        if (is_null($method)) {
+        if ($method === null) {
             static::markTestSkipped("Entity doesn't have associations, so cannot test those...");
         }
 
@@ -281,7 +280,7 @@ abstract class EntityTestCase extends KernelTestCase
         );
 
         if (is_string($output)) {
-            static::assertInstanceOf($output, $this->entity->$method($input));
+            static::assertInstanceOf($output, $this->entity->{$method}($input));
         }
     }
 
@@ -301,7 +300,7 @@ abstract class EntityTestCase extends KernelTestCase
         ?EntityInterface $entity,
         array $mappings,
     ): void {
-        if (is_null($getter)) {
+        if ($getter === null) {
             static::markTestSkipped('Entity does not contain many-to-many relationships.');
         }
 
@@ -313,7 +312,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             get_class($this->getEntity()),
-            $this->entity->$adder($entity),
+            $this->entity->{$adder}($entity),
             sprintf(
                 "Added method '%s()' for property '%s' did not return instance of the entity itself",
                 $adder,
@@ -322,7 +321,7 @@ abstract class EntityTestCase extends KernelTestCase
         );
 
         /** @var ArrayCollection $collection */
-        $collection = $this->entity->$getter();
+        $collection = $this->entity->{$getter}();
 
         static::assertTrue($collection->contains($entity));
 
@@ -340,7 +339,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             get_class($this->getEntity()),
-            $this->entity->$removal($entity),
+            $this->entity->{$removal}($entity),
             sprintf(
                 "Removal method '%s()' for property '%s' did not return instance of the entity itself",
                 $adder,
@@ -349,7 +348,7 @@ abstract class EntityTestCase extends KernelTestCase
         );
 
         /** @var ArrayCollection $collection */
-        $collection = $this->entity->$getter();
+        $collection = $this->entity->{$getter}();
 
         static::assertTrue($collection->isEmpty());
 
@@ -371,7 +370,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             get_class($this->getEntity()),
-            $this->entity->$clear(),
+            $this->entity->{$clear}(),
             sprintf(
                 "Clear method '%s()' for property '%s' did not return instance of the entity itself",
                 $adder,
@@ -380,7 +379,7 @@ abstract class EntityTestCase extends KernelTestCase
         );
 
         /** @var ArrayCollection $collection */
-        $collection = $this->entity->$getter();
+        $collection = $this->entity->{$getter}();
 
         static::assertTrue($collection->isEmpty());
     }
@@ -396,7 +395,7 @@ abstract class EntityTestCase extends KernelTestCase
         ?EntityInterface $targetEntity,
         ?string $field
     ): void {
-        if (is_null($setter)) {
+        if ($setter === null) {
             static::markTestSkipped('Entity does not contain many-to-one relationships.');
         }
 
@@ -405,7 +404,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             get_class($this->getEntity()),
-            $this->entity->$setter($targetEntity),
+            $this->entity->{$setter}($targetEntity),
             sprintf(
                 "Setter method '%s()' for property '%s' did not return instance of the entity itself",
                 $setter,
@@ -417,7 +416,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             get_class($targetEntity),
-            $this->entity->$getter(),
+            $this->entity->{$getter}(),
             sprintf(
                 "Getter method '%s()' for property '%s' did not return expected object '%s'.",
                 $getter,
@@ -434,7 +433,7 @@ abstract class EntityTestCase extends KernelTestCase
      */
     public function testThatOneToManyAssociationMethodsWorksAsExpected(?string $methodGetter, ?string $field): void
     {
-        if (is_null($methodGetter)) {
+        if ($methodGetter === null) {
             static::markTestSkipped('Entity does not contain one-to-many relationships.');
         }
 
@@ -442,7 +441,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             ArrayCollection::class,
-            $this->entity->$methodGetter(),
+            $this->entity->{$methodGetter}(),
             sprintf(
                 "Getter method '%s()' for property '%s' did not return expected 'ArrayCollection' object.",
                 $methodGetter,
@@ -768,11 +767,10 @@ abstract class EntityTestCase extends KernelTestCase
 
     protected function createEntity(): EntityInterface
     {
-        /**
-         * @var EntityInterface $entity
-         */
         $entity = new $this->entityName();
 
-        return $entity;
+        return $entity instanceof EntityInterface
+            ? $entity
+            : throw new UnexpectedValueException('Entity not set');
     }
 }

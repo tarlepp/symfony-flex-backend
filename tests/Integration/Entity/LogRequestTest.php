@@ -31,6 +31,8 @@ use function ucfirst;
  *
  * @package App\Tests\Integration\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method LogRequest getEntity()
  */
 class LogRequestTest extends EntityTestCase
 {
