@@ -3,16 +3,14 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Entity/DateDimensionTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
 
 use App\Entity\DateDimension;
-use App\Entity\Interfaces\EntityInterface;
 use App\Utils\Tests\PhpUnitUtil;
 use DateTime;
-use Exception;
 use Throwable;
 use function floor;
 use function in_array;
@@ -22,34 +20,29 @@ use function ucfirst;
  * Class DateDimensionTest
  *
  * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DateDimensionTest extends EntityTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $entityName = DateDimension::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @param string $field
-     * @param string $type
-     * @param array $meta
-     *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
         ?string $field = null,
         ?string $type = null,
-        ?array $meta = null
+        ?array $meta = null,
     ): void {
         static::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @param string $field
-     * @param string $type
-     * @param array $meta
-     *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterReturnsInstanceOfEntity(
@@ -79,12 +72,13 @@ class DateDimensionTest extends EntityTestCase
         $dateDimension = new DateDimension(new DateTime());
 
         try {
-            if (static::isType($type)) {
-                $method = 'assertIs' . ucfirst($type);
+            $method = 'assertIs' . ucfirst($type);
 
-                static::$method($dateDimension->{$getter}());
-            }
-        } catch (\Throwable $error) {
+            static::$method($dateDimension->{$getter}());
+        } catch (Throwable $error) {
+            /**
+             * @var class-string $type
+             */
             static::assertInstanceOf($type, $dateDimension->{$getter}(), $error->getMessage());
         }
     }
@@ -114,11 +108,9 @@ class DateDimensionTest extends EntityTestCase
 
     /**
      * @noinspection PhpMissingParentCallCommonInspection
-     *
-     * @throws Exception
      */
-    protected function getEntity(): EntityInterface
+    protected function createEntity(): DateDimension
     {
-        return new $this->entityName(new DateTime());
+        return new DateDimension(new DateTime());
     }
 }

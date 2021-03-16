@@ -3,23 +3,24 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Entity/RoleTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
 
-use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Role;
-use Exception;
 
 /**
  * Class RoleTest
  *
  * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RoleTest extends EntityTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $entityName = Role::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -33,11 +34,9 @@ class RoleTest extends EntityTestCase
 
     /**
      * @noinspection PhpMissingParentCallCommonInspection
-     *
-     * @throws Exception
      */
-    protected function getEntity(): EntityInterface
+    protected function createEntity(): Role
     {
-        return new $this->entityName('Some role');
+        return new Role('Some role');
     }
 }
