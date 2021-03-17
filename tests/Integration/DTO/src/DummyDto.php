@@ -11,7 +11,6 @@ namespace App\Tests\Integration\DTO\src;
 use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DummyDto
@@ -24,8 +23,6 @@ class DummyDto extends RestDto
     private mixed $foo;
 
     /**
-     * @param mixed $foo
-     *
      * @return DummyDto
      */
     public function setFoo(mixed $foo): self
