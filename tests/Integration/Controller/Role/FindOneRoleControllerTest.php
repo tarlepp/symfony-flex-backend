@@ -18,10 +18,17 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
  * @package App\Tests\Integration\Controller\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @property FindOneRoleController $controller
+ * @method FindOneRoleController getController()
  */
 class FindOneRoleControllerTest extends RestIntegrationControllerTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $controllerClass = FindOneRoleController::class;
+
+    /**
+     * @var class-string
+     */
     protected string $resourceClass = RoleResource::class;
 }

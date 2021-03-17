@@ -17,9 +17,18 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
  *
  * @package App\Tests\Integration\Controller\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method DeleteUserController getController()
  */
 class DeleteUserControllerTest extends RestIntegrationControllerTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $controllerClass = DeleteUserController::class;
+
+    /**
+     * @var class-string
+     */
     protected string $resourceClass = UserResource::class;
 }
