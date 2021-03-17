@@ -17,6 +17,7 @@ use Generator;
 use InvalidArgumentException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use UnexpectedValueException;
 
 /**
  * Class EnumLanguageTypeTest
@@ -26,8 +27,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class EnumLanguageTypeTest extends KernelTestCase
 {
-    private AbstractPlatform $platform;
-    private Type $type;
+    private ?AbstractPlatform $platform = null;
+    private ?Type $type = null;
 
     /**
      * @throws DBALException
@@ -45,47 +46,57 @@ class EnumLanguageTypeTest extends KernelTestCase
         $this->type = Type::getType('EnumLanguage');
     }
 
+    /**
+     * @testdox Test that `getSQLDeclaration` method returns expected
+     */
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
-        static::assertSame("ENUM('en', 'fi')", $this->type->getSQLDeclaration([], $this->platform));
+        static::assertSame("ENUM('en', 'fi')", $this->getType()->getSQLDeclaration([], $this->getPlatform()));
     }
 
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
      *
-     * @testdox Test that `convertToDatabaseValue` method returns `$value`.
+     * @testdox Test that `convertToDatabaseValue` method returns `$value`
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
-        static::assertSame($value, $this->type->convertToDatabaseValue($value, $this->platform));
+        static::assertSame($value, $this->getType()->convertToDatabaseValue($value, $this->getPlatform()));
     }
 
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
      *
-     * @param mixed $value
-     *
-     * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input.
+     * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input
      */
-    public function testThatConvertToDatabaseValueThrowsAnException($value): void
+    public function testThatConvertToDatabaseValueThrowsAnException(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid \'EnumLanguage\' value');
 
-        $this->type->convertToDatabaseValue($value, $this->platform);
+        $this->getType()->convertToDatabaseValue($value, $this->getPlatform());
     }
 
+    /**
+     * @testdox Test that `requiresSQLCommentHint` method returns expected
+     */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        static::assertTrue($this->type->requiresSQLCommentHint($this->platform));
+        static::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
+    /**
+     * @return Generator<array{0: 'en'|'fi'}>
+     */
     public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
         yield ['en'];
         yield ['fi'];
     }
 
+    /**
+     * @return Generator<array{0: mixed}>
+     */
     public function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
     {
         yield [null];
@@ -96,5 +107,19 @@ class EnumLanguageTypeTest extends KernelTestCase
         yield ['foobar'];
         yield [[]];
         yield [new stdClass()];
+    }
+
+    private function getPlatform(): MySqlPlatform
+    {
+        return $this->platform instanceof MySqlPlatform
+            ? $this->platform
+            : throw new UnexpectedValueException('Platform not set');
+    }
+
+    private function getType(): Type
+    {
+        return $this->type instanceof Type
+            ? $this->type
+            : throw new UnexpectedValueException('Type not set');
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Doctrine/DBAL/Types/UTCDateTimeTypeTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
@@ -21,17 +21,18 @@ use Generator;
 use ReflectionException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
+use UnexpectedValueException;
 
 /**
  * Class UTCDateTimeTypeTest
  *
  * @package App\Tests\Integration\Doctrine\DBAL\Types
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UTCDateTimeTypeTest extends KernelTestCase
 {
-    private AbstractPlatform $platform;
-    private Type $type;
+    private ?AbstractPlatform $platform = null;
+    private ?Type $type = null;
 
     /**
      * @throws DBALException
@@ -51,6 +52,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `convertToDatabaseValue` method works as expected
      */
     public function testThatDateTimeConvertsToDatabaseValue(): void
     {
@@ -59,28 +62,30 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         $expected = $dateExpected
             ->setTimezone(new DateTimeZone('UTC'))
-            ->format($this->platform->getDateTimeTzFormatString());
+            ->format($this->getPlatform()->getDateTimeTzFormatString());
 
-        $actual = $this->type->convertToDatabaseValue($dateInput, $this->platform);
-
-        static::assertSame($expected, $actual);
+        static::assertSame($expected, $this->getType()->convertToDatabaseValue($dateInput, $this->getPlatform()));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `convertToDatabaseValue` method creates DateTimeZone instance as expected
      */
     public function testThatConvertToDatabaseValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
-        PhpUnitUtil::setProperty('utc', null, $this->type);
+        $type = $this->getType();
 
-        static::assertNull(PhpUnitUtil::getProperty('utc', $this->type));
+        PhpUnitUtil::setProperty('utc', null, $type);
+
+        static::assertNull(PhpUnitUtil::getProperty('utc', $type));
 
         $dateInput = new DateTime('1981-04-07 10:00:00', new DateTimeZone('Europe/Helsinki'));
 
-        $this->type->convertToDatabaseValue($dateInput, $this->platform);
+        $type->convertToDatabaseValue($dateInput, $this->getPlatform());
 
         /** @var DateTimeZone $property */
-        $property = PhpUnitUtil::getProperty('utc', $this->type);
+        $property = PhpUnitUtil::getProperty('utc', $type);
 
         static::assertInstanceOf(DateTimeZone::class, $property);
         static::assertSame('UTC', $property->getName());
@@ -89,49 +94,59 @@ class UTCDateTimeTypeTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestDateTimeConvertsToPHPValue
      *
-     * @param string|DateTime $value
-     *
-     * @testdox Test that `convertToPHPValue` method converts `$value` to `$expected`.
+     * @testdox Test that `convertToPHPValue` method converts `$value` to `$expected`
      */
-    public function testDateTimeConvertsToPHPValue(string $expected, $value): void
+    public function testDateTimeConvertsToPHPValue(string $expected, string | DateTime $value): void
     {
-        $date = $this->type->convertToPHPValue($value, $this->platform);
+        $date = $this->getType()->convertToPHPValue($value, $this->getPlatform());
 
-        static::assertInstanceOf('DateTime', $date);
+        static::assertInstanceOf(DateTime::class, $date);
         static::assertSame($expected, $date->format('Y-m-d H:i:s'));
     }
 
     /**
      * @throws ReflectionException
+     *
+     * @testdox Test that `convertToPHPValue` method creates DateTimeZone instance as expected
      */
     public function testThatConvertToPHPValueCreatesTimeZoneInstanceIfItIsNull(): void
     {
-        PhpUnitUtil::setProperty('utc', null, $this->type);
+        $type = $this->getType();
 
-        static::assertNull(PhpUnitUtil::getProperty('utc', $this->type));
+        PhpUnitUtil::setProperty('utc', null, $type);
 
-        $this->type->convertToPHPValue('1981-04-07 10:00:00', $this->platform);
+        static::assertNull(PhpUnitUtil::getProperty('utc', $type));
+
+        $type->convertToPHPValue('1981-04-07 10:00:00', $this->getPlatform());
 
         /** @var DateTimeZone $property */
-        $property = PhpUnitUtil::getProperty('utc', $this->type);
+        $property = PhpUnitUtil::getProperty('utc', $type);
 
         static::assertInstanceOf(DateTimeZone::class, $property);
         static::assertSame('UTC', $property->getName());
     }
 
+    /**
+     * @testdox Test that `convertToPHPValue` method throws an exception when invalid value is used
+     */
     public function testThatConvertToPHPValueThrowsAnExceptionWithInvalidValue(): void
     {
         $this->expectException(ConversionException::class);
 
-        $this->type->convertToPHPValue('foobar', $this->platform);
-    }
-
-    public function testThatRequiresSQLCommentHintReturnsExpected(): void
-    {
-        static::assertTrue($this->type->requiresSQLCommentHint($this->platform));
+        $this->getType()->convertToPHPValue('foobar', $this->getPlatform());
     }
 
     /**
+     * @testdox Test that `requiresSQLCommentHint` method returns expected
+     */
+    public function testThatRequiresSQLCommentHintReturnsExpected(): void
+    {
+        static::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
+    }
+
+    /**
+     * @return Generator<array{0: string, 1: string|DateTime}>
+     *
      * @throws Throwable
      */
     public function dataProviderTestDateTimeConvertsToPHPValue(): Generator
@@ -150,5 +165,19 @@ class UTCDateTimeTypeTest extends KernelTestCase
             '1981-04-07 10:00:00',
             new DateTime('1981-04-07 10:00:00', new DateTimeZone('UTC')),
         ];
+    }
+
+    private function getPlatform(): MySqlPlatform
+    {
+        return $this->platform instanceof MySqlPlatform
+            ? $this->platform
+            : throw new UnexpectedValueException('Platform not set');
+    }
+
+    private function getType(): Type
+    {
+        return $this->type instanceof Type
+            ? $this->type
+            : throw new UnexpectedValueException('Type not set');
     }
 }
