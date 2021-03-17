@@ -3,12 +3,12 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/DTO/src/DummyDto.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO\src;
 
-use App\Dto\RestDto;
+use App\DTO\RestDto;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,21 +17,18 @@ use Symfony\Component\HttpFoundation\Request;
  * Class DummyDto
  *
  * @package App\Tests\Integration\Dto\src
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DummyDto extends RestDto
 {
-    /**
-     * @var mixed
-     */
-    private $foo;
+    private mixed $foo;
 
     /**
      * @param mixed $foo
      *
      * @return DummyDto
      */
-    public function setFoo($foo): self
+    public function setFoo(mixed $foo): self
     {
         $this->setVisited('foo');
 
@@ -40,10 +37,7 @@ class DummyDto extends RestDto
         return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFoo()
+    public function getFoo(): mixed
     {
         return $this->foo;
     }
@@ -56,14 +50,6 @@ class DummyDto extends RestDto
     public function hasFoo(): bool
     {
         return (bool)$this->foo;
-    }
-
-    /**
-     * Method to create DTO from request object.
-     */
-    public function createFromRequest(Request $request): RestDtoInterface
-    {
-        return new self();
     }
 
     /**
