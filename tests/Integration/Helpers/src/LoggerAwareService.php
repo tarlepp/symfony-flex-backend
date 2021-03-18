@@ -19,4 +19,9 @@ use App\Helpers\LoggerAwareTrait;
 class LoggerAwareService
 {
     use LoggerAwareTrait;
+
+    public function __construct()
+    {
+        $this->logger = null;
+    }
 }

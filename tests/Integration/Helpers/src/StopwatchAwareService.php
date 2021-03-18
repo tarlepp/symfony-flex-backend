@@ -19,4 +19,9 @@ use App\Helpers\StopwatchAwareTrait;
 class StopwatchAwareService
 {
     use StopwatchAwareTrait;
+
+    public function __construct()
+    {
+        $this->stopwatch = null;
+    }
 }

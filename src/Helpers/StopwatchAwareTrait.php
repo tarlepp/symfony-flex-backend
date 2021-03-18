@@ -23,7 +23,7 @@ use Symfony\Contracts\Service\Attribute\Required;
  */
 trait StopwatchAwareTrait
 {
-    protected Stopwatch $stopwatch;
+    protected ?Stopwatch $stopwatch;
 
     #[Required]
     public function setStopwatch(Stopwatch $stopwatch): self
