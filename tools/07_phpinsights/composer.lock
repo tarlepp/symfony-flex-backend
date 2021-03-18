@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f4c79da7d3a2550a4d56516cf474bf0",
+    "content-hash": "8d697c0e3ca4db608a87fe2e3f02039a",
     "packages": [],
     "packages-dev": [
         {
@@ -800,21 +800,21 @@
         },
         {
             "name": "league/container",
-            "version": "3.3.4",
+            "version": "3.3.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/container.git",
-                "reference": "40aed0f11d16bc23f9d04a27acc3549cd1bb42ab"
+                "reference": "048ab87810f508dbedbcb7ae941b606eb8ee353b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/container/zipball/40aed0f11d16bc23f9d04a27acc3549cd1bb42ab",
-                "reference": "40aed0f11d16bc23f9d04a27acc3549cd1bb42ab",
+                "url": "https://api.github.com/repos/thephpleague/container/zipball/048ab87810f508dbedbcb7ae941b606eb8ee353b",
+                "reference": "048ab87810f508dbedbcb7ae941b606eb8ee353b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.0 || ^8.0",
-                "psr/container": "^1.0"
+                "psr/container": "^1.0.0 || ^2.0.0"
             },
             "provide": {
                 "psr/container-implementation": "^1.0"
@@ -867,7 +867,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/container/issues",
-                "source": "https://github.com/thephpleague/container/tree/3.3.4"
+                "source": "https://github.com/thephpleague/container/tree/3.3.5"
             },
             "funding": [
                 {
@@ -875,7 +875,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-02-22T10:35:05+00:00"
+            "time": "2021-03-16T09:42:56+00:00"
         },
         {
             "name": "nette/utils",
@@ -1435,12 +1435,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "43a315341710475e88006a0e55864b348d3d781c"
+                "reference": "fe6ef201f838f07770873731a99f359ebb64fa50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/43a315341710475e88006a0e55864b348d3d781c",
-                "reference": "43a315341710475e88006a0e55864b348d3d781c",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/fe6ef201f838f07770873731a99f359ebb64fa50",
+                "reference": "fe6ef201f838f07770873731a99f359ebb64fa50",
                 "shasum": ""
             },
             "conflict": {
@@ -1642,6 +1642,7 @@
                 "sylius/resource-bundle": "<1.3.14|>=1.4,<1.4.7|>=1.5,<1.5.2|>=1.6,<1.6.4",
                 "sylius/sylius": "<1.6.9|>=1.7,<1.7.9|>=1.8,<1.8.3",
                 "symbiote/silverstripe-multivaluefield": ">=3,<3.0.99",
+                "symbiote/silverstripe-queuedjobs": ">=3,<3.0.2|>=3.1,<3.1.4|>=4,<4.0.7|>=4.1,<4.1.2|>=4.2,<4.2.4|>=4.3,<4.3.3|>=4.4,<4.4.3|>=4.5,<4.5.1|>=4.6,<4.6.4",
                 "symbiote/silverstripe-versionedfiles": "<=2.0.3",
                 "symfony/cache": ">=3.1,<3.4.35|>=4,<4.2.12|>=4.3,<4.3.8",
                 "symfony/dependency-injection": ">=2,<2.0.17|>=2.7,<2.7.51|>=2.8,<2.8.50|>=3,<3.4.26|>=4,<4.1.12|>=4.2,<4.2.7",
@@ -1678,8 +1679,8 @@
                 "titon/framework": ">=0,<9.9.99",
                 "truckersmp/phpwhois": "<=4.3.1",
                 "twig/twig": "<1.38|>=2,<2.7",
-                "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.32|>=8,<8.7.38|>=9,<9.5.23|>=10,<10.4.10",
-                "typo3/cms-core": ">=8,<8.7.38|>=9,<9.5.23|>=10,<10.4.10",
+                "typo3/cms": ">=6.2,<6.2.30|>=7,<7.6.32|>=8,<8.7.38|>=9,<9.5.25|>=10,<10.4.14|>=11,<11.1.1",
+                "typo3/cms-core": ">=8,<8.7.38|>=9,<9.5.25|>=10,<10.4.14|>=11,<11.1.1",
                 "typo3/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "typo3/phar-stream-wrapper": ">=1,<2.1.1|>=3,<3.1.1",
@@ -1758,7 +1759,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-13T00:05:05+00:00"
+            "time": "2021-03-16T14:08:12+00:00"
         },
         {
             "name": "sebastian/finder-facade",

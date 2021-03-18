@@ -1,4 +1,6 @@
 {
+	"name": "tarlepp/symfony-flex-backend-tools",
+	"description": "",
 	"require": {},
 	"require-dev": {
 		"phpmetrics/phpmetrics": "2.7.4",
