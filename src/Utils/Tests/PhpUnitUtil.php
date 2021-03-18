@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Type;
 use Exception;
 use LogicException;
+use Ramsey\Uuid\UuidInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
@@ -181,9 +182,11 @@ class PhpUnitUtil
     /**
      * Helper method to override any property value within given class.
      *
+     * @param UuidInterface|array<array-key, string>|null $value
+     *
      * @throws ReflectionException
      */
-    public static function setProperty(string $property, mixed $value, object $object): void
+    public static function setProperty(string $property, UuidInterface | array | null $value, object $object): void
     {
         $clazz = new ReflectionClass(get_class($object));
 
