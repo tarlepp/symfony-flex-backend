@@ -22,6 +22,7 @@ $localPhpEnvFile = dirname(__DIR__) . '/.env.local.php';
 
 // Load cached env vars if the .env.local.php file exists
 // Run "composer dump-env prod" to create it (requires symfony/flex >=1.2)
+/** @psalm-suppress UnresolvableInclude */
 if (is_readable($localPhpEnvFile) && is_array($env = include $localPhpEnvFile)
     && ($_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? $env['APP_ENV'] ?? null) === ($env['APP_ENV'] ?? null)
 ) {
