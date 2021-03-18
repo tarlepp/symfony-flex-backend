@@ -19,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
  */
 trait RestActionBase
 {
+    /**
+     * @param array<int, string> $allowedHttpMethods
+     */
     public function getResourceForMethod(Request $request, array $allowedHttpMethods): RestResourceInterface
     {
         // Make sure that we have everything we need to make this work

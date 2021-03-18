@@ -66,6 +66,9 @@ trait RestMethodHelper
         return $dtoClass;
     }
 
+    /**
+     * @param array<int, string> $allowedHttpMethods
+     */
     public function validateRestMethod(Request $request, array $allowedHttpMethods): void
     {
         // Make sure that we have everything we need to make this work
