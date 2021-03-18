@@ -20,12 +20,9 @@ use App\Entity\Interfaces\EntityInterface;
  */
 class DummyDto extends RestDto
 {
-    private mixed $foo;
+    private string $foo = '';
 
-    /**
-     * @return DummyDto
-     */
-    public function setFoo(mixed $foo): self
+    public function setFoo(string $foo): self
     {
         $this->setVisited('foo');
 
@@ -34,7 +31,7 @@ class DummyDto extends RestDto
         return $this;
     }
 
-    public function getFoo(): mixed
+    public function getFoo(): string
     {
         return $this->foo;
     }
