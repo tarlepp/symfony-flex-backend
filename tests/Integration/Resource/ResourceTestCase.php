@@ -56,13 +56,6 @@ abstract class ResourceTestCase extends KernelTestCase
         $this->resource = $resource;
     }
 
-    public function getResource(): RestResourceInterface
-    {
-        return $this->resource instanceof RestResourceInterface
-            ? $this->resource
-            : throw new UnexpectedValueException('Resource not set');
-    }
-
     /**
      * @throws Throwable
      */
@@ -88,5 +81,10 @@ abstract class ResourceTestCase extends KernelTestCase
         );
 
         static::assertSame($this->entityClass, $this->getResource()->getEntityName(), $message);
+    }
+
+    private function getResource(): RestResourceInterface
+    {
+        return $this->resource ?? throw new UnexpectedValueException('Resource not set');
     }
 }

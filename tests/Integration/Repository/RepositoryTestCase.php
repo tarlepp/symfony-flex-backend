@@ -111,8 +111,6 @@ abstract class RepositoryTestCase extends KernelTestCase
 
     protected function getResource(): RestResourceInterface
     {
-        return $this->resource instanceof RestResourceInterface
-            ? $this->resource
-            : throw new UnexpectedValueException('Resource not set');
+        return $this->resource ?? throw new UnexpectedValueException('Resource not set');
     }
 }

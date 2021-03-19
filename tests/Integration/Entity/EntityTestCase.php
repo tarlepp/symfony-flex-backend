@@ -760,17 +760,16 @@ abstract class EntityTestCase extends KernelTestCase
 
     protected function getEntity(): EntityInterface
     {
-        return $this->entity instanceof EntityInterface
-            ? $this->entity
-            : throw new UnexpectedValueException('Entity not set');
+        return $this->entity ?? throw new UnexpectedValueException('Entity not set');
     }
 
     protected function createEntity(): EntityInterface
     {
+        /**
+         * @var EntityInterface|null $entity
+         */
         $entity = new $this->entityName();
 
-        return $entity instanceof EntityInterface
-            ? $entity
-            : throw new UnexpectedValueException('Entity not set');
+        return $entity ?? throw new UnexpectedValueException('Entity not set');
     }
 }

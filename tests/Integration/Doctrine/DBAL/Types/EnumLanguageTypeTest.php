@@ -109,17 +109,13 @@ class EnumLanguageTypeTest extends KernelTestCase
         yield [new stdClass()];
     }
 
-    private function getPlatform(): MySqlPlatform
+    private function getPlatform(): AbstractPlatform
     {
-        return $this->platform instanceof MySqlPlatform
-            ? $this->platform
-            : throw new UnexpectedValueException('Platform not set');
+        return $this->platform ??  throw new UnexpectedValueException('Platform not set');
     }
 
     private function getType(): Type
     {
-        return $this->type instanceof Type
-            ? $this->type
-            : throw new UnexpectedValueException('Type not set');
+        return $this->type ?? throw new UnexpectedValueException('Type not set');
     }
 }

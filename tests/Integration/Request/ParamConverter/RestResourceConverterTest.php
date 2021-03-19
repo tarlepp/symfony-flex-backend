@@ -141,8 +141,6 @@ class RestResourceConverterTest extends KernelTestCase
 
     private function getConverter(): RestResourceConverter
     {
-        return $this->converter instanceof RestResourceConverter
-            ? $this->converter
-            : throw new UnexpectedValueException('RestResourceConverter not found...');
+        return $this->converter ?? throw new UnexpectedValueException('RestResourceConverter not found...');
     }
 }

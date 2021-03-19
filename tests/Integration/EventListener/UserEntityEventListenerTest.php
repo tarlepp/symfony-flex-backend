@@ -183,29 +183,21 @@ class UserEntityEventListenerTest extends KernelTestCase
 
     private function getEntityManager(): EntityManager
     {
-        return $this->entityManager instanceof EntityManager
-            ? $this->entityManager
-            : throw new UnexpectedValueException('EntityManager not set');
+        return $this->entityManager ?? throw new UnexpectedValueException('EntityManager not set');
     }
 
     private function getEncoder(): UserPasswordEncoderInterface
     {
-        return $this->encoder instanceof UserPasswordEncoderInterface
-            ? $this->encoder
-            : throw new UnexpectedValueException('Encoder not set');
+        return $this->encoder ?? throw new UnexpectedValueException('Encoder not set');
     }
 
     private function getListener(): UserEntityEventListener
     {
-        return $this->listener instanceof UserEntityEventListener
-            ? $this->listener
-            : throw new UnexpectedValueException('Listener not set');
+        return $this->listener ?? throw new UnexpectedValueException('Listener not set');
     }
 
     private function getEntity(): User
     {
-        return $this->entity instanceof User
-            ? $this->entity
-            : throw new UnexpectedValueException('Entity not set');
+        return $this->entity ?? throw new UnexpectedValueException('Entity not set');
     }
 }
