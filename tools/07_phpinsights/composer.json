@@ -1,4 +1,6 @@
 {
+	"name": "tarlepp/symfony-flex-backend-tools",
+	"description": "",
 	"require": {},
 	"require-dev": {
 		"nunomaduro/phpinsights": "1.14.1",
