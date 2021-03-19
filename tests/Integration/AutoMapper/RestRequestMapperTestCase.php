@@ -59,8 +59,6 @@ abstract class RestRequestMapperTestCase extends KernelTestCase
 
     protected function getMapperObject(): RestRequestMapper
     {
-        return $this->mapperObject instanceof RestRequestMapper
-            ? $this->mapperObject
-            : throw new UnexpectedValueException('MapperObject not set');
+        return $this->mapperObject ?? throw new UnexpectedValueException('MapperObject not set');
     }
 }

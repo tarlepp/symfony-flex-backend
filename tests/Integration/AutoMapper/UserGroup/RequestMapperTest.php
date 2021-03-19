@@ -37,7 +37,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         DTO\UserGroupPatch::class,
     ];
 
-    private MockObject | RoleResource | null $mockRoleResource = null;
+    private ?MockObject $mockRoleResource = null;
 
     protected function setUp(): void
     {
@@ -91,8 +91,6 @@ class RequestMapperTest extends RestRequestMapperTestCase
 
     private function getMockRoleResource(): MockObject
     {
-        return $this->mockRoleResource instanceof MockObject
-            ? $this->mockRoleResource
-            : throw new UnexpectedValueException('MockRoleResource not set');
+        return $this->mockRoleResource ??  throw new UnexpectedValueException('MockRoleResource not set');
     }
 }
