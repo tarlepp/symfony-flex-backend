@@ -68,7 +68,9 @@ class RepositoryHelperTest extends KernelTestCase
 
         RepositoryHelper::processCriteria($qb, []);
 
-        $expected = 'SELECT entity FROM App\\Entity\\User entity';
+        $expected = <<<'DQL'
+SELECT entity FROM App\Entity\User entity
+DQL;
         $message = 'processCriteria method changed DQL when it should not - weird';
 
         static::assertSame($expected, $qb->getDQL(), $message);
@@ -85,7 +87,9 @@ class RepositoryHelperTest extends KernelTestCase
 
         $message = 'processSearchTerms did not return expected DQL.';
 
-        $expected = 'SELECT entity FROM App\\Entity\\User entity';
+        $expected = <<<'DQL'
+SELECT entity FROM App\Entity\User entity
+DQL;
         $actual = $qb->getDQL();
 
         static::assertSame($expected, $actual, $message);
