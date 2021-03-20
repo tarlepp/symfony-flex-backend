@@ -1,4 +1,4 @@
-php_version: 8.0
+php_version: '8.0'
 
 pre_composer_script: |
     #!/bin/bash
