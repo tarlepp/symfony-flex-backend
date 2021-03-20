@@ -39,7 +39,7 @@ trait UserRelations
     #[Groups([
         'User.userGroups',
 
-        'set.UserProfile',
+        User::SET_USER_BASIC,
     ])]
     protected Collection | ArrayCollection $userGroups;
 
@@ -96,7 +96,7 @@ trait UserRelations
     #[Groups([
         'User.roles',
 
-        'set.UserProfile',
+        User::SET_USER_BASIC,
     ])]
     public function getRoles(): array
     {

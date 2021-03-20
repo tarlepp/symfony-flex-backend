@@ -38,6 +38,9 @@ class UserGroup implements EntityInterface, Stringable
     use Timestampable;
     use Uuid;
 
+    public const SET_USER_PROFILE_GROUPS = 'set.UserProfileGroups';
+    public const SET_USER_GROUP_BASIC = 'set.UserGroupBasic';
+
     /**
      * @ORM\Column(
      *      name="id",
@@ -57,9 +60,9 @@ class UserGroup implements EntityInterface, Stringable
         'User.userGroups',
         'Role.userGroups',
 
-        'set.UserProfile',
-        'set.UserProfileGroups',
-        'set.UserGroupBasic',
+        User::SET_USER_PROFILE,
+        UserGroup::SET_USER_PROFILE_GROUPS,
+        UserGroup::SET_USER_GROUP_BASIC,
     ])]
     private UuidInterface $id;
 
@@ -79,9 +82,9 @@ class UserGroup implements EntityInterface, Stringable
     #[Groups([
         'UserGroup.role',
 
-        'set.UserProfile',
-        'set.UserProfileGroups',
-        'set.UserGroupBasic',
+        User::SET_USER_PROFILE,
+        UserGroup::SET_USER_PROFILE_GROUPS,
+        UserGroup::SET_USER_GROUP_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -100,9 +103,9 @@ class UserGroup implements EntityInterface, Stringable
         'UserGroup',
         'UserGroup.name',
 
-        'set.UserProfile',
-        'set.UserProfileGroups',
-        'set.UserGroupBasic',
+        User::SET_USER_PROFILE,
+        UserGroup::SET_USER_PROFILE_GROUPS,
+        UserGroup::SET_USER_GROUP_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
