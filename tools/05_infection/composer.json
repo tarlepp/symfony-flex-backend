@@ -4,7 +4,7 @@
 	"require": {},
 	"require-dev": {
 		"infection/infection": "0.21.4",
-		"roave/security-advisories": "dev-master"
+		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"platform": {
