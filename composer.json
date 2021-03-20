@@ -25,7 +25,7 @@
 		"ext-mbstring": "*",
 		"ext-pdo": "*",
 		"doctrine/annotations": "1.12.1",
-		"doctrine/doctrine-bundle": "2.2.3",
+		"doctrine/doctrine-bundle": "2.2.4",
 		"doctrine/doctrine-migrations-bundle": "3.0.2",
 		"doctrine/orm": "2.8.2",
 		"easycorp/easy-log-handler": "1.0.9",
@@ -67,7 +67,7 @@
 	"require-dev": {
 		"bamarni/composer-bin-plugin": "1.4.1",
 		"doctrine/doctrine-fixtures-bundle": "3.4.0",
-		"roave/security-advisories": "dev-master",
+		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "5.2.4",
 		"symfony/debug-bundle": "5.2.4",
 		"symfony/maker-bundle": "1.29.1",
