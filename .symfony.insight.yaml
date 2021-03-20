@@ -1,6 +1,5 @@
-php_version: 7.4
+php_version: 8.0
 
 pre_composer_script: |
     #!/bin/bash
     sed -i -e 's/\/app\/secrets\/application.json/.\/secrets\/application.json/g' .env
-
