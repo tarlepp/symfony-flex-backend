@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Interfaces/RestResourceInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Interfaces;
@@ -11,7 +11,6 @@ namespace App\Rest\Interfaces;
 use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Repository\Interfaces\BaseRepositoryInterface;
-use Doctrine\ORM\ORMException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
@@ -20,26 +19,23 @@ use UnexpectedValueException;
  * Interface RestResourceInterface
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface RestResourceInterface
 {
     /**
      * Getter method for serializer context.
      *
-     * @return array<int|string, array<int, array<int, string>|string>|bool|string>
+     * @return array<int|string, mixed>
      */
     public function getSerializerContext(): array;
 
     /**
      * Getter method for entity repository.
+     *
+     * @throws Throwable
      */
     public function getRepository(): BaseRepositoryInterface;
-
-    /**
-     * Setter method for repository.
-     */
-    public function setRepository(BaseRepositoryInterface $repository): self;
 
     /**
      * Getter for used validator.
@@ -48,10 +44,6 @@ interface RestResourceInterface
 
     /**
      * Setter for used validator.
-     *
-     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
-     *
-     * @required
      */
     public function setValidator(ValidatorInterface $validator): self;
 
@@ -69,6 +61,8 @@ interface RestResourceInterface
 
     /**
      * Getter method for current entity name.
+     *
+     * @throws Throwable
      */
     public function getEntityName(): string;
 
@@ -77,16 +71,16 @@ interface RestResourceInterface
      * identifier without actually loading it, if the entity is not yet
      * loaded.
      *
-     * @return object|null
-     *
-     * @throws ORMException
+     * @throws Throwable
      */
-    public function getReference(string $id);
+    public function getReference(string $id): ?object;
 
     /**
      * Getter method for all associations that current entity contains.
      *
      * @return array<int, string>
+     *
+     * @throws Throwable
      */
     public function getAssociations(): array;
 
@@ -107,8 +101,8 @@ interface RestResourceInterface
      * value is an array of specified repository entities.
      *
      * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null $orderBy
-     * @param array<string, string>|null $search
+     * @param array<string, string>|null           $orderBy
+     * @param array<string, string>|null           $search
      *
      * @return array<int, EntityInterface>
      *
@@ -136,7 +130,7 @@ interface RestResourceInterface
      * null if entity was not found.
      *
      * @param array<int|string, string|array> $criteria
-     * @param array<int, string>|null $orderBy
+     * @param array<int, string>|null         $orderBy
      *
      * @throws Throwable
      */
@@ -151,7 +145,7 @@ interface RestResourceInterface
      * search terms.
      *
      * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null $search
+     * @param array<string, string>|null           $search
      *
      * @throws Throwable
      */
@@ -201,7 +195,7 @@ interface RestResourceInterface
      * value is an array of specified repository entity id values.
      *
      * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null $search
+     * @param array<string, string>|null           $search
      *
      * @return array<int, string>
      */

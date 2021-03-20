@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/LogLogin.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -27,17 +27,17 @@ use function is_array;
  * @ORM\Table(
  *      name="log_login",
  *      indexes={
- * @ORM\Index(name="user_id", columns={"user_id"}),
- * @ORM\Index(name="date", columns={"date"}),
- *      }
+ *          @ORM\Index(name="user_id", columns={"user_id"}),
+ *          @ORM\Index(name="date", columns={"date"}),
+ *      },
  *  )
  * @ORM\Entity(
- *      readOnly=true
+ *      readOnly=true,
  *  )
  * @ORM\HasLifecycleCallbacks()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LogLogin implements EntityInterface
 {
@@ -45,11 +45,6 @@ class LogLogin implements EntityInterface
     use Uuid;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.id",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -60,20 +55,19 @@ class LogLogin implements EntityInterface
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.id',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.user",
-     *  })
-     *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\User",
      *      inversedBy="logsLogin",
      *  )
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(
+     *      @ORM\JoinColumn(
      *          name="user_id",
      *          referencedColumnName="id",
      *          onDelete="SET NULL",
@@ -81,28 +75,26 @@ class LogLogin implements EntityInterface
      *      ),
      *  })
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.user',
+    ])]
     private ?User $user;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.type",
-     *  })
-     *
      * @ORM\Column(
      *      name="type",
      *      type="EnumLogLogin",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.type',
+    ])]
     private string $type;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.clientType",
-     *  })
-     *
      * @ORM\Column(
      *      name="client_type",
      *      type="string",
@@ -110,14 +102,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.clientType',
+    ])]
     private ?string $clientType = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.clientName",
-     *  })
-     *
      * @ORM\Column(
      *      name="client_name",
      *      type="string",
@@ -125,14 +116,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.clientName',
+    ])]
     private ?string $clientName = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.clientShortName",
-     *  })
-     *
      * @ORM\Column(
      *      name="client_short_name",
      *      type="string",
@@ -140,14 +130,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.clientShortName',
+    ])]
     private ?string $clientShortName = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.clientVersion",
-     *  })
-     *
      * @ORM\Column(
      *      name="client_version",
      *      type="string",
@@ -155,14 +144,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.clientVersion',
+    ])]
     private ?string $clientVersion = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.clientEngine",
-     *  })
-     *
      * @ORM\Column(
      *      name="client_engine",
      *      type="string",
@@ -170,14 +158,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.clientEngine',
+    ])]
     private ?string $clientEngine = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.osName",
-     *  })
-     *
      * @ORM\Column(
      *      name="os_name",
      *      type="string",
@@ -185,14 +172,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.osName',
+    ])]
     private ?string $osName = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.osShortName",
-     *  })
-     *
      * @ORM\Column(
      *      name="os_short_name",
      *      type="string",
@@ -200,14 +186,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.osShortName',
+    ])]
     private ?string $osShortName = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.osVersion",
-     *  })
-     *
      * @ORM\Column(
      *      name="os_version",
      *      type="string",
@@ -215,14 +200,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.osVersion',
+    ])]
     private ?string $osVersion = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.osPlatform",
-     *  })
-     *
      * @ORM\Column(
      *      name="os_platform",
      *      type="string",
@@ -230,14 +214,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.osPlatform',
+    ])]
     private ?string $osPlatform = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.deviceName",
-     *  })
-     *
      * @ORM\Column(
      *      name="device_name",
      *      type="string",
@@ -245,14 +228,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.deviceName',
+    ])]
     private ?string $deviceName = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.brandName",
-     *  })
-     *
      * @ORM\Column(
      *      name="brand_name",
      *      type="string",
@@ -260,14 +242,13 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.brandName',
+    ])]
     private ?string $brandName = null;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.model",
-     *  })
-     *
      * @ORM\Column(
      *      name="model",
      *      type="string",
@@ -275,6 +256,10 @@ class LogLogin implements EntityInterface
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.model',
+    ])]
     private ?string $model = null;
 
     private DeviceDetector $deviceDetector;

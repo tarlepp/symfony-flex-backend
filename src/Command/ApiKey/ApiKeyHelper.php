@@ -28,7 +28,7 @@ class ApiKeyHelper
 {
     public function __construct(
         private ApiKeyResource $apiKeyResource,
-        private RolesService $rolesService
+        private RolesService $rolesService,
     ) {
     }
 
@@ -54,7 +54,7 @@ class ApiKeyHelper
                 'Is this the correct API key \'[%s] [%s] %s\'?',
                 $apiKey->getId(),
                 $apiKey->getToken(),
-                $apiKey->getDescription()
+                $apiKey->getDescription(),
             );
 
             $found = $io->confirm($message, false);
@@ -80,7 +80,7 @@ class ApiKeyHelper
             sprintf(
                 "GUID:  %s\nToken: %s",
                 $apiKey->getId(),
-                $apiKey->getToken()
+                $apiKey->getToken(),
             ),
         ];
     }
@@ -114,7 +114,7 @@ class ApiKeyHelper
                 '[Token: %s] %s - Roles: %s',
                 $apiKey->getToken(),
                 $apiKey->getDescription(),
-                implode(', ', $this->rolesService->getInheritedRoles($apiKey->getRoles()))
+                implode(', ', $this->rolesService->getInheritedRoles($apiKey->getRoles())),
             );
         };
     }

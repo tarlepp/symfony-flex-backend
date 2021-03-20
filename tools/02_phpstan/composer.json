@@ -1,10 +1,12 @@
 {
+	"name": "tarlepp/symfony-flex-backend-tools",
+	"description": "",
 	"require": {},
 	"require-dev": {
-		"phpstan/phpstan": "0.12.74",
-		"phpstan/phpstan-phpunit": "0.12.17",
-		"phpstan/phpstan-symfony": "0.12.16",
-		"roave/security-advisories": "dev-master"
+		"phpstan/phpstan": "0.12.82",
+		"phpstan/phpstan-phpunit": "0.12.18",
+		"phpstan/phpstan-symfony": "0.12.21",
+		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"platform": {

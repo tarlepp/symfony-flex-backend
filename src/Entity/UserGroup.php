@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/UserGroup.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -20,7 +20,6 @@ use Ramsey\Uuid\UuidInterface;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Throwable;
 
 /**
  * Class UserGroup
@@ -31,7 +30,7 @@ use Throwable;
  * @ORM\Entity()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserGroup implements EntityInterface, Stringable
 {
@@ -40,19 +39,6 @@ class UserGroup implements EntityInterface, Stringable
     use Uuid;
 
     /**
-     * @Groups({
-     *      "UserGroup",
-     *      "UserGroup.id",
-     *
-     *      "ApiKey.userGroups",
-     *      "User.userGroups",
-     *      "Role.userGroups",
-     *
-     *      "set.UserProfile",
-     *      "set.UserProfileGroups",
-     *      "set.UserGroupBasic",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -63,97 +49,98 @@ class UserGroup implements EntityInterface, Stringable
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'UserGroup',
+        'UserGroup.id',
+
+        'ApiKey.userGroups',
+        'User.userGroups',
+        'Role.userGroups',
+
+        'set.UserProfile',
+        'set.UserProfileGroups',
+        'set.UserGroupBasic',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "UserGroup.role",
-     *
-     *      "set.UserProfile",
-     *      "set.UserProfileGroups",
-     *      "set.UserGroupBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Valid()
-     *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\Role",
      *      inversedBy="userGroups",
      *  )
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(
+     *      @ORM\JoinColumn(
      *          name="role",
      *          referencedColumnName="role",
      *          onDelete="CASCADE",
      *      ),
      *  })
      */
+    #[Groups([
+        'UserGroup.role',
+
+        'set.UserProfile',
+        'set.UserProfileGroups',
+        'set.UserGroupBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Valid]
     private Role $role;
 
     /**
-     * @Groups({
-     *      "UserGroup",
-     *      "UserGroup.name",
-     *
-     *      "set.UserProfile",
-     *      "set.UserProfileGroups",
-     *      "set.UserGroupBasic",
-     *  })
-     *
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(min = 2, max = 255)
-     *
      * @ORM\Column(
      *      name="name",
      *      type="string",
      *      length=255,
-     *      nullable=false
+     *      nullable=false,
      *  )
      */
+    #[Groups([
+        'UserGroup',
+        'UserGroup.name',
+
+        'set.UserProfile',
+        'set.UserProfileGroups',
+        'set.UserGroupBasic',
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 2, max: 255)]
     private string $name = '';
 
     /**
      * @var Collection<int, User>|ArrayCollection<int, User>
-     *
-     * @Groups({
-     *      "UserGroup.users",
-     *  })
      *
      * @ORM\ManyToMany(
      *      targetEntity="User",
      *      mappedBy="userGroups",
      *  )
      * @ORM\JoinTable(
-     *      name="user_has_user_group"
+     *      name="user_has_user_group",
      *  )
      */
-    private Collection $users;
+    #[Groups([
+        'UserGroup.users',
+    ])]
+    private Collection | ArrayCollection $users;
 
     /**
      * @var Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
-     *
-     * @Groups({
-     *      "UserGroup.apiKeys",
-     *  })
      *
      * @ORM\ManyToMany(
      *      targetEntity="ApiKey",
      *      mappedBy="userGroups",
      *  )
      * @ORM\JoinTable(
-     *      name="api_key_has_user_group"
+     *      name="api_key_has_user_group",
      *  )
      */
-    private Collection $apiKeys;
+    #[Groups([
+        'UserGroup.apiKeys',
+    ])]
+    private Collection | ArrayCollection $apiKeys;
 
-    /**
-     * UserGroup constructor.
-     *
-     * @throws Throwable
-     */
     public function __construct()
     {
         $this->id = $this->createUuid();
@@ -199,7 +186,7 @@ class UserGroup implements EntityInterface, Stringable
     /**
      * @return Collection<int, User>|ArrayCollection<int, User>
      */
-    public function getUsers(): Collection
+    public function getUsers(): Collection | ArrayCollection
     {
         return $this->users;
     }
@@ -207,7 +194,7 @@ class UserGroup implements EntityInterface, Stringable
     /**
      * @return Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
      */
-    public function getApiKeys(): Collection
+    public function getApiKeys(): Collection | ArrayCollection
     {
         return $this->apiKeys;
     }

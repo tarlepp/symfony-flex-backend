@@ -2,13 +2,15 @@
 <psalm
     totallyTyped="false"
     allowPhpStormGenerics="true"
-    resolveFromConfigFile="true"
+    rememberPropertyAssignmentsAfterCall="false"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config file://./tools/03_psalm/vendor/vimeo/psalm/config.xsd"
+    phpVersion="8.0"
 >
     <projectFiles>
         <directory name="src/" />
+        <directory name="tests/" />
 
         <ignoreFiles>
             <directory name="vendor" />

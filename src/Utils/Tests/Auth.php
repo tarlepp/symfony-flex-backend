@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Utils/Tests/Auth.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Utils\Tests;
@@ -20,6 +20,7 @@ use function compact;
 use function file_get_contents;
 use function file_put_contents;
 use function getenv;
+use function is_string;
 use function property_exists;
 use function sha1;
 use function sprintf;
@@ -30,15 +31,13 @@ use function sys_get_temp_dir;
  * Class Auth
  *
  * @package App\Utils\Tests
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class Auth
 {
-    private KernelInterface $kernel;
-
-    public function __construct(KernelInterface $kernel)
-    {
-        $this->kernel = $kernel;
+    public function __construct(
+        private KernelInterface $kernel,
+    ) {
     }
 
     /**
@@ -105,12 +104,14 @@ class Auth
      */
     private function getToken(string $username, string $password): string
     {
+        $testChannel = getenv('ENV_TEST_CHANNEL_READABLE');
+
         // Specify used cache file
         $filename = sprintf(
             '%s%stest_jwt_auth_cache%s.json',
             sys_get_temp_dir(),
             DIRECTORY_SEPARATOR,
-            (string)getenv('ENV_TEST_CHANNEL_READABLE')
+            is_string($testChannel) ? $testChannel : '',
         );
 
         // Read current cache

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Traits/UserRelations.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -21,70 +21,66 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Class UserRelations
  *
  * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait UserRelations
 {
     /**
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      *
-     * @Groups({
-     *      "User.userGroups",
-     *
-     *      "set.UserProfile",
-     *  })
-     *
      * @ORM\ManyToMany(
      *      targetEntity="App\Entity\UserGroup",
      *      inversedBy="users",
      *  )
      * @ORM\JoinTable(
-     *      name="user_has_user_group"
+     *      name="user_has_user_group",
      *  )
      */
-    protected Collection $userGroups;
+    #[Groups([
+        'User.userGroups',
+
+        'set.UserProfile',
+    ])]
+    protected Collection | ArrayCollection $userGroups;
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
-     *
-     * @Groups({
-     *      "User.logsRequest",
-     *  })
      *
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\LogRequest",
      *      mappedBy="user",
      *  )
      */
-    protected Collection $logsRequest;
+    #[Groups([
+        'User.logsRequest',
+    ])]
+    protected Collection | ArrayCollection $logsRequest;
 
     /**
      * @var Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
-     *
-     * @Groups({
-     *      "User.logsLogin",
-     *  })
      *
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\LogLogin",
      *      mappedBy="user",
      *  )
      */
-    protected Collection $logsLogin;
+    #[Groups([
+        'User.logsLogin',
+    ])]
+    protected Collection | ArrayCollection $logsLogin;
 
     /**
      * @var Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
-     *
-     * @Groups({
-     *      "User.logsLoginFailure",
-     *  })
      *
      * @ORM\OneToMany(
      *      targetEntity="App\Entity\LogLoginFailure",
      *      mappedBy="user",
      *  )
      */
-    protected Collection $logsLoginFailure;
+    #[Groups([
+        'User.logsLoginFailure',
+    ])]
+    protected Collection | ArrayCollection $logsLoginFailure;
 
     /**
      * Getter for roles.
@@ -95,14 +91,13 @@ trait UserRelations
      * If you want to get user inherited roles you need to implement that
      * logic by yourself OR use eg. `/user/{uuid}/roles` API endpoint.
      *
-     * @Groups({
-     *      "User.roles",
-     *
-     *      "set.UserProfile",
-     *  })
-     *
-     * @return string[]
+     * @return array<int, string>
      */
+    #[Groups([
+        'User.roles',
+
+        'set.UserProfile',
+    ])]
     public function getRoles(): array
     {
         return $this->userGroups
@@ -115,7 +110,7 @@ trait UserRelations
      *
      * @return Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    public function getUserGroups(): Collection
+    public function getUserGroups(): Collection | ArrayCollection
     {
         return $this->userGroups;
     }
@@ -125,7 +120,7 @@ trait UserRelations
      *
      * @return Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
      */
-    public function getLogsRequest()
+    public function getLogsRequest(): Collection | ArrayCollection
     {
         return $this->logsRequest;
     }
@@ -135,7 +130,7 @@ trait UserRelations
      *
      * @return Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
      */
-    public function getLogsLogin()
+    public function getLogsLogin(): Collection | ArrayCollection
     {
         return $this->logsLogin;
     }
@@ -145,7 +140,7 @@ trait UserRelations
      *
      * @return Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
      */
-    public function getLogsLoginFailure()
+    public function getLogsLoginFailure(): Collection | ArrayCollection
     {
         return $this->logsLoginFailure;
     }

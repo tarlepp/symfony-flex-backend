@@ -3,12 +3,13 @@ declare(strict_types = 1);
 /**
  * /src/Helpers/StopwatchAwareTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Helpers;
 
 use Symfony\Component\Stopwatch\Stopwatch;
+use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * Class StopwatchAwareTrait
@@ -18,17 +19,13 @@ use Symfony\Component\Stopwatch\Stopwatch;
  *       nothing else.
  *
  * @package App\Helpers
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait StopwatchAwareTrait
 {
-    protected Stopwatch $stopwatch;
+    protected ?Stopwatch $stopwatch;
 
-    /**
-     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
-     *
-     * @required
-     */
+    #[Required]
     public function setStopwatch(Stopwatch $stopwatch): self
     {
         $this->stopwatch = $stopwatch;

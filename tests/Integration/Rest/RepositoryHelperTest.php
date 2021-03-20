@@ -12,9 +12,9 @@ use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Rest\RepositoryHelper;
 use App\Utils\Tests\StringableArrayObject;
-use Doctrine\Orm\Query\Parameter;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use function assert;
 
 /**
  * Class RepositoryHelperTest
@@ -24,13 +24,16 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class RepositoryHelperTest extends KernelTestCase
 {
-    protected UserRepository $repository;
+    protected ?UserRepository $repository = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         static::bootKernel();
+
+        assert(static::$container->get(UserResource::class) instanceof UserResource);
+        assert(static::$container->get(UserResource::class)->getRepository() instanceof UserRepository);
 
         $this->repository = static::$container->get(UserResource::class)->getRepository();
 
@@ -40,11 +43,14 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $input
+     * @psalm-param StringableArrayObject $input
+     *
      * @testdox Test that after `processCriteria` method call DQL is `$expected` when using `$input` as input
      */
     public function testThatProcessCriteriaWorksAsExpected(string $expected, StringableArrayObject $input): void
     {
-        $qb = $this->repository->createQueryBuilder('entity');
+        $qb = $this->getRepository()->createQueryBuilder('entity');
 
         RepositoryHelper::processCriteria($qb, $input->getArrayCopy());
 
@@ -58,11 +64,13 @@ class RepositoryHelperTest extends KernelTestCase
      */
     public function testThatProcessCriteriaWorksWithEmptyCriteria(): void
     {
-        $qb = $this->repository->createQueryBuilder('entity');
+        $qb = $this->getRepository()->createQueryBuilder('entity');
 
         RepositoryHelper::processCriteria($qb, []);
 
-        $expected = 'SELECT entity FROM App\\Entity\\User entity';
+        $expected = <<<'DQL'
+SELECT entity FROM App\Entity\User entity
+DQL;
         $message = 'processCriteria method changed DQL when it should not - weird';
 
         static::assertSame($expected, $qb->getDQL(), $message);
@@ -73,13 +81,15 @@ class RepositoryHelperTest extends KernelTestCase
      */
     public function testThatProcessSearchTermsWorksLikeExpectedWithoutSearchColumns(): void
     {
-        $qb = $this->repository->createQueryBuilder('entity');
+        $qb = $this->getRepository()->createQueryBuilder('entity');
 
         RepositoryHelper::processSearchTerms($qb, [], ['and' => ['foo', 'bar']]);
 
         $message = 'processSearchTerms did not return expected DQL.';
 
-        $expected = 'SELECT entity FROM App\\Entity\\User entity';
+        $expected = <<<'DQL'
+SELECT entity FROM App\Entity\User entity
+DQL;
         $actual = $qb->getDQL();
 
         static::assertSame($expected, $actual, $message);
@@ -88,15 +98,18 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatProcessSearchTermsWorksLikeExpected
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $terms
+     * @psalm-param StringableArrayObject $terms
+     *
      * @testdox Test that after `processSearchTerms` method call DQL is `$expected` when using `$terms` as terms
      */
     public function testThatProcessSearchTermsWorksLikeExpectedWithSearchColumns(
         string $expected,
         StringableArrayObject $terms
     ): void {
-        $qb = $this->repository->createQueryBuilder('entity');
+        $qb = $this->getRepository()->createQueryBuilder('entity');
 
-        RepositoryHelper::processSearchTerms($qb, $this->repository->getSearchColumns(), $terms->getArrayCopy());
+        RepositoryHelper::processSearchTerms($qb, $this->getRepository()->getSearchColumns(), $terms->getArrayCopy());
 
         $message = 'processSearchTerms did not return expected DQL.';
 
@@ -106,11 +119,14 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatProcessOrderByWorksLikeExpected
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $input
+     * @psalm-param StringableArrayObject $input
+     *
      * @testdox Test that after `processOrderBy` method call DQL is `$expected` when using `$input` as input
      */
     public function testThatProcessOrderByWorksLikeExpected(string $expected, StringableArrayObject $input): void
     {
-        $qb = $this->repository->createQueryBuilder('entity');
+        $qb = $this->getRepository()->createQueryBuilder('entity');
 
         RepositoryHelper::processOrderBy($qb, $input->getArrayCopy());
 
@@ -124,7 +140,7 @@ class RepositoryHelperTest extends KernelTestCase
      */
     public function testThatGetExpressionDoesNotModifyExpressionWithEmptyCriteria(): void
     {
-        $queryBuilder = $this->repository->createQueryBuilder('entity');
+        $queryBuilder = $this->getRepository()->createQueryBuilder('entity');
         $expression = $queryBuilder->expr()->andX();
 
         $output = RepositoryHelper::getExpression($queryBuilder, $expression, []);
@@ -137,6 +153,11 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $criteria
+     * @phpstan-param StringableArrayObject<array<mixed>> $params
+     * @psalm-param StringableArrayObject $criteria
+     * @psalm-param StringableArrayObject $params
+     *
      * @testdox Test that after `getExpression` call DQL is `$dql` and parameters are `$params` when using `$criteria`
      */
     public function testThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(
@@ -144,7 +165,7 @@ class RepositoryHelperTest extends KernelTestCase
         string $dql,
         StringableArrayObject $params
     ): void {
-        $queryBuilder = $this->repository->createQueryBuilder('u');
+        $queryBuilder = $this->getRepository()->createQueryBuilder('u');
         $expression = $queryBuilder->expr()->andX();
 
         $queryBuilder->andWhere(
@@ -154,13 +175,15 @@ class RepositoryHelperTest extends KernelTestCase
         static::assertSame($dql, $queryBuilder->getQuery()->getDQL());
         static::assertCount($params->count(), $queryBuilder->getParameters());
 
-        /** @var Parameter $parameter */
         foreach ($queryBuilder->getParameters()->toArray() as $key => $parameter) {
             static::assertSame($params[$key]['name'], $parameter->getName());
             static::assertSame($params[$key]['value'], $parameter->getValue());
         }
     }
 
+    /**
+     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatProcessCriteriaWorksAsExpected(): Generator
     {
         yield [
@@ -227,6 +250,9 @@ class RepositoryHelperTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): Generator
     {
         // @codingStandardsIgnoreStart
@@ -273,6 +299,9 @@ class RepositoryHelperTest extends KernelTestCase
         // @codingStandardsIgnoreEnd
     }
 
+    /**
+     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatProcessOrderByWorksLikeExpected(): Generator
     {
         yield [
@@ -315,6 +344,9 @@ class RepositoryHelperTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
+     */
     public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(): Generator
     {
         yield [
@@ -535,5 +567,12 @@ DQL
             ]),
         ];
         // @codingStandardsIgnoreEnd
+    }
+
+    private function getRepository(): UserRepository
+    {
+        assert($this->repository instanceof UserRepository);
+
+        return $this->repository;
     }
 }

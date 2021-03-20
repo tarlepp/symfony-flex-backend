@@ -11,7 +11,6 @@ namespace App\Tests\E2E\Controller\Auth;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function json_encode;
 
@@ -38,9 +37,10 @@ class GetTokenControllerTest extends WebTestCase
         $client->request($method, $this->baseUrl);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(405, $response->getStatusCode(), $response->getContent());
+        static::assertNotFalse($content);
+        static::assertSame(405, $response->getStatusCode(), $content);
     }
 
     /**
@@ -68,15 +68,16 @@ class GetTokenControllerTest extends WebTestCase
         );
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(
             200,
             $response->getStatusCode(),
             "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response
         );
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         // Attributes that should be present...
         $attributes = [
@@ -108,29 +109,35 @@ class GetTokenControllerTest extends WebTestCase
                 'CONTENT_TYPE' => 'application/json',
                 'HTTP_X-Requested-With' => 'XMLHttpRequest',
             ],
-            json_encode(['username' => 'username', 'password' => 'password'], JSON_THROW_ON_ERROR)
+            json_encode([
+                'username' => 'username',
+                'password' => 'password',
+            ], JSON_THROW_ON_ERROR)
         );
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
+        static::assertNotFalse($content);
         static::assertSame(401, $response->getStatusCode());
 
-        $responseContent = JSON::decode($response->getContent());
+        $responseContent = JSON::decode($content);
 
         $info = "\nResponse: \n" . $response;
 
         static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
         static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-
         static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
         static::assertSame(
             'Invalid credentials.',
             $responseContent->message,
-            'Response message was not expected' . $info
+            'Response message was not expected' . $info,
         );
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost(): Generator
     {
         yield ['HEAD'];
@@ -142,6 +149,9 @@ class GetTokenControllerTest extends WebTestCase
         yield ['PATCH'];
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGetTokenReturnsJwtWithValidCredentials(): Generator
     {
         yield ['john', 'password'];

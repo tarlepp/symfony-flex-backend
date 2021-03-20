@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/RepositoryHelper.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -23,15 +23,15 @@ use function call_user_func_array;
 use function count;
 use function is_array;
 use function is_numeric;
+use function str_contains;
 use function strcmp;
-use function strpos;
 use function strtolower;
 
 /**
  * Class RepositoryHelper
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RepositoryHelper
 {
@@ -82,8 +82,7 @@ class RepositoryHelper
      * tl;dr Modify your $criteria parameter in your controller with
      * 'processCriteria(array &$criteria)' method.
      *
-     * @see \App\Rest\Repository::getExpression()
-     * @see \App\Controller\Rest::processCriteria()
+     * @see \App\Repository\Traits\RepositoryMethodsTrait::getQueryBuilder()
      *
      * @param array<int|string, string|array>|null $criteria
      *
@@ -112,10 +111,10 @@ class RepositoryHelper
      * those. Note that each repository has 'searchColumns' property which
      * contains the fields where search term will be affected.
      *
-     * @see \App\Controller\Rest::getSearchTerms
+     * @see \App\Repository\Traits\RepositoryMethodsTrait::getQueryBuilder()
      *
      * @param array<int, string> $columns
-     * @param array<string, string>|null $terms
+     * @param array<mixed>|null $terms
      *
      * @throws InvalidArgumentException
      */
@@ -147,7 +146,7 @@ class RepositoryHelper
         $orderBy ??= [];
 
         foreach ($orderBy as $column => $order) {
-            if (strpos($column, '.') === false) {
+            if (!str_contains($column, '.')) {
                 $column = 'entity.' . $column;
             }
 
@@ -236,7 +235,7 @@ class RepositoryHelper
     public static function getExpression(
         QueryBuilder $queryBuilder,
         Composite $expression,
-        array $criteria
+        array $criteria,
     ): Composite {
         self::processExpression($queryBuilder, $expression, $criteria);
 
@@ -270,7 +269,7 @@ class RepositoryHelper
         Composite $expression,
         bool $expressionAnd,
         bool $expressionOr,
-        $comparison
+        array $comparison
     ): void {
         if ($expressionAnd) {
             $expression->add(self::getExpression($queryBuilder, $queryBuilder->expr()->andX(), $comparison));
@@ -292,11 +291,11 @@ class RepositoryHelper
      *
      * @param string|array<int, string> $value
      *
-     * @return array<int, string|array>
+     * @return array{0: string, 1: string, 2: string|array}
      */
-    private static function createCriteria(string $column, $value): array
+    private static function createCriteria(string $column, string | array $value): array
     {
-        if (strpos($column, '.') === false) {
+        if (!str_contains($column, '.')) {
             $column = 'entity.' . $column;
         }
 
@@ -344,7 +343,7 @@ class RepositoryHelper
         QueryBuilder $queryBuilder,
         string $lowercaseOperator,
         array $parameters,
-        array $value
+        array $value,
     ): array {
         // Operator is between, so we need to add third parameter for Expr method
         if ($lowercaseOperator === 'between') {
@@ -359,8 +358,7 @@ class RepositoryHelper
             // Otherwise this must be IN or NOT IN expression
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
-            } catch (InvalidUuidStringException $error) {
-                (static fn (InvalidUuidStringException $error): InvalidUuidStringException => $error)($error);
+            } catch (InvalidUuidStringException) {
             }
 
             $parameters[] = array_map(
@@ -376,12 +374,10 @@ class RepositoryHelper
 
     /**
      * @param array<int|string, string|array> $condition
-     *
-     * @psalm-suppress MissingClosureParamType
      */
     private static function getIterator(array &$condition): Closure
     {
-        return static function ($value, string $column) use (&$condition): void {
+        return static function (string | array $value, string $column) use (&$condition): void {
             // If criteria contains 'and' OR 'or' key(s) assume that array in only in the right format
             if (strcmp($column, 'and') === 0 || strcmp($column, 'or') === 0) {
                 $condition[$column] = $value;
@@ -401,7 +397,7 @@ class RepositoryHelper
         QueryBuilder $queryBuilder,
         stdClass $comparison,
         string $lowercaseOperator,
-        array $parameters
+        array $parameters,
     ): array {
         if (is_array($comparison->value)) {
             $value = $comparison->value;

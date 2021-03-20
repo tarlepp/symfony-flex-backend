@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/Actions/User/FindAction.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\User;
@@ -23,22 +23,20 @@ use Throwable;
  * @see \App\Rest\Traits\Methods\FindMethod for detailed documents.
  *
  * @package App\Rest\Traits\Actions\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait FindAction
 {
     use FindMethod;
 
     /**
-     * @Route(
-     *      path="",
-     *      methods={"GET"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_USER')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '',
+        methods: [Request::METHOD_GET],
+    )]
+    #[Security('is_granted("ROLE_USER")')]
     public function findAction(Request $request): Response
     {
         return $this->findMethod($request);

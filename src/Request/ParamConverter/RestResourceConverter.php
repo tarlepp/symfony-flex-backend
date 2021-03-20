@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Request/ParamConverter/RestResourceConverter.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Request\ParamConverter;
@@ -17,18 +17,17 @@ use Throwable;
 /**
  * Class RestResourceConverter
  *
- * Purpose of this param converter is to use exactly same methods and workflow as in basic REST API requests.
+ * Purpose of this param converter is to use exactly same methods and workflow
+ * as in basic REST API requests.
  *
  * @package App\Request\ParamConverter
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RestResourceConverter implements ParamConverterInterface
 {
-    private ResourceCollection $collection;
-
-    public function __construct(ResourceCollection $collection)
-    {
-        $this->collection = $collection;
+    public function __construct(
+        private ResourceCollection $collection,
+    ) {
     }
 
     /**
@@ -43,6 +42,7 @@ class RestResourceConverter implements ParamConverterInterface
         $resource = $this->collection->get($configuration->getClass());
 
         if ($identifier !== '') {
+            // TODO make throw to exists on options
             $request->attributes->set($name, $resource->findOne($identifier, true));
         }
 

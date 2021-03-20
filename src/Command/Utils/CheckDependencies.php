@@ -47,34 +47,28 @@ class CheckDependencies extends Command
 {
     use SymfonyStyleTrait;
 
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private SymfonyStyle $io;
-
     public function __construct(
-        private string $projectDir
+        private string $projectDir,
     ) {
         parent::__construct('check-dependencies');
 
         $this->setDescription('Console command to check which vendor dependencies has updates');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->io = $this->getSymfonyStyle($input, $output);
+        $io = $this->getSymfonyStyle($input, $output);
 
         $directories = $this->getNamespaceDirectories();
 
         array_unshift($directories, $this->projectDir);
 
-        $rows = $this->determineTableRows($directories);
+        $rows = $this->determineTableRows($io, $directories);
 
         $headers = [
             'Path',
@@ -97,7 +91,7 @@ class CheckDependencies extends Command
 
         count($rows)
             ? $table->render()
-            : $this->io->success('Good news, there is not any vendor dependency to update at this time!');
+            : $io->success('Good news, there is not any vendor dependency to update at this time!');
 
         return 0;
     }
@@ -119,16 +113,9 @@ class CheckDependencies extends Command
             ->directories()
             ->in($this->projectDir . DIRECTORY_SEPARATOR . 'tools/');
 
-        /**
-         * Closure to return pure path from current SplFileInfo object.
-         *
-         * @param SplFileInfo $fileInfo
-         *
-         * @return string
-         */
         $closure = static fn (SplFileInfo $fileInfo): string => $fileInfo->getPath();
 
-        /** @var Traversable $iterator */
+        /** @var Traversable<SplFileInfo> $iterator */
         $iterator = $finder->getIterator();
 
         // Determine namespace directories
@@ -148,10 +135,10 @@ class CheckDependencies extends Command
      *
      * @throws JsonException
      */
-    private function determineTableRows(array $directories): array
+    private function determineTableRows(SymfonyStyle $io, array $directories): array
     {
         // Initialize progress bar for process
-        $progressBar = $this->getProgressBar(count($directories), 'Checking all vendor dependencies');
+        $progressBar = $this->getProgressBar($io, count($directories), 'Checking all vendor dependencies');
 
         // Initialize output rows
         $rows = [];
@@ -225,7 +212,7 @@ class CheckDependencies extends Command
         }
 
         /** @var stdClass $decoded */
-        $decoded = json_decode($process->getOutput(), false, 512, JSON_THROW_ON_ERROR);
+        $decoded = json_decode($process->getOutput(), flags: JSON_THROW_ON_ERROR);
 
         /** @var array<int, stdClass>|string|null $installed */
         $installed = $decoded->installed;
@@ -236,7 +223,7 @@ class CheckDependencies extends Command
     /**
      * Helper method to get progress bar for console.
      */
-    private function getProgressBar(int $steps, string $message): ProgressBar
+    private function getProgressBar(SymfonyStyle $io, int $steps, string $message): ProgressBar
     {
         $format = '
  %message%
@@ -247,7 +234,7 @@ class CheckDependencies extends Command
  Memory usage:   %memory:-6s%
 ';
 
-        $progress = $this->io->createProgressBar($steps);
+        $progress = $io->createProgressBar($steps);
         $progress->setFormat($format);
         $progress->setMessage($message);
 

@@ -3,14 +3,13 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/DTO/DtoTestCase.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO;
 
 use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
-use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -21,6 +20,7 @@ use Throwable;
 use TypeError;
 use function array_filter;
 use function array_map;
+use function assert;
 use function count;
 use function gettype;
 use function is_object;
@@ -31,16 +31,21 @@ use function ucfirst;
  * Class DtoTestCase
  *
  * @package App\Tests\Integration\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class DtoTestCase extends KernelTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $dtoClass;
 
     private static ?PropertyInfoExtractor $propertyInfo = null;
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that DTO class properties have `getter` methods defined
      */
     public function testThatPropertiesHaveGetters(): void
     {
@@ -62,6 +67,8 @@ abstract class DtoTestCase extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that DTO class properties have `setter` methods defined
      */
     public function testThatPropertiesHaveSetters(): void
     {
@@ -83,15 +90,14 @@ abstract class DtoTestCase extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that DTO class `setter` methods calls `setVisited` method
      */
     public function testThatSetterCallsSetVisitedMethod(): void
     {
         $dtoReflection = new ReflectionClass($this->dtoClass);
         $properties = $this->getDtoProperties();
 
-        /**
-         * @var MockObject|RestDtoInterface $mock
-         */
         $mock = $this->getMockBuilder($this->dtoClass)
             ->onlyMethods(['setVisited'])
             ->getMock();
@@ -101,7 +107,6 @@ abstract class DtoTestCase extends KernelTestCase
 
         $expectedVisited = [];
 
-        /** @var ReflectionProperty $reflectionProperty */
         foreach ($properties as $reflectionProperty) {
             // Get "valid" value for current property
             $value = $this->getValueForProperty($dtoReflection, $reflectionProperty);
@@ -113,11 +118,16 @@ abstract class DtoTestCase extends KernelTestCase
             $mock->{$setter}($value);
         }
 
+        /**
+         * @var RestDtoInterface $mock
+         */
         static::assertSame($expectedVisited, $mock->getVisited());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that DTO class `getter` method returns expected value after `setter` method call
      */
     public function testThatGetterMethodReturnExpectedAfterSetter(): void
     {
@@ -145,7 +155,7 @@ abstract class DtoTestCase extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `setter` method for `$field` will fail if parameter is not `$type` type.
+     * @testdox Test that `setter` method for `$field` will fail if parameter is not `$type` type
      */
     public function testThatSetterOnlyAcceptSpecifiedType(string $field, string $type): void
     {
@@ -169,16 +179,16 @@ abstract class DtoTestCase extends KernelTestCase
     }
 
     /**
+     * @return array<int, array{0: string, 1: string}>
+     *
      * @throws Throwable
      */
     public function dataProviderTestThatSetterOnlyAcceptSpecifiedType(): array
     {
-        $iterator = function (ReflectionProperty $reflectionProperty) {
-            return [
-                $reflectionProperty->getName(),
-                $this->getType($this->dtoClass, $reflectionProperty->getName()),
-            ];
-        };
+        $iterator = fn (ReflectionProperty $reflectionProperty): array => [
+            $reflectionProperty->getName(),
+            $this->getType($this->dtoClass, $reflectionProperty->getName()),
+        ];
 
         return array_map($iterator, $this->getDtoProperties());
     }
@@ -214,11 +224,9 @@ abstract class DtoTestCase extends KernelTestCase
     }
 
     /**
-     * @return mixed
-     *
      * @throws Throwable
      */
-    private function getValueForProperty(ReflectionClass $dtoReflection, ReflectionProperty $reflectionProperty)
+    private function getValueForProperty(ReflectionClass $dtoReflection, ReflectionProperty $reflectionProperty): mixed
     {
         return PhpUnitUtil::getValidValueForType(
             $this->getType($dtoReflection->getName(), $reflectionProperty->getName())
@@ -226,7 +234,7 @@ abstract class DtoTestCase extends KernelTestCase
     }
 
     /**
-     * @return ReflectionProperty[]
+     * @return array<int, ReflectionProperty>
      *
      * @throws Throwable
      */
@@ -236,7 +244,7 @@ abstract class DtoTestCase extends KernelTestCase
         $dtoReflection = new ReflectionClass($dtoClass);
         $dto = new $dtoClass();
 
-        $filter = fn (ReflectionProperty $reflectionProperty) =>
+        $filter = static fn (ReflectionProperty $reflectionProperty): bool =>
             !$reflectionProperty->isStatic()
             && !$reflectionProperty->isPrivate()
             && (
@@ -244,7 +252,6 @@ abstract class DtoTestCase extends KernelTestCase
                 || $reflectionProperty->getDeclaringClass()->isInstance($dto)
             );
 
-        /* @var ReflectionProperty[] $properties */
         return array_filter($dtoReflection->getProperties(), $filter);
     }
 
@@ -254,13 +261,19 @@ abstract class DtoTestCase extends KernelTestCase
             self::initializePropertyExtractor();
         }
 
+        assert(self::$propertyInfo instanceof PropertyInfoExtractor);
+
         $types = self::$propertyInfo->getTypes($class, $property);
+
+        static::assertNotNull($types);
 
         $type = $types[0]->getBuiltinType();
 
         if ($type === 'object') {
             $type = $types[0]->getClassName();
         }
+
+        static::assertNotNull($type);
 
         return $type;
     }

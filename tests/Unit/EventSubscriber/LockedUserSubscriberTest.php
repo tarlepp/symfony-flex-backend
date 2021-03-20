@@ -9,8 +9,6 @@ declare(strict_types = 1);
 namespace App\Tests\Unit\EventSubscriber;
 
 use App\EventSubscriber\LockedUserSubscriber;
-use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
-use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -27,11 +25,16 @@ class LockedUserSubscriberTest extends KernelTestCase
     public function testThatGetSubscribedEventsReturnsExpected(): void
     {
         $expected = [
-            AuthenticationSuccessEvent::class => [
+            'Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent' => [
                 'onAuthenticationSuccess',
                 128,
             ],
-            AuthenticationFailureEvent::class => 'onAuthenticationFailure',
+            'Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent' => 'onAuthenticationFailure',
+            'lexik_jwt_authentication.on_authentication_success' => [
+                'onAuthenticationSuccess',
+                128,
+            ],
+            'lexik_jwt_authentication.on_authentication_failure' => 'onAuthenticationFailure',
         ];
 
         static::assertSame($expected, LockedUserSubscriber::getSubscribedEvents());

@@ -8,22 +8,42 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Repository;
 
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\LogRequest;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\LogRequestRepository;
 use App\Resource\LogRequestResource;
+use App\Rest\Interfaces\RestResourceInterface;
 
 /**
  * Class LogRequestRepositoryTest
  *
  * @package App\Tests\Integration\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method LogRequestResource getResource()
+ * @method LogRequestRepository getRepository()
  */
 class LogRequestRepositoryTest extends RepositoryTestCase
 {
-    protected LogRequestRepository $repository;
+    /**
+     * @var class-string<EntityInterface>
+     */
     protected string $entityName = LogRequest::class;
+
+    /**
+     * @var class-string<BaseRepositoryInterface>
+     */
     protected string $repositoryName = LogRequestRepository::class;
+
+    /**
+     * @var class-string<RestResourceInterface>
+     */
     protected string $resourceName = LogRequestResource::class;
+
+    /**
+     * @var array<int, string>
+     */
     protected array $associations = [
         'user',
         'apiKey',

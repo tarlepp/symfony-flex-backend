@@ -28,40 +28,38 @@ class RemoveUserCommand extends Command
 
     public function __construct(
         private UserResource $userResource,
-        private UserHelper $userHelper
+        private UserHelper $userHelper,
     ) {
         parent::__construct('user:remove');
 
         $this->setDescription('Console command to remove existing user');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
-
-        // Get user entity
         $user = $this->userHelper->getUser($io, 'Which user you want to remove?');
-        $message = null;
-
-        if ($user instanceof User) {
-            // Delete user
-            $this->userResource->delete($user->getId());
-
-            $message = 'User removed - have a nice day';
-        }
+        $message = $user instanceof User ? $this->delete($user) : null;
 
         if ($input->isInteractive()) {
-            $message ??= 'Nothing changed - have a nice day';
-
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return 0;
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function delete(User $user): string
+    {
+        $this->userResource->delete($user->getId());
+
+        return 'User removed - have a nice day';
     }
 }

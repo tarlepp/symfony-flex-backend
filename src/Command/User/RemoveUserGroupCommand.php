@@ -28,39 +28,38 @@ class RemoveUserGroupCommand extends Command
 
     public function __construct(
         private UserGroupResource $userGroupResource,
-        private UserHelper $userHelper
+        private UserHelper $userHelper,
     ) {
         parent::__construct('user:remove-group');
 
         $this->setDescription('Console command to remove existing user group');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
-
         $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to remove?');
-        $message = null;
-
-        if ($userGroup instanceof UserGroup) {
-            // Delete user group
-            $this->userGroupResource->delete($userGroup->getId());
-
-            $message = 'User group removed - have a nice day';
-        }
+        $message = $userGroup instanceof UserGroup ? $this->delete($userGroup) : null;
 
         if ($input->isInteractive()) {
-            $message ??= 'Nothing changed - have a nice day';
-
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return 0;
+    }
+
+    /**
+     * @throws Throwable
+     */
+    private function delete(UserGroup $userGroup): string
+    {
+        $this->userGroupResource->delete($userGroup->getId());
+
+        return'User group removed - have a nice day';
     }
 }

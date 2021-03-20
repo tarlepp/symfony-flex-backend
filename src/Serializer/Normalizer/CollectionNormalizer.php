@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Serializer/CollectionNormalizer.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Serializer\Normalizer;
@@ -17,19 +17,21 @@ use function is_object;
  * Class CollectionNormalizer
  *
  * @package App\Serializer
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class CollectionNormalizer implements NormalizerInterface
 {
-    private ObjectNormalizer $normalizer;
-
-    public function __construct(ObjectNormalizer $normalizer)
-    {
-        $this->normalizer = $normalizer;
+    public function __construct(
+        private ObjectNormalizer $normalizer,
+    ) {
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @psalm-param mixed $object
+     *
+     * @return array<int, mixed>
      */
     public function normalize($object, ?string $format = null, array $context = []): array
     {

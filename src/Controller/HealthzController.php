@@ -36,11 +36,6 @@ class HealthzController
      *
      * @see https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/
      *
-     * @Route(
-     *     path="/healthz",
-     *     methods={"GET"}
-     *  )
-     *
      * @OA\Response(
      *      response=200,
      *      description="success",
@@ -53,19 +48,21 @@ class HealthzController
      *
      * @throws Throwable
      */
+    #[Route(
+        path: '/healthz',
+        methods: [Request::METHOD_GET],
+    )]
     public function __invoke(Request $request): Response
     {
         return $this->responseHandler->createResponse(
             $request,
             $this->healthzService->check(),
-            null,
-            200,
-            ResponseHandler::FORMAT_JSON,
-            [
+            format: ResponseHandler::FORMAT_JSON,
+            context: [
                 'groups' => [
                     'Healthz.timestamp',
                 ],
-            ]
+            ],
         );
     }
 }

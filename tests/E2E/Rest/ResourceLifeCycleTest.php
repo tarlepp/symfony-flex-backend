@@ -14,6 +14,8 @@ use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
+use UnexpectedValueException;
+use function sprintf;
 
 /**
  * Class ResourceLifeCycleTest
@@ -23,15 +25,25 @@ use Throwable;
  */
 class ResourceLifeCycleTest extends WebTestCase
 {
-    private RoleRepository $repository;
+    private ?RoleRepository $repository = null;
 
+    /**
+     * @throws Throwable
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
         static::bootKernel();
 
-        $this->repository = static::$kernel->getContainer()->get(ResourceForLifeCycleTests::class)->getRepository();
+        $testResource = static::$kernel->getContainer()->get(ResourceForLifeCycleTests::class);
+
+        /** @psalm-suppress TypeDoesNotContainType */
+        if (!($testResource instanceof ResourceForLifeCycleTests)) {
+            throw new UnexpectedValueException('Invalid resource class');
+        }
+
+        $this->repository = $testResource->getRepository();
     }
 
     /**
@@ -47,12 +59,16 @@ class ResourceLifeCycleTest extends WebTestCase
         $client->request('GET', '/test_lifecycle_behaviour/' . $role);
 
         $response = $client->getResponse();
-        $entity = $this->repository->findOneBy(['id' => $role]);
+        $entity = $this->getRepository()->findOneBy(['id' => $role]);
 
-        static::assertSame(418, $response->getStatusCode(), $response->getContent());
+        static::assertNotNull($entity, sprintf('Role entity for id `%s` not found...', $role));
+        static::assertSame(418, $response->getStatusCode(), (string)$response->getContent());
         static::assertSame('Description - ' . $role, $entity->getDescription());
     }
 
+    /**
+     * @return Generator<array<int, string>>
+     */
     public function dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException(): Generator
     {
         yield [RolesService::ROLE_ADMIN];
@@ -60,5 +76,10 @@ class ResourceLifeCycleTest extends WebTestCase
         yield [RolesService::ROLE_LOGGED];
         yield [RolesService::ROLE_ROOT];
         yield [RolesService::ROLE_USER];
+    }
+
+    private function getRepository(): RoleRepository
+    {
+        return $this->repository ?? throw new UnexpectedValueException('Invalid resource class');
     }
 }

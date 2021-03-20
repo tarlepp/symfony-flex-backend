@@ -32,16 +32,15 @@ class ListUserGroupsCommand extends Command
     use SymfonyStyleTrait;
 
     public function __construct(
-        private UserGroupResource $userGroupResource
+        private UserGroupResource $userGroupResource,
     ) {
         parent::__construct('user:list-groups');
 
         $this->setDescription('Console command to list user groups');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
@@ -71,7 +70,7 @@ class ListUserGroupsCommand extends Command
      */
     private function getRows(): array
     {
-        return array_map($this->getFormatterUserGroup(), $this->userGroupResource->find(null, ['name' => 'ASC']));
+        return array_map($this->getFormatterUserGroup(), $this->userGroupResource->find(orderBy: ['name' => 'ASC']));
     }
 
     /**
@@ -84,7 +83,7 @@ class ListUserGroupsCommand extends Command
             '%s %s <%s>',
             $user->getFirstName(),
             $user->getLastName(),
-            $user->getEmail()
+            $user->getEmail(),
         );
 
         return static fn (UserGroup $userGroup): array => [

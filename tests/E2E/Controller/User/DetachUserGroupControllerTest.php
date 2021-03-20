@@ -13,7 +13,6 @@ use App\DataFixtures\ORM\LoadUserGroupData;
 use App\Utils\Tests\PhpUnitUtil;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -54,9 +53,10 @@ class DetachUserGroupControllerTest extends WebTestCase
         $client->request('DELETE', $this->baseUrl . '/' . $userUuid . '/group/' . $groupUuid);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(401, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -75,9 +75,10 @@ class DetachUserGroupControllerTest extends WebTestCase
         $client->request('DELETE', $this->baseUrl . '/' . $userUuid . '/group/' . $groupUuid);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(403, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -94,11 +95,15 @@ class DetachUserGroupControllerTest extends WebTestCase
         $client->request('DELETE', $this->baseUrl . '/' . $userUuid . '/group/' . $groupUuid);
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatAttachUserGroupReturns403(): Generator
     {
         yield ['john', 'password'];

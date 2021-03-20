@@ -72,7 +72,7 @@ class CreateUserCommand extends Command
         private UserResource $userResource,
         private UserGroupResource $userGroupResource,
         private RolesService $rolesService,
-        private RoleRepository $roleRepository
+        private RoleRepository $roleRepository,
     ) {
         parent::__construct('user:create');
 
@@ -91,9 +91,8 @@ class CreateUserCommand extends Command
         HelperConfigure::configure($this, self::$commandParameters);
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */

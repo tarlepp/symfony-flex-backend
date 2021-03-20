@@ -11,15 +11,11 @@ namespace App\Controller\Localization;
 use App\Service\Localization;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class LanguageController
- *
- * @Route(
- *     path="/localization/language",
- *     methods={"GET"}
- *  )
  *
  * @OA\Tag(name="Localization")
  *
@@ -47,6 +43,10 @@ class LanguageController
      *      ),
      *  )
      */
+    #[Route(
+        path: '/localization/language',
+        methods: [Request::METHOD_GET],
+    )]
     public function __invoke(): JsonResponse
     {
         return new JsonResponse($this->localization->getLanguages());

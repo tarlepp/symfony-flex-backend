@@ -11,7 +11,6 @@ namespace App\Tests\E2E\Controller\Role;
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
 use Generator;
-use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use function array_search;
 use function array_slice;
@@ -38,9 +37,10 @@ class InheritedRolesControllerTest extends WebTestCase
         $client->request('GET', $this->baseUrl . '/ROLE_ADMIN/inherited');
 
         $response = $client->getResponse();
+        $content = $response->getContent();
 
-        static::assertInstanceOf(Response::class, $response);
-        static::assertSame(401, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
+        static::assertNotFalse($content);
+        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -58,18 +58,25 @@ class InheritedRolesControllerTest extends WebTestCase
 
         foreach ($roles as $role) {
             $offset = array_search($role, $roles, true);
+
+            static::assertIsInt($offset);
+
             $expectedRoles = array_slice($roles, $offset);
 
             $client->request('GET', $this->baseUrl . '/' . $role . '/inherited');
 
             $response = $client->getResponse();
+            $content = $response->getContent();
 
-            static::assertInstanceOf(Response::class, $response);
-            static::assertSame(200, $response->getStatusCode(), $response->getContent() . "\nResponse:\n" . $response);
-            static::assertJsonStringEqualsJsonString(JSON::encode($expectedRoles), $response->getContent());
+            static::assertNotFalse($content);
+            static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+            static::assertJsonStringEqualsJsonString(JSON::encode($expectedRoles), $content);
         }
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGetInheritedRolesActionWorksAsExpected(): Generator
     {
         yield ['john', 'password'];

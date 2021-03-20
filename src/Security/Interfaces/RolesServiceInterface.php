@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Interfaces/RolesServiceInterface.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Interfaces;
@@ -12,7 +12,7 @@ namespace App\Security\Interfaces;
  * Interface RolesServiceInterface
  *
  * @package Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 interface RolesServiceInterface
 {

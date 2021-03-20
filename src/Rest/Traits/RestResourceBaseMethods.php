@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/RestResourceBaseMethods.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits;
@@ -14,6 +14,8 @@ use App\Exception\ValidatorException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Throwable;
+use UnexpectedValueException;
+use function assert;
 use function get_class;
 
 /**
@@ -324,15 +326,18 @@ trait RestResourceBaseMethods
         }
     }
 
-    /**
-     * @psalm-suppress MoreSpecificReturnType
-     */
     private function createEntity(): EntityInterface
     {
         /** @var class-string $entityClass */
         $entityClass = $this->getRepository()->getEntityName();
 
-        return new $entityClass();
+        $entity = new $entityClass();
+
+        $exception = new UnexpectedValueException(
+            sprintf('Given `%s` class does not implement `EntityInterface`', $entityClass),
+        );
+
+        return assert($entity instanceof EntityInterface) ? $entity : throw $exception;
     }
 
     /**

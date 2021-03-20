@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/DTO/ApiKey/ApiKeyPatchTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO\ApiKey;
@@ -18,12 +18,18 @@ use App\Tests\Integration\DTO\DtoTestCase;
  * Class ApiKeyPatchTest
  *
  * @package App\Tests\Integration\DTO\ApiKey
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyPatchTest extends DtoTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $dtoClass = ApiKeyPatch::class;
 
+    /**
+     * @testdox Test that `setUserGroups` method updates entity correctly
+     */
     public function testThatUserGroupsAreExpected(): void
     {
         $userGroup1 = (new UserGroup())
@@ -42,6 +48,9 @@ class ApiKeyPatchTest extends DtoTestCase
             ->load($user)
             ->setUserGroups([$userGroup2]);
 
+        /**
+         * @var ApiKey $updatedApiKey
+         */
         $updatedApiKey = $dto->update($user);
 
         static::assertCount(2, $updatedApiKey->getUserGroups());

@@ -66,6 +66,9 @@ class VersionControllerTest extends WebTestCase
         $version = $response->headers->get('X-API-VERSION');
 
         static::assertNotNull($version);
-        static::assertSame(JSON::decode(file_get_contents(__DIR__ . '/../../../composer.json'))->version, $version);
+        static::assertSame(
+            JSON::decode((string)file_get_contents(__DIR__ . '/../../../composer.json'))->version,
+            $version,
+        );
     }
 }

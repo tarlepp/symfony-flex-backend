@@ -28,6 +28,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use function assert;
 
 /**
  * Class UpdateMethodTest
@@ -37,35 +38,12 @@ use Throwable;
  */
 class UpdateMethodTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|RestDtoInterface
-     */
-    private $restDto;
-
-    /**
-     * @var MockObject|EntityInterface
-     */
-    private $entity;
-
-    /**
-     * @var MockObject|RestResourceInterface
-     */
-    private $resource;
-
-    /**
-     * @var MockObject|ResponseHandlerInterface
-     */
-    private $responseHandler;
-
-    /**
-     * @var MockObject|UpdateMethodTestClass
-     */
-    private $validTestClass;
-
-    /**
-     * @var MockObject|UpdateMethodInvalidTestClass
-     */
-    private $inValidTestClass;
+    private MockObject | RestDtoInterface | null $restDto = null;
+    private MockObject | EntityInterface | null $entity = null;
+    private MockObject | RestResourceInterface | null $resource = null;
+    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
+    private MockObject | UpdateMethodTestClass | null $validTestClass = null;
+    private MockObject | UpdateMethodInvalidTestClass | null $inValidTestClass = null;
 
     protected function setUp(): void
     {
@@ -103,7 +81,10 @@ class UpdateMethodTest extends KernelTestCase
         /** @codingStandardsIgnoreEnd */
         $request = Request::create('/' . Uuid::uuid4()->toString(), 'PUT');
 
-        $this->inValidTestClass->updateMethod($request, $this->restDto, 'some-id');
+        static::assertInstanceOf(UpdateMethodInvalidTestClass::class, $this->inValidTestClass);
+        static::assertInstanceOf(RestDtoInterface::class, $this->restDto);
+
+        $this->getInValidTestClass()->updateMethod($request, $this->getRestDto(), 'some-id');
     }
 
     /**
@@ -119,7 +100,10 @@ class UpdateMethodTest extends KernelTestCase
 
         $request = Request::create('/' . Uuid::uuid4()->toString(), $httpMethod);
 
-        $this->validTestClass->updateMethod($request, $this->restDto, 'some-id')->getContent();
+        static::assertInstanceOf(UpdateMethodTestClass::class, $this->validTestClass);
+        static::assertInstanceOf(RestDtoInterface::class, $this->restDto);
+
+        $this->getValidTestClass()->updateMethod($request, $this->getRestDto(), 'some-id')->getContent();
     }
 
     /**
@@ -134,7 +118,7 @@ class UpdateMethodTest extends KernelTestCase
         $uuid = Uuid::uuid4()->toString();
         $request = Request::create('/' . $uuid, 'PUT');
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('update')
             ->with($uuid, $this->restDto, true)
@@ -143,7 +127,7 @@ class UpdateMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $this->validTestClass->updateMethod($request, $this->restDto, $uuid);
+        $this->getValidTestClass()->updateMethod($request, $this->getRestDto(), $uuid);
     }
 
     /**
@@ -157,20 +141,23 @@ class UpdateMethodTest extends KernelTestCase
 
         $request = Request::create('/' . $uuid, 'PUT');
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('update')
             ->with($uuid, $this->restDto, true)
             ->willReturn($this->entity);
 
-        $this->responseHandler
+        $this->getResponseHandlerMock()
             ->expects(static::once())
             ->method('createResponse')
-            ->with($request, $this->entity, $this->resource);
+            ->with($request, $this->entity, $this->getResourceMock());
 
-        $this->validTestClass->updateMethod($request, $this->restDto, $uuid);
+        $this->getValidTestClass()->updateMethod($request, $this->getRestDto(), $uuid);
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -183,6 +170,9 @@ class UpdateMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
+    /**
+     * @return Generator<array{0: Throwable, 1: int}>
+     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
@@ -192,5 +182,40 @@ class UpdateMethodTest extends KernelTestCase
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
+    }
+
+    private function getValidTestClass(): UpdateMethodTestClass
+    {
+        assert($this->validTestClass instanceof UpdateMethodTestClass);
+
+        return $this->validTestClass;
+    }
+
+    private function getInValidTestClass(): UpdateMethodInvalidTestClass
+    {
+        assert($this->inValidTestClass instanceof UpdateMethodInvalidTestClass);
+
+        return $this->inValidTestClass;
+    }
+
+    private function getRestDto(): RestDtoInterface
+    {
+        assert($this->restDto instanceof RestDtoInterface);
+
+        return $this->restDto;
+    }
+
+    private function getResourceMock(): MockObject
+    {
+        assert($this->resource instanceof MockObject);
+
+        return $this->resource;
+    }
+
+    private function getResponseHandlerMock(): MockObject
+    {
+        assert($this->responseHandler instanceof MockObject);
+
+        return $this->responseHandler;
     }
 }

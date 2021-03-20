@@ -11,6 +11,8 @@ namespace App\Controller\Auth;
 use App\Utils\JSON;
 use JsonException;
 use OpenApi\Annotations as OA;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use function sprintf;
@@ -26,17 +28,12 @@ class GetTokenController
     /**
      * Endpoint action to get user Json Web Token (JWT) for authentication.
      *
-     * @Route(
-     *      path="/auth/getToken",
-     *      methods={"POST"},
-     *  );
-     *
      * @OA\RequestBody(
      *      request="body",
      *      description="Credentials object",
      *      required=true,
      *      @OA\Schema(
-     *          example={"username": "username", "password": "password"}
+     *          example={"username": "username", "password": "password"},
      *      )
      *  )
      * @OA\Response(
@@ -73,13 +70,20 @@ class GetTokenController
      * @throws HttpException
      * @throws JsonException
      */
+    #[Route(
+        path: '/auth/getToken',
+        methods: [Request::METHOD_POST],
+    )]
     public function __invoke(): void
     {
         $message = sprintf(
             'You need to send JSON body to obtain token eg. %s',
-            JSON::encode(['username' => 'username', 'password' => 'password'])
+            JSON::encode([
+                'username' => 'username',
+                'password' => 'password',
+            ]),
         );
 
-        throw new HttpException(400, $message);
+        throw new HttpException(Response::HTTP_BAD_REQUEST, $message);
     }
 }

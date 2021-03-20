@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Traits/Blameable.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -17,19 +17,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Trait Blameable
  *
  * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait Blameable
 {
     /**
      * @Gedmo\Blameable(on="create")
-     *
-     * @Groups({
-     *      "ApiKey.createdBy",
-     *      "Role.createdBy",
-     *      "User.createdBy",
-     *      "UserGroup.createdBy",
-     *  })
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(
@@ -39,17 +32,16 @@ trait Blameable
      *      onDelete="SET NULL",
      *  )
      */
+    #[Groups([
+        'ApiKey.createdBy',
+        'Role.createdBy',
+        'User.createdBy',
+        'UserGroup.createdBy',
+    ])]
     protected ?User $createdBy = null;
 
     /**
      * @Gedmo\Blameable(on="update")
-     *
-     * @Groups({
-     *      "ApiKey.updatedBy",
-     *      "Role.updatedBy",
-     *      "User.updatedBy",
-     *      "UserGroup.updatedBy",
-     *  })
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\User")
      * @ORM\JoinColumn(
@@ -59,6 +51,12 @@ trait Blameable
      *      onDelete="SET NULL",
      *  )
      */
+    #[Groups([
+        'ApiKey.updatedBy',
+        'Role.updatedBy',
+        'User.updatedBy',
+        'UserGroup.updatedBy',
+    ])]
     protected ?User $updatedBy = null;
 
     public function getCreatedBy(): ?User

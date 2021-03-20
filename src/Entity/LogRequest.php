@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/LogRequest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity;
@@ -27,18 +27,18 @@ use function mb_strlen;
  * @ORM\Table(
  *      name="log_request",
  *      indexes={
- * @ORM\Index(name="user_id", columns={"user_id"}),
- * @ORM\Index(name="api_key_id", columns={"api_key_id"}),
- * @ORM\Index(name="request_date", columns={"date"}),
- *      }
+ *          @ORM\Index(name="user_id", columns={"user_id"}),
+ *          @ORM\Index(name="api_key_id", columns={"api_key_id"}),
+ *          @ORM\Index(name="request_date", columns={"date"}),
+ *      },
  *  )
  * @ORM\Entity(
- *      readOnly=true
+ *      readOnly=true,
  *  )
  * @ORM\HasLifecycleCallbacks()
  *
  * @package App\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LogRequest implements EntityInterface
 {
@@ -47,14 +47,6 @@ class LogRequest implements EntityInterface
     use Uuid;
 
     /**
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.id",
-     *
-     *      "ApiKey.logsRequest",
-     *      "User.logRequest",
-     *  })
-     *
      * @ORM\Column(
      *      name="id",
      *      type="uuid_binary_ordered_time",
@@ -65,19 +57,22 @@ class LogRequest implements EntityInterface
      *
      * @OA\Property(type="string", format="uuid")
      */
+    #[Groups([
+        'LogRequest',
+        'LogRequest.id',
+
+        'ApiKey.logsRequest',
+        'User.logRequest',
+    ])]
     private UuidInterface $id;
 
     /**
-     * @Groups({
-     *      "LogRequest.user",
-     *  })
-     *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\User",
      *      inversedBy="logsRequest",
      *  )
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(
+     *      @ORM\JoinColumn(
      *          name="user_id",
      *          referencedColumnName="id",
      *          nullable=true,
@@ -85,19 +80,18 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
+    #[Groups([
+        'LogRequest.user',
+    ])]
     private ?User $user;
 
     /**
-     * @Groups({
-     *      "LogRequest.apiKey",
-     *  })
-     *
      * @ORM\ManyToOne(
      *      targetEntity="App\Entity\ApiKey",
      *      inversedBy="logsRequest",
      *  )
      * @ORM\JoinColumns({
-     * @ORM\JoinColumn(
+     *      @ORM\JoinColumn(
      *          name="api_key_id",
      *          referencedColumnName="id",
      *          nullable=true,
@@ -105,54 +99,49 @@ class LogRequest implements EntityInterface
      *      ),
      *  })
      */
+    #[Groups([
+        'LogRequest.apiKey',
+    ])]
     private ?ApiKey $apiKey;
 
     /**
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.statusCode",
-     *  })
-     *
      * @ORM\Column(
      *      name="status_code",
      *      type="integer",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogRequest',
+        'LogRequest.statusCode',
+    ])]
     private int $statusCode = 0;
 
     /**
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.responseContentLength",
-     *  })
-     *
      * @ORM\Column(
      *      name="response_content_length",
      *      type="integer",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogRequest',
+        'LogRequest.responseContentLength',
+    ])]
     private int $responseContentLength = 0;
 
     /**
-     * @Groups({
-     *      "LogRequest",
-     *      "LogRequest.isMasterRequest",
-     *  })
-     *
      * @ORM\Column(
      *      name="is_master_request",
      *      type="boolean",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogRequest',
+        'LogRequest.isMasterRequest',
+    ])]
     private bool $masterRequest;
-
-    /**
-     * @var array<int, string>
-     */
-    private array $sensitiveProperties;
 
     /**
      * LogRequest constructor.
@@ -162,14 +151,13 @@ class LogRequest implements EntityInterface
      * @throws Throwable
      */
     public function __construct(
-        array $sensitiveProperties,
+        private array $sensitiveProperties,
         ?Request $request = null,
         ?Response $response = null,
         ?User $user = null,
         ?ApiKey $apiKey = null,
         ?bool $masterRequest = null
     ) {
-        $this->sensitiveProperties = $sensitiveProperties;
         $this->id = $this->createUuid();
         $this->user = $user;
         $this->apiKey = $apiKey;
@@ -217,6 +205,9 @@ class LogRequest implements EntityInterface
         return $this->masterRequest;
     }
 
+    /**
+     * @return array<int, string>
+     */
     public function getSensitiveProperties(): array
     {
         return $this->sensitiveProperties;

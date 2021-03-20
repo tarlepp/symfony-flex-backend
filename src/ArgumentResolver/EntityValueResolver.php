@@ -21,10 +21,9 @@ use function is_subclass_of;
 /**
  * Class EntityValueResolver
  *
- * Example how to use this within your controller (just remember to add `@` to those annotations);
- *  /**
- *   * Symfony\Component\Routing\Annotation\Route(path="some_path_to_your_route/{user}/{apikey}")
- *   *\/
+ * Example how to use this within your controller;
+ *
+ *  #[Route(path: 'some_path_to_your_route/{user}/{apikey}')]
  *  public function someMethod(\App\Entity\User $user, \App\Entity\ApiKey $apikey): Response
  *  {
  *      ...
@@ -47,9 +46,6 @@ class EntityValueResolver implements ArgumentValueResolverInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
         return is_string($request->get($argument->getName()))
@@ -58,9 +54,9 @@ class EntityValueResolver implements ArgumentValueResolverInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws Throwable
+     *
+     * @return Generator<EntityInterface|null>
      */
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {

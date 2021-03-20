@@ -26,16 +26,12 @@ use function array_values;
 trait ExecuteMultipleCommandTrait
 {
     use GetApplicationTrait;
+    use SymfonyStyleTrait;
 
     /**
      * @var array<array-key, string>
      */
     private array $choices = [];
-
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private SymfonyStyle $io;
 
     /**
      * Setter method for choices to use.
@@ -48,15 +44,12 @@ trait ExecuteMultipleCommandTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->io = new SymfonyStyle($input, $output);
-        $this->io->write("\033\143");
-        $command = $this->ask();
+        $io = $this->getSymfonyStyle($input, $output);
+        $command = $this->ask($io);
 
         while ($command !== null) {
             $arguments = [
@@ -68,11 +61,11 @@ trait ExecuteMultipleCommandTrait
             $cmd = $this->getApplication()->find($command);
             $outputValue = $cmd->run($input, $output);
 
-            $command = $this->ask();
+            $command = $this->ask($io);
         }
 
         if ($input->isInteractive()) {
-            $this->io->success('Have a nice day');
+            $io->success('Have a nice day');
         }
 
         return $outputValue ?? 0;
@@ -81,12 +74,12 @@ trait ExecuteMultipleCommandTrait
     /**
      * Method to ask user to make choose one of defined choices.
      */
-    private function ask(): ?string
+    private function ask(SymfonyStyle $io): ?string
     {
         $index = array_search(
-            $this->io->choice('What you want to do', array_values($this->choices)),
+            $io->choice('What you want to do', array_values($this->choices)),
             array_values($this->choices),
-            true
+            true,
         );
 
         $choice = (string)array_values(array_flip($this->choices))[(int)$index];

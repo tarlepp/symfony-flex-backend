@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/DTO/RestDto.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\DTO;
@@ -24,7 +24,7 @@ use function ucfirst;
  * Class RestDto
  *
  * @package App\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class RestDto implements RestDtoInterface
 {
@@ -54,7 +54,7 @@ abstract class RestDto implements RestDtoInterface
      */
     private array $visited = [];
 
-    public function setId(string $id): RestDtoInterface
+    public function setId(string $id): self
     {
         $this->setVisited('id');
 
@@ -73,7 +73,7 @@ abstract class RestDto implements RestDtoInterface
         return array_filter($this->visited, static fn (string $property): bool => $property !== 'id');
     }
 
-    public function setVisited(string $property): RestDtoInterface
+    public function setVisited(string $property): self
     {
         $this->visited[] = $property;
 
@@ -99,7 +99,7 @@ abstract class RestDto implements RestDtoInterface
         return $entity;
     }
 
-    public function patch(RestDtoInterface $dto): RestDtoInterface
+    public function patch(RestDtoInterface $dto): self
     {
         foreach ($dto->getVisited() as $property) {
             // Determine getter method

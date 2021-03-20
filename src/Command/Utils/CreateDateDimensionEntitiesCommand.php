@@ -32,43 +32,36 @@ use function sprintf;
 class CreateDateDimensionEntitiesCommand extends Command
 {
     private const YEAR_MIN = 1970;
-    // This should be the year when I'm officially retired
-    private const YEAR_MAX = 2047;
-
-    /**
-     * @psalm-suppress PropertyNotSetInConstructor
-     */
-    private SymfonyStyle $io;
+    private const YEAR_MAX = 2047; // This should be the year when I'm officially retired
 
     public function __construct(
-        private DateDimensionRepository $dateDimensionRepository
+        private DateDimensionRepository $dateDimensionRepository,
     ) {
         parent::__construct('utils:create-date-dimension-entities');
 
-        $this->setDescription('Console command to create \'DateDimension\' entities.');
+        $this->setDescription('Console command to create `DateDimension` entities.');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // Create output decorator helpers for the Symfony Style Guide.
-        $this->io = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
 
-        $this->io->title($this->getDescription());
+        $io->title($this->getDescription());
 
         // Determine start and end years
-        $yearStart = $this->getYearStart();
-        $yearEnd = $this->getYearEnd($yearStart);
+        $yearStart = $this->getYearStart($io);
+        $yearEnd = $this->getYearEnd($io, $yearStart);
 
         // Create actual entities
-        $this->process($yearStart, $yearEnd);
+        $this->process($io, $yearStart, $yearEnd);
 
-        $this->io->success('All done - have a nice day!');
+        $io->success('All done - have a nice day!');
 
         return 0;
     }
@@ -78,9 +71,9 @@ class CreateDateDimensionEntitiesCommand extends Command
      *
      * @throws InvalidArgumentException
      */
-    private function getYearStart(): int
+    private function getYearStart(SymfonyStyle $io): int
     {
-        return (int)$this->io->ask('Give a year where to start', (string)self::YEAR_MIN, $this->validatorYearStart());
+        return (int)$io->ask('Give a year where to start', (string)self::YEAR_MIN, $this->validatorYearStart());
     }
 
     /**
@@ -88,12 +81,12 @@ class CreateDateDimensionEntitiesCommand extends Command
      *
      * @throws InvalidArgumentException
      */
-    private function getYearEnd(int $yearStart): int
+    private function getYearEnd(SymfonyStyle $io, int $yearStart): int
     {
-        return (int)$this->io->ask(
+        return (int)$io->ask(
             'Give a year where to end',
             (string)self::YEAR_MAX,
-            $this->validatorYearEnd($yearStart)
+            $this->validatorYearEnd($yearStart),
         );
     }
 
@@ -102,14 +95,15 @@ class CreateDateDimensionEntitiesCommand extends Command
      *
      * @throws Throwable
      */
-    private function process(int $yearStart, int $yearEnd): void
+    private function process(SymfonyStyle $io, int $yearStart, int $yearEnd): void
     {
         $dateStart = new DateTime($yearStart . '-01-01 00:00:00', new DateTimeZone('UTC'));
         $dateEnd = new DateTime($yearEnd . '-12-31 23:59:59', new DateTimeZone('UTC'));
 
         $progress = $this->getProgressBar(
+            $io,
             (int)$dateEnd->diff($dateStart)->format('%a') + 1,
-            sprintf('Creating DateDimension entities between years %d and %d...', $yearStart, $yearEnd)
+            sprintf('Creating DateDimension entities between years %d and %d...', $yearStart, $yearEnd),
         );
 
         // Remove existing entities
@@ -122,7 +116,7 @@ class CreateDateDimensionEntitiesCommand extends Command
     /**
      * Helper method to get progress bar for console.
      */
-    private function getProgressBar(int $steps, string $message): ProgressBar
+    private function getProgressBar(SymfonyStyle $io, int $steps, string $message): ProgressBar
     {
         $format = '
  %message%
@@ -133,7 +127,7 @@ class CreateDateDimensionEntitiesCommand extends Command
  Memory usage:   %memory:-6s%
 ';
 
-        $progress = $this->io->createProgressBar($steps);
+        $progress = $io->createProgressBar($steps);
         $progress->setFormat($format);
         $progress->setMessage($message);
 
@@ -175,19 +169,15 @@ class CreateDateDimensionEntitiesCommand extends Command
      */
     private function validatorYearStart(): Closure
     {
-        return static function (int $year): int {
-            if ($year < self::YEAR_MIN || $year > self::YEAR_MAX) {
-                $message = sprintf(
+        return static fn (int $year): int => ($year < self::YEAR_MIN || $year > self::YEAR_MAX)
+            ? throw new InvalidArgumentException(
+                sprintf(
                     'Start year must be between %d and %d',
                     self::YEAR_MIN,
-                    self::YEAR_MAX
-                );
-
-                throw new InvalidArgumentException($message);
-            }
-
-            return $year;
-        };
+                    self::YEAR_MAX,
+                ),
+            )
+            : $year;
     }
 
     /**
@@ -197,19 +187,15 @@ class CreateDateDimensionEntitiesCommand extends Command
      */
     private function validatorYearEnd(int $yearStart): Closure
     {
-        return static function (int $year) use ($yearStart): int {
-            if ($year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart) {
-                $message = sprintf(
+        return static fn (int $year): int => ($year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart)
+            ? throw new InvalidArgumentException(
+                sprintf(
                     'End year must be between %d and %d and after given start year %d',
                     self::YEAR_MIN,
                     self::YEAR_MAX,
-                    $yearStart
-                );
-
-                throw new InvalidArgumentException($message);
-            }
-
-            return $year;
-        };
+                    $yearStart,
+                ),
+            )
+            : $year;
     }
 }

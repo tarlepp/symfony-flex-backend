@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Entity/UserTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -19,10 +19,15 @@ use function unserialize;
  * Class UserTest
  *
  * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method User getEntity()
  */
 class UserTest extends EntityTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $entityName = User::class;
 
     /**
@@ -35,60 +40,65 @@ class UserTest extends EntityTestCase
         string $password,
         string $expected
     ): void {
-        $this->entity->setPassword($callable, $password);
+        $entity = $this->getEntity();
 
-        static::assertSame($expected, $this->entity->getPassword());
+        $entity->setPassword($callable, $password);
+
+        static::assertSame($expected, $entity->getPassword());
     }
 
     public function testThatSetPlainPasswordIsWorkingAsExpected(): void
     {
+        $entity = $this->getEntity();
+
         // First set new password
-        $this->entity->setPassword('str_rot13', 'password');
+        $entity->setPassword('str_rot13', 'password');
 
         // Set plain password
-        $this->entity->setPlainPassword('plainPassword');
+        $entity->setPlainPassword('plainPassword');
 
-        static::assertEmpty($this->entity->getPassword());
-        static::assertSame('plainPassword', $this->entity->getPlainPassword());
+        static::assertEmpty($this->getEntity()->getPassword());
+        static::assertSame('plainPassword', $this->getEntity()->getPlainPassword());
     }
 
     public function testThatSetEmptyPlainPasswordDoesNotResetPassword(): void
     {
+        $entity = $this->getEntity();
+
         // First set new password
-        $this->entity->setPassword('str_rot13', 'password');
+        $entity->setPassword('str_rot13', 'password');
 
         // Set plain password
-        $this->entity->setPlainPassword('');
+        $entity->setPlainPassword('');
 
-        static::assertNotEmpty($this->entity->getPassword());
-        static::assertEmpty($this->entity->getPlainPassword());
+        static::assertNotEmpty($entity->getPassword());
+        static::assertEmpty($entity->getPlainPassword());
     }
 
     public function testThatUserEntityCanBeSerializedAndUnSerializedAsExpected(): void
     {
+        $entity = $this->getEntity();
+
         // First set some data for entity
-        $this->entity->setUsername('john');
-        $this->entity->setPassword('str_rot13', 'password');
+        $entity->setUsername('john');
+        $entity->setPassword('str_rot13', 'password');
 
-        /** @var User $entity */
-        $entity = unserialize(serialize($this->entity), ['allowed_classes' => true]);
+        /** @var User $entityUnSerialized */
+        $entityUnSerialized = unserialize(serialize($entity), ['allowed_classes' => true]);
 
-        // Assert that unserialized object returns expected data
-        static::assertSame('john', $entity->getUsername());
-        static::assertSame('cnffjbeq', $entity->getPassword());
-    }
-
-    public function testThatGetSaltMethodReturnsNull(): void
-    {
-        static::assertNull($this->entity->getSalt());
+        // Assert that un-serialized object returns expected data
+        static::assertSame('john', $entityUnSerialized->getUsername());
+        static::assertSame('cnffjbeq', $entityUnSerialized->getPassword());
     }
 
     public function testThatEraseCredentialsMethodWorksAsExpected(): void
     {
-        $this->entity->setPlainPassword('password');
-        $this->entity->eraseCredentials();
+        $entity = $this->getEntity();
 
-        static::assertEmpty($this->entity->getPlainPassword());
+        $entity->setPlainPassword('password');
+        $entity->eraseCredentials();
+
+        static::assertEmpty($entity->getPlainPassword());
     }
 
     public function testThatGetRolesReturnsExpectedWithoutRoleService(): void
@@ -100,7 +110,7 @@ class UserTest extends EntityTestCase
     }
 
     /**
-     * Data provider for testThatPasswordHashingIsWorkingAsExpected
+     * @return Generator<array{0: string, 1: string, 2: string}>
      */
     public function dataProviderTestThatPasswordHashingIsWorkingAsExpected(): Generator
     {

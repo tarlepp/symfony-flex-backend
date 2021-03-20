@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Functional/Repository/RoleRepositoryTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Repository;
@@ -12,19 +12,17 @@ use App\Repository\RoleRepository;
 use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
+use function assert;
 
 /**
  * Class RoleRepositoryTest
  *
  * @package Functional\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RoleRepositoryTest extends KernelTestCase
 {
-    /**
-     * @var RoleRepository;
-     */
-    private $repository;
+    private ?RoleRepository $repository = null;
 
     /**
      * @throws Throwable
@@ -46,6 +44,8 @@ class RoleRepositoryTest extends KernelTestCase
 
         static::bootKernel();
 
+        assert(static::$container->get(RoleRepository::class) instanceof RoleRepository);
+
         $this->repository = static::$container->get(RoleRepository::class);
     }
 
@@ -54,8 +54,15 @@ class RoleRepositoryTest extends KernelTestCase
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
-        static::assertSame(5, $this->repository->countAdvanced());
-        static::assertSame(5, $this->repository->reset());
-        static::assertSame(0, $this->repository->countAdvanced());
+        static::assertSame(5, $this->getRepository()->countAdvanced());
+        static::assertSame(5, $this->getRepository()->reset());
+        static::assertSame(0, $this->getRepository()->countAdvanced());
+    }
+
+    private function getRepository(): RoleRepository
+    {
+        assert($this->repository instanceof RoleRepository);
+
+        return $this->repository;
     }
 }

@@ -251,7 +251,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning PHPStan - PHP Static Analysis Tool\033[39m"
 	@@bin/console cache:clear --env=test
 	@./vendor/bin/phpstan --version
-	@./vendor/bin/phpstan analyze src
+	@./vendor/bin/phpstan
 else
 	$(WARNING_DOCKER)
 endif
@@ -299,6 +299,14 @@ COMPOSER_BIN := $(shell which composer)
 update-bin: ## Update composer bin dependencies
 ifeq ($(INSIDE_DOCKER), 1)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader
+else
+	$(WARNING_DOCKER)
+endif
+
+COMPOSER_BIN := $(shell which composer)
+install-bin: ## Install composer bin dependencies
+ifeq ($(INSIDE_DOCKER), 1)
+	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader
 else
 	$(WARNING_DOCKER)
 endif

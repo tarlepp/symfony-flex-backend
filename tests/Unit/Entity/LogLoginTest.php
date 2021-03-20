@@ -79,6 +79,9 @@ class LogLoginTest extends KernelTestCase
         static::assertSame($user, $entity->getUser());
     }
 
+    /**
+     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
+     */
     public function dataProviderTestThatGetCreatedAtReturnsExpected(): Generator
     {
         yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector('')];
@@ -86,6 +89,9 @@ class LogLoginTest extends KernelTestCase
         yield [EnumLogLoginType::TYPE_FAILURE, new Request(), new DeviceDetector('')];
     }
 
+    /**
+     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
+     */
     public function dataProviderTestThatGetUserReturnsNullIfUserNotGiven(): Generator
     {
         yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector('')];
@@ -93,6 +99,9 @@ class LogLoginTest extends KernelTestCase
         yield [EnumLogLoginType::TYPE_FAILURE, new Request(), new DeviceDetector('')];
     }
 
+    /**
+     * @return Generator<array{0: 'success'|'failure', 1: Request, 2: DeviceDetector}>
+     */
     public function dataProviderTestThatGetUserReturnsExpectedUser(): Generator
     {
         yield [EnumLogLoginType::TYPE_SUCCESS, new Request(), new DeviceDetector(''), new User()];

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Traits/LogEntityTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -20,68 +20,58 @@ use Throwable;
  * Trait LogEntityTrait
  *
  * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @property User|null $user
  */
 trait LogEntityTrait
 {
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.time",
-     *      "LogRequest",
-     *      "LogRequest.time",
-     *  })
-     *
      * @ORM\Column(
      *      name="time",
      *      type="datetime_immutable",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.time',
+        'LogRequest',
+        'LogRequest.time',
+    ])]
     protected DateTimeImmutable $time;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.date",
-     *      "LogRequest",
-     *      "LogRequest.date",
-     *  })
-     *
      * @ORM\Column(
      *      name="`date`",
      *      type="date_immutable",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.date',
+        'LogRequest',
+        'LogRequest.date',
+    ])]
     protected DateTimeImmutable $date;
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.agent",
-     *      "LogRequest",
-     *      "LogRequest.agent",
-     *  })
-     *
      * @ORM\Column(
      *      name="agent",
      *      type="text",
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.agent',
+        'LogRequest',
+        'LogRequest.agent',
+    ])]
     protected string $agent = '';
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.httpHost",
-     *      "LogRequest",
-     *      "LogRequest.httpHost",
-     *  })
-     *
      * @ORM\Column(
      *      name="http_host",
      *      type="string",
@@ -89,16 +79,15 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.httpHost',
+        'LogRequest',
+        'LogRequest.httpHost',
+    ])]
     protected string $httpHost = '';
 
     /**
-     * @Groups({
-     *      "LogLogin",
-     *      "LogLogin.clientIp",
-     *      "LogRequest",
-     *      "LogRequest.clientIp",
-     *  })
-     *
      * @ORM\Column(
      *      name="client_ip",
      *      type="string",
@@ -106,6 +95,12 @@ trait LogEntityTrait
      *      nullable=false,
      *  )
      */
+    #[Groups([
+        'LogLogin',
+        'LogLogin.clientIp',
+        'LogRequest',
+        'LogRequest.clientIp',
+    ])]
     private string $clientIp = '';
 
     public function getTime(): DateTimeImmutable
@@ -140,11 +135,9 @@ trait LogEntityTrait
 
     private function processRequestData(Request $request): void
     {
-        $userAgent = $request->headers->get('User-Agent') ?? '';
-
         $this->clientIp = (string)$request->getClientIp();
         $this->httpHost = $request->getHttpHost();
-        $this->agent = $userAgent;
+        $this->agent = $request->headers->get('User-Agent') ?? '';
     }
 
     /**
@@ -154,7 +147,7 @@ trait LogEntityTrait
      */
     private function processTimeAndDate(): void
     {
-        $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
+        $now = new DateTimeImmutable(timezone: new DateTimeZone('UTC'));
 
         $this->time = $now;
         $this->date = $now;

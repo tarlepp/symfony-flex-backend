@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Entity/Traits/Timestampable.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Entity\Traits;
@@ -17,19 +17,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * Trait Timestampable
  *
  * @package App\Entity\Traits
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait Timestampable
 {
     /**
      * @Gedmo\Timestampable(on="create")
-     *
-     * @Groups({
-     *      "ApiKey.createdAt",
-     *      "Role.createdAt",
-     *      "User.createdAt",
-     *      "UserGroup.createdAt",
-     *  })
      *
      * @ORM\Column(
      *      name="created_at",
@@ -37,17 +30,16 @@ trait Timestampable
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'ApiKey.createdAt',
+        'Role.createdAt',
+        'User.createdAt',
+        'UserGroup.createdAt',
+    ])]
     protected ?DateTimeImmutable $createdAt = null;
 
     /**
      * @Gedmo\Timestampable(on="update")
-     *
-     * @Groups({
-     *      "ApiKey.updatedAt",
-     *      "Role.updatedAt",
-     *      "User.updatedAt",
-     *      "UserGroup.updatedAt",
-     *  })
      *
      * @ORM\Column(
      *      name="updated_at",
@@ -55,6 +47,12 @@ trait Timestampable
      *      nullable=true,
      *  )
      */
+    #[Groups([
+        'ApiKey.updatedAt',
+        'Role.updatedAt',
+        'User.updatedAt',
+        'UserGroup.updatedAt',
+    ])]
     protected ?DateTimeImmutable $updatedAt = null;
 
     public function setCreatedAt(DateTimeImmutable $createdAt): self

@@ -11,6 +11,7 @@ namespace App\Controller;
 use App\Service\Version;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,11 +30,6 @@ class VersionController
     /**
      * Route for get API version.
      *
-     * @Route(
-     *     path="/version",
-     *     methods={"GET"}
-     *  )
-     *
      * @OA\Response(
      *      response=200,
      *      description="success",
@@ -44,6 +40,10 @@ class VersionController
      *      ),
      *  )
      */
+    #[Route(
+        path: '/version',
+        methods: [Request::METHOD_GET],
+    )]
     public function __invoke(): JsonResponse
     {
         return new JsonResponse(['version' => $this->version->get()]);

@@ -15,6 +15,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserTo
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use function assert;
 
 /**
  * Class IsUserHimselfVoterTest
@@ -24,7 +25,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 class IsUserHimselfVoterTest extends KernelTestCase
 {
-    private IsUserHimselfVoter $voter;
+    private ?IsUserHimselfVoter $voter = null;
 
     protected function setUp(): void
     {
@@ -40,7 +41,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
     {
         $token = new AnonymousToken('secret', 'anon');
 
-        static::assertSame(Voter::ACCESS_ABSTAIN, $this->voter->vote($token, 'subject', ['IS_USER_HIMSELF']));
+        static::assertSame(Voter::ACCESS_ABSTAIN, $this->getVoter()->vote($token, 'subject', ['IS_USER_HIMSELF']));
     }
 
     /**
@@ -50,7 +51,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
     {
         $token = new JWTUserToken([], new SecurityUser(new User()));
 
-        static::assertSame(Voter::ACCESS_DENIED, $this->voter->vote($token, new User(), ['IS_USER_HIMSELF']));
+        static::assertSame(Voter::ACCESS_DENIED, $this->getVoter()->vote($token, new User(), ['IS_USER_HIMSELF']));
     }
 
     /**
@@ -61,6 +62,13 @@ class IsUserHimselfVoterTest extends KernelTestCase
         $user = new User();
         $token = new JWTUserToken([], new SecurityUser($user));
 
-        static::assertSame(Voter::ACCESS_GRANTED, $this->voter->vote($token, $user, ['IS_USER_HIMSELF']));
+        static::assertSame(Voter::ACCESS_GRANTED, $this->getVoter()->vote($token, $user, ['IS_USER_HIMSELF']));
+    }
+
+    private function getVoter(): IsUserHimselfVoter
+    {
+        assert($this->voter instanceof IsUserHimselfVoter);
+
+        return $this->voter;
     }
 }

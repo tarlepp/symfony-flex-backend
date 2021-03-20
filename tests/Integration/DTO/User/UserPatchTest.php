@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/DTO/User/UserPatchTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO\User;
@@ -18,12 +18,18 @@ use App\Tests\Integration\DTO\DtoTestCase;
  * Class UserPatchTest
  *
  * @package App\Tests\Integration\DTO\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserPatchTest extends DtoTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $dtoClass = UserPatch::class;
 
+    /**
+     * @testdox Test that `setUserGroups` method updates entity correctly
+     */
     public function testThatUserGroupsAreExpected(): void
     {
         $userGroup1 = (new UserGroup())
@@ -41,8 +47,13 @@ class UserPatchTest extends DtoTestCase
         $dto = (new UserPatch())->load($user)
             ->setUserGroups([$userGroup2]);
 
+        /**
+         * @var User $updatedUser
+         */
         $updatedUser = $dto->update($user);
 
         static::assertCount(2, $updatedUser->getUserGroups());
+        static::assertSame($userGroup1, $updatedUser->getUserGroups()[0]);
+        static::assertSame($userGroup2, $updatedUser->getUserGroups()[1]);
     }
 }

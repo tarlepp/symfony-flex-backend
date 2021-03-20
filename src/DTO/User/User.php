@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\DTO\User;
 
 use App\DTO\RestDto;
-use App\DTO\RestDtoInterface;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\User as Entity;
@@ -22,16 +21,13 @@ use function array_map;
 /**
  * Class User
  *
- * @AppAssert\UniqueEmail()
- * @AppAssert\UniqueUsername()
- *
  * @package App\DTO\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method self|RestDtoInterface get(string $id)
- * @method self|RestDtoInterface patch(RestDtoInterface $dto)
  * @method Entity|EntityInterface update(EntityInterface $entity)
  */
+#[AppAssert\UniqueEmail]
+#[AppAssert\UniqueUsername]
 class User extends RestDto
 {
     /**
@@ -42,69 +38,45 @@ class User extends RestDto
         'userGroups' => 'updateUserGroups',
     ];
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 255,
-     *  )
-     */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 2, max: 255)]
     protected string $username = '';
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 255,
-     *  )
-     */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 2, max: 255)]
     protected string $firstName = '';
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Length(
-     *      min = 2,
-     *      max = 255,
-     *  )
-     */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(min: 2, max: 255)]
     protected string $lastName = '';
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @Assert\Email()
-     */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Email]
     protected string $email = '';
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @AppAssert\Language()
-     */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[AppAssert\Language]
     protected string $language = Localization::DEFAULT_LANGUAGE;
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @AppAssert\Locale()
-     */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[AppAssert\Locale]
     protected string $locale = Localization::DEFAULT_LOCALE;
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\NotNull()
-     * @AppAssert\Timezone()
-     */
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[AppAssert\Timezone]
     protected string $timezone = Localization::DEFAULT_TIMEZONE;
 
     /**
      * @var UserGroupEntity[]|array<int, UserGroupEntity>
-     *
-     * @AppAssert\EntityReferenceExists(entityClass=UserGroupEntity::class)
      */
+    #[AppAssert\EntityReferenceExists(entityClass: UserGroupEntity::class)]
     protected array $userGroups = [];
 
     protected string $password = '';
@@ -244,13 +216,11 @@ class User extends RestDto
     }
 
     /**
-     * Method to load DTO data from specified entity.
+     * {@inheritdoc}
      *
      * @param EntityInterface|Entity $entity
-     *
-     * @return RestDtoInterface|User
      */
-    public function load(EntityInterface $entity): RestDtoInterface
+    public function load(EntityInterface $entity): self
     {
         if ($entity instanceof Entity) {
             $this->id = $entity->getId();
@@ -286,10 +256,15 @@ class User extends RestDto
      *
      * @param array<int, UserGroupEntity> $value
      */
-    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): void
+    protected function updateUserGroups(UserGroupAwareInterface $entity, array $value): self
     {
         $entity->clearUserGroups();
 
-        array_map([$entity, 'addUserGroup'], $value);
+        array_map(
+            static fn (UserGroupEntity $userGroup): UserGroupAwareInterface => $entity->addUserGroup($userGroup),
+            $value,
+        );
+
+        return $this;
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Repository/BaseRepository.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Repository;
@@ -15,6 +15,7 @@ use App\Repository\Traits\RepositoryWrappersTrait;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use function array_map;
 use function array_merge;
 use function array_unshift;
 use function count;
@@ -28,7 +29,7 @@ use function spl_object_hash;
  * Class BaseRepository
  *
  * @package App\Repository
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class BaseRepository implements BaseRepositoryInterface
 {
@@ -39,15 +40,17 @@ abstract class BaseRepository implements BaseRepositoryInterface
     private const LEFT_JOIN = 'leftJoin';
 
     /**
-     * @var array<int, string>
-     */
-    protected static array $searchColumns = [];
-
-    /**
      * @psalm-var class-string
      */
     protected static string $entityName;
+
+    /**
+     * @var array<int, string>
+     */
+    protected static array $searchColumns = [];
     protected static EntityManager $entityManager;
+
+    protected ManagerRegistry $managerRegistry;
 
     /**
      * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
@@ -68,7 +71,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     ];
 
     /**
-     * @var array<int, array<int, callable|mixed>>
+     * @var array<int, array{0: callable, 1: array}>
      */
     private static array $callbacks = [];
 
@@ -76,11 +79,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @var array<int, string>
      */
     private static array $processedCallbacks = [];
-
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
-        $this->managerRegistry = $managerRegistry;
-    }
 
     /**
      * @psalm-return class-string
@@ -170,9 +168,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
     protected function processJoins(QueryBuilder $queryBuilder): void
     {
         foreach (self::$joins as $joinType => $joins) {
-            foreach ($joins as $joinParameters) {
-                $queryBuilder->{$joinType}(...$joinParameters);
-            }
+            array_map(
+                static fn (array $joinParameters): QueryBuilder => $queryBuilder->{$joinType}(...$joinParameters),
+                $joins,
+            );
 
             self::$joins[$joinType] = [];
         }
@@ -180,8 +179,6 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     /**
      * Process defined callbacks for current QueryBuilder instance.
-     *
-     * @psalm-suppress PossiblyInvalidArgument
      */
     protected function processCallbacks(QueryBuilder $queryBuilder): void
     {

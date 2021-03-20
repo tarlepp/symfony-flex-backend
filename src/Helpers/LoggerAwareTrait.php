@@ -3,12 +3,13 @@ declare(strict_types = 1);
 /**
  * /src/Helpers/LoggerAwareTrait.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Helpers;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * Trait LoggerAwareTrait
@@ -18,17 +19,13 @@ use Psr\Log\LoggerInterface;
  *       and nothing else.
  *
  * @package App\Helpers
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait LoggerAwareTrait
 {
-    protected LoggerInterface $logger;
+    protected ?LoggerInterface $logger;
 
-    /**
-     * @see https://symfony.com/doc/current/service_container/autowiring.html#autowiring-other-methods-e-g-setters
-     *
-     * @required
-     */
+    #[Required]
     public function setLogger(LoggerInterface $logger): self
     {
         $this->logger = $logger;

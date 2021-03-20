@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Functional/ArgumentResolver/LoggedInUserValueResolverTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\ArgumentResolver;
@@ -21,16 +21,30 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Throwable;
+use function assert;
 use function iterator_to_array;
 
 /**
  * Class LoggedInUserValueResolverTest
  *
  * @package App\Tests\Functional\ArgumentResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LoggedInUserValueResolverTest extends KernelTestCase
 {
+    private ?UserRepository $repository = null;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+
+        assert(static::$container->get(UserRepository::class) instanceof UserRepository);
+
+        $this->repository = static::$container->get(UserRepository::class);
+    }
+
     /**
      * @dataProvider dataProviderValidUsers
      *
@@ -40,14 +54,9 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatResolveReturnsExpectedUserObject(string $username): void
     {
-        static::bootKernel();
+        $repository = $this->getRepository();
 
-        /**
-         * @var UserRepository $userRepository
-         */
-        $userRepository = static::$container->get(UserRepository::class);
-
-        $user = $userRepository->loadUserByUsername($username, false);
+        $user = $repository->loadUserByUsername($username, false);
 
         static::assertNotNull($user);
 
@@ -57,7 +66,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $userRepository);
+        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository);
 
         $resolver = new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
@@ -77,14 +86,9 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      */
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(string $username): void
     {
-        static::bootKernel();
+        $repository = $this->getRepository();
 
-        /**
-         * @var UserRepository $userRepository
-         */
-        $userRepository = static::$container->get(UserRepository::class);
-
-        $user = $userRepository->loadUserByUsername($username, false);
+        $user = $repository->loadUserByUsername($username, false);
 
         static::assertNotNull($user);
 
@@ -94,11 +98,11 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $tokenStorage = new TokenStorage();
         $tokenStorage->setToken($token);
 
-        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $userRepository);
+        $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository);
 
         $argumentResolver = new ArgumentResolver(
             null,
-            [new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification)]
+            [new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification)],
         );
 
         $closure = static function (User $loggedInUser): void {
@@ -108,6 +112,9 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         static::assertSame([$user], $argumentResolver->getArguments(Request::create('/'), $closure));
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderValidUsers(): Generator
     {
         yield ['john'];
@@ -116,5 +123,12 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         yield ['john-user'];
         yield ['john-admin'];
         yield ['john-root'];
+    }
+
+    private function getRepository(): UserRepository
+    {
+        assert($this->repository instanceof UserRepository);
+
+        return $this->repository;
     }
 }

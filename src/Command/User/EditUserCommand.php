@@ -31,35 +31,26 @@ class EditUserCommand extends Command
 
     public function __construct(
         private UserResource $userResource,
-        private UserHelper $userHelper
+        private UserHelper $userHelper,
     ) {
         parent::__construct('user:edit');
 
         $this->setDescription('Command to edit existing user');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
-
-        // Get user entity
         $user = $this->userHelper->getUser($io, 'Which user you want to edit?');
-        $message = null;
-
-        if ($user instanceof UserEntity) {
-            $message = $this->updateUser($input, $output, $user);
-        }
+        $message = $user instanceof UserEntity ? $this->updateUser($input, $output, $user) : null;
 
         if ($input->isInteractive()) {
-            $message ??= 'Nothing changed - have a nice day';
-
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return 0;

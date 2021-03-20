@@ -3,36 +3,36 @@ declare(strict_types = 1);
 /**
  * /src/Validator/Constraints/UniqueEmail.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Validator\Constraints;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
 /**
  * Class UniqueEmail
  *
+ * Usage example;
+ *  App\Validator\Constraints\UniqueEmail()
+ *
+ * Just add that to your class as an annotation and you're good to go.
+ *
  * @Annotation
  * @Target({"CLASS"})
  *
  * @package App\Validator\Constraints
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Attribute(Attribute::TARGET_CLASS | Attribute::IS_REPEATABLE)]
 class UniqueEmail extends Constraint
 {
-    /**
-     * Unique constant for validator constrain
-     */
     public const IS_UNIQUE_EMAIL_ERROR = 'd487278d-8b13-4da0-b4cc-f862e6e99af6';
-
-    /**
-     * Message for validation error
-     */
     public const MESSAGE = 'This email is already taken.';
 
     /**
-     * Error names configuration
+     * {@inheritdoc}
      *
      * @var array<string, string>
      */
@@ -40,14 +40,8 @@ class UniqueEmail extends Constraint
         self::IS_UNIQUE_EMAIL_ERROR => 'IS_UNIQUE_EMAIL_ERROR',
     ];
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * Returns whether the constraint can be put onto classes, properties or both.
-     *
-     * This method should return one or more of the constants
-     * Constraint::CLASS_CONSTRAINT and Constraint::PROPERTY_CONSTRAINT.
-     *
-     * @return string One or more constant values
+     * @noinspection PhpMissingParentCallCommonInspection
      */
     public function getTargets(): string
     {

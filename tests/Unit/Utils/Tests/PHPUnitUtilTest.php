@@ -64,19 +64,22 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetValidValueReturnsExpectedValue
      *
-     * @param mixed $expected
-     *
      * @throws Throwable
      *
      * @testdox Test that `getValidValueForType` method returns `$expected` with `$input` and strict mode `$strict`
      */
-    public function testThatGetValidValueReturnsExpectedValue($expected, string $input, bool $strict): void
+    public function testThatGetValidValueReturnsExpectedValue(mixed $expected, string $input, bool $strict): void
     {
         $value = PhpUnitUtil::getValidValueForType(PhpUnitUtil::getType($input));
 
         $expected = $expected instanceof StringableArrayObject ? $expected->getArrayCopy() : $expected;
 
-        $strict ? static::assertSame($expected, $value) : static::assertInstanceOf($expected, $value);
+        if ($strict) {
+            static::assertSame($expected, $value);
+        } else {
+            /** @psalm-var class-string $expected */
+            static::assertInstanceOf($expected, $value);
+        }
     }
 
     /**
@@ -87,6 +90,22 @@ class PHPUnitUtilTest extends KernelTestCase
     public function testThatGetValidValueForTypeWorksWithCustomType(): void
     {
         static::assertInstanceOf(User::class, PhpUnitUtil::getValidValueForType(User::class));
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType
+     *
+     * @param int | string | array<int, string> $expected
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `getValidValueForType` returns `$expected` when using `$type` as input type
+     */
+    public function testThatGetValidValueForTypeWorksIfThereIsAPipeOnType(
+        int | string | array $expected,
+        string $type,
+    ): void {
+        static::assertSame($expected, PhpUnitUtil::getValidValueForType($type));
     }
 
     /**
@@ -105,17 +124,20 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue
      *
-     * @param mixed $expected
+     * @param class-string $expected
      *
      * @throws Throwable
      *
      * @testdox Test that `getInvalidValueForType` method returns `$expected` when using `$input` as input
      */
-    public function testThatGetInvalidValueForTypeReturnsExpectedValue($expected, string $input): void
+    public function testThatGetInvalidValueForTypeReturnsExpectedValue(string $expected, string $input): void
     {
         static::assertInstanceOf($expected, PhpUnitUtil::getInvalidValueForType($input));
     }
 
+    /**
+     * @return Generator<array<int, mixed>>
+     */
     public function dataProviderTestThatGetInvalidValueForTypeReturnsExpectedValue(): Generator
     {
         yield [DateTime::class, stdClass::class];
@@ -127,8 +149,13 @@ class PHPUnitUtilTest extends KernelTestCase
         yield [stdClass::class, 'array'];
         yield [stdClass::class, 'boolean'];
         yield [stdClass::class, 'bool'];
+        yield [stdClass::class, 'string|int'];
+        yield [stdClass::class, 'string[]'];
     }
 
+    /**
+     * @return Generator<array<int, mixed>>
+     */
     public function dataProviderTestThatGetTypeReturnExpected(): Generator
     {
         yield ['int', 'integer'];
@@ -146,6 +173,9 @@ class PHPUnitUtilTest extends KernelTestCase
         yield ['bool', 'bool'];
     }
 
+    /**
+     * @return Generator<array<int, mixed>>
+     */
     public function dataProviderTestThatGetValidValueReturnsExpectedValue(): Generator
     {
         yield [666, 'int', true];
@@ -161,5 +191,15 @@ class PHPUnitUtilTest extends KernelTestCase
         yield [new StringableArrayObject(['some', 'array', 'here']), 'array', true];
         yield [true, 'boolean', true];
         yield [true, 'bool', true];
+    }
+
+    /**
+     * @return Generator<array{0: int|string|array, 1: string}>
+     */
+    public function dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType(): Generator
+    {
+        yield ['Some text here', 'string|int'];
+        yield [666, 'int|string'];
+        yield [['some', 'array', 'here'], 'string[]'];
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/ApiKeyUser.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security;
@@ -18,7 +18,7 @@ use function array_unique;
  * Class ApiKeyUser
  *
  * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyUser implements ApiKeyUserInterface
 {

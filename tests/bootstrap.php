@@ -41,7 +41,7 @@ if (is_readable($databaseCacheFile) && (string)getenv('ENV_TEST_CHANNEL_READABLE
 }
 
 // Create and boot 'test' kernel
-$kernel = new Kernel(getenv('APP_ENV'), (bool)getenv('APP_DEBUG'));
+$kernel = new Kernel((string)getenv('APP_ENV'), (bool)getenv('APP_DEBUG'));
 $kernel->boot();
 
 // Create new application

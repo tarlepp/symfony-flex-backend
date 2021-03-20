@@ -3,23 +3,24 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Resource/GenericResourceTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Resource;
 
 use App\DTO\RestDtoInterface;
 use App\DTO\User\User as UserDto;
-use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
+use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;
 use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -27,306 +28,325 @@ use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 use UnexpectedValueException;
-use function get_class;
 
 /**
  * Class GenericResourceTest
  *
  * @package App\Tests\Integration\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class GenericResourceTest extends KernelTestCase
 {
-    private string $dtoClass = UserDto::class;
-    private string $resourceClass = UserResource::class;
-    private string $entityClass = UserEntity::class;
-    private UserResource $resource;
+    private ?UserResource $resource = null;
+    private ?MockObject $repository = null;
 
+    /**
+     * @throws Throwable
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
         static::bootKernel();
 
-        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $this->resource = static::$container->get($this->resourceClass);
+        /** @var UserRepository $repository */
+        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
+
+        $validator = static::$container->get(ValidatorInterface::class) instanceof ValidatorInterface
+            ? static::$container->get(ValidatorInterface::class)
+            : throw new UnexpectedValueException('ddd');
+        $this->resource = new UserResource($repository, new RolesService([]));
+
+        /** @var MockObject $repository */
+        $this->repository = $repository;
+
+        $this->resource->setValidator($validator);
     }
 
+    /**
+     * @testdox Test without DTO class `getDtoClass` method call throws an exception
+     */
     public function testThatGetDtoClassThrowsAnExceptionWithoutDto(): void
     {
         $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionMessageMatches('/DTO class not specified for \'.*\' resource/');
 
-        $this->resource
-            ->setDtoClass('')
-            ->getDtoClass();
+        $this->getResource()->setDtoClass('')->getDtoClass();
     }
 
+    /**
+     * @testdox Test that `getDtoClass` returns expected value when custom DTO is set
+     */
     public function testThatGetDtoClassReturnsExpectedDto(): void
     {
-        $this->resource->setDtoClass('foobar');
+        $resource = $this->getResource()->setDtoClass('foobar');
 
-        static::assertSame('foobar', $this->resource->getDtoClass());
+        static::assertSame('foobar', $resource->getDtoClass());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `getEntityName` method calls expected repository methods and returns expected value
      */
     public function testThatGetEntityNameCallsExpectedRepositoryMethod(): void
     {
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
-            ->method('getEntityName');
+            ->method('getEntityName')
+            ->willReturn('someEntity');
 
-        $this->resource
-            ->setRepository($repository)
-            ->getEntityName();
+        static::assertSame('someEntity', $this->getResource()->getEntityName());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `getReference` method calls expected repository methods and returns expected value
      */
     public function testThatGetReferenceCallsExpectedRepositoryMethod(): void
     {
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
+        $entity = new UserEntity();
 
-        $repository
+        $this->getRepository()
             ->expects(static::once())
-            ->method('getReference');
+            ->method('getReference')
+            ->with($entity->getId())
+            ->willReturn($entity);
 
-        $this->resource
-            ->setRepository($repository)
-            ->getReference('some id');
+        static::assertSame($entity, $this->getResource()->getReference($entity->getId()));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `getAssociations` method calls expected repository methods and returns expected value
      */
     public function testThatGetAssociationsCallsExpectedRepositoryMethod(): void
     {
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
-            ->method('getAssociations');
+            ->method('getAssociations')
+            ->willReturn([
+                'entity1' => 'foo',
+                'entity2' => 'bar',
+            ]);
 
-        $this->resource
-            ->setRepository($repository)
-            ->getAssociations();
+        static::assertSame(['entity1', 'entity2'], $this->getResource()->getAssociations());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `getDtoForEntity` method calls expected repository methods and returns expected value
      */
     public function testThatGetDtoForEntityCallsExpectedRepositoryMethod(): void
     {
-        $entity = $this->getEntityMock();
+        $entity = new UserEntity();
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('find')
-            ->with('some id')
+            ->with($entity->getId())
             ->willReturn($entity);
 
-        /** @var MockObject|RestDtoInterface $dto */
-        $dto = $this->getDtoMockBuilder()->getMock();
+        /** @var UserDto $newDto */
+        $newDto = $this->getResource()->getDtoForEntity($entity->getId(), UserDto::class, new UserDto());
 
-        $this->resource->setRepository($repository);
-
-        /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf(
-            RestDtoInterface::class,
-            $this->resource->getDtoForEntity('some id', get_class($dto), $dto)
-        );
+        static::assertInstanceOf(UserDto::class, $newDto);
+        static::assertSame($entity->getId(), $newDto->getId());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `getDtoForEntity` method throws an exception if entity is not found
      */
     public function testThatGetDtoForEntityThrowsAnExceptionIfEntityWasNotFound(): void
     {
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('find')
             ->with('some id')
             ->willReturn(null);
 
-        /** @var MockObject|RestDtoInterface $dto */
-        $dto = $this->getDtoMockBuilder()->getMock();
-
-        $this->resource
-            ->setRepository($repository)
-            ->getDtoForEntity('some id', get_class($dto), $dto);
+        $this->getResource()->getDtoForEntity('some id', UserDto::class, new UserDto());
     }
 
     /**
      * @dataProvider dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
+     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @psalm-param StringableArrayObject $expectedArguments
+     * @psalm-param StringableArrayObject $arguments
+     *
      * @throws Throwable
      *
-     * @testdox Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments.
+     * @testdox Test that `findByAdvanced` method is called with `$expectedArguments` when using `$arguments` arguments
      */
     public function testThatFindCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
-        StringableArrayObject $arguments
+        StringableArrayObject $arguments,
     ): void {
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
+        $results = [
+            new UserEntity(),
+            new UserEntity(),
+            new UserEntity(),
+        ];
 
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('findByAdvanced')
-            ->with(...$expectedArguments->getArrayCopy());
+            ->with(...$expectedArguments->getArrayCopy())
+            ->willReturn($results);
 
-        $this->resource
-            ->setRepository($repository)
-            ->find(...$arguments->getArrayCopy());
+        static::assertSame($results, $this->getResource()->find(...$arguments->getArrayCopy()));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `findOne` method calls expected repository methods and returns expected value
      */
     public function testThatFindOneCallsExpectedRepositoryMethod(): void
     {
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
+        $entity = new UserEntity();
 
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('findAdvanced')
-            ->with('some id');
+            ->with($entity->getId())
+            ->willReturn($entity);
 
-        $this->resource
-            ->setRepository($repository)
-            ->findOne('some id');
+        static::assertSame($entity, $this->getResource()->findOne($entity->getId()));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `findOne` method returns null if entity is not found and exception bit is not set
+     */
+    public function testThatFindOneReturnsNullIfEntityIsNotFound(): void
+    {
+        $this->getRepository()
+            ->expects(static::once())
+            ->method('findAdvanced')
+            ->with('some id')
+            ->willReturn(null);
+
+        static::assertNull($this->getResource()->findOne('some id'));
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that calling `findOne` method throws an exception if entity is not found and exception bit is set
      */
     public function testThatFindOneThrowsAnExceptionIfEntityWasNotFound(): void
     {
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('findAdvanced')
             ->with('some id')
             ->willReturn(null);
 
-        $this->resource
-            ->setRepository($repository)
-            ->findOne('some id', true);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatFindOneWontThrowAnExceptionIfEntityWasFound(): void
-    {
-        $entity = $this->getEntityMock();
-
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
-            ->expects(static::once())
-            ->method('findAdvanced')
-            ->with('some id')
-            ->willReturn($entity);
-
-        $this->resource->setRepository($repository);
-
-        static::assertSame($entity, $this->resource->findOne('some id', true));
+        $this->getResource()->findOne('some id', true);
     }
 
     /**
      * @dataProvider dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
+     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @psalm-param StringableArrayObject $expectedArguments
+     * @psalm-param StringableArrayObject $arguments
+     *
      * @throws Throwable
      *
-     * @testdox Test that `findOneBy` method is called with `$expectedArguments` when using `$arguments` arguments.
+     * @testdox Test that `findOneBy` method is called with `$expectedArguments` when using `$arguments` arguments
      */
     public function testThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
-        StringableArrayObject $arguments
+        StringableArrayObject $arguments,
     ): void {
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
+        $entity = new UserEntity();
 
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('findOneBy')
-            ->with(...$expectedArguments->getArrayCopy());
+            ->with(...$expectedArguments->getArrayCopy())
+            ->willReturn($entity);
 
-        $this->resource
-            ->setRepository($repository)
-            ->findOneBy(...$arguments->getArrayCopy());
+        static::assertSame($entity, $this->getResource()->findOneBy(...$arguments->getArrayCopy()));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `findOneBy` method throws an exception if entity not found and exception bit is set
      */
     public function testThatFindOneByThrowsAnExceptionIfEntityWasNotFound(): void
     {
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('findOneBy')
             ->with([], [])
             ->willReturn(null);
 
-        $this->resource
-            ->setRepository($repository)
-            ->findOneBy([], null, true);
+        $this->getResource()->findOneBy([], throwExceptionIfNotFound: true);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `findOneBy` method doesn't throw an exception if entity not found and exception bit is not set
+     */
+    public function testThatFindOneByDoesNotThrowAnExceptionIfEntityWasNotFound(): void
+    {
+        $this->getRepository()
+            ->expects(static::once())
+            ->method('findOneBy')
+            ->with([], [])
+            ->willReturn(null);
+
+        static::assertNull($this->getResource()->findOneBy([]));
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `findOneBy` method doesn't throw an exception if entity is found and exception bit is set
      */
     public function testThatFindOneByWontThrowAnExceptionIfEntityWasFound(): void
     {
-        $entity = $this->getEntityMock();
+        $entity = new UserEntity();
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('findOneBy')
             ->with([], [])
             ->willReturn($entity);
 
-        $this->resource->setRepository($repository);
-
-        static::assertSame($entity, $this->resource->findOneBy([], null, true));
+        static::assertSame($entity, $this->getResource()->findOneBy([], throwExceptionIfNotFound: true));
     }
 
     /**
      * @dataProvider dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters
+     *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
+     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @psalm-param StringableArrayObject $expectedArguments
+     * @psalm-param StringableArrayObject $arguments
      *
      * @throws Throwable
      *
@@ -334,84 +354,88 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatCountCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
-        StringableArrayObject $arguments
+        StringableArrayObject $arguments,
     ): void {
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('countAdvanced')
-            ->with(...$expectedArguments->getArrayCopy());
+            ->with(...$expectedArguments->getArrayCopy())
+            ->willReturn(10);
 
-        $this->resource
-            ->setRepository($repository)
-            ->count(...$arguments->getArrayCopy());
+        static::assertSame(10, $this->getResource()->count(...$arguments->getArrayCopy()));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `save` method calls expected repository methods and returns expected value
      */
     public function testThatSaveMethodCallsExpectedRepositoryMethod(): void
     {
-        $entity = new ApiKeyEntity();
+        $entity = new UserEntity();
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('save')
             ->with($entity);
 
-        $this->resource->setRepository($repository);
-
-        static::assertSame($entity, $this->resource->save($entity));
+        static::assertSame($entity, $this->getResource()->save($entity, skipValidation: true));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `save` method throws an validation exception with invalid entity
+     */
+    public function testThatSaveMethodThrowsValidationException(): void
+    {
+        $this->expectException(ValidatorException::class);
+
+        $entity = new UserEntity();
+
+        $this->getRepository()
+            ->expects(static::never())
+            ->method('save');
+
+        $this->getResource()->save($entity);
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that calling `create` method throws an validation exception with invalid DTO
      */
     public function testThatCreateMethodThrowsAnErrorWithInvalidDto(): void
     {
         $this->expectException(ValidatorException::class);
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
+        $this->getRepository()
+            ->expects(static::once())
+            ->method('getEntityName')
+            ->willReturn(UserEntity::class);
+
+        $this->getResource()->create(new UserDto());
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that calling `create` method calls expected repository and dto class methods
+     */
+    public function testThatCreateMethodCallsExpectedMethods(): void
+    {
+        $repository = $this->getRepository();
 
         $repository
             ->expects(static::once())
             ->method('getEntityName')
             ->willReturn(UserEntity::class);
 
-        $dto = new $this->dtoClass();
-
-        $this->resource
-            ->setRepository($repository)
-            ->create($dto);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function testThatCreateMethodCallsExpectedMethods(): void
-    {
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
-            ->expects(static::once())
-            ->method('getEntityName')
-            ->willReturn($this->entityClass);
-
         $repository
             ->expects(static::once())
             ->method('save');
 
-        /** @var MockObject|ValidatorInterface $validator */
         $validator = $this->getMockBuilder(ValidatorInterface::class)->getMock();
-
-        /** @var MockObject|UserRepository|ConstraintViolationListInterface $repository */
         $constraintViolationList = $this->getMockBuilder(ConstraintViolationListInterface::class)->getMock();
 
         $constraintViolationList
@@ -424,50 +448,44 @@ class GenericResourceTest extends KernelTestCase
             ->method('validate')
             ->willReturn($constraintViolationList);
 
-        /** @var MockObject|RestDtoInterface $dto */
-        $dto = $this->getDtoMockBuilder()->getMock();
+        $dto = $this->getMockBuilder(UserDto::class)->getMock();
 
-        $dto
-            ->expects(static::once())
+        $dto->expects(static::once())
             ->method('update');
 
-        $this->resource
-            ->setRepository($repository)
+        $this->getResource()
             ->setValidator($validator)
-            ->create($dto);
+            ->create(/** @var MockObject|RestDtoInterface $dto */ $dto);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `update` method throws an exception if entity was not found
      */
     public function testThatUpdateMethodThrowsAnExceptionIfEntityWasNotFound(): void
     {
         $this->expectException(NotFoundHttpException::class);
         $this->expectExceptionMessage('Not found');
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('find')
             ->with('some id')
             ->willReturn(null);
 
-        $dto = new $this->dtoClass();
-
-        $this->resource
-            ->setRepository($repository)
-            ->update('some id', $dto);
+        $this->getResource()->update('some id', new UserDto());
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `update` method calls expected repository methods
      */
     public function testThatUpdateCallsExpectedRepositoryMethod(): void
     {
-        $dto = new $this->dtoClass();
-        $entity = new $this->entityClass();
+        $dto = new UserDto();
+        $entity = new UserEntity();
 
         $methods = [
             'setUsername' => 'username',
@@ -481,8 +499,7 @@ class GenericResourceTest extends KernelTestCase
             $entity->{$method}($value);
         }
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
+        $repository = $this->getRepository();
 
         $repository
             ->expects(static::exactly(2))
@@ -493,22 +510,21 @@ class GenericResourceTest extends KernelTestCase
         $repository
             ->expects(static::once())
             ->method('save')
-            ->with($entity);
+            ->with($dto->update($entity));
 
-        $this->resource
-            ->setRepository($repository)
-            ->update('some id', $dto);
+        $this->getResource()->update('some id', $dto);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that calling `delete` method calls expected repository methods and returns expected value
      */
     public function testThatDeleteMethodCallsExpectedRepositoryMethod(): void
     {
-        $entity = $this->getEntityMock();
+        $entity = new UserEntity();
 
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
+        $repository = $this->getRepository();
 
         $repository
             ->expects(static::once())
@@ -521,13 +537,41 @@ class GenericResourceTest extends KernelTestCase
             ->method('remove')
             ->with($entity);
 
-        $this->resource->setRepository($repository);
+        static::assertSame($entity, $this->getResource()->delete('some id'));
+    }
 
-        static::assertSame($entity, $this->resource->delete('some id'));
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that calling `delete` method throws an exception if entity was not found
+     */
+    public function testThatDeleteMethodThrowsAnExceptionIfEntityWasNotFound(): void
+    {
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage('Not found');
+
+        $repository = $this->getRepository();
+
+        $repository
+            ->expects(static::once())
+            ->method('find')
+            ->with('some id')
+            ->willReturn(null);
+
+        $repository
+            ->expects(static::never())
+            ->method('remove');
+
+        $this->getResource()->delete('some id');
     }
 
     /**
      * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
+     *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
+     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @psalm-param StringableArrayObject $expectedArguments
+     * @psalm-param StringableArrayObject $arguments
      *
      * @throws Throwable
      *
@@ -535,43 +579,19 @@ class GenericResourceTest extends KernelTestCase
      */
     public function testThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(
         StringableArrayObject $expectedArguments,
-        StringableArrayObject $arguments
+        StringableArrayObject $arguments,
     ): void {
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
+        $this->getRepository()
             ->expects(static::once())
             ->method('findIds')
             ->with(...$expectedArguments->getArrayCopy());
 
-        $this->resource
-            ->setRepository($repository)
-            ->getIds(...$arguments->getArrayCopy());
+        $this->getResource()->getIds(...$arguments->getArrayCopy());
     }
 
     /**
-     * @throws Throwable
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
      */
-    public function testThatSaveMethodThrowsAnExceptionWithInvalidEntity(): void
-    {
-        $this->expectException(ValidatorException::class);
-
-        $entity = new $this->entityClass();
-
-        /** @var MockObject|UserRepository $repository */
-        $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
-
-        $repository
-            ->expects(static::never())
-            ->method('save')
-            ->with($entity);
-
-        $this->resource
-            ->setRepository($repository)
-            ->save($entity);
-    }
-
     public function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -590,6 +610,9 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -623,6 +646,9 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -641,6 +667,9 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
         yield [
@@ -659,33 +688,30 @@ class GenericResourceTest extends KernelTestCase
         ];
     }
 
-    /**
-     * @return EntityManagerInterface|object
-     */
-    private static function getEntityManager(): EntityManagerInterface
+    protected function getResource(): UserResource
     {
-        return static::$container->get('doctrine')->getManager();
+        return $this->resource ?? throw new UnexpectedValueException('Resource not found...');
+    }
+
+    protected function getRepository(): MockObject
+    {
+        return !$this->repository instanceof MockObject
+            ? throw new UnexpectedValueException('Repository not found...')
+            : $this->repository;
     }
 
     private function getRepositoryMockBuilder(): MockBuilder
     {
-        return $this
-            ->getMockBuilder(UserRepository::class)
-            ->setConstructorArgs([static::getEntityManager(), new ClassMetadata($this->entityClass)]);
-    }
+        $doctrine = static::$container->get('doctrine') ?? new stdClass();
 
-    /**
-     * @return MockObject|UserEntity
-     *
-     * @throws Throwable
-     */
-    private function getEntityMock(): MockObject
-    {
-        return $this->createMock($this->entityClass);
-    }
+        if (method_exists($doctrine, 'getManager')
+            && ($doctrine->getManager() instanceof EntityManagerInterface)
+        ) {
+            return $this
+                ->getMockBuilder(UserRepository::class)
+                ->setConstructorArgs([$doctrine->getManager(), new ClassMetadata(UserEntity::class)]);
+        }
 
-    private function getDtoMockBuilder(): MockBuilder
-    {
-        return $this->getMockBuilder($this->dtoClass);
+        throw new UnexpectedValueException('....');
     }
 }

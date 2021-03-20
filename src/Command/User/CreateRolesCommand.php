@@ -34,16 +34,15 @@ class CreateRolesCommand extends Command
     public function __construct(
         private EntityManagerInterface $entityManager,
         private RoleRepository $roleRepository,
-        private RolesService $rolesService
+        private RolesService $rolesService,
     ) {
         parent::__construct('user:create-roles');
 
         $this->setDescription('Console command to create roles to database');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
@@ -54,8 +53,8 @@ class CreateRolesCommand extends Command
         $created = array_sum(
             array_map(
                 fn (string $role): int => $this->createRole($role),
-                $this->rolesService->getRoles()
-            )
+                $this->rolesService->getRoles(),
+            ),
         );
 
         $this->entityManager->flush();
@@ -66,7 +65,7 @@ class CreateRolesCommand extends Command
             $message = sprintf(
                 'Created total of %d role(s) and removed %d role(s) - have a nice day',
                 $created,
-                $removed
+                $removed,
             );
 
             $io->success($message);

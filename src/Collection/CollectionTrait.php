@@ -13,7 +13,6 @@ use Closure;
 use InvalidArgumentException;
 use IteratorAggregate;
 use IteratorIterator;
-use Psr\Log\LoggerInterface;
 use Throwable;
 use function iterator_count;
 
@@ -25,9 +24,6 @@ use function iterator_count;
  */
 trait CollectionTrait
 {
-    private IteratorAggregate $items;
-    private LoggerInterface $logger;
-
     /**
      * Method to filter current collection.
      *
@@ -42,28 +38,23 @@ trait CollectionTrait
      *
      * @throws InvalidArgumentException
      */
-    abstract public function error(string $className): void;
+    abstract public function getErrorMessage(string $className): string;
 
     /**
      * Getter method for given class for current collection.
-     *
-     * @psalm-var class-string $className
      *
      * @throws InvalidArgumentException
      */
     public function get(string $className): mixed
     {
-        $current = $this->getFilteredItem($className);
-
-        if ($current === null) {
-            $this->error($className);
-        }
-
-        return $current;
+        return $this->getFilteredItem($className)
+            ?? throw new InvalidArgumentException($this->getErrorMessage($className));
     }
 
     /**
      * Method to get all items from current collection.
+     *
+     * @return IteratorAggregate<mixed>
      */
     public function getAll(): IteratorAggregate
     {
@@ -72,8 +63,6 @@ trait CollectionTrait
 
     /**
      * Method to check if specified class exists or not in current collection.
-     *
-     * @psalm-var class-string $className
      */
     public function has(?string $className = null): bool
     {
@@ -88,9 +77,6 @@ trait CollectionTrait
         return iterator_count($this->items);
     }
 
-    /**
-     * @psalm-var class-string $className
-     */
     private function getFilteredItem(string $className): mixed
     {
         try {

@@ -17,9 +17,18 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
  *
  * @package App\Tests\Integration\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method UserController getController()
  */
 class UserControllerTest extends RestIntegrationControllerTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $controllerClass = UserController::class;
+
+    /**
+     * @var class-string
+     */
     protected string $resourceClass = UserResource::class;
 }

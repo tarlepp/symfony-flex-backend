@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Helpers/StopwatchAwareTraitTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Helpers;
@@ -18,7 +18,7 @@ use Throwable;
  * Class StopwatchAwareTraitTest
  *
  * @package App\Tests\Integration\Helpers
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class StopwatchAwareTraitTest extends KernelTestCase
 {
@@ -34,6 +34,9 @@ class StopwatchAwareTraitTest extends KernelTestCase
     {
         static::bootKernel();
 
+        /**
+         * @var StopwatchAwareService $service
+         */
         $service = static::$kernel->getContainer()->get(StopwatchAwareService::class);
 
         $stopwatch = PhpUnitUtil::getProperty('stopwatch', $service);

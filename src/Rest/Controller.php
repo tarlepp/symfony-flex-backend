@@ -13,6 +13,7 @@ use App\Rest\Interfaces\ResponseHandlerInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\Traits\Actions\RestActionBase;
 use App\Rest\Traits\RestMethodHelper;
+use Symfony\Contracts\Service\Attribute\Required;
 use UnexpectedValueException;
 
 /**
@@ -46,33 +47,19 @@ abstract class Controller implements ControllerInterface
     public const METHOD_PATCH = 'patchMethod';
     public const METHOD_UPDATE = 'updateMethod';
 
-    // We cannot define this here if we're using constructor property promotion
-    // protected ?RestResourceInterface $resource = null;
     protected ?ResponseHandlerInterface $responseHandler = null;
 
-    /**
-     * @psalm-suppress UndefinedThisPropertyFetch
-     */
     public function getResource(): RestResourceInterface
     {
-        $exists = property_exists($this, 'resource');
-
-        if (!$exists || !$this->resource instanceof RestResourceInterface) {
-            throw new UnexpectedValueException('Resource service not set', 500);
-        }
-
-        return $this->resource;
+        return $this->resource ?? throw new UnexpectedValueException('Resource service not set', 500);
     }
 
     public function getResponseHandler(): ResponseHandlerInterface
     {
-        if (!$this->responseHandler instanceof ResponseHandlerInterface) {
-            throw new UnexpectedValueException('ResponseHandler service not set', 500);
-        }
-
-        return $this->responseHandler;
+        return $this->responseHandler ?? throw new UnexpectedValueException('ResponseHandler service not set', 500);
     }
 
+    #[Required]
     public function setResponseHandler(ResponseHandler $responseHandler): self
     {
         $this->responseHandler = $responseHandler;

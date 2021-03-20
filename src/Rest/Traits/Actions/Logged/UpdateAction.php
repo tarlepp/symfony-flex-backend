@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/Traits/Actions/Logged/UpdateAction.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest\Traits\Actions\Logged;
@@ -24,25 +24,23 @@ use Throwable;
  * @see \App\Rest\Traits\Methods\UpdateMethod for detailed documents.
  *
  * @package App\Rest\Traits\Actions\Logged
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 trait UpdateAction
 {
     use UpdateMethod;
 
     /**
-     * @Route(
-     *      "/{id}",
-     *      requirements={
-     *          "id" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"PUT"},
-     *  )
-     *
-     * @Security("is_granted('ROLE_LOGGED')")
-     *
      * @throws Throwable
      */
+    #[Route(
+        path: '/{id}',
+        requirements: [
+            'id' => '%app.uuid_v1_regex%',
+        ],
+        methods: [Request::METHOD_PUT],
+    )]
+    #[Security('is_granted("ROLE_LOGGED")')]
     public function updateAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
         return $this->updateMethod($request, $restDto, $id);

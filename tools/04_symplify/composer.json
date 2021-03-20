@@ -1,0 +1,19 @@
+{
+	"name": "tarlepp/symfony-flex-backend-tools",
+	"description": "",
+	"require": {},
+	"require-dev": {
+		"roave/security-advisories": "dev-latest",
+		"symplify/config-transformer": "9.2.12",
+		"symplify/easy-coding-standard": "9.2.12"
+	},
+	"config": {
+		"platform": {
+			"php": "8.0.0"
+		},
+		"preferred-install": {
+			"*": "dist"
+		},
+		"sort-packages": true
+	}
+}

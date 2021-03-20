@@ -40,8 +40,8 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * {@inheritdoc}
      *
-     * @param array|object $source
-     * @param array<int, mixed> $context
+     * @psalm-param array<array-key, mixed>|object $source
+     * @psalm-param array<int, mixed> $context
      */
     public function map($source, string $targetClass, array $context = []): RestDtoInterface
     {
@@ -54,9 +54,9 @@ abstract class RestRequestMapper implements MapperInterface
     /**
      * {@inheritdoc}
      *
-     * @param array|object $source
-     * @param object $destination
-     * @param array<int, mixed> $context
+     * @psalm-param array<array-key, mixed>|object $source
+     * @psalm-param object $destination
+     * @psalm-param array<int, mixed> $context
      */
     public function mapToObject($source, $destination, array $context = []): RestDtoInterface
     {
@@ -64,7 +64,7 @@ abstract class RestRequestMapper implements MapperInterface
             throw new InvalidArgumentException(
                 sprintf(
                     'RestRequestMapper expects that $source is Request object, "%s" provided',
-                    gettype($source)
+                    gettype($source),
                 )
             );
         }
@@ -73,7 +73,7 @@ abstract class RestRequestMapper implements MapperInterface
             throw new InvalidArgumentException(
                 sprintf(
                     'RestRequestMapper expects that $source is Request object, "%s" provided',
-                    get_class($source)
+                    get_class($source),
                 )
             );
         }
@@ -82,7 +82,7 @@ abstract class RestRequestMapper implements MapperInterface
             throw new InvalidArgumentException(
                 sprintf(
                     'RestRequestMapper expects that $destination is instance of RestDtoInterface object, "%s" provided',
-                    get_class($destination)
+                    get_class($destination),
                 )
             );
         }
@@ -91,7 +91,7 @@ abstract class RestRequestMapper implements MapperInterface
             throw new LengthException(
                 sprintf(
                     'RestRequestMapper expects that mapper "%s::$properties" contains properties to convert',
-                    static::class
+                    static::class,
                 )
             );
         }
@@ -105,11 +105,11 @@ abstract class RestRequestMapper implements MapperInterface
             $setter = 'set' . ucfirst($property);
             $transformer = 'transform' . ucfirst($property);
 
-            /** @var int|string|array|null $value */
+            /** @var int|string|array<mixed>|null $value */
             $value = $request->get($property);
 
             if (method_exists($this, $transformer)) {
-                /** @var int|string|object|array|null $value */
+                /** @var int|string|object|array<mixed>|null $value */
                 $value = $this->{$transformer}($value);
             }
 

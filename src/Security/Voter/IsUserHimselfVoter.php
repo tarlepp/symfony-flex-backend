@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Security/Voter/IsUserHimselfVoter.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Security\Voter;
@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  * Class IsUserHimselfVoter
  *
  * @package App\Security
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class IsUserHimselfVoter extends Voter
 {

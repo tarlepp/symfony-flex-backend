@@ -10,12 +10,15 @@ namespace App\Controller\User;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
+use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Throwable;
@@ -37,26 +40,6 @@ class DetachUserGroupController
     /**
      * Endpoint action to detach specified user group from specified user.
      *
-     * @Route(
-     *      "/user/{user}/group/{userGroup}",
-     *      requirements={
-     *          "user" = "%app.uuid_v1_regex%",
-     *          "userGroup" = "%app.uuid_v1_regex%",
-     *      },
-     *      methods={"DELETE"},
-     *  )
-     *
-     * @ParamConverter(
-     *      "user",
-     *      class="App\Resource\UserResource",
-     *  )
-     * @ParamConverter(
-     *      "userGroup",
-     *      class="App\Resource\UserGroupResource",
-     *  )
-     *
-     * @Security("is_granted('ROLE_ROOT')")
-     *
      * @OA\Tag(name="User Management")
      * @OA\Parameter(
      *      name="Authorization",
@@ -66,7 +49,7 @@ class DetachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="Bearer _your_jwt_here_",
-     *      )
+     *      ),
      *  )
      * @OA\Parameter(
      *      name="userId",
@@ -76,7 +59,7 @@ class DetachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="User GUID",
-     *      )
+     *      ),
      *  )
      * @OA\Parameter(
      *      name="userGroupId",
@@ -86,7 +69,7 @@ class DetachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="User Group GUID",
-     *      )
+     *      ),
      *  )
      * @OA\Response(
      *      response=200,
@@ -129,6 +112,23 @@ class DetachUserGroupController
      *
      * @throws Throwable
      */
+    #[Route(
+        path: '/user/{user}/group/{userGroup}',
+        requirements: [
+            'user' => '%app.uuid_v1_regex%',
+            'userGroup' => '%app.uuid_v1_regex%',
+        ],
+        methods: [Request::METHOD_DELETE],
+    )]
+    #[Security('is_granted("ROLE_ROOT")')]
+    #[ParamConverter(
+        data: 'user',
+        class: UserResource::class,
+    )]
+    #[ParamConverter(
+        data: 'userGroup',
+        class: UserGroupResource::class,
+    )]
     public function __invoke(User $user, UserGroup $userGroup): JsonResponse
     {
         $this->userResource->save($user->removeUserGroup($userGroup));
@@ -141,9 +141,8 @@ class DetachUserGroupController
 
         return new JsonResponse(
             $this->serializer->serialize($user->getUserGroups()->getValues(), 'json', $groups),
-            200,
-            [],
-            true
+            Response::HTTP_OK,
+            json: true
         );
     }
 }

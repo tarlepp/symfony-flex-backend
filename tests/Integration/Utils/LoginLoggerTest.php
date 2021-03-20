@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Throwable;
+use UnexpectedValueException;
 
 /**
  * Class LoginLoggerTest
@@ -25,16 +26,13 @@ use Throwable;
  */
 class LoginLoggerTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|LogLoginResource
-     */
-    private $logLoginResource;
+    private MockObject | LogLoginResource | null $resource = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->logLoginResource = $this->getMockBuilder(LogLoginResource::class)
+        $this->resource = $this->getMockBuilder(LogLoginResource::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -49,7 +47,7 @@ class LoginLoggerTest extends KernelTestCase
         $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Could not get request from current request stack');
 
-        (new LoginLogger($this->logLoginResource, new RequestStack()))
+        (new LoginLogger($this->getResource(), new RequestStack()))
             ->process('');
     }
 
@@ -60,14 +58,28 @@ class LoginLoggerTest extends KernelTestCase
      */
     public function testThatCreateEntryCallsResourceSaveMethod(): void
     {
-        $this->logLoginResource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('save');
 
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
 
-        (new LoginLogger($this->logLoginResource, $requestStack))
+        (new LoginLogger($this->getResource(), $requestStack))
             ->process('');
+    }
+
+    private function getResource(): LogLoginResource
+    {
+        return $this->resource instanceof LogLoginResource
+            ? $this->resource
+            : throw new UnexpectedValueException('Resource not set');
+    }
+
+    private function getResourceMock(): MockObject
+    {
+        return $this->resource instanceof MockObject
+            ? $this->resource
+            : throw new UnexpectedValueException('Resource not set');
     }
 }

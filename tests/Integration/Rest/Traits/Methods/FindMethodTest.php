@@ -26,6 +26,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use function assert;
 
 /**
  * Class FindMethodTest
@@ -35,25 +36,10 @@ use Throwable;
  */
 class FindMethodTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|RestResourceInterface
-     */
-    private $resource;
-
-    /**
-     * @var MockObject|ResponseHandlerInterface
-     */
-    private $responseHandler;
-
-    /**
-     * @var MockObject|FindMethodTestClass
-     */
-    private $validTestClass;
-
-    /**
-     * @var MockObject|FindMethodInvalidTestClass
-     */
-    private $inValidTestClass;
+    private MockObject | RestResourceInterface | null $resource = null;
+    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
+    private MockObject | FindMethodTestClass | null $validTestClass = null;
+    private MockObject | FindMethodInvalidTestClass | null $inValidTestClass = null;
 
     protected function setUp(): void
     {
@@ -88,7 +74,7 @@ class FindMethodTest extends KernelTestCase
         );
         /* @codingStandardsIgnoreEnd */
 
-        $this->inValidTestClass->findMethod(Request::create('/'));
+        $this->getInValidTestClass()->findMethod(Request::create('/'));
     }
 
     /**
@@ -102,7 +88,7 @@ class FindMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $this->validTestClass->findMethod(Request::create('/', $httpMethod))->getContent();
+        $this->getValidTestClass()->findMethod(Request::create('/', $httpMethod))->getContent();
     }
 
     /**
@@ -116,7 +102,7 @@ class FindMethodTest extends KernelTestCase
     {
         $request = Request::create('/');
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('find')
             ->with([], [], null, null, [])
@@ -125,11 +111,18 @@ class FindMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $this->validTestClass->findMethod($request);
+        $this->getValidTestClass()->findMethod($request);
     }
 
     /**
      * @dataProvider dataProviderTestThatTraitCallsServiceMethods
+     *
+     * @phpstan-param StringableArrayObject<array<mixed>> $criteria
+     * @phpstan-param StringableArrayObject<array<mixed>> $orderBy
+     * @phpstan-param StringableArrayObject<array<mixed>> $search
+     * @psalm-param StringableArrayObject $criteria
+     * @psalm-param StringableArrayObject $orderBy
+     * @psalm-param StringableArrayObject $search
      *
      * @throws Throwable
      *
@@ -145,7 +138,7 @@ class FindMethodTest extends KernelTestCase
     ): void {
         $request = Request::create('/' . $queryString);
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('find')
             ->with(
@@ -157,12 +150,12 @@ class FindMethodTest extends KernelTestCase
             )
             ->willReturn([]);
 
-        $this->responseHandler
+        $this->getResponseHandlerMock()
             ->expects(static::once())
             ->method('createResponse')
             ->with($request, [], $this->resource);
 
-        $this->validTestClass->findMethod($request);
+        $this->getValidTestClass()->findMethod($request);
     }
 
     /**
@@ -176,9 +169,12 @@ class FindMethodTest extends KernelTestCase
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
 
-        $this->validTestClass->findMethod(Request::create('/?where=foo'));
+        $this->getValidTestClass()->findMethod(Request::create('/?where=foo'));
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -191,6 +187,9 @@ class FindMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
+    /**
+     * @return Generator<array{0: Throwable, 1: int}>
+     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
@@ -202,6 +201,9 @@ class FindMethodTest extends KernelTestCase
         yield [new InvalidArgumentException(), 400];
     }
 
+    /**
+     * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
+     */
     public function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {
         yield [
@@ -224,7 +226,11 @@ class FindMethodTest extends KernelTestCase
 
         yield [
             '?where={"foo": {"bar": "foobar"}}',
-            new StringableArrayObject(['foo' => ['bar' => 'foobar']]),
+            new StringableArrayObject([
+                'foo' => [
+                    'bar' => 'foobar',
+                ],
+            ]),
             new StringableArrayObject([]),
             null,
             null,
@@ -237,7 +243,9 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['or' => ['term']]),
+            new StringableArrayObject([
+                'or' => ['term'],
+            ]),
         ];
 
         yield [
@@ -300,7 +308,9 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['or' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'or' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
@@ -309,7 +319,9 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['and' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'and' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
@@ -318,7 +330,9 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['or' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'or' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
@@ -327,7 +341,38 @@ class FindMethodTest extends KernelTestCase
             new StringableArrayObject([]),
             null,
             null,
-            new StringableArrayObject(['and' => ['term1', 'term2'], 'or' => ['term3', 'term4']]),
+            new StringableArrayObject([
+                'and' => ['term1', 'term2'],
+                'or' => ['term3', 'term4'],
+            ]),
         ];
+    }
+
+    private function getValidTestClass(): FindMethodTestClass
+    {
+        assert($this->validTestClass instanceof FindMethodTestClass);
+
+        return $this->validTestClass;
+    }
+
+    private function getInValidTestClass(): FindMethodInvalidTestClass
+    {
+        assert($this->inValidTestClass instanceof FindMethodInvalidTestClass);
+
+        return $this->inValidTestClass;
+    }
+
+    private function getResourceMock(): MockObject
+    {
+        assert($this->resource instanceof MockObject);
+
+        return $this->resource;
+    }
+
+    private function getResponseHandlerMock(): MockObject
+    {
+        assert($this->responseHandler instanceof MockObject);
+
+        return $this->responseHandler;
     }
 }

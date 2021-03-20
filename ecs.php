@@ -24,6 +24,7 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocNoPackageFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\Whitespace\HeredocIndentationFixer;
 use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
@@ -37,11 +38,11 @@ use Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $imports = [
-        '/tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/psr12.php',
-        '/tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/php80-migration-risky.php',
-        '/tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/clean-code.php',
-        '/tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/common.php',
-        '/tools/04_ecs/vendor/symplify/easy-coding-standard/config/set/symfony.php',
+        '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/psr12.php',
+        '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/php80-migration-risky.php',
+        '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/clean-code.php',
+        '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/common.php',
+        '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/symfony.php',
     ];
 
     array_map(
@@ -168,6 +169,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             PhpdocAlignFixer::class => null,
             UnusedParameterSniff::class => null,
             HeredocIndentationFixer::class => null,
+            PhpdocToCommentFixer::class => null,
         ]
     );
 };

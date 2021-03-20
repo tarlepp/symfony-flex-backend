@@ -1,13 +1,15 @@
 {
+	"name": "tarlepp/symfony-flex-backend-tools",
+	"description": "",
 	"require": {},
 	"require-dev": {
-		"liuggio/fastest": "1.7.2",
+		"liuggio/fastest": "1.8.0",
 		"phpunit/php-code-coverage": "9.2.5",
 		"phpunit/phpcov": "8.2.0",
-		"phpunit/phpunit": "9.5.2",
-		"roave/security-advisories": "dev-master",
-		"symfony/browser-kit": "5.2.3",
-		"symfony/phpunit-bridge": "5.2.3"
+		"phpunit/phpunit": "9.5.3",
+		"roave/security-advisories": "dev-latest",
+		"symfony/browser-kit": "5.2.4",
+		"symfony/phpunit-bridge": "5.2.4"
 	},
 	"config": {
 		"platform": {

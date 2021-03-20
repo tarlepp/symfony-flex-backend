@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Functional/Security/Provider/ApiKeyUserProviderTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Functional\Security\Provider;
@@ -14,6 +14,7 @@ use App\Security\ApiKeyUser;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
+use Doctrine\Persistence\ManagerRegistry;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -21,17 +22,18 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User;
 use Throwable;
 use function array_map;
+use function assert;
 use function str_pad;
 
 /**
  * Class ApiKeyUserProviderTest
  *
  * @package App\Tests\Functional\Security\Provider
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyUserProviderTest extends KernelTestCase
 {
-    private ApiKeyUserProvider $apiKeyUserProvider;
+    private ?ApiKeyUserProvider $apiKeyUserProvider = null;
 
     protected function setUp(): void
     {
@@ -39,14 +41,19 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         static::bootKernel();
 
+        /**
+         * @var ManagerRegistry $managerRegistry
+         */
         $managerRegistry = static::$container->get('doctrine');
+
+        /**
+         * @var RolesService $rolesService
+         */
+        $rolesService = static::$container->get(RolesService::class);
 
         $repository = ApiKeyRepository::class;
 
-        $this->apiKeyUserProvider = new ApiKeyUserProvider(
-            new $repository($managerRegistry),
-            static::$container->get(RolesService::class)
-        );
+        $this->apiKeyUserProvider = new ApiKeyUserProvider(new $repository($managerRegistry), $rolesService);
     }
 
     /**
@@ -58,7 +65,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         $token = str_pad($shortRole, 40, '_');
 
-        $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
+        $apiKey = $this->getApiKeyUserProvider()->getApiKeyForToken($token);
 
         static::assertInstanceOf(ApiKey::class, $apiKey);
     }
@@ -72,7 +79,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         $token = str_pad($shortRole, 40, '-');
 
-        $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
+        $apiKey = $this->getApiKeyUserProvider()->getApiKeyForToken($token);
 
         static::assertNull($apiKey);
     }
@@ -85,11 +92,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->expectException(UsernameNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
 
-        $this->apiKeyUserProvider->loadUserByUsername((string)time());
+        $this->getApiKeyUserProvider()->loadUserByUsername((string)time());
     }
 
     /**
      * @dataProvider dataProviderTestThatLoadUserByUsernameWorksAsExpected
+     *
+     * @phpstan-param StringableArrayObject<array<int, string>> $roles
+     * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
      *
@@ -97,7 +107,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatLoadUserByUsernameWorksAsExpected(string $token, StringableArrayObject $roles): void
     {
-        $apiKeyUser = $this->apiKeyUserProvider->loadUserByUsername($token);
+        $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByUsername($token);
 
         static::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
         static::assertSame($roles->getArrayCopy(), $apiKeyUser->getApiKey()->getRoles());
@@ -113,7 +123,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $user = new User('username', 'password');
 
-        $this->apiKeyUserProvider->refreshUser($user);
+        $this->getApiKeyUserProvider()->refreshUser($user);
     }
 
     /**
@@ -123,30 +133,38 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatSupportsClassReturnsExpected(bool $expected, string $class): void
     {
-        static::assertSame($expected, $this->apiKeyUserProvider->supportsClass($class));
+        static::assertSame($expected, $this->getApiKeyUserProvider()->supportsClass($class));
     }
 
+    /**
+     * @return array<int, array{0: string}>
+     */
     public function dataProviderTestThatGetApiKeyReturnsExpected(): array
     {
         static::bootKernel();
 
+        /**
+         * @var RolesService $rolesService
+         */
         $rolesService = static::$container->get(RolesService::class);
 
-        $iterator = static function (string $role) use ($rolesService): array {
-            return [$rolesService->getShort($role)];
-        };
+        $iterator = static fn (string $role): array => [$rolesService->getShort($role)];
 
         return array_map($iterator, $rolesService->getRoles());
     }
 
+    /**
+     * @return array<int, array{0: string, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatLoadUserByUsernameWorksAsExpected(): array
     {
         static::bootKernel();
 
+        /**
+         * @var ManagerRegistry $managerRegistry
+         */
         $managerRegistry = static::$container->get('doctrine');
         $repositoryClass = ApiKeyRepository::class;
-
-        /** @var ApiKeyRepository $repository */
         $repository = new $repositoryClass($managerRegistry);
 
         $iterator = static function (ApiKey $apiKey): array {
@@ -159,9 +177,19 @@ class ApiKeyUserProviderTest extends KernelTestCase
         return array_map($iterator, $repository->findAll());
     }
 
+    /**
+     * @return Generator<array{0: boolean, 1: class-string}>
+     */
     public function dataProviderTestThatSupportsClassReturnsExpected(): Generator
     {
         yield [false, User::class];
         yield [true, ApiKeyUser::class];
+    }
+
+    private function getApiKeyUserProvider(): ApiKeyUserProvider
+    {
+        assert($this->apiKeyUserProvider instanceof ApiKeyUserProvider);
+
+        return $this->apiKeyUserProvider;
     }
 }

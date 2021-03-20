@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Entity/LogRequestTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -30,41 +30,19 @@ use function ucfirst;
  * Class LogRequestTest
  *
  * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method LogRequest getEntity()
  */
 class LogRequestTest extends EntityTestCase
 {
-    protected string $entityName = LogRequest::class;
-
     /**
-     * @throws Throwable
-     *
-     * @noinspection PhpMissingParentCallCommonInspection
+     * @var class-string
      */
-    protected function setUp(): void
-    {
-        static::bootKernel();
-
-        // Store container and entity manager
-        $this->testContainer = static::$kernel->getContainer();
-
-        /* @noinspection MissingService */
-        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
-
-        // Create new entity object
-        $this->entity = new $this->entityName([]);
-
-        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $this->repository = $this->entityManager->getRepository($this->entityName);
-    }
+    protected string $entityName = LogRequest::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @param string $field
-     * @param string $type
-     * @param array $meta
-     *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
@@ -77,10 +55,6 @@ class LogRequestTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @param string $field
-     * @param string $type
-     * @param array $meta
-     *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterReturnsInstanceOfEntity(
@@ -140,18 +114,26 @@ class LogRequestTest extends EntityTestCase
         );
 
         try {
-            if (static::isType($type)) {
-                $method = 'assertIs' . ucfirst($type);
+            $method = 'assertIs' . ucfirst($type);
 
-                static::$method($value, $message);
-            }
+            static::$method($value, $message);
         } catch (Throwable $error) {
+            /**
+             * @var class-string $type
+             */
             static::assertInstanceOf($type, $value, $message . ' - ' . $error->getMessage());
         }
     }
 
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
+     *
+     * @phpstan-param StringableArrayObject<array<int, string>> $properties
+     * @phpstan-param StringableArrayObject<array<string, string>> $headers
+     * @phpstan-param StringableArrayObject<array<string, string>> $expected
+     * @psalm-param StringableArrayObject $properties
+     * @psalm-param StringableArrayObject $headers
+     * @psalm-param StringableArrayObject $expected
      *
      * @throws Throwable
      *
@@ -173,6 +155,13 @@ class LogRequestTest extends EntityTestCase
     /**
      * @dataProvider dataProviderTestThatSensitiveDataIsCleaned
      *
+     * @phpstan-param StringableArrayObject<array<int, string>> $properties
+     * @phpstan-param StringableArrayObject<array<string, string>> $parameters
+     * @phpstan-param StringableArrayObject<array<string, string>> $expected
+     * @psalm-param StringableArrayObject $properties
+     * @psalm-param StringableArrayObject $parameters
+     * @psalm-param StringableArrayObject $expected
+     *
      * @throws Throwable
      *
      * @testdox Test that sensitive data `$properties` from `parameters` is cleaned and output is expected `$expected`.
@@ -180,7 +169,7 @@ class LogRequestTest extends EntityTestCase
     public function testThatSensitiveDataIsCleanedFromParameters(
         StringableArrayObject $properties,
         StringableArrayObject $parameters,
-        StringableArrayObject $expected
+        StringableArrayObject $expected,
     ): void {
         $request = Request::create('', 'POST');
         $request->request->replace($parameters->getArrayCopy());
@@ -192,6 +181,9 @@ class LogRequestTest extends EntityTestCase
 
     /**
      * @dataProvider dataProviderTestThatDetermineParametersWorksLikeExpected
+     *
+     * @phpstan-param StringableArrayObject<array<string, string>> $expected
+     * @psalm-param StringableArrayObject $expected
      *
      * @throws Throwable
      *
@@ -209,6 +201,9 @@ class LogRequestTest extends EntityTestCase
         );
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject, 2: StringableArrayObject}>
+     */
     public function dataProviderTestThatSensitiveDataIsCleaned(): Generator
     {
         yield [
@@ -257,6 +252,9 @@ class LogRequestTest extends EntityTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatDetermineParametersWorksLikeExpected(): Generator
     {
         yield [
@@ -268,5 +266,15 @@ class LogRequestTest extends EntityTestCase
             'foo=bar',
             new StringableArrayObject(['foo' => 'bar']),
         ];
+    }
+
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     *
+     * @throws Throwable
+     */
+    protected function createEntity(): LogRequest
+    {
+        return new LogRequest([]);
     }
 }

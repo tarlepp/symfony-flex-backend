@@ -31,34 +31,26 @@ class EditUserGroupCommand extends Command
 
     public function __construct(
         private UserGroupResource $userGroupResource,
-        private UserHelper $userHelper
+        private UserHelper $userHelper,
     ) {
         parent::__construct('user:edit-group');
 
         $this->setDescription('Command to edit existing user group');
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * {@inheritdoc}
+     * @noinspection PhpMissingParentCallCommonInspection
      *
      * @throws Throwable
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
-
         $userGroup = $this->userHelper->getUserGroup($io, 'Which user group you want to edit?');
-        $message = null;
-
-        if ($userGroup instanceof UserGroupEntity) {
-            $message = $this->updateUserGroup($input, $output, $userGroup);
-        }
+        $message = $userGroup instanceof UserGroupEntity ? $this->updateUserGroup($input, $output, $userGroup) : null;
 
         if ($input->isInteractive()) {
-            $message ??= 'Nothing changed - have a nice day';
-
-            $io->success($message);
+            $io->success($message ?? 'Nothing changed - have a nice day');
         }
 
         return 0;
@@ -72,7 +64,7 @@ class EditUserGroupCommand extends Command
     protected function updateUserGroup(
         InputInterface $input,
         OutputInterface $output,
-        UserGroupEntity $userGroup
+        UserGroupEntity $userGroup,
     ): string {
         // Load entity to DTO
         $dtoLoaded = new UserGroupDto();

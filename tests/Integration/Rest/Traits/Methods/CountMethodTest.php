@@ -26,6 +26,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use function assert;
 
 /**
  * Class CountMethodTest
@@ -35,25 +36,10 @@ use Throwable;
  */
 class CountMethodTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|RestResourceInterface
-     */
-    private $resource;
-
-    /**
-     * @var MockObject|ResponseHandlerInterface
-     */
-    private $responseHandler;
-
-    /**
-     * @var MockObject|CountMethodTestClass
-     */
-    private $validTestClass;
-
-    /**
-     * @var MockObject|CountMethodInvalidTestClass
-     */
-    private $inValidTestClass;
+    private MockObject | RestResourceInterface | null $resource = null;
+    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
+    private MockObject | CountMethodTestClass | null $validTestClass = null;
+    private MockObject | CountMethodInvalidTestClass | null $inValidTestClass = null;
 
     protected function setUp(): void
     {
@@ -88,7 +74,7 @@ class CountMethodTest extends KernelTestCase
         );
         /* @codingStandardsIgnoreEnd */
 
-        $this->inValidTestClass->countMethod(Request::create('/'));
+        $this->getInValidTestClass()->countMethod(Request::create('/'));
     }
 
     /**
@@ -102,7 +88,7 @@ class CountMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $this->validTestClass->countMethod(Request::create('/', $httpMethod))->getContent();
+        $this->getValidTestClass()->countMethod(Request::create('/', $httpMethod))->getContent();
     }
 
     /**
@@ -116,7 +102,7 @@ class CountMethodTest extends KernelTestCase
     {
         $request = Request::create('/');
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('count')
             ->with([], [])
@@ -125,11 +111,16 @@ class CountMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $this->validTestClass->countMethod($request);
+        $this->getValidTestClass()->countMethod($request);
     }
 
     /**
      * @dataProvider dataProviderTestThatTraitCallsServiceMethods
+     *
+     * @phpstan-param StringableArrayObject<array<mixed>> $criteria
+     * @phpstan-param StringableArrayObject<array<mixed>> $search
+     * @psalm-param StringableArrayObject $criteria
+     * @psalm-param StringableArrayObject $search
      *
      * @throws Throwable
      *
@@ -142,18 +133,18 @@ class CountMethodTest extends KernelTestCase
     ): void {
         $request = Request::create('/' . $queryString);
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('count')
             ->with($criteria->getArrayCopy(), $search->getArrayCopy())
             ->willReturn(0);
 
-        $this->responseHandler
+        $this->getResponseHandlerMock()
             ->expects(static::once())
             ->method('createResponse')
             ->with($request, ['count' => 0], $this->resource);
 
-        $this->validTestClass->countMethod($request);
+        $this->getValidTestClass()->countMethod($request);
     }
 
     /**
@@ -167,9 +158,12 @@ class CountMethodTest extends KernelTestCase
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
 
-        $this->validTestClass->countMethod(Request::create('/?where=foo'));
+        $this->getValidTestClass()->countMethod(Request::create('/?where=foo'));
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -182,6 +176,9 @@ class CountMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
+    /**
+     * @return Generator<array{0: Throwable, 1: int}>
+     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
@@ -194,7 +191,7 @@ class CountMethodTest extends KernelTestCase
     }
 
     /**
-     * @throws Throwable
+     * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
      */
     public function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {
@@ -208,38 +205,81 @@ class CountMethodTest extends KernelTestCase
 
         yield [
             '?where={"foo": {"bar": "foobar"}}',
-            new StringableArrayObject(['foo' => ['bar' => 'foobar']]),
+            new StringableArrayObject([
+                'foo' => [
+                    'bar' => 'foobar',
+                ],
+            ]),
             new StringableArrayObject([]),
         ];
 
         yield [
             '?search=term',
             new StringableArrayObject([]),
-            new StringableArrayObject(['or' => ['term']]),
+            new StringableArrayObject([
+                'or' => ['term'],
+            ]),
         ];
 
         yield [
             '?search=term1+term2',
             new StringableArrayObject([]),
-            new StringableArrayObject(['or' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'or' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
             '?search={"and": ["term1", "term2"]}',
             new StringableArrayObject([]),
-            new StringableArrayObject(['and' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'and' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
             '?search={"or": ["term1", "term2"]}',
             new StringableArrayObject([]),
-            new StringableArrayObject(['or' => ['term1', 'term2']]),
+            new StringableArrayObject([
+                'or' => ['term1', 'term2'],
+            ]),
         ];
 
         yield [
             '?search={"and": ["term1", "term2"], "or": ["term3", "term4"]}',
             new StringableArrayObject([]),
-            new StringableArrayObject(['and' => ['term1', 'term2'], 'or' => ['term3', 'term4']]),
+            new StringableArrayObject([
+                'and' => ['term1', 'term2'],
+                'or' => ['term3', 'term4'],
+            ]),
         ];
+    }
+
+    private function getValidTestClass(): CountMethodTestClass
+    {
+        assert($this->validTestClass instanceof CountMethodTestClass);
+
+        return $this->validTestClass;
+    }
+
+    private function getInValidTestClass(): CountMethodInvalidTestClass
+    {
+        assert($this->inValidTestClass instanceof CountMethodInvalidTestClass);
+
+        return $this->inValidTestClass;
+    }
+
+    private function getResourceMock(): MockObject
+    {
+        assert($this->resource instanceof MockObject);
+
+        return $this->resource;
+    }
+
+    private function getResponseHandlerMock(): MockObject
+    {
+        assert($this->responseHandler instanceof MockObject);
+
+        return $this->responseHandler;
     }
 }

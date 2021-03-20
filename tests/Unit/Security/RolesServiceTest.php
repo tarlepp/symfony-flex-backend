@@ -12,6 +12,7 @@ use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use function assert;
 
 /**
  * Class RolesServiceTest
@@ -21,7 +22,7 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class RolesServiceTest extends KernelTestCase
 {
-    private RolesService $service;
+    private ?RolesService $service = null;
 
     protected function setUp(): void
     {
@@ -29,7 +30,8 @@ class RolesServiceTest extends KernelTestCase
 
         static::bootKernel();
 
-        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
+        assert(static::$container->get(RolesService::class) instanceof RolesService);
+
         $this->service = static::$container->get(RolesService::class);
     }
 
@@ -53,7 +55,7 @@ class RolesServiceTest extends KernelTestCase
             ],
         ];
 
-        static::assertSame($expected, $this->service->getHierarchy(), 'Roles hierarchy is not expected.');
+        static::assertSame($expected, $this->getService()->getHierarchy(), 'Roles hierarchy is not expected.');
     }
 
     /**
@@ -69,7 +71,7 @@ class RolesServiceTest extends KernelTestCase
                 'ROLE_ROOT',
                 'ROLE_API',
             ],
-            $this->service->getRoles(),
+            $this->getService()->getRoles(),
             'Returned roles are not expected.'
         );
     }
@@ -81,7 +83,7 @@ class RolesServiceTest extends KernelTestCase
      */
     public function testThatGetRoleLabelReturnsExpected(string $role, string $expected): void
     {
-        static::assertSame($expected, $this->service->getRoleLabel($role), 'Role label was not expected one.');
+        static::assertSame($expected, $this->getService()->getRoleLabel($role), 'Role label was not expected one.');
     }
 
     /**
@@ -91,11 +93,16 @@ class RolesServiceTest extends KernelTestCase
      */
     public function testThatGetShortReturnsExpected(string $input, string $expected): void
     {
-        static::assertSame($expected, $this->service->getShort($input), 'Short role name was not expected');
+        static::assertSame($expected, $this->getService()->getShort($input), 'Short role name was not expected');
     }
 
     /**
      * @dataProvider dataProviderTestThatGetInheritedRolesReturnsExpected
+     *
+     * @phpstan-param StringableArrayObject<array<int, string>> $expected
+     * @phpstan-param StringableArrayObject<array<int, string>> $roles
+     * @psalm-param StringableArrayObject $expected
+     * @psalm-param StringableArrayObject $roles
      *
      * @testdox Test that `RolesService::getInheritedRoles` method returns `$expected` when using `$roles` as input
      */
@@ -105,11 +112,14 @@ class RolesServiceTest extends KernelTestCase
     ): void {
         static::assertSame(
             $expected->getArrayCopy(),
-            $this->service->getInheritedRoles($roles->getArrayCopy()),
+            $this->getService()->getInheritedRoles($roles->getArrayCopy()),
             'Inherited roles was not expected'
         );
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGetRoleLabelReturnsExpected(): Generator
     {
         yield [RolesService::ROLE_LOGGED, 'Logged in users'];
@@ -120,6 +130,9 @@ class RolesServiceTest extends KernelTestCase
         yield ['Not supported role', 'Unknown - Not supported role'];
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string}>
+     */
     public function dataProviderTestThatGetShortReturnsExpected(): Generator
     {
         yield [RolesService::ROLE_LOGGED, 'logged'];
@@ -130,6 +143,9 @@ class RolesServiceTest extends KernelTestCase
         yield ['SOME_CUSTOM_ROLE', 'custom_role'];
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     */
     public function dataProviderTestThatGetInheritedRolesReturnsExpected(): Generator
     {
         yield [
@@ -161,5 +177,12 @@ class RolesServiceTest extends KernelTestCase
             ]),
             new StringableArrayObject([RolesService::ROLE_ROOT]),
         ];
+    }
+
+    private function getService(): RolesService
+    {
+        assert($this->service instanceof RolesService);
+
+        return $this->service;
     }
 }

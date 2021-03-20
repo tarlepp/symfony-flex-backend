@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /src/Rest/UuidHelper.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Rest;
@@ -21,7 +21,7 @@ use Ramsey\Uuid\UuidInterface;
  * Class UuidHelper
  *
  * @package App\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UuidHelper
 {
@@ -50,9 +50,8 @@ class UuidHelper
             if ($fields instanceof FieldsInterface) {
                 $output = $fields->getVersion() === 1 ? UuidBinaryOrderedTimeType::NAME : UuidBinaryType::NAME;
             }
-        } catch (InvalidUuidStringException $exception) {
+        } catch (InvalidUuidStringException) {
             // ok, so now we know that value isn't uuid
-            (static fn (InvalidUuidStringException $exception): InvalidUuidStringException => $exception)($exception);
         }
 
         return $output;
