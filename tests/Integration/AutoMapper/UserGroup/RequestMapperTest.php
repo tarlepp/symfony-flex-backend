@@ -91,6 +91,6 @@ class RequestMapperTest extends RestRequestMapperTestCase
 
     private function getMockRoleResource(): MockObject
     {
-        return $this->mockRoleResource ??  throw new UnexpectedValueException('MockRoleResource not set');
+        return $this->mockRoleResource ?? throw new UnexpectedValueException('MockRoleResource not set');
     }
 }

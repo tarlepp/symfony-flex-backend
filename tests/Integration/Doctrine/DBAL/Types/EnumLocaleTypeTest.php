@@ -111,11 +111,11 @@ class EnumLocaleTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return $this->platform ??  throw new UnexpectedValueException('Platform not set');
+        return $this->platform ?? throw new UnexpectedValueException('Platform not set');
     }
 
     private function getType(): Type
     {
-        return $this->type ??  throw new UnexpectedValueException('Type not set');
+        return $this->type ?? throw new UnexpectedValueException('Type not set');
     }
 }

@@ -111,7 +111,7 @@ class EnumLogLoginTypeTest extends KernelTestCase
 
     private function getPlatform(): AbstractPlatform
     {
-        return $this->platform ??  throw new UnexpectedValueException('Platform not set');
+        return $this->platform ?? throw new UnexpectedValueException('Platform not set');
     }
 
     private function getType(): Type
