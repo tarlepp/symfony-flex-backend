@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/EventSubscriber/AuthenticationFailureSubscriberTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -13,7 +13,6 @@ use App\EventSubscriber\AuthenticationFailureSubscriber;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -24,7 +23,7 @@ use Throwable;
  * Class AuthenticationFailureSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AuthenticationFailureSubscriberTest extends KernelTestCase
 {
@@ -45,10 +44,6 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
         $event = new AuthenticationFailureEvent($authenticationException, $response);
 
-        /**
-         * @var MockObject|LoginLogger $loginLogger
-         * @var MockObject|UserRepository $userRepository
-         */
         $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
@@ -83,10 +78,6 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
         $event = new AuthenticationFailureEvent($authenticationException, $response);
 
-        /**
-         * @var MockObject|LoginLogger $loginLogger
-         * @var MockObject|UserRepository $userRepository
-         */
         $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 
@@ -110,8 +101,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
         try {
             $subscriber->onAuthenticationFailure($event);
-        } catch (Throwable $exception) {
-            (fn ($exception): bool => true)($exception);
+        } catch (Throwable) {
         }
     }
 }

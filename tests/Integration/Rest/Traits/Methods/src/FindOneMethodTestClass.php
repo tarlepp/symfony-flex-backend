@@ -23,10 +23,10 @@ abstract class FindOneMethodTestClass extends Controller
 {
     use FindOneMethod;
 
-    public function __construct(RestResourceInterface $resource, ResponseHandlerInterface $responseHandler)
-    {
-        $this->resource = $resource;
-
+    public function __construct(
+        protected RestResourceInterface $resource,
+        ResponseHandlerInterface $responseHandler,
+    ) {
         $this->responseHandler = $responseHandler;
     }
 }

@@ -26,6 +26,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\User as CoreUser;
 use Throwable;
+use function assert;
 
 /**
  * Class UserTypeIdentificationTest
@@ -35,15 +36,8 @@ use Throwable;
  */
 class UserTypeIdentificationTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|TokenStorageInterface
-     */
-    private MockObject $tokenStorage;
-
-    /**
-     * @var MockObject|UserRepository
-     */
-    private MockObject $userRepository;
+    private MockObject | TokenStorageInterface | null $tokenStorage = null;
+    private MockObject | UserRepository | null $userRepository = null;
 
     protected function setUp(): void
     {
@@ -60,12 +54,14 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     public function testThatGetApiKeyReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull((new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getApiKey());
+        static::assertNull(
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getApiKey(),
+        );
     }
 
     /**
@@ -78,14 +74,14 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
 
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
         static::assertSame(
             $apiKey,
-            (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getApiKey()
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getApiKey(),
         );
     }
 
@@ -98,12 +94,14 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     public function testThatGetUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull((new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getUser());
+        static::assertNull(
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getUser(),
+        );
     }
 
     /**
@@ -118,18 +116,21 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $token = new UsernamePasswordToken($securityUser, 'credentials', 'providerKey');
 
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
-        $this->userRepository
+        $this->getUserRepositoryMock()
             ->expects(static::once())
             ->method('loadUserByUsername')
             ->with($user->getId(), true)
             ->willReturn($user);
 
-        static::assertSame($user, (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getUser());
+        static::assertSame(
+            $user,
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getUser(),
+        );
     }
 
     /**
@@ -139,12 +140,14 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     public function testThatGetIdentityReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::exactly(2))
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull((new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getIdentity());
+        static::assertNull(
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getIdentity(),
+        );
     }
 
     /**
@@ -156,14 +159,14 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $token = new UsernamePasswordToken($securityUser, 'credentials', 'providerKey');
 
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
         static::assertSame(
             $securityUser,
-            (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getIdentity()
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getIdentity()
         );
     }
 
@@ -176,14 +179,14 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
 
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::exactly(2))
             ->method('getToken')
             ->willReturn($token);
 
         static::assertSame(
             $apiKeyUser,
-            (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getIdentity()
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getIdentity()
         );
     }
 
@@ -194,12 +197,14 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     public function testThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull((new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getApiKeyUser());
+        static::assertNull(
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getApiKeyUser(),
+        );
     }
 
     /**
@@ -211,14 +216,14 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $token = new UsernamePasswordToken($apiKeyUser, 'credentials', 'providerKey');
 
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
         static::assertSame(
             $apiKeyUser,
-            (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getApiKeyUser()
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getApiKeyUser(),
         );
     }
 
@@ -229,12 +234,14 @@ class UserTypeIdentificationTest extends KernelTestCase
      */
     public function testThatGetSecurityUserReturnsNullWhenTokenIsNotValid(?TokenInterface $token): void
     {
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
-        static::assertNull((new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getSecurityUser());
+        static::assertNull(
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getSecurityUser(),
+        );
     }
 
     /**
@@ -246,42 +253,60 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $token = new UsernamePasswordToken($securityUser, 'credentials', 'providerKey');
 
-        $this->tokenStorage
+        $this->getTokenStorageMock()
             ->expects(static::once())
             ->method('getToken')
             ->willReturn($token);
 
         static::assertSame(
             $securityUser,
-            (new UserTypeIdentification($this->tokenStorage, $this->userRepository))->getSecurityUser()
+            (new UserTypeIdentification($this->getTokenStorage(), $this->getUserRepository()))->getSecurityUser(),
         );
     }
 
+    /**
+     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     */
     public function dataProviderTestThatGetUserReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
+    /**
+     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     */
     public function dataProviderTestThatGetApiKeyReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
+    /**
+     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     */
     public function dataProviderTestThatGetSecurityUserReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
+    /**
+     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     */
     public function dataProviderTestThatGetApiKeyUserReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
+    /**
+     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     */
     public function dataProviderTestThatGetIdentityReturnsNullWhenTokenIsNotValid(): Generator
     {
         return $this->getInvalidTokens();
     }
 
+    /**
+     * @return Generator<array{0: \Symfony\Component\Security\Core\Authentication\Token\AbstractToken|null}>
+     */
     private function getInvalidTokens(): Generator
     {
         yield [null];
@@ -299,5 +324,33 @@ class UserTypeIdentificationTest extends KernelTestCase
         yield [new PreAuthenticatedToken(new CoreUser('username', 'password'), 'credentials', 'providerKey')];
 
         yield [new RememberMeToken(new CoreUser('username', 'password'), 'provider-key', 'some-secret')];
+    }
+
+    private function getTokenStorage(): TokenStorageInterface
+    {
+        assert($this->tokenStorage instanceof TokenStorageInterface);
+
+        return $this->tokenStorage;
+    }
+
+    private function getTokenStorageMock(): MockObject
+    {
+        assert($this->tokenStorage instanceof MockObject);
+
+        return $this->tokenStorage;
+    }
+
+    private function getUserRepository(): UserRepository
+    {
+        assert($this->userRepository instanceof UserRepository);
+
+        return $this->userRepository;
+    }
+
+    private function getUserRepositoryMock(): MockObject
+    {
+        assert($this->userRepository instanceof MockObject);
+
+        return $this->userRepository;
     }
 }

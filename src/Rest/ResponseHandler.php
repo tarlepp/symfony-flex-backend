@@ -58,6 +58,8 @@ final class ResponseHandler implements ResponseHandlerInterface
 
     /**
      * @return array<int|string, mixed>
+     *
+     * @throws Throwable
      */
     public function getSerializeContext(Request $request, ?RestResourceInterface $restResource = null): array
     {
@@ -98,6 +100,9 @@ final class ResponseHandler implements ResponseHandlerInterface
         );
     }
 
+    /**
+     * @throws Throwable
+     */
     public function createResponse(
         Request $request,
         mixed $data,
@@ -145,6 +150,8 @@ final class ResponseHandler implements ResponseHandlerInterface
      * @param array<int, string> $populate
      *
      * @return array<int, string>
+     *
+     * @throws Throwable
      */
     private function checkPopulateAll(
         bool $populateAll,

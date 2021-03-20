@@ -8,21 +8,42 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Repository;
 
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\LogLogin;
+use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Repository\LogLoginRepository;
 use App\Resource\LogLoginResource;
+use App\Rest\Interfaces\RestResourceInterface;
 
 /**
  * Class LogLoginRepositoryTest
  *
  * @package App\Tests\Integration\Repository
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ *
+ * @method LogLoginResource getResource()
+ * @method LogLoginRepository getRepository()
  */
 class LogLoginRepositoryTest extends RepositoryTestCase
 {
+    /**
+     * @var class-string<EntityInterface>
+     */
     protected string $entityName = LogLogin::class;
+
+    /**
+     * @var class-string<BaseRepositoryInterface>
+     */
     protected string $repositoryName = LogLoginRepository::class;
+
+    /**
+     * @var class-string<RestResourceInterface>
+     */
     protected string $resourceName = LogLoginResource::class;
+
+    /**
+     * @var array<int, string>
+     */
     protected array $associations = [
         'user',
     ];

@@ -333,11 +333,11 @@ trait RestResourceBaseMethods
 
         $entity = new $entityClass();
 
-        return assert($entity instanceof EntityInterface)
-            ? $entity
-            : throw new UnexpectedValueException(
-                sprintf('Given `%s` class does not implement `EntityInterface`', $entityClass)
-            );
+        $exception = new UnexpectedValueException(
+            sprintf('Given `%s` class does not implement `EntityInterface`', $entityClass),
+        );
+
+        return assert($entity instanceof EntityInterface) ? $entity : throw $exception;
     }
 
     /**

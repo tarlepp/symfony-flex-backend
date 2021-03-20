@@ -23,6 +23,7 @@ use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\User;
 use Throwable;
+use function assert;
 use function json_encode;
 
 /**
@@ -33,7 +34,7 @@ use function json_encode;
  */
 class ApiKeyAuthenticatorTest extends KernelTestCase
 {
-    private MockObject | ApiKeyUserProvider $apiKeyUserProvider;
+    private MockObject | ApiKeyUserProvider | null $apiKeyUserProvider = null;
 
     protected function setUp(): void
     {
@@ -53,7 +54,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatSupportReturnsExpected(bool $expected, Request $request): void
     {
-        $authenticator = new ApiKeyAuthenticator($this->apiKeyUserProvider);
+        $authenticator = new ApiKeyAuthenticator($this->getApiKeyUserProvider());
 
         static::assertSame($expected, $authenticator->supports($request));
     }
@@ -65,19 +66,24 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatStartMethodReturnsExpected(): void
     {
-        $authenticator = new ApiKeyAuthenticator($this->apiKeyUserProvider);
+        $authenticator = new ApiKeyAuthenticator($this->getApiKeyUserProvider());
 
         $output = $authenticator->start(new Request());
+        $content = $output->getContent();
 
         static::assertSame(401, $output->getStatusCode());
+        static::assertNotFalse($content);
         static::assertJsonStringEqualsJsonString(
             json_encode(['message' => 'Authentication Required'], JSON_THROW_ON_ERROR),
-            $output->getContent()
+            $content,
         );
     }
 
     /**
      * @dataProvider dataProviderTestThatGetCredentialsReturnsExpected
+     *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expected
+     * @psalm-param StringableArrayObject $expected
      *
      * @throws Throwable
      *
@@ -85,7 +91,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatGetCredentialsReturnsExpected(?StringableArrayObject $expected, Request $request): void
     {
-        $authenticator = new ApiKeyAuthenticator($this->apiKeyUserProvider);
+        $authenticator = new ApiKeyAuthenticator($this->getApiKeyUserProvider());
 
         static::assertSame(
             $expected === null ? null : $expected->getArrayCopy(),
@@ -96,41 +102,41 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetUserReturnsExpected
      *
-     * @param mixed $credentials
-     *
      * @throws Throwable
      *
      * @testdox Test that `getUser` returns null when using `$credentials` as credentials
      */
-    public function testThatGetUserReturnsExpectedWhenCredentialsIsInvalid($credentials): void
+    public function testThatGetUserReturnsExpectedWhenCredentialsIsInvalid(mixed $credentials): void
     {
-        $authenticator = new ApiKeyAuthenticator($this->apiKeyUserProvider);
+        $authenticator = new ApiKeyAuthenticator($this->getApiKeyUserProvider());
 
         static::assertNull(
             $authenticator->getUser(
                 $credentials instanceof StringableArrayObject ? $credentials->getArrayCopy() : $credentials,
-                $this->apiKeyUserProvider
-            )
+                $this->getApiKeyUserProvider(),
+            ),
         );
     }
 
     /**
      * @dataProvider dataProviderTestThatCheckCredentialsThrowsAnException
      *
-     * @param mixed $credentials
+     * @phpstan-param StringableArrayObject<array<mixed>> $credentials
+     * @psalm-param StringableArrayObject $credentials
      *
      * @throws Throwable
      *
      * @testdox Test that `checkCredentials` method throws `Invalid token` exception when using `$credentials` as input
      */
-    public function testThatCheckCredentialsThrowsAnException($credentials): void
-    {
+    public function testThatCheckCredentialsThrowsAnException(
+        string | int | stdClass | StringableArrayObject | null $credentials,
+    ): void {
         $this->expectException(AuthenticationException::class);
         $this->expectExceptionMessage('Invalid token');
 
-        (new ApiKeyAuthenticator($this->apiKeyUserProvider))->checkCredentials(
+        (new ApiKeyAuthenticator($this->getApiKeyUserProvider()))->checkCredentials(
             $credentials instanceof StringableArrayObject ? $credentials->getArrayCopy() : $credentials,
-            new User('user', 'password')
+            new User('user', 'password'),
         );
     }
 
@@ -139,15 +145,15 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatCheckCredentialsReturnsFalseWhenValidToken(): void
     {
-        $this->apiKeyUserProvider
+        $this->getApiKeyUserProviderMock()
             ->expects(static::once())
             ->method('getApiKeyForToken')
             ->with('some-token')
             ->willReturn(null);
 
         static::assertFalse(
-            (new ApiKeyAuthenticator($this->apiKeyUserProvider))
-                ->checkCredentials(['token' => 'some-token'], new User('user', 'password'))
+            (new ApiKeyAuthenticator($this->getApiKeyUserProvider()))
+                ->checkCredentials(['token' => 'some-token'], new User('user', 'password')),
         );
     }
 
@@ -158,15 +164,15 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
     {
         $apiKey = new ApiKey();
 
-        $this->apiKeyUserProvider
+        $this->getApiKeyUserProviderMock()
             ->expects(static::once())
             ->method('getApiKeyForToken')
             ->with('some-token')
             ->willReturn($apiKey);
 
         static::assertTrue(
-            (new ApiKeyAuthenticator($this->apiKeyUserProvider))
-                ->checkCredentials(['token' => 'some-token'], new User('user', 'password'))
+            (new ApiKeyAuthenticator($this->getApiKeyUserProvider()))
+                ->checkCredentials(['token' => 'some-token'], new User('user', 'password')),
         );
     }
 
@@ -177,12 +183,12 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatOnAuthenticationSuccessReturnsNull(): void
     {
-        $authenticator = new ApiKeyAuthenticator($this->apiKeyUserProvider);
+        $authenticator = new ApiKeyAuthenticator($this->getApiKeyUserProvider());
 
         static::assertNull($authenticator->onAuthenticationSuccess(
             new Request(),
             new AnonymousToken('secret', 'user'),
-            'foobar'
+            'foobar',
         ));
     }
 
@@ -193,13 +199,13 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatOnAuthenticationFailureReturnsExpected(): void
     {
-        $output = (new ApiKeyAuthenticator($this->apiKeyUserProvider))
+        $output = (new ApiKeyAuthenticator($this->getApiKeyUserProvider()))
             ->onAuthenticationFailure(new Request(), new AuthenticationException('foobar'));
 
         static::assertSame(Response::HTTP_FORBIDDEN, $output->getStatusCode());
         static::assertJsonStringEqualsJsonString(
             json_encode(['message' => 'An authentication exception occurred.'], JSON_THROW_ON_ERROR),
-            $output->getContent()
+            (string)$output->getContent(),
         );
     }
 
@@ -210,9 +216,12 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatSupportsRememberMeReturnsFalse(): void
     {
-        static::assertFalse((new ApiKeyAuthenticator($this->apiKeyUserProvider))->supportsRememberMe());
+        static::assertFalse((new ApiKeyAuthenticator($this->getApiKeyUserProvider()))->supportsRememberMe());
     }
 
+    /**
+     * @return Generator<array{0: boolean, 1: Request}>
+     */
     public function dataProviderTestThatSupportReturnsExpected(): Generator
     {
         yield [false, new Request()];
@@ -228,6 +237,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [true, $request];
     }
 
+    /**
+     * @return Generator<array{0: null|StringableArrayObject, 1: Request}>
+     */
     public function dataProviderTestThatGetCredentialsReturnsExpected(): Generator
     {
         yield [null, new Request()];
@@ -253,6 +265,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [new StringableArrayObject(['token' => 'somekey']), $request];
     }
 
+    /**
+     * @return Generator<array{0: string|int|stdClass|StringableArrayObject|null}>
+     */
     public function dataProviderTestThatGetUserReturnsExpected(): Generator
     {
         yield [null];
@@ -265,6 +280,9 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [new StringableArrayObject(['token' => null])];
     }
 
+    /**
+     * @return Generator<array{0: string|int|stdClass|StringableArrayObject|null}>
+     */
     public function dataProviderTestThatCheckCredentialsThrowsAnException(): Generator
     {
         yield [null];
@@ -275,5 +293,19 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [new StringableArrayObject(['foobar'])];
         yield [new StringableArrayObject(['foobar' => 'barfoo'])];
         yield [new StringableArrayObject(['token' => null])];
+    }
+
+    private function getApiKeyUserProvider(): ApiKeyUserProvider
+    {
+        assert($this->apiKeyUserProvider instanceof ApiKeyUserProvider);
+
+        return $this->apiKeyUserProvider;
+    }
+
+    private function getApiKeyUserProviderMock(): MockObject
+    {
+        assert($this->apiKeyUserProvider instanceof MockObject);
+
+        return $this->apiKeyUserProvider;
     }
 }

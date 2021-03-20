@@ -28,6 +28,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use function assert;
 
 /**
  * Class PatchMethodTest
@@ -37,35 +38,12 @@ use Throwable;
  */
 class PatchMethodTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|RestDtoInterface
-     */
-    private $restDto;
-
-    /**
-     * @var MockObject|EntityInterface
-     */
-    private $entity;
-
-    /**
-     * @var MockObject|RestResourceInterface
-     */
-    private $resource;
-
-    /**
-     * @var MockObject|ResponseHandlerInterface
-     */
-    private $responseHandler;
-
-    /**
-     * @var MockObject|PatchMethodTestClass
-     */
-    private $validTestClass;
-
-    /**
-     * @var MockObject|PatchMethodInvalidTestClass
-     */
-    private $inValidTestClass;
+    private MockObject | RestDtoInterface | null $restDto = null;
+    private MockObject | EntityInterface | null $entity = null;
+    private MockObject | RestResourceInterface | null $resource = null;
+    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
+    private MockObject | PatchMethodTestClass | null $validTestClass = null;
+    private MockObject | PatchMethodInvalidTestClass | null $inValidTestClass = null;
 
     protected function setUp(): void
     {
@@ -103,7 +81,7 @@ class PatchMethodTest extends KernelTestCase
         /** @codingStandardsIgnoreEnd */
         $request = Request::create('/' . Uuid::uuid4()->toString(), 'PATCH');
 
-        $this->inValidTestClass->patchMethod($request, $this->restDto, 'some-id');
+        $this->getInValidTestClass()->patchMethod($request, $this->getRestDto(), 'some-id');
     }
 
     /**
@@ -119,7 +97,7 @@ class PatchMethodTest extends KernelTestCase
 
         $request = Request::create('/' . Uuid::uuid4()->toString(), $httpMethod);
 
-        $this->validTestClass->patchMethod($request, $this->restDto, 'some-id')->getContent();
+        $this->getValidTestClass()->patchMethod($request, $this->getRestDto(), 'some-id')->getContent();
     }
 
     /**
@@ -134,7 +112,7 @@ class PatchMethodTest extends KernelTestCase
         $uuid = Uuid::uuid4()->toString();
         $request = Request::create('/' . $uuid, 'PATCH');
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('patch')
             ->with($uuid, $this->restDto, true)
@@ -143,7 +121,7 @@ class PatchMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $this->validTestClass->patchMethod($request, $this->restDto, $uuid);
+        $this->getValidTestClass()->patchMethod($request, $this->getRestDto(), $uuid);
     }
 
     /**
@@ -157,20 +135,23 @@ class PatchMethodTest extends KernelTestCase
 
         $request = Request::create('/' . $uuid, 'PATCH');
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('patch')
             ->with($uuid, $this->restDto, true)
             ->willReturn($this->entity);
 
-        $this->responseHandler
+        $this->getResponseHandlerMock()
             ->expects(static::once())
             ->method('createResponse')
             ->with($request, $this->entity, $this->resource);
 
-        $this->validTestClass->patchMethod($request, $this->restDto, $uuid);
+        $this->getValidTestClass()->patchMethod($request, $this->getRestDto(), $uuid);
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -183,6 +164,9 @@ class PatchMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
+    /**
+     * @return Generator<array{0: Throwable, 1: int}>
+     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
@@ -192,5 +176,40 @@ class PatchMethodTest extends KernelTestCase
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
+    }
+
+    private function getValidTestClass(): PatchMethodTestClass
+    {
+        assert($this->validTestClass instanceof PatchMethodTestClass);
+
+        return $this->validTestClass;
+    }
+
+    private function getInValidTestClass(): PatchMethodInvalidTestClass
+    {
+        assert($this->inValidTestClass instanceof PatchMethodInvalidTestClass);
+
+        return $this->inValidTestClass;
+    }
+
+    private function getRestDto(): RestDtoInterface
+    {
+        assert($this->restDto instanceof RestDtoInterface);
+
+        return $this->restDto;
+    }
+
+    private function getResourceMock(): MockObject
+    {
+        assert($this->resource instanceof MockObject);
+
+        return $this->resource;
+    }
+
+    private function getResponseHandlerMock(): MockObject
+    {
+        assert($this->responseHandler instanceof MockObject);
+
+        return $this->responseHandler;
     }
 }

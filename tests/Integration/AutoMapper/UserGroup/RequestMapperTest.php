@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/AutoMapper/UserGroup/RequestMapperTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\AutoMapper\UserGroup;
@@ -17,17 +17,19 @@ use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Throwable;
+use UnexpectedValueException;
 
 /**
  * Class RequestMapperTest
  *
  * @package App\Tests\Integration\AutoMapper\UserGroup
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RequestMapperTest extends RestRequestMapperTestCase
 {
-    protected RequestMapper $mapperObject;
-    protected string $mapperClass = RequestMapper::class;
+    /**
+     * @var array<int, class-string>
+     */
     protected array $restDtoClasses = [
         DTO\UserGroup::class,
         DTO\UserGroupCreate::class,
@@ -35,10 +37,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         DTO\UserGroupPatch::class,
     ];
 
-    /**
-     * @var MockObject|RoleResource
-     */
-    private MockObject $mockRoleResource;
+    private ?MockObject $mockRoleResource = null;
 
     protected function setUp(): void
     {
@@ -54,15 +53,17 @@ class RequestMapperTest extends RestRequestMapperTestCase
     /**
      * @dataProvider dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod
      *
+     * @param class-string $dtoClass
+     *
      * @throws Throwable
      *
-     * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass`.
+     * @testdox Test that `transformUserGroups` calls expected resource method when processing `$dtoClass`
      */
     public function testThatTransformUserGroupsCallsExpectedResourceMethod(string $dtoClass): void
     {
         $role = new Role('Some Role');
 
-        $this->mockRoleResource
+        $this->getMockRoleResource()
             ->expects(static::once())
             ->method('getReference')
             ->with($role->getId())
@@ -73,15 +74,23 @@ class RequestMapperTest extends RestRequestMapperTestCase
         /**
          * @var DTO\UserGroup $dto
          */
-        $dto = $this->mapperObject->mapToObject($request, new $dtoClass());
+        $dto = $this->getMapperObject()->mapToObject($request, new $dtoClass());
 
         static::assertSame($role, $dto->getRole());
     }
 
+    /**
+     * @return Generator<array{0: class-string}>
+     */
     public function dataProviderTestThatTransformUserGroupsCallsExpectedResourceMethod(): Generator
     {
         foreach ($this->restDtoClasses as $dtoClass) {
             yield [$dtoClass];
         }
+    }
+
+    private function getMockRoleResource(): MockObject
+    {
+        return $this->mockRoleResource ?? throw new UnexpectedValueException('MockRoleResource not set');
     }
 }

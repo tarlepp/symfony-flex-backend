@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Doctrine/DBAL/Types/EnumLogLoginTypeTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Doctrine\DBAL\Types;
@@ -17,17 +17,18 @@ use Generator;
 use InvalidArgumentException;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use UnexpectedValueException;
 
 /**
  * Class EnumLogLoginTypeTest
  *
  * @package App\Tests\Integration\Doctrine\DBAL\Types
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class EnumLogLoginTypeTest extends KernelTestCase
 {
-    private AbstractPlatform $platform;
-    private Type $type;
+    private ?AbstractPlatform $platform = null;
+    private ?Type $type = null;
 
     /**
      * @throws DBALException
@@ -45,47 +46,57 @@ class EnumLogLoginTypeTest extends KernelTestCase
         $this->type = Type::getType('EnumLogLogin');
     }
 
+    /**
+     * @testdox Test that `getSQLDeclaration` method returns expected
+     */
     public function testThatGetSQLDeclarationReturnsExpected(): void
     {
-        static::assertSame("ENUM('failure', 'success')", $this->type->getSQLDeclaration([], $this->platform));
+        static::assertSame("ENUM('failure', 'success')", $this->getType()->getSQLDeclaration([], $this->getPlatform()));
     }
 
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueWorksWithProperValues
      *
-     * @testdox Test that `convertToDatabaseValue` method returns `$value`.
+     * @testdox Test that `convertToDatabaseValue` method returns `$value`
      */
     public function testThatConvertToDatabaseValueWorksWithProperValues(string $value): void
     {
-        static::assertSame($value, $this->type->convertToDatabaseValue($value, $this->platform));
+        static::assertSame($value, $this->getType()->convertToDatabaseValue($value, $this->getPlatform()));
     }
 
     /**
      * @dataProvider dataProviderTestThatConvertToDatabaseValueThrowsAnException
      *
-     * @param mixed $value
-     *
-     * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input.
+     * @testdox Test that `convertToDatabaseValue` method throws an exception with `$value` input
      */
-    public function testThatConvertToDatabaseValueThrowsAnException($value): void
+    public function testThatConvertToDatabaseValueThrowsAnException(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid \'EnumLogLogin\' value');
 
-        $this->type->convertToDatabaseValue($value, $this->platform);
+        $this->getType()->convertToDatabaseValue($value, $this->getPlatform());
     }
 
+    /**
+     * @testdox Test that `requiresSQLCommentHint` method returns expected
+     */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        static::assertTrue($this->type->requiresSQLCommentHint($this->platform));
+        static::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
+    /**
+     * @return Generator<array{0: 'failure'|'success'}>
+     */
     public function dataProviderTestThatConvertToDatabaseValueWorksWithProperValues(): Generator
     {
         yield ['failure'];
         yield ['success'];
     }
 
+    /**
+     * @return Generator<array{0: mixed}>
+     */
     public function dataProviderTestThatConvertToDatabaseValueThrowsAnException(): Generator
     {
         yield [null];
@@ -96,5 +107,15 @@ class EnumLogLoginTypeTest extends KernelTestCase
         yield ['foobar'];
         yield [[]];
         yield [new stdClass()];
+    }
+
+    private function getPlatform(): AbstractPlatform
+    {
+        return $this->platform ?? throw new UnexpectedValueException('Platform not set');
+    }
+
+    private function getType(): Type
+    {
+        return $this->type ?? throw new UnexpectedValueException('Type not set');
     }
 }

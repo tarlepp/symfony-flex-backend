@@ -3,27 +3,45 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Resource/ResourceTestCase.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Resource;
 
+use App\Entity\Interfaces\EntityInterface;
+use App\Repository\BaseRepository;
 use App\Rest\Interfaces\RestResourceInterface;
+use App\Rest\RestResource;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Throwable;
+use UnexpectedValueException;
+use function assert;
 use function sprintf;
 
 /**
  * Class ResourceTestCase
  *
  * @package App\Tests\Integration\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 abstract class ResourceTestCase extends KernelTestCase
 {
-    protected string $resourceClass;
-    protected string $repositoryClass;
+    /**
+     * @var class-string<EntityInterface>
+     */
     protected string $entityClass;
-    protected RestResourceInterface $resource;
+
+    /**
+     * @var class-string<BaseRepository>
+     */
+    protected string $repositoryClass;
+
+    /**
+     * @var class-string<RestResource>
+     */
+    protected string $resourceClass;
+
+    protected ?RestResourceInterface $resource = null;
 
     protected function setUp(): void
     {
@@ -31,10 +49,16 @@ abstract class ResourceTestCase extends KernelTestCase
 
         static::bootKernel();
 
-        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $this->resource = static::$container->get($this->resourceClass);
+        $resource = static::$container->get($this->resourceClass);
+
+        assert($resource instanceof RestResourceInterface);
+
+        $this->resource = $resource;
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetRepositoryReturnsExpected(): void
     {
         $message = sprintf(
@@ -43,9 +67,12 @@ abstract class ResourceTestCase extends KernelTestCase
         );
 
         /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf($this->repositoryClass, $this->resource->getRepository(), $message);
+        static::assertInstanceOf($this->repositoryClass, $this->getResource()->getRepository(), $message);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetEntityNameReturnsExpected(): void
     {
         $message = sprintf(
@@ -53,6 +80,11 @@ abstract class ResourceTestCase extends KernelTestCase
             $this->entityClass
         );
 
-        static::assertSame($this->entityClass, $this->resource->getEntityName(), $message);
+        static::assertSame($this->entityClass, $this->getResource()->getEntityName(), $message);
+    }
+
+    private function getResource(): RestResourceInterface
+    {
+        return $this->resource ?? throw new UnexpectedValueException('Resource not set');
     }
 }

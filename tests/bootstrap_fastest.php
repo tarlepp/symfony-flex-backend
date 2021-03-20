@@ -6,6 +6,6 @@ declare(strict_types = 1);
  * @package App\Tests
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-$pattern = sprintf('%s%stest_database_cache*', sys_get_temp_dir(), DIRECTORY_SEPARATOR);
+$files = glob(sprintf('%s%stest_database_cache*', sys_get_temp_dir(), DIRECTORY_SEPARATOR));
 
-array_map('unlink', glob($pattern));
+is_array($files) ? array_map('unlink', $files) : throw new RuntimeException('Cannot real cache files...');
