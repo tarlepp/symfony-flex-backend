@@ -59,7 +59,6 @@ class ResponseHandlerTest extends ContainerTestCase
         /** @var SerializerInterface $serializer */
         $serializer = $this->getContainer()->get(SerializerInterface::class);
 
-        /** @var RestResourceInterface $stubResourceService */
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         $httpResponse = (new ResponseHandler($serializer))->createResponse($request, $data, $stubResourceService, 200);
@@ -316,18 +315,14 @@ class ResponseHandlerTest extends ContainerTestCase
         static::assertSame(['AnotherFakeEntity'], $context['groups']);
     }
 
+    /**
+     * @throws Throwable
+     */
     public function testThatGetSerializeContextReturnsExpectedWhenResourceHasGetSerializerContextMethod(): void
     {
-        /** @var SerializerInterface $serializer */
         $serializer = $this->createMock(SerializerInterface::class);
-
-        /** @var MockObject $request */
         $request = $this->createMock(Request::class);
-
-        /** @var MockObject $parameterBag */
         $parameterBag = $this->createMock(ParameterBag::class);
-
-        /** @var MockObject $restResource */
         $restResource = $this->createMock(RestResourceInterface::class);
 
         $expected = [
@@ -357,10 +352,7 @@ class ResponseHandlerTest extends ContainerTestCase
             ->with('populate')
             ->willReturn(['AnotherFakeEntity']);
 
-        /**
-         * @var Request  $request
-         * @var InputBag $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->query = $parameterBag;
 
         /** @var RestResourceInterface $restResource */
