@@ -61,8 +61,8 @@ class UserGroup implements EntityInterface, Stringable
         'Role.userGroups',
 
         User::SET_USER_PROFILE,
-        UserGroup::SET_USER_PROFILE_GROUPS,
-        UserGroup::SET_USER_GROUP_BASIC,
+        self::SET_USER_PROFILE_GROUPS,
+        self::SET_USER_GROUP_BASIC,
     ])]
     private UuidInterface $id;
 
@@ -83,8 +83,8 @@ class UserGroup implements EntityInterface, Stringable
         'UserGroup.role',
 
         User::SET_USER_PROFILE,
-        UserGroup::SET_USER_PROFILE_GROUPS,
-        UserGroup::SET_USER_GROUP_BASIC,
+        self::SET_USER_PROFILE_GROUPS,
+        self::SET_USER_GROUP_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -104,8 +104,8 @@ class UserGroup implements EntityInterface, Stringable
         'UserGroup.name',
 
         User::SET_USER_PROFILE,
-        UserGroup::SET_USER_PROFILE_GROUPS,
-        UserGroup::SET_USER_GROUP_BASIC,
+        self::SET_USER_PROFILE_GROUPS,
+        self::SET_USER_GROUP_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]

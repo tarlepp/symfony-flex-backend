@@ -73,8 +73,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         'UserGroup.users',
 
-        User::SET_USER_PROFILE,
-        User::SET_USER_BASIC,
+        self::SET_USER_PROFILE,
+        self::SET_USER_BASIC,
     ])]
     private UuidInterface $id;
 
@@ -90,8 +90,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         'User',
         'User.username',
 
-        User::SET_USER_PROFILE,
-        User::SET_USER_BASIC,
+        self::SET_USER_PROFILE,
+        self::SET_USER_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -110,8 +110,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         'User',
         'User.firstName',
 
-        User::SET_USER_PROFILE,
-        User::SET_USER_BASIC,
+        self::SET_USER_PROFILE,
+        self::SET_USER_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -130,8 +130,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         'User',
         'User.lastName',
 
-        User::SET_USER_PROFILE,
-        User::SET_USER_BASIC,
+        self::SET_USER_PROFILE,
+        self::SET_USER_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -150,8 +150,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         'User',
         'User.email',
 
-        User::SET_USER_PROFILE,
-        User::SET_USER_BASIC,
+        self::SET_USER_PROFILE,
+        self::SET_USER_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -172,8 +172,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         'User',
         'User.language',
 
-        User::SET_USER_PROFILE,
-        User::SET_USER_BASIC,
+        self::SET_USER_PROFILE,
+        self::SET_USER_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -194,8 +194,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         'User',
         'User.locale',
 
-        User::SET_USER_PROFILE,
-        User::SET_USER_BASIC,
+        self::SET_USER_PROFILE,
+        self::SET_USER_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -218,8 +218,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         'User',
         'User.timezone',
 
-        User::SET_USER_PROFILE,
-        User::SET_USER_BASIC,
+        self::SET_USER_PROFILE,
+        self::SET_USER_BASIC,
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
