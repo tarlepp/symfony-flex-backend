@@ -2,11 +2,11 @@
 version: 2
 plugins:
   duplication:
-    enabled: true
+    enabled: false
     config:
       languages:
         php:
-          mass_threshold: 55
+          mass_threshold: 80
   editorconfig:
     enabled: true
   fixme:
@@ -43,7 +43,7 @@ checks:
       threshold: 5
   method-count:
     config:
-      threshold: 20
+      threshold: 22
   method-lines:
     config:
       threshold: 40
