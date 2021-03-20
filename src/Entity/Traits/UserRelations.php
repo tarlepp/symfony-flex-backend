@@ -11,6 +11,7 @@ namespace App\Entity\Traits;
 use App\Entity\LogLogin;
 use App\Entity\LogLoginFailure;
 use App\Entity\LogRequest;
+use App\Entity\User;
 use App\Entity\UserGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -38,8 +39,6 @@ trait UserRelations
      */
     #[Groups([
         'User.userGroups',
-
-        User::SET_USER_BASIC,
     ])]
     protected Collection | ArrayCollection $userGroups;
 
