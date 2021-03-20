@@ -95,7 +95,7 @@ trait UserRelations
     #[Groups([
         'User.roles',
 
-        User::SET_USER_BASIC,
+        User::SET_USER_PROFILE,
     ])]
     public function getRoles(): array
     {
