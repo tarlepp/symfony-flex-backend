@@ -83,8 +83,8 @@ class IndexController
     {
         /** @var array<string, string|array<string, string>> $output */
         $output = JSON::decode(
-            $this->serializer->serialize($loggedInUser, 'json', ['groups' => 'set.UserProfile']),
-            true
+            $this->serializer->serialize($loggedInUser, 'json', ['groups' => User::SET_USER_PROFILE]),
+            true,
         );
 
         /** @var array<int, string> $roles */
