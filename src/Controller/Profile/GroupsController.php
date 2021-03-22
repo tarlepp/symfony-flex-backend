@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Controller\Profile;
 
 use App\Entity\User;
+use App\Entity\UserGroup;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -94,7 +95,7 @@ class GroupsController
             $this->serializer->serialize(
                 $loggedInUser->getUserGroups()->toArray(),
                 'json',
-                ['groups' => 'set.UserProfileGroups']
+                ['groups' => UserGroup::SET_USER_PROFILE_GROUPS],
             ),
             json: true,
         );

@@ -21,7 +21,6 @@ use function array_key_exists;
 use function array_map;
 use function array_merge;
 use function array_pop;
-use function count;
 use function end;
 use function explode;
 use function implode;
@@ -88,9 +87,9 @@ final class ResponseHandler implements ResponseHandlerInterface
             $filter = static fn (string $groupName): bool => strncmp($groupName, 'Set.', 4) === 0;
 
             if (array_key_exists('populateOnly', $request->query->all())
-                || count(array_filter($groups, $filter)) > 0
+                || !empty(array_filter($groups, $filter))
             ) {
-                $groups = count($populate) === 0 ? [$entityName] : $populate;
+                $groups = empty($populate) ? [$entityName] : $populate;
             }
         }
 
@@ -160,7 +159,7 @@ final class ResponseHandler implements ResponseHandlerInterface
         RestResourceInterface $restResource,
     ): array {
         // Set all associations to be populated
-        if ($populateAll && count($populate) === 0) {
+        if ($populateAll && empty($populate)) {
             $associations = $restResource->getAssociations();
             $populate = array_map(
                 static fn (string $assocName): string => $entityName . '.' . $assocName,

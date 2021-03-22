@@ -15,7 +15,6 @@ use function array_map;
 use function array_merge;
 use function array_unique;
 use function array_values;
-use function count;
 use function explode;
 use function is_array;
 use function str_contains;
@@ -72,7 +71,7 @@ final class SearchTerm implements SearchTermInterface
         $output = null;
 
         // We have some generated criteria
-        if (count($criteria) > 0) {
+        if (!empty($criteria)) {
             // Create used criteria array
             $output = [
                 'and' => [
@@ -91,7 +90,7 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getTermIterator(array $columns, int $mode): Closure
     {
-        return static fn (string $term): ?array => count($columns) > 0
+        return static fn (string $term): ?array => !empty($columns)
             ? array_map(self::getColumnIterator($term, $mode), $columns)
             : null;
     }

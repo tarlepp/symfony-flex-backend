@@ -50,9 +50,9 @@ class Role implements EntityInterface
 
         'UserGroup.role',
 
-        'set.UserProfile',
-        'set.UserProfileGroups',
-        'set.UserGroupBasic',
+        User::SET_USER_BASIC,
+        UserGroup::SET_USER_PROFILE_GROUPS,
+        UserGroup::SET_USER_GROUP_BASIC,
     ])]
     private string $id;
 

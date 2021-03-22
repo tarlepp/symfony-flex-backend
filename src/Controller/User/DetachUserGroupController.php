@@ -135,13 +135,12 @@ class DetachUserGroupController
 
         $groups = [
             'groups' => [
-                'set.UserGroupBasic',
+                UserGroup::SET_USER_GROUP_BASIC,
             ],
         ];
 
         return new JsonResponse(
             $this->serializer->serialize($user->getUserGroups()->getValues(), 'json', $groups),
-            Response::HTTP_OK,
             json: true
         );
     }

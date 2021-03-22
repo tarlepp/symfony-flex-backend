@@ -381,7 +381,7 @@ trait LogRequestProcessRequestTrait
     /**
      * Getter method to convert current request parameters to array.
      *
-     * @return mixed[]
+     * @return array<mixed>
      */
     private function determineParameters(Request $request): array
     {
