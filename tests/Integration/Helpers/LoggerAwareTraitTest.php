@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Helpers/LoggerAwareTraitTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Helpers;
@@ -18,7 +18,7 @@ use Throwable;
  * Class LoggerAwareTraitTest
  *
  * @package App\Tests\Integration\Helpers
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LoggerAwareTraitTest extends KernelTestCase
 {
@@ -34,6 +34,9 @@ class LoggerAwareTraitTest extends KernelTestCase
     {
         static::bootKernel();
 
+        /**
+         * @var LoggerAwareService $service
+         */
         $service = static::$kernel->getContainer()->get(LoggerAwareService::class);
 
         $logger = PhpUnitUtil::getProperty('logger', $service);

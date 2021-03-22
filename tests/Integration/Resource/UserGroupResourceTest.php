@@ -3,24 +3,38 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Resource/UserGroupResourceTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Resource;
 
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\UserGroup;
+use App\Repository\BaseRepository;
 use App\Repository\UserGroupRepository;
 use App\Resource\UserGroupResource;
+use App\Rest\RestResource;
 
 /**
  * Class UserGroupResourceTest
  *
  * @package App\Tests\Integration\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserGroupResourceTest extends ResourceTestCase
 {
+    /**
+     * @var class-string<EntityInterface>
+     */
     protected string $entityClass = UserGroup::class;
+
+    /**
+     * @var class-string<BaseRepository>
+     */
     protected string $repositoryClass = UserGroupRepository::class;
+
+    /**
+     * @var class-string<RestResource>
+     */
     protected string $resourceClass = UserGroupResource::class;
 }

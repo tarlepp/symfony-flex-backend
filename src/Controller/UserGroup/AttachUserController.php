@@ -138,7 +138,7 @@ class AttachUserController
 
         $groups = [
             'groups' => [
-                'set.UserBasic',
+                User::SET_USER_BASIC,
             ],
         ];
 

@@ -155,7 +155,7 @@ class CheckDependencies extends Command
                 // First row of current library
                 if ($row === 0) {
                     // We want to add table separator between different libraries
-                    if (count($rows) > 0) {
+                    if (!empty($rows)) {
                         $rows[] = new TableSeparator();
                     }
 

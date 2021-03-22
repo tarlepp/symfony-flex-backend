@@ -8,17 +8,21 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest;
 
+use App\Controller\ApiKeyController;
+use App\DTO\ApiKey\ApiKey;
 use App\DTO\RestDtoInterface;
+use App\Resource\ApiKeyResource;
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use App\Tests\Integration\Rest\src\AbstractController as Controller;
+use App\Utils\Tests\PhpUnitUtil;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionProperty;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Serializer;
 use Throwable;
 use UnexpectedValueException;
+use function assert;
 use function get_class;
 
 /**
@@ -29,29 +33,18 @@ use function get_class;
  */
 class ControllerTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|RestResourceInterface
-     */
-    private $resource;
-
-    /**
-     * @var MockObject|Controller
-     */
-    private $controller;
-
-    /**
-     * @var MockObject|RestDtoInterface
-     */
-    private $dtoClass;
+    private MockObject | RestDtoInterface | null $dtoClass = null;
+    private MockObject | ApiKeyResource | null $resource = null;
+    private ApiKeyController | null $controller = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->dtoClass = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $this->controller = $this->getMockForAbstractClass(Controller::class, [$this->resource])
-            ->setResponseHandler(new ResponseHandler(new Serializer()));
+        $this->resource = $this->getMockBuilder(ApiKeyResource::class)->disableOriginalConstructor()->getMock();
+        $this->controller = new ApiKeyController($this->getResource());
+        $this->controller->setResponseHandler(new ResponseHandler(new Serializer()));
     }
 
     /**
@@ -75,8 +68,7 @@ class ControllerTest extends KernelTestCase
      */
     public function testThatGetResourceDoesNotThrowsAnExceptionIfSet(): void
     {
-        /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf(RestResourceInterface::class, $this->controller->getResource());
+        static::assertInstanceOf(RestResourceInterface::class, $this->getController()->getResource());
     }
 
     /**
@@ -100,7 +92,7 @@ class ControllerTest extends KernelTestCase
      */
     public function testThatGetResponseHandlerDoesNotThrowsAnExceptionIfSet(): void
     {
-        static::assertInstanceOf(ResponseHandler::class, $this->controller->getResponseHandler());
+        static::assertInstanceOf(ResponseHandler::class, $this->getController()->getResponseHandler());
     }
 
     /**
@@ -110,12 +102,12 @@ class ControllerTest extends KernelTestCase
      */
     public function testThatGetDtoClassCallsExpectedServiceMethods(): void
     {
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('getDtoClass')
-            ->willReturn(get_class($this->dtoClass));
+            ->willReturn(get_class($this->getDtoClass()));
 
-        $this->controller->getDtoClass();
+        $this->getController()->getDtoClass();
     }
 
     /**
@@ -130,12 +122,12 @@ class ControllerTest extends KernelTestCase
             'Given DTO class \'stdClass\' is not implementing \'App\DTO\RestDtoInterface\' interface.'
         );
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('getDtoClass')
             ->willReturn(stdClass::class);
 
-        $this->controller->getDtoClass();
+        $this->getController()->getDtoClass();
     }
 
     /**
@@ -146,13 +138,41 @@ class ControllerTest extends KernelTestCase
     public function testThatGetDtoClassWorksAsExpectedWithGivenDtoClasses(): void
     {
         $dtoClasses = [
-            'foo' => get_class($this->dtoClass),
+            'foo' => ApiKey::class,
         ];
 
-        $reflection = new ReflectionProperty(get_class($this->controller), 'dtoClasses');
-        $reflection->setAccessible(true);
-        $reflection->setValue(null, $dtoClasses);
+        $controller = $this->getController();
 
-        static::assertSame(get_class($this->dtoClass), $this->controller->getDtoClass('foo'));
+        PhpUnitUtil::setProperty('dtoClasses', $dtoClasses, $controller);
+
+        static::assertSame(ApiKey::class, $controller->getDtoClass('foo'));
+    }
+
+    private function getDtoClass(): RestDtoInterface
+    {
+        assert($this->dtoClass instanceof RestDtoInterface);
+
+        return $this->dtoClass;
+    }
+
+    private function getController(): ApiKeyController
+    {
+        assert($this->controller instanceof ApiKeyController);
+
+        return $this->controller;
+    }
+
+    private function getResource(): ApiKeyResource
+    {
+        assert($this->resource instanceof ApiKeyResource);
+
+        return $this->resource;
+    }
+
+    private function getResourceMock(): MockObject
+    {
+        assert($this->resource instanceof MockObject);
+
+        return $this->resource;
     }
 }

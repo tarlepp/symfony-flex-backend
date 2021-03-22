@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/EventSubscriber/BodySubscriberTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -12,8 +12,8 @@ use App\EventSubscriber\BodySubscriber;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use JsonException;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * Class BodySubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class BodySubscriberTest extends KernelTestCase
 {
@@ -75,6 +75,9 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatJsonContentReplaceParametersAsExpected
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $expectedParameters
+     * @psalm-param StringableArrayObject $expectedParameters
+     *
      * @throws JsonException
      *
      * @testdox Test that subscriber converts `$content` content with `$contentType` type to `$expectedParameters`.
@@ -121,14 +124,8 @@ class BodySubscriberTest extends KernelTestCase
     {
         static::bootKernel();
 
-        /**
-         * @var MockObject|Request $request
-         * @var MockObject|ParameterBag $parameterBag
-         */
         $request = $this->getMockBuilder(Request::class)->getMock();
         $parameterBag = $this->getMockBuilder(ParameterBag::class)->getMock();
-
-        $request->request = $parameterBag;
 
         $request
             ->expects(static::once())
@@ -139,12 +136,20 @@ class BodySubscriberTest extends KernelTestCase
             ->expects(static::never())
             ->method('replace');
 
+        /**
+         * @var InputBag $parameterBag
+         */
+        $request->request = $parameterBag;
+
         $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
     }
 
+    /**
+     * @return Generator<array{0: StringableArrayObject, 1: string, 2:  string}>
+     */
     public function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
     {
         yield [

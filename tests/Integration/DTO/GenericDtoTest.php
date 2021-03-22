@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/DTO/GenericDtoTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO;
@@ -16,7 +16,6 @@ use App\Utils\Tests\PhpUnitUtil;
 use BadMethodCallException;
 use Generator;
 use LogicException;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 
@@ -24,18 +23,19 @@ use Throwable;
  * Class GenericDtoTest
  *
  * @package App\Tests\Integration\DTO
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class GenericDtoTest extends KernelTestCase
 {
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `patch` method throws an exception if `getter` method does not exist on DTO class
      */
     public function testThatPatchThrowsAnExceptionIfGetterMethodDoesNotExist(): void
     {
         $this->expectException(BadMethodCallException::class);
 
-        /** @var MockObject|RestDtoInterface $dtoMock */
         $dtoMock = $this->createMock(RestDtoInterface::class);
 
         $dtoMock
@@ -52,22 +52,25 @@ class GenericDtoTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `determineGetterMethod` method returns `$expected` when using `$dto::$$property` property.
+     * @testdox Test that `determineGetterMethod` method returns `$expected` when using `$dto::$property` property
      */
     public function testThatDetermineGetterMethodReturnsExpected(
         string $expected,
         string $property,
-        RestDtoInterface $dto
+        RestDtoInterface $dto,
     ): void {
         static::assertSame($expected, PhpUnitUtil::callMethod($dto, 'determineGetterMethod', [$dto, $property]));
     }
 
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `patch` method throws an exception if DTO class contains multiple `getters` for same property
+     */
     public function testThatPatchThrowsAnErrorIfMultipleGettersAreDefined(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('Property \'foo\' has multiple getter methods - this is insane!');
-
-        require_once __DIR__ . '/src/DummyDto.php';
 
         $dtoMock = (new DummyDto())
             ->setFoo('foo');
@@ -78,10 +81,11 @@ class GenericDtoTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `patch` method calls expected methods
      */
     public function testThatPatchCallsExpectedMethods(): void
     {
-        /** @var MockObject|User $dtoUser */
         $dtoUser = $this->createMock(User::class);
 
         $dtoUser
@@ -99,6 +103,9 @@ class GenericDtoTest extends KernelTestCase
             ->method('getEmail')
             ->willReturn('email@com');
 
+        /**
+         * @var User $dto
+         */
         $dto = (new User())
             ->patch($dtoUser);
 
@@ -108,10 +115,11 @@ class GenericDtoTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `update` method calls expected methods
      */
     public function testThatUpdateMethodCallsExpectedMethods(): void
     {
-        /** @var MockObject|UserEntity $userEntity */
         $userEntity = $this->createMock(UserEntity::class);
 
         $userEntity
@@ -139,6 +147,9 @@ class GenericDtoTest extends KernelTestCase
             ->update($userEntity);
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string, 2: User}>
+     */
     public function dataProviderTestThatDetermineGetterMethodReturnsExpected(): Generator
     {
         yield [

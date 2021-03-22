@@ -26,6 +26,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use function assert;
 
 /**
  * Class IdsMethodTest
@@ -35,25 +36,10 @@ use Throwable;
  */
 class IdsMethodTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|RestResourceInterface
-     */
-    private $resource;
-
-    /**
-     * @var MockObject|ResponseHandlerInterface
-     */
-    private $responseHandler;
-
-    /**
-     * @var MockObject|IdsMethodTestClass
-     */
-    private $validTestClass;
-
-    /**
-     * @var MockObject|IdsMethodInvalidTestClass
-     */
-    private $inValidTestClass;
+    private MockObject | RestResourceInterface | null $resource = null;
+    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
+    private MockObject | IdsMethodTestClass | null $validTestClass = null;
+    private MockObject | IdsMethodInvalidTestClass | null $inValidTestClass = null;
 
     protected function setUp(): void
     {
@@ -88,7 +74,7 @@ class IdsMethodTest extends KernelTestCase
         );
         /* @codingStandardsIgnoreEnd */
 
-        $this->inValidTestClass->idsMethod(Request::create('/'));
+        $this->getInValidTestClass()->idsMethod(Request::create('/'));
     }
 
     /**
@@ -104,7 +90,7 @@ class IdsMethodTest extends KernelTestCase
 
         $request = Request::create('/', $httpMethod);
 
-        $this->validTestClass->idsMethod($request)->getContent();
+        $this->getValidTestClass()->idsMethod($request)->getContent();
     }
 
     /**
@@ -118,7 +104,7 @@ class IdsMethodTest extends KernelTestCase
     {
         $request = Request::create('/');
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('getIds')
             ->with([], [])
@@ -127,11 +113,16 @@ class IdsMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $this->validTestClass->idsMethod($request);
+        $this->getValidTestClass()->idsMethod($request);
     }
 
     /**
      * @dataProvider dataProviderTestThatTraitCallsServiceMethods
+     *
+     * @phpstan-param StringableArrayObject<array<mixed>> $criteria
+     * @phpstan-param StringableArrayObject<array<mixed>> $search
+     * @psalm-param StringableArrayObject $criteria
+     * @psalm-param StringableArrayObject $search
      *
      * @throws Throwable
      *
@@ -144,18 +135,18 @@ class IdsMethodTest extends KernelTestCase
     ): void {
         $request = Request::create('/' . $queryString);
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('getIds')
             ->with($criteria->getArrayCopy(), $search->getArrayCopy())
             ->willReturn([]);
 
-        $this->responseHandler
+        $this->getResponseHandlerMock()
             ->expects(static::once())
             ->method('createResponse')
             ->with($request, [], $this->resource);
 
-        $this->validTestClass->idsMethod($request);
+        $this->getValidTestClass()->idsMethod($request);
     }
 
     /**
@@ -169,11 +160,11 @@ class IdsMethodTest extends KernelTestCase
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
 
-        $this->validTestClass->idsMethod(Request::create('/?where=foo'));
+        $this->getValidTestClass()->idsMethod(Request::create('/?where=foo'));
     }
 
     /**
-     * @throws Throwable
+     * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
      */
     public function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {
@@ -237,6 +228,9 @@ class IdsMethodTest extends KernelTestCase
         ];
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -249,6 +243,9 @@ class IdsMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
+    /**
+     * @return Generator<array{0: Throwable, 1: int}>
+     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
@@ -258,5 +255,33 @@ class IdsMethodTest extends KernelTestCase
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
+    }
+
+    private function getValidTestClass(): IdsMethodTestClass
+    {
+        assert($this->validTestClass instanceof IdsMethodTestClass);
+
+        return $this->validTestClass;
+    }
+
+    private function getInValidTestClass(): IdsMethodInvalidTestClass
+    {
+        assert($this->inValidTestClass instanceof IdsMethodInvalidTestClass);
+
+        return $this->inValidTestClass;
+    }
+
+    private function getResourceMock(): MockObject
+    {
+        assert($this->resource instanceof MockObject);
+
+        return $this->resource;
+    }
+
+    private function getResponseHandlerMock(): MockObject
+    {
+        assert($this->responseHandler instanceof MockObject);
+
+        return $this->responseHandler;
     }
 }

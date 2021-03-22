@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Controller;
 
-use App\Controller\ProfileController;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -16,8 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  *
  * @package App\Tests\Integration\Controller
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
- *
- * @property ProfileController $controller
  */
 class ProfileControllerTest extends KernelTestCase
 {

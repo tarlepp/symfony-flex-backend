@@ -33,6 +33,10 @@ class ActionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitCallsExpectedMethod
      *
+     * @phpstan-param StringableArrayObject<array<mixed>> $parameters
+     * @psalm-param StringableArrayObject $parameters
+     * @psalm-param trait-string $class
+     *
      * @throws Throwable
      *
      * @testdox Test that `$method` triggers `$trait` method call in `$class` trait when using `$parameters` parameters
@@ -58,11 +62,19 @@ class ActionTest extends KernelTestCase
             ->method($trait)
             ->with(...$parameters->getArrayCopy());
 
-        $result = call_user_func_array([$stub, $method], $parameters->getArrayCopy());
+        /**
+         * @var callable $callback
+         */
+        $callback = [$stub, $method];
+
+        $result = call_user_func_array($callback, $parameters->getArrayCopy());
 
         static::assertInstanceOf(Response::class, $result);
     }
 
+    /**
+     * @return array<int, array{0: trait-string, 1: string, 2: string, 3: StringableArrayObject}>
+     */
     public function dataProviderTestThatTraitCallsExpectedMethod(): array
     {
         static::bootKernel();
@@ -74,6 +86,10 @@ class ActionTest extends KernelTestCase
 
         $iterator = function (string $filename) use ($folder, $namespace): array {
             $base = str_replace([$folder, DIRECTORY_SEPARATOR, '.php'], ['', '\\', ''], $filename);
+
+            /**
+             * @psalm-var trait-string $class
+             */
             $class = $namespace . $base;
 
             $parameters = [

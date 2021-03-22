@@ -17,6 +17,7 @@ use Doctrine\ORM\Tools\SchemaValidator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use function array_walk;
+use function assert;
 use function implode;
 
 /**
@@ -27,7 +28,7 @@ use function implode;
  */
 class SchemaTest extends KernelTestCase
 {
-    private SchemaValidator $validator;
+    private ?SchemaValidator $validator = null;
 
     /**
      * @throws Throwable
@@ -50,12 +51,17 @@ class SchemaTest extends KernelTestCase
             Type::addType('EnumLogLogin', EnumLogLoginType::class);
         }
 
-        /** @var EntityManagerInterface $em */
-        $em = static::$kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
+        /**
+         * @var \Doctrine\Persistence\ManagerRegistry $managerRegistry
+         */
+        $managerRegistry = static::$kernel->getContainer()->get('doctrine');
 
-        $this->validator = new SchemaValidator($em);
+        /**
+         * @var EntityManagerInterface $entityManager
+         */
+        $entityManager = $managerRegistry->getManager();
+
+        $this->validator = new SchemaValidator($entityManager);
     }
 
     /**
@@ -63,11 +69,11 @@ class SchemaTest extends KernelTestCase
      */
     public function testThatMappingsAreValid(): void
     {
-        $errors = $this->validator->validateMapping();
+        $errors = $this->getValidator()->validateMapping();
 
         $messages = [];
 
-        $formatter = static function ($errors, $className) use (&$messages): void {
+        $formatter = static function (array $errors, string $className) use (&$messages): void {
             $messages[] = $className . ': ' . implode(', ', $errors);
         };
 
@@ -82,8 +88,15 @@ class SchemaTest extends KernelTestCase
     public function testThatSchemaInSyncWithMetadata(): void
     {
         static::assertTrue(
-            $this->validator->schemaInSyncWithMetadata(),
+            $this->getValidator()->schemaInSyncWithMetadata(),
             'The database schema is not in sync with the current mapping file.'
         );
+    }
+
+    private function getValidator(): SchemaValidator
+    {
+        assert($this->validator instanceof SchemaValidator);
+
+        return $this->validator;
     }
 }

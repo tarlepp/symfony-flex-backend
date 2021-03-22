@@ -20,7 +20,6 @@ use function array_key_exists;
 use function array_map;
 use function array_walk;
 use function call_user_func_array;
-use function count;
 use function is_array;
 use function is_numeric;
 use function str_contains;
@@ -92,7 +91,7 @@ class RepositoryHelper
     {
         $criteria ??= [];
 
-        if (count($criteria) === 0) {
+        if (empty($criteria)) {
             return;
         }
 
@@ -114,7 +113,7 @@ class RepositoryHelper
      * @see \App\Repository\Traits\RepositoryMethodsTrait::getQueryBuilder()
      *
      * @param array<int, string> $columns
-     * @param array<string, string>|null $terms
+     * @param array<mixed>|null $terms
      *
      * @throws InvalidArgumentException
      */
@@ -122,7 +121,7 @@ class RepositoryHelper
     {
         $terms ??= [];
 
-        if (count($columns) === 0) {
+        if (empty($columns)) {
             return;
         }
 

@@ -93,6 +93,22 @@ class PHPUnitUtilTest extends KernelTestCase
     }
 
     /**
+     * @dataProvider dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType
+     *
+     * @param int | string | array<int, string> $expected
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `getValidValueForType` returns `$expected` when using `$type` as input type
+     */
+    public function testThatGetValidValueForTypeWorksIfThereIsAPipeOnType(
+        int | string | array $expected,
+        string $type,
+    ): void {
+        static::assertSame($expected, PhpUnitUtil::getValidValueForType($type));
+    }
+
+    /**
      * @throws Throwable
      *
      * @testdox Test that `getInvalidValueForType` method throws exception with not know type
@@ -133,6 +149,8 @@ class PHPUnitUtilTest extends KernelTestCase
         yield [stdClass::class, 'array'];
         yield [stdClass::class, 'boolean'];
         yield [stdClass::class, 'bool'];
+        yield [stdClass::class, 'string|int'];
+        yield [stdClass::class, 'string[]'];
     }
 
     /**
@@ -173,5 +191,15 @@ class PHPUnitUtilTest extends KernelTestCase
         yield [new StringableArrayObject(['some', 'array', 'here']), 'array', true];
         yield [true, 'boolean', true];
         yield [true, 'bool', true];
+    }
+
+    /**
+     * @return Generator<array{0: int|string|array, 1: string}>
+     */
+    public function dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType(): Generator
+    {
+        yield ['Some text here', 'string|int'];
+        yield [666, 'int|string'];
+        yield [['some', 'array', 'here'], 'string[]'];
     }
 }

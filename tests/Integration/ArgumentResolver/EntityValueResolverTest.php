@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/ArgumentResolver/EntityValueResolverTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\ArgumentResolver;
@@ -12,7 +12,6 @@ use App\ArgumentResolver\EntityValueResolver;
 use App\Entity\User;
 use App\Resource\ResourceCollection;
 use App\Resource\UserResource;
-use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,13 +23,12 @@ use function iterator_to_array;
  * Class EntityValueResolverTest
  *
  * @package App\Tests\Integration\ArgumentResolver
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class EntityValueResolverTest extends KernelTestCase
 {
     public function testThatSupportsReturnFalseWithNotSupportedRequestParameterType(): void
     {
-        /** @var MockObject|ResourceCollection $resourceCollection */
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
         $resolver = new EntityValueResolver($resourceCollection);
@@ -41,7 +39,6 @@ class EntityValueResolverTest extends KernelTestCase
 
     public function testThatSupportsReturnFalseWithWrongArgumentParameterType(): void
     {
-        /** @var MockObject|ResourceCollection $resourceCollection */
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
         $resolver = new EntityValueResolver($resourceCollection);
@@ -52,7 +49,6 @@ class EntityValueResolverTest extends KernelTestCase
 
     public function testThatSupportsMethodCallsExpectedResourceCollectionMethods(): void
     {
-        /** @var MockObject|ResourceCollection $resourceCollection */
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
         $resourceCollection
@@ -69,7 +65,6 @@ class EntityValueResolverTest extends KernelTestCase
 
     public function testThatSupportsMethodReturnFalseWithNotSupportedEntityResource(): void
     {
-        /** @var MockObject|ResourceCollection $resourceCollection */
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
         $resourceCollection
@@ -89,10 +84,6 @@ class EntityValueResolverTest extends KernelTestCase
      */
     public function testThatResolveMethodReturnsExpected(): void
     {
-        /**
-         * @var MockObject|ResourceCollection $resourceCollection
-         * @var MockObject|UserResource $userResource
-         */
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
         $userResource = $this->getMockBuilder(UserResource::class)->disableOriginalConstructor()->getMock();
 

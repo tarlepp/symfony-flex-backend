@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/EventSubscriber/AuthenticationSuccessSubscriberTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -14,7 +14,6 @@ use App\Repository\UserRepository;
 use App\Security\SecurityUser;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -23,7 +22,7 @@ use Throwable;
  * Class AuthenticationSuccessSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AuthenticationSuccessSubscriberTest extends KernelTestCase
 {
@@ -36,10 +35,6 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
         $securityUser = new SecurityUser($userEntity);
         $event = new AuthenticationSuccessEvent([], $securityUser, new Response());
 
-        /**
-         * @var MockObject|LoginLogger $loginLogger
-         * @var MockObject|UserRepository $userRepository
-         */
         $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();
         $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
 

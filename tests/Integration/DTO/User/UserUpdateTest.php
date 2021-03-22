@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/DTO/User/UserUpdateTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\DTO\User;
@@ -18,12 +18,18 @@ use App\Tests\Integration\DTO\DtoTestCase;
  * Class UserUpdateTest
  *
  * @package App\Tests\Integration\DTO\User
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserUpdateTest extends DtoTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $dtoClass = UserUpdate::class;
 
+    /**
+     * @testdox Test that `setUserGroups` method updates entity correctly
+     */
     public function testThatUserGroupsAreExpected(): void
     {
         $userGroup1 = (new UserGroup())
@@ -42,8 +48,12 @@ class UserUpdateTest extends DtoTestCase
             ->load($user)
             ->setUserGroups([$userGroup2]);
 
+        /**
+         * @var User $updatedUser
+         */
         $updatedUser = $dto->update($user);
 
         static::assertCount(1, $updatedUser->getUserGroups());
+        static::assertSame($userGroup2, $updatedUser->getUserGroups()[0]);
     }
 }

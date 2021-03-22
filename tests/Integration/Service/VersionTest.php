@@ -14,6 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\Cache\CacheInterface;
+use UnexpectedValueException;
 
 /**
  * Class VersionTest
@@ -23,15 +24,8 @@ use Symfony\Contracts\Cache\CacheInterface;
  */
 class VersionTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var MockObject|LoggerInterface
-     */
-    private $logger;
+    private MockObject | CacheInterface | string $cache = '';
+    private MockObject | LoggerInterface | string $logger = '';
 
     protected function setUp(): void
     {
@@ -48,17 +42,45 @@ class VersionTest extends KernelTestCase
     {
         $exception = new Exception('test exception');
 
-        $this->cache
+        $this->getCacheMock()
             ->expects(static::once())
             ->method('get')
             ->willThrowException($exception);
 
-        $this->logger
+        $this->getLoggerMock()
             ->expects(static::once())
             ->method('error')
             ->with($exception->getMessage(), $exception->getTrace());
 
-        (new Version('', $this->cache, $this->logger))
+        (new Version('', $this->getCache(), $this->getLogger()))
             ->get();
+    }
+
+    private function getCache(): CacheInterface
+    {
+        return $this->cache instanceof CacheInterface
+            ? $this->cache
+            : throw new UnexpectedValueException('Cache not set');
+    }
+
+    private function getCacheMock(): MockObject
+    {
+        return $this->cache instanceof MockObject
+            ? $this->cache
+            : throw new UnexpectedValueException('Cache not set');
+    }
+
+    private function getLogger(): LoggerInterface
+    {
+        return $this->logger instanceof LoggerInterface
+            ? $this->logger
+            : throw new UnexpectedValueException('Logger not set');
+    }
+
+    private function getLoggerMock(): MockObject
+    {
+        return $this->logger instanceof MockObject
+            ? $this->logger
+            : throw new UnexpectedValueException('Logger not set');
     }
 }

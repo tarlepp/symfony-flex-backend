@@ -13,6 +13,7 @@ use App\Utils\HealthzService;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
+use UnexpectedValueException;
 
 /**
  * Class HealthzServiceTest
@@ -22,10 +23,7 @@ use Throwable;
  */
 class HealthzServiceTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|HealthzRepository
-     */
-    private $repository;
+    private MockObject | HealthzRepository | null $repository = null;
 
     protected function setUp(): void
     {
@@ -41,19 +39,33 @@ class HealthzServiceTest extends KernelTestCase
      */
     public function testThatCheckMethodCallsExpectedRepositoryMethods(): void
     {
-        $this->repository
+        $this->getRepositoryMock()
             ->expects(static::once())
             ->method('cleanup');
 
-        $this->repository
+        $this->getRepositoryMock()
             ->expects(static::once())
             ->method('create');
 
-        $this->repository
+        $this->getRepositoryMock()
             ->expects(static::once())
             ->method('read');
 
-        (new HealthzService($this->repository))
+        (new HealthzService($this->getRepository()))
             ->check();
+    }
+
+    private function getRepository(): HealthzRepository
+    {
+        return $this->repository instanceof HealthzRepository
+            ? $this->repository
+            : throw new UnexpectedValueException('Repository not set');
+    }
+
+    private function getRepositoryMock(): MockObject
+    {
+        return $this->repository instanceof MockObject
+            ? $this->repository
+            : throw new UnexpectedValueException('Repository not set');
     }
 }

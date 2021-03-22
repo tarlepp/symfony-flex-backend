@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Entity/LogLoginFailureTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Entity;
@@ -19,40 +19,19 @@ use function ucfirst;
  * Class LogLoginFailureTest
  *
  * @package App\Tests\Integration\Entity
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ *
+ * @method LogLoginFailure getEntity()
  */
 class LogLoginFailureTest extends EntityTestCase
 {
+    /**
+     * @var class-string
+     */
     protected string $entityName = LogLoginFailure::class;
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        static::bootKernel();
-
-        // Store container and entity manager
-        $this->testContainer = static::$kernel->getContainer();
-
-        /* @noinspection MissingService */
-        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $this->entityManager = $this->testContainer->get('doctrine.orm.default_entity_manager');
-
-        // Create new entity object and set repository
-        $this->entity = new $this->entityName(new User());
-
-        /* @noinspection PhpFieldAssignmentTypeMismatchInspection */
-        $this->repository = $this->entityManager->getRepository($this->entityName);
-    }
-
-    /** @noinspection PhpMissingParentCallCommonInspection */
-    /**
-     * @param string $field
-     * @param string $type
-     * @param array $meta
-     *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterOnlyAcceptSpecifiedType(
@@ -65,10 +44,6 @@ class LogLoginFailureTest extends EntityTestCase
 
     /** @noinspection PhpMissingParentCallCommonInspection */
     /**
-     * @param string $field
-     * @param string $type
-     * @param array $meta
-     *
      * @testdox No setter for `$field` field in read only entity - so cannot test this.
      */
     public function testThatSetterReturnsInstanceOfEntity(
@@ -106,13 +81,24 @@ class LogLoginFailureTest extends EntityTestCase
         }
 
         try {
-            if (static::isType($type)) {
-                $method = 'assertIs' . ucfirst($type);
+            $method = 'assertIs' . ucfirst($type);
 
-                static::$method($logRequest->{$getter}());
-            }
+            static::$method($logRequest->{$getter}());
         } catch (Throwable $error) {
+            /**
+             * @var class-string $type
+             */
             static::assertInstanceOf($type, $logRequest->{$getter}(), $error->getMessage());
         }
+    }
+
+    /**
+     * @noinspection PhpMissingParentCallCommonInspection
+     *
+     * @throws Throwable
+     */
+    protected function createEntity(): LogLoginFailure
+    {
+        return new LogLoginFailure(new User());
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/Resource/ResourceCollectionTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\Resource;
@@ -32,22 +32,22 @@ use Generator;
 use InvalidArgumentException;
 use IteratorAggregate;
 use LogicException;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use function assert;
 
 /**
  * Class ResourceCollectionTest
  *
  * @package App\Tests\Integration\Resource
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ResourceCollectionTest extends KernelTestCase
 {
     public function testThatGetMethodThrowsAnException(): void
     {
-        /** @var MockObject|LoggerInterface $logger */
+        /** @var LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
@@ -63,7 +63,6 @@ class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
 
-        /** @var MockObject|LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
@@ -71,13 +70,14 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects(static::once())
             ->method('error');
 
+        /** @var LoggerInterface $logger */
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
             ->get('FooBar');
     }
 
     public function testThatGetEntityResourceMethodThrowsAnException(): void
     {
-        /** @var MockObject|LoggerInterface $logger */
+        /** @var LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
@@ -93,7 +93,6 @@ class ResourceCollectionTest extends KernelTestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
 
-        /** @var MockObject|LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
@@ -101,6 +100,7 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects(static::once())
             ->method('error');
 
+        /** @var LoggerInterface $logger */
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
             ->getEntityResource('FooBar');
     }
@@ -118,6 +118,8 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetReturnsExpectedResource
      *
+     * @param class-string $resourceClass
+     *
      * @testdox Test that `get` method with `$resourceClass` input returns instance of that resource class.
      */
     public function testThatGetReturnsExpectedResource(string $resourceClass): void
@@ -127,6 +129,9 @@ class ResourceCollectionTest extends KernelTestCase
 
     /**
      * @dataProvider dataProviderTestThatGetEntityResourceReturnsExpectedResource
+     *
+     * @param class-string $resourceClass
+     * @param class-string $entityClass
      *
      * @testdox Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class.
      */
@@ -156,6 +161,9 @@ class ResourceCollectionTest extends KernelTestCase
         static::assertSame($expected, $this->getCollection()->hasEntityResource($entity));
     }
 
+    /**
+     * @return Generator<array{0: class-string<\App\Rest\RestResource>}>
+     */
     public function dataProviderTestThatGetReturnsExpectedResource(): Generator
     {
         yield [ApiKeyResource::class];
@@ -169,6 +177,12 @@ class ResourceCollectionTest extends KernelTestCase
         yield [UserResource::class];
     }
 
+    /**
+     * @return Generator<array{
+     *      0: class-string<\App\Rest\RestResource>,
+     *      1: class-string<\App\Entity\Interfaces\EntityInterface>
+     *  }>
+     */
     public function dataProviderTestThatGetEntityResourceReturnsExpectedResource(): Generator
     {
         yield [ApiKeyResource::class, ApiKey::class];
@@ -182,6 +196,9 @@ class ResourceCollectionTest extends KernelTestCase
         yield [UserResource::class, User::class];
     }
 
+    /**
+     * @return Generator<array{0: boolean, 1: class-string<\App\Rest\RestResource>|string|null}>
+     */
     public function dataProviderTestThatHasReturnsExpected(): Generator
     {
         yield [true, ApiKeyResource::class];
@@ -198,6 +215,9 @@ class ResourceCollectionTest extends KernelTestCase
         yield [false, stdClass::class];
     }
 
+    /**
+     * @return Generator<array{0: boolean, 1: class-string<\App\Entity\Interfaces\EntityInterface>|string|null}>
+     */
     public function dataProviderTestThatHasEntityResourceReturnsExpected(): Generator
     {
         yield [true, ApiKey::class];
@@ -218,20 +238,23 @@ class ResourceCollectionTest extends KernelTestCase
     {
         static::bootKernel();
 
+        assert(static::$container->get(ResourceCollection::class) instanceof ResourceCollection);
+
         return static::$container->get(ResourceCollection::class);
     }
 
+    /**
+     * @return IteratorAggregate<mixed>
+     */
     private function getEmptyIteratorAggregate(): IteratorAggregate
     {
         return new class([]) implements IteratorAggregate {
             private ArrayObject $iterator;
 
             /**
-             * Constructor of the class.
-             *
-             * @param $input
+             * @param array<mixed> $input
              */
-            public function __construct($input)
+            public function __construct(array $input)
             {
                 $this->iterator = new ArrayObject($input);
             }
@@ -243,6 +266,9 @@ class ResourceCollectionTest extends KernelTestCase
         };
     }
 
+    /**
+     * @return IteratorAggregate<mixed>
+     */
     private function getIteratorAggregateThatThrowsAnException(): IteratorAggregate
     {
         return new class() implements IteratorAggregate {

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/Integration/EventSubscriber/AcceptLanguageSubscriberTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\Integration\EventSubscriber;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * Class AcceptLanguageSubscriberTest
  *
  * @package App\Tests\Integration\EventSubscriber
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AcceptLanguageSubscriberTest extends KernelTestCase
 {
@@ -58,6 +58,9 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
         static::assertSame($expected, $request->getLocale());
     }
 
+    /**
+     * @return Generator<array{0: string, 1: string, 2: string}>
+     */
     public function dataProviderTestThatLocaleIsSetAsExpected(): Generator
     {
         yield ['fi', 'fi', 'fi'];

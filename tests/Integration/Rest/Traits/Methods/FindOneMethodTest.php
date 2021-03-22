@@ -27,6 +27,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
+use function assert;
 
 /**
  * Class FindOneMethodTest
@@ -36,30 +37,11 @@ use Throwable;
  */
 class FindOneMethodTest extends KernelTestCase
 {
-    /**
-     * @var MockObject|RestResourceInterface
-     */
-    private $resource;
-
-    /**
-     * @var MockObject|EntityInterface
-     */
-    private $entity;
-
-    /**
-     * @var MockObject|ResponseHandlerInterface
-     */
-    private $responseHandler;
-
-    /**
-     * @var MockObject|FindOneMethodTestClass
-     */
-    private $validTestClass;
-
-    /**
-     * @var MockObject|FindOneMethodInvalidTestClass
-     */
-    private $inValidTestClass;
+    private MockObject | RestResourceInterface | null $resource = null;
+    private MockObject | EntityInterface | null $entity = null;
+    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
+    private MockObject | FindOneMethodTestClass | null $validTestClass = null;
+    private MockObject | FindOneMethodInvalidTestClass | null $inValidTestClass = null;
 
     protected function setUp(): void
     {
@@ -95,7 +77,7 @@ class FindOneMethodTest extends KernelTestCase
         );
         /* @codingStandardsIgnoreEnd */
 
-        $this->inValidTestClass->findOneMethod(Request::create('/' . Uuid::uuid4()->toString()), 'some-id');
+        $this->getInValidTestClass()->findOneMethod(Request::create('/' . Uuid::uuid4()->toString()), 'some-id');
     }
 
     /**
@@ -109,7 +91,7 @@ class FindOneMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $this->validTestClass
+        $this->getValidTestClass()
             ->findOneMethod(Request::create('/' . Uuid::uuid4()->toString(), $httpMethod), 'some-id')
             ->getContent();
     }
@@ -128,13 +110,13 @@ class FindOneMethodTest extends KernelTestCase
 
         $uuid = Uuid::uuid4()->toString();
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('findOne')
             ->with($uuid)
             ->willThrowException($exception);
 
-        $this->validTestClass->findOneMethod(Request::create('/' . $uuid), $uuid);
+        $this->getValidTestClass()->findOneMethod(Request::create('/' . $uuid), $uuid);
     }
 
     /**
@@ -148,20 +130,23 @@ class FindOneMethodTest extends KernelTestCase
 
         $request = Request::create('/' . $uuid);
 
-        $this->resource
+        $this->getResourceMock()
             ->expects(static::once())
             ->method('findOne')
             ->with($uuid, true)
             ->willReturn($this->entity);
 
-        $this->responseHandler
+        $this->getResponseHandlerMock()
             ->expects(static::once())
             ->method('createResponse')
             ->with($request, $this->entity, $this->resource);
 
-        $this->validTestClass->findOneMethod($request, $uuid);
+        $this->getValidTestClass()->findOneMethod($request, $uuid);
     }
 
+    /**
+     * @return Generator<array{0: string}>
+     */
     public function dataProviderTestThatTraitThrowsAnExceptionWithWrongHttpMethod(): Generator
     {
         yield ['HEAD'];
@@ -174,6 +159,9 @@ class FindOneMethodTest extends KernelTestCase
         yield ['foobar'];
     }
 
+    /**
+     * @return Generator<array{0: Throwable, 1: int}>
+     */
     public function dataProviderTestThatTraitHandlesException(): Generator
     {
         yield [new HttpException(400, '', null, [], 400), 400];
@@ -183,5 +171,33 @@ class FindOneMethodTest extends KernelTestCase
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
+    }
+
+    private function getValidTestClass(): FindOneMethodTestClass
+    {
+        assert($this->validTestClass instanceof FindOneMethodTestClass);
+
+        return $this->validTestClass;
+    }
+
+    private function getInValidTestClass(): FindOneMethodInvalidTestClass
+    {
+        assert($this->inValidTestClass instanceof FindOneMethodInvalidTestClass);
+
+        return $this->inValidTestClass;
+    }
+
+    private function getResourceMock(): MockObject
+    {
+        assert($this->resource instanceof MockObject);
+
+        return $this->resource;
+    }
+
+    private function getResponseHandlerMock(): MockObject
+    {
+        assert($this->responseHandler instanceof MockObject);
+
+        return $this->responseHandler;
     }
 }

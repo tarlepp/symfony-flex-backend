@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Controller\User;
 
 use App\Entity\User;
+use App\Entity\UserGroup;
 use App\Resource\UserResource;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
@@ -102,13 +103,12 @@ class UserGroupsController
     {
         $groups = [
             'groups' => [
-                'set.UserGroupBasic',
+                UserGroup::SET_USER_GROUP_BASIC,
             ],
         ];
 
         return new JsonResponse(
             $this->serializer->serialize($requestUser->getUserGroups()->getValues(), 'json', $groups),
-            Response::HTTP_OK,
             json: true
         );
     }
