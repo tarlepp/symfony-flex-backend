@@ -70,7 +70,7 @@
 		"roave/security-advisories": "dev-latest",
 		"symfony/browser-kit": "5.2.4",
 		"symfony/debug-bundle": "5.2.4",
-		"symfony/maker-bundle": "1.29.1",
+		"symfony/maker-bundle": "1.30.0",
 		"symfony/requirements-checker": "2.0.0",
 		"symfony/stopwatch": "5.2.4",
 		"symfony/var-dumper": "5.2.5",
