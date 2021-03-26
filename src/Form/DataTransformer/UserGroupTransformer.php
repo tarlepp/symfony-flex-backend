@@ -44,13 +44,10 @@ class UserGroupTransformer implements DataTransformerInterface
      */
     public function transform($value): array
     {
-        return is_array($value)
-            ? array_map(
-                static fn (UserGroup | Stringable $userGroup): string =>
-                    $userGroup instanceof UserGroup ? $userGroup->getId() : (string)$userGroup,
-                $value,
-            )
-            : [];
+        $callback = static fn (UserGroup | Stringable $userGroup): string =>
+            $userGroup instanceof UserGroup ? $userGroup->getId() : (string)$userGroup;
+
+        return is_array($value) ? array_map($callback, $value) : [];
     }
 
     /**
