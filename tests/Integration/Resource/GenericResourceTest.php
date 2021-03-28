@@ -700,6 +700,9 @@ class GenericResourceTest extends KernelTestCase
             : $this->repository;
     }
 
+    /**
+     * @return MockBuilder<UserRepository>
+     */
     private function getRepositoryMockBuilder(): MockBuilder
     {
         $doctrine = static::$container->get('doctrine') ?? new stdClass();
