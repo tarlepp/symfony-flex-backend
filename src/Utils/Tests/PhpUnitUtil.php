@@ -158,24 +158,18 @@ class PhpUnitUtil
 
     public static function getType(Type | string | null $type): string
     {
+        $exception = new LogicException(
+            sprintf("Currently type '%s' is not supported within type normalizer", (string)$type),
+        );
+
         return match ($type) {
-            self::TYPE_INT, self::TYPE_INTEGER, 'bigint'
-                => self::TYPE_INT,
-            'time', 'date', 'datetime'
-                => DateTime::class,
-            'time_immutable', 'date_immutable', 'datetime_immutable'
-                => DateTimeImmutable::class,
-            self::TYPE_STRING, 'text', 'EnumLanguage', 'EnumLocale', 'EnumLogLogin'
-                => self::TYPE_STRING,
-            self::TYPE_ARRAY
-                => self::TYPE_ARRAY,
-            self::TYPE_BOOL, self::TYPE_BOOLEAN
-                => self::TYPE_BOOL,
-            default
-                => throw new LogicException(sprintf(
-                "Currently type '%s' is not supported within type normalizer",
-                (string)$type,
-            )),
+            'time', 'date', 'datetime' => DateTime::class,
+            'time_immutable', 'date_immutable', 'datetime_immutable' => DateTimeImmutable::class,
+            self::TYPE_INT, self::TYPE_INTEGER, 'bigint' => self::TYPE_INT,
+            self::TYPE_STRING, 'text', 'EnumLanguage', 'EnumLocale', 'EnumLogLogin' => self::TYPE_STRING,
+            self::TYPE_ARRAY => self::TYPE_ARRAY,
+            self::TYPE_BOOL, self::TYPE_BOOLEAN => self::TYPE_BOOL,
+            default => throw $exception,
         };
     }
 
@@ -207,51 +201,7 @@ class PhpUnitUtil
         $cacheKey = $type . serialize($meta);
 
         if (!array_key_exists($cacheKey, self::$validValueCache)) {
-            $meta ??= [];
-
-            $class = stdClass::class;
-            $params = [null];
-
-            if (substr_count($type, '\\') > 1 && !str_contains($type, '|')) {
-                /** @var class-string $class */
-                $class = count($meta) ? $meta['targetEntity'] : $type;
-
-                $type = self::TYPE_CUSTOM_CLASS;
-
-                $cleanClass = $class[0] === '\\' ? ltrim($class, '\\') : $class;
-
-                if ($cleanClass === Role::class) {
-                    $params = ['Some Role'];
-                }
-            }
-
-            if (str_contains($type, '|')) {
-                $output = self::getValidValueForType(explode('|', $type)[0], $meta);
-            } elseif (str_contains($type, '[]')) {
-                /** @var array<mixed, object> $output */
-                $output = self::getValidValueForType(self::TYPE_ARRAY, $meta);
-            } else {
-                $output = match ($type) {
-                    self::TYPE_CUSTOM_CLASS
-                        => new $class(...$params),
-                    self::TYPE_INT, self::TYPE_INTEGER
-                        => 666,
-                    self::TYPE_STRING
-                        => 'Some text here',
-                    self::TYPE_ARRAY
-                        => ['some', self::TYPE_ARRAY, 'here'],
-                    self::TYPE_BOOL, self::TYPE_BOOLEAN
-                        => true,
-                    DateTime::class
-                        => new DateTime(),
-                    DateTimeImmutable::class
-                        => new DateTimeImmutable(),
-                    default
-                        => throw new LogicException(sprintf("Cannot create valid value for type '%s'.", $type)),
-                };
-            }
-
-            self::$validValueCache[$cacheKey] = $output;
+            self::$validValueCache[$cacheKey] = self::getValidValue($meta, $type);
         }
 
         return self::$validValueCache[$cacheKey];
@@ -289,5 +239,53 @@ class PhpUnitUtil
         }
 
         return self::$invalidValueCache[$type];
+    }
+
+    /**
+     * @param array<string, string>|null $meta
+     *
+     * @throws Throwable
+     */
+    private static function getValidValue(
+        ?array $meta,
+        string $type
+    ): mixed {
+        $meta ??= [];
+
+        $class = stdClass::class;
+        $params = [null];
+
+        if (substr_count($type, '\\') > 1 && !str_contains($type, '|')) {
+            /** @var class-string $class */
+            $class = count($meta) ? $meta['targetEntity'] : $type;
+
+            $type = self::TYPE_CUSTOM_CLASS;
+
+            $cleanClass = $class[0] === '\\' ? ltrim($class, '\\') : $class;
+
+            if ($cleanClass === Role::class) {
+                $params = ['Some Role'];
+            }
+        }
+
+        $output = match ($type) {
+            self::TYPE_CUSTOM_CLASS => new $class(...$params),
+            self::TYPE_INT, self::TYPE_INTEGER => 666,
+            self::TYPE_STRING => 'Some text here',
+            self::TYPE_ARRAY => ['some', self::TYPE_ARRAY, 'here'],
+            self::TYPE_BOOL, self::TYPE_BOOLEAN => true,
+            DateTime::class => new DateTime(),
+            DateTimeImmutable::class => new DateTimeImmutable(),
+            default => null,
+        };
+
+        if (str_contains($type, '|')) {
+            $output = self::getValidValueForType(explode('|', $type)[0], $meta);
+        } elseif (str_contains($type, '[]')) {
+            /** @var array<mixed, object> $output */
+            $output = self::getValidValueForType(self::TYPE_ARRAY, $meta);
+        }
+
+        return $output ?? throw new LogicException(sprintf("Cannot create valid value for type '%s'.", $type));
     }
 }
