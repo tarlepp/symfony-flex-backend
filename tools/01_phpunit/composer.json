@@ -4,7 +4,7 @@
 	"require": {},
 	"require-dev": {
 		"liuggio/fastest": "1.8.0",
-		"phpunit/php-code-coverage": "9.2.5",
+		"phpunit/php-code-coverage": "9.2.6",
 		"phpunit/phpcov": "8.2.0",
 		"phpunit/phpunit": "9.5.4",
 		"roave/security-advisories": "dev-latest",
