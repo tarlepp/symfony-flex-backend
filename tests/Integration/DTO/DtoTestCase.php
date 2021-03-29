@@ -36,7 +36,8 @@ use function ucfirst;
 abstract class DtoTestCase extends KernelTestCase
 {
     /**
-     * @var class-string
+     * @psalm-var class-string
+     * @phpstan-var class-string<RestDtoInterface>
      */
     protected string $dtoClass;
 
@@ -95,6 +96,7 @@ abstract class DtoTestCase extends KernelTestCase
      */
     public function testThatSetterCallsSetVisitedMethod(): void
     {
+        /** @psalm-var ReflectionClass<RestDtoInterface> $dtoReflection */
         $dtoReflection = new ReflectionClass($this->dtoClass);
         $properties = $this->getDtoProperties();
 
@@ -131,6 +133,7 @@ abstract class DtoTestCase extends KernelTestCase
      */
     public function testThatGetterMethodReturnExpectedAfterSetter(): void
     {
+        /** @psalm-var ReflectionClass<RestDtoInterface> $dtoReflection */
         $dtoReflection = new ReflectionClass($this->dtoClass);
 
         $dto = new $this->dtoClass();
@@ -224,6 +227,8 @@ abstract class DtoTestCase extends KernelTestCase
     }
 
     /**
+     * @phpstan-param ReflectionClass<RestDtoInterface> $dtoReflection
+     *
      * @throws Throwable
      */
     private function getValueForProperty(ReflectionClass $dtoReflection, ReflectionProperty $reflectionProperty): mixed
