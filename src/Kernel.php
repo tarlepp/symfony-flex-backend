@@ -6,7 +6,9 @@ declare(strict_types = 1);
 
 namespace App;
 
+use App\Service\StopwatchCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -22,9 +24,6 @@ class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureContainer(ContainerConfigurator $container): void
     {
         $container->import('../config/{packages}/*.yaml');
@@ -45,9 +44,6 @@ class Kernel extends BaseKernel
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->import('../config/{routes}/' . $this->environment . '/*.yaml');
@@ -64,6 +60,15 @@ class Kernel extends BaseKernel
              * @psalm-suppress UnresolvableInclude
              */
             (require $path)($routes->withPath($path), $this);
+        }
+    }
+
+    protected function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+
+        if ($this->environment === 'dev') {
+            $container->addCompilerPass(new StopwatchCompilerPass());
         }
     }
 }
