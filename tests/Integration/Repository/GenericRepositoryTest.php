@@ -478,7 +478,7 @@ class GenericRepositoryTest extends KernelTestCase
             ->getMock();
 
         $arguments = [
-            ['some criteria'],
+            ['foo' => 'some criteria'],
             ['some order by'],
             10,
             20,
