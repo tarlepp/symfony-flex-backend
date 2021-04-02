@@ -1,6 +1,7 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
+        override_url: true
         default_table_options:
             charset: utf8mb4
             collate: utf8mb4_unicode_ci
