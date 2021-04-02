@@ -27,7 +27,7 @@
 		"doctrine/annotations": "1.12.1",
 		"doctrine/doctrine-bundle": "2.3.0",
 		"doctrine/doctrine-migrations-bundle": "3.0.2",
-		"doctrine/orm": "2.8.2",
+		"doctrine/orm": "2.8.3",
 		"easycorp/easy-log-handler": "1.0.9",
 		"gedmo/doctrine-extensions": "3.0.4",
 		"lexik/jwt-authentication-bundle": "2.11.2",
@@ -113,7 +113,6 @@
 				"tools/01_phpunit/vendor/liuggio/fastest/adapters"
 			],
 			"PhpCsFixer\\": "tools/04_symplify/vendor/friendsofphp/php-cs-fixer/src",
-			"SlevomatCodingStandard\\": "tools/04_symplify/vendor/slevomat/coding-standard/SlevomatCodingStandard",
 			"Symplify\\CodingStandard\\": "tools/04_symplify/vendor/symplify/coding-standard/src",
 			"PHPStan\\PhpDoc\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/PhpDoc/PHPUnit",
 			"PHPStan\\Rules\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Rules/PHPUnit",
