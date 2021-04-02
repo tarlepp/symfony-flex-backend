@@ -9,6 +9,8 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Serializer;
 
 use App\Serializer\Normalizer\CollectionNormalizer;
+use Doctrine\Common\Collections\ArrayCollection;
+use Generator;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -38,5 +40,35 @@ class CollectionNormalizerTest extends KernelTestCase
             ->with($object, 'someFormat', ['someContext']);
 
         (new CollectionNormalizer($normalizer))->normalize([$object], 'someFormat', ['someContext']);
+    }
+
+    /**
+     * @dataProvider dataProviderTestThatSupportsNormalizationReturnsExpected
+     *
+     * @testdox Test that `supportsNormalization` method returns `$expected` when using `$data` + `$format`
+     */
+    public function testThatSupportsNormalizationReturnsExpected(bool $expected, mixed $data, ?string $format): void
+    {
+        $normalizer = $this->getMockBuilder(ObjectNormalizer::class)->disableOriginalConstructor()->getMock();
+
+        static::assertSame(
+            $expected,
+            (new CollectionNormalizer($normalizer))->supportsNormalization($data, $format),
+        );
+    }
+
+    /**
+     * @return Generator<array{0: bool, 1: mixed}>
+     */
+    public function dataProviderTestThatSupportsNormalizationReturnsExpected(): Generator
+    {
+        yield [false, '', null];
+        yield [false, '', 'json'];
+        yield [false, new stdClass(), 'json'];
+        yield [false, new ArrayCollection(), 'json'];
+        yield [false, new ArrayCollection(['string']), 'json'];
+        yield [false, new ArrayCollection([123]), 'json'];
+        yield [false, new ArrayCollection([new stdClass()]), 'not-json'];
+        yield [true, new ArrayCollection([new stdClass()]), 'json'];
     }
 }
