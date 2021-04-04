@@ -37,7 +37,7 @@ trait RepositoryWrappersTrait
     /**
      * {@inheritdoc}
      *
-     * @return array<string, string>
+     * @psalm-return array<string, array<string, mixed>>
      */
     public function getAssociations(): array
     {

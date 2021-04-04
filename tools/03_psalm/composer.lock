@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f27d3ff0836cf5401d973dd32b6fb28",
+    "content-hash": "5162444dd9033ba2c547b6611421d86a",
     "packages": [],
     "packages-dev": [
         {
@@ -98,16 +98,16 @@
         },
         {
             "name": "amphp/byte-stream",
-            "version": "v1.8.0",
+            "version": "v1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/amphp/byte-stream.git",
-                "reference": "f0c20cf598a958ba2aa8c6e5a71c697d652c7088"
+                "reference": "acbd8002b3536485c997c4e019206b3f10ca15bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/amphp/byte-stream/zipball/f0c20cf598a958ba2aa8c6e5a71c697d652c7088",
-                "reference": "f0c20cf598a958ba2aa8c6e5a71c697d652c7088",
+                "url": "https://api.github.com/repos/amphp/byte-stream/zipball/acbd8002b3536485c997c4e019206b3f10ca15bd",
+                "reference": "acbd8002b3536485c997c4e019206b3f10ca15bd",
                 "shasum": ""
             },
             "require": {
@@ -163,9 +163,15 @@
             "support": {
                 "irc": "irc://irc.freenode.org/amphp",
                 "issues": "https://github.com/amphp/byte-stream/issues",
-                "source": "https://github.com/amphp/byte-stream/tree/master"
+                "source": "https://github.com/amphp/byte-stream/tree/v1.8.1"
             },
-            "time": "2020-06-29T18:35:05+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/amphp",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-03-30T17:13:30+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -903,16 +909,16 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v2.2.3",
+            "version": "v2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "567d5d6e3209e451f4290fe5dd9c8652b7fdf3ed"
+                "reference": "4fceec03d875002cde67d45a8f20bcc0fc12414c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/567d5d6e3209e451f4290fe5dd9c8652b7fdf3ed",
-                "reference": "567d5d6e3209e451f4290fe5dd9c8652b7fdf3ed",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/4fceec03d875002cde67d45a8f20bcc0fc12414c",
+                "reference": "4fceec03d875002cde67d45a8f20bcc0fc12414c",
                 "shasum": ""
             },
             "require": {
@@ -961,9 +967,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v2.2.3"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v2.2.4"
             },
-            "time": "2021-03-25T15:53:15+00:00"
+            "time": "2021-04-01T14:15:51+00:00"
         },
         {
             "name": "psr/cache",

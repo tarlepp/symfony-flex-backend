@@ -51,7 +51,7 @@ interface BaseRepositoryInterface
     /**
      * Gets all association mappings of the class.
      *
-     * @return array<string, string>
+     * @psalm-return array<string, array<string, mixed>>
      */
     public function getAssociations(): array;
 
@@ -92,8 +92,8 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository findOneBy method.
      *
-     * @param array<int|string, string|array> $criteria
-     * @param array<int, string>|null $orderBy
+     * @psalm-param array<string, mixed> $criteria
+     * @psalm-param array<string, string>|null $orderBy
      *
      * @psalm-return EntityInterface|object|null
      */
@@ -102,8 +102,8 @@ interface BaseRepositoryInterface
     /**
      * Wrapper for default Doctrine repository findBy method.
      *
-     * @param array<int|string, string|array> $criteria
-     * @param array<int, string>|null $orderBy
+     * @psalm-param array<string, mixed> $criteria
+     * @psalm-param list<string>|null $orderBy
      *
      * @psalm-return list<object|EntityInterface>
      */
