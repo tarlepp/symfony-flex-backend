@@ -86,11 +86,6 @@ class Localization
 
         $identifiers = DateTimeZone::listIdentifiers();
 
-        // TODO: remove after https://github.com/vimeo/psalm/issues/5442 is solved
-        if (!is_array($identifiers)) {
-            return [];
-        }
-
         foreach ($identifiers as $identifier) {
             $dateTimeZone = new DateTimeZone($identifier);
 
