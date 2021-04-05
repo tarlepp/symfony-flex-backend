@@ -11,7 +11,6 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Throwable;
 
 /**
  * Class IndexController
@@ -23,8 +22,6 @@ class IndexController
 {
     /**
      * Default application response when requested root.
-     *
-     * @throws Throwable
      */
     #[Route(
         path: '/',
