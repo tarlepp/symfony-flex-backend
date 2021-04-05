@@ -19,7 +19,6 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Throwable;
 use function explode;
 use function floor;
-use function is_array;
 use function str_replace;
 
 /**
