@@ -479,7 +479,7 @@ class GenericRepositoryTest extends KernelTestCase
 
         $arguments = [
             ['foo' => 'some criteria'],
-            ['some order by'],
+            ['bar' => 'some order by'],
             10,
             20,
         ];
