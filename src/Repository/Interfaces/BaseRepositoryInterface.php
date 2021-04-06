@@ -103,7 +103,7 @@ interface BaseRepositoryInterface
      * Wrapper for default Doctrine repository findBy method.
      *
      * @psalm-param array<string, mixed> $criteria
-     * @psalm-param list<string>|null $orderBy
+     * @psalm-param array<string, string>|null $orderBy
      *
      * @psalm-return list<object|EntityInterface>
      */
