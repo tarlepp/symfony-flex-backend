@@ -68,7 +68,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $userTypeIdentification = new UserTypeIdentification($tokenStorage, $repository);
 
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification);
+        $resolver = new LoggedInUserValueResolver($userTypeIdentification);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
         $request = Request::create('/');
 
@@ -102,7 +102,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $argumentResolver = new ArgumentResolver(
             null,
-            [new LoggedInUserValueResolver($tokenStorage, $userTypeIdentification)],
+            [new LoggedInUserValueResolver($userTypeIdentification)],
         );
 
         $closure = static function (User $loggedInUser): void {

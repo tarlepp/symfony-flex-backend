@@ -19,7 +19,6 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Throwable;
 use function explode;
 use function floor;
-use function is_array;
 use function str_replace;
 
 /**
@@ -85,11 +84,6 @@ class Localization
         $output = [];
 
         $identifiers = DateTimeZone::listIdentifiers();
-
-        // TODO: remove after https://github.com/vimeo/psalm/issues/5442 is solved
-        if (!is_array($identifiers)) {
-            return [];
-        }
 
         foreach ($identifiers as $identifier) {
             $dateTimeZone = new DateTimeZone($identifier);

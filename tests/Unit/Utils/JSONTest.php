@@ -49,6 +49,7 @@ class JSONTest extends KernelTestCase
      */
     public function testThatDecodeWorksLikeExpected(StringableArrayObject $parameters, mixed $expected): void
     {
+        /** @psalm-suppress InvalidArgument */
         static::assertSame(
             serialize($expected),
             serialize(JSON::decode(...$parameters))
