@@ -20,8 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Throwable;
 use function iterator_to_array;
 
@@ -35,34 +33,86 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 {
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `supports` methods returns `false` if the parameter name isn't `loggedInUser`
+     */
+    public function testThatSupportsReturnFalseWithWrongName(): void
+    {
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+
+        $resolver = new LoggedInUserValueResolver($userService);
+        $metadata = new ArgumentMetadata('foobar', null, false, false, null);
+
+        static::assertFalse($resolver->supports(Request::create('/'), $metadata));
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `supports` methods returns `false` if the parameter name is `loggedInUser` but type is wrong
      */
     public function testThatSupportsReturnFalseWithWrongType(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
-        $tokenStorage = new TokenStorage();
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
-        $metadata = new ArgumentMetadata('foo', null, false, false, null);
+        $resolver = new LoggedInUserValueResolver($userService);
+        $metadata = new ArgumentMetadata('loggedInUser', null, false, false, null);
 
         static::assertFalse($resolver->supports(Request::create('/'), $metadata));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `supports` returns `false` if the parameter name isn't `loggedInUser` but type is correct
      */
-    public function testThatSupportsReturnFalseWithNoToken(): void
+    public function testThatSupportsReturnFalseWithWrongNameAndCorrectType(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
-        $tokenStorage = new TokenStorage();
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
-        $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
+        $resolver = new LoggedInUserValueResolver($userService);
+        $metadata = new ArgumentMetadata('foobar', User::class, false, false, null);
 
         static::assertFalse($resolver->supports(Request::create('/'), $metadata));
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `supports` method returns `true` if parameter is nullable
+     */
+    public function testThatSupportsReturnFalseWithNullable(): void
+    {
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+
+        $resolver = new LoggedInUserValueResolver($userService);
+        $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null, true);
+
+        static::assertTrue($resolver->supports(Request::create('/'), $metadata));
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `supports` method throws an exception when `userService->getSecurityUser` returns null
+     */
+    public function testThatSupportsReturnFalseWithNoToken(): void
+    {
+        $this->expectException(MissingTokenException::class);
+        $this->expectExceptionMessage('JWT Token not found');
+
+        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
+
+        $resolver = new LoggedInUserValueResolver($userService);
+        $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
+
+        $resolver->supports(Request::create('/'), $metadata);
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `supports` throws an exception when `userService->getSecurityUser` returns non `SecurityUser`
      */
     public function testThatSupportsThrowsAnExceptionWithNonSecurityUser(): void
     {
@@ -71,12 +121,12 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
-        $token = new UsernamePasswordToken('username', 'password', 'provider');
+        $userService
+            ->expects(static::once())
+            ->method('getSecurityUser')
+            ->willReturn(null);
 
-        $tokenStorage = new TokenStorage();
-        $tokenStorage->setToken($token);
-
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
+        $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         $resolver->supports(Request::create('/'), $metadata);
@@ -84,23 +134,21 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `supports` methods returns `true` with proper `SecurityUser`
      */
     public function testThatSupportsReturnsTrueWithProperUser(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $securityUser = new SecurityUser(new User());
-        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
-
-        $tokenStorage = new TokenStorage();
-        $tokenStorage->setToken($token);
 
         $userService
             ->expects(static::once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
+        $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
         static::assertTrue($resolver->supports(Request::create('/'), $metadata));
@@ -108,21 +156,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
-     */
-    public function testThatResolveThrowsAnExceptionIfTokenIsNotPresent(): void
-    {
-        $this->expectException(MissingTokenException::class);
-        $this->expectExceptionMessage('JWT Token not found');
-
-        $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
-
-        (new LoggedInUserValueResolver(new TokenStorage(), $userService))
-            ->resolve(new Request(), new ArgumentMetadata('loggedInUser', null, false, false, null))
-            ->current();
-    }
-
-    /**
-     * @throws Throwable
+     *
+     * @testdox Test that `resolve` method calls expected `UserService` service method
      */
     public function testThatResolveCallsExpectedResourceMethod(): void
     {
@@ -132,13 +167,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
             ->expects(static::once())
             ->method('getUser');
 
-        $securityUser = new SecurityUser(new User());
-        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
-
-        $tokenStorage = new TokenStorage();
-        $tokenStorage->setToken($token);
-
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
+        $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
         $request = Request::create('/');
 
@@ -150,24 +179,21 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `resolve` method returns expected user
      */
     public function testThatResolveReturnsExpectedUser(): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $user = new User();
-        $securityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
 
         $userService
             ->expects(static::once())
             ->method('getUser')
             ->willReturn($user);
 
-        $tokenStorage = new TokenStorage();
-        $tokenStorage->setToken($token);
-
-        $resolver = new LoggedInUserValueResolver($tokenStorage, $userService);
+        $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
         $request = Request::create('/');
 
@@ -178,6 +204,8 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that integration with `ArgumentResolver` returns expected user
      */
     public function testThatIntegrationWithArgumentResolverReturnsExpectedUser(): void
     {
@@ -185,7 +213,6 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $user = new User();
         $securityUser = new SecurityUser($user);
-        $token = new UsernamePasswordToken($securityUser, 'password', 'provider');
 
         $userService
             ->expects(static::once())
@@ -197,10 +224,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
             ->method('getUser')
             ->willReturn($user);
 
-        $tokenStorage = new TokenStorage();
-        $tokenStorage->setToken($token);
-
-        $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($tokenStorage, $userService)]);
+        $argumentResolver = new ArgumentResolver(null, [new LoggedInUserValueResolver($userService)]);
 
         $closure = static function (User $loggedInUser): void {
             // Do nothing
@@ -213,15 +237,16 @@ class LoggedInUserValueResolverTest extends KernelTestCase
      * @dataProvider dataProviderTestThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet
      *
      * @throws Throwable
+     *
+     * @testdox Test that integration with `ArgumentResolver` returns null when there is not user present
      */
     public function testThatIntegrationWithArgumentResolverReturnsNullWhenUserNotSet(Closure $closure): void
     {
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
-        $tokenStorage = new TokenStorage();
         $argumentResolver = new ArgumentResolver(
             null,
-            [new LoggedInUserValueResolver($tokenStorage, $userService), new DefaultValueResolver()]
+            [new LoggedInUserValueResolver($userService), new DefaultValueResolver()]
         );
 
         static::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));
