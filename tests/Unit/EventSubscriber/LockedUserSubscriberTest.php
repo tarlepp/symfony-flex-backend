@@ -29,11 +29,11 @@ class LockedUserSubscriberTest extends KernelTestCase
                 'onAuthenticationSuccess',
                 128,
             ],
-            'Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent' => 'onAuthenticationFailure',
             'lexik_jwt_authentication.on_authentication_success' => [
                 'onAuthenticationSuccess',
                 128,
             ],
+            'Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent' => 'onAuthenticationFailure',
             'lexik_jwt_authentication.on_authentication_failure' => 'onAuthenticationFailure',
         ];
 
