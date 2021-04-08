@@ -23,7 +23,8 @@ use App\Tests\Integration\DTO\DtoTestCase;
 class UserPatchTest extends DtoTestCase
 {
     /**
-     * @var class-string
+     * @psalm-var class-string
+     * @phpstan-var class-string<UserPatch>
      */
     protected string $dtoClass = UserPatch::class;
 
