@@ -16,6 +16,7 @@ use App\Controller\User\DeleteUserController;
 use App\Controller\User\UserController;
 use App\Controller\UserGroup\UserGroupController;
 use App\Rest\ControllerCollection;
+use App\Rest\Interfaces\ControllerInterface;
 use ArrayObject;
 use Generator;
 use InvalidArgumentException;
@@ -43,6 +44,9 @@ class ControllerCollectionTest extends KernelTestCase
         $this->expectExceptionMessage('REST controller \'FooBar\' does not exist');
 
         $iteratorAggregate = new class([]) implements IteratorAggregate {
+            /**
+             * @phpstan-var ArrayObject<int, mixed>
+             */
             private ArrayObject $iterator;
 
             /**
@@ -55,6 +59,9 @@ class ControllerCollectionTest extends KernelTestCase
                 $this->iterator = new ArrayObject($input);
             }
 
+            /**
+             * @phpstan-return ArrayObject<int, mixed>
+             */
             public function getIterator(): ArrayObject
             {
                 return $this->iterator;
@@ -129,6 +136,9 @@ class ControllerCollectionTest extends KernelTestCase
         yield [false, GetTokenController::class];
     }
 
+    /**
+     * @return ControllerCollection<ControllerInterface>
+     */
     private function getCollection(): ControllerCollection
     {
         static::bootKernel();

@@ -3,7 +3,6 @@ parameters:
     paths:
         - src
         - tests
-    checkGenericClassInNonGenericObjectType: false
 includes:
     - tools/02_phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
     - tools/02_phpstan/vendor/phpstan/phpstan-phpunit/extension.neon

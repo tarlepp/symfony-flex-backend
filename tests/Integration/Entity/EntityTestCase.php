@@ -147,7 +147,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         $value = PhpUnitUtil::getInvalidValueForType($type);
 
-        $this->entity->{$setter}($value);
+        $this->getEntity()->{$setter}($value);
 
         $message = sprintf(
             "Setter '%s' didn't fail with invalid value type '%s', maybe missing variable type?",
@@ -181,7 +181,7 @@ abstract class EntityTestCase extends KernelTestCase
         /**
          * @var callable $callable
          */
-        $callable = [$this->entity, $setter];
+        $callable = [$this->getEntity(), $setter];
 
         static::assertInstanceOf(
             get_class($this->getEntity()),
@@ -216,12 +216,12 @@ abstract class EntityTestCase extends KernelTestCase
         /**
          * @var callable $callable
          */
-        $callable = [$this->entity, $getter];
+        $callable = [$this->getEntity(), $getter];
 
         if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
             $value = PhpUnitUtil::getValidValueForType($type, $meta);
 
-            $this->entity->{$setter}($value);
+            $this->getEntity()->{$setter}($value);
 
             static::assertSame(
                 $value,
@@ -243,7 +243,7 @@ abstract class EntityTestCase extends KernelTestCase
         try {
             $method = 'assertIs' . ucfirst($type);
 
-            static::$method($this->entity->{$getter}());
+            static::$method($this->getEntity()->{$getter}());
         } catch (Throwable $error) {
             /** @var class-string $type */
             static::assertInstanceOf($type, $callable(), $error->getMessage());
@@ -280,7 +280,7 @@ abstract class EntityTestCase extends KernelTestCase
         );
 
         if (is_string($output)) {
-            static::assertInstanceOf($output, $this->entity->{$method}($input));
+            static::assertInstanceOf($output, $this->getEntity()->{$method}($input));
         }
     }
 
@@ -312,7 +312,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             get_class($this->getEntity()),
-            $this->entity->{$adder}($entity),
+            $this->getEntity()->{$adder}($entity),
             sprintf(
                 "Added method '%s()' for property '%s' did not return instance of the entity itself",
                 $adder,
@@ -320,26 +320,26 @@ abstract class EntityTestCase extends KernelTestCase
             ),
         );
 
-        /** @var ArrayCollection $collection */
-        $collection = $this->entity->{$getter}();
+        /** @var ArrayCollection<int, EntityInterface> $collection */
+        $collection = $this->getEntity()->{$getter}();
 
         static::assertTrue($collection->contains($entity));
 
         if (isset($mappings['mappedBy'])) {
-            /** @var ArrayCollection $collection */
+            /** @var ArrayCollection<int, EntityInterface> $collection */
             $collection = $entity->{'get' . ucfirst($mappings['mappedBy'])}();
 
-            static::assertTrue($collection->contains($this->entity));
+            static::assertTrue($collection->contains($this->getEntity()));
         } elseif (isset($mappings['inversedBy'])) {
-            /** @var ArrayCollection $collection */
+            /** @var ArrayCollection<int, EntityInterface> $collection */
             $collection = $entity->{'get' . ucfirst($mappings['inversedBy'])}();
 
-            static::assertTrue($collection->contains($this->entity));
+            static::assertTrue($collection->contains($this->getEntity()));
         }
 
         static::assertInstanceOf(
             get_class($this->getEntity()),
-            $this->entity->{$removal}($entity),
+            $this->getEntity()->{$removal}($entity),
             sprintf(
                 "Removal method '%s()' for property '%s' did not return instance of the entity itself",
                 $adder,
@@ -347,18 +347,18 @@ abstract class EntityTestCase extends KernelTestCase
             ),
         );
 
-        /** @var ArrayCollection $collection */
-        $collection = $this->entity->{$getter}();
+        /** @var ArrayCollection<int, EntityInterface> $collection */
+        $collection = $this->getEntity()->{$getter}();
 
         static::assertTrue($collection->isEmpty());
 
         if (isset($mappings['mappedBy'])) {
-            /** @var ArrayCollection $collection */
+            /** @var ArrayCollection<int, EntityInterface> $collection */
             $collection = $entity->{'get' . ucfirst($mappings['mappedBy'])}();
 
             static::assertTrue($collection->isEmpty());
         } elseif (isset($mappings['inversedBy'])) {
-            /** @var ArrayCollection $collection */
+            /** @var ArrayCollection<int, EntityInterface> $collection */
             $collection = $entity->{'get' . ucfirst($mappings['inversedBy'])}();
 
             static::assertTrue($collection->isEmpty());
@@ -366,11 +366,11 @@ abstract class EntityTestCase extends KernelTestCase
 
         // Test for 'clear' method
 
-        $this->entity->{$adder}($entity);
+        $this->getEntity()->{$adder}($entity);
 
         static::assertInstanceOf(
             get_class($this->getEntity()),
-            $this->entity->{$clear}(),
+            $this->getEntity()->{$clear}(),
             sprintf(
                 "Clear method '%s()' for property '%s' did not return instance of the entity itself",
                 $adder,
@@ -378,8 +378,8 @@ abstract class EntityTestCase extends KernelTestCase
             ),
         );
 
-        /** @var ArrayCollection $collection */
-        $collection = $this->entity->{$getter}();
+        /** @var ArrayCollection<int, EntityInterface> $collection */
+        $collection = $this->getEntity()->{$getter}();
 
         static::assertTrue($collection->isEmpty());
     }
@@ -404,7 +404,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             get_class($this->getEntity()),
-            $this->entity->{$setter}($targetEntity),
+            $this->getEntity()->{$setter}($targetEntity),
             sprintf(
                 "Setter method '%s()' for property '%s' did not return instance of the entity itself",
                 $setter,
@@ -416,7 +416,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             get_class($targetEntity),
-            $this->entity->{$getter}(),
+            $this->getEntity()->{$getter}(),
             sprintf(
                 "Getter method '%s()' for property '%s' did not return expected object '%s'.",
                 $getter,
@@ -441,7 +441,7 @@ abstract class EntityTestCase extends KernelTestCase
 
         static::assertInstanceOf(
             ArrayCollection::class,
-            $this->entity->{$methodGetter}(),
+            $this->getEntity()->{$methodGetter}(),
             sprintf(
                 "Getter method '%s()' for property '%s' did not return expected 'ArrayCollection' object.",
                 $methodGetter,
