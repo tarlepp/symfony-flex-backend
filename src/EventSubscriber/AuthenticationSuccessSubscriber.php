@@ -12,6 +12,7 @@ use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use App\Repository\UserRepository;
 use App\Utils\LoginLogger;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Throwable;
 
@@ -38,6 +39,7 @@ class AuthenticationSuccessSubscriber implements EventSubscriberInterface
     {
         return [
             AuthenticationSuccessEvent::class => 'onAuthenticationSuccess',
+            Events::AUTHENTICATION_SUCCESS => 'onAuthenticationSuccess',
         ];
     }
 
