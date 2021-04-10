@@ -49,11 +49,11 @@ class LockedUserSubscriber implements EventSubscriberInterface
                 'onAuthenticationSuccess',
                 128,
             ],
-            AuthenticationFailureEvent::class => 'onAuthenticationFailure',
             Events::AUTHENTICATION_SUCCESS => [
                 'onAuthenticationSuccess',
                 128,
             ],
+            AuthenticationFailureEvent::class => 'onAuthenticationFailure',
             Events::AUTHENTICATION_FAILURE => 'onAuthenticationFailure',
         ];
     }

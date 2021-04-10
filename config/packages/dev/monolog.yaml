@@ -1,13 +1,10 @@
 monolog:
     handlers:
         main:
-            type: buffer
-            handler: easylog
-            channels: ['!event']
+            type: stream
+            path: php://stderr
             level: debug
-        easylog:
-            type: service
-            id: EasyCorp\EasyLog\EasyLogHandler
+            channels: ['!event']
         firephp:
             type: firephp
             level: info
