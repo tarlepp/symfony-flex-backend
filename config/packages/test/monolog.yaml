@@ -4,5 +4,4 @@ monolog:
             type: stream
             path: '%kernel.logs_dir%/%kernel.environment%.log'
             level: debug
-            excluded_http_codes: [404, 405]
             channels: ['!event']
