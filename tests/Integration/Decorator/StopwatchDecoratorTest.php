@@ -10,6 +10,7 @@ namespace App\Tests\Integration\Decorator;
 
 use App\Decorator\StopwatchDecorator;
 use App\Validator\Constraints\EntityReferenceExists;
+use Exception;
 use Generator;
 use ProxyManager\Factory\AccessInterceptorValueHolderFactory;
 use ProxyManager\Proxy\AccessInterceptorValueHolderInterface;
@@ -60,6 +61,29 @@ class StopwatchDecoratorTest extends KernelTestCase
         $decoratedService = $decorator->decorate($service);
 
         static::assertSame('property', $decoratedService->getTargets());
+    }
+
+    /**
+     * @testdox Test that `decorate` method returns exact same service if factory throws an expection
+     */
+    public function testThatDecoratorReturnsTheSameInstanceIfFactoryFails(): void
+    {
+        $service = new EntityReferenceExists();
+
+        $factory = $this->getMockBuilder(AccessInterceptorValueHolderFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+
+        $factory
+            ->expects(static::once())
+            ->method('createProxy')
+            ->willThrowException(new Exception('foo'));
+
+        $decorator = new StopwatchDecorator($factory, $stopWatch);
+
+        static::assertSame($service, $decorator->decorate($service));
     }
 
     /**
