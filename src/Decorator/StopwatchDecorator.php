@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Service/StopwatchDecorator.php
+ * /src/Decorator/StopwatchDecorator.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Service;
+namespace App\Decorator;
 
 use ProxyManager\Factory\AccessInterceptorValueHolderFactory;
 use ReflectionClass;
@@ -19,7 +19,7 @@ use function str_starts_with;
 /**
  * Class StopwatchDecorator
  *
- * @package App\Service
+ * @package App\Decorator
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class StopwatchDecorator

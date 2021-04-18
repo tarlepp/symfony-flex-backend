@@ -1,13 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Service/StopwatchCompilerPass.php
+ * /src/Compiler/StopwatchCompilerPass.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Service;
+namespace App\Compiler;
 
+use App\Service\StopwatchDecorator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -17,7 +18,7 @@ use function str_starts_with;
 /**
  * Class StopwatchCompilerPass
  *
- * @package App\Service
+ * @package App\Compiler
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class StopwatchCompilerPass implements CompilerPassInterface
