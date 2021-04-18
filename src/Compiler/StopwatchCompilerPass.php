@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Compiler;
 
-use App\Service\StopwatchDecorator;
+use App\Decorator\StopwatchDecorator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

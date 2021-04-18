@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Service/StopwatchCompilerPassTest.php
+ * /tests/Integration/Compiler/StopwatchCompilerPassTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Service;
+namespace App\Tests\Integration\Compiler;
 
-use App\Service\StopwatchCompilerPass;
+use App\Compiler\StopwatchCompilerPass;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\Definition;
 /**
  * Class StopwatchCompilerPassTest
  *
- * @package App\Tests\Integration\Service
+ * @package App\Tests\Compiler\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class StopwatchCompilerPassTest extends KernelTestCase

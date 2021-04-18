@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Service/StopwatchDecoratorTest.php
+ * /tests/Integration/Decorator/StopwatchDecoratorTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Service;
+namespace App\Tests\Integration\Decorator;
 
-use App\Service\StopwatchDecorator;
+use App\Decorator\StopwatchDecorator;
 use App\Validator\Constraints\EntityReferenceExists;
 use Generator;
 use ProxyManager\Factory\AccessInterceptorValueHolderFactory;
@@ -20,7 +20,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 /**
  * Class StopwatchDecoratorTest
  *
- * @package App\Tests\Integration\Service
+ * @package App\Tests\Decorator\Service
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class StopwatchDecoratorTest extends KernelTestCase

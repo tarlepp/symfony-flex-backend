@@ -6,7 +6,7 @@ declare(strict_types = 1);
 
 namespace App;
 
-use App\Service\StopwatchCompilerPass;
+use App\Compiler\StopwatchCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
