@@ -33,9 +33,11 @@ services:
             tags: [ 'app.rest.resource', 'app.stopwatch' ]
         App\Repository\BaseRepository:
             tags: [ 'app.rest.repository', 'app.stopwatch' ]
-        Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface:
-            tags: [ 'app.stopwatch' ]
         AutoMapperPlus\MapperInterface:
+            tags: [ 'app.stopwatch' ]
+        Symfony\Component\EventDispatcher\EventSubscriberInterface:
+            tags: [ 'app.stopwatch' ]
+        Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface:
             tags: [ 'app.stopwatch' ]
 
     # makes classes in src/ available to be used as services
