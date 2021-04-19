@@ -5,5 +5,5 @@ services:
     doctrine.dbal.default_connection.stopwatch:
         class: Doctrine\DBAL\Connection
         decorates: doctrine.dbal.default_connection
-        factory: [ '@App\Service\StopwatchDecorator', decorate ]
+        factory: [ '@App\Decorator\StopwatchDecorator', decorate ]
         arguments: [ '@doctrine.dbal.default_connection.stopwatch.inner' ]
