@@ -35,19 +35,16 @@ class StopwatchDecoratorTest extends KernelTestCase
      */
     public function testThatDecorateMethodReturnsExpected(string $expected, object $service): void
     {
-        $factory = new AccessInterceptorValueHolderFactory();
-        $stopWatch = new Stopwatch();
-
-        $decorator = new StopwatchDecorator($factory, $stopWatch);
+        $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), new Stopwatch());
 
         static::assertInstanceOf($expected, $decorator->decorate($service));
     }
 
+    /**
+     * @testdox Test that decorator calls expected methods from `StopWatch` service
+     */
     public function testThatDecoratorCallsStopWatchStartAndStopMethods(): void
     {
-        $service = new EntityReferenceExists();
-
-        $factory = new AccessInterceptorValueHolderFactory();
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
         $stopWatch
@@ -55,10 +52,15 @@ class StopwatchDecoratorTest extends KernelTestCase
             ->method('start')
             ->with('EntityReferenceExists->getTargets', 'App\Validator\Constraints\EntityReferenceExists');
 
-        $decorator = new StopwatchDecorator($factory, $stopWatch);
+        $stopWatch
+            ->expects(static::once())
+            ->method('stop')
+            ->with('EntityReferenceExists->getTargets');
+
+        $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
 
         /** @var EntityReferenceExists $decoratedService */
-        $decoratedService = $decorator->decorate($service);
+        $decoratedService = $decorator->decorate(new EntityReferenceExists());
 
         static::assertSame('property', $decoratedService->getTargets());
     }
