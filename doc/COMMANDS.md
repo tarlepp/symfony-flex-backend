@@ -27,7 +27,20 @@ make bash
 ```
 
 That command is shortcut for `docker-compose exec php bash` command and you
-can use that command within your host machine.
+can use that command within your host machine. Note that default user inside
+that `php` container is `dev` and it has been bind to your host machine user
+and group (uid = 1000, gid = 1000) - so that you don't have issues within file
+permissions.
+
+Note that if you host machine user _isn't_ bind to those mentioned values:
+
+```
+uid = 1000 
+gid = 1000
+```
+
+You need to create `docker-compose.override.yml` file and specify used user
+information there.
 
 ### Makefile
 
