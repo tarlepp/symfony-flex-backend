@@ -34,7 +34,7 @@ permissions.
 
 Note that if you host machine user _isn't_ bind to those mentioned values:
 
-```
+```bash
 uid = 1000 
 gid = 1000
 ```
