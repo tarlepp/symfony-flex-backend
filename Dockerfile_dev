@@ -63,7 +63,7 @@ RUN curl -s https://api.github.com/repos/fabpot/local-php-security-checker/relea
     && chmod +x /usr/bin/local-php-security-checker
 
 RUN groupadd --gid ${HOST_GID} dev \
-    && useradd --password dev --uid ${HOST_UID} --gid ${HOST_GID} --shell /bin/bash --create-home dev \
+    && useradd -p $(perl -e 'print crypt($ARGV[0], "password")' 'dev') --uid ${HOST_UID} --gid ${HOST_GID} --shell /bin/bash --create-home dev \
     && usermod -a -G www-data,sudo dev \
     && chgrp -hR dev /app
 
