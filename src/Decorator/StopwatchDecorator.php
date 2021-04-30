@@ -8,12 +8,14 @@ declare(strict_types = 1);
 
 namespace App\Decorator;
 
+use App\Entity\Interfaces\EntityInterface;
 use ProxyManager\Factory\AccessInterceptorValueHolderFactory;
 use ReflectionClass;
 use ReflectionMethod;
 use Symfony\Component\Stopwatch\Stopwatch;
 use Throwable;
 use function array_filter;
+use function is_object;
 use function str_starts_with;
 
 /**
@@ -30,9 +32,6 @@ class StopwatchDecorator
     ) {
     }
 
-    /**
-     * @noinspection PhpUnusedParameterInspection
-     */
     public function decorate(object $service): object
     {
         $class = new ReflectionClass($service);
@@ -69,14 +68,12 @@ class StopwatchDecorator
                 /**
                  * Decorate returned values as well
                  *
-                 * Commented this out for now, there is some edge cases that
-                 * this will cause some errors - need to fix those firsts.
+                 * Note that this might cause some weird errors on some edge
+                 * cases - we should fix those when those happens...
                  */
-                /*
                 if (is_object($returnValue) && !$returnValue instanceof EntityInterface) {
                     $returnValue = $this->decorate($returnValue);
                 }
-                */
             };
         }
 
