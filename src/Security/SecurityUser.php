@@ -105,6 +105,11 @@ class SecurityUser implements SecurityUserInterface
         return $this->timezone;
     }
 
+    /**
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
     public function eraseCredentials(): void
     {
     }

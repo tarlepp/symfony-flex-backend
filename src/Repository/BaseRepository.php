@@ -142,7 +142,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function addInnerJoin(array $parameters): self
     {
-        if (count($parameters) > 0) {
+        if (!empty($parameters)) {
             $this->addJoinToQuery(self::INNER_JOIN, $parameters);
         }
 

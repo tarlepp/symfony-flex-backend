@@ -20,7 +20,6 @@ use function array_key_exists;
 use function array_map;
 use function array_walk;
 use function call_user_func_array;
-use function count;
 use function is_array;
 use function is_numeric;
 use function str_contains;
@@ -92,7 +91,7 @@ class RepositoryHelper
     {
         $criteria ??= [];
 
-        if (count($criteria) === 0) {
+        if (empty($criteria)) {
             return;
         }
 
@@ -122,7 +121,7 @@ class RepositoryHelper
     {
         $terms ??= [];
 
-        if (count($columns) === 0) {
+        if (empty($columns)) {
             return;
         }
 
@@ -359,6 +358,7 @@ class RepositoryHelper
             try {
                 $value = array_map([UuidHelper::class, 'getBytes'], $value);
             } catch (InvalidUuidStringException) {
+                // Ok so value isn't list of UUIDs
             }
 
             $parameters[] = array_map(

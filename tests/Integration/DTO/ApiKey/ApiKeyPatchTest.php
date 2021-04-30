@@ -23,7 +23,8 @@ use App\Tests\Integration\DTO\DtoTestCase;
 class ApiKeyPatchTest extends DtoTestCase
 {
     /**
-     * @var class-string
+     * @psalm-var class-string
+     * @phpstan-var class-string<ApiKeyPatch>
      */
     protected string $dtoClass = ApiKeyPatch::class;
 

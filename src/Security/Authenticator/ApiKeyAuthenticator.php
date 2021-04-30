@@ -19,7 +19,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
-use function count;
 use function is_array;
 use function preg_match;
 
@@ -44,7 +43,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 
         preg_match('#^ApiKey (\w+)$#', $apiKey, $matches);
 
-        return count($matches) > 0;
+        return !empty($matches);
     }
 
     public function start(Request $request, ?AuthenticationException $authException = null): JsonResponse
@@ -67,7 +66,7 @@ class ApiKeyAuthenticator extends AbstractGuardAuthenticator
 
         preg_match('#^ApiKey (\w+)$#', $apiKey, $matches);
 
-        if (count($matches) > 0) {
+        if (!empty($matches)) {
             $output = [
                 self::CREDENTIAL_KEY => $matches[1],
             ];

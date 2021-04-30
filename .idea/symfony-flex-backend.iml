@@ -7,7 +7,6 @@
       <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/friendsofphp/php-cs-fixer/src" isTestSource="true" packagePrefix="PhpCsFixer\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/coding-standard/src" isTestSource="true" packagePrefix="Symplify\CodingStandard\" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/slevomat/coding-standard/SlevomatCodingStandard" isTestSource="true" packagePrefix="SlevomatCodingStandard\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest/src" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="App\Tests\" />
@@ -148,7 +147,6 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/collections" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/migrations" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/lcobucci/jwt" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/easycorp/easy-log-handler" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/lexer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/orm" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/dbal" />
@@ -164,6 +162,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/matthiasnoback/symfony-console-form" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpdocumentor/type-resolver" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/polyfill-intl-icu" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/doctrine/deprecations" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

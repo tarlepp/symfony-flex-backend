@@ -249,6 +249,9 @@ class ResourceCollectionTest extends KernelTestCase
     private function getEmptyIteratorAggregate(): IteratorAggregate
     {
         return new class([]) implements IteratorAggregate {
+            /**
+             * @phpstan-var ArrayObject<int, mixed>
+             */
             private ArrayObject $iterator;
 
             /**
@@ -259,6 +262,9 @@ class ResourceCollectionTest extends KernelTestCase
                 $this->iterator = new ArrayObject($input);
             }
 
+            /**
+             * @phpstan-return ArrayObject<int, mixed>
+             */
             public function getIterator(): ArrayObject
             {
                 return $this->iterator;
@@ -272,6 +278,9 @@ class ResourceCollectionTest extends KernelTestCase
     private function getIteratorAggregateThatThrowsAnException(): IteratorAggregate
     {
         return new class() implements IteratorAggregate {
+            /**
+             * @phpstan-return ArrayObject<int, mixed>
+             */
             public function getIterator(): ArrayObject
             {
                 throw new LogicException('Exception with getIterator');
