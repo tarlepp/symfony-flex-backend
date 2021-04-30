@@ -9,7 +9,12 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Decorator;
 
 use App\Decorator\StopwatchDecorator;
+use App\Entity\ApiKey;
+use App\Repository\ApiKeyRepository;
+use App\Resource\ApiKeyResource;
 use App\Validator\Constraints\EntityReferenceExists;
+use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Generator;
 use ProxyManager\Factory\AccessInterceptorValueHolderFactory;
@@ -17,6 +22,7 @@ use ProxyManager\Proxy\AccessInterceptorValueHolderInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Throwable;
 
 /**
  * Class StopwatchDecoratorTest
@@ -37,6 +43,7 @@ class StopwatchDecoratorTest extends KernelTestCase
     {
         $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), new Stopwatch());
 
+        /** @noinspection UnnecessaryAssertionInspection */
         static::assertInstanceOf($expected, $decorator->decorate($service));
     }
 
@@ -47,6 +54,7 @@ class StopwatchDecoratorTest extends KernelTestCase
     {
         $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
 
+        /** @noinspection ClassConstantCanBeUsedInspection */
         $stopWatch
             ->expects(static::once())
             ->method('start')
@@ -66,7 +74,7 @@ class StopwatchDecoratorTest extends KernelTestCase
     }
 
     /**
-     * @testdox Test that `decorate` method returns exact same service if factory throws an expection
+     * @testdox Test that `decorate` method returns exact same service if factory throws an exception
      */
     public function testThatDecoratorReturnsTheSameInstanceIfFactoryFails(): void
     {
@@ -86,6 +94,79 @@ class StopwatchDecoratorTest extends KernelTestCase
         $decorator = new StopwatchDecorator($factory, $stopWatch);
 
         static::assertSame($service, $decorator->decorate($service));
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `decorate` method decorates possible inner objects / services
+     */
+    public function testThatDecoratorAlsoDecoratesInnerObjects(): void
+    {
+        $managerRegistry = $this->getMockBuilder(ManagerRegistry::class)->disableOriginalConstructor()->getMock();
+        $entityManager = $this->getMockBuilder(EntityManager::class)->disableOriginalConstructor()->getMock();
+        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+
+        $managerRegistry
+            ->expects(static::once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManager);
+
+        $stopWatch
+            ->expects(static::exactly(2))
+            ->method('start');
+
+        $stopWatch
+            ->expects(static::exactly(2))
+            ->method('stop');
+
+        $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
+        $repository = new ApiKeyRepository($managerRegistry);
+        $resource = new ApiKeyResource($repository);
+
+        /** @var ApiKeyResource $decoratedService */
+        $decoratedService = $decorator->decorate($resource);
+        $decoratedService->getRepository()->getEntityManager();
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `decorate` method does not decorate entity objects
+     */
+    public function testThatDecoratorDoesNotTryToDecorateEntityObjects(): void
+    {
+        $apiKey = new ApiKey();
+
+        $managerRegistry = $this->getMockBuilder(ManagerRegistry::class)->disableOriginalConstructor()->getMock();
+        $entityManager = $this->getMockBuilder(EntityManager::class)->disableOriginalConstructor()->getMock();
+        $stopWatch = $this->getMockBuilder(Stopwatch::class)->disableOriginalConstructor()->getMock();
+
+        $managerRegistry
+            ->expects(static::once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManager);
+
+        $entityManager
+            ->expects(static::once())
+            ->method('find')
+            ->willReturn($apiKey);
+
+        $stopWatch
+            ->expects(static::once())
+            ->method('start');
+
+        $stopWatch
+            ->expects(static::once())
+            ->method('stop');
+
+        $decorator = new StopwatchDecorator(new AccessInterceptorValueHolderFactory(), $stopWatch);
+        $repository = new ApiKeyRepository($managerRegistry);
+
+        /** @var ApiKeyRepository $decoratedService */
+        $decoratedService = $decorator->decorate($repository);
+
+        static::assertSame($apiKey, $decoratedService->find($apiKey->getId()));
     }
 
     /**
