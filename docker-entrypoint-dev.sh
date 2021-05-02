@@ -37,7 +37,6 @@ COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader
 
 # Step 3
 make generate-jwt-keys
-chmod 644 /app/config/jwt/private.pem
 
 # Step 4
 ./bin/console doctrine:database:create --no-interaction --if-not-exists
