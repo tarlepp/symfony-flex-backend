@@ -19,14 +19,12 @@ use Exception;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use function assert;
 
 /**
  * Class CountMethodTest
@@ -36,29 +34,6 @@ use function assert;
  */
 class CountMethodTest extends KernelTestCase
 {
-    private MockObject | RestResourceInterface | null $resource = null;
-    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
-    private MockObject | CountMethodTestClass | null $validTestClass = null;
-    private MockObject | CountMethodInvalidTestClass | null $inValidTestClass = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->validTestClass = $this->getMockForAbstractClass(
-            CountMethodTestClass::class,
-            [$this->resource, $this->responseHandler]
-        );
-
-        $this->inValidTestClass = $this->getMockForAbstractClass(CountMethodInvalidTestClass::class);
-    }
-
     /**
      * @throws Throwable
      *
@@ -74,7 +49,8 @@ class CountMethodTest extends KernelTestCase
         );
         /* @codingStandardsIgnoreEnd */
 
-        $this->getInValidTestClass()->countMethod(Request::create('/'));
+        $this->getMockForAbstractClass(CountMethodInvalidTestClass::class)
+            ->countMethod(Request::create('/'));
     }
 
     /**
@@ -88,7 +64,17 @@ class CountMethodTest extends KernelTestCase
     {
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $this->getValidTestClass()->countMethod(Request::create('/', $httpMethod))->getContent();
+        $restResourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $validTestClass = $this->getMockForAbstractClass(
+            CountMethodTestClass::class,
+            [$restResourceMock, $responseHandlerMock],
+        );
+
+        $validTestClass->countMethod(Request::create('/', $httpMethod))->getContent();
     }
 
     /**
@@ -102,23 +88,33 @@ class CountMethodTest extends KernelTestCase
     {
         $request = Request::create('/');
 
-        $this->getResourceMock()
+        $this->expectException(HttpException::class);
+        $this->expectExceptionCode($expectedCode);
+
+        $restResourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $restResourceMock
             ->expects(static::once())
             ->method('count')
             ->with([], [])
             ->willThrowException($exception);
 
-        $this->expectException(HttpException::class);
-        $this->expectExceptionCode($expectedCode);
+        $validTestClass = $this->getMockForAbstractClass(
+            CountMethodTestClass::class,
+            [$restResourceMock, $responseHandlerMock],
+        );
 
-        $this->getValidTestClass()->countMethod($request);
+        $validTestClass->countMethod($request);
     }
 
     /**
      * @dataProvider dataProviderTestThatTraitCallsServiceMethods
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $criteria
-     * @phpstan-param StringableArrayObject<array<mixed>> $search
+     * @phpstan-param StringableArrayObject<array> $criteria
+     * @phpstan-param StringableArrayObject<array> $search
      * @psalm-param StringableArrayObject $criteria
      * @psalm-param StringableArrayObject $search
      *
@@ -132,19 +128,24 @@ class CountMethodTest extends KernelTestCase
         StringableArrayObject $search
     ): void {
         $request = Request::create('/' . $queryString);
+        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->getResourceMock()
+        $resourceMock
             ->expects(static::once())
             ->method('count')
             ->with($criteria->getArrayCopy(), $search->getArrayCopy())
             ->willReturn(0);
 
-        $this->getResponseHandlerMock()
+        $responseHandlerMock
             ->expects(static::once())
             ->method('createResponse')
-            ->with($request, ['count' => 0], $this->resource);
+            ->with($request, ['count' => 0], $resourceMock);
 
-        $this->getValidTestClass()->countMethod($request);
+        $this->getMockForAbstractClass(CountMethodTestClass::class, [$resourceMock, $responseHandlerMock])
+            ->countMethod($request);
     }
 
     /**
@@ -158,7 +159,17 @@ class CountMethodTest extends KernelTestCase
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
 
-        $this->getValidTestClass()->countMethod(Request::create('/?where=foo'));
+        $restResourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $validTestClass = $this->getMockForAbstractClass(
+            CountMethodTestClass::class,
+            [$restResourceMock, $responseHandlerMock],
+        );
+
+        $validTestClass->countMethod(Request::create('/?where=foo'));
     }
 
     /**
@@ -253,33 +264,5 @@ class CountMethodTest extends KernelTestCase
                 'or' => ['term3', 'term4'],
             ]),
         ];
-    }
-
-    private function getValidTestClass(): CountMethodTestClass
-    {
-        assert($this->validTestClass instanceof CountMethodTestClass);
-
-        return $this->validTestClass;
-    }
-
-    private function getInValidTestClass(): CountMethodInvalidTestClass
-    {
-        assert($this->inValidTestClass instanceof CountMethodInvalidTestClass);
-
-        return $this->inValidTestClass;
-    }
-
-    private function getResourceMock(): MockObject
-    {
-        assert($this->resource instanceof MockObject);
-
-        return $this->resource;
-    }
-
-    private function getResponseHandlerMock(): MockObject
-    {
-        assert($this->responseHandler instanceof MockObject);
-
-        return $this->responseHandler;
     }
 }
