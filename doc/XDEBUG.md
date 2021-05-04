@@ -31,7 +31,7 @@ Note that if you're using Mac, read [Mac users](#mac-users) section first.
 
 ### PhpStorm basic configuration
 
-1) Make sure that Xdebug port is `9009`
+1) Make sure that Xdebug port is `9003`
 2) Validate debugger configuration
 3) Install needed browser extensions
 
@@ -98,11 +98,11 @@ override that in your local `docker-compose.override.yml` file.
 See those [External links / resources](#external-links--resources) on this
 documentation to get more information.
 
-## Debug Postman requests
+~~## Debug Postman requests~~
 
-If you're using [Postman](https://www.getpostman.com/) to test / debug your
+~~If you're using [Postman](https://www.getpostman.com/) to test / debug your
 application you need to add `?XDEBUG_SESSION_START=PHPSTORM` to each URL
-that you use with Postman.
+that you use with Postman.~~
 
 ## External links / resources
 
