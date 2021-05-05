@@ -54,7 +54,6 @@ class UpdateMethodTest extends KernelTestCase
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
         /** @codingStandardsIgnoreEnd */
-
         $this->getMockForAbstractClass(UpdateMethodInvalidTestClass::class)
             ->updateMethod($request, $restDtoMock, 'some-id');
     }

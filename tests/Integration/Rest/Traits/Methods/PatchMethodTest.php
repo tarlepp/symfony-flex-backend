@@ -54,7 +54,6 @@ class PatchMethodTest extends KernelTestCase
             '/You cannot use (.*) controller class with REST traits if that does not implement (.*)ControllerInterface\'/'
         );
         /** @codingStandardsIgnoreEnd */
-
         $this->getMockForAbstractClass(PatchMethodInvalidTestClass::class)
             ->patchMethod($request, $restDtoMock, 'some-id');
     }
