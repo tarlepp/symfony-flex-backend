@@ -243,7 +243,7 @@ class CountMethodTest extends KernelTestCase
      * @return array{
      *      0: \PHPUnit\Framework\MockObject\MockObject&RestResourceInterface,
      *      1: \PHPUnit\Framework\MockObject\MockObject&ResponseHandlerInterface,
-     *      2: \PHPUnit\Framework\MockObject\MockObject&CountMethodTestClass
+     *      2: \PHPUnit\Framework\MockObject\MockObject&CountMethodTestClass,
      *  }
      */
     private function getMocks(): array

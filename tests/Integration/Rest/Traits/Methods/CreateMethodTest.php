@@ -64,20 +64,12 @@ class CreateMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
+        [, $restDtoMock, , , $testClassMock] = $this->getMocks();
+
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $restResourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $validTestClass = $this->getMockForAbstractClass(
-            CreateMethodTestClass::class,
-            [$restResourceMock, $responseHandlerMock],
-        );
-
-        $validTestClass
-            ->createMethod(Request::create('/', $httpMethod), $this->getMockBuilder(RestDtoInterface::class)->getMock())
+        $testClassMock
+            ->createMethod(Request::create('/', $httpMethod), $restDtoMock)
             ->getContent();
     }
 
@@ -90,14 +82,7 @@ class CreateMethodTest extends KernelTestCase
      */
     public function testThatHandleRestMethodExceptionIsCalled(Throwable $exception, int $expectedCode): void
     {
-        $this->expectException(HttpException::class);
-        $this->expectExceptionCode($expectedCode);
-
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $restResourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        [, $restDtoMock, $restResourceMock, , $testClassMock] = $this->getMocks();
 
         $restResourceMock
             ->expects(static::once())
@@ -105,12 +90,10 @@ class CreateMethodTest extends KernelTestCase
             ->with($restDtoMock, true)
             ->willThrowException($exception);
 
-        $validTestClass = $this->getMockForAbstractClass(
-            CreateMethodTestClass::class,
-            [$restResourceMock, $responseHandlerMock],
-        );
+        $this->expectException(HttpException::class);
+        $this->expectExceptionCode($expectedCode);
 
-        $validTestClass->createMethod(Request::create('/', 'POST'), $restDtoMock)->getContent();
+        $testClassMock->createMethod(Request::create('/', 'POST'), $restDtoMock)->getContent();
     }
 
     /**
@@ -122,12 +105,7 @@ class CreateMethodTest extends KernelTestCase
     {
         $request = Request::create('/', 'POST');
 
-        $entityMock = $this->getMockBuilder(EntityInterface::class)->getMock();
-        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
-        $restResourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        [$entityMock, $restDtoMock, $restResourceMock, $responseHandlerMock, $testClassMock] = $this->getMocks();
 
         $restResourceMock
             ->expects(static::once())
@@ -140,12 +118,7 @@ class CreateMethodTest extends KernelTestCase
             ->method('createResponse')
             ->with($request, $entityMock, $restResourceMock, 201);
 
-        $validTestClass = $this->getMockForAbstractClass(
-            CreateMethodTestClass::class,
-            [$restResourceMock, $responseHandlerMock],
-        );
-
-        $validTestClass->createMethod($request, $restDtoMock);
+        $testClassMock->createMethod($request, $restDtoMock);
     }
 
     /**
@@ -175,5 +148,30 @@ class CreateMethodTest extends KernelTestCase
         yield [new Exception(), 400];
         yield [new LogicException(), 400];
         yield [new InvalidArgumentException(), 400];
+    }
+
+    /**
+     * @return array{
+     *      0: \PHPUnit\Framework\MockObject\MockObject&EntityInterface,
+     *      1: \PHPUnit\Framework\MockObject\MockObject&RestDtoInterface,
+     *      2: \PHPUnit\Framework\MockObject\MockObject&RestResourceInterface,
+     *      3: \PHPUnit\Framework\MockObject\MockObject&ResponseHandlerInterface,
+     *      4: \PHPUnit\Framework\MockObject\MockObject&CreateMethodTestClass,
+     *  }
+     */
+    private function getMocks(): array
+    {
+        $entityMock = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $restDtoMock = $this->getMockBuilder(RestDtoInterface::class)->getMock();
+        $restResourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $testClassMock = $this->getMockForAbstractClass(
+            CreateMethodTestClass::class,
+            [$restResourceMock, $responseHandlerMock],
+        );
+
+        return [$entityMock, $restDtoMock, $restResourceMock, $responseHandlerMock, $testClassMock];
     }
 }
