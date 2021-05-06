@@ -30,7 +30,15 @@ services:
         App\Rest\Interfaces\ControllerInterface:
             tags: [ 'app.rest.controller' ]
         App\Rest\Interfaces\RestResourceInterface:
-            tags: [ 'app.rest.resource' ]
+            tags: [ 'app.rest.resource', 'app.stopwatch' ]
+        App\Repository\BaseRepository:
+            tags: [ 'app.rest.repository', 'app.stopwatch' ]
+        AutoMapperPlus\MapperInterface:
+            tags: [ 'app.stopwatch' ]
+        Symfony\Component\EventDispatcher\EventSubscriberInterface:
+            tags: [ 'app.stopwatch' ]
+        Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface:
+            tags: [ 'app.stopwatch' ]
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
