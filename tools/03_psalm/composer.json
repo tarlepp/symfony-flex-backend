@@ -6,7 +6,7 @@
 		"roave/security-advisories": "dev-latest",
 		"psalm/plugin-phpunit": "0.15.1",
 		"psalm/plugin-symfony": "2.2.4",
-		"vimeo/psalm": "4.7.1"
+		"vimeo/psalm": "4.7.2"
 	},
 	"config": {
 		"platform": {
