@@ -8,7 +8,7 @@ set -e
 #      another value within this. Also we want to export host IP so that we can use that within `check.php` to check
 #      that current environment is compatible with Symfony.
 #   2) Install all dependencies
-#   3) Generate JWT encryption keys + allow apache to read this file
+#   3) Generate JWT encryption keys
 #   4) Create database if it not exists yet
 #   5) Run possible migrations, so that database is always up to date
 #
