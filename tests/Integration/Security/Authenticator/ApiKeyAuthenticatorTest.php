@@ -306,7 +306,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
     /**
      * @psalm-return MockObject&ApiKeyUserProvider
      */
-    private function getMock(): ApiKeyUserProvider|MockObject
+    private function getMock(): ApiKeyUserProvider | MockObject
     {
         return $this->getMockBuilder(ApiKeyUserProvider::class)
             ->disableOriginalConstructor()
