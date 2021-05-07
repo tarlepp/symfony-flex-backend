@@ -13,6 +13,7 @@ use App\Security\Authenticator\ApiKeyAuthenticator;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
+use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -41,9 +42,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatSupportReturnsExpected(bool $expected, Request $request): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
@@ -57,9 +56,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatStartMethodReturnsExpected(): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
@@ -86,9 +83,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatGetCredentialsReturnsExpected(?StringableArrayObject $expected, Request $request): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
@@ -107,9 +102,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatGetUserReturnsExpectedWhenCredentialsIsInvalid(mixed $credentials): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
@@ -134,9 +127,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
     public function testThatCheckCredentialsThrowsAnException(
         string | int | stdClass | StringableArrayObject | null $credentials,
     ): void {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         $this->expectException(AuthenticationException::class);
         $this->expectExceptionMessage('Invalid token');
@@ -152,9 +143,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatCheckCredentialsReturnsFalseWhenValidToken(): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         $apiKeyUserProviderMock
             ->expects(static::once())
@@ -175,9 +164,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
     {
         $apiKey = new ApiKey();
 
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         $apiKeyUserProviderMock
             ->expects(static::once())
@@ -198,9 +185,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatOnAuthenticationSuccessReturnsNull(): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
@@ -218,9 +203,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatOnAuthenticationFailureReturnsExpected(): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         $output = (new ApiKeyAuthenticator($apiKeyUserProviderMock))
             ->onAuthenticationFailure(new Request(), new AuthenticationException('foobar'));
@@ -239,9 +222,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatSupportsRememberMeReturnsFalse(): void
     {
-        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $apiKeyUserProviderMock = $this->getMock();
 
         static::assertFalse((new ApiKeyAuthenticator($apiKeyUserProviderMock))->supportsRememberMe());
     }
@@ -320,5 +301,15 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [new StringableArrayObject(['foobar'])];
         yield [new StringableArrayObject(['foobar' => 'barfoo'])];
         yield [new StringableArrayObject(['token' => null])];
+    }
+
+    /**
+     * @psalm-return MockObject&ApiKeyUserProvider
+     */
+    private function getMock(): ApiKeyUserProvider|MockObject
+    {
+        return $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }
