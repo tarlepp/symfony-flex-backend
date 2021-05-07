@@ -21,11 +21,11 @@ if [[ -z "${DOCKER_WITH_MAC}" ]]; then
     # Not Mac, so determine actual docker container IP address
     HOST=$(/sbin/ip route|awk '/default/ { print $3 }')
 else
-    # Otherwise use special value, which works wit Mac
+    # Otherwise use special value, which works with Mac
     HOST="docker.for.mac.localhost"
 fi
 
-sed -i "s/xdebug\.client_host \=.*/xdebug\.client_host\=$HOST/g" /usr/local/etc/php/php.ini
+sed -i "s/xdebug\.client_host \=.*/xdebug\.client_host\ = $HOST/g" /usr/local/etc/php/php.ini
 
 DOCKER_IP=$(/sbin/ip route|awk '/default/ { print $3 }')
 
