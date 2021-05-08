@@ -11,13 +11,13 @@ namespace App\Tests\Integration;
 use App\Doctrine\DBAL\Types\EnumLanguageType;
 use App\Doctrine\DBAL\Types\EnumLocaleType;
 use App\Doctrine\DBAL\Types\EnumLogLoginType;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaValidator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
 use function array_walk;
-use function assert;
 use function implode;
 
 /**
@@ -28,8 +28,6 @@ use function implode;
  */
 class SchemaTest extends KernelTestCase
 {
-    private ?SchemaValidator $validator = null;
-
     /**
      * @throws Throwable
      */
@@ -50,18 +48,6 @@ class SchemaTest extends KernelTestCase
         if (!Type::hasType('EnumLogLogin')) {
             Type::addType('EnumLogLogin', EnumLogLoginType::class);
         }
-
-        /**
-         * @var \Doctrine\Persistence\ManagerRegistry $managerRegistry
-         */
-        $managerRegistry = static::$kernel->getContainer()->get('doctrine');
-
-        /**
-         * @var EntityManagerInterface $entityManager
-         */
-        $entityManager = $managerRegistry->getManager();
-
-        $this->validator = new SchemaValidator($entityManager);
     }
 
     /**
@@ -95,8 +81,16 @@ class SchemaTest extends KernelTestCase
 
     private function getValidator(): SchemaValidator
     {
-        assert($this->validator instanceof SchemaValidator);
+        /**
+         * @var Registry $managerRegistry
+         */
+        $managerRegistry = static::$container->get('doctrine');
 
-        return $this->validator;
+        /**
+         * @var EntityManagerInterface $entityManager
+         */
+        $entityManager = $managerRegistry->getManager();
+
+        return new SchemaValidator($entityManager);
     }
 }
