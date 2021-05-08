@@ -13,7 +13,6 @@ use App\Repository\Interfaces\BaseRepositoryInterface;
 use App\Rest\Interfaces\RestResourceInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
-use UnexpectedValueException;
 use function array_keys;
 use function sort;
 
@@ -49,18 +48,12 @@ abstract class RepositoryTestCase extends KernelTestCase
      * @var array<int, string>
      */
     protected array $searchColumns = [];
-    private ?RestResourceInterface $resource = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         self::bootKernel();
-
-        /** @var RestResourceInterface $resource */
-        $resource = self::$container->get($this->resourceName);
-
-        $this->resource = $resource;
     }
 
     /**
@@ -111,6 +104,9 @@ abstract class RepositoryTestCase extends KernelTestCase
 
     protected function getResource(): RestResourceInterface
     {
-        return $this->resource ?? throw new UnexpectedValueException('Resource not set');
+        /** @var RestResourceInterface $resource */
+        $resource = self::$container->get($this->resourceName);
+
+        return $resource;
     }
 }
