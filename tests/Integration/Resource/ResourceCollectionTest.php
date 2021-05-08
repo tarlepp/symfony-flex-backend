@@ -45,11 +45,12 @@ use function assert;
  */
 class ResourceCollectionTest extends KernelTestCase
 {
+    /**
+     * @testdox Test `get` method throws an exception when asking not existing resource class
+     */
     public function testThatGetMethodThrowsAnException(): void
     {
-        /** @var LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
@@ -58,28 +59,30 @@ class ResourceCollectionTest extends KernelTestCase
             ->get('FooBar');
     }
 
+    /**
+     * @testdox Test `get` method calls expected logger method when asking not existing resource class
+     */
     public function testThatLoggerIsCalledIfGetMethodGetIteratorThrowsAnException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
-
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $logger
             ->expects(static::once())
             ->method('error');
 
-        /** @var LoggerInterface $logger */
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Resource \'FooBar\' does not exist');
+
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
             ->get('FooBar');
     }
 
+    /**
+     * @testdox Test `get` method throws an exception when asking not existing entity class
+     */
     public function testThatGetEntityResourceMethodThrowsAnException(): void
     {
-        /** @var LoggerInterface $logger */
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
@@ -88,28 +91,35 @@ class ResourceCollectionTest extends KernelTestCase
             ->getEntityResource('FooBar');
     }
 
+    /**
+     * @testdox Test `get` method calls expected logger method when asking not existing entity class
+     */
     public function testThatLoggerIsCalledIfGetEntityResourceMethodGetIteratorThrowsAnException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
-
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
+        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         $logger
             ->expects(static::once())
             ->method('error');
 
-        /** @var LoggerInterface $logger */
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Resource class does not exist for entity \'FooBar\'');
+
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
             ->getEntityResource('FooBar');
     }
 
+    /**
+     * @testdox Test `getAll` method returns expected count of resources
+     */
     public function testThatGetAllReturnsCorrectCountOfResources(): void
     {
         static::assertCount(9, $this->getCollection()->getAll());
     }
 
+    /**
+     * @testdox Test `count` method returns expected count of resources
+     */
     public function testThatCountMethodReturnsExpectedCount(): void
     {
         static::assertSame(9, $this->getCollection()->count(), 'REST resource count from collection was not expected');
@@ -120,7 +130,7 @@ class ResourceCollectionTest extends KernelTestCase
      *
      * @param class-string $resourceClass
      *
-     * @testdox Test that `get` method with `$resourceClass` input returns instance of that resource class.
+     * @testdox Test that `get` method with `$resourceClass` input returns instance of that resource class
      */
     public function testThatGetReturnsExpectedResource(string $resourceClass): void
     {
@@ -133,7 +143,7 @@ class ResourceCollectionTest extends KernelTestCase
      * @param class-string $resourceClass
      * @param class-string $entityClass
      *
-     * @testdox Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class.
+     * @testdox Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class
      */
     public function testThatGetEntityResourceReturnsExpectedResource(string $resourceClass, string $entityClass): void
     {
@@ -144,7 +154,7 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatHasReturnsExpected
      *
-     * @testdox Test that `has` method returns `$expected` with `$resource` input.
+     * @testdox Test that `has` method returns `$expected` with `$resource` input
      */
     public function testThatHasReturnsExpected(bool $expected, ?string $resource): void
     {
@@ -154,7 +164,7 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatHasEntityResourceReturnsExpected
      *
-     * @testdox Test that `hasEntityResource` method returns `$expected` with `$entity` input.
+     * @testdox Test that `hasEntityResource` method returns `$expected` with `$entity` input
      */
     public function testThatHasEntityResourceReturnsExpected(bool $expected, ?string $entity): void
     {
@@ -255,7 +265,7 @@ class ResourceCollectionTest extends KernelTestCase
             private ArrayObject $iterator;
 
             /**
-             * @param array<mixed> $input
+             * @phpstan-param array<int, mixed> $input
              */
             public function __construct(array $input)
             {

@@ -45,6 +45,7 @@ class LogLoginFailureResourceTest extends ResourceTestCase
      */
     public function testThatResetMethodCallsExpectedRepositoryMethod(): void
     {
+        /** @var \PHPUnit\Framework\MockObject\MockObject&LogLoginFailureRepository $repository */
         $repository = $this->getMockBuilder($this->repositoryClass)->disableOriginalConstructor()->getMock();
 
         $user = (new User())->setUsername('username');
@@ -55,7 +56,6 @@ class LogLoginFailureResourceTest extends ResourceTestCase
             ->with($user)
             ->willReturn(0);
 
-        /** @var LogLoginFailureRepository $repository */
         (new LogLoginFailureResource($repository))->reset($user);
     }
 }
