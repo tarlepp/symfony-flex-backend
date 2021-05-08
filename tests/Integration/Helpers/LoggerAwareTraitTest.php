@@ -22,22 +22,25 @@ use Throwable;
  */
 class LoggerAwareTraitTest extends KernelTestCase
 {
-    public function testThatLoggerAttributeExists(): void
+    /**
+     * @testdox Test that `logger` property exists when using `LoggerAwareTrait` trait
+     */
+    public function testThatLoggerPropertyExists(): void
     {
         static::assertClassHasAttribute('logger', LoggerAwareService::class);
     }
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `logger` property is instance of `LoggerInterface` when using `LoggerAwareTrait` trait
      */
     public function testThatLoggerIsInstanceOfLoggerInterface(): void
     {
         static::bootKernel();
 
-        /**
-         * @var LoggerAwareService $service
-         */
-        $service = static::$kernel->getContainer()->get(LoggerAwareService::class);
+        /** @var LoggerAwareService $service */
+        $service = static::$container->get(LoggerAwareService::class);
 
         $logger = PhpUnitUtil::getProperty('logger', $service);
 
