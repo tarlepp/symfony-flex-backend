@@ -26,17 +26,6 @@ use UnexpectedValueException;
  */
 class LoginLoggerTest extends KernelTestCase
 {
-    private MockObject | LogLoginResource | null $resource = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->resource = $this->getMockBuilder(LogLoginResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @throws Throwable
      *
@@ -47,7 +36,7 @@ class LoginLoggerTest extends KernelTestCase
         $this->expectException(BadMethodCallException::class);
         $this->expectExceptionMessage('Could not get request from current request stack');
 
-        (new LoginLogger($this->getResource(), new RequestStack()))
+        (new LoginLogger($this->getLogLoginResourceMock(), new RequestStack()))
             ->process('');
     }
 
@@ -58,28 +47,26 @@ class LoginLoggerTest extends KernelTestCase
      */
     public function testThatCreateEntryCallsResourceSaveMethod(): void
     {
-        $this->getResourceMock()
-            ->expects(static::once())
-            ->method('save');
-
         $requestStack = new RequestStack();
         $requestStack->push(new Request());
 
-        (new LoginLogger($this->getResource(), $requestStack))
+        $logLoginResourceMock = $this->getLogLoginResourceMock();
+
+        $logLoginResourceMock
+            ->expects(static::once())
+            ->method('save');
+
+        (new LoginLogger($logLoginResourceMock, $requestStack))
             ->process('');
     }
 
-    private function getResource(): LogLoginResource
+    /**
+     * @return MockObject&LogLoginResource
+     */
+    private function getLogLoginResourceMock(): MockObject | LogLoginResource
     {
-        return $this->resource instanceof LogLoginResource
-            ? $this->resource
-            : throw new UnexpectedValueException('Resource not set');
-    }
-
-    private function getResourceMock(): MockObject
-    {
-        return $this->resource instanceof MockObject
-            ? $this->resource
-            : throw new UnexpectedValueException('Resource not set');
+        return $this->getMockBuilder(LogLoginResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }
