@@ -8,7 +8,7 @@ set -e
 #      another value within this. Also we want to export host IP so that we can use that within `check.php` to check
 #      that current environment is compatible with Symfony.
 #   2) Install all dependencies
-#   3) Generate JWT encryption keys + allow apache to read this file
+#   3) Generate JWT encryption keys
 #   4) Create database if it not exists yet
 #   5) Run possible migrations, so that database is always up to date
 #
@@ -37,7 +37,6 @@ COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader
 
 # Step 3
 make generate-jwt-keys
-chmod 644 /app/config/jwt/private.pem
 
 # Step 4
 ./bin/console doctrine:database:create --no-interaction --if-not-exists
