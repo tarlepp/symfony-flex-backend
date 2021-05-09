@@ -62,7 +62,7 @@ class LogRequest implements EntityInterface
         'LogRequest.id',
 
         'ApiKey.logsRequest',
-        'User.logRequest',
+        'User.logsRequest',
     ])]
     private UuidInterface $id;
 
