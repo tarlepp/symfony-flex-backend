@@ -27,8 +27,6 @@ use function array_keys;
  */
 class UserTypeTest extends TypeTestCase
 {
-
-
     public function testSubmitValidData(): void
     {
         // Create new role entity for testing
