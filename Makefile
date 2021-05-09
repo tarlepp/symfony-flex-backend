@@ -23,11 +23,17 @@ endif
 # Global variables that we're using
 HOST_UID := $(shell id -u)
 HOST_GID := $(shell id -g)
+CONSOLE := $(shell which bin/console)
+OPENSSL_BIN := $(shell which openssl)
+PHPDBG := $(shell which phpdbg)
+COMPOSER_BIN := $(shell which composer)
 WARNING_HOST = @printf "\033[31mThis command cannot be run inside docker container!\033[39m\n"
 WARNING_DOCKER = @printf "\033[31mThis command must be run inside docker container!\nUse 'make bash' command to get shell inside container.\033[39m\n"
 
 .DEFAULT_GOAL := help
-.PHONY: help
+
+help:
+	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "[32m%-27s[0m %s\n", $$1, $$2}'
 
 configuration: ## Prints out application current configuration
 ifeq ($(INSIDE_DOCKER), 1)
@@ -36,22 +42,12 @@ else
 	$(WARNING_DOCKER)
 endif
 
-help:
-	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "[32m%-27s[0m %s\n", $$1, $$2}'
-
-CONSOLE := $(shell which bin/console)
-sf_console:
-ifndef CONSOLE
-	@printf "Run \033[32mcomposer require cli\033[39m to install the Symfony console.\n"
-endif
-
 cache-clear: ## Clears the cache
 ifdef CONSOLE
 	@bin/console cache:clear --no-warmup
 else
 	@rm -rf var/cache/*
 endif
-.PHONY: cache-clear
 
 cache-warmup: cache-clear ## Warms up an empty cache
 ifdef CONSOLE
@@ -59,9 +55,7 @@ ifdef CONSOLE
 else
 	@printf "Cannot warm up the cache (needs symfony/console).\n"
 endif
-.PHONY: cache-warmup
 
-OPENSSL_BIN := $(shell which openssl)
 generate-jwt-keys: ## Generates JWT auth keys
 ifndef OPENSSL_BIN
 	@printf "\033[31mUnable to generate keys (needs OpenSSL)\033[39m\n"
@@ -74,12 +68,11 @@ else
 	@rm -f ${JWT_PUBLIC_KEY}
 	@openssl genrsa -passout pass:${JWT_PASSPHRASE} -out ${JWT_SECRET_KEY} -aes256 4096
 	@openssl rsa -passin pass:${JWT_PASSPHRASE} -pubout -in ${JWT_SECRET_KEY} -out ${JWT_PUBLIC_KEY}
-	@chmod 664 ${JWT_SECRET_KEY}
-	@chmod 664 ${JWT_PUBLIC_KEY}
+	@chmod 644 ${JWT_SECRET_KEY}
+	@chmod 644 ${JWT_PUBLIC_KEY}
 	@echo "\033[32mRSA key pair successfully generated\033[39m"
 endif
 
-PHPDBG := $(shell which phpdbg)
 run-tests: ## Runs all tests via phpunit (Uses phpdbg if that is installed)
 ifndef PHPDBG
 	@${MAKE} run-tests-php
@@ -295,7 +288,6 @@ else
 	$(WARNING_DOCKER)
 endif
 
-COMPOSER_BIN := $(shell which composer)
 update-bin: ## Update composer bin dependencies
 ifeq ($(INSIDE_DOCKER), 1)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader
@@ -303,7 +295,6 @@ else
 	$(WARNING_DOCKER)
 endif
 
-COMPOSER_BIN := $(shell which composer)
 install-bin: ## Install composer bin dependencies
 ifeq ($(INSIDE_DOCKER), 1)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader
