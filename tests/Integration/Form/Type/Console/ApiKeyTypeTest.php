@@ -17,8 +17,6 @@ use App\Resource\UserGroupResource;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use Throwable;
-use UnexpectedValueException;
 use function array_keys;
 
 /**
@@ -29,18 +27,6 @@ use function array_keys;
  */
 class ApiKeyTypeTest extends TypeTestCase
 {
-    private MockObject | UserGroupResource | string $userGroupResource = '';
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        $this->userGroupResource = $this->createMock(UserGroupResource::class);
-
-        parent::setUp();
-    }
-
     public function testSubmitValidData(): void
     {
         // Create new role entity for testing
@@ -51,12 +37,14 @@ class ApiKeyTypeTest extends TypeTestCase
             ->setRole($roleEntity)
             ->setName('Some name');
 
-        $this->getUserGroupResourceMock()
+        $userGroupResourceMock = $this->getMock();
+
+        $userGroupResourceMock
             ->expects(static::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
-        $this->getUserGroupResourceMock()
+        $userGroupResourceMock
             ->expects(static::once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
@@ -103,8 +91,10 @@ class ApiKeyTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
+        $userGroupResourceMock = $this->getMock();
+
         // create a type instance with the mocked dependencies
-        $type = new ApiKeyType($this->getUserGroupResource(), new UserGroupTransformer($this->getUserGroupResource()));
+        $type = new ApiKeyType($userGroupResourceMock, new UserGroupTransformer($userGroupResourceMock));
 
         return [
             // register the type instances with the PreloadedExtension
@@ -112,17 +102,17 @@ class ApiKeyTypeTest extends TypeTestCase
         ];
     }
 
-    private function getUserGroupResource(): UserGroupResource
+    /**
+     * @return MockObject&UserGroupResource
+     */
+    private function getMock(): MockObject | UserGroupResource
     {
-        return $this->userGroupResource instanceof UserGroupResource
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
-    }
+        static $cache;
 
-    private function getUserGroupResourceMock(): MockObject
-    {
-        return $this->userGroupResource instanceof MockObject
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
+        if (!$cache) {
+            $cache = $this->createMock(UserGroupResource::class);
+        }
+
+        return $cache;
     }
 }

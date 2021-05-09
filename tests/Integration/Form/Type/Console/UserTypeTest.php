@@ -15,10 +15,8 @@ use App\Form\DataTransformer\UserGroupTransformer;
 use App\Form\Type\Console\UserType;
 use App\Resource\UserGroupResource;
 use App\Service\Localization;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
-use UnexpectedValueException;
 use function array_keys;
 
 /**
@@ -29,16 +27,7 @@ use function array_keys;
  */
 class UserTypeTest extends TypeTestCase
 {
-    private MockObject | UserGroupResource | string $userGroupResource = '';
-    private MockObject | Localization | string $localization = '';
 
-    protected function setUp(): void
-    {
-        $this->userGroupResource = $this->createMock(UserGroupResource::class);
-        $this->localization = $this->createMock(Localization::class);
-
-        parent::setUp();
-    }
 
     public function testSubmitValidData(): void
     {
@@ -49,28 +38,30 @@ class UserTypeTest extends TypeTestCase
         $userGroupEntity = (new UserGroup())
             ->setRole($roleEntity);
 
-        $this->getUserGroupResourceMock()
+        [$userGroupResourceMock, $localizationMock] = $this->getMocks();
+
+        $userGroupResourceMock
             ->expects(static::once())
             ->method('find')
             ->willReturn([$userGroupEntity]);
 
-        $this->getUserGroupResourceMock()
+        $userGroupResourceMock
             ->expects(static::once())
             ->method('findOne')
             ->with($userGroupEntity->getId())
             ->willReturn($userGroupEntity);
 
-        $this->getLocalizationMock()
+        $localizationMock
             ->expects(static::once())
             ->method('getLanguages')
             ->willReturn(['en', 'fi']);
 
-        $this->getLocalizationMock()
+        $localizationMock
             ->expects(static::once())
             ->method('getLocales')
             ->willReturn(['en', 'fi']);
 
-        $this->getLocalizationMock()
+        $localizationMock
             ->expects(static::once())
             ->method('getFormattedTimezones')
             ->willReturn([
@@ -152,11 +143,13 @@ class UserTypeTest extends TypeTestCase
     {
         parent::getExtensions();
 
+        [$userGroupResourceMock, $localizationMock] = $this->getMocks();
+
         // create a type instance with the mocked dependencies
         $type = new UserType(
-            $this->getUserGroupResource(),
-            new UserGroupTransformer($this->getUserGroupResource()),
-            $this->getLocalization()
+            $userGroupResourceMock,
+            new UserGroupTransformer($userGroupResourceMock),
+            $localizationMock
         );
 
         return [
@@ -165,31 +158,23 @@ class UserTypeTest extends TypeTestCase
         ];
     }
 
-    private function getUserGroupResource(): UserGroupResource
+    /**
+     * @return array{
+     *      0: \PHPUnit\Framework\MockObject\MockObject&UserGroupResource,
+     *      1: \PHPUnit\Framework\MockObject\MockObject&Localization,
+     *  }
+     */
+    private function getMocks(): array
     {
-        return $this->userGroupResource instanceof UserGroupResource
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
-    }
+        static $cache;
 
-    private function getUserGroupResourceMock(): MockObject
-    {
-        return $this->userGroupResource instanceof MockObject
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
-    }
+        if (!$cache) {
+            $cache = [
+                $this->createMock(UserGroupResource::class),
+                $this->createMock(Localization::class),
+            ];
+        }
 
-    private function getLocalization(): Localization
-    {
-        return $this->localization instanceof Localization
-            ? $this->localization
-            : throw new UnexpectedValueException('Localization not set');
-    }
-
-    private function getLocalizationMock(): MockObject
-    {
-        return $this->localization instanceof MockObject
-            ? $this->localization
-            : throw new UnexpectedValueException('Localization not set');
+        return $cache;
     }
 }
