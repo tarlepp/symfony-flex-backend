@@ -41,29 +41,27 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
         $authenticationException->setToken($token);
 
         $response = new Response();
-
         $event = new AuthenticationFailureEvent($authenticationException, $response);
 
-        $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();
-        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        [$loginLoggerMock, $userRepositoryMock] = $this->getMocks();
 
-        $userRepository
+        $userRepositoryMock
             ->expects(static::once())
             ->method('loadUserByUsername')
             ->with('test-user')
             ->willReturn($user);
 
-        $loginLogger
+        $loginLoggerMock
             ->expects(static::once())
             ->method('setUser')
             ->with($user)
-            ->willReturn($loginLogger);
+            ->willReturn($loginLoggerMock);
 
-        $loginLogger
+        $loginLoggerMock
             ->expects(static::once())
             ->method('process');
 
-        (new AuthenticationFailureSubscriber($loginLogger, $userRepository))
+        (new AuthenticationFailureSubscriber($loginLoggerMock, $userRepositoryMock))
             ->onAuthenticationFailure($event);
     }
 
@@ -78,30 +76,43 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
         $event = new AuthenticationFailureEvent($authenticationException, $response);
 
-        $loginLogger = $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock();
-        $userRepository = $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock();
+        [$loginLoggerMock, $userRepositoryMock] = $this->getMocks();
 
-        $userRepository
+        $userRepositoryMock
             ->expects(static::once())
             ->method('loadUserByUsername')
             ->with('test-user')
             ->willReturn(null);
 
-        $loginLogger
+        $loginLoggerMock
             ->expects(static::once())
             ->method('setUser')
             ->with(null)
-            ->willReturn($loginLogger);
+            ->willReturn($loginLoggerMock);
 
-        $loginLogger
+        $loginLoggerMock
             ->expects(static::once())
             ->method('process');
 
-        $subscriber = new AuthenticationFailureSubscriber($loginLogger, $userRepository);
+        $subscriber = new AuthenticationFailureSubscriber($loginLoggerMock, $userRepositoryMock);
 
         try {
             $subscriber->onAuthenticationFailure($event);
         } catch (Throwable) {
         }
+    }
+
+    /**
+     * @return array{
+     *      0: \PHPUnit\Framework\MockObject\MockObject&LoginLogger,
+     *      1: \PHPUnit\Framework\MockObject\MockObject&UserRepository,
+     *  }
+     */
+    private function getMocks(): array
+    {
+        return [
+            $this->getMockBuilder(LoginLogger::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock(),
+        ];
     }
 }

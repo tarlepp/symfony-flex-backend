@@ -12,10 +12,8 @@ use App\Entity\User;
 use App\EventSubscriber\DoctrineExtensionSubscriber;
 use App\Security\UserTypeIdentification;
 use Gedmo\Blameable\BlameableListener;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class DoctrineExtensionSubscriberTest
@@ -25,17 +23,6 @@ use UnexpectedValueException;
  */
 class DoctrineExtensionSubscriberTest extends KernelTestCase
 {
-    private MockObject | BlameableListener | null $blameableListener = null;
-    private MockObject | UserTypeIdentification | null $userTypeIdentification = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->blameableListener = $this->createMock(BlameableListener::class);
-        $this->userTypeIdentification = $this->createMock(UserTypeIdentification::class);
-    }
-
     /**
      * @testdox Test that user is not set to `BlameableListener` when there isn't logged in user
      *
@@ -43,16 +30,18 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
      */
     public function testThatUserIsNotSetToBlameableListenerWhenThereIsNotLoggedInUser(): void
     {
-        $this->getUserTypeIdentificationMock()
+        [$blameableListenerMock, $userTypeIdentificationMock] = $this->getMocks();
+
+        $userTypeIdentificationMock
             ->expects(static::once())
             ->method('getUser')
             ->willReturn(null);
 
-        $this->getBlameableListenerMock()
+        $blameableListenerMock
             ->expects(static::never())
             ->method('setUserValue');
 
-        (new DoctrineExtensionSubscriber($this->getBlameableListener(), $this->getUserTypeIdentification()))
+        (new DoctrineExtensionSubscriber($blameableListenerMock, $userTypeIdentificationMock))
             ->onKernelRequest();
     }
 
@@ -65,45 +54,33 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
     {
         $user = new User();
 
-        $this->getUserTypeIdentificationMock()
+        [$blameableListenerMock, $userTypeIdentificationMock] = $this->getMocks();
+
+        $userTypeIdentificationMock
             ->expects(static::once())
             ->method('getUser')
             ->willReturn($user);
 
-        $this->getBlameableListenerMock()
+        $blameableListenerMock
             ->expects(static::once())
             ->method('setUserValue')
             ->with($user);
 
-        (new DoctrineExtensionSubscriber($this->getBlameableListener(), $this->getUserTypeIdentification()))
+        (new DoctrineExtensionSubscriber($blameableListenerMock, $userTypeIdentificationMock))
             ->onKernelRequest();
     }
 
-    private function getBlameableListener(): BlameableListener
+    /**
+     * @return array{
+     *      0: \PHPUnit\Framework\MockObject\MockObject&BlameableListener,
+     *      1: \PHPUnit\Framework\MockObject\MockObject&UserTypeIdentification,
+     *  }
+     */
+    private function getMocks(): array
     {
-        return $this->blameableListener instanceof BlameableListener
-            ? $this->blameableListener
-            : throw new UnexpectedValueException('BlameableListener not set');
-    }
-
-    private function getBlameableListenerMock(): MockObject
-    {
-        return $this->blameableListener instanceof MockObject
-            ? $this->blameableListener
-            : throw new UnexpectedValueException('BlameableListener not set');
-    }
-
-    private function getUserTypeIdentification(): UserTypeIdentification
-    {
-        return $this->userTypeIdentification instanceof UserTypeIdentification
-            ? $this->userTypeIdentification
-            : throw new UnexpectedValueException('UserTypeIdentification not set');
-    }
-
-    private function getUserTypeIdentificationMock(): MockObject
-    {
-        return $this->userTypeIdentification instanceof MockObject
-            ? $this->userTypeIdentification
-            : throw new UnexpectedValueException('UserTypeIdentification not set');
+        return [
+            $this->createMock(BlameableListener::class),
+            $this->createMock(UserTypeIdentification::class),
+        ];
     }
 }
