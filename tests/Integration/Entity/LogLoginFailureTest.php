@@ -39,7 +39,7 @@ class LogLoginFailureTest extends EntityTestCase
         ?string $type = null,
         ?array $meta = null
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        static::markTestSkipped('There is no setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -51,7 +51,7 @@ class LogLoginFailureTest extends EntityTestCase
         ?string $type = null,
         ?array $meta = null
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        static::markTestSkipped('There is no setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
