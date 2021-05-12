@@ -46,7 +46,10 @@ class StopwatchDecorator
         $suffix = [];
 
         $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
-        $methods = array_filter($methods, static fn ($method): bool => !$method->isStatic() && !$method->isFinal());
+        $methods = array_filter(
+            $methods,
+            static fn (ReflectionMethod $method): bool => !$method->isStatic() && !$method->isFinal()
+        );
 
         foreach ($methods as $method) {
             $methodName = $method->getName();
