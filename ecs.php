@@ -11,7 +11,9 @@ declare(strict_types = 1);
 use PhpCsFixer\Fixer\ArrayNotation\NoMultilineWhitespaceAroundDoubleArrowFixer;
 use PhpCsFixer\Fixer\CastNotation\CastSpacesFixer;
 use PhpCsFixer\Fixer\ClassNotation\ClassAttributesSeparationFixer;
+use PhpCsFixer\Fixer\ConstantNotation\NativeConstantInvocationFixer;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
+use PhpCsFixer\Fixer\FunctionNotation\NativeFunctionInvocationFixer;
 use PhpCsFixer\Fixer\FunctionNotation\SingleLineThrowFixer;
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer;
@@ -39,10 +41,10 @@ use Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $imports = [
         '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/psr12.php',
-        '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/php80-migration-risky.php',
         '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/clean-code.php',
         '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/common.php',
         '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/symfony.php',
+        '/tools/04_symplify/vendor/symplify/easy-coding-standard/config/set/symfony-risky.php',
     ];
 
     array_map(
@@ -170,6 +172,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             UnusedParameterSniff::class => null,
             HeredocIndentationFixer::class => null,
             PhpdocToCommentFixer::class => null,
+            NativeFunctionInvocationFixer::class => null,
+            NativeConstantInvocationFixer::class => null,
         ]
     );
 };
