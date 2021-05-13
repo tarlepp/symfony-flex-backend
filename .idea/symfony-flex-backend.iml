@@ -4,8 +4,6 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/phpunit/phpunit/src" isTestSource="true" packagePrefix="PHPUnit\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/symfony/phpunit-bridge" isTestSource="true" packagePrefix="Symfony\Bridge\PhpUnit\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/friendsofphp/php-cs-fixer/src" isTestSource="true" packagePrefix="PhpCsFixer\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/coding-standard/src" isTestSource="true" packagePrefix="Symplify\CodingStandard\" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/liuggio/fastest/src" isTestSource="true" packagePrefix="Liuggio\Fastest\" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" packagePrefix="App\" />
@@ -16,6 +14,9 @@
       <sourceFolder url="file://$MODULE_DIR$/tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/PhpDoc/PHPUnit" isTestSource="true" packagePrefix="PHPStan\PhpDoc\PHPUnit\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Rules/PHPUnit" isTestSource="true" packagePrefix="PHPStan\Rules\PHPUnit\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Type/PHPUnit" isTestSource="true" packagePrefix="PHPStan\Type\PHPUnit\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/friendsofphp/php-cs-fixer/src" isTestSource="true" packagePrefix="PhpCsFixer\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/coding-standard/src" isTestSource="true" packagePrefix="Symplify\CodingStandard\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/rule-doc-generator-contracts/src" isTestSource="true" packagePrefix="Symplify\RuleDocGenerator\" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine" />
