@@ -17,7 +17,11 @@ use function array_unique;
 use function array_values;
 use function explode;
 use function is_array;
+use function is_string;
+use function preg_match_all;
+use function preg_replace;
 use function str_contains;
+use function str_replace;
 use function trim;
 
 /**
@@ -148,9 +152,23 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getSearchTerms(array | string | null $search): array
     {
+        if (is_string($search)) {
+            preg_match_all('#([^\"]\S*|\".+?\")\s*#', trim($search), $matches);
+
+            if ($matches[1]) {
+                $search = array_map(
+                    static fn (string $term): string => trim(str_replace('"', '', $term)),
+                    $matches[1],
+                );
+            }
+        }
+
         return array_unique(
             array_filter(
-                array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
+                array_map(
+                    static fn (string $term): string => (string)preg_replace('#\s+#', ' ', $term),
+                    array_map('trim', (is_array($search) ? $search : explode(' ', (string)$search))),
+                ),
                 static fn (string $value): bool => trim($value) !== ''
             )
         );
