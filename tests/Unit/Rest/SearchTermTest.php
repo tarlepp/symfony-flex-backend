@@ -38,8 +38,8 @@ class SearchTermTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatReturnedCriteriaIsExpected
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $inputArguments
-     * @phpstan-param StringableArrayObject<array<mixed>> $expected
+     * @phpstan-param StringableArrayObject<array> $inputArguments
+     * @phpstan-param StringableArrayObject<array> $expected
      * @psalm-param StringableArrayObject $inputArguments
      * @psalm-param StringableArrayObject $expected
      *
@@ -106,6 +106,17 @@ class SearchTermTest extends KernelTestCase
         ];
 
         yield [
+            new StringableArrayObject(['c1', 'word     ']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
             new StringableArrayObject([['c1', 'c2'], ['search', 'word']]),
             new StringableArrayObject([
                 'and' => [
@@ -114,6 +125,44 @@ class SearchTermTest extends KernelTestCase
                         ['entity.c2', 'like', '%search%'],
                         ['entity.c1', 'like', '%word%'],
                         ['entity.c2', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'c2'], ['   search', '   word    ']]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c2', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['entity.c2', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'c2'], ['search word']]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                        ['entity.c2', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'c2'], ['    search     word    ']]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                        ['entity.c2', 'like', '%search word%'],
                     ],
                 ],
             ]),
@@ -134,6 +183,44 @@ class SearchTermTest extends KernelTestCase
         ];
 
         yield [
+            new StringableArrayObject([['c1', 'c2'], '   search   word   ']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c2', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['entity.c2', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'c2'], '"search word"']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                        ['entity.c2', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'c2'], '  "  search  word  "  ']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                        ['entity.c2', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
             new StringableArrayObject(['someTable.c1', 'search word']),
             new StringableArrayObject([
                 'and' => [
@@ -146,12 +233,81 @@ class SearchTermTest extends KernelTestCase
         ];
 
         yield [
+            new StringableArrayObject(['someTable.c1', '    search     word    ']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['someTable.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['someTable.c1', '"search word"']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['someTable.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['someTable.c1', '"    search    word   "']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['someTable.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
             new StringableArrayObject(['someTable.c1', ['search', 'word']]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
                         ['someTable.c1', 'like', '%search%'],
                         ['someTable.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['someTable.c1', ['    search', 'word   ', '   foo    bar   ']]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['someTable.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%word%'],
+                        ['someTable.c1', 'like', '%foo bar%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['someTable.c1', ['search word']]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['someTable.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['someTable.c1', ['    search    word   ']]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['someTable.c1', 'like', '%search word%'],
                     ],
                 ],
             ]),
@@ -172,6 +328,52 @@ class SearchTermTest extends KernelTestCase
         ];
 
         yield [
+            new StringableArrayObject([['c1', 'someTable.c1'], '    search    word   ']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['someTable.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'someTable.c1'], 'search word "word search"']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['someTable.c1', 'like', '%word%'],
+                        ['entity.c1', 'like', '%word search%'],
+                        ['someTable.c1', 'like', '%word search%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'someTable.c1'], '   search    word     "    word      search   "']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['someTable.c1', 'like', '%word%'],
+                        ['entity.c1', 'like', '%word search%'],
+                        ['someTable.c1', 'like', '%word search%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
             new StringableArrayObject([['c1', 'someTable.c1'], ['search', 'word']]),
             new StringableArrayObject([
                 'and' => [
@@ -180,6 +382,46 @@ class SearchTermTest extends KernelTestCase
                         ['someTable.c1', 'like', '%search%'],
                         ['entity.c1', 'like', '%word%'],
                         ['someTable.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'someTable.c1'], ['   search', 'word   ', '   foo   bar   ']]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['someTable.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['someTable.c1', 'like', '%word%'],
+                        ['entity.c1', 'like', '%foo bar%'],
+                        ['someTable.c1', 'like', '%foo bar%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'someTable.c1'], ['search word']]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                        ['someTable.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject([['c1', 'someTable.c1'], ['   search    word   ']]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                        ['someTable.c1', 'like', '%search word%'],
                     ],
                 ],
             ]),
@@ -198,12 +440,80 @@ class SearchTermTest extends KernelTestCase
         ];
 
         yield [
+            new StringableArrayObject(['c1', '   search    word   ', SearchTerm::OPERAND_AND]),
+            new StringableArrayObject([
+                'and' => [
+                    'and' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_AND]),
+            new StringableArrayObject([
+                'and' => [
+                    'and' => [
+                        ['entity.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"    search     word   "', SearchTerm::OPERAND_AND]),
+            new StringableArrayObject([
+                'and' => [
+                    'and' => [
+                        ['entity.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
             new StringableArrayObject(['c1', 'search word', SearchTerm::OPERAND_OR]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
                         ['entity.c1', 'like', '%search%'],
                         ['entity.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '   search    word   ', SearchTerm::OPERAND_OR]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_OR]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"    search     word   "', SearchTerm::OPERAND_OR]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
                     ],
                 ],
             ]),
@@ -222,12 +532,80 @@ class SearchTermTest extends KernelTestCase
         ];
 
         yield [
+            new StringableArrayObject(['c1', '    search     word    ', 'notSupportedOperand']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"search word"', 'notSupportedOperand']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"    search    word   "', 'notSupportedOperand']),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
             new StringableArrayObject(['c1', 'search word', SearchTerm::OPERAND_OR, SearchTerm::MODE_FULL]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
                         ['entity.c1', 'like', '%search%'],
                         ['entity.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '    search    word    ', SearchTerm::OPERAND_OR, SearchTerm::MODE_FULL]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_OR, SearchTerm::MODE_FULL]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"    search    word   "', SearchTerm::OPERAND_OR, SearchTerm::MODE_FULL]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
                     ],
                 ],
             ]),
@@ -246,6 +624,40 @@ class SearchTermTest extends KernelTestCase
         ];
 
         yield [
+            new StringableArrayObject(['c1', '  search  word  ', SearchTerm::OPERAND_OR, SearchTerm::MODE_STARTS_WITH]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', 'search%'],
+                        ['entity.c1', 'like', 'word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_OR, SearchTerm::MODE_STARTS_WITH]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', 'search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', ' " search word "', SearchTerm::OPERAND_OR, SearchTerm::MODE_STARTS_WITH]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', 'search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
             new StringableArrayObject(['c1', 'search word', SearchTerm::OPERAND_OR, SearchTerm::MODE_ENDS_WITH]),
             new StringableArrayObject([
                 'and' => [
@@ -258,12 +670,81 @@ class SearchTermTest extends KernelTestCase
         ];
 
         yield [
+            new StringableArrayObject(['c1', '  search   word  ', SearchTerm::OPERAND_OR, SearchTerm::MODE_ENDS_WITH]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search'],
+                        ['entity.c1', 'like', '%word'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_OR, SearchTerm::MODE_ENDS_WITH]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"  search   word "', SearchTerm::OPERAND_OR, SearchTerm::MODE_ENDS_WITH]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
             new StringableArrayObject(['c1', 'search word', SearchTerm::OPERAND_OR, 666]),
             new StringableArrayObject([
                 'and' => [
                     'or' => [
                         ['entity.c1', 'like', '%search%'],
                         ['entity.c1', 'like', '%word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '  search word  foobar   ', SearchTerm::OPERAND_OR, 666]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search%'],
+                        ['entity.c1', 'like', '%word%'],
+                        ['entity.c1', 'like', '%foobar%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '"search word"', SearchTerm::OPERAND_OR, 666]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
+                    ],
+                ],
+            ]),
+        ];
+
+        yield [
+            new StringableArrayObject(['c1', '  "  search   word  "  ', SearchTerm::OPERAND_OR, 666]),
+            new StringableArrayObject([
+                'and' => [
+                    'or' => [
+                        ['entity.c1', 'like', '%search word%'],
                     ],
                 ],
             ]),
