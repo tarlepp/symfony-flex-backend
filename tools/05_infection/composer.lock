@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ce424392c4d52617641518913a1fce3",
+    "content-hash": "61c8a441dc4793babe1fc70fa2f33fe4",
     "packages": [],
     "packages-dev": [
         {
@@ -220,16 +220,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.22.1",
+            "version": "0.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "c2f04fdf558e1bc1f19515207d1a2f5c538fec37"
+                "reference": "ac87ae49e9f192f610276565e54469231dca7837"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/c2f04fdf558e1bc1f19515207d1a2f5c538fec37",
-                "reference": "c2f04fdf558e1bc1f19515207d1a2f5c538fec37",
+                "url": "https://api.github.com/repos/infection/infection/zipball/ac87ae49e9f192f610276565e54469231dca7837",
+                "reference": "ac87ae49e9f192f610276565e54469231dca7837",
                 "shasum": ""
             },
             "require": {
@@ -242,7 +242,7 @@
                 "infection/include-interceptor": "^0.2.4",
                 "justinrainbow/json-schema": "^5.2",
                 "nikic/php-parser": "^4.10.3",
-                "ocramius/package-versions": "^1.11.0 || ^2.0",
+                "ocramius/package-versions": "^1.9.0 || ^2.0",
                 "ondram/ci-detector": "^3.3.0",
                 "php": "^7.4.7 || ^8.0",
                 "sanmai/later": "^0.1.1",
@@ -329,7 +329,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.22.1"
+                "source": "https://github.com/infection/infection/tree/0.23.0"
             },
             "funding": [
                 {
@@ -341,7 +341,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-04-26T20:57:04+00:00"
+            "time": "2021-05-13T16:12:33+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -707,12 +707,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "7eb44fcd78af4a3b07018fe8860a0e195427bc9b"
+                "reference": "5ffdb87f627ff16cc392e30515a1fe069cddc3e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/7eb44fcd78af4a3b07018fe8860a0e195427bc9b",
-                "reference": "7eb44fcd78af4a3b07018fe8860a0e195427bc9b",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5ffdb87f627ff16cc392e30515a1fe069cddc3e2",
+                "reference": "5ffdb87f627ff16cc392e30515a1fe069cddc3e2",
                 "shasum": ""
             },
             "conflict": {
@@ -1056,7 +1056,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-12T15:03:06+00:00"
+            "time": "2021-05-13T21:03:10+00:00"
         },
         {
             "name": "sanmai/later",

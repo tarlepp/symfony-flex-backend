@@ -30,8 +30,6 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\Whitespace\HeredocIndentationFixer;
 use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
-use SlevomatCodingStandard\Sniffs\Functions\UnusedParameterSniff;
-use SlevomatCodingStandard\Sniffs\Whitespaces\DuplicateSpacesSniff;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
@@ -146,10 +144,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         );
 
-    $services
-        ->set(DuplicateSpacesSniff::class)
-        ->property('ignoreSpacesInAnnotation', true);
-
     $parameters = $containerConfigurator->parameters();
 
     $parameters->set(
@@ -169,7 +163,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ArrayOpenerAndCloserNewlineFixer::class => null,
             ArrayListItemNewlineFixer::class => null,
             PhpdocAlignFixer::class => null,
-            UnusedParameterSniff::class => null,
             HeredocIndentationFixer::class => null,
             PhpdocToCommentFixer::class => null,
             NativeFunctionInvocationFixer::class => null,
