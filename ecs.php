@@ -18,6 +18,7 @@ use PhpCsFixer\Fixer\FunctionNotation\SingleLineThrowFixer;
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\DeclareEqualNormalizeFixer;
 use PhpCsFixer\Fixer\NamespaceNotation\NoBlankLinesBeforeNamespaceFixer;
+use PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Operator\ConcatSpaceFixer;
 use PhpCsFixer\Fixer\Operator\IncrementStyleFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
@@ -140,6 +141,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             [
                 [
                     'statements' => ['continue', 'declare', 'return', 'throw', 'try'],
+                ],
+            ],
+        );
+
+    $services
+        ->set(BinaryOperatorSpacesFixer::class)
+        ->call(
+            'configure',
+            [
+                [
+                    'operators' => [
+                        '&' => 'align'
+                    ]
                 ],
             ],
         );
