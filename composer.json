@@ -37,7 +37,7 @@
 		"nelmio/cors-bundle": "2.1.1",
 		"phpdocumentor/reflection-docblock": "5.2.2",
 		"ramsey/uuid-doctrine": "1.6.0",
-		"sensio/framework-extra-bundle": "6.1.2",
+		"sensio/framework-extra-bundle": "6.1.4",
 		"symfony/asset": "5.2.7",
 		"symfony/config": "5.2.8",
 		"symfony/console": "5.2.8",
