@@ -1492,12 +1492,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "d58c720daf8468a2439d3020e73b03a92e1fcf55"
+                "reference": "5a791bd14e78af5fc2184a370a72e828ff477263"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d58c720daf8468a2439d3020e73b03a92e1fcf55",
-                "reference": "d58c720daf8468a2439d3020e73b03a92e1fcf55",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5a791bd14e78af5fc2184a370a72e828ff477263",
+                "reference": "5a791bd14e78af5fc2184a370a72e828ff477263",
                 "shasum": ""
             },
             "conflict": {
@@ -1681,7 +1681,7 @@
                 "shopware/core": "<=6.3.5.2",
                 "shopware/platform": "<=6.3.5.2",
                 "shopware/production": "<=6.3.5.2",
-                "shopware/shopware": "<5.6.9",
+                "shopware/shopware": "<=5.6.9",
                 "silverstripe/admin": ">=1.0.3,<1.0.4|>=1.1,<1.1.1",
                 "silverstripe/assets": ">=1,<1.4.7|>=1.5,<1.5.2",
                 "silverstripe/cms": "<4.3.6|>=4.4,<4.4.4",
@@ -1770,6 +1770,7 @@
                 "wallabag/tcpdf": "<6.2.22",
                 "wikimedia/parsoid": "<0.12.2",
                 "willdurand/js-translation-bundle": "<2.1.1",
+                "wp-cli/wp-cli": "<2.5",
                 "yii2mod/yii2-cms": "<1.9.2",
                 "yiisoft/yii": ">=1.1.14,<1.1.15",
                 "yiisoft/yii2": "<2.0.38",
@@ -1841,7 +1842,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-19T13:19:49+00:00"
+            "time": "2021-05-21T15:03:46+00:00"
         },
         {
             "name": "sebastian/finder-facade",
