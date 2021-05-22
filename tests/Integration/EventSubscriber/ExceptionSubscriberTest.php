@@ -56,19 +56,17 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function testThatOnKernelExceptionMethodCallsLogger(string $environment): void
     {
-        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
-        $stubLogger = $this->createMock(LoggerInterface::class);
-        $stubKernel = $this->createMock(KernelInterface::class);
+        [$userTypeIdentificationMock, $loggerMock, $kernelMock,] = $this->getMocks();
 
         $exception = new Exception('test exception');
-        $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($kernelMock, new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
 
-        $stubLogger
+        $loggerMock
             ->expects(static::once())
             ->method('error')
             ->with((string)$exception);
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+        (new ExceptionSubscriber($loggerMock, $userTypeIdentificationMock, $environment))
             ->onKernelException($event);
     }
 
@@ -81,16 +79,14 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function testThatOnKernelExceptionMethodSetResponse(string $environment): void
     {
-        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
-        $stubLogger = $this->createMock(LoggerInterface::class);
-        $stubKernel = $this->createMock(KernelInterface::class);
+        [$userTypeIdentificationMock, $loggerMock, $kernelMock] = $this->getMocks();
 
         $exception = new Exception('test exception');
-        $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($kernelMock, new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
 
         $originalResponse = $event->getResponse();
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+        (new ExceptionSubscriber($loggerMock, $userTypeIdentificationMock, $environment))
             ->onKernelException($event);
 
         static::assertNotSame($originalResponse, $event->getResponse());
@@ -109,20 +105,17 @@ class ExceptionSubscriberTest extends KernelTestCase
         string $environment,
         string $message
     ): void {
-        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
-        $stubLogger = $this->createMock(LoggerInterface::class);
-        $stubHttpKernel = $this->createMock(HttpKernelInterface::class);
-        $stubRequest = $this->createMock(Request::class);
+        [$userTypeIdentificationMock, $loggerMock, , $httpKernelMock, $requestMock] = $this->getMocks();
 
         // Create event
         $event = new ExceptionEvent(
-            $stubHttpKernel,
-            $stubRequest,
+            $httpKernelMock,
+            $requestMock,
             HttpKernelInterface::MASTER_REQUEST,
             $exception
         );
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+        (new ExceptionSubscriber($loggerMock, $userTypeIdentificationMock, $environment))
             ->onKernelException($event);
 
         $response = $event->getResponse();
@@ -148,20 +141,17 @@ class ExceptionSubscriberTest extends KernelTestCase
      */
     public function testThatResponseHasExpectedKeys(array $expectedKeys, string $environment): void
     {
-        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
-        $stubLogger = $this->createMock(LoggerInterface::class);
-        $stubHttpKernel = $this->createMock(HttpKernelInterface::class);
-        $stubRequest = $this->createMock(Request::class);
+        [$userTypeIdentificationMock, $loggerMock, , $httpKernelMock, $requestMock] = $this->getMocks();
 
         // Create event
         $event = new ExceptionEvent(
-            $stubHttpKernel,
-            $stubRequest,
+            $httpKernelMock,
+            $requestMock,
             HttpKernelInterface::MASTER_REQUEST,
             new Exception('error')
         );
 
-        (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
+        (new ExceptionSubscriber($loggerMock, $userTypeIdentificationMock, $environment))
             ->onKernelException($event);
 
         $response = $event->getResponse();
@@ -190,17 +180,16 @@ class ExceptionSubscriberTest extends KernelTestCase
         bool $user,
         string $environment
     ): void {
-        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
-        $stubLogger = $this->createMock(LoggerInterface::class);
+        [$userTypeIdentificationMock, $loggerMock, , ,] = $this->getMocks();
 
         if ($user) {
-            $stubUserTypeIdentification
+            $userTypeIdentificationMock
                 ->expects(static::once())
                 ->method('getSecurityUser')
                 ->willReturn(new SecurityUser(new User()));
         }
 
-        $subscriber = new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment);
+        $subscriber = new ExceptionSubscriber($loggerMock, $userTypeIdentificationMock, $environment);
 
         static::assertSame(
             $expectedStatusCode,
@@ -220,11 +209,10 @@ class ExceptionSubscriberTest extends KernelTestCase
         Throwable $exception,
         string $environment
     ): void {
-        $stubUserTypeIdentification = $this->createMock(UserTypeIdentification::class);
-        $stubLogger = $this->createMock(LoggerInterface::class);
+        [$userTypeIdentificationMock, $loggerMock, , ,] = $this->getMocks();
 
         // Create subscriber
-        $subscriber = new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment);
+        $subscriber = new ExceptionSubscriber($loggerMock, $userTypeIdentificationMock, $environment);
 
         static::assertSame(
             $expectedMessage,
@@ -588,6 +576,26 @@ class ExceptionSubscriberTest extends KernelTestCase
             'message',
             new HttpException(0, 'message'),
             'dev',
+        ];
+    }
+
+    /**
+     * @return array{
+     *      0: \PHPUnit\Framework\MockObject\MockObject&UserTypeIdentification,
+     *      1: \PHPUnit\Framework\MockObject\MockObject&LoggerInterface,
+     *      2: \PHPUnit\Framework\MockObject\MockObject&KernelInterface,
+     *      3: \PHPUnit\Framework\MockObject\MockObject&HttpKernelInterface,
+     *      4: \PHPUnit\Framework\MockObject\MockObject&Request,
+     *  }
+     */
+    private function getMocks(): array
+    {
+        return [
+            $this->createMock(UserTypeIdentification::class),
+            $this->createMock(LoggerInterface::class),
+            $this->createMock(KernelInterface::class),
+            $this->createMock(HttpKernelInterface::class),
+            $this->createMock(Request::class),
         ];
     }
 }

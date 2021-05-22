@@ -22,6 +22,9 @@ use Throwable;
  */
 class StopwatchAwareTraitTest extends KernelTestCase
 {
+    /**
+     * @testdox Test that `stopwatch` property exists when using `StopwatchAwareTrait` trait
+     */
     public function testThatStopwatchAttributeExists(): void
     {
         static::assertClassHasAttribute('stopwatch', StopwatchAwareService::class);
@@ -29,15 +32,15 @@ class StopwatchAwareTraitTest extends KernelTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `stopwatch` property is instance of `Stopwatch` when using `StopwatchAwareTrait` trait
      */
     public function testThatStopwatchIsInstanceOfLoggerInterface(): void
     {
         static::bootKernel();
 
-        /**
-         * @var StopwatchAwareService $service
-         */
-        $service = static::$kernel->getContainer()->get(StopwatchAwareService::class);
+        /** @var StopwatchAwareService $service */
+        $service = static::$container->get(StopwatchAwareService::class);
 
         $stopwatch = PhpUnitUtil::getProperty('stopwatch', $service);
 

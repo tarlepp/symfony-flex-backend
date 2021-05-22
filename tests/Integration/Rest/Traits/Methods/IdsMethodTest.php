@@ -19,14 +19,12 @@ use Exception;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use function assert;
 
 /**
  * Class IdsMethodTest
@@ -36,29 +34,6 @@ use function assert;
  */
 class IdsMethodTest extends KernelTestCase
 {
-    private MockObject | RestResourceInterface | null $resource = null;
-    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
-    private MockObject | IdsMethodTestClass | null $validTestClass = null;
-    private MockObject | IdsMethodInvalidTestClass | null $inValidTestClass = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->validTestClass = $this->getMockForAbstractClass(
-            IdsMethodTestClass::class,
-            [$this->resource, $this->responseHandler]
-        );
-
-        $this->inValidTestClass = $this->getMockForAbstractClass(IdsMethodInvalidTestClass::class);
-    }
-
     /**
      * @throws Throwable
      *
@@ -74,7 +49,8 @@ class IdsMethodTest extends KernelTestCase
         );
         /* @codingStandardsIgnoreEnd */
 
-        $this->getInValidTestClass()->idsMethod(Request::create('/'));
+        $this->getMockForAbstractClass(IdsMethodInvalidTestClass::class)
+            ->idsMethod(Request::create('/'));
     }
 
     /**
@@ -86,11 +62,13 @@ class IdsMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
-        $this->expectException(MethodNotAllowedHttpException::class);
-
         $request = Request::create('/', $httpMethod);
 
-        $this->getValidTestClass()->idsMethod($request)->getContent();
+        [, , $testClassMock] = $this->getMocks();
+
+        $this->expectException(MethodNotAllowedHttpException::class);
+
+        $testClassMock->idsMethod($request)->getContent();
     }
 
     /**
@@ -104,7 +82,9 @@ class IdsMethodTest extends KernelTestCase
     {
         $request = Request::create('/');
 
-        $this->getResourceMock()
+        [$restResourceMock, , $testClassMock] = $this->getMocks();
+
+        $restResourceMock
             ->expects(static::once())
             ->method('getIds')
             ->with([], [])
@@ -113,7 +93,7 @@ class IdsMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $this->getValidTestClass()->idsMethod($request);
+        $testClassMock->idsMethod($request);
     }
 
     /**
@@ -131,22 +111,24 @@ class IdsMethodTest extends KernelTestCase
     public function testThatTraitCallsServiceMethods(
         string $queryString,
         StringableArrayObject $criteria,
-        StringableArrayObject $search
+        StringableArrayObject $search,
     ): void {
         $request = Request::create('/' . $queryString);
 
-        $this->getResourceMock()
+        [$restResourceMock, $responseHandlerMock, $testClassMock] = $this->getMocks();
+
+        $restResourceMock
             ->expects(static::once())
             ->method('getIds')
             ->with($criteria->getArrayCopy(), $search->getArrayCopy())
             ->willReturn([]);
 
-        $this->getResponseHandlerMock()
+        $responseHandlerMock
             ->expects(static::once())
             ->method('createResponse')
-            ->with($request, [], $this->resource);
+            ->with($request, [], $restResourceMock);
 
-        $this->getValidTestClass()->idsMethod($request);
+        $testClassMock->idsMethod($request);
     }
 
     /**
@@ -156,11 +138,13 @@ class IdsMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWhenWhereParameterIsNotValidJson(): void
     {
+        [, , $testClassMock] = $this->getMocks();
+
         $this->expectException(HttpException::class);
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
 
-        $this->getValidTestClass()->idsMethod(Request::create('/?where=foo'));
+        $testClassMock->idsMethod(Request::create('/?where=foo'));
     }
 
     /**
@@ -257,31 +241,24 @@ class IdsMethodTest extends KernelTestCase
         yield [new InvalidArgumentException(), 400];
     }
 
-    private function getValidTestClass(): IdsMethodTestClass
+    /**
+     * @return array{
+     *      0: \PHPUnit\Framework\MockObject\MockObject&RestResourceInterface,
+     *      1: \PHPUnit\Framework\MockObject\MockObject&ResponseHandlerInterface,
+     *      2: \PHPUnit\Framework\MockObject\MockObject&IdsMethodTestClass,
+     *  }
+     */
+    private function getMocks(): array
     {
-        assert($this->validTestClass instanceof IdsMethodTestClass);
+        $restResourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $testClassMock = $this->getMockForAbstractClass(
+            IdsMethodTestClass::class,
+            [$restResourceMock, $responseHandlerMock],
+        );
 
-        return $this->validTestClass;
-    }
-
-    private function getInValidTestClass(): IdsMethodInvalidTestClass
-    {
-        assert($this->inValidTestClass instanceof IdsMethodInvalidTestClass);
-
-        return $this->inValidTestClass;
-    }
-
-    private function getResourceMock(): MockObject
-    {
-        assert($this->resource instanceof MockObject);
-
-        return $this->resource;
-    }
-
-    private function getResponseHandlerMock(): MockObject
-    {
-        assert($this->responseHandler instanceof MockObject);
-
-        return $this->responseHandler;
+        return [$restResourceMock, $responseHandlerMock, $testClassMock];
     }
 }

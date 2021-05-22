@@ -19,7 +19,6 @@ use Exception;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
-use PHPUnit\Framework\MockObject\MockObject;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +26,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use function assert;
 
 /**
  * Class DeleteMethodTest
@@ -37,31 +35,6 @@ use function assert;
  */
 class DeleteMethodTest extends KernelTestCase
 {
-    private MockObject | EntityInterface | null $entity = null;
-    private MockObject | RestResourceInterface | null $resource = null;
-    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
-    private MockObject | DeleteMethodTestClass | null $validTestClass = null;
-    private MockObject | DeleteMethodInvalidTestClass | null $inValidTestClass = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->entity = $this->getMockBuilder(EntityInterface::class)->getMock();
-        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->validTestClass = $this->getMockForAbstractClass(
-            DeleteMethodTestClass::class,
-            [$this->resource, $this->responseHandler]
-        );
-
-        $this->inValidTestClass = $this->getMockForAbstractClass(DeleteMethodInvalidTestClass::class);
-    }
-
     /**
      * @throws Throwable
      *
@@ -77,10 +50,8 @@ class DeleteMethodTest extends KernelTestCase
         );
         /* @codingStandardsIgnoreEnd */
 
-        $this->getInValidTestClass()->deleteMethod(
-            Request::create('/' . Uuid::uuid4()->toString(), 'DELETE'),
-            'some-id'
-        );
+        $this->getMockForAbstractClass(DeleteMethodInvalidTestClass::class)
+            ->deleteMethod(Request::create('/' . Uuid::uuid4()->toString(), 'DELETE'), 'some-id');
     }
 
     /**
@@ -92,12 +63,13 @@ class DeleteMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
+        $request = Request::create('/' . Uuid::uuid4()->toString(), $httpMethod);
+
+        [, , , $testClassMock] = $this->getMocks();
+
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $this->getValidTestClass()->deleteMethod(
-            Request::create('/' . Uuid::uuid4()->toString(), $httpMethod),
-            'some-id'
-        );
+        $testClassMock->deleteMethod($request, 'some-id');
     }
 
     /**
@@ -112,7 +84,9 @@ class DeleteMethodTest extends KernelTestCase
         $uuid = Uuid::uuid4()->toString();
         $request = Request::create('/' . $uuid, 'DELETE');
 
-        $this->getResourceMock()
+        [, $restResourceMock, , $testClassMock] = $this->getMocks();
+
+        $restResourceMock
             ->expects(static::once())
             ->method('delete')
             ->with($uuid)
@@ -121,7 +95,7 @@ class DeleteMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $this->getValidTestClass()->deleteMethod($request, $uuid);
+        $testClassMock->deleteMethod($request, $uuid);
     }
 
     /**
@@ -134,18 +108,20 @@ class DeleteMethodTest extends KernelTestCase
         $uuid = Uuid::uuid4()->toString();
         $request = Request::create('/' . $uuid, 'DELETE');
 
-        $this->getResourceMock()
+        [$entityMock, $restResourceMock, $responseHandlerMock, $testClassMock] = $this->getMocks();
+
+        $restResourceMock
             ->expects(static::once())
             ->method('delete')
             ->with($uuid)
-            ->willReturn($this->entity);
+            ->willReturn($entityMock);
 
-        $this->getResponseHandlerMock()
+        $responseHandlerMock
             ->expects(static::once())
             ->method('createResponse')
-            ->with($request, $this->entity, $this->resource);
+            ->with($request, $entityMock, $restResourceMock);
 
-        $this->getValidTestClass()->deleteMethod($request, $uuid);
+        $testClassMock->deleteMethod($request, $uuid);
     }
 
     /**
@@ -177,31 +153,26 @@ class DeleteMethodTest extends KernelTestCase
         yield [new InvalidArgumentException(), 400];
     }
 
-    private function getValidTestClass(): DeleteMethodTestClass
+    /**
+     * @return array{
+     *      0: \PHPUnit\Framework\MockObject\MockObject&EntityInterface,
+     *      1: \PHPUnit\Framework\MockObject\MockObject&RestResourceInterface,
+     *      2: \PHPUnit\Framework\MockObject\MockObject&ResponseHandlerInterface,
+     *      3: \PHPUnit\Framework\MockObject\MockObject&DeleteMethodTestClass,
+     *  }
+     */
+    private function getMocks(): array
     {
-        assert($this->validTestClass instanceof DeleteMethodTestClass);
+        $entityMock = $this->getMockBuilder(EntityInterface::class)->getMock();
+        $restResourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $testClassMock = $this->getMockForAbstractClass(
+            DeleteMethodTestClass::class,
+            [$restResourceMock, $responseHandlerMock],
+        );
 
-        return $this->validTestClass;
-    }
-
-    private function getInValidTestClass(): DeleteMethodInvalidTestClass
-    {
-        assert($this->inValidTestClass instanceof DeleteMethodInvalidTestClass);
-
-        return $this->inValidTestClass;
-    }
-
-    private function getResourceMock(): MockObject
-    {
-        assert($this->resource instanceof MockObject);
-
-        return $this->resource;
-    }
-
-    private function getResponseHandlerMock(): MockObject
-    {
-        assert($this->responseHandler instanceof MockObject);
-
-        return $this->responseHandler;
+        return [$entityMock, $restResourceMock, $responseHandlerMock, $testClassMock];
     }
 }

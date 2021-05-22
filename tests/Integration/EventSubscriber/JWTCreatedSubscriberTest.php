@@ -27,7 +27,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
 {
     public function testThatPayloadContainsExpectedDataWhenRequestIsPresent(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create new user for JWT
         $user = (new User())
@@ -42,7 +42,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber($requestStack, $logger))
+        (new JWTCreatedSubscriber($requestStack, $loggerMock))
             ->onJWTCreated($event);
 
         $keys = ['exp', 'checksum'];
@@ -54,7 +54,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
 
     public function testThatPayloadContainsExpectedDataWhenRequestIsNotPresent(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
         // Create new user for JWT
         $user = (new User())
@@ -65,7 +65,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber(new RequestStack(), $logger))
+        (new JWTCreatedSubscriber(new RequestStack(), $loggerMock))
             ->onJWTCreated($event);
 
         $keys = ['exp'];
@@ -79,9 +79,9 @@ class JWTCreatedSubscriberTest extends KernelTestCase
 
     public function testThatLoggerAlertIsCalledIfRequestDoesNotExist(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)->getMock();
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)->getMock();
 
-        $logger
+        $loggerMock
             ->expects(static::once())
             ->method('alert')
             ->with('Request not available');
@@ -95,7 +95,7 @@ class JWTCreatedSubscriberTest extends KernelTestCase
         // Create JWTCreatedEvent
         $event = new JWTCreatedEvent([], new SecurityUser($user));
 
-        (new JWTCreatedSubscriber(new RequestStack(), $logger))
+        (new JWTCreatedSubscriber(new RequestStack(), $loggerMock))
             ->onJWTCreated($event);
     }
 }

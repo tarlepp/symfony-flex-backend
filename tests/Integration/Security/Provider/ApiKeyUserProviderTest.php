@@ -15,7 +15,6 @@ use App\Security\ApiKeyUser;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
 use Generator;
-use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -23,7 +22,6 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
-use function assert;
 
 /**
  * Class ApiKeyUserProviderTest
@@ -33,34 +31,18 @@ use function assert;
  */
 class ApiKeyUserProviderTest extends KernelTestCase
 {
-    private MockObject | ApiKeyRepository | null$apiKeyRepository = null;
-    private MockObject | RolesService | null $rolesService = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @dataProvider dataProviderTestThatSupportClassReturnsExpected
-     *
-     * @param mixed $input
      *
      * @throws Throwable
      *
      * @testdox Test that `supportsClass` method returns `$expected` when using `$input` as input
      */
-    public function testThatSupportClassReturnsExpected(bool $expected, $input): void
+    public function testThatSupportClassReturnsExpected(bool $expected, mixed $input): void
     {
-        $provider = new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService());
+        [$apiKeyRepositoryMock, $rolesServiceMock] = $this->getMocks();
+
+        $provider = new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock);
 
         static::assertSame($expected, $provider->supportsClass((string)$input));
     }
@@ -72,12 +54,14 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatRefreshUserThrowsAnException(): void
     {
+        $user = new User('username', 'password');
+
+        [$apiKeyRepositoryMock, $rolesServiceMock] = $this->getMocks();
+
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage('API key cannot refresh user');
 
-        $user = new User('username', 'password');
-
-        (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
+        (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->refreshUser($user);
     }
 
@@ -88,16 +72,18 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatLoadUserByUsernameThrowsAnException(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
-        $this->expectExceptionMessage('API key is not valid');
+        [$apiKeyRepositoryMock, $rolesServiceMock] = $this->getMocks();
 
-        $this->getApiKeyRepositoryMock()
+        $apiKeyRepositoryMock
             ->expects(static::once())
             ->method('findOneBy')
             ->with(['token' => 'guid'])
             ->willReturn(null);
 
-        (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
+        $this->expectException(UsernameNotFoundException::class);
+        $this->expectExceptionMessage('API key is not valid');
+
+        (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->loadUserByUsername('guid');
     }
 
@@ -110,13 +96,15 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         $apiKey = new ApiKey();
 
-        $this->getApiKeyRepositoryMock()
+        [$apiKeyRepositoryMock, $rolesServiceMock] = $this->getMocks();
+
+        $apiKeyRepositoryMock
             ->expects(static::once())
             ->method('findOneBy')
             ->with(['token' => 'guid'])
             ->willReturn($apiKey);
 
-        $user = (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
+        $user = (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->loadUserByUsername('guid');
 
         static::assertSame($apiKey, $user->getApiKey());
@@ -129,13 +117,15 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatGetApiKeyForTokenCallsExpectedRepositoryMethod(): void
     {
-        $this->getApiKeyRepositoryMock()
+        [$apiKeyRepositoryMock, $rolesServiceMock] = $this->getMocks();
+
+        $apiKeyRepositoryMock
             ->expects(static::once())
             ->method('findOneBy')
             ->with(['token' => 'some_token'])
             ->willReturn(null);
 
-        (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
+        (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->getApiKeyForToken('some_token');
     }
 
@@ -153,24 +143,17 @@ class ApiKeyUserProviderTest extends KernelTestCase
         yield [true, ApiKeyUser::class];
     }
 
-    private function getApiKeyRepository(): ApiKeyRepository
+    /**
+     * @return array{
+     *      0: \PHPUnit\Framework\MockObject\MockObject&ApiKeyRepository,
+     *      1: \PHPUnit\Framework\MockObject\MockObject&RolesService,
+     *  }
+     */
+    private function getMocks(): array
     {
-        assert($this->apiKeyRepository instanceof ApiKeyRepository);
-
-        return $this->apiKeyRepository;
-    }
-
-    private function getApiKeyRepositoryMock(): MockObject
-    {
-        assert($this->apiKeyRepository instanceof MockObject);
-
-        return $this->apiKeyRepository;
-    }
-
-    private function getRolesService(): RolesService
-    {
-        assert($this->rolesService instanceof RolesService);
-
-        return $this->rolesService;
+        return [
+            $this->getMockBuilder(ApiKeyRepository::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(RolesService::class)->disableOriginalConstructor()->getMock(),
+        ];
     }
 }

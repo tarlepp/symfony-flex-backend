@@ -23,10 +23,15 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 class AcceptLanguageSubscriberTest extends KernelTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+    }
+
     public function testThatSpecifiedDefaultLanguageIsSet(): void
     {
-        static::bootKernel();
-
         $request = new Request();
         $request->headers->set('Accept-Language', 'foo');
 
@@ -45,8 +50,6 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
      */
     public function testThatLocaleIsSetAsExpected(string $expected, string $default, string $asked): void
     {
-        static::bootKernel();
-
         $request = new Request();
         $request->headers->set('Accept-Language', $asked);
 

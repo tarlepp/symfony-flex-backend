@@ -15,7 +15,6 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserTo
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use function assert;
 
 /**
  * Class IsUserHimselfVoterTest
@@ -25,23 +24,15 @@ use function assert;
  */
 class IsUserHimselfVoterTest extends KernelTestCase
 {
-    private ?IsUserHimselfVoter $voter = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->voter = new IsUserHimselfVoter();
-    }
-
     /**
      * @testdox Test that `vote` method returns `Voter::ACCESS_ABSTAIN` when subject is not supported
      */
     public function testThatVoteReturnsExpectedIfSubjectIsNotSupported(): void
     {
+        $voter = new IsUserHimselfVoter();
         $token = new AnonymousToken('secret', 'anon');
 
-        static::assertSame(Voter::ACCESS_ABSTAIN, $this->getVoter()->vote($token, 'subject', ['IS_USER_HIMSELF']));
+        static::assertSame(Voter::ACCESS_ABSTAIN, $voter->vote($token, 'subject', ['IS_USER_HIMSELF']));
     }
 
     /**
@@ -49,9 +40,10 @@ class IsUserHimselfVoterTest extends KernelTestCase
      */
     public function testThatVoteReturnsExpectedWhenUserMismatch(): void
     {
+        $voter = new IsUserHimselfVoter();
         $token = new JWTUserToken([], new SecurityUser(new User()));
 
-        static::assertSame(Voter::ACCESS_DENIED, $this->getVoter()->vote($token, new User(), ['IS_USER_HIMSELF']));
+        static::assertSame(Voter::ACCESS_DENIED, $voter->vote($token, new User(), ['IS_USER_HIMSELF']));
     }
 
     /**
@@ -59,16 +51,10 @@ class IsUserHimselfVoterTest extends KernelTestCase
      */
     public function testThatVoteReturnsExpectedWhenUserMatch(): void
     {
+        $voter = new IsUserHimselfVoter();
         $user = new User();
         $token = new JWTUserToken([], new SecurityUser($user));
 
-        static::assertSame(Voter::ACCESS_GRANTED, $this->getVoter()->vote($token, $user, ['IS_USER_HIMSELF']));
-    }
-
-    private function getVoter(): IsUserHimselfVoter
-    {
-        assert($this->voter instanceof IsUserHimselfVoter);
-
-        return $this->voter;
+        static::assertSame(Voter::ACCESS_GRANTED, $voter->vote($token, $user, ['IS_USER_HIMSELF']));
     }
 }

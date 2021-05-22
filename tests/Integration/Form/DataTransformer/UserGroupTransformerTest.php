@@ -13,11 +13,9 @@ use App\Form\DataTransformer\UserGroupTransformer;
 use App\Resource\UserGroupResource;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\Exception\TransformationFailedException;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class UserGroupTransformerTest
@@ -27,26 +25,11 @@ use UnexpectedValueException;
  */
 class UserGroupTransformerTest extends KernelTestCase
 {
-    private MockObject | UserGroupResource | null $userGroupResource = null;
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->userGroupResource = $this
-            ->getMockBuilder(UserGroupResource::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expected
-     * @phpstan-param StringableArrayObject<array<mixed>>|null $input
+     * @phpstan-param StringableArrayObject<array> $expected
+     * @phpstan-param StringableArrayObject<array>|null $input
      * @psalm-param StringableArrayObject $expected
      * @psalm-param StringableArrayObject|null $input
      *
@@ -56,7 +39,9 @@ class UserGroupTransformerTest extends KernelTestCase
         StringableArrayObject $expected,
         ?StringableArrayObject $input
     ): void {
-        $transformer = new UserGroupTransformer($this->getUserGroupResource());
+        $userGroupResourceMock = $this->createMock(UserGroupResource::class);
+
+        $transformer = new UserGroupTransformer($userGroupResourceMock);
 
         static::assertSame(
             $expected->getArrayCopy(),
@@ -72,13 +57,15 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity1 = new UserGroup();
         $entity2 = new UserGroup();
 
-        $this->getUserGroupResourceMock()
+        $userGroupResourceMock = $this->createMock(UserGroupResource::class);
+
+        $userGroupResourceMock
             ->expects(static::exactly(2))
             ->method('findOne')
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
 
-        (new UserGroupTransformer($this->getUserGroupResource()))
+        (new UserGroupTransformer($userGroupResourceMock))
             ->reverseTransform(['1', '2']);
     }
 
@@ -87,18 +74,20 @@ class UserGroupTransformerTest extends KernelTestCase
      */
     public function testThatReverseTransformThrowsAnException(): void
     {
-        $this->expectException(TransformationFailedException::class);
-        $this->expectExceptionMessage('User group with id "2" does not exist!');
-
         $entity = new UserGroup();
 
-        $this->getUserGroupResourceMock()
+        $userGroupResourceMock = $this->createMock(UserGroupResource::class);
+
+        $userGroupResourceMock
             ->expects(static::exactly(2))
             ->method('findOne')
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity, null);
 
-        (new UserGroupTransformer($this->getUserGroupResource()))
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessage('User group with id "2" does not exist!');
+
+        (new UserGroupTransformer($userGroupResourceMock))
             ->reverseTransform(['1', '2']);
     }
 
@@ -110,13 +99,15 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity1 = new UserGroup();
         $entity2 = new UserGroup();
 
-        $this->getUserGroupResourceMock()
+        $userGroupResourceMock = $this->createMock(UserGroupResource::class);
+
+        $userGroupResourceMock
             ->expects(static::exactly(2))
             ->method('findOne')
             ->withConsecutive(['1'], ['2'])
             ->willReturnOnConsecutiveCalls($entity1, $entity2);
 
-        $transformer = new UserGroupTransformer($this->getUserGroupResource());
+        $transformer = new UserGroupTransformer($userGroupResourceMock);
 
         static::assertSame([$entity1, $entity2], $transformer->reverseTransform(['1', '2']));
     }
@@ -131,19 +122,5 @@ class UserGroupTransformerTest extends KernelTestCase
         $entity = new UserGroup();
 
         yield [new StringableArrayObject([$entity->getId()]), new StringableArrayObject([$entity])];
-    }
-
-    private function getUserGroupResource(): UserGroupResource
-    {
-        return $this->userGroupResource instanceof UserGroupResource
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
-    }
-
-    private function getUserGroupResourceMock(): MockObject
-    {
-        return $this->userGroupResource instanceof MockObject
-            ? $this->userGroupResource
-            : throw new UnexpectedValueException('UserGroupResource not set');
     }
 }

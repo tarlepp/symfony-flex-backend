@@ -52,7 +52,9 @@ class ControllerCollectionTest extends KernelTestCase
             /**
              * Constructor of the class.
              *
-             * @param array<mixed> $input
+             * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
+             *
+             * @param array<array-key, mixed> $input
              */
             public function __construct(array $input)
             {

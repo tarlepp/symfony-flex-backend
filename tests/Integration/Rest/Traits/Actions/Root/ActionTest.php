@@ -33,7 +33,7 @@ class ActionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitCallsExpectedMethod
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $parameters
+     * @phpstan-param StringableArrayObject<array> $parameters
      * @psalm-param StringableArrayObject $parameters
      * @psalm-param trait-string $class
      *
@@ -93,7 +93,7 @@ class ActionTest extends KernelTestCase
             $class = $namespace . $base;
 
             $parameters = [
-                $request = $this->createMock(Request::class),
+                $this->createMock(Request::class),
             ];
 
             switch ($base) {

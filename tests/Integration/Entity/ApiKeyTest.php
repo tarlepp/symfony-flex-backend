@@ -45,7 +45,7 @@ class ApiKeyTest extends EntityTestCase
      * @dataProvider dataProviderTestThatApiKeyHasExpectedRoles
      *
      * @phpstan-param StringableArrayObject<array<int, string>> $expectedRoles
-     * @phpstan-param StringableArrayObject<array<mixed>> $criteria
+     * @phpstan-param StringableArrayObject<array> $criteria
      * @psalm-param StringableArrayObject $expectedRoles
      * @psalm-param StringableArrayObject $criteria
      *

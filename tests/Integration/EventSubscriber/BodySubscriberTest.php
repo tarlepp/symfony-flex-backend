@@ -27,15 +27,19 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  */
 class BodySubscriberTest extends KernelTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        static::bootKernel();
+    }
+
     /**
      * @throws JsonException
      */
     public function testThatEmptyBodyWorksLikeExpected(): void
     {
-        static::bootKernel();
-
         $request = new Request();
-
         $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         (new BodySubscriber())
@@ -50,8 +54,6 @@ class BodySubscriberTest extends KernelTestCase
      */
     public function testThatNonJsonContentTypeWorksLikeExpected(): void
     {
-        static::bootKernel();
-
         $inputQuery = [
             'foo' => 'bar',
         ];
@@ -75,7 +77,7 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatJsonContentReplaceParametersAsExpected
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedParameters
+     * @phpstan-param StringableArrayObject<array> $expectedParameters
      * @psalm-param StringableArrayObject $expectedParameters
      *
      * @throws JsonException
@@ -87,8 +89,6 @@ class BodySubscriberTest extends KernelTestCase
         string $contentType,
         string $content
     ): void {
-        static::bootKernel();
-
         $request = new Request([], ['foobar' => 'foobar'], [], [], [], [], $content);
         $request->headers->set('Content-Type', $contentType);
 
@@ -105,13 +105,10 @@ class BodySubscriberTest extends KernelTestCase
      */
     public function testThatInvalidJsonContentThrowsAnException(): void
     {
-        $this->expectException(JsonException::class);
-
-        static::bootKernel();
-
         $request = new Request([], [], [], [], [], [], '{"Some": "not", "valid" JSON}');
-
         $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+
+        $this->expectException(JsonException::class);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -122,8 +119,6 @@ class BodySubscriberTest extends KernelTestCase
      */
     public function testThatWithEmptyBodyReplaceIsNotCalled(): void
     {
-        static::bootKernel();
-
         $request = $this->getMockBuilder(Request::class)->getMock();
         $parameterBag = $this->getMockBuilder(ParameterBag::class)->getMock();
 

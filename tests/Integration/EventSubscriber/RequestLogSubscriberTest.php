@@ -17,14 +17,12 @@ use App\Security\SecurityUser;
 use App\Security\UserTypeIdentification;
 use App\Utils\RequestLogger;
 use Generator;
-use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Throwable;
-use UnexpectedValueException;
 
 /**
  * Class RequestLogSubscriberTest
@@ -34,31 +32,11 @@ use UnexpectedValueException;
  */
 class RequestLogSubscriberTest extends KernelTestCase
 {
-    private MockObject | RequestLogger | null $requestLogger = null;
-    private MockObject | UserRepository | null $userRepository = null;
-    private MockObject | LoggerInterface | null $logger = null;
-    private MockObject | UserTypeIdentification | null $userTypeIdentification = null;
-
     protected function setUp(): void
     {
         parent::setUp();
 
         static::bootKernel();
-
-        $this->requestLogger = $this->getMockBuilder(RequestLogger::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->userRepository = $this->getMockBuilder(UserRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-
-        $this->userTypeIdentification = $this->getMockBuilder(UserTypeIdentification::class)
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 
     /**
@@ -72,41 +50,43 @@ class RequestLogSubscriberTest extends KernelTestCase
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
 
-        $this->getRequestLoggerMock()
+        [$requestLoggerMock, $userRepositoryMock, $loggerMock, $userTypeIdentificationMock] = $this->getMocks();
+
+        $requestLoggerMock
             ->expects(static::once())
             ->method('setRequest')
             ->with($request)
-            ->willReturn($this->requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::once())
             ->method('setResponse')
             ->with($event->getResponse())
-            ->willReturn($this->requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::once())
             ->method('setMasterRequest')
             ->with($event->isMasterRequest())
-            ->willReturn($this->requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::once())
             ->method('handle');
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setUser');
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setApiKey');
 
         (new RequestLogSubscriber(
-            $this->getRequestLogger(),
-            $this->getUserRepository(),
-            $this->getLogger(),
-            $this->getUserTypeIdentification(),
+            $requestLoggerMock,
+            $userRepositoryMock,
+            $loggerMock,
+            $userTypeIdentificationMock,
             []
         ))
             ->onTerminateEvent($event);
@@ -122,37 +102,37 @@ class RequestLogSubscriberTest extends KernelTestCase
         $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
-        $user = (new User())
-            ->setUsername('test user');
-
+        $user = (new User())->setUsername('test user');
         $securityUser = new SecurityUser($user);
 
-        $this->getUserRepositoryMock()
+        [$requestLoggerMock, $userRepositoryMock, $loggerMock, $userTypeIdentificationMock] = $this->getMocks();
+
+        $userRepositoryMock
             ->expects(static::once())
             ->method('getReference')
             ->with($user->getId())
             ->willReturn($user);
 
-        $this->getUserTypeIdentificationMock()
+        $userTypeIdentificationMock
             ->expects(static::once())
             ->method('getIdentity')
             ->willReturn($securityUser);
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::once())
             ->method('setUser')
             ->with($user)
-            ->willReturn($this->requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setApiKey');
 
         (new RequestLogSubscriber(
-            $this->getRequestLogger(),
-            $this->getUserRepository(),
-            $this->getLogger(),
-            $this->getUserTypeIdentification(),
+            $requestLoggerMock,
+            $userRepositoryMock,
+            $loggerMock,
+            $userTypeIdentificationMock,
             []
         ))
             ->onTerminateEvent($event);
@@ -168,27 +148,27 @@ class RequestLogSubscriberTest extends KernelTestCase
         $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
-        $user = (new User())
-            ->setUsername('test user');
-
+        $user = (new User())->setUsername('test user');
         $securityUser = new SecurityUser($user);
 
-        $this->getUserRepositoryMock()
+        [$requestLoggerMock, $userRepositoryMock, $loggerMock, $userTypeIdentificationMock] = $this->getMocks();
+
+        $userRepositoryMock
             ->expects(static::once())
             ->method('getReference')
             ->with($user->getId())
             ->willReturn(null);
 
-        $this->getUserTypeIdentificationMock()
+        $userTypeIdentificationMock
             ->expects(static::once())
             ->method('getIdentity')
             ->willReturn($securityUser);
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setUser');
 
-        $this->getLoggerMock()
+        $loggerMock
             ->expects(static::once())
             ->method('error')
             ->with(
@@ -197,10 +177,10 @@ class RequestLogSubscriberTest extends KernelTestCase
             );
 
         (new RequestLogSubscriber(
-            $this->getRequestLogger(),
-            $this->getUserRepository(),
-            $this->getLogger(),
-            $this->getUserTypeIdentification(),
+            $requestLoggerMock,
+            $userRepositoryMock,
+            $loggerMock,
+            $userTypeIdentificationMock,
             []
         ))
             ->onTerminateEvent($event);
@@ -216,38 +196,36 @@ class RequestLogSubscriberTest extends KernelTestCase
         $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
-
-        $apiKeyUser = $this->getMockBuilder(ApiKeyUser::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $apiKey = new ApiKey();
 
-        $apiKeyUser
+        [$requestLoggerMock, $userRepositoryMock, $loggerMock, $userTypeIdentificationMock] = $this->getMocks();
+        $apiKeyUserMock = $this->getMockBuilder(ApiKeyUser::class)->disableOriginalConstructor()->getMock();
+
+        $apiKeyUserMock
             ->expects(static::once())
             ->method('getApiKey')
             ->willReturn($apiKey);
 
-        $this->getUserTypeIdentificationMock()
+        $userTypeIdentificationMock
             ->expects(static::once())
             ->method('getIdentity')
-            ->willReturn($apiKeyUser);
+            ->willReturn($apiKeyUserMock);
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::once())
             ->method('setApiKey')
             ->with($apiKey)
-            ->willReturn($this->requestLogger);
+            ->willReturn($requestLoggerMock);
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setUser');
 
         (new RequestLogSubscriber(
-            $this->getRequestLogger(),
-            $this->getUserRepository(),
-            $this->getLogger(),
-            $this->getUserTypeIdentification(),
+            $requestLoggerMock,
+            $userRepositoryMock,
+            $loggerMock,
+            $userTypeIdentificationMock,
             []
         ))
             ->onTerminateEvent($event);
@@ -265,20 +243,21 @@ class RequestLogSubscriberTest extends KernelTestCase
             'REQUEST_URI' => '/foobar',
         ]);
         $response = new Response();
-
         $event = new TerminateEvent(static::$kernel, $request, $response);
 
-        $this->getRequestLoggerMock()
+        [$requestLoggerMock, $userRepositoryMock, $loggerMock, $userTypeIdentificationMock] = $this->getMocks();
+
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setRequest')
             ->with($request)
-            ->willReturn($this->requestLogger);
+            ->willReturn($requestLoggerMock);
 
         (new RequestLogSubscriber(
-            $this->getRequestLogger(),
-            $this->getUserRepository(),
-            $this->getLogger(),
-            $this->getUserTypeIdentification(),
+            $requestLoggerMock,
+            $userRepositoryMock,
+            $loggerMock,
+            $userTypeIdentificationMock,
             []
         ))
             ->onTerminateEvent($event);
@@ -297,39 +276,41 @@ class RequestLogSubscriberTest extends KernelTestCase
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
 
-        $this->getRequestLoggerMock()
+        [$requestLoggerMock, $userRepositoryMock, $loggerMock, $userTypeIdentificationMock] = $this->getMocks();
+
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setRequest');
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setResponse');
 
-        $this->getUserTypeIdentificationMock()
+        $userTypeIdentificationMock
             ->expects(static::never())
             ->method('getIdentity');
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setMasterRequest');
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('handle');
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setUser');
 
-        $this->getRequestLoggerMock()
+        $requestLoggerMock
             ->expects(static::never())
             ->method('setApiKey');
 
         (new RequestLogSubscriber(
-            $this->getRequestLogger(),
-            $this->getUserRepository(),
-            $this->getLogger(),
-            $this->getUserTypeIdentification(),
+            $requestLoggerMock,
+            $userRepositoryMock,
+            $loggerMock,
+            $userTypeIdentificationMock,
             [$ignored]
         ))
             ->onTerminateEvent($event);
@@ -349,59 +330,21 @@ class RequestLogSubscriberTest extends KernelTestCase
         yield ['/secret/foo/bar', '/secret/*'];
     }
 
-    private function getRequestLogger(): RequestLogger
+    /**
+     * @return array{
+     *      0: \PHPUnit\Framework\MockObject\MockObject&RequestLogger,
+     *      1: \PHPUnit\Framework\MockObject\MockObject&UserRepository,
+     *      2: \PHPUnit\Framework\MockObject\MockObject&LoggerInterface,
+     *      3: \PHPUnit\Framework\MockObject\MockObject&UserTypeIdentification,
+     *  }
+     */
+    private function getMocks(): array
     {
-        return $this->requestLogger instanceof RequestLogger
-            ? $this->requestLogger
-            : throw new UnexpectedValueException('RequestLogger not set');
-    }
-
-    private function getRequestLoggerMock(): MockObject
-    {
-        return $this->requestLogger instanceof MockObject
-            ? $this->requestLogger
-            : throw new UnexpectedValueException('RequestLogger not set');
-    }
-
-    private function getUserRepository(): UserRepository
-    {
-        return $this->userRepository instanceof UserRepository
-            ? $this->userRepository
-            : throw new UnexpectedValueException('UserRepository not set');
-    }
-
-    private function getUserRepositoryMock(): MockObject
-    {
-        return $this->userRepository instanceof MockObject
-            ? $this->userRepository
-            : throw new UnexpectedValueException('UserRepository not set');
-    }
-
-    private function getLogger(): LoggerInterface
-    {
-        return $this->logger instanceof LoggerInterface
-            ? $this->logger
-            : throw new UnexpectedValueException('Logger not set');
-    }
-
-    private function getLoggerMock(): MockObject
-    {
-        return $this->logger instanceof MockObject
-            ? $this->logger
-            : throw new UnexpectedValueException('Logger not set');
-    }
-
-    private function getUserTypeIdentification(): UserTypeIdentification
-    {
-        return $this->userTypeIdentification instanceof UserTypeIdentification
-            ? $this->userTypeIdentification
-            : throw new UnexpectedValueException('UserTypeIdentification not set');
-    }
-
-    private function getUserTypeIdentificationMock(): MockObject
-    {
-        return $this->userTypeIdentification instanceof MockObject
-            ? $this->userTypeIdentification
-            : throw new UnexpectedValueException('UserTypeIdentification not set');
+        return [
+            $this->getMockBuilder(RequestLogger::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(UserRepository::class)->disableOriginalConstructor()->getMock(),
+            $this->getMockBuilder(LoggerInterface::class)->getMock(),
+            $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock(),
+        ];
     }
 }
