@@ -74,11 +74,8 @@ jobs:
       - name: Lint YAML configurations
         run: make lint-yaml
 
-      # TODO: Disable this until 3.6 is released
-      # See:
-      #   - https://github.com/squizlabs/PHP_CodeSniffer/issues/3167
-      #- name: Run PHP CodeSniffer
-      #  run: make phpcs
+      - name: Run PHP CodeSniffer
+        run: make phpcs
 
       - name: Run The Easiest Way to Use Any Coding Standard
         run: make ecs
