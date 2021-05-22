@@ -60,7 +60,7 @@ class GenericRestRequestMapperTest extends KernelTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `mapToObject` method throws an exception if `destination` is not instance of `RestDtoInterface`
+     * @testdox Test that `mapToObject` throws an exception if `destination` is not instance of `RestDtoInterface`
      */
     public function testThatMapToObjectThrowsAnExceptionIfDestinationIsNotRestDtoInterface(): void
     {
