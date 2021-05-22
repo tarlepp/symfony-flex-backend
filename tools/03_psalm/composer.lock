@@ -1174,12 +1174,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "5a791bd14e78af5fc2184a370a72e828ff477263"
+                "reference": "b690895fa1530e85397d5070517e45e098be6d18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5a791bd14e78af5fc2184a370a72e828ff477263",
-                "reference": "5a791bd14e78af5fc2184a370a72e828ff477263",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/b690895fa1530e85397d5070517e45e098be6d18",
+                "reference": "b690895fa1530e85397d5070517e45e098be6d18",
                 "shasum": ""
             },
             "conflict": {
@@ -1462,6 +1462,7 @@
                 "yiisoft/yii2-gii": "<2.0.4",
                 "yiisoft/yii2-jui": "<2.0.4",
                 "yiisoft/yii2-redis": "<2.0.8",
+                "yoast-seo-for-typo3/yoast_seo": "<7.2.1",
                 "yourls/yourls": "<1.7.4",
                 "zendesk/zendesk_api_client_php": "<2.2.11",
                 "zendframework/zend-cache": ">=2.4,<2.4.8|>=2.5,<2.5.3",
@@ -1524,7 +1525,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-21T15:03:46+00:00"
+            "time": "2021-05-21T19:22:20+00:00"
         },
         {
             "name": "sebastian/diff",
