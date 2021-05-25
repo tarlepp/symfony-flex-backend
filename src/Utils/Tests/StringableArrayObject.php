@@ -18,8 +18,6 @@ use Stringable;
  *
  * @package App\Utils\Tests
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
- *
- * @phpstan-ignore-next-line
  */
 class StringableArrayObject extends ArrayObject implements Stringable
 {
