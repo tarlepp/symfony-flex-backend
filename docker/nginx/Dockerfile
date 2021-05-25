@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM nginx:1.21
 
 ARG HOST_UID
 ARG HOST_GID
