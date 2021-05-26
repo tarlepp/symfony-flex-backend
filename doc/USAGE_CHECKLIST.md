@@ -28,7 +28,7 @@ started to use this template.
         `composer symfony:generate-id` command to generate new. Note that
         this will update your `composer.lock` file - so remember to commit
         that.
-* [ ] Application configuration
+* [ ] Application configuration / setup
   * [ ] [.env](../.env) Change `APP_SECRET` value with new one, you can use
         eg. [this](http://nux.net/secret) tool for that. Also remember to
         change that `APP_SECRET` value in [.env.test](../.env.test) and
@@ -37,6 +37,14 @@ started to use this template.
         generate new `JWT_PASSPHRASE` value. Also remember to do those
         changes to [application_test.json](../secrets/application_test.json)
         files.
+  * [ ] [site.webmanifest](../public/site.webmanifest) - check that file
+        contents - [information](https://developer.mozilla.org/en-US/docs/Web/Manifest)
+        - and made necessary changes.
+  * [ ] [robots.txt](../public/robots.txt) - check that file contents - 
+        [information](https://developers.google.com/search/docs/advanced/robots/intro)
+        - and made necessary changes.
+  * [ ] [favicon.ico](../public/favicon.ico) - change your application favicon
+        to match your brand.
 * [ ] 3rd party services that you might not need _or_ you need to change those
       to work with _your_ application - if you don't need to use those services
       just delete those files and all is done.
