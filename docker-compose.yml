@@ -28,10 +28,6 @@ services:
         container_name: symfony-backend-nginx
         build:
             context: ./docker/nginx/
-            args:
-                HOST_UID: $HOST_UID
-                HOST_GID: $HOST_GID
-        user: $HOST_UID:$HOST_GID
         depends_on:
             - php
         ports:
