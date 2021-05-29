@@ -1,6 +1,7 @@
 version: '3'
 services:
     php:
+        container_name: symfony-backend-php-fpm
         build:
             context: .
             dockerfile: ./Dockerfile_dev
@@ -24,11 +25,13 @@ services:
             TRUSTED_PROXIES: "127.0.0.1,REMOTE_ADDR"
 
     nginx:
+        container_name: symfony-backend-nginx
         build:
             context: ./docker/nginx/
             args:
                 HOST_UID: $HOST_UID
                 HOST_GID: $HOST_GID
+        user: $HOST_UID:$HOST_GID
         depends_on:
             - php
         ports:
@@ -39,6 +42,7 @@ services:
             #- /app/var/
 
     mysql:
+        container_name: symfony-backend-mysql
         build:
             context: ./docker/mysql/
         command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

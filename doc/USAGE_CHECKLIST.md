@@ -31,7 +31,8 @@ started to use this template.
 * [ ] Application configuration / setup
   * [ ] [.env](../.env) Change `APP_SECRET` value with new one, you can use
         eg. [this](http://nux.net/secret) tool for that. Also remember to
-        change that `APP_SECRET` value in [.env.test](../.env.test) and
+        change that `APP_SECRET` value in [.env.test](../.env.test) and in
+        [.env.gh-actions](../.env.gh-actions) files.
   * [ ] [application.json](../secrets/application.json) Change file contents
         to match your application configuration - specially you need to
         generate new `JWT_PASSPHRASE` value. Also remember to do those
@@ -45,6 +46,8 @@ started to use this template.
         - and made necessary changes.
   * [ ] [favicon.ico](../public/favicon.ico) - change your application favicon
         to match your brand.
+  * [ ] [docker-compose.yml](../docker-compose.yml) Change `container_name` to
+        match your application.
 * [ ] 3rd party services that you might not need _or_ you need to change those
       to work with _your_ application - if you don't need to use those services
       just delete those files and all is done.
