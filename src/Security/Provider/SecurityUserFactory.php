@@ -67,10 +67,10 @@ class SecurityUserFactory implements UserProviderInterface
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
 
-        $userEntity = $this->userRepository->find($user->getUsername());
+        $userEntity = $this->userRepository->find($user->getUserIdentifier());
 
         if (!($userEntity instanceof User)) {
-            throw new UsernameNotFoundException(sprintf('User not found for UUID: "%s".', $user->getUsername()));
+            throw new UsernameNotFoundException(sprintf('User not found for UUID: "%s".', $user->getUserIdentifier()));
         }
 
         return new SecurityUser($userEntity, $this->rolesService->getInheritedRoles($userEntity->getRoles()));

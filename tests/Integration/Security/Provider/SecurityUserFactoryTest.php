@@ -170,7 +170,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $this->getUserRepositoryMock()
             ->expects(static::once())
             ->method('find')
-            ->with($securityUser->getUsername())
+            ->with($securityUser->getUserIdentifier())
             ->willReturn($user);
 
         $this->getRolesServiceMock()
@@ -183,7 +183,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->refreshUser($securityUser);
 
         static::assertNotSame($securityUser, $newSecurityUser);
-        static::assertSame($securityUser->getUsername(), $newSecurityUser->getUsername());
+        static::assertSame($securityUser->getUsername(), $newSecurityUser->getUserIdentifier());
         static::assertSame($securityUser->getRoles(), $newSecurityUser->getRoles());
     }
 

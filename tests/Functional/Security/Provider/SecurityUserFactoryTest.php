@@ -97,7 +97,7 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         $securityUser = new SecurityUser($user);
 
-        static::assertSame($user->getId(), $this->getSecurityUserFactory()->refreshUser($securityUser)->getUsername());
+        static::assertSame($user->getId(), $this->getSecurityUserFactory()->refreshUser($securityUser)->getUserIdentifier());
     }
 
     /**
