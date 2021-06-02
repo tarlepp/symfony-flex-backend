@@ -10,10 +10,10 @@ namespace App\Tests\Integration\Rest;
 
 use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\ResponseHandler;
-use App\Utils\Tests\ContainerTestCase;
 use Exception;
 use Generator;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;
 use Symfony\Component\Form\FormInterface;
@@ -30,12 +30,12 @@ use Throwable;
  * @package App\Tests\Integration\Rest
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
-class ResponseHandlerTest extends ContainerTestCase
+class ResponseHandlerTest extends KernelTestCase
 {
     public function testThatGetSerializerReturnsExpected(): void
     {
         /** @var SerializerInterface $serializer */
-        $serializer = $this->getContainer()->get(SerializerInterface::class);
+        $serializer = self::getContainer()->get(SerializerInterface::class);
 
         $responseClass = new ResponseHandler($serializer);
 
@@ -57,7 +57,7 @@ class ResponseHandlerTest extends ContainerTestCase
         string $expectedContent
     ): void {
         /** @var SerializerInterface $serializer */
-        $serializer = $this->getContainer()->get(SerializerInterface::class);
+        $serializer = self::getContainer()->get(SerializerInterface::class);
 
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
@@ -107,7 +107,7 @@ class ResponseHandlerTest extends ContainerTestCase
         $request = Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => $format]);
 
         /** @var SerializerInterface $serializer */
-        $serializer = $this->getContainer()->get(SerializerInterface::class);
+        $serializer = self::getContainer()->get(SerializerInterface::class);
 
         /** @var RestResourceInterface $stubResourceService */
         $stubResourceService = $this->createMock(RestResourceInterface::class);
