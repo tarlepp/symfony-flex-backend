@@ -20,7 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\User as CoreUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
@@ -57,7 +57,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionIfUserNotFound(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('User not found for UUID:');
 
         $this->getUserRepositoryMock()
@@ -145,7 +145,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserNotFound(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('User not found for UUID:');
 
         $this->getUserRepositoryMock()

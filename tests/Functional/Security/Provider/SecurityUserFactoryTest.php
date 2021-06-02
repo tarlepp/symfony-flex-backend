@@ -16,7 +16,7 @@ use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\User as CoreUser;
 use Throwable;
 use function assert;
@@ -50,7 +50,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidUsername(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
 
         $this->getSecurityUserFactory()->loadUserByUsername('foobar');
     }
@@ -80,7 +80,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
 
         $this->getSecurityUserFactory()->refreshUser(new SecurityUser(new User()));
     }
@@ -97,7 +97,10 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         $securityUser = new SecurityUser($user);
 
-        static::assertSame($user->getId(), $this->getSecurityUserFactory()->refreshUser($securityUser)->getUserIdentifier());
+        static::assertSame(
+            $user->getId(),
+            $this->getSecurityUserFactory()->refreshUser($securityUser)->getUserIdentifier()
+        );
     }
 
     /**

@@ -18,7 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\User;
 use Throwable;
 use function array_map;
@@ -89,7 +89,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidGuid(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
 
         $this->getApiKeyUserProvider()->loadUserByUsername((string)time());
