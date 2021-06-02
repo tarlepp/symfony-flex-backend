@@ -20,7 +20,7 @@ RUN pickle install apcu \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.0.13 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.0.14 /usr/bin/composer /usr/bin/composer
 
 ENV APP_ENV prod
 ENV COMPOSER_ALLOW_SUPERUSER 1
