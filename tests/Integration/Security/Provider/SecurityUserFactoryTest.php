@@ -94,7 +94,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $securityUser = (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
             ->loadUserByUsername('test_user');
 
-        static::assertSame($user->getId(), $securityUser->getUsername());
+        static::assertSame($user->getId(), $securityUser->getUserIdentifier());
         static::assertSame(['FOO', 'BAR'], $securityUser->getRoles());
     }
 
@@ -183,7 +183,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->refreshUser($securityUser);
 
         static::assertNotSame($securityUser, $newSecurityUser);
-        static::assertSame($securityUser->getUsername(), $newSecurityUser->getUserIdentifier());
+        static::assertSame($securityUser->getUserIdentifier(), $newSecurityUser->getUserIdentifier());
         static::assertSame($securityUser->getRoles(), $newSecurityUser->getRoles());
     }
 
