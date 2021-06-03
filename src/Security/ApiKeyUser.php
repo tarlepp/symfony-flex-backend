@@ -97,7 +97,7 @@ class ApiKeyUser implements ApiKeyUserInterface
      *
      * @codeCoverageIgnore
      */
-    public function getUsername(): string
+    public function getUserIdentifier(): string
     {
         return $this->username;
     }
@@ -109,5 +109,17 @@ class ApiKeyUser implements ApiKeyUserInterface
      */
     public function eraseCredentials(): void
     {
+    }
+
+    /**
+     * @todo Remove this when this `getUsername` is removed from main interface (Symfony 6.0)
+     *
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getUsername(): string
+    {
+        return $this->getUserIdentifier();
     }
 }
