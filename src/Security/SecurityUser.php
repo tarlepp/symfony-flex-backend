@@ -9,7 +9,8 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Entity\User;
-use App\Security\Interfaces\SecurityUserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class SecurityUser
@@ -17,10 +18,10 @@ use App\Security\Interfaces\SecurityUserInterface;
  * @package App\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class SecurityUser implements SecurityUserInterface
+class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private string $username;
-    private string $password;
+    private string|null $password;
     private string $language;
     private string $locale;
     private string $timezone;
@@ -65,7 +66,7 @@ class SecurityUser implements SecurityUserInterface
      *
      * @codeCoverageIgnore
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
