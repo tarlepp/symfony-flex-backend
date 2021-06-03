@@ -1,13 +1,11 @@
 <?php
-
 declare(strict_types = 1);
 
 // phpcs:ignoreFile
-/** @noinspection PhpIllegalPsrClassPathInspection */
 
 namespace DoctrineMigrations;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -33,7 +31,7 @@ final class Version20191006091354 extends AbstractMigration
     }
 
     /**
-     * @throws DBALException
+     * @throws Exception
      */
     public function up(Schema $schema): void
     {
@@ -274,7 +272,7 @@ SQL;
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      *
-     * @throws DBALException
+     * @throws Exception
      */
     public function down(Schema $schema): void
     {
