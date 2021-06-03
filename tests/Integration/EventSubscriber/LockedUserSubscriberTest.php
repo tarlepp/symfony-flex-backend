@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\LockedException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\User\User as CoreUser;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function range;
 
@@ -47,7 +47,12 @@ class LockedUserSubscriberTest extends KernelTestCase
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()->getMock();
 
-        $event = new AuthenticationSuccessEvent([], new CoreUser('username', 'password'), new Response());
+        $event = new AuthenticationSuccessEvent(
+            [],
+            new class('username', 'password') extends InMemoryUser {
+            },
+            new Response()
+        );
 
         (new LockedUserSubscriber($userRepository, $logLoginFailureResource))
             ->onAuthenticationSuccess($event);

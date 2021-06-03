@@ -17,7 +17,7 @@ use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Symfony\Component\Security\Core\User\User as CoreUser;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function assert;
 
@@ -124,9 +124,10 @@ class SecurityUserFactoryTest extends KernelTestCase
     public function testThatRefreshUserThrowsAnExceptionIfUserClassIsNotSupported(): void
     {
         $this->expectException(UnsupportedUserException::class);
-        $this->expectExceptionMessage('Invalid user class "Symfony\Component\Security\Core\User\User"');
+        $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
 
-        $user = new CoreUser('test', 'password');
+        $user = new class('test', 'password') extends InMemoryUser {
+        };
 
         $this->getSecurityUserFactory()->refreshUser($user);
     }

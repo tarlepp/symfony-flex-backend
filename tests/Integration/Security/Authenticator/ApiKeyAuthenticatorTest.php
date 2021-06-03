@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function assert;
 use function json_encode;
@@ -136,7 +136,8 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         (new ApiKeyAuthenticator($this->getApiKeyUserProvider()))->checkCredentials(
             $credentials instanceof StringableArrayObject ? $credentials->getArrayCopy() : $credentials,
-            new User('user', 'password'),
+            new class('user', 'password') extends InMemoryUser {
+            },
         );
     }
 
@@ -153,7 +154,11 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         static::assertFalse(
             (new ApiKeyAuthenticator($this->getApiKeyUserProvider()))
-                ->checkCredentials(['token' => 'some-token'], new User('user', 'password')),
+                ->checkCredentials(
+                    ['token' => 'some-token'],
+                    new class('user', 'password') extends InMemoryUser {
+                    },
+                ),
         );
     }
 
@@ -172,7 +177,11 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         static::assertTrue(
             (new ApiKeyAuthenticator($this->getApiKeyUserProvider()))
-                ->checkCredentials(['token' => 'some-token'], new User('user', 'password')),
+                ->checkCredentials(
+                    ['token' => 'some-token'],
+                    new class('user', 'password') extends InMemoryUser {
+                    },
+                ),
         );
     }
 

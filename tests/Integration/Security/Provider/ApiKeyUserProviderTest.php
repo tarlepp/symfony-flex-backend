@@ -20,7 +20,7 @@ use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 use function assert;
@@ -75,7 +75,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage('API key cannot refresh user');
 
-        $user = new User('username', 'password');
+        $user = new class('username', 'password') extends InMemoryUser {
+        };
 
         (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
             ->refreshUser($user);
