@@ -119,7 +119,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
             $this->requestLogger->setApiKey($identify->getApiKey());
         }
 
-        $this->requestLogger->setMasterRequest($event->isMasterRequest());
+        $this->requestLogger->setMainRequest($event->isMainRequest());
         $this->requestLogger->handle();
     }
 }
