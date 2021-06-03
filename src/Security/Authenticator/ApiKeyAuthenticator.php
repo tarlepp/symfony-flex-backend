@@ -8,18 +8,17 @@ declare(strict_types = 1);
 
 namespace App\Security\Authenticator;
 
-use App\Entity\ApiKey;
-use App\Security\Interfaces\ApiKeyUserInterface;
 use App\Security\Provider\ApiKeyUserProvider;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
-use function is_array;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use function preg_match;
 
 /**
@@ -28,94 +27,58 @@ use function preg_match;
  * @package App\Security\Authenticator
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyAuthenticator extends AbstractGuardAuthenticator
+class ApiKeyAuthenticator extends AbstractAuthenticator
 {
-    private const CREDENTIAL_KEY = 'token';
-
     public function __construct(
         private ApiKeyUserProvider $apiKeyUserProvider,
     ) {
     }
 
-    public function supports(Request $request): bool
+    public function supports(Request $request): ?bool
     {
-        $apiKey = $request->headers->get('Authorization', '');
-
-        preg_match('#^ApiKey (\w+)$#', $apiKey, $matches);
+        $matches = $this->getMatches($request);
 
         return !empty($matches);
     }
 
-    public function start(Request $request, ?AuthenticationException $authException = null): JsonResponse
+    public function authenticate(Request $request): PassportInterface
+    {
+        $matches = $this->getMatches($request);
+        $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($matches[1]);
+
+        if ($apiKey === null) {
+            throw new UserNotFoundException();
+        }
+
+        return new SelfValidatingPassport(new UserBadge($matches[1]));
+    }
+
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    {
+        return null;
+    }
+
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $data = [
-            'message' => 'Authentication Required',
+            'code' => 401,
+            'message' => 'Invalid ApiKey',
         ];
 
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
     /**
-     * @return array<string, string>|null
+     * @param Request $request
+     *
+     * @return array<mixed>
      */
-    public function getCredentials(Request $request): ?array
+    private function getMatches(Request $request)
     {
-        $output = null;
-
         $apiKey = $request->headers->get('Authorization', '');
 
         preg_match('#^ApiKey (\w+)$#', $apiKey, $matches);
 
-        if (!empty($matches)) {
-            $output = [
-                self::CREDENTIAL_KEY => $matches[1],
-            ];
-        }
-
-        return $output;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUser($credentials, UserProviderInterface $userProvider): ?ApiKeyUserInterface
-    {
-        $apiToken = $this->getApiKeyToken($credentials);
-
-        return $apiToken === null ? null : $this->apiKeyUserProvider->loadUserByUsername($apiToken);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function checkCredentials($credentials, UserInterface $user): bool
-    {
-        $apiToken = $this->getApiKeyToken($credentials) ?? throw new AuthenticationException('Invalid token');
-
-        return $this->apiKeyUserProvider->getApiKeyForToken($apiToken) instanceof ApiKey;
-    }
-
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey): ?Response
-    {
-        return null;
-    }
-
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
-    {
-        $data = [
-            'message' => strtr($exception->getMessageKey(), $exception->getMessageData()),
-        ];
-
-        return new JsonResponse($data, Response::HTTP_FORBIDDEN);
-    }
-
-    public function supportsRememberMe(): bool
-    {
-        return false;
-    }
-
-    private function getApiKeyToken(mixed $credentials): ?string
-    {
-        return is_array($credentials) ? $credentials[self::CREDENTIAL_KEY] ?? null : null;
+        return $matches;
     }
 }
