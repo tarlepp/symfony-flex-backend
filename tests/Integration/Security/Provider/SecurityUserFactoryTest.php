@@ -132,7 +132,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     public function testThatRefreshUserThrowsAnExceptionWithNotSupportedUser(): void
     {
         $this->expectException(UnsupportedUserException::class);
-        $this->expectErrorMessageMatches('^Invalid user class (.*)');
+        $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
 
         (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
             ->refreshUser(
