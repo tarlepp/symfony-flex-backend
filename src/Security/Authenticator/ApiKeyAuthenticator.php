@@ -36,21 +36,19 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
 
     public function supports(Request $request): ?bool
     {
-        $matches = $this->getMatches($request);
-
-        return !empty($matches);
+        return $this->getToken($request) !== '';
     }
 
     public function authenticate(Request $request): PassportInterface
     {
-        $matches = $this->getMatches($request);
-        $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($matches[1]);
+        $token = $this->getToken($request);
+        $apiKey = $this->apiKeyUserProvider->getApiKeyForToken($token);
 
         if ($apiKey === null) {
             throw new UserNotFoundException();
         }
 
-        return new SelfValidatingPassport(new UserBadge($matches[1]));
+        return new SelfValidatingPassport(new UserBadge($token));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
@@ -68,17 +66,10 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
         return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return array<mixed>
-     */
-    private function getMatches(Request $request)
+    private function getToken(Request $request): string
     {
-        $apiKey = $request->headers->get('Authorization', '');
+        preg_match('#^ApiKey (\w+)$#', $request->headers->get('Authorization', ''), $matches);
 
-        preg_match('#^ApiKey (\w+)$#', $apiKey, $matches);
-
-        return $matches;
+        return $matches[1] ?? '';
     }
 }
