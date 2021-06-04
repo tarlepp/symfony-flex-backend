@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private string $username;
-    private string|null $password;
+    private string | null $password;
     private string $language;
     private string $locale;
     private string $timezone;
@@ -81,11 +81,6 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
         return null;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
     public function getUserIdentifier(): string
     {
         return $this->username;
