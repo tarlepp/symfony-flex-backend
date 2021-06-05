@@ -127,10 +127,8 @@ class UserRolesControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetUserRolesReturns200ForUserHimself(): Generator
     {
-        static::bootKernel();
-
         /** @var RolesService $rolesService */
-        $rolesService = static::$container->get(RolesService::class);
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         yield [
             LoadUserData::$uuids['john'],
@@ -182,10 +180,8 @@ class UserRolesControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGetRolesReturns200ForRootRoleUser(): Generator
     {
-        static::bootKernel();
-
         /** @var RolesService $rolesService */
-        $rolesService = static::$container->get(RolesService::class);
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         yield [LoadUserData::$uuids['john'], '[]'];
 

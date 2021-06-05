@@ -170,12 +170,8 @@ class GroupsControllerTest extends WebTestCase
      */
     public function dataProviderTestThatGroupsActionReturnExpectedWithValidApiKey(): Generator
     {
-        static::bootKernel();
-
-        /**
-         * @var RolesService $rolesService
-         */
-        $rolesService = static::$container->get(RolesService::class);
+        /** @var RolesService $rolesService */
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {
             yield [str_pad($rolesService->getShort($role), 40, '_')];

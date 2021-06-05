@@ -47,11 +47,10 @@ class HealthzRepositoryTest extends KernelTestCase
     {
         parent::setUp();
 
-        static::bootKernel();
+        /** @var HealthzRepository $repository */
+        $repository = static::getContainer()->get(HealthzRepository::class);
 
-        assert(static::$container->get(HealthzRepository::class) instanceof HealthzRepository);
-
-        $this->repository = static::$container->get(HealthzRepository::class);
+        $this->repository = $repository;
     }
 
     /**

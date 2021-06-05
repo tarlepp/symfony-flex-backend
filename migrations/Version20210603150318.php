@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 
 // phpcs:ignoreFile
-namespace <namespace>;
+namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\Schema;
@@ -11,14 +11,14 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class <className> extends AbstractMigration
+final class Version20210603150318 extends AbstractMigration
 {
     /**
      * @noinspection PhpMissingParentCallCommonInspection
      */
     public function getDescription(): string
     {
-        return 'TODO: Describe reason for this migration';
+        return 'Rename `master` => `main`';
     }
 
     /**
@@ -40,7 +40,7 @@ final class <className> extends AbstractMigration
             'Migration can only be executed safely on \'mysql\'.'
         );
 
-<up>
+        $this->addSql('ALTER TABLE log_request CHANGE is_master_request is_main_request TINYINT(1) NOT NULL');
     }
 
     /**
@@ -56,6 +56,6 @@ final class <className> extends AbstractMigration
             'Migration can only be executed safely on \'mysql\'.'
         );
 
-<down>
+        $this->addSql('ALTER TABLE log_request CHANGE is_main_request is_master_request TINYINT(1) NOT NULL');
     }
 }

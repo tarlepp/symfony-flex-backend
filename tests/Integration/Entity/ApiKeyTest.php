@@ -55,12 +55,8 @@ class ApiKeyTest extends EntityTestCase
         StringableArrayObject $expectedRoles,
         StringableArrayObject $criteria
     ): void {
-        static::bootKernel();
-
-        /**
-         * @var ApiKeyRepository $repository
-         */
-        $repository = static::$container->get(ApiKeyRepository::class);
+        /** @var ApiKeyRepository $repository */
+        $repository = static::getContainer()->get(ApiKeyRepository::class);
 
         $apiKey = $repository->findOneBy($criteria->getArrayCopy());
 
@@ -73,12 +69,8 @@ class ApiKeyTest extends EntityTestCase
      */
     public function dataProviderTestThatApiKeyHasExpectedRoles(): Generator
     {
-        static::bootKernel();
-
-        /**
-         * @var RolesService $rolesService
-         */
-        $rolesService = static::$container->get(RolesService::class);
+        /** @var RolesService $rolesService */
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {
             yield [

@@ -20,8 +20,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\User as CoreUser;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 use function assert;
@@ -57,7 +57,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionIfUserNotFound(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('User not found for UUID:');
 
         $this->getUserRepositoryMock()
@@ -94,7 +94,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $securityUser = (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
             ->loadUserByUsername('test_user');
 
-        static::assertSame($user->getId(), $securityUser->getUsername());
+        static::assertSame($user->getId(), $securityUser->getUserIdentifier());
         static::assertSame(['FOO', 'BAR'], $securityUser->getRoles());
     }
 
@@ -132,10 +132,10 @@ class SecurityUserFactoryTest extends KernelTestCase
     public function testThatRefreshUserThrowsAnExceptionWithNotSupportedUser(): void
     {
         $this->expectException(UnsupportedUserException::class);
-        $this->expectExceptionMessage('Invalid user class "Symfony\Component\Security\Core\User\User"');
+        $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
 
         (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
-            ->refreshUser(new CoreUser('test_user', 'password'));
+            ->refreshUser(new InMemoryUser('username', 'password'));
     }
 
     /**
@@ -145,7 +145,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserNotFound(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('User not found for UUID:');
 
         $this->getUserRepositoryMock()
@@ -170,7 +170,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $this->getUserRepositoryMock()
             ->expects(static::once())
             ->method('find')
-            ->with($securityUser->getUsername())
+            ->with($securityUser->getUserIdentifier())
             ->willReturn($user);
 
         $this->getRolesServiceMock()
@@ -183,7 +183,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->refreshUser($securityUser);
 
         static::assertNotSame($securityUser, $newSecurityUser);
-        static::assertSame($securityUser->getUsername(), $newSecurityUser->getUsername());
+        static::assertSame($securityUser->getUserIdentifier(), $newSecurityUser->getUserIdentifier());
         static::assertSame($securityUser->getRoles(), $newSecurityUser->getRoles());
     }
 

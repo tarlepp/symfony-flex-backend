@@ -9,12 +9,10 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Rest;
 
 use App\Repository\UserRepository;
-use App\Resource\UserResource;
 use App\Rest\RepositoryHelper;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use function assert;
 
 /**
  * Class RepositoryHelperTest
@@ -24,22 +22,6 @@ use function assert;
  */
 class RepositoryHelperTest extends KernelTestCase
 {
-    protected ?UserRepository $repository = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        assert(static::$container->get(UserResource::class) instanceof UserResource);
-        assert(static::$container->get(UserResource::class)->getRepository() instanceof UserRepository);
-
-        $this->repository = static::$container->get(UserResource::class)->getRepository();
-
-        RepositoryHelper::resetParameterCount();
-    }
-
     /**
      * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
      *
@@ -98,7 +80,7 @@ DQL;
     /**
      * @dataProvider dataProviderTestThatProcessSearchTermsWorksLikeExpected
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $terms
+     * @phpstan-param StringableArrayObject<array> $terms
      * @psalm-param StringableArrayObject $terms
      *
      * @testdox Test that after `processSearchTerms` method call DQL is `$expected` when using `$terms` as terms
@@ -119,7 +101,7 @@ DQL;
     /**
      * @dataProvider dataProviderTestThatProcessOrderByWorksLikeExpected
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $input
+     * @phpstan-param StringableArrayObject<array> $input
      * @psalm-param StringableArrayObject $input
      *
      * @testdox Test that after `processOrderBy` method call DQL is `$expected` when using `$input` as input
@@ -153,8 +135,8 @@ DQL;
     /**
      * @dataProvider dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $criteria
-     * @phpstan-param StringableArrayObject<array<mixed>> $params
+     * @phpstan-param StringableArrayObject<array> $criteria
+     * @phpstan-param StringableArrayObject<array> $params
      * @psalm-param StringableArrayObject $criteria
      * @psalm-param StringableArrayObject $params
      *
@@ -571,8 +553,11 @@ DQL
 
     private function getRepository(): UserRepository
     {
-        assert($this->repository instanceof UserRepository);
+        /** @var UserRepository $userRepository */
+        $userRepository = static::getContainer()->get(UserRepository::class);
 
-        return $this->repository;
+        RepositoryHelper::resetParameterCount();
+
+        return $userRepository;
     }
 }

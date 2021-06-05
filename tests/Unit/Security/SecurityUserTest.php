@@ -58,7 +58,7 @@ class SecurityUserTest extends KernelTestCase
     {
         $user = new User();
 
-        static::assertSame($user->getId(), (new SecurityUser($user))->getUsername());
+        static::assertSame($user->getId(), (new SecurityUser($user))->getUserIdentifier());
     }
 
     /**
