@@ -134,7 +134,6 @@ class ResourceCollectionTest extends KernelTestCase
      * @param class-string<RestResource> $resourceClass
      * @param class-string<EntityInterface> $entityClass
      *
-     *
      * @testdox Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class.
      */
     public function testThatGetEntityResourceReturnsExpectedResource(string $resourceClass, string $entityClass): void

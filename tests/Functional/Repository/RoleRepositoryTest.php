@@ -12,7 +12,6 @@ use App\Repository\RoleRepository;
 use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
-use function assert;
 
 /**
  * Class RoleRepositoryTest
