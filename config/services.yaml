@@ -45,6 +45,7 @@ services:
     App\:
         resource: '../src/'
         exclude:
+            - '../src/DataFixtures/'
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/EventListener/'
@@ -56,12 +57,6 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: [ 'controller.service_arguments' ]
-
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    App\DataFixtures\:
-        resource: '../src/DataFixtures/*'
-        tags: [ 'doctrine.fixture.orm' ]
 
     App\ArgumentResolver\EntityValueResolver:
         tags:
@@ -86,6 +81,10 @@ services:
 
 when@dev:
     services:
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+            tags: [ 'doctrine.fixture.orm' ]
+
         App\Utils\Tests\:
             resource: '../src/Utils/Tests'
 
@@ -106,5 +105,9 @@ when@dev:
 
 when@test:
     services:
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+            tags: [ 'doctrine.fixture.orm' ]
+
         App\Utils\Tests\:
             resource: '../src/Utils/Tests'
