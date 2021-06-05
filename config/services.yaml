@@ -81,6 +81,9 @@ services:
 
 when@dev:
     services:
+        _defaults:
+            autowire: true      # Automatically injects dependencies in your services.
+            autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         App\DataFixtures\:
             resource: '../src/DataFixtures/'
             tags: [ 'doctrine.fixture.orm' ]
@@ -105,6 +108,9 @@ when@dev:
 
 when@test:
     services:
+        _defaults:
+            autowire: true      # Automatically injects dependencies in your services.
+            autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         App\DataFixtures\:
             resource: '../src/DataFixtures/'
             tags: [ 'doctrine.fixture.orm' ]
