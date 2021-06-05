@@ -19,8 +19,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 use function assert;
@@ -75,7 +75,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage('API key cannot refresh user');
 
-        $user = new User('username', 'password');
+        $user = new InMemoryUser('username', 'password');
 
         (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
             ->refreshUser($user);
@@ -88,7 +88,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatLoadUserByUsernameThrowsAnException(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
 
         $this->getApiKeyRepositoryMock()

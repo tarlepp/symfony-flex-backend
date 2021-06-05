@@ -12,7 +12,6 @@ use App\Repository\RoleRepository;
 use App\Utils\Tests\PhpUnitUtil;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
-use function assert;
 
 /**
  * Class RoleRepositoryTest
@@ -22,8 +21,6 @@ use function assert;
  */
 class RoleRepositoryTest extends KernelTestCase
 {
-    private ?RoleRepository $repository = null;
-
     /**
      * @throws Throwable
      */
@@ -38,31 +35,16 @@ class RoleRepositoryTest extends KernelTestCase
         parent::tearDownAfterClass();
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        assert(static::$container->get(RoleRepository::class) instanceof RoleRepository);
-
-        $this->repository = static::$container->get(RoleRepository::class);
-    }
-
     /**
      * @throws Throwable
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
-        static::assertSame(5, $this->getRepository()->countAdvanced());
-        static::assertSame(5, $this->getRepository()->reset());
-        static::assertSame(0, $this->getRepository()->countAdvanced());
-    }
+        /** @var RoleRepository $repository */
+        $repository = static::getContainer()->get(RoleRepository::class);
 
-    private function getRepository(): RoleRepository
-    {
-        assert($this->repository instanceof RoleRepository);
-
-        return $this->repository;
+        static::assertSame(5, $repository->countAdvanced());
+        static::assertSame(5, $repository->reset());
+        static::assertSame(0, $repository->countAdvanced());
     }
 }

@@ -51,13 +51,6 @@ class GenericRepositoryTest extends KernelTestCase
      */
     private string $resourceClass = ApiKeyResource::class;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-    }
-
     /**
      * @throws Throwable
      */
@@ -66,7 +59,7 @@ class GenericRepositoryTest extends KernelTestCase
         $entity = new ApiKeyEntity();
 
         /** @var ApiKeyResource $resource */
-        $resource = static::$container->get($this->resourceClass);
+        $resource = static::getContainer()->get($this->resourceClass);
 
         static::assertInstanceOf(ApiKeyEntity::class, $resource->getRepository()->getReference($entity->getId()));
     }
@@ -77,7 +70,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatGetReferenceReturnsExpectedWithNonUuidInput(): void
     {
         /** @var RoleRepository $repository */
-        $repository = static::$container->get(RoleRepository::class);
+        $repository = static::getContainer()->get(RoleRepository::class);
 
         static::assertInstanceOf(Role::class, $repository->getReference('some-role'));
     }
@@ -88,7 +81,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatGetAssociationsReturnsExpected(): void
     {
         /** @var ApiKeyResource $resource */
-        $resource = static::$container->get($this->resourceClass);
+        $resource = static::getContainer()->get(ApiKeyResource::class);
 
         static::assertSame(
             ['userGroups', 'logsRequest', 'createdBy', 'updatedBy'],
@@ -102,7 +95,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatGetClassMetaDataReturnsExpected(): void
     {
         /** @var ApiKeyResource $resource */
-        $resource = static::$container->get($this->resourceClass);
+        $resource = static::getContainer()->get($this->resourceClass);
 
         static::assertInstanceOf(ClassMetadata::class, $resource->getRepository()->getClassMetaData());
     }
@@ -224,7 +217,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddLeftJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         /** @var ApiKeyResource $resource */
-        $resource = static::$container->get($this->resourceClass);
+        $resource = static::getContainer()->get($this->resourceClass);
         $repository = $resource->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
@@ -251,7 +244,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddInnerJoinWorksAsExpected(string $expected, StringableArrayObject $parameters): void
     {
         /** @var ApiKeyResource $resource */
-        $resource = static::$container->get($this->resourceClass);
+        $resource = static::getContainer()->get($this->resourceClass);
         $repository = $resource->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
@@ -278,7 +271,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddLeftJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         /** @var ApiKeyResource $resource */
-        $resource = static::$container->get($this->resourceClass);
+        $resource = static::getContainer()->get($this->resourceClass);
         $repository = $resource->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
@@ -307,7 +300,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddInnerJoinAddsJoinJustOnce(string $expected, StringableArrayObject $parameters): void
     {
         /** @var ApiKeyResource $resource */
-        $resource = static::$container->get($this->resourceClass);
+        $resource = static::getContainer()->get($this->resourceClass);
         $repository = $resource->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
@@ -329,7 +322,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddCallbackWorks(): void
     {
         /** @var ApiKeyResource $resource */
-        $resource = static::$container->get($this->resourceClass);
+        $resource = static::getContainer()->get($this->resourceClass);
         $repository = $resource->getRepository();
 
         $queryBuilder = $repository->createQueryBuilder('entity');
@@ -351,7 +344,7 @@ class GenericRepositoryTest extends KernelTestCase
     public function testThatAddCallbackCallsCallbackJustOnce(): void
     {
         /** @var ApiKeyResource $resource */
-        $resource = static::$container->get($this->resourceClass);
+        $resource = static::getContainer()->get($this->resourceClass);
         $repository = $resource->getRepository();
 
         $count = 0;

@@ -132,16 +132,16 @@ class LogRequest implements EntityInterface
 
     /**
      * @ORM\Column(
-     *      name="is_master_request",
+     *      name="is_main_request",
      *      type="boolean",
      *      nullable=false,
      *  )
      */
     #[Groups([
         'LogRequest',
-        'LogRequest.isMasterRequest',
+        'LogRequest.isMainRequest',
     ])]
-    private bool $masterRequest;
+    private bool $mainRequest;
 
     /**
      * LogRequest constructor.
@@ -156,12 +156,12 @@ class LogRequest implements EntityInterface
         ?Response $response = null,
         ?User $user = null,
         ?ApiKey $apiKey = null,
-        ?bool $masterRequest = null
+        ?bool $mainRequest = null
     ) {
         $this->id = $this->createUuid();
         $this->user = $user;
         $this->apiKey = $apiKey;
-        $this->masterRequest = $masterRequest ?? true;
+        $this->mainRequest = $mainRequest ?? true;
 
         $this->processTimeAndDate();
 
@@ -200,9 +200,9 @@ class LogRequest implements EntityInterface
         return $this->apiKey;
     }
 
-    public function isMasterRequest(): bool
+    public function isMainRequest(): bool
     {
-        return $this->masterRequest;
+        return $this->mainRequest;
     }
 
     /**

@@ -16,10 +16,9 @@ use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\User as CoreUser;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
-use function assert;
 
 /**
  * Class SecurityUserFactoryTest
@@ -29,28 +28,12 @@ use function assert;
  */
 class SecurityUserFactoryTest extends KernelTestCase
 {
-    private ?SecurityUserFactory $securityUserFactory = null;
-    private ?UserRepository $userRepository = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        assert(static::$container->get(SecurityUserFactory::class) instanceof SecurityUserFactory);
-        assert(static::$container->get(UserRepository::class) instanceof UserRepository);
-
-        $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
-        $this->userRepository = static::$container->get(UserRepository::class);
-    }
-
     /**
      * @throws Throwable
      */
     public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidUsername(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
 
         $this->getSecurityUserFactory()->loadUserByUsername('foobar');
     }
@@ -80,7 +63,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
 
         $this->getSecurityUserFactory()->refreshUser(new SecurityUser(new User()));
     }
@@ -97,7 +80,10 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         $securityUser = new SecurityUser($user);
 
-        static::assertSame($user->getId(), $this->getSecurityUserFactory()->refreshUser($securityUser)->getUsername());
+        static::assertSame(
+            $user->getId(),
+            $this->getSecurityUserFactory()->refreshUser($securityUser)->getUserIdentifier()
+        );
     }
 
     /**
@@ -121,9 +107,9 @@ class SecurityUserFactoryTest extends KernelTestCase
     public function testThatRefreshUserThrowsAnExceptionIfUserClassIsNotSupported(): void
     {
         $this->expectException(UnsupportedUserException::class);
-        $this->expectExceptionMessage('Invalid user class "Symfony\Component\Security\Core\User\User"');
+        $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
 
-        $user = new CoreUser('test', 'password');
+        $user = new InMemoryUser('username', 'password');
 
         $this->getSecurityUserFactory()->refreshUser($user);
     }
@@ -143,15 +129,17 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     private function getSecurityUserFactory(): SecurityUserFactory
     {
-        assert($this->securityUserFactory instanceof SecurityUserFactory);
+        /** @var SecurityUserFactory $securityUserFactory */
+        $securityUserFactory = static::getContainer()->get(SecurityUserFactory::class);
 
-        return $this->securityUserFactory;
+        return $securityUserFactory;
     }
 
     private function getUserRepository(): UserRepository
     {
-        assert($this->userRepository instanceof UserRepository);
+        /** @var UserRepository $userRepository */
+        $userRepository = static::getContainer()->get(UserRepository::class);
 
-        return $this->userRepository;
+        return $userRepository;
     }
 }

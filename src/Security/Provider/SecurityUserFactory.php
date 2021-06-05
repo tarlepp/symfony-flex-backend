@@ -13,7 +13,7 @@ use App\Repository\UserRepository;
 use App\Security\RolesService;
 use App\Security\SecurityUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Throwable;
@@ -47,7 +47,7 @@ class SecurityUserFactory implements UserProviderInterface
         );
 
         if (!($user instanceof User)) {
-            throw new UsernameNotFoundException(sprintf('User not found for UUID: "%s".', $username));
+            throw new UserNotFoundException(sprintf('User not found for UUID: "%s".', $username));
         }
 
         return new SecurityUser($user, $this->rolesService->getInheritedRoles($user->getRoles()));
@@ -67,10 +67,10 @@ class SecurityUserFactory implements UserProviderInterface
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
 
-        $userEntity = $this->userRepository->find($user->getUsername());
+        $userEntity = $this->userRepository->find($user->getUserIdentifier());
 
         if (!($userEntity instanceof User)) {
-            throw new UsernameNotFoundException(sprintf('User not found for UUID: "%s".', $user->getUsername()));
+            throw new UserNotFoundException(sprintf('User not found for UUID: "%s".', $user->getUserIdentifier()));
         }
 
         return new SecurityUser($userEntity, $this->rolesService->getInheritedRoles($userEntity->getRoles()));

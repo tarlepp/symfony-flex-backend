@@ -15,7 +15,7 @@ use App\Security\Interfaces\ApiKeyUserInterface;
 use App\Security\Interfaces\ApiKeyUserProviderInterface;
 use App\Security\RolesService;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -42,7 +42,7 @@ class ApiKeyUserProvider implements ApiKeyUserProviderInterface
         $apiKey = $this->getApiKeyForToken($username);
 
         if ($apiKey === null) {
-            throw new UsernameNotFoundException('API key is not valid');
+            throw new UserNotFoundException('API key is not valid');
         }
 
         return new ApiKeyUser($apiKey, $this->rolesService->getInheritedRoles($apiKey->getRoles()));

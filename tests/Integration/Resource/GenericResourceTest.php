@@ -15,12 +15,12 @@ use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;
 use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
-use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -47,14 +47,12 @@ class GenericResourceTest extends KernelTestCase
     {
         parent::setUp();
 
-        static::bootKernel();
-
         /** @var UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
-        $validator = static::$container->get(ValidatorInterface::class) instanceof ValidatorInterface
-            ? static::$container->get(ValidatorInterface::class)
-            : throw new UnexpectedValueException('ddd');
+        /** @var ValidatorInterface $validator */
+        $validator = static::getContainer()->get(ValidatorInterface::class);
+
         $this->resource = new UserResource($repository, new RolesService([]));
 
         /** @var MockObject $repository */
@@ -179,8 +177,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
-     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @phpstan-param StringableArrayObject<array> $expectedArguments
+     * @phpstan-param StringableArrayObject<array> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -263,8 +261,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
-     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @phpstan-param StringableArrayObject<array> $expectedArguments
+     * @phpstan-param StringableArrayObject<array> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -343,8 +341,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
-     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @phpstan-param StringableArrayObject<array> $expectedArguments
+     * @phpstan-param StringableArrayObject<array> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -568,8 +566,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
-     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @phpstan-param StringableArrayObject<array> $expectedArguments
+     * @phpstan-param StringableArrayObject<array> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -705,7 +703,8 @@ class GenericResourceTest extends KernelTestCase
      */
     private function getRepositoryMockBuilder(): MockBuilder
     {
-        $doctrine = static::$container->get('doctrine') ?? new stdClass();
+        /** @var Registry $doctrine */
+        $doctrine = static::getContainer()->get('doctrine');
 
         if (method_exists($doctrine, 'getManager')
             && ($doctrine->getManager() instanceof EntityManagerInterface)

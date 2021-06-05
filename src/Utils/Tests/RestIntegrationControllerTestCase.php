@@ -10,6 +10,7 @@ namespace App\Utils\Tests;
 
 use App\Rest\Controller;
 use ReflectionClass;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use UnexpectedValueException;
 use function gc_collect_cycles;
 use function gc_enable;
@@ -22,7 +23,7 @@ use function sprintf;
  * @package App\Utils\Tests
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-abstract class RestIntegrationControllerTestCase extends ContainerTestCase
+abstract class RestIntegrationControllerTestCase extends KernelTestCase
 {
     protected ?Controller $controller = null;
 
@@ -43,7 +44,7 @@ abstract class RestIntegrationControllerTestCase extends ContainerTestCase
         parent::setUp();
 
         /** @var Controller $controller */
-        $controller = $this->getContainer()->get($this->controllerClass);
+        $controller = self::getContainer()->get($this->controllerClass);
 
         $this->controller = $controller;
     }

@@ -86,8 +86,8 @@ class RequestLogSubscriberTest extends KernelTestCase
 
         $this->getRequestLoggerMock()
             ->expects(static::once())
-            ->method('setMasterRequest')
-            ->with($event->isMasterRequest())
+            ->method('setMainRequest')
+            ->with($event->isMainRequest())
             ->willReturn($this->requestLogger);
 
         $this->getRequestLoggerMock()
@@ -311,7 +311,7 @@ class RequestLogSubscriberTest extends KernelTestCase
 
         $this->getRequestLoggerMock()
             ->expects(static::never())
-            ->method('setMasterRequest');
+            ->method('setMainRequest');
 
         $this->getRequestLoggerMock()
             ->expects(static::never())

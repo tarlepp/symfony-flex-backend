@@ -61,7 +61,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         $stubKernel = $this->createMock(KernelInterface::class);
 
         $exception = new Exception('test exception');
-        $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $stubLogger
             ->expects(static::once())
@@ -86,7 +86,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         $stubKernel = $this->createMock(KernelInterface::class);
 
         $exception = new Exception('test exception');
-        $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MASTER_REQUEST, $exception);
+        $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $originalResponse = $event->getResponse();
 
@@ -118,7 +118,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         $event = new ExceptionEvent(
             $stubHttpKernel,
             $stubRequest,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $exception
         );
 
@@ -157,7 +157,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         $event = new ExceptionEvent(
             $stubHttpKernel,
             $stubRequest,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             new Exception('error')
         );
 

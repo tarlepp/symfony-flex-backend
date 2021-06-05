@@ -45,23 +45,18 @@ services:
     App\:
         resource: '../src/'
         exclude:
+            - '../src/DataFixtures/'
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/EventListener/'
+            - '../src/Utils/Tests/'
             - '../src/Kernel.php'
-            - '../src/Tests/'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
         resource: '../src/Controller/'
         tags: [ 'controller.service_arguments' ]
-
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    App\DataFixtures\:
-        resource: '../src/DataFixtures/*'
-        tags: [ 'doctrine.fixture.orm' ]
 
     App\ArgumentResolver\EntityValueResolver:
         tags:
@@ -83,3 +78,42 @@ services:
     App\EventSubscriber\RequestLogSubscriber:
         arguments:
             $ignoredRoutes: '%env(key:REQUEST_LOG_IGNORED_ROUTES:json:file:APPLICATION_CONFIG)%'
+
+when@dev:
+    services:
+        _defaults:
+            autowire: true      # Automatically injects dependencies in your services.
+            autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+            tags: [ 'doctrine.fixture.orm' ]
+
+        App\Utils\Tests\:
+            resource: '../src/Utils/Tests'
+
+        ProxyManager\Factory\AccessInterceptorValueHolderFactory:
+            class: ProxyManager\Factory\AccessInterceptorValueHolderFactory
+
+        doctrine.dbal.default_connection.stopwatch:
+            class: Doctrine\DBAL\Connection
+            decorates: doctrine.dbal.default_connection
+            factory: [ '@App\Decorator\StopwatchDecorator', decorate ]
+            arguments: [ '@doctrine.dbal.default_connection.stopwatch.inner' ]
+
+        symfony.component.serializer.stopwatch:
+            class: Symfony\Component\Serializer\Serializer
+            decorates: serializer
+            factory: [ '@App\Decorator\StopwatchDecorator', decorate ]
+            arguments: [ '@symfony.component.serializer.stopwatch.inner' ]
+
+when@test:
+    services:
+        _defaults:
+            autowire: true      # Automatically injects dependencies in your services.
+            autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+            tags: [ 'doctrine.fixture.orm' ]
+
+        App\Utils\Tests\:
+            resource: '../src/Utils/Tests'

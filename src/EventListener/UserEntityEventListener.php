@@ -12,7 +12,7 @@ use App\Entity\User;
 use App\Security\SecurityUser;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use LengthException;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use function strlen;
 
 /**
@@ -24,7 +24,7 @@ use function strlen;
 class UserEntityEventListener
 {
     public function __construct(
-        private UserPasswordEncoderInterface $userPasswordEncoder,
+        private UserPasswordHasherInterface $userPasswordHasher,
     ) {
     }
 
@@ -61,8 +61,8 @@ class UserEntityEventListener
             }
 
             // Password hash callback
-            $callback = fn (string $plainPassword): string => $this->userPasswordEncoder
-                ->encodePassword(new SecurityUser($user, []), $plainPassword);
+            $callback = fn (string $plainPassword): string => $this->userPasswordHasher
+                ->hashPassword(new SecurityUser($user, []), $plainPassword);
 
             // Set new password and encode it with user encoder
             $user->setPassword($callback, $plainPassword);
