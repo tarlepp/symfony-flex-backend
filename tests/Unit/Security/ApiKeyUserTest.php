@@ -55,7 +55,7 @@ class ApiKeyUserTest extends KernelTestCase
 
         yield [new ApiKey(), new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];
 
-        $exception = new \Exception('ddd');
+        $exception = new \Exception('Cannot find user group');
 
         yield [
             (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Normal users']) ?? throw $exception),
