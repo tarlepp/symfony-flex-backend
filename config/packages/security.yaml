@@ -1,12 +1,12 @@
 security:
+    # https://symfony.com/doc/current/security/experimental_authenticators.html
     enable_authenticator_manager: true
 
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    encoders:
+    password_hashers:
         App\Security\SecurityUser:
             algorithm: auto
 
-    # https://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         chain_provider:
             chain:
@@ -35,6 +35,7 @@ security:
         api:
             pattern: ^/
             stateless: true
+            lazy: true
             entry_point: lexik_jwt_authentication.jwt_token_authenticator
             custom_authenticators:
                 - App\Security\Authenticator\ApiKeyAuthenticator
@@ -55,5 +56,5 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-    # - { path: ^/admin, roles: ROLE_ADMIN }
-    # - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^/admin, roles: ROLE_ADMIN }
+        # - { path: ^/profile, roles: ROLE_USER }
