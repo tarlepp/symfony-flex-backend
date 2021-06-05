@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7714b9d5ff1dd21c9bbff36dc0319b30",
+    "content-hash": "7f5a711e4e47a57379760a4b1efa607c",
     "packages": [],
     "packages-dev": [
         {
@@ -3039,16 +3039,16 @@
         },
         {
             "name": "symplify/config-transformer",
-            "version": "v9.3.16",
+            "version": "v9.3.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/config-transformer.git",
-                "reference": "44246173c0b2a426eede7fc5af8ed7471603aa96"
+                "reference": "84c51b3f2d61079cdcfb71c516689fc3a11158a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/44246173c0b2a426eede7fc5af8ed7471603aa96",
-                "reference": "44246173c0b2a426eede7fc5af8ed7471603aa96",
+                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/84c51b3f2d61079cdcfb71c516689fc3a11158a5",
+                "reference": "84c51b3f2d61079cdcfb71c516689fc3a11158a5",
                 "shasum": ""
             },
             "require": {
@@ -3062,12 +3062,12 @@
                 "symfony/expression-language": "^4.4|^5.2",
                 "symfony/http-kernel": "^4.4|^5.2",
                 "symfony/yaml": "^4.4|^5.2",
-                "symplify/php-config-printer": "^9.3.16"
+                "symplify/php-config-printer": "^9.3.15"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5",
                 "symfony/framework-bundle": "^4.4|^5.2",
-                "symplify/easy-testing": "^9.3.16"
+                "symplify/easy-testing": "^9.3.15"
             },
             "bin": [
                 "bin/config-transformer"
@@ -3084,9 +3084,9 @@
             ],
             "description": "Convert Symfony YAML/XML format to PHP/YAML",
             "support": {
-                "source": "https://github.com/symplify/config-transformer/tree/v9.3.16"
+                "source": "https://github.com/symplify/config-transformer/tree/v9.3.15"
             },
-            "time": "2021-06-04T21:05:58+00:00"
+            "time": "2021-05-21T16:30:52+00:00"
         },
         {
             "name": "symplify/console-package-builder",
@@ -3136,16 +3136,16 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v9.3.16",
+            "version": "v9.3.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "51be7c87e22f2a4c55fdc54f5d242a9a60120569"
+                "reference": "597c828aae750fed6cbab5e42fb2027ce1e494f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/51be7c87e22f2a4c55fdc54f5d242a9a60120569",
-                "reference": "51be7c87e22f2a4c55fdc54f5d242a9a60120569",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/597c828aae750fed6cbab5e42fb2027ce1e494f0",
+                "reference": "597c828aae750fed6cbab5e42fb2027ce1e494f0",
                 "shasum": ""
             },
             "require": {
@@ -3174,7 +3174,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/v9.3.16"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/v9.3.15"
             },
             "funding": [
                 {
@@ -3186,7 +3186,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-04T21:09:07+00:00"
+            "time": "2021-05-21T16:34:33+00:00"
         },
         {
             "name": "symplify/easy-testing",
