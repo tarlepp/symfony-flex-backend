@@ -109,8 +109,7 @@ class SecurityUserFactoryTest extends KernelTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
 
-        $user = new class('test', 'password') extends InMemoryUser {
-        };
+        $user = new InMemoryUser('username', 'password');
 
         $this->getSecurityUserFactory()->refreshUser($user);
     }

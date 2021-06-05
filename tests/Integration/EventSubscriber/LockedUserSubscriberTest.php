@@ -49,8 +49,7 @@ class LockedUserSubscriberTest extends KernelTestCase
 
         $event = new AuthenticationSuccessEvent(
             [],
-            new class('username', 'password') extends InMemoryUser {
-            },
+            new InMemoryUser('username', 'password'),
             new Response()
         );
 

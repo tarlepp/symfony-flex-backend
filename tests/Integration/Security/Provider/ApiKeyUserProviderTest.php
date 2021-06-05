@@ -75,8 +75,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage('API key cannot refresh user');
 
-        $user = new class('username', 'password') extends InMemoryUser {
-        };
+        $user = new InMemoryUser('username', 'password');
 
         (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
             ->refreshUser($user);

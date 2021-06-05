@@ -315,15 +315,13 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         yield [new AnonymousToken(
             'secret',
-            new class('username', 'password') extends InMemoryUser {
-            },
+            new InMemoryUser('username', 'password'),
         )];
 
         yield [new UsernamePasswordToken('user', 'credentials', 'providerKey')];
 
         yield [new UsernamePasswordToken(
-            new class('username', 'password') extends InMemoryUser {
-            },
+            new InMemoryUser('username', 'password'),
             'credentials',
             'providerKey',
         )];
@@ -331,15 +329,13 @@ class UserTypeIdentificationTest extends KernelTestCase
         yield [new PreAuthenticatedToken('user', 'credentials', 'providerKey')];
 
         yield [new PreAuthenticatedToken(
-            new class('username', 'password') extends InMemoryUser {
-            },
+            new InMemoryUser('username', 'password'),
             'credentials',
             'providerKey',
         )];
 
         yield [new RememberMeToken(
-            new class('username', 'password') extends InMemoryUser {
-            },
+            new InMemoryUser('username', 'password'),
             'provider-key',
             'some-secret',
         )];
