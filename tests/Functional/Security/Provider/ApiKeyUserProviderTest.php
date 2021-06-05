@@ -44,12 +44,12 @@ class ApiKeyUserProviderTest extends KernelTestCase
         /**
          * @var ManagerRegistry $managerRegistry
          */
-        $managerRegistry = static::$container->get('doctrine');
+        $managerRegistry = static::getContainer()->get('doctrine');
 
         /**
          * @var RolesService $rolesService
          */
-        $rolesService = static::$container->get(RolesService::class);
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         $repository = ApiKeyRepository::class;
 
@@ -142,12 +142,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function dataProviderTestThatGetApiKeyReturnsExpected(): array
     {
-        static::bootKernel();
-
-        /**
-         * @var RolesService $rolesService
-         */
-        $rolesService = static::$container->get(RolesService::class);
+        /** @var RolesService $rolesService */
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         $iterator = static fn (string $role): array => [$rolesService->getShort($role)];
 
@@ -159,12 +155,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function dataProviderTestThatLoadUserByUsernameWorksAsExpected(): array
     {
-        static::bootKernel();
-
-        /**
-         * @var ManagerRegistry $managerRegistry
-         */
-        $managerRegistry = static::$container->get('doctrine');
+        /** @var ManagerRegistry $managerRegistry */
+        $managerRegistry = static::getContainer()->get('doctrine');
         $repositoryClass = ApiKeyRepository::class;
         $repository = new $repositoryClass($managerRegistry);
 
@@ -179,7 +171,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string}>
+     * @return Generator<array{0: boolean, 1: class-string<\Symfony\Component\Security\Core\User\UserInterface>}>
      */
     public function dataProviderTestThatSupportsClassReturnsExpected(): Generator
     {

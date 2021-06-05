@@ -39,7 +39,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         parent::setUp();
 
         // Store container and entity manager
-        $testContainer = self::getContainer();
+        $testContainer = static::getContainer();
         $entityManager = $testContainer->get('doctrine.orm.default_entity_manager');
         $encoder = $testContainer->get('security.user_password_hasher');
 
