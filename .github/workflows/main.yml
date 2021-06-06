@@ -87,7 +87,9 @@ jobs:
       #  run: make psalm
 
       - name: Run PHPStan static analysis tool
-        run: make phpstan
+        run: |
+          make cache-warmup
+          make phpstan
 
       # TODO: enable this when https://github.com/nunomaduro/phpinsights has new version
       #- name: Run `phploc` to collect LOC stats
