@@ -46,7 +46,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByIdentifier` method with `$username` input returns `SecurityUser` with `$roles` roles.
+     * @testdox Test that `loadUserByIdentifier` method with `$username` returns `SecurityUser` with `$roles` roles
      */
     public function testThatLoadUserByIdentifierReturnsExpectedUserInstance(
         string $username,
