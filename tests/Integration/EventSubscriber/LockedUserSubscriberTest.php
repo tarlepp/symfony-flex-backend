@@ -85,7 +85,7 @@ class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
 
@@ -109,7 +109,7 @@ class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
 
@@ -169,7 +169,7 @@ class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn(null);
 
@@ -203,7 +203,7 @@ class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn(new UserEntity());
 

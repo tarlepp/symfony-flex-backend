@@ -55,7 +55,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     {
         $repository = $this->getRepository();
 
-        $user = $repository->loadUserByUsername($username, false);
+        $user = $repository->loadUserByIdentifier($username, false);
 
         static::assertNotNull($user);
 
@@ -87,7 +87,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
     {
         $repository = $this->getRepository();
 
-        $user = $repository->loadUserByUsername($username, false);
+        $user = $repository->loadUserByIdentifier($username, false);
 
         static::assertNotNull($user);
 

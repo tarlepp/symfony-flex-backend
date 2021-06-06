@@ -34,28 +34,28 @@ class SecurityUserFactory implements UserProviderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @throws Throwable
-     */
-    public function loadUserByUsername(string $username): UserInterface
-    {
-        $user = $this->userRepository->loadUserByUsername(
-            $username,
-            (bool)preg_match('#' . $this->uuidV1Regex . '#', $username)
-        );
-
-        if (!($user instanceof User)) {
-            throw new UserNotFoundException(sprintf('User not found for UUID: "%s".', $username));
-        }
-
-        return new SecurityUser($user, $this->rolesService->getInheritedRoles($user->getRoles()));
-    }
-
     public function supportsClass(string $class): bool
     {
         return $class === SecurityUser::class;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws Throwable
+     */
+    public function loadUserByIdentifier(string $identifier): SecurityUser
+    {
+        $user = $this->userRepository->loadUserByIdentifier(
+            $identifier,
+            (bool)preg_match('#' . $this->uuidV1Regex . '#', $identifier)
+        );
+
+        if (!($user instanceof User)) {
+            throw new UserNotFoundException(sprintf('User not found for UUID: "%s".', $identifier));
+        }
+
+        return new SecurityUser($user, $this->rolesService->getInheritedRoles($user->getRoles()));
     }
 
     /**
@@ -74,5 +74,19 @@ class SecurityUserFactory implements UserProviderInterface
         }
 
         return new SecurityUser($userEntity, $this->rolesService->getInheritedRoles($userEntity->getRoles()));
+    }
+
+    /**
+     * @todo Remove this method when Symfony 6.0.0 is released
+     *
+     * {@inheritDoc}
+     *
+     * @throws Throwable
+     *
+     * @codeCoverageIgnore
+     */
+    public function loadUserByUsername(string $username): SecurityUser
+    {
+        return $this->loadUserByIdentifier($username);
     }
 }
