@@ -84,9 +84,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` method throws an exception when API key is not found
+     * @testdox Test that `loadUserByIdentifier` method throws an exception when API key is not found
      */
-    public function testThatLoadUserByUsernameThrowsAnException(): void
+    public function testThatLoadUserByIdentifierThrowsAnException(): void
     {
         $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
@@ -98,15 +98,15 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->willReturn(null);
 
         (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
-            ->loadUserByUsername('guid');
+            ->loadUserByIdentifier('guid');
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` method returns expected `ApiKeyUser` instance
+     * @testdox Test that `loadUserByIdentifier` method returns expected `ApiKeyUser` instance
      */
-    public function testThatLoadUserByUsernameCreatesExpectedApiKeyUser(): void
+    public function testThatLoadUserByIdentifierCreatesExpectedApiKeyUser(): void
     {
         $apiKey = new ApiKey();
 
@@ -117,7 +117,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->willReturn($apiKey);
 
         $user = (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
-            ->loadUserByUsername('guid');
+            ->loadUserByIdentifier('guid');
 
         static::assertSame($apiKey, $user->getApiKey());
     }

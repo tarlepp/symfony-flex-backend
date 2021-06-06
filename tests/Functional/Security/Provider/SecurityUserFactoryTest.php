@@ -31,28 +31,28 @@ class SecurityUserFactoryTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidUsername(): void
+    public function testThatLoadUserByIdentifierThrowsAnExceptionWithInvalidUsername(): void
     {
         $this->expectException(UserNotFoundException::class);
 
-        $this->getSecurityUserFactory()->loadUserByUsername('foobar');
+        $this->getSecurityUserFactory()->loadUserByIdentifier('foobar');
     }
 
     /**
-     * @dataProvider dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance
+     * @dataProvider dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance
      *
      * @phpstan-param StringableArrayObject<array<int, string>> $roles
      * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` method with `$username` input returns `SecurityUser` with `$roles` roles.
+     * @testdox Test that `loadUserByIdentifier` method with `$username` input returns `SecurityUser` with `$roles` roles.
      */
-    public function testThatLoadUserByUsernameReturnsExpectedUserInstance(
+    public function testThatLoadUserByIdentifierReturnsExpectedUserInstance(
         string $username,
         StringableArrayObject $roles
     ): void {
-        $domainUser = $this->getSecurityUserFactory()->loadUserByUsername($username);
+        $domainUser = $this->getSecurityUserFactory()->loadUserByIdentifier($username);
 
         static::assertInstanceOf(SecurityUser::class, $domainUser);
         static::assertSame($roles->getArrayCopy(), $domainUser->getRoles());
@@ -117,7 +117,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: StringableArrayObject}>
      */
-    public function dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance(): Generator
+    public function dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance(): Generator
     {
         yield ['john', new StringableArrayObject([])];
         yield ['john-api', new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];

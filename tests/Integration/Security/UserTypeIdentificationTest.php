@@ -123,7 +123,7 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $this->getUserRepositoryMock()
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with($user->getId(), true)
             ->willReturn($user);
 
