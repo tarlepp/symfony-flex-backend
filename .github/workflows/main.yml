@@ -42,11 +42,6 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Configure application for CI run
-        run: |
-          make generate-jwt-keys
-          chmod 644 ./config/jwt/private.pem
-
       - name: Validate composer.json and composer.lock
         run: composer validate
 
