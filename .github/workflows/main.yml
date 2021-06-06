@@ -44,8 +44,6 @@ jobs:
 
       - name: Configure application for CI run
         run: |
-          cp .env.gh-actions .env
-          cp .env.gh-actions .env.test
           make generate-jwt-keys
           chmod 644 ./config/jwt/private.pem
 
@@ -87,9 +85,7 @@ jobs:
       #  run: make psalm
 
       - name: Run PHPStan static analysis tool
-        run: |
-          make cache-warmup
-          make phpstan
+        run: make phpstan
 
       # TODO: enable this when https://github.com/nunomaduro/phpinsights has new version
       #- name: Run `phploc` to collect LOC stats
