@@ -82,8 +82,8 @@ services:
 when@dev:
     services:
         _defaults:
-            autowire: true      # Automatically injects dependencies in your services.
-            autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+            autowire: true
+            autoconfigure: true
         App\DataFixtures\:
             resource: '../src/DataFixtures/'
             tags: [ 'doctrine.fixture.orm' ]
@@ -109,11 +109,34 @@ when@dev:
 when@test:
     services:
         _defaults:
-            autowire: true      # Automatically injects dependencies in your services.
-            autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+            autowire: true
+            autoconfigure: true
+            public: true
+
         App\DataFixtures\:
             resource: '../src/DataFixtures/'
             tags: [ 'doctrine.fixture.orm' ]
 
         App\Utils\Tests\:
             resource: '../src/Utils/Tests'
+
+        App\Tests\E2E\Rest\src\:
+            resource: '../tests/E2E/Rest/src/*'
+
+        App\Tests\E2E\Rest\src\Controller\:
+            resource: '../tests/E2E/Rest/src/Controller/*'
+            tags:
+                - 'controller.service_arguments'
+                - 'app.rest.controller'
+
+        App\Tests\E2E\Rest\Traits\Actions\src\:
+            resource: '../tests/E2E/Rest/Traits/Actions/src/*'
+            tags:
+                - 'controller.service_arguments'
+                - 'app.rest.controller'
+
+        App\Tests\Integration\Helpers\src\:
+            resource: '../tests/Integration/Helpers/src/*'
+
+        test.app.security.roles_service: '@App\Security\RolesService'
+        test.app.utils.tests.auth: '@App\Utils\Tests\Auth'
