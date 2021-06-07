@@ -48,7 +48,6 @@ class ResourceCollectionTest extends KernelTestCase
 {
     public function testThatGetMethodThrowsAnException(): void
     {
-        /** @var LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
@@ -71,14 +70,12 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects(static::once())
             ->method('error');
 
-        /** @var LoggerInterface $logger */
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
             ->get('FooBar');
     }
 
     public function testThatGetEntityResourceMethodThrowsAnException(): void
     {
-        /** @var LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
@@ -101,7 +98,6 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects(static::once())
             ->method('error');
 
-        /** @var LoggerInterface $logger */
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
             ->getEntityResource('FooBar');
     }
@@ -241,10 +237,7 @@ class ResourceCollectionTest extends KernelTestCase
 
     private function getCollection(): ResourceCollection
     {
-        /** @var ResourceCollection $resourceCollection */
-        $resourceCollection = static::getContainer()->get(ResourceCollection::class);
-
-        return $resourceCollection;
+        return static::getContainer()->get(ResourceCollection::class);
     }
 
     /**

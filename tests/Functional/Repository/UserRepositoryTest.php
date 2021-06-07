@@ -128,11 +128,14 @@ class UserRepositoryTest extends KernelTestCase
 
     private function getRepository(): UserRepository
     {
-        static::bootKernel();
+        static $cache;
 
-        /** @var UserRepository $repository */
-        $repository = static::getContainer()->get(UserRepository::class);
+        if ($cache === null) {
+            static::bootKernel();
 
-        return $repository;
+            $cache = static::getContainer()->get(UserRepository::class);
+        }
+
+        return $cache;
     }
 }

@@ -40,7 +40,6 @@ class VersionControllerTest extends WebTestCase
      */
     public function testThatVersionRouteDoesNotMakeRequestLog(): void
     {
-        /** @var LogRequestResource $resource */
         $resource = static::getContainer()->get(LogRequestResource::class);
 
         $expectedLogCount = $resource->count();

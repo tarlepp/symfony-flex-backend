@@ -40,7 +40,6 @@ class RoleRepositoryTest extends KernelTestCase
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
-        /** @var RoleRepository $repository */
         $repository = static::getContainer()->get(RoleRepository::class);
 
         static::assertSame(5, $repository->countAdvanced());
