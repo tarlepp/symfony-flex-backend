@@ -31,7 +31,6 @@ use function iterator_to_array;
  */
 class LoggedInUserValueResolverTest extends KernelTestCase
 {
-
     /**
      * @dataProvider dataProviderValidUsers
      *

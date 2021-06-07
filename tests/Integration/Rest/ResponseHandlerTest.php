@@ -12,7 +12,6 @@ use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\ResponseHandler;
 use Exception;
 use Generator;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormErrorIterator;

@@ -9,7 +9,6 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\DTO\ApiKey;
 
 use App\DTO\ApiKey\ApiKey as ApiKeyDto;
-use App\DTO\RestDtoInterface;
 use App\Entity\ApiKey as ApiKeyEntity;
 use App\Entity\Role as RoleEntity;
 use App\Entity\UserGroup as UserGroupEntity;

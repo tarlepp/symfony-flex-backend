@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Resource;
 
-use App\DTO\RestDtoInterface;
 use App\DTO\User\User as UserDto;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
