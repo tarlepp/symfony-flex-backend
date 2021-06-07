@@ -8,6 +8,7 @@
             <SchemaInfo>
               <option name="name" value="composer.json" />
               <option name="relativePathToSchema" value="https://json.schemastore.org/composer" />
+              <option name="schemaVersion" value="JSON Schema version 7" />
               <option name="applicationDefined" value="true" />
               <option name="patterns">
                 <list>

@@ -14,8 +14,6 @@ use App\Rest\Interfaces\RestResourceInterface;
 use App\Rest\RestResource;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
-use UnexpectedValueException;
-use function assert;
 use function sprintf;
 
 /**
@@ -40,21 +38,6 @@ abstract class ResourceTestCase extends KernelTestCase
      * @var class-string<RestResource>
      */
     protected string $resourceClass;
-
-    protected ?RestResourceInterface $resource = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $resource = static::$container->get($this->resourceClass);
-
-        assert($resource instanceof RestResourceInterface);
-
-        $this->resource = $resource;
-    }
 
     /**
      * @throws Throwable
@@ -85,6 +68,9 @@ abstract class ResourceTestCase extends KernelTestCase
 
     private function getResource(): RestResourceInterface
     {
-        return $this->resource ?? throw new UnexpectedValueException('Resource not set');
+        /** @var RestResourceInterface $resource */
+        $resource = static::getContainer()->get($this->resourceClass);
+
+        return $resource;
     }
 }

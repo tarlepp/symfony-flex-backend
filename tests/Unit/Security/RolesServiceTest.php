@@ -12,7 +12,6 @@ use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use function assert;
 
 /**
  * Class RolesServiceTest
@@ -22,19 +21,6 @@ use function assert;
  */
 class RolesServiceTest extends KernelTestCase
 {
-    private ?RolesService $service = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        assert(static::$container->get(RolesService::class) instanceof RolesService);
-
-        $this->service = static::$container->get(RolesService::class);
-    }
-
     /**
      * @testdox Test that `RolesService::getHierarchy` method returns expected
      */
@@ -181,8 +167,9 @@ class RolesServiceTest extends KernelTestCase
 
     private function getService(): RolesService
     {
-        assert($this->service instanceof RolesService);
+        /** @var RolesService $rolesService */
+        $rolesService = static::getContainer()->get(RolesService::class);
 
-        return $this->service;
+        return $rolesService;
     }
 }

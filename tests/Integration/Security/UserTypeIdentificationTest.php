@@ -24,7 +24,7 @@ use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\User\User as CoreUser;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function assert;
 
@@ -123,7 +123,7 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         $this->getUserRepositoryMock()
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with($user->getId(), true)
             ->willReturn($user);
 
@@ -313,17 +313,32 @@ class UserTypeIdentificationTest extends KernelTestCase
 
         yield [new AnonymousToken('secret', 'user')];
 
-        yield [new AnonymousToken('secret', new CoreUser('username', 'password'))];
+        yield [new AnonymousToken(
+            'secret',
+            new InMemoryUser('username', 'password'),
+        )];
 
         yield [new UsernamePasswordToken('user', 'credentials', 'providerKey')];
 
-        yield [new UsernamePasswordToken(new CoreUser('username', 'password'), 'credentials', 'providerKey')];
+        yield [new UsernamePasswordToken(
+            new InMemoryUser('username', 'password'),
+            'credentials',
+            'providerKey',
+        )];
 
         yield [new PreAuthenticatedToken('user', 'credentials', 'providerKey')];
 
-        yield [new PreAuthenticatedToken(new CoreUser('username', 'password'), 'credentials', 'providerKey')];
+        yield [new PreAuthenticatedToken(
+            new InMemoryUser('username', 'password'),
+            'credentials',
+            'providerKey',
+        )];
 
-        yield [new RememberMeToken(new CoreUser('username', 'password'), 'provider-key', 'some-secret')];
+        yield [new RememberMeToken(
+            new InMemoryUser('username', 'password'),
+            'provider-key',
+            'some-secret',
+        )];
     }
 
     private function getTokenStorage(): TokenStorageInterface

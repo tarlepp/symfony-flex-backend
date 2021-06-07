@@ -16,7 +16,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use LengthException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Throwable;
 use UnexpectedValueException;
 use function assert;
@@ -31,28 +31,26 @@ class UserEntityEventListenerTest extends KernelTestCase
 {
     private ?EntityManager $entityManager = null;
     private ?User $entity = null;
-    private ?UserPasswordEncoderInterface $encoder = null;
+    private ?UserPasswordHasherInterface $hasher = null;
     private ?UserEntityEventListener $listener = null;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        static::bootKernel();
-
         // Store container and entity manager
-        $testContainer = static::$kernel->getContainer();
+        $testContainer = static::getContainer();
         $entityManager = $testContainer->get('doctrine.orm.default_entity_manager');
-        $encoder = $testContainer->get('security.password_encoder');
+        $encoder = $testContainer->get('security.user_password_hasher');
 
         assert($entityManager instanceof EntityManager);
-        assert($encoder instanceof UserPasswordEncoderInterface);
+        assert($encoder instanceof UserPasswordHasherInterface);
 
         $this->entityManager = $entityManager;
-        $this->encoder = $encoder;
+        $this->hasher = $encoder;
 
         // Create listener
-        $this->listener = new UserEntityEventListener($this->encoder);
+        $this->listener = new UserEntityEventListener($this->hasher);
 
         // Create new user but not store it at this time
         $this->entity = (new User())
@@ -138,7 +136,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         );
 
         static::assertTrue(
-            $this->getEncoder()->isPasswordValid(new SecurityUser($this->getEntity()), 'test_test'),
+            $this->getHasher()->isPasswordValid(new SecurityUser($this->getEntity()), 'test_test'),
             'Changed password is not valid.'
         );
     }
@@ -148,7 +146,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         // Create encrypted password manually for user
         $this->getEntity()->setPassword(
             fn (string $password): string =>
-                $this->getEncoder()->encodePassword(new SecurityUser($this->getEntity()), $password),
+                $this->getHasher()->hashPassword(new SecurityUser($this->getEntity()), $password),
             'test_test'
         );
 
@@ -176,7 +174,7 @@ class UserEntityEventListenerTest extends KernelTestCase
         );
 
         static::assertTrue(
-            $this->getEncoder()->isPasswordValid(new SecurityUser($this->getEntity()), 'test_test_test'),
+            $this->getHasher()->isPasswordValid(new SecurityUser($this->getEntity()), 'test_test_test'),
             'Changed password is not valid.'
         );
     }
@@ -186,9 +184,9 @@ class UserEntityEventListenerTest extends KernelTestCase
         return $this->entityManager ?? throw new UnexpectedValueException('EntityManager not set');
     }
 
-    private function getEncoder(): UserPasswordEncoderInterface
+    private function getHasher(): UserPasswordHasherInterface
     {
-        return $this->encoder ?? throw new UnexpectedValueException('Encoder not set');
+        return $this->hasher ?? throw new UnexpectedValueException('Encoder not set');
     }
 
     private function getListener(): UserEntityEventListener

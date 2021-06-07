@@ -105,13 +105,13 @@ class RequestLogSubscriber implements EventSubscriberInterface
         $identify = $this->userService->getIdentity();
 
         if ($identify instanceof SecurityUser) {
-            $userEntity = $this->userRepository->getReference($identify->getUsername());
+            $userEntity = $this->userRepository->getReference($identify->getUserIdentifier());
 
             if ($userEntity instanceof UserEntity) {
                 $this->requestLogger->setUser($userEntity);
             } else {
                 $this->logger->error(
-                    sprintf('User not found for UUID: "%s".', $identify->getUsername()),
+                    sprintf('User not found for UUID: "%s".', $identify->getUserIdentifier()),
                     self::getSubscribedEvents()
                 );
             }
@@ -119,7 +119,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
             $this->requestLogger->setApiKey($identify->getApiKey());
         }
 
-        $this->requestLogger->setMasterRequest($event->isMasterRequest());
+        $this->requestLogger->setMainRequest($event->isMainRequest());
         $this->requestLogger->handle();
     }
 }

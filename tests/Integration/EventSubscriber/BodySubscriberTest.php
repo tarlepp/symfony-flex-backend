@@ -36,7 +36,7 @@ class BodySubscriberTest extends KernelTestCase
 
         $request = new Request();
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         (new BodySubscriber())
             ->onKernelRequest($event);
@@ -63,7 +63,7 @@ class BodySubscriberTest extends KernelTestCase
         $request = new Request($inputQuery, $inputRequest, [], [], [], [], 'Some content');
         $request->headers->set('Content-Type', 'text/xml');
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         (new BodySubscriber())
             ->onKernelRequest($event);
@@ -92,7 +92,7 @@ class BodySubscriberTest extends KernelTestCase
         $request = new Request([], ['foobar' => 'foobar'], [], [], [], [], $content);
         $request->headers->set('Content-Type', $contentType);
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -111,7 +111,7 @@ class BodySubscriberTest extends KernelTestCase
 
         $request = new Request([], [], [], [], [], [], '{"Some": "not", "valid" JSON}');
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -141,7 +141,7 @@ class BodySubscriberTest extends KernelTestCase
          */
         $request->request = $parameterBag;
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);

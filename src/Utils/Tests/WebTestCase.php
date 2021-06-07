@@ -26,8 +26,6 @@ use function is_string;
  */
 abstract class WebTestCase extends BaseWebTestCase
 {
-    private Auth $authService;
-
     /**
      * @codeCoverageIgnore
      */
@@ -48,23 +46,11 @@ abstract class WebTestCase extends BaseWebTestCase
         gc_collect_cycles();
     }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        self::bootKernel();
-
-        /** @var Auth $authService */
-        $authService = self::$container->get('test.app.utils.tests.auth');
-
-        $this->authService = $authService;
-    }
-
     /**
      * Helper method to get authorized client for specified username and password.
      *
-     * @param array<mixed>|null $options
-     * @param array<mixed>|null $server
+     * @param array<string, string>|null $options
+     * @param array<string, string>|null $server
      *
      * @throws Throwable
      */
@@ -77,13 +63,15 @@ abstract class WebTestCase extends BaseWebTestCase
         $options ??= [];
         $server ??= [];
 
+        $authService = $this->getAuthService();
+
         // Merge authorization headers
         $server = array_merge(
             $username === null || $password === null
                 ? []
-                : $this->authService->getAuthorizationHeadersForUser($username, $password),
+                : $authService->getAuthorizationHeadersForUser($username, $password),
             array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
-            $this->authService->getJwtHeaders(),
+            $authService->getJwtHeaders(),
             $server
         );
 
@@ -95,19 +83,23 @@ abstract class WebTestCase extends BaseWebTestCase
     /**
      * Helper method to get authorized API Key client for specified role.
      *
-     * @param array<mixed>|null $options
-     * @param array<mixed>|null $server
+     * @param array<string, string>|null $options
+     * @param array<string, string>|null $server
      */
     public function getApiKeyClient(?string $role = null, ?array $options = null, ?array $server = null): KernelBrowser
     {
         $options ??= [];
         $server ??= [];
 
+        $authService = $this->getAuthService();
+
         // Merge authorization headers
         $server = array_merge(
-            $role === null ? [] : $this->authService->getAuthorizationHeadersForApiKey($role),
+            $role === null
+                ? ['HTTP_AUTHORIZATION' => 'ApiKey invalid-api-key']
+                : $authService->getAuthorizationHeadersForApiKey($role),
             array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
-            $this->authService->getJwtHeaders(),
+            $authService->getJwtHeaders(),
             $server
         );
 
@@ -149,5 +141,15 @@ abstract class WebTestCase extends BaseWebTestCase
         }
 
         return $output;
+    }
+
+    private function getAuthService(): Auth
+    {
+        static::bootKernel();
+
+        /** @var Auth $authService */
+        $authService = static::getContainer()->get('test.app.utils.tests.auth');
+
+        return $authService;
     }
 }

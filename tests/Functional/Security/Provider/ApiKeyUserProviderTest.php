@@ -18,8 +18,8 @@ use Doctrine\Persistence\ManagerRegistry;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function array_map;
 use function assert;
@@ -44,12 +44,12 @@ class ApiKeyUserProviderTest extends KernelTestCase
         /**
          * @var ManagerRegistry $managerRegistry
          */
-        $managerRegistry = static::$container->get('doctrine');
+        $managerRegistry = static::getContainer()->get('doctrine');
 
         /**
          * @var RolesService $rolesService
          */
-        $rolesService = static::$container->get(RolesService::class);
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         $repository = ApiKeyRepository::class;
 
@@ -87,27 +87,27 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidGuid(): void
+    public function testThatLoadUserByIdentifierThrowsAnExceptionWithInvalidGuid(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
 
-        $this->getApiKeyUserProvider()->loadUserByUsername((string)time());
+        $this->getApiKeyUserProvider()->loadUserByIdentifier((string)time());
     }
 
     /**
-     * @dataProvider dataProviderTestThatLoadUserByUsernameWorksAsExpected
+     * @dataProvider dataProviderTestThatLoadUserByIdentifierWorksAsExpected
      *
      * @phpstan-param StringableArrayObject<array<int, string>> $roles
      * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` returns `ApiKeyUser` with `$roles` roles when using `$token` as an input.
+     * @testdox Test that `loadUserByIdentifier` returns `ApiKeyUser` with `$roles` roles when using `$token` input
      */
-    public function testThatLoadUserByUsernameWorksAsExpected(string $token, StringableArrayObject $roles): void
+    public function testThatLoadUserByIdentifierWorksAsExpected(string $token, StringableArrayObject $roles): void
     {
-        $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByUsername($token);
+        $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByIdentifier($token);
 
         static::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
         static::assertSame($roles->getArrayCopy(), $apiKeyUser->getApiKey()->getRoles());
@@ -121,7 +121,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage('API key cannot refresh user');
 
-        $user = new User('username', 'password');
+        $user = new InMemoryUser('username', 'password');
 
         $this->getApiKeyUserProvider()->refreshUser($user);
     }
@@ -141,12 +141,8 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function dataProviderTestThatGetApiKeyReturnsExpected(): array
     {
-        static::bootKernel();
-
-        /**
-         * @var RolesService $rolesService
-         */
-        $rolesService = static::$container->get(RolesService::class);
+        /** @var RolesService $rolesService */
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         $iterator = static fn (string $role): array => [$rolesService->getShort($role)];
 
@@ -156,14 +152,10 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @return array<int, array{0: string, 1: StringableArrayObject}>
      */
-    public function dataProviderTestThatLoadUserByUsernameWorksAsExpected(): array
+    public function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
     {
-        static::bootKernel();
-
-        /**
-         * @var ManagerRegistry $managerRegistry
-         */
-        $managerRegistry = static::$container->get('doctrine');
+        /** @var ManagerRegistry $managerRegistry */
+        $managerRegistry = static::getContainer()->get('doctrine');
         $repositoryClass = ApiKeyRepository::class;
         $repository = new $repositoryClass($managerRegistry);
 
@@ -178,11 +170,11 @@ class ApiKeyUserProviderTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string}>
+     * @return Generator<array{0: boolean, 1: class-string<\Symfony\Component\Security\Core\User\UserInterface>}>
      */
     public function dataProviderTestThatSupportsClassReturnsExpected(): Generator
     {
-        yield [false, User::class];
+        yield [false, InMemoryUser::class];
         yield [true, ApiKeyUser::class];
     }
 

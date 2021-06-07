@@ -10,6 +10,7 @@ namespace App\Security;
 
 use App\Entity\ApiKey;
 use App\Security\Interfaces\ApiKeyUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use function array_merge;
 use function array_unique;
@@ -20,15 +21,15 @@ use function array_unique;
  * @package App\Security
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class ApiKeyUser implements ApiKeyUserInterface
+class ApiKeyUser implements ApiKeyUserInterface, UserInterface
 {
     /**
      * @Groups({
      *      "ApiKeyUser",
-     *      "ApiKeyUser.apiKey",
+     *      "ApiKeyUser.identifier",
      *  })
      */
-    private string $username;
+    private string $identifier;
 
     /**
      * @Groups({
@@ -53,7 +54,7 @@ class ApiKeyUser implements ApiKeyUserInterface
     public function __construct(ApiKey $apiKey, array $roles)
     {
         $this->apiKey = $apiKey;
-        $this->username = $this->apiKey->getToken();
+        $this->identifier = $this->apiKey->getToken();
         $this->roles = array_unique(array_merge($roles, [RolesService::ROLE_API]));
     }
 
@@ -97,9 +98,9 @@ class ApiKeyUser implements ApiKeyUserInterface
      *
      * @codeCoverageIgnore
      */
-    public function getUsername(): string
+    public function getUserIdentifier(): string
     {
-        return $this->username;
+        return $this->identifier;
     }
 
     /**
@@ -109,5 +110,17 @@ class ApiKeyUser implements ApiKeyUserInterface
      */
     public function eraseCredentials(): void
     {
+    }
+
+    /**
+     * @todo Remove this method when Symfony 6.0.0 is released
+     *
+     * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
+     */
+    public function getUsername(): string
+    {
+        return $this->getUserIdentifier();
     }
 }

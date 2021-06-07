@@ -32,7 +32,7 @@ class RequestLogger implements RequestLoggerInterface
     private ?Request $request = null;
     private ?User $user = null;
     private ?ApiKey $apiKey = null;
-    private bool $masterRequest = false;
+    private bool $mainRequest = false;
 
     public function __construct(
         private LogRequestResource $resource,
@@ -69,9 +69,9 @@ class RequestLogger implements RequestLoggerInterface
         return $this;
     }
 
-    public function setMasterRequest(bool $masterRequest): self
+    public function setMainRequest(bool $mainRequest): self
     {
-        $this->masterRequest = $masterRequest;
+        $this->mainRequest = $mainRequest;
 
         return $this;
     }
@@ -104,7 +104,7 @@ class RequestLogger implements RequestLoggerInterface
             $this->response,
             $this->user,
             $this->apiKey,
-            $this->masterRequest
+            $this->mainRequest
         );
 
         $this->resource->save($entity, true, true);

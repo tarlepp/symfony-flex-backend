@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\LockedException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\User\User as CoreUser;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function range;
 
@@ -47,7 +47,11 @@ class LockedUserSubscriberTest extends KernelTestCase
         $logLoginFailureResource = $this->getMockBuilder(LogLoginFailureResource::class)
             ->disableOriginalConstructor()->getMock();
 
-        $event = new AuthenticationSuccessEvent([], new CoreUser('username', 'password'), new Response());
+        $event = new AuthenticationSuccessEvent(
+            [],
+            new InMemoryUser('username', 'password'),
+            new Response()
+        );
 
         (new LockedUserSubscriber($userRepository, $logLoginFailureResource))
             ->onAuthenticationSuccess($event);
@@ -81,7 +85,7 @@ class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
 
@@ -105,7 +109,7 @@ class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with($user->getId())
             ->willReturn($user);
 
@@ -165,7 +169,7 @@ class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn(null);
 
@@ -199,7 +203,7 @@ class LockedUserSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn(new UserEntity());
 

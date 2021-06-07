@@ -120,6 +120,12 @@ interface RestResourceInterface
      * Generic findOne method to return single item from database. Return value
      * is single entity from specified repository.
      *
+     * @psalm-return (
+     *      $throwExceptionIfNotFound is true
+     *      ? EntityInterface
+     *      : EntityInterface|null
+     *  )
+     *
      * @throws Throwable
      */
     public function findOne(string $id, ?bool $throwExceptionIfNotFound = null): ?EntityInterface;
@@ -131,6 +137,12 @@ interface RestResourceInterface
      *
      * @param array<int|string, string|array> $criteria
      * @param array<int, string>|null         $orderBy
+     *
+     * @psalm-return (
+     *      $throwExceptionIfNotFound is true
+     *      ? EntityInterface
+     *      : EntityInterface|null
+     *  )
      *
      * @throws Throwable
      */
