@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9e4d4372f9b1806e9f61dd5d172b133b",
+    "content-hash": "29d5f4107b148b6cdb80c7018f95cb62",
     "packages": [],
     "packages-dev": [
         {
@@ -849,16 +849,16 @@
         },
         {
             "name": "psalm/plugin-phpunit",
-            "version": "0.15.2",
+            "version": "0.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-phpunit.git",
-                "reference": "31d15bbc0169a3c454e495e03fd8a6ccb663661b"
+                "reference": "1ce1ef2c3fe8bed6ddaba1607c00b48a52145023"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-phpunit/zipball/31d15bbc0169a3c454e495e03fd8a6ccb663661b",
-                "reference": "31d15bbc0169a3c454e495e03fd8a6ccb663661b",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-phpunit/zipball/1ce1ef2c3fe8bed6ddaba1607c00b48a52145023",
+                "reference": "1ce1ef2c3fe8bed6ddaba1607c00b48a52145023",
                 "shasum": ""
             },
             "require": {
@@ -866,7 +866,7 @@
                 "composer/semver": "^1.4 || ^2.0 || ^3.0",
                 "ext-simplexml": "*",
                 "php": "^7.1 || ^8.0",
-                "vimeo/psalm": "dev-master || dev-4.x || ^4.0"
+                "vimeo/psalm": "dev-master || dev-4.x || ^4.5"
             },
             "conflict": {
                 "phpunit/phpunit": "<7.5"
@@ -903,9 +903,9 @@
             "description": "Psalm plugin for PHPUnit",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-phpunit/issues",
-                "source": "https://github.com/psalm/psalm-plugin-phpunit/tree/0.15.2"
+                "source": "https://github.com/psalm/psalm-plugin-phpunit/tree/0.16.0"
             },
-            "time": "2021-05-29T19:11:38+00:00"
+            "time": "2021-06-06T07:53:56+00:00"
         },
         {
             "name": "psalm/plugin-symfony",
@@ -1174,12 +1174,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "9460a22455b82b353d2212fecedebcf73b141baa"
+                "reference": "bce6fe41b2f8451b8f6b7adcdcc73ba5a18a4960"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/9460a22455b82b353d2212fecedebcf73b141baa",
-                "reference": "9460a22455b82b353d2212fecedebcf73b141baa",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/bce6fe41b2f8451b8f6b7adcdcc73ba5a18a4960",
+                "reference": "bce6fe41b2f8451b8f6b7adcdcc73ba5a18a4960",
                 "shasum": ""
             },
             "conflict": {
@@ -1251,6 +1251,7 @@
                 "ezyang/htmlpurifier": "<4.1.1",
                 "facade/ignition": "<1.16.14|>=2,<2.4.2|>=2.5,<2.5.2",
                 "firebase/php-jwt": "<2",
+                "flarum/core": ">=1,<=1.0.1",
                 "flarum/sticky": ">=0.1-beta.14,<=0.1-beta.15",
                 "flarum/tags": "<=0.1-beta.13",
                 "fluidtypo3/vhs": "<5.1.1",
@@ -1528,7 +1529,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-01T22:04:47+00:00"
+            "time": "2021-06-07T22:28:46+00:00"
         },
         {
             "name": "sebastian/diff",
