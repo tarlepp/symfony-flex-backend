@@ -143,9 +143,6 @@ class ControllerCollectionTest extends KernelTestCase
      */
     private function getCollection(): ControllerCollection
     {
-        /** @var ControllerCollection $controllerCollection */
-        $controllerCollection = static::getContainer()->get(ControllerCollection::class);
-
-        return $controllerCollection;
+        return static::getContainer()->get(ControllerCollection::class);
     }
 }

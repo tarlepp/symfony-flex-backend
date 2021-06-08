@@ -50,7 +50,7 @@ class AuthenticationSuccessSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with($userEntity->getId())
             ->willReturn($userEntity);
 

@@ -53,27 +53,27 @@ class SecurityUserFactoryTest extends KernelTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` method throws an exception when user is not found
+     * @testdox Test that `loadUserByIdentifier` method throws an exception when user is not found
      */
-    public function testThatLoadUserByUsernameThrowsAnExceptionIfUserNotFound(): void
+    public function testThatLoadUserByIdentifierThrowsAnExceptionIfUserNotFound(): void
     {
         $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('User not found for UUID:');
 
         $this->getUserRepositoryMock()
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with('test_user')
             ->willReturn(null);
 
         (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
-            ->loadUserByUsername('test_user');
+            ->loadUserByIdentifier('test_user');
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` method returns expected `SecurityUser` instance
+     * @testdox Test that `loadUserByIdentifier` method returns expected `SecurityUser` instance
      */
     public function testThatLoadByUsernameReturnsExpectedSecurityUser(): void
     {
@@ -81,7 +81,7 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         $this->getUserRepositoryMock()
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with('test_user')
             ->willReturn($user);
 
@@ -92,7 +92,7 @@ class SecurityUserFactoryTest extends KernelTestCase
             ->willReturn(['FOO', 'BAR']);
 
         $securityUser = (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
-            ->loadUserByUsername('test_user');
+            ->loadUserByIdentifier('test_user');
 
         static::assertSame($user->getId(), $securityUser->getUserIdentifier());
         static::assertSame(['FOO', 'BAR'], $securityUser->getRoles());

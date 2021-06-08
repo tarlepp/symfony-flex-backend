@@ -87,27 +87,27 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidGuid(): void
+    public function testThatLoadUserByIdentifierThrowsAnExceptionWithInvalidGuid(): void
     {
         $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
 
-        $this->getApiKeyUserProvider()->loadUserByUsername((string)time());
+        $this->getApiKeyUserProvider()->loadUserByIdentifier((string)time());
     }
 
     /**
-     * @dataProvider dataProviderTestThatLoadUserByUsernameWorksAsExpected
+     * @dataProvider dataProviderTestThatLoadUserByIdentifierWorksAsExpected
      *
      * @phpstan-param StringableArrayObject<array<int, string>> $roles
      * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` returns `ApiKeyUser` with `$roles` roles when using `$token` as an input.
+     * @testdox Test that `loadUserByIdentifier` returns `ApiKeyUser` with `$roles` roles when using `$token` input
      */
-    public function testThatLoadUserByUsernameWorksAsExpected(string $token, StringableArrayObject $roles): void
+    public function testThatLoadUserByIdentifierWorksAsExpected(string $token, StringableArrayObject $roles): void
     {
-        $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByUsername($token);
+        $apiKeyUser = $this->getApiKeyUserProvider()->loadUserByIdentifier($token);
 
         static::assertInstanceOf(ApiKeyUser::class, $apiKeyUser);
         static::assertSame($roles->getArrayCopy(), $apiKeyUser->getApiKey()->getRoles());
@@ -141,7 +141,6 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function dataProviderTestThatGetApiKeyReturnsExpected(): array
     {
-        /** @var RolesService $rolesService */
         $rolesService = static::getContainer()->get(RolesService::class);
 
         $iterator = static fn (string $role): array => [$rolesService->getShort($role)];
@@ -152,7 +151,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @return array<int, array{0: string, 1: StringableArrayObject}>
      */
-    public function dataProviderTestThatLoadUserByUsernameWorksAsExpected(): array
+    public function dataProviderTestThatLoadUserByIdentifierWorksAsExpected(): array
     {
         /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = static::getContainer()->get('doctrine');

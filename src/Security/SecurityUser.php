@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    private string $username;
+    private string $identifier;
     private string | null $password;
     private string $language;
     private string $locale;
@@ -38,7 +38,7 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function __construct(User $user, array $roles = [])
     {
-        $this->username = $user->getId();
+        $this->identifier = $user->getId();
         $this->password = $user->getPassword();
         $this->language = $user->getLanguage();
         $this->locale = $user->getLocale();
@@ -83,7 +83,7 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUserIdentifier(): string
     {
-        return $this->username;
+        return $this->identifier;
     }
 
     public function getLanguage(): string
@@ -111,7 +111,7 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @todo Remove this when this `getUsername` is removed from main interface (Symfony 6.0)
+     * @todo Remove this method when Symfony 6.0.0 is released
      *
      * {@inheritdoc}
      *

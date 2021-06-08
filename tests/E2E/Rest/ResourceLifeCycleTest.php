@@ -14,7 +14,6 @@ use App\Tests\E2E\Rest\src\Resource\ResourceForLifeCycleTests;
 use App\Utils\Tests\WebTestCase;
 use Generator;
 use Throwable;
-use UnexpectedValueException;
 use function sprintf;
 
 /**
@@ -25,27 +24,6 @@ use function sprintf;
  */
 class ResourceLifeCycleTest extends WebTestCase
 {
-    private ?RoleRepository $repository = null;
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        $testResource = static::$kernel->getContainer()->get(ResourceForLifeCycleTests::class);
-
-        /** @psalm-suppress TypeDoesNotContainType */
-        if (!($testResource instanceof ResourceForLifeCycleTests)) {
-            throw new UnexpectedValueException('Invalid resource class');
-        }
-
-        $this->repository = $testResource->getRepository();
-    }
-
     /**
      * @dataProvider dataProviderTestThatModifiedEntityIsNotFlushedIfLifeCycleMethodThrowsAnException
      *
@@ -80,6 +58,6 @@ class ResourceLifeCycleTest extends WebTestCase
 
     private function getRepository(): RoleRepository
     {
-        return $this->repository ?? throw new UnexpectedValueException('Invalid resource class');
+        return static::getContainer()->get(ResourceForLifeCycleTests::class)->getRepository();
     }
 }

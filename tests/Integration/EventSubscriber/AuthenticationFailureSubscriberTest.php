@@ -49,7 +49,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn($user);
 
@@ -83,7 +83,7 @@ class AuthenticationFailureSubscriberTest extends KernelTestCase
 
         $userRepository
             ->expects(static::once())
-            ->method('loadUserByUsername')
+            ->method('loadUserByIdentifier')
             ->with('test-user')
             ->willReturn(null);
 
