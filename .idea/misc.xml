@@ -3,5 +3,6 @@
   <component name="ProjectPlainTextFileTypeManager">
     <file url="file://$PROJECT_DIR$/vendor/symfony/polyfill-mbstring/Mbstring.php" />
     <file url="file://$PROJECT_DIR$/vendor/symfony/polyfill-php73/Resources/stubs/JsonException.php" />
+    <file url="file://$PROJECT_DIR$/vendor/symfony/polyfill-php73/Resources/stubs/JsonException.php" />
   </component>
 </project>
