@@ -155,7 +155,6 @@ class IndexControllerTest extends WebTestCase
      */
     public function dataProviderTestThatProfileActionReturnsExpected(): Generator
     {
-        /** @var RolesService $rolesService */
         $rolesService = static::getContainer()->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {

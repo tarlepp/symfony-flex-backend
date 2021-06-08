@@ -158,7 +158,6 @@ class RolesControllerTest extends WebTestCase
      */
     public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
     {
-        /** @var RolesService $rolesService */
         $rolesService = static::getContainer()->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {

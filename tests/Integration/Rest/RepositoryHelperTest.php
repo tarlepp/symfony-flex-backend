@@ -553,7 +553,6 @@ DQL
 
     private function getRepository(): UserRepository
     {
-        /** @var UserRepository $userRepository */
         $userRepository = static::getContainer()->get(UserRepository::class);
 
         RepositoryHelper::resetParameterCount();
