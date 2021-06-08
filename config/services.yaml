@@ -91,6 +91,24 @@ when@dev:
         App\Utils\Tests\:
             resource: '../src/Utils/Tests'
 
+        App\Tests\E2E\Rest\src\:
+            resource: '../tests/E2E/Rest/src/*'
+
+        App\Tests\E2E\Rest\src\Controller\:
+            resource: '../tests/E2E/Rest/src/Controller/*'
+            tags:
+                - 'controller.service_arguments'
+                - 'app.rest.controller'
+
+        App\Tests\E2E\Rest\Traits\Actions\src\:
+            resource: '../tests/E2E/Rest/Traits/Actions/src/*'
+            tags:
+                - 'controller.service_arguments'
+                - 'app.rest.controller'
+
+        App\Tests\Integration\Helpers\src\:
+            resource: '../tests/Integration/Helpers/src/*'
+
         ProxyManager\Factory\AccessInterceptorValueHolderFactory:
             class: ProxyManager\Factory\AccessInterceptorValueHolderFactory
 

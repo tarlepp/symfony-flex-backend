@@ -210,7 +210,7 @@ psalm: ## Runs Psalm static analysis tool
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
-	@@bin/console cache:clear --env=test
+	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json
 else
@@ -221,7 +221,7 @@ psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
-	@@bin/console cache:clear --env=test
+	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json
 else
@@ -232,7 +232,7 @@ psalm-github: ## Runs Psalm static analysis tool
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
-	@@bin/console cache:clear --env=test
+	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json --output-format=github
 else
@@ -242,7 +242,7 @@ endif
 phpstan: ## Runs PHPStan static analysis tool
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning PHPStan - PHP Static Analysis Tool\033[39m"
-	@@bin/console cache:clear --env=test
+	@@bin/console cache:clear
 	@./vendor/bin/phpstan --version
 	@./vendor/bin/phpstan
 else

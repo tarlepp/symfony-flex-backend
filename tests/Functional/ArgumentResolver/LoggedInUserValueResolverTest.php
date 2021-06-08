@@ -21,7 +21,6 @@ use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Throwable;
-use function assert;
 use function iterator_to_array;
 
 /**
@@ -32,18 +31,6 @@ use function iterator_to_array;
  */
 class LoggedInUserValueResolverTest extends KernelTestCase
 {
-    private ?UserRepository $repository = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        /** @var UserRepository $repository */
-        $repository = static::getContainer()->get(UserRepository::class);
-
-        $this->repository = $repository;
-    }
-
     /**
      * @dataProvider dataProviderValidUsers
      *
@@ -126,8 +113,6 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
     private function getRepository(): UserRepository
     {
-        assert($this->repository instanceof UserRepository);
-
-        return $this->repository;
+        return static::getContainer()->get(UserRepository::class);
     }
 }

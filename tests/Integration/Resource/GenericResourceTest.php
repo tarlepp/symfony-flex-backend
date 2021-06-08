@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Resource;
 
-use App\DTO\RestDtoInterface;
 use App\DTO\User\User as UserDto;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
@@ -47,18 +46,11 @@ class GenericResourceTest extends KernelTestCase
     {
         parent::setUp();
 
-        /** @var UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
-        /** @var ValidatorInterface $validator */
-        $validator = static::getContainer()->get(ValidatorInterface::class);
-
         $this->resource = new UserResource($repository, new RolesService([]));
-
-        /** @var MockObject $repository */
+        $this->resource->setValidator(static::getContainer()->get(ValidatorInterface::class));
         $this->repository = $repository;
-
-        $this->resource->setValidator($validator);
     }
 
     /**
@@ -148,7 +140,6 @@ class GenericResourceTest extends KernelTestCase
             ->with($entity->getId())
             ->willReturn($entity);
 
-        /** @var UserDto $newDto */
         $newDto = $this->getResource()->getDtoForEntity($entity->getId(), UserDto::class, new UserDto());
 
         static::assertInstanceOf(UserDto::class, $newDto);
@@ -453,7 +444,7 @@ class GenericResourceTest extends KernelTestCase
 
         $this->getResource()
             ->setValidator($validator)
-            ->create(/** @var MockObject|RestDtoInterface $dto */ $dto);
+            ->create($dto);
     }
 
     /**
