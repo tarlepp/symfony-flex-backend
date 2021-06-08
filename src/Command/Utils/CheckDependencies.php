@@ -85,7 +85,9 @@ class CheckDependencies extends Command
         $table->setHeaders($headers);
         $table->setRows($rows);
         $table->setStyle($style);
-        $table->setColumnMaxWidth(2, 80);
+        $table->setColumnMaxWidth(0, 23);
+        $table->setColumnMaxWidth(1, 28);
+        $table->setColumnMaxWidth(2, 70);
         $table->setColumnMaxWidth(3, 10);
         $table->setColumnMaxWidth(4, 11);
 
@@ -131,7 +133,7 @@ class CheckDependencies extends Command
      *
      * @param array<int, string> $directories
      *
-     * @return array<int, array<int, string>|TableSeparator>
+     * @psalm-return array<int, array<int, string>|TableSeparator>
      *
      * @throws JsonException
      */
@@ -143,11 +145,6 @@ class CheckDependencies extends Command
         // Initialize output rows
         $rows = [];
 
-        /**
-         * Closure to process each vendor directory and check if there is libraries to be updated.
-         *
-         * @param string $directory
-         */
         $iterator = function (string $directory) use ($progressBar, &$rows): void {
             foreach ($this->processNamespacePath($directory) as $row => $data) {
                 $relativePath = '';
