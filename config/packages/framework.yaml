@@ -22,3 +22,13 @@ framework:
     #fragments: true
     php_errors:
         log: true
+
+when@test:
+    framework:
+        test: true
+        profiler:
+            collect: false
+        cache:
+            pools:
+                app.version.cache:
+                    adapter: cache.adapter.filesystem

@@ -14,7 +14,6 @@ use App\Utils\Tests\PhpUnitUtil;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
-use function assert;
 
 /**
  * Class HealthzRepositoryTest
@@ -24,8 +23,6 @@ use function assert;
  */
 class HealthzRepositoryTest extends KernelTestCase
 {
-    private ?HealthzRepository $repository = null;
-
     /**
      * @throws Throwable
      */
@@ -43,22 +40,10 @@ class HealthzRepositoryTest extends KernelTestCase
     /**
      * @throws Throwable
      */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        assert(static::$container->get(HealthzRepository::class) instanceof HealthzRepository);
-
-        $this->repository = static::$container->get(HealthzRepository::class);
-    }
-
-    /**
-     * @throws Throwable
-     */
     public function testThatReadValueMethodReturnsExpectedWithEmptyDatabase(): void
     {
+        static::bootKernel();
+
         PhpUnitUtil::loadFixtures(static::$kernel);
 
         static::assertNull($this->getRepository()->read());
@@ -97,8 +82,6 @@ class HealthzRepositoryTest extends KernelTestCase
 
     private function getRepository(): HealthzRepository
     {
-        assert($this->repository instanceof HealthzRepository);
-
-        return $this->repository;
+        return static::getContainer()->get(HealthzRepository::class);
     }
 }

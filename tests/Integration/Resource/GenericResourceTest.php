@@ -8,19 +8,18 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Resource;
 
-use App\DTO\RestDtoInterface;
 use App\DTO\User\User as UserDto;
 use App\Entity\User as UserEntity;
 use App\Repository\UserRepository;
 use App\Resource\UserResource;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Generator;
 use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
-use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -47,20 +46,11 @@ class GenericResourceTest extends KernelTestCase
     {
         parent::setUp();
 
-        static::bootKernel();
-
-        /** @var UserRepository $repository */
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
 
-        $validator = static::$container->get(ValidatorInterface::class) instanceof ValidatorInterface
-            ? static::$container->get(ValidatorInterface::class)
-            : throw new UnexpectedValueException('ddd');
         $this->resource = new UserResource($repository, new RolesService([]));
-
-        /** @var MockObject $repository */
+        $this->resource->setValidator(static::getContainer()->get(ValidatorInterface::class));
         $this->repository = $repository;
-
-        $this->resource->setValidator($validator);
     }
 
     /**
@@ -150,7 +140,6 @@ class GenericResourceTest extends KernelTestCase
             ->with($entity->getId())
             ->willReturn($entity);
 
-        /** @var UserDto $newDto */
         $newDto = $this->getResource()->getDtoForEntity($entity->getId(), UserDto::class, new UserDto());
 
         static::assertInstanceOf(UserDto::class, $newDto);
@@ -179,8 +168,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
-     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @phpstan-param StringableArrayObject<array> $expectedArguments
+     * @phpstan-param StringableArrayObject<array> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -263,8 +252,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
-     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @phpstan-param StringableArrayObject<array> $expectedArguments
+     * @phpstan-param StringableArrayObject<array> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -343,8 +332,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
-     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @phpstan-param StringableArrayObject<array> $expectedArguments
+     * @phpstan-param StringableArrayObject<array> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -455,7 +444,7 @@ class GenericResourceTest extends KernelTestCase
 
         $this->getResource()
             ->setValidator($validator)
-            ->create(/** @var MockObject|RestDtoInterface $dto */ $dto);
+            ->create($dto);
     }
 
     /**
@@ -568,8 +557,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedArguments
-     * @phpstan-param StringableArrayObject<array<mixed>> $arguments
+     * @phpstan-param StringableArrayObject<array> $expectedArguments
+     * @phpstan-param StringableArrayObject<array> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -705,7 +694,8 @@ class GenericResourceTest extends KernelTestCase
      */
     private function getRepositoryMockBuilder(): MockBuilder
     {
-        $doctrine = static::$container->get('doctrine') ?? new stdClass();
+        /** @var Registry $doctrine */
+        $doctrine = static::getContainer()->get('doctrine');
 
         if (method_exists($doctrine, 'getManager')
             && ($doctrine->getManager() instanceof EntityManagerInterface)

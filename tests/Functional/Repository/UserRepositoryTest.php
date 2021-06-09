@@ -16,7 +16,6 @@ use Throwable;
 use function array_fill;
 use function array_map;
 use function array_merge;
-use function assert;
 use function count;
 
 /**
@@ -27,8 +26,6 @@ use function count;
  */
 class UserRepositoryTest extends KernelTestCase
 {
-    private ?UserRepository $repository = null;
-
     /**
      * @throws Throwable
      */
@@ -41,17 +38,6 @@ class UserRepositoryTest extends KernelTestCase
         static::$kernel->shutdown();
 
         parent::tearDownAfterClass();
-    }
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        assert(static::$container->get(UserRepository::class) instanceof UserRepository);
-
-        $this->repository = static::$container->get(UserRepository::class);
     }
 
     /**
@@ -142,8 +128,14 @@ class UserRepositoryTest extends KernelTestCase
 
     private function getRepository(): UserRepository
     {
-        assert($this->repository instanceof UserRepository);
+        static $cache;
 
-        return $this->repository;
+        if ($cache === null) {
+            static::bootKernel();
+
+            $cache = static::getContainer()->get(UserRepository::class);
+        }
+
+        return $cache;
     }
 }

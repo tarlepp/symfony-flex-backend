@@ -45,7 +45,7 @@ class ApiKeyTest extends EntityTestCase
      * @dataProvider dataProviderTestThatApiKeyHasExpectedRoles
      *
      * @phpstan-param StringableArrayObject<array<int, string>> $expectedRoles
-     * @phpstan-param StringableArrayObject<array<mixed>> $criteria
+     * @phpstan-param StringableArrayObject<array> $criteria
      * @psalm-param StringableArrayObject $expectedRoles
      * @psalm-param StringableArrayObject $criteria
      *
@@ -55,14 +55,7 @@ class ApiKeyTest extends EntityTestCase
         StringableArrayObject $expectedRoles,
         StringableArrayObject $criteria
     ): void {
-        static::bootKernel();
-
-        /**
-         * @var ApiKeyRepository $repository
-         */
-        $repository = static::$container->get(ApiKeyRepository::class);
-
-        $apiKey = $repository->findOneBy($criteria->getArrayCopy());
+        $apiKey = static::getContainer()->get(ApiKeyRepository::class)->findOneBy($criteria->getArrayCopy());
 
         static::assertInstanceOf(ApiKey::class, $apiKey);
         static::assertSame($expectedRoles->getArrayCopy(), $apiKey->getRoles());
@@ -73,12 +66,7 @@ class ApiKeyTest extends EntityTestCase
      */
     public function dataProviderTestThatApiKeyHasExpectedRoles(): Generator
     {
-        static::bootKernel();
-
-        /**
-         * @var RolesService $rolesService
-         */
-        $rolesService = static::$container->get(RolesService::class);
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {
             yield [

@@ -45,23 +45,18 @@ services:
     App\:
         resource: '../src/'
         exclude:
+            - '../src/DataFixtures/'
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/EventListener/'
+            - '../src/Utils/Tests/'
             - '../src/Kernel.php'
-            - '../src/Tests/'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
         resource: '../src/Controller/'
         tags: [ 'controller.service_arguments' ]
-
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    App\DataFixtures\:
-        resource: '../src/DataFixtures/*'
-        tags: [ 'doctrine.fixture.orm' ]
 
     App\ArgumentResolver\EntityValueResolver:
         tags:
@@ -83,3 +78,83 @@ services:
     App\EventSubscriber\RequestLogSubscriber:
         arguments:
             $ignoredRoutes: '%env(key:REQUEST_LOG_IGNORED_ROUTES:json:file:APPLICATION_CONFIG)%'
+
+when@dev:
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+            tags: [ 'doctrine.fixture.orm' ]
+
+        App\Utils\Tests\:
+            resource: '../src/Utils/Tests'
+
+        App\Tests\E2E\Rest\src\:
+            resource: '../tests/E2E/Rest/src/*'
+
+        App\Tests\E2E\Rest\src\Controller\:
+            resource: '../tests/E2E/Rest/src/Controller/*'
+            tags:
+                - 'controller.service_arguments'
+                - 'app.rest.controller'
+
+        App\Tests\E2E\Rest\Traits\Actions\src\:
+            resource: '../tests/E2E/Rest/Traits/Actions/src/*'
+            tags:
+                - 'controller.service_arguments'
+                - 'app.rest.controller'
+
+        App\Tests\Integration\Helpers\src\:
+            resource: '../tests/Integration/Helpers/src/*'
+
+        ProxyManager\Factory\AccessInterceptorValueHolderFactory:
+            class: ProxyManager\Factory\AccessInterceptorValueHolderFactory
+
+        doctrine.dbal.default_connection.stopwatch:
+            class: Doctrine\DBAL\Connection
+            decorates: doctrine.dbal.default_connection
+            factory: [ '@App\Decorator\StopwatchDecorator', decorate ]
+            arguments: [ '@doctrine.dbal.default_connection.stopwatch.inner' ]
+
+        symfony.component.serializer.stopwatch:
+            class: Symfony\Component\Serializer\Serializer
+            decorates: serializer
+            factory: [ '@App\Decorator\StopwatchDecorator', decorate ]
+            arguments: [ '@symfony.component.serializer.stopwatch.inner' ]
+
+when@test:
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true
+            public: true
+
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+            tags: [ 'doctrine.fixture.orm' ]
+
+        App\Utils\Tests\:
+            resource: '../src/Utils/Tests'
+
+        App\Tests\E2E\Rest\src\:
+            resource: '../tests/E2E/Rest/src/*'
+
+        App\Tests\E2E\Rest\src\Controller\:
+            resource: '../tests/E2E/Rest/src/Controller/*'
+            tags:
+                - 'controller.service_arguments'
+                - 'app.rest.controller'
+
+        App\Tests\E2E\Rest\Traits\Actions\src\:
+            resource: '../tests/E2E/Rest/Traits/Actions/src/*'
+            tags:
+                - 'controller.service_arguments'
+                - 'app.rest.controller'
+
+        App\Tests\Integration\Helpers\src\:
+            resource: '../tests/Integration/Helpers/src/*'
+
+        test.app.security.roles_service: '@App\Security\RolesService'
+        test.app.utils.tests.auth: '@App\Utils\Tests\Auth'

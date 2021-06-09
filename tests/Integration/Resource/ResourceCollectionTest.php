@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Resource;
 use App\Entity\ApiKey;
 use App\Entity\DateDimension;
 use App\Entity\Healthz;
+use App\Entity\Interfaces\EntityInterface;
 use App\Entity\LogLogin;
 use App\Entity\LogLoginFailure;
 use App\Entity\LogRequest;
@@ -27,6 +28,7 @@ use App\Resource\ResourceCollection;
 use App\Resource\RoleResource;
 use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
+use App\Rest\RestResource;
 use ArrayObject;
 use Generator;
 use InvalidArgumentException;
@@ -35,7 +37,6 @@ use LogicException;
 use Psr\Log\LoggerInterface;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use function assert;
 
 /**
  * Class ResourceCollectionTest
@@ -47,7 +48,6 @@ class ResourceCollectionTest extends KernelTestCase
 {
     public function testThatGetMethodThrowsAnException(): void
     {
-        /** @var LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
@@ -70,14 +70,12 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects(static::once())
             ->method('error');
 
-        /** @var LoggerInterface $logger */
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
             ->get('FooBar');
     }
 
     public function testThatGetEntityResourceMethodThrowsAnException(): void
     {
-        /** @var LoggerInterface $logger */
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMock();
 
@@ -100,7 +98,6 @@ class ResourceCollectionTest extends KernelTestCase
             ->expects(static::once())
             ->method('error');
 
-        /** @var LoggerInterface $logger */
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
             ->getEntityResource('FooBar');
     }
@@ -118,7 +115,7 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetReturnsExpectedResource
      *
-     * @param class-string $resourceClass
+     * @param class-string<RestResource> $resourceClass
      *
      * @testdox Test that `get` method with `$resourceClass` input returns instance of that resource class.
      */
@@ -130,8 +127,8 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetEntityResourceReturnsExpectedResource
      *
-     * @param class-string $resourceClass
-     * @param class-string $entityClass
+     * @param class-string<RestResource> $resourceClass
+     * @param class-string<EntityInterface> $entityClass
      *
      * @testdox Test that `getEntityResource` method with `$entityClass` input returns `$resourceClass` class.
      */
@@ -144,6 +141,8 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatHasReturnsExpected
      *
+     * @param class-string<RestResource>|string|null $resource
+     *
      * @testdox Test that `has` method returns `$expected` with `$resource` input.
      */
     public function testThatHasReturnsExpected(bool $expected, ?string $resource): void
@@ -154,6 +153,8 @@ class ResourceCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatHasEntityResourceReturnsExpected
      *
+     * @param class-string<EntityInterface>|string|null $entity
+     *
      * @testdox Test that `hasEntityResource` method returns `$expected` with `$entity` input.
      */
     public function testThatHasEntityResourceReturnsExpected(bool $expected, ?string $entity): void
@@ -162,7 +163,7 @@ class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string<\App\Rest\RestResource>}>
+     * @return Generator<array{0: class-string<RestResource>}>
      */
     public function dataProviderTestThatGetReturnsExpectedResource(): Generator
     {
@@ -179,8 +180,8 @@ class ResourceCollectionTest extends KernelTestCase
 
     /**
      * @return Generator<array{
-     *      0: class-string<\App\Rest\RestResource>,
-     *      1: class-string<\App\Entity\Interfaces\EntityInterface>
+     *      0: class-string<RestResource>,
+     *      1: class-string<EntityInterface>
      *  }>
      */
     public function dataProviderTestThatGetEntityResourceReturnsExpectedResource(): Generator
@@ -197,7 +198,7 @@ class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string<\App\Rest\RestResource>|string|null}>
+     * @return Generator<array{0: boolean, 1: class-string<RestResource>|string|null}>
      */
     public function dataProviderTestThatHasReturnsExpected(): Generator
     {
@@ -216,7 +217,7 @@ class ResourceCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string<\App\Entity\Interfaces\EntityInterface>|string|null}>
+     * @return Generator<array{0: boolean, 1: class-string<EntityInterface>|string|null}>
      */
     public function dataProviderTestThatHasEntityResourceReturnsExpected(): Generator
     {
@@ -236,11 +237,7 @@ class ResourceCollectionTest extends KernelTestCase
 
     private function getCollection(): ResourceCollection
     {
-        static::bootKernel();
-
-        assert(static::$container->get(ResourceCollection::class) instanceof ResourceCollection);
-
-        return static::$container->get(ResourceCollection::class);
+        return static::getContainer()->get(ResourceCollection::class);
     }
 
     /**

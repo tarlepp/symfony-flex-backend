@@ -48,7 +48,7 @@ class ResponseSubscriberTest extends KernelTestCase
         $request = new Request();
         $response = new Response();
 
-        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MASTER_REQUEST, $response);
+        $event = new ResponseEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST, $response);
         $version = new Version(static::$kernel->getProjectDir(), $cacheStub, $logger);
 
         (new ResponseSubscriber($version))

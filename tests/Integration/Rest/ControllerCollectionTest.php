@@ -15,6 +15,7 @@ use App\Controller\Role\RoleController;
 use App\Controller\User\DeleteUserController;
 use App\Controller\User\UserController;
 use App\Controller\UserGroup\UserGroupController;
+use App\Rest\Controller;
 use App\Rest\ControllerCollection;
 use App\Rest\Interfaces\ControllerInterface;
 use ArrayObject;
@@ -23,7 +24,6 @@ use InvalidArgumentException;
 use IteratorAggregate;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use function assert;
 
 /**
  * Class ControllerCollectionTest
@@ -84,7 +84,7 @@ class ControllerCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetReturnsExpectedController
      *
-     * @param class-string $controllerName
+     * @param class-string<Controller> $controllerName
      *
      * @testdox Test that `get` method with `$controllerName` input returns instance of that controller
      */
@@ -98,6 +98,8 @@ class ControllerCollectionTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatHasReturnsExpected
      *
+     * @param class-string<Controller>|string|null $controller
+     *
      * @testdox Test that `has` method returns `$expected` with `$controller` input
      */
     public function testThatHasReturnsExpected(bool $expected, ?string $controller): void
@@ -108,7 +110,7 @@ class ControllerCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: class-string}>
+     * @return Generator<array{0: class-string<Controller>}>
      */
     public function dataProviderTestThatGetReturnsExpectedController(): Generator
     {
@@ -121,7 +123,7 @@ class ControllerCollectionTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: class-string|string|null}>
+     * @return Generator<array{0: boolean, 1: class-string<Controller>|string|null}>
      */
     public function dataProviderTestThatHasReturnsExpected(): Generator
     {
@@ -141,10 +143,6 @@ class ControllerCollectionTest extends KernelTestCase
      */
     private function getCollection(): ControllerCollection
     {
-        static::bootKernel();
-
-        assert(static::$container->get(ControllerCollection::class) instanceof ControllerCollection);
-
-        return static::$container->get(ControllerCollection::class);
+        return static::getContainer()->get(ControllerCollection::class);
     }
 }

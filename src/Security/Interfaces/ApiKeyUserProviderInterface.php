@@ -11,7 +11,6 @@ namespace App\Security\Interfaces;
 use App\Entity\ApiKey;
 use App\Repository\ApiKeyRepository;
 use App\Security\RolesService;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * Interface ApiKeyUserProviderInterface
@@ -19,7 +18,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * @package App\Security\Provider
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-interface ApiKeyUserProviderInterface extends UserProviderInterface
+interface ApiKeyUserProviderInterface
 {
     public function __construct(ApiKeyRepository $apiKeyRepository, RolesService $rolesService);
 

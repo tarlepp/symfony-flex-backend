@@ -50,7 +50,7 @@ class UserTypeIdentification
     {
         $user = $this->getSecurityUser();
 
-        return $user === null ? null : $this->userRepository->loadUserByUsername($user->getUsername(), true);
+        return $user === null ? null : $this->userRepository->loadUserByIdentifier($user->getUserIdentifier(), true);
     }
 
     /**

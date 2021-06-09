@@ -48,6 +48,17 @@ started to use this template.
         to match your brand.
   * [ ] [docker-compose.yml](../docker-compose.yml) Change `container_name` to
         match your application.
+  * [ ] [mysql_custom.cnf](../docker/mysql/mysql_custom.cnf) Check that MySQL
+        has custom configuration that your application needs. Also check that
+        [Dockerfile](../docker/mysql/Dockerfile) is matching your production
+        setup.
+  * [ ] [nginx.conf](../docker/nginx/nginx.conf) Check that Nginx has proper
+        configuration for your application needs. Also check that
+        [Dockerfile](../docker/mysql/Dockerfile) is matching your production
+        setup.
+  * [ ] [php.ini](../docker/php/php.ini) Check that PHP has proper production
+        configuration. Also check [php-dev.ini](../docker/php/php-dev.ini) for
+        development environment setup.
 * [ ] 3rd party services that you might not need _or_ you need to change those
       to work with _your_ application - if you don't need to use those services
       just delete those files and all is done.

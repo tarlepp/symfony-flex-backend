@@ -19,8 +19,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
 use function assert;
@@ -75,7 +75,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage('API key cannot refresh user');
 
-        $user = new User('username', 'password');
+        $user = new InMemoryUser('username', 'password');
 
         (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
             ->refreshUser($user);
@@ -84,11 +84,11 @@ class ApiKeyUserProviderTest extends KernelTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` method throws an exception when API key is not found
+     * @testdox Test that `loadUserByIdentifier` method throws an exception when API key is not found
      */
-    public function testThatLoadUserByUsernameThrowsAnException(): void
+    public function testThatLoadUserByIdentifierThrowsAnException(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('API key is not valid');
 
         $this->getApiKeyRepositoryMock()
@@ -98,15 +98,15 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->willReturn(null);
 
         (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
-            ->loadUserByUsername('guid');
+            ->loadUserByIdentifier('guid');
     }
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` method returns expected `ApiKeyUser` instance
+     * @testdox Test that `loadUserByIdentifier` method returns expected `ApiKeyUser` instance
      */
-    public function testThatLoadUserByUsernameCreatesExpectedApiKeyUser(): void
+    public function testThatLoadUserByIdentifierCreatesExpectedApiKeyUser(): void
     {
         $apiKey = new ApiKey();
 
@@ -117,7 +117,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->willReturn($apiKey);
 
         $user = (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
-            ->loadUserByUsername('guid');
+            ->loadUserByIdentifier('guid');
 
         static::assertSame($apiKey, $user->getApiKey());
     }

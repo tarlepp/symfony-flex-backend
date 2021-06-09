@@ -16,10 +16,9 @@ use App\Utils\Tests\StringableArrayObject;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\User as CoreUser;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
-use function assert;
 
 /**
  * Class SecurityUserFactoryTest
@@ -29,47 +28,31 @@ use function assert;
  */
 class SecurityUserFactoryTest extends KernelTestCase
 {
-    private ?SecurityUserFactory $securityUserFactory = null;
-    private ?UserRepository $userRepository = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        assert(static::$container->get(SecurityUserFactory::class) instanceof SecurityUserFactory);
-        assert(static::$container->get(UserRepository::class) instanceof UserRepository);
-
-        $this->securityUserFactory = static::$container->get(SecurityUserFactory::class);
-        $this->userRepository = static::$container->get(UserRepository::class);
-    }
-
     /**
      * @throws Throwable
      */
-    public function testThatLoadUserByUsernameThrowsAnExceptionWithInvalidUsername(): void
+    public function testThatLoadUserByIdentifierThrowsAnExceptionWithInvalidUsername(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
 
-        $this->getSecurityUserFactory()->loadUserByUsername('foobar');
+        $this->getSecurityUserFactory()->loadUserByIdentifier('foobar');
     }
 
     /**
-     * @dataProvider dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance
+     * @dataProvider dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance
      *
      * @phpstan-param StringableArrayObject<array<int, string>> $roles
      * @psalm-param StringableArrayObject $roles
      *
      * @throws Throwable
      *
-     * @testdox Test that `loadUserByUsername` method with `$username` input returns `SecurityUser` with `$roles` roles.
+     * @testdox Test that `loadUserByIdentifier` method with `$username` returns `SecurityUser` with `$roles` roles
      */
-    public function testThatLoadUserByUsernameReturnsExpectedUserInstance(
+    public function testThatLoadUserByIdentifierReturnsExpectedUserInstance(
         string $username,
         StringableArrayObject $roles
     ): void {
-        $domainUser = $this->getSecurityUserFactory()->loadUserByUsername($username);
+        $domainUser = $this->getSecurityUserFactory()->loadUserByIdentifier($username);
 
         static::assertInstanceOf(SecurityUser::class, $domainUser);
         static::assertSame($roles->getArrayCopy(), $domainUser->getRoles());
@@ -80,7 +63,7 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserIsNotFound(): void
     {
-        $this->expectException(UsernameNotFoundException::class);
+        $this->expectException(UserNotFoundException::class);
 
         $this->getSecurityUserFactory()->refreshUser(new SecurityUser(new User()));
     }
@@ -97,7 +80,10 @@ class SecurityUserFactoryTest extends KernelTestCase
 
         $securityUser = new SecurityUser($user);
 
-        static::assertSame($user->getId(), $this->getSecurityUserFactory()->refreshUser($securityUser)->getUsername());
+        static::assertSame(
+            $user->getId(),
+            $this->getSecurityUserFactory()->refreshUser($securityUser)->getUserIdentifier()
+        );
     }
 
     /**
@@ -121,9 +107,9 @@ class SecurityUserFactoryTest extends KernelTestCase
     public function testThatRefreshUserThrowsAnExceptionIfUserClassIsNotSupported(): void
     {
         $this->expectException(UnsupportedUserException::class);
-        $this->expectExceptionMessage('Invalid user class "Symfony\Component\Security\Core\User\User"');
+        $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
 
-        $user = new CoreUser('test', 'password');
+        $user = new InMemoryUser('username', 'password');
 
         $this->getSecurityUserFactory()->refreshUser($user);
     }
@@ -131,7 +117,7 @@ class SecurityUserFactoryTest extends KernelTestCase
     /**
      * @return Generator<array{0: string, 1: StringableArrayObject}>
      */
-    public function dataProviderTestThatLoadUserByUsernameReturnsExpectedUserInstance(): Generator
+    public function dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance(): Generator
     {
         yield ['john', new StringableArrayObject([])];
         yield ['john-api', new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];
@@ -143,15 +129,11 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     private function getSecurityUserFactory(): SecurityUserFactory
     {
-        assert($this->securityUserFactory instanceof SecurityUserFactory);
-
-        return $this->securityUserFactory;
+        return static::getContainer()->get(SecurityUserFactory::class);
     }
 
     private function getUserRepository(): UserRepository
     {
-        assert($this->userRepository instanceof UserRepository);
-
-        return $this->userRepository;
+        return static::getContainer()->get(UserRepository::class);
     }
 }

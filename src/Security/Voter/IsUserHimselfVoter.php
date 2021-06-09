@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Security\Voter;
 
 use App\Entity\User;
-use App\Security\Interfaces\SecurityUserInterface;
+use App\Security\SecurityUser;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
@@ -39,7 +39,7 @@ class IsUserHimselfVoter extends Voter
         $user = $token->getUser();
 
         return $token->isAuthenticated()
-            && $user instanceof SecurityUserInterface
+            && $user instanceof SecurityUser
             && $user->getUuid() === $subject->getId();
     }
 }

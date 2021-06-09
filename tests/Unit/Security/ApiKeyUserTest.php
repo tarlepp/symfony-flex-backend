@@ -35,10 +35,7 @@ class ApiKeyUserTest extends KernelTestCase
      */
     public function testThatGetRolesReturnsExpected(ApiKey $apiKey, StringableArrayObject $expectedRoles): void
     {
-        static::bootKernel();
-
-        /** @var RolesService $rolesService */
-        $rolesService = static::$container->get(RolesService::class);
+        $rolesService = static::getContainer()->get(RolesService::class);
 
         $apiKeyUser = new ApiKeyUser($apiKey, $rolesService->getInheritedRoles($apiKey->getRoles()));
 
@@ -46,20 +43,17 @@ class ApiKeyUserTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array<mixed>>
+     * @return Generator<array{0: ApiKey, 1: StringableArrayObject}>
      *
      * @throws Throwable
      */
     public function dataProviderTestThatGetRolesReturnsExpected(): Generator
     {
-        static::bootKernel();
-
-        /** @var UserGroupResource $userGroupResource */
-        $userGroupResource = static::$container->get(UserGroupResource::class);
+        $userGroupResource = static::getContainer()->get(UserGroupResource::class);
 
         yield [new ApiKey(), new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];
 
-        $exception = new \Exception('ddd');
+        $exception = new \Exception('Cannot find user group');
 
         yield [
             (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Normal users']) ?? throw $exception),

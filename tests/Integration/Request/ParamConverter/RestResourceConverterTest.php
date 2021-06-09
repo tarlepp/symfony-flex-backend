@@ -21,8 +21,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use UnexpectedValueException;
-use function assert;
 
 /**
  * Class RestResourceConverterTest
@@ -32,23 +30,10 @@ use function assert;
  */
 class RestResourceConverterTest extends KernelTestCase
 {
-    private ?RestResourceConverter $converter = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        assert(static::$container->get(ResourceCollection::class) instanceof ResourceCollection);
-
-        $this->converter = new RestResourceConverter(static::$container->get(ResourceCollection::class));
-    }
-
     /**
      * @dataProvider dataProviderTestThatSupportMethodReturnsExpected
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $configuration
+     * @phpstan-param StringableArrayObject<array> $configuration
      * @psalm-param StringableArrayObject $configuration
      *
      * @testdox Test `supports` method returns `$expected` when using `$configuration` as ParamConverter input.
@@ -141,6 +126,6 @@ class RestResourceConverterTest extends KernelTestCase
 
     private function getConverter(): RestResourceConverter
     {
-        return $this->converter ?? throw new UnexpectedValueException('RestResourceConverter not found...');
+        return new RestResourceConverter(static::getContainer()->get(ResourceCollection::class));
     }
 }
