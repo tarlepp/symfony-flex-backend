@@ -45,7 +45,7 @@ started to use this template.
         [Dockerfile](../docker/mysql/Dockerfile) is matching your production
         setup.
   * [ ] [nginx.conf](../docker/nginx/nginx.conf) Check that Nginx has proper
-        configuration for your application needs. Also check that 
+        configuration for your application needs. Also check that
         [Dockerfile](../docker/mysql/Dockerfile) is matching your production
         setup.
   * [ ] [php.ini](../docker/php/php.ini) Check that PHP has proper production
