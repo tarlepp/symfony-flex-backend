@@ -23,11 +23,6 @@ started to use this template.
   * [ ] Common properties; `name`, `description`, `keywords`, `homapage`,
         `version`, `license`, `authors`, `support.issues` and
         `extra.projectTitle`
-  * [ ] Symfony Flex ID - this is important! First remove `extra.symfony.id`
-        from your `composer.json` file and after that you just need to run
-        `composer symfony:generate-id` command to generate new. Note that
-        this will update your `composer.lock` file - so remember to commit
-        that.
 * [ ] Application configuration / setup
   * [ ] [.env](../.env) Change `APP_SECRET` value with new one, you can use
         eg. [this](http://nux.net/secret) tool for that. Also remember to
@@ -69,6 +64,8 @@ started to use this template.
       jobs to check application code.
   * [ ] [main.yml](../.github/workflows/main.yml) - Check file contents and
         modify it for your needs.
+  * [ ] [vulnerability-scan.yml](../.github/workflows/vulnerability-scan.yml) -
+        Check file contents and modify it for your needs.
 * [ ] Last step when all above is done - just delete this file.
 
 ---
