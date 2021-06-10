@@ -23,12 +23,7 @@ started to use this template.
   * [ ] Common properties; `name`, `description`, `keywords`, `homapage`,
         `version`, `license`, `authors`, `support.issues` and
         `extra.projectTitle`
-  * [ ] Symfony Flex ID - this is important! First remove `extra.symfony.id`
-        from your `composer.json` file and after that you just need to run
-        `composer symfony:generate-id` command to generate new. Note that
-        this will update your `composer.lock` file - so remember to commit
-        that.
-* [ ] Application configuration
+* [ ] Application configuration / setup
   * [ ] [.env](../.env) Change `APP_SECRET` value with new one, you can use
         eg. [this](http://nux.net/secret) tool for that. Also remember to
         change that `APP_SECRET` value in [.env.test](../.env.test) and in
@@ -38,6 +33,14 @@ started to use this template.
         generate new `JWT_PASSPHRASE` value. Also remember to do those
         changes to [application_test.json](../secrets/application_test.json)
         files.
+  * [ ] [site.webmanifest](../public/site.webmanifest) - check that file
+        contents - [information](https://developer.mozilla.org/en-US/docs/Web/Manifest)
+        - and made necessary changes.
+  * [ ] [robots.txt](../public/robots.txt) - check that file contents -
+        [information](https://developers.google.com/search/docs/advanced/robots/intro)
+        - and made necessary changes.
+  * [ ] [favicon.ico](../public/favicon.ico) - change your application favicon
+        to match your brand.
   * [ ] [docker-compose.yml](../docker-compose.yml) Change `container_name` to
         match your application.
   * [ ] [mysql_custom.cnf](../docker/mysql/mysql_custom.cnf) Check that MySQL
@@ -61,6 +64,8 @@ started to use this template.
       jobs to check application code.
   * [ ] [main.yml](../.github/workflows/main.yml) - Check file contents and
         modify it for your needs.
+  * [ ] [vulnerability-scan.yml](../.github/workflows/vulnerability-scan.yml) -
+        Check file contents and modify it for your needs.
 * [ ] Last step when all above is done - just delete this file.
 
 ---
