@@ -36,7 +36,7 @@ started to use this template.
   * [ ] [site.webmanifest](../public/site.webmanifest) - check that file
         contents - [information](https://developer.mozilla.org/en-US/docs/Web/Manifest)
         - and made necessary changes.
-  * [ ] [robots.txt](../public/robots.txt) - check that file contents - 
+  * [ ] [robots.txt](../public/robots.txt) - check that file contents -
         [information](https://developers.google.com/search/docs/advanced/robots/intro)
         - and made necessary changes.
   * [ ] [favicon.ico](../public/favicon.ico) - change your application favicon
