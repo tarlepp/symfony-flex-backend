@@ -225,7 +225,8 @@ class RequestHandlerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatGetCriteriaMethodsReturnsExpectedGenerator(): Generator
     {
@@ -293,7 +294,8 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetOrderByReturnsExpectedValue' test.
      *
-     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatGetOrderByReturnsExpectedValue(): Generator
     {
@@ -427,7 +429,8 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetLimitReturnsExpectedValue' test.
      *
-     * @return Generator<array{0: StringableArrayObject, 1: int}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: int}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: int}>
      */
     public function dataProviderTestThatGetLimitReturnsExpectedValue(): Generator
     {
@@ -455,7 +458,8 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetOffsetReturnsExpectedValue' test.
      *
-     * @return Generator<array{0: StringableArrayObject, 1: int}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: int}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: int}>
      */
     public function dataProviderTestThatGetOffsetReturnsExpectedValue(): Generator
     {
@@ -483,7 +487,8 @@ class RequestHandlerTest extends KernelTestCase
     /**
      * Data provider method for 'testThatGetSearchTermsReturnsExpectedValue' test.
      *
-     * @return Generator<array{0: StringableArrayObject, 1: boolean|string}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: boolean|string}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: boolean|string}>
      */
     public function dataProviderTestThatGetSearchTermsReturnsExpectedValue(): Generator
     {

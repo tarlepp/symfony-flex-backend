@@ -119,8 +119,8 @@ class IdsMethodTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTraitCallsServiceMethods
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $criteria
-     * @phpstan-param StringableArrayObject<array<mixed>> $search
+     * @phpstan-param StringableArrayObject<mixed> $criteria
+     * @phpstan-param StringableArrayObject<mixed> $search
      * @psalm-param StringableArrayObject $criteria
      * @psalm-param StringableArrayObject $search
      *
@@ -164,7 +164,8 @@ class IdsMethodTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject, 2: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>, 2: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatTraitCallsServiceMethods(): Generator
     {

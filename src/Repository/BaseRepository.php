@@ -71,7 +71,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     ];
 
     /**
-     * @var array<int, array{0: callable, 1: array}>
+     * @var array<int, array{0: callable, 1: array<mixed>}>
      */
     private static array $callbacks = [];
 

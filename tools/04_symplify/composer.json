@@ -4,8 +4,8 @@
 	"require": {},
 	"require-dev": {
 		"roave/security-advisories": "dev-latest",
-		"symplify/config-transformer": "9.3.20",
-		"symplify/easy-coding-standard": "9.3.20"
+		"symplify/config-transformer": "9.3.26",
+		"symplify/easy-coding-standard": "9.3.26"
 	},
 	"config": {
 		"platform": {

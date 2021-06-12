@@ -73,7 +73,7 @@ interface ControllerInterface
     /**
      * Method to process current criteria array.
      *
-     * @param array<int|string, string|array> $criteria
+     * @param array<int|string, string|array<mixed>> $criteria
      */
     public function processCriteria(array &$criteria, Request $request, string $method): void;
 }

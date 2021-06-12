@@ -177,7 +177,7 @@ class JSONTest extends KernelTestCase
     /**
      * Data provider for 'testThatDecodeWorksLikeExpected'.
      *
-     * @return Generator<array>
+     * @return Generator<array<int, mixed>>
      */
     public function dataProviderTestThatDecodeWorksLikeExpected(): Generator
     {

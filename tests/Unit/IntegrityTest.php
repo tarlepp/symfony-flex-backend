@@ -444,7 +444,8 @@ FORMAT;
     }
 
     /**
-     * @return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
+     * @psalm-return array<int, array{0: string, 1: string, 2: StringableArrayObject}>
+     * @phpstan-return array<int, array{0: string, 1: string, 2: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatRepositoryHaveFunctionalTests(): array
     {

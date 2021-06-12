@@ -507,7 +507,8 @@ class GenericRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatAddLeftJoinWorksAsExpected(): Generator
     {
@@ -533,7 +534,8 @@ class GenericRepositoryTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatAddInnerJoinWorksAsExpected(): Generator
     {
