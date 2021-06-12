@@ -87,7 +87,8 @@ class RestResourceConverterTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: boolean, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: boolean, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: boolean, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatSupportMethodReturnsExpected(): Generator
     {

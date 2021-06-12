@@ -75,7 +75,7 @@ class BodySubscriberTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatJsonContentReplaceParametersAsExpected
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expectedParameters
+     * @phpstan-param StringableArrayObject<mixed> $expectedParameters
      * @psalm-param StringableArrayObject $expectedParameters
      *
      * @throws JsonException
@@ -148,7 +148,8 @@ class BodySubscriberTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject, 1: string, 2:  string}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2:  string}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2:  string}>
      */
     public function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
     {
