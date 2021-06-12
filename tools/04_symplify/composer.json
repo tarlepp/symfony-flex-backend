@@ -7,7 +7,7 @@
 		"symplify/config-transformer": "9.3.26",
 		"symplify/easy-coding-standard": "9.3.26"
 	},
-	"config": {
+	"config": {make
 		"platform": {
 			"php": "8.0.0"
 		},
