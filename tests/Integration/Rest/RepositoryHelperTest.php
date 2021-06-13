@@ -25,7 +25,7 @@ class RepositoryHelperTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatProcessCriteriaWorksAsExpected
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $input
+     * @phpstan-param StringableArrayObject<mixed> $input
      * @psalm-param StringableArrayObject $input
      *
      * @testdox Test that after `processCriteria` method call DQL is `$expected` when using `$input` as input
@@ -164,7 +164,8 @@ DQL;
     }
 
     /**
-     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatProcessCriteriaWorksAsExpected(): Generator
     {
@@ -233,7 +234,8 @@ DQL;
     }
 
     /**
-     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatProcessSearchTermsWorksLikeExpected(): Generator
     {
@@ -282,7 +284,8 @@ DQL;
     }
 
     /**
-     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatProcessOrderByWorksLikeExpected(): Generator
     {
@@ -327,7 +330,8 @@ DQL;
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: string, 2: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: string, 2: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatGetExpressionCreatesExpectedDqlAndParametersWithSimpleCriteria(): Generator
     {

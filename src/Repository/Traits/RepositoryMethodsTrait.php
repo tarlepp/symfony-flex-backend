@@ -180,7 +180,7 @@ trait RepositoryMethodsTrait
     /**
      * Helper method to get QueryBuilder for current instance within specified default parameters.
      *
-     * @param array<int|string, string|array>|null $criteria
+     * @param array<int|string, string|array<mixed>>|null $criteria
      * @param array<string, string>|null $search
      * @param array<string, string>|null $orderBy
      *

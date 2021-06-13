@@ -83,7 +83,7 @@ class RepositoryHelper
      *
      * @see \App\Repository\Traits\RepositoryMethodsTrait::getQueryBuilder()
      *
-     * @param array<int|string, string|array>|null $criteria
+     * @param array<int|string, string|array<mixed>>|null $criteria
      *
      * @throws InvalidArgumentException
      */
@@ -227,7 +227,7 @@ class RepositoryHelper
      *
      * @see https://gist.github.com/jgornick/8671644
      *
-     * @param array<int|string, string|array> $criteria
+     * @param array<int|string, string|array<mixed>> $criteria
      *
      * @throws InvalidArgumentException
      */
@@ -242,7 +242,7 @@ class RepositoryHelper
     }
 
     /**
-     * @param array<int|string, string|array> $criteria
+     * @param array<int|string, string|array<int|string, string>> $criteria
      *
      * @throws InvalidArgumentException
      */
@@ -259,7 +259,7 @@ class RepositoryHelper
     }
 
     /**
-     * @param array<int|string, string|array> $comparison
+     * @param array<int|string, string|array<int|string, string>> $comparison
      *
      * @throws InvalidArgumentException
      */
@@ -290,7 +290,7 @@ class RepositoryHelper
      *
      * @param string|array<int, string> $value
      *
-     * @return array{0: string, 1: string, 2: string|array}
+     * @return array{0: string, 1: string, 2: string|array<int, string>}
      */
     private static function createCriteria(string $column, string | array $value): array
     {
@@ -304,7 +304,7 @@ class RepositoryHelper
     }
 
     /**
-     * @param array<int|string, string|array> $comparison
+     * @param array<int|string, string|array<mixed>> $comparison
      *
      * @return array<int, mixed>
      */
@@ -373,7 +373,7 @@ class RepositoryHelper
     }
 
     /**
-     * @param array<int|string, string|array> $condition
+     * @param array<int|string, string|array<int|string, string>> $condition
      */
     private static function getIterator(array &$condition): Closure
     {

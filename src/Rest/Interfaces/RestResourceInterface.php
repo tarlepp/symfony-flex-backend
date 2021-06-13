@@ -100,9 +100,9 @@ interface RestResourceInterface
      * Generic find method to return an array of items from database. Return
      * value is an array of specified repository entities.
      *
-     * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null           $orderBy
-     * @param array<string, string>|null           $search
+     * @param array<int|string, string|array<mixed>>|null $criteria
+     * @param array<string, string>|null $orderBy
+     * @param array<string, string>|null $search
      *
      * @return array<int, EntityInterface>
      *
@@ -135,8 +135,8 @@ interface RestResourceInterface
      * criteria. Return value is single entity from specified repository or
      * null if entity was not found.
      *
-     * @param array<int|string, string|array> $criteria
-     * @param array<int, string>|null         $orderBy
+     * @param array<int|string, string|array<mixed>> $criteria
+     * @param array<int, string>|null $orderBy
      *
      * @psalm-return (
      *      $throwExceptionIfNotFound is true
@@ -156,8 +156,8 @@ interface RestResourceInterface
      * Generic count method to return entity count for specified criteria and
      * search terms.
      *
-     * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null           $search
+     * @param array<int|string, string|array<mixed>>|null $criteria
+     * @param array<string, string>|null $search
      *
      * @throws Throwable
      */
@@ -206,8 +206,8 @@ interface RestResourceInterface
      * Generic ids method to return an array of id values from database. Return
      * value is an array of specified repository entity id values.
      *
-     * @param array<int|string, string|array>|null $criteria
-     * @param array<string, string>|null           $search
+     * @param array<int|string, string|array<mixed>>|null $criteria
+     * @param array<string, string>|null $search
      *
      * @return array<int, string>
      */

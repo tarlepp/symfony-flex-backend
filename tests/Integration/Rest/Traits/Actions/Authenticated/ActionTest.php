@@ -73,7 +73,8 @@ class ActionTest extends KernelTestCase
     }
 
     /**
-     * @return array<int, array{0: trait-string, 1: string, 2: string, 3: StringableArrayObject}>
+     * @psalm-return array<int, array{0: trait-string, 1: string, 2: string, 3: StringableArrayObject}>
+     * @phpstan-return array<int, array{0: trait-string, 1: string, 2: string, 3: StringableArrayObject<mixed>}|mixed>
      */
     public function dataProviderTestThatTraitCallsExpectedMethod(): array
     {

@@ -168,8 +168,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array> $expectedArguments
-     * @phpstan-param StringableArrayObject<array> $arguments
+     * @phpstan-param StringableArrayObject<mixed> $expectedArguments
+     * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -252,8 +252,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array> $expectedArguments
-     * @phpstan-param StringableArrayObject<array> $arguments
+     * @phpstan-param StringableArrayObject<mixed> $expectedArguments
+     * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -332,8 +332,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array> $expectedArguments
-     * @phpstan-param StringableArrayObject<array> $arguments
+     * @phpstan-param StringableArrayObject<mixed> $expectedArguments
+     * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -557,8 +557,8 @@ class GenericResourceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters
      *
-     * @phpstan-param StringableArrayObject<array> $expectedArguments
-     * @phpstan-param StringableArrayObject<array> $arguments
+     * @phpstan-param StringableArrayObject<mixed> $expectedArguments
+     * @phpstan-param StringableArrayObject<mixed> $arguments
      * @psalm-param StringableArrayObject $expectedArguments
      * @psalm-param StringableArrayObject $arguments
      *
@@ -579,7 +579,8 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatCountCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
@@ -600,7 +601,8 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatFindCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
@@ -636,7 +638,8 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatFindOneByCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {
@@ -657,7 +660,8 @@ class GenericResourceTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatGetIdsCallsExpectedRepositoryMethodWithCorrectParameters(): Generator
     {

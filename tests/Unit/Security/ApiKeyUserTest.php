@@ -13,6 +13,7 @@ use App\Resource\UserGroupResource;
 use App\Security\ApiKeyUser;
 use App\Security\RolesService;
 use App\Utils\Tests\StringableArrayObject;
+use Exception;
 use Generator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -43,7 +44,8 @@ class ApiKeyUserTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: ApiKey, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: ApiKey, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: ApiKey, 1: StringableArrayObject<mixed>}>
      *
      * @throws Throwable
      */
@@ -53,7 +55,7 @@ class ApiKeyUserTest extends KernelTestCase
 
         yield [new ApiKey(), new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];
 
-        $exception = new \Exception('Cannot find user group');
+        $exception = new Exception('Cannot find user group');
 
         yield [
             (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Normal users']) ?? throw $exception),
