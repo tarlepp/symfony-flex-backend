@@ -88,7 +88,7 @@ class CheckDependencies extends Command
             array_map(
                 static fn (array $row): int => isset($row[1]) ? strlen($row[1]) : 0,
                 array_filter($rows, static fn (mixed $row): bool => !$row instanceof TableSeparator)
-            )
+            ) + [0]
         );
 
         $style = clone Table::getStyleDefinition('box');
