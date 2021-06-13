@@ -26,7 +26,7 @@ class IsUserHimselfVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function supports(string $attribute, $subject): bool
+    protected function supports(string $attribute, mixed $subject): bool
     {
         return $attribute === self::ATTRIBUTE && $subject instanceof User;
     }
@@ -34,7 +34,7 @@ class IsUserHimselfVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
