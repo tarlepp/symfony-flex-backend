@@ -51,19 +51,12 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->getUserIdentifier();
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return array<int, string> The user roles
-     */
     public function getRoles(): array
     {
         return $this->roles;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @codeCoverageIgnore
      */
     public function getPassword(): ?string
@@ -72,13 +65,18 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @codeCoverageIgnore
      */
     public function getSalt(): ?string
     {
         return null;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
+    public function eraseCredentials(): void
+    {
     }
 
     public function getUserIdentifier(): string
@@ -102,18 +100,7 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function eraseCredentials(): void
-    {
-    }
-
-    /**
      * @todo Remove this method when Symfony 6.0.0 is released
-     *
-     * {@inheritdoc}
      *
      * @codeCoverageIgnore
      */
