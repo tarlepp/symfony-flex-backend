@@ -98,11 +98,19 @@ class CheckDependencies extends Command
         $table->setHeaders($headers);
         $table->setRows($rows);
         $table->setStyle($style);
-        $table->setColumnWidth(0, 23);
-        $table->setColumnWidth(1, $packageNameLength);
-        $table->setColumnWidth(2, 95 - $packageNameLength);
-        $table->setColumnWidth(3, 10);
-        $table->setColumnWidth(4, 11);
+
+        $widths = [
+            23,
+            $packageNameLength,
+            95 - $packageNameLength,
+            10,
+            11,
+        ];
+
+        foreach ($widths as $columnIndex => $width) {
+            $table->setColumnWidth($columnIndex, $width);
+            $table->setColumnMaxWidth($columnIndex, $width);
+        }
 
         count($rows)
             ? $table->render()
