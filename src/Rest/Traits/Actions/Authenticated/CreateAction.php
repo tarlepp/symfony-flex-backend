@@ -10,10 +10,11 @@ namespace App\Rest\Traits\Actions\Authenticated;
 
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\CreateMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Throwable;
 
 /**
@@ -37,7 +38,7 @@ trait CreateAction
         path: '',
         methods: [Request::METHOD_POST],
     )]
-    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
+    #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
     public function createAction(Request $request, RestDtoInterface $restDto): Response
     {
         return $this->createMethod($request, $restDto);

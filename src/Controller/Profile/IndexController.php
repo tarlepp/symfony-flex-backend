@@ -14,10 +14,11 @@ use App\Utils\JSON;
 use JsonException;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**
@@ -78,7 +79,7 @@ class IndexController
         path: '/profile',
         methods: [Request::METHOD_GET],
     )]
-    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
+    #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
     public function __invoke(User $loggedInUser): JsonResponse
     {
         /** @var array<string, string|array<string, string>> $output */

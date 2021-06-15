@@ -12,8 +12,9 @@ use App\Resource\RoleResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 /**
  * Class RoleController
@@ -28,7 +29,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(
     path: '/role',
 )]
-#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
+#[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class RoleController extends Controller
 {
     use Actions\Admin\CountAction;
