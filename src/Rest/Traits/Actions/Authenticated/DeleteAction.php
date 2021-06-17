@@ -9,10 +9,11 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Actions\Authenticated;
 
 use App\Rest\Traits\Methods\DeleteMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Throwable;
 
 /**
@@ -39,7 +40,7 @@ trait DeleteAction
         ],
         methods: [Request::METHOD_DELETE],
     )]
-    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
+    #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
     public function deleteAction(Request $request, string $id): Response
     {
         return $this->deleteMethod($request, $id);

@@ -10,7 +10,8 @@ namespace App\Rest\Traits\Actions\Root;
 
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\PatchMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Security\RolesService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +41,7 @@ trait PatchAction
         ],
         methods: [Request::METHOD_PATCH],
     )]
-    #[Security('is_granted("ROLE_ROOT")')]
+    #[IsGranted(RolesService::ROLE_ROOT)]
     public function patchAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
         return $this->patchMethod($request, $restDto, $id);

@@ -10,7 +10,8 @@ namespace App\Rest\Traits\Actions\Logged;
 
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Security\RolesService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,7 +41,7 @@ trait UpdateAction
         ],
         methods: [Request::METHOD_PUT],
     )]
-    #[Security('is_granted("ROLE_LOGGED")')]
+    #[IsGranted(RolesService::ROLE_LOGGED)]
     public function updateAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
         return $this->updateMethod($request, $restDto, $id);

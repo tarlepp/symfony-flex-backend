@@ -23,7 +23,7 @@ use Throwable;
  * Example how to use this within your controller;
  *
  *  #[Route(path: 'some-path')]
- *  #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
+ *  #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
  *  public function someMethod(\App\Entity\User $loggedInUser): Response
  *  {
  *      ...

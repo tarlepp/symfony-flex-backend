@@ -10,10 +10,11 @@ namespace App\Rest\Traits\Actions\Authenticated;
 
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\PatchMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Throwable;
 
 /**
@@ -40,7 +41,7 @@ trait PatchAction
         ],
         methods: [Request::METHOD_PATCH],
     )]
-    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
+    #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
     public function patchAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
         return $this->patchMethod($request, $restDto, $id);
