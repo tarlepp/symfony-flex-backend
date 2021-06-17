@@ -2,41 +2,14 @@
 declare(strict_types = 1);
 
 use App\Kernel;
-use Symfony\Component\ErrorHandler\Debug;
-use Symfony\Component\HttpFoundation\Request;
+use Liuggio\Fastest\Environment\FastestEnvironment;
 
-require dirname(__DIR__) . '/config/bootstrap.php';
+require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';
 
-if ($_SERVER['APP_DEBUG']) {
-    umask(0000);
+return static function (array $context): Kernel {
+    if (class_exists(FastestEnvironment::class)) {
+        FastestEnvironment::setFromRequest();
+    }
 
-    Debug::enable();
-}
-
-$trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? false;
-$trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? false;
-
-if ($trustedProxies !== false) {
-    Request::setTrustedProxies(
-        explode(',', $trustedProxies),
-        Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST
-    );
-}
-
-if ($trustedHosts !== false) {
-    Request::setTrustedHosts([$trustedHosts]);
-}
-
-// Create new application kernel
-$kernel = new Kernel($_SERVER['APP_ENV'], (bool)$_SERVER['APP_DEBUG']);
-
-// Create request
-$request = Request::createFromGlobals();
-
-// Handle request and send response to client
-/** @noinspection PhpUnhandledExceptionInspection */
-$response = $kernel->handle($request);
-$response->send();
-
-// Terminate application
-$kernel->terminate($request, $response);
+    return new Kernel($context['APP_ENV'], (bool)$context['APP_DEBUG']);
+};
