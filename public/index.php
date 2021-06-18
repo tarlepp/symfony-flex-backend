@@ -7,6 +7,8 @@ use Liuggio\Fastest\Environment\FastestEnvironment;
 require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';
 
 return static function (array $context): Kernel {
+    chdir(dirname(__DIR__));
+
     if (class_exists(FastestEnvironment::class)) {
         FastestEnvironment::setFromRequest();
     }

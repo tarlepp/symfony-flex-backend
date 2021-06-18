@@ -93,6 +93,8 @@ function InitializeEnvironment(): void
     $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = $debug;
 }
 
+chdir(dirname(__DIR__));
+
 $readableChannel = (string)getenv('ENV_TEST_CHANNEL_READABLE');
 
 // Application is started against 'fastest' library, so we need to override database name manually
