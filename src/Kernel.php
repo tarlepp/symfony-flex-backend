@@ -30,9 +30,11 @@ class Kernel extends BaseKernel
         if (is_file(dirname(__DIR__) . '/config/services.yaml')) {
             $container->import('../config/services.yaml');
             $container->import('../config/{services}_' . $this->environment . '.yaml');
-        } else {
-            $container->import('../config/{services}.php');
+
+            return;
         }
+
+        $container->import('../config/{services}.php');
     }
 
     protected function configureRoutes(RoutingConfigurator $routes): void
@@ -40,10 +42,8 @@ class Kernel extends BaseKernel
         $routes->import('../config/{routes}/' . $this->environment . '/*.yaml');
         $routes->import('../config/{routes}/*.yaml');
 
-        if (is_file(dirname(__DIR__) . '/config/routes.yaml')) {
-            $routes->import('../config/routes.yaml');
-        } else {
-            $routes->import('../config/{routes}.php');
-        }
+        is_file(dirname(__DIR__) . '/config/routes.yaml')
+            ? $routes->import('../config/routes.yaml')
+            : $routes->import('../config/{routes}.php');
     }
 }
