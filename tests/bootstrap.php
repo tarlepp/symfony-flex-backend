@@ -33,8 +33,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
  *
  * @throws Throwable
  */
-function InitializeFastestEnvironmentVariables(string $readableChannel): void
-{
+$InitializeFastestEnvironmentVariables = static function (string $readableChannel): void {
     static $cache = [];
 
     if (!array_key_exists($readableChannel, $cache)) {
@@ -60,13 +59,12 @@ function InitializeFastestEnvironmentVariables(string $readableChannel): void
 
     // And finally populate new variables to current environment
     putenv('DATABASE_URL=' . $cache[$readableChannel]);
-}
+};
 
 /**
  * Function to initialize test environment for use
  */
-function InitializeEnvironment(): void
-{
+$InitializeEnvironment = static function (): void {
     $localPhpEnvFile = dirname(__DIR__) . '/.env.local.php';
 
     // Load cached env vars if the .env.local.php file exists
@@ -91,7 +89,7 @@ function InitializeEnvironment(): void
     $debug = (int)$_SERVER['APP_DEBUG'] || filter_var($_SERVER['APP_DEBUG'], FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
 
     $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = $debug;
-}
+};
 
 chdir(dirname(__DIR__));
 
@@ -99,10 +97,10 @@ $readableChannel = (string)getenv('ENV_TEST_CHANNEL_READABLE');
 
 // Application is started against 'fastest' library, so we need to override database name manually
 if (strlen($readableChannel) > 0) {
-    InitializeFastestEnvironmentVariables($readableChannel);
+    $InitializeFastestEnvironmentVariables($readableChannel);
 }
 
-InitializeEnvironment();
+$InitializeEnvironment();
 
 $databaseCacheFile = sprintf(
     '%s%stest_database_cache%s.json',
