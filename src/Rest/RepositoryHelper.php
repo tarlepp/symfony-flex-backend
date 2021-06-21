@@ -83,7 +83,7 @@ class RepositoryHelper
      *
      * @see \App\Repository\Traits\RepositoryMethodsTrait::getQueryBuilder()
      *
-     * @param array<int|string, string|array<mixed>>|null $criteria
+     * @param array<int|string, mixed>|null $criteria
      *
      * @throws InvalidArgumentException
      */
@@ -227,7 +227,7 @@ class RepositoryHelper
      *
      * @see https://gist.github.com/jgornick/8671644
      *
-     * @param array<int|string, string|array<mixed>> $criteria
+     * @param array<int|string, mixed> $criteria
      *
      * @throws InvalidArgumentException
      */
@@ -242,13 +242,13 @@ class RepositoryHelper
     }
 
     /**
-     * @param array<int|string, string|array<int|string, string>> $criteria
+     * @param array<int|string, mixed> $criteria
      *
      * @throws InvalidArgumentException
      */
     private static function processExpression(QueryBuilder $queryBuilder, Composite $expression, array $criteria): void
     {
-        $iterator = static function (array $comparison, string $key) use ($queryBuilder, $expression): void {
+        $iterator = static function (array $comparison, string|int $key) use ($queryBuilder, $expression): void {
             $expressionAnd = ($key === 'and' || array_key_exists('and', $comparison));
             $expressionOr = ($key === 'or' || array_key_exists('or', $comparison));
 
@@ -259,7 +259,7 @@ class RepositoryHelper
     }
 
     /**
-     * @param array<int|string, string|array<int|string, string>> $comparison
+     * @param array<int|string, mixed> $comparison
      *
      * @throws InvalidArgumentException
      */
