@@ -248,7 +248,7 @@ class RepositoryHelper
      */
     private static function processExpression(QueryBuilder $queryBuilder, Composite $expression, array $criteria): void
     {
-        $iterator = static function (array $comparison, string|int $key) use ($queryBuilder, $expression): void {
+        $iterator = static function (array $comparison, string | int $key) use ($queryBuilder, $expression): void {
             $expressionAnd = ($key === 'and' || array_key_exists('and', $comparison));
             $expressionOr = ($key === 'or' || array_key_exists('or', $comparison));
 
