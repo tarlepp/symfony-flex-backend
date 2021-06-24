@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 
 // phpcs:ignoreFile
-
 namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Exception;
@@ -20,14 +19,6 @@ final class Version20200229154730 extends AbstractMigration
     public function getDescription(): string
     {
         return 'User localization support.';
-    }
-
-    /**
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    public function isTransactional(): bool
-    {
-        return false;
     }
 
     /**
