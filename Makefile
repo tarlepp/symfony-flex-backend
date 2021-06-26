@@ -28,6 +28,7 @@ OPENSSL_BIN := $(shell which openssl)
 PHPDBG := $(shell which phpdbg)
 COMPOSER_BIN := $(shell which composer)
 DOCKER := $(shell which docker)
+DOCKER_COMPOSE := $(shell which docker-compose)
 
 ifdef DOCKER
 	IS_RUNNING := $(shell docker ps -f name=php | grep php)
@@ -367,7 +368,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader
 else ifeq ($(strip $(IS_RUNNING)),)
 	$(WARNING_DOCKER)
-else
+else ifdef DOCKER_COMPOSE
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make update-bin
 endif
@@ -377,7 +378,7 @@ ifeq ($(INSIDE_DOCKER), 1)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader
 else ifeq ($(strip $(IS_RUNNING)),)
 	$(WARNING_DOCKER)
-else
+else ifdef DOCKER_COMPOSE
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make install-bin
 endif

@@ -2,4 +2,4 @@ php_version: '8.0'
 
 pre_composer_script: |
     #!/bin/bash
-    sed -i -e 's/\/app\/secrets\/application.json/.\/secrets\/application.json/g' .env
+    sed -i -e 's/\APP_ENV=dev/.\APP_ENV=prod/g' .env
