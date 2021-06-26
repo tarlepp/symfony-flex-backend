@@ -26,6 +26,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 use Throwable;
 use Traversable;
+use function array_filter;
 use function array_map;
 use function array_unshift;
 use function count;
@@ -36,6 +37,7 @@ use function iterator_to_array;
 use function sort;
 use function sprintf;
 use function str_replace;
+use function strlen;
 
 /**
  * Class CheckDependencies
@@ -78,6 +80,17 @@ class CheckDependencies extends Command
             'New version',
         ];
 
+        /**
+         * @psalm-suppress RedundantCastGivenDocblockType
+         * @psalm-suppress ArgumentTypeCoercion
+         */
+        $packageNameLength = (int)max(
+            array_map(
+                static fn (array $row): int => isset($row[1]) ? strlen($row[1]) : 0,
+                array_filter($rows, static fn (mixed $row): bool => !$row instanceof TableSeparator)
+            ) + [0]
+        );
+
         $style = clone Table::getStyleDefinition('box');
         $style->setCellHeaderFormat('<info>%s</info>');
 
@@ -85,11 +98,19 @@ class CheckDependencies extends Command
         $table->setHeaders($headers);
         $table->setRows($rows);
         $table->setStyle($style);
-        $table->setColumnMaxWidth(0, 23);
-        $table->setColumnMaxWidth(1, 28);
-        $table->setColumnMaxWidth(2, 70);
-        $table->setColumnMaxWidth(3, 10);
-        $table->setColumnMaxWidth(4, 11);
+
+        $widths = [
+            23,
+            $packageNameLength,
+            95 - $packageNameLength,
+            10,
+            11,
+        ];
+
+        foreach ($widths as $columnIndex => $width) {
+            $table->setColumnWidth($columnIndex, $width);
+            $table->setColumnMaxWidth($columnIndex, $width);
+        }
 
         count($rows)
             ? $table->render()

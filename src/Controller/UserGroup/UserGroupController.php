@@ -15,8 +15,9 @@ use App\Resource\UserGroupResource;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 /**
  * Class UserGroupController
@@ -31,7 +32,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(
     path: '/user_group',
 )]
-#[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
+#[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class UserGroupController extends Controller
 {
     use Actions\Admin\CountAction;

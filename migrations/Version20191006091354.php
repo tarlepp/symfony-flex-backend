@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 
 // phpcs:ignoreFile
-
 namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Exception;
@@ -20,14 +19,6 @@ final class Version20191006091354 extends AbstractMigration
     public function getDescription(): string
     {
         return 'Initial database structure';
-    }
-
-    /**
-     * @noinspection PhpMissingParentCallCommonInspection
-     */
-    public function isTransactional(): bool
-    {
-        return false;
     }
 
     /**

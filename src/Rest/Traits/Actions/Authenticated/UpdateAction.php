@@ -10,10 +10,11 @@ namespace App\Rest\Traits\Actions\Authenticated;
 
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\UpdateMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Throwable;
 
 /**
@@ -40,7 +41,7 @@ trait UpdateAction
         ],
         methods: [Request::METHOD_PUT],
     )]
-    #[Security('is_granted("IS_AUTHENTICATED_FULLY")')]
+    #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
     public function updateAction(Request $request, RestDtoInterface $restDto, string $id): Response
     {
         return $this->updateMethod($request, $restDto, $id);

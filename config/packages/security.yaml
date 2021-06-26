@@ -9,7 +9,7 @@ security:
 
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        chain_provider:
+        chain_user_provider:
             chain:
                 providers: [security_user_provider, api_key_user_provider]
         security_user_provider:
@@ -38,12 +38,10 @@ security:
             stateless: true
             lazy: true
             entry_point: lexik_jwt_authentication.jwt_token_authenticator
+            provider: chain_user_provider
+            jwt: ~
             custom_authenticators:
                 - App\Security\Authenticator\ApiKeyAuthenticator
-            guard:
-                provider: security_user_provider
-                authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
 
     role_hierarchy:
         ROLE_API: [ROLE_LOGGED]

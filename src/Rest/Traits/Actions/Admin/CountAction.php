@@ -9,7 +9,8 @@ declare(strict_types = 1);
 namespace App\Rest\Traits\Actions\Admin;
 
 use App\Rest\Traits\Methods\CountMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Security\RolesService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,7 +37,7 @@ trait CountAction
         path: '/count',
         methods: [Request::METHOD_GET],
     )]
-    #[Security('is_granted("ROLE_ADMIN")')]
+    #[IsGranted(RolesService::ROLE_ADMIN)]
     public function countAction(Request $request): Response
     {
         return $this->countMethod($request);

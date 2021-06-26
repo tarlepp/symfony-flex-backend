@@ -11,7 +11,6 @@ namespace App\Security;
 use App\Entity\ApiKey;
 use App\Security\Interfaces\ApiKeyUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use function array_merge;
 use function array_unique;
 
@@ -23,28 +22,11 @@ use function array_unique;
  */
 class ApiKeyUser implements ApiKeyUserInterface, UserInterface
 {
-    /**
-     * @Groups({
-     *      "ApiKeyUser",
-     *      "ApiKeyUser.identifier",
-     *  })
-     */
     private string $identifier;
-
-    /**
-     * @Groups({
-     *      "ApiKeyUser.apiKey",
-     *  })
-     */
     private ApiKey $apiKey;
 
     /**
      * @var array<int, string>
-     *
-     * @Groups({
-     *      "ApiKeyUser",
-     *      "ApiKeyUser.roles",
-     *  })
      */
     private array $roles;
 
@@ -63,29 +45,20 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
         return $this->apiKey;
     }
 
-    /**
-     * {@inheritdoc}
-     *
-     * @return array<int, string> The user roles
-     */
     public function getRoles(): array
     {
         return $this->roles;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @codeCoverageIgnore
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
-        return '';
+        return null;
     }
 
     /**
-     * {@inheritdoc}
-     *
      * @codeCoverageIgnore
      */
     public function getSalt(): ?string
@@ -94,28 +67,19 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @codeCoverageIgnore
-     */
-    public function getUserIdentifier(): string
-    {
-        return $this->identifier;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
      * @codeCoverageIgnore
      */
     public function eraseCredentials(): void
     {
     }
 
+    public function getUserIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
     /**
      * @todo Remove this method when Symfony 6.0.0 is released
-     *
-     * {@inheritdoc}
      *
      * @codeCoverageIgnore
      */

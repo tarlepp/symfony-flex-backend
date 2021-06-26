@@ -115,7 +115,8 @@ class SecurityUserFactoryTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: string, 1: StringableArrayObject}>
+     * @psalm-return Generator<array{0: string, 1: StringableArrayObject}>
+     * @phpstan-return Generator<array{0: string, 1: StringableArrayObject<array<int, string>>}>
      */
     public function dataProviderTestThatLoadUserByIdentifierReturnsExpectedUserInstance(): Generator
     {

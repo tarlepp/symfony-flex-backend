@@ -45,8 +45,8 @@ class UserGroupTransformerTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatTransformReturnsExpected
      *
-     * @phpstan-param StringableArrayObject<array<mixed>> $expected
-     * @phpstan-param StringableArrayObject<array<mixed>>|null $input
+     * @phpstan-param StringableArrayObject<mixed> $expected
+     * @phpstan-param StringableArrayObject<mixed>|null $input
      * @psalm-param StringableArrayObject $expected
      * @psalm-param StringableArrayObject|null $input
      *
@@ -122,7 +122,8 @@ class UserGroupTransformerTest extends KernelTestCase
     }
 
     /**
-     * @return Generator<array{0: StringableArrayObject, 1: ?StringableArrayObject}>
+     * @psalm-return Generator<array{0: StringableArrayObject, 1: ?StringableArrayObject}>
+     * @phpstan-return Generator<array{0: StringableArrayObject<mixed>, 1: ?StringableArrayObject<mixed>}>
      */
     public function dataProviderTestThatTransformReturnsExpected(): Generator
     {

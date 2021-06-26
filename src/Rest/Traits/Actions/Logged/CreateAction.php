@@ -10,7 +10,8 @@ namespace App\Rest\Traits\Actions\Logged;
 
 use App\DTO\RestDtoInterface;
 use App\Rest\Traits\Methods\CreateMethod;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use App\Security\RolesService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -37,7 +38,7 @@ trait CreateAction
         path: '',
         methods: [Request::METHOD_POST],
     )]
-    #[Security('is_granted("ROLE_LOGGED")')]
+    #[IsGranted(RolesService::ROLE_LOGGED)]
     public function createAction(Request $request, RestDtoInterface $restDto): Response
     {
         return $this->createMethod($request, $restDto);

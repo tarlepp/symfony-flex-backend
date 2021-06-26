@@ -58,7 +58,7 @@ final class SearchTerm implements SearchTermInterface
      * @param array<int, string> $columns
      * @param array<int, string> $searchTerms
      *
-     * @return array<string, array<string, array>>|null
+     * @return array<string, array<string, array<string, mixed>>>|null
      */
     private static function createCriteria(array $columns, array $searchTerms, string $operand, int $mode): ?array
     {
@@ -67,7 +67,7 @@ final class SearchTerm implements SearchTermInterface
         /**
          * Get criteria
          *
-         * @var array<string, array<string, array>>
+         * @var array<string, array<string, array<int, string>>>
          */
         $criteria = array_filter(array_map($iteratorTerm, $searchTerms));
 

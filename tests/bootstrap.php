@@ -17,16 +17,90 @@ declare(strict_types = 1);
  */
 
 use App\Kernel;
+use App\Utils\JSON;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Filesystem\Filesystem;
 
-// Specify used environment file
-putenv('ENVIRONMENT_FILE=.env.test');
+require dirname(__DIR__) . '/vendor/autoload.php';
 
-require __DIR__ . '/../vendor/autoload.php';
-require __DIR__ . '/../bootstrap.php';
+/**
+ * Function to make necessary initialization for `fastest` - This means that we
+ * need to set `DATABASE_URL` environment variable, before we initialize `DotEnv`
+ * component for testing environment.
+ *
+ * @throws Throwable
+ */
+$InitializeFastestEnvironmentVariables = static function (string $readableChannel): void {
+    static $cache = [];
+
+    if (!array_key_exists($readableChannel, $cache)) {
+        // Parse current environment file
+        $variables = (new Dotenv())->parse((string)file_get_contents(dirname(__DIR__) . '/.env.test'));
+
+        $originalDatabaseUrl = JSON::decode(
+            (string)file_get_contents($variables['APPLICATION_CONFIG']),
+            true
+        )['DATABASE_URL'] ?? throw new RuntimeException('Cannot get `DATABASE_URL from specified env file.');
+
+        $databaseName = trim(((array)parse_url($originalDatabaseUrl))['path'] ?? '', '/');
+
+        // Replace DATABASE_URL variable with proper database name
+        $databaseUrl = str_replace(
+            '/' . $databaseName . '?',
+            '/' . $databaseName . '_' . $readableChannel . '?',
+            $originalDatabaseUrl
+        );
+
+        $cache[$readableChannel] = $databaseUrl;
+    }
+
+    // And finally populate new variables to current environment
+    putenv('DATABASE_URL=' . $cache[$readableChannel]);
+};
+
+/**
+ * Function to initialize test environment for use
+ */
+$InitializeEnvironment = static function (): void {
+    $localPhpEnvFile = dirname(__DIR__) . '/.env.local.php';
+
+    // Load cached env vars if the .env.local.php file exists
+    // Run "composer dump-env prod" to create it (requires symfony/flex >=1.2)
+    /** @psalm-suppress UnresolvableInclude */
+    if (is_readable($localPhpEnvFile) && is_array($env = include $localPhpEnvFile)
+        && ($_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? $env['APP_ENV'] ?? null) === ($env['APP_ENV'] ?? null)
+    ) {
+        foreach ($env as $k => $v) {
+            $_ENV[$k] ??= (isset($_SERVER[$k]) && strncmp($k, 'HTTP_', 5) !== 0 ? $_SERVER[$k] : $v);
+        }
+    }
+
+    // load all the .env files
+    (new Dotenv())->loadEnv(dirname(__DIR__) . '/.env');
+
+    /** @noinspection AdditionOperationOnArraysInspection */
+    $_SERVER += $_ENV;
+    $_SERVER['APP_ENV'] = $_ENV['APP_ENV'] = ($_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? null) ?: 'dev';
+    $_SERVER['APP_DEBUG'] ??= $_ENV['APP_DEBUG'] ?? $_SERVER['APP_ENV'] !== 'prod';
+
+    $debug = (int)$_SERVER['APP_DEBUG'] || filter_var($_SERVER['APP_DEBUG'], FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
+
+    $_SERVER['APP_DEBUG'] = $_ENV['APP_DEBUG'] = $debug;
+};
+
+chdir(dirname(__DIR__));
+
+$readableChannel = (string)getenv('ENV_TEST_CHANNEL_READABLE');
+
+// Application is started against 'fastest' library, so we need to override database name manually
+if (strlen($readableChannel) > 0) {
+    $InitializeFastestEnvironmentVariables($readableChannel);
+}
+
+$InitializeEnvironment();
 
 $databaseCacheFile = sprintf(
     '%s%stest_database_cache%s.json',
