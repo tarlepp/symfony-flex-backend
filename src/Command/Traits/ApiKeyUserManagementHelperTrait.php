@@ -21,7 +21,7 @@ use Throwable;
  */
 trait ApiKeyUserManagementHelperTrait
 {
-    use \App\Command\Traits\GetApplicationTrait;
+    use GetApplicationTrait;
 
     abstract public function getRolesService(): RolesService;
 
