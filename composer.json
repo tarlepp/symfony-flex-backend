@@ -52,7 +52,7 @@
 		"symfony/property-info": "5.3.1",
 		"symfony/routing": "5.3.0",
 		"symfony/runtime": "5.3.2",
-		"symfony/security-bundle": "5.3.2",
+		"symfony/security-bundle": "5.3.3",
 		"symfony/serializer": "5.3.2",
 		"symfony/translation": "5.3.2",
 		"symfony/twig-bundle": "5.3.0",
