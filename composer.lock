@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1348564b5c3f406bbbdd20a275158fe9",
+    "content-hash": "80af553ac4c46fef176b4c8a0a5c1902",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -6461,16 +6461,16 @@
         },
         {
             "name": "symfony/runtime",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/runtime.git",
-                "reference": "876ad7ce168c893550d20a1da58f52d3ec4eb574"
+                "reference": "4ee1e32575a6b8fc45441fa83bce4817509dc866"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/runtime/zipball/876ad7ce168c893550d20a1da58f52d3ec4eb574",
-                "reference": "876ad7ce168c893550d20a1da58f52d3ec4eb574",
+                "url": "https://api.github.com/repos/symfony/runtime/zipball/4ee1e32575a6b8fc45441fa83bce4817509dc866",
+                "reference": "4ee1e32575a6b8fc45441fa83bce4817509dc866",
                 "shasum": ""
             },
             "require": {
@@ -6518,7 +6518,7 @@
             "description": "Enables decoupling PHP applications from global state",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/runtime/tree/v5.3.2"
+                "source": "https://github.com/symfony/runtime/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -6534,7 +6534,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-11T12:51:21+00:00"
+            "time": "2021-06-17T20:24:56+00:00"
         },
         {
             "name": "symfony/security-bundle",
