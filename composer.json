@@ -39,7 +39,7 @@
 		"ramsey/uuid-doctrine": "1.6.0",
 		"sensio/framework-extra-bundle": "6.1.5",
 		"symfony/asset": "5.3.2",
-		"symfony/config": "5.3.2",
+		"symfony/config": "5.3.3",
 		"symfony/console": "5.3.2",
 		"symfony/dotenv": "5.3.0",
 		"symfony/expression-language": "5.3.0",
