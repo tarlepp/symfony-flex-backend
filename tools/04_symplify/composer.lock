@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3735134d151d3a76becc193b7a90e430",
+    "content-hash": "4b1c22a2dee5ffdde6bfee8ad3a766d2",
     "packages": [],
     "packages-dev": [
         {
@@ -416,12 +416,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ac0d045cdd1a9f1c87a0225a1dcda2bfb71be924"
+                "reference": "7498cba51fb164f181c497edd1cc3e7837df2943"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ac0d045cdd1a9f1c87a0225a1dcda2bfb71be924",
-                "reference": "ac0d045cdd1a9f1c87a0225a1dcda2bfb71be924",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/7498cba51fb164f181c497edd1cc3e7837df2943",
+                "reference": "7498cba51fb164f181c497edd1cc3e7837df2943",
                 "shasum": ""
             },
             "conflict": {
@@ -615,8 +615,8 @@
                 "scheb/two-factor-bundle": ">=0,<3.26|>=4,<4.11",
                 "sensiolabs/connect": "<4.2.3",
                 "serluck/phpwhois": "<=4.2.6",
-                "shopware/core": "<=6.3.5.2",
-                "shopware/platform": "<=6.3.5.2",
+                "shopware/core": "<=6.4.1",
+                "shopware/platform": "<=6.4.1",
                 "shopware/production": "<=6.3.5.2",
                 "shopware/shopware": "<=5.6.9",
                 "silverstripe/admin": ">=1.0.3,<1.0.4|>=1.1,<1.1.1",
@@ -651,7 +651,7 @@
                 "sylius/grid": ">=1,<1.1.19|>=1.2,<1.2.18|>=1.3,<1.3.13|>=1.4,<1.4.5|>=1.5,<1.5.1",
                 "sylius/grid-bundle": ">=1,<1.1.19|>=1.2,<1.2.18|>=1.3,<1.3.13|>=1.4,<1.4.5|>=1.5,<1.5.1",
                 "sylius/resource-bundle": "<1.3.14|>=1.4,<1.4.7|>=1.5,<1.5.2|>=1.6,<1.6.4",
-                "sylius/sylius": "<1.6.9|>=1.7,<1.7.9|>=1.8,<1.8.3",
+                "sylius/sylius": "<1.6.9|>=1.7,<1.7.9|>=1.8,<1.8.3|>=1.9,<1.9.5",
                 "symbiote/silverstripe-multivaluefield": ">=3,<3.0.99",
                 "symbiote/silverstripe-queuedjobs": ">=3,<3.0.2|>=3.1,<3.1.4|>=4,<4.0.7|>=4.1,<4.1.2|>=4.2,<4.2.4|>=4.3,<4.3.3|>=4.4,<4.4.3|>=4.5,<4.5.1|>=4.6,<4.6.4",
                 "symbiote/silverstripe-versionedfiles": "<=2.0.3",
@@ -783,20 +783,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-24T09:02:34+00:00"
+            "time": "2021-06-29T04:03:09+00:00"
         },
         {
             "name": "symfony/cache",
-            "version": "v5.3.0",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/cache.git",
-                "reference": "44fd0f97d1fb198d344f22379dfc56af2221e608"
+                "reference": "82962a497f090e95e3b357c21bf6f54991c9b1a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/cache/zipball/44fd0f97d1fb198d344f22379dfc56af2221e608",
-                "reference": "44fd0f97d1fb198d344f22379dfc56af2221e608",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/82962a497f090e95e3b357c21bf6f54991c9b1a5",
+                "reference": "82962a497f090e95e3b357c21bf6f54991c9b1a5",
                 "shasum": ""
             },
             "require": {
@@ -863,7 +863,7 @@
                 "psr6"
             ],
             "support": {
-                "source": "https://github.com/symfony/cache/tree/v5.3.0"
+                "source": "https://github.com/symfony/cache/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -879,7 +879,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-26T17:43:10+00:00"
+            "time": "2021-06-24T08:13:00+00:00"
         },
         {
             "name": "symfony/cache-contracts",
@@ -962,16 +962,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "9c307728cfacbd50914f0db28aee1e0ecd82b99f"
+                "reference": "a69e0c55528b47df88d3c4067ddedf32d485d662"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/9c307728cfacbd50914f0db28aee1e0ecd82b99f",
-                "reference": "9c307728cfacbd50914f0db28aee1e0ecd82b99f",
+                "url": "https://api.github.com/repos/symfony/config/zipball/a69e0c55528b47df88d3c4067ddedf32d485d662",
+                "reference": "a69e0c55528b47df88d3c4067ddedf32d485d662",
                 "shasum": ""
             },
             "require": {
@@ -1021,7 +1021,7 @@
             "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/config/tree/v5.3.2"
+                "source": "https://github.com/symfony/config/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -1037,7 +1037,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-12T10:15:17+00:00"
+            "time": "2021-06-24T08:13:00+00:00"
         },
         {
             "name": "symfony/console",
@@ -1139,16 +1139,16 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "ddbff73bc4fa3d5b415431d486770ab0e72f6516"
+                "reference": "e421c4f161848740ad1fcf09b12391ddca168d95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/ddbff73bc4fa3d5b415431d486770ab0e72f6516",
-                "reference": "ddbff73bc4fa3d5b415431d486770ab0e72f6516",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/e421c4f161848740ad1fcf09b12391ddca168d95",
+                "reference": "e421c4f161848740ad1fcf09b12391ddca168d95",
                 "shasum": ""
             },
             "require": {
@@ -1207,7 +1207,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dependency-injection/tree/v5.3.2"
+                "source": "https://github.com/symfony/dependency-injection/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -1223,7 +1223,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-12T09:17:04+00:00"
+            "time": "2021-06-24T08:13:00+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -1294,16 +1294,16 @@
         },
         {
             "name": "symfony/error-handler",
-            "version": "v5.3.0",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "0e6768b8c0dcef26df087df2bbbaa143867a59b2"
+                "reference": "43323e79c80719e8a4674e33484bca98270d223f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/0e6768b8c0dcef26df087df2bbbaa143867a59b2",
-                "reference": "0e6768b8c0dcef26df087df2bbbaa143867a59b2",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/43323e79c80719e8a4674e33484bca98270d223f",
+                "reference": "43323e79c80719e8a4674e33484bca98270d223f",
                 "shasum": ""
             },
             "require": {
@@ -1343,7 +1343,7 @@
             "description": "Provides tools to manage errors and ease debugging PHP code",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/error-handler/tree/v5.3.0"
+                "source": "https://github.com/symfony/error-handler/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -1359,7 +1359,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-26T17:43:10+00:00"
+            "time": "2021-06-24T08:13:00+00:00"
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1591,16 +1591,16 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.3.0",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "348116319d7fb7d1faa781d26a48922428013eb2"
+                "reference": "19b71c8f313b411172dd5f470fd61f24466d79a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/348116319d7fb7d1faa781d26a48922428013eb2",
-                "reference": "348116319d7fb7d1faa781d26a48922428013eb2",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/19b71c8f313b411172dd5f470fd61f24466d79a9",
+                "reference": "19b71c8f313b411172dd5f470fd61f24466d79a9",
                 "shasum": ""
             },
             "require": {
@@ -1633,7 +1633,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/filesystem/tree/v5.3.0"
+                "source": "https://github.com/symfony/filesystem/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -1649,7 +1649,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-26T17:43:10+00:00"
+            "time": "2021-06-30T07:27:52+00:00"
         },
         {
             "name": "symfony/finder",
@@ -1792,16 +1792,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "7b6dd714d95106b831aaa7f3c9c612ab886516bd"
+                "reference": "0e45ab1574caa0460d9190871a8ce47539e40ccf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/7b6dd714d95106b831aaa7f3c9c612ab886516bd",
-                "reference": "7b6dd714d95106b831aaa7f3c9c612ab886516bd",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/0e45ab1574caa0460d9190871a8ce47539e40ccf",
+                "reference": "0e45ab1574caa0460d9190871a8ce47539e40ccf",
                 "shasum": ""
             },
             "require": {
@@ -1845,7 +1845,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v5.3.2"
+                "source": "https://github.com/symfony/http-foundation/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -1861,20 +1861,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-12T10:15:17+00:00"
+            "time": "2021-06-27T09:19:40+00:00"
         },
         {
             "name": "symfony/http-kernel",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "e7021165d9dbfb4051296b8de827e92c8a7b5c87"
+                "reference": "90ad9f4b21ddcb8ebe9faadfcca54929ad23f9f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/e7021165d9dbfb4051296b8de827e92c8a7b5c87",
-                "reference": "e7021165d9dbfb4051296b8de827e92c8a7b5c87",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/90ad9f4b21ddcb8ebe9faadfcca54929ad23f9f8",
+                "reference": "90ad9f4b21ddcb8ebe9faadfcca54929ad23f9f8",
                 "shasum": ""
             },
             "require": {
@@ -1957,7 +1957,7 @@
             "description": "Provides a structured process for converting a Request into a Response",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-kernel/tree/v5.3.2"
+                "source": "https://github.com/symfony/http-kernel/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -1973,7 +1973,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-17T14:18:27+00:00"
+            "time": "2021-06-30T08:27:49+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -2621,16 +2621,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "0732e97e41c0a590f77e231afc16a327375d50b0"
+                "reference": "bd53358e3eccec6a670b5f33ab680d8dbe1d4ae1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/0732e97e41c0a590f77e231afc16a327375d50b0",
-                "reference": "0732e97e41c0a590f77e231afc16a327375d50b0",
+                "url": "https://api.github.com/repos/symfony/string/zipball/bd53358e3eccec6a670b5f33ab680d8dbe1d4ae1",
+                "reference": "bd53358e3eccec6a670b5f33ab680d8dbe1d4ae1",
                 "shasum": ""
             },
             "require": {
@@ -2684,7 +2684,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v5.3.2"
+                "source": "https://github.com/symfony/string/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -2700,20 +2700,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-06T09:51:56+00:00"
+            "time": "2021-06-27T11:44:38+00:00"
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "905a22c68b292ffb6f20d7636c36b220d1fba5ae"
+                "reference": "46aa709affb9ad3355bd7a810f9662d71025c384"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/905a22c68b292ffb6f20d7636c36b220d1fba5ae",
-                "reference": "905a22c68b292ffb6f20d7636c36b220d1fba5ae",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/46aa709affb9ad3355bd7a810f9662d71025c384",
+                "reference": "46aa709affb9ad3355bd7a810f9662d71025c384",
                 "shasum": ""
             },
             "require": {
@@ -2772,7 +2772,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v5.3.2"
+                "source": "https://github.com/symfony/var-dumper/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -2788,20 +2788,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-06T09:51:56+00:00"
+            "time": "2021-06-24T08:13:00+00:00"
         },
         {
             "name": "symfony/var-exporter",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "df663fb63bdcd7298373cbd431165ab031706cb2"
+                "reference": "903c2c0babd6267de5bcb2995e8fc1efb5f01f1f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/df663fb63bdcd7298373cbd431165ab031706cb2",
-                "reference": "df663fb63bdcd7298373cbd431165ab031706cb2",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/903c2c0babd6267de5bcb2995e8fc1efb5f01f1f",
+                "reference": "903c2c0babd6267de5bcb2995e8fc1efb5f01f1f",
                 "shasum": ""
             },
             "require": {
@@ -2845,7 +2845,7 @@
                 "serialize"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-exporter/tree/v5.3.2"
+                "source": "https://github.com/symfony/var-exporter/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -2861,20 +2861,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-09T10:57:10+00:00"
+            "time": "2021-06-27T09:16:08+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v5.3.2",
+            "version": "v5.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "71719ab2409401711d619765aa255f9d352a59b2"
+                "reference": "485c83a2fb5893e2ff21bf4bfc7fdf48b4967229"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/71719ab2409401711d619765aa255f9d352a59b2",
-                "reference": "71719ab2409401711d619765aa255f9d352a59b2",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/485c83a2fb5893e2ff21bf4bfc7fdf48b4967229",
+                "reference": "485c83a2fb5893e2ff21bf4bfc7fdf48b4967229",
                 "shasum": ""
             },
             "require": {
@@ -2920,7 +2920,7 @@
             "description": "Loads and dumps YAML files",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/yaml/tree/v5.3.2"
+                "source": "https://github.com/symfony/yaml/tree/v5.3.3"
             },
             "funding": [
                 {
@@ -2936,39 +2936,39 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-06T09:51:56+00:00"
+            "time": "2021-06-24T08:13:00+00:00"
         },
         {
             "name": "symplify/astral",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/astral.git",
-                "reference": "c8180f0c72f44ddab654b97732d441ad8fcde255"
+                "reference": "57bcb217e64e7e975bf5c71059cf19880e3fd186"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/astral/zipball/c8180f0c72f44ddab654b97732d441ad8fcde255",
-                "reference": "c8180f0c72f44ddab654b97732d441ad8fcde255",
+                "url": "https://api.github.com/repos/symplify/astral/zipball/57bcb217e64e7e975bf5c71059cf19880e3fd186",
+                "reference": "57bcb217e64e7e975bf5c71059cf19880e3fd186",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.2",
                 "nikic/php-parser": "4.10.5",
-                "php": ">=7.3",
+                "php": ">=8.0",
                 "symfony/dependency-injection": "^5.3",
-                "symfony/http-kernel": "^4.4|^5.3",
-                "symplify/autowire-array-parameter": "^9.3.26",
-                "symplify/package-builder": "^9.3.26"
+                "symfony/http-kernel": "^5.3",
+                "symplify/autowire-array-parameter": "^9.4.3",
+                "symplify/package-builder": "^9.4.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5",
-                "symplify/easy-testing": "^9.3.26"
+                "symplify/easy-testing": "^9.4.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.5-dev"
                 }
             },
             "autoload": {
@@ -2982,7 +2982,7 @@
             ],
             "description": "Toolking for smart daily work with AST",
             "support": {
-                "source": "https://github.com/symplify/astral/tree/v9.3.26"
+                "source": "https://github.com/symplify/astral/tree/9.4.3"
             },
             "funding": [
                 {
@@ -2994,27 +2994,27 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-12T13:23:09+00:00"
+            "time": "2021-07-01T09:31:14+00:00"
         },
         {
             "name": "symplify/autowire-array-parameter",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/autowire-array-parameter.git",
-                "reference": "48f51983e25e1aa853708941e58cf9c7d846d86e"
+                "reference": "c45b63754f1a7d9a788d4fb43ae6b42bfc5ce207"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/48f51983e25e1aa853708941e58cf9c7d846d86e",
-                "reference": "48f51983e25e1aa853708941e58cf9c7d846d86e",
+                "url": "https://api.github.com/repos/symplify/autowire-array-parameter/zipball/c45b63754f1a7d9a788d4fb43ae6b42bfc5ce207",
+                "reference": "c45b63754f1a7d9a788d4fb43ae6b42bfc5ce207",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.2",
-                "php": ">=7.3",
+                "php": ">=8.0",
                 "symfony/dependency-injection": "^5.3",
-                "symplify/package-builder": "^9.3.26"
+                "symplify/package-builder": "^9.4.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -3022,7 +3022,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.5-dev"
                 }
             },
             "autoload": {
@@ -3036,7 +3036,7 @@
             ],
             "description": "Autowire array parameters for your Symfony applications",
             "support": {
-                "source": "https://github.com/symplify/autowire-array-parameter/tree/v9.3.26"
+                "source": "https://github.com/symplify/autowire-array-parameter/tree/9.4.3"
             },
             "funding": [
                 {
@@ -3048,31 +3048,31 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-12T13:23:08+00:00"
+            "time": "2021-07-01T09:31:25+00:00"
         },
         {
             "name": "symplify/composer-json-manipulator",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/composer-json-manipulator.git",
-                "reference": "3a287b31c70e7a31564f9dd39943f97e15404e4b"
+                "reference": "c27820b06314be57b6b3b6a85ce008fd28973e8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/composer-json-manipulator/zipball/3a287b31c70e7a31564f9dd39943f97e15404e4b",
-                "reference": "3a287b31c70e7a31564f9dd39943f97e15404e4b",
+                "url": "https://api.github.com/repos/symplify/composer-json-manipulator/zipball/c27820b06314be57b6b3b6a85ce008fd28973e8f",
+                "reference": "c27820b06314be57b6b3b6a85ce008fd28973e8f",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.2",
-                "php": ">=7.3",
-                "symfony/config": "^4.4|^5.3",
+                "php": ">=8.0",
+                "symfony/config": "^5.3",
                 "symfony/dependency-injection": "^5.3",
-                "symfony/filesystem": "^4.4|^5.3",
-                "symfony/http-kernel": "^4.4|^5.3",
-                "symplify/package-builder": "^9.3.26",
-                "symplify/smart-file-system": "^9.3.26"
+                "symfony/filesystem": "^5.3",
+                "symfony/http-kernel": "^5.3",
+                "symplify/package-builder": "^9.4.3",
+                "symplify/smart-file-system": "^9.4.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -3080,7 +3080,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.5-dev"
                 }
             },
             "autoload": {
@@ -3094,7 +3094,7 @@
             ],
             "description": "Package to load, merge and save composer.json file(s)",
             "support": {
-                "source": "https://github.com/symplify/composer-json-manipulator/tree/v9.3.26"
+                "source": "https://github.com/symplify/composer-json-manipulator/tree/9.4.3"
             },
             "funding": [
                 {
@@ -3106,20 +3106,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-12T13:23:06+00:00"
+            "time": "2021-07-01T09:31:17+00:00"
         },
         {
             "name": "symplify/config-transformer",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/config-transformer.git",
-                "reference": "153277b938c58048b9c9c55d1b1686a8471c96c6"
+                "reference": "cd9b79dbaae308bb2de892bf437bf6bda0b33776"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/153277b938c58048b9c9c55d1b1686a8471c96c6",
-                "reference": "153277b938c58048b9c9c55d1b1686a8471c96c6",
+                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/cd9b79dbaae308bb2de892bf437bf6bda0b33776",
+                "reference": "cd9b79dbaae308bb2de892bf437bf6bda0b33776",
                 "shasum": ""
             },
             "require": {
@@ -3128,17 +3128,17 @@
                 "nette/utils": "^3.2",
                 "nikic/php-parser": "4.10.5",
                 "php": ">=8.0",
-                "symfony/console": "^4.4|^5.3",
+                "symfony/console": "^5.3",
                 "symfony/dependency-injection": "^5.3",
-                "symfony/expression-language": "^4.4|^5.3",
-                "symfony/http-kernel": "^4.4|^5.3",
-                "symfony/yaml": "^4.4|^5.3",
-                "symplify/php-config-printer": "^9.3.26"
+                "symfony/expression-language": "^5.3",
+                "symfony/http-kernel": "^5.3",
+                "symfony/yaml": "^5.3",
+                "symplify/php-config-printer": "^9.4.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5",
-                "symfony/framework-bundle": "^4.4|^5.3",
-                "symplify/easy-testing": "^9.3.26"
+                "symfony/framework-bundle": "^5.3",
+                "symplify/easy-testing": "^9.4.3"
             },
             "bin": [
                 "bin/config-transformer"
@@ -3155,39 +3155,39 @@
             ],
             "description": "Convert Symfony YAML/XML format to PHP/YAML",
             "support": {
-                "source": "https://github.com/symplify/config-transformer/tree/v9.3.26"
+                "source": "https://github.com/symplify/config-transformer/tree/9.4.3"
             },
-            "time": "2021-06-12T13:23:08+00:00"
+            "time": "2021-07-01T09:31:22+00:00"
         },
         {
             "name": "symplify/console-package-builder",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/console-package-builder.git",
-                "reference": "4a2a541d8c63ee132b15049908953131c65e9f13"
+                "reference": "b6c5b29a60a916c9d28454f4f15a5b9b333e564f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/console-package-builder/zipball/4a2a541d8c63ee132b15049908953131c65e9f13",
-                "reference": "4a2a541d8c63ee132b15049908953131c65e9f13",
+                "url": "https://api.github.com/repos/symplify/console-package-builder/zipball/b6c5b29a60a916c9d28454f4f15a5b9b333e564f",
+                "reference": "b6c5b29a60a916c9d28454f4f15a5b9b333e564f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.3",
-                "symfony/console": "^4.4|^5.3",
+                "php": ">=8.0",
+                "symfony/console": "^5.3",
                 "symfony/dependency-injection": "^5.3",
-                "symplify/symplify-kernel": "^9.3.26"
+                "symplify/symplify-kernel": "^9.4.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5",
-                "symfony/http-kernel": "^4.4|^5.3",
-                "symplify/package-builder": "^9.3.26"
+                "symfony/http-kernel": "^5.3",
+                "symplify/package-builder": "^9.4.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.5-dev"
                 }
             },
             "autoload": {
@@ -3201,22 +3201,22 @@
             ],
             "description": "Package to speed up building command line applications",
             "support": {
-                "source": "https://github.com/symplify/console-package-builder/tree/v9.3.26"
+                "source": "https://github.com/symplify/console-package-builder/tree/9.4.3"
             },
-            "time": "2021-06-12T13:23:12+00:00"
+            "time": "2021-07-01T09:31:22+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "v9.3.26",
+            "version": "9.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "d8e2c58563fe4f1bcc6f41146657be254800e711"
+                "reference": "f5642d83cb52a9a103c3e2c1e547a23b010c5011"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/d8e2c58563fe4f1bcc6f41146657be254800e711",
-                "reference": "d8e2c58563fe4f1bcc6f41146657be254800e711",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/f5642d83cb52a9a103c3e2c1e547a23b010c5011",
+                "reference": "f5642d83cb52a9a103c3e2c1e547a23b010c5011",
                 "shasum": ""
             },
             "require": {
@@ -3241,7 +3241,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/v9.3.26"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.1"
             },
             "funding": [
                 {
@@ -3253,33 +3253,33 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-12T13:27:38+00:00"
+            "time": "2021-06-29T12:49:47+00:00"
         },
         {
             "name": "symplify/easy-testing",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-testing.git",
-                "reference": "8a80573bd94ef097827dd39708321e57db752810"
+                "reference": "3a60d84bc619b8b9d7460b678acb1f0c9d3b1d64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-testing/zipball/8a80573bd94ef097827dd39708321e57db752810",
-                "reference": "8a80573bd94ef097827dd39708321e57db752810",
+                "url": "https://api.github.com/repos/symplify/easy-testing/zipball/3a60d84bc619b8b9d7460b678acb1f0c9d3b1d64",
+                "reference": "3a60d84bc619b8b9d7460b678acb1f0c9d3b1d64",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.2",
-                "php": ">=7.3",
-                "symfony/console": "^4.4|^5.3",
+                "php": ">=8.0",
+                "symfony/console": "^5.3",
                 "symfony/dependency-injection": "^5.3",
-                "symfony/finder": "^4.4|^5.3",
-                "symfony/http-kernel": "^4.4|^5.3",
-                "symplify/console-package-builder": "^9.3.26",
-                "symplify/package-builder": "^9.3.26",
-                "symplify/smart-file-system": "^9.3.26",
-                "symplify/symplify-kernel": "^9.3.26"
+                "symfony/finder": "^5.3",
+                "symfony/http-kernel": "^5.3",
+                "symplify/console-package-builder": "^9.4.3",
+                "symplify/package-builder": "^9.4.3",
+                "symplify/smart-file-system": "^9.4.3",
+                "symplify/symplify-kernel": "^9.4.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -3290,7 +3290,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.5-dev"
                 }
             },
             "autoload": {
@@ -3304,7 +3304,7 @@
             ],
             "description": "Testing made easy",
             "support": {
-                "source": "https://github.com/symplify/easy-testing/tree/v9.3.26"
+                "source": "https://github.com/symplify/easy-testing/tree/9.4.3"
             },
             "funding": [
                 {
@@ -3316,33 +3316,33 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-12T13:23:26+00:00"
+            "time": "2021-07-01T09:31:30+00:00"
         },
         {
             "name": "symplify/package-builder",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/package-builder.git",
-                "reference": "bd05d6e6230d9bcffd49ec9f6ae0b00840cf836a"
+                "reference": "55f0d250ef9e25a0cf3c3c66d7e781342cca7b29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/package-builder/zipball/bd05d6e6230d9bcffd49ec9f6ae0b00840cf836a",
-                "reference": "bd05d6e6230d9bcffd49ec9f6ae0b00840cf836a",
+                "url": "https://api.github.com/repos/symplify/package-builder/zipball/55f0d250ef9e25a0cf3c3c66d7e781342cca7b29",
+                "reference": "55f0d250ef9e25a0cf3c3c66d7e781342cca7b29",
                 "shasum": ""
             },
             "require": {
                 "nette/neon": "^3.2",
                 "nette/utils": "^3.2",
-                "php": ">=7.3",
-                "symfony/config": "^4.4|^5.3",
-                "symfony/console": "^4.4|^5.3",
+                "php": ">=8.0",
+                "symfony/config": "^5.3",
+                "symfony/console": "^5.3",
                 "symfony/dependency-injection": "^5.3",
-                "symfony/finder": "^4.4|^5.3",
-                "symfony/http-kernel": "^4.4|^5.3",
-                "symplify/easy-testing": "^9.3.26",
-                "symplify/symplify-kernel": "^9.3.26"
+                "symfony/finder": "^5.3",
+                "symfony/http-kernel": "^5.3",
+                "symplify/easy-testing": "^9.4.3",
+                "symplify/symplify-kernel": "^9.4.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -3350,7 +3350,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.5-dev"
                 }
             },
             "autoload": {
@@ -3364,7 +3364,7 @@
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
             "support": {
-                "source": "https://github.com/symplify/package-builder/tree/v9.3.26"
+                "source": "https://github.com/symplify/package-builder/tree/9.4.3"
             },
             "funding": [
                 {
@@ -3376,39 +3376,39 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-12T13:23:43+00:00"
+            "time": "2021-07-01T09:31:35+00:00"
         },
         {
             "name": "symplify/php-config-printer",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/php-config-printer.git",
-                "reference": "288d5d10694b15dfe21e7edc3db26af75f817b4c"
+                "reference": "e547edb77d4b4feac40e578761aedac2e5cd03ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/php-config-printer/zipball/288d5d10694b15dfe21e7edc3db26af75f817b4c",
-                "reference": "288d5d10694b15dfe21e7edc3db26af75f817b4c",
+                "url": "https://api.github.com/repos/symplify/php-config-printer/zipball/e547edb77d4b4feac40e578761aedac2e5cd03ad",
+                "reference": "e547edb77d4b4feac40e578761aedac2e5cd03ad",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.2",
                 "nikic/php-parser": "4.10.5",
-                "php": ">=7.3",
-                "symfony/http-kernel": "^4.4|^5.3",
-                "symfony/yaml": "^4.4|^5.3",
-                "symplify/astral": "^9.3.26",
-                "symplify/symplify-kernel": "^9.3.26"
+                "php": ">=8.0",
+                "symfony/http-kernel": "^5.3",
+                "symfony/yaml": "^5.3",
+                "symplify/astral": "^9.4.3",
+                "symplify/symplify-kernel": "^9.4.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5",
-                "symplify/easy-testing": "^9.3.26"
+                "symplify/easy-testing": "^9.4.3"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.5-dev"
                 }
             },
             "autoload": {
@@ -3423,29 +3423,29 @@
             "description": "Print Symfony services array with configuration to to plain PHP file format thanks to this simple php-parser wrapper",
             "support": {
                 "issues": "https://github.com/symplify/php-config-printer/issues",
-                "source": "https://github.com/symplify/php-config-printer/tree/v9.3.26"
+                "source": "https://github.com/symplify/php-config-printer/tree/9.4.3"
             },
-            "time": "2021-06-12T13:23:48+00:00"
+            "time": "2021-07-01T09:31:35+00:00"
         },
         {
             "name": "symplify/smart-file-system",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/smart-file-system.git",
-                "reference": "0d9c75b144616ea3977a385f5bd09720335447df"
+                "reference": "1a99ae4083c152a3fbf88269964a0337b052f878"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/0d9c75b144616ea3977a385f5bd09720335447df",
-                "reference": "0d9c75b144616ea3977a385f5bd09720335447df",
+                "url": "https://api.github.com/repos/symplify/smart-file-system/zipball/1a99ae4083c152a3fbf88269964a0337b052f878",
+                "reference": "1a99ae4083c152a3fbf88269964a0337b052f878",
                 "shasum": ""
             },
             "require": {
                 "nette/utils": "^3.2",
-                "php": ">=7.3",
-                "symfony/filesystem": "^4.4|^5.3",
-                "symfony/finder": "^4.4|^5.3"
+                "php": ">=8.0",
+                "symfony/filesystem": "^5.3",
+                "symfony/finder": "^5.3"
             },
             "require-dev": {
                 "nette/finder": "^2.5",
@@ -3454,7 +3454,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.5-dev"
                 }
             },
             "autoload": {
@@ -3468,7 +3468,7 @@
             ],
             "description": "Sanitized FileInfo with safe getRealPath() and other handy methods",
             "support": {
-                "source": "https://github.com/symplify/smart-file-system/tree/v9.3.26"
+                "source": "https://github.com/symplify/smart-file-system/tree/9.4.3"
             },
             "funding": [
                 {
@@ -3480,31 +3480,31 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-11T10:20:15+00:00"
+            "time": "2021-06-30T16:02:31+00:00"
         },
         {
             "name": "symplify/symplify-kernel",
-            "version": "v9.3.26",
+            "version": "9.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/symplify-kernel.git",
-                "reference": "f76cf247ff6168b181a9db7050b8cf6047589d02"
+                "reference": "0102518442cee6a4629400d34bf6965c3a3001e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/symplify-kernel/zipball/f76cf247ff6168b181a9db7050b8cf6047589d02",
-                "reference": "f76cf247ff6168b181a9db7050b8cf6047589d02",
+                "url": "https://api.github.com/repos/symplify/symplify-kernel/zipball/0102518442cee6a4629400d34bf6965c3a3001e5",
+                "reference": "0102518442cee6a4629400d34bf6965c3a3001e5",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.3",
-                "symfony/console": "^4.4|^5.3",
+                "php": ">=8.0",
+                "symfony/console": "^5.3",
                 "symfony/dependency-injection": "^5.3",
-                "symfony/http-kernel": "^4.4|^5.3",
-                "symplify/autowire-array-parameter": "^9.3.26",
-                "symplify/composer-json-manipulator": "^9.3.26",
-                "symplify/package-builder": "^9.3.26",
-                "symplify/smart-file-system": "^9.3.26"
+                "symfony/http-kernel": "^5.3",
+                "symplify/autowire-array-parameter": "^9.4.3",
+                "symplify/composer-json-manipulator": "^9.4.3",
+                "symplify/package-builder": "^9.4.3",
+                "symplify/smart-file-system": "^9.4.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "^9.5"
@@ -3512,7 +3512,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "9.4-dev"
+                    "dev-main": "9.5-dev"
                 }
             },
             "autoload": {
@@ -3526,9 +3526,9 @@
             ],
             "description": "Internal Kernel for Symplify packages",
             "support": {
-                "source": "https://github.com/symplify/symplify-kernel/tree/v9.3.26"
+                "source": "https://github.com/symplify/symplify-kernel/tree/9.4.3"
             },
-            "time": "2021-06-12T13:24:27+00:00"
+            "time": "2021-07-01T09:32:08+00:00"
         }
     ],
     "aliases": [],
