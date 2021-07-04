@@ -1,4 +1,4 @@
-FROM php:8.0.7-fpm
+FROM php:8.1.0alpha2-fpm
 
 RUN apt-get update && apt-get install -y \
     zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq wget \
