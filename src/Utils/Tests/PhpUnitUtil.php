@@ -28,7 +28,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use function array_key_exists;
-use function count;
 use function explode;
 use function get_class;
 use function sprintf;
