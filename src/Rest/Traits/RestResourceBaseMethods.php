@@ -303,7 +303,7 @@ trait RestResourceBaseMethods
     private function validateDto(RestDtoInterface $dto, bool $skipValidation): void
     {
         /** @var ConstraintViolationListInterface|null $errors */
-        $errors = !$skipValidation ? $this->getValidator()->validate($dto) : null;
+        $errors = $skipValidation ? null : $this->getValidator()->validate($dto);
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {
@@ -318,7 +318,7 @@ trait RestResourceBaseMethods
      */
     private function validateEntity(EntityInterface $entity, bool $skipValidation): void
     {
-        $errors = !$skipValidation ? $this->getValidator()->validate($entity) : null;
+        $errors = $skipValidation ? null : $this->getValidator()->validate($entity);
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {

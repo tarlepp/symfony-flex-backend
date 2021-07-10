@@ -46,7 +46,7 @@ class ApiKeyHelper
         while ($found !== true) {
             $apiKey = $this->getApiKeyEntity($io, $question);
 
-            if ($apiKey === null) {
+            if (!$apiKey instanceof ApiKey) {
                 break;
             }
 

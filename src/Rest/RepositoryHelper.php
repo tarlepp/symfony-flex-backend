@@ -113,7 +113,7 @@ class RepositoryHelper
      * @see \App\Repository\Traits\RepositoryMethodsTrait::getQueryBuilder()
      *
      * @param array<int, string> $columns
-     * @param array<mixed>|null $terms
+     * @phpstan-param array<mixed>|null $terms
      *
      * @throws InvalidArgumentException
      */
@@ -320,7 +320,7 @@ class RepositoryHelper
 
         $lowercaseOperator = strtolower($comparisonObject->operator);
 
-        if (!($lowercaseOperator === 'isnull' || $lowercaseOperator === 'isnotnull')) {
+        if ($lowercaseOperator !== 'isnull' && $lowercaseOperator !== 'isnotnull') {
             $parameters = self::getComparisonParameters(
                 $queryBuilder,
                 $comparisonObject,
@@ -356,7 +356,7 @@ class RepositoryHelper
         } else {
             // Otherwise this must be IN or NOT IN expression
             try {
-                $value = array_map([UuidHelper::class, 'getBytes'], $value);
+                $value = array_map(static fn (string $value): string => UuidHelper::getBytes($value), $value);
             } catch (InvalidUuidStringException) {
                 // Ok so value isn't list of UUIDs
             }

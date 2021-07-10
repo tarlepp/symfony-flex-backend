@@ -257,7 +257,7 @@ class PhpUnitUtil
 
         if (substr_count($type, '\\') > 1 && !str_contains($type, '|')) {
             /** @var class-string $class */
-            $class = count($meta) ? $meta['targetEntity'] : $type;
+            $class = $meta !== [] ? $meta['targetEntity'] : $type;
 
             $type = self::TYPE_CUSTOM_CLASS;
 
