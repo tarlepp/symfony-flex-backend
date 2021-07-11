@@ -65,6 +65,7 @@ class CheckDependencies extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getSymfonyStyle($input, $output);
+        $io->info('Starting to check dependencies...');
 
         $directories = $this->getNamespaceDirectories();
 
