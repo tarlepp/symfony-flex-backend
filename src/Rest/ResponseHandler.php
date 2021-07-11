@@ -65,11 +65,11 @@ final class ResponseHandler implements ResponseHandlerInterface
         /**
          * Specify used populate settings
          *
-         * @var array<int, string>
+         * @var array<int, string> $populate
          */
         $populate = (array)$request->get('populate', []);
 
-        $groups = array_merge(['default', $populate]);
+        $groups = ['default', ...$populate];
 
         if ($restResource !== null) {
             // Get current entity name

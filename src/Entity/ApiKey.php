@@ -235,7 +235,9 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     public function addUserGroup(UserGroup $userGroup): self
     {
-        if (!$this->userGroups->contains($userGroup)) {
+        $contains = $this->userGroups->contains($userGroup);
+
+        if (!$contains) {
             $this->userGroups->add($userGroup);
             $userGroup->addApiKey($this);
         }
@@ -245,7 +247,9 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     public function removeUserGroup(UserGroup $userGroup): self
     {
-        if ($this->userGroups->removeElement($userGroup)) {
+        $removed = $this->userGroups->removeElement($userGroup);
+
+        if ($removed) {
             $userGroup->removeApiKey($this);
         }
 

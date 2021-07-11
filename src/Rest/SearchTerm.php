@@ -67,7 +67,7 @@ final class SearchTerm implements SearchTermInterface
         /**
          * Get criteria
          *
-         * @var array<string, array<string, array<int, string>>>
+         * @var array<string, array<string, array<int, string>>> $criteria
          */
         $criteria = array_filter(array_map($iteratorTerm, $searchTerms));
 
@@ -94,9 +94,9 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getTermIterator(array $columns, int $mode): Closure
     {
-        return static fn (string $term): ?array => !empty($columns)
-            ? array_map(self::getColumnIterator($term, $mode), $columns)
-            : null;
+        return static fn (string $term): ?array => empty($columns)
+            ? null
+            : array_map(self::getColumnIterator($term, $mode), $columns);
     }
 
     /**
@@ -112,7 +112,7 @@ final class SearchTerm implements SearchTermInterface
          * @return array<int, string>
          */
         return static fn (string $column): array => [
-            !str_contains($column, '.') ? 'entity.' . $column : $column, 'like', self::getTerm($mode, $term),
+            str_contains($column, '.') ? $column : 'entity.' . $column, 'like', self::getTerm($mode, $term),
         ];
     }
 

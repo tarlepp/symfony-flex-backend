@@ -43,10 +43,10 @@ class UserHelper
         $found = false;
         $user = null;
 
-        while ($found !== true) {
+        while (!$found) {
             $user = $this->getUserEntity($io, $question);
 
-            if ($user === null) {
+            if (!$user instanceof User) {
                 break;
             }
 
@@ -67,10 +67,10 @@ class UserHelper
         $found = false;
         $userGroup = null;
 
-        while ($found !== true) {
+        while (!$found) {
             $userGroup = $this->getUserGroupEntity($io, $question);
 
-            if ($userGroup === null) {
+            if (!$userGroup instanceof UserGroup) {
                 break;
             }
 

@@ -28,7 +28,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Throwable;
 use function array_key_exists;
-use function count;
 use function explode;
 use function get_class;
 use function sprintf;
@@ -257,7 +256,7 @@ class PhpUnitUtil
 
         if (substr_count($type, '\\') > 1 && !str_contains($type, '|')) {
             /** @var class-string $class */
-            $class = count($meta) ? $meta['targetEntity'] : $type;
+            $class = $meta !== [] ? $meta['targetEntity'] : $type;
 
             $type = self::TYPE_CUSTOM_CLASS;
 

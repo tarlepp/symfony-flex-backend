@@ -3,9 +3,9 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"phpstan/phpstan": "0.12.90",
+		"phpstan/phpstan": "0.12.91",
 		"phpstan/phpstan-phpunit": "0.12.20",
-		"phpstan/phpstan-symfony": "0.12.37",
+		"phpstan/phpstan-symfony": "0.12.38",
 		"roave/security-advisories": "dev-latest"
 	},
 	"config": {

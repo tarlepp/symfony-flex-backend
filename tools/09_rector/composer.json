@@ -3,9 +3,8 @@
 	"description": "",
 	"require": {},
 	"require-dev": {
-		"roave/security-advisories": "dev-latest",
-		"symplify/config-transformer": "9.4.20",
-		"symplify/easy-coding-standard": "9.4.20"
+		"rector/rector": "0.11.35",
+		"roave/security-advisories": "dev-latest"
 	},
 	"config": {
 		"platform": {
