@@ -204,7 +204,9 @@ class UserGroup implements EntityInterface, Stringable
 
     public function addUser(User $user): self
     {
-        if (!$this->users->contains($user)) {
+        $contains = $this->users->contains($user);
+
+        if (!$contains) {
             $this->users->add($user);
             $user->addUserGroup($this);
         }
@@ -214,7 +216,9 @@ class UserGroup implements EntityInterface, Stringable
 
     public function removeUser(User $user): self
     {
-        if ($this->users->removeElement($user)) {
+        $removed = $this->users->removeElement($user);
+
+        if ($removed) {
             $user->removeUserGroup($this);
         }
 
@@ -230,7 +234,9 @@ class UserGroup implements EntityInterface, Stringable
 
     public function addApiKey(ApiKey $apiKey): self
     {
-        if (!$this->apiKeys->contains($apiKey)) {
+        $contains = $this->apiKeys->contains($apiKey);
+
+        if (!$contains) {
             $this->apiKeys->add($apiKey);
             $apiKey->addUserGroup($this);
         }
@@ -240,7 +246,9 @@ class UserGroup implements EntityInterface, Stringable
 
     public function removeApiKey(ApiKey $apiKey): self
     {
-        if ($this->apiKeys->removeElement($apiKey)) {
+        $removed = $this->apiKeys->removeElement($apiKey);
+
+        if ($removed) {
             $apiKey->removeUserGroup($this);
         }
 

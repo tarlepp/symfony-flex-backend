@@ -10,8 +10,8 @@ namespace App\Entity;
 
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Traits\Uuid;
-use DateTime;
 use DateTimeImmutable;
+use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
@@ -68,7 +68,7 @@ class DateDimension implements EntityInterface
         'DateDimension',
         'DateDimension.date',
     ])]
-    private DateTime $date;
+    private DateTimeInterface $date;
 
     /**
      * @ORM\Column(
@@ -230,7 +230,7 @@ class DateDimension implements EntityInterface
     ])]
     private int $unixTime;
 
-    public function __construct(DateTime $dateTime)
+    public function __construct(DateTimeInterface $dateTime)
     {
         $this->id = $this->createUuid();
 
@@ -252,7 +252,7 @@ class DateDimension implements EntityInterface
         return $this->id->toString();
     }
 
-    public function getDate(): DateTime
+    public function getDate(): DateTimeInterface
     {
         return $this->date;
     }

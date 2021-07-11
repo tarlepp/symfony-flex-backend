@@ -40,9 +40,7 @@ class JSON
         $options ??= 0;
         $depth ??= 512;
 
-        $output = json_encode($input, JSON_THROW_ON_ERROR | $options, $depth);
-
-        return (string)$output;
+        return json_encode($input, JSON_THROW_ON_ERROR | $options, $depth);
     }
 
     /**

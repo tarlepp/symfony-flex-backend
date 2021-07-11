@@ -34,11 +34,11 @@ class ControllerCollection implements Countable
     /**
      * Collection constructor.
      *
-     * @param IteratorAggregate<int, ControllerInterface> $items
+     * @phpstan-param IteratorAggregate<int, ControllerInterface> $items
      */
     public function __construct(
-        private IteratorAggregate $items,
-        private LoggerInterface $logger,
+        protected IteratorAggregate $items,
+        protected LoggerInterface $logger,
     ) {
     }
 
