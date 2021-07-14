@@ -60,6 +60,6 @@ class RemoveUserGroupCommand extends Command
     {
         $this->userGroupResource->delete($userGroup->getId());
 
-        return'User group removed - have a nice day';
+        return 'User group removed - have a nice day';
     }
 }
