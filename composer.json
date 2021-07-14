@@ -111,8 +111,8 @@
 				"tools/01_phpunit/vendor/liuggio/fastest/src",
 				"tools/01_phpunit/vendor/liuggio/fastest/adapters"
 			],
-			"PhpCsFixer\\": "tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/friendsofphp/php-cs-fixer/src/",
-			"Symplify\\CodingStandard\\": "tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/coding-standard/src/",
+			"PhpCsFixer\\": "tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/friendsofphp/php-cs-fixer/src",
+			"Symplify\\CodingStandard\\": "tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/coding-standard/src",
 			"Symplify\\RuleDocGenerator\\": "tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/rule-doc-generator-contracts/src",
 			"PHPStan\\PhpDoc\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/PhpDoc/PHPUnit",
 			"PHPStan\\Rules\\PHPUnit\\": "tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Rules/PHPUnit",
