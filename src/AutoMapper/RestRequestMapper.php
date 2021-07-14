@@ -15,7 +15,6 @@ use LengthException;
 use Symfony\Component\HttpFoundation\Request;
 use function array_filter;
 use function count;
-use function get_class;
 use function gettype;
 use function is_object;
 use function method_exists;
@@ -73,7 +72,7 @@ abstract class RestRequestMapper implements MapperInterface
             throw new InvalidArgumentException(
                 sprintf(
                     'RestRequestMapper expects that $source is Request object, "%s" provided',
-                    get_class($source),
+                    $source::class,
                 )
             );
         }
@@ -82,7 +81,7 @@ abstract class RestRequestMapper implements MapperInterface
             throw new InvalidArgumentException(
                 sprintf(
                     'RestRequestMapper expects that $destination is instance of RestDtoInterface object, "%s" provided',
-                    get_class($destination),
+                    $destination::class,
                 )
             );
         }

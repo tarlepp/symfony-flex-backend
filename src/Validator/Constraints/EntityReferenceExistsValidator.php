@@ -19,7 +19,6 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use function array_filter;
 use function array_map;
 use function count;
-use function get_class;
 use function implode;
 use function is_array;
 use function str_replace;
@@ -86,7 +85,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
             $message = count($invalidIds) === 1
                 ? EntityReferenceExists::MESSAGE_SINGLE
                 : EntityReferenceExists::MESSAGE_MULTIPLE;
-            $entity = get_class($entities[0]);
+            $entity = $entities[0]::class;
 
             $parameterEntity = str_replace('Proxies\\__CG__\\', '', $entity);
             $parameterId = count($invalidIds) > 1 ? implode('", "', $invalidIds) : $invalidIds[0];

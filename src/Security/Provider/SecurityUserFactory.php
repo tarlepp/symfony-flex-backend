@@ -17,7 +17,6 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Throwable;
-use function get_class;
 
 /**
  * Class SecurityUserFactory
@@ -64,7 +63,7 @@ class SecurityUserFactory implements UserProviderInterface
     public function refreshUser(UserInterface $user): SecurityUser
     {
         if (!($user instanceof SecurityUser)) {
-            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
+            throw new UnsupportedUserException(sprintf('Invalid user class "%s".', $user::class));
         }
 
         $userEntity = $this->userRepository->find($user->getUserIdentifier());

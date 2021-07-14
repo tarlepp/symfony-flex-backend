@@ -15,7 +15,6 @@ use function array_filter;
 use function array_key_exists;
 use function count;
 use function current;
-use function get_class;
 use function method_exists;
 use function sprintf;
 use function ucfirst;
@@ -126,7 +125,7 @@ abstract class RestDto implements RestDtoInterface
         if ($getter === null) {
             $message = sprintf(
                 'DTO class \'%s\' does not have getter method property \'%s\' - cannot patch dto',
-                get_class($dto),
+                $dto::class,
                 $property
             );
 
