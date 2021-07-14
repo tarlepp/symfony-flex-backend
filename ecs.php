@@ -29,8 +29,8 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocSeparationFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocSummaryFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
-use PhpCsFixer\Fixer\Whitespace\HeredocIndentationFixer;
 use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
+use PhpCsFixer\Fixer\Whitespace\HeredocIndentationFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
@@ -152,8 +152,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             [
                 [
                     'operators' => [
-                        '&' => 'align'
-                    ]
+                        '&' => 'align',
+                    ],
                 ],
             ],
         );
