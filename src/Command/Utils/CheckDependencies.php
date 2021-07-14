@@ -73,14 +73,6 @@ class CheckDependencies extends Command
 
         $rows = $this->determineTableRows($io, $directories);
 
-        $headers = [
-            'Path',
-            'Dependency',
-            'Description',
-            'Version',
-            'New version',
-        ];
-
         /**
          * @psalm-suppress RedundantCastGivenDocblockType
          * @psalm-suppress ArgumentTypeCoercion
@@ -96,22 +88,11 @@ class CheckDependencies extends Command
         $style->setCellHeaderFormat('<info>%s</info>');
 
         $table = new Table($output);
-        $table->setHeaders($headers);
+        $table->setHeaders($this->getHeaders());
         $table->setRows($rows);
         $table->setStyle($style);
 
-        $widths = [
-            23,
-            $packageNameLength,
-            95 - $packageNameLength,
-            10,
-            11,
-        ];
-
-        foreach ($widths as $columnIndex => $width) {
-            $table->setColumnWidth($columnIndex, $width);
-            $table->setColumnMaxWidth($columnIndex, $width);
-        }
+        $this->setTableColumnWidths($packageNameLength, $table);
 
         count($rows)
             ? $table->render()
@@ -174,7 +155,7 @@ class CheckDependencies extends Command
                 // First row of current library
                 if ($row === 0) {
                     // We want to add table separator between different libraries
-                    if (!empty($rows)) {
+                    if (count($rows) > 0) {
                         $rows[] = new TableSeparator();
                     }
 
@@ -258,5 +239,35 @@ class CheckDependencies extends Command
         $progress->setMessage($message);
 
         return $progress;
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function getHeaders(): array
+    {
+        return [
+            'Path',
+            'Dependency',
+            'Description',
+            'Version',
+            'New version',
+        ];
+    }
+
+    private function setTableColumnWidths(int $packageNameLength, Table $table): void
+    {
+        $widths = [
+            23,
+            $packageNameLength,
+            95 - $packageNameLength,
+            10,
+            11,
+        ];
+
+        foreach ($widths as $columnIndex => $width) {
+            $table->setColumnWidth($columnIndex, $width);
+            $table->setColumnMaxWidth($columnIndex, $width);
+        }
     }
 }
