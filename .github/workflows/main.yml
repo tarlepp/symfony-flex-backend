@@ -82,13 +82,11 @@ jobs:
       - name: Run PHPStan static analysis tool
         run: make phpstan
 
-      # TODO: enable this when https://github.com/nunomaduro/phpinsights has new version
-      #- name: Run `phploc` to collect LOC stats
-      #  run: make phploc
+      - name: Run `phploc` to collect LOC stats
+        run: make phploc
 
-      # TODO: enable this when https://github.com/nunomaduro/phpinsights/issues/457 is solved
-      #- name: Run `PHP Insights` static analysis tool
-      #  run: make phpinsights
+      - name: Run `PHP Insights` static analysis tool
+        run: make phpinsights
 
       - name: Archive Psalm results (psalm.json)
         uses: actions/upload-artifact@v1
