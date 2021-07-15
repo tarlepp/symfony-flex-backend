@@ -42,8 +42,24 @@ class StopwatchDecorator
             return $service;
         }
 
-        $prefix = [];
-        $suffix = [];
+        [$prefixInterceptors, $suffixInterceptors] = $this->getPrefixAndSuffixInterceptors($class, $className);
+
+        try {
+            $output = $this->factory->createProxy($service, $prefixInterceptors, $suffixInterceptors);
+        } catch (Throwable) {
+            $output = $service;
+        }
+
+        return $output;
+    }
+
+    /**
+     * @return array{0: array<string, \Closure>, 1: array<string, \Closure>}
+     */
+    private function getPrefixAndSuffixInterceptors(ReflectionClass $class, string $className): array
+    {
+        $prefixInterceptors = [];
+        $suffixInterceptors = [];
 
         $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
         $methods = array_filter($methods, static fn ($method): bool => !$method->isStatic() && !$method->isFinal());
@@ -52,11 +68,11 @@ class StopwatchDecorator
             $methodName = $method->getName();
             $eventName = "{$class->getShortName()}->{$methodName}";
 
-            $prefix[$methodName] = function () use ($eventName, $className): void {
+            $prefixInterceptors[$methodName] = function () use ($eventName, $className): void {
                 $this->stopwatch->start($eventName, $className);
             };
 
-            $suffix[$methodName] = function (
+            $suffixInterceptors[$methodName] = function (
                 mixed $p,
                 mixed $i,
                 mixed $m,
@@ -77,12 +93,6 @@ class StopwatchDecorator
             };
         }
 
-        try {
-            $output = $this->factory->createProxy($service, $prefix, $suffix);
-        } catch (Throwable) {
-            $output = $service;
-        }
-
-        return $output;
+        return [$prefixInterceptors, $suffixInterceptors];
     }
 }
