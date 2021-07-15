@@ -1,6 +1,8 @@
 <?php
-
-declare(strict_types=1);
+declare(strict_types = 1);
+/**
+ * rector.php
+ */
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
@@ -22,8 +24,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     //$parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan.neon.dist');
 
     // Define what rule sets will be applied
-    $containerConfigurator->import(SetList::DEAD_CODE);
+    $containerConfigurator->import(SetList::CODE_QUALITY);
     $containerConfigurator->import(SetList::CODE_QUALITY_STRICT);
+    $containerConfigurator->import(SetList::DEAD_CODE);
+    //$containerConfigurator->import(SetList::TYPE_DECLARATION);
+    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
+    $containerConfigurator->import(SetList::PHP_80);
 
     // get services (needed for register a single rule)
     $services = $containerConfigurator->services();
