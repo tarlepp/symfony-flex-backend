@@ -37,27 +37,6 @@ class Role implements EntityInterface
 
     /**
      * @ORM\Column(
-     *      name="role",
-     *      type="string",
-     *      unique=true,
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     */
-    #[Groups([
-        'Role',
-        'Role.id',
-
-        'UserGroup.role',
-
-        User::SET_USER_BASIC,
-        UserGroup::SET_USER_PROFILE_GROUPS,
-        UserGroup::SET_USER_GROUP_BASIC,
-    ])]
-    private string $id;
-
-    /**
-     * @ORM\Column(
      *      name="description",
      *      type="text",
      *      nullable=false,
@@ -84,9 +63,28 @@ class Role implements EntityInterface
     ])]
     private Collection | ArrayCollection $userGroups;
 
-    public function __construct(string $role)
-    {
-        $this->id = $role;
+    public function __construct(
+        /**
+         * @ORM\Column(
+         *      name="role",
+         *      type="string",
+         *      unique=true,
+         *      nullable=false,
+         *  )
+         * @ORM\Id()
+         */
+        #[Groups([
+            'Role',
+            'Role.id',
+
+            'UserGroup.role',
+
+            User::SET_USER_BASIC,
+            UserGroup::SET_USER_PROFILE_GROUPS,
+            UserGroup::SET_USER_GROUP_BASIC,
+        ])]
+        private string $id
+    ) {
         $this->userGroups = new ArrayCollection();
     }
 
