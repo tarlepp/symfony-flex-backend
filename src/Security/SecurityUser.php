@@ -100,7 +100,7 @@ class SecurityUser implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @todo Remove this method when Symfony 6.0.0 is released
+     * @reminder Remove this method when Symfony 6.0.0 is released
      *
      * @codeCoverageIgnore
      */
