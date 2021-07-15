@@ -91,7 +91,7 @@ class RepositoryHelper
     {
         $criteria ??= [];
 
-        if (empty($criteria)) {
+        if ($criteria === []) {
             return;
         }
 
@@ -121,7 +121,7 @@ class RepositoryHelper
     {
         $terms ??= [];
 
-        if (empty($columns)) {
+        if ($columns === []) {
             return;
         }
 

@@ -94,9 +94,9 @@ class CheckDependencies extends Command
 
         $this->setTableColumnWidths($packageNameLength, $table);
 
-        count($rows)
-            ? $table->render()
-            : $io->success('Good news, there is not any vendor dependency to update at this time!');
+        $rows === []
+            ? $io->success('Good news, there is not any vendor dependency to update at this time!')
+            : $table->render();
 
         return 0;
     }
@@ -155,7 +155,7 @@ class CheckDependencies extends Command
                 // First row of current library
                 if ($row === 0) {
                     // We want to add table separator between different libraries
-                    if (count($rows) > 0) {
+                    if ($rows !== 0) {
                         $rows[] = new TableSeparator();
                     }
 

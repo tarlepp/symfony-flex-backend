@@ -26,7 +26,6 @@ use Throwable;
 use function array_intersect;
 use function array_key_exists;
 use function class_implements;
-use function count;
 use function in_array;
 use function method_exists;
 use function spl_object_hash;
@@ -207,7 +206,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         if (!array_key_exists($cacheKey, self::$cache)) {
             $intersect = array_intersect((array)class_implements($exception), self::$clientExceptions);
 
-            self::$cache[$cacheKey] = count($intersect) !== 0;
+            self::$cache[$cacheKey] = $intersect !== [];
         }
 
         return self::$cache[$cacheKey];

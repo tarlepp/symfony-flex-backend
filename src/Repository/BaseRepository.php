@@ -18,7 +18,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use function array_map;
 use function array_merge;
 use function array_unshift;
-use function count;
 use function implode;
 use function in_array;
 use function serialize;
@@ -133,7 +132,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function addLeftJoin(array $parameters): self
     {
-        if (count($parameters) > 1) {
+        if ($parameters !== []) {
             $this->addJoinToQuery(self::LEFT_JOIN, $parameters);
         }
 
@@ -142,7 +141,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
 
     public function addInnerJoin(array $parameters): self
     {
-        if (!empty($parameters)) {
+        if ($parameters !== []) {
             $this->addJoinToQuery(self::INNER_JOIN, $parameters);
         }
 

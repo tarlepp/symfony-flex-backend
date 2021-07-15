@@ -81,7 +81,7 @@ class EntityReferenceExistsValidator extends ConstraintValidator
     {
         $invalidIds = $this->getInvalidValues($entities);
 
-        if (!empty($invalidIds)) {
+        if ($invalidIds !== []) {
             $message = count($invalidIds) === 1
                 ? EntityReferenceExists::MESSAGE_SINGLE
                 : EntityReferenceExists::MESSAGE_MULTIPLE;
