@@ -25,6 +25,7 @@ use function is_numeric;
 use function str_contains;
 use function strcmp;
 use function strtolower;
+use function syslog;
 
 /**
  * Class RepositoryHelper
@@ -357,8 +358,9 @@ class RepositoryHelper
             // Otherwise this must be IN or NOT IN expression
             try {
                 $value = array_map(static fn (string $value): string => UuidHelper::getBytes($value), $value);
-            } catch (InvalidUuidStringException) {
+            } catch (InvalidUuidStringException $exception) {
                 // Ok so value isn't list of UUIDs
+                syslog(LOG_INFO, $exception->getMessage());
             }
 
             $parameters[] = array_map(

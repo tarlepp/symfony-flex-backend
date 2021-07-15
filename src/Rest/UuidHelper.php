@@ -16,6 +16,7 @@ use Ramsey\Uuid\Rfc4122\FieldsInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidFactory;
 use Ramsey\Uuid\UuidInterface;
+use function syslog;
 
 /**
  * Class UuidHelper
@@ -50,8 +51,9 @@ class UuidHelper
             if ($fields instanceof FieldsInterface) {
                 $output = $fields->getVersion() === 1 ? UuidBinaryOrderedTimeType::NAME : UuidBinaryType::NAME;
             }
-        } catch (InvalidUuidStringException) {
+        } catch (InvalidUuidStringException $exception) {
             // ok, so now we know that value isn't uuid
+            syslog(LOG_INFO, $exception->getMessage());
         }
 
         return $output;
