@@ -169,7 +169,7 @@ class CreateDateDimensionEntitiesCommand extends Command
      */
     private function validatorYearStart(): Closure
     {
-        return static fn (int $year): int => ($year < self::YEAR_MIN || $year > self::YEAR_MAX)
+        return static fn (int $year): int => $year < self::YEAR_MIN || $year > self::YEAR_MAX
             ? throw new InvalidArgumentException(
                 sprintf(
                     'Start year must be between %d and %d',
@@ -187,7 +187,7 @@ class CreateDateDimensionEntitiesCommand extends Command
      */
     private function validatorYearEnd(int $yearStart): Closure
     {
-        return static fn (int $year): int => ($year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart)
+        return static fn (int $year): int => $year < self::YEAR_MIN || $year > self::YEAR_MAX || $year < $yearStart
             ? throw new InvalidArgumentException(
                 sprintf(
                     'End year must be between %d and %d and after given start year %d',
