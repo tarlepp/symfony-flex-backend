@@ -94,12 +94,11 @@ jobs:
           name: psalm.json
           path: ./build/psalm.json
 
-      # TODO: enable this when https://github.com/nunomaduro/phpinsights has new version
-      #- name: Archive `phploc` results (phploc.json)
-      #  uses: actions/upload-artifact@v1
-      #  with:
-      #    name: phploc.json
-      #    path: ./build/phploc.json
+      - name: Archive `phploc` results (phploc.json)
+        uses: actions/upload-artifact@v1
+        with:
+          name: phploc.json
+          path: ./build/phploc.json
 
   test:
     name: PHPUnit tests (PHP ${{ matrix.php-versions }})
