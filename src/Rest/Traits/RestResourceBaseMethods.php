@@ -16,7 +16,6 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Throwable;
 use UnexpectedValueException;
 use function assert;
-use function get_class;
 
 /**
  * Trait RestResourceBaseMethods
@@ -151,7 +150,7 @@ trait RestResourceBaseMethods
          * entity to that. And after that patch that dto with given partial OR
          * whole dto class.
          */
-        $restDto = $this->getDtoForEntity($id, get_class($dto), $dto);
+        $restDto = $this->getDtoForEntity($id, $dto::class, $dto);
 
         // Before callback method call
         $this->beforeUpdate($id, $restDto, $entity);
@@ -185,7 +184,7 @@ trait RestResourceBaseMethods
          * entity to that. And after that patch that dto with given partial OR
          * whole dto class.
          */
-        $restDto = $this->getDtoForEntity($id, get_class($dto), $dto, true);
+        $restDto = $this->getDtoForEntity($id, $dto::class, $dto, true);
 
         // Before callback method call
         $this->beforePatch($id, $restDto, $entity);
@@ -307,7 +306,7 @@ trait RestResourceBaseMethods
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {
-            throw new ValidatorException(get_class($dto), $errors);
+            throw new ValidatorException($dto::class, $errors);
         }
     }
 
@@ -322,7 +321,7 @@ trait RestResourceBaseMethods
 
         // Oh noes, we have some errors
         if ($errors !== null && $errors->count() > 0) {
-            throw new ValidatorException(get_class($entity), $errors);
+            throw new ValidatorException($entity::class, $errors);
         }
     }
 

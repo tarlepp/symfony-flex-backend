@@ -79,7 +79,7 @@ class ApiKeyUser implements ApiKeyUserInterface, UserInterface
     }
 
     /**
-     * @todo Remove this method when Symfony 6.0.0 is released
+     * @remimder Remove this method when Symfony 6.0.0 is released
      *
      * @codeCoverageIgnore
      */

@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\TerminateEvent;
 use Throwable;
 use function array_filter;
-use function count;
+use function array_values;
 use function in_array;
 use function str_contains;
 use function substr;
@@ -81,7 +81,7 @@ class RequestLogSubscriber implements EventSubscriberInterface
         if ($request->getRealMethod() === Request::METHOD_OPTIONS
             || str_contains($path, '/_profiler')
             || in_array($path, $this->ignoredRoutes, true)
-            || count(array_filter($this->ignoredRoutes, $filter)) !== 0
+            || array_values(array_filter($this->ignoredRoutes, $filter)) !== []
         ) {
             return;
         }

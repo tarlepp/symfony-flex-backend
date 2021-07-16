@@ -90,6 +90,6 @@ class UserTypeIdentification
     {
         $token = $this->tokenStorage->getToken();
 
-        return !($token === null || $token instanceof AnonymousToken) ? $token->getUser() : null;
+        return $token === null || $token instanceof AnonymousToken ? null : $token->getUser();
     }
 }

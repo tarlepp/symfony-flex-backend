@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a0bc314209448830e3b64945d788a5f",
+    "content-hash": "97da8f913caafdaaef4888a190ec4ff6",
     "packages": [],
     "packages-dev": [
         {
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "1a08d0c7ab47e57fad0d254951a615f07445e91f"
+                "reference": "fc5e5d772af47d035df8178172391259b6e30566"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/1a08d0c7ab47e57fad0d254951a615f07445e91f",
-                "reference": "1a08d0c7ab47e57fad0d254951a615f07445e91f",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/fc5e5d772af47d035df8178172391259b6e30566",
+                "reference": "fc5e5d772af47d035df8178172391259b6e30566",
                 "shasum": ""
             },
             "conflict": {
@@ -76,6 +76,7 @@
                 "endroid/qr-code-bundle": "<3.4.2",
                 "enshrined/svg-sanitize": "<0.13.1",
                 "erusev/parsedown": "<1.7.2",
+                "ether/logs": "<3.0.4",
                 "ezsystems/demobundle": ">=5.4,<5.4.6.1",
                 "ezsystems/ez-support-tools": ">=2.2,<2.2.3",
                 "ezsystems/ezdemo-ls-extension": ">=5.4,<5.4.2.1",
@@ -190,7 +191,7 @@
                 "phpunit/phpunit": ">=4.8.19,<4.8.28|>=5.0.10,<5.6.3",
                 "phpwhois/phpwhois": "<=4.2.5",
                 "phpxmlrpc/extras": "<0.6.1",
-                "pimcore/pimcore": "<6.8.8",
+                "pimcore/pimcore": "<10.0.7",
                 "pocketmine/pocketmine-mp": "<3.15.4",
                 "pressbooks/pressbooks": "<5.18",
                 "prestashop/autoupgrade": ">=4,<4.10.1",
@@ -381,20 +382,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-02T20:02:51+00:00"
+            "time": "2021-07-13T18:03:10+00:00"
         },
         {
             "name": "symplify/config-transformer",
-            "version": "9.4.20",
+            "version": "9.4.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/config-transformer.git",
-                "reference": "f6bbcea26f018fea1c8197a6ba976a3b0f07d6c6"
+                "reference": "d01d91b752a299cec6d439d0f2a55843fc1aff9b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/f6bbcea26f018fea1c8197a6ba976a3b0f07d6c6",
-                "reference": "f6bbcea26f018fea1c8197a6ba976a3b0f07d6c6",
+                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/d01d91b752a299cec6d439d0f2a55843fc1aff9b",
+                "reference": "d01d91b752a299cec6d439d0f2a55843fc1aff9b",
                 "shasum": ""
             },
             "require": {
@@ -410,7 +411,7 @@
             ],
             "description": "Prefixed version of Symfony YAML/XML to PHP/YAML config converter",
             "support": {
-                "source": "https://github.com/symplify/config-transformer/tree/9.4.20"
+                "source": "https://github.com/symplify/config-transformer/tree/9.4.22"
             },
             "funding": [
                 {
@@ -422,20 +423,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-10T09:52:55+00:00"
+            "time": "2021-07-12T08:59:57+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "9.4.20",
+            "version": "9.4.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "02886ea43a1034ef00ae15d6d5d07a55e5388094"
+                "reference": "223dabfa7d61e5aa57cc1be967e4f670e86e085a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/02886ea43a1034ef00ae15d6d5d07a55e5388094",
-                "reference": "02886ea43a1034ef00ae15d6d5d07a55e5388094",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/223dabfa7d61e5aa57cc1be967e4f670e86e085a",
+                "reference": "223dabfa7d61e5aa57cc1be967e4f670e86e085a",
                 "shasum": ""
             },
             "require": {
@@ -460,7 +461,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.20"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.22"
             },
             "funding": [
                 {
@@ -472,7 +473,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-10T09:54:31+00:00"
+            "time": "2021-07-12T09:01:33+00:00"
         }
     ],
     "aliases": [],

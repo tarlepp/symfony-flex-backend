@@ -26,8 +26,6 @@ use Throwable;
 use function array_intersect;
 use function array_key_exists;
 use function class_implements;
-use function count;
-use function get_class;
 use function in_array;
 use function method_exists;
 use function spl_object_hash;
@@ -124,7 +122,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         if ($this->environment === 'dev') {
             $error += [
                 'debug' => [
-                    'exception' => get_class($exception),
+                    'exception' => $exception::class,
                     'file' => $exception->getFile(),
                     'line' => $exception->getLine(),
                     'message' => $exception->getMessage(),
@@ -159,7 +157,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             AuthenticationException::class,
         ];
 
-        if (in_array(get_class($exception), $accessDeniedClasses, true)) {
+        if (in_array($exception::class, $accessDeniedClasses, true)) {
             $message = 'Access denied.';
         } elseif ($exception instanceof Exception || $exception instanceof ORMException) {
             // Database errors
@@ -208,7 +206,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         if (!array_key_exists($cacheKey, self::$cache)) {
             $intersect = array_intersect((array)class_implements($exception), self::$clientExceptions);
 
-            self::$cache[$cacheKey] = count($intersect) !== 0;
+            self::$cache[$cacheKey] = $intersect !== [];
         }
 
         return self::$cache[$cacheKey];

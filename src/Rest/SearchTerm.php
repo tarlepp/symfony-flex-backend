@@ -75,7 +75,7 @@ final class SearchTerm implements SearchTermInterface
         $output = null;
 
         // We have some generated criteria
-        if (!empty($criteria)) {
+        if ($criteria !== []) {
             // Create used criteria array
             $output = [
                 'and' => [
@@ -94,7 +94,7 @@ final class SearchTerm implements SearchTermInterface
      */
     private static function getTermIterator(array $columns, int $mode): Closure
     {
-        return static fn (string $term): ?array => empty($columns)
+        return static fn (string $term): ?array => $columns === []
             ? null
             : array_map(self::getColumnIterator($term, $mode), $columns);
     }
