@@ -38,190 +38,163 @@ trait LogRequestProcessRequestTrait
 
     /**
      * @var array<string, string>
-     *
-     * @ORM\Column(
-     *      name="headers",
-     *      type="array",
-     *  )
      */
+    #[ORM\Column(
+        name: 'headers',
+        type: 'array',
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.headers',
     ])]
     private array $headers = [];
 
-    /**
-     * @ORM\Column(
-     *      name="method",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'method',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.method',
     ])]
     private string $method = '';
 
-    /**
-     * @ORM\Column(
-     *      name="scheme",
-     *      type="string",
-     *      length=5,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'scheme',
+        type: 'string',
+        length: 5,
+        nullable: false,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.scheme',
     ])]
     private string $scheme = '';
 
-    /**
-     * @ORM\Column(
-     *      name="base_path",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'base_path',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.basePath',
     ])]
     private string $basePath = '';
 
-    /**
-     * @ORM\Column(
-     *      name="script",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'script',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.script',
     ])]
     private string $script = '';
 
-    /**
-     * @ORM\Column(
-     *      name="path",
-     *      type="string",
-     *      length=255,
-     *      nullable=true,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'path',
+        type: 'string',
+        length: 255,
+        nullable: true,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.path',
     ])]
     private string $path = '';
 
-    /**
-     * @ORM\Column(
-     *      name="query_string",
-     *      type="text",
-     *      nullable=true,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'query_string',
+        type: 'text',
+        nullable: true,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.queryString',
     ])]
     private string $queryString = '';
 
-    /**
-     * @ORM\Column(
-     *      name="uri",
-     *      type="text",
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'uri',
+        type: 'text',
+        nullable: false,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.uri',
     ])]
     private string $uri = '';
 
-    /**
-     * @ORM\Column(
-     *      name="controller",
-     *      type="string",
-     *      length=255,
-     *      nullable=true,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'controller',
+        type: 'string',
+        length: 255,
+        nullable: true,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.controller',
     ])]
     private string $controller = '';
 
-    /**
-     * @ORM\Column(
-     *      name="content_type",
-     *      type="string",
-     *      length=255,
-     *      nullable=true,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'content_type',
+        type: 'string',
+        length: 255,
+        nullable: true,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.contentType',
     ])]
     private string $contentType = '';
 
-    /**
-     * @ORM\Column(
-     *      name="content_type_short",
-     *      type="string",
-     *      length=255,
-     *      nullable=true,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'content_type_short',
+        type: 'string',
+        length: 255,
+        nullable: true,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.contentTypeShort',
     ])]
     private string $contentTypeShort = '';
 
-    /**
-     * @ORM\Column(
-     *      name="is_xml_http_request",
-     *      type="boolean",
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'is_xml_http_request',
+        type: 'boolean',
+        nullable: false,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.isXmlHttpRequest',
     ])]
     private bool $xmlHttpRequest = false;
 
-    /**
-     * @ORM\Column(
-     *      name="action",
-     *      type="string",
-     *      length=255,
-     *      nullable=true,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'action',
+        type: 'string',
+        length: 255,
+        nullable: true,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.action',
     ])]
     private string $action = '';
 
-    /**
-     * @ORM\Column(
-     *      name="content",
-     *      type="text",
-     *      nullable=true,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'content',
+        type: 'text',
+        nullable: true,
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.content',
@@ -230,12 +203,11 @@ trait LogRequestProcessRequestTrait
 
     /**
      * @var array<string, string>
-     *
-     * @ORM\Column(
-     *      name="parameters",
-     *      type="array",
-     *  )
      */
+    #[ORM\Column(
+        name: 'parameters',
+        type: 'array',
+    )]
     #[Groups([
         'LogRequest',
         'LogRequest.parameters',

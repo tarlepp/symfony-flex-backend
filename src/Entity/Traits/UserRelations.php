@@ -28,15 +28,12 @@ trait UserRelations
 {
     /**
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="App\Entity\UserGroup",
-     *      inversedBy="users",
-     *  )
-     * @ORM\JoinTable(
-     *      name="user_has_user_group",
-     *  )
      */
+    #[ORM\ManyToMany(
+        targetEntity: UserGroup::class,
+        inversedBy: 'users',
+    )]
+    #[ORM\JoinTable(name: 'user_has_user_group')]
     #[Groups([
         'User.userGroups',
     ])]
@@ -44,12 +41,11 @@ trait UserRelations
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
-     *
-     * @ORM\OneToMany(
-     *      targetEntity="App\Entity\LogRequest",
-     *      mappedBy="user",
-     *  )
      */
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: LogRequest::class,
+    )]
     #[Groups([
         'User.logsRequest',
     ])]
@@ -57,12 +53,11 @@ trait UserRelations
 
     /**
      * @var Collection<int, LogLogin>|ArrayCollection<int, LogLogin>
-     *
-     * @ORM\OneToMany(
-     *      targetEntity="App\Entity\LogLogin",
-     *      mappedBy="user",
-     *  )
      */
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: LogLogin::class,
+    )]
     #[Groups([
         'User.logsLogin',
     ])]
@@ -70,12 +65,11 @@ trait UserRelations
 
     /**
      * @var Collection<int, LogLoginFailure>|ArrayCollection<int, LogLoginFailure>
-     *
-     * @ORM\OneToMany(
-     *      targetEntity="App\Entity\LogLoginFailure",
-     *      mappedBy="user",
-     *  )
      */
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: LogLoginFailure::class,
+    )]
     #[Groups([
         'User.logsLoginFailure',
     ])]

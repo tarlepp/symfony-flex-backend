@@ -26,13 +26,11 @@ use Throwable;
  */
 trait LogEntityTrait
 {
-    /**
-     * @ORM\Column(
-     *      name="time",
-     *      type="datetime_immutable",
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'time',
+        type: 'datetime_immutable',
+        nullable: false,
+    )]
     #[Groups([
         'LogLogin',
         'LogLogin.time',
@@ -41,13 +39,11 @@ trait LogEntityTrait
     ])]
     protected DateTimeImmutable $time;
 
-    /**
-     * @ORM\Column(
-     *      name="`date`",
-     *      type="date_immutable",
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: '`date`',
+        type: 'date_immutable',
+        nullable: false,
+    )]
     #[Groups([
         'LogLogin',
         'LogLogin.date',
@@ -56,13 +52,11 @@ trait LogEntityTrait
     ])]
     protected DateTimeImmutable $date;
 
-    /**
-     * @ORM\Column(
-     *      name="agent",
-     *      type="text",
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'agent',
+        type: 'text',
+        nullable: false,
+    )]
     #[Groups([
         'LogLogin',
         'LogLogin.agent',
@@ -71,14 +65,12 @@ trait LogEntityTrait
     ])]
     protected string $agent = '';
 
-    /**
-     * @ORM\Column(
-     *      name="http_host",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'http_host',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     #[Groups([
         'LogLogin',
         'LogLogin.httpHost',
@@ -87,14 +79,12 @@ trait LogEntityTrait
     ])]
     protected string $httpHost = '';
 
-    /**
-     * @ORM\Column(
-     *      name="client_ip",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'client_ip',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     #[Groups([
         'LogLogin',
         'LogLogin.clientIp',
@@ -141,10 +131,9 @@ trait LogEntityTrait
     }
 
     /**
-     * @ORM\PrePersist()
-     *
      * @throws Throwable
      */
+    #[ORM\PrePersist]
     private function processTimeAndDate(): void
     {
         $now = new DateTimeImmutable(timezone: new DateTimeZone('UTC'));

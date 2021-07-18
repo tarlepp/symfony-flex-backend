@@ -24,14 +24,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class UserGroup
  *
- * @ORM\Table(
- *      name="user_group",
- *  )
- * @ORM\Entity()
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'user_group')]
 class UserGroup implements EntityInterface, Stringable
 {
     use Blameable;
@@ -42,16 +39,14 @@ class UserGroup implements EntityInterface, Stringable
     public const SET_USER_GROUP_BASIC = 'set.UserGroupBasic';
 
     /**
-     * @ORM\Column(
-     *      name="id",
-     *      type="uuid_binary_ordered_time",
-     *      unique=true,
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     *
      * @OA\Property(type="string", format="uuid")
      */
+    #[ORM\Id]
+    #[ORM\Column(
+        name: 'id',
+        type: 'uuid_binary_ordered_time',
+        unique: true,
+    )]
     #[Groups([
         'UserGroup',
         'UserGroup.id',
@@ -66,19 +61,15 @@ class UserGroup implements EntityInterface, Stringable
     ])]
     private UuidInterface $id;
 
-    /**
-     * @ORM\ManyToOne(
-     *      targetEntity="App\Entity\Role",
-     *      inversedBy="userGroups",
-     *  )
-     * @ORM\JoinColumns({
-     *      @ORM\JoinColumn(
-     *          name="role",
-     *          referencedColumnName="role",
-     *          onDelete="CASCADE",
-     *      ),
-     *  })
-     */
+    #[ORM\ManyToOne(
+        targetEntity: Role::class,
+        inversedBy: 'userGroups',
+    )]
+    #[ORM\JoinColumn(
+        name: 'role',
+        referencedColumnName: 'role',
+        onDelete: 'CASCADE',
+    )]
     #[Groups([
         'UserGroup.role',
 
@@ -91,14 +82,11 @@ class UserGroup implements EntityInterface, Stringable
     #[Assert\Valid]
     private Role $role;
 
-    /**
-     * @ORM\Column(
-     *      name="name",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'name',
+        type: 'string',
+        length: 255,
+    )]
     #[Groups([
         'UserGroup',
         'UserGroup.name',
@@ -114,15 +102,12 @@ class UserGroup implements EntityInterface, Stringable
 
     /**
      * @var Collection<int, User>|ArrayCollection<int, User>
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="User",
-     *      mappedBy="userGroups",
-     *  )
-     * @ORM\JoinTable(
-     *      name="user_has_user_group",
-     *  )
      */
+    #[ORM\ManyToMany(
+        targetEntity: 'User',
+        mappedBy: 'userGroups',
+    )]
+    #[ORM\JoinTable(name: 'user_has_user_group')]
     #[Groups([
         'UserGroup.users',
     ])]
@@ -130,15 +115,12 @@ class UserGroup implements EntityInterface, Stringable
 
     /**
      * @var Collection<int, ApiKey>|ArrayCollection<int, ApiKey>
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="ApiKey",
-     *      mappedBy="userGroups",
-     *  )
-     * @ORM\JoinTable(
-     *      name="api_key_has_user_group",
-     *  )
      */
+    #[ORM\ManyToMany(
+        targetEntity: 'ApiKey',
+        mappedBy: 'userGroups',
+    )]
+    #[ORM\JoinTable(name: 'api_key_has_user_group')]
     #[Groups([
         'UserGroup.apiKeys',
     ])]
