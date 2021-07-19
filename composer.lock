@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7332506286b24d94bd86a4d6439e7e0e",
+    "content-hash": "5fc94d420280836cd8abcc57291359f9",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2489,16 +2489,16 @@
         },
         {
             "name": "nelmio/api-doc-bundle",
-            "version": "v4.3.0",
+            "version": "v4.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/NelmioApiDocBundle.git",
-                "reference": "40dfcf418475998c6541431711b5476b249627d3"
+                "reference": "06bc5136d7e510b0ffdd453baa6ef6bad366d9db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/40dfcf418475998c6541431711b5476b249627d3",
-                "reference": "40dfcf418475998c6541431711b5476b249627d3",
+                "url": "https://api.github.com/repos/nelmio/NelmioApiDocBundle/zipball/06bc5136d7e510b0ffdd453baa6ef6bad366d9db",
+                "reference": "06bc5136d7e510b0ffdd453baa6ef6bad366d9db",
                 "shasum": ""
             },
             "require": {
@@ -2524,6 +2524,7 @@
             },
             "require-dev": {
                 "api-platform/core": "^2.4",
+                "composer/package-versions-deprecated": "1.11.99.1",
                 "friendsofsymfony/rest-bundle": "^2.8|^3.0",
                 "jms/serializer": "^1.14|^3.0",
                 "jms/serializer-bundle": "^2.3|^3.0",
@@ -2594,9 +2595,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nelmio/NelmioApiDocBundle/issues",
-                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.3.0"
+                "source": "https://github.com/nelmio/NelmioApiDocBundle/tree/v4.4.0"
             },
-            "time": "2021-06-07T17:09:58+00:00"
+            "time": "2021-07-18T16:59:37+00:00"
         },
         {
             "name": "nelmio/cors-bundle",
