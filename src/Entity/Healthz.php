@@ -21,42 +21,34 @@ use Throwable;
 /**
  * Class Healthz
  *
- * @ORM\Table(
- *      name="healthz",
- *  )
- * @ORM\Entity()
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'healthz')]
 class Healthz implements EntityInterface
 {
     use Uuid;
 
     /**
-     * @ORM\Column(
-     *      name="id",
-     *      type="uuid_binary_ordered_time",
-     *      unique=true,
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     *
      * @OA\Property(type="string", format="uuid")
      */
+    #[ORM\Id]
+    #[ORM\Column(
+        name: 'id',
+        type: 'uuid_binary_ordered_time',
+        unique: true,
+    )]
     #[Groups([
         'Healthz',
         'Healthz.id',
     ])]
     private UuidInterface $id;
 
-    /**
-     * @ORM\Column(
-     *      name="timestamp",
-     *      type="datetime_immutable",
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'timestamp',
+        type: 'datetime_immutable',
+    )]
     #[Groups([
         'Healthz',
         'Healthz.timestamp',

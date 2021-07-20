@@ -33,17 +33,15 @@ use function random_int;
 /**
  * Class ApiKey
  *
- * @ORM\Table(
- *      name="api_key",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="uq_token", columns={"token"}),
- *      },
- *  )
- * @ORM\Entity()
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'api_key')]
+#[ORM\UniqueConstraint(
+    name: 'uq_token',
+    columns: ['token'],
+)]
 #[AssertCollection\UniqueEntity('token')]
 class ApiKey implements EntityInterface, UserGroupAwareInterface
 {
@@ -52,16 +50,14 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     use Uuid;
 
     /**
-     * @ORM\Column(
-     *      name="id",
-     *      type="uuid_binary_ordered_time",
-     *      unique=true,
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     *
      * @OA\Property(type="string", format="uuid")
      */
+    #[ORM\Id]
+    #[ORM\Column(
+        name: 'id',
+        type: 'uuid_binary_ordered_time',
+        unique: true,
+    )]
     #[Groups([
         'ApiKey',
         'ApiKey.id',
@@ -70,14 +66,11 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     ])]
     private UuidInterface $id;
 
-    /**
-     * @ORM\Column(
-     *      name="token",
-     *      type="string",
-     *      length=40,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'token',
+        type: 'string',
+        length: 40,
+    )]
     #[Groups([
         'ApiKey',
         'ApiKey.token',
@@ -87,12 +80,10 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     #[Assert\Length(exactly: 40)]
     private string $token = '';
 
-    /**
-     * @ORM\Column(
-     *      name="description",
-     *      type="text",
-     *  )
-     */
+    #[ORM\Column(
+        name: 'description',
+        type: 'text',
+    )]
     #[Groups([
         'ApiKey',
         'ApiKey.description',
@@ -102,15 +93,12 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     /**
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
-     *
-     * @ORM\ManyToMany(
-     *      targetEntity="UserGroup",
-     *      inversedBy="apiKeys",
-     *  )
-     * @ORM\JoinTable(
-     *      name="api_key_has_user_group",
-     *  )
      */
+    #[ORM\JoinTable(name: 'api_key_has_user_group')]
+    #[ORM\ManyToMany(
+        targetEntity: UserGroup::class,
+        inversedBy: 'apiKeys',
+    )]
     #[Groups([
         'ApiKey.userGroups',
     ])]
@@ -118,12 +106,11 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     /**
      * @var Collection<int, LogRequest>|ArrayCollection<int, LogRequest>
-     *
-     * @ORM\OneToMany(
-     *      targetEntity="App\Entity\LogRequest",
-     *      mappedBy="apiKey",
-     *  )
      */
+    #[ORM\OneToMany(
+        mappedBy: 'apiKey',
+        targetEntity: LogRequest::class,
+    )]
     #[Groups([
         'ApiKey.logsRequest',
     ])]
