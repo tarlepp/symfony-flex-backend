@@ -68,7 +68,7 @@
 		"bamarni/composer-bin-plugin": "1.4.1",
 		"doctrine/doctrine-fixtures-bundle": "3.4.0",
 		"roave/security-advisories": "dev-latest",
-		"symfony/browser-kit": "5.3.0",
+		"symfony/browser-kit": "5.3.4",
 		"symfony/debug-bundle": "5.3.0",
 		"symfony/maker-bundle": "1.33.0",
 		"symfony/requirements-checker": "2.0.0",
