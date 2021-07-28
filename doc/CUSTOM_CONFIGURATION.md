@@ -7,12 +7,12 @@ configuration for this application.
 
 * [What is this?](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Prologue](#prologue)
-  * [Creating custom files](#creating-custom-files)
-  * [Detailed configuration](#detailed-configuration)
-  * [External links / resources](#external-links--resources)
+  * [Prologue](#prologue-smallsuptable-of-contentssupsmall)
+  * [Creating custom files](#creating-custom-files-smallsuptable-of-contentssupsmall)
+  * [Detailed configuration](#detailed-configuration-smallsuptable-of-contentssupsmall)
+  * [External links / resources](#external-links--resources-smallsuptable-of-contentssupsmall)
 
-## Prologue
+## Prologue <small><sup>[▲](#table-of-contents)</sup></small>
 
 This application is using [Dotenv](https://symfony.com/doc/current/components/dotenv.html)
 component parses `.env` files to make environment variables stored in them
@@ -25,7 +25,7 @@ Within this application we define _all_ environment specified settings to
 separate `application.json` file that we can easily use with Symfony
 configuration part.
 
-## Creating custom files
+## Creating custom files <small><sup>[▲](#table-of-contents)</sup></small>
 
 Starting to use custom configuration is quite easy, all you need to do is
 following:
@@ -50,7 +50,7 @@ Making necessary changes to those files should be quite self explanatory -
 just take a look what those files contains. And most likely you only need
 to make changes to that `secrets/application.local.json` file.
 
-## Detailed configuration
+## Detailed configuration <small><sup>[▲](#table-of-contents)</sup></small>
 
 Below you can see all the current configuration values that are defined in
 `application.json` and those are used on Symfony configuration files.
@@ -68,7 +68,7 @@ REQUEST_LOG_SENSITIVE_PROPERTIES  = Which request parameters are "sensitive"
                                     log
 ```
 
-## External links / resources
+## External links / resources <small><sup>[▲](#table-of-contents)</sup></small>
 
 * [Nov 2018 Changes to .env & How to Update](https://symfony.com/doc/current/configuration/dot-env-changes.html)
 * [New in Symfony 4.2: Define env vars per environment](https://symfony.com/blog/new-in-symfony-4-2-define-env-vars-per-environment)
