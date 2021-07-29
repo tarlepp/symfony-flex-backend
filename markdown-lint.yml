@@ -1,2 +1,9 @@
 MD026:
     punctuation: '.,;:!'
+
+MD033:
+    allowed_elements: {
+        'small',
+        'sup',
+    }
+
