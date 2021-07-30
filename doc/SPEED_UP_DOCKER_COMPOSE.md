@@ -34,8 +34,8 @@ The "most" clean solution to solve this atm is to run eg. Ubuntu desktop within
 machines. And this means that you actually run your favorite IDE inside that
 virtual machine.
 
-Another way is to use [docker-sync](#installation-of-docker-sync-table-of-contents). Application
-itself already contains necessary [docker-sync.yml](../docker-sync.yml)
+Another way is to use [docker-sync](#installation-of-docker-sync-table-of-contents).
+Application itself already contains necessary [docker-sync.yml](../docker-sync.yml)
 configuration  file to help with this.
 
 ### Mac [▲](#table-of-contents)

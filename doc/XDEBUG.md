@@ -27,7 +27,8 @@ These instructions relies heavily to screenshots, so you might need to use
 your own brains for some parts of these instructions - but I bet you can get
 this working in couple of minutes.
 
-Note that if you're using Mac, read [Mac users](#mac-users-table-of-contents) section first.
+Note that if you're using Mac, read [Mac users](#mac-users-table-of-contents)
+section first.
 
 ### PhpStorm basic configuration [▲](#table-of-contents)
 
@@ -95,8 +96,8 @@ By default this application assumes that you're using `app.localhost` as your
 PHP server that you've configured to your IDE. If you need to change that, just
 override that in your local `docker-compose.override.yml` file.
 
-See those [External links / resources](#external-links--resources-table-of-contents) on this
-documentation to get more information.
+See those [External links / resources](#external-links--resources-table-of-contents)
+on this documentation to get more information.
 
 ## Debug Postman requests [▲](#table-of-contents)
 
