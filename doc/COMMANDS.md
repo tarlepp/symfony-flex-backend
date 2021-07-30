@@ -7,15 +7,15 @@ application during development stage.
 
 * [What is this?](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Commands](#commands-smallsuptable-of-contentssupsmall)
-    * [Makefile](#makefile-smallsuptable-of-contentssupsmall)
-    * [Symfony console](#symfony-console-smallsuptable-of-contentssupsmall)
-    * [Custom commands](#custom-commands-smallsuptable-of-contentssupsmall)
-      * [user:management](#usermanagement-smallsuptable-of-contentssupsmall)
-      * [api-key:management](#api-keymanagement-smallsuptable-of-contentssupsmall)
-      * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities-smallsuptable-of-contentssupsmall)
+  * [Commands](#commands-table-of-contents)
+    * [Makefile](#makefile-table-of-contents)
+    * [Symfony console](#symfony-console-table-of-contents)
+    * [Custom commands](#custom-commands-table-of-contents)
+      * [user:management](#usermanagement-table-of-contents)
+      * [api-key:management](#api-keymanagement-table-of-contents)
+      * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities-table-of-contents)
 
-## Commands <small><sup>[▲](#table-of-contents)</sup></small>
+## Commands [▲](#table-of-contents)
 
 Note that all of these commands are intended to be executed either inside
 docker container or your local/dedicated server.
@@ -42,7 +42,7 @@ gid = 1000
 You need to create `docker-compose.override.yml` file and specify used user
 information there.
 
-### Makefile <small><sup>[▲](#table-of-contents)</sup></small>
+### Makefile [▲](#table-of-contents)
 
 Symfony Flex comes with `Makefile` configuration so that you can easily run
 some generic commands via `make` command. Below is a list of currently
@@ -91,7 +91,7 @@ update-bin                  # Update composer bin dependencies
 update                      # Update composer dependencies
 ```
 
-### Symfony console <small><sup>[▲](#table-of-contents)</sup></small>
+### Symfony console [▲](#table-of-contents)
 
 You can list all Symfony console commands via following command:
 
@@ -105,7 +105,7 @@ or
 console
 ```
 
-### Custom commands <small><sup>[▲](#table-of-contents)</sup></small>
+### Custom commands [▲](#table-of-contents)
 
 Project contains following custom console commands to help eg. user management:
 
@@ -120,7 +120,7 @@ Project contains following custom console commands to help eg. user management:
                                                     # 'DateDimension' entities.
 ```
 
-#### user:management <small><sup>[▲](#table-of-contents)</sup></small>
+#### user:management [▲](#table-of-contents)
 
 This command is just a wrapper for following commands:
 
@@ -136,7 +136,7 @@ This command is just a wrapper for following commands:
 ./bin/console user:list-groups    # To list current user groups
 ```
 
-#### api-key:management <small><sup>[▲](#table-of-contents)</sup></small>
+#### api-key:management [▲](#table-of-contents)
 
 This command is just a wrapper for following commands:
 
@@ -148,7 +148,7 @@ This command is just a wrapper for following commands:
 ./bin/console api-key:list            # To list API keys
 ```
 
-#### utils:create-date-dimension-entities <small><sup>[▲](#table-of-contents)</sup></small>
+#### utils:create-date-dimension-entities [▲](#table-of-contents)
 
 Command to create `DateDimension` entities that can be used with date/time
 related report queries.

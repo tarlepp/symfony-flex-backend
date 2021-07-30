@@ -16,44 +16,44 @@
 JSON REST API which is build on top of [Symfony](https://symfony.com/)
 framework.
 
-This application is mean to use as an `API` that some [frontend](#frontend-smallsuptable-of-contentssupsmall)
+This application is mean to use as an `API` that some [frontend](#frontend-table-of-contents)
 application(s) or different backend application(s) uses as they like.
 
 ## Table of Contents
 
 * [What is this](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Requirements](#requirements-smallsuptable-of-contentssupsmall)
-    * [Recommendations](#recommendations-smallsuptable-of-contentssupsmall)
-  * [Installation](#installation-smallsuptable-of-contentssupsmall)
-    * [1. Clone repository](#1-clone-repository-smallsuptable-of-contentssupsmall)
-    * [2. Start containers](#2-start-containers-smallsuptable-of-contentssupsmall)
-    * [3. Using application](#3-using-application-smallsuptable-of-contentssupsmall)
-    * [4. Getting shell to container](#4-getting-shell-to-container-smallsuptable-of-contentssupsmall)
-    * [5. Building containers](#5-building-containers-smallsuptable-of-contentssupsmall)
-  * [Frontend?](#frontend-smallsuptable-of-contentssupsmall)
-  * [Resources](#resources-smallsuptable-of-contentssupsmall)
-  * [External links / resources](#external-links--resources-smallsuptable-of-contentssupsmall)
-  * [Authors](#authors-smallsuptable-of-contentssupsmall)
-  * [License](#license-smallsuptable-of-contentssupsmall)
+  * [Requirements](#requirements-table-of-contents)
+    * [Recommendations](#recommendations-table-of-contents)
+  * [Installation](#installation-table-of-contents)
+    * [1. Clone repository](#1-clone-repository-table-of-contents)
+    * [2. Start containers](#2-start-containers-table-of-contents)
+    * [3. Using application](#3-using-application-table-of-contents)
+    * [4. Getting shell to container](#4-getting-shell-to-container-table-of-contents)
+    * [5. Building containers](#5-building-containers-table-of-contents)
+  * [Frontend?](#frontend-table-of-contents)
+  * [Resources](#resources-table-of-contents)
+  * [External links / resources](#external-links--resources-table-of-contents)
+  * [Authors](#authors-table-of-contents)
+  * [License](#license-table-of-contents)
 
-## Requirements <small><sup>[▲](#table-of-contents)</sup></small>
+## Requirements [▲](#table-of-contents)
 
 * [docker-compose](https://docs.docker.com/compose/install/)
 * If you are not using docker / docker-compose then follow [this](doc/INSTALLATION_WITHOUT_DOCKER.md)
 
-### Recommendations <small><sup>[▲](#table-of-contents)</sup></small>
+### Recommendations [▲](#table-of-contents)
 
 * `*nix platform` - most likely you're going to host your application on *nix
   platform - so I would recommend to do development also on that platform.
 * `Makefile` support - if you don't have this you need to look `Makefile` file
   to see what each `make` command is doing.
 
-## Installation <small><sup>[▲](#table-of-contents)</sup></small>
+## Installation [▲](#table-of-contents)
 
 This installation guide expects that you're using docker-compose.
 
-### 1. Clone repository <small><sup>[▲](#table-of-contents)</sup></small>
+### 1. Clone repository [▲](#table-of-contents)
 
 Use your favorite IDE and get checkout from GitHub or just use following
 command
@@ -62,7 +62,7 @@ command
 git clone https://github.com/tarlepp/symfony-flex-backend.git
 ```
 
-### 2. Start containers <small><sup>[▲](#table-of-contents)</sup></small>
+### 2. Start containers [▲](#table-of-contents)
 
 For this just run following command:
 
@@ -77,7 +77,7 @@ Those containers are following:
 * nginx (this will serve application)
 * mysql (MySQL 5.7 which will store all the data of application)
 
-### 3. Using application <small><sup>[▲](#table-of-contents)</sup></small>
+### 3. Using application [▲](#table-of-contents)
 
 By default `make start` / `docker-compose up` command starts those three
 containers and exposes following ports on `localhost`:
@@ -95,7 +95,7 @@ user: root
 password: password
 ```
 
-### 4. Getting shell to container <small><sup>[▲](#table-of-contents)</sup></small>
+### 4. Getting shell to container [▲](#table-of-contents)
 
 After you've run `make start` / `docker-compose up` command you can list all
 running containers with `docker ps` command.
@@ -110,7 +110,7 @@ make bash
 Where that `php` is that actual container where this backend application is
 running.
 
-### 5. Building containers <small><sup>[▲](#table-of-contents)</sup></small>
+### 5. Building containers [▲](#table-of-contents)
 
 For time to time you probably need to build containers again. This is something
 that you should do everytime if you have some problems to get containers up and
@@ -120,7 +120,7 @@ running. This you can do with following command:
 make start-build
 ```
 
-## Frontend? <small><sup>[▲](#table-of-contents)</sup></small>
+## Frontend? [▲](#table-of-contents)
 
 So this is an API backend what about frontend then? No worries I've made simple
 Angular NgRx powered template frontend which work with this backend just out of
@@ -131,7 +131,7 @@ the box.
 With these two _template_ applications it should be quite easy to start to
 build _your_ own application - right?
 
-## Resources <small><sup>[▲](#table-of-contents)</sup></small>
+## Resources [▲](#table-of-contents)
 
 * [Resource index](doc/README.md)
 * [Application commands](doc/COMMANDS.md)
@@ -145,18 +145,18 @@ build _your_ own application - right?
 * [Usage checklist](doc/USAGE_CHECKLIST.md)
 * [Using Xdebug](doc/XDEBUG.md)
 
-## External links / resources <small><sup>[▲](#table-of-contents)</sup></small>
+## External links / resources [▲](#table-of-contents)
 
 * [Symfony Flex set to enable RAD (Rapid Application Development)](https://www.symfony.fi/entry/symfony-flex-to-enable-rad-rapid-application-development)
 * [Symfony 4: A quick Demo](https://medium.com/@fabpot/symfony-4-a-quick-demo-da7d32be323)
 * [composer-version](https://github.com/vutran/composer-version)
 * [Symfony Recipes Server](https://symfony.sh/)
 
-## Authors <small><sup>[▲](#table-of-contents)</sup></small>
+## Authors [▲](#table-of-contents)
 
 * [Tarmo Leppänen](https://github.com/tarlepp)
 
-## License <small><sup>[▲](#table-of-contents)</sup></small>
+## License [▲](#table-of-contents)
 
 [The MIT License (MIT)](LICENSE)
 

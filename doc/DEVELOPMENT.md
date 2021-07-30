@@ -7,18 +7,18 @@ application.
 
 * [What is this?](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Development](#development-smallsuptable-of-contentssupsmall)
-    * [IDE](#ide-smallsuptable-of-contentssupsmall)
-    * [PHP Code Sniffer](#php-code-sniffer-smallsuptable-of-contentssupsmall)
-    * [Database changes](#database-changes-smallsuptable-of-contentssupsmall)
+  * [Development](#development-table-of-contents)
+    * [IDE](#ide-table-of-contents)
+    * [PHP Code Sniffer](#php-code-sniffer-table-of-contents)
+    * [Database changes](#database-changes-table-of-contents)
 
-## Development <small><sup>[▲](#table-of-contents)</sup></small>
+## Development [▲](#table-of-contents)
 
 * [PSR-1](https://www.php-fig.org/psr/psr-1/)
 * [PSR-2](https://www.php-fig.org/psr/psr-2/)
 * [Coding Standards](http://symfony.com/doc/current/contributing/code/standards.html)
 
-### IDE <small><sup>[▲](#table-of-contents)</sup></small>
+### IDE [▲](#table-of-contents)
 
 I highly recommend that you use "proper"
 [IDE](https://en.wikipedia.org/wiki/Integrated_development_environment)
@@ -34,7 +34,7 @@ Just choose one which is the best for you.
 Also note that project contains `.idea` folder that holds default settings for
 PHPStorm.
 
-### PHP Code Sniffer <small><sup>[▲](#table-of-contents)</sup></small>
+### PHP Code Sniffer [▲](#table-of-contents)
 
 It's highly recommended that you use this tool while doing actual development
 to application. PHP Code Sniffer is added to project ```dev``` dependencies, so
@@ -50,7 +50,7 @@ will help you to get things rolling.
 
 * [Using PHP Code Sniffer Tool](https://www.jetbrains.com/help/phpstorm/using-php-code-sniffer.html)
 
-### Database changes <small><sup>[▲](#table-of-contents)</sup></small>
+### Database changes [▲](#table-of-contents)
 
 Migration files contain all necessary database changes
 to get application running with its database structure. You can migrate

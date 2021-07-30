@@ -10,36 +10,36 @@ new developers - so this document is trying to solve that issue.
 
 * [What is this?](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [REST API wtf?](#rest-api-wtf-smallsuptable-of-contentssupsmall)
-    * [Explanation](#explanation-smallsuptable-of-contentssupsmall)
-    * [Base workflow](#base-workflow-smallsuptable-of-contentssupsmall)
-    * [REST traits](#rest-traits-smallsuptable-of-contentssupsmall)
-    * [How to make new REST API?](#how-to-make-new-rest-api-smallsuptable-of-contentssupsmall)
-    * [Alternatives](#alternatives-smallsuptable-of-contentssupsmall)
-  * [Authentication and authorization](#authentication-and-authorization-smallsuptable-of-contentssupsmall)
-    * [Authentication](#authentication-smallsuptable-of-contentssupsmall)
-      * [Normal users](#normal-users-smallsuptable-of-contentssupsmall)
-      * [ApiKey "users"](#apikey-users-smallsuptable-of-contentssupsmall)
-  * [Controllers](#controllers-smallsuptable-of-contentssupsmall)
-  * [Resources](#resources-smallsuptable-of-contentssupsmall)
-    * [Lifecycle callbacks](#lifecycle-callbacks-smallsuptable-of-contentssupsmall)
-  * [Repositories](#repositories-smallsuptable-of-contentssupsmall)
-    * [Parameter handling](#parameter-handling-smallsuptable-of-contentssupsmall)
-    * [Query builder callbacks and joins](#query-builder-callbacks-and-joins-smallsuptable-of-contentssupsmall)
-  * [Argument value resolvers](#argument-value-resolvers-smallsuptable-of-contentssupsmall)
-    * [Entity value resolver](#entity-value-resolver-smallsuptable-of-contentssupsmall)
-    * [Logged in user value resolver](#logged-in-user-value-resolver-smallsuptable-of-contentssupsmall)
-    * [REST DTO value resolver](#rest-dto-value-resolver-smallsuptable-of-contentssupsmall)
-  * [Common helpers](#common-helpers-smallsuptable-of-contentssupsmall)
-    * [LoggerAwareTrait](#loggerawaretrait-smallsuptable-of-contentssupsmall)
-    * [StopwatchAwareTrait](#stopwatchawaretrait-smallsuptable-of-contentssupsmall)
+  * [REST API wtf?](#rest-api-wtf-table-of-contents)
+    * [Explanation](#explanation-table-of-contents)
+    * [Base workflow](#base-workflow-table-of-contents)
+    * [REST traits](#rest-traits-table-of-contents)
+    * [How to make new REST API?](#how-to-make-new-rest-api-table-of-contents)
+    * [Alternatives](#alternatives-table-of-contents)
+  * [Authentication and authorization](#authentication-and-authorization-table-of-contents)
+    * [Authentication](#authentication-table-of-contents)
+      * [Normal users](#normal-users-table-of-contents)
+      * [ApiKey "users"](#apikey-users-table-of-contents)
+  * [Controllers](#controllers-table-of-contents)
+  * [Resources](#resources-table-of-contents)
+    * [Lifecycle callbacks](#lifecycle-callbacks-table-of-contents)
+  * [Repositories](#repositories-table-of-contents)
+    * [Parameter handling](#parameter-handling-table-of-contents)
+    * [Query builder callbacks and joins](#query-builder-callbacks-and-joins-table-of-contents)
+  * [Argument value resolvers](#argument-value-resolvers-table-of-contents)
+    * [Entity value resolver](#entity-value-resolver-table-of-contents)
+    * [Logged in user value resolver](#logged-in-user-value-resolver-table-of-contents)
+    * [REST DTO value resolver](#rest-dto-value-resolver-table-of-contents)
+  * [Common helpers](#common-helpers-table-of-contents)
+    * [LoggerAwareTrait](#loggerawaretrait-table-of-contents)
+    * [StopwatchAwareTrait](#stopwatchawaretrait-table-of-contents)
 
-## REST API wtf? <small><sup>[▲](#table-of-contents)</sup></small>
+## REST API wtf? [▲](#table-of-contents)
 
 This application provides a REST API that you can easily use - and now you
 might be asking question - why, isn't there a ton of those already?
 
-### Explanation <small><sup>[▲](#table-of-contents)</sup></small>
+### Explanation [▲](#table-of-contents)
 
 When I started with this "project" I first tried `FOSRestBundle` and after that
 `API Platform` and neither of those wasn't "good" enough for my needs for REST
@@ -67,7 +67,7 @@ The main points to make this from scratch are following things;
   etc.)
 * And the main thing - to learn how to use Symfony
 
-### Base workflow <small><sup>[▲](#table-of-contents)</sup></small>
+### Base workflow [▲](#table-of-contents)
 
 Within this application the base workflow is following, when we're talking
 about "big" sections at time;
@@ -78,7 +78,7 @@ So the main idea is to use _generic_ `resource` service(s) to control your
 application workflow. This resource is just one more layer within your
 application where you can control your request / response handling as you like.
 
-### REST traits <small><sup>[▲](#table-of-contents)</sup></small>
+### REST traits [▲](#table-of-contents)
 
 Application relies traits within those basic CRUD actions. You can easily
 attach any of following generic trait to your application controller;
@@ -95,7 +95,7 @@ attach any of following generic trait to your application controller;
 Where you can use that _{role}_ to specify which role user needs to have
 to access that action.
 
-### How to make new REST API? <small><sup>[▲](#table-of-contents)</sup></small>
+### How to make new REST API? [▲](#table-of-contents)
 
 To create new REST API from scratch you need to add following parts to your
 application;
@@ -110,9 +110,9 @@ application;
 And that those all has bind together, you should see clear example of this
 structure if you look how `ApiKey` endpoint has been built to this application.
 
-## Authentication and authorization <small><sup>[▲](#table-of-contents)</sup></small>
+## Authentication and authorization [▲](#table-of-contents)
 
-### Authentication <small><sup>[▲](#table-of-contents)</sup></small>
+### Authentication [▲](#table-of-contents)
 
 By default this application is providing a "normal" user and "apikey"
 authentication implementations. Another quite _big_ difference to traditional
@@ -120,7 +120,7 @@ Symfony  applications is that this application does not bind `Entities` to
 `Symfony\Component\Security\Core\User\UserInterface` - this application uses
 separated DTO's for that.
 
-#### Normal users <small><sup>[▲](#table-of-contents)</sup></small>
+#### Normal users [▲](#table-of-contents)
 
 These users are authenticated via `Json Web Token (JWT)`, each JWT is created
 using private/public keys and those keys are always re-generated when
@@ -132,7 +132,7 @@ Also note that if/when you want to use something else as user provider than
 your application database, you just need to change `SecurityUserFactory`
 implementation and/or create your own one.
 
-#### ApiKey "users" <small><sup>[▲](#table-of-contents)</sup></small>
+#### ApiKey "users" [▲](#table-of-contents)
 
 This authentication is used within `server-to-server` communication between
 "trusted" parties. These "ApiKey" users are authenticated via special HTTP
@@ -142,7 +142,7 @@ request header;
 Authorization: ApiKey _APIKEY_TOKEN_HERE_
 ```
 
-## Controllers <small><sup>[▲](#table-of-contents)</sup></small>
+## Controllers [▲](#table-of-contents)
 
 If your application is providing just a basic REST API for CRUD actions, then
 like 99% your controllers would look like something below;
@@ -192,7 +192,7 @@ class FooBarController extends Controller
 Controller with this structure is giving you 100% CRUD operations that your
 application will provide within that simple controller.
 
-### Alternatives <small><sup>[▲](#table-of-contents)</sup></small>
+### Alternatives [▲](#table-of-contents)
 
 You should know that there is also another solutions for REST API, that you
 really should look/try also.
@@ -205,7 +205,7 @@ build REST API from scratch - within that process you will learn basically
 the main aspects of Symfony based applications (security, controllers, dto,
 request/response handling, etc.).
 
-## Resources <small><sup>[▲](#table-of-contents)</sup></small>
+## Resources [▲](#table-of-contents)
 
 Resource services are layer between your controller/command and repository.
 Within this layer you can control how to `mutate` that repository data for
@@ -239,7 +239,7 @@ information about those from
 
 These resource services are the main backbone of your application.
 
-### Lifecycle callbacks <small><sup>[▲](#table-of-contents)</sup></small>
+### Lifecycle callbacks [▲](#table-of-contents)
 
 Using resource services give you ability to use `lifecycle callbacks` that
 give you extra layer to control how your requests are handled within your
@@ -261,12 +261,12 @@ Each of these you can use `before` and `after` methods within your resource
 service to control your request and response as you like. For more information
 about these see [this](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/Rest/Traits/RestResourceLifeCycles.php).
 
-## Repositories <small><sup>[▲](#table-of-contents)</sup></small>
+## Repositories [▲](#table-of-contents)
 
 Repositories within this application are much like the same as Symfony
 itself provides by default, but there is couple of extra features within those;
 
-### Parameter handling <small><sup>[▲](#table-of-contents)</sup></small>
+### Parameter handling [▲](#table-of-contents)
 
 This application has builtin generic parameter handling to help you with
 generic REST queries. Handling of following generic parameters has been
@@ -297,7 +297,7 @@ are replacements for what doctrine itself is providing)
 Note that within base REST CRUD actions these parameters have been passed
 through from `resource` service to repository level.
 
-### Query builder callbacks and joins <small><sup>[▲](#table-of-contents)</sup></small>
+### Query builder callbacks and joins [▲](#table-of-contents)
 
 Usually common use case for generic REST API is to add custom callbacks to
 specified query that is going to be executed and this application provides you
@@ -334,14 +334,14 @@ lazy loading with those.
 This will save some serious time on request / response processing + it'll
 just make one query instead of `1+n` queries.
 
-## Argument value resolvers <small><sup>[▲](#table-of-contents)</sup></small>
+## Argument value resolvers [▲](#table-of-contents)
 
 Application has following builtin argument resolvers that you can use to build
 your own application.
 
 [Symfony documentation](https://symfony.com/doc/current/controller/argument_value_resolver.html)
 
-### Entity value resolver <small><sup>[▲](#table-of-contents)</sup></small>
+### Entity value resolver [▲](#table-of-contents)
 
 This is basically replacement for [SensioFrameworkExtraBundle](https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle)
 `@ParamConverter` annotation, so that you can easily inject _any_ entity to
@@ -353,7 +353,7 @@ those [lifecycle callbacks](#lifecycle-callbacks) as you like.
 
 [source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ArgumentResolver/EntityValueResolver.php)
 
-### Logged in user value resolver <small><sup>[▲](#table-of-contents)</sup></small>
+### Logged in user value resolver [▲](#table-of-contents)
 
 Because this application has separated user `entity` totally from actual
 firewall user - you can use this resolver to inject actual logged in user
@@ -361,7 +361,7 @@ entity to your controller.
 
 [source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ArgumentResolver/LoggedInUserValueResolver.php)
 
-### REST DTO value resolver <small><sup>[▲](#table-of-contents)</sup></small>
+### REST DTO value resolver [▲](#table-of-contents)
 
 This resolver is used within following generic REST CRUD routes;
 
@@ -377,7 +377,7 @@ to make actual mapping from request to corresponding DTO object.
 
 [source](https://github.com/tarlepp/symfony-flex-backend/blob/master/src/ArgumentResolver/RestDtoValueResolver.php)
 
-## Common helpers <small><sup>[▲](#table-of-contents)</sup></small>
+## Common helpers [▲](#table-of-contents)
 
 This application has builtin common helper traits that you can easily to use
 everywhere in your application.
@@ -387,7 +387,7 @@ quickly - these helpers are not mentioned to be use in your production code!!!
 eg. if you need `LoggerInterface` in your service, just use DI to inject that
 to your service._
 
-### LoggerAwareTrait <small><sup>[▲](#table-of-contents)</sup></small>
+### LoggerAwareTrait [▲](#table-of-contents)
 
 Within this trait you can easily inject _your_ `logger` to any service that
 you've in your application.
@@ -409,7 +409,7 @@ class SomeService
 After that you can just use `$this->logger` in your service to log what you
 need.
 
-### StopwatchAwareTrait <small><sup>[▲](#table-of-contents)</sup></small>
+### StopwatchAwareTrait [▲](#table-of-contents)
 
 This is used to easy up your application debug process.
 
