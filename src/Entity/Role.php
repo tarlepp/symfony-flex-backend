@@ -19,29 +19,24 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Class Role
  *
- * @ORM\Table(
- *      name="role",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="uq_role", columns={"role"}),
- *      },
- *  )
- * @ORM\Entity()
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'role')]
+#[ORM\UniqueConstraint(
+    name: 'uq_role',
+    columns: ['role'],
+)]
 class Role implements EntityInterface
 {
     use Blameable;
     use Timestampable;
 
-    /**
-     * @ORM\Column(
-     *      name="description",
-     *      type="text",
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'description',
+        type: 'text',
+    )]
     #[Groups([
         'Role',
         'Role.description',
@@ -52,27 +47,19 @@ class Role implements EntityInterface
      * User groups that belongs to this role.
      *
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
-     *
-     * @ORM\OneToMany(
-     *      targetEntity="App\Entity\UserGroup",
-     *      mappedBy="role",
-     *  )
      */
+    #[ORM\OneToMany(
+        mappedBy: 'role',
+        targetEntity: UserGroup::class,
+    )]
     #[Groups([
         'Role.userGroups',
     ])]
     private Collection | ArrayCollection $userGroups;
 
     public function __construct(
-        /**
-         * @ORM\Column(
-         *      name="role",
-         *      type="string",
-         *      unique=true,
-         *      nullable=false,
-         *  )
-         * @ORM\Id()
-         */
+        #[ORM\Id]
+        #[ORM\Column(name: 'role', type: 'string', unique: true, nullable: false)]
         #[Groups([
             'Role',
             'Role.id',

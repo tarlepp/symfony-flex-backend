@@ -28,18 +28,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class User
  *
- * @ORM\Table(
- *      name="user",
- *      uniqueConstraints={
- *          @ORM\UniqueConstraint(name="uq_username", columns={"username"}),
- *          @ORM\UniqueConstraint(name="uq_email", columns={"email"}),
- *      },
- *  )
- * @ORM\Entity()
- *
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[ORM\Entity]
+#[ORM\Table(name: 'user')]
+#[ORM\UniqueConstraint(
+    name: 'uq_username',
+    columns: ['username'],
+)]
+#[ORM\UniqueConstraint(
+    name: 'uq_email',
+    columns: ['email'],
+)]
 #[AssertCollection\UniqueEntity('email')]
 #[AssertCollection\UniqueEntity('username')]
 class User implements EntityInterface, UserInterface, UserGroupAwareInterface
@@ -53,16 +54,15 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     public const SET_USER_BASIC = 'set.UserBasic';
 
     /**
-     * @ORM\Column(
-     *      name="id",
-     *      type="uuid_binary_ordered_time",
-     *      unique=true,
-     *      nullable=false,
-     *  )
-     * @ORM\Id()
-     *
      * @OA\Property(type="string", format="uuid")
      */
+    #[ORM\Id]
+    #[ORM\Column(
+        name: 'id',
+        type: 'uuid_binary_ordered_time',
+        unique: true,
+        nullable: false,
+    )]
     #[Groups([
         'User',
         'User.id',
@@ -78,14 +78,12 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     ])]
     private UuidInterface $id;
 
-    /**
-     * @ORM\Column(
-     *      name="username",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'username',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     #[Groups([
         'User',
         'User.username',
@@ -98,14 +96,12 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[Assert\Length(min: 2, max: 255)]
     private string $username = '';
 
-    /**
-     * @ORM\Column(
-     *      name="first_name",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'first_name',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     #[Groups([
         'User',
         'User.firstName',
@@ -118,14 +114,12 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[Assert\Length(min: 2, max: 255)]
     private string $firstName = '';
 
-    /**
-     * @ORM\Column(
-     *      name="last_name",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'last_name',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     #[Groups([
         'User',
         'User.lastName',
@@ -138,14 +132,12 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[Assert\Length(min: 2, max: 255)]
     private string $lastName = '';
 
-    /**
-     * @ORM\Column(
-     *      name="email",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'email',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     #[Groups([
         'User',
         'User.email',
@@ -158,16 +150,12 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[Assert\Email]
     private string $email = '';
 
-    /**
-     * @ORM\Column(
-     *      name="language",
-     *      type="EnumLanguage",
-     *      nullable=false,
-     *      options={
-     *          "comment": "User language for translations",
-     *      },
-     *  )
-     */
+    #[ORM\Column(
+        name: 'language',
+        type: 'EnumLanguage',
+        nullable: false,
+        options: ['comment' => 'User language for translations'],
+    )]
     #[Groups([
         'User',
         'User.language',
@@ -180,16 +168,12 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[AppAssert\Language]
     private string $language = Localization::DEFAULT_LANGUAGE;
 
-    /**
-     * @ORM\Column(
-     *      name="locale",
-     *      type="EnumLocale",
-     *      nullable=false,
-     *      options={
-     *          "comment": "User locale for number, time, date, etc. formatting.",
-     *      },
-     *  )
-     */
+    #[ORM\Column(
+        name: 'locale',
+        type: 'EnumLocale',
+        nullable: false,
+        options: ['comment' => 'User locale for number, time, date, etc. formatting.'],
+    )]
     #[Groups([
         'User',
         'User.locale',
@@ -202,18 +186,16 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[AppAssert\Locale]
     private string $locale = Localization::DEFAULT_LOCALE;
 
-    /**
-     * @ORM\Column(
-     *      name="timezone",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *      options={
-     *          "comment": "User timezone which should be used to display time, date, etc.",
-     *          "default": "Europe/Helsinki",
-     *      },
-     *  )
-     */
+    #[ORM\Column(
+        name: 'timezone',
+        type: 'string',
+        length: 255,
+        nullable: false,
+        options: [
+            'comment' => 'User timezone which should be used to display time, date, etc.',
+            'default' => 'Europe/Helsinki',
+        ],
+    )]
     #[Groups([
         'User',
         'User.timezone',
@@ -226,14 +208,12 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[AppAssert\Timezone]
     private string $timezone = Localization::DEFAULT_TIMEZONE;
 
-    /**
-     * @ORM\Column(
-     *      name="password",
-     *      type="string",
-     *      length=255,
-     *      nullable=false,
-     *  )
-     */
+    #[ORM\Column(
+        name: 'password',
+        type: 'string',
+        length: 255,
+        nullable: false,
+    )]
     private string $password = '';
 
     /**

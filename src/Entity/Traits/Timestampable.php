@@ -23,13 +23,12 @@ trait Timestampable
 {
     /**
      * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(
-     *      name="created_at",
-     *      type="datetime_immutable",
-     *      nullable=true,
-     *  )
      */
+    #[ORM\Column(
+        name: 'created_at',
+        type: 'datetime_immutable',
+        nullable: true,
+    )]
     #[Groups([
         'ApiKey.createdAt',
         'Role.createdAt',
@@ -40,13 +39,12 @@ trait Timestampable
 
     /**
      * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(
-     *      name="updated_at",
-     *      type="datetime_immutable",
-     *      nullable=true,
-     *  )
      */
+    #[ORM\Column(
+        name: 'updated_at',
+        type: 'datetime_immutable',
+        nullable: true,
+    )]
     #[Groups([
         'ApiKey.updatedAt',
         'Role.updatedAt',
