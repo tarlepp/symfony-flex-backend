@@ -54,7 +54,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     /**
      * Joins that need to attach to queries, this is needed for to prevent duplicate joins on those.
      *
-     * @var array<string, array<int, array<int, array<int, string>>>>
+     * @var array<string, array<array<int, scalar>>>
      */
     private static array $joins = [
         self::INNER_JOIN => [],
@@ -203,7 +203,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
      * @see QueryBuilder::innerJoin()
      *
      * @param string $type Join type; leftJoin, innerJoin or join
-     * @param array<int, array<int, string>> $parameters Query builder join parameters
+     * @param array<int, scalar> $parameters Query builder join parameters
      */
     private function addJoinToQuery(string $type, array $parameters): void
     {
