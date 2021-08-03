@@ -148,7 +148,7 @@ class CheckDependencies extends Command
         // Initialize output rows
         $rows = [];
 
-        $iterator = function (string $directory) use ($progressBar, &$rows): void {
+        $iterator = function (string $directory) use ($io, $progressBar, &$rows): void {
             foreach ($this->processNamespacePath($directory) as $row => $data) {
                 $relativePath = '';
 
@@ -170,6 +170,10 @@ class CheckDependencies extends Command
                     $rows[] = [''];
                     $rows[] = ['', '', '<fg=red>' . $data->warning . '</>'];
                 }
+            }
+
+            if (count($rows) === 1) {
+                $io->write("\033\143");
             }
 
             $progressBar->advance();
