@@ -148,14 +148,14 @@ class CheckDependencies extends Command
         // Initialize output rows
         $rows = [];
 
-        $iterator = function (string $directory) use ($progressBar, &$rows): void {
+        $iterator = function (string $directory) use ($io, $progressBar, &$rows): void {
             foreach ($this->processNamespacePath($directory) as $row => $data) {
                 $relativePath = '';
 
                 // First row of current library
                 if ($row === 0) {
                     // We want to add table separator between different libraries
-                    if ($rows !== 0) {
+                    if ($rows !== []) {
                         $rows[] = new TableSeparator();
                     }
 
@@ -170,6 +170,10 @@ class CheckDependencies extends Command
                     $rows[] = [''];
                     $rows[] = ['', '', '<fg=red>' . $data->warning . '</>'];
                 }
+            }
+
+            if (count($rows) === 1) {
+                $io->write("\033\143");
             }
 
             $progressBar->advance();
