@@ -95,7 +95,7 @@ class CheckDependencies extends Command
         $this->setTableColumnWidths($packageNameLength, $table);
 
         $rows === []
-            ? $io->success('Good news, there is not any vendor dependency to update at this time!')
+            ? $io->success('Good news, there is no any vendor dependency to update at this time!')
             : $table->render();
 
         return 0;
