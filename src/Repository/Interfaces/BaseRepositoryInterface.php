@@ -197,7 +197,7 @@ interface BaseRepositoryInterface
      *
      * @see QueryBuilder::leftJoin() for parameters
      *
-     * @param array<int, array<int, string>> $parameters
+     * @param array<int, scalar> $parameters
      *
      * @throws InvalidArgumentException
      */
@@ -210,7 +210,7 @@ interface BaseRepositoryInterface
      *
      * @see QueryBuilder::innerJoin() for parameters
      *
-     * @param array<int, array<int, string>> $parameters
+     * @param array<int, scalar> $parameters
      *
      * @throws InvalidArgumentException
      */
