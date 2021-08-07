@@ -7,9 +7,9 @@ use this template as in base of your own application.
 
 * [What is this?](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Checklist](#checklist)
+  * [Checklist](#checklist-table-of-contents)
 
-## Checklist
+## Checklist [▲](#table-of-contents)
 
 Below you have _basic_ checklist that **_you need to go through_** after you have
 started to use this template.
