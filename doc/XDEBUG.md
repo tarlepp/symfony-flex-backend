@@ -11,25 +11,26 @@ have all basic configuration ready.
 
 * [What is this?](#what-is-this)
   * [Table of Contents](#table-of-contents)
-  * [Configuration and usage](#configuration-and-usage)
-    * [PhpStorm basic configuration](#phpstorm-basic-configuration)
-    * [First connection](#first-connection)
-    * [Configuring debugging server](#configuring-debugging-server)
-  * [Mac users](#mac-users)
-  * [Debug CLI commands](#debug-cli-commands)
-  * [Debug Postman requests](#debug-postman-requests)
-  * [External links / resources](#external-links--resources)
-  * [Closure](#closure)
+  * [Configuration and usage](#configuration-and-usage-table-of-contents)
+    * [PhpStorm basic configuration](#phpstorm-basic-configuration-table-of-contents)
+    * [First connection](#first-connection-table-of-contents)
+    * [Configuring debugging server](#configuring-debugging-server-table-of-contents)
+  * [Mac users](#mac-users-table-of-contents)
+  * [Debug CLI commands](#debug-cli-commands-table-of-contents)
+  * [Debug Postman requests](#debug-postman-requests-table-of-contents)
+  * [External links / resources](#external-links--resources-table-of-contents)
+  * [Closure](#closure-table-of-contents)
 
-## Configuration and usage
+## Configuration and usage [▲](#table-of-contents)
 
 These instructions relies heavily to screenshots, so you might need to use
 your own brains for some parts of these instructions - but I bet you can get
 this working in couple of minutes.
 
-Note that if you're using Mac, read [Mac users](#mac-users) section first.
+Note that if you're using Mac, read [Mac users](#mac-users-table-of-contents)
+section first.
 
-### PhpStorm basic configuration
+### PhpStorm basic configuration [▲](#table-of-contents)
 
 1) Make sure that Xdebug port is `9003`
 2) Validate debugger configuration
@@ -47,7 +48,7 @@ Create Run/Debug Configuration like in image below:
 
 ![Run/Debug Configuration](images/xdebug_03.png)
 
-### First connection
+### First connection [▲](#table-of-contents)
 
 After you have make sure that all basic things are configured properly you can
 start to listen incoming PHP debug connections. After this you need to do
@@ -63,14 +64,14 @@ After that you should see following:
 
 And in this screen select the correct `index.php` file.
 
-### Configuring debugging server
+### Configuring debugging server [▲](#table-of-contents)
 
 Last step is to configure used paths on debugging server to match with your
 local paths. See the image below:
 
 ![Path mappings](images/xdebug_05.png)
 
-## Mac users
+## Mac users [▲](#table-of-contents)
 
 Mac users need to create a `docker-compose.override.yml` file with following
 content:
@@ -89,28 +90,28 @@ document, which will tell you how to speed your Mac environment quite lot.
 You just need to combine those both configurations to your local
 `docker-compose.override.yml` file
 
-## Debug CLI commands
+## Debug CLI commands [▲](#table-of-contents)
 
 By default this application assumes that you're using `app.localhost` as your
 PHP server that you've configured to your IDE. If you need to change that, just
 override that in your local `docker-compose.override.yml` file.
 
-See those [External links / resources](#external-links--resources) on this
-documentation to get more information.
+See those [External links / resources](#external-links--resources-table-of-contents)
+on this documentation to get more information.
 
-~~## Debug Postman requests~~
+## Debug Postman requests [▲](#table-of-contents)
 
 ~~If you're using [Postman](https://www.getpostman.com/) to test / debug your
 application you need to add `?XDEBUG_SESSION_START=PHPSTORM` to each URL
 that you use with Postman.~~
 
-## External links / resources
+## External links / resources [▲](#table-of-contents)
 
 * [Debugging PHP (web and cli) with Xdebug using Docker and PHPStorm](https://thecodingmachine.io/configuring-xdebug-phpstorm-docker)
 * [Debug your PHP in Docker with Intellij/PHPStorm and Xdebug](https://gist.github.com/jehaby/61a89b15571b4bceee2417106e80240d)
 * [Debugging with Postman and PHPStorm (Xdebug)](https://www.thinkbean.com/drupal-development-blog/debugging-postman-and-phpstorm-xdebug)
 
-## Closure
+## Closure [▲](#table-of-contents)
 
 Happy debugging \o/ - it has not ever be as easy as this...
 
