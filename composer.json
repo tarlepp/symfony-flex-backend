@@ -24,7 +24,7 @@
 		"ext-json": "*",
 		"ext-mbstring": "*",
 		"ext-pdo": "*",
-		"doctrine/annotations": "1.13.1",
+		"doctrine/annotations": "1.13.2",
 		"doctrine/doctrine-bundle": "2.4.2",
 		"doctrine/doctrine-migrations-bundle": "3.1.1",
 		"doctrine/orm": "2.9.3",
