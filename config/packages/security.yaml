@@ -37,7 +37,6 @@ security:
             pattern: ^/
             stateless: true
             lazy: true
-            entry_point: lexik_jwt_authentication.jwt_token_authenticator
             provider: chain_user_provider
             jwt: ~
             custom_authenticators:
