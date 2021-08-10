@@ -97,6 +97,13 @@ class RequestLogger implements RequestLoggerInterface
      */
     private function createRequestLogEntry(): void
     {
+        /**
+         * We want to clear possible existing managements entities before we
+         * flush this new `LogRequest` entity to database. This is to prevent
+         * not wanted entity state changes to be flushed.
+         */
+        $this->resource->getRepository()->getEntityManager()->clear();
+
         // Create new request log entity
         $entity = new LogRequest(
             $this->sensitiveProperties,

@@ -1,4 +1,4 @@
-FROM php:8.0.8-fpm
+FROM php:8.0.9-fpm
 
 RUN apt-get update && apt-get install -y \
     zlib1g-dev libzip-dev libxml2-dev libicu-dev g++ git unzip jq wget \
@@ -20,7 +20,7 @@ RUN pickle install apcu \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.1.1 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.1.5 /usr/bin/composer /usr/bin/composer
 
 ENV APP_ENV prod
 ENV APP_DEBUG 0
