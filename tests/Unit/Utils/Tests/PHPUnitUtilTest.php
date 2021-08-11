@@ -95,7 +95,7 @@ class PHPUnitUtilTest extends KernelTestCase
     /**
      * @dataProvider dataProviderTestThatGetValidValueForTypeWorksIfThereIsAPipeOnType
      *
-     * @param int | string | array<int, string> $expected
+     * @param int|string|array<int, string> $expected
      *
      * @throws Throwable
      *
