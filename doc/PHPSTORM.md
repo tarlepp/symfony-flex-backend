@@ -17,9 +17,9 @@ section of this documentation.
     * [Debugging](#debugging-table-of-contents)
   * [External links / resources](#external-links--resources-table-of-contents)
 
-## Setup [▲](#table-of-contents)
+## Setup [ᐞ](#table-of-contents)
 
-### CLI Interpreter [▲](#table-of-contents)
+### CLI Interpreter [ᐞ](#table-of-contents)
 
 First thing that you need to do is select correct CLI interpreter for your
 PhpStorm. Selection should be available on `Settings -> Languages & Frameworks
@@ -32,7 +32,7 @@ section - Configuring Remote PHP Interpreters.
 
 ![Path mappings](images/phpstorm_01.png)
 
-### Server [▲](#table-of-contents)
+### Server [ᐞ](#table-of-contents)
 
 Next thing to configure is used PHP servers. This you can do in
 `Settings -> Languages & Frameworks -> PHP -> Servers` - purpose of this is to
@@ -41,7 +41,7 @@ docker container.
 
 ![Path mappings](images/phpstorm_02.png)
 
-### Test Frameworks [▲](#table-of-contents)
+### Test Frameworks [ᐞ](#table-of-contents)
 
 Application itself contains quite lot of tests as you know from that [testing](TESTING.md)
 documentation. To get support to run tests directly from your IDE you need to
@@ -62,12 +62,12 @@ those earlier configured settings.
 
 ![Path mappings](images/phpstorm_04.png)
 
-### Debugging [▲](#table-of-contents)
+### Debugging [ᐞ](#table-of-contents)
 
 Application supports using of XDebug for debugging tool, so just read [Using Xdebug](XDEBUG.md)
 documentation and you're ready to start debugging your application.
 
-## External links / resources [▲](#table-of-contents)
+## External links / resources [ᐞ](#table-of-contents)
 
 * [Configuring Remote PHP Interpreters](https://www.jetbrains.com/help/phpstorm/configuring-remote-interpreters.html)
 * [Test Frameworks](https://www.jetbrains.com/help/phpstorm/php-test-frameworks.html)
