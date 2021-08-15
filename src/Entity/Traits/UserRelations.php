@@ -33,7 +33,9 @@ trait UserRelations
         targetEntity: UserGroup::class,
         inversedBy: 'users',
     )]
-    #[ORM\JoinTable(name: 'user_has_user_group')]
+    #[ORM\JoinTable(
+        name: 'user_has_user_group',
+    )]
     #[Groups([
         'User.userGroups',
     ])]

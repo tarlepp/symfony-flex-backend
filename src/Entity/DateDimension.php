@@ -26,10 +26,16 @@ use function floor;
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[ORM\Entity(readOnly: true)]
-#[ORM\Table(name: 'date_dimension')]
+#[ORM\Entity(
+    readOnly: true,
+)]
+#[ORM\Table(
+    name: 'date_dimension',
+)]
 #[ORM\Index(
-    columns: ['date'],
+    columns: [
+        'date',
+    ],
     name: 'date',
 )]
 class DateDimension implements EntityInterface
@@ -54,7 +60,9 @@ class DateDimension implements EntityInterface
     #[ORM\Column(
         name: 'year',
         type: 'integer',
-        options: ['comment' => 'A full numeric representation of a year, 4 digits'],
+        options: [
+            'comment' => 'A full numeric representation of a year, 4 digits',
+        ],
     )]
     #[Groups([
         'DateDimension',
@@ -65,7 +73,9 @@ class DateDimension implements EntityInterface
     #[ORM\Column(
         name: 'month',
         type: 'integer',
-        options: ['comment' => 'Day of the month without leading zeros; 1 to 12'],
+        options: [
+            'comment' => 'Day of the month without leading zeros; 1 to 12',
+        ],
     )]
     #[Groups([
         'DateDimension',
@@ -76,7 +86,9 @@ class DateDimension implements EntityInterface
     #[ORM\Column(
         name: 'day',
         type: 'integer',
-        options: ['comment' => 'Day of the month without leading zeros; 1 to 31'],
+        options: [
+            'comment' => 'Day of the month without leading zeros; 1 to 31',
+        ],
     )]
     #[Groups([
         'DateDimension',
@@ -87,7 +99,9 @@ class DateDimension implements EntityInterface
     #[ORM\Column(
         name: 'quarter',
         type: 'integer',
-        options: ['comment' => 'Calendar quarter; 1, 2, 3 or 4'],
+        options: [
+            'comment' => 'Calendar quarter; 1, 2, 3 or 4',
+        ],
     )]
     #[Groups([
         'DateDimension',
@@ -98,7 +112,9 @@ class DateDimension implements EntityInterface
     #[ORM\Column(
         name: 'week_number',
         type: 'integer',
-        options: ['comment' => 'ISO-8601 week number of year, weeks starting on Monday'],
+        options: [
+            'comment' => 'ISO-8601 week number of year, weeks starting on Monday',
+        ],
     )]
     #[Groups([
         'DateDimension',
@@ -122,7 +138,9 @@ class DateDimension implements EntityInterface
     #[ORM\Column(
         name: 'day_number_of_year',
         type: 'integer',
-        options: ['comment' => 'The day of the year (starting from 0); 0 through 365'],
+        options: [
+            'comment' => 'The day of the year (starting from 0); 0 through 365',
+        ],
     )]
     #[Groups([
         'DateDimension',
@@ -133,7 +151,9 @@ class DateDimension implements EntityInterface
     #[ORM\Column(
         name: 'leap_year',
         type: 'boolean',
-        options: ['comment' => 'Whether it\'s a leap year'],
+        options: [
+            'comment' => 'Whether it\'s a leap year or not',
+        ],
     )]
     #[Groups([
         'DateDimension',
@@ -144,7 +164,9 @@ class DateDimension implements EntityInterface
     #[ORM\Column(
         name: 'week_numbering_year',
         type: 'integer',
-        options: ['comment' => 'ISO-8601 week-numbering year.'],
+        options: [
+            'comment' => 'ISO-8601 week-numbering year.',
+        ],
     )]
     #[Groups([
         'DateDimension',
@@ -155,7 +177,9 @@ class DateDimension implements EntityInterface
     #[ORM\Column(
         name: 'unix_time',
         type: 'bigint',
-        options: ['comment' => 'Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)'],
+        options: [
+            'comment' => 'Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)',
+        ],
     )]
     #[Groups([
         'DateDimension',
@@ -164,7 +188,10 @@ class DateDimension implements EntityInterface
     private int $unixTime;
 
     public function __construct(
-        #[ORM\Column(name: 'date', type: 'date')]
+        #[ORM\Column(
+            name: 'date',
+            type: 'date',
+        )]
         #[Groups([
             'DateDimension',
             'DateDimension.date',

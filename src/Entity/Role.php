@@ -23,10 +23,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[ORM\Entity]
-#[ORM\Table(name: 'role')]
+#[ORM\Table(
+    name: 'role',
+)]
 #[ORM\UniqueConstraint(
     name: 'uq_role',
-    columns: ['role'],
+    columns: [
+        'role',
+    ],
 )]
 class Role implements EntityInterface
 {
@@ -59,7 +63,12 @@ class Role implements EntityInterface
 
     public function __construct(
         #[ORM\Id]
-        #[ORM\Column(name: 'role', type: 'string', unique: true, nullable: false)]
+        #[ORM\Column(
+            name: 'role',
+            type: 'string',
+            unique: true,
+            nullable: false,
+        )]
         #[Groups([
             'Role',
             'Role.id',

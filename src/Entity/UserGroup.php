@@ -28,7 +28,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[ORM\Entity]
-#[ORM\Table(name: 'user_group')]
+#[ORM\Table(
+    name: 'user_group',
+)]
 class UserGroup implements EntityInterface, Stringable
 {
     use Blameable;
@@ -97,7 +99,10 @@ class UserGroup implements EntityInterface, Stringable
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+    )]
     private string $name = '';
 
     /**
@@ -107,7 +112,9 @@ class UserGroup implements EntityInterface, Stringable
         targetEntity: 'User',
         mappedBy: 'userGroups',
     )]
-    #[ORM\JoinTable(name: 'user_has_user_group')]
+    #[ORM\JoinTable(
+        name: 'user_has_user_group',
+    )]
     #[Groups([
         'UserGroup.users',
     ])]
@@ -120,7 +127,9 @@ class UserGroup implements EntityInterface, Stringable
         targetEntity: 'ApiKey',
         mappedBy: 'userGroups',
     )]
-    #[ORM\JoinTable(name: 'api_key_has_user_group')]
+    #[ORM\JoinTable(
+        name: 'api_key_has_user_group',
+    )]
     #[Groups([
         'UserGroup.apiKeys',
     ])]

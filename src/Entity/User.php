@@ -32,14 +32,20 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[ORM\Entity]
-#[ORM\Table(name: 'user')]
+#[ORM\Table(
+    name: 'user',
+)]
 #[ORM\UniqueConstraint(
     name: 'uq_username',
-    columns: ['username'],
+    columns: [
+        'username',
+    ],
 )]
 #[ORM\UniqueConstraint(
     name: 'uq_email',
-    columns: ['email'],
+    columns: [
+        'email',
+    ],
 )]
 #[AssertCollection\UniqueEntity('email')]
 #[AssertCollection\UniqueEntity('username')]
@@ -93,7 +99,10 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+    )]
     private string $username = '';
 
     #[ORM\Column(
@@ -111,7 +120,10 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+    )]
     private string $firstName = '';
 
     #[ORM\Column(
@@ -129,7 +141,10 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+    )]
     private string $lastName = '';
 
     #[ORM\Column(
@@ -154,7 +169,9 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         name: 'language',
         type: 'EnumLanguage',
         nullable: false,
-        options: ['comment' => 'User language for translations'],
+        options: [
+            'comment' => 'User language for translations',
+        ],
     )]
     #[Groups([
         'User',
@@ -172,7 +189,9 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         name: 'locale',
         type: 'EnumLocale',
         nullable: false,
-        options: ['comment' => 'User locale for number, time, date, etc. formatting.'],
+        options: [
+            'comment' => 'User locale for number, time, date, etc. formatting.',
+        ],
     )]
     #[Groups([
         'User',
@@ -193,7 +212,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         nullable: false,
         options: [
             'comment' => 'User timezone which should be used to display time, date, etc.',
-            'default' => 'Europe/Helsinki',
+            'default' => Localization::DEFAULT_TIMEZONE,
         ],
     )]
     #[Groups([
@@ -213,11 +232,16 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         type: 'string',
         length: 255,
         nullable: false,
+        options: [
+            'comment' => 'Hashed password',
+        ],
     )]
     private string $password = '';
 
     /**
      * Plain password. Used for model validation. Must not be persisted.
+     *
+     * @see UserEntityEventListener
      */
     private string $plainPassword = '';
 
