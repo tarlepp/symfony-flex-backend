@@ -13,7 +13,7 @@ use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\Uuid;
-use App\Security\RolesService;
+use App\Security\Interfaces\RolesServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -221,7 +221,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
                 '\strval',
                 array_unique(
                     array_merge(
-                        [RolesService::ROLE_API],
+                        [RolesServiceInterface::ROLE_API],
                         $this->userGroups
                             ->map(static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
                             ->toArray(),
@@ -233,9 +233,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     public function addUserGroup(UserGroup $userGroup): self
     {
-        $contains = $this->userGroups->contains($userGroup);
-
-        if (!$contains) {
+        if ($this->userGroups->contains($userGroup) === false) {
             $this->userGroups->add($userGroup);
             $userGroup->addApiKey($this);
         }
@@ -245,9 +243,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     public function removeUserGroup(UserGroup $userGroup): self
     {
-        $removed = $this->userGroups->removeElement($userGroup);
-
-        if ($removed) {
+        if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeApiKey($this);
         }
 
