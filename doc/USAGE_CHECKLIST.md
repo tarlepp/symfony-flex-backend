@@ -9,7 +9,7 @@ use this template as in base of your own application.
   * [Table of Contents](#table-of-contents)
   * [Checklist](#checklist-table-of-contents)
 
-## Checklist [▲](#table-of-contents)
+## Checklist [ᐞ](#table-of-contents)
 
 Below you have _basic_ checklist that **_you need to go through_** after you have
 started to use this template.

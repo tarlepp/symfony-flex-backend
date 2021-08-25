@@ -17,17 +17,17 @@ usage in development stage.
     * [Startup](#startup-table-of-contents)
   * [Notes](#notes-table-of-contents)
 
-## Reasons? [▲](#table-of-contents)
+## Reasons? [ᐞ](#table-of-contents)
 
 Symfony generates quite lot of cache files, because it's using compiled
 container to make things happen. This means a quite lot of IO traffic and that
 causes slowness problems within certain environments.
 
-## Environments with problems [▲](#table-of-contents)
+## Environments with problems [ᐞ](#table-of-contents)
 
 Basically Windows and Mac; with linux you should not have these problems at all.
 
-### Windows [▲](#table-of-contents)
+### Windows [ᐞ](#table-of-contents)
 
 The "most" clean solution to solve this atm is to run eg. Ubuntu desktop within
 [VMware](https://www.vmware.com/) / [VirtualBox](https://www.virtualbox.org/)
@@ -38,7 +38,7 @@ Another way is to use [docker-sync](#installation-of-docker-sync-table-of-conten
 Application itself already contains necessary [docker-sync.yml](../docker-sync.yml)
 configuration  file to help with this.
 
-### Mac [▲](#table-of-contents)
+### Mac [ᐞ](#table-of-contents)
 
 With Mac there is a bit speed difference versus pure _*inux_ installation, but
 you could try to speed that up by using [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-release-notes/)
@@ -50,16 +50,16 @@ And if that [Docker for Mac Edge](https://docs.docker.com/docker-for-mac/edge-re
 isn't fast enough for you, you could also setup that [docker-sync](#installation-of-docker-sync-table-of-contents)
 for your environment.
 
-### Linux [▲](#table-of-contents)
+### Linux [ᐞ](#table-of-contents)
 
 No need to do anything `¯\_(ツ)_/¯`
 
-## Installation of docker-sync [▲](#table-of-contents)
+## Installation of docker-sync [ᐞ](#table-of-contents)
 
 Follow install instructions from [docker-sync](http://docker-sync.io/)
 website.
 
-### Configuration [▲](#table-of-contents)
+### Configuration [ᐞ](#table-of-contents)
 
 Create a `docker-compose.override.yml` file with following content:
 
@@ -83,11 +83,11 @@ volumes:
         external: true
 ```
 
-### Startup [▲](#table-of-contents)
+### Startup [ᐞ](#table-of-contents)
 
 To start application you just need to use command `docker-sync-stack start`
 
-## Notes [▲](#table-of-contents)
+## Notes [ᐞ](#table-of-contents)
 
 If / when you want to use Xdebug, you should read this document:
 [Using Xdebug](XDEBUG.md)

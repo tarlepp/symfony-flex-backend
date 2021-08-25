@@ -12,7 +12,7 @@ configuration for this application.
   * [Detailed configuration](#detailed-configuration-table-of-contents)
   * [External links / resources](#external-links--resources-table-of-contents)
 
-## Prologue [▲](#table-of-contents)
+## Prologue [ᐞ](#table-of-contents)
 
 This application is using [Dotenv](https://symfony.com/doc/current/components/dotenv.html)
 component parses `.env` files to make environment variables stored in them
@@ -25,7 +25,7 @@ Within this application we define _all_ environment specified settings to
 separate `application.json` file that we can easily use with Symfony
 configuration part.
 
-## Creating custom files [▲](#table-of-contents)
+## Creating custom files [ᐞ](#table-of-contents)
 
 Starting to use custom configuration is quite easy, all you need to do is
 following:
@@ -50,7 +50,7 @@ Making necessary changes to those files should be quite self explanatory -
 just take a look what those files contains. And most likely you only need
 to make changes to that `secrets/application.local.json` file.
 
-## Detailed configuration [▲](#table-of-contents)
+## Detailed configuration [ᐞ](#table-of-contents)
 
 Below you can see all the current configuration values that are defined in
 `application.json` and those are used on Symfony configuration files.
@@ -68,7 +68,7 @@ REQUEST_LOG_SENSITIVE_PROPERTIES  = Which request parameters are "sensitive"
                                     log
 ```
 
-## External links / resources [▲](#table-of-contents)
+## External links / resources [ᐞ](#table-of-contents)
 
 * [Nov 2018 Changes to .env & How to Update](https://symfony.com/doc/current/configuration/dot-env-changes.html)
 * [New in Symfony 4.2: Define env vars per environment](https://symfony.com/blog/new-in-symfony-4-2-define-env-vars-per-environment)
