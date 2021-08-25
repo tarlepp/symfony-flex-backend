@@ -10,7 +10,7 @@ application.
   * [Table of Contents](#table-of-contents)
   * [Resources](#resources-table-of-contents)
 
-## Resources [▲](#table-of-contents)
+## Resources [ᐞ](#table-of-contents)
 
 * [Application commands](COMMANDS.md)
 * [Concepts and features](CONCEPTS_AND_FEATURES.md)
