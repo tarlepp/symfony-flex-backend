@@ -67,6 +67,7 @@ $InitializeFastestEnvironmentVariables = static function (string $readableChanne
 $InitializeEnvironment = static function (): void {
     $localPhpEnvFile = dirname(__DIR__) . '/.env.local.php';
 
+    /** @psalm-suppress UnresolvableInclude */
     $env = is_readable($localPhpEnvFile) ? include $localPhpEnvFile : null;
 
     // Load cached env vars if the .env.local.php file exists
