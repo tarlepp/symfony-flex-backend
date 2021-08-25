@@ -27,18 +27,28 @@ use function mb_strlen;
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[ORM\Entity(readOnly: true)]
-#[ORM\Table(name: 'log_request')]
+#[ORM\Entity(
+    readOnly: true,
+)]
+#[ORM\Table(
+    name: 'log_request',
+)]
 #[ORM\Index(
-    columns: ['user_id'],
+    columns: [
+        'user_id',
+    ],
     name: 'user_id',
 )]
 #[ORM\Index(
-    columns: ['api_key_id'],
+    columns: [
+        'api_key_id',
+    ],
     name: 'api_key_id',
 )]
 #[ORM\Index(
-    columns: ['date'],
+    columns: [
+        'date',
+    ],
     name: 'request_date',
 )]
 #[ORM\HasLifecycleCallbacks]
@@ -107,14 +117,26 @@ class LogRequest implements EntityInterface
         private array $sensitiveProperties,
         ?Request $request = null,
         ?Response $response = null,
-        #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'logsRequest')]
-        #[ORM\JoinColumn(name: 'user_id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(
+            targetEntity: User::class,
+            inversedBy: 'logsRequest',
+        )]
+        #[ORM\JoinColumn(
+            name: 'user_id',
+            onDelete: 'SET NULL',
+        )]
         #[Groups([
             'LogRequest.user',
         ])]
         private ?User $user = null,
-        #[ORM\ManyToOne(targetEntity: ApiKey::class, inversedBy: 'logsRequest')]
-        #[ORM\JoinColumn(name: 'api_key_id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(
+            targetEntity: ApiKey::class,
+            inversedBy: 'logsRequest',
+        )]
+        #[ORM\JoinColumn(
+            name: 'api_key_id',
+            onDelete: 'SET NULL',
+        )]
         #[Groups([
             'LogRequest.apiKey',
         ])]

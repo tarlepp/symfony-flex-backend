@@ -33,7 +33,9 @@ trait UserRelations
         targetEntity: UserGroup::class,
         inversedBy: 'users',
     )]
-    #[ORM\JoinTable(name: 'user_has_user_group')]
+    #[ORM\JoinTable(
+        name: 'user_has_user_group',
+    )]
     #[Groups([
         'User.userGroups',
     ])]
@@ -143,9 +145,7 @@ trait UserRelations
      */
     public function addUserGroup(UserGroup $userGroup): self
     {
-        $contains = $this->userGroups->contains($userGroup);
-
-        if (!$contains) {
+        if ($this->userGroups->contains($userGroup) === false) {
             $this->userGroups->add($userGroup);
 
             /* @noinspection PhpParamsInspection */
@@ -160,10 +160,7 @@ trait UserRelations
      */
     public function removeUserGroup(UserGroup $userGroup): self
     {
-        $removed = $this->userGroups->removeElement($userGroup);
-
-        if ($removed) {
-            /* @noinspection PhpParamsInspection */
+        if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeUser($this);
         }
 

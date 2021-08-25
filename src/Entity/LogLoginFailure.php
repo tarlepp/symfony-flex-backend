@@ -24,10 +24,16 @@ use Throwable;
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[ORM\Entity(readOnly: true)]
-#[ORM\Table(name: 'log_login_failure')]
+#[ORM\Entity(
+    readOnly: true,
+)]
+#[ORM\Table(
+    name: 'log_login_failure',
+)]
 #[ORM\Index(
-    columns: ['user_id'],
+    columns: [
+        'user_id',
+    ],
     name: 'user_id',
 )]
 class LogLoginFailure implements EntityInterface
@@ -65,8 +71,14 @@ class LogLoginFailure implements EntityInterface
      * @throws Throwable
      */
     public function __construct(
-        #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'logsLoginFailure')]
-        #[ORM\JoinColumn(name: 'user_id', nullable: false)]
+        #[ORM\ManyToOne(
+            targetEntity: User::class,
+            inversedBy: 'logsLoginFailure',
+        )]
+        #[ORM\JoinColumn(
+            name: 'user_id',
+            nullable: false,
+        )]
         #[Groups([
             'LogLoginFailure',
             'LogLoginFailure.user',
