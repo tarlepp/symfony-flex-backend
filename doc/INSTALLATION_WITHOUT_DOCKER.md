@@ -20,15 +20,15 @@ or dedicated server - without using docker.
         * [Apache](#apache-table-of-contents)
     * [7. Database](#7-database-table-of-contents)
 
-## Requirements [▲](#table-of-contents)
+## Requirements [ᐞ](#table-of-contents)
 
 * PHP 7.4 or higher
 * [Composer](https://getcomposer.org/)
 * Database that is supported by [Doctrine](http://www.doctrine-project.org/)
 
-## Installation [▲](#table-of-contents)
+## Installation [ᐞ](#table-of-contents)
 
-### 1. Clone repository [▲](#table-of-contents)
+### 1. Clone repository [ᐞ](#table-of-contents)
 
 Use your favorite IDE and get checkout from GitHub or just use following command
 
@@ -36,7 +36,7 @@ Use your favorite IDE and get checkout from GitHub or just use following command
 git clone https://github.com/tarlepp/symfony-flex-backend.git
 ```
 
-### 2. Configuration [▲](#table-of-contents)
+### 2. Configuration [ᐞ](#table-of-contents)
 
 By default application will use `.env` file for configuration. You can add your
 own local file as in `.env.local` and override necessary values there.
@@ -50,7 +50,7 @@ after that creating a `.env.local` file and use that file in there.
 _Note_ that this same works also if you're using [Docker](../README.md#2-start-containers-table-of-contents)
 environment for dev.
 
-### 3. File permissions [▲](#table-of-contents)
+### 3. File permissions [ᐞ](#table-of-contents)
 
 Next thing is to make sure that application `var` directory has correct
 permissions. Instructions for that you can find
@@ -69,7 +69,7 @@ setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var
 setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var
 ```
 
-### 4. Dependencies installation [▲](#table-of-contents)
+### 4. Dependencies installation [ᐞ](#table-of-contents)
 
 Next phase is to install all needed dependencies. This you can do with following
 command, in your project folder:
@@ -78,7 +78,7 @@ command, in your project folder:
 composer install
 ```
 
-### 5. Create JWT auth keys [▲](#table-of-contents)
+### 5. Create JWT auth keys [ᐞ](#table-of-contents)
 
 Application uses JWT to authenticate users, so we need to create public and
 private keys to sign those. You can create new keys with following command.
@@ -87,12 +87,12 @@ private keys to sign those. You can create new keys with following command.
 make generate-jwt-keys
 ```
 
-### 6. Environment checks [▲](#table-of-contents)
+### 6. Environment checks [ᐞ](#table-of-contents)
 
 To check that your environment is ready for this application. You need to make
 two checks; one for CLI environment and another for your web-server environment.
 
-#### CLI environment [▲](#table-of-contents)
+#### CLI environment [ᐞ](#table-of-contents)
 
 You need to run following command to make all necessary checks.
 
@@ -100,7 +100,7 @@ You need to run following command to make all necessary checks.
 ./vendor/bin/requirements-checker
 ```
 
-#### Web-server environment [▲](#table-of-contents)
+#### Web-server environment [ᐞ](#table-of-contents)
 
 Open terminal and go to project root directory and run following command to
 start standalone server.
@@ -112,7 +112,7 @@ start standalone server.
 Open your favorite browser with `http://127.0.0.1:8000/check.php` url and
 check it for any errors.
 
-##### Apache [▲](#table-of-contents)
+##### Apache [ᐞ](#table-of-contents)
 
 To get JWT authorization headers to work correctly you need to make sure that
 your Apache config has mod_rewrite enabled. This you can do with following
@@ -122,7 +122,7 @@ command:
 sudo a2enmod rewrite
 ```
 
-### 7. Database [▲](#table-of-contents)
+### 7. Database [ᐞ](#table-of-contents)
 
 To initialize database you need to run following commands:
 
