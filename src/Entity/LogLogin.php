@@ -27,14 +27,22 @@ use function is_array;
  * @package App\Entity
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-#[ORM\Entity(readOnly: true)]
-#[ORM\Table(name: 'log_login')]
+#[ORM\Entity(
+    readOnly: true,
+)]
+#[ORM\Table(
+    name: 'log_login',
+)]
 #[ORM\Index(
-    columns: ['user_id'],
+    columns: [
+        'user_id',
+    ],
     name: 'user_id',
 )]
 #[ORM\Index(
-    columns: ['date'],
+    columns: [
+        'date',
+    ],
     name: 'date',
 )]
 #[ORM\HasLifecycleCallbacks]
@@ -57,22 +65,6 @@ class LogLogin implements EntityInterface
         'LogLogin.id',
     ])]
     private UuidInterface $id;
-
-    /*
-    #[ORM\ManyToOne(
-        targetEntity: User::class,
-        inversedBy: 'logsLogin',
-    )]
-    #[ORM\JoinColumn(
-        name: 'user_id',
-        onDelete: 'SET NULL',
-    )]
-    #[Groups([
-        'LogLogin',
-        'LogLogin.user',
-    ])]
-    private ?User $user;
-    */
 
     #[ORM\Column(
         name: 'client_type',
@@ -226,7 +218,10 @@ class LogLogin implements EntityInterface
      * @throws Throwable
      */
     public function __construct(
-        #[ORM\Column(name: 'type', type: 'EnumLogLogin')]
+        #[ORM\Column(
+            name: 'type',
+            type: 'EnumLogLogin',
+        )]
         #[Groups([
             'LogLogin',
             'LogLogin.type',
@@ -234,8 +229,14 @@ class LogLogin implements EntityInterface
         private string $type,
         Request $request,
         DeviceDetector $deviceDetector,
-        #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'logsLogin')]
-        #[ORM\JoinColumn(name: 'user_id', onDelete: 'SET NULL')]
+        #[ORM\ManyToOne(
+            targetEntity: User::class,
+            inversedBy: 'logsLogin',
+        )]
+        #[ORM\JoinColumn(
+            name: 'user_id',
+            onDelete: 'SET NULL',
+        )]
         #[Groups([
             'LogLogin',
             'LogLogin.user',

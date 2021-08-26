@@ -67,10 +67,12 @@ $InitializeFastestEnvironmentVariables = static function (string $readableChanne
 $InitializeEnvironment = static function (): void {
     $localPhpEnvFile = dirname(__DIR__) . '/.env.local.php';
 
+    /** @psalm-suppress UnresolvableInclude */
+    $env = is_readable($localPhpEnvFile) ? include $localPhpEnvFile : null;
+
     // Load cached env vars if the .env.local.php file exists
     // Run "composer dump-env prod" to create it (requires symfony/flex >=1.2)
-    /** @psalm-suppress UnresolvableInclude */
-    if (is_readable($localPhpEnvFile) && is_array($env = include $localPhpEnvFile)
+    if (is_array($env)
         && ($_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? $env['APP_ENV'] ?? null) === ($env['APP_ENV'] ?? null)
     ) {
         foreach ($env as $k => $v) {

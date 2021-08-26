@@ -13,7 +13,7 @@ use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\Traits\Blameable;
 use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\Uuid;
-use App\Security\RolesService;
+use App\Security\Interfaces\RolesServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -37,10 +37,14 @@ use function random_int;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[ORM\Entity]
-#[ORM\Table(name: 'api_key')]
+#[ORM\Table(
+    name: 'api_key',
+)]
 #[ORM\UniqueConstraint(
     name: 'uq_token',
-    columns: ['token'],
+    columns: [
+        'token',
+    ],
 )]
 #[AssertCollection\UniqueEntity('token')]
 class ApiKey implements EntityInterface, UserGroupAwareInterface
@@ -70,6 +74,9 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
         name: 'token',
         type: 'string',
         length: 40,
+        options: [
+            'comment' => 'Generated API key string for authentication',
+        ],
     )]
     #[Groups([
         'ApiKey',
@@ -77,7 +84,9 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\Length(exactly: 40)]
+    #[Assert\Length(
+        exactly: 40,
+    )]
     private string $token = '';
 
     #[ORM\Column(
@@ -94,7 +103,9 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
     /**
      * @var Collection<int, UserGroup>|ArrayCollection<int, UserGroup>
      */
-    #[ORM\JoinTable(name: 'api_key_has_user_group')]
+    #[ORM\JoinTable(
+        name: 'api_key_has_user_group',
+    )]
     #[ORM\ManyToMany(
         targetEntity: UserGroup::class,
         inversedBy: 'apiKeys',
@@ -210,7 +221,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
                 '\strval',
                 array_unique(
                     array_merge(
-                        [RolesService::ROLE_API],
+                        [RolesServiceInterface::ROLE_API],
                         $this->userGroups
                             ->map(static fn (UserGroup $userGroup): string => $userGroup->getRole()->getId())
                             ->toArray(),
@@ -222,9 +233,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     public function addUserGroup(UserGroup $userGroup): self
     {
-        $contains = $this->userGroups->contains($userGroup);
-
-        if (!$contains) {
+        if ($this->userGroups->contains($userGroup) === false) {
             $this->userGroups->add($userGroup);
             $userGroup->addApiKey($this);
         }
@@ -234,9 +243,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     public function removeUserGroup(UserGroup $userGroup): self
     {
-        $removed = $this->userGroups->removeElement($userGroup);
-
-        if ($removed) {
+        if ($this->userGroups->removeElement($userGroup)) {
             $userGroup->removeApiKey($this);
         }
 

@@ -15,7 +15,7 @@ application during development stage.
       * [api-key:management](#api-keymanagement-table-of-contents)
       * [utils:create-date-dimension-entities](#utilscreate-date-dimension-entities-table-of-contents)
 
-## Commands [▲](#table-of-contents)
+## Commands [ᐞ](#table-of-contents)
 
 Note that all of these commands are intended to be executed either inside
 docker container or your local/dedicated server.
@@ -42,7 +42,7 @@ gid = 1000
 You need to create `docker-compose.override.yml` file and specify used user
 information there.
 
-### Makefile [▲](#table-of-contents)
+### Makefile [ᐞ](#table-of-contents)
 
 Symfony Flex comes with `Makefile` configuration so that you can easily run
 some generic commands via `make` command. Below is a list of currently
@@ -91,7 +91,7 @@ update-bin                  # Update composer bin dependencies
 update                      # Update composer dependencies
 ```
 
-### Symfony console [▲](#table-of-contents)
+### Symfony console [ᐞ](#table-of-contents)
 
 You can list all Symfony console commands via following command:
 
@@ -105,7 +105,7 @@ or
 console
 ```
 
-### Custom commands [▲](#table-of-contents)
+### Custom commands [ᐞ](#table-of-contents)
 
 Project contains following custom console commands to help eg. user management:
 
@@ -120,7 +120,7 @@ Project contains following custom console commands to help eg. user management:
                                                     # 'DateDimension' entities.
 ```
 
-#### user:management [▲](#table-of-contents)
+#### user:management [ᐞ](#table-of-contents)
 
 This command is just a wrapper for following commands:
 
@@ -136,7 +136,7 @@ This command is just a wrapper for following commands:
 ./bin/console user:list-groups    # To list current user groups
 ```
 
-#### api-key:management [▲](#table-of-contents)
+#### api-key:management [ᐞ](#table-of-contents)
 
 This command is just a wrapper for following commands:
 
@@ -148,7 +148,7 @@ This command is just a wrapper for following commands:
 ./bin/console api-key:list            # To list API keys
 ```
 
-#### utils:create-date-dimension-entities [▲](#table-of-contents)
+#### utils:create-date-dimension-entities [ᐞ](#table-of-contents)
 
 Command to create `DateDimension` entities that can be used with date/time
 related report queries.

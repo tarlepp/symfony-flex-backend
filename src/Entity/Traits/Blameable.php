@@ -24,7 +24,9 @@ trait Blameable
     /**
      * @Gedmo\Blameable(on="create")
      */
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(
+        targetEntity: User::class,
+    )]
     #[ORM\JoinColumn(
         name: 'created_by_id',
         referencedColumnName: 'id',
@@ -42,7 +44,9 @@ trait Blameable
     /**
      * @Gedmo\Blameable(on="update")
      */
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(
+        targetEntity: User::class,
+    )]
     #[ORM\JoinColumn(
         name: 'updated_by_id',
         referencedColumnName: 'id',

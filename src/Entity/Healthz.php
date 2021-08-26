@@ -25,7 +25,9 @@ use Throwable;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[ORM\Entity]
-#[ORM\Table(name: 'healthz')]
+#[ORM\Table(
+    name: 'healthz',
+)]
 class Healthz implements EntityInterface
 {
     use Uuid;

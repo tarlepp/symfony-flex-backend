@@ -28,7 +28,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[ORM\Entity]
-#[ORM\Table(name: 'user_group')]
+#[ORM\Table(
+    name: 'user_group',
+)]
 class UserGroup implements EntityInterface, Stringable
 {
     use Blameable;
@@ -97,7 +99,10 @@ class UserGroup implements EntityInterface, Stringable
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\Length(min: 2, max: 255)]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+    )]
     private string $name = '';
 
     /**
@@ -107,7 +112,9 @@ class UserGroup implements EntityInterface, Stringable
         targetEntity: 'User',
         mappedBy: 'userGroups',
     )]
-    #[ORM\JoinTable(name: 'user_has_user_group')]
+    #[ORM\JoinTable(
+        name: 'user_has_user_group',
+    )]
     #[Groups([
         'UserGroup.users',
     ])]
@@ -120,7 +127,9 @@ class UserGroup implements EntityInterface, Stringable
         targetEntity: 'ApiKey',
         mappedBy: 'userGroups',
     )]
-    #[ORM\JoinTable(name: 'api_key_has_user_group')]
+    #[ORM\JoinTable(
+        name: 'api_key_has_user_group',
+    )]
     #[Groups([
         'UserGroup.apiKeys',
     ])]
@@ -186,9 +195,7 @@ class UserGroup implements EntityInterface, Stringable
 
     public function addUser(User $user): self
     {
-        $contains = $this->users->contains($user);
-
-        if (!$contains) {
+        if ($this->users->contains($user) === false) {
             $this->users->add($user);
             $user->addUserGroup($this);
         }
@@ -198,9 +205,7 @@ class UserGroup implements EntityInterface, Stringable
 
     public function removeUser(User $user): self
     {
-        $removed = $this->users->removeElement($user);
-
-        if ($removed) {
+        if ($this->users->removeElement($user)) {
             $user->removeUserGroup($this);
         }
 
@@ -216,9 +221,7 @@ class UserGroup implements EntityInterface, Stringable
 
     public function addApiKey(ApiKey $apiKey): self
     {
-        $contains = $this->apiKeys->contains($apiKey);
-
-        if (!$contains) {
+        if ($this->apiKeys->contains($apiKey) === false) {
             $this->apiKeys->add($apiKey);
             $apiKey->addUserGroup($this);
         }
@@ -228,9 +231,7 @@ class UserGroup implements EntityInterface, Stringable
 
     public function removeApiKey(ApiKey $apiKey): self
     {
-        $removed = $this->apiKeys->removeElement($apiKey);
-
-        if ($removed) {
+        if ($this->apiKeys->removeElement($apiKey)) {
             $apiKey->removeUserGroup($this);
         }
 
