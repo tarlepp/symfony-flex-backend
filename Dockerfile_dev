@@ -9,7 +9,7 @@ ARG HOST_GID
 
 # Declare constants
 ENV PATH "$PATH:/home/dev/.composer/vendor/bin:/app/vendor/bin:/app/bin"
-ENV NVM_VERSION v0.35.3
+ENV NVM_VERSION v0.35.8
 ENV NODE_VERSION 16
 
 # Update package list and install necessary libraries
