@@ -13,22 +13,20 @@ use App\DTO\User\UserPatch;
 use App\DTO\User\UserUpdate;
 use App\Rest\Controller;
 use App\Rest\Traits\Actions\Admin as Actions;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 
 /**
  * Class AdminActionsController
  *
- * @Route(
- *     path="/test_admin_actions",
- *  )
- *
- * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
-
- *
  * @package App\Tests\E2E\Rest\Traits\Actions\src
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
  */
+#[Route(
+    path: '/test_admin_actions',
+)]
+#[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class AdminActionsController extends Controller
 {
     use Actions\CountAction;
