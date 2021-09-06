@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "652edc9098871304448273ea35612aa0",
+    "content-hash": "30bf3b69da28382a95a619f84fbb8e27",
     "packages": [],
     "packages-dev": [
         {
@@ -73,25 +73,25 @@
         },
         {
             "name": "infection/abstract-testframework-adapter",
-            "version": "0.3.1",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/abstract-testframework-adapter.git",
-                "reference": "c52539339f28d6b67625ff24496289b3e6d66025"
+                "reference": "18925e20d15d1a5995bb85c9dc09e8751e1e069b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/abstract-testframework-adapter/zipball/c52539339f28d6b67625ff24496289b3e6d66025",
-                "reference": "c52539339f28d6b67625ff24496289b3e6d66025",
+                "url": "https://api.github.com/repos/infection/abstract-testframework-adapter/zipball/18925e20d15d1a5995bb85c9dc09e8751e1e069b",
+                "reference": "18925e20d15d1a5995bb85c9dc09e8751e1e069b",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3 || ^8.0"
+                "php": "^7.4 || ^8.0"
             },
             "require-dev": {
                 "ergebnis/composer-normalize": "^2.8",
-                "friendsofphp/php-cs-fixer": "^2.16",
-                "phpunit/phpunit": "^9.0"
+                "friendsofphp/php-cs-fixer": "^2.17",
+                "phpunit/phpunit": "^9.5"
             },
             "type": "library",
             "autoload": {
@@ -112,9 +112,19 @@
             "description": "Abstract Test Framework Adapter for Infection",
             "support": {
                 "issues": "https://github.com/infection/abstract-testframework-adapter/issues",
-                "source": "https://github.com/infection/abstract-testframework-adapter/tree/0.3"
+                "source": "https://github.com/infection/abstract-testframework-adapter/tree/0.5.0"
             },
-            "time": "2020-08-30T13:50:12+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/infection",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/infection",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2021-08-17T18:49:12+00:00"
         },
         {
             "name": "infection/extension-installer",
@@ -230,16 +240,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.24.0",
+            "version": "0.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "cfc3263e0f562c49fbdfb4a7899222443fdc9690"
+                "reference": "77b684ada43efd93e3ace7ea254aa9848d8ea9e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/cfc3263e0f562c49fbdfb4a7899222443fdc9690",
-                "reference": "cfc3263e0f562c49fbdfb4a7899222443fdc9690",
+                "url": "https://api.github.com/repos/infection/infection/zipball/77b684ada43efd93e3ace7ea254aa9848d8ea9e6",
+                "reference": "77b684ada43efd93e3ace7ea254aa9848d8ea9e6",
                 "shasum": ""
             },
             "require": {
@@ -247,10 +257,10 @@
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-libxml": "*",
-                "infection/abstract-testframework-adapter": "^0.3.1",
+                "infection/abstract-testframework-adapter": "^0.5.0",
                 "infection/extension-installer": "^0.1.0",
-                "infection/include-interceptor": "^0.2.4",
-                "justinrainbow/json-schema": "^5.2",
+                "infection/include-interceptor": "^0.2.5",
+                "justinrainbow/json-schema": "^5.2.10",
                 "nikic/php-parser": "^4.10.3",
                 "ocramius/package-versions": "^1.9.0 || ^2.0",
                 "ondram/ci-detector": "^3.3.0",
@@ -263,7 +273,7 @@
                 "symfony/filesystem": "^3.4.29 || ^4.1.19 || ^5.0",
                 "symfony/finder": "^3.4.29 || ^4.1.19 || ^5.0",
                 "symfony/process": "^3.4.29 || ^4.1.19 || ^5.0",
-                "thecodingmachine/safe": "^1.0",
+                "thecodingmachine/safe": "^1.1.3",
                 "webmozart/assert": "^1.3",
                 "webmozart/path-util": "^2.3"
             },
@@ -272,6 +282,7 @@
                 "symfony/console": "=4.1.5"
             },
             "require-dev": {
+                "brianium/paratest": "^6.3",
                 "ext-simplexml": "*",
                 "helmich/phpunit-json-assert": "^3.0",
                 "phpspec/prophecy-phpunit": "^2.0",
@@ -339,7 +350,7 @@
             ],
             "support": {
                 "issues": "https://github.com/infection/infection/issues",
-                "source": "https://github.com/infection/infection/tree/0.24.0"
+                "source": "https://github.com/infection/infection/tree/0.25.0"
             },
             "funding": [
                 {
@@ -351,7 +362,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2021-07-25T18:53:30+00:00"
+            "time": "2021-09-04T12:13:36+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
