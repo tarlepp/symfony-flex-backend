@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/E2E/Rest/Traits/Actions/AdminActionsTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest\Traits\Actions;
@@ -15,7 +15,7 @@ use Generator;
  * Class AdminActionsTest
  *
  * @package App\Tests\E2E\Rest\Traits\Actions
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AdminActionsTest extends RestTraitTestCase
 {

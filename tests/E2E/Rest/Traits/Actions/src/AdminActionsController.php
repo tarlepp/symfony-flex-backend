@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/E2E/Rest/Traits/Actions/src/AdminActionsController.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest\Traits\Actions\src;
@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
  * Class AdminActionsController
  *
  * @package App\Tests\E2E\Rest\Traits\Actions\src
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 #[Route(
     path: '/test_admin_actions',

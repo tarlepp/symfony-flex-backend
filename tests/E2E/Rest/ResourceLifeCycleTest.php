@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/E2E/Rest/ResourceLifeCycleTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest;
@@ -20,7 +20,7 @@ use function sprintf;
  * Class ResourceLifeCycleTest
  *
  * @package App\Tests\E2E\Rest
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ResourceLifeCycleTest extends WebTestCase
 {
