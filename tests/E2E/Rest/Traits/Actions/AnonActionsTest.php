@@ -27,7 +27,7 @@ class AnonActionsTest extends RestTraitTestCase
         //yield ['john-admin', 'password-admin'];
         //yield ['john-user', 'password-user'];
         //yield ['john-logged', 'password-logged'];
-        //yield ['john', 'password'];
+        yield ['john', 'password'];
         yield [null, null];
     }
 
