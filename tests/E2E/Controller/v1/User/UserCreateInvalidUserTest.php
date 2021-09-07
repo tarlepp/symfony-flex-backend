@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/UserCreateInvalidUserTest.php
+ * /tests/E2E/Controller/v1/User/UserCreateInvalidUserTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\User;
+namespace App\Tests\E2E\Controller\v1\User;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -16,7 +16,7 @@ use Throwable;
 /**
  * Class UserCreateInvalidUserTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserCreateInvalidUserTest extends WebTestCase
@@ -26,7 +26,7 @@ class UserCreateInvalidUserTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /user` returns HTTP status code 403 with invalid user $username + $password
+     * @testdox Test that `POST /v1/user` returns HTTP status code 403 with invalid user $username + $password
      */
     public function testThatCreateActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -38,7 +38,7 @@ class UserCreateInvalidUserTest extends WebTestCase
         ];
 
         $client = $this->getTestClient($username, $password);
-        $client->request('POST', '/user', [], [], [], JSON::encode($data));
+        $client->request('POST', '/v1/user', [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
         $content = $response->getContent();

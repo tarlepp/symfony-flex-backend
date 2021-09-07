@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/DetachUserGroupControllerTest.php
+ * /tests/E2E/Controller/v1/User/DetachUserGroupControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\User;
+namespace App\Tests\E2E\Controller\v1\User;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\DataFixtures\ORM\LoadUserGroupData;
@@ -18,12 +18,12 @@ use Throwable;
 /**
  * Class DetachUserGroupControllerTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DetachUserGroupControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/user';
+    private string $baseUrl = '/v1/user';
 
     /**
      * @throws Throwable
@@ -42,7 +42,7 @@ class DetachUserGroupControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user/{user}/group/{userGroup}` returns 401 for non-logged in user
+     * @testdox Test that `DELETE /v1/user/{user}/group/{userGroup}` returns 401 for non-logged in user
      */
     public function testThatDetachUserGroupReturns401(): void
     {
@@ -64,7 +64,7 @@ class DetachUserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user/{user}/group/{userGroup}` returns 403 for $u + $p, who hasn't `ROLE_ROOT` role
+     * @testdox Test that `DELETE /v1/user/{user}/group/{userGroup}` returns 403 for $u + $p, who hasn't `ROLE_ROOT` role
      */
     public function testThatDetachUserGroupReturns403(string $u, string $p): void
     {
@@ -84,7 +84,7 @@ class DetachUserGroupControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user/{user}/group/{userGroup}` returns 200 with root user
+     * @testdox Test that `DELETE /v1/user/{user}/group/{userGroup}` returns 200 with root user
      */
     public function testThatDetachUserGroupReturns200(): void
     {

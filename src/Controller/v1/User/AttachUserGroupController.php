@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/User/AttachUserGroupController.php
+ * /src/Controller/v1/User/AttachUserGroupController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\User;
+namespace App\Controller\v1\User;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
@@ -27,7 +27,7 @@ use Throwable;
 /**
  * Class AttachUserGroupController
  *
- * @package App\Controller
+ * @package App\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AttachUserGroupController
@@ -127,7 +127,7 @@ class AttachUserGroupController
      * @throws Throwable
      */
     #[Route(
-        path: '/user/{user}/group/{userGroup}',
+        path: '/v1/user/{user}/group/{userGroup}',
         requirements: [
             'user' => '%app.uuid_v1_regex%',
             'userGroup' => '%app.uuid_v1_regex%',

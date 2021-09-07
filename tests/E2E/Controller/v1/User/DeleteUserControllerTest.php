@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/DeleteUserControllerTest.php
+ * /tests/E2E/Controller/v1/User/DeleteUserControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\User;
+namespace App\Tests\E2E\Controller\v1\User;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\Utils\Tests\PhpUnitUtil;
@@ -17,12 +17,12 @@ use Throwable;
 /**
  * Class DeleteUserControllerTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DeleteUserControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/user';
+    private string $baseUrl = '/v1/user';
 
     /**
      * @throws Throwable
@@ -41,7 +41,7 @@ class DeleteUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user/{userId}` returns 401 for non-logged in user
+     * @testdox Test that `DELETE /v1/user/{userId}` returns 401 for non-logged in user
      */
     public function testThatDeleteUserReturns401(): void
     {
@@ -60,7 +60,7 @@ class DeleteUserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user/{userId}` returns 403 for $username + $password, who hasn't `ROLE_ROOT` role
+     * @testdox Test that `DELETE /v1/user/{userId}` returns 403 for $username + $password, who hasn't `ROLE_ROOT` role
      */
     public function testThatDeleteUserReturns403(string $username, string $password): void
     {
@@ -77,7 +77,7 @@ class DeleteUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user/{userId}` returns 400 if user tries to remove himself
+     * @testdox Test that `DELETE /v1/user/{userId}` returns 400 if user tries to remove himself
      */
     public function testThatDeleteActionThrowsAnExceptionIfUserTriesToRemoveHimself(): void
     {
@@ -98,7 +98,7 @@ class DeleteUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user/{userId}` returns 200 with root user
+     * @testdox Test that `DELETE /v1/user/{userId}` returns 200 with root user
      */
     public function testThatDeleteActionReturns200(): void
     {

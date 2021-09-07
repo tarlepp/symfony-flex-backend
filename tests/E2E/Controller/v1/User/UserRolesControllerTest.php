@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/UserRolesControllerTest.php
+ * /tests/E2E/Controller/v1/User/UserRolesControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\User;
+namespace App\Tests\E2E\Controller\v1\User;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\Security\RolesService;
@@ -18,17 +18,17 @@ use Throwable;
 /**
  * Class UserRolesControllerTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserRolesControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/user';
+    private string $baseUrl = '/v1/user';
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/{userUuid}/roles` returns 401 for non-logged in user
+     * @testdox Test that `GET /v1/user/{userUuid}/roles` returns 401 for non-logged in user
      */
     public function testThatGetUserRolesReturnsReturns401(): void
     {
@@ -47,7 +47,7 @@ class UserRolesControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/$userId/roles` returns 403 with invalid user $username + $password
+     * @testdox Test that `GET /v1/user/$userId/roles` returns 403 with invalid user $username + $password
      */
     public function testThatGetUserRolesReturns403ForInvalidUser(
         string $userId,
@@ -69,7 +69,7 @@ class UserRolesControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/$userId/roles` returns expected for user him/herself with $username + $password
+     * @testdox Test that `GET /v1/user/$userId/roles` returns expected for user him/herself with $username + $password
      */
     public function testThatGetUserRolesReturns200ForUserHimself(
         string $userId,
@@ -93,7 +93,7 @@ class UserRolesControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/$userId/roles` returns expected `$expectedResponse` for user who has `ROLE_ROOT`
+     * @testdox Test that `GET /v1/user/$userId/roles` returns expected `$expectedResponse` for user who has `ROLE_ROOT`
      */
     public function testThatGetUserRolesReturns200ForRootRoleUser(string $userId, string $expectedResponse): void
     {

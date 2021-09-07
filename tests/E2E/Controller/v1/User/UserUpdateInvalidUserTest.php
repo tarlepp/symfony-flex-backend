@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/UserUpdateInvalidUserTest.php
+ * /tests/E2E/Controller/v1/User/UserUpdateInvalidUserTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\User;
+namespace App\Tests\E2E\Controller\v1\User;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\Utils\JSON;
@@ -17,7 +17,7 @@ use Throwable;
 /**
  * Class UserUpdateInvalidUserTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserUpdateInvalidUserTest extends WebTestCase
@@ -27,7 +27,7 @@ class UserUpdateInvalidUserTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PUT /user/{userId}` returns HTTP status 403 with invalid user $username + $password
+     * @testdox Test that `PUT /v1/user/{userId}` returns HTTP status 403 with invalid user $username + $password
      */
     public function testThatPutActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -39,7 +39,7 @@ class UserUpdateInvalidUserTest extends WebTestCase
         ];
 
         $client = $this->getTestClient($username, $password);
-        $client->request('PUT', '/user/' . LoadUserData::$uuids['john'], [], [], [], JSON::encode($data));
+        $client->request('PUT', '/v1/user/' . LoadUserData::$uuids['john'], [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
         $content = $response->getContent();
@@ -58,7 +58,7 @@ class UserUpdateInvalidUserTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PATCH /user/{userId}` returns HTTP status 403 with invalid user $username + $password
+     * @testdox Test that `PATCH /v1/user/{userId}` returns HTTP status 403 with invalid user $username + $password
      */
     public function testThatPatchActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -70,7 +70,7 @@ class UserUpdateInvalidUserTest extends WebTestCase
         ];
 
         $client = $this->getTestClient($username, $password);
-        $client->request('PUT', '/user/' . LoadUserData::$uuids['john'], [], [], [], JSON::encode($data));
+        $client->request('PUT', '/v1/user/' . LoadUserData::$uuids['john'], [], [], [], JSON::encode($data));
 
         $response = $client->getResponse();
         $content = $response->getContent();

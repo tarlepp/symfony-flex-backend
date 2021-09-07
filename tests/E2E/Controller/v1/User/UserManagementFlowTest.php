@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/UserManagementFlowTest.php
+ * /tests/E2E/Controller/v1/User/UserManagementFlowTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\User;
+namespace App\Tests\E2E\Controller\v1\User;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -15,17 +15,17 @@ use Throwable;
 /**
  * Class UserManagementFlowTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserManagementFlowTest extends WebTestCase
 {
-    private string $baseUrl = '/user';
+    private string $baseUrl = '/v1/user';
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /user` with proper payload creates new user
+     * @testdox Test that `POST /v1/user` with proper payload creates new user
      */
     public function testThatCreateActionWorksLikeExpected(): string
     {
@@ -63,7 +63,7 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PUT /user/{userId}` returns expected
+     * @testdox Test that `PUT /v1/user/{userId}` returns expected
      */
     public function testThatUpdateActionWorksLikeExpected(string $userId): string
     {
@@ -99,7 +99,7 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PUT /user/{userId}` returns HTTP status 400 with partial data
+     * @testdox Test that `PUT /v1/user/{userId}` returns HTTP status 400 with partial data
      */
     public function testThatUpdateActionDoesNotWorkWithPartialData(string $userId): string
     {
@@ -125,7 +125,7 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `PATCH /user/{userId}` returns expected data
+     * @testdox Test that `PATCH /v1/user/{userId}` returns expected data
      */
     public function testThatPatchActionWorksWithPartialData(string $userId): string
     {
@@ -164,7 +164,7 @@ class UserManagementFlowTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user/{userId}` returns HTTP 200 with valid user
+     * @testdox Test that `DELETE /v1/user/{userId}` returns HTTP 200 with valid user
      */
     public function testThatDeleteActionWorksLikeExpected(string $userId): void
     {

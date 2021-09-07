@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/UserControllerTest.php
+ * /tests/E2E/Controller/v1/User/UserControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\User;
+namespace App\Tests\E2E\Controller\v1\User;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -16,12 +16,12 @@ use Throwable;
 /**
  * Class UserControllerTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/user';
+    private string $baseUrl = '/v1/user';
 
     /**
      * @throws Throwable
@@ -49,7 +49,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /count` returns expected response with $username + $password
+     * @testdox Test that `GET /v1/user/count` returns expected response with $username + $password
      */
     public function testThatCountActionReturnsExpected(string $username, string $password): void
     {
@@ -67,7 +67,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderValidApiKeyUsers
      *
-     * @testdox Test that `GET /count` returns expected response with $role `ApiKey` token
+     * @testdox Test that `GET /v1/user/count` returns expected response with $role `ApiKey` token
      */
     public function testThatCountActionReturnsExpectedForApiKeyUser(string $role): void
     {
@@ -87,7 +87,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /count` returns HTTP 403 with $username + $password
+     * @testdox Test that `GET /v1/user/count` returns HTTP 403 with $username + $password
      */
     public function testThatCountActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -109,7 +109,7 @@ class UserControllerTest extends WebTestCase
     /**
      * @dataProvider dataProviderInvalidApiKeyUsers
      *
-     * @testdox Test that `GET /count` returns HTTP 403 with $role `ApiKey` token
+     * @testdox Test that `GET /v1/user/count` returns HTTP 403 with $role `ApiKey` token
      */
     public function testThatCountActionReturns403ForInvalidApiKeyUser(string $role): void
     {
@@ -133,7 +133,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `Find` action returns expected with $username + $password
+     * @testdox Test that `GET /v1/user` action returns expected with $username + $password
      */
     public function testThatFindActionReturnsExpected(string $username, string $password): void
     {
@@ -153,7 +153,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `find` action returns HTTP 403 for invalid user $username + $password
+     * @testdox Test that `GET /v1/user` action returns HTTP 403 for invalid user $username + $password
      */
     public function testThatFindActionReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -177,7 +177,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/ids` returns expected with $username + $password
+     * @testdox Test that `GET /v1/user/ids` returns expected with $username + $password
      */
     public function testThatIdsActionReturnExpected(string $username, string $password): void
     {
@@ -197,7 +197,7 @@ class UserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/ids` returns HTTP status 403 with invalid user $username + $password
+     * @testdox Test that `GET /v1/user/ids` returns HTTP status 403 with invalid user $username + $password
      */
     public function testThatIdsActionReturns403ForInvalidUser(string $username, string $password): void
     {

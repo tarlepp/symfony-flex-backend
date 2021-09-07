@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/User/DeleteUserController.php
+ * /src/Controller/v1/User/DeleteUserController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\User;
+namespace App\Controller\v1\User;
 
 use App\Entity\User;
 use App\Resource\UserResource;
@@ -27,7 +27,7 @@ use Throwable;
  *
  * @OA\Tag(name="User Management")
  *
- * @package App\Controller
+ * @package App\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DeleteUserController extends Controller
@@ -43,7 +43,7 @@ class DeleteUserController extends Controller
      * @throws Throwable
      */
     #[Route(
-        path: '/user/{requestUser}',
+        path: '/v1/user/{requestUser}',
         requirements: [
             'requestUser' => '%app.uuid_v1_regex%',
         ],

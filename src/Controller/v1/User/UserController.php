@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/User/UserController.php
+ * /src/Controller/v1/User/UserController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\User;
+namespace App\Controller\v1\User;
 
 use App\DTO\User\UserCreate;
 use App\DTO\User\UserPatch;
@@ -24,13 +24,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
  *
  * @OA\Tag(name="User Management")
  *
- * @package App\Controller
+ * @package App\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @method UserResource getResource()
  */
 #[Route(
-    path: '/user',
+    path: '/v1/user',
 )]
 #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class UserController extends Controller

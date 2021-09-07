@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/UserGroupsControllerTest.php
+ * /tests/E2E/Controller/v1/User/UserGroupsControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\User;
+namespace App\Tests\E2E\Controller\v1\User;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\Security\RolesService;
@@ -18,17 +18,17 @@ use Throwable;
 /**
  * Class UserGroupsControllerTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserGroupsControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/user';
+    private string $baseUrl = '/v1/user';
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/{user}/groups` returns 401 for non-logged in user
+     * @testdox Test that `GET /v1/user/{user}/groups` returns 401 for non-logged in user
      */
     public function testThatGetUserGroupsReturnsReturns401(): void
     {
@@ -47,7 +47,7 @@ class UserGroupsControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/$userId/groups` returns 403 with invalid user $username + $password
+     * @testdox Test that `GET /v1/user/$userId/groups` returns 403 with invalid user $username + $password
      */
     public function testThatGetUserGroupsReturns403ForInvalidUser(
         string $userId,
@@ -69,7 +69,7 @@ class UserGroupsControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/$userId/groups` returns expected with user him/herself $username + $password
+     * @testdox Test that `GET /v1/user/$userId/groups` returns expected with user him/herself $username + $password
      */
     public function testThatGetUserGroupsActionsReturns200ForUserHimself(
         string $userId,
@@ -98,7 +98,7 @@ class UserGroupsControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user/$userId/groups` request returns expected response `$expectedResponse`
+     * @testdox Test that `GET /v1/user/$userId/groups` request returns expected response `$expectedResponse`
      */
     public function testThatGetUserGroupsReturns200ForRootRoleUser(
         string $userId,

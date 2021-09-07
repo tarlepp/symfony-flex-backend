@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/User/AttachUserGroupControllerTest.php
+ * /tests/E2E/Controller/v1/User/AttachUserGroupControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\User;
+namespace App\Tests\E2E\Controller\v1\User;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\DataFixtures\ORM\LoadUserGroupData;
@@ -19,12 +19,12 @@ use Throwable;
 /**
  * Class AttachUserGroupControllerTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AttachUserGroupControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/user';
+    private string $baseUrl = '/v1/user';
 
     /**
      * @throws Throwable
@@ -43,7 +43,7 @@ class AttachUserGroupControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /user/{userId}/group/{userGroupId}` returns 401 for non-logged in user
+     * @testdox Test that `POST /v1/user/{user}/group/{userGroup}` returns 401 for non-logged in user
      */
     public function testThatAttachUserGroupReturns401(): void
     {
@@ -65,7 +65,7 @@ class AttachUserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /user/{userId}/group/{userGroupId}` returns 403 for $u + $p, who hasn't `ROLE_ROOT` role
+     * @testdox Test that `POST /v1/user/{user}/group/{userGroup}` returns 403 for $u + $p, who hasn't `ROLE_ROOT` role
      */
     public function testThatAttachUserGroupReturns403(string $u, string $p): void
     {
@@ -87,7 +87,7 @@ class AttachUserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /user/{userId}/group/{userGroupId}` returns status $expectedStatus with root user
+     * @testdox Test that `POST /v1/user/{user}/group/{userGroup}` returns status $expectedStatus with root user
      */
     public function testThatAttachUserGroupWorksAsExpected(int $expectedStatus): void
     {

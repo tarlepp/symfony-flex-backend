@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/User/UserRolesController.php
+ * /src/Controller/v1/User/UserRolesController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\User;
+namespace App\Controller\v1\User;
 
 use App\Entity\User;
 use App\Resource\UserResource;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class UserRolesController
  *
- * @package App\Controller
+ * @package App\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserRolesController
@@ -80,7 +80,7 @@ class UserRolesController
      *  )
      */
     #[Route(
-        path: '/user/{requestUser}/roles',
+        path: '/v1/user/{requestUser}/roles',
         requirements: [
             'requestUser' => '%app.uuid_v1_regex%',
         ],

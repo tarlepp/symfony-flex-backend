@@ -1,44 +1,40 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/User/DetachUserGroupController.php
+ * /src/Controller/v1/User/UserGroupsController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\User;
+namespace App\Controller\v1\User;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
-use App\Resource\UserGroupResource;
 use App\Resource\UserResource;
-use App\Security\RolesService;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
-use Throwable;
 
 /**
- * Class DetachUserGroupController
+ * Class UserGroupsController
  *
- * @package App\Controller\User
+ * @package App\Controller\v1\User
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class DetachUserGroupController
+class UserGroupsController
 {
     public function __construct(
         private SerializerInterface $serializer,
-        private UserResource $userResource,
     ) {
     }
 
     /**
-     * Endpoint action to detach specified user group from specified user.
+     * Endpoint action to fetch specified user user groups.
      *
      * @OA\Tag(name="User Management")
      * @OA\Parameter(
@@ -49,26 +45,6 @@ class DetachUserGroupController
      *      @OA\Schema(
      *          type="string",
      *          default="Bearer _your_jwt_here_",
-     *      ),
-     *  )
-     * @OA\Parameter(
-     *      name="userId",
-     *      in="path",
-     *      required=true,
-     *      description="User GUID",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="User GUID",
-     *      ),
-     *  )
-     * @OA\Parameter(
-     *      name="userGroupId",
-     *      in="path",
-     *      required=true,
-     *      description="User Group GUID",
-     *      @OA\Schema(
-     *          type="string",
-     *          default="User Group GUID",
      *      ),
      *  )
      * @OA\Response(
@@ -97,9 +73,9 @@ class DetachUserGroupController
      *          @OA\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
-     * @OA\Response(
+     *  @OA\Response(
      *      response=403,
-     *      description="Forbidden",
+     *      description="Access denied",
      *      @OA\Schema(
      *          type="object",
      *          example={
@@ -109,30 +85,21 @@ class DetachUserGroupController
      *          @OA\Property(property="message", type="string", description="Error description"),
      *      ),
      *  )
-     *
-     * @throws Throwable
      */
     #[Route(
-        path: '/user/{user}/group/{userGroup}',
+        path: '/v1/user/{requestUser}/groups',
         requirements: [
-            'user' => '%app.uuid_v1_regex%',
-            'userGroup' => '%app.uuid_v1_regex%',
+            'requestUser' => '%app.uuid_v1_regex%',
         ],
-        methods: [Request::METHOD_DELETE],
+        methods: [Request::METHOD_GET],
     )]
-    #[IsGranted(RolesService::ROLE_ROOT)]
+    #[Security('is_granted("IS_USER_HIMSELF", requestUser) or is_granted("ROLE_ROOT")')]
     #[ParamConverter(
-        data: 'user',
+        data: 'requestUser',
         class: UserResource::class,
     )]
-    #[ParamConverter(
-        data: 'userGroup',
-        class: UserGroupResource::class,
-    )]
-    public function __invoke(User $user, UserGroup $userGroup): JsonResponse
+    public function __invoke(User $requestUser): JsonResponse
     {
-        $this->userResource->save($user->removeUserGroup($userGroup));
-
         $groups = [
             'groups' => [
                 UserGroup::SET_USER_GROUP_BASIC,
@@ -140,7 +107,7 @@ class DetachUserGroupController
         ];
 
         return new JsonResponse(
-            $this->serializer->serialize($user->getUserGroups()->getValues(), 'json', $groups),
+            $this->serializer->serialize($requestUser->getUserGroups()->getValues(), 'json', $groups),
             json: true
         );
     }
