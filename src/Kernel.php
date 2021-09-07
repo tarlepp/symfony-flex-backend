@@ -6,7 +6,9 @@ declare(strict_types = 1);
 
 namespace App;
 
+use App\Compiler\StopwatchCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -21,6 +23,15 @@ use function is_file;
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
+
+    protected function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+
+        if ($this->environment === 'dev') {
+            $container->addCompilerPass(new StopwatchCompilerPass());
+        }
+    }
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
