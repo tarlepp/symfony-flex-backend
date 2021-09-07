@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/UserGroup/DetachUserController.php
+ * /src/Controller/v1/UserGroup/DetachUserController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\UserGroup;
+namespace App\Controller\v1\UserGroup;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
@@ -26,7 +26,7 @@ use Throwable;
 /**
  * Class DetachUserController
  *
- * @package App\Controller\UserGroup
+ * @package App\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DetachUserController
@@ -102,7 +102,7 @@ class DetachUserController
      * @throws Throwable
      */
     #[Route(
-        path: '/user_group/{userGroup}/user/{user}',
+        path: '/v1/user_group/{userGroup}/user/{user}',
         requirements: [
             'userGroup' => '%app.uuid_v1_regex%',
             'user' => '%app.uuid_v1_regex%',

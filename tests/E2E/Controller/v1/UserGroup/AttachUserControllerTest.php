@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/UserGroup/AttachUserControllerTest.php
+ * /tests/E2E/Controller/v1/UserGroup/AttachUserControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\UserGroup;
+namespace App\Tests\E2E\Controller\v1\UserGroup;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\DataFixtures\ORM\LoadUserGroupData;
@@ -19,12 +19,12 @@ use Throwable;
 /**
  * Class AttachUserControllerTest
  *
- * @package App\Tests\E2E\Controller\UserGroup
+ * @package App\Tests\E2E\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class AttachUserControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/user_group';
+    private string $baseUrl = '/v1/user_group';
 
     /**
      * @throws Throwable
@@ -43,7 +43,7 @@ class AttachUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `POST /user_group/{userId}/user/{userGroupId}` returns 401 for non-logged in user
+     * @testdox Test that `POST /v1/user_group/{user}/user/{userGroup}` returns 401 for non-logged in user
      */
     public function testThatAttachUserGroupReturns401(): void
     {
@@ -65,7 +65,7 @@ class AttachUserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /user_group/{userId}/user/{userGroupId}` returns 403 for $u + $p, who hasn't `ROLE_ROOT`
+     * @testdox Test that `POST /v1/user_group/{user}/user/{userGroup}` returns 403 for $u + $p, who hasn't `ROLE_ROOT`
      */
     public function testThatAttachUserActionReturns403ForInvalidUser(string $u, string $p): void
     {
@@ -92,7 +92,7 @@ class AttachUserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `POST /user_group/{userId}/user/{userGroupId}` returns status $expectedStatus with root user
+     * @testdox Test that `POST /v1/user_group/{user}/user/{userGroup}` returns status $expectedStatus with root user
      */
     public function testThatAttachUserActionWorksAsExpected(int $expectedStatus): void
     {

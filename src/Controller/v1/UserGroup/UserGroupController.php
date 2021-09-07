@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/UserGroup/UserGroupController.php
+ * /src/Controller/v1/UserGroup/UserGroupController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\UserGroup;
+namespace App\Controller\v1\UserGroup;
 
 use App\DTO\UserGroup\UserGroupCreate;
 use App\DTO\UserGroup\UserGroupPatch;
@@ -24,13 +24,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
  *
  * @OA\Tag(name="UserGroup Management")
  *
- * @package App\Controller\UserGroup
+ * @package App\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @method UserGroupResource getResource()
  */
 #[Route(
-    path: '/user_group',
+    path: '/v1/user_group',
 )]
 #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class UserGroupController extends Controller

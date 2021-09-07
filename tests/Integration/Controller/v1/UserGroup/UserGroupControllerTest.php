@@ -1,24 +1,24 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Controller/UserGroup/UserGroupControllerTest.php
+ * /tests/Integration/Controller/v1/UserGroup/UserGroupControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Controller\UserGroup;
+namespace App\Tests\Integration\Controller\v1\UserGroup;
 
-use App\Controller\UserGroup\UserGroupController;
+use App\Controller\v1\UserGroup\UserGroupController;
 use App\Resource\UserGroupResource;
 use App\Utils\Tests\RestIntegrationControllerTestCase;
 
 /**
  * Class UserGroupControllerTest
  *
- * @package App\Tests\Integration\Controller
+ * @package App\Tests\Integration\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
- * @method UserGroupController getController()
+ * @method \App\Controller\v1\UserGroup\UserGroupController getController()
  */
 class UserGroupControllerTest extends RestIntegrationControllerTestCase
 {

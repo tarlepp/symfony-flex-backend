@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/UserGroup/DetachUserControllerTest.php
+ * /tests/E2E/Controller/v1/UserGroup/DetachUserControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\UserGroup;
+namespace App\Tests\E2E\Controller\v1\UserGroup;
 
 use App\DataFixtures\ORM\LoadUserData;
 use App\DataFixtures\ORM\LoadUserGroupData;
@@ -18,12 +18,12 @@ use Throwable;
 /**
  * Class DetachUserControllerTest
  *
- * @package App\Tests\E2E\Controller\User
+ * @package App\Tests\E2E\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class DetachUserControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/user_group';
+    private string $baseUrl = '/v1/user_group';
 
     /**
      * @throws Throwable
@@ -42,7 +42,7 @@ class DetachUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user_group/{userGroup}/user/{user}` returns 401 for non-logged in user
+     * @testdox Test that `DELETE /v1/user_group/{userGroup}/user/{user}` returns 401 for non-logged in user
      */
     public function testThatDetachUserReturns401(): void
     {
@@ -64,7 +64,7 @@ class DetachUserControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user_group/{userGroup}/user/{user}` returns 403 for $u + $p, who hasn't `ROLE_ROOT`
+     * @testdox Test that `DELETE /v1/user_group/{userGroup}/user/{user}` returns 403 for $u + $p, who hasn't `ROLE_ROOT`
      */
     public function testThatDetachUserReturns403(string $u, string $p): void
     {
@@ -84,7 +84,7 @@ class DetachUserControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /user_group/{userGroup}/user/{user}` returns 200 with root user
+     * @testdox Test that `DELETE /v1/user_group/{userGroup}/user/{user}` returns 200 with root user
      */
     public function testThatDetachUserReturns200(): void
     {

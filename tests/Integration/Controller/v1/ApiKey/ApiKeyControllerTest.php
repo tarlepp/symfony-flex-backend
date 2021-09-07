@@ -15,7 +15,7 @@ use App\Utils\Tests\RestIntegrationControllerTestCase;
 /**
  * Class ApiKeyControllerTest
  *
- * @package App\Tests\Integration\Controller\v1\ApiKey
+ * @package App\Tests\Integration\Controller\v1
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @method ApiKeyController getController()

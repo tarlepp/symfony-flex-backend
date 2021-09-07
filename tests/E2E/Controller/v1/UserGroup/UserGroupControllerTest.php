@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/UserGroup/UserGroupControllerTest.php
+ * /tests/E2E/Controller/UserGroup/v1/UserGroupControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\UserGroup;
+namespace App\Tests\E2E\Controller\v1\UserGroup;
 
 use App\Utils\Tests\WebTestCase;
 use Generator;
@@ -15,17 +15,17 @@ use Throwable;
 /**
  * Class UserGroupControllerTest
  *
- * @package App\Tests\E2E\Controller\UserGroup
+ * @package App\Tests\E2E\Controller\v1\UserGroup
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class UserGroupControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/user_group';
+    private string $baseUrl = '/v1/user_group';
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /user_group` returns HTTP 401 for non-logged in user
+     * @testdox Test that `GET /v1/user_group` returns HTTP 401 for non-logged in user
      */
     public function testThatGetBaseRouteReturn401(): void
     {
@@ -42,7 +42,7 @@ class UserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user_group` returns HTTP 403 when using $username + $password as a user
+     * @testdox Test that `GET /v1/user_group` returns HTTP 403 when using $username + $password as a user
      */
     public function testThatGetBaseRouteReturns403ForInvalidUser(string $username, string $password): void
     {
@@ -66,7 +66,7 @@ class UserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `GET /user_group` returns HTTP 200 when using $username + $password as a user
+     * @testdox Test that `GET /v1/user_group` returns HTTP 200 when using $username + $password as a user
      */
     public function testThatGetBaseRouteReturns200ForValidUser(string $username, string $password): void
     {

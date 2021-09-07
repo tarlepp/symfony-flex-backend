@@ -14,7 +14,7 @@ use App\Controller\Role\FindOneRoleController;
 use App\Controller\Role\RoleController;
 use App\Controller\User\DeleteUserController;
 use App\Controller\User\UserController;
-use App\Controller\UserGroup\UserGroupController;
+use App\Controller\v1\UserGroup\UserGroupController;
 use App\Rest\Controller;
 use App\Rest\ControllerCollection;
 use App\Rest\Interfaces\ControllerInterface;
