@@ -8,7 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Tests\Integration\Rest;
 
-use App\Controller\ApiKeyController;
+use App\Controller\v1\ApiKey\ApiKeyController;
 use App\DTO\ApiKey\ApiKey;
 use App\DTO\RestDtoInterface;
 use App\Resource\ApiKeyResource;

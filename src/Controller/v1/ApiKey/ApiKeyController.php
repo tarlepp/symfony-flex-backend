@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/ApiKeyController.php
+ * /src/Controller/v1/ApiKey/ApiKeyController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller;
+namespace App\Controller\v1\ApiKey;
 
 use App\DTO\ApiKey\ApiKeyCreate;
 use App\DTO\ApiKey\ApiKeyPatch;
@@ -30,7 +30,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
  * @method ApiKeyResource getResource()
  */
 #[Route(
-    path: '/api_key',
+    path: '/v1/api_key',
 )]
 #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class ApiKeyController extends Controller

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/ApiKeyControllerTest.php
+ * /tests/E2E/Controller/v1/ApiKey/ApiKeyControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller;
+namespace App\Tests\E2E\Controller\v1\ApiKey;
 
 use App\Utils\Tests\WebTestCase;
 use Generator;
@@ -15,12 +15,12 @@ use Throwable;
 /**
  * Class ApiKeyControllerTest
  *
- * @package App\Tests\E2E\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @package App\Tests\E2E\Controller\v1\ApiKey
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ApiKeyControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/api_key';
+    private string $baseUrl = '/v1/api_key';
 
     /**
      * @throws Throwable
