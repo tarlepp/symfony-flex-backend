@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/Localization/LanguageControllerTest.php
+ * /tests/E2E/Controller/v1/Localization/LanguageControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\Localization;
+namespace App\Tests\E2E\Controller\v1\Localization;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -16,19 +16,19 @@ use Throwable;
 /**
  * Class LanguageControllerTest
  *
- * @package App\Tests\E2E\Controller\Localization
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @package App\Tests\E2E\Controller\v1\Localization
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LanguageControllerTest extends WebTestCase
 {
-    private string $baseUrl = 'localization/language';
+    private string $baseUrl = '/v1/localization/language';
 
     /**
      * @dataProvider dataProviderTestThatLanguageRouteDoesNotAllowOtherMethodThanGet
      *
      * @throws Throwable
      *
-     * @testdox Test that `/localization/language` endpoint returns 405 with `$method` method.
+     * @testdox Test that `/v1/localization/language` endpoint returns 405 with `$method` method
      */
     public function testThatLanguageRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
@@ -45,7 +45,7 @@ class LanguageControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/localization/language` endpoint returns 200 with `GET` method.
+     * @testdox Test that `/v1/localization/language` endpoint returns 200 with `GET` method
      */
     public function testThatLanguageRouteReturns200(): void
     {
@@ -62,7 +62,7 @@ class LanguageControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/localization/language` endpoint returns expected count of languages (2).
+     * @testdox Test that `/v1/localization/language` endpoint returns expected count of languages (2)
      */
     public function testThatLanguageRouteReturnsExpectedNumberOfLanguages(): void
     {

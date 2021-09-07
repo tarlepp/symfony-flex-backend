@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/Localization/LocaleControllerTest.php
+ * /tests/E2E/Controller/v1/Localization/LocaleControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\Localization;
+namespace App\Tests\E2E\Controller\v1\Localization;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -16,19 +16,19 @@ use Throwable;
 /**
  * Class LocaleControllerTest
  *
- * @package App\Tests\E2E\Controller\Localization
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @package App\Tests\E2E\Controller\v1\Localization
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LocaleControllerTest extends WebTestCase
 {
-    private string $baseUrl = 'localization/locale';
+    private string $baseUrl = '/v1/localization/locale';
 
     /**
      * @dataProvider dataProviderTestThatLocaleRouteDoesNotAllowOtherMethodThanGet
      *
      * @throws Throwable
      *
-     * @testdox Test that `/localization/locale` endpoint returns 405 with `$method` method.
+     * @testdox Test that `/v1/localization/locale` endpoint returns 405 with `$method` method
      */
     public function testThatLocaleRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
@@ -45,7 +45,7 @@ class LocaleControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/localization/locale` endpoint returns 200 with `GET` method.
+     * @testdox Test that `/v1/localization/locale` endpoint returns 200 with `GET` method
      */
     public function testThatLocaleRouteReturns200(): void
     {
@@ -62,7 +62,7 @@ class LocaleControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/localization/locale` endpoint returns expected count of locales (2).
+     * @testdox Test that `/v1/localization/locale` endpoint returns expected count of locales (2)
      */
     public function testThatLocaleRouteReturnsExpectedNumberOfLocales(): void
     {

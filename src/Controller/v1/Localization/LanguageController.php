@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/Localization/LanguageController.php
+ * /src/Controller/v1/Localization/LanguageController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\Localization;
+namespace App\Controller\v1\Localization;
 
 use App\Service\Localization;
 use OpenApi\Annotations as OA;
@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @OA\Tag(name="Localization")
  *
- * @package App\Controller\Localization
+ * @package App\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class LanguageController
@@ -44,7 +44,7 @@ class LanguageController
      *  )
      */
     #[Route(
-        path: '/localization/language',
+        path: '/v1/localization/language',
         methods: [Request::METHOD_GET],
     )]
     public function __invoke(): JsonResponse

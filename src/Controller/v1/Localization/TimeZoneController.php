@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/Localization/TimezoneController.php
+ * /src/Controller/v1/Localization/TimezoneController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\Localization;
+namespace App\Controller\v1\Localization;
 
 use App\Service\Localization;
 use OpenApi\Annotations as OA;
@@ -20,7 +20,7 @@ use Throwable;
  *
  * @OA\Tag(name="Localization")
  *
- * @package App\Controller\Localization
+ * @package App\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class TimeZoneController
@@ -73,7 +73,7 @@ class TimeZoneController
      * @throws Throwable
      */
     #[Route(
-        path: '/localization/timezone',
+        path: '/v1/localization/timezone',
         methods: [Request::METHOD_GET],
     )]
     public function __invoke(): JsonResponse

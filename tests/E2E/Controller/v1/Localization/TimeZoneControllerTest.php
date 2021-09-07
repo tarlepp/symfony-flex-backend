@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/Localization/TimeZoneControllerTest.php
+ * /tests/E2E/Controller/v1/Localization/TimeZoneControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\Localization;
+namespace App\Tests\E2E\Controller\v1\Localization;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -16,19 +16,19 @@ use Throwable;
 /**
  * Class TimeZoneControllerTest
  *
- * @package App\Tests\E2E\Controller\Localization
+ * @package App\Tests\E2E\Controller\v1\Localization
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class TimeZoneControllerTest extends WebTestCase
 {
-    private string $baseUrl = 'localization/timezone';
+    private string $baseUrl = '/v1/localization/timezone';
 
     /**
      * @dataProvider dataProviderTestThatTimeZoneRouteDoesNotAllowOtherMethodThanGet
      *
      * @throws Throwable
      *
-     * @testdox Test that `/localization/timezone` endpoint returns 405 with `$method` method.
+     * @testdox Test that `/v1/localization/timezone` endpoint returns 405 with `$method` method
      */
     public function testThatTimeZoneRouteDoesNotAllowOtherMethodThanGet(string $method): void
     {
@@ -45,7 +45,7 @@ class TimeZoneControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/localization/timezone` endpoint returns 200 with `GET` method.
+     * @testdox Test that `/v1/localization/timezone` endpoint returns 200 with `GET` method
      */
     public function testThatTimeZoneRouteReturns200(): void
     {
@@ -62,7 +62,7 @@ class TimeZoneControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/localization/timezone` endpoint returns and array of timezones
+     * @testdox Test that `/v1/localization/timezone` endpoint returns and array of timezones
      */
     public function testThatTimeZoneRouteReturnsAnArrayOfTimeZones(): void
     {
@@ -81,7 +81,7 @@ class TimeZoneControllerTest extends WebTestCase
     /**
      * @throws Throwable
      *
-     * @testdox Test that `/localization/timezone` endpoint returns data as in expected structure.
+     * @testdox Test that `/v1/localization/timezone` endpoint returns data as in expected structure
      */
     public function testThatTimeZoneRouteReturnsDataAsInExpectedStructure(): void
     {
