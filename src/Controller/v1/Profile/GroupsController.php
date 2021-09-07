@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/Profile/GroupsController.php
+ * /src/Controller/v1/Profile/GroupsController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\Profile;
+namespace App\Controller\v1\Profile;
 
 use App\Entity\User;
 use App\Entity\UserGroup;
@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 /**
  * Class GroupsController
  *
- * @package App\Controller\Profile
+ * @package App\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class GroupsController
@@ -86,7 +86,7 @@ class GroupsController
      * @OA\Tag(name="Profile")
      */
     #[Route(
-        path: '/profile/groups',
+        path: '/v1/profile/groups',
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]

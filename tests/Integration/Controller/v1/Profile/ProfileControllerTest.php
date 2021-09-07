@@ -1,20 +1,20 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Controller/ProfileControllerTest.php
+ * /tests/Integration/Controller/v1/ProfileProfileControllerTest.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Controller;
+namespace App\Tests\Integration\Controller\v1\Profile;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Class ProfileControllerTest
  *
- * @package App\Tests\Integration\Controller
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @package App\Tests\Integration\Controller\v1\Profile
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class ProfileControllerTest extends KernelTestCase
 {

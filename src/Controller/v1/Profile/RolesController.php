@@ -1,42 +1,37 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/Profile/IndexController.php
+ * /src/Controller/v1/Profile/RolesController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\Profile;
+namespace App\Controller\v1\Profile;
 
 use App\Entity\User;
 use App\Security\RolesService;
-use App\Utils\JSON;
-use JsonException;
-use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /**
- * Class IndexController
+ * Class RolesController
  *
- * @package App\Controller\Profile
+ * @package App\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
-class IndexController
+class RolesController
 {
     public function __construct(
-        private SerializerInterface $serializer,
         private RolesService $rolesService,
     ) {
     }
 
     /**
-     * Endpoint action to get current user profile data.
+     * Endpoint action to get current user roles as an array.
      *
      * @OA\Parameter(
      *      name="Authorization",
@@ -50,12 +45,10 @@ class IndexController
      *  )
      * @OA\Response(
      *      response=200,
-     *      description="User profile data",
+     *      description="User roles",
      *      @OA\Schema(
-     *          ref=@Model(
-     *              type=User::class,
-     *              groups={"set.UserProfile"},
-     *          ),
+     *          type="array",
+     *          @OA\Items(type="string"),
      *      ),
      *  )
      * @OA\Response(
@@ -72,27 +65,14 @@ class IndexController
      *      ),
      *  )
      * @OA\Tag(name="Profile")
-     *
-     * @throws JsonException
      */
     #[Route(
-        path: '/profile',
+        path: '/v1/profile/roles',
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
     public function __invoke(User $loggedInUser): JsonResponse
     {
-        /** @var array<string, string|array<string, string>> $output */
-        $output = JSON::decode(
-            $this->serializer->serialize($loggedInUser, 'json', ['groups' => User::SET_USER_PROFILE]),
-            true,
-        );
-
-        /** @var array<int, string> $roles */
-        $roles = $output['roles'];
-
-        $output['roles'] = $this->rolesService->getInheritedRoles($roles);
-
-        return new JsonResponse($output);
+        return new JsonResponse($this->rolesService->getInheritedRoles($loggedInUser->getRoles()));
     }
 }

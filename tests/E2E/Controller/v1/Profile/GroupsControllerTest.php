@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/Profile/GroupsControllerTest.php
+ * /tests/E2E/Controller/v1/Profile/GroupsControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\Profile;
+namespace App\Tests\E2E\Controller\v1\Profile;
 
 use App\Security\RolesService;
 use App\Utils\JSON;
@@ -20,15 +20,17 @@ use function array_map;
 /**
  * Class GroupsControllerTest
  *
- * @package App\Tests\E2E\Controller\Profile
+ * @package App\Tests\E2E\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class GroupsControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/profile/groups';
+    private string $baseUrl = '/v1/profile/groups';
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /v1/profile/groups` returns 401 without Json Web Token
      */
     public function testThatGroupsActionReturns401WithoutToken(): void
     {
@@ -57,6 +59,8 @@ class GroupsControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
+     *
+     * @testdox Test that `GET /v1/profile/groups` returns 401 with invalid ApiKey token
      */
     public function testThatGroupsActionReturns401WithInvalidApiKey(): void
     {
@@ -90,7 +94,7 @@ class GroupsControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `groups` action returns expected groups with $username + $password
+     * @testdox Test that ``GET /v1/profile/groups` returns expected groups with $username + $password
      */
     public function testThatGroupsActionReturnExpected(string $username, string $password, array $expected): void
     {
@@ -121,7 +125,7 @@ class GroupsControllerTest extends WebTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `groups` action returns expected with invalid $token token.
+     * @testdox Test that `GET /v1/profile/groups` returns expected with invalid $token token
      */
     public function testThatGroupsActionReturnExpectedWithValidApiKey(string $token): void
     {

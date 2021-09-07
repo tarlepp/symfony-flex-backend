@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/Profile/RolesControllerTest.php
+ * /tests/E2E/Controller/v1/Profile/RolesControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\Profile;
+namespace App\Tests\E2E\Controller\v1\Profile;
 
 use App\Security\RolesService;
 use App\Utils\JSON;
@@ -19,15 +19,17 @@ use function str_pad;
 /**
  * Class RolesControllerTest
  *
- * @package App\Tests\E2E\Controller\Profile
+ * @package App\Tests\E2E\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class RolesControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/profile/roles';
+    private string $baseUrl = '/v1/profile/roles';
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /v1/profile/roles` returns 401 without Json Web Token
      */
     public function testThatRolesActionReturns401WithoutToken(): void
     {
@@ -56,6 +58,8 @@ class RolesControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
+     *
+     * @testdox Test that `GET /v1/profile/roles` returns 401 with invalid ApiKey token
      */
     public function testThatRolesActionReturns401WithInvalidApiKey(): void
     {
@@ -89,7 +93,7 @@ class RolesControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `roles` action returns expected roles with $username + $password
+     * @testdox Test that `GET /v1/profile/roles` returns expected roles with $username + $password
      */
     public function testThatRolesActionReturnsExpected(string $username, string $password, array $expected): void
     {
@@ -109,7 +113,7 @@ class RolesControllerTest extends WebTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `roles` action returns expected with invalid $token token.
+     * @testdox Test that `GET /v1/profile/roles` returns expected with invalid $token token
      */
     public function testThatRolesActionReturnsExpectedWithValidApiKey(string $token): void
     {

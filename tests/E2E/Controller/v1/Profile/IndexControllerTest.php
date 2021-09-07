@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/Profile/IndexControllerTest.php
+ * /tests/E2E/Controller/v1/Profile/IndexControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\Profile;
+namespace App\Tests\E2E\Controller\v1\Profile;
 
 use App\Security\RolesService;
 use App\Utils\JSON;
@@ -19,15 +19,17 @@ use function str_pad;
 /**
  * Class IndexControllerTest
  *
- * @package App\Tests\E2E\Controller\Profile
+ * @package App\Tests\E2E\Controller\v1\Profile
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class IndexControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/profile';
+    private string $baseUrl = '/v1/profile';
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `GET /v1/profile` returns 401 without Json Web Token
      */
     public function testThatProfileActionReturns401WithoutToken(): void
     {
@@ -59,7 +61,7 @@ class IndexControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `profile` action returns HTTP 200 with $username + $password
+     * @testdox Test that `GET /v1/profile` returns HTTP 200 with $username + $password
      */
     public function testThatProfileActionReturnExpectedWithValidToken(string $username, string $password): void
     {
@@ -75,6 +77,8 @@ class IndexControllerTest extends WebTestCase
 
     /**
      * @throws JsonException
+     *
+     * @testdox Test that `GET /v1/profile` returns 401 with invalid ApiKey token
      */
     public function testThatProfileActionReturns401WithInvalidApiKey(): void
     {
@@ -106,7 +110,7 @@ class IndexControllerTest extends WebTestCase
      *
      * @throws JsonException
      *
-     * @testdox Test that `profile` action returns expected with invalid $token token.
+     * @testdox Test that `GET /v1/profile` returns expected with invalid $token token
      */
     public function testThatProfileActionReturnsExpected(string $token): void
     {
