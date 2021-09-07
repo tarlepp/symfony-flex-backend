@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1919f7426bc35a5b47b60516a90de3fb",
+    "content-hash": "3b03e0774667a11cc361fa4330dce73f",
     "packages": [],
     "packages-dev": [
         {
@@ -909,22 +909,22 @@
         },
         {
             "name": "psalm/plugin-symfony",
-            "version": "v3.0.2",
+            "version": "v3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/psalm/psalm-plugin-symfony.git",
-                "reference": "848d58f398c489bfb656db399a8dba9fb4e20547"
+                "reference": "7b19393d11204e63a1c4b3cdee8585aa72a0ea70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/848d58f398c489bfb656db399a8dba9fb4e20547",
-                "reference": "848d58f398c489bfb656db399a8dba9fb4e20547",
+                "url": "https://api.github.com/repos/psalm/psalm-plugin-symfony/zipball/7b19393d11204e63a1c4b3cdee8585aa72a0ea70",
+                "reference": "7b19393d11204e63a1c4b3cdee8585aa72a0ea70",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
                 "php": "^7.1 || ^8.0",
-                "symfony/framework-bundle": "^3.0 || ^4.0 || ^5.0",
+                "symfony/framework-bundle": "^4.0 || ^5.0",
                 "vimeo/psalm": "^4.9"
             },
             "require-dev": {
@@ -967,9 +967,9 @@
             "description": "Psalm Plugin for Symfony",
             "support": {
                 "issues": "https://github.com/psalm/psalm-plugin-symfony/issues",
-                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v3.0.2"
+                "source": "https://github.com/psalm/psalm-plugin-symfony/tree/v3.0.3"
             },
-            "time": "2021-09-01T11:05:24+00:00"
+            "time": "2021-09-06T15:39:00+00:00"
         },
         {
             "name": "psr/cache",

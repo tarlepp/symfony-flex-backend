@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "00237d3b8f0fccb65d48b14e27960d1c",
+    "content-hash": "0dd791fed34e220d2cc6e3440b24d327",
     "packages": [],
     "packages-dev": [
         {
@@ -407,16 +407,16 @@
         },
         {
             "name": "symplify/config-transformer",
-            "version": "9.4.52",
+            "version": "9.4.58",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/config-transformer.git",
-                "reference": "18a9b42124a2c44758518c790b6c12b217c76cdc"
+                "reference": "d799d9316957819647de245fa591e9369f10a72a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/18a9b42124a2c44758518c790b6c12b217c76cdc",
-                "reference": "18a9b42124a2c44758518c790b6c12b217c76cdc",
+                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/d799d9316957819647de245fa591e9369f10a72a",
+                "reference": "d799d9316957819647de245fa591e9369f10a72a",
                 "shasum": ""
             },
             "require": {
@@ -432,7 +432,7 @@
             ],
             "description": "Prefixed version of Symfony YAML/XML to PHP/YAML config converter",
             "support": {
-                "source": "https://github.com/symplify/config-transformer/tree/9.4.52"
+                "source": "https://github.com/symplify/config-transformer/tree/9.4.58"
             },
             "funding": [
                 {
@@ -444,20 +444,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-04T11:19:14+00:00"
+            "time": "2021-09-07T06:21:29+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "9.4.52",
+            "version": "9.4.58",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "a950a28876a202f9ad800611c63472c11ebedde1"
+                "reference": "45a3f2f90dac67127634300434217fb99f059cf2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/a950a28876a202f9ad800611c63472c11ebedde1",
-                "reference": "a950a28876a202f9ad800611c63472c11ebedde1",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/45a3f2f90dac67127634300434217fb99f059cf2",
+                "reference": "45a3f2f90dac67127634300434217fb99f059cf2",
                 "shasum": ""
             },
             "require": {
@@ -482,7 +482,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.52"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.58"
             },
             "funding": [
                 {
@@ -494,7 +494,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-04T11:19:57+00:00"
+            "time": "2021-09-07T06:44:32+00:00"
         }
     ],
     "aliases": [],
