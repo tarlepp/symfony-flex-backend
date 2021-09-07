@@ -1,21 +1,21 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Controller/Role/RoleControllerTest.php
+ * /tests/Integration/Controller/v1/Role/RoleControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Controller\Role;
+namespace App\Tests\Integration\Controller\v1\Role;
 
-use App\Controller\Role\RoleController;
+use App\Controller\v1\Role\RoleController;
 use App\Resource\RoleResource;
 use App\Utils\Tests\RestIntegrationControllerTestCase;
 
 /**
  * Class RoleControllerTest
  *
- * @package App\Tests\Integration\Controller\Role
+ * @package App\Tests\Integration\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @method RoleController getController()

@@ -1,21 +1,21 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Controller/Role/FindOneRoleControllerTest.php
+ * /tests/Integration/Controller/v1/Role/FindOneRoleControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Controller\Role;
+namespace App\Tests\Integration\Controller\v1\Role;
 
-use App\Controller\Role\FindOneRoleController;
+use App\Controller\v1\Role\FindOneRoleController;
 use App\Resource\RoleResource;
 use App\Utils\Tests\RestIntegrationControllerTestCase;
 
 /**
  * Class FindOneRoleControllerTest
  *
- * @package App\Tests\Integration\Controller\Role
+ * @package App\Tests\Integration\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @method FindOneRoleController getController()

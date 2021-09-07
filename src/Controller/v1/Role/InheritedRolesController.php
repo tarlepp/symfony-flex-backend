@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/Role/InheritedRolesController.php
+ * /src/Controller/v1/Role/InheritedRolesController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\Role;
+namespace App\Controller\v1\Role;
 
 use App\Entity\Role;
 use App\Resource\RoleResource;
@@ -24,7 +24,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
  *
  * @OA\Tag(name="Role Management")
  *
- * @package App\Controller\Role
+ * @package App\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class InheritedRolesController
@@ -73,7 +73,7 @@ class InheritedRolesController
      *  )
      */
     #[Route(
-        path: '/role/{role}/inherited',
+        path: '/v1/role/{role}/inherited',
         requirements: ['role' => '^ROLE_\w+$'],
         methods: [Request::METHOD_GET],
     )]

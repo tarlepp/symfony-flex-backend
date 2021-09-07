@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/Role/FindOneRoleController.php
+ * /src/Controller/v1/Role/FindOneRoleController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\Role;
+namespace App\Controller\v1\Role;
 
 use App\Resource\RoleResource;
 use App\Rest\Controller;
@@ -24,7 +24,7 @@ use Throwable;
  *
  * @OA\Tag(name="Role Management")
  *
- * @package App\Controller\Role
+ * @package App\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class FindOneRoleController extends Controller
@@ -40,7 +40,7 @@ class FindOneRoleController extends Controller
      * @throws Throwable
      */
     #[Route(
-        path: '/role/{role}',
+        path: '/v1/role/{role}',
         requirements: ['role' => '^ROLE_\w+$'],
         methods: [Request::METHOD_GET],
     )]

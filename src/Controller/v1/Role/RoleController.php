@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/Role/RoleController.php
+ * /src/Controller/v1/Role/RoleController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\Role;
+namespace App\Controller\v1\Role;
 
 use App\Resource\RoleResource;
 use App\Rest\Controller;
@@ -21,13 +21,13 @@ use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
  *
  * @OA\Tag(name="Role Management")
  *
- * @package App\Controller
+ * @package App\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @method RoleResource getResource()
  */
 #[Route(
-    path: '/role',
+    path: '/v1/role',
 )]
 #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
 class RoleController extends Controller

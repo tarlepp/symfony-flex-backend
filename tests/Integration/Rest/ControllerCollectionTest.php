@@ -10,8 +10,8 @@ namespace App\Tests\Integration\Rest;
 
 use App\Controller\v1\ApiKey\ApiKeyController;
 use App\Controller\Auth\GetTokenController;
-use App\Controller\Role\FindOneRoleController;
-use App\Controller\Role\RoleController;
+use App\Controller\v1\Role\FindOneRoleController;
+use App\Controller\v1\Role\RoleController;
 use App\Controller\v1\User\DeleteUserController;
 use App\Controller\v1\User\UserController;
 use App\Controller\v1\UserGroup\UserGroupController;

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/Role/InheritedRolesControllerTest.php
+ * /tests/E2E/Controller/v1/Role/InheritedRolesControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\Role;
+namespace App\Tests\E2E\Controller\v1\Role;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -18,17 +18,17 @@ use function array_slice;
 /**
  * Class InheritedRolesControllerTest
  *
- * @package App\Tests\E2E\Controller\Role
+ * @package App\Tests\E2E\Controller\v1\Role
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class InheritedRolesControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/role';
+    private string $baseUrl = '/v1/role';
 
     /**
      * @throws Throwable
      *
-     * @testdox Test that `GET /role/ROLE_ADMIN/inherited` returns HTTP 401 for non-logged in user.
+     * @testdox Test that `GET /v1/role/ROLE_ADMIN/inherited` returns HTTP 401 for non-logged in user
      */
     public function testThatGetInheritedRoles401(): void
     {
