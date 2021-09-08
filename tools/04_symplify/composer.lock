@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0dd791fed34e220d2cc6e3440b24d327",
+    "content-hash": "e1470925bd797f264357cb37eb51ec34",
     "packages": [],
     "packages-dev": [
         {
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "05f521f12b6e072bc77aaa78191907987d0454ff"
+                "reference": "2253b042c4cf1a9413f44a1c224ef2f705517bfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/05f521f12b6e072bc77aaa78191907987d0454ff",
-                "reference": "05f521f12b6e072bc77aaa78191907987d0454ff",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2253b042c4cf1a9413f44a1c224ef2f705517bfb",
+                "reference": "2253b042c4cf1a9413f44a1c224ef2f705517bfb",
                 "shasum": ""
             },
             "conflict": {
@@ -94,7 +94,7 @@
                 "ezsystems/ezplatform-rest": ">=1.2,<=1.2.2|>=1.3,<=1.3.1",
                 "ezsystems/ezplatform-user": ">=1,<1.0.1",
                 "ezsystems/ezpublish-kernel": "<=6.13.8.1|>=7,<=7.5.15.1",
-                "ezsystems/ezpublish-legacy": ">=5.3,<5.3.12.6|>=5.4,<5.4.14.2|>=2011,<2017.12.7.3|>=2018.6,<2018.6.1.4|>=2018.9,<2018.9.1.3|>=2019.3,<2019.3.5.1",
+                "ezsystems/ezpublish-legacy": "<=2017.12.7.3|>=2018.6,<=2019.3.5.1",
                 "ezsystems/platform-ui-assets-bundle": ">=4.2,<4.2.3",
                 "ezsystems/repository-forms": ">=2.3,<2.3.2.1",
                 "ezyang/htmlpurifier": "<4.1.1",
@@ -403,20 +403,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-03T16:04:40+00:00"
+            "time": "2021-09-07T23:02:49+00:00"
         },
         {
             "name": "symplify/config-transformer",
-            "version": "9.4.58",
+            "version": "9.4.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/config-transformer.git",
-                "reference": "d799d9316957819647de245fa591e9369f10a72a"
+                "reference": "7c88fd16fdacedbaa7e270f1327d94884e5c6c11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/d799d9316957819647de245fa591e9369f10a72a",
-                "reference": "d799d9316957819647de245fa591e9369f10a72a",
+                "url": "https://api.github.com/repos/symplify/config-transformer/zipball/7c88fd16fdacedbaa7e270f1327d94884e5c6c11",
+                "reference": "7c88fd16fdacedbaa7e270f1327d94884e5c6c11",
                 "shasum": ""
             },
             "require": {
@@ -432,7 +432,7 @@
             ],
             "description": "Prefixed version of Symfony YAML/XML to PHP/YAML config converter",
             "support": {
-                "source": "https://github.com/symplify/config-transformer/tree/9.4.58"
+                "source": "https://github.com/symplify/config-transformer/tree/9.4.59"
             },
             "funding": [
                 {
@@ -444,20 +444,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-07T06:21:29+00:00"
+            "time": "2021-09-07T21:25:47+00:00"
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "9.4.58",
+            "version": "9.4.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "45a3f2f90dac67127634300434217fb99f059cf2"
+                "reference": "9c4cf0d86630f6faaba129b1fa7c9afc7a069d5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/45a3f2f90dac67127634300434217fb99f059cf2",
-                "reference": "45a3f2f90dac67127634300434217fb99f059cf2",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/9c4cf0d86630f6faaba129b1fa7c9afc7a069d5b",
+                "reference": "9c4cf0d86630f6faaba129b1fa7c9afc7a069d5b",
                 "shasum": ""
             },
             "require": {
@@ -482,7 +482,7 @@
             ],
             "description": "Prefixed scoped version of ECS package",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.58"
+                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.59"
             },
             "funding": [
                 {
@@ -494,7 +494,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-07T06:44:32+00:00"
+            "time": "2021-09-07T21:26:36+00:00"
         }
     ],
     "aliases": [],
