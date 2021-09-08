@@ -1,14 +1,14 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/Integration/Controller/Auth/GetTokenControllerTest.php
+ * /tests/Integration/Controller/v1/Auth/GetTokenControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\Integration\Controller\Auth;
+namespace App\Tests\Integration\Controller\v1\Auth;
 
-use App\Controller\Auth\GetTokenController;
+use App\Controller\v1\Auth\GetTokenController;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
@@ -16,7 +16,7 @@ use Throwable;
 /**
  * Class GetTokenControllerTest
  *
- * @package App\Tests\Integration\Controller\Auth
+ * @package App\Tests\Integration\Controller\v1\Auth
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @property GetTokenController $controller

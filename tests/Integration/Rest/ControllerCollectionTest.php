@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Tests\Integration\Rest;
 
 use App\Controller\v1\ApiKey\ApiKeyController;
-use App\Controller\Auth\GetTokenController;
+use App\Controller\v1\Auth\GetTokenController;
 use App\Controller\v1\Role\FindOneRoleController;
 use App\Controller\v1\Role\RoleController;
 use App\Controller\v1\User\DeleteUserController;

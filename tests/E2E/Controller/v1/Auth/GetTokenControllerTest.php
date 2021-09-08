@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /tests/E2E/Controller/Auth/GetTokenControllerTest.php
+ * /tests/E2E/Controller/v1/Auth/GetTokenControllerTest.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Tests\E2E\Controller\Auth;
+namespace App\Tests\E2E\Controller\v1\Auth;
 
 use App\Utils\JSON;
 use App\Utils\Tests\WebTestCase;
@@ -17,19 +17,19 @@ use function json_encode;
 /**
  * Class GetTokenControllerTest
  *
- * @package App\Tests\E2E\Controller\Auth
+ * @package App\Tests\E2E\Controller\v1\Auth
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class GetTokenControllerTest extends WebTestCase
 {
-    private string $baseUrl = '/auth/getToken';
+    private string $baseUrl = '/v1/auth/get_token';
 
     /**
      * @dataProvider dataProviderTestThatGetTokenRouteDoesNotAllowOtherThanPost
      *
      * @throws Throwable
      *
-     * @testdox Test that `getToken` action returns 405 with $method method
+     * @testdox Test that `GET /v1/auth/get_token` returns 405 with $method method
      */
     public function testThatGetTokenActionDoesNotAllowOtherThanPost(string $method): void
     {
@@ -48,7 +48,7 @@ class GetTokenControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `getToken` action returns proper JWT with $username + $password
+     * @testdox Test that `POST /v1/auth/get_token` returns proper JWT with $username + $password
      */
     public function testThatGetTokenActionReturnsJwtWithValidCredentials(string $username, string $password): void
     {
@@ -96,6 +96,8 @@ class GetTokenControllerTest extends WebTestCase
 
     /**
      * @throws Throwable
+     *
+     * @testdox Test that `POST /v1/auth/get_token` returns 401 with invalid credentials
      */
     public function testThatGetTokenActionReturn401WithInvalidCredentials(): void
     {

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types = 1);
 /**
- * /src/Controller/Auth/GetTokenController.php
+ * /src/Controller/v1/Auth/GetTokenController.php
  *
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
-namespace App\Controller\Auth;
+namespace App\Controller\v1\Auth;
 
 use App\Utils\JSON;
 use JsonException;
@@ -20,7 +20,7 @@ use function sprintf;
 /**
  * Class GetTokenController
  *
- * @package App\Controller
+ * @package App\Controller\v1\Auth
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 class GetTokenController
@@ -71,7 +71,7 @@ class GetTokenController
      * @throws JsonException
      */
     #[Route(
-        path: '/auth/getToken',
+        path: '/v1/auth/get_token',
         methods: [Request::METHOD_POST],
     )]
     public function __invoke(): void

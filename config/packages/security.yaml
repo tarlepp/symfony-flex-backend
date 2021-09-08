@@ -23,11 +23,11 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         login:
-            pattern: ^/auth/getToken$
+            pattern: ^/v1/auth/get_token$
             stateless: true
             json_login:
                 provider: security_user_provider
-                check_path: /auth/getToken
+                check_path: /v1/auth/get_token
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: App\Security\Handler\TranslatedAuthenticationFailureHandler
         root:
