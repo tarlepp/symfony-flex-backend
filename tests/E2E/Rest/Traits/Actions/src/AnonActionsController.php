@@ -3,7 +3,7 @@ declare(strict_types = 1);
 /**
  * /tests/E2E/Rest/Traits/Actions/src/AnonActionsController.php
  *
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
 
 namespace App\Tests\E2E\Rest\Traits\Actions\src;
@@ -18,14 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class AnonActionsController
  *
- * @Route(
- *     path="/test_anon_actions",
- *  )
-
- *
  * @package App\Tests\E2E\Rest\Traits\Actions\src
- * @author TLe, Tarmo Leppänen <tarmo.leppanen@protacon.com>
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  */
+#[Route(
+    path: '/test_anon_actions',
+)]
 class AnonActionsController extends Controller
 {
     use Actions\CountAction;
