@@ -1,0 +1,93 @@
+<?php
+declare(strict_types = 1);
+/**
+ * /tests/E2E/Controller/v1/Localization/LanguageControllerTest.php
+ *
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ */
+
+namespace App\Tests\E2E\Controller\v1\Localization;
+
+use App\Utils\JSON;
+use App\Utils\Tests\WebTestCase;
+use Generator;
+use Throwable;
+
+/**
+ * Class LanguageControllerTest
+ *
+ * @package App\Tests\E2E\Controller\v1\Localization
+ * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
+ */
+class LanguageControllerTest extends WebTestCase
+{
+    private string $baseUrl = '/v1/localization/language';
+
+    /**
+     * @dataProvider dataProviderTestThatLanguageRouteDoesNotAllowOtherMethodThanGet
+     *
+     * @throws Throwable
+     *
+     * @testdox Test that `/v1/localization/language` endpoint returns 405 with `$method` method
+     */
+    public function testThatLanguageRouteDoesNotAllowOtherMethodThanGet(string $method): void
+    {
+        $client = $this->getTestClient();
+        $client->request($method, $this->baseUrl);
+
+        $response = $client->getResponse();
+        $content = $response->getContent();
+
+        static::assertNotFalse($content);
+        static::assertSame(405, $response->getStatusCode(), $content);
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `/v1/localization/language` endpoint returns 200 with `GET` method
+     */
+    public function testThatLanguageRouteReturns200(): void
+    {
+        $client = $this->getTestClient();
+        $client->request('GET', $this->baseUrl);
+
+        $response = $client->getResponse();
+        $content = $response->getContent();
+
+        static::assertNotFalse($content);
+        static::assertSame(200, $response->getStatusCode(), $content);
+    }
+
+    /**
+     * @throws Throwable
+     *
+     * @testdox Test that `/v1/localization/language` endpoint returns expected count of languages (2)
+     */
+    public function testThatLanguageRouteReturnsExpectedNumberOfLanguages(): void
+    {
+        $client = $this->getTestClient();
+        $client->request('GET', $this->baseUrl);
+
+        $response = $client->getResponse();
+        $content = $response->getContent();
+
+        static::assertNotFalse($content);
+
+        static::assertCount(2, JSON::decode($content));
+    }
+
+    /**
+     * @return Generator<array{0: string}>
+     */
+    public function dataProviderTestThatLanguageRouteDoesNotAllowOtherMethodThanGet(): Generator
+    {
+        yield ['PUT'];
+        yield ['POST'];
+        yield ['DELETE'];
+        yield ['TRACE'];
+        yield ['OPTIONS'];
+        yield ['CONNECT'];
+        yield ['PATCH'];
+    }
+}
