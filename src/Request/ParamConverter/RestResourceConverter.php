@@ -39,7 +39,7 @@ class RestResourceConverter implements ParamConverterInterface
     {
         $name = $configuration->getName();
         $identifier = (string)$request->attributes->get($name, '');
-        $resource = $this->collection->get($configuration->getClass());
+        $resource = $this->collection->get($configuration->getClass() ?? '');
 
         if ($identifier !== '') {
             // Reminder make throw to exists on options
