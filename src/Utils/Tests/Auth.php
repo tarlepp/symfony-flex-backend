@@ -127,7 +127,7 @@ class Auth
             // Create request to make login using given credentials
             $client->request(
                 'POST',
-                '/auth/getToken',
+                '/v1/auth/get_token',
                 [],
                 [],
                 array_merge(
