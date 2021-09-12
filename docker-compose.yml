@@ -31,7 +31,7 @@ services:
         depends_on:
             - php
         ports:
-            - 8000:80
+            - "8000:80"
         volumes:
             - ./:/app:cached
             # Cannot use this because of the directory rights are forced for root user
@@ -45,9 +45,16 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: password
         ports:
-            - 3310:3306
+            - "3310:3306"
         volumes:
             - mysql:/var/lib/mysql
 
+    dozzle:
+        container_name: symfony-backend-dozzle
+        image: amir20/dozzle
+        ports:
+            - "8100:8080"
+        volumes:
+            -  /var/run/docker.sock:/var/run/docker.sock
 volumes:
     mysql:

@@ -70,20 +70,23 @@ For this just run following command:
 make start
 ```
 
-This command will create three (3) containers to run this backend application.
+This command will create four (4) containers to run this backend application.
 Those containers are following:
 
-* php (this is for actual application)
-* nginx (this will serve application)
-* mysql (MySQL 5.7 which will store all the data of application)
+* [php](https://www.php.net/) (this is for actual application)
+* [nginx](https://www.nginx.com/) (this will serve application)
+* [mysql](https://www.mysql.com/) (MySQL 8.0 which will store all the data of application)
+* [dozzle](https://dozzle.dev/) (to see your docker container logs)
 
 ### 3. Using application [ᐞ](#table-of-contents)
 
-By default `make start` / `docker-compose up` command starts those three
+By default `make start` / `docker-compose up` command starts those four
 containers and exposes following ports on `localhost`:
 
-* 8000 (nginx + php-fpm)
-* 3310 (mysql)
+* symfony-backend-nginx - http://localhost:8000 (nginx) 
+* symfony-backend-php-fpm - this is not exposed to host machine (php-frpm)
+* symfony-backend-mysql - http://localhost:3010 (mysql)
+* symfony-backend-dozzle - http://localhost:8100 (dozzle)
 
 And this application is usable within your browser on `http://localhost:8000`
 address.
