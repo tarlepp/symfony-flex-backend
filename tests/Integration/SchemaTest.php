@@ -14,10 +14,9 @@ use App\Doctrine\DBAL\Types\EnumLogLoginType;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaValidator;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Throwable;
 use function array_walk;
-use function assert;
 use function implode;
 
 /**
@@ -28,42 +27,6 @@ use function implode;
  */
 class SchemaTest extends KernelTestCase
 {
-    private ?SchemaValidator $validator = null;
-
-    /**
-     * @throws Throwable
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        if (!Type::hasType('EnumLanguage')) {
-            Type::addType('EnumLanguage', EnumLanguageType::class);
-        }
-
-        if (!Type::hasType('EnumLocale')) {
-            Type::addType('EnumLocale', EnumLocaleType::class);
-        }
-
-        if (!Type::hasType('EnumLogLogin')) {
-            Type::addType('EnumLogLogin', EnumLogLoginType::class);
-        }
-
-        /**
-         * @var \Doctrine\Persistence\ManagerRegistry $managerRegistry
-         */
-        $managerRegistry = static::$kernel->getContainer()->get('doctrine');
-
-        /**
-         * @var EntityManagerInterface $entityManager
-         */
-        $entityManager = $managerRegistry->getManager();
-
-        $this->validator = new SchemaValidator($entityManager);
-    }
-
     /**
      * @testdox Test that entity mappings are valid
      */
@@ -95,8 +58,30 @@ class SchemaTest extends KernelTestCase
 
     private function getValidator(): SchemaValidator
     {
-        assert($this->validator instanceof SchemaValidator);
+        static::bootKernel();
 
-        return $this->validator;
+        if (!Type::hasType('EnumLanguage')) {
+            Type::addType('EnumLanguage', EnumLanguageType::class);
+        }
+
+        if (!Type::hasType('EnumLocale')) {
+            Type::addType('EnumLocale', EnumLocaleType::class);
+        }
+
+        if (!Type::hasType('EnumLogLogin')) {
+            Type::addType('EnumLogLogin', EnumLogLoginType::class);
+        }
+
+        /**
+         * @var ManagerRegistry $managerRegistry
+         */
+        $managerRegistry = static::$kernel->getContainer()->get('doctrine');
+
+        /**
+         * @var EntityManagerInterface $entityManager
+         */
+        $entityManager = $managerRegistry->getManager();
+
+        return new SchemaValidator($entityManager);
     }
 }
