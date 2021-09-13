@@ -83,10 +83,10 @@ Those containers are following:
 By default `make start` / `docker-compose up` command starts those four
 containers and exposes following ports on `localhost`:
 
-* symfony-backend-nginx - http://localhost:8000 (nginx) 
-* symfony-backend-php-fpm - this is not exposed to host machine (php-frpm)
-* symfony-backend-mysql - http://localhost:3010 (mysql)
-* symfony-backend-dozzle - http://localhost:8100 (dozzle)
+* symfony-backend-nginx - [http://localhost:8000](http://localhost:8000) (nginx)
+* symfony-backend-php-fpm - this is not exposed to host machine (php-fpm)
+* symfony-backend-mysql - [http://localhost:3010](http://localhost:3010) (mysql)
+* symfony-backend-dozzle - [http://localhost:8100](http://localhost:8100) (dozzle)
 
 And this application is usable within your browser on `http://localhost:8000`
 address.
