@@ -45,7 +45,7 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: password
         ports:
-            - "3310:3306"
+            - "33060:3306"
         volumes:
             - mysql:/var/lib/mysql
 
@@ -53,7 +53,7 @@ services:
         container_name: symfony-backend-dozzle
         image: amir20/dozzle
         ports:
-            - "8100:8080"
+            - "8080:8080"
         volumes:
             -  /var/run/docker.sock:/var/run/docker.sock
 volumes:
