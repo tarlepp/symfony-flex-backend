@@ -407,15 +407,17 @@ else ifneq ($(strip $(IS_RUNNING)),)
 	$(WARNING_DOCKER_RUNNING)
 else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --detach
+	@printf "\033[32mContainers are running background, check logs for detailed information!\033[39m\n"
 endif
 
-start-build: ## Start application in development mode and build containers
+build: ## Build containers and start application in development mode
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)
 else ifneq ($(strip $(IS_RUNNING)),)
 	$(WARNING_DOCKER_RUNNING)
 else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build --detach
+	@printf "\033[32mContainers are built and those are running background, check logs for detailed information!\033[39m\n"
 endif
 
 stop: ## Stop application containers
@@ -434,7 +436,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up
 endif
 
-watch-start-build: ## Start application in development mode and build containers + watch output
+watch-build: ## Build containers and start application in development mode + watch output
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)
 else ifneq ($(strip $(IS_RUNNING)),)
