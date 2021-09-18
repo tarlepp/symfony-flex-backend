@@ -70,6 +70,12 @@ For this just run following command:
 make start
 ```
 
+If you like to see containers logs directly use following command:
+
+```bash
+make watch-start
+```
+
 This command will create three (3) containers to run this backend application.
 Those containers are following:
 
@@ -117,7 +123,13 @@ that you should do everytime if you have some problems to get containers up and
 running. This you can do with following command:
 
 ```bash
-make start-build
+make build
+```
+
+If you like to see containers logs directly use following command:
+
+```bash
+make watch-build
 ```
 
 ## Frontend? [ᐞ](#table-of-contents)
