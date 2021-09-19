@@ -37,6 +37,7 @@ endif
 
 WARNING_HOST = @printf "\033[31mThis command cannot be run inside docker container!\033[39m\n"
 WARNING_DOCKER = @printf "\033[31mThis command must be run inside docker container and it's not running!\nUse 'make start' command to get container running and after that run this command again.\033[39m\n"
+WARNING_DOCKER_RUNNING = @printf "\033[31mDocker is already running - you cannot execute this command multiple times\033[39m\n"
 NOTICE_HOST = @printf "\033[33mRunning command from host machine by using 'docker-compose exec' command\033[39m\n"
 
 .DEFAULT_GOAL := help
@@ -390,11 +391,33 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php bash
 endif
 
+logs: ## Show logs from all containers
+ifeq ($(INSIDE_DOCKER), 1)
+	$(WARNING_HOST)
+else ifeq ($(strip $(IS_RUNNING)),)
+	$(WARNING_DOCKER)
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose logs --follow php nginx mysql
+endif
+
 start: ## Start application in development mode
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)
+else ifneq ($(strip $(IS_RUNNING)),)
+	$(WARNING_DOCKER_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --detach
+	@printf "\033[32mContainers are running background, check logs for detailed information!\033[39m\n"
+endif
+
+build: ## Build containers and start application in development mode
+ifeq ($(INSIDE_DOCKER), 1)
+	$(WARNING_HOST)
+else ifneq ($(strip $(IS_RUNNING)),)
+	$(WARNING_DOCKER_RUNNING)
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build --detach
+	@printf "\033[32mContainers are built and those are running background, check logs for detailed information!\033[39m\n"
 endif
 
 stop: ## Stop application containers
@@ -404,11 +427,22 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose down
 endif
 
-start-build: ## Start application in development mode and build containers
+watch-start: ## Start application in development mode + watch output
 ifeq ($(INSIDE_DOCKER), 1)
 	$(WARNING_HOST)
+else ifneq ($(strip $(IS_RUNNING)),)
+	$(WARNING_DOCKER_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up
+endif
+
+watch-build: ## Build containers and start application in development mode + watch output
+ifeq ($(INSIDE_DOCKER), 1)
+	$(WARNING_HOST)
+else ifneq ($(strip $(IS_RUNNING)),)
+	$(WARNING_DOCKER_RUNNING)
+else
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build --detach
 endif
 
 local-configuration: ## Create local configuration files
