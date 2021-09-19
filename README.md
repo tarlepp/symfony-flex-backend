@@ -70,7 +70,13 @@ For this just run following command:
 make start
 ```
 
-This command will create four (4) containers to run this backend application.
+If you like to see containers logs directly use following command:
+
+```bash
+make watch-start
+```
+
+These commands will create four (4) containers to run this backend application.
 Those containers are following:
 
 * [php](https://www.php.net/) (this is for actual application)
@@ -120,7 +126,13 @@ that you should do everytime if you have some problems to get containers up and
 running. This you can do with following command:
 
 ```bash
-make start-build
+make build
+```
+
+If you like to see containers logs directly use following command:
+
+```bash
+make watch-build
 ```
 
 ## Frontend? [ᐞ](#table-of-contents)

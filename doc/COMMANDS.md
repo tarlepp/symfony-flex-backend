@@ -51,44 +51,51 @@ with just running `make` command:
 
 ```bash
 bash                        # Get bash inside PHP container
+build                       # Build containers and start application in 
+                            # development mode
 cache-clear                 # Clears the cache
 cache-warmup                # Warms up an empty cache
 check-dependencies          # Checks if any vendor dependency can be updated
-clear-tools                 # Clears all tools dependencies
+clear-tools                 # Clears all tools depedencies
+configuration               # Prints out application current configuration
 ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard
                             # to fix issues
 ecs                         # Runs The Easiest Way to Use Any Coding Standard
 generate-jwt-keys           # Generates JWT auth keys
 infection                   # Runs Infection to codebase
+install-bin                 # Install composer bin dependencies
 lint-configuration          # Lint current defined `application.json` that it
                             # contains valid JSON
 lint-yaml                   # Lint config YAML files
 local-configuration         # Create local configuration files
+logs                        # Show logs from all containers
 normalize-composer          # Normalizes `composer.json` content
 phpcs                       # Runs PHP CodeSniffer
 phpinsights                 # Runs PHP Insights
 phploc                      # Runs `phploc` and create json output
 phpmetrics                  # Generates PhpMetrics static analysis
 phpstan                     # Runs PHPStan static analysis tool
+psalm-github                # Runs Psalm static analysis tool
+psalm                       # Runs Psalm static analysis tool
 psalm-shepherd              # Runs Psalm static analysis tool + report results
                             # to shepherd
-psalm                       # Runs Psalm static analysis tool
 report-fastest              # Creates clover and JUnit xml from fastest run
-run-tests-fastest-php       # Runs all test via fastest (pure PHP)
 run-tests-fastest-phpdbg    # Runs all test via fastest (phpdbg)
+run-tests-fastest-php       # Runs all test via fastest (pure PHP)
 run-tests-fastest           # Runs all test via fastest (Uses phpdbg if that is
                             # installed)
-run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests-phpdbg            # Runs all tests via phpunit (phpdbg)
+run-tests-php               # Runs all tests via phpunit (pure PHP)
 run-tests                   # Runs all tests via phpunit (Uses phpdbg if that
                             # is installed)
-serve                       # Runs a local web server
-start-build                 # Start application in development mode and build
-                            # containers
 start                       # Start application in development mode
 stop                        # Stop application containers
 update-bin                  # Update composer bin dependencies
 update                      # Update composer dependencies
+watch-build                 # Build containers and start application in 
+                            # development mode + watch output
+watch-start                 # Start application in development mode + watch
+                            # output
 ```
 
 ### Symfony console [ᐞ](#table-of-contents)
