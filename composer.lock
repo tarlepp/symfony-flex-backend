@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a8350cc080a6632d225f447cde0a58b7",
+    "content-hash": "e69c5ce6717961e4037b8dc0bac2f1d0",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2153,16 +2153,16 @@
         },
         {
             "name": "matomo/device-detector",
-            "version": "4.3.0",
+            "version": "4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matomo-org/device-detector.git",
-                "reference": "3fcceafc601444412ce65297ba4ce878ee77e450"
+                "reference": "88e5419ee1448ccb9537e287dd09836ff9d2de3b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/3fcceafc601444412ce65297ba4ce878ee77e450",
-                "reference": "3fcceafc601444412ce65297ba4ce878ee77e450",
+                "url": "https://api.github.com/repos/matomo-org/device-detector/zipball/88e5419ee1448ccb9537e287dd09836ff9d2de3b",
+                "reference": "88e5419ee1448ccb9537e287dd09836ff9d2de3b",
                 "shasum": ""
             },
             "require": {
@@ -2218,7 +2218,7 @@
                 "source": "https://github.com/matomo-org/matomo",
                 "wiki": "https://dev.matomo.org/"
             },
-            "time": "2021-07-19T08:24:00+00:00"
+            "time": "2021-09-20T12:34:12+00:00"
         },
         {
             "name": "matthiasnoback/symfony-console-form",
@@ -8433,16 +8433,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.12.0",
+            "version": "v4.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "6608f01670c3cc5079e18c1dab1104e002579143"
+                "reference": "50953a2691a922aa1769461637869a0a2faa3f53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/6608f01670c3cc5079e18c1dab1104e002579143",
-                "reference": "6608f01670c3cc5079e18c1dab1104e002579143",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/50953a2691a922aa1769461637869a0a2faa3f53",
+                "reference": "50953a2691a922aa1769461637869a0a2faa3f53",
                 "shasum": ""
             },
             "require": {
@@ -8483,9 +8483,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.12.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.0"
             },
-            "time": "2021-07-21T10:44:31+00:00"
+            "time": "2021-09-20T12:20:58+00:00"
         },
         {
             "name": "roave/security-advisories",
