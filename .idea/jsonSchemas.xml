@@ -3,17 +3,44 @@
   <component name="JsonSchemaMappingsProjectConfiguration">
     <state>
       <map>
-        <entry key="composer.json">
+        <entry key="Composer">
           <value>
             <SchemaInfo>
-              <option name="name" value="composer.json" />
-              <option name="relativePathToSchema" value="https://json.schemastore.org/composer" />
+              <option name="name" value="Composer" />
+              <option name="relativePathToSchema" value="https://getcomposer.org/schema.json" />
               <option name="schemaVersion" value="JSON Schema version 7" />
               <option name="applicationDefined" value="true" />
               <option name="patterns">
                 <list>
                   <Item>
                     <option name="path" value="composer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="tools/01_phpunit/composer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="tools/02_phpstan/composer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="tools/03_psalm/composer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="tools/04_symplify/composer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="tools/05_infection/composer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="tools/06_php-coveralls/composer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="tools/07_phpinsights/composer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="tools/08_phpmetrics/composer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="tools/09_rector/composer.json" />
                   </Item>
                 </list>
               </option>
