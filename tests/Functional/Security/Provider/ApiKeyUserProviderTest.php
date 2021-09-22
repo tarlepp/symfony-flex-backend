@@ -22,7 +22,6 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function array_map;
-use function assert;
 use function str_pad;
 
 /**
