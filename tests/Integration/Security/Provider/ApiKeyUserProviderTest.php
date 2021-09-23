@@ -15,7 +15,6 @@ use App\Security\ApiKeyUser;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
 use Generator;
-use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
