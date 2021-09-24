@@ -458,7 +458,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make local-configuration
 endif
 
-normalize-composer: ## Normalizes `composer.json` content
+normalize-composer: ## Normalizes `composer.json` file content
 ifeq ($(INSIDE_DOCKER), 1)
 	@composer normalize
 else ifeq ($(strip $(IS_RUNNING)),)
@@ -466,6 +466,16 @@ else ifeq ($(strip $(IS_RUNNING)),)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make normalize-composer
+endif
+
+validate-composer: ## Validate `composer.json` file content
+ifeq ($(INSIDE_DOCKER), 1)
+	@composer validate -q && ([ $$? -eq 0 ] && echo "\033[32mGood news, your \`composer.json\` file is valid\033[39m")
+else ifeq ($(strip $(IS_RUNNING)),)
+	$(WARNING_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make validate-composer
 endif
 
 phploc: ## Runs `phploc` and create json output
