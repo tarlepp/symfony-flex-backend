@@ -470,7 +470,7 @@ endif
 
 validate-composer: ## Validate `composer.json` file content
 ifeq ($(INSIDE_DOCKER), 1)
-	@composer validate --no-check-versions && ([ $$? -eq 0 ] && echo "\033[32mGood news, your \`composer.json\` file is valid\033[39m")
+	@composer validate --no-check-version && ([ $$? -eq 0 ] && echo "\033[32mGood news, your \`composer.json\` file is valid\033[39m")
 else ifeq ($(strip $(IS_RUNNING)),)
 	$(WARNING_DOCKER)
 else

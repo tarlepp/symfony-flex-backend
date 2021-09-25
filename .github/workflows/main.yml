@@ -43,7 +43,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Validate main `composer.json` and `composer.lock` files
-        run: composer validate --no-check-versions
+        run: composer validate --no-check-version
 
       - name: Install Composer dependencies
         run: composer install --no-progress --optimize-autoloader
