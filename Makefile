@@ -330,7 +330,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make lint-yaml
 endif
 
-clear-tools: ## Clears all tools depedencies
+clear-tools: ## Clears all tools dependencies
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mClearing tools dependencies\033[39m"
 	@find -type d -name vendor | grep tools | xargs rm -rf

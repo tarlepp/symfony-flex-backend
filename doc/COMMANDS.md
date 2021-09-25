@@ -59,7 +59,7 @@ check-dependencies-latest   # Checks if any vendor dependency can be updated
                             # (latest versions)
 check-dependencies-minor    # Checks if any vendor dependency can be updated
                             # (only minor versions)
-clear-tools                 # Clears all tools depedencies
+clear-tools                 # Clears all tools dependencies
 configuration               # Prints out application current configuration
 ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard
                             # to fix issues
