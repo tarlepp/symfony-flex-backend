@@ -330,7 +330,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make lint-yaml
 endif
 
-clear-tools: ## Clears all tools depedencies
+clear-tools: ## Clears all tools dependencies
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mClearing tools dependencies\033[39m"
 	@find -type d -name vendor | grep tools | xargs rm -rf
@@ -342,7 +342,7 @@ else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make clear-tools
 endif
 
-check-dependencies: ## Checks if any vendor dependency can be updated
+check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
 ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mChecking vendor dependencies\033[39m"
 	@bin/console check-dependencies
@@ -350,7 +350,18 @@ else ifeq ($(strip $(IS_RUNNING)),)
 	$(WARNING_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-latest
+endif
+
+check-dependencies-minor: ## Checks if any vendor dependency can be updated (only minor versions)
+ifeq ($(INSIDE_DOCKER), 1)
+	@echo "\033[32mChecking vendor dependencies\033[39m"
+	@bin/console check-dependencies
+else ifeq ($(strip $(IS_RUNNING)),)
+	$(WARNING_DOCKER)
+else
+	$(NOTICE_HOST)
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-minor
 endif
 
 update: ## Update composer dependencies
