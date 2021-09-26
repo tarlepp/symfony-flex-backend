@@ -286,16 +286,16 @@ class CheckDependencies extends Command
     }
 
     /**
-     * @return array<{0: string, 1: string, 2: string, 3: string, 4: string}>
+     * @return array{0: string, 1: string, 2: string, 3: string, 4: string}
      */
     private function getPackageRow(string $relativePath, mixed $data): array
     {
         return [
             dirname($relativePath),
-            $data->name,
-            $data->description,
-            $data->version,
-            property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . $data->version . '</>',
+            (string)$data->name,
+            (string)$data->description,
+            (string)$data->version,
+            (string)(property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . $data->version . '</>'),
         ];
     }
 
