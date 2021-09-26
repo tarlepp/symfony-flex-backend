@@ -350,7 +350,7 @@ else ifeq ($(strip $(IS_RUNNING)),)
 	$(WARNING_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-latest
 endif
 
 check-dependencies-minor: ## Checks if any vendor dependency can be updated (only minor versions)
@@ -361,7 +361,7 @@ else ifeq ($(strip $(IS_RUNNING)),)
 	$(WARNING_DOCKER)
 else
 	$(NOTICE_HOST)
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-minor
 endif
 
 update: ## Update composer dependencies
