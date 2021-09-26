@@ -55,8 +55,11 @@ build                       # Build containers and start application in
                             # development mode
 cache-clear                 # Clears the cache
 cache-warmup                # Warms up an empty cache
-check-dependencies          # Checks if any vendor dependency can be updated
-clear-tools                 # Clears all tools depedencies
+check-dependencies-latest   # Checks if any vendor dependency can be updated
+                            # (latest versions)
+check-dependencies-minor    # Checks if any vendor dependency can be updated
+                            # (only minor versions)
+clear-tools                 # Clears all tools dependencies
 configuration               # Prints out application current configuration
 ecs-fix                     # Runs The Easiest Way to Use Any Coding Standard
                             # to fix issues
