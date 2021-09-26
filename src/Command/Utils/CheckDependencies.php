@@ -177,13 +177,7 @@ class CheckDependencies extends Command
                     $rows[] = [''];
                 }
 
-                $rows[] = [
-                    dirname($relativePath),
-                    $data->name,
-                    $data->description,
-                    $data->version,
-                    property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . $data->version . '</>',
-                ];
+                $rows[] = $this->getPackageRow($relativePath, $data);
 
                 if (isset($data->warning)) {
                     $rows[] = [''];
@@ -288,6 +282,20 @@ class CheckDependencies extends Command
             'Description',
             'Version',
             'New version',
+        ];
+    }
+
+    /**
+     * @return array<{0: string, 1: string, 2: string, 3: string, 4: string}>
+     */
+    private function getPackageRow(string $relativePath, mixed $data): array
+    {
+        return [
+            dirname($relativePath),
+            $data->name,
+            $data->description,
+            $data->version,
+            property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . $data->version . '</>',
         ];
     }
 
