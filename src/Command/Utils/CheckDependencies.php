@@ -20,6 +20,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
@@ -55,6 +56,13 @@ class CheckDependencies extends Command
         parent::__construct('check-dependencies');
 
         $this->setDescription('Console command to check which vendor dependencies has updates');
+
+        $this->addOption(
+            'minor',
+            'm',
+            InputOption::VALUE_NONE,
+            'Only check for minor updates',
+        );
     }
 
     /**
@@ -64,14 +72,19 @@ class CheckDependencies extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $onlyMinor = $input->getOption('minor');
+
         $io = $this->getSymfonyStyle($input, $output);
-        $io->info('Starting to check dependencies...');
+        $io->info([
+            'Starting to check dependencies...',
+            $onlyMinor ? 'Checking only minor version updates' : 'Checking for latest version updates',
+        ]);
 
         $directories = $this->getNamespaceDirectories();
 
         array_unshift($directories, $this->projectDir);
 
-        $rows = $this->determineTableRows($io, $directories);
+        $rows = $this->determineTableRows($io, $directories, $onlyMinor);
 
         /**
          * @psalm-suppress RedundantCastGivenDocblockType
@@ -140,7 +153,7 @@ class CheckDependencies extends Command
      *
      * @throws JsonException
      */
-    private function determineTableRows(SymfonyStyle $io, array $directories): array
+    private function determineTableRows(SymfonyStyle $io, array $directories, bool $onlyMinor): array
     {
         // Initialize progress bar for process
         $progressBar = $this->getProgressBar($io, count($directories), 'Checking all vendor dependencies');
@@ -148,8 +161,8 @@ class CheckDependencies extends Command
         // Initialize output rows
         $rows = [];
 
-        $iterator = function (string $directory) use ($io, $progressBar, &$rows): void {
-            foreach ($this->processNamespacePath($directory) as $row => $data) {
+        $iterator = function (string $directory) use ($io, $onlyMinor, $progressBar, &$rows): void {
+            foreach ($this->processNamespacePath($directory, $onlyMinor) as $row => $data) {
                 $relativePath = '';
 
                 // First row of current library
@@ -164,11 +177,20 @@ class CheckDependencies extends Command
                     $rows[] = [''];
                 }
 
-                $rows[] = [dirname($relativePath), $data->name, $data->description, $data->version, $data->latest];
+                $rows[] = $this->getPackageRow($relativePath, $data);
 
                 if (isset($data->warning)) {
                     $rows[] = [''];
                     $rows[] = ['', '', '<fg=red>' . $data->warning . '</>'];
+                }
+
+                if (!property_exists($data, 'latest')) {
+                    $rows[] = [''];
+                    $rows[] = [
+                        '',
+                        '',
+                        '<fg=yellow>There is newer version, but it\'s not compatible with current setup</>',
+                    ];
                 }
             }
 
@@ -191,7 +213,7 @@ class CheckDependencies extends Command
      *
      * @throws JsonException
      */
-    private function processNamespacePath(string $path): array
+    private function processNamespacePath(string $path, bool $onlyMinor): array
     {
         $command = [
             'composer',
@@ -200,6 +222,10 @@ class CheckDependencies extends Command
             '-f',
             'json',
         ];
+
+        if ($onlyMinor) {
+            $command[] = '-m';
+        }
 
         $process = new Process($command, $path);
         $process->enableOutput();
@@ -256,6 +282,20 @@ class CheckDependencies extends Command
             'Description',
             'Version',
             'New version',
+        ];
+    }
+
+    /**
+     * @return array{0: string, 1: string, 2: string, 3: string, 4: string}
+     */
+    private function getPackageRow(string $relativePath, mixed $data): array
+    {
+        return [
+            dirname($relativePath),
+            (string)$data->name,
+            (string)$data->description,
+            (string)$data->version,
+            (string)(property_exists($data, 'latest') ? $data->latest : '<fg=yellow>' . $data->version . '</>'),
         ];
     }
 
