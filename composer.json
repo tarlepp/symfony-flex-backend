@@ -41,22 +41,22 @@
 		"symfony/asset": "5.3.4",
 		"symfony/config": "5.3.4",
 		"symfony/console": "5.3.7",
-		"symfony/dotenv": "5.3.7",
+		"symfony/dotenv": "5.3.8",
 		"symfony/expression-language": "5.3.7",
 		"symfony/flex": "1.16.2",
-		"symfony/form": "5.3.7",
-		"symfony/framework-bundle": "5.3.7",
+		"symfony/form": "5.3.8",
+		"symfony/framework-bundle": "5.3.8",
 		"symfony/monolog-bundle": "3.7.0",
 		"symfony/process": "5.3.7",
-		"symfony/property-access": "5.3.7",
-		"symfony/property-info": "5.3.7",
+		"symfony/property-access": "5.3.8",
+		"symfony/property-info": "5.3.8",
 		"symfony/routing": "5.3.7",
 		"symfony/runtime": "5.3.4",
-		"symfony/security-bundle": "5.3.7",
-		"symfony/serializer": "5.3.4",
-		"symfony/translation": "5.3.7",
+		"symfony/security-bundle": "5.3.8",
+		"symfony/serializer": "5.3.8",
+		"symfony/translation": "5.3.9",
 		"symfony/twig-bundle": "5.3.4",
-		"symfony/validator": "5.3.7",
+		"symfony/validator": "5.3.8",
 		"symfony/yaml": "5.3.6"
 	},
 	"conflict": {
@@ -73,8 +73,8 @@
 		"symfony/maker-bundle": "1.34.0",
 		"symfony/requirements-checker": "2.0.0",
 		"symfony/stopwatch": "5.3.4",
-		"symfony/var-dumper": "5.3.7",
-		"symfony/web-profiler-bundle": "5.3.5"
+		"symfony/var-dumper": "5.3.8",
+		"symfony/web-profiler-bundle": "5.3.8"
 	},
 	"config": {
 		"platform": {
