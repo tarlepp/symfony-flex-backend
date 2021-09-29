@@ -13,11 +13,11 @@ JWT_SECRET_KEY=$$(echo | jq -r .JWT_SECRET_KEY ${APPLICATION_CONFIG})
 JWT_PASSPHRASE=$$(echo | jq -r .JWT_PASSPHRASE ${APPLICATION_CONFIG})
 
 ifdef GITHUB_WORKFLOW
-	INSIDE_DOCKER = 1
+	INSIDE_DOCKER_CONTAINER = 1
 else ifneq ("$(wildcard /.dockerenv)", "")
-	INSIDE_DOCKER = 1
+	INSIDE_DOCKER_CONTAINER = 1
 else
-	INSIDE_DOCKER = 0
+	INSIDE_DOCKER_CONTAINER = 0
 endif
 
 # Global variables that we're using
@@ -28,17 +28,28 @@ OPENSSL_BIN := $(shell which openssl)
 PHPDBG := $(shell which phpdbg)
 COMPOSER_BIN := $(shell which composer)
 DOCKER := $(shell which docker)
+CONTAINER_PREFIX := 'symfony-backend' # Check your `docker-compose.yml` file `container_name` property for this one
+CONTAINER_COUNT := 4 # Check your `docker-compose.yml` file service count for this one
 
 ifdef DOCKER
-	IS_RUNNING := $(shell docker ps -f name=php | grep php)
+	RUNNING_SOME_CONTAINERS := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX))
+	TEMP := $(shell docker ps -f name=$(CONTAINER_PREFIX) | grep -c $(CONTAINER_PREFIX) | grep $(CONTAINER_COUNT))
 else
-	IS_RUNNING := '';
+	RUNNING_SOME_CONTAINERS := 0;
+	TEMP := 0
 endif
 
-WARNING_HOST = @printf "\033[31mThis command cannot be run inside docker container!\033[39m\n"
-WARNING_DOCKER = @printf "\033[31mThis command must be run inside docker container and it's not running!\nUse 'make start' command to get container running and after that run this command again.\033[39m\n"
-WARNING_DOCKER_RUNNING = @printf "\033[31mDocker is already running - you cannot execute this command multiple times\033[39m\n"
+ifeq ($(INSIDE_DOCKER_CONTAINER)$(TEMP), 04)
+	RUNNING_ALL_CONTAINERS = 1
+else
+	RUNNING_ALL_CONTAINERS = 0;
+endif
+
+ERROR_DOCKER = @printf "\033[31mSeems like that all necessary Docker containers are not running atm.\nCheck logs for detailed information about the reason of this\033[39m\n"
 NOTICE_HOST = @printf "\033[33mRunning command from host machine by using 'docker-compose exec' command\033[39m\n"
+WARNING_HOST = @printf "\033[31mThis command cannot be run inside docker container!\033[39m\n"
+WARNING_DOCKER = @printf "\033[31mThis command must be run inside specified docker container and it's not\nrunning atm. Use \`make start\` and/or \`make watch-start\` command to get\nnecessary container(s) running and after that run this command again.\033[39m\n"
+WARNING_DOCKER_RUNNING = @printf "\033[31mDocker is already running - you cannot execute this command multiple times\033[39m\n"
 
 .DEFAULT_GOAL := help
 
@@ -47,10 +58,12 @@ help:
 	@grep -E '^[a-zA-Z-]+:.*?## .*$$' Makefile | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "[32m%-27s[0m %s\n", $$1, $$2}'
 
 configuration: ## Prints out application current configuration
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo | jq -r . ${APPLICATION_CONFIG}
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make configuration
@@ -71,7 +84,7 @@ else
 endif
 
 generate-jwt-keys: ## Generates JWT auth keys
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mGenerating RSA keys for JWT\033[39m"
 	@mkdir -p config/jwt
 	@rm -f ${JWT_SECRET_KEY}
@@ -81,8 +94,10 @@ ifeq ($(INSIDE_DOCKER), 1)
 	@chmod 644 ${JWT_SECRET_KEY}
 	@chmod 644 ${JWT_PUBLIC_KEY}
 	@echo "\033[32mRSA key pair successfully generated\033[39m"
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make generate-jwt-keys
@@ -103,7 +118,7 @@ else
 endif
 
 run-tests-php: ## Runs all tests via phpunit (pure PHP)
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning test with PhpUnit in single thread (pure PHP)\033[39m"
 	@php ./vendor/bin/phpunit --version
 	@rm -rf build/logs
@@ -111,15 +126,17 @@ ifeq ($(INSIDE_DOCKER), 1)
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
 	@./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make run-tests-php
 endif
 
 run-tests-phpdbg: ## Runs all tests via phpunit (phpdbg)
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning test with PhpUnit in single thread (phpdbg)\033[39m"
 	@php ./vendor/bin/phpunit --version
 	@rm -rf build/logs
@@ -127,71 +144,81 @@ ifeq ($(INSIDE_DOCKER), 1)
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
 	@phpdbg -qrr ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml --log-junit build/logs/junit.xml
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make run-tests-phpdbg
 endif
 
 run-tests-fastest-php: ## Runs all test via fastest (pure PHP)
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads (pure PHP)\033[39m"
 	@rm -rf build/fastest
 	@mkdir -p build/fastest
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
 	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -o -b "php ./tests/bootstrap_fastest.php" "php ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make run-tests-fastest-php
 endif
 
 run-tests-fastest-phpdbg: ## Runs all test via fastest (phpdbg)
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning tests with liuggio/fastest + PhpUnit in multiple threads (phpdbg)\033[39m"
 	@rm -rf build/fastest
 	@mkdir -p build/fastest
 	@rm -rf ./var/cache/test*
 	@bin/console cache:warmup --env=test
 	@find tests/ -name "*Test.php" | php ./vendor/bin/fastest -v -p 8 -o -b "php ./tests/bootstrap_fastest.php" "phpdbg -qrr -d memory_limit=4096M ./vendor/bin/phpunit {} -c phpunit.fastest.xml --coverage-php build/fastest/{n}.cov --log-junit build/fastest/{n}.xml";
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make run-tests-fastest-phpdbg
 endif
 
 report-fastest: ## Creates clover and JUnit xml from fastest run
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@rm -rf build/logs
 	@mkdir -p build/logs
 	@./vendor/bin/phpcov merge ./build/fastest/ --clover=./build/logs/clover.xml --html ./build/report/
 	@php merge-phpunit-xml.php ./build/fastest/ ./build/logs/junit.xml
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make report-fastest
 endif
 
 infection: ## Runs Infection to codebase
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning Infection to codebase (pure PHP)\033[39m"
 	@mkdir -p build/infection
 	@bin/console cache:clear --env=test
 	@./vendor/bin/infection --threads=8 --only-covered --show-mutations --test-framework-options="--testsuite=Functional,Integration,Unit"
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make infection
 endif
 
 phpmetrics: ## Generates PhpMetrics static analysis
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@mkdir -p build/phpmetrics
 	@if [ ! -f build/logs/junit.xml ] ; then \
 		printf "\033[32;49mclover.xml not found running tests...\033[39m\n" ; \
@@ -200,221 +227,259 @@ ifeq ($(INSIDE_DOCKER), 1)
 	@echo "\033[32mRunning PhpMetrics\033[39m"
 	@php ./vendor/bin/phpmetrics --version
 	@./vendor/bin/phpmetrics --junit=build/logs/junit.xml --report-html=build/phpmetrics .
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpmetrics
 endif
 
 phpcs: ## Runs PHP CodeSniffer
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning PhpCodeSniffer\033[39m"
 	@php ./vendor/bin/phpcs --version
 	@php ./vendor/bin/phpcs --standard=PSR2 --colors -p src tests
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpcs
 endif
 
 ecs: ## Runs The Easiest Way to Use Any Coding Standard
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning EasyCodingStandard\033[39m"
 	@php ./vendor/bin/ecs --version
 	@php ./vendor/bin/ecs --clear-cache check src tests
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make ecs
 endif
 
 ecs-fix: ## Runs The Easiest Way to Use Any Coding Standard to fix issues
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning EasyCodingStandard\033[39m"
 	@php ./vendor/bin/ecs --version
 	@php ./vendor/bin/ecs --clear-cache --fix check src tests
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make ecs-fix
 endif
 
 phpinsights: ## Runs PHP Insights
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning PHP Insights\033[39m"
 	@php -d error_reporting=0 ./vendor/bin/phpinsights analyse --no-interaction --min-quality=100 --min-complexity=85 --min-architecture=100 --min-style=100
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpinsights
 endif
 
 psalm: ## Runs Psalm static analysis tool
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --report=./build/psalm.json
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make psalm
 endif
 
 psalm-shepherd: ## Runs Psalm static analysis tool + report results to shepherd
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make psalm-shepherd
 endif
 
 psalm-github: ## Runs Psalm static analysis tool
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning Psalm - A static analysis tool for PHP\033[39m"
 	@mkdir -p build
 	@@bin/console cache:clear
 	@php ./vendor/bin/psalm --version
 	@php ./vendor/bin/psalm --no-cache --shepherd --report=./build/psalm.json --output-format=github
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make psalm-github
 endif
 
 phpstan: ## Runs PHPStan static analysis tool
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mRunning PHPStan - PHP Static Analysis Tool\033[39m"
 	@@bin/console cache:clear
 	@./vendor/bin/phpstan --version
 	@./vendor/bin/phpstan
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phpstan
 endif
 
 lint-configuration: ## Lint current defined `application.json` that it contains valid JSON
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -r "if (!json_decode(file_get_contents('${APPLICATION_CONFIG}'))) { echo \"\033[31mInvalid JSON in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; exit(1); } else { echo \"\033[32mNo errors in configuration file '${APPLICATION_CONFIG}'\033[39m\n\"; }"
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make lint-configuration
 endif
 
 lint-yaml: ## Lint config YAML files
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mLinting YAML config files\033[39m"
 	@@bin/console lint:yaml config --parse-tags
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make lint-yaml
 endif
 
 clear-tools: ## Clears all tools dependencies
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mClearing tools dependencies\033[39m"
 	@find -type d -name vendor | grep tools | xargs rm -rf
 	@echo "\033[32mremember to run 'make update' command after this\033[39m"
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make clear-tools
 endif
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mChecking vendor dependencies\033[39m"
 	@bin/console check-dependencies
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-latest
 endif
 
 check-dependencies-minor: ## Checks if any vendor dependency can be updated (only minor versions)
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@echo "\033[32mChecking vendor dependencies\033[39m"
 	@bin/console check-dependencies
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make check-dependencies-minor
 endif
 
 update: ## Update composer dependencies
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -d memory_limit=-1 /usr/bin/composer update --with-all-dependencies --optimize-autoloader
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make update
 endif
 
 update-bin: ## Update composer bin dependencies
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all update --no-progress --optimize-autoloader
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make update-bin
 endif
 
 install-bin: ## Install composer bin dependencies
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php -d memory_limit=-1 $(COMPOSER_BIN) bin all install --no-progress --optimize-autoloader
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make install-bin
 endif
 
 bash: ## Get bash inside PHP container
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php bash
 endif
 
 logs: ## Show logs from all containers
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose logs --follow php nginx mysql
 endif
 
 start: ## Start application in development mode
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
-else ifneq ($(strip $(IS_RUNNING)),)
+else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER_RUNNING)
 else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --detach
@@ -422,9 +487,9 @@ else
 endif
 
 build: ## Build containers and start application in development mode
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
-else ifneq ($(strip $(IS_RUNNING)),)
+else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER_RUNNING)
 else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build --detach
@@ -432,68 +497,76 @@ else
 endif
 
 stop: ## Stop application containers
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
 else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose down
 endif
 
 watch-start: ## Start application in development mode + watch output
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
-else ifneq ($(strip $(IS_RUNNING)),)
+else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER_RUNNING)
 else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up
 endif
 
 watch-build: ## Build containers and start application in development mode + watch output
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	$(WARNING_HOST)
-else ifneq ($(strip $(IS_RUNNING)),)
+else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER_RUNNING)
 else
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build --detach
 endif
 
 local-configuration: ## Create local configuration files
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@cp /app/.env /app/.env.local
 	@cp /app/secrets/application.json /app/secrets/application.local.json
 	@sed -i "s/application\.json/application\.local\.json/g" .env.local
 	@echo "\033[32mLocal configuration created, just edit your new \`secrets/application.local.json\` file for your needs\033[39m"
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make local-configuration
 endif
 
 normalize-composer: ## Normalizes `composer.json` file content
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@composer normalize
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make normalize-composer
 endif
 
 validate-composer: ## Validate `composer.json` file content
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@composer validate --no-check-version && ([ $$? -eq 0 ] && echo "\033[32mGood news, your \`composer.json\` file is valid\033[39m")
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make validate-composer
 endif
 
 phploc: ## Runs `phploc` and create json output
-ifeq ($(INSIDE_DOCKER), 1)
+ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 	@php ./vendor/bin/phploc --log-json=./build/phploc.json ./src
-else ifeq ($(strip $(IS_RUNNING)),)
+else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
+else ifneq ($(RUNNING_ALL_CONTAINERS), 1)
+	$(ERROR_DOCKER)
 else
 	$(NOTICE_HOST)
 	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose exec php make phploc
