@@ -181,7 +181,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             HeredocIndentationFixer::class => null,
             PhpdocToCommentFixer::class => null,
             NativeFunctionInvocationFixer::class => null,
-            NativeConstantInvocationFixer::class => null,
         ]
     );
 

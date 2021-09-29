@@ -25,6 +25,7 @@ use function sha1;
 use function sprintf;
 use function str_pad;
 use function sys_get_temp_dir;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Class Auth
