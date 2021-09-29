@@ -15,7 +15,6 @@ use App\Security\ApiKeyUser;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Security\RolesService;
 use Generator;
-use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -23,7 +22,6 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
-use function assert;
 
 /**
  * Class ApiKeyUserProviderTest
@@ -33,22 +31,6 @@ use function assert;
  */
 class ApiKeyUserProviderTest extends KernelTestCase
 {
-    private MockObject | ApiKeyRepository | null$apiKeyRepository = null;
-    private MockObject | RolesService | null $rolesService = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->apiKeyRepository = $this->getMockBuilder(ApiKeyRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @dataProvider dataProviderTestThatSupportClassReturnsExpected
      *
@@ -60,7 +42,15 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatSupportClassReturnsExpected(bool $expected, $input): void
     {
-        $provider = new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService());
+        $apiKeyRepositoryMock = $this->getMockBuilder(ApiKeyRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $provider = new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock);
 
         static::assertSame($expected, $provider->supportsClass((string)$input));
     }
@@ -72,12 +62,20 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatRefreshUserThrowsAnException(): void
     {
+        $apiKeyRepositoryMock = $this->getMockBuilder(ApiKeyRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->expectException(UnsupportedUserException::class);
         $this->expectExceptionMessage('API key cannot refresh user');
 
         $user = new InMemoryUser('username', 'password');
 
-        (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
+        (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->refreshUser($user);
     }
 
@@ -88,10 +86,15 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatLoadUserByIdentifierThrowsAnException(): void
     {
-        $this->expectException(UserNotFoundException::class);
-        $this->expectExceptionMessage('API key is not valid');
+        $apiKeyRepositoryMock = $this->getMockBuilder(ApiKeyRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->getApiKeyRepositoryMock()
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $apiKeyRepositoryMock
             ->expects(static::once())
             ->method('findOneBy')
             ->with([
@@ -99,7 +102,10 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ])
             ->willReturn(null);
 
-        (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
+        $this->expectException(UserNotFoundException::class);
+        $this->expectExceptionMessage('API key is not valid');
+
+        (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->loadUserByIdentifier('guid');
     }
 
@@ -110,9 +116,17 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatLoadUserByIdentifierCreatesExpectedApiKeyUser(): void
     {
+        $apiKeyRepositoryMock = $this->getMockBuilder(ApiKeyRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $apiKey = new ApiKey();
 
-        $this->getApiKeyRepositoryMock()
+        $apiKeyRepositoryMock
             ->expects(static::once())
             ->method('findOneBy')
             ->with([
@@ -120,7 +134,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ])
             ->willReturn($apiKey);
 
-        $user = (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
+        $user = (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->loadUserByIdentifier('guid');
 
         static::assertSame($apiKey, $user->getApiKey());
@@ -133,7 +147,15 @@ class ApiKeyUserProviderTest extends KernelTestCase
      */
     public function testThatGetApiKeyForTokenCallsExpectedRepositoryMethod(): void
     {
-        $this->getApiKeyRepositoryMock()
+        $apiKeyRepositoryMock = $this->getMockBuilder(ApiKeyRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $apiKeyRepositoryMock
             ->expects(static::once())
             ->method('findOneBy')
             ->with([
@@ -141,7 +163,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ])
             ->willReturn(null);
 
-        (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
+        (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->getApiKeyForToken('some_token');
     }
 
@@ -157,26 +179,5 @@ class ApiKeyUserProviderTest extends KernelTestCase
         yield [false, UserInterface::class];
         yield [false, UserEntity::class];
         yield [true, ApiKeyUser::class];
-    }
-
-    private function getApiKeyRepository(): ApiKeyRepository
-    {
-        assert($this->apiKeyRepository instanceof ApiKeyRepository);
-
-        return $this->apiKeyRepository;
-    }
-
-    private function getApiKeyRepositoryMock(): MockObject
-    {
-        assert($this->apiKeyRepository instanceof MockObject);
-
-        return $this->apiKeyRepository;
-    }
-
-    private function getRolesService(): RolesService
-    {
-        assert($this->rolesService instanceof RolesService);
-
-        return $this->rolesService;
     }
 }

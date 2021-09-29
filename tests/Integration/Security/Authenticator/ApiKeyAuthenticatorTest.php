@@ -12,14 +12,12 @@ use App\Security\Authenticator\ApiKeyAuthenticator;
 use App\Security\Provider\ApiKeyUserProvider;
 use App\Utils\Tests\StringableArrayObject;
 use Generator;
-use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Throwable;
-use function assert;
 
 /**
  * Class ApiKeyAuthenticatorTest
@@ -29,17 +27,6 @@ use function assert;
  */
 class ApiKeyAuthenticatorTest extends KernelTestCase
 {
-    private MockObject | ApiKeyUserProvider | null $apiKeyUserProvider = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->apiKeyUserProvider = $this->getMockBuilder(ApiKeyUserProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @dataProvider dataProviderTestThatSupportReturnsExpected
      *
@@ -49,7 +36,11 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatSupportReturnsExpected(bool $expected, Request $request): void
     {
-        $authenticator = new ApiKeyAuthenticator($this->getApiKeyUserProvider());
+        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
         static::assertSame($expected, $authenticator->supports($request));
     }
@@ -61,7 +52,11 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
      */
     public function testThatOnAuthenticationSuccessReturnsNull(): void
     {
-        $authenticator = new ApiKeyAuthenticator($this->getApiKeyUserProvider());
+        $apiKeyUserProviderMock = $this->getMockBuilder(ApiKeyUserProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
         static::assertNull($authenticator->onAuthenticationSuccess(
             new Request(),
@@ -177,12 +172,5 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
                 'token' => null,
             ]),
         ];
-    }
-
-    private function getApiKeyUserProvider(): ApiKeyUserProvider
-    {
-        assert($this->apiKeyUserProvider instanceof ApiKeyUserProvider);
-
-        return $this->apiKeyUserProvider;
     }
 }

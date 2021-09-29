@@ -15,7 +15,6 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\Authentication\Token\JWTUserTo
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
-use function assert;
 
 /**
  * Class IsUserHimselfVoterTest
@@ -25,15 +24,6 @@ use function assert;
  */
 class IsUserHimselfVoterTest extends KernelTestCase
 {
-    private ?IsUserHimselfVoter $voter = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->voter = new IsUserHimselfVoter();
-    }
-
     /**
      * @testdox Test that `vote` method returns `Voter::ACCESS_ABSTAIN` when subject is not supported
      */
@@ -67,8 +57,6 @@ class IsUserHimselfVoterTest extends KernelTestCase
 
     private function getVoter(): IsUserHimselfVoter
     {
-        assert($this->voter instanceof IsUserHimselfVoter);
-
-        return $this->voter;
+        return new IsUserHimselfVoter();
     }
 }

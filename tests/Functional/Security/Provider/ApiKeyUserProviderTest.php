@@ -22,7 +22,6 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 use Throwable;
 use function array_map;
-use function assert;
 use function str_pad;
 
 /**
@@ -33,29 +32,6 @@ use function str_pad;
  */
 class ApiKeyUserProviderTest extends KernelTestCase
 {
-    private ?ApiKeyUserProvider $apiKeyUserProvider = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        static::bootKernel();
-
-        /**
-         * @var ManagerRegistry $managerRegistry
-         */
-        $managerRegistry = static::getContainer()->get('doctrine');
-
-        /**
-         * @var RolesService $rolesService
-         */
-        $rolesService = static::getContainer()->get(RolesService::class);
-
-        $repository = ApiKeyRepository::class;
-
-        $this->apiKeyUserProvider = new ApiKeyUserProvider(new $repository($managerRegistry), $rolesService);
-    }
-
     /**
      * @dataProvider dataProviderTestThatGetApiKeyReturnsExpected
      *
@@ -180,8 +156,16 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
     private function getApiKeyUserProvider(): ApiKeyUserProvider
     {
-        assert($this->apiKeyUserProvider instanceof ApiKeyUserProvider);
+        static::bootKernel();
 
-        return $this->apiKeyUserProvider;
+        /**
+         * @var ManagerRegistry $managerRegistry
+         */
+        $managerRegistry = static::getContainer()->get('doctrine');
+        $rolesService = static::getContainer()->get(RolesService::class);
+
+        $repository = ApiKeyRepository::class;
+
+        return new ApiKeyUserProvider(new $repository($managerRegistry), $rolesService);
     }
 }
