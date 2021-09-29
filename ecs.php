@@ -178,7 +178,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ArrayOpenerAndCloserNewlineFixer::class => null,
             ArrayListItemNewlineFixer::class => null,
             PhpdocAlignFixer::class => null,
-            HeredocIndentationFixer::class => null,
             PhpdocToCommentFixer::class => null,
             NativeFunctionInvocationFixer::class => null,
         ]
