@@ -73,7 +73,14 @@ class EditApiKeyCommand extends Command
         $helper = $this->getHelper('form');
 
         /** @var ApiKeyDto $dtoEdit */
-        $dtoEdit = $helper->interactUsingForm(ApiKeyType::class, $input, $output, ['data' => $dtoLoaded]);
+        $dtoEdit = $helper->interactUsingForm(
+            ApiKeyType::class,
+            $input,
+            $output,
+            [
+                'data' => $dtoLoaded,
+            ]
+        );
 
         // Patch API key
         $this->apiKeyResource->patch($apiKey->getId(), $dtoEdit);

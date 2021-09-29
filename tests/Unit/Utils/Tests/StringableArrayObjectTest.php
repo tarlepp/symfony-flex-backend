@@ -40,22 +40,30 @@ class StringableArrayObjectTest extends KernelTestCase
     public function dataProviderTestThatCastingToStringReturnsExpected(): Generator
     {
         yield [
-            new StringableArrayObject(['test' => 'foo']),
+            new StringableArrayObject([
+                'test' => 'foo',
+            ]),
             '{"test":"foo"}',
         ];
 
         yield [
-            new StringableArrayObject(['test' => 1]),
+            new StringableArrayObject([
+                'test' => 1,
+            ]),
             '{"test":1}',
         ];
 
         yield [
-            new StringableArrayObject(['test' => false]),
+            new StringableArrayObject([
+                'test' => false,
+            ]),
             '{"test":false}',
         ];
 
         yield [
-            new StringableArrayObject(['test' => null]),
+            new StringableArrayObject([
+                'test' => null,
+            ]),
             '{"test":null}',
         ];
     }

@@ -74,7 +74,14 @@ class EditUserGroupCommand extends Command
         $helper = $this->getHelper('form');
 
         /** @var UserGroupDto $dtoEdit */
-        $dtoEdit = $helper->interactUsingForm(UserGroupType::class, $input, $output, ['data' => $dtoLoaded]);
+        $dtoEdit = $helper->interactUsingForm(
+            UserGroupType::class,
+            $input,
+            $output,
+            [
+                'data' => $dtoLoaded,
+            ]
+        );
 
         // Patch user group
         $this->userGroupResource->patch($userGroup->getId(), $dtoEdit);

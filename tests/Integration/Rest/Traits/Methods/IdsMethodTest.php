@@ -173,7 +173,9 @@ class IdsMethodTest extends KernelTestCase
 
         yield [
             '?where={"foo": "bar"}',
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
             new StringableArrayObject([]),
         ];
 

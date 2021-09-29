@@ -142,7 +142,13 @@ class CountMethodTest extends KernelTestCase
         $this->getResponseHandlerMock()
             ->expects(static::once())
             ->method('createResponse')
-            ->with($request, ['count' => 0], $this->resource);
+            ->with(
+                $request,
+                [
+                    'count' => 0,
+                ],
+                $this->resource
+            );
 
         $this->getValidTestClass()->countMethod($request);
     }
@@ -200,7 +206,9 @@ class CountMethodTest extends KernelTestCase
 
         yield [
             '?where={"foo": "bar"}',
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
             new StringableArrayObject([]),
         ];
 

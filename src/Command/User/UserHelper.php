@@ -91,7 +91,12 @@ class UserHelper
         $choices = [];
         $iterator = $this->getUserIterator($choices);
 
-        array_map($iterator, $this->userResource->find(orderBy: ['username' => 'asc']));
+        array_map(
+            $iterator,
+            $this->userResource->find(orderBy: [
+                'username' => 'asc',
+            ])
+        );
 
         $choices['Exit'] = 'Exit command';
 
@@ -109,7 +114,12 @@ class UserHelper
         $choices = [];
         $iterator = $this->getUserGroupIterator($choices);
 
-        array_map($iterator, $this->userGroupResource->find(orderBy: ['name' => 'asc']));
+        array_map(
+            $iterator,
+            $this->userGroupResource->find(orderBy: [
+                'name' => 'asc',
+            ])
+        );
 
         $choices['Exit'] = 'Exit command';
 

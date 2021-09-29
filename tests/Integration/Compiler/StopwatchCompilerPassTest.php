@@ -47,7 +47,9 @@ class StopwatchCompilerPassTest extends KernelTestCase
         $container
             ->expects(static::exactly(5))
             ->method('findTaggedServiceIds')
-            ->willReturn([stdClass::class => []]);
+            ->willReturn([
+                stdClass::class => [],
+            ]);
 
         $container
             ->expects(static::never())
@@ -68,7 +70,9 @@ class StopwatchCompilerPassTest extends KernelTestCase
         $container
             ->expects(static::exactly(5))
             ->method('findTaggedServiceIds')
-            ->willReturn(['App\Foo' => []]);
+            ->willReturn([
+                'App\Foo' => [],
+            ]);
 
         $container
             ->expects(static::exactly(5))

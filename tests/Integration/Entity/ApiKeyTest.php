@@ -72,7 +72,9 @@ class ApiKeyTest extends EntityTestCase
         foreach ($rolesService->getRoles() as $role) {
             yield [
                 new StringableArrayObject(array_unique([RolesService::ROLE_API, $role])),
-                new StringableArrayObject(['description' => 'ApiKey Description: ' . $rolesService->getShort($role)]),
+                new StringableArrayObject([
+                    'description' => 'ApiKey Description: ' . $rolesService->getShort($role),
+                ]),
             ];
         }
     }

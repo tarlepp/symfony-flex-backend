@@ -213,26 +213,42 @@ class LogRequestTest extends EntityTestCase
     {
         yield [
             new StringableArrayObject(['password']),
-            new StringableArrayObject(['password' => 'password']),
-            new StringableArrayObject(['password' => '*** REPLACED ***']),
+            new StringableArrayObject([
+                'password' => 'password',
+            ]),
+            new StringableArrayObject([
+                'password' => '*** REPLACED ***',
+            ]),
         ];
 
         yield [
             new StringableArrayObject(['token']),
-            new StringableArrayObject(['token' => 'secret token']),
-            new StringableArrayObject(['token' => '*** REPLACED ***']),
+            new StringableArrayObject([
+                'token' => 'secret token',
+            ]),
+            new StringableArrayObject([
+                'token' => '*** REPLACED ***',
+            ]),
         ];
 
         yield [
             new StringableArrayObject(['authorization']),
-            new StringableArrayObject(['authorization' => 'authorization bearer']),
-            new StringableArrayObject(['authorization' => '*** REPLACED ***']),
+            new StringableArrayObject([
+                'authorization' => 'authorization bearer',
+            ]),
+            new StringableArrayObject([
+                'authorization' => '*** REPLACED ***',
+            ]),
         ];
 
         yield [
             new StringableArrayObject(['cookie']),
-            new StringableArrayObject(['cookie' => 'cookie']),
-            new StringableArrayObject(['cookie' => '*** REPLACED ***']),
+            new StringableArrayObject([
+                'cookie' => 'cookie',
+            ]),
+            new StringableArrayObject([
+                'cookie' => '*** REPLACED ***',
+            ]),
         ];
 
         yield [
@@ -265,12 +281,16 @@ class LogRequestTest extends EntityTestCase
     {
         yield [
             '{"foo":"bar"}',
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
         ];
 
         yield [
             'foo=bar',
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
         ];
     }
 

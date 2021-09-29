@@ -41,7 +41,9 @@ class FindOneRoleController extends Controller
      */
     #[Route(
         path: '/v1/role/{role}',
-        requirements: ['role' => '^ROLE_\w+$'],
+        requirements: [
+            'role' => '^ROLE_\w+$',
+        ],
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]

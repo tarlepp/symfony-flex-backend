@@ -37,7 +37,9 @@ class ResourceLifeCycleTest extends WebTestCase
         $client->request('GET', '/test_lifecycle_behaviour/' . $role);
 
         $response = $client->getResponse();
-        $entity = $this->getRepository()->findOneBy(['id' => $role]);
+        $entity = $this->getRepository()->findOneBy([
+            'id' => $role,
+        ]);
 
         static::assertNotNull($entity, sprintf('Role entity for id `%s` not found...', $role));
         static::assertSame(418, $response->getStatusCode(), (string)$response->getContent());

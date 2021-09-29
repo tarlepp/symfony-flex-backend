@@ -58,17 +58,23 @@ class ApiKeyUserTest extends KernelTestCase
         $exception = new Exception('Cannot find user group');
 
         yield [
-            (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Normal users']) ?? throw $exception),
+            (new ApiKey())->addUserGroup($userGroupResource->findOneBy([
+                'name' => 'Normal users',
+            ]) ?? throw $exception),
             new StringableArrayObject(['ROLE_API', 'ROLE_USER', 'ROLE_LOGGED']),
         ];
 
         yield [
-            (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Admin users']) ?? throw $exception),
+            (new ApiKey())->addUserGroup($userGroupResource->findOneBy([
+                'name' => 'Admin users',
+            ]) ?? throw $exception),
             new StringableArrayObject(['ROLE_API', 'ROLE_ADMIN', 'ROLE_LOGGED', 'ROLE_USER']),
         ];
 
         yield [
-            (new ApiKey())->addUserGroup($userGroupResource->findOneBy(['name' => 'Root users']) ?? throw $exception),
+            (new ApiKey())->addUserGroup($userGroupResource->findOneBy([
+                'name' => 'Root users',
+            ]) ?? throw $exception),
             new StringableArrayObject(['ROLE_API', 'ROLE_ROOT', 'ROLE_LOGGED', 'ROLE_ADMIN', 'ROLE_USER']),
         ];
     }

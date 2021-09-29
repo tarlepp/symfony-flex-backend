@@ -94,7 +94,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->getApiKeyRepositoryMock()
             ->expects(static::once())
             ->method('findOneBy')
-            ->with(['token' => 'guid'])
+            ->with([
+                'token' => 'guid',
+            ])
             ->willReturn(null);
 
         (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
@@ -113,7 +115,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->getApiKeyRepositoryMock()
             ->expects(static::once())
             ->method('findOneBy')
-            ->with(['token' => 'guid'])
+            ->with([
+                'token' => 'guid',
+            ])
             ->willReturn($apiKey);
 
         $user = (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))
@@ -132,7 +136,9 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $this->getApiKeyRepositoryMock()
             ->expects(static::once())
             ->method('findOneBy')
-            ->with(['token' => 'some_token'])
+            ->with([
+                'token' => 'some_token',
+            ])
             ->willReturn(null);
 
         (new ApiKeyUserProvider($this->getApiKeyRepository(), $this->getRolesService()))

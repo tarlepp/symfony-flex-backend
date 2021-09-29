@@ -46,6 +46,8 @@ class VersionController
     )]
     public function __invoke(): JsonResponse
     {
-        return new JsonResponse(['version' => $this->version->get()]);
+        return new JsonResponse([
+            'version' => $this->version->get(),
+        ]);
     }
 }

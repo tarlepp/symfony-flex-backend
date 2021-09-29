@@ -155,7 +155,9 @@ class JSONTest extends KernelTestCase
         ];
 
         yield [
-            ['foo' => 'bar'],
+            [
+                'foo' => 'bar',
+            ],
             '{"foo":"bar"}',
         ];
 

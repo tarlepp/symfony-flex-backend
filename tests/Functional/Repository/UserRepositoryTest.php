@@ -53,14 +53,24 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testThatFindByAdvancedReturnsExpected(): void
     {
-        $users = $this->getRepository()->findByAdvanced(['username' => 'john']);
+        $users = $this->getRepository()->findByAdvanced([
+            'username' => 'john',
+        ]);
 
         static::assertCount(1, $users);
     }
 
     public function testThatFindIdsReturnsExpected(): void
     {
-        static::assertCount(5, $this->getRepository()->findIds([], ['or' => 'john-']));
+        static::assertCount(
+            5,
+            $this->getRepository()->findIds(
+                [],
+                [
+                    'or' => 'john-',
+                ]
+            )
+        );
     }
 
     /**
