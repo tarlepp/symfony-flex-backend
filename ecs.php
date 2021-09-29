@@ -30,7 +30,6 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\Whitespace\BlankLineBeforeStatementFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer;
 use Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 
@@ -170,7 +169,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             NotOperatorWithSuccessorSpaceFixer::class => null,
             SingleLineThrowFixer::class => null,
             BlankLineAfterStrictTypesFixer::class => null,
-            ParamReturnAndVarTagMalformsFixer::class => null,
             PhpdocAlignFixer::class => null,
             PhpdocToCommentFixer::class => null,
             NativeFunctionInvocationFixer::class => null,

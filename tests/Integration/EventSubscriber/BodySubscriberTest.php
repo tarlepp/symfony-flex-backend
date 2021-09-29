@@ -146,9 +146,7 @@ class BodySubscriberTest extends KernelTestCase
             ->expects(static::never())
             ->method('replace');
 
-        /**
-         * @var InputBag $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->request = $parameterBag;
 
         $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);

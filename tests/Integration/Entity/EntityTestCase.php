@@ -178,9 +178,7 @@ abstract class EntityTestCase extends KernelTestCase
             static::markTestSkipped('No need to test this setter...');
         }
 
-        /**
-         * @var callable $callable
-         */
+        /** @var callable $callable */
         $callable = [$this->getEntity(), $setter];
 
         static::assertInstanceOf(
@@ -213,9 +211,7 @@ abstract class EntityTestCase extends KernelTestCase
             $getter = 'is' . ucfirst($field);
         }
 
-        /**
-         * @var callable $callable
-         */
+        /** @var callable $callable */
         $callable = [$this->getEntity(), $getter];
 
         if (array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta)) {
@@ -765,9 +761,7 @@ abstract class EntityTestCase extends KernelTestCase
 
     protected function createEntity(): EntityInterface
     {
-        /**
-         * @var EntityInterface|null $entity
-         */
+        /** @var EntityInterface|null $entity */
         $entity = new $this->entityName();
 
         return $entity ?? throw new UnexpectedValueException('Entity not set');

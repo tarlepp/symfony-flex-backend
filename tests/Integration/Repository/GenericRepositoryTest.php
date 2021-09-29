@@ -465,9 +465,7 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
-        /**
-         * @var BaseRepositoryInterface $repository
-         */
+        /** @var BaseRepositoryInterface $repository */
         $repository = new ApiKeyRepository($managerObject);
         $repository->findBy(...$arguments);
     }

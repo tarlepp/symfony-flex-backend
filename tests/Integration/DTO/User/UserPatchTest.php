@@ -48,9 +48,7 @@ class UserPatchTest extends DtoTestCase
         $dto = (new UserPatch())->load($user)
             ->setUserGroups([$userGroup2]);
 
-        /**
-         * @var User $updatedUser
-         */
+        /** @var User $updatedUser */
         $updatedUser = $dto->update($user);
 
         static::assertCount(2, $updatedUser->getUserGroups());

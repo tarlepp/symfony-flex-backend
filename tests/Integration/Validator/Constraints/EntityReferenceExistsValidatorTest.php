@@ -103,9 +103,7 @@ class EntityReferenceExistsValidatorTest extends KernelTestCase
      */
     public function testThatContextAndLoggerMethodsAreNotCalledWithinHappyPath(): void
     {
-        /**
-         * @var MockObject $value
-         */
+        /** @var MockObject $value */
         $value = $this->getMockForAbstractClass(EntityReference::class, [], 'TestClass');
 
         $this->getContextMock()
