@@ -176,7 +176,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             BlankLineAfterStrictTypesFixer::class => null,
             ParamReturnAndVarTagMalformsFixer::class => null,
             ArrayOpenerAndCloserNewlineFixer::class => null,
-            ArrayListItemNewlineFixer::class => null,
             PhpdocAlignFixer::class => null,
             PhpdocToCommentFixer::class => null,
             NativeFunctionInvocationFixer::class => null,

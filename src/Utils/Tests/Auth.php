@@ -138,7 +138,10 @@ class Auth
                         'HTTP_X-Requested-With' => 'XMLHttpRequest',
                     ]
                 ),
-                JSON::encode(['username' => $username, 'password' => $password])
+                JSON::encode([
+                    'username' => $username,
+                    'password' => $password,
+                ])
             );
 
             $response = $client->getResponse();
