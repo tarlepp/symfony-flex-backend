@@ -16,11 +16,12 @@
       <sourceFolder url="file://$MODULE_DIR$/tools/02_phpstan/vendor/phpstan/phpstan-phpunit/src/Type/PHPUnit" isTestSource="true" packagePrefix="PHPStan\Type\PHPUnit\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/friendsofphp/php-cs-fixer/src" isTestSource="true" packagePrefix="PhpCsFixer\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/coding-standard/src" isTestSource="true" packagePrefix="Symplify\CodingStandard\" />
-      <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/rule-doc-generator-contracts/src" isTestSource="true" packagePrefix="Symplify\RuleDocGenerator\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/vendor/symplify/rule-doc-generator-contracts/src" isTestSource="true" packagePrefix="ECSPrefix20210928\Symplify\RuleDocGenerator\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/09_rector/vendor/rector/rector/packages/Set" isTestSource="true" packagePrefix="Rector\Set\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/09_rector/vendor/rector/rector/rules/Php74" isTestSource="true" packagePrefix="Rector\Php74\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/09_rector/vendor/rector/rector/rules/Php80" isTestSource="true" packagePrefix="Rector\Php80\" />
       <sourceFolder url="file://$MODULE_DIR$/tools/09_rector/vendor/rector/rector/src" isTestSource="true" packagePrefix="Rector\Core\" />
+      <sourceFolder url="file://$MODULE_DIR$/tools/04_symplify/vendor/symplify/easy-coding-standard/src" isTestSource="true" packagePrefix="Symplify\EasyCodingStandard\" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/tools/01_phpunit/vendor/doctrine" />
@@ -168,6 +169,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/debug-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/web-profiler-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/runtime" />
+      <excludeFolder url="file://$MODULE_DIR$/tools/09_rector" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
