@@ -36,6 +36,7 @@ use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
 use Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer;
 use Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer;
+use Symplify\EasyCodingStandard\ValueObject\Option;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $imports = [
@@ -183,4 +184,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             NativeConstantInvocationFixer::class => null,
         ]
     );
+
+    $parameters->set(Option::PARALLEL, true);
 };
