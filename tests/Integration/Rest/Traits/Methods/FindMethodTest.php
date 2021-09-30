@@ -19,14 +19,12 @@ use Exception;
 use Generator;
 use InvalidArgumentException;
 use LogicException;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
-use function assert;
 
 /**
  * Class FindMethodTest
@@ -36,29 +34,6 @@ use function assert;
  */
 class FindMethodTest extends KernelTestCase
 {
-    private MockObject | RestResourceInterface | null $resource = null;
-    private MockObject | ResponseHandlerInterface | null $responseHandler = null;
-    private MockObject | FindMethodTestClass | null $validTestClass = null;
-    private MockObject | FindMethodInvalidTestClass | null $inValidTestClass = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->resource = $this->getMockBuilder(RestResourceInterface::class)->getMock();
-
-        $this->responseHandler = $this->getMockBuilder(ResponseHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->validTestClass = $this->getMockForAbstractClass(
-            FindMethodTestClass::class,
-            [$this->resource, $this->responseHandler]
-        );
-
-        $this->inValidTestClass = $this->getMockForAbstractClass(FindMethodInvalidTestClass::class);
-    }
-
     /**
      * @throws Throwable
      *
@@ -66,6 +41,8 @@ class FindMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnException(): void
     {
+        $inValidTestClassMock = $this->getMockForAbstractClass(FindMethodInvalidTestClass::class);
+
         $this->expectException(LogicException::class);
 
         /* @codingStandardsIgnoreStart */
@@ -74,7 +51,7 @@ class FindMethodTest extends KernelTestCase
         );
         /* @codingStandardsIgnoreEnd */
 
-        $this->getInValidTestClass()->findMethod(Request::create('/'));
+        $inValidTestClassMock->findMethod(Request::create('/'));
     }
 
     /**
@@ -86,9 +63,18 @@ class FindMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWithWrongHttpMethod(string $httpMethod): void
     {
+        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $validTestClassMock = $this->getMockForAbstractClass(
+            FindMethodTestClass::class,
+            [$resourceMock, $responseHandlerMock]
+        );
+
         $this->expectException(MethodNotAllowedHttpException::class);
 
-        $this->getValidTestClass()->findMethod(Request::create('/', $httpMethod))->getContent();
+        $validTestClassMock->findMethod(Request::create('/', $httpMethod))->getContent();
     }
 
     /**
@@ -100,9 +86,18 @@ class FindMethodTest extends KernelTestCase
      */
     public function testThatTraitHandlesException(Throwable $exception, int $expectedCode): void
     {
+        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $validTestClassMock = $this->getMockForAbstractClass(
+            FindMethodTestClass::class,
+            [$resourceMock, $responseHandlerMock]
+        );
+
         $request = Request::create('/');
 
-        $this->getResourceMock()
+        $resourceMock
             ->expects(static::once())
             ->method('find')
             ->with([], [], null, null, [])
@@ -111,7 +106,7 @@ class FindMethodTest extends KernelTestCase
         $this->expectException(HttpException::class);
         $this->expectExceptionCode($expectedCode);
 
-        $this->getValidTestClass()->findMethod($request);
+        $validTestClassMock->findMethod($request);
     }
 
     /**
@@ -136,9 +131,18 @@ class FindMethodTest extends KernelTestCase
         ?int $offset,
         StringableArrayObject $search
     ): void {
+        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $validTestClassMock = $this->getMockForAbstractClass(
+            FindMethodTestClass::class,
+            [$resourceMock, $responseHandlerMock]
+        );
+
         $request = Request::create('/' . $queryString);
 
-        $this->getResourceMock()
+        $resourceMock
             ->expects(static::once())
             ->method('find')
             ->with(
@@ -150,12 +154,12 @@ class FindMethodTest extends KernelTestCase
             )
             ->willReturn([]);
 
-        $this->getResponseHandlerMock()
+        $responseHandlerMock
             ->expects(static::once())
             ->method('createResponse')
-            ->with($request, [], $this->resource);
+            ->with($request, [], $resourceMock);
 
-        $this->getValidTestClass()->findMethod($request);
+        $validTestClassMock->findMethod($request);
     }
 
     /**
@@ -165,11 +169,20 @@ class FindMethodTest extends KernelTestCase
      */
     public function testThatTraitThrowsAnExceptionWhenWhereParameterIsNotValidJson(): void
     {
+        $resourceMock = $this->getMockBuilder(RestResourceInterface::class)->getMock();
+        $responseHandlerMock = $this->getMockBuilder(ResponseHandlerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $validTestClassMock = $this->getMockForAbstractClass(
+            FindMethodTestClass::class,
+            [$resourceMock, $responseHandlerMock]
+        );
+
         $this->expectException(HttpException::class);
         $this->expectExceptionCode(400);
         $this->expectExceptionMessage('Current \'where\' parameter is not valid JSON.');
 
-        $this->getValidTestClass()->findMethod(Request::create('/?where=foo'));
+        $validTestClassMock->findMethod(Request::create('/?where=foo'));
     }
 
     /**
@@ -347,33 +360,5 @@ class FindMethodTest extends KernelTestCase
                 'or' => ['term3', 'term4'],
             ]),
         ];
-    }
-
-    private function getValidTestClass(): FindMethodTestClass
-    {
-        assert($this->validTestClass instanceof FindMethodTestClass);
-
-        return $this->validTestClass;
-    }
-
-    private function getInValidTestClass(): FindMethodInvalidTestClass
-    {
-        assert($this->inValidTestClass instanceof FindMethodInvalidTestClass);
-
-        return $this->inValidTestClass;
-    }
-
-    private function getResourceMock(): MockObject
-    {
-        assert($this->resource instanceof MockObject);
-
-        return $this->resource;
-    }
-
-    private function getResponseHandlerMock(): MockObject
-    {
-        assert($this->responseHandler instanceof MockObject);
-
-        return $this->responseHandler;
     }
 }

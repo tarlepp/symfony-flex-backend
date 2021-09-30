@@ -16,7 +16,6 @@ use App\Security\Provider\SecurityUserFactory;
 use App\Security\RolesService;
 use App\Security\SecurityUser;
 use Generator;
-use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -24,7 +23,6 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Throwable;
-use function assert;
 
 /**
  * Class SecurityUserFactoryTest
@@ -34,22 +32,6 @@ use function assert;
  */
 class SecurityUserFactoryTest extends KernelTestCase
 {
-    private MockObject | UserRepository | null $userRepository = null;
-    private MockObject | RolesService | null $rolesService = null;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->userRepository = $this->getMockBuilder(UserRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->rolesService = $this->getMockBuilder(RolesService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-    }
-
     /**
      * @throws Throwable
      *
@@ -57,16 +39,24 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatLoadUserByIdentifierThrowsAnExceptionIfUserNotFound(): void
     {
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('User not found for UUID:');
 
-        $this->getUserRepositoryMock()
+        $userRepositoryMock
             ->expects(static::once())
             ->method('loadUserByIdentifier')
             ->with('test_user')
             ->willReturn(null);
 
-        (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
+        (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
             ->loadUserByIdentifier('test_user');
     }
 
@@ -77,21 +67,29 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatLoadByUsernameReturnsExpectedSecurityUser(): void
     {
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $user = new User();
 
-        $this->getUserRepositoryMock()
+        $userRepositoryMock
             ->expects(static::once())
             ->method('loadUserByIdentifier')
             ->with('test_user')
             ->willReturn($user);
 
-        $this->getRolesServiceMock()
+        $rolesServiceMock
             ->expects(static::once())
             ->method('getInheritedRoles')
             ->with($user->getRoles())
             ->willReturn(['FOO', 'BAR']);
 
-        $securityUser = (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
+        $securityUser = (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
             ->loadUserByIdentifier('test_user');
 
         static::assertSame($user->getId(), $securityUser->getUserIdentifier());
@@ -105,8 +103,16 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatSupportsMethodsReturnsFalseWithNotSupportedType(bool | int | string $input): void
     {
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         static::assertFalse(
-            (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
+            (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
                 ->supportsClass((string)$input)
         );
     }
@@ -118,8 +124,16 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatSupportsMethodsReturnsTrueWithSupportedType(): void
     {
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         static::assertTrue(
-            (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
+            (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
                 ->supportsClass(SecurityUser::class)
         );
     }
@@ -131,10 +145,18 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserThrowsAnExceptionWithNotSupportedUser(): void
     {
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->expectException(UnsupportedUserException::class);
         $this->expectErrorMessageMatches('#^Invalid user class(.*)#');
 
-        (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
+        (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
             ->refreshUser(new InMemoryUser('username', 'password'));
     }
 
@@ -145,15 +167,23 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserThrowsAnExceptionIfUserNotFound(): void
     {
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->expectException(UserNotFoundException::class);
         $this->expectExceptionMessage('User not found for UUID:');
 
-        $this->getUserRepositoryMock()
+        $userRepositoryMock
             ->expects(static::once())
             ->method('find')
             ->willReturn(null);
 
-        (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
+        (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
             ->refreshUser(new SecurityUser(new User()));
     }
 
@@ -164,22 +194,30 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserReturnsNewInstanceOfSecurityUser(): void
     {
+        $userRepositoryMock = $this->getMockBuilder(UserRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $rolesServiceMock = $this->getMockBuilder(RolesService::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $user = new User();
         $securityUser = new SecurityUser($user, ['FOO', 'BAR']);
 
-        $this->getUserRepositoryMock()
+        $userRepositoryMock
             ->expects(static::once())
             ->method('find')
             ->with($securityUser->getUserIdentifier())
             ->willReturn($user);
 
-        $this->getRolesServiceMock()
+        $rolesServiceMock
             ->expects(static::once())
             ->method('getInheritedRoles')
             ->with($user->getRoles())
             ->willReturn(['FOO', 'BAR']);
 
-        $newSecurityUser = (new SecurityUserFactory($this->getUserRepository(), $this->getRolesService(), ''))
+        $newSecurityUser = (new SecurityUserFactory($userRepositoryMock, $rolesServiceMock, ''))
             ->refreshUser($securityUser);
 
         static::assertNotSame($securityUser, $newSecurityUser);
@@ -199,33 +237,5 @@ class SecurityUserFactoryTest extends KernelTestCase
         yield [UserInterface::class];
         yield [UserEntity::class];
         yield [ApiKeyUser::class];
-    }
-
-    private function getUserRepository(): UserRepository
-    {
-        assert($this->userRepository instanceof UserRepository);
-
-        return $this->userRepository;
-    }
-
-    private function getUserRepositoryMock(): MockObject
-    {
-        assert($this->userRepository instanceof MockObject);
-
-        return $this->userRepository;
-    }
-
-    private function getRolesService(): RolesService
-    {
-        assert($this->rolesService instanceof RolesService);
-
-        return $this->rolesService;
-    }
-
-    private function getRolesServiceMock(): MockObject
-    {
-        assert($this->rolesService instanceof MockObject);
-
-        return $this->rolesService;
     }
 }

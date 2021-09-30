@@ -395,7 +395,7 @@ endif
 
 check-dependencies-latest: ## Checks if any vendor dependency can be updated (latest versions)
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@echo "\033[32mChecking vendor dependencies\033[39m"
+	@echo "\033[32mChecking vendor dependencies (latest)\033[39m"
 	@bin/console check-dependencies
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
@@ -408,8 +408,8 @@ endif
 
 check-dependencies-minor: ## Checks if any vendor dependency can be updated (only minor versions)
 ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
-	@echo "\033[32mChecking vendor dependencies\033[39m"
-	@bin/console check-dependencies
+	@echo "\033[32mChecking vendor dependencies (minor)\033[39m"
+	@bin/console check-dependencies --minor
 else ifeq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER)
 else ifneq ($(RUNNING_ALL_CONTAINERS), 1)

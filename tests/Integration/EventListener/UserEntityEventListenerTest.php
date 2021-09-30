@@ -17,9 +17,6 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use LengthException;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Throwable;
-use UnexpectedValueException;
-use function assert;
 
 /**
  * Class UserEntityEventListenerTest
@@ -29,173 +26,156 @@ use function assert;
  */
 class UserEntityEventListenerTest extends KernelTestCase
 {
-    private ?EntityManager $entityManager = null;
-    private ?User $entity = null;
-    private ?UserPasswordHasherInterface $hasher = null;
-    private ?UserEntityEventListener $listener = null;
-
-    protected function setUp(): void
+    /**
+     * @testdox Test that too short password throws an exception with `prePersist` event
+     */
+    public function testThatTooShortPasswordThrowsAnExceptionWithPrePersist(): void
     {
-        parent::setUp();
+        /** @var EntityManager $entityManager */
+        $entityManager = static::getContainer()->get('doctrine.orm.default_entity_manager');
 
-        // Store container and entity manager
-        $testContainer = static::getContainer();
-        $entityManager = $testContainer->get('doctrine.orm.default_entity_manager');
-        $encoder = $testContainer->get('security.user_password_hasher');
+        /** @var UserPasswordHasherInterface $hasher */
+        $hasher = static::getContainer()->get('security.user_password_hasher');
 
-        assert($entityManager instanceof EntityManager);
-        assert($encoder instanceof UserPasswordHasherInterface);
-
-        $this->entityManager = $entityManager;
-        $this->hasher = $encoder;
-
-        // Create listener
-        $this->listener = new UserEntityEventListener($this->hasher);
-
-        // Create new user but not store it at this time
-        $this->entity = (new User())
+        $entity = (new User())
             ->setUsername('john_doe_the_tester')
             ->setEmail('john.doe_the_tester@test.com')
             ->setFirstName('John')
             ->setLastName('Doe');
+
+        $this->expectException(LengthException::class);
+        $this->expectExceptionMessage('Too short password');
+
+        // Set plain password so that listener can make a real one
+        $entity->setPlainPassword('test');
+
+        // Create event for prePersist method
+        $event = new LifecycleEventArgs($entity, $entityManager);
+
+        // Call listener method
+        (new UserEntityEventListener($hasher))->prePersist($event);
     }
 
     /**
-     * @throws Throwable
+     * @testdox Test that too short password throws an exception with `preUpdate` event
      */
-    protected function tearDown(): void
-    {
-        $entityManager = $this->getEntityManager();
-        $entity = $this->getEntity();
-
-        if ($entityManager->contains($entity)) {
-            $entityManager->remove($entity);
-            $entityManager->flush();
-        }
-
-        $entityManager->close();
-
-        static::$kernel->shutdown();
-
-        parent::tearDown();
-    }
-
-    public function testThatTooShortPasswordThrowsAnExceptionWithPrePersist(): void
-    {
-        $this->expectException(LengthException::class);
-        $this->expectExceptionMessage('Too short password');
-
-        // Set plain password so that listener can make a real one
-        $this->getEntity()->setPlainPassword('test');
-
-        // Create event for prePersist method
-        $event = new LifecycleEventArgs($this->getEntity(), $this->getEntityManager());
-
-        // Call listener method
-        $this->getListener()->prePersist($event);
-    }
-
     public function testThatTooShortPasswordThrowsAnExceptionWithPreUpdate(): void
     {
+        /** @var EntityManager $entityManager */
+        $entityManager = static::getContainer()->get('doctrine.orm.default_entity_manager');
+
+        /** @var UserPasswordHasherInterface $hasher */
+        $hasher = static::getContainer()->get('security.user_password_hasher');
+
+        $entity = (new User())
+            ->setUsername('john_doe_the_tester')
+            ->setEmail('john.doe_the_tester@test.com')
+            ->setFirstName('John')
+            ->setLastName('Doe');
+
         $this->expectException(LengthException::class);
         $this->expectExceptionMessage('Too short password');
 
         // Set plain password so that listener can make a real one
-        $this->getEntity()->setPlainPassword('test');
+        $entity->setPlainPassword('test');
 
         $changeSet = [];
 
-        $event = new PreUpdateEventArgs($this->getEntity(), $this->getEntityManager(), $changeSet);
+        $event = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
 
-        $this->getListener()->preUpdate($event);
+        (new UserEntityEventListener($hasher))->preUpdate($event);
     }
 
     public function testListenerPrePersistMethodWorksAsExpected(): void
     {
+        /** @var EntityManager $entityManager */
+        $entityManager = static::getContainer()->get('doctrine.orm.default_entity_manager');
+
+        /** @var UserPasswordHasherInterface $hasher */
+        $hasher = static::getContainer()->get('security.user_password_hasher');
+
+        $entity = (new User())
+            ->setUsername('john_doe_the_tester')
+            ->setEmail('john.doe_the_tester@test.com')
+            ->setFirstName('John')
+            ->setLastName('Doe');
+
         // Get store old password
-        $oldPassword = $this->getEntity()->getPassword();
+        $oldPassword = $entity->getPassword();
 
         // Set plain password so that listener can make a real one
-        $this->getEntity()->setPlainPassword('test_test');
+        $entity->setPlainPassword('test_test');
 
         // Create event for prePersist method
-        $event = new LifecycleEventArgs($this->getEntity(), $this->getEntityManager());
+        $event = new LifecycleEventArgs($entity, $entityManager);
 
         // Call listener method
-        $this->getListener()->prePersist($event);
+        (new UserEntityEventListener($hasher))->prePersist($event);
 
         static::assertEmpty(
-            $this->getEntity()->getPlainPassword(),
+            $entity->getPlainPassword(),
             'Listener did not reset plain password value.'
         );
 
         static::assertNotSame(
             $oldPassword,
-            $this->getEntity()->getPassword(),
+            $entity->getPassword(),
             'Password was not changed by the listener.',
         );
 
         static::assertTrue(
-            $this->getHasher()->isPasswordValid(new SecurityUser($this->getEntity()), 'test_test'),
+            $hasher->isPasswordValid(new SecurityUser($entity), 'test_test'),
             'Changed password is not valid.'
         );
     }
 
     public function testListenerPreUpdateMethodWorksAsExpected(): void
     {
+        /** @var EntityManager $entityManager */
+        $entityManager = static::getContainer()->get('doctrine.orm.default_entity_manager');
+
+        /** @var UserPasswordHasherInterface $hasher */
+        $hasher = static::getContainer()->get('security.user_password_hasher');
+
+        $entity = (new User())
+            ->setUsername('john_doe_the_tester')
+            ->setEmail('john.doe_the_tester@test.com')
+            ->setFirstName('John')
+            ->setLastName('Doe');
+
         // Create encrypted password manually for user
-        $this->getEntity()->setPassword(
+        $entity->setPassword(
             fn (string $password): string =>
-                $this->getHasher()->hashPassword(new SecurityUser($this->getEntity()), $password),
+                $hasher->hashPassword(new SecurityUser($entity), $password),
             'test_test'
         );
 
         // Set plain password so that listener can make a real one
-        $this->getEntity()->setPlainPassword('test_test_test');
+        $entity->setPlainPassword('test_test_test');
 
         // Get store old password
-        $oldPassword = $this->getEntity()->getPassword();
+        $oldPassword = $entity->getPassword();
 
         $changeSet = [];
 
-        $event = new PreUpdateEventArgs($this->getEntity(), $this->getEntityManager(), $changeSet);
+        $event = new PreUpdateEventArgs($entity, $entityManager, $changeSet);
 
-        $this->getListener()->preUpdate($event);
+        (new UserEntityEventListener($hasher))->preUpdate($event);
 
         static::assertEmpty(
-            $this->getEntity()->getPlainPassword(),
+            $entity->getPlainPassword(),
             'Listener did not reset plain password value.'
         );
 
         static::assertNotSame(
             $oldPassword,
-            $this->getEntity()->getPassword(),
+            $entity->getPassword(),
             'Password was not changed by the listener.',
         );
 
         static::assertTrue(
-            $this->getHasher()->isPasswordValid(new SecurityUser($this->getEntity()), 'test_test_test'),
+            $hasher->isPasswordValid(new SecurityUser($entity), 'test_test_test'),
             'Changed password is not valid.'
         );
-    }
-
-    private function getEntityManager(): EntityManager
-    {
-        return $this->entityManager ?? throw new UnexpectedValueException('EntityManager not set');
-    }
-
-    private function getHasher(): UserPasswordHasherInterface
-    {
-        return $this->hasher ?? throw new UnexpectedValueException('Encoder not set');
-    }
-
-    private function getListener(): UserEntityEventListener
-    {
-        return $this->listener ?? throw new UnexpectedValueException('Listener not set');
-    }
-
-    private function getEntity(): User
-    {
-        return $this->entity ?? throw new UnexpectedValueException('Entity not set');
     }
 }
