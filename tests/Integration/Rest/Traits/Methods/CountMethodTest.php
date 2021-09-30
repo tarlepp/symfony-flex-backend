@@ -151,7 +151,7 @@ class CountMethodTest extends KernelTestCase
                 [
                     'count' => 0,
                 ],
-                $this->resource
+                $resourceMock
             );
 
         $validTestClassMock->countMethod($request);
