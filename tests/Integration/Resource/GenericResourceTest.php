@@ -22,6 +22,7 @@ use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -47,8 +48,9 @@ class GenericResourceTest extends KernelTestCase
         parent::setUp();
 
         $repository = $this->getRepositoryMockBuilder()->disableOriginalConstructor()->getMock();
+        $roleHierarchy = $this->getMockBuilder(RoleHierarchyInterface::class)->disableOriginalConstructor()->getMock();
 
-        $this->resource = new UserResource($repository, new RolesService([]));
+        $this->resource = new UserResource($repository, new RolesService($roleHierarchy));
         $this->resource->setValidator(static::getContainer()->get(ValidatorInterface::class));
         $this->repository = $repository;
     }
