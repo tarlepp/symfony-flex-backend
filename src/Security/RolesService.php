@@ -9,7 +9,7 @@ declare(strict_types = 1);
 namespace App\Security;
 
 use App\Security\Interfaces\RolesServiceInterface;
-use Symfony\Component\Security\Core\Role\RoleHierarchy;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 use function array_key_exists;
 use function array_unique;
 use function array_values;
@@ -26,13 +26,6 @@ use function mb_substr;
 class RolesService implements RolesServiceInterface
 {
     /**
-     * Roles hierarchy.
-     *
-     * @var array<string, array<int, string>>
-     */
-    private array $rolesHierarchy;
-
-    /**
      * @var array<string, string>
      */
     private static array $roleNames = [
@@ -44,18 +37,12 @@ class RolesService implements RolesServiceInterface
     ];
 
     /**
-     * RolesHelper constructor.
-     *
-     * @param array<string, array<int, string>> $rolesHierarchy
+     * RolesService constructor.
      */
-    public function __construct(array $rolesHierarchy)
+    public function __construct(
+        private RoleHierarchyInterface $roleHierarchy,
+    )
     {
-        $this->rolesHierarchy = $rolesHierarchy;
-    }
-
-    public function getHierarchy(): array
-    {
-        return $this->rolesHierarchy;
     }
 
     public function getRoles(): array
@@ -90,6 +77,6 @@ class RolesService implements RolesServiceInterface
 
     public function getInheritedRoles(array $roles): array
     {
-        return array_values(array_unique((new RoleHierarchy($this->rolesHierarchy))->getReachableRoleNames($roles)));
+        return array_values(array_unique($this->roleHierarchy->getReachableRoleNames($roles)));
     }
 }

@@ -72,9 +72,6 @@ services:
     App\Rest\ControllerCollection:
         arguments: [ !tagged app.rest.controller ]
 
-    App\Security\RolesService:
-        arguments: [ '%security.role_hierarchy.roles%' ]
-
     App\EventSubscriber\RequestLogSubscriber:
         arguments:
             $ignoredRoutes: '%env(key:REQUEST_LOG_IGNORED_ROUTES:json:file:APPLICATION_CONFIG)%'
