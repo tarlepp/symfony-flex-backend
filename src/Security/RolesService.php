@@ -36,13 +36,9 @@ class RolesService implements RolesServiceInterface
         self::ROLE_API => 'API users',
     ];
 
-    /**
-     * RolesService constructor.
-     */
     public function __construct(
         private RoleHierarchyInterface $roleHierarchy,
-    )
-    {
+    ) {
     }
 
     public function getRoles(): array

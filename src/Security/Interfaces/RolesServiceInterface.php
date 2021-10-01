@@ -25,9 +25,6 @@ interface RolesServiceInterface
     public const ROLE_ROOT = 'ROLE_ROOT';
     public const ROLE_API = 'ROLE_API';
 
-    /**
-     * RolesService constructor.
-     */
     public function __construct(
         RoleHierarchyInterface $roleHierarchy,
     );
