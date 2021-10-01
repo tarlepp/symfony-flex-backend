@@ -58,7 +58,6 @@ started to use this template.
       to work with _your_ application - if you don't need to use those services
       just delete those files and all is done.
   * [ ] [.codeclimate.yml](../.codeclimate.yml) - [https://codeclimate.com/](https://codeclimate.com/)
-  * [ ] [.sensiolabs.yml](../.sensiolabs.yml) - [https://insight.symfony.com/](https://insight.symfony.com/)
   * [ ] [sonar-project.properties](../sonar-project.properties) - [https://sonarcloud.io/](https://sonarcloud.io/)
 * [ ] Github Actions - This application is using GitHub Actions to run multiple
       jobs to check application code.
