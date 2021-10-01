@@ -34,7 +34,16 @@ class EntityValueResolverTest extends KernelTestCase
         $resolver = new EntityValueResolver($resourceCollection);
         $metadata = new ArgumentMetadata('foo', null, false, false, null);
 
-        static::assertFalse($resolver->supports(Request::create('/', 'GET', ['foo' => new stdClass()]), $metadata));
+        static::assertFalse($resolver->supports(
+            Request::create(
+                '/',
+                'GET',
+                [
+                    'foo' => new stdClass(),
+                ]
+            ),
+            $metadata
+        ));
     }
 
     public function testThatSupportsReturnFalseWithWrongArgumentParameterType(): void
@@ -44,7 +53,9 @@ class EntityValueResolverTest extends KernelTestCase
         $resolver = new EntityValueResolver($resourceCollection);
         $metadata = new ArgumentMetadata('foo', stdClass::class, false, false, null);
 
-        static::assertFalse($resolver->supports(Request::create('/', 'GET', ['foo' => 'bar']), $metadata));
+        static::assertFalse($resolver->supports(Request::create('/', 'GET', [
+            'foo' => 'bar',
+        ]), $metadata));
     }
 
     public function testThatSupportsMethodCallsExpectedResourceCollectionMethods(): void
@@ -60,7 +71,16 @@ class EntityValueResolverTest extends KernelTestCase
         $resolver = new EntityValueResolver($resourceCollection);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
-        $resolver->supports(Request::create('/', 'GET', ['foo' => 'bar']), $metadata);
+        $resolver->supports(
+            Request::create(
+                '/',
+                'GET',
+                [
+                    'foo' => 'bar',
+                ]
+            ),
+            $metadata
+        );
     }
 
     public function testThatSupportsMethodReturnFalseWithNotSupportedEntityResource(): void
@@ -76,7 +96,16 @@ class EntityValueResolverTest extends KernelTestCase
         $resolver = new EntityValueResolver($resourceCollection);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
-        static::assertFalse($resolver->supports(Request::create('/', 'GET', ['foo' => 'bar']), $metadata));
+        static::assertFalse($resolver->supports(
+            Request::create(
+                '/',
+                'GET',
+                [
+                    'foo' => 'bar',
+                ]
+            ),
+            $metadata
+        ));
     }
 
     /**
@@ -103,7 +132,13 @@ class EntityValueResolverTest extends KernelTestCase
 
         $resolver = new EntityValueResolver($resourceCollection);
         $metadata = new ArgumentMetadata('user', User::class, false, false, null);
-        $request = Request::create('/', 'GET', ['user' => $user->getId()]);
+        $request = Request::create(
+            '/',
+            'GET',
+            [
+                'user' => $user->getId(),
+            ]
+        );
 
         static::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
     }

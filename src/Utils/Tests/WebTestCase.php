@@ -77,7 +77,15 @@ abstract class WebTestCase extends BaseWebTestCase
 
         self::ensureKernelShutdown();
 
-        return static::createClient(array_merge($options, ['debug' => false]), $server);
+        return static::createClient(
+            array_merge(
+                $options,
+                [
+                    'debug' => false,
+                ]
+            ),
+            $server
+        );
     }
 
     /**
@@ -96,7 +104,9 @@ abstract class WebTestCase extends BaseWebTestCase
         // Merge authorization headers
         $server = array_merge(
             $role === null
-                ? ['HTTP_AUTHORIZATION' => 'ApiKey invalid-api-key']
+                ? [
+                    'HTTP_AUTHORIZATION' => 'ApiKey invalid-api-key',
+                ]
                 : $authService->getAuthorizationHeadersForApiKey($role),
             array_merge($this->getJsonHeaders(), $this->getFastestHeaders()),
             $authService->getJwtHeaders(),

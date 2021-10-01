@@ -25,6 +25,7 @@ use function sha1;
 use function sprintf;
 use function str_pad;
 use function sys_get_temp_dir;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Class Auth
@@ -137,7 +138,10 @@ class Auth
                         'HTTP_X-Requested-With' => 'XMLHttpRequest',
                     ]
                 ),
-                JSON::encode(['username' => $username, 'password' => $password])
+                JSON::encode([
+                    'username' => $username,
+                    'password' => $password,
+                ])
             );
 
             $response = $client->getResponse();

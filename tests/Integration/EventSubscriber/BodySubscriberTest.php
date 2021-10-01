@@ -89,7 +89,17 @@ class BodySubscriberTest extends KernelTestCase
     ): void {
         static::bootKernel();
 
-        $request = new Request([], ['foobar' => 'foobar'], [], [], [], [], $content);
+        $request = new Request(
+            [],
+            [
+                'foobar' => 'foobar',
+            ],
+            [],
+            [],
+            [],
+            [],
+            $content
+        );
         $request->headers->set('Content-Type', $contentType);
 
         $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
@@ -136,9 +146,7 @@ class BodySubscriberTest extends KernelTestCase
             ->expects(static::never())
             ->method('replace');
 
-        /**
-         * @var InputBag $parameterBag
-         */
+        /** @var InputBag $parameterBag */
         $request->request = $parameterBag;
 
         $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
@@ -154,25 +162,33 @@ class BodySubscriberTest extends KernelTestCase
     public function dataProviderTestThatJsonContentReplaceParametersAsExpected(): Generator
     {
         yield [
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
             '',
             '{"foo": "bar"}',
         ];
 
         yield [
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
             'application/json',
             '{"foo": "bar"}',
         ];
 
         yield [
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
             'application/x-json',
             '{"foo": "bar"}',
         ];
 
         yield [
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
             'text/plain',
             '{"foo": "bar"}',
         ];

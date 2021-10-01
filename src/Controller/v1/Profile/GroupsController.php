@@ -96,7 +96,9 @@ class GroupsController
             $this->serializer->serialize(
                 $loggedInUser->getUserGroups()->toArray(),
                 'json',
-                ['groups' => UserGroup::SET_USER_PROFILE_GROUPS],
+                [
+                    'groups' => UserGroup::SET_USER_PROFILE_GROUPS,
+                ],
             ),
             json: true,
         );

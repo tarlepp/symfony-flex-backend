@@ -10,6 +10,7 @@ namespace App\Tests\Integration\DTO;
 
 use App\DTO\RestDtoInterface;
 use App\Utils\Tests\PhpUnitUtil;
+use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use ReflectionProperty;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -100,6 +101,7 @@ abstract class DtoTestCase extends KernelTestCase
         $dtoReflection = new ReflectionClass($this->dtoClass);
         $properties = $this->getDtoProperties();
 
+        /** @var RestDtoInterface&MockObject $mock */
         $mock = $this->getMockBuilder($this->dtoClass)
             ->onlyMethods(['setVisited'])
             ->getMock();
@@ -120,9 +122,6 @@ abstract class DtoTestCase extends KernelTestCase
             $mock->{$setter}($value);
         }
 
-        /**
-         * @var RestDtoInterface $mock
-         */
         static::assertSame($expectedVisited, $mock->getVisited());
     }
 

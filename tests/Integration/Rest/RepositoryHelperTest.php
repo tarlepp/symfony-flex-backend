@@ -65,7 +65,13 @@ DQL;
     {
         $qb = $this->getRepository()->createQueryBuilder('entity');
 
-        RepositoryHelper::processSearchTerms($qb, [], ['and' => ['foo', 'bar']]);
+        RepositoryHelper::processSearchTerms(
+            $qb,
+            [],
+            [
+                'and' => ['foo', 'bar'],
+            ]
+        );
 
         $message = 'processSearchTerms did not return expected DQL.';
 
@@ -172,13 +178,17 @@ DQL;
         yield [
             /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE entity.foo = ?1',
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
         ];
 
         yield [
             /* @lang text */
             'SELECT entity FROM App\Entity\User entity WHERE foo.bar = ?1',
-            new StringableArrayObject(['foo.bar' => 'foobar']),
+            new StringableArrayObject([
+                'foo.bar' => 'foobar',
+            ]),
         ];
 
         yield [
@@ -292,31 +302,41 @@ DQL;
         yield [
             /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
-            new StringableArrayObject(['foo' => 'asc']),
+            new StringableArrayObject([
+                'foo' => 'asc',
+            ]),
         ];
 
         yield [
             /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo DESC',
-            new StringableArrayObject(['foo' => 'DESC']),
+            new StringableArrayObject([
+                'foo' => 'DESC',
+            ]),
         ];
 
         yield [
             /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY entity.foo asc',
-            new StringableArrayObject(['entity.foo' => 'asc']),
+            new StringableArrayObject([
+                'entity.foo' => 'asc',
+            ]),
         ];
 
         yield [
             /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY .foo asdf',
-            new StringableArrayObject(['.foo' => 'asdf']),
+            new StringableArrayObject([
+                '.foo' => 'asdf',
+            ]),
         ];
 
         yield [
             /* @lang text */
             'SELECT entity FROM App\Entity\User entity ORDER BY foo.bar asc',
-            new StringableArrayObject(['foo.bar' => 'asc']),
+            new StringableArrayObject([
+                'foo.bar' => 'asc',
+            ]),
         ];
 
         yield [
@@ -557,6 +577,7 @@ DQL
 
     private function getRepository(): UserRepository
     {
+        /** @var UserRepository $userRepository */
         $userRepository = static::getContainer()->get(UserRepository::class);
 
         RepositoryHelper::resetParameterCount();

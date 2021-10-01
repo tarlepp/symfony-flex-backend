@@ -73,12 +73,16 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [false, new Request()];
 
         $request = new Request();
-        $request->headers = new HeaderBag(['Authorization' => 'ApiKey']);
+        $request->headers = new HeaderBag([
+            'Authorization' => 'ApiKey',
+        ]);
 
         yield [false, $request];
 
         $request = new Request();
-        $request->headers = new HeaderBag(['Authorization' => 'ApiKey somekey']);
+        $request->headers = new HeaderBag([
+            'Authorization' => 'ApiKey somekey',
+        ]);
 
         yield [true, $request];
     }
@@ -92,24 +96,34 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [null, new Request()];
 
         $request = new Request();
-        $request->headers = new HeaderBag(['Authorization' => 'FooBar']);
+        $request->headers = new HeaderBag([
+            'Authorization' => 'FooBar',
+        ]);
 
         yield [null, $request];
 
         $request = new Request();
-        $request->headers = new HeaderBag(['Authorization' => 'ApiKey']);
+        $request->headers = new HeaderBag([
+            'Authorization' => 'ApiKey',
+        ]);
 
         yield [null, $request];
 
         $request = new Request();
-        $request->headers = new HeaderBag(['Authorization' => 'ApiKey    ']);
+        $request->headers = new HeaderBag([
+            'Authorization' => 'ApiKey    ',
+        ]);
 
         yield [null, $request];
 
         $request = new Request();
-        $request->headers = new HeaderBag(['Authorization' => 'ApiKey somekey']);
+        $request->headers = new HeaderBag([
+            'Authorization' => 'ApiKey somekey',
+        ]);
 
-        yield [new StringableArrayObject(['token' => 'somekey']), $request];
+        yield [new StringableArrayObject([
+            'token' => 'somekey',
+        ]), $request];
     }
 
     /**
@@ -124,8 +138,16 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [new stdClass()];
         yield [new StringableArrayObject([])];
         yield [new StringableArrayObject(['foobar'])];
-        yield [new StringableArrayObject(['foobar' => 'barfoo'])];
-        yield [new StringableArrayObject(['token' => null])];
+        yield [
+            new StringableArrayObject([
+                'foobar' => 'barfoo',
+            ]),
+        ];
+        yield [
+            new StringableArrayObject([
+                'token' => null,
+            ]),
+        ];
     }
 
     /**
@@ -140,7 +162,15 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
         yield [new stdClass()];
         yield [new StringableArrayObject([])];
         yield [new StringableArrayObject(['foobar'])];
-        yield [new StringableArrayObject(['foobar' => 'barfoo'])];
-        yield [new StringableArrayObject(['token' => null])];
+        yield [
+            new StringableArrayObject([
+                'foobar' => 'barfoo',
+            ]),
+        ];
+        yield [
+            new StringableArrayObject([
+                'token' => null,
+            ]),
+        ];
     }
 }

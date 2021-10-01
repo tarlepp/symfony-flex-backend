@@ -103,9 +103,7 @@ class GenericDtoTest extends KernelTestCase
             ->method('getEmail')
             ->willReturn('email@com');
 
-        /**
-         * @var User $dto
-         */
+        /** @var User $dto */
         $dto = (new User())
             ->patch($dtoUser);
 

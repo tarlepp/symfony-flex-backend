@@ -70,7 +70,12 @@ class ListUserGroupsCommand extends Command
      */
     private function getRows(): array
     {
-        return array_map($this->getFormatterUserGroup(), $this->userGroupResource->find(orderBy: ['name' => 'ASC']));
+        return array_map(
+            $this->getFormatterUserGroup(),
+            $this->userGroupResource->find(orderBy: [
+                'name' => 'ASC',
+            ])
+        );
     }
 
     /**

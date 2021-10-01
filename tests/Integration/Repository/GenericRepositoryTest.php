@@ -438,8 +438,12 @@ class GenericRepositoryTest extends KernelTestCase
             ->getMock();
 
         $arguments = [
-            ['foo' => 'some criteria'],
-            ['bar' => 'some order by'],
+            [
+                'foo' => 'some criteria',
+            ],
+            [
+                'bar' => 'some order by',
+            ],
             10,
             20,
         ];
@@ -461,9 +465,7 @@ class GenericRepositoryTest extends KernelTestCase
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
-        /**
-         * @var BaseRepositoryInterface $repository
-         */
+        /** @var BaseRepositoryInterface $repository */
         $repository = new ApiKeyRepository($managerObject);
         $repository->findBy(...$arguments);
     }

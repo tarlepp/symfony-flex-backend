@@ -231,7 +231,9 @@ class FindMethodTest extends KernelTestCase
 
         yield [
             '?where={"foo": "bar"}',
-            new StringableArrayObject(['foo' => 'bar']),
+            new StringableArrayObject([
+                'foo' => 'bar',
+            ]),
             new StringableArrayObject([]),
             null,
             null,
@@ -265,7 +267,9 @@ class FindMethodTest extends KernelTestCase
         yield [
             '?order=column',
             new StringableArrayObject([]),
-            new StringableArrayObject(['column' => 'ASC']),
+            new StringableArrayObject([
+                'column' => 'ASC',
+            ]),
             null,
             null,
             new StringableArrayObject([]),
@@ -274,7 +278,9 @@ class FindMethodTest extends KernelTestCase
         yield [
             '?order=-column',
             new StringableArrayObject([]),
-            new StringableArrayObject(['column' => 'DESC']),
+            new StringableArrayObject([
+                'column' => 'DESC',
+            ]),
             null,
             null,
             new StringableArrayObject([]),

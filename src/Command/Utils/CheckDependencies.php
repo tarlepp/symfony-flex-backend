@@ -39,6 +39,7 @@ use function sort;
 use function sprintf;
 use function str_replace;
 use function strlen;
+use const DIRECTORY_SEPARATOR;
 
 /**
  * Class CheckDependencies

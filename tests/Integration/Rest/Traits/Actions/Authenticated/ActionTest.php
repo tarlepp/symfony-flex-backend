@@ -62,9 +62,7 @@ class ActionTest extends KernelTestCase
             ->method($trait)
             ->with(...$parameters->getArrayCopy());
 
-        /**
-         * @var callable $callback
-         */
+        /** @var callable $callback */
         $callback = [$stub, $method];
 
         $result = call_user_func_array($callback, $parameters->getArrayCopy());
@@ -88,9 +86,7 @@ class ActionTest extends KernelTestCase
         $iterator = function (string $filename) use ($folder, $namespace): array {
             $base = str_replace([$folder, DIRECTORY_SEPARATOR, '.php'], ['', '\\', ''], $filename);
 
-            /**
-             * @psalm-var trait-string $class
-             */
+            /** @psalm-var trait-string $class */
             $class = $namespace . $base;
 
             $parameters = [

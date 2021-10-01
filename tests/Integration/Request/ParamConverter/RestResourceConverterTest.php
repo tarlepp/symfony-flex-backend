@@ -94,22 +94,30 @@ class RestResourceConverterTest extends KernelTestCase
     {
         yield [
             false,
-            new StringableArrayObject(['class' => 'FooBar']),
+            new StringableArrayObject([
+                'class' => 'FooBar',
+            ]),
         ];
 
         yield [
             false,
-            new StringableArrayObject(['class' => LoggerInterface::class]),
+            new StringableArrayObject([
+                'class' => LoggerInterface::class,
+            ]),
         ];
 
         yield [
             false,
-            new StringableArrayObject(['class' => Role::class]),
+            new StringableArrayObject([
+                'class' => Role::class,
+            ]),
         ];
 
         yield [
             true,
-            new StringableArrayObject(['class' => RoleResource::class]),
+            new StringableArrayObject([
+                'class' => RoleResource::class,
+            ]),
         ];
     }
 

@@ -73,7 +73,9 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserReturnsCorrectUser(): void
     {
-        $user = $this->getUserRepository()->findOneBy(['username' => 'john']);
+        $user = $this->getUserRepository()->findOneBy([
+            'username' => 'john',
+        ]);
 
         static::assertNotNull($user);
         static::assertInstanceOf(User::class, $user);
@@ -91,7 +93,9 @@ class SecurityUserFactoryTest extends KernelTestCase
      */
     public function testThatRefreshUserReturnsANewInstanceOfSecurityUser(): void
     {
-        $user = $this->getUserRepository()->findOneBy(['username' => 'john']);
+        $user = $this->getUserRepository()->findOneBy([
+            'username' => 'john',
+        ]);
 
         static::assertNotNull($user);
         static::assertInstanceOf(User::class, $user);

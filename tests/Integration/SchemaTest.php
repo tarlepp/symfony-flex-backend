@@ -77,9 +77,7 @@ class SchemaTest extends KernelTestCase
          */
         $managerRegistry = static::$kernel->getContainer()->get('doctrine');
 
-        /**
-         * @var EntityManagerInterface $entityManager
-         */
+        /** @var EntityManagerInterface $entityManager */
         $entityManager = $managerRegistry->getManager();
 
         return new SchemaValidator($entityManager);

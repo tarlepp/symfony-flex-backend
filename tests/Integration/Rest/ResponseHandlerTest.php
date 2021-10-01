@@ -99,14 +99,31 @@ class ResponseHandlerTest extends KernelTestCase
         $this->expectExceptionCode(400);
         $this->expectExceptionMessageMatches('/Serialization for the format .* is not supported/');
 
-        $request = Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => $format]);
+        $request = Request::create(
+            '',
+            'GET',
+            [],
+            [],
+            [],
+            [
+                'CONTENT_TYPE' => $format,
+            ]
+        );
 
         $serializer = static::getContainer()->get(SerializerInterface::class);
 
         $stubResourceService = $this->createMock(RestResourceInterface::class);
 
         (new ResponseHandler($serializer))
-            ->createResponse($request, ['foo' => 'bar'], $stubResourceService, 200, $format);
+            ->createResponse(
+                $request,
+                [
+                    'foo' => 'bar',
+                ],
+                $stubResourceService,
+                200,
+                $format
+            );
     }
 
     /**
@@ -151,7 +168,9 @@ class ResponseHandlerTest extends KernelTestCase
         $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
-            ->willReturn(['populateAll' => '']);
+            ->willReturn([
+                'populateAll' => '',
+            ]);
 
         $restResource
             ->expects(static::once())
@@ -180,7 +199,9 @@ class ResponseHandlerTest extends KernelTestCase
         $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
-            ->willReturn(['populateAll' => '']);
+            ->willReturn([
+                'populateAll' => '',
+            ]);
 
         $restResource
             ->expects(static::once())
@@ -214,7 +235,9 @@ class ResponseHandlerTest extends KernelTestCase
         $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
-            ->willReturn(['populateOnly' => '']);
+            ->willReturn([
+                'populateOnly' => '',
+            ]);
 
         $restResource
             ->expects(static::once())
@@ -243,7 +266,9 @@ class ResponseHandlerTest extends KernelTestCase
         $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
-            ->willReturn(['populateOnly' => '']);
+            ->willReturn([
+                'populateOnly' => '',
+            ]);
 
         $restResource
             ->expects(static::once())
@@ -284,7 +309,9 @@ class ResponseHandlerTest extends KernelTestCase
         $parameterBag
             ->expects(static::exactly(2))
             ->method('all')
-            ->willReturn(['populateOnly' => '']);
+            ->willReturn([
+                'populateOnly' => '',
+            ]);
 
         $restResource
             ->expects(static::once())
@@ -395,19 +422,43 @@ class ResponseHandlerTest extends KernelTestCase
     {
         yield [
             Request::create(''),
-            ['foo' => 'bar'],
+            [
+                'foo' => 'bar',
+            ],
             '{"foo":"bar"}',
         ];
 
         yield [
-            Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => 'Some weird content type']),
-            ['foo' => 'bar'],
+            Request::create(
+                '',
+                'GET',
+                [],
+                [],
+                [],
+                [
+                    'CONTENT_TYPE' => 'Some weird content type',
+                ]
+            ),
+            [
+                'foo' => 'bar',
+            ],
             '{"foo":"bar"}',
         ];
 
         yield [
-            Request::create('', 'GET', [], [], [], ['CONTENT_TYPE' => 'application/xml']),
-            ['foo' => 'bar'],
+            Request::create(
+                '',
+                'GET',
+                [],
+                [],
+                [],
+                [
+                    'CONTENT_TYPE' => 'application/xml',
+                ]
+            ),
+            [
+                'foo' => 'bar',
+            ],
             <<<DATA
 <?xml version="1.0"?>
 <response><foo>bar</foo></response>

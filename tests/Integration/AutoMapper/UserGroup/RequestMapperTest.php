@@ -69,11 +69,14 @@ class RequestMapperTest extends RestRequestMapperTestCase
             ->with($role->getId())
             ->willReturn($role);
 
-        $request = new Request([], ['role' => $role->getId()]);
+        $request = new Request(
+            [],
+            [
+                'role' => $role->getId(),
+            ]
+        );
 
-        /**
-         * @var DTO\UserGroup $dto
-         */
+        /** @var DTO\UserGroup $dto */
         $dto = $this->getMapperObject()->mapToObject($request, new $dtoClass());
 
         static::assertSame($role, $dto->getRole());

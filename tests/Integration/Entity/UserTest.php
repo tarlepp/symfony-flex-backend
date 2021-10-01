@@ -84,7 +84,12 @@ class UserTest extends EntityTestCase
         $entity->setPassword('str_rot13', 'password');
 
         /** @var User $entityUnSerialized */
-        $entityUnSerialized = unserialize(serialize($entity), ['allowed_classes' => true]);
+        $entityUnSerialized = unserialize(
+            serialize($entity),
+            [
+                'allowed_classes' => true,
+            ]
+        );
 
         // Assert that un-serialized object returns expected data
         static::assertSame('john', $entityUnSerialized->getUsername());

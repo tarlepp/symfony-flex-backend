@@ -68,7 +68,16 @@ class RequestLogSubscriberTest extends KernelTestCase
      */
     public function testThatMethodCallsExpectedLoggerMethods(): void
     {
-        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
+        $request = new Request(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [
+                'REQUEST_URI' => '/foobar',
+            ]
+        );
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
 
@@ -119,7 +128,16 @@ class RequestLogSubscriberTest extends KernelTestCase
      */
     public function testThatSetUserIsCalled(): void
     {
-        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
+        $request = new Request(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [
+                'REQUEST_URI' => '/foobar',
+            ]
+        );
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
         $user = (new User())
@@ -165,7 +183,16 @@ class RequestLogSubscriberTest extends KernelTestCase
      */
     public function testThatLoggerIsCalledIfUserIsNotFoundByRepository(): void
     {
-        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
+        $request = new Request(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [
+                'REQUEST_URI' => '/foobar',
+            ]
+        );
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
         $user = (new User())
@@ -213,7 +240,16 @@ class RequestLogSubscriberTest extends KernelTestCase
      */
     public function testThatSetApiKeyIsCalled(): void
     {
-        $request = new Request([], [], [], [], [], ['REQUEST_URI' => '/foobar']);
+        $request = new Request(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [
+                'REQUEST_URI' => '/foobar',
+            ]
+        );
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
 
@@ -293,7 +329,16 @@ class RequestLogSubscriberTest extends KernelTestCase
      */
     public function testThatLoggerServiceIsNotCalledWhenUsingSpecifiedIgnoredRoute(string $url, string $ignored): void
     {
-        $request = new Request([], [], [], [], [], ['REQUEST_URI' => $url]);
+        $request = new Request(
+            [],
+            [],
+            [],
+            [],
+            [],
+            [
+                'REQUEST_URI' => $url,
+            ]
+        );
         $response = new Response();
         $event = new TerminateEvent(static::$kernel, $request, $response);
 

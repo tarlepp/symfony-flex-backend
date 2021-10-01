@@ -73,9 +73,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
             'userGroups' => [$userGroup->getId()],
         ]);
 
-        /**
-         * @var DTO\ApiKey $dto
-         */
+        /** @var DTO\ApiKey $dto */
         $dto = $this->getMapperObject()->mapToObject($request, new $dtoClass());
 
         static::assertSame([$userGroup], $dto->getUserGroups());

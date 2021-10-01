@@ -46,6 +46,8 @@ class ResponseSubscriber implements EventSubscriberInterface
     public function onKernelResponse(ResponseEvent $event): void
     {
         // Attach new header
-        $event->getResponse()->headers->add(['X-API-VERSION' => $this->version->get()]);
+        $event->getResponse()->headers->add([
+            'X-API-VERSION' => $this->version->get(),
+        ]);
     }
 }
