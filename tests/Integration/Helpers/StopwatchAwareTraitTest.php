@@ -34,9 +34,7 @@ class StopwatchAwareTraitTest extends KernelTestCase
     {
         self::bootKernel();
 
-        /**
-         * @var StopwatchAwareService $service
-         */
+        /** @var StopwatchAwareService $service */
         $service = self::$kernel->getContainer()->get(StopwatchAwareService::class);
 
         $stopwatch = PhpUnitUtil::getProperty('stopwatch', $service);

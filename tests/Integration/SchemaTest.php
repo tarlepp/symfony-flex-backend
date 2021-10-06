@@ -72,9 +72,7 @@ class SchemaTest extends KernelTestCase
             Type::addType('EnumLogLogin', EnumLogLoginType::class);
         }
 
-        /**
-         * @var ManagerRegistry $managerRegistry
-         */
+        /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = self::$kernel->getContainer()->get('doctrine');
 
         /** @var EntityManagerInterface $entityManager */

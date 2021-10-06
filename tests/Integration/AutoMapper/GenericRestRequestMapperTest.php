@@ -108,7 +108,3 @@ class GenericRestRequestMapperTest extends KernelTestCase
         self::assertSame('fbzrGenafsbezInyhr', $transformedObject->getSomeTransformProperty());
     }
 }
-/*
-ed614010-26a6-11ec-9621-0242ac130002
-00000000-0000-1000-0000-000000000000
-*/

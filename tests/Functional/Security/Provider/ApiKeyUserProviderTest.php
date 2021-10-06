@@ -158,9 +158,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
     {
         self::bootKernel();
 
-        /**
-         * @var ManagerRegistry $managerRegistry
-         */
+        /** @var ManagerRegistry $managerRegistry */
         $managerRegistry = self::getContainer()->get('doctrine');
         $rolesService = self::getContainer()->get(RolesService::class);
 
