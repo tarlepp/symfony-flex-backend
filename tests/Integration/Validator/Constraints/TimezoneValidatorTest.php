@@ -38,29 +38,29 @@ class TimezoneValidatorTest extends KernelTestCase
             ->setTimezone('foo/bar');
 
         $localizationMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getTimezones')
             ->willReturn(['bar/foo']);
 
         $contextMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('buildViolation')
             ->with(Timezone::MESSAGE)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setParameter')
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setCode')
             ->with(Timezone::INVALID_TIMEZONE)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('addViolation');
 
         // Run validator

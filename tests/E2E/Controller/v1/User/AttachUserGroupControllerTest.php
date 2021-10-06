@@ -31,11 +31,11 @@ class AttachUserGroupControllerTest extends WebTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        PhpUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(self::$kernel);
 
-        static::$kernel->shutdown();
+        self::$kernel->shutdown();
 
         parent::tearDownAfterClass();
     }
@@ -56,8 +56,8 @@ class AttachUserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -78,8 +78,8 @@ class AttachUserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -100,9 +100,9 @@ class AttachUserGroupControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
-        static::assertCount(1, JSON::decode($content));
+        self::assertNotFalse($content);
+        self::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertCount(1, JSON::decode($content));
     }
 
     /**

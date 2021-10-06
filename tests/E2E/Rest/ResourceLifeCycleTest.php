@@ -41,9 +41,9 @@ class ResourceLifeCycleTest extends WebTestCase
             'id' => $role,
         ]);
 
-        static::assertNotNull($entity, sprintf('Role entity for id `%s` not found...', $role));
-        static::assertSame(418, $response->getStatusCode(), (string)$response->getContent());
-        static::assertSame('Description - ' . $role, $entity->getDescription());
+        self::assertNotNull($entity, sprintf('Role entity for id `%s` not found...', $role));
+        self::assertSame(418, $response->getStatusCode(), (string)$response->getContent());
+        self::assertSame('Description - ' . $role, $entity->getDescription());
     }
 
     /**
@@ -60,6 +60,6 @@ class ResourceLifeCycleTest extends WebTestCase
 
     private function getRepository(): RoleRepository
     {
-        return static::getContainer()->get(ResourceForLifeCycleTests::class)->getRepository();
+        return self::getContainer()->get(ResourceForLifeCycleTests::class)->getRepository();
     }
 }

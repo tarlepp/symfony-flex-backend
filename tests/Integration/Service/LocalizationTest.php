@@ -43,12 +43,12 @@ class LocalizationTest extends KernelTestCase
         $exception = new Exception('test exception');
 
         $this->getCacheMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('get')
             ->willThrowException($exception);
 
         $this->getLoggerMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('error')
             ->with($exception->getMessage(), $exception->getTrace());
 

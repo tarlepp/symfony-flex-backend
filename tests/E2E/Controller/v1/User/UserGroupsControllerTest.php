@@ -38,8 +38,8 @@ class UserGroupsControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -60,8 +60,8 @@ class UserGroupsControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(403, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -83,14 +83,14 @@ class UserGroupsControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
         $data = JSON::decode($content);
 
         $expectedResponse === ''
-            ? static::assertEmpty($data)
-            : static::assertSame($expectedResponse, $data[0]->role->id);
+            ? self::assertEmpty($data)
+            : self::assertSame($expectedResponse, $data[0]->role->id);
     }
 
     /**
@@ -110,14 +110,14 @@ class UserGroupsControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
         $data = JSON::decode($content);
 
         $expectedResponse === null
-            ? static::assertEmpty($data)
-            : static::assertSame($expectedResponse, $data[0]->role->id, $content);
+            ? self::assertEmpty($data)
+            : self::assertSame($expectedResponse, $data[0]->role->id, $content);
     }
 
     /**

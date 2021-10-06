@@ -54,8 +54,8 @@ class SecurityUserFactoryTest extends KernelTestCase
     ): void {
         $domainUser = $this->getSecurityUserFactory()->loadUserByIdentifier($username);
 
-        static::assertInstanceOf(SecurityUser::class, $domainUser);
-        static::assertSame($roles->getArrayCopy(), $domainUser->getRoles());
+        self::assertInstanceOf(SecurityUser::class, $domainUser);
+        self::assertSame($roles->getArrayCopy(), $domainUser->getRoles());
     }
 
     /**
@@ -77,12 +77,12 @@ class SecurityUserFactoryTest extends KernelTestCase
             'username' => 'john',
         ]);
 
-        static::assertNotNull($user);
-        static::assertInstanceOf(User::class, $user);
+        self::assertNotNull($user);
+        self::assertInstanceOf(User::class, $user);
 
         $securityUser = new SecurityUser($user);
 
-        static::assertSame(
+        self::assertSame(
             $user->getId(),
             $this->getSecurityUserFactory()->refreshUser($securityUser)->getUserIdentifier()
         );
@@ -97,12 +97,12 @@ class SecurityUserFactoryTest extends KernelTestCase
             'username' => 'john',
         ]);
 
-        static::assertNotNull($user);
-        static::assertInstanceOf(User::class, $user);
+        self::assertNotNull($user);
+        self::assertInstanceOf(User::class, $user);
 
         $securityUser = new SecurityUser($user);
 
-        static::assertNotSame($securityUser, $this->getSecurityUserFactory()->refreshUser($securityUser));
+        self::assertNotSame($securityUser, $this->getSecurityUserFactory()->refreshUser($securityUser));
     }
 
     /**
@@ -134,11 +134,11 @@ class SecurityUserFactoryTest extends KernelTestCase
 
     private function getSecurityUserFactory(): SecurityUserFactory
     {
-        return static::getContainer()->get(SecurityUserFactory::class);
+        return self::getContainer()->get(SecurityUserFactory::class);
     }
 
     private function getUserRepository(): UserRepository
     {
-        return static::getContainer()->get(UserRepository::class);
+        return self::getContainer()->get(UserRepository::class);
     }
 }

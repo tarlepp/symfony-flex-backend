@@ -38,8 +38,8 @@ class LocaleControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(405, $response->getStatusCode(), $content);
+        self::assertNotFalse($content);
+        self::assertSame(405, $response->getStatusCode(), $content);
     }
 
     /**
@@ -55,8 +55,8 @@ class LocaleControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content);
     }
 
     /**
@@ -72,8 +72,8 @@ class LocaleControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertCount(2, JSON::decode($content));
+        self::assertNotFalse($content);
+        self::assertCount(2, JSON::decode($content));
     }
 
     /**

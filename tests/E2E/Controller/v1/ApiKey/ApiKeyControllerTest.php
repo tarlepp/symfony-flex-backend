@@ -33,8 +33,8 @@ class ApiKeyControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
@@ -52,8 +52,8 @@ class ApiKeyControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame($expectedStatus, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**

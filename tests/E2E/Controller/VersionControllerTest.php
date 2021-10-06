@@ -32,7 +32,7 @@ class VersionControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
@@ -40,14 +40,14 @@ class VersionControllerTest extends WebTestCase
      */
     public function testThatVersionRouteDoesNotMakeRequestLog(): void
     {
-        $resource = static::getContainer()->get(LogRequestResource::class);
+        $resource = self::getContainer()->get(LogRequestResource::class);
 
         $expectedLogCount = $resource->count();
 
         $client = $this->getTestClient();
         $client->request('GET', '/version');
 
-        static::assertSame($expectedLogCount, $resource->count());
+        self::assertSame($expectedLogCount, $resource->count());
     }
 
     /**
@@ -62,8 +62,8 @@ class VersionControllerTest extends WebTestCase
 
         $version = $response->headers->get('X-API-VERSION');
 
-        static::assertNotNull($version);
-        static::assertSame(
+        self::assertNotNull($version);
+        self::assertSame(
             JSON::decode((string)file_get_contents(__DIR__ . '/../../../composer.json'))->version,
             $version,
         );

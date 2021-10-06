@@ -32,6 +32,6 @@ class ResponseSubscriberTest extends KernelTestCase
             ],
         ];
 
-        static::assertSame($expected, ResponseSubscriber::getSubscribedEvents());
+        self::assertSame($expected, ResponseSubscriber::getSubscribedEvents());
     }
 }

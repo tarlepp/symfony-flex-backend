@@ -24,6 +24,6 @@ class TimezoneTest extends KernelTestCase
      */
     public function testThatGetTargetsReturnsExpected(): void
     {
-        static::assertSame('property', (new Timezone())->getTargets());
+        self::assertSame('property', (new Timezone())->getTargets());
     }
 }

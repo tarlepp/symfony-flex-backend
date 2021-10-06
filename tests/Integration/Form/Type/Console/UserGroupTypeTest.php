@@ -45,18 +45,18 @@ class UserGroupTypeTest extends TypeTestCase
         $roleEntity = new Role('ROLE_ADMIN');
 
         $this->getRoleResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('find')
             ->willReturn([$roleEntity]);
 
         $this->getRoleResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOne')
             ->with($roleEntity->getId())
             ->willReturn($roleEntity);
 
         $this->getRolesServiceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getRoleLabel')
             ->willReturn('role name');
 
@@ -78,19 +78,19 @@ class UserGroupTypeTest extends TypeTestCase
         $form->submit($formData);
 
         // Test that data transformers have not been failed
-        static::assertTrue($form->isSynchronized());
+        self::assertTrue($form->isSynchronized());
 
         // Test that form data matches with the DTO mapping
-        static::assertSame($dto->getId(), $form->getData()->getId());
-        static::assertSame($dto->getName(), $form->getData()->getName());
-        static::assertSame($dto->getRole(), $form->getData()->getRole());
+        self::assertSame($dto->getId(), $form->getData()->getId());
+        self::assertSame($dto->getName(), $form->getData()->getName());
+        self::assertSame($dto->getRole(), $form->getData()->getRole());
 
         // Check that form renders correctly
         $view = $form->createView();
         $children = $view->children;
 
         foreach (array_keys($formData) as $key) {
-            static::assertArrayHasKey($key, $children);
+            self::assertArrayHasKey($key, $children);
         }
     }
 

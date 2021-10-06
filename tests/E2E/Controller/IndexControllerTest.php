@@ -29,6 +29,6 @@ class IndexControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
     }
 }

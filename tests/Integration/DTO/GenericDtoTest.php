@@ -39,7 +39,7 @@ class GenericDtoTest extends KernelTestCase
         $dtoMock = $this->createMock(RestDtoInterface::class);
 
         $dtoMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getVisited')
             ->willReturn(['foo']);
 
@@ -59,7 +59,7 @@ class GenericDtoTest extends KernelTestCase
         string $property,
         RestDtoInterface $dto,
     ): void {
-        static::assertSame($expected, PhpUnitUtil::callMethod($dto, 'determineGetterMethod', [$dto, $property]));
+        self::assertSame($expected, PhpUnitUtil::callMethod($dto, 'determineGetterMethod', [$dto, $property]));
     }
 
     /**
@@ -89,17 +89,17 @@ class GenericDtoTest extends KernelTestCase
         $dtoUser = $this->createMock(User::class);
 
         $dtoUser
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getVisited')
             ->willReturn(['username', 'email']);
 
         $dtoUser
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getUsername')
             ->willReturn('username');
 
         $dtoUser
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getEmail')
             ->willReturn('email@com');
 
@@ -107,8 +107,8 @@ class GenericDtoTest extends KernelTestCase
         $dto = (new User())
             ->patch($dtoUser);
 
-        static::assertSame('username', $dto->getUsername());
-        static::assertSame('email@com', $dto->getEmail());
+        self::assertSame('username', $dto->getUsername());
+        self::assertSame('email@com', $dto->getEmail());
     }
 
     /**
@@ -121,19 +121,19 @@ class GenericDtoTest extends KernelTestCase
         $userEntity = $this->createMock(UserEntity::class);
 
         $userEntity
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setUsername')
             ->with('username')
             ->willReturn($userEntity);
 
         $userEntity
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setEmail')
             ->with('email@com')
             ->willReturn($userEntity);
 
         $userEntity
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setPlainPassword')
             ->with('password')
             ->willReturn($userEntity);

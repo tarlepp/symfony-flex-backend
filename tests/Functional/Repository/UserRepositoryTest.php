@@ -31,11 +31,11 @@ class UserRepositoryTest extends KernelTestCase
      */
     public static function tearDownAfterClass(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
-        PhpUnitUtil::loadFixtures(static::$kernel);
+        PhpUnitUtil::loadFixtures(self::$kernel);
 
-        static::$kernel->shutdown();
+        self::$kernel->shutdown();
 
         parent::tearDownAfterClass();
     }
@@ -45,7 +45,7 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testThatCountAdvancedReturnsExpected(): void
     {
-        static::assertSame(6, $this->getRepository()->countAdvanced());
+        self::assertSame(6, $this->getRepository()->countAdvanced());
     }
 
     /**
@@ -57,12 +57,12 @@ class UserRepositoryTest extends KernelTestCase
             'username' => 'john',
         ]);
 
-        static::assertCount(1, $users);
+        self::assertCount(1, $users);
     }
 
     public function testThatFindIdsReturnsExpected(): void
     {
-        static::assertCount(
+        self::assertCount(
             5,
             $this->getRepository()->findIds(
                 [],
@@ -94,7 +94,7 @@ class UserRepositoryTest extends KernelTestCase
         foreach ($data as $set) {
             [$expected, $username, $id] = $set;
 
-            static::assertSame($expected, $this->getRepository()->isUsernameAvailable($username, $id));
+            self::assertSame($expected, $this->getRepository()->isUsernameAvailable($username, $id));
         }
     }
 
@@ -119,7 +119,7 @@ class UserRepositoryTest extends KernelTestCase
         foreach ($data as $set) {
             [$expected, $email, $id] = $set;
 
-            static::assertSame($expected, $this->getRepository()->isEmailAvailable($email, $id));
+            self::assertSame($expected, $this->getRepository()->isEmailAvailable($email, $id));
         }
     }
 
@@ -131,9 +131,9 @@ class UserRepositoryTest extends KernelTestCase
      */
     public function testThatResetMethodDeletesAllRecords(): void
     {
-        static::assertSame(6, $this->getRepository()->countAdvanced());
-        static::assertSame(6, $this->getRepository()->reset());
-        static::assertSame(0, $this->getRepository()->countAdvanced());
+        self::assertSame(6, $this->getRepository()->countAdvanced());
+        self::assertSame(6, $this->getRepository()->reset());
+        self::assertSame(0, $this->getRepository()->countAdvanced());
     }
 
     private function getRepository(): UserRepository
@@ -141,9 +141,9 @@ class UserRepositoryTest extends KernelTestCase
         static $cache;
 
         if ($cache === null) {
-            static::bootKernel();
+            self::bootKernel();
 
-            $cache = static::getContainer()->get(UserRepository::class);
+            $cache = self::getContainer()->get(UserRepository::class);
         }
 
         return $cache;

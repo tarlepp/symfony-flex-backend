@@ -40,7 +40,7 @@ class DateDimensionTest extends EntityTestCase
         ?string $type = null,
         ?array $meta = null,
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        self::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -52,7 +52,7 @@ class DateDimensionTest extends EntityTestCase
         ?string $type = null,
         ?array $meta = null
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        self::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -76,12 +76,12 @@ class DateDimensionTest extends EntityTestCase
         try {
             $method = 'assertIs' . ucfirst($type);
 
-            static::$method($dateDimension->{$getter}());
+            self::$method($dateDimension->{$getter}());
         } catch (Throwable $error) {
             /**
              * @var class-string $type
              */
-            static::assertInstanceOf($type, $dateDimension->{$getter}(), $error->getMessage());
+            self::assertInstanceOf($type, $dateDimension->{$getter}(), $error->getMessage());
         }
     }
 
@@ -95,17 +95,17 @@ class DateDimensionTest extends EntityTestCase
         /** @var DateDimension $entity */
         $entity = new $this->entityName($dateTime);
 
-        static::assertSame($dateTime, $entity->getDate());
-        static::assertSame((int)$dateTime->format('Y'), $entity->getYear());
-        static::assertSame((int)$dateTime->format('n'), $entity->getMonth());
-        static::assertSame((int)$dateTime->format('j'), $entity->getDay());
-        static::assertSame((int)floor(((int)$dateTime->format('n') - 1) / 3) + 1, $entity->getQuarter());
-        static::assertSame((int)$dateTime->format('W'), $entity->getWeekNumber());
-        static::assertSame((int)$dateTime->format('N'), $entity->getDayNumberOfWeek());
-        static::assertSame((int)$dateTime->format('z'), $entity->getDayNumberOfYear());
-        static::assertSame((bool)$dateTime->format('L'), $entity->isLeapYear());
-        static::assertSame((int)$dateTime->format('o'), $entity->getWeekNumberingYear());
-        static::assertSame((int)$dateTime->format('U'), $entity->getUnixTime());
+        self::assertSame($dateTime, $entity->getDate());
+        self::assertSame((int)$dateTime->format('Y'), $entity->getYear());
+        self::assertSame((int)$dateTime->format('n'), $entity->getMonth());
+        self::assertSame((int)$dateTime->format('j'), $entity->getDay());
+        self::assertSame((int)floor(((int)$dateTime->format('n') - 1) / 3) + 1, $entity->getQuarter());
+        self::assertSame((int)$dateTime->format('W'), $entity->getWeekNumber());
+        self::assertSame((int)$dateTime->format('N'), $entity->getDayNumberOfWeek());
+        self::assertSame((int)$dateTime->format('z'), $entity->getDayNumberOfYear());
+        self::assertSame((bool)$dateTime->format('L'), $entity->isLeapYear());
+        self::assertSame((int)$dateTime->format('o'), $entity->getWeekNumberingYear());
+        self::assertSame((int)$dateTime->format('U'), $entity->getUnixTime());
     }
 
     /**

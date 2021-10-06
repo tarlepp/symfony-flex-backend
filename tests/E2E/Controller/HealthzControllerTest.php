@@ -30,7 +30,7 @@ class HealthzControllerTest extends WebTestCase
 
         $response = $client->getResponse();
 
-        static::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertSame(200, $response->getStatusCode(), "Response:\n" . $response);
     }
 
     /**
@@ -38,13 +38,13 @@ class HealthzControllerTest extends WebTestCase
      */
     public function testThatHealthzRouteDoesNotMakeRequestLog(): void
     {
-        $resource = static::getContainer()->get(LogRequestResource::class);
+        $resource = self::getContainer()->get(LogRequestResource::class);
 
         $expectedLogCount = $resource->count();
 
         $client = $this->getTestClient();
         $client->request('GET', '/healthz');
 
-        static::assertSame($expectedLogCount, $resource->count());
+        self::assertSame($expectedLogCount, $resource->count());
     }
 }

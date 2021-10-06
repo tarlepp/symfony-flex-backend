@@ -46,14 +46,14 @@ class UserManagementFlowTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(201, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(201, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
         $data['id'] = JSON::decode($content)->id;
 
         unset($data['password']);
 
-        static::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
+        self::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
 
         return $data['id'];
     }
@@ -84,12 +84,12 @@ class UserManagementFlowTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
         $data['id'] = $userId;
 
-        static::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
+        self::assertJsonStringEqualsJsonString(JSON::encode($data), $content);
 
         return $userId;
     }
@@ -114,8 +114,8 @@ class UserManagementFlowTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(400, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(400, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
 
         return $userId;
     }
@@ -152,9 +152,9 @@ class UserManagementFlowTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-        static::assertJsonStringEqualsJsonString(JSON::encode($expectedData), $content);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertJsonStringEqualsJsonString(JSON::encode($expectedData), $content);
 
         return $userId;
     }
@@ -174,7 +174,7 @@ class UserManagementFlowTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "Response:\n" . $response);
     }
 }

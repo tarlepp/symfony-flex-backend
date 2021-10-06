@@ -35,7 +35,7 @@ class CollectionNormalizerTest extends KernelTestCase
         $object = new stdClass();
 
         $normalizer
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('normalize')
             ->with($object, 'someFormat', ['someContext']);
 
@@ -51,7 +51,7 @@ class CollectionNormalizerTest extends KernelTestCase
     {
         $normalizer = $this->getMockBuilder(ObjectNormalizer::class)->disableOriginalConstructor()->getMock();
 
-        static::assertSame(
+        self::assertSame(
             $expected,
             (new CollectionNormalizer($normalizer))->supportsNormalization($data, $format),
         );

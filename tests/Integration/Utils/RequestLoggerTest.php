@@ -43,7 +43,7 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLogIsNotCreatedIfRequestAndResponseObjectsAreNotSet(): void
     {
         $this->getResourceMock()
-            ->expects(static::never())
+            ->expects(self::never())
             ->method('save');
 
         (new RequestLogger($this->getResource(), $this->getLogger(), []))
@@ -56,7 +56,7 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLogIsNotCreatedIfRequestObjectIsNotSet(): void
     {
         $this->getResourceMock()
-            ->expects(static::never())
+            ->expects(self::never())
             ->method('save');
 
         (new RequestLogger($this->getResource(), $this->getLogger(), []))
@@ -70,7 +70,7 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLogIsNotCreatedIfResponseObjectIsNotSet(): void
     {
         $this->getResourceMock()
-            ->expects(static::never())
+            ->expects(self::never())
             ->method('save');
 
         (new RequestLogger($this->getResource(), $this->getLogger(), []))
@@ -84,7 +84,7 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatResourceSaveMethodIsCalled(): void
     {
         $this->getResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('save')
             ->with();
 
@@ -100,12 +100,12 @@ class RequestLoggerTest extends KernelTestCase
     public function testThatLoggerIsCalledIfExceptionIsThrown(): void
     {
         $this->getResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('save')
             ->willThrowException(new Exception('test exception'));
 
         $this->getLoggerMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('error')
             ->with('test exception');
 

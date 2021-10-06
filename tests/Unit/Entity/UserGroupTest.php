@@ -24,6 +24,6 @@ class UserGroupTest extends KernelTestCase
      */
     public function testThatToStringMethodReturnsExpected(): void
     {
-        static::assertSame(UserGroup::class, (string)(new UserGroup()));
+        self::assertSame(UserGroup::class, (string)(new UserGroup()));
     }
 }

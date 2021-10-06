@@ -32,17 +32,17 @@ class BodySubscriberTest extends KernelTestCase
      */
     public function testThatEmptyBodyWorksLikeExpected(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
         $request = new Request();
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         (new BodySubscriber())
             ->onKernelRequest($event);
 
-        static::assertEmpty($request->query->all());
-        static::assertEmpty($request->request->all());
+        self::assertEmpty($request->query->all());
+        self::assertEmpty($request->request->all());
     }
 
     /**
@@ -50,7 +50,7 @@ class BodySubscriberTest extends KernelTestCase
      */
     public function testThatNonJsonContentTypeWorksLikeExpected(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
         $inputQuery = [
             'foo' => 'bar',
@@ -63,13 +63,13 @@ class BodySubscriberTest extends KernelTestCase
         $request = new Request($inputQuery, $inputRequest, [], [], [], [], 'Some content');
         $request->headers->set('Content-Type', 'text/xml');
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         (new BodySubscriber())
             ->onKernelRequest($event);
 
-        static::assertSame($inputQuery, $request->query->all());
-        static::assertSame($inputRequest, $request->request->all());
+        self::assertSame($inputQuery, $request->query->all());
+        self::assertSame($inputRequest, $request->request->all());
     }
 
     /**
@@ -87,7 +87,7 @@ class BodySubscriberTest extends KernelTestCase
         string $contentType,
         string $content
     ): void {
-        static::bootKernel();
+        self::bootKernel();
 
         $request = new Request(
             [],
@@ -102,12 +102,12 @@ class BodySubscriberTest extends KernelTestCase
         );
         $request->headers->set('Content-Type', $contentType);
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
 
-        static::assertSame($expectedParameters->getArrayCopy(), $request->request->all());
+        self::assertSame($expectedParameters->getArrayCopy(), $request->request->all());
     }
 
     /**
@@ -117,11 +117,11 @@ class BodySubscriberTest extends KernelTestCase
     {
         $this->expectException(JsonException::class);
 
-        static::bootKernel();
+        self::bootKernel();
 
         $request = new Request([], [], [], [], [], [], '{"Some": "not", "valid" JSON}');
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);
@@ -132,24 +132,24 @@ class BodySubscriberTest extends KernelTestCase
      */
     public function testThatWithEmptyBodyReplaceIsNotCalled(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
         $request = $this->getMockBuilder(Request::class)->getMock();
         $parameterBag = $this->getMockBuilder(ParameterBag::class)->getMock();
 
         $request
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getContent')
             ->willReturn('');
 
         $parameterBag
-            ->expects(static::never())
+            ->expects(self::never())
             ->method('replace');
 
         /** @var InputBag $parameterBag */
         $request->request = $parameterBag;
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new BodySubscriber();
         $subscriber->onKernelRequest($event);

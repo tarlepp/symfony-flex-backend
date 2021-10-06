@@ -55,8 +55,8 @@ class UpdateMethodTest extends KernelTestCase
         /** @codingStandardsIgnoreEnd */
         $request = Request::create('/' . Uuid::uuid4()->toString(), 'PUT');
 
-        static::assertInstanceOf(UpdateMethodInvalidTestClass::class, $inValidTestClassMock);
-        static::assertInstanceOf(RestDtoInterface::class, $restDtoMock);
+        self::assertInstanceOf(UpdateMethodInvalidTestClass::class, $inValidTestClassMock);
+        self::assertInstanceOf(RestDtoInterface::class, $restDtoMock);
 
         $inValidTestClassMock->updateMethod($request, $restDtoMock, 'some-id');
     }
@@ -84,8 +84,8 @@ class UpdateMethodTest extends KernelTestCase
 
         $request = Request::create('/' . Uuid::uuid4()->toString(), $httpMethod);
 
-        static::assertInstanceOf(UpdateMethodTestClass::class, $validTestClassMock);
-        static::assertInstanceOf(RestDtoInterface::class, $restDtoMock);
+        self::assertInstanceOf(UpdateMethodTestClass::class, $validTestClassMock);
+        self::assertInstanceOf(RestDtoInterface::class, $restDtoMock);
 
         $validTestClassMock->updateMethod($request, $restDtoMock, 'some-id')->getContent();
     }
@@ -114,7 +114,7 @@ class UpdateMethodTest extends KernelTestCase
         $request = Request::create('/' . $uuid, 'PUT');
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('update')
             ->with($uuid, $restDtoMock, true)
             ->willThrowException($exception);
@@ -149,13 +149,13 @@ class UpdateMethodTest extends KernelTestCase
         $request = Request::create('/' . $uuid, 'PUT');
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('update')
             ->with($uuid, $restDtoMock, true)
             ->willReturn($entityMock);
 
         $responseHandlerMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock);
 

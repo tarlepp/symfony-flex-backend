@@ -24,7 +24,7 @@ class LoggerAwareTraitTest extends KernelTestCase
 {
     public function testThatLoggerAttributeExists(): void
     {
-        static::assertClassHasAttribute('logger', LoggerAwareService::class);
+        self::assertClassHasAttribute('logger', LoggerAwareService::class);
     }
 
     /**
@@ -32,15 +32,15 @@ class LoggerAwareTraitTest extends KernelTestCase
      */
     public function testThatLoggerIsInstanceOfLoggerInterface(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
         /**
          * @var LoggerAwareService $service
          */
-        $service = static::$kernel->getContainer()->get(LoggerAwareService::class);
+        $service = self::$kernel->getContainer()->get(LoggerAwareService::class);
 
         $logger = PhpUnitUtil::getProperty('logger', $service);
 
-        static::assertInstanceOf(LoggerInterface::class, $logger);
+        self::assertInstanceOf(LoggerInterface::class, $logger);
     }
 }

@@ -33,12 +33,12 @@ class ApiKeyTest extends EntityTestCase
 
     public function testThatTokenIsGenerated(): void
     {
-        static::assertSame(40, strlen($this->getEntity()->getToken()));
+        self::assertSame(40, strlen($this->getEntity()->getToken()));
     }
 
     public function testThatGetRolesContainsExpectedRole(): void
     {
-        static::assertContainsEquals(RolesService::ROLE_API, $this->getEntity()->getRoles());
+        self::assertContainsEquals(RolesService::ROLE_API, $this->getEntity()->getRoles());
     }
 
     /**
@@ -55,10 +55,10 @@ class ApiKeyTest extends EntityTestCase
         StringableArrayObject $expectedRoles,
         StringableArrayObject $criteria
     ): void {
-        $apiKey = static::getContainer()->get(ApiKeyRepository::class)->findOneBy($criteria->getArrayCopy());
+        $apiKey = self::getContainer()->get(ApiKeyRepository::class)->findOneBy($criteria->getArrayCopy());
 
-        static::assertInstanceOf(ApiKey::class, $apiKey);
-        static::assertSame($expectedRoles->getArrayCopy(), $apiKey->getRoles());
+        self::assertInstanceOf(ApiKey::class, $apiKey);
+        self::assertSame($expectedRoles->getArrayCopy(), $apiKey->getRoles());
     }
 
     /**
@@ -67,7 +67,7 @@ class ApiKeyTest extends EntityTestCase
      */
     public function dataProviderTestThatApiKeyHasExpectedRoles(): Generator
     {
-        $rolesService = static::getContainer()->get(RolesService::class);
+        $rolesService = self::getContainer()->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {
             yield [

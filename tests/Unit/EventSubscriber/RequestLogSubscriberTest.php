@@ -32,6 +32,6 @@ class RequestLogSubscriberTest extends KernelTestCase
             ],
         ];
 
-        static::assertSame($expected, RequestLogSubscriber::getSubscribedEvents());
+        self::assertSame($expected, RequestLogSubscriber::getSubscribedEvents());
     }
 }

@@ -102,7 +102,7 @@ class CreateMethodTest extends KernelTestCase
         );
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('create')
             ->with($restDtoMock, true)
             ->willThrowException($exception);
@@ -136,13 +136,13 @@ class CreateMethodTest extends KernelTestCase
         $request = Request::create('/', 'POST');
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('create')
             ->with($restDtoMock, true)
             ->willReturn($entityMock);
 
         $responseHandlerMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('createResponse')
             ->with($request, $entityMock, $resourceMock, 201);
 

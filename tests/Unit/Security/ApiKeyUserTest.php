@@ -36,11 +36,11 @@ class ApiKeyUserTest extends KernelTestCase
      */
     public function testThatGetRolesReturnsExpected(ApiKey $apiKey, StringableArrayObject $expectedRoles): void
     {
-        $rolesService = static::getContainer()->get(RolesService::class);
+        $rolesService = self::getContainer()->get(RolesService::class);
 
         $apiKeyUser = new ApiKeyUser($apiKey, $rolesService->getInheritedRoles($apiKey->getRoles()));
 
-        static::assertEqualsCanonicalizing($expectedRoles->getArrayCopy(), $apiKeyUser->getRoles());
+        self::assertEqualsCanonicalizing($expectedRoles->getArrayCopy(), $apiKeyUser->getRoles());
     }
 
     /**
@@ -51,7 +51,7 @@ class ApiKeyUserTest extends KernelTestCase
      */
     public function dataProviderTestThatGetRolesReturnsExpected(): Generator
     {
-        $userGroupResource = static::getContainer()->get(UserGroupResource::class);
+        $userGroupResource = self::getContainer()->get(UserGroupResource::class);
 
         yield [new ApiKey(), new StringableArrayObject(['ROLE_API', 'ROLE_LOGGED'])];
 

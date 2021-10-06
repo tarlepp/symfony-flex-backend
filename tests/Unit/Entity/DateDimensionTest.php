@@ -34,6 +34,6 @@ class DateDimensionTest extends KernelTestCase
 
         $entity = new DateDimension($dateTime);
 
-        static::assertSame($dateTime->format('u'), $entity->getCreatedAt()->format('u'));
+        self::assertSame($dateTime->format('u'), $entity->getCreatedAt()->format('u'));
     }
 }

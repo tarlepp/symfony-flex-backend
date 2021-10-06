@@ -64,7 +64,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         $role = new Role('Some Role');
 
         $this->getMockRoleResource()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getReference')
             ->with($role->getId())
             ->willReturn($role);
@@ -79,7 +79,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         /** @var DTO\UserGroup $dto */
         $dto = $this->getMapperObject()->mapToObject($request, new $dtoClass());
 
-        static::assertSame($role, $dto->getRole());
+        self::assertSame($role, $dto->getRole());
     }
 
     /**
