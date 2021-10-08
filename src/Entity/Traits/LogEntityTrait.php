@@ -42,7 +42,7 @@ trait LogEntityTrait
 
     #[ORM\Column(
         name: '`date`',
-        type: 'date_immutable',
+        type: Types::DATE_IMMUTABLE,
         nullable: false,
     )]
     #[Groups([
@@ -126,7 +126,7 @@ trait LogEntityTrait
 
     private function processRequestData(Request $request): void
     {
-        $this->clientIp = (string)$request->getClientIp();
+        $this->clientIp = $request->getClientIp() ?? '';
         $this->httpHost = $request->getHttpHost();
         $this->agent = $request->headers->get('User-Agent') ?? '';
     }
