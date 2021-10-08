@@ -14,6 +14,7 @@ use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
 use Ramsey\Uuid\UuidInterface;
@@ -86,7 +87,7 @@ class UserGroup implements EntityInterface, Stringable
 
     #[ORM\Column(
         name: 'name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
     )]
     #[Groups([

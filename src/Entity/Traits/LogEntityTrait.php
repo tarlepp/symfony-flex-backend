@@ -11,6 +11,7 @@ namespace App\Entity\Traits;
 use App\Entity\User;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -28,7 +29,7 @@ trait LogEntityTrait
 {
     #[ORM\Column(
         name: 'time',
-        type: 'datetime_immutable',
+        type: Types::DATETIME_IMMUTABLE,
         nullable: false,
     )]
     #[Groups([
@@ -54,7 +55,7 @@ trait LogEntityTrait
 
     #[ORM\Column(
         name: 'agent',
-        type: 'text',
+        type: Types::TEXT,
         nullable: false,
     )]
     #[Groups([
@@ -67,7 +68,7 @@ trait LogEntityTrait
 
     #[ORM\Column(
         name: 'http_host',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -81,7 +82,7 @@ trait LogEntityTrait
 
     #[ORM\Column(
         name: 'client_ip',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]

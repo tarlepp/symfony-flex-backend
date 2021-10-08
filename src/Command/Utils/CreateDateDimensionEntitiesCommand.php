@@ -13,6 +13,7 @@ use App\Repository\DateDimensionRepository;
 use Closure;
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use InvalidArgumentException;
 use Symfony\Component\Console\Command\Command;
@@ -144,7 +145,7 @@ class CreateDateDimensionEntitiesCommand extends Command
 
         // You spin me round (like a record... er like a date)
         while ((int)$dateStart->format('Y') < $yearEnd + 1) {
-            $em->persist(new DateDimension(clone $dateStart));
+            $em->persist(new DateDimension(DateTimeImmutable::createFromMutable(clone $dateStart)));
 
             $dateStart->add(new DateInterval('P1D'));
 

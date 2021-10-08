@@ -12,6 +12,7 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Traits\LogEntityTrait;
 use App\Entity\Traits\LogRequestProcessRequestTrait;
 use App\Entity\Traits\Uuid;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
 use Ramsey\Uuid\UuidInterface;
@@ -78,7 +79,7 @@ class LogRequest implements EntityInterface
 
     #[ORM\Column(
         name: 'status_code',
-        type: 'integer',
+        type: Types::INTEGER,
     )]
     #[Groups([
         'LogRequest',
@@ -88,7 +89,7 @@ class LogRequest implements EntityInterface
 
     #[ORM\Column(
         name: 'response_content_length',
-        type: 'integer',
+        type: Types::INTEGER,
     )]
     #[Groups([
         'LogRequest',
@@ -98,7 +99,7 @@ class LogRequest implements EntityInterface
 
     #[ORM\Column(
         name: 'is_main_request',
-        type: 'boolean',
+        type: Types::BOOLEAN,
     )]
     #[Groups([
         'LogRequest',

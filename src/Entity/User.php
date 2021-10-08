@@ -18,6 +18,7 @@ use App\Entity\Traits\Uuid;
 use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
 use Ramsey\Uuid\UuidInterface;
@@ -86,7 +87,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'username',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -107,7 +108,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'first_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -128,7 +129,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'last_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -149,7 +150,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'email',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -207,7 +208,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'timezone',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
         options: [
@@ -229,7 +230,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'password',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
         options: [

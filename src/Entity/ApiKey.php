@@ -16,6 +16,7 @@ use App\Entity\Traits\Uuid;
 use App\Security\Interfaces\RolesServiceInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
 use Ramsey\Uuid\UuidInterface;
@@ -72,7 +73,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'token',
-        type: 'string',
+        type: Types::STRING,
         length: 40,
         options: [
             'comment' => 'Generated API key string for authentication',
@@ -91,7 +92,7 @@ class ApiKey implements EntityInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'description',
-        type: 'text',
+        type: Types::TEXT,
     )]
     #[Groups([
         'ApiKey',

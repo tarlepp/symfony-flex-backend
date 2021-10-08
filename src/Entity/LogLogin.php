@@ -12,6 +12,7 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Traits\LogEntityTrait;
 use App\Entity\Traits\Uuid;
 use DeviceDetector\DeviceDetector;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
 use Ramsey\Uuid\UuidInterface;
@@ -68,7 +69,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'client_type',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -80,7 +81,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'client_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -92,7 +93,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'client_short_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -104,7 +105,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'client_version',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -116,7 +117,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'client_engine',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -128,7 +129,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'os_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -140,7 +141,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'os_short_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -152,7 +153,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'os_version',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true
     )]
@@ -164,7 +165,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'os_platform',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -176,7 +177,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'device_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -188,7 +189,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'brand_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -200,7 +201,7 @@ class LogLogin implements EntityInterface
 
     #[ORM\Column(
         name: 'model',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]

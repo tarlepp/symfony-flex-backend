@@ -12,6 +12,7 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Traits\Uuid;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
 use Ramsey\Uuid\UuidInterface;
@@ -49,7 +50,7 @@ class Healthz implements EntityInterface
 
     #[ORM\Column(
         name: 'timestamp',
-        type: 'datetime_immutable',
+        type: Types::DATETIME_IMMUTABLE,
     )]
     #[Groups([
         'Healthz',
