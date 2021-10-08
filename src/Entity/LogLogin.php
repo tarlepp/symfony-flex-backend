@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Traits\LogEntityTrait;
 use App\Entity\Traits\Uuid;
@@ -221,7 +222,7 @@ class LogLogin implements EntityInterface
     public function __construct(
         #[ORM\Column(
             name: 'type',
-            type: 'EnumLogLogin',
+            type: AppTypes::ENUM_LOG_LOGIN,
         )]
         #[Groups([
             'LogLogin',

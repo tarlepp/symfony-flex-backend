@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\Interfaces\UserInterface;
@@ -168,7 +169,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'language',
-        type: 'EnumLanguage',
+        type: AppTypes::ENUM_LANGUAGE,
         nullable: false,
         options: [
             'comment' => 'User language for translations',
@@ -188,7 +189,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'locale',
-        type: 'EnumLocale',
+        type: AppTypes::ENUM_LOCALE,
         nullable: false,
         options: [
             'comment' => 'User locale for number, time, date, etc. formatting.',
