@@ -198,7 +198,7 @@ class DateDimension implements EntityInterface
             'DateDimension',
             'DateDimension.date',
         ])]
-        private DateTimeInterface $date
+        private DateTimeImmutable $date
     ) {
         $this->id = $this->createUuid();
 
