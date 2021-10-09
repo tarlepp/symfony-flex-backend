@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use App\Utils\JSON;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JsonException;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +42,7 @@ trait LogRequestProcessRequestTrait
      */
     #[ORM\Column(
         name: 'headers',
-        type: 'array',
+        type: Types::ARRAY,
     )]
     #[Groups([
         'LogRequest',
@@ -51,7 +52,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'method',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -63,7 +64,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'scheme',
-        type: 'string',
+        type: Types::STRING,
         length: 5,
         nullable: false,
     )]
@@ -75,7 +76,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'base_path',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -87,7 +88,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'script',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -99,7 +100,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'path',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -111,7 +112,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'query_string',
-        type: 'text',
+        type: Types::TEXT,
         nullable: true,
     )]
     #[Groups([
@@ -122,7 +123,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'uri',
-        type: 'text',
+        type: Types::TEXT,
         nullable: false,
     )]
     #[Groups([
@@ -133,7 +134,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'controller',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -145,7 +146,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'content_type',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -157,7 +158,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'content_type_short',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -169,7 +170,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'is_xml_http_request',
-        type: 'boolean',
+        type: Types::BOOLEAN,
         nullable: false,
     )]
     #[Groups([
@@ -180,7 +181,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'action',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: true,
     )]
@@ -192,7 +193,7 @@ trait LogRequestProcessRequestTrait
 
     #[ORM\Column(
         name: 'content',
-        type: 'text',
+        type: Types::TEXT,
         nullable: true,
     )]
     #[Groups([
@@ -206,7 +207,7 @@ trait LogRequestProcessRequestTrait
      */
     #[ORM\Column(
         name: 'parameters',
-        type: 'array',
+        type: Types::ARRAY,
     )]
     #[Groups([
         'LogRequest',
