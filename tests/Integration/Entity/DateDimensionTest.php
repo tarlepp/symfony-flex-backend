@@ -11,6 +11,7 @@ namespace App\Tests\Integration\Entity;
 use App\Entity\DateDimension;
 use App\Utils\Tests\PhpUnitUtil;
 use DateTime;
+use DateTimeImmutable;
 use Throwable;
 use function floor;
 use function in_array;
@@ -71,7 +72,7 @@ class DateDimensionTest extends EntityTestCase
             $getter = 'is' . ucfirst($field);
         }
 
-        $dateDimension = new DateDimension(new DateTime());
+        $dateDimension = $this->createEntity();
 
         try {
             $method = 'assertIs' . ucfirst($type);
@@ -90,7 +91,7 @@ class DateDimensionTest extends EntityTestCase
      */
     public function testThatConstructorCallsExpectedMethods(): void
     {
-        $dateTime = new DateTime();
+        $dateTime = new DateTimeImmutable();
 
         /** @var DateDimension $entity */
         $entity = new $this->entityName($dateTime);
@@ -113,6 +114,6 @@ class DateDimensionTest extends EntityTestCase
      */
     protected function createEntity(): DateDimension
     {
-        return new DateDimension(new DateTime());
+        return new DateDimension(new DateTimeImmutable());
     }
 }
