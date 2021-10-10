@@ -22,29 +22,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class RolesServiceTest extends KernelTestCase
 {
     /**
-     * @testdox Test that `RolesService::getHierarchy` method returns expected
-     */
-    public function testThatGetHierarchyReturnsExpected(): void
-    {
-        $expected = [
-            'ROLE_API' => [
-                'ROLE_LOGGED',
-            ],
-            'ROLE_USER' => [
-                'ROLE_LOGGED',
-            ],
-            'ROLE_ADMIN' => [
-                'ROLE_USER',
-            ],
-            'ROLE_ROOT' => [
-                'ROLE_ADMIN',
-            ],
-        ];
-
-        static::assertSame($expected, $this->getService()->getHierarchy(), 'Roles hierarchy is not expected.');
-    }
-
-    /**
      * @testdox Test that `RolesService::getRoles` method returns expected
      */
     public function testThatGetRolesReturnsExpected(): void

@@ -14,8 +14,10 @@ use App\Entity\Traits\Timestampable;
 use App\Entity\Traits\Uuid;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
+use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Stringable;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -46,7 +48,7 @@ class UserGroup implements EntityInterface, Stringable
     #[ORM\Id]
     #[ORM\Column(
         name: 'id',
-        type: 'uuid_binary_ordered_time',
+        type: UuidBinaryOrderedTimeType::NAME,
         unique: true,
     )]
     #[Groups([
@@ -86,7 +88,7 @@ class UserGroup implements EntityInterface, Stringable
 
     #[ORM\Column(
         name: 'name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
     )]
     #[Groups([

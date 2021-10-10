@@ -1,4 +1,4 @@
-FROM php:8.0.10-fpm
+FROM php:8.0.11-fpm
 
 # Let's use bash as a default shell with login each time
 SHELL ["/bin/bash", "--login", "-c"]
@@ -36,7 +36,7 @@ RUN pickle install apcu \
     && docker-php-ext-enable apcu --ini-name 10-docker-php-ext-apcu.ini
 
 # Copy the Composer PHAR from the Composer image into the PHP image
-COPY --from=composer:2.1.6 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.1.8 /usr/bin/composer /usr/bin/composer
 
 # Copy development `php.ini` configuration to container
 COPY ./docker/php/php-dev.ini /usr/local/etc/php/php.ini

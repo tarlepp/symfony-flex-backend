@@ -9,6 +9,7 @@ declare(strict_types = 1);
 namespace App\Entity\Traits;
 
 use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -26,7 +27,7 @@ trait Timestampable
      */
     #[ORM\Column(
         name: 'created_at',
-        type: 'datetime_immutable',
+        type: Types::DATETIME_IMMUTABLE,
         nullable: true,
     )]
     #[Groups([
@@ -42,7 +43,7 @@ trait Timestampable
      */
     #[ORM\Column(
         name: 'updated_at',
-        type: 'datetime_immutable',
+        type: Types::DATETIME_IMMUTABLE,
         nullable: true,
     )]
     #[Groups([

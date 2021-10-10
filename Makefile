@@ -518,7 +518,7 @@ ifeq ($(INSIDE_DOCKER_CONTAINER), 1)
 else ifneq ($(RUNNING_SOME_CONTAINERS), 0)
 	$(WARNING_DOCKER_RUNNING)
 else
-	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build --detach
+	@HOST_UID=$(HOST_UID) HOST_GID=$(HOST_GID) docker-compose up --build
 endif
 
 local-configuration: ## Create local configuration files

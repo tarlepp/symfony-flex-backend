@@ -10,6 +10,7 @@ namespace App\Tests\Unit\Entity;
 
 use App\Entity\DateDimension;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Throwable;
@@ -32,7 +33,7 @@ class DateDimensionTest extends KernelTestCase
         $dateTime = new DateTime('now', new DateTimeZone('UTC'));
         $dateTime->setTime(10, 10, 10);
 
-        $entity = new DateDimension($dateTime);
+        $entity = new DateDimension(DateTimeImmutable::createFromMutable($dateTime));
 
         static::assertSame($dateTime->format('u'), $entity->getCreatedAt()->format('u'));
     }

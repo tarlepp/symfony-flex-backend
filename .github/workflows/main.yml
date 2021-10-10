@@ -254,6 +254,8 @@ jobs:
   build:
     name: Build application Docker image
     runs-on: ubuntu-latest
+    needs:
+      - test
 
     steps:
       - uses: actions/checkout@v1

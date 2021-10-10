@@ -8,6 +8,7 @@ declare(strict_types = 1);
 
 namespace App\Entity;
 
+use App\Doctrine\DBAL\Types\Types as AppTypes;
 use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Interfaces\UserGroupAwareInterface;
 use App\Entity\Interfaces\UserInterface;
@@ -18,8 +19,10 @@ use App\Entity\Traits\Uuid;
 use App\Service\Localization;
 use App\Validator\Constraints as AppAssert;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
+use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints as AssertCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -65,7 +68,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     #[ORM\Id]
     #[ORM\Column(
         name: 'id',
-        type: 'uuid_binary_ordered_time',
+        type: UuidBinaryOrderedTimeType::NAME,
         unique: true,
         nullable: false,
     )]
@@ -86,7 +89,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'username',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -107,7 +110,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'first_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -128,7 +131,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'last_name',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -149,7 +152,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'email',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
     )]
@@ -167,7 +170,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'language',
-        type: 'EnumLanguage',
+        type: AppTypes::ENUM_LANGUAGE,
         nullable: false,
         options: [
             'comment' => 'User language for translations',
@@ -187,7 +190,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'locale',
-        type: 'EnumLocale',
+        type: AppTypes::ENUM_LOCALE,
         nullable: false,
         options: [
             'comment' => 'User locale for number, time, date, etc. formatting.',
@@ -207,7 +210,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'timezone',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
         options: [
@@ -229,7 +232,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
     #[ORM\Column(
         name: 'password',
-        type: 'string',
+        type: Types::STRING,
         length: 255,
         nullable: false,
         options: [
