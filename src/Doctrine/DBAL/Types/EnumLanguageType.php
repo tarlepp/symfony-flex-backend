@@ -19,7 +19,7 @@ class EnumLanguageType extends EnumType
     public const LANGUAGE_EN = 'en';
     public const LANGUAGE_FI = 'fi';
 
-    protected static string $name = 'EnumLanguage';
+    protected static string $name = Types::ENUM_LANGUAGE;
 
     /**
      * @var array<int, string>

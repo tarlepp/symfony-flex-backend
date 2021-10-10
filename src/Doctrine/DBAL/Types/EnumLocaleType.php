@@ -19,7 +19,7 @@ class EnumLocaleType extends EnumType
     public const LOCALE_EN = 'en';
     public const LOCALE_FI = 'fi';
 
-    protected static string $name = 'EnumLocale';
+    protected static string $name = Types::ENUM_LOCALE;
 
     /**
      * @var array<int, string>
