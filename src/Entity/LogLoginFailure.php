@@ -12,8 +12,10 @@ use App\Entity\Interfaces\EntityInterface;
 use App\Entity\Traits\Uuid;
 use DateTimeImmutable;
 use DateTimeZone;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use OpenApi\Annotations as OA;
+use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Throwable;
@@ -46,7 +48,7 @@ class LogLoginFailure implements EntityInterface
     #[ORM\Id]
     #[ORM\Column(
         name: 'id',
-        type: 'uuid_binary_ordered_time',
+        type: UuidBinaryOrderedTimeType::NAME,
         unique: true,
     )]
     #[Groups([
@@ -57,7 +59,7 @@ class LogLoginFailure implements EntityInterface
 
     #[ORM\Column(
         name: 'timestamp',
-        type: 'datetime_immutable',
+        type: Types::DATETIME_IMMUTABLE,
     )]
     #[Groups([
         'LogLoginFailure',
