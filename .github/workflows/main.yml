@@ -67,9 +67,8 @@ jobs:
       - name: Lint YAML configurations
         run: make lint-yaml
 
-      # Disabled temporary
-      #- name: Run PHP CodeSniffer
-      #  run: make phpcs
+      - name: Run PHP CodeSniffer
+        run: make phpcs
 
       - name: Run The Easiest Way to Use Any Coding Standard
         run: make ecs

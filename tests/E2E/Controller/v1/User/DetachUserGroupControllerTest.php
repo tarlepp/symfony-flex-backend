@@ -64,7 +64,7 @@ class DetachUserGroupControllerTest extends WebTestCase
      *
      * @throws Throwable
      *
-     * @testdox Test that `DELETE /v1/user/{user}/group/{userGroup}` returns 403 for $u + $p, who hasn't `ROLE_ROOT` role
+     * @testdox Test that `DELETE /v1/user/{user}/group/{group}` returns 403 for $u + $p, who hasn't `ROLE_ROOT` role
      */
     public function testThatDetachUserGroupReturns403(string $u, string $p): void
     {
