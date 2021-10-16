@@ -53,7 +53,13 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager): void
     {
         // Create entities
-        array_map(fn (?string $role): bool => $this->createUser($manager, $role), [null, ...$this->rolesService->getRoles()]);
+        array_map(
+            fn (?string $role): bool => $this->createUser($manager, $role),
+            [
+                null,
+                ...$this->rolesService->getRoles(),
+            ],
+        );
 
         // Flush database changes
         $manager->flush();
