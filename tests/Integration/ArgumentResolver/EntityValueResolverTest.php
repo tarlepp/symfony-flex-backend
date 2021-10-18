@@ -34,7 +34,7 @@ class EntityValueResolverTest extends KernelTestCase
         $resolver = new EntityValueResolver($resourceCollection);
         $metadata = new ArgumentMetadata('foo', null, false, false, null);
 
-        static::assertFalse($resolver->supports(
+        self::assertFalse($resolver->supports(
             Request::create(
                 '/',
                 'GET',
@@ -53,7 +53,7 @@ class EntityValueResolverTest extends KernelTestCase
         $resolver = new EntityValueResolver($resourceCollection);
         $metadata = new ArgumentMetadata('foo', stdClass::class, false, false, null);
 
-        static::assertFalse($resolver->supports(Request::create('/', 'GET', [
+        self::assertFalse($resolver->supports(Request::create('/', 'GET', [
             'foo' => 'bar',
         ]), $metadata));
     }
@@ -63,7 +63,7 @@ class EntityValueResolverTest extends KernelTestCase
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
         $resourceCollection
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('hasEntityResource')
             ->with(User::class)
             ->willReturn(false);
@@ -88,7 +88,7 @@ class EntityValueResolverTest extends KernelTestCase
         $resourceCollection = $this->getMockBuilder(ResourceCollection::class)->disableOriginalConstructor()->getMock();
 
         $resourceCollection
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('hasEntityResource')
             ->with(User::class)
             ->willReturn(false);
@@ -96,7 +96,7 @@ class EntityValueResolverTest extends KernelTestCase
         $resolver = new EntityValueResolver($resourceCollection);
         $metadata = new ArgumentMetadata('foo', User::class, false, false, null);
 
-        static::assertFalse($resolver->supports(
+        self::assertFalse($resolver->supports(
             Request::create(
                 '/',
                 'GET',
@@ -119,13 +119,13 @@ class EntityValueResolverTest extends KernelTestCase
         $user = new User();
 
         $resourceCollection
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getEntityResource')
             ->with(User::class)
             ->willReturn($userResource);
 
         $userResource
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOne')
             ->with($user->getId())
             ->willReturn($user);
@@ -140,6 +140,6 @@ class EntityValueResolverTest extends KernelTestCase
             ]
         );
 
-        static::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
+        self::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
     }
 }

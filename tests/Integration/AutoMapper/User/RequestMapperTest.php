@@ -64,7 +64,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         $userGroup = new UserGroup();
 
         $this->getMockUserGroupResource()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getReference')
             ->with($userGroup->getId())
             ->willReturn($userGroup);
@@ -76,7 +76,7 @@ class RequestMapperTest extends RestRequestMapperTestCase
         /** @var DTO\User $dto */
         $dto = $this->getMapperObject()->mapToObject($request, new $dtoClass());
 
-        static::assertSame([$userGroup], $dto->getUserGroups());
+        self::assertSame([$userGroup], $dto->getUserGroups());
     }
 
     /**

@@ -103,8 +103,8 @@ class GenericRestRequestMapperTest extends KernelTestCase
         /** @var TestRestRequestMapperDto $transformedObject */
         $transformedObject = (new TestRestRequestMapper())->mapToObject($request, new TestRestRequestMapperDto());
 
-        static::assertInstanceOf(TestRestRequestMapperDto::class, $transformedObject);
-        static::assertSame('someValue', $transformedObject->getSomeProperty());
-        static::assertSame('fbzrGenafsbezInyhr', $transformedObject->getSomeTransformProperty());
+        self::assertInstanceOf(TestRestRequestMapperDto::class, $transformedObject);
+        self::assertSame('someValue', $transformedObject->getSomeProperty());
+        self::assertSame('fbzrGenafsbezInyhr', $transformedObject->getSomeTransformProperty());
     }
 }

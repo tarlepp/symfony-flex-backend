@@ -98,7 +98,7 @@ class FindMethodTest extends KernelTestCase
         $request = Request::create('/');
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('find')
             ->with([], [], null, null, [])
             ->willThrowException($exception);
@@ -143,7 +143,7 @@ class FindMethodTest extends KernelTestCase
         $request = Request::create('/' . $queryString);
 
         $resourceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('find')
             ->with(
                 $criteria->getArrayCopy(),
@@ -155,7 +155,7 @@ class FindMethodTest extends KernelTestCase
             ->willReturn([]);
 
         $responseHandlerMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('createResponse')
             ->with($request, [], $resourceMock);
 

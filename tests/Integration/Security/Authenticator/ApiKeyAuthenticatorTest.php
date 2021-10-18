@@ -42,7 +42,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
-        static::assertSame($expected, $authenticator->supports($request));
+        self::assertSame($expected, $authenticator->supports($request));
     }
 
     /**
@@ -58,7 +58,7 @@ class ApiKeyAuthenticatorTest extends KernelTestCase
 
         $authenticator = new ApiKeyAuthenticator($apiKeyUserProviderMock);
 
-        static::assertNull($authenticator->onAuthenticationSuccess(
+        self::assertNull($authenticator->onAuthenticationSuccess(
             new Request(),
             new AnonymousToken('secret', 'user'),
             'foobar',

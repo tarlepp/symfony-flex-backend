@@ -67,7 +67,7 @@ class ResourceCollectionTest extends KernelTestCase
             ->getMock();
 
         $logger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('error');
 
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
@@ -95,7 +95,7 @@ class ResourceCollectionTest extends KernelTestCase
             ->getMock();
 
         $logger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('error');
 
         (new ResourceCollection($this->getIteratorAggregateThatThrowsAnException(), $logger))
@@ -104,12 +104,12 @@ class ResourceCollectionTest extends KernelTestCase
 
     public function testThatGetAllReturnsCorrectCountOfResources(): void
     {
-        static::assertCount(9, $this->getCollection()->getAll());
+        self::assertCount(9, $this->getCollection()->getAll());
     }
 
     public function testThatCountMethodReturnsExpectedCount(): void
     {
-        static::assertSame(9, $this->getCollection()->count(), 'REST resource count from collection was not expected');
+        self::assertSame(9, $this->getCollection()->count(), 'REST resource count from collection was not expected');
     }
 
     /**
@@ -121,7 +121,7 @@ class ResourceCollectionTest extends KernelTestCase
      */
     public function testThatGetReturnsExpectedResource(string $resourceClass): void
     {
-        static::assertInstanceOf($resourceClass, $this->getCollection()->get($resourceClass));
+        self::assertInstanceOf($resourceClass, $this->getCollection()->get($resourceClass));
     }
 
     /**
@@ -135,7 +135,7 @@ class ResourceCollectionTest extends KernelTestCase
     public function testThatGetEntityResourceReturnsExpectedResource(string $resourceClass, string $entityClass): void
     {
         /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf($resourceClass, $this->getCollection()->getEntityResource($entityClass));
+        self::assertInstanceOf($resourceClass, $this->getCollection()->getEntityResource($entityClass));
     }
 
     /**
@@ -147,7 +147,7 @@ class ResourceCollectionTest extends KernelTestCase
      */
     public function testThatHasReturnsExpected(bool $expected, ?string $resource): void
     {
-        static::assertSame($expected, $this->getCollection()->has($resource));
+        self::assertSame($expected, $this->getCollection()->has($resource));
     }
 
     /**
@@ -159,7 +159,7 @@ class ResourceCollectionTest extends KernelTestCase
      */
     public function testThatHasEntityResourceReturnsExpected(bool $expected, ?string $entity): void
     {
-        static::assertSame($expected, $this->getCollection()->hasEntityResource($entity));
+        self::assertSame($expected, $this->getCollection()->hasEntityResource($entity));
     }
 
     /**
@@ -237,7 +237,7 @@ class ResourceCollectionTest extends KernelTestCase
 
     private function getCollection(): ResourceCollection
     {
-        return static::getContainer()->get(ResourceCollection::class);
+        return self::getContainer()->get(ResourceCollection::class);
     }
 
     /**

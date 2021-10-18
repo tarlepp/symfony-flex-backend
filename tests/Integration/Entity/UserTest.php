@@ -44,7 +44,7 @@ class UserTest extends EntityTestCase
 
         $entity->setPassword($callable, $password);
 
-        static::assertSame($expected, $entity->getPassword());
+        self::assertSame($expected, $entity->getPassword());
     }
 
     public function testThatSetPlainPasswordIsWorkingAsExpected(): void
@@ -57,8 +57,8 @@ class UserTest extends EntityTestCase
         // Set plain password
         $entity->setPlainPassword('plainPassword');
 
-        static::assertEmpty($this->getEntity()->getPassword());
-        static::assertSame('plainPassword', $this->getEntity()->getPlainPassword());
+        self::assertEmpty($this->getEntity()->getPassword());
+        self::assertSame('plainPassword', $this->getEntity()->getPlainPassword());
     }
 
     public function testThatSetEmptyPlainPasswordDoesNotResetPassword(): void
@@ -71,8 +71,8 @@ class UserTest extends EntityTestCase
         // Set plain password
         $entity->setPlainPassword('');
 
-        static::assertNotEmpty($entity->getPassword());
-        static::assertEmpty($entity->getPlainPassword());
+        self::assertNotEmpty($entity->getPassword());
+        self::assertEmpty($entity->getPlainPassword());
     }
 
     public function testThatUserEntityCanBeSerializedAndUnSerializedAsExpected(): void
@@ -92,8 +92,8 @@ class UserTest extends EntityTestCase
         );
 
         // Assert that un-serialized object returns expected data
-        static::assertSame('john', $entityUnSerialized->getUsername());
-        static::assertSame('cnffjbeq', $entityUnSerialized->getPassword());
+        self::assertSame('john', $entityUnSerialized->getUsername());
+        self::assertSame('cnffjbeq', $entityUnSerialized->getPassword());
     }
 
     public function testThatEraseCredentialsMethodWorksAsExpected(): void
@@ -103,7 +103,7 @@ class UserTest extends EntityTestCase
         $entity->setPlainPassword('password');
         $entity->eraseCredentials();
 
-        static::assertEmpty($entity->getPlainPassword());
+        self::assertEmpty($entity->getPlainPassword());
     }
 
     public function testThatGetRolesReturnsExpectedWithoutRoleService(): void
@@ -111,7 +111,7 @@ class UserTest extends EntityTestCase
         $group = (new UserGroup())->setRole(new Role('ROLE_ROOT'));
         $user = (new User())->addUserGroup($group);
 
-        static::assertSame(['ROLE_ROOT'], $user->getRoles());
+        self::assertSame(['ROLE_ROOT'], $user->getRoles());
     }
 
     /**

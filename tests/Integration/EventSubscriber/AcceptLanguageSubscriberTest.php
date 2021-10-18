@@ -25,17 +25,17 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
 {
     public function testThatSpecifiedDefaultLanguageIsSet(): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
         $request = new Request();
         $request->headers->set('Accept-Language', 'foo');
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         $subscriber = new AcceptLanguageSubscriber('bar');
         $subscriber->onKernelRequest($event);
 
-        static::assertSame('bar', $request->getLocale());
+        self::assertSame('bar', $request->getLocale());
     }
 
     /**
@@ -45,17 +45,17 @@ class AcceptLanguageSubscriberTest extends KernelTestCase
      */
     public function testThatLocaleIsSetAsExpected(string $expected, string $default, string $asked): void
     {
-        static::bootKernel();
+        self::bootKernel();
 
         $request = new Request();
         $request->headers->set('Accept-Language', $asked);
 
-        $event = new RequestEvent(static::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
+        $event = new RequestEvent(self::$kernel, $request, HttpKernelInterface::MAIN_REQUEST);
 
         (new AcceptLanguageSubscriber($default))
             ->onKernelRequest($event);
 
-        static::assertSame($expected, $request->getLocale());
+        self::assertSame($expected, $request->getLocale());
     }
 
     /**

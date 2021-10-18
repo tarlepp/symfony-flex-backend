@@ -28,14 +28,14 @@ class GetTokenControllerTest extends KernelTestCase
         try {
             (new GetTokenController())();
         } catch (Throwable $exception) {
-            static::assertInstanceOf(HttpException::class, $exception);
-            static::assertSame(
+            self::assertInstanceOf(HttpException::class, $exception);
+            self::assertSame(
                 'You need to send JSON body to obtain token eg. {"username":"username","password":"password"}',
                 $exception->getMessage()
             );
 
             /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-            static::assertSame(400, $exception->getStatusCode());
+            self::assertSame(400, $exception->getStatusCode());
         }
     }
 }

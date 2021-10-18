@@ -64,7 +64,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         $event = new ExceptionEvent($stubKernel, new Request(), HttpKernelInterface::MAIN_REQUEST, $exception);
 
         $stubLogger
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('error')
             ->with((string)$exception);
 
@@ -93,7 +93,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         (new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment))
             ->onKernelException($event);
 
-        static::assertNotSame($originalResponse, $event->getResponse());
+        self::assertNotSame($originalResponse, $event->getResponse());
     }
 
     /**
@@ -127,14 +127,14 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         $response = $event->getResponse();
 
-        static::assertInstanceOf(Response::class, $response);
+        self::assertInstanceOf(Response::class, $response);
 
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
+        self::assertNotFalse($content);
 
-        static::assertSame($status, $response->getStatusCode());
-        static::assertSame($message, JSON::decode($content)->message);
+        self::assertSame($status, $response->getStatusCode());
+        self::assertSame($message, JSON::decode($content)->message);
     }
 
     /**
@@ -166,15 +166,15 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         $response = $event->getResponse();
 
-        static::assertInstanceOf(Response::class, $response);
+        self::assertInstanceOf(Response::class, $response);
 
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
+        self::assertNotFalse($content);
 
         $result = JSON::decode($content, true);
 
-        static::assertSame($expectedKeys, array_keys($result));
+        self::assertSame($expectedKeys, array_keys($result));
     }
 
     /**
@@ -195,14 +195,14 @@ class ExceptionSubscriberTest extends KernelTestCase
 
         if ($user) {
             $stubUserTypeIdentification
-                ->expects(static::once())
+                ->expects(self::once())
                 ->method('getSecurityUser')
                 ->willReturn(new SecurityUser(new User()));
         }
 
         $subscriber = new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment);
 
-        static::assertSame(
+        self::assertSame(
             $expectedStatusCode,
             PhpUnitUtil::callMethod($subscriber, 'getStatusCode', [$exception])
         );
@@ -226,7 +226,7 @@ class ExceptionSubscriberTest extends KernelTestCase
         // Create subscriber
         $subscriber = new ExceptionSubscriber($stubLogger, $stubUserTypeIdentification, $environment);
 
-        static::assertSame(
+        self::assertSame(
             $expectedMessage,
             PhpUnitUtil::callMethod($subscriber, 'getExceptionMessage', [$exception])
         );

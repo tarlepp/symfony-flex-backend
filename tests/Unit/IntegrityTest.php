@@ -58,7 +58,7 @@ class IntegrityTest extends KernelTestCase
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -74,7 +74,7 @@ class IntegrityTest extends KernelTestCase
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -94,7 +94,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -121,7 +121,7 @@ FORMAT;
             implode('", "', $methods->getArrayCopy())
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -137,7 +137,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -153,7 +153,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -169,7 +169,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -185,7 +185,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -201,7 +201,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -217,7 +217,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -233,7 +233,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -249,7 +249,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -265,7 +265,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -281,7 +281,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -297,7 +297,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -313,7 +313,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -331,7 +331,7 @@ FORMAT;
             $eventSubscriberTestClass
         );
 
-        static::assertTrue(class_exists($eventSubscriberTestClass), $message);
+        self::assertTrue(class_exists($eventSubscriberTestClass), $message);
     }
 
     /**
@@ -347,7 +347,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -363,7 +363,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -379,7 +379,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -395,7 +395,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -411,7 +411,7 @@ FORMAT;
             $testClass
         );
 
-        static::assertTrue(class_exists($testClass), $message);
+        self::assertTrue(class_exists($testClass), $message);
     }
 
     /**
@@ -421,7 +421,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Controller/';
+        $folder = self::$kernel->getProjectDir() . '/src/Controller/';
         $namespace = '\\App\\Controller\\';
         $namespaceTest = '\\App\\Tests\\E2E\\Controller\\';
 
@@ -435,7 +435,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Repository/';
+        $folder = self::$kernel->getProjectDir() . '/src/Repository/';
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
         $filter = $this->getInterfaceFilter(BaseRepositoryInterface::class);
@@ -451,7 +451,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Repository/';
+        $folder = self::$kernel->getProjectDir() . '/src/Repository/';
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Functional\\Repository\\';
 
@@ -503,7 +503,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Repository/';
+        $folder = self::$kernel->getProjectDir() . '/src/Repository/';
         $namespace = '\\App\\Repository\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Repository\\';
         $filter = $this->getInterfaceFilter(BaseRepositoryInterface::class);
@@ -518,7 +518,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Entity/';
+        $folder = self::$kernel->getProjectDir() . '/src/Entity/';
         $namespace = '\\App\\Entity\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Entity\\';
         $filter = $this->getInterfaceFilter(EntityInterface::class);
@@ -533,7 +533,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/EventSubscriber/';
+        $folder = self::$kernel->getProjectDir() . '/src/EventSubscriber/';
         $namespace = '\\App\\EventSubscriber\\';
         $namespaceTest = '\\App\\Tests\\Integration\\EventSubscriber\\';
 
@@ -547,7 +547,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/EventListener/';
+        $folder = self::$kernel->getProjectDir() . '/src/EventListener/';
         $namespace = '\\App\\EventListener\\';
         $namespaceTest = '\\App\\Tests\\Integration\\EventListener\\';
 
@@ -561,7 +561,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Resource/';
+        $folder = self::$kernel->getProjectDir() . '/src/Resource/';
         $namespace = '\\App\\Resource\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Resource\\';
 
@@ -575,7 +575,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Security/Authenticator/';
+        $folder = self::$kernel->getProjectDir() . '/src/Security/Authenticator/';
         $namespace = '\\App\\Security\\Authenticator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Authenticator\\';
         $filter = fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
@@ -592,7 +592,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Security/Provider/';
+        $folder = self::$kernel->getProjectDir() . '/src/Security/Provider/';
         $namespace = '\\App\\Security\\Provider\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Provider\\';
         $filter = $this->getInterfaceFilter(UserProviderInterface::class);
@@ -607,7 +607,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Security/Voter/';
+        $folder = self::$kernel->getProjectDir() . '/src/Security/Voter/';
         $namespace = '\\App\\Security\\Voter\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Security\\Voter\\';
         $filter = $this->getInterfaceFilter(VoterInterface::class);
@@ -622,7 +622,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/DTO/';
+        $folder = self::$kernel->getProjectDir() . '/src/DTO/';
         $namespace = '\\App\\DTO\\';
         $namespaceTest = '\\App\\Tests\\Integration\\DTO\\';
 
@@ -636,7 +636,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Form/';
+        $folder = self::$kernel->getProjectDir() . '/src/Form/';
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
         $filter = $this->getInterfaceFilter(FormTypeInterface::class);
@@ -651,7 +651,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Form/';
+        $folder = self::$kernel->getProjectDir() . '/src/Form/';
         $namespace = '\\App\\Form\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Form\\';
         $filter = $this->getInterfaceFilter(DataTransformerInterface::class);
@@ -666,7 +666,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Controller/';
+        $folder = self::$kernel->getProjectDir() . '/src/Controller/';
         $namespace = '\\App\\Controller\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Controller\\';
         $filter = $this->getInterfaceFilter(ControllerInterface::class);
@@ -681,7 +681,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Validator/';
+        $folder = self::$kernel->getProjectDir() . '/src/Validator/';
         $namespace = '\\App\\Validator\\';
         $namespaceTest = '\\App\\Tests\\Unit\\Validator\\';
         $filter = $this->getSubclassOfFilter(Constraint::class);
@@ -696,7 +696,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/EventSubscriber/';
+        $folder = self::$kernel->getProjectDir() . '/src/EventSubscriber/';
 
         $namespace = '\\App\\EventSubscriber\\';
         $namespaceTest = '\\App\\Tests\\Unit\\EventSubscriber\\';
@@ -713,7 +713,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Validator/';
+        $folder = self::$kernel->getProjectDir() . '/src/Validator/';
         $namespace = '\\App\\Validator\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Validator\\';
         $filter = $this->getInterfaceFilter(ConstraintValidatorInterface::class);
@@ -728,7 +728,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Doctrine/DBAL/Types/';
+        $folder = self::$kernel->getProjectDir() . '/src/Doctrine/DBAL/Types/';
         $namespace = '\\App\\Doctrine\\DBAL\\Types\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Doctrine\\DBAL\\Types\\';
         $filter = fn (ReflectionClass $reflectionClass): bool =>
@@ -744,7 +744,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/AutoMapper/';
+        $folder = self::$kernel->getProjectDir() . '/src/AutoMapper/';
         $namespace = '\\App\\AutoMapper\\';
         $namespaceTest = '\\App\\Tests\\Integration\\AutoMapper\\';
         $filter = fn (ReflectionClass $reflectionClass): bool => !$reflectionClass->isAbstract()
@@ -761,7 +761,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/Service/';
+        $folder = self::$kernel->getProjectDir() . '/src/Service/';
         $namespace = '\\App\\Service\\';
         $namespaceTest = '\\App\\Tests\\Integration\\Service\\';
 
@@ -775,7 +775,7 @@ FORMAT;
     {
         $this->bootKernelCached();
 
-        $folder = static::$kernel->getProjectDir() . '/src/ArgumentResolver/';
+        $folder = self::$kernel->getProjectDir() . '/src/ArgumentResolver/';
         $namespace = '\\App\\ArgumentResolver\\';
         $namespaceTest = '\\App\\Tests\\Integration\\ArgumentResolver\\';
         $filter = $this->getInterfaceFilter(ArgumentValueResolverInterface::class);
@@ -847,7 +847,7 @@ FORMAT;
         static $cache = null;
 
         if ($cache === null) {
-            static::bootKernel();
+            self::bootKernel();
 
             $cache = true;
         }

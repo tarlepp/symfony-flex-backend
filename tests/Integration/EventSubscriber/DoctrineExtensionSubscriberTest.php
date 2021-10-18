@@ -44,12 +44,12 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
     public function testThatUserIsNotSetToBlameableListenerWhenThereIsNotLoggedInUser(): void
     {
         $this->getUserTypeIdentificationMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getUser')
             ->willReturn(null);
 
         $this->getBlameableListenerMock()
-            ->expects(static::never())
+            ->expects(self::never())
             ->method('setUserValue');
 
         (new DoctrineExtensionSubscriber($this->getBlameableListener(), $this->getUserTypeIdentification()))
@@ -66,12 +66,12 @@ class DoctrineExtensionSubscriberTest extends KernelTestCase
         $user = new User();
 
         $this->getUserTypeIdentificationMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getUser')
             ->willReturn($user);
 
         $this->getBlameableListenerMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setUserValue')
             ->with($user);
 

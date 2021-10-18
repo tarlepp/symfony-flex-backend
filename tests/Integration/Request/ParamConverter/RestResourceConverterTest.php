@@ -40,7 +40,7 @@ class RestResourceConverterTest extends KernelTestCase
      */
     public function testThatSupportMethodReturnsExpected(bool $expected, StringableArrayObject $configuration): void
     {
-        static::assertSame(
+        self::assertSame(
             $expected,
             $this->getConverter()->supports(new ParamConverter($configuration->getArrayCopy())),
         );
@@ -81,9 +81,9 @@ class RestResourceConverterTest extends KernelTestCase
             'class' => RoleResource::class,
         ]);
 
-        static::assertTrue($this->getConverter()->apply($request, $paramConverter));
-        static::assertInstanceOf(Role::class, $request->attributes->get('role'));
-        static::assertSame('Description - ' . $role, $request->attributes->get('role')->getDescription());
+        self::assertTrue($this->getConverter()->apply($request, $paramConverter));
+        self::assertInstanceOf(Role::class, $request->attributes->get('role'));
+        self::assertSame('Description - ' . $role, $request->attributes->get('role')->getDescription());
     }
 
     /**
@@ -135,6 +135,6 @@ class RestResourceConverterTest extends KernelTestCase
 
     private function getConverter(): RestResourceConverter
     {
-        return new RestResourceConverter(static::getContainer()->get(ResourceCollection::class));
+        return new RestResourceConverter(self::getContainer()->get(ResourceCollection::class));
     }
 }

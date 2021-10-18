@@ -39,17 +39,17 @@ class RolesControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
-        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
-        static::assertSame(
+        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertSame(
             'JWT Token not found',
             $responseContent->message,
             'Response message was not expected' . $info,
@@ -69,17 +69,17 @@ class RolesControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
-        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
-        static::assertSame(
+        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertSame(
             'JWT Token not found',
             $responseContent->message,
             'Response message was not expected' . $info,
@@ -103,9 +103,9 @@ class RolesControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-        static::assertSame($expected, JSON::decode($content, true), $content);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertSame($expected, JSON::decode($content, true), $content);
     }
 
     /**
@@ -123,17 +123,17 @@ class RolesControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), "Response:\n" . $response);
 
         $responseContent = JSON::decode($content);
 
         $info = "\nResponse:\n" . $response;
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
-        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
-        static::assertSame(
+        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertSame(
             'JWT Token not found',
             $responseContent->message,
             'Response message was not expected' . $info,
@@ -162,7 +162,7 @@ class RolesControllerTest extends WebTestCase
      */
     public function dataProviderTestThatRolesActionReturnsExpectedWithValidApiKey(): Generator
     {
-        $rolesService = static::getContainer()->get(RolesService::class);
+        $rolesService = self::getContainer()->get(RolesService::class);
 
         foreach ($rolesService->getRoles() as $role) {
             yield [str_pad($rolesService->getShort($role), 40, '_')];

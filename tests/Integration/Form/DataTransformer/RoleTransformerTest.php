@@ -50,7 +50,7 @@ class RoleTransformerTest extends KernelTestCase
     {
         $transformer = new RoleTransformer($this->getRoleResource());
 
-        static::assertSame($expected, $transformer->transform($input));
+        self::assertSame($expected, $transformer->transform($input));
     }
 
     /**
@@ -61,7 +61,7 @@ class RoleTransformerTest extends KernelTestCase
         $entity = new Role('Some Role');
 
         $this->getRoleResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOne')
             ->with($entity->getId())
             ->willReturn($entity);
@@ -79,7 +79,7 @@ class RoleTransformerTest extends KernelTestCase
         $this->expectExceptionMessage('Role with name "role_name" does not exist!');
 
         $this->getRoleResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOne')
             ->with('role_name')
             ->willReturn(null);
@@ -96,14 +96,14 @@ class RoleTransformerTest extends KernelTestCase
         $entity = new Role('Some Role');
 
         $this->getRoleResourceMock()
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOne')
             ->with('Some Role')
             ->willReturn($entity);
 
         $transformer = new RoleTransformer($this->getRoleResource());
 
-        static::assertSame($entity, $transformer->reverseTransform('Some Role'));
+        self::assertSame($entity, $transformer->reverseTransform('Some Role'));
     }
 
     /**

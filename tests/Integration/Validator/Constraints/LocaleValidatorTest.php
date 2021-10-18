@@ -33,29 +33,29 @@ class LocaleValidatorTest extends KernelTestCase
         $builderMock = $this->getMockBuilder(ConstraintViolationBuilderInterface::class)->getMock();
 
         $localizationMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getLocales')
             ->willReturn(['bar']);
 
         $contextMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('buildViolation')
             ->with(Locale::MESSAGE)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setParameter')
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('setCode')
             ->with(Locale::INVALID_LOCALE)
             ->willReturn($builderMock);
 
         $builderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('addViolation');
 
         // Run validator

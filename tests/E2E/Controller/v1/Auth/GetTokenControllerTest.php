@@ -39,8 +39,8 @@ class GetTokenControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(405, $response->getStatusCode(), $content);
+        self::assertNotFalse($content);
+        self::assertSame(405, $response->getStatusCode(), $content);
     }
 
     /**
@@ -70,8 +70,8 @@ class GetTokenControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(
+        self::assertNotFalse($content);
+        self::assertSame(
             200,
             $response->getStatusCode(),
             "User login was not successfully with payload:\n" . $payload . "\nResponse: \n" . $response
@@ -89,8 +89,8 @@ class GetTokenControllerTest extends WebTestCase
             $messageNotPresent = 'getToken did not return all expected attributes, missing \'' . $attribute . '\'.';
             $messageEmpty = 'Attribute \'' . $attribute . '\' is empty, this is fail...';
 
-            static::assertObjectHasAttribute($attribute, $responseContent, $messageNotPresent);
-            static::assertNotEmpty($responseContent->{$attribute}, $messageEmpty);
+            self::assertObjectHasAttribute($attribute, $responseContent, $messageNotPresent);
+            self::assertNotEmpty($responseContent->{$attribute}, $messageEmpty);
         }
     }
 
@@ -120,17 +120,17 @@ class GetTokenControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode());
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode());
 
         $responseContent = JSON::decode($content);
 
         $info = "\nResponse: \n" . $response;
 
-        static::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
-        static::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
-        static::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
-        static::assertSame(
+        self::assertObjectHasAttribute('code', $responseContent, 'Response does not contain "code"' . $info);
+        self::assertSame(401, $responseContent->code, 'Response code was not expected' . $info);
+        self::assertObjectHasAttribute('message', $responseContent, 'Response does not contain "message"' . $info);
+        self::assertSame(
             'Invalid credentials.',
             $responseContent->message,
             'Response message was not expected' . $info,

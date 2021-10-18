@@ -52,7 +52,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
 
         $provider = new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock);
 
-        static::assertSame($expected, $provider->supportsClass((string)$input));
+        self::assertSame($expected, $provider->supportsClass((string)$input));
     }
 
     /**
@@ -95,7 +95,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->getMock();
 
         $apiKeyRepositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOneBy')
             ->with([
                 'token' => 'guid',
@@ -127,7 +127,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $apiKey = new ApiKey();
 
         $apiKeyRepositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOneBy')
             ->with([
                 'token' => 'guid',
@@ -137,7 +137,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
         $user = (new ApiKeyUserProvider($apiKeyRepositoryMock, $rolesServiceMock))
             ->loadUserByIdentifier('guid');
 
-        static::assertSame($apiKey, $user->getApiKey());
+        self::assertSame($apiKey, $user->getApiKey());
     }
 
     /**
@@ -156,7 +156,7 @@ class ApiKeyUserProviderTest extends KernelTestCase
             ->getMock();
 
         $apiKeyRepositoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('findOneBy')
             ->with([
                 'token' => 'some_token',

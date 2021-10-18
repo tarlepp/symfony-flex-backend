@@ -32,10 +32,10 @@ class UserEntityEventListenerTest extends KernelTestCase
     public function testThatTooShortPasswordThrowsAnExceptionWithPrePersist(): void
     {
         /** @var EntityManager $entityManager */
-        $entityManager = static::getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
 
         /** @var UserPasswordHasherInterface $hasher */
-        $hasher = static::getContainer()->get('security.user_password_hasher');
+        $hasher = self::getContainer()->get('security.user_password_hasher');
 
         $entity = (new User())
             ->setUsername('john_doe_the_tester')
@@ -62,10 +62,10 @@ class UserEntityEventListenerTest extends KernelTestCase
     public function testThatTooShortPasswordThrowsAnExceptionWithPreUpdate(): void
     {
         /** @var EntityManager $entityManager */
-        $entityManager = static::getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
 
         /** @var UserPasswordHasherInterface $hasher */
-        $hasher = static::getContainer()->get('security.user_password_hasher');
+        $hasher = self::getContainer()->get('security.user_password_hasher');
 
         $entity = (new User())
             ->setUsername('john_doe_the_tester')
@@ -89,10 +89,10 @@ class UserEntityEventListenerTest extends KernelTestCase
     public function testListenerPrePersistMethodWorksAsExpected(): void
     {
         /** @var EntityManager $entityManager */
-        $entityManager = static::getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
 
         /** @var UserPasswordHasherInterface $hasher */
-        $hasher = static::getContainer()->get('security.user_password_hasher');
+        $hasher = self::getContainer()->get('security.user_password_hasher');
 
         $entity = (new User())
             ->setUsername('john_doe_the_tester')
@@ -112,18 +112,18 @@ class UserEntityEventListenerTest extends KernelTestCase
         // Call listener method
         (new UserEntityEventListener($hasher))->prePersist($event);
 
-        static::assertEmpty(
+        self::assertEmpty(
             $entity->getPlainPassword(),
             'Listener did not reset plain password value.'
         );
 
-        static::assertNotSame(
+        self::assertNotSame(
             $oldPassword,
             $entity->getPassword(),
             'Password was not changed by the listener.',
         );
 
-        static::assertTrue(
+        self::assertTrue(
             $hasher->isPasswordValid(new SecurityUser($entity), 'test_test'),
             'Changed password is not valid.'
         );
@@ -132,10 +132,10 @@ class UserEntityEventListenerTest extends KernelTestCase
     public function testListenerPreUpdateMethodWorksAsExpected(): void
     {
         /** @var EntityManager $entityManager */
-        $entityManager = static::getContainer()->get('doctrine.orm.default_entity_manager');
+        $entityManager = self::getContainer()->get('doctrine.orm.default_entity_manager');
 
         /** @var UserPasswordHasherInterface $hasher */
-        $hasher = static::getContainer()->get('security.user_password_hasher');
+        $hasher = self::getContainer()->get('security.user_password_hasher');
 
         $entity = (new User())
             ->setUsername('john_doe_the_tester')
@@ -162,18 +162,18 @@ class UserEntityEventListenerTest extends KernelTestCase
 
         (new UserEntityEventListener($hasher))->preUpdate($event);
 
-        static::assertEmpty(
+        self::assertEmpty(
             $entity->getPlainPassword(),
             'Listener did not reset plain password value.'
         );
 
-        static::assertNotSame(
+        self::assertNotSame(
             $oldPassword,
             $entity->getPassword(),
             'Password was not changed by the listener.',
         );
 
-        static::assertTrue(
+        self::assertTrue(
             $hasher->isPasswordValid(new SecurityUser($entity), 'test_test_test'),
             'Changed password is not valid.'
         );

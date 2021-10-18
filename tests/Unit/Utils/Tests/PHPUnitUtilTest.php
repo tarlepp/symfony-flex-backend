@@ -45,7 +45,7 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function testThatGetTypeReturnExpected(string $expected, string $input): void
     {
-        static::assertSame($expected, PhpUnitUtil::getType($input));
+        self::assertSame($expected, PhpUnitUtil::getType($input));
     }
 
     /**
@@ -75,10 +75,10 @@ class PHPUnitUtilTest extends KernelTestCase
         $expected = $expected instanceof StringableArrayObject ? $expected->getArrayCopy() : $expected;
 
         if ($strict) {
-            static::assertSame($expected, $value);
+            self::assertSame($expected, $value);
         } else {
             /** @psalm-var class-string $expected */
-            static::assertInstanceOf($expected, $value);
+            self::assertInstanceOf($expected, $value);
         }
     }
 
@@ -89,7 +89,7 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function testThatGetValidValueForTypeWorksWithCustomType(): void
     {
-        static::assertInstanceOf(User::class, PhpUnitUtil::getValidValueForType(User::class));
+        self::assertInstanceOf(User::class, PhpUnitUtil::getValidValueForType(User::class));
     }
 
     /**
@@ -105,7 +105,7 @@ class PHPUnitUtilTest extends KernelTestCase
         int | string | array $expected,
         string $type,
     ): void {
-        static::assertSame($expected, PhpUnitUtil::getValidValueForType($type));
+        self::assertSame($expected, PhpUnitUtil::getValidValueForType($type));
     }
 
     /**
@@ -132,7 +132,7 @@ class PHPUnitUtilTest extends KernelTestCase
      */
     public function testThatGetInvalidValueForTypeReturnsExpectedValue(string $expected, string $input): void
     {
-        static::assertInstanceOf($expected, PhpUnitUtil::getInvalidValueForType($input));
+        self::assertInstanceOf($expected, PhpUnitUtil::getInvalidValueForType($input));
     }
 
     /**

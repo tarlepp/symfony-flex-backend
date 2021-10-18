@@ -50,7 +50,7 @@ abstract class ResourceTestCase extends KernelTestCase
         );
 
         /** @noinspection UnnecessaryAssertionInspection */
-        static::assertInstanceOf($this->repositoryClass, $this->getResource()->getRepository(), $message);
+        self::assertInstanceOf($this->repositoryClass, $this->getResource()->getRepository(), $message);
     }
 
     /**
@@ -63,13 +63,13 @@ abstract class ResourceTestCase extends KernelTestCase
             $this->entityClass
         );
 
-        static::assertSame($this->entityClass, $this->getResource()->getEntityName(), $message);
+        self::assertSame($this->entityClass, $this->getResource()->getEntityName(), $message);
     }
 
     private function getResource(): RestResourceInterface
     {
         /** @var RestResourceInterface $resource */
-        $resource = static::getContainer()->get($this->resourceClass);
+        $resource = self::getContainer()->get($this->resourceClass);
 
         return $resource;
     }

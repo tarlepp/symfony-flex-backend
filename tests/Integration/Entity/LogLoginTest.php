@@ -43,7 +43,7 @@ class LogLoginTest extends EntityTestCase
         ?string $type = null,
         ?array $meta = null
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        self::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -55,7 +55,7 @@ class LogLoginTest extends EntityTestCase
         ?string $type = null,
         ?array $meta = null
     ): void {
-        static::markTestSkipped('There is not setter in read only entity...');
+        self::markTestSkipped('There is not setter in read only entity...');
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
@@ -90,18 +90,18 @@ class LogLoginTest extends EntityTestCase
         if (!(array_key_exists('columnName', $meta) || array_key_exists('joinColumns', $meta))) {
             $type = ArrayCollection::class;
 
-            static::assertInstanceOf($type, $logRequest->{$getter}());
+            self::assertInstanceOf($type, $logRequest->{$getter}());
         }
 
         try {
             $method = 'assertIs' . ucfirst($type);
 
-            static::$method($logRequest->{$getter}());
+            self::$method($logRequest->{$getter}());
         } catch (Throwable $error) {
             /**
              * @var class-string $type
              */
-            static::assertInstanceOf($type, $logRequest->{$getter}(), $error->getMessage());
+            self::assertInstanceOf($type, $logRequest->{$getter}(), $error->getMessage());
         }
     }
 

@@ -43,7 +43,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('foobar', null, false, false, null);
 
-        static::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        self::assertFalse($resolver->supports(Request::create('/'), $metadata));
     }
 
     /**
@@ -58,7 +58,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', null, false, false, null);
 
-        static::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        self::assertFalse($resolver->supports(Request::create('/'), $metadata));
     }
 
     /**
@@ -73,7 +73,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('foobar', User::class, false, false, null);
 
-        static::assertFalse($resolver->supports(Request::create('/'), $metadata));
+        self::assertFalse($resolver->supports(Request::create('/'), $metadata));
     }
 
     /**
@@ -88,7 +88,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null, true);
 
-        static::assertTrue($resolver->supports(Request::create('/'), $metadata));
+        self::assertTrue($resolver->supports(Request::create('/'), $metadata));
     }
 
     /**
@@ -122,7 +122,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $userService
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getSecurityUser')
             ->willReturn(null);
 
@@ -144,14 +144,14 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $securityUser = new SecurityUser(new User());
 
         $userService
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
         $resolver = new LoggedInUserValueResolver($userService);
         $metadata = new ArgumentMetadata('loggedInUser', User::class, false, false, null);
 
-        static::assertTrue($resolver->supports(Request::create('/'), $metadata));
+        self::assertTrue($resolver->supports(Request::create('/'), $metadata));
     }
 
     /**
@@ -164,7 +164,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $userService = $this->getMockBuilder(UserTypeIdentification::class)->disableOriginalConstructor()->getMock();
 
         $userService
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getUser');
 
         $resolver = new LoggedInUserValueResolver($userService);
@@ -189,7 +189,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $user = new User();
 
         $userService
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getUser')
             ->willReturn($user);
 
@@ -199,7 +199,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
 
         $resolver->supports($request, $metadata);
 
-        static::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
+        self::assertSame([$user], iterator_to_array($resolver->resolve($request, $metadata)));
     }
 
     /**
@@ -215,12 +215,12 @@ class LoggedInUserValueResolverTest extends KernelTestCase
         $securityUser = new SecurityUser($user);
 
         $userService
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getSecurityUser')
             ->willReturn($securityUser);
 
         $userService
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getUser')
             ->willReturn($user);
 
@@ -230,7 +230,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
             // Do nothing
         };
 
-        static::assertSame([$user], $argumentResolver->getArguments(Request::create('/'), $closure));
+        self::assertSame([$user], $argumentResolver->getArguments(Request::create('/'), $closure));
     }
 
     /**
@@ -249,7 +249,7 @@ class LoggedInUserValueResolverTest extends KernelTestCase
             [new LoggedInUserValueResolver($userService), new DefaultValueResolver()]
         );
 
-        static::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));
+        self::assertSame([null], $argumentResolver->getArguments(Request::create('/'), $closure));
     }
 
     /**

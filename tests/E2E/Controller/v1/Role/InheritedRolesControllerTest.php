@@ -39,8 +39,8 @@ class InheritedRolesControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+        self::assertNotFalse($content);
+        self::assertSame(401, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
     }
 
     /**
@@ -59,7 +59,7 @@ class InheritedRolesControllerTest extends WebTestCase
         foreach ($roles as $role) {
             $offset = array_search($role, $roles, true);
 
-            static::assertIsInt($offset);
+            self::assertIsInt($offset);
 
             $expectedRoles = array_slice($roles, $offset);
 
@@ -68,9 +68,9 @@ class InheritedRolesControllerTest extends WebTestCase
             $response = $client->getResponse();
             $content = $response->getContent();
 
-            static::assertNotFalse($content);
-            static::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
-            static::assertJsonStringEqualsJsonString(JSON::encode($expectedRoles), $content);
+            self::assertNotFalse($content);
+            self::assertSame(200, $response->getStatusCode(), $content . "\nResponse:\n" . $response);
+            self::assertJsonStringEqualsJsonString(JSON::encode($expectedRoles), $content);
         }
     }
 

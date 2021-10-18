@@ -31,7 +31,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
     {
         $token = new AnonymousToken('secret', 'anon');
 
-        static::assertSame(Voter::ACCESS_ABSTAIN, $this->getVoter()->vote($token, 'subject', ['IS_USER_HIMSELF']));
+        self::assertSame(Voter::ACCESS_ABSTAIN, $this->getVoter()->vote($token, 'subject', ['IS_USER_HIMSELF']));
     }
 
     /**
@@ -41,7 +41,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
     {
         $token = new JWTUserToken([], new SecurityUser(new User()));
 
-        static::assertSame(Voter::ACCESS_DENIED, $this->getVoter()->vote($token, new User(), ['IS_USER_HIMSELF']));
+        self::assertSame(Voter::ACCESS_DENIED, $this->getVoter()->vote($token, new User(), ['IS_USER_HIMSELF']));
     }
 
     /**
@@ -52,7 +52,7 @@ class IsUserHimselfVoterTest extends KernelTestCase
         $user = new User();
         $token = new JWTUserToken([], new SecurityUser($user));
 
-        static::assertSame(Voter::ACCESS_GRANTED, $this->getVoter()->vote($token, $user, ['IS_USER_HIMSELF']));
+        self::assertSame(Voter::ACCESS_GRANTED, $this->getVoter()->vote($token, $user, ['IS_USER_HIMSELF']));
     }
 
     private function getVoter(): IsUserHimselfVoter

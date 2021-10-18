@@ -64,7 +64,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
             ->setTimezone(new DateTimeZone('UTC'))
             ->format($this->getPlatform()->getDateTimeTzFormatString());
 
-        static::assertSame($expected, $this->getType()->convertToDatabaseValue($dateInput, $this->getPlatform()));
+        self::assertSame($expected, $this->getType()->convertToDatabaseValue($dateInput, $this->getPlatform()));
     }
 
     /**
@@ -78,7 +78,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         PhpUnitUtil::setProperty('utc', null, $type);
 
-        static::assertNull(PhpUnitUtil::getProperty('utc', $type));
+        self::assertNull(PhpUnitUtil::getProperty('utc', $type));
 
         $dateInput = new DateTime('1981-04-07 10:00:00', new DateTimeZone('Europe/Helsinki'));
 
@@ -87,8 +87,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
         /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $type);
 
-        static::assertInstanceOf(DateTimeZone::class, $property);
-        static::assertSame('UTC', $property->getName());
+        self::assertInstanceOf(DateTimeZone::class, $property);
+        self::assertSame('UTC', $property->getName());
     }
 
     /**
@@ -100,8 +100,8 @@ class UTCDateTimeTypeTest extends KernelTestCase
     {
         $date = $this->getType()->convertToPHPValue($value, $this->getPlatform());
 
-        static::assertInstanceOf(DateTime::class, $date);
-        static::assertSame($expected, $date->format('Y-m-d H:i:s'));
+        self::assertInstanceOf(DateTime::class, $date);
+        self::assertSame($expected, $date->format('Y-m-d H:i:s'));
     }
 
     /**
@@ -115,15 +115,15 @@ class UTCDateTimeTypeTest extends KernelTestCase
 
         PhpUnitUtil::setProperty('utc', null, $type);
 
-        static::assertNull(PhpUnitUtil::getProperty('utc', $type));
+        self::assertNull(PhpUnitUtil::getProperty('utc', $type));
 
         $type->convertToPHPValue('1981-04-07 10:00:00', $this->getPlatform());
 
         /** @var DateTimeZone $property */
         $property = PhpUnitUtil::getProperty('utc', $type);
 
-        static::assertInstanceOf(DateTimeZone::class, $property);
-        static::assertSame('UTC', $property->getName());
+        self::assertInstanceOf(DateTimeZone::class, $property);
+        self::assertSame('UTC', $property->getName());
     }
 
     /**
@@ -141,7 +141,7 @@ class UTCDateTimeTypeTest extends KernelTestCase
      */
     public function testThatRequiresSQLCommentHintReturnsExpected(): void
     {
-        static::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
+        self::assertTrue($this->getType()->requiresSQLCommentHint($this->getPlatform()));
     }
 
     /**

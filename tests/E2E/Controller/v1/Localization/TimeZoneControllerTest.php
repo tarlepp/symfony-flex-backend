@@ -38,8 +38,8 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(405, $response->getStatusCode(), $content);
+        self::assertNotFalse($content);
+        self::assertSame(405, $response->getStatusCode(), $content);
     }
 
     /**
@@ -55,8 +55,8 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
-        static::assertSame(200, $response->getStatusCode(), $content);
+        self::assertNotFalse($content);
+        self::assertSame(200, $response->getStatusCode(), $content);
     }
 
     /**
@@ -72,10 +72,10 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
+        self::assertNotFalse($content);
         $data = JSON::decode((string)$response->getContent());
 
-        static::assertIsArray($data, $content);
+        self::assertIsArray($data, $content);
     }
 
     /**
@@ -91,13 +91,13 @@ class TimeZoneControllerTest extends WebTestCase
         $response = $client->getResponse();
         $content = $response->getContent();
 
-        static::assertNotFalse($content);
+        self::assertNotFalse($content);
         $data = JSON::decode($content, true)[0];
 
-        static::assertArrayHasKey('timezone', $data);
-        static::assertArrayHasKey('identifier', $data);
-        static::assertArrayHasKey('offset', $data);
-        static::assertArrayHasKey('value', $data);
+        self::assertArrayHasKey('timezone', $data);
+        self::assertArrayHasKey('identifier', $data);
+        self::assertArrayHasKey('offset', $data);
+        self::assertArrayHasKey('value', $data);
     }
 
     /**
