@@ -16,8 +16,6 @@ use App\Utils\Tests\PhpUnitUtil;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Throwable;
 use function array_map;
 use function str_pad;
@@ -29,42 +27,43 @@ use function str_pad;
  * @author TLe, Tarmo Leppänen <tarmo.leppanen@pinja.com>
  *
  * @psalm-suppress MissingConstructor
+ * @psalm-suppress PropertyNotSetInConstructor
  */
-final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, ContainerAwareInterface
+final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface
 {
-    use ContainerAwareTrait;
-
-    private ObjectManager $manager;
-    private RolesServiceInterface $roles;
-
     /**
      * @var array<string, string>
      */
     private array $uuids = [
-        '' => 'daffdcdc-c79b-11ea-87d0-0242ac130003',
-        '-logged' => '066482a0-c79b-11ea-87d0-0242ac130003',
-        '-api' => '0cd106cc-c79b-11ea-87d0-0242ac130003',
-        '-user' => '1154e02e-c79b-11ea-87d0-0242ac130003',
-        '-admin' => '154ea868-c79b-11ea-87d0-0242ac130003',
-        '-root' => '187b35ba-c79b-11ea-87d0-0242ac130003',
+        '' => '30000000-0000-1000-8000-000000000001',
+        '-logged' => '30000000-0000-1000-8000-000000000002',
+        '-api' => '30000000-0000-1000-8000-000000000003',
+        '-user' => '30000000-0000-1000-8000-000000000004',
+        '-admin' => '30000000-0000-1000-8000-000000000005',
+        '-root' => '30000000-0000-1000-8000-000000000006',
     ];
+
+    public function __construct(
+        private RolesServiceInterface $rolesService,
+    ) {
+    }
 
     /**
      * @throws Throwable
      */
     public function load(ObjectManager $manager): void
     {
-        /** @var RolesServiceInterface $rolesService */
-        $rolesService = $this->container->get('test.app.security.roles_service');
-
-        $this->roles = $rolesService;
-        $this->manager = $manager;
-
         // Create entities
-        array_map(fn (?string $role): bool => $this->createApiKey($role), [null, ...$this->roles->getRoles()]);
+        array_map(
+            fn (?string $role): bool => $this->createApiKey($manager, $role),
+            [
+                null,
+                ...$this->rolesService->getRoles(),
+            ],
+        );
 
         // Flush database changes
-        $this->manager->flush();
+        $manager->flush();
     }
 
     public function getOrder(): int
@@ -75,22 +74,22 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
     /**
      * @throws Throwable
      */
-    private function createApiKey(?string $role = null): bool
+    private function createApiKey(ObjectManager $manager, ?string $role = null): bool
     {
         // Create new entity
         $entity = (new ApiKey())
-            ->setDescription('ApiKey Description: ' . ($role === null ? '' : $this->roles->getShort($role)))
-            ->setToken(str_pad($role === null ? '' : $this->roles->getShort($role), 40, '_'));
+            ->setDescription('ApiKey Description: ' . ($role === null ? '' : $this->rolesService->getShort($role)))
+            ->setToken(str_pad($role === null ? '' : $this->rolesService->getShort($role), 40, '_'));
 
         $suffix = '';
 
         if ($role !== null) {
             /** @var UserGroup $userGroup */
-            $userGroup = $this->getReference('UserGroup-' . $this->roles->getShort($role));
+            $userGroup = $this->getReference('UserGroup-' . $this->rolesService->getShort($role));
 
             $entity->addUserGroup($userGroup);
 
-            $suffix = '-' . $this->roles->getShort($role);
+            $suffix = '-' . $this->rolesService->getShort($role);
         }
 
         PhpUnitUtil::setProperty(
@@ -100,7 +99,7 @@ final class LoadApiKeyData extends Fixture implements OrderedFixtureInterface, C
         );
 
         // Persist entity
-        $this->manager->persist($entity);
+        $manager->persist($entity);
 
         // Create reference for later usage
         $this->addReference('ApiKey' . $suffix, $entity);
